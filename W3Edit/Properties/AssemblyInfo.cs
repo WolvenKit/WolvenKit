@@ -5,13 +5,21 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("W3Edit")]
-[assembly: AssemblyDescription("Witcher 3 Mod Editor")]
+[assembly: AssemblyTitle("Redkit 2")]
+[assembly: AssemblyDescription(@"Redkit 2
+By: Sarcen&Traderain
+Awesome people:
+- CAPA
+- remr
+- KNG
+- erx
+- Skacik
+- The Witcher 3 modding discord (https://discord.gg/qBNgDEX)")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("W3Edit")]
-[assembly: AssemblyCopyright("Copyright © 2015")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCompany("CDReject")]
+[assembly: AssemblyProduct("Redkit 2")]
+[assembly: AssemblyCopyright("Copyright © 2015-2017")]
+[assembly: AssemblyTrademark("GPL-3.0")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

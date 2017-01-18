@@ -157,7 +157,7 @@ namespace W3Edit
                 }
                 else
                 {
-                    txPath.Text = item.FullPath;
+                    txPath.Text += (item.FullPath + ";");
                 }
             }
         }
@@ -169,19 +169,6 @@ namespace W3Edit
 
         private void fileListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            if (fileListView.SelectedItems.Count > 0)
-            {
-                var paths = new List<string>();
-                foreach(BundleListItem item in fileListView.SelectedItems)
-                {
-                    if (!item.IsDirectory)
-                    {
-                        paths.Add(item.FullPath);
-                    }
-                }
-
-                txPath.Text = string.Join(";", paths);
-            }
         }
 
         private void fileListView_SelectedIndexChanged(object sender, EventArgs e)
@@ -258,6 +245,35 @@ namespace W3Edit
         void textbox_KeyDown(object sender, KeyEventArgs e)
         {
 
+        }
+
+        private void SearchBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            txPath.Text = "";
+        }
+
+        private void MarkSelected_Click(object sender, EventArgs e)
+        {
+            if (fileListView.SelectedItems.Count > 0)
+            {
+                var paths = new List<string>();
+                foreach (BundleListItem item in fileListView.SelectedItems)
+                {
+                    if (!item.IsDirectory)
+                    {
+                        paths.Add(item.FullPath);
+                    }
+                }
+                if(txPath.Text == "")
+                    txPath.Text += paths.Aggregate(";", (c, n) => c + ";" + n);
+                else
+                    txPath.Text += paths.Aggregate("",(c, n) => c + ";" + n);              
+            }
         }
     }
 }

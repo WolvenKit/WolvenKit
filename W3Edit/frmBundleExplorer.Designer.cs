@@ -42,9 +42,10 @@
             this.colCompressiontype = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colTimeStamp = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.pathPanel = new System.Windows.Forms.Panel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.SearchBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.ClearFiles = new System.Windows.Forms.Button();
+            this.MarkSelected = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // treeImages
@@ -159,12 +160,13 @@
             this.pathPanel.TabIndex = 6;
             this.pathPanel.Click += new System.EventHandler(this.pathPanel_Click);
             // 
-            // textBox1
+            // SearchBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(64, 38);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(162, 20);
-            this.textBox1.TabIndex = 7;
+            this.SearchBox.Location = new System.Drawing.Point(64, 38);
+            this.SearchBox.Name = "SearchBox";
+            this.SearchBox.Size = new System.Drawing.Size(337, 20);
+            this.SearchBox.TabIndex = 7;
+            this.SearchBox.TextChanged += new System.EventHandler(this.SearchBox_TextChanged);
             // 
             // label1
             // 
@@ -175,16 +177,28 @@
             this.label1.TabIndex = 8;
             this.label1.Text = "Search:";
             // 
-            // button1
+            // ClearFiles
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(452, 468);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(105, 23);
-            this.button1.TabIndex = 9;
-            this.button1.Text = "Deselect all";
-            this.button1.UseVisualStyleBackColor = true;
+            this.ClearFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ClearFiles.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.ClearFiles.Location = new System.Drawing.Point(350, 468);
+            this.ClearFiles.Name = "ClearFiles";
+            this.ClearFiles.Size = new System.Drawing.Size(105, 23);
+            this.ClearFiles.TabIndex = 9;
+            this.ClearFiles.Text = "Clear selected files";
+            this.ClearFiles.UseVisualStyleBackColor = true;
+            this.ClearFiles.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // MarkSelected
+            // 
+            this.MarkSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.MarkSelected.Location = new System.Drawing.Point(461, 468);
+            this.MarkSelected.Name = "MarkSelected";
+            this.MarkSelected.Size = new System.Drawing.Size(105, 23);
+            this.MarkSelected.TabIndex = 10;
+            this.MarkSelected.Text = "Mark selected";
+            this.MarkSelected.UseVisualStyleBackColor = true;
+            this.MarkSelected.Click += new System.EventHandler(this.MarkSelected_Click);
             // 
             // frmBundleExplorer
             // 
@@ -193,9 +207,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btClose;
             this.ClientSize = new System.Drawing.Size(689, 503);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.MarkSelected);
+            this.Controls.Add(this.ClearFiles);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.SearchBox);
             this.Controls.Add(this.pathPanel);
             this.Controls.Add(this.fileListView);
             this.Controls.Add(this.btClose);
@@ -226,8 +241,9 @@
         private System.Windows.Forms.ColumnHeader colCompressionRatio;
         private System.Windows.Forms.ColumnHeader colCompressiontype;
         private System.Windows.Forms.ColumnHeader colTimeStamp;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox SearchBox;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button ClearFiles;
+        private System.Windows.Forms.Button MarkSelected;
     }
 }

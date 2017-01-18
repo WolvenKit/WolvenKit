@@ -21,7 +21,7 @@ namespace W3Edit
 {
     public partial class frmMain : Form
     {
-        private string BaseTitle = "Sarcen's Witcher 3 Mod Editor";
+        private string BaseTitle = "Redkit 2 by CDReject";
 
         public W3Mod ActiveMod 
         {
@@ -925,6 +925,12 @@ namespace W3Edit
                     SaveMod();
                 }
             }
+        }
+
+        private void creditsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var cf = new About())
+                cf.ShowDialog();
         }
 
 
