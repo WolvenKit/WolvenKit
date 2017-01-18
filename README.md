@@ -1,2 +1,9 @@
 # Redkit 2
-Withcer 3 Mod Editor/Creator
+By: Sarcen&Traderain
+Awesome people:
+- CAPA
+- remr
+- KNG
+- erx
+- Skacik
+- The Witcher 3 modding discord (https://discord.gg/qBNgDEX)
