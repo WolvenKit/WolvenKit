@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>doboz4net</id>
+    <version>1.0.1</version>
+    <title>Doboz for .NET</title>
+    <authors>Milosz Krajewski</authors>
+    <owners>Milosz Krajewski</owners>
+    <licenseUrl>https://doboz4net.codeplex.com/license</licenseUrl>
+    <projectUrl>https://doboz4net.codeplex.com/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Doboz is asymmetric compression algorithm. It sacrifices compression speed for near-zip compression ratio and very fast decompression (1200MB/s @ i5-3570).
+
+This packaged contains safe and unsafe implementation selected automatically depending on application trust level.</description>
+    <summary>Doboz is asymmetric compression algorithm. It sacrifices compression speed for near-zip compression ratio and very fast decompression (1200MB/s @ i5-3570)</summary>
+    <copyright>Milosz Krajewski</copyright>
+  </metadata>
+</package>

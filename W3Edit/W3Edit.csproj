@@ -1,0 +1,341 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{12FD792B-EC76-4969-8B42-9671025D5108}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>W3Edit</RootNamespace>
+    <AssemblyName>W3Edit</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Doboz">
+      <HintPath>..\packages\doboz4net.1.0.1\lib\net40-client\Doboz.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zlib">
+      <HintPath>..\..\..\..\Ionic.Zlib.dll</HintPath>
+    </Reference>
+    <Reference Include="LZ4">
+      <HintPath>..\packages\lz4net.1.0.9.93\lib\net4-client\LZ4.dll</HintPath>
+    </Reference>
+    <Reference Include="ObjectListView">
+      <HintPath>..\packages\ObjectListView.Official.2.8.1\lib\net20\ObjectListView.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WeifenLuo.WinFormsUI.Docking">
+      <HintPath>..\packages\DockPanelSuite.3.0.0-alpha8\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Configuration.cs" />
+    <Compile Include="CopyController.cs" />
+    <Compile Include="FileSavedEventArgs.cs" />
+    <Compile Include="ImportExportUtility.cs" />
+    <Compile Include="FlowTreeEditors\ChunkEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\ChunkEditor.Designer.cs">
+      <DependentUpon>ChunkEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FlowTreeEditors\MoveEditorArgs.cs" />
+    <Compile Include="FlowTreeEditors\SceneChoiceEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\SceneChoiceEditor.Designer.cs">
+      <DependentUpon>SceneChoiceEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FlowTreeEditors\SceneFlowConditionEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\SceneFlowConditionEditor.Designer.cs">
+      <DependentUpon>SceneFlowConditionEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FlowTreeEditors\SceneLinkEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\SceneLinkEditor.Designer.cs">
+      <DependentUpon>SceneLinkEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FlowTreeEditors\SceneRandomizerEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\SceneRandomizerEditor.Designer.cs">
+      <DependentUpon>SceneRandomizerEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FlowTreeEditors\SceneSectionEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\SceneSectionEditor.Designer.cs">
+      <DependentUpon>SceneSectionEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmAddChunk.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAddChunk.Designer.cs">
+      <DependentUpon>frmAddChunk.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmAddVariable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAddVariable.Designer.cs">
+      <DependentUpon>frmAddVariable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmBundleExplorer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmBundleExplorer.Designer.cs">
+      <DependentUpon>frmBundleExplorer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmChunkFlowDiagram.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmChunkFlowDiagram.Designer.cs">
+      <DependentUpon>frmChunkFlowDiagram.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmChunkList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmChunkList.Designer.cs">
+      <DependentUpon>frmChunkList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmChunkProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmChunkProperties.Designer.cs">
+      <DependentUpon>frmChunkProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmCR2WDocument.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCR2WDocument.Designer.cs">
+      <DependentUpon>frmCR2WDocument.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmEmbeddedFiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEmbeddedFiles.Designer.cs">
+      <DependentUpon>frmEmbeddedFiles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmExtractAmbigious.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmExtractAmbigious.Designer.cs">
+      <DependentUpon>frmExtractAmbigious.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmHexEditorView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmHexEditorView.Designer.cs">
+      <DependentUpon>frmHexEditorView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.Designer.cs">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmModExplorer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmModExplorer.Designer.cs">
+      <DependentUpon>frmModExplorer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmModSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmModSettings.Designer.cs">
+      <DependentUpon>frmModSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmOutput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmOutput.Designer.cs">
+      <DependentUpon>frmOutput.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmRenameDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRenameDialog.Designer.cs">
+      <DependentUpon>frmRenameDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSettings.Designer.cs">
+      <DependentUpon>frmSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainController.cs" />
+    <Compile Include="Mod\ModManager.cs" />
+    <Compile Include="Mod\W3Mod.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RequestFileOpenArgs.cs" />
+    <Compile Include="SelectChunkArgs.cs" />
+    <Compile Include="Win32.cs" />
+    <EmbeddedResource Include="FlowTreeEditors\ChunkEditor.resx">
+      <DependentUpon>ChunkEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FlowTreeEditors\SceneFlowConditionEditor.resx">
+      <DependentUpon>SceneFlowConditionEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FlowTreeEditors\SceneLinkEditor.resx">
+      <DependentUpon>SceneLinkEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAddChunk.resx">
+      <DependentUpon>frmAddChunk.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAddVariable.resx">
+      <DependentUpon>frmAddVariable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmBundleExplorer.resx">
+      <DependentUpon>frmBundleExplorer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmChunkFlowDiagram.resx">
+      <DependentUpon>frmChunkFlowDiagram.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmChunkList.resx">
+      <DependentUpon>frmChunkList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmChunkProperties.resx">
+      <DependentUpon>frmChunkProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCR2WDocument.resx">
+      <DependentUpon>frmCR2WDocument.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEmbeddedFiles.resx">
+      <DependentUpon>frmEmbeddedFiles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmExtractAmbigious.resx">
+      <DependentUpon>frmExtractAmbigious.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmHexEditorView.resx">
+      <DependentUpon>frmHexEditorView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMain.resx">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmModExplorer.resx">
+      <DependentUpon>frmModExplorer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmModSettings.resx">
+      <DependentUpon>frmModSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmOutput.resx">
+      <DependentUpon>frmOutput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRenameDialog.resx">
+      <DependentUpon>frmRenameDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSettings.resx">
+      <DependentUpon>frmSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Open_6529.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NewSolutionFolder_6289.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Save_6530.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Saveall_6518.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gear_16xLG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AddNodefromFile_354.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\properties_16xLG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\package_16xLG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FileGroup_10135_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\W3Edit.Bundles\W3Edit.Bundles.csproj">
+      <Project>{5bd2292a-24db-4b4a-a5b1-5d435769c289}</Project>
+      <Name>W3Edit.Bundles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\W3Edit.CR2W\W3Edit.CR2W.csproj">
+      <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>
+      <Name>W3Edit.CR2W</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </ProjectReference>
+    <ProjectReference Include="..\W3Edit.W3Strings\W3Edit.W3Strings.csproj">
+      <Project>{32d40d10-d6c3-48f0-aeb6-0f41c7e75cfd}</Project>
+      <Name>W3Edit.W3Strings</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

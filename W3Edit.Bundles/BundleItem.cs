@@ -1,0 +1,103 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.MemoryMappedFiles;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace W3Edit.Bundles
+{
+    public class BundleItem
+    {
+        public Bundle Bundle { get; set; }
+
+        public string Name { get; set; }
+        public byte[] Hash { get; set; }
+        public uint Unknown { get; set; }
+        public uint Size { get; set; }
+        public uint ZSize { get; set; }
+        public uint Offset { get; set; }
+        public ulong TimeStamp { get; set; }
+        public byte[] Unknown2 { get; set; }
+        public uint Unknown3 { get; set; }
+        public uint Compression { get; set; }
+
+        public string DateString { get; set; }
+
+        public string CompressionType
+        {
+            get
+            {
+                if (Compression == 0)
+                    return "None";
+
+                if ((Compression & 4) == 4)
+                    return "Lz4";
+
+                if ((Compression & 2) == 2)
+                    return "Doboz";
+
+                if ((Compression & 1) == 1)
+                    return "Zlib";
+
+                return "Unknown";
+            }
+        }
+
+        public void Extract(Stream output)
+        {
+            using (var file = MemoryMappedFile.CreateFromFile(Bundle.FileName, FileMode.Open))
+            {
+                using (var viewstream = file.CreateViewStream(Offset, ZSize, MemoryMappedFileAccess.Read))
+                {
+                    switch (CompressionType)
+                    {
+                        case "None":
+                            {
+                                viewstream.CopyTo(output);
+                            }
+                            break;
+                        case "Lz4":
+                            {
+                                var buffer = new byte[ZSize];
+                                var c = viewstream.Read(buffer, 0, buffer.Length);
+                                var uncompressed = LZ4.LZ4Codec.Decode(buffer, 0, c, (int)Size);
+                                output.Write(uncompressed, 0, uncompressed.Length);
+                            }
+                            break;
+                        case "Doboz":
+                            {
+                                var buffer = new byte[ZSize];
+                                var c = viewstream.Read(buffer, 0, buffer.Length);
+                                var uncompressed = Doboz.DobozCodec.Decode(buffer, 0, c);
+                                output.Write(uncompressed, 0, uncompressed.Length);
+                            }
+
+                            break;
+                        case "Zlib":
+                            {
+                                var zlib = new Ionic.Zlib.ZlibStream(viewstream, Ionic.Zlib.CompressionMode.Decompress);
+                                zlib.CopyTo(output);
+                            }
+                            break;
+
+                        default:
+                            throw new MissingCompressionException("Unhandled compression algorithm.") { Compression = Compression };
+                    }
+
+                    viewstream.Close();
+                }
+            }
+        }
+
+        public void Extract(string filename)
+        {
+            using (var output = new FileStream(filename, FileMode.CreateNew, FileAccess.Write))
+            {
+                Extract(output);
+                output.Close();
+            }
+        }
+    }
+}
