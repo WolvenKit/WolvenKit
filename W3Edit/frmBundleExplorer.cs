@@ -25,16 +25,18 @@ namespace W3Edit
         public BundleTreeNode ActiveNode { get; set; }
         public BundleTreeNode RootNode { get; set; }
 
-        public string[] SelectedPaths { 
-            get { return txPath.Text.Split(';'); } 
+        public ListView.ListViewItemCollection SelectedPaths { 
+            get { return pathlistview.Items; } 
         }
+
+        public List<string> AutoCompleteNames; //TODO: Make some mlg linq querry to get all filenames and extensions
 
         public frmBundleExplorer()
         {
             InitializeComponent();
-
+            
             var manager = MainController.Get().BundleManager;
-            RootNode = manager.RootNode;
+            RootNode = manager.RootNode;            
         }
 
         private void frmBundleExplorer_Load(object sender, EventArgs e)
@@ -157,7 +159,21 @@ namespace W3Edit
                 }
                 else
                 {
-                    txPath.Text += (item.FullPath + ";");
+                    var cont = false;
+                    foreach (ListViewItem i in pathlistview.Items)
+                    {
+                        if (i.Text == item.FullPath)
+                            cont = true;
+                    }
+                    if(!cont)
+                    {
+                        var tempnode = new ListViewItem();
+                        tempnode.ImageKey = "genericFile";
+                        tempnode.Text = item.FullPath;
+                        tempnode.ToolTipText = item.FullPath;
+                        txPath.Text += (item.FullPath + ";");
+                        pathlistview.Items.Add(tempnode);
+                    }
                 }
             }
         }
@@ -254,26 +270,61 @@ namespace W3Edit
 
         private void button1_Click(object sender, EventArgs e)
         {
-            txPath.Text = "";
+            foreach (ListViewItem item in pathlistview.SelectedItems)
+            {
+                pathlistview.Items.Remove(item);
+            }
         }
 
         private void MarkSelected_Click(object sender, EventArgs e)
         {
             if (fileListView.SelectedItems.Count > 0)
             {
-                var paths = new List<string>();
                 foreach (BundleListItem item in fileListView.SelectedItems)
                 {
                     if (!item.IsDirectory)
                     {
-                        paths.Add(item.FullPath);
+                        var cont = false;
+                        foreach (ListViewItem i in pathlistview.Items)
+                        {
+                            if (i.Text == item.FullPath)
+                                cont = true;
+                        }
+                        if (!cont)
+                        {
+                            var tempnode = new ListViewItem();
+                            tempnode.ImageKey = "genericFile";
+                            tempnode.ToolTipText = item.FullPath;
+                            tempnode.Text = item.FullPath;
+                            pathlistview.Items.Add(tempnode);
+                        }
                     }
-                }
-                if(txPath.Text == "")
-                    txPath.Text += paths.Aggregate(";", (c, n) => c + ";" + n);
-                else
-                    txPath.Text += paths.Aggregate("",(c, n) => c + ";" + n);              
+                }     
             }
+        }
+
+        private void SearchButton_Click(object sender, EventArgs e)
+        {
+            //TODO: Add the actual search here
+        }
+
+        private void Clear_Click(object sender, EventArgs e)
+        {
+            pathlistview.Items.Clear();
+        }
+
+        private void fileListView_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if(e.KeyCode == Keys.Back)
+            {
+                if(ActiveNode != RootNode)
+                OpenPath(ActiveNode.Parent.FullPath);
+            }
+        }
+
+        private void btOpen_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

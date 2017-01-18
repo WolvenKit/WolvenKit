@@ -31,8 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmBundleExplorer));
             this.treeImages = new System.Windows.Forms.ImageList(this.components);
-            this.lblFilePath = new System.Windows.Forms.Label();
-            this.txPath = new System.Windows.Forms.TextBox();
             this.btOpen = new System.Windows.Forms.Button();
             this.btClose = new System.Windows.Forms.Button();
             this.fileListView = new System.Windows.Forms.ListView();
@@ -46,6 +44,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.ClearFiles = new System.Windows.Forms.Button();
             this.MarkSelected = new System.Windows.Forms.Button();
+            this.filetypeCB = new System.Windows.Forms.ComboBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txPath = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.pathlistview = new System.Windows.Forms.ListView();
+            this.columnPath = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // treeImages
@@ -56,41 +62,24 @@
             this.treeImages.Images.SetKeyName(1, "normalFolder");
             this.treeImages.Images.SetKeyName(2, "openFolder");
             // 
-            // lblFilePath
-            // 
-            this.lblFilePath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblFilePath.AutoSize = true;
-            this.lblFilePath.Location = new System.Drawing.Point(14, 438);
-            this.lblFilePath.Name = "lblFilePath";
-            this.lblFilePath.Size = new System.Drawing.Size(34, 13);
-            this.lblFilePath.TabIndex = 1;
-            this.lblFilePath.Text = "File(s)";
-            // 
-            // txPath
-            // 
-            this.txPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txPath.Location = new System.Drawing.Point(54, 435);
-            this.txPath.Name = "txPath";
-            this.txPath.Size = new System.Drawing.Size(623, 20);
-            this.txPath.TabIndex = 2;
-            // 
             // btOpen
             // 
             this.btOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btOpen.CausesValidation = false;
             this.btOpen.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btOpen.Location = new System.Drawing.Point(572, 468);
+            this.btOpen.Location = new System.Drawing.Point(696, 453);
             this.btOpen.Name = "btOpen";
             this.btOpen.Size = new System.Drawing.Size(105, 23);
             this.btOpen.TabIndex = 3;
             this.btOpen.Text = "Add to Mod";
             this.btOpen.UseVisualStyleBackColor = true;
+            this.btOpen.Click += new System.EventHandler(this.btOpen_Click);
             // 
             // btClose
             // 
             this.btClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btClose.Location = new System.Drawing.Point(12, 468);
+            this.btClose.Location = new System.Drawing.Point(12, 453);
             this.btClose.Name = "btClose";
             this.btClose.Size = new System.Drawing.Size(75, 23);
             this.btClose.TabIndex = 4;
@@ -112,7 +101,7 @@
             this.fileListView.HideSelection = false;
             this.fileListView.Location = new System.Drawing.Point(12, 78);
             this.fileListView.Name = "fileListView";
-            this.fileListView.Size = new System.Drawing.Size(665, 351);
+            this.fileListView.Size = new System.Drawing.Size(678, 369);
             this.fileListView.SmallImageList = this.treeImages;
             this.fileListView.TabIndex = 5;
             this.fileListView.UseCompatibleStateImageBehavior = false;
@@ -121,6 +110,7 @@
             this.fileListView.SelectedIndexChanged += new System.EventHandler(this.fileListView_SelectedIndexChanged);
             this.fileListView.DoubleClick += new System.EventHandler(this.fileListView_DoubleClick);
             this.fileListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.fileListView_MouseDoubleClick);
+            this.fileListView.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.fileListView_PreviewKeyDown);
             // 
             // colFileName
             // 
@@ -151,6 +141,7 @@
             // 
             this.pathPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.pathPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.pathPanel.BackColor = System.Drawing.SystemColors.Window;
             this.pathPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pathPanel.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -162,26 +153,33 @@
             // 
             // SearchBox
             // 
-            this.SearchBox.Location = new System.Drawing.Point(64, 38);
+            this.SearchBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.SearchBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.SearchBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.HistoryList;
+            this.SearchBox.Location = new System.Drawing.Point(72, 43);
             this.SearchBox.Name = "SearchBox";
-            this.SearchBox.Size = new System.Drawing.Size(337, 20);
+            this.SearchBox.Size = new System.Drawing.Size(343, 20);
             this.SearchBox.TabIndex = 7;
             this.SearchBox.TextChanged += new System.EventHandler(this.SearchBox_TextChanged);
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 41);
+            this.label1.Location = new System.Drawing.Point(14, 46);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(44, 13);
+            this.label1.Size = new System.Drawing.Size(52, 13);
             this.label1.TabIndex = 8;
-            this.label1.Text = "Search:";
+            this.label1.Text = "Filename:";
             // 
             // ClearFiles
             // 
             this.ClearFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ClearFiles.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.ClearFiles.Location = new System.Drawing.Point(350, 468);
+            this.ClearFiles.Location = new System.Drawing.Point(461, 453);
             this.ClearFiles.Name = "ClearFiles";
             this.ClearFiles.Size = new System.Drawing.Size(105, 23);
             this.ClearFiles.TabIndex = 9;
@@ -192,7 +190,7 @@
             // MarkSelected
             // 
             this.MarkSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.MarkSelected.Location = new System.Drawing.Point(461, 468);
+            this.MarkSelected.Location = new System.Drawing.Point(585, 453);
             this.MarkSelected.Name = "MarkSelected";
             this.MarkSelected.Size = new System.Drawing.Size(105, 23);
             this.MarkSelected.TabIndex = 10;
@@ -200,13 +198,114 @@
             this.MarkSelected.UseVisualStyleBackColor = true;
             this.MarkSelected.Click += new System.EventHandler(this.MarkSelected_Click);
             // 
+            // filetypeCB
+            // 
+            this.filetypeCB.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.filetypeCB.FormattingEnabled = true;
+            this.filetypeCB.Items.AddRange(new object[] {
+            "Any",
+            ".w2phase"});
+            this.filetypeCB.Location = new System.Drawing.Point(461, 43);
+            this.filetypeCB.Name = "filetypeCB";
+            this.filetypeCB.Size = new System.Drawing.Size(121, 21);
+            this.filetypeCB.TabIndex = 11;
+            // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Location = new System.Drawing.Point(591, 41);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(86, 23);
+            this.button1.TabIndex = 12;
+            this.button1.Text = "Search";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.SearchButton_Click);
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(421, 46);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(34, 13);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "Type:";
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(693, 25);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(67, 13);
+            this.label3.TabIndex = 15;
+            this.label3.Text = "Marked files:";
+            // 
+            // txPath
+            // 
+            this.txPath.Location = new System.Drawing.Point(102, 455);
+            this.txPath.Name = "txPath";
+            this.txPath.Size = new System.Drawing.Size(100, 20);
+            this.txPath.TabIndex = 16;
+            this.txPath.Visible = false;
+            // 
+            // button2
+            // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.Location = new System.Drawing.Point(350, 453);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(105, 23);
+            this.button2.TabIndex = 17;
+            this.button2.Text = "Clear all";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.Clear_Click);
+            // 
+            // pathlistview
+            // 
+            this.pathlistview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pathlistview.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnPath});
+            this.pathlistview.FullRowSelect = true;
+            this.pathlistview.GridLines = true;
+            this.pathlistview.HideSelection = false;
+            this.pathlistview.Location = new System.Drawing.Point(696, 41);
+            this.pathlistview.Name = "pathlistview";
+            this.pathlistview.ShowItemToolTips = true;
+            this.pathlistview.Size = new System.Drawing.Size(105, 406);
+            this.pathlistview.SmallImageList = this.treeImages;
+            this.pathlistview.TabIndex = 14;
+            this.pathlistview.UseCompatibleStateImageBehavior = false;
+            this.pathlistview.View = System.Windows.Forms.View.Details;
+            // 
+            // columnPath
+            // 
+            this.columnPath.Text = "Path";
+            this.columnPath.Width = 105;
+            // 
             // frmBundleExplorer
             // 
             this.AcceptButton = this.btOpen;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btClose;
-            this.ClientSize = new System.Drawing.Size(689, 503);
+            this.ClientSize = new System.Drawing.Size(811, 479);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.txPath);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.pathlistview);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.filetypeCB);
             this.Controls.Add(this.MarkSelected);
             this.Controls.Add(this.ClearFiles);
             this.Controls.Add(this.label1);
@@ -215,8 +314,6 @@
             this.Controls.Add(this.fileListView);
             this.Controls.Add(this.btClose);
             this.Controls.Add(this.btOpen);
-            this.Controls.Add(this.txPath);
-            this.Controls.Add(this.lblFilePath);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmBundleExplorer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -229,8 +326,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblFilePath;
-        private System.Windows.Forms.TextBox txPath;
         private System.Windows.Forms.Button btOpen;
         private System.Windows.Forms.Button btClose;
         private System.Windows.Forms.ImageList treeImages;
@@ -245,5 +340,13 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button ClearFiles;
         private System.Windows.Forms.Button MarkSelected;
+        private System.Windows.Forms.ComboBox filetypeCB;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txPath;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ListView pathlistview;
+        private System.Windows.Forms.ColumnHeader columnPath;
     }
 }

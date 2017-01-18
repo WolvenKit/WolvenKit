@@ -172,17 +172,17 @@ namespace W3Edit
 
         private void contextMenu_Opening(object sender, CancelEventArgs e)
         {
-            var node = (VariableListNode)treeView.SelectedObject;
-            if (node == null)
+            var node = (VariableListNode[])treeView.SelectedObjects;
+            if (node == null || node.ToArray().Length <= 0)
             {
                 e.Cancel = true;
                 return;
             }
 
-            addVariableToolStripMenuItem.Enabled = node.Variable.CanAddVariable(null);
-            removeVariableToolStripMenuItem.Enabled = node.Parent != null && node.Parent.Variable.CanRemoveVariable(node.Variable);
-            pasteToolStripMenuItem.Enabled = CopyController.VariableTarget != null && node.Variable != null && node.Variable.CanAddVariable(CopyController.VariableTarget);
-            ptrPropertiesToolStripMenuItem.Visible = node.Variable is CPtr;
+          //  addVariableToolStripMenuItem.Enabled = node.Variable.CanAddVariable(null);
+           // removeVariableToolStripMenuItem.Enabled = node.Parent != null && node.Parent.Variable.CanRemoveVariable(node.Variable);
+           // pasteToolStripMenuItem.Enabled = CopyController.VariableTarget != null && node.Variable != null && node.Variable.CanAddVariable(CopyController.VariableTarget);
+           // ptrPropertiesToolStripMenuItem.Visible = node.Variable is CPtr;
         }
 
         private void copyVariable()

@@ -37,7 +37,7 @@
             // 
             this.btOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btOk.Location = new System.Drawing.Point(370, 38);
+            this.btOk.Location = new System.Drawing.Point(370, 35);
             this.btOk.Name = "btOk";
             this.btOk.Size = new System.Drawing.Size(75, 23);
             this.btOk.TabIndex = 0;
@@ -48,7 +48,7 @@
             // 
             this.btCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btCancel.Location = new System.Drawing.Point(12, 38);
+            this.btCancel.Location = new System.Drawing.Point(12, 35);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(75, 23);
             this.btCancel.TabIndex = 1;
@@ -59,7 +59,7 @@
             // 
             this.txFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txFileName.Location = new System.Drawing.Point(12, 12);
+            this.txFileName.Location = new System.Drawing.Point(12, 9);
             this.txFileName.Name = "txFileName";
             this.txFileName.Size = new System.Drawing.Size(433, 20);
             this.txFileName.TabIndex = 2;

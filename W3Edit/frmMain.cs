@@ -242,12 +242,10 @@ namespace W3Edit
 
             if (explorer.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                foreach (var depotpath in explorer.SelectedPaths)
+                foreach (ListViewItem depotpath in explorer.SelectedPaths)
                 {
-                    AddToMod(depotpath);
+                    AddToMod(depotpath.Text);
                 }
-
-
                 UpdateModFileList();
                 SaveMod();
             }
@@ -931,6 +929,11 @@ namespace W3Edit
         {
             using (var cf = new About())
                 cf.ShowDialog();
+        }
+
+        private void joinOurDiscordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://discord.gg/qBNgDEX");
         }
 
 
