@@ -94,7 +94,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(569, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(824, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -228,7 +228,7 @@
             this.dockPanel.Location = new System.Drawing.Point(0, 0);
             this.dockPanel.Name = "dockPanel";
             this.dockPanel.RightToLeftLayout = true;
-            this.dockPanel.Size = new System.Drawing.Size(569, 312);
+            this.dockPanel.Size = new System.Drawing.Size(824, 369);
             dockPanelGradient1.EndColor = System.Drawing.SystemColors.ControlLight;
             dockPanelGradient1.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
             autoHideStripSkin1.DockStripGradient = dockPanelGradient1;
@@ -285,7 +285,7 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btRunGame,
             this.btPack});
-            this.toolStrip1.Location = new System.Drawing.Point(172, 24);
+            this.toolStrip1.Location = new System.Drawing.Point(166, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(58, 25);
             this.toolStrip1.TabIndex = 3;
@@ -320,13 +320,13 @@
             // 
             this.toolStripContainer1.ContentPanel.AutoScroll = true;
             this.toolStripContainer1.ContentPanel.Controls.Add(this.dockPanel);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(569, 312);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(824, 369);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.LeftToolStripPanelVisible = false;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer1.Name = "toolStripContainer1";
             this.toolStripContainer1.RightToolStripPanelVisible = false;
-            this.toolStripContainer1.Size = new System.Drawing.Size(569, 361);
+            this.toolStripContainer1.Size = new System.Drawing.Size(824, 418);
             this.toolStripContainer1.TabIndex = 4;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
@@ -425,7 +425,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(569, 361);
+            this.ClientSize = new System.Drawing.Size(824, 418);
             this.Controls.Add(this.toolStripContainer1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;

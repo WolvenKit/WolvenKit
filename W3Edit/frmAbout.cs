@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace W3Edit
 {
-    partial class About : Form
+    partial class frmAbout : Form
     {
-        public About()
+        public frmAbout()
         {
             InitializeComponent();
             this.Text = String.Format("About {0}", AssemblyTitle);

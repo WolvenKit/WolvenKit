@@ -4,12 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml.Serialization;
 using W3Edit.CR2W.Editors;
 using W3Edit.CR2W.Types;
 
 namespace W3Edit.CR2W
 {
+    [Serializable]
     public class CR2WChunk : IEditableVariable
     {
         public CName typeName;

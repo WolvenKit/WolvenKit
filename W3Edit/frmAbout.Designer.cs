@@ -1,6 +1,6 @@
 ﻿namespace W3Edit
 {
-    partial class About
+    partial class frmAbout
     {
         /// <summary>
         /// Required designer variable.

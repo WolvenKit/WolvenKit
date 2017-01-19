@@ -36,6 +36,8 @@
             this.colIndex = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.colName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.colDisplay = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.copyChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.listView)).BeginInit();
             this.SuspendLayout();
@@ -44,21 +46,23 @@
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addChunkToolStripMenuItem,
-            this.deleteChunkToolStripMenuItem});
+            this.deleteChunkToolStripMenuItem,
+            this.copyChunkToolStripMenuItem,
+            this.pasteChunkToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(146, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(146, 92);
             // 
             // addChunkToolStripMenuItem
             // 
             this.addChunkToolStripMenuItem.Name = "addChunkToolStripMenuItem";
-            this.addChunkToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.addChunkToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.addChunkToolStripMenuItem.Text = "Add Chunk";
             this.addChunkToolStripMenuItem.Click += new System.EventHandler(this.addChunkToolStripMenuItem_Click);
             // 
             // deleteChunkToolStripMenuItem
             // 
             this.deleteChunkToolStripMenuItem.Name = "deleteChunkToolStripMenuItem";
-            this.deleteChunkToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.deleteChunkToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.deleteChunkToolStripMenuItem.Text = "Delete Chunk";
             this.deleteChunkToolStripMenuItem.Click += new System.EventHandler(this.deleteChunkToolStripMenuItem_Click);
             // 
@@ -100,6 +104,21 @@
             this.colDisplay.Text = "Preview";
             this.colDisplay.Width = 352;
             // 
+            // copyChunkToolStripMenuItem
+            // 
+            this.copyChunkToolStripMenuItem.Name = "copyChunkToolStripMenuItem";
+            this.copyChunkToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.copyChunkToolStripMenuItem.Text = "Copy Chunk";
+            this.copyChunkToolStripMenuItem.Click += new System.EventHandler(this.copyChunkToolStripMenuItem_Click);
+            // 
+            // pasteChunkToolStripMenuItem
+            // 
+            this.pasteChunkToolStripMenuItem.Enabled = false;
+            this.pasteChunkToolStripMenuItem.Name = "pasteChunkToolStripMenuItem";
+            this.pasteChunkToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.pasteChunkToolStripMenuItem.Text = "Paste Chunk";
+            this.pasteChunkToolStripMenuItem.Click += new System.EventHandler(this.pasteChunkToolStripMenuItem_Click);
+            // 
             // frmChunkList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -128,5 +147,7 @@
         private BrightIdeasSoftware.OLVColumn colIndex;
         private BrightIdeasSoftware.OLVColumn colName;
         private BrightIdeasSoftware.OLVColumn colDisplay;
+        private System.Windows.Forms.ToolStripMenuItem copyChunkToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pasteChunkToolStripMenuItem;
     }
 }

@@ -85,5 +85,39 @@ namespace W3Edit
                 listView.UpdateObjects(File.chunks);
             }
         }
+
+        private void copyChunkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.Clear();
+            List<CR2WChunk> chunks = new List<CR2WChunk>();
+            foreach (CR2WChunk item in listView.SelectedObjects)
+                chunks.Add(item);
+            CopyController.ChunkList = chunks;
+            pasteChunkToolStripMenuItem.Enabled = true;
+        }
+
+        private void pasteChunkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var copiedchunks = CopyController.ChunkList;
+            if(copiedchunks != null && copiedchunks.Count > 0)
+            {
+                foreach (CR2WChunk chunk in copiedchunks)
+                {
+                    try
+                    {
+                        listView.AddObject(chunk);
+                        if (OnSelectChunk != null && chunk != null)
+                        {
+                            OnSelectChunk(this, new SelectChunkArgs() { Chunk = chunk });
+                        }
+                        listView.RefreshObject(chunk);
+                    }
+                    catch (InvalidChunkTypeException ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error adding chunk.");
+                    }   
+                }             
+            }
+        }
     }
 }

@@ -927,7 +927,7 @@ namespace W3Edit
 
         private void creditsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var cf = new About())
+            using (var cf = new frmAbout())
                 cf.ShowDialog();
         }
 

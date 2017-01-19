@@ -32,7 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmBundleExplorer));
             this.treeImages = new System.Windows.Forms.ImageList(this.components);
             this.btOpen = new System.Windows.Forms.Button();
-            this.btClose = new System.Windows.Forms.Button();
             this.fileListView = new System.Windows.Forms.ListView();
             this.colFileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colFileSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -48,7 +47,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.txPath = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.pathlistview = new System.Windows.Forms.ListView();
             this.columnPath = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -67,24 +65,13 @@
             this.btOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btOpen.CausesValidation = false;
             this.btOpen.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btOpen.Location = new System.Drawing.Point(696, 453);
+            this.btOpen.Location = new System.Drawing.Point(12, 452);
             this.btOpen.Name = "btOpen";
-            this.btOpen.Size = new System.Drawing.Size(105, 23);
+            this.btOpen.Size = new System.Drawing.Size(145, 23);
             this.btOpen.TabIndex = 3;
-            this.btOpen.Text = "Add to Mod";
+            this.btOpen.TabStop = false;
+            this.btOpen.Text = "Add marked files to mod";
             this.btOpen.UseVisualStyleBackColor = true;
-            this.btOpen.Click += new System.EventHandler(this.btOpen_Click);
-            // 
-            // btClose
-            // 
-            this.btClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btClose.Location = new System.Drawing.Point(12, 453);
-            this.btClose.Name = "btClose";
-            this.btClose.Size = new System.Drawing.Size(75, 23);
-            this.btClose.TabIndex = 4;
-            this.btClose.Text = "Close";
-            this.btClose.UseVisualStyleBackColor = true;
             // 
             // fileListView
             // 
@@ -163,6 +150,7 @@
             this.SearchBox.Size = new System.Drawing.Size(343, 20);
             this.SearchBox.TabIndex = 7;
             this.SearchBox.TextChanged += new System.EventHandler(this.SearchBox_TextChanged);
+            this.SearchBox.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.SearchBox_PreviewKeyDown);
             // 
             // label1
             // 
@@ -179,21 +167,23 @@
             // ClearFiles
             // 
             this.ClearFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ClearFiles.Location = new System.Drawing.Point(461, 453);
+            this.ClearFiles.Location = new System.Drawing.Point(583, 453);
             this.ClearFiles.Name = "ClearFiles";
             this.ClearFiles.Size = new System.Drawing.Size(105, 23);
             this.ClearFiles.TabIndex = 9;
-            this.ClearFiles.Text = "Clear selected files";
+            this.ClearFiles.TabStop = false;
+            this.ClearFiles.Text = "Unmark selected";
             this.ClearFiles.UseVisualStyleBackColor = true;
             this.ClearFiles.Click += new System.EventHandler(this.button1_Click);
             // 
             // MarkSelected
             // 
             this.MarkSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.MarkSelected.Location = new System.Drawing.Point(585, 453);
+            this.MarkSelected.Location = new System.Drawing.Point(694, 453);
             this.MarkSelected.Name = "MarkSelected";
             this.MarkSelected.Size = new System.Drawing.Size(105, 23);
             this.MarkSelected.TabIndex = 10;
+            this.MarkSelected.TabStop = false;
             this.MarkSelected.Text = "Mark selected";
             this.MarkSelected.UseVisualStyleBackColor = true;
             this.MarkSelected.Click += new System.EventHandler(this.MarkSelected_Click);
@@ -249,22 +239,15 @@
             this.label3.TabIndex = 15;
             this.label3.Text = "Marked files:";
             // 
-            // txPath
-            // 
-            this.txPath.Location = new System.Drawing.Point(102, 455);
-            this.txPath.Name = "txPath";
-            this.txPath.Size = new System.Drawing.Size(100, 20);
-            this.txPath.TabIndex = 16;
-            this.txPath.Visible = false;
-            // 
             // button2
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(350, 453);
+            this.button2.Location = new System.Drawing.Point(472, 453);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(105, 23);
             this.button2.TabIndex = 17;
-            this.button2.Text = "Clear all";
+            this.button2.TabStop = false;
+            this.button2.Text = "Clear marks";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.Clear_Click);
             // 
@@ -297,10 +280,8 @@
             this.AcceptButton = this.btOpen;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.btClose;
             this.ClientSize = new System.Drawing.Size(811, 479);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.txPath);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.pathlistview);
             this.Controls.Add(this.label2);
@@ -312,7 +293,6 @@
             this.Controls.Add(this.SearchBox);
             this.Controls.Add(this.pathPanel);
             this.Controls.Add(this.fileListView);
-            this.Controls.Add(this.btClose);
             this.Controls.Add(this.btOpen);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmBundleExplorer";
@@ -327,7 +307,6 @@
         #endregion
 
         private System.Windows.Forms.Button btOpen;
-        private System.Windows.Forms.Button btClose;
         private System.Windows.Forms.ImageList treeImages;
         private System.Windows.Forms.ListView fileListView;
         private System.Windows.Forms.ColumnHeader colFileName;
@@ -344,7 +323,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txPath;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ListView pathlistview;
         private System.Windows.Forms.ColumnHeader columnPath;

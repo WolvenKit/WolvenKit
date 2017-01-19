@@ -171,7 +171,6 @@ namespace W3Edit
                         tempnode.ImageKey = "genericFile";
                         tempnode.Text = item.FullPath;
                         tempnode.ToolTipText = item.FullPath;
-                        txPath.Text += (item.FullPath + ";");
                         pathlistview.Items.Add(tempnode);
                     }
                 }
@@ -276,6 +275,11 @@ namespace W3Edit
             }
         }
 
+        public void Search(string s,int i)
+        {
+            MessageBox.Show("Searching: " + s + "\nExtension: " + filetypeCB.Items[i]);
+        }
+
         private void MarkSelected_Click(object sender, EventArgs e)
         {
             if (fileListView.SelectedItems.Count > 0)
@@ -305,7 +309,7 @@ namespace W3Edit
 
         private void SearchButton_Click(object sender, EventArgs e)
         {
-            //TODO: Add the actual search here
+            Search(SearchBox.Text, filetypeCB.SelectedIndex);
         }
 
         private void Clear_Click(object sender, EventArgs e)
@@ -322,9 +326,12 @@ namespace W3Edit
             }
         }
 
-        private void btOpen_Click(object sender, EventArgs e)
+        private void SearchBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-
+            if(e.KeyCode == Keys.Enter)
+            {
+                Search(SearchBox.Text, filetypeCB.SelectedIndex);               
+            }
         }
     }
 }
