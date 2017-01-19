@@ -172,57 +172,72 @@ namespace W3Edit
 
         private void contextMenu_Opening(object sender, CancelEventArgs e)
         {
-            var node = (VariableListNode[])treeView.SelectedObjects;
-            if (node == null || node.ToArray().Length <= 0)
+            List<VariableListNode> sNodes = new List<VariableListNode>();
+            foreach (VariableListNode item in treeView.SelectedObjects)
+            {
+                if (item != null && item.Variable != null)
+                {
+                    sNodes.Add(item);
+                }
+            }
+            if (sNodes == null || sNodes.ToArray().Length <= 0)
             {
                 e.Cancel = true;
                 return;
             }
 
-          //  addVariableToolStripMenuItem.Enabled = node.Variable.CanAddVariable(null);
-           // removeVariableToolStripMenuItem.Enabled = node.Parent != null && node.Parent.Variable.CanRemoveVariable(node.Variable);
-           // pasteToolStripMenuItem.Enabled = CopyController.VariableTarget != null && node.Variable != null && node.Variable.CanAddVariable(CopyController.VariableTarget);
-           // ptrPropertiesToolStripMenuItem.Visible = node.Variable is CPtr;
+            addVariableToolStripMenuItem.Enabled = sNodes.All(x=> x.Variable.CanAddVariable(null));
+            removeVariableToolStripMenuItem.Enabled = sNodes.All(x=> x.Parent != null && x.Parent.Variable.CanRemoveVariable(x.Variable));
+            pasteToolStripMenuItem.Enabled = CopyController.VariableTargets != null &&
+                                             sNodes.All(x => x.Variable != null && CopyController.VariableTargets.Any(z=> x.Variable.CanAddVariable(z)));
+            ptrPropertiesToolStripMenuItem.Visible = sNodes.All(x=> x.Variable is CPtr) && sNodes.Count == 1;
         }
 
         private void copyVariable()
         {
-            var node = (VariableListNode)treeView.SelectedObject;
-            if (node == null || node.Variable == null)
+            List<IEditableVariable> tocopynodes = new List<IEditableVariable>();
+            foreach (VariableListNode item in treeView.SelectedObjects)
             {
-                return;
+                if (item != null && item.Variable != null)
+                {
+                    tocopynodes.Add(item.Variable);
+                }
             }
-
-            CopyController.VariableTarget = node.Variable;
+            if(tocopynodes.Count > 0)
+            {
+                CopyController.VariableTargets = tocopynodes;
+            }
         }
 
         private void pasteVariable()
         {
             var node = (VariableListNode)treeView.SelectedObject;
-            if (CopyController.VariableTarget == null || node == null || node.Variable == null || !node.Variable.CanAddVariable(null))
+            if (CopyController.VariableTargets == null || node == null || node.Variable == null || !node.Variable.CanAddVariable(null))
             {
                 return;
             }
 
-            if (CopyController.VariableTarget is CVariable)
+            if (CopyController.VariableTargets.All(x=> x is CVariable))
             {
-                var cvar = (CVariable)CopyController.VariableTarget;
-
-                var context = new CR2WCopyAction()
+                foreach (CVariable v in CopyController.VariableTargets.Select(x=> (CVariable)x))
                 {
-                    SourceFile = cvar.cr2w,
-                    DestinationFile = node.Variable.CR2WOwner,
-                    MaxIterationDepth = 0,
-                };
+                    var context = new CR2WCopyAction()
+                    {
+                        SourceFile = v.cr2w,
+                        DestinationFile = node.Variable.CR2WOwner,
+                        MaxIterationDepth = 0,
+                    };
 
-                var newvar = cvar.Copy(context);
-                node.Variable.AddVariable(newvar);
+                    var newvar = v.Copy(context);
+                    node.Variable.AddVariable(newvar);
 
-                var subnode = AddListViewItems(newvar, node);
-                node.Children.Add(subnode);
+                    var subnode = AddListViewItems(newvar, node);
+                    node.Children.Add(subnode);
 
-                treeView.RefreshObject(node);
-                treeView.RefreshObject(subnode);
+                    treeView.RefreshObject(node);
+                    treeView.RefreshObject(subnode);
+                    
+                }
             }
         }
 

@@ -120,10 +120,5 @@ namespace W3Edit
                 }             
             }
         }
-
-        private void refreshChunksToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

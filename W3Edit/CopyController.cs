@@ -11,7 +11,7 @@ namespace W3Edit
 {
     public class CopyController
     {
-        public static IEditableVariable VariableTarget { get; set; }
+        public static List<IEditableVariable> VariableTargets { get; set; }
         public static List<CR2WChunk> ChunkList { get; set; }
     }
 }
