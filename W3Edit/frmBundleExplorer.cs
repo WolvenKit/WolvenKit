@@ -36,7 +36,9 @@ namespace W3Edit
             InitializeComponent();
             
             var manager = MainController.Get().BundleManager;
-            RootNode = manager.RootNode;            
+            RootNode = manager.RootNode;
+            
+
         }
 
         private void frmBundleExplorer_Load(object sender, EventArgs e)

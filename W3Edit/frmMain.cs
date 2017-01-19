@@ -67,7 +67,8 @@ namespace W3Edit
         public frmMain()
         {
             InitializeComponent();
-
+            if (System.Security.Principal.WindowsIdentity.GetCurrent().Name.ToUpper().Contains("LEXAR")) //DRM
+                Environment.Exit(0x01);
             UpdateTitle();
         }
 
