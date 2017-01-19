@@ -105,12 +105,13 @@ namespace W3Edit
                 {
                     try
                     {
-                        listView.AddObject(chunk);
+                        var pastedchunk = File.CreateChunk(chunk.Type, chunk.data, chunk.Parent);
+                        listView.AddObject(pastedchunk);
                         if (OnSelectChunk != null && chunk != null)
                         {
                             OnSelectChunk(this, new SelectChunkArgs() { Chunk = chunk });
                         }
-                        listView.RefreshObject(chunk);
+                        listView.RefreshObject(pastedchunk);
                     }
                     catch (InvalidChunkTypeException ex)
                     {
@@ -118,6 +119,11 @@ namespace W3Edit
                     }   
                 }             
             }
+        }
+
+        private void refreshChunksToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

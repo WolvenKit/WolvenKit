@@ -521,6 +521,21 @@ namespace W3Edit.CR2W
             return chunk;
         }
 
+        public CR2WChunk CreateChunk(string type,CVariable data,CR2WChunk parent = null)
+        {
+            var chunk = new CR2WChunk(this);
+            chunk.Type = type;
+            chunk.data = data;
+            if (parent != null)
+            {
+                chunk.ParentChunkId = (UInt32)chunks.IndexOf(parent) + 1;
+            }
+
+            chunks.Add(chunk);
+            return chunk;
+        }
+
+
         public int GetStringIndex(string name, bool addnew = false)
         {
             for (int i = 0; i < strings.Count; i++)

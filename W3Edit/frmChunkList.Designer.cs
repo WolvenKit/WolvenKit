@@ -38,6 +38,7 @@
             this.colDisplay = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.copyChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.refreshChunksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.listView)).BeginInit();
             this.SuspendLayout();
@@ -48,9 +49,10 @@
             this.addChunkToolStripMenuItem,
             this.deleteChunkToolStripMenuItem,
             this.copyChunkToolStripMenuItem,
-            this.pasteChunkToolStripMenuItem});
+            this.pasteChunkToolStripMenuItem,
+            this.refreshChunksToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(146, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(157, 136);
             // 
             // addChunkToolStripMenuItem
             // 
@@ -119,6 +121,13 @@
             this.pasteChunkToolStripMenuItem.Text = "Paste Chunk";
             this.pasteChunkToolStripMenuItem.Click += new System.EventHandler(this.pasteChunkToolStripMenuItem_Click);
             // 
+            // refreshChunksToolStripMenuItem
+            // 
+            this.refreshChunksToolStripMenuItem.Name = "refreshChunksToolStripMenuItem";
+            this.refreshChunksToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.refreshChunksToolStripMenuItem.Text = "Refresh Chunks";
+            this.refreshChunksToolStripMenuItem.Click += new System.EventHandler(this.refreshChunksToolStripMenuItem_Click);
+            // 
             // frmChunkList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -149,5 +158,6 @@
         private BrightIdeasSoftware.OLVColumn colDisplay;
         private System.Windows.Forms.ToolStripMenuItem copyChunkToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pasteChunkToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem refreshChunksToolStripMenuItem;
     }
 }
