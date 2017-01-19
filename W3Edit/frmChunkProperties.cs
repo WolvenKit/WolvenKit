@@ -295,16 +295,16 @@ namespace W3Edit
 
         private void removeVariableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var node = (VariableListNode)treeView.SelectedObject;
-            if (node == null || node.Parent == null || !node.Parent.Variable.CanRemoveVariable(node.Variable))
+            ListView.SelectedIndexCollection col = treeView.SelectedIndices;
+            foreach (VariableListNode node in treeView.SelectedObjects)
             {
-                return;
+                if (node != null && node.Parent != null && node.Parent.Variable.CanRemoveVariable(node.Variable))
+                {
+                    node.Parent.Variable.RemoveVariable(node.Variable);
+                    node.Parent.Children.Remove(node);
+                    treeView.RefreshObject(node.Parent);
+                }
             }
-
-            node.Parent.Variable.RemoveVariable(node.Variable);
-            node.Parent.Children.Remove(node);
-
-            treeView.RefreshObject(node.Parent);
         }
 
 
