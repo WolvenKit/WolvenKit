@@ -393,6 +393,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\refresh.png" />
     <None Include="Resources\aERVQbx_460s.jpg" />
   </ItemGroup>
   <ItemGroup>

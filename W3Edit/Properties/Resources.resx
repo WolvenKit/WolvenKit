@@ -124,14 +124,11 @@
   <data name="NewSolutionFolder_6289" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\NewSolutionFolder_6289.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="geralt" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\geralt.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="gear_16xLG" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\gear_16xLG.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="FileGroup_10135_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\FileGroup_10135_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="geralt" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\geralt.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Save_6530" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Save_6530.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -139,13 +136,19 @@
   <data name="Saveall_6518" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Saveall_6518.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="FileGroup_10135_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FileGroup_10135_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="properties_16xLG" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\properties_16xLG.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aERVQbx_460s" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\aERVQbx_460s.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Open_6529" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Open_6529.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="aERVQbx_460s" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\aERVQbx_460s.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

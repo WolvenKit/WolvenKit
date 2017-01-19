@@ -938,6 +938,11 @@ namespace W3Edit
                 Process.Start("https://discord.gg/qBNgDEX");
         }
 
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+                UpdateModFileList(true);
+        }
+
 
     }
 }

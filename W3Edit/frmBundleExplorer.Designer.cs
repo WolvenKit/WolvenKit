@@ -50,6 +50,8 @@
             this.button2 = new System.Windows.Forms.Button();
             this.pathlistview = new System.Windows.Forms.ListView();
             this.columnPath = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // treeImages
@@ -145,6 +147,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.SearchBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.SearchBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.SearchBox.CausesValidation = false;
             this.SearchBox.Location = new System.Drawing.Point(72, 43);
             this.SearchBox.Name = "SearchBox";
             this.SearchBox.Size = new System.Drawing.Size(343, 20);
@@ -275,6 +278,10 @@
             this.columnPath.Text = "Path";
             this.columnPath.Width = 105;
             // 
+            // errorProvider
+            // 
+            this.errorProvider.ContainerControl = this;
+            // 
             // frmBundleExplorer
             // 
             this.AcceptButton = this.btOpen;
@@ -299,6 +306,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Bundle Explorer";
             this.Load += new System.EventHandler(this.frmBundleExplorer_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -326,5 +334,6 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ListView pathlistview;
         private System.Windows.Forms.ColumnHeader columnPath;
+        private System.Windows.Forms.ErrorProvider errorProvider;
     }
 }
