@@ -21,7 +21,7 @@ namespace W3Edit
 
             public string FullPath { get; set; }
         }
-
+        public List<string> Files { get; set; }
         public BundleTreeNode ActiveNode { get; set; }
         public BundleTreeNode RootNode { get; set; }
 
@@ -29,7 +29,8 @@ namespace W3Edit
             get { return pathlistview.Items; } 
         }
 
-        public List<string> AutoCompleteNames; //TODO: Make some mlg linq querry to get all filenames and extensions
+        public List<BundleItem> FileList;
+        public List<string> Autocompletelist;
 
         public frmBundleExplorer()
         {
@@ -37,8 +38,16 @@ namespace W3Edit
             
             var manager = MainController.Get().BundleManager;
             RootNode = manager.RootNode;
-            
-
+            FileList = GetFiles(RootNode);
+            filetypeCB.Items.AddRange(GetExtensions(FileList.Select(x=>x.Name).ToArray()));
+            filetypeCB.SelectedIndex = 0;
+            Autocompletelist = FileList.Select(x=> x.Name).ToList();
+            var completelist = new AutoCompleteStringCollection();
+            foreach (var name in Autocompletelist)
+            {
+                completelist.Add(name);
+            }
+            SearchBox.AutoCompleteCustomSource = completelist;
         }
 
         private void frmBundleExplorer_Load(object sender, EventArgs e)
@@ -68,7 +77,7 @@ namespace W3Edit
                     });
                 }
 
-                foreach(var item in node.Directories)
+                foreach(var item in node.Directories.OrderBy(x=>x.Key))
                 {
                     fileListView.Items.Add(new BundleListItem()
                     {
@@ -80,7 +89,7 @@ namespace W3Edit
                 }
 
 
-                foreach (var item in node.Files)
+                foreach (var item in node.Files.OrderBy(x => x.Key))
                 {
                     var lastItem = item.Value[item.Value.Count-1];
                     var listItem = fileListView.Items.Add(new BundleListItem()
@@ -279,7 +288,69 @@ namespace W3Edit
 
         public void Search(string s,int i)
         {
-            MessageBox.Show("Searching: " + s + "\nExtension: " + filetypeCB.Items[i]);
+            var found = SearchFiles(FileList.ToArray(),s,filetypeCB.Items[i].ToString()).Take(10);
+            fileListView.Items.Clear();
+            foreach (var file in found)
+            {
+                var lastItem = file;
+                var listItem = fileListView.Items.Add(new BundleListItem()
+                {
+                    Node = null,
+                    FullPath = lastItem.Name,
+                    Text = file.Name,
+                    IsDirectory = false,
+                    ImageKey = "genericFile"
+                });
+                listItem.SubItems.Add(lastItem.Size.ToString());
+                listItem.SubItems.Add(string.Format("{0}%", (100 - (int)((float)lastItem.ZSize / (float)lastItem.Size * 100.0f))) );
+                listItem.SubItems.Add(lastItem.CompressionType);
+                listItem.SubItems.Add(lastItem.DateString);
+            }
+        }
+
+        public List<BundleItem> GetFiles(BundleTreeNode mainnode)
+        {
+            List<BundleItem> bundfiles = new List<BundleItem>();
+            foreach (var wfile in mainnode.Files)
+            {
+                foreach (var val in wfile.Value)
+                {
+                    bundfiles.Add(val);
+                }
+            }
+            foreach (var dir in mainnode.Directories.Values)
+            {
+                var subs = GetFiles(dir);
+                foreach (var subfil in subs)
+                {
+                    bundfiles.Add(subfil);
+                }
+            }
+            return bundfiles;
+        }
+
+        public BundleItem[] SearchFiles(BundleItem[] files,string searchkeyword,string Extension)
+        {
+            List<BundleItem> filtered = new List<BundleItem>();
+            foreach (var file in files)
+            {
+                if ((file.Name.EndsWith(Extension) && file.Name.ToUpper().Contains(searchkeyword.ToUpper())) || (file.Name.ToUpper().Contains(searchkeyword.ToUpper()) && Extension.ToUpper() == "ANY"))
+                {
+                    filtered.Add(file);
+                }
+            }
+            return filtered.ToArray();
+        }
+
+        public string[] GetExtensions(params string[] filename)
+        {
+            List<string> extensions = new List<string>();
+            foreach (var file in filename)
+            {
+                if (!extensions.Contains(file.Split('.').Last()))
+                    extensions.Add(file.Split('.').Last());
+            }
+            return extensions.ToArray();
         }
 
         private void MarkSelected_Click(object sender, EventArgs e)

@@ -934,7 +934,8 @@ namespace W3Edit
 
         private void joinOurDiscordToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("https://discord.gg/qBNgDEX");
+            if(MessageBox.Show("Are you sure you would like to join the modding discord?","Confirmation",MessageBoxButtons.YesNo) == DialogResult.Yes)
+                Process.Start("https://discord.gg/qBNgDEX");
         }
 
 
