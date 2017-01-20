@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3Edit.W3Strings", "W3Edit.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3Edit.Bundles", "W3Edit.Bundles\W3Edit.Bundles.csproj", "{5BD2292A-24DB-4B4A-A5B1-5D435769C289}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3Edit.W3Speech", "W3Edit.W3Speech\W3Edit.W3Speech.csproj", "{C025F253-C78B-4A3B-87E7-1B2A1A453B97}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{5BD2292A-24DB-4B4A-A5B1-5D435769C289}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BD2292A-24DB-4B4A-A5B1-5D435769C289}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BD2292A-24DB-4B4A-A5B1-5D435769C289}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C025F253-C78B-4A3B-87E7-1B2A1A453B97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C025F253-C78B-4A3B-87E7-1B2A1A453B97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C025F253-C78B-4A3B-87E7-1B2A1A453B97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C025F253-C78B-4A3B-87E7-1B2A1A453B97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

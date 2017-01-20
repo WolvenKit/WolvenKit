@@ -52,7 +52,7 @@ namespace W3Edit
             {
                 TextLanguage = "en",
                 VoiceLanguage = "en",
-                EnableFlowTreeEditor = false,
+                EnableFlowTreeEditor = true,
             };
         }
 

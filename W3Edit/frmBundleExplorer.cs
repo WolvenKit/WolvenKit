@@ -39,9 +39,11 @@ namespace W3Edit
             var manager = MainController.Get().BundleManager;
             RootNode = manager.RootNode;
             FileList = GetFiles(RootNode);
-            filetypeCB.Items.AddRange(GetExtensions(FileList.Select(x=>x.Name).ToArray()));
+            var sorted = GetExtensions(FileList.Select(x => x.Name).ToArray());
+            Array.Sort(sorted, (x, y) => String.Compare(x, y));
+            filetypeCB.Items.AddRange(sorted);
             filetypeCB.SelectedIndex = 0;
-            Autocompletelist = FileList.Select(x=> x.Name).ToList();
+            Autocompletelist = FileList.Select(x=> GetFileName(x.Name)).ToList();
             var completelist = new AutoCompleteStringCollection();
             foreach (var name in Autocompletelist)
             {
@@ -286,6 +288,19 @@ namespace W3Edit
             }
         }
 
+        public string GetFileName(string s)
+        {
+            var result = "";
+            if(s.Contains('\\'))
+            {
+                result = s.Split('\\').Last();
+            }
+            else
+            {
+                result = s;
+            }
+            return result;
+        }
         public void Search(string s,int i)
         {
             if (s.Length < 3)

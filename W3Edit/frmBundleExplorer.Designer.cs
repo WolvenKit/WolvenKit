@@ -65,7 +65,7 @@
             // btOpen
             // 
             this.btOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btOpen.CausesValidation = false;
+            this.btOpen.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btOpen.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btOpen.Location = new System.Drawing.Point(12, 452);
             this.btOpen.Name = "btOpen";
@@ -142,8 +142,7 @@
             // 
             // SearchBox
             // 
-            this.SearchBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.SearchBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.SearchBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.SearchBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
@@ -157,8 +156,7 @@
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(14, 46);
@@ -193,9 +191,7 @@
             // 
             // filetypeCB
             // 
-            this.filetypeCB.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.filetypeCB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.filetypeCB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.filetypeCB.FormattingEnabled = true;
             this.filetypeCB.Items.AddRange(new object[] {
@@ -207,9 +203,7 @@
             // 
             // button1
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.Location = new System.Drawing.Point(591, 41);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(86, 23);
@@ -220,9 +214,7 @@
             // 
             // label2
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(421, 46);
             this.label2.Name = "label2";
@@ -232,11 +224,9 @@
             // 
             // label3
             // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(693, 25);
+            this.label3.Location = new System.Drawing.Point(693, 19);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(67, 13);
             this.label3.TabIndex = 15;
@@ -256,8 +246,7 @@
             // 
             // pathlistview
             // 
-            this.pathlistview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.pathlistview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pathlistview.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnPath});
@@ -284,7 +273,6 @@
             // 
             // frmBundleExplorer
             // 
-            this.AcceptButton = this.btOpen;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(811, 479);

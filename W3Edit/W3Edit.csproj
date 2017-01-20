@@ -79,7 +79,8 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>W3Edit_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Doboz">
@@ -118,6 +119,12 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="CopyController.cs" />
     <Compile Include="FileSavedEventArgs.cs" />
+    <Compile Include="frmQuestDesign.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmQuestDesign.Designer.cs">
+      <DependentUpon>frmQuestDesign.cs</DependentUpon>
+    </Compile>
     <Compile Include="ImportExportUtility.cs" />
     <Compile Include="FlowTreeEditors\ChunkEditor.cs">
       <SubType>UserControl</SubType>
@@ -314,6 +321,9 @@
     <EmbeddedResource Include="frmOutput.resx">
       <DependentUpon>frmOutput.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmQuestDesign.resx">
+      <DependentUpon>frmQuestDesign.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmRenameDialog.resx">
       <DependentUpon>frmRenameDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -342,8 +352,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="W3Edit_1_TemporaryKey.pfx" />
-    <None Include="W3Edit_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Open_6529.png" />
