@@ -943,6 +943,12 @@ namespace W3Edit
                 UpdateModFileList(true);
         }
 
+        private void saveEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (frmSaveEditor sef = new frmSaveEditor())
+                sef.ShowDialog();
+        }
+
 
     }
 }

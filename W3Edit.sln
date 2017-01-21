@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3Edit.Bundles", "W3Edit.Bu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3Edit.W3Speech", "W3Edit.W3Speech\W3Edit.W3Speech.csproj", "{C025F253-C78B-4A3B-87E7-1B2A1A453B97}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3SavegameEditor.Core", "C:\Users\Bence\Desktop\W3SavegameEditor-master\W3SavegameEditor.Core\W3SavegameEditor.Core.csproj", "{9C026DA7-481D-43C6-8C18-635D69FDB423}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{C025F253-C78B-4A3B-87E7-1B2A1A453B97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C025F253-C78B-4A3B-87E7-1B2A1A453B97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C025F253-C78B-4A3B-87E7-1B2A1A453B97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C026DA7-481D-43C6-8C18-635D69FDB423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C026DA7-481D-43C6-8C18-635D69FDB423}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C026DA7-481D-43C6-8C18-635D69FDB423}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C026DA7-481D-43C6-8C18-635D69FDB423}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

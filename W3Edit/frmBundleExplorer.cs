@@ -303,11 +303,6 @@ namespace W3Edit
         }
         public void Search(string s,int i)
         {
-            if (s.Length < 3)
-            {
-                errorProvider.SetError(SearchBox, "Please enter more than 3 characters!");
-                return;
-            }
             var found = SearchFiles(FileList.ToArray(),s,filetypeCB.Items[i].ToString());
             fileListView.Items.Clear();
             foreach (var file in found)
