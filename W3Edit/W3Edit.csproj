@@ -426,6 +426,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <Content Include="Notes\Filetypes.txt" />
     <None Include="Resources\refresh.png" />
     <None Include="Resources\aERVQbx_460s.jpg" />
   </ItemGroup>

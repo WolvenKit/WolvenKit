@@ -16,6 +16,7 @@ using WeifenLuo.WinFormsUI.Docking;
 using System.Diagnostics;
 using W3Edit.CR2W.Types;
 using W3Edit.Bundles;
+using System.Runtime.InteropServices;
 
 namespace W3Edit
 {
@@ -28,7 +29,6 @@ namespace W3Edit
             get { return ModManager.Get().ActiveMod; }
             set { ModManager.Get().ActiveMod = value; UpdateTitle(); }
         }
-
         public string Version
         {
             get
@@ -38,6 +38,9 @@ namespace W3Edit
                 return fvi.FileVersion;
             }
         }
+
+        [DllImport("shell32.dll")]
+        static extern int FindExecutable(string lpFile, string lpDirectory, [Out] StringBuilder lpResult);
 
         private void UpdateTitle()
         {
@@ -461,6 +464,9 @@ namespace W3Edit
                 case ".txt":
                     ShellExecute(fullpath);
                 break;
+                case ".subs":
+                    PolymorphExecute(fullpath, ".txt");
+                    break;
                 default:
                     LoadDocument(fullpath);
                 break;
@@ -472,6 +478,21 @@ namespace W3Edit
             var proc = new ProcessStartInfo(fullpath);
             proc.UseShellExecute = true;
             Process.Start(proc);
+        }
+
+        private void PolymorphExecute(string fullpath,string extension)
+        {
+            File.WriteAllBytes(Path.GetTempPath() + "asd." + extension, new byte[] { 0x01 });
+            StringBuilder programname = new StringBuilder();
+            FindExecutable("asd." + extension, Path.GetTempPath(), programname);
+            if (programname.ToString().ToUpper().Contains(".EXE"))
+            {
+                Process.Start(programname.ToString(), fullpath);
+            }
+            else
+            {
+                throw new InvalidFileTypeException("Invalid file type");
+            }
         }
 
         private void ShowOutput()
