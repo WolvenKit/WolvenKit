@@ -7,4 +7,5 @@ Awesome people:
 - KNG
 - erx
 - Skacik
+- George Tziotis
 - The Witcher 3 modding discord (https://discord.gg/qBNgDEX)
