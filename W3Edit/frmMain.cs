@@ -490,17 +490,19 @@ namespace W3Edit
 
         private void createNewMod()
         {
-            var dlg = new SaveFileDialog();
-            dlg.Title = "Create Witcher 3 Mod Project";
-            dlg.Filter = "Witcher 3 Mod|*.w3modproj";
-            dlg.InitialDirectory = MainController.Get().Configuration.InitialModDirectory;
+            var dlg = new SaveFileDialog
+            {
+                Title = @"Create Witcher 3 Mod Project",
+                Filter = @"Witcher 3 Mod|*.w3modproj",
+                InitialDirectory = MainController.Get().Configuration.InitialModDirectory
+            };
 
-            while (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            while (dlg.ShowDialog() == DialogResult.OK)
             {
                 
                 if(dlg.FileName.Contains(' '))
                 {
-                    MessageBox.Show("The mod path should not contain spaces because wcc_lite.exe will have trouble with that.", "Invalid path");
+                    MessageBox.Show(@"The mod path should not contain spaces because wcc_lite.exe will have trouble with that.", "Invalid path");
                     continue;
                 }
 
@@ -588,16 +590,14 @@ namespace W3Edit
 
         private void saveAllFiles()
         {
-            foreach(var d in OpenDocuments)
+            foreach (var d in OpenDocuments.Where(d => d.SaveTarget != null))
             {
-                if(d.SaveTarget != null)
-                    saveFile(d);
+                saveFile(d);
             }
 
-            foreach (var d in OpenDocuments)
+            foreach (var d in OpenDocuments.Where(d => d.SaveTarget == null))
             {
-                if (d.SaveTarget == null)
-                    saveFile(d);
+                saveFile(d);
             }
         }
 
@@ -671,14 +671,7 @@ namespace W3Edit
 
             string gameModDir = null;
 
-            if (ActiveMod.InstallAsDLC)
-            {
-                gameModDir = Path.Combine(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath), @"..\..\DLC\", modName);
-            }
-            else
-            {
-                gameModDir = Path.Combine(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath), @"..\..\Mods\", modName);
-            }
+            gameModDir = Path.Combine(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath), ActiveMod.InstallAsDLC ? @"..\..\DLC\" : @"..\..\Mods\", modName);
 
             if (!Directory.Exists(gameModDir))
                 Directory.CreateDirectory(gameModDir);
@@ -746,11 +739,10 @@ namespace W3Edit
         private async Task createModMetaData()
         {
             var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.WCC_Lite);
-            proc.WorkingDirectory = Path.GetDirectoryName(config.WCC_Lite);
+            var proc = new ProcessStartInfo(config.WCC_Lite) {WorkingDirectory = Path.GetDirectoryName(config.WCC_Lite)};
             var packedDir = Path.Combine(ActiveMod.Directory, @"packed\content\");
 
-            proc.Arguments = string.Format("metadatastore -path={0}", packedDir);
+            proc.Arguments = $"metadatastore -path={packedDir}";
             proc.UseShellExecute = false;
             proc.RedirectStandardOutput = true;
             proc.WindowStyle = ProcessWindowStyle.Hidden;
@@ -777,15 +769,15 @@ namespace W3Edit
             }
         }
 
-        private frmCR2WDocument activedocument;
+        private frmCR2WDocument _activedocument;
         public frmCR2WDocument ActiveDocument {
             get 
             { 
-                return activedocument; 
+                return _activedocument; 
             }
             set
             {
-                activedocument = value;
+                _activedocument = value;
                 UpdateTitle();
             }
         }
@@ -801,13 +793,15 @@ namespace W3Edit
         private async void executeGame()
         {
             var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.ExecutablePath);
-            proc.WorkingDirectory = Path.GetDirectoryName(config.ExecutablePath);
+            var proc = new ProcessStartInfo(config.ExecutablePath)
+            {
+                WorkingDirectory = Path.GetDirectoryName(config.ExecutablePath),
+                Arguments = "-debugscripts",
+                UseShellExecute = false,
+                RedirectStandardOutput = true
+            };
 
-            proc.Arguments = "-debugscripts";
 
-            proc.UseShellExecute = false;
-            proc.RedirectStandardOutput = true;
 
             AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n");
 

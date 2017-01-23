@@ -87,10 +87,7 @@ namespace W3Edit
                         }
 
                         // auto expand new nodes;
-                        if (newNode.Parent != null)
-                        {
-                            newNode.Parent.Expand();
-                        }
+                        newNode.Parent?.Expand();
                         current = newNode.Nodes;
                     }
                     else
@@ -109,10 +106,7 @@ namespace W3Edit
 
         private void modFileList_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            if (RequestFileOpen == null)
-                return;
-
-            RequestFileOpen(this, new RequestFileArgs() { File = e.Node.FullPath });
+            RequestFileOpen?.Invoke(this, new RequestFileArgs() { File = e.Node.FullPath });
             
         }
 

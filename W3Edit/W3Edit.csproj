@@ -424,6 +424,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <Content Include="Licenses\License.doboz4net.txt" />
+    <Content Include="Licenses\License.dockpanelsuit.txt" />
+    <Content Include="Licenses\License.dotnetzip.txt" />
+    <Content Include="Licenses\License.dotnetzip.zlib.txt" />
+    <Content Include="Licenses\License.lz4net.txt" />
+    <Content Include="Licenses\License.objectlistview.txt" />
+    <Content Include="Licenses\License.W3SaveGameEditor.txt" />
     <Content Include="Notes\Filetypes.txt" />
     <None Include="Resources\witcher3_102.ico" />
     <None Include="Resources\witcher3_101.ico" />
@@ -433,6 +440,11 @@
     <None Include="Resources\aERVQbx_460s.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -444,6 +456,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
