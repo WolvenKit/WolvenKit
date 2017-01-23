@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using W3SavegameEditor.Core.Common;
+using W3SavegameEditor.Core;
+using System.IO;
 using W3SavegameEditor.Core.Savegame;
 using W3SavegameEditor.Core.Savegame.Variables;
 using W3SavegameEditor.Models;
-using System.IO;
 
 namespace W3Edit
 {

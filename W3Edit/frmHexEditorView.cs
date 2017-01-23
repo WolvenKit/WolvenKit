@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using W3Edit.CR2W;
 using W3Edit.CR2W.Editors;
 using W3Edit.CR2W.Types;
+using System.Collections;
 
 namespace W3Edit
 {
@@ -719,6 +720,11 @@ namespace W3Edit
                 bytestart = bytes.Length - 1;
 
             ExaminePosition();
+        }
+
+        public void InsertObjects(int index, ICollection modelObjects)
+        {
+            throw new NotImplementedException();
         }
     }
 }

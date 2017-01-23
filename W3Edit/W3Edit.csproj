@@ -73,7 +73,7 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -86,17 +86,20 @@
     <Reference Include="Doboz">
       <HintPath>..\packages\doboz4net.1.0.1\lib\net40-client\Doboz.dll</HintPath>
     </Reference>
-    <Reference Include="Ionic.Zlib">
-      <HintPath>..\..\..\..\Ionic.Zlib.dll</HintPath>
+    <Reference Include="Ionic.ZLib, Version=2.0.0.14, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MarkerMetro.Unity.Ionic.Zlib.2.0.0.14\lib\net35\Ionic.ZLib.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="LZ4">
-      <HintPath>..\packages\lz4net.1.0.9.93\lib\net4-client\LZ4.dll</HintPath>
+    <Reference Include="LZ4, Version=1.0.10.93, Culture=neutral, PublicKeyToken=62e1b5ec1eec9bdd, processorArchitecture=MSIL">
+      <HintPath>..\packages\lz4net.1.0.10.93\lib\net4-client\LZ4.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="LZ4PCL">
       <HintPath>..\packages\LZ4PCL.1.0.0\lib\portable-net4+netcore45+wpa81+MonoAndroid1+MonoTouch1\LZ4PCL.dll</HintPath>
     </Reference>
-    <Reference Include="ObjectListView">
-      <HintPath>..\packages\ObjectListView.Official.2.8.1\lib\net20\ObjectListView.dll</HintPath>
+    <Reference Include="ObjectListView, Version=2.9.1.1072, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
+      <HintPath>..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -274,11 +277,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestFileOpenArgs.cs" />
-    <Compile Include="SaveModels\DelegateCommand.cs" />
-    <Compile Include="SaveModels\SavegameDataModel.cs" />
-    <Compile Include="SaveModels\SavegameModel.cs" />
-    <Compile Include="SaveModels\SavegameViewModel.cs" />
-    <Compile Include="SaveModels\VariableModel.cs" />
     <Compile Include="SelectChunkArgs.cs" />
     <Compile Include="Win32.cs" />
     <EmbeddedResource Include="frmAbout.resx">
@@ -416,7 +414,7 @@
       <Name>W3Edit.W3Strings</Name>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\Bence\Desktop\W3SavegameEditor-master\W3SavegameEditor.Core\W3SavegameEditor.Core.csproj">
+    <ProjectReference Include="C:\Users\Traderai\Desktop\W3SavegameEditor-master\W3SavegameEditor-master\W3SavegameEditor.Core\W3SavegameEditor.Core.csproj">
       <Project>{9c026da7-481d-43c6-8c18-635d69fdb423}</Project>
       <Name>W3SavegameEditor.Core</Name>
     </ProjectReference>

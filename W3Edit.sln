@@ -1,9 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3Edit", "W3Edit\W3Edit.csproj", "{12FD792B-EC76-4969-8B42-9671025D5108}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9C026DA7-481D-43C6-8C18-635D69FDB423} = {9C026DA7-481D-43C6-8C18-635D69FDB423}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3Edit.CR2W", "W3Edit.CR2W\W3Edit.CR2W.csproj", "{F3129E02-31AD-4327-A9EF-7C52D777C71F}"
 EndProject
@@ -13,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3Edit.Bundles", "W3Edit.Bu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3Edit.W3Speech", "W3Edit.W3Speech\W3Edit.W3Speech.csproj", "{C025F253-C78B-4A3B-87E7-1B2A1A453B97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3SavegameEditor.Core", "C:\Users\Bence\Desktop\W3SavegameEditor-master\W3SavegameEditor.Core\W3SavegameEditor.Core.csproj", "{9C026DA7-481D-43C6-8C18-635D69FDB423}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3SavegameEditor.Core", "C:\Users\Traderai\Desktop\W3SavegameEditor-master\W3SavegameEditor-master\W3SavegameEditor.Core\W3SavegameEditor.Core.csproj", "{9C026DA7-481D-43C6-8C18-635D69FDB423}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
