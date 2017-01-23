@@ -63,6 +63,16 @@ namespace W3Edit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _2c21aeda16de354ba5334551a883b481 {
+            get {
+                object obj = ResourceManager.GetObject("2c21aeda16de354ba5334551a883b481", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap AddNodefromFile_354 {
             get {
                 object obj = ResourceManager.GetObject("AddNodefromFile_354", resourceCulture);
@@ -106,6 +116,16 @@ namespace W3Edit.Properties {
         internal static System.Drawing.Bitmap geralt {
             get {
                 object obj = ResourceManager.GetObject("geralt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap info_icon_23818 {
+            get {
+                object obj = ResourceManager.GetObject("info-icon-23818", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -166,6 +186,26 @@ namespace W3Edit.Properties {
         internal static System.Drawing.Bitmap Saveall_6518 {
             get {
                 object obj = ResourceManager.GetObject("Saveall_6518", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon witcher_cursor {
+            get {
+                object obj = ResourceManager.GetObject("witcher_cursor", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap witcher3_101 {
+            get {
+                object obj = ResourceManager.GetObject("witcher3_101", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

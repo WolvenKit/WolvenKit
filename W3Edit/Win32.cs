@@ -18,5 +18,8 @@ namespace W3Edit
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        [DllImport("shell32.dll")]
+        public static extern int FindExecutable(string lpFile, string lpDirectory, [Out] StringBuilder lpResult);
     }
 }

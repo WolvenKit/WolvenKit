@@ -17,12 +17,13 @@ using System.Diagnostics;
 using W3Edit.CR2W.Types;
 using W3Edit.Bundles;
 using System.Runtime.InteropServices;
+using W3Edit.Properties;
 
 namespace W3Edit
 {
     public partial class frmMain : Form
     {
-        private string BaseTitle = "Redkit 2 by CDReject";
+        private string BaseTitle = "Redkit 2";
 
         public W3Mod ActiveMod 
         {
@@ -38,9 +39,6 @@ namespace W3Edit
                 return fvi.FileVersion;
             }
         }
-
-        [DllImport("shell32.dll")]
-        static extern int FindExecutable(string lpFile, string lpDirectory, [Out] StringBuilder lpResult);
 
         private void UpdateTitle()
         {
@@ -70,8 +68,6 @@ namespace W3Edit
         public frmMain()
         {
             InitializeComponent();
-            if (System.Security.Principal.WindowsIdentity.GetCurrent().Name.ToUpper().Contains("LEXAR")) //DRM
-                Environment.Exit(0x01);
             UpdateTitle();
         }
 
@@ -94,14 +90,13 @@ namespace W3Edit
             Size = config.MainSize;
             Location = config.MainLocation;
             WindowState = config.MainState;
-
             try
             {
                 dockPanel.LoadFromXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"), DeserializeDockContent);
             }
             catch
             {
-
+                // ignored
             }
         }
 
@@ -117,13 +112,10 @@ namespace W3Edit
             if (memoryStream == null && !File.Exists(filename))
                 return null;
 
-            for(int i=0; i<OpenDocuments.Count; i++)
+            foreach (var t in OpenDocuments.Where(t => t.FileName == filename))
             {
-                if(OpenDocuments[i].FileName == filename)
-                {
-                    OpenDocuments[i].Activate();
-                    return null;
-                }
+                t.Activate();
+                return null;
             }
 
             var doc = new frmCR2WDocument();
@@ -143,7 +135,7 @@ namespace W3Edit
             catch(InvalidFileTypeException ex)
             {
                 if (!suppressErrors)
-                    MessageBox.Show(this ,ex.Message, "Error opening file.");
+                    MessageBox.Show(this ,ex.Message, @"Error opening file.");
 
                 OpenDocuments.Remove(doc);
                 doc.Dispose();
@@ -152,7 +144,7 @@ namespace W3Edit
             catch(MissingTypeException ex)
             {
                 if (!suppressErrors)
-                    MessageBox.Show(this, ex.Message, "Error opening file.");
+                    MessageBox.Show(this, ex.Message, @"Error opening file.");
 
                 OpenDocuments.Remove(doc);
                 doc.Dispose();
@@ -165,7 +157,7 @@ namespace W3Edit
 
             var output = new StringBuilder();
 
-            if (doc.File.UnknownTypes.Count() > 0)
+            if (doc.File.UnknownTypes.Any())
             {
                 ShowOutput();
 
@@ -180,13 +172,10 @@ namespace W3Edit
 
             var hasUnknownBytes = false;
 
-            for (int i = 0; i < doc.File.chunks.Count;i++ )
+            foreach (var t in doc.File.chunks.Where(t => t.unknownBytes?.Bytes != null && t.unknownBytes.Bytes.Length > 0))
             {
-                if (doc.File.chunks[i].unknownBytes != null && doc.File.chunks[i].unknownBytes.Bytes != null && doc.File.chunks[i].unknownBytes.Bytes.Length > 0)
-                {
-                    output.Append(doc.File.chunks[i].Name + " contains " + doc.File.chunks[i].unknownBytes.Bytes.Length + " unknown bytes. \n");
-                    hasUnknownBytes = true;
-                }
+                output.Append(t.Name + " contains " + t.unknownBytes.Bytes.Length + " unknown bytes. \n");
+                hasUnknownBytes = true;
             }
 
             if (hasUnknownBytes)
@@ -266,11 +255,7 @@ namespace W3Edit
 
             if(manager.Items[depotpath].Count > 1)
             {
-                var bundles = new Dictionary<string, BundleItem>();
-                foreach(var bundle in manager.Items[depotpath]) 
-                {
-                    bundles.Add(bundle.Bundle.FileName, bundle);
-                }
+                var bundles = manager.Items[depotpath].ToDictionary(bundle => bundle.Bundle.FileName);
 
                 var dlg = new frmExtractAmbigious(bundles.Keys);
                 if(dlg.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
@@ -311,10 +296,7 @@ namespace W3Edit
 
         private void UpdateModFileList(bool clear=false)
         {
-            if (ModExplorer != null)
-            {
-                ModExplorer.UpdateModFileList(clear);
-            }
+            ModExplorer?.UpdateModFileList(clear);
         }
 
         private void openModToolStripMenuItem_Click(object sender, EventArgs e)
@@ -415,13 +397,10 @@ namespace W3Edit
         private void removeFromMod(string filename)
         {
             // Close open documents
-            for(int i=0; i< OpenDocuments.Count; i++)
+            foreach (frmCR2WDocument t in OpenDocuments.Where(t => t.FileName == filename))
             {
-                if(OpenDocuments[i].FileName == filename)
-                {
-                    OpenDocuments[i].Close();
-                    break;
-                }
+                t.Close();
+                break;
             }
 
 
@@ -444,10 +423,7 @@ namespace W3Edit
             }
 
             // Delete from mod explorer
-            if (ModExplorer != null)
-            {
-                ModExplorer.DeleteNode(filename);
-            }
+            ModExplorer?.DeleteNode(filename);
 
             SaveMod();
         }
@@ -473,18 +449,17 @@ namespace W3Edit
             }
         }
 
-        private void ShellExecute(string fullpath)
+        private static void ShellExecute(string fullpath)
         {
-            var proc = new ProcessStartInfo(fullpath);
-            proc.UseShellExecute = true;
+            var proc = new ProcessStartInfo(fullpath) {UseShellExecute = true};
             Process.Start(proc);
         }
 
-        private void PolymorphExecute(string fullpath,string extension)
+        private static void PolymorphExecute(string fullpath,string extension)
         {
             File.WriteAllBytes(Path.GetTempPath() + "asd." + extension, new byte[] { 0x01 });
-            StringBuilder programname = new StringBuilder();
-            FindExecutable("asd." + extension, Path.GetTempPath(), programname);
+            var programname = new StringBuilder();
+            Win32.FindExecutable("asd." + extension, Path.GetTempPath(), programname);
             if (programname.ToString().ToUpper().Contains(".EXE"))
             {
                 Process.Start(programname.ToString(), fullpath);
@@ -569,11 +544,6 @@ namespace W3Edit
         {
             var settings = new frmSettings();
             settings.ShowDialog();
-        }
-
-        private void toolStripContainer1_ContentPanel_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void modExplorerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -740,14 +710,13 @@ namespace W3Edit
         private async Task packMod()
         {
             var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.WCC_Lite);
-            proc.WorkingDirectory = Path.GetDirectoryName(config.WCC_Lite);
+            var proc = new ProcessStartInfo(config.WCC_Lite) {WorkingDirectory = Path.GetDirectoryName(config.WCC_Lite)};
             var packedDir = Path.Combine(ActiveMod.Directory, @"packed\content\");
             var uncookedDir = ActiveMod.FileDirectory;
             if (!Directory.Exists(packedDir))
                 Directory.CreateDirectory(packedDir);
 
-            proc.Arguments = string.Format("pack -dir={0} -outdir={1}", uncookedDir, packedDir);
+            proc.Arguments = $"pack -dir={uncookedDir} -outdir={packedDir}";
             proc.UseShellExecute = false;
             proc.RedirectStandardOutput = true;
             proc.WindowStyle = ProcessWindowStyle.Hidden;
@@ -953,23 +922,26 @@ namespace W3Edit
                 cf.ShowDialog();
         }
 
-        private void joinOurDiscordToolStripMenuItem_Click(object sender, EventArgs e)
+        private void addFileToolStripMenuItem_Click_2(object sender, EventArgs e)
         {
-            if(MessageBox.Show("Are you sure you would like to join the modding discord?","Confirmation",MessageBoxButtons.YesNo) == DialogResult.Yes)
-                Process.Start("https://discord.gg/qBNgDEX");
+            MessageBox.Show(@"Not implemented yet!"); //TODO: Add this
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-                UpdateModFileList(true);
-        }
-
-        private void saveEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        private void saveExplorerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (frmSaveEditor sef = new frmSaveEditor())
                 sef.ShowDialog();
         }
 
+        private void joinOurDiscordToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            if (MessageBox.Show(@"Are you sure you would like to join the modding discord?", @"Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                Process.Start("https://discord.gg/qBNgDEX");
+        }
 
+        private void TbtRefresh(object sender, EventArgs e)
+        {
+            UpdateModFileList(true);
+        }
     }
 }

@@ -425,6 +425,10 @@
   <ItemGroup>
     <Content Include="icon.ico" />
     <Content Include="Notes\Filetypes.txt" />
+    <None Include="Resources\witcher3_102.ico" />
+    <None Include="Resources\witcher3_101.ico" />
+    <None Include="Resources\2c21aeda16de354ba5334551a883b481.png" />
+    <None Include="Resources\info-icon-23818.jpg" />
     <None Include="Resources\refresh.png" />
     <None Include="Resources\aERVQbx_460s.jpg" />
   </ItemGroup>
