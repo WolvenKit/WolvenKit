@@ -1,38 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 using W3Edit.CR2W.Types;
 
 namespace W3Edit.CR2W.Editors
 {
-    public class EditableList<T> : IEditableVariable 
-                        where T : CVariable
+    public class EditableList<T> : IEditableVariable
+        where T : CVariable
     {
-
-        public string Name { get; set; }
-
-        public string Type { get; set; }
-
-        public List<T> List { get; set; }
-
-        private CR2WFile cr2w;
-
-        public CR2WFile CR2WOwner
-        {
-            get { return cr2w; }
-        }
-
         public EditableList(List<T> list, CR2WFile cr2w)
         {
             Type = "";
             Name = "";
             List = list;
-            this.cr2w = cr2w;
+            CR2WOwner = cr2w;
         }
 
-        public System.Windows.Forms.Control GetEditor()
+        public List<T> List { get; set; }
+        public string Name { get; set; }
+        public string Type { get; set; }
+        public CR2WFile CR2WOwner { get; }
+
+        public Control GetEditor()
         {
             return null;
         }
@@ -56,7 +45,7 @@ namespace W3Edit.CR2W.Editors
         {
             if (var is T)
             {
-                List.Add((T)var);
+                List.Add((T) var);
 
                 var.ParentVariable = null;
             }
@@ -66,10 +55,10 @@ namespace W3Edit.CR2W.Editors
         {
             if (child is T)
             {
-                List.Remove((T)child);
-                if(child is CVariable)
+                List.Remove((T) child);
+                if (child is CVariable)
                 {
-                    ((CVariable)child).ParentVariable = null;
+                    ((CVariable) child).ParentVariable = null;
                 }
             }
         }
@@ -78,7 +67,5 @@ namespace W3Edit.CR2W.Editors
         {
             return "";
         }
-
-
     }
 }

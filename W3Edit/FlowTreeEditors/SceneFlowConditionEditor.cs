@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using W3Edit.CR2W.Types;
 using W3Edit.CR2W;
+using W3Edit.CR2W.Types;
 
 namespace W3Edit.FlowTreeEditors
 {
@@ -30,18 +23,15 @@ namespace W3Edit.FlowTreeEditors
             var questConditionObj = Chunk.GetVariableByName("questCondition");
             if (questConditionObj != null && questConditionObj is CPtr)
             {
-                var questCondition = (CPtr)questConditionObj;
-                if( questCondition.PtrTarget != null )
+                var questCondition = (CPtr) questConditionObj;
+                if (questCondition.PtrTarget != null)
                 {
-                    lblCondition.Click += delegate(object sender, EventArgs e)
-                    {
-                        FireSelectEvent(questCondition.PtrTarget);
-                    };
+                    lblCondition.Click += delegate { FireSelectEvent(questCondition.PtrTarget); };
 
                     var factIdObj = questCondition.PtrTarget.GetVariableByName("factId");
-                    if(factIdObj != null && factIdObj is CString)
+                    if (factIdObj != null && factIdObj is CString)
                     {
-                        lblCondition.Text = ((CString)factIdObj).val;
+                        lblCondition.Text = ((CString) factIdObj).val;
                     }
                     else
                     {
@@ -51,12 +41,10 @@ namespace W3Edit.FlowTreeEditors
             }
 
             var commentObj = Chunk.GetVariableByName("comment");
-            if(commentObj != null && commentObj is CString)
+            if (commentObj != null && commentObj is CString)
             {
-                lblCondition.Text = ((CString)commentObj).val;
+                lblCondition.Text = ((CString) commentObj).val;
             }
-
-            
         }
 
         public override List<CPtr> GetConnections()
@@ -68,7 +56,7 @@ namespace W3Edit.FlowTreeEditors
                 var trueLinkObj = Chunk.GetVariableByName("trueLink");
                 if (trueLinkObj != null && trueLinkObj is CPtr)
                 {
-                    var nextLinkElementPtr = ((CPtr)trueLinkObj);
+                    var nextLinkElementPtr = ((CPtr) trueLinkObj);
                     if (nextLinkElementPtr.PtrTarget != null)
                     {
                         list.Add(nextLinkElementPtr);
@@ -78,7 +66,7 @@ namespace W3Edit.FlowTreeEditors
                 var falseLinkObj = Chunk.GetVariableByName("falseLink");
                 if (falseLinkObj != null && falseLinkObj is CPtr)
                 {
-                    var nextLinkElementPtr = ((CPtr)falseLinkObj);
+                    var nextLinkElementPtr = ((CPtr) falseLinkObj);
                     if (nextLinkElementPtr.PtrTarget != null)
                     {
                         list.Add(nextLinkElementPtr);
@@ -92,11 +80,11 @@ namespace W3Edit.FlowTreeEditors
         public override Point GetConnectionLocation(int i)
         {
             if (i == 0)
-                return new Point(0, lblTrue.Top + lblTrue.Height / 2);
+                return new Point(0, lblTrue.Top + lblTrue.Height/2);
             if (i == 1)
-                return new Point(0, lblFalse.Top + lblFalse.Height / 2);
+                return new Point(0, lblFalse.Top + lblFalse.Height/2);
 
-            return new Point(0, i * 20 + 21 + 10);
+            return new Point(0, i*20 + 21 + 10);
         }
     }
 }

@@ -1,39 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
+using W3Edit.CR2W.Types;
 
 namespace W3Edit.CR2W.Editors
 {
     public class EditableObject : IEditableVariable
     {
-        public string Name { get; set; }
-        public string Type { get; set; }
-
-        public object Object { get; set; }
-
-        private CR2WFile cr2w;
-
-        public CR2WFile CR2WOwner
-        {
-            get { return cr2w; }
-        }
-
         public EditableObject(object o, CR2WFile cr2w)
         {
             Name = "";
             Type = "";
             Object = o;
-            this.cr2w = cr2w;
+            CR2WOwner = cr2w;
         }
 
-        public override string ToString()
-        {
-            return Object.ToString();
-        }
+        public object Object { get; set; }
+        public string Name { get; set; }
+        public string Type { get; set; }
+        public CR2WFile CR2WOwner { get; }
 
-        public System.Windows.Forms.Control GetEditor()
+        public Control GetEditor()
         {
             return null;
         }
@@ -53,7 +40,7 @@ namespace W3Edit.CR2W.Editors
             return false;
         }
 
-        public void AddVariable(Types.CVariable var)
+        public void AddVariable(CVariable var)
         {
             throw new NotImplementedException();
         }
@@ -61,6 +48,11 @@ namespace W3Edit.CR2W.Editors
         public void RemoveVariable(IEditableVariable child)
         {
             throw new NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            return Object.ToString();
         }
     }
 }

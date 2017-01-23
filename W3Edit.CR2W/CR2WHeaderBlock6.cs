@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace W3Edit.CR2W
 {
     public class CR2WHeaderBlock6
     {
-        public UInt32 unk1;
-        public UInt32 unk2;
-        public UInt32 unk3;
-        public UInt32 size;
-        public UInt32 size2;
-        public UInt32 crc;
+        public uint crc;
+        public uint size;
+        public uint size2;
+        public uint unk1;
+        public uint unk2;
+        public uint unk3;
 
         public CR2WHeaderBlock6()
         {

@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace W3Edit.CR2W
 {
     public class CR2WHeaderData
     {
-        public UInt32 offset;
-        public UInt32 size;
-        public UInt32 crc;
+        public uint crc;
+        public uint offset;
+        public uint size;
 
         public CR2WHeaderData()
         {
-
         }
 
         public CR2WHeaderData(BinaryReader file)

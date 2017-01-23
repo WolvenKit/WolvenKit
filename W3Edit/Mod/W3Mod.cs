@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace W3Edit.Mod
@@ -11,27 +7,18 @@ namespace W3Edit.Mod
     public class W3Mod
     {
         [XmlIgnore]
-        public string FileName { 
-            get; 
-            set; 
-        }
+        public string FileName { get; set; }
 
         [XmlIgnore]
         public string Directory
         {
-            get
-            {
-                return Path.Combine(Path.GetDirectoryName(FileName), Name);
-            }
+            get { return Path.Combine(Path.GetDirectoryName(FileName), Name); }
         }
 
         [XmlIgnore]
         public string FileDirectory
         {
-            get
-            {
-                return Path.Combine(Directory, "files");
-            }
+            get { return Path.Combine(Directory, "files"); }
         }
 
         public string Name { get; set; }
@@ -43,7 +30,7 @@ namespace W3Edit.Mod
             {
                 var list = new List<string>();
 
-                if(!System.IO.Directory.Exists(FileDirectory))
+                if (!System.IO.Directory.Exists(FileDirectory))
                 {
                     System.IO.Directory.CreateDirectory(FileDirectory);
                 }

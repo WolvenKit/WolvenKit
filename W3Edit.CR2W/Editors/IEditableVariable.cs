@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using W3Edit.CR2W.Types;
 
@@ -12,14 +8,12 @@ namespace W3Edit.CR2W.Editors
     {
         string Name { get; set; }
         string Type { get; set; }
+        CR2WFile CR2WOwner { get; }
         Control GetEditor();
         List<IEditableVariable> GetEditableVariables();
-
         bool CanRemoveVariable(IEditableVariable child);
         bool CanAddVariable(IEditableVariable newvar);
         void AddVariable(CVariable var);
         void RemoveVariable(IEditableVariable child);
-
-        CR2WFile CR2WOwner { get; }
     }
 }

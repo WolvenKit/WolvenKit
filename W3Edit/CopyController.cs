@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using W3Edit.CR2W;
 using W3Edit.CR2W.Editors;
-using W3Edit.CR2W.Types;
 
 namespace W3Edit
 {

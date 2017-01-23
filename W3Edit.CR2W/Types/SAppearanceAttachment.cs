@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using W3Edit.CR2W.Editors;
 
 namespace W3Edit.CR2W.Types
@@ -18,19 +15,19 @@ namespace W3Edit.CR2W.Types
             bytes.Name = "unknownBytes";
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public override void Read(BinaryReader file, uint size)
         {
             base.Read(file, size);
 
             var bytecount = file.ReadUInt32();
-            bytes.Bytes = file.ReadBytes((int)bytecount - 4);
+            bytes.Bytes = file.ReadBytes((int) bytecount - 4);
         }
 
         public override void Write(BinaryWriter file)
         {
             base.Write(file);
 
-            file.Write((UInt32)(bytes.Bytes.Length + 4));
+            file.Write((uint) (bytes.Bytes.Length + 4));
             file.Write(bytes.Bytes);
         }
 
@@ -38,7 +35,7 @@ namespace W3Edit.CR2W.Types
         {
             if (val is byte[])
             {
-                bytes.Bytes = (byte[])val;
+                bytes.Bytes = (byte[]) val;
             }
 
             return this;
@@ -51,8 +48,8 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (SAppearanceAttachment)base.Copy(context);
-            var.bytes = (CBytes)bytes.Copy(context);
+            var var = (SAppearanceAttachment) base.Copy(context);
+            var.bytes = (CBytes) bytes.Copy(context);
             return var;
         }
 

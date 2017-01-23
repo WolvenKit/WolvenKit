@@ -62,6 +62,7 @@
             this.treeView.AllColumns.Add(this.colEndAt);
             this.treeView.AlternateRowBackColor = System.Drawing.Color.LightCyan;
             this.treeView.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.SingleClick;
+            this.treeView.CellEditUseWholeCell = false;
             this.treeView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colMethod,
             this.colName,
@@ -72,10 +73,10 @@
             this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView.FullRowSelect = true;
             this.treeView.Location = new System.Drawing.Point(0, 0);
+            this.treeView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.treeView.Name = "treeView";
-            this.treeView.OwnerDraw = true;
             this.treeView.ShowGroups = false;
-            this.treeView.Size = new System.Drawing.Size(688, 168);
+            this.treeView.Size = new System.Drawing.Size(917, 209);
             this.treeView.TabIndex = 2;
             this.treeView.UseAlternatingBackColors = true;
             this.treeView.UseCompatibleStateImageBehavior = false;
@@ -120,6 +121,7 @@
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -131,25 +133,28 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.treeView);
             this.splitContainer1.Panel2.Controls.Add(this.statusStrip1);
-            this.splitContainer1.Size = new System.Drawing.Size(688, 423);
-            this.splitContainer1.SplitterDistance = 229;
+            this.splitContainer1.Size = new System.Drawing.Size(917, 521);
+            this.splitContainer1.SplitterDistance = 282;
+            this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 3;
             // 
             // listView
             // 
             this.listView.AllColumns.Add(this.colPos);
             this.listView.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.DoubleClick;
+            this.listView.CellEditUseWholeCell = false;
             this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colPos});
+            this.listView.Cursor = System.Windows.Forms.Cursors.Default;
             this.listView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listView.FullRowSelect = true;
             this.listView.GridLines = true;
             this.listView.Location = new System.Drawing.Point(0, 0);
+            this.listView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.listView.Name = "listView";
-            this.listView.OwnerDraw = true;
             this.listView.ShowGroups = false;
-            this.listView.Size = new System.Drawing.Size(688, 229);
+            this.listView.Size = new System.Drawing.Size(917, 282);
             this.listView.TabIndex = 1;
             this.listView.UseCompatibleStateImageBehavior = false;
             this.listView.View = System.Windows.Forms.View.Details;
@@ -166,29 +171,31 @@
             this.colPos.Searchable = false;
             this.colPos.Sortable = false;
             this.colPos.Text = "Position";
-            this.colPos.Width = 95;
+            this.colPos.Width = 96;
             // 
             // statusStrip1
             // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.spacer,
             this.lblPosition});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 168);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 209);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(688, 22);
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
+            this.statusStrip1.Size = new System.Drawing.Size(917, 25);
             this.statusStrip1.TabIndex = 3;
             this.statusStrip1.Text = "status";
             // 
             // spacer
             // 
             this.spacer.Name = "spacer";
-            this.spacer.Size = new System.Drawing.Size(647, 17);
+            this.spacer.Size = new System.Drawing.Size(866, 20);
             this.spacer.Spring = true;
             // 
             // lblPosition
             // 
             this.lblPosition.Name = "lblPosition";
-            this.lblPosition.Size = new System.Drawing.Size(26, 17);
+            this.lblPosition.Size = new System.Drawing.Size(31, 20);
             this.lblPosition.Text = "Pos";
             // 
             // colPosition
@@ -199,10 +206,11 @@
             // 
             // frmHexEditorView
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(688, 423);
+            this.ClientSize = new System.Drawing.Size(917, 521);
             this.Controls.Add(this.splitContainer1);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "frmHexEditorView";
             this.Text = "Hex Viewer";
             ((System.ComponentModel.ISupportInitialize)(this.treeView)).EndInit();

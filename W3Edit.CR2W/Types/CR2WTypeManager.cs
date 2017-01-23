@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace W3Edit.CR2W.Types
 {
@@ -21,18 +18,8 @@ namespace W3Edit.CR2W.Types
 
     public class CR2WTypeManager
     {
-        static CR2WTypeManager instance = null;
-        public static CR2WTypeManager Get()
-        {
-            if (instance == null)
-                instance = new CR2WTypeManager();
-
-            return instance;
-        }
-
-        Dictionary<string, CR2WTypeDefinition> types = new Dictionary<string, CR2WTypeDefinition>();
-
-        public List<string> AvailableTypes { get { return types.Keys.ToList(); } }
+        private static CR2WTypeManager instance;
+        private readonly Dictionary<string, CR2WTypeDefinition> types = new Dictionary<string, CR2WTypeDefinition>();
 
         public CR2WTypeManager()
         {
@@ -74,8 +61,7 @@ namespace W3Edit.CR2W.Types
             Register("EEntityStaticFlags", new CFlags(null));
 
             Register("LocalizedString", new CLocalizedString(null));
-            
-            
+
 
             Register("CDateTime", new CDateTime(null));
 
@@ -112,11 +98,10 @@ namespace W3Edit.CR2W.Types
 
             Register("CSkeletalAnimationSetEntry", new CSkeletalAnimationSetEntry(null));
 
-            
 
-            var vectors = new string[] { 
+            var vectors = new[]
+            {
                 "CStorySceneRandomizer",
-
                 "ApertureDofParams", "Box", "EulerAngles", "Vector2",
                 "CEventGeneratorCameraParams", "CGenericGrassMask", "CGlobalLightingTrajectory",
                 "CWorldShadowConfig", "SAnimationBufferBitwiseCompressedData",
@@ -129,45 +114,44 @@ namespace W3Edit.CR2W.Types
                 "SWorldSkyboxParameters", "CEntityAppearance", "SBlockDesc", "SCachedConnections",
                 "QuestScriptParam", "StorySceneCameraDefinition", "CStorySceneVoicetagMapping",
                 "SStorySceneCameraLightMod", "SCurveData", "SCurveDataEntry", "CStorySceneSectionVariantElementInfo",
-                "CStorySceneEventCameraInterpolationKey", "SItemNameProperty", "CColorShift", "SAbilityAttributeValue", 
-	            "CAreaEnvironmentParams", "CEnvGameplayEffectsParameters", "CEnvWindParameters",
-	            "CEnvFinalColorBalanceParameters",
-	            "CEnvSharpenParameters",
-	            "CEnvNVSSAOParameters",
-	            "CEnvMSSSAOParameters",
-	            "CEnvGlobalLightParameters",
-	            "CEnvSpeedTreeParameters",
-	            "CEnvToneMappingParameters",
-	            "CEnvBloomNewParameters",
-	            "CEnvGlobalFogParameters",
-	            "CEnvGlobalSkyParameters" ,
-	            "CEnvDepthOfFieldParameters" ,
-	            "CEnvColorModTransparencyParameters",
-	            "CEnvShadowsParameters",
-	            "CEnvWaterParameters",
-	            "CEnvColorGroupsParameters",
-	            "CEnvFlareColorGroupsParameters",
-	            "CEnvSunAndMoonParameters",
-	            "CEnvMotionBlurParameters",
-	            "CEnvCameraLightsSetupParameters",
-	            "CEnvDialogLightParameters",
-	            "CEnvCameraLightParameters",
-	            "CEnvFlareColorParameters",
-	            "CEnvParametricBalanceParameters",
-	            "CEnvAmbientProbesGenParameters",
-	            "CEnvReflectionProbesGenParameters",
-	            "CEnvSpeedTreeRandomColorParameters",
-	            "CEnvToneMappingCurveParameters",
-	            "CEnvDistanceRangeParameters",
-	            "CSStoryPhaseNames",
-	            "CSLayerName",
+                "CStorySceneEventCameraInterpolationKey", "SItemNameProperty", "CColorShift", "SAbilityAttributeValue",
+                "CAreaEnvironmentParams", "CEnvGameplayEffectsParameters", "CEnvWindParameters",
+                "CEnvFinalColorBalanceParameters",
+                "CEnvSharpenParameters",
+                "CEnvNVSSAOParameters",
+                "CEnvMSSSAOParameters",
+                "CEnvGlobalLightParameters",
+                "CEnvSpeedTreeParameters",
+                "CEnvToneMappingParameters",
+                "CEnvBloomNewParameters",
+                "CEnvGlobalFogParameters",
+                "CEnvGlobalSkyParameters",
+                "CEnvDepthOfFieldParameters",
+                "CEnvColorModTransparencyParameters",
+                "CEnvShadowsParameters",
+                "CEnvWaterParameters",
+                "CEnvColorGroupsParameters",
+                "CEnvFlareColorGroupsParameters",
+                "CEnvSunAndMoonParameters",
+                "CEnvMotionBlurParameters",
+                "CEnvCameraLightsSetupParameters",
+                "CEnvDialogLightParameters",
+                "CEnvCameraLightParameters",
+                "CEnvFlareColorParameters",
+                "CEnvParametricBalanceParameters",
+                "CEnvAmbientProbesGenParameters",
+                "CEnvReflectionProbesGenParameters",
+                "CEnvSpeedTreeRandomColorParameters",
+                "CEnvToneMappingCurveParameters",
+                "CEnvDistanceRangeParameters",
+                "CSStoryPhaseNames",
+                "CSLayerName",
                 "CEnvironmentDefinition",
 
                 //"CMaterialGraph",
                 "CMaterialParameterScalar",
                 "CMaterialParameterTexture",
                 "CMaterialParameterColor",
-
                 "SFurPhysicalMaterials",
                 "SFurGraphicalMaterials",
                 "SFurLevelOfDetail",
@@ -185,213 +169,196 @@ namespace W3Edit.CR2W.Types
                 "SFurCulling",
                 "SFurDistanceLOD",
                 "SFurDetailLOD",
-
                 "SWorldDescription",
                 "SMapPinConfig",
-                "CWitcherGameResource", 
-                "SMapPinType", 
-
+                "CWitcherGameResource",
+                "SMapPinType",
                 "GameTimeWrapper",
                 "GameTime",
-
-                "CQuest", 
-                "CQuestGraph", 
-                "CQuestPhaseBlock", 
-                "CQuestLayersHiderBlock", 
-                "CQuestPhaseOutputBlock", 
-                "CQuestPhaseInputBlock", 
-                "CQuestPauseConditionBlock", 
-                "CQuestRealtimeDelayCondition", 
-                "CDescriptionGraphBlock", 
-                "CQuestFactsDBChangingBlock", 
-                "CQuestAndBlock", 
-                "CCommentGraphBlock", 
-                "CQuestConditionBlock", 
-                "CQuestFactsDBCondition", 
-                "CQuestManageFastTravelBlock", 
-                "CQuestTimeManagementBlock", 
-                "SItem", 
-                "CQuestTagsPresenceCondition", 
-                "CSetTimeFunction", 
-                "CQuestStartBlock", 
-                "CJournalBlock", 
-                "CJournalPath", 
-
-                "CQuestPhase", 
-                "CQuestChangeWorldBlock", 
-                "CPauseTimeFunction", 
-
-                "CParticleSystem", 
-                "SParticleEmitterLODLevel", 
-                "EmitterDurationSettings", 
-                "CParticleDrawerBillboard", 
-                "CEvaluatorFloatConst", 
-
-                "CStoryScene", 
-                "CStorySceneInput", 
-                "CStorySceneEventLightProperties", 
-                "CStorySceneEventCameraLight", 
-                "CStorySceneOutput", 
-                "CStorySceneSectionVariant", 
-                "CStorySceneCutscenePlayer", 
-                "CStorySceneComment", 
-                "CStorySceneLine", 
-                "CStorySceneEventInfo", 
-                "CStorySceneVideoElement", 
-                "CStorySceneActor", 
-                "CStorySceneLight", 
-
-                "CStorySceneEventCustomCameraInstance", 
-                "CStorySceneEventLookAt", 
-                "CStorySceneEventMimicsAnim", 
-                "CStorySceneEventCameraAnim", 
-                "CStorySceneEventOverridePlacement", 
-                "CStorySceneEventCameraInterpolation", 
-                "CStorySceneChoice", 
-                "CStorySceneChoiceLine", 
-                "CStorySceneEventChangePose", 
-                "CStorySceneEventCustomCamera", 
-                "CStorySceneEventAnimation", 
-                "CStorySceneEventLookAtDuration", 
-                "CStorySceneEventMimics", 
-                "SStorySceneSpotLightProperties", 
-                "CStorySceneEventAdditiveAnimation", 
-                "CStorySceneResetClothAndDanglesEvent", 
-                "CStorySceneEventFade", 
-                "CStoryScenePauseElement", 
-                "CStorySceneFlowCondition", 
-                "CStorySceneLinkElement", 
-                "CStorySceneEventPoseKey", 
-                "SSSBoneTransform", 
-                "CStorySceneEventVisibility", 
-                "CExitStorySceneChoiceAction", 
-                "CStorySceneDialogsetInstance", 
-                "CStorySceneDialogsetSlot", 
-                "CStorySceneEventModifyEnv", 
-                "SStorySceneAttachmentInfo", 
-                "CStorySceneEventChangeActorGameState", 
-                "CStorySceneEventLightPropertiesInterpolation", 
-                "CStorySceneEventLightPropertiesInterpolationKey", 
-                "CStorySceneEventScenePropPlacement", 
-                "CStoryScenePropEffectEvent", 
-                "CStorySceneEventSound", 
-                "CStorySceneProp", 
-                "CStorySceneEventStartBlendToGameplayCamera", 
-                "CStorySceneEventPlacementInterpolation", 
-                "CStorySceneEventPlacementInterpolationKey", 
-                "CStorySceneEventAttachPropToSlot", 
-                "CStorySceneActorEffectEvent", 
-                "CStorySceneEventHideScabbard", 
-                "CFactsDBChoiceMemo", 
-                "CStorySceneActorEffectEventDuration", 
-                "CStorySceneEventReward", 
-                "W3QuestCond_chosenLanguage", 
-                "CStorySceneAddFactEvent", 
+                "CQuest",
+                "CQuestGraph",
+                "CQuestPhaseBlock",
+                "CQuestLayersHiderBlock",
+                "CQuestPhaseOutputBlock",
+                "CQuestPhaseInputBlock",
+                "CQuestPauseConditionBlock",
+                "CQuestRealtimeDelayCondition",
+                "CDescriptionGraphBlock",
+                "CQuestFactsDBChangingBlock",
+                "CQuestAndBlock",
+                "CCommentGraphBlock",
+                "CQuestConditionBlock",
+                "CQuestFactsDBCondition",
+                "CQuestManageFastTravelBlock",
+                "CQuestTimeManagementBlock",
+                "SItem",
+                "CQuestTagsPresenceCondition",
+                "CSetTimeFunction",
+                "CQuestStartBlock",
+                "CJournalBlock",
+                "CJournalPath",
+                "CQuestPhase",
+                "CQuestChangeWorldBlock",
+                "CPauseTimeFunction",
+                "CParticleSystem",
+                "SParticleEmitterLODLevel",
+                "EmitterDurationSettings",
+                "CParticleDrawerBillboard",
+                "CEvaluatorFloatConst",
+                "CStoryScene",
+                "CStorySceneInput",
+                "CStorySceneEventLightProperties",
+                "CStorySceneEventCameraLight",
+                "CStorySceneOutput",
+                "CStorySceneSectionVariant",
+                "CStorySceneCutscenePlayer",
+                "CStorySceneComment",
+                "CStorySceneLine",
+                "CStorySceneEventInfo",
+                "CStorySceneVideoElement",
+                "CStorySceneActor",
+                "CStorySceneLight",
+                "CStorySceneEventCustomCameraInstance",
+                "CStorySceneEventLookAt",
+                "CStorySceneEventMimicsAnim",
+                "CStorySceneEventCameraAnim",
+                "CStorySceneEventOverridePlacement",
+                "CStorySceneEventCameraInterpolation",
+                "CStorySceneChoice",
+                "CStorySceneChoiceLine",
+                "CStorySceneEventChangePose",
+                "CStorySceneEventCustomCamera",
+                "CStorySceneEventAnimation",
+                "CStorySceneEventLookAtDuration",
+                "CStorySceneEventMimics",
+                "SStorySceneSpotLightProperties",
+                "CStorySceneEventAdditiveAnimation",
+                "CStorySceneResetClothAndDanglesEvent",
+                "CStorySceneEventFade",
+                "CStoryScenePauseElement",
+                "CStorySceneFlowCondition",
+                "CStorySceneLinkElement",
+                "CStorySceneEventPoseKey",
+                "SSSBoneTransform",
+                "CStorySceneEventVisibility",
+                "CExitStorySceneChoiceAction",
+                "CStorySceneDialogsetInstance",
+                "CStorySceneDialogsetSlot",
+                "CStorySceneEventModifyEnv",
+                "SStorySceneAttachmentInfo",
+                "CStorySceneEventChangeActorGameState",
+                "CStorySceneEventLightPropertiesInterpolation",
+                "CStorySceneEventLightPropertiesInterpolationKey",
+                "CStorySceneEventScenePropPlacement",
+                "CStoryScenePropEffectEvent",
+                "CStorySceneEventSound",
+                "CStorySceneProp",
+                "CStorySceneEventStartBlendToGameplayCamera",
+                "CStorySceneEventPlacementInterpolation",
+                "CStorySceneEventPlacementInterpolationKey",
+                "CStorySceneEventAttachPropToSlot",
+                "CStorySceneActorEffectEvent",
+                "CStorySceneEventHideScabbard",
+                "CFactsDBChoiceMemo",
+                "CStorySceneActorEffectEventDuration",
+                "CStorySceneEventReward",
+                "W3QuestCond_chosenLanguage",
+                "CStorySceneAddFactEvent",
                 "Bezier2dHandle",
-
-                "CStorySceneEventWorldEntityEffect", 
-                "CStorySceneDanglesShakeEvent", 
-                "CStorySceneEventEquipItem", 
-                "CStorySceneEventEnhancedCameraBlend", 
-                "CStorySceneEventDialogLine", 
-                "CStorySceneEventOpenDoor", 
-                "CStorySceneEventExitActor", 
-                "CStorySceneLocaleVariantMapping", 
-                "CQuestCameraFocusCondition", 
-                "CAxiiStorySceneChoiceAction", 
-                "CQuestActorCondition", 
-                "CQCHasItem", 
-                "CPayStorySceneChoiceAction", 
-                "CQuestLogicOperationCondition", 
-                "CStorySceneEventPropPlacementInterpolation", 
-                "CStorySceneEventPropPlacementInterpolationKey", 
-                "CStorySceneFlowSwitch", 
-                "CStorySceneFlowSwitchCase", 
-                "W3QuestCond_IsItemQuantityMet", 
-                "CGameCardsChoiceAction", 
-                "CShopStorySceneChoiceAction", 
-                "CStorySceneLinkHub", 
-                "CAuctionSceneChoiceAction", 
-                "CStorySceneEventVideoOverlay", 
-                "CStorySceneEventCameraLightInterpolation", 
-                "CStorySceneEventCameraLightInterpolationKey", 
-                "SStorySceneLightDimmerProperties", 
-                "CPayFactBasedStorySceneChoiceAction", 
-                "CMonsterContractChoiceAction", 
-                "W3QuestCond_IsItemEquipped", 
-                "CStorySceneEventOverrideAnimation", 
-                "CStorySceneQuestChoiceLine", 
-
+                "CStorySceneEventWorldEntityEffect",
+                "CStorySceneDanglesShakeEvent",
+                "CStorySceneEventEquipItem",
+                "CStorySceneEventEnhancedCameraBlend",
+                "CStorySceneEventDialogLine",
+                "CStorySceneEventOpenDoor",
+                "CStorySceneEventExitActor",
+                "CStorySceneLocaleVariantMapping",
+                "CQuestCameraFocusCondition",
+                "CAxiiStorySceneChoiceAction",
+                "CQuestActorCondition",
+                "CQCHasItem",
+                "CPayStorySceneChoiceAction",
+                "CQuestLogicOperationCondition",
+                "CStorySceneEventPropPlacementInterpolation",
+                "CStorySceneEventPropPlacementInterpolationKey",
+                "CStorySceneFlowSwitch",
+                "CStorySceneFlowSwitchCase",
+                "W3QuestCond_IsItemQuantityMet",
+                "CGameCardsChoiceAction",
+                "CShopStorySceneChoiceAction",
+                "CStorySceneLinkHub",
+                "CAuctionSceneChoiceAction",
+                "CStorySceneEventVideoOverlay",
+                "CStorySceneEventCameraLightInterpolation",
+                "CStorySceneEventCameraLightInterpolationKey",
+                "SStorySceneLightDimmerProperties",
+                "CPayFactBasedStorySceneChoiceAction",
+                "CMonsterContractChoiceAction",
+                "W3QuestCond_IsItemEquipped",
+                "CStorySceneEventOverrideAnimation",
+                "CStorySceneQuestChoiceLine",
                 "CEnvPaintEffectParameters",
-
-                "CQuestContentActivatorBlock", 
-                "CQuestSceneBlock", 
-                "CQuestFactsDBExCondition", 
-                "SItemExt", 
-
-                "CFurMeshResource", 
-                "Matrix", 
-                "SFurVisualizers", 
-
-
-                "CDLCDefinition", 
-                "CR4QuestDLCMounter", 
-                "CR4RewardsDLCMounter", 
-                "CR4JournalDLCMounter", 
-                "CR4AttitudesDLCMounter", 
-                "CR4DefinitionsDLCMounter", 
-                "CR4DefinitionsEntitieTemplatesDLCMounter", 
-                "CR4SceneAnimationsDLCMounter", 
-                "CR4EntityTemplateParamDLCMounter", 
-                "CAnimAnimsetsParam", 
-                "CR4ResourceDefinitionsDLCMounter", 
-                "CR4AnimationsCategoriesDLCMounter", 
-                "CR4ActionPointCategoriesDLCMounter", 
-                "CR4ScaleformContentDLCMounter", 
-                "CR4EntityExternalAppearanceDLCMounter", 
-                "CR4EntityExternalAppearanceDLC", 
-                "CR4DefinitionsNGPlusDLCMounter", 
-                "CR4JournalEntriesDLCMounter", 
-                "CR4MappinsDLCMounter", 
-                "CR4VideoDLCMounter", 
+                "CQuestContentActivatorBlock",
+                "CQuestSceneBlock",
+                "CQuestFactsDBExCondition",
+                "SItemExt",
+                "CFurMeshResource",
+                "Matrix",
+                "SFurVisualizers",
+                "CDLCDefinition",
+                "CR4QuestDLCMounter",
+                "CR4RewardsDLCMounter",
+                "CR4JournalDLCMounter",
+                "CR4AttitudesDLCMounter",
+                "CR4DefinitionsDLCMounter",
+                "CR4DefinitionsEntitieTemplatesDLCMounter",
+                "CR4SceneAnimationsDLCMounter",
+                "CR4EntityTemplateParamDLCMounter",
+                "CAnimAnimsetsParam",
+                "CR4ResourceDefinitionsDLCMounter",
+                "CR4AnimationsCategoriesDLCMounter",
+                "CR4ActionPointCategoriesDLCMounter",
+                "CR4ScaleformContentDLCMounter",
+                "CR4EntityExternalAppearanceDLCMounter",
+                "CR4EntityExternalAppearanceDLC",
+                "CR4DefinitionsNGPlusDLCMounter",
+                "CR4JournalEntriesDLCMounter",
+                "CR4MappinsDLCMounter",
+                "CR4VideoDLCMounter",
                 "CSaveFileDLCMounter",
-
                 "SStreamedAttachment",
                 "EntitySlot",
-
-                "CSkeletalAnimationSet", 
-
-                "CExtAnimDurationEvent", 
-                "CExtAnimSoundEvent", 
-                "CExtAnimFootstepEvent", 
-                "CEASEnumEvent", 
-                "SEnumVariant", 
-                "CPreAttackEvent", 
-                "CExtAnimEvent", 
-                "CLineMotionExtraction2", 
-                "CAnimationBufferBitwiseCompressed", 
-                "SAnimationBufferBitwiseCompressedBoneTrack", 
-
-                "CExtAnimEffectEvent", 
-                "CSkeletalAnimation", 
-                "CPreAttackEventData", 
-                "CExtAnimItemEffectEvent", 
-                "CExtAnimItemSyncEvent", 
-                "CExtAnimMaterialBasedFxEvent", 
-                "CExtAnimRaiseEventEvent", 
-                "CExtAnimItemSyncDurationEvent", 
-
-                "CExtAnimAttackEvent", 
-                "CExtAnimLocationAdjustmentEvent", 
-                "CExtAnimOnSlopeEvent", 
+                "CSkeletalAnimationSet",
+                "CExtAnimDurationEvent",
+                "CExtAnimSoundEvent",
+                "CExtAnimFootstepEvent",
+                "CEASEnumEvent",
+                "SEnumVariant",
+                "CPreAttackEvent",
+                "CExtAnimEvent",
+                "CLineMotionExtraction2",
+                "CAnimationBufferBitwiseCompressed",
+                "SAnimationBufferBitwiseCompressedBoneTrack",
+                "CExtAnimEffectEvent",
+                "CSkeletalAnimation",
+                "CPreAttackEventData",
+                "CExtAnimItemEffectEvent",
+                "CExtAnimItemSyncEvent",
+                "CExtAnimMaterialBasedFxEvent",
+                "CExtAnimRaiseEventEvent",
+                "CExtAnimItemSyncDurationEvent",
+                "CExtAnimAttackEvent",
+                "CExtAnimLocationAdjustmentEvent",
+                "CExtAnimOnSlopeEvent"
             };
 
-            for (int i = 0; i < vectors.Length; i++)
+            for (var i = 0; i < vectors.Length; i++)
             {
                 Register(vectors[i], new CVector(null));
             }
 
-            var cnames = new string[] { 
+            var cnames = new[]
+            {
                 "EActorImmortalityMode", "EAIAttitude", "EAreaName", "ECameraPlane", "ECompareFunc",
                 "ECompareOp", "ECurveBaseType", "ECurveRelativeMode", "ECurveType", "ECurveValueType",
                 "EDoorQuestState", "EFocusModeVisibility",
@@ -406,34 +373,45 @@ namespace W3Edit.CR2W.Types
                 "SAnimationBufferOrientationCompressionMethod",
                 "EEffectType", "EMoveType", "ESkeletonType", "EBreastPreset",
                 "EInterpolationEasingStyle", "EDialogLookAtType", "EDialogResetClothAndDanglesType", "ELookAtLevel",
-                "EGwintDifficultyMode", "EGwintAggressionMode", "EStorySceneAnimationType", "EGeraltPath", "EDrawWeaponQuestType",
-                "EQueryFightMode", "ETopLevelAIPriorities", "ESoundEventSaveBehavior", "ECharacterDefenseStats", "ESimpleCurveType",
+                "EGwintDifficultyMode", "EGwintAggressionMode", "EStorySceneAnimationType", "EGeraltPath",
+                "EDrawWeaponQuestType",
+                "EQueryFightMode", "ETopLevelAIPriorities", "ESoundEventSaveBehavior", "ECharacterDefenseStats",
+                "ESimpleCurveType",
                 "EBehaviorGraph", "EQuestNPCStates", "EDismountType", "ERenderingSortGroup", "ERenderingBlendMode",
-
-                "ESceneEventLightColorSource", 
-                "ELightType", 
-                "ELightShadowCastingMode", 
-                "EFarPlaneDistance", 
-                "ECheckedLanguage", 
-                "ELanguageCheckType", 
-                "EInterpolationMethod", 
-                "EDimmerType", 
+                "ESceneEventLightColorSource",
+                "ELightType",
+                "ELightShadowCastingMode",
+                "EFarPlaneDistance",
+                "ECheckedLanguage",
+                "ELanguageCheckType",
+                "EInterpolationMethod",
+                "EDimmerType",
                 "EInputActionBlock",
-
                 "EUsableItemType",
-
-                "SAnimationBufferStreamingOption", 
-
-                "EItemLatentAction", 
-                "ESkeletalAnimationType", 
-                "EItemEffectAction", 
+                "SAnimationBufferStreamingOption",
+                "EItemLatentAction",
+                "ESkeletalAnimationType",
+                "EItemEffectAction"
             };
 
 
-            for (int i = 0; i < cnames.Length; i++)
+            for (var i = 0; i < cnames.Length; i++)
             {
                 Register(cnames[i], new CName(null));
             }
+        }
+
+        public List<string> AvailableTypes
+        {
+            get { return types.Keys.ToList(); }
+        }
+
+        public static CR2WTypeManager Get()
+        {
+            if (instance == null)
+                instance = new CR2WTypeManager();
+
+            return instance;
         }
 
         public void Register(string name, CVariable var)
@@ -441,19 +419,19 @@ namespace W3Edit.CR2W.Types
             types.Add(name, new CR2WTypeDefinition(name, var));
         }
 
-        public CVariable GetByName(string name, string varname, CR2WFile cr2w, bool readUnknownAsBytes=true)
+        public CVariable GetByName(string name, string varname, CR2WFile cr2w, bool readUnknownAsBytes = true)
         {
-            string fullname = name;
-            Regex reg = new Regex(@"^(\w+):(.+)$");
-            Match match = reg.Match(name);
+            var fullname = name;
+            var reg = new Regex(@"^(\w+):(.+)$");
+            var match = reg.Match(name);
 
             if (match.Success)
             {
                 name = match.Groups[1].Value;
             }
 
-            Regex regFixedSizeArray = new Regex(@"^\[(\d+)\](.+)$");
-            Match matchFixedSizeArray = regFixedSizeArray.Match(name);
+            var regFixedSizeArray = new Regex(@"^\[(\d+)\](.+)$");
+            var matchFixedSizeArray = regFixedSizeArray.Match(name);
 
             if (matchFixedSizeArray.Success)
             {
@@ -462,8 +440,8 @@ namespace W3Edit.CR2W.Types
 
             if (name == "array")
             {
-                Regex regArrayType = new Regex(@"(\d+),(\d+),(.+)");
-                Match matchArrayType = regArrayType.Match(fullname);
+                var regArrayType = new Regex(@"(\d+),(\d+),(.+)");
+                var matchArrayType = regArrayType.Match(fullname);
                 if (matchArrayType.Success)
                 {
                     // byte arrays, these can be huge, using ordinary arrays is just too slow.
@@ -471,36 +449,23 @@ namespace W3Edit.CR2W.Types
                     {
                         return new CByteArray(cr2w);
                     }
-                    else
-                    {
-                        return new CArray(fullname, matchArrayType.Groups[3].Value, false, cr2w);
-                    }
+                    return new CArray(fullname, matchArrayType.Groups[3].Value, false, cr2w);
                 }
-                else
-                {
-                    return new CArray(fullname, cr2w);
-                }
+                return new CArray(fullname, cr2w);
             }
-            else if (types.ContainsKey(name))
+            if (types.ContainsKey(name))
             {
                 return types[name].var.Create(cr2w);
             }
-            else
+            if (!cr2w.UnknownTypes.Contains(fullname))
+                cr2w.UnknownTypes.Add(fullname);
+
+            // Unknown type, just interpret as bytes
+            if (readUnknownAsBytes)
             {
-                if (!cr2w.UnknownTypes.Contains(fullname))
-                    cr2w.UnknownTypes.Add(fullname);
-
-                // Unknown type, just interpret as bytes
-                if (readUnknownAsBytes) 
-                {
-                    return new CBytes(cr2w);
-                }
-                else
-                {
-                    return null;
-                }
+                return new CBytes(cr2w);
             }
+            return null;
         }
-
     }
 }

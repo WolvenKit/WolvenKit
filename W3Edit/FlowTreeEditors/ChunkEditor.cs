@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using W3Edit.CR2W;
 using W3Edit.CR2W.Types;
@@ -14,15 +9,18 @@ namespace W3Edit.FlowTreeEditors
 {
     public partial class ChunkEditor : UserControl
     {
-        public virtual string GetCopyText() { return chunk.Name; }
-
         private CR2WChunk chunk;
+        private bool mouseMoving;
+        private Point mouseStart;
+
+        public ChunkEditor()
+        {
+            InitializeComponent();
+        }
+
         public CR2WChunk Chunk
         {
-            get
-            {
-                return chunk;
-            }
+            get { return chunk; }
             set
             {
                 chunk = value;
@@ -30,16 +28,13 @@ namespace W3Edit.FlowTreeEditors
             }
         }
 
-        private bool mouseMoving;
-        private Point mouseStart;
+        public virtual string GetCopyText()
+        {
+            return chunk.Name;
+        }
 
         public event EventHandler<SelectChunkArgs> OnSelectChunk;
         public event EventHandler<MoveEditorArgs> OnManualMove;
-
-        public ChunkEditor()
-        {
-            InitializeComponent();
-        }
 
         private void lblTitle_MouseDown(object sender, MouseEventArgs e)
         {
@@ -58,8 +53,11 @@ namespace W3Edit.FlowTreeEditors
             {
                 if (OnManualMove != null)
                 {
-                    OnManualMove(this, new MoveEditorArgs() {
-                        Relative = new Point((Location.X - mouseStart.X + e.X) - Location.X, (Location.Y - mouseStart.Y + e.Y) - Location.Y) 
+                    OnManualMove(this, new MoveEditorArgs
+                    {
+                        Relative =
+                            new Point((Location.X - mouseStart.X + e.X) - Location.X,
+                                (Location.Y - mouseStart.Y + e.Y) - Location.Y)
                     });
                 }
                 Location = new Point(Location.X - mouseStart.X + e.X, Location.Y - mouseStart.Y + e.Y);
@@ -91,13 +89,13 @@ namespace W3Edit.FlowTreeEditors
         {
             if (OnSelectChunk != null)
             {
-                OnSelectChunk(this, new SelectChunkArgs() { Chunk = c });
+                OnSelectChunk(this, new SelectChunkArgs {Chunk = c});
             }
         }
 
         public virtual Point GetConnectionLocation(int i)
         {
-            return new Point(0, Height / 2);
+            return new Point(0, Height/2);
         }
     }
 }

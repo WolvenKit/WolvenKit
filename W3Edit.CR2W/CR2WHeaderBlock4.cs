@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace W3Edit.CR2W
 {
     public class CR2WHeaderBlock4
     {
-        public UInt32 unk1;
-        public UInt32 unk2;
-        public UInt32 unk3;
-        public UInt32 unk4;
+        public uint unk1;
+        public uint unk2;
+        public uint unk3;
+        public uint unk4;
 
         public CR2WHeaderBlock4()
         {
         }
-
 
         public CR2WHeaderBlock4(BinaryReader file)
         {

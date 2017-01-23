@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace W3Edit.CR2W.Types
 {
     public class CDateTime : CVariable
     {
-        public UInt64 val;
+        public ulong val;
 
         public CDateTime(CR2WFile cr2w)
             : base(cr2w)
         {
-
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public override void Read(BinaryReader file, uint size)
         {
             val = file.ReadUInt64();
         }
@@ -29,10 +23,7 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is UInt64)
-            {
-                val = (UInt64)val;
-            }
+            val = val as ulong?;
 
             return this;
         }
@@ -44,7 +35,7 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CDateTime)base.Copy(context);
+            var var = (CDateTime) base.Copy(context);
             var.val = val;
             return var;
         }

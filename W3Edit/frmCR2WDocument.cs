@@ -1,25 +1,59 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using W3Edit.CR2W;
 using WeifenLuo.WinFormsUI.Docking;
-using W3Edit.CR2W.Types;
-using W3Edit.CR2W.Editors;
-using System.Collections;
-using BrightIdeasSoftware;
 
 namespace W3Edit
 {
     public partial class frmCR2WDocument : DockContent
     {
+        private readonly frmChunkList chunkList;
+        private readonly frmEmbeddedFiles embeddedFiles;
+        private readonly frmChunkFlowDiagram flowDiagram;
         private CR2WFile file;
+        private frmChunkProperties propertyWindow;
+
+        public frmCR2WDocument()
+        {
+            InitializeComponent();
+
+            try
+            {
+                dockPanel.LoadFromXml(
+                    Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "cr2wdocument_layout.xml"),
+                    DeserializeDockContent);
+            }
+            catch
+            {
+            }
+
+            chunkList = new frmChunkList();
+            chunkList.File = File;
+            chunkList.DockAreas = DockAreas.Document;
+            chunkList.Show(dockPanel, DockState.Document);
+            chunkList.OnSelectChunk += frmCR2WDocument_OnSelectChunk;
+
+            if (MainController.Get().Configuration.EnableFlowTreeEditor)
+            {
+                flowDiagram = new frmChunkFlowDiagram();
+                flowDiagram.File = File;
+                flowDiagram.DockAreas = DockAreas.Document;
+                flowDiagram.Show(dockPanel, DockState.Document);
+                flowDiagram.OnSelectChunk += frmCR2WDocument_OnSelectChunk;
+            }
+
+            embeddedFiles = new frmEmbeddedFiles();
+            embeddedFiles.File = file;
+            embeddedFiles.DockAreas = DockAreas.Document;
+            embeddedFiles.Hide();
+
+            propertyWindow = new frmChunkProperties();
+            propertyWindow.Show(dockPanel, DockState.DockBottom);
+
+            chunkList.Activate();
+        }
+
         public CR2WFile File
         {
             get { return file; }
@@ -31,7 +65,7 @@ namespace W3Edit
                 {
                     chunkList.File = file;
                 }
-                
+
                 if (flowDiagram != null && !flowDiagram.IsDisposed)
                 {
                     flowDiagram.File = file;
@@ -43,12 +77,11 @@ namespace W3Edit
 
                     if (file.block7.Count > 0)
                     {
-                        embeddedFiles.Show(dockPanel, WeifenLuo.WinFormsUI.Docking.DockState.Document);
+                        embeddedFiles.Show(dockPanel, DockState.Document);
                     }
                 }
             }
         }
-
 
         public string FileName
         {
@@ -56,56 +89,13 @@ namespace W3Edit
             set { File.FileName = value; }
         }
 
-        public event EventHandler<FileSavedEventArgs> OnFileSaved;
         public object SaveTarget { get; set; }
-
-        private frmChunkList chunkList;
-        private frmChunkProperties propertyWindow;
-        private frmChunkFlowDiagram flowDiagram;
-        private frmEmbeddedFiles embeddedFiles;
-
-        public frmCR2WDocument()
-        {
-            InitializeComponent();
-
-            try
-            {
-                dockPanel.LoadFromXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "cr2wdocument_layout.xml"), DeserializeDockContent);
-            }
-            catch
-            {
-
-            }
-
-            chunkList = new frmChunkList();
-            chunkList.File = File;
-            chunkList.DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Document;
-            chunkList.Show(dockPanel, WeifenLuo.WinFormsUI.Docking.DockState.Document);
-            chunkList.OnSelectChunk += frmCR2WDocument_OnSelectChunk;
-
-            if (MainController.Get().Configuration.EnableFlowTreeEditor)
-            {
-                flowDiagram = new frmChunkFlowDiagram();
-                flowDiagram.File = File;
-                flowDiagram.DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Document;
-                flowDiagram.Show(dockPanel, WeifenLuo.WinFormsUI.Docking.DockState.Document);
-                flowDiagram.OnSelectChunk += frmCR2WDocument_OnSelectChunk;
-            }
-
-            embeddedFiles = new frmEmbeddedFiles();
-            embeddedFiles.File = file;
-            embeddedFiles.DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Document;
-            embeddedFiles.Hide();
-
-            propertyWindow = new frmChunkProperties();
-            propertyWindow.Show(dockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
-
-            chunkList.Activate();
-        }
+        public event EventHandler<FileSavedEventArgs> OnFileSaved;
 
         private void frmCR2WDocument_FormClosed(object sender, FormClosedEventArgs e)
         {
-            dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "cr2wdocument_layout.xml"));
+            dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath),
+                "cr2wdocument_layout.xml"));
 
             if (propertyWindow != null && !propertyWindow.IsDisposed)
             {
@@ -118,7 +108,7 @@ namespace W3Edit
             return null;
         }
 
-        void frmCR2WDocument_OnSelectChunk(object sender, SelectChunkArgs e)
+        private void frmCR2WDocument_OnSelectChunk(object sender, SelectChunkArgs e)
         {
             if (propertyWindow == null || propertyWindow.IsDisposed)
             {
@@ -154,7 +144,7 @@ namespace W3Edit
                 {
                     FileName = filename,
                     EditorController = MainController.Get(),
-                    LocalizedStringSource = MainController.Get(),
+                    LocalizedStringSource = MainController.Get()
                 };
             }
         }
@@ -181,7 +171,7 @@ namespace W3Edit
 
                     if (OnFileSaved != null)
                     {
-                        OnFileSaved(this, new FileSavedEventArgs() { FileName = FileName, Stream = mem, File = File });
+                        OnFileSaved(this, new FileSavedEventArgs {FileName = FileName, Stream = mem, File = File});
                     }
                 }
             }
@@ -202,7 +192,7 @@ namespace W3Edit
 
                         if (OnFileSaved != null)
                         {
-                            OnFileSaved(this, new FileSavedEventArgs() { FileName = FileName, Stream = fs, File = File });
+                            OnFileSaved(this, new FileSavedEventArgs {FileName = FileName, Stream = fs, File = File});
                         }
                         fs.Close();
                     }

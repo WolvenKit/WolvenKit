@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using W3Edit.CR2W.Editors;
-using W3Edit.CR2W.Types;
 
 namespace W3Edit.CR2W.Types
 {
@@ -16,7 +11,6 @@ namespace W3Edit.CR2W.Types
         public CStorySceneScript(CR2WFile cr2w) :
             base(cr2w)
         {
-
         }
 
         public void SetScriptFunction(string functionName, CVariable[] lParameters)
@@ -25,11 +19,11 @@ namespace W3Edit.CR2W.Types
             parameters.AddRange(lParameters);
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public override void Read(BinaryReader file, uint size)
         {
             base.Read(file, size);
 
-            while(true)
+            while (true)
             {
                 var nameId = file.ReadUInt16();
 
@@ -42,7 +36,7 @@ namespace W3Edit.CR2W.Types
                 var typename = cr2w.strings[typeId].str;
 
                 var variable = CR2WTypeManager.Get().GetByName(typename, "", cr2w);
-                variable.Read(file, lsize-4);
+                variable.Read(file, lsize - 4);
 
                 variable.typeId = typeId;
                 variable.nameId = nameId;
@@ -55,7 +49,7 @@ namespace W3Edit.CR2W.Types
         {
             base.Write(file);
 
-            for (int i = 0; i < parameters.Count; i++ )
+            for (var i = 0; i < parameters.Count; i++)
             {
                 var variable = parameters[i];
 
@@ -63,18 +57,18 @@ namespace W3Edit.CR2W.Types
                 file.Write(variable.typeId);
 
                 var startpos = file.BaseStream.Position;
-                file.Write((UInt32)0); // placeholder
+                file.Write((uint) 0); // placeholder
 
                 variable.Write(file);
                 var endpos = file.BaseStream.Position;
 
-                var newsize = (UInt32)(endpos - startpos);
+                var newsize = (uint) (endpos - startpos);
 
-                file.Seek((int)startpos, SeekOrigin.Begin);
+                file.Seek((int) startpos, SeekOrigin.Begin);
                 file.Write(newsize);
-                file.Seek((int)endpos, SeekOrigin.Begin);
+                file.Seek((int) endpos, SeekOrigin.Begin);
             }
-            file.Write((UInt16)0);
+            file.Write((ushort) 0);
         }
 
         public override CVariable SetValue(object val)
@@ -89,7 +83,7 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CStorySceneScript)base.Copy(context);
+            var var = (CStorySceneScript) base.Copy(context);
 
             foreach (var item in parameters)
             {
@@ -102,7 +96,7 @@ namespace W3Edit.CR2W.Types
         public override List<IEditableVariable> GetEditableVariables()
         {
             var list = new List<IEditableVariable>(variables);
-            list.Add(new EditableList<CVariable>(parameters, cr2w) { Name = "functionParameters" });
+            list.Add(new EditableList<CVariable>(parameters, cr2w) {Name = "functionParameters"});
             return list;
         }
     }
@@ -112,7 +106,6 @@ namespace W3Edit.CR2W.Types
         public CQuestScriptBlock(CR2WFile cr2w) :
             base(cr2w)
         {
-
         }
 
         public override CVariable Create(CR2WFile cr2w)

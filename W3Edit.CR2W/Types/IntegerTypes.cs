@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
+using System.Windows.Forms;
 
 namespace W3Edit.CR2W.Types
 {
     public class CUInt64 : CVariable
     {
-        public UInt64 val { get; set; }
-
         public CUInt64(CR2WFile cr2w)
             : base(cr2w)
         {
-
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public ulong val { get; set; }
+
+        public override void Read(BinaryReader file, uint size)
         {
             val = file.ReadUInt64();
         }
@@ -29,9 +24,9 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is UInt64)
+            if (val is ulong)
             {
-                this.val = (UInt64)val;
+                this.val = (ulong) val;
             }
 
             return this;
@@ -44,14 +39,14 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CUInt64)base.Copy(context);
+            var var = (CUInt64) base.Copy(context);
             var.val = val;
             return var;
         }
 
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
-            var editor = new System.Windows.Forms.TextBox();
+            var editor = new TextBox();
             editor.DataBindings.Add("Text", this, "val");
             return editor;
         }
@@ -64,15 +59,14 @@ namespace W3Edit.CR2W.Types
 
     public class CUInt32 : CVariable
     {
-        public UInt32 val { get; set; }
-
         public CUInt32(CR2WFile cr2w)
             : base(cr2w)
         {
-
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public uint val { get; set; }
+
+        public override void Read(BinaryReader file, uint size)
         {
             val = file.ReadUInt32();
         }
@@ -84,9 +78,9 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is UInt32)
+            if (val is uint)
             {
-                this.val = (UInt32)val;
+                this.val = (uint) val;
             }
 
             return this;
@@ -99,14 +93,14 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CUInt32)base.Copy(context);
+            var var = (CUInt32) base.Copy(context);
             var.val = val;
             return var;
         }
 
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
-            var editor = new System.Windows.Forms.TextBox();
+            var editor = new TextBox();
             editor.DataBindings.Add("Text", this, "val");
             return editor;
         }
@@ -119,15 +113,14 @@ namespace W3Edit.CR2W.Types
 
     public class CUInt16 : CVariable
     {
-        public UInt16 val { get; set; }
-
         public CUInt16(CR2WFile cr2w)
             : base(cr2w)
         {
-
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public ushort val { get; set; }
+
+        public override void Read(BinaryReader file, uint size)
         {
             val = file.ReadUInt16();
         }
@@ -139,9 +132,9 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is UInt16)
+            if (val is ushort)
             {
-                this.val = (UInt16)val;
+                this.val = (ushort) val;
             }
 
             return this;
@@ -154,14 +147,14 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CUInt16)base.Copy(context);
+            var var = (CUInt16) base.Copy(context);
             var.val = val;
             return var;
         }
 
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
-            var editor = new System.Windows.Forms.TextBox();
+            var editor = new TextBox();
             editor.DataBindings.Add("Text", this, "val");
             return editor;
         }
@@ -174,15 +167,14 @@ namespace W3Edit.CR2W.Types
 
     public class CUInt8 : CVariable
     {
-        public Byte val { get; set; }
-
         public CUInt8(CR2WFile cr2w)
             : base(cr2w)
         {
-
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public byte val { get; set; }
+
+        public override void Read(BinaryReader file, uint size)
         {
             val = file.ReadByte();
         }
@@ -196,7 +188,7 @@ namespace W3Edit.CR2W.Types
         {
             if (val is byte)
             {
-                this.val = (byte)val;
+                this.val = (byte) val;
             }
 
             return this;
@@ -209,14 +201,14 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CUInt8)base.Copy(context);
+            var var = (CUInt8) base.Copy(context);
             var.val = val;
             return var;
         }
 
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
-            var editor = new System.Windows.Forms.TextBox();
+            var editor = new TextBox();
             editor.DataBindings.Add("Text", this, "val");
             return editor;
         }
@@ -230,15 +222,14 @@ namespace W3Edit.CR2W.Types
 
     public class CInt64 : CVariable
     {
-        public Int64 val { get; set; }
-
         public CInt64(CR2WFile cr2w)
             : base(cr2w)
         {
-
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public long val { get; set; }
+
+        public override void Read(BinaryReader file, uint size)
         {
             val = file.ReadInt64();
         }
@@ -250,9 +241,9 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is Int64)
+            if (val is long)
             {
-                this.val = (Int64)val;
+                this.val = (long) val;
             }
 
             return this;
@@ -265,14 +256,14 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CInt64)base.Copy(context);
+            var var = (CInt64) base.Copy(context);
             var.val = val;
             return var;
         }
 
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
-            var editor = new System.Windows.Forms.TextBox();
+            var editor = new TextBox();
             editor.DataBindings.Add("Text", this, "val");
             return editor;
         }
@@ -285,15 +276,14 @@ namespace W3Edit.CR2W.Types
 
     public class CInt32 : CVariable
     {
-        public Int32 val { get; set; }
-
         public CInt32(CR2WFile cr2w)
             : base(cr2w)
         {
-
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public int val { get; set; }
+
+        public override void Read(BinaryReader file, uint size)
         {
             val = file.ReadInt32();
         }
@@ -305,9 +295,9 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is Int32)
+            if (val is int)
             {
-                this.val = (Int32)val;
+                this.val = (int) val;
             }
 
             return this;
@@ -320,14 +310,14 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CInt32)base.Copy(context);
+            var var = (CInt32) base.Copy(context);
             var.val = val;
             return var;
         }
 
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
-            var editor = new System.Windows.Forms.TextBox();
+            var editor = new TextBox();
             editor.DataBindings.Add("Text", this, "val");
             return editor;
         }
@@ -340,15 +330,14 @@ namespace W3Edit.CR2W.Types
 
     public class CInt16 : CVariable
     {
-        public Int16 val { get; set; }
-
         public CInt16(CR2WFile cr2w)
             : base(cr2w)
         {
-
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public short val { get; set; }
+
+        public override void Read(BinaryReader file, uint size)
         {
             val = file.ReadInt16();
         }
@@ -360,9 +349,9 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is Int16)
+            if (val is short)
             {
-                this.val = (Int16)val;
+                this.val = (short) val;
             }
 
             return this;
@@ -375,14 +364,14 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CInt16)base.Copy(context);
+            var var = (CInt16) base.Copy(context);
             var.val = val;
             return var;
         }
 
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
-            var editor = new System.Windows.Forms.TextBox();
+            var editor = new TextBox();
             editor.DataBindings.Add("Text", this, "val");
             return editor;
         }
@@ -395,15 +384,14 @@ namespace W3Edit.CR2W.Types
 
     public class CInt8 : CVariable
     {
-        public SByte val { get; set; }
-
         public CInt8(CR2WFile cr2w)
             : base(cr2w)
         {
-
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public sbyte val { get; set; }
+
+        public override void Read(BinaryReader file, uint size)
         {
             val = file.ReadSByte();
         }
@@ -417,7 +405,7 @@ namespace W3Edit.CR2W.Types
         {
             if (val is sbyte)
             {
-                this.val = (sbyte)val;
+                this.val = (sbyte) val;
             }
 
             return this;
@@ -430,14 +418,14 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CInt8)base.Copy(context);
+            var var = (CInt8) base.Copy(context);
             var.val = val;
             return var;
         }
 
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
-            var editor = new System.Windows.Forms.TextBox();
+            var editor = new TextBox();
             editor.DataBindings.Add("Text", this, "val");
             return editor;
         }
@@ -450,15 +438,14 @@ namespace W3Edit.CR2W.Types
 
     public class CDynamicInt : CVariable
     {
-        public Int32 val { get; set; }
-
         public CDynamicInt(CR2WFile cr2w)
             : base(cr2w)
         {
-
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public int val { get; set; }
+
+        public override void Read(BinaryReader file, uint size)
         {
             var result = 0;
             var shift = 0;
@@ -468,7 +455,8 @@ namespace W3Edit.CR2W.Types
             do
             {
                 b = file.ReadByte();
-                if (b == 128) {
+                if (b == 128)
+                {
                     result = 0;
                     break;
                 }
@@ -504,7 +492,7 @@ namespace W3Edit.CR2W.Types
         {
             if (val is sbyte)
             {
-                this.val = (sbyte)val;
+                this.val = (sbyte) val;
             }
 
             return this;
@@ -517,14 +505,14 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CDynamicInt)base.Copy(context);
+            var var = (CDynamicInt) base.Copy(context);
             var.val = val;
             return var;
         }
 
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
-            var editor = new System.Windows.Forms.TextBox();
+            var editor = new TextBox();
             editor.DataBindings.Add("Text", this, "val");
             return editor;
         }
@@ -537,29 +525,28 @@ namespace W3Edit.CR2W.Types
 
     public class CBool : CVariable
     {
-        public bool val { get; set; }
-
         public CBool(CR2WFile cr2w)
             : base(cr2w)
         {
-
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public bool val { get; set; }
+
+        public override void Read(BinaryReader file, uint size)
         {
             val = file.ReadByte() != 0;
         }
 
         public override void Write(BinaryWriter file)
         {
-            file.Write(val ? (byte)1 : (byte)0);
+            file.Write(val ? (byte) 1 : (byte) 0);
         }
 
         public override CVariable SetValue(object val)
         {
             if (val is bool)
             {
-                this.val = (bool)val;
+                this.val = (bool) val;
             }
 
             return this;
@@ -572,14 +559,14 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CBool)base.Copy(context);
+            var var = (CBool) base.Copy(context);
             var.val = val;
             return var;
         }
 
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
-            var editor = new System.Windows.Forms.CheckBox();
+            var editor = new CheckBox();
             editor.DataBindings.Add("Checked", this, "val");
             return editor;
         }

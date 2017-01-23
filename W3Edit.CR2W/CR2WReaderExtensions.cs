@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using W3Edit.CR2W.Types;
 
 namespace W3Edit.CR2W
@@ -11,7 +8,7 @@ namespace W3Edit.CR2W
     public static class CR2WReaderExtensions
     {
         /// <summary>
-        /// Read null terminated string
+        ///     Read null terminated string
         /// </summary>
         /// <param name="file">Reader</param>
         /// <param name="len">Fixed length string</param>
@@ -19,17 +16,17 @@ namespace W3Edit.CR2W
         public static string ReadCR2WString(this BinaryReader file, int len = 0)
         {
             string str = null;
-            if (len > 0) 
+            if (len > 0)
             {
                 str = Encoding.Default.GetString(file.ReadBytes(len));
             }
-            else 
+            else
             {
                 var sb = new StringBuilder();
-                while (true) 
+                while (true)
                 {
-                    var c = (char)file.ReadByte();
-                    if (c == 0) 
+                    var c = (char) file.ReadByte();
+                    if (c == 0)
                         break;
                     sb.Append(c);
                 }
@@ -44,10 +41,10 @@ namespace W3Edit.CR2W
             {
                 file.Write(Encoding.Default.GetBytes(str));
             }
-            file.Write((byte)0);
+            file.Write((byte) 0);
         }
 
-        public static void AddUnique(this Dictionary<string, UInt32> dic, string str, UInt32 val)
+        public static void AddUnique(this Dictionary<string, uint> dic, string str, uint val)
         {
             if (str == null) str = "";
 
@@ -57,9 +54,9 @@ namespace W3Edit.CR2W
             }
         }
 
-        public static UInt32 Get(this Dictionary<string, UInt32> dic, string str)
+        public static uint Get(this Dictionary<string, uint> dic, string str)
         {
-            if (str == null) 
+            if (str == null)
                 str = "";
 
             return dic[str];
@@ -67,7 +64,7 @@ namespace W3Edit.CR2W
 
         public static CVariable GetVariableByName(this CVector arr, string name)
         {
-            for (int i = 0; i < arr.variables.Count; i++)
+            for (var i = 0; i < arr.variables.Count; i++)
             {
                 if (arr.variables[i].Name == name)
                     return arr.variables[i];
@@ -77,7 +74,7 @@ namespace W3Edit.CR2W
 
         public static CVariable GetVariableByType(this CVector arr, string type)
         {
-            for (int i = 0; i < arr.variables.Count; i++)
+            for (var i = 0; i < arr.variables.Count; i++)
             {
                 if (arr.variables[i].Type == type)
                     return arr.variables[i];
@@ -89,9 +86,9 @@ namespace W3Edit.CR2W
         {
             if (arr.data is CVector)
             {
-                var vdata = (CVector)arr.data;
+                var vdata = (CVector) arr.data;
 
-                for (int i = 0; i < vdata.variables.Count; i++)
+                for (var i = 0; i < vdata.variables.Count; i++)
                 {
                     if (vdata.variables[i].Name == name)
                         return vdata.variables[i];
@@ -105,9 +102,9 @@ namespace W3Edit.CR2W
         {
             if (arr.data is CVector)
             {
-                var vdata = (CVector)arr.data;
+                var vdata = (CVector) arr.data;
 
-                for (int i = 0; i < vdata.variables.Count; i++)
+                for (var i = 0; i < vdata.variables.Count; i++)
                 {
                     if (vdata.variables[i].Name == name)
                         return vdata.variables[i];
@@ -131,44 +128,45 @@ namespace W3Edit.CR2W
 
         public static void CreateConnection(this CR2WChunk chunk, string in_name, string out_name, CR2WChunk out_target)
         {
-            var cachedConnections = (CArray)chunk.GetVariableByName("cachedConnections");
+            var cachedConnections = (CArray) chunk.GetVariableByName("cachedConnections");
 
             if (cachedConnections == null)
             {
-                cachedConnections = (CArray)chunk.cr2w.CreateVariable(chunk, "array:2,0,SCachedConnections", "cachedConnections");
+                cachedConnections =
+                    (CArray) chunk.cr2w.CreateVariable(chunk, "array:2,0,SCachedConnections", "cachedConnections");
             }
 
-            { // connection 1
+            {
+                // connection 1
 
-                var connection = (CVector)cachedConnections.array.Find(delegate(CVariable item)
+                var connection = (CVector) cachedConnections.array.Find(delegate(CVariable item)
                 {
-                    var vec = (CVector)item;
+                    var vec = (CVector) item;
                     if (vec == null)
                         return false;
 
-                    var socketId = (CName)vec.GetVariableByName("socketId");
+                    var socketId = (CName) vec.GetVariableByName("socketId");
                     return socketId != null && socketId.Value == in_name;
                 });
 
                 if (connection == null)
                 {
                     connection = chunk.cr2w.CreateVector(cachedConnections);
-                    ((CName)chunk.cr2w.CreateVariable(connection, "CName", "socketId")).Value = in_name;
+                    ((CName) chunk.cr2w.CreateVariable(connection, "CName", "socketId")).Value = in_name;
                 }
 
 
-                var blocks = (CArray)connection.GetVariableByName("blocks");
+                var blocks = (CArray) connection.GetVariableByName("blocks");
 
                 if (blocks == null)
                 {
-                    blocks = (CArray)chunk.cr2w.CreateVariable(connection, "array:2,0,SBlockDesc", "blocks");
+                    blocks = (CArray) chunk.cr2w.CreateVariable(connection, "array:2,0,SBlockDesc", "blocks");
                 }
 
                 var block = chunk.cr2w.CreateVector(blocks);
                 chunk.cr2w.CreatePtr(block, "ptr:CQuestGraphBlock", out_target, "ock");
-                ((CName)chunk.cr2w.CreateVariable(block, "CName", "putName")).Value = out_name;
+                ((CName) chunk.cr2w.CreateVariable(block, "CName", "putName")).Value = out_name;
             }
         }
-
     }
 }

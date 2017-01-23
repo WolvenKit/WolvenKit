@@ -1,12 +1,5 @@
-﻿using BrightIdeasSoftware;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using W3Edit.CR2W;
 using WeifenLuo.WinFormsUI.Docking;
@@ -16,11 +9,6 @@ namespace W3Edit
     public partial class frmChunkList : DockContent
     {
         private CR2WFile file;
-        public CR2WFile File { 
-            get { return file; } 
-            set { file = value; updateList(); } 
-        }
-        public event EventHandler<SelectChunkArgs> OnSelectChunk;
 
         public frmChunkList()
         {
@@ -28,6 +16,18 @@ namespace W3Edit
 
             listView.ItemSelectionChanged += chunkListView_ItemSelectionChanged;
         }
+
+        public CR2WFile File
+        {
+            get { return file; }
+            set
+            {
+                file = value;
+                updateList();
+            }
+        }
+
+        public event EventHandler<SelectChunkArgs> OnSelectChunk;
 
         private void updateList()
         {
@@ -39,9 +39,9 @@ namespace W3Edit
 
         private void chunkListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            if (OnSelectChunk != null && (CR2WChunk)listView.SelectedObject != null)
+            if (OnSelectChunk != null && (CR2WChunk) listView.SelectedObject != null)
             {
-                OnSelectChunk(this, new SelectChunkArgs() { Chunk = (CR2WChunk)listView.SelectedObject });
+                OnSelectChunk(this, new SelectChunkArgs {Chunk = (CR2WChunk) listView.SelectedObject});
             }
         }
 
@@ -49,7 +49,7 @@ namespace W3Edit
         {
             var dlg = new frmAddChunk();
 
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (dlg.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
@@ -58,7 +58,7 @@ namespace W3Edit
 
                     if (OnSelectChunk != null && chunk != null)
                     {
-                        OnSelectChunk(this, new SelectChunkArgs() { Chunk = chunk });
+                        OnSelectChunk(this, new SelectChunkArgs {Chunk = chunk});
                     }
                 }
                 catch (InvalidChunkTypeException ex)
@@ -73,12 +73,15 @@ namespace W3Edit
             if (listView.SelectedObjects.Count == 0)
                 return;
 
-            if (MessageBox.Show("Are you sure you want to delete the selected chunk(s)? \n\n NOTE: Any pointers or handles to these chunks will NOT be deleted.", "Confirmation", MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
+            if (
+                MessageBox.Show(
+                    "Are you sure you want to delete the selected chunk(s)? \n\n NOTE: Any pointers or handles to these chunks will NOT be deleted.",
+                    "Confirmation", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 var selected = listView.SelectedObjects;
                 foreach (var obj in selected)
                 {
-                    File.RemoveChunk((CR2WChunk)obj);
+                    File.RemoveChunk((CR2WChunk) obj);
                 }
 
                 listView.RemoveObjects(selected);
@@ -89,7 +92,7 @@ namespace W3Edit
         private void copyChunkToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Clipboard.Clear();
-            List<CR2WChunk> chunks = new List<CR2WChunk>();
+            var chunks = new List<CR2WChunk>();
             foreach (CR2WChunk item in listView.SelectedObjects)
                 chunks.Add(item);
             CopyController.ChunkList = chunks;
@@ -99,9 +102,9 @@ namespace W3Edit
         private void pasteChunkToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var copiedchunks = CopyController.ChunkList;
-            if(copiedchunks != null && copiedchunks.Count > 0)
+            if (copiedchunks != null && copiedchunks.Count > 0)
             {
-                foreach (CR2WChunk chunk in copiedchunks)
+                foreach (var chunk in copiedchunks)
                 {
                     try
                     {
@@ -109,15 +112,15 @@ namespace W3Edit
                         listView.AddObject(pastedchunk);
                         if (OnSelectChunk != null && chunk != null)
                         {
-                            OnSelectChunk(this, new SelectChunkArgs() { Chunk = chunk });
+                            OnSelectChunk(this, new SelectChunkArgs {Chunk = chunk});
                         }
                         listView.RefreshObject(pastedchunk);
                     }
                     catch (InvalidChunkTypeException ex)
                     {
                         MessageBox.Show(ex.Message, "Error adding chunk.");
-                    }   
-                }             
+                    }
+                }
             }
         }
     }

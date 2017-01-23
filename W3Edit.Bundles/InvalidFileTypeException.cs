@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace W3Edit.Bundles
 {
@@ -9,7 +6,6 @@ namespace W3Edit.Bundles
     {
         public InvalidBundleException(string message) : base(message)
         {
-
         }
     }
 }

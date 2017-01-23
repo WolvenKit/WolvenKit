@@ -1,16 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
+using System.Windows.Forms;
+using W3Edit.CR2W.Editors;
 
 namespace W3Edit.CR2W.Types
 {
     public class CHandle : CVariable
     {
+        public CHandle(CR2WFile cr2w)
+            : base(cr2w)
+        {
+        }
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Int32 val
+        public int val
         {
             get
             {
@@ -18,11 +22,8 @@ namespace W3Edit.CR2W.Types
                 {
                     return ChunkIndex;
                 }
-                else
-                {
-                    var newfiletype = (UInt16)cr2w.GetStringIndex(FileType, true);
-                    return (-cr2w.GetHandleIndex(Handle, newfiletype, Flags, true) - 1);
-                }
+                var newfiletype = (ushort) cr2w.GetStringIndex(FileType, true);
+                return (-cr2w.GetHandleIndex(Handle, newfiletype, Flags, true) - 1);
             }
             set
             {
@@ -46,18 +47,11 @@ namespace W3Edit.CR2W.Types
 
         public string Handle { get; set; }
         public string FileType { get; set; }
-        public UInt16 Flags { get; set; }
+        public ushort Flags { get; set; }
         public bool ChunkHandle { get; set; }
-
         public int ChunkIndex { get; set; }
 
-        public CHandle(CR2WFile cr2w)
-            : base(cr2w)
-        {
-
-        }
-
-        public override void Read(BinaryReader file, UInt32 size)
+        public override void Read(BinaryReader file, uint size)
         {
             val = file.ReadInt32();
         }
@@ -71,7 +65,7 @@ namespace W3Edit.CR2W.Types
         {
             if (val is int)
             {
-                this.val = (int)val;
+                this.val = (int) val;
             }
 
             return this;
@@ -84,7 +78,7 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CHandle)base.Copy(context);
+            var var = (CHandle) base.Copy(context);
 
             var.Handle = Handle;
             var.FileType = FileType;
@@ -104,37 +98,27 @@ namespace W3Edit.CR2W.Types
                 if (ChunkIndex - 1 < 0 || ChunkIndex - 1 >= cr2w.chunks.Count)
                     return "Invalid Chunk handle";
 
-                return "Chunk handle: " + cr2w.chunks[ChunkIndex-1].Type + " #" + (ChunkIndex);
+                return "Chunk handle: " + cr2w.chunks[ChunkIndex - 1].Type + " #" + (ChunkIndex);
             }
 
             return FileType + ": " + Handle;
         }
 
-        internal class HandleComboItem
-        {
-            public int Value { get; set; }
-            public string Text { get; set; }
-            public override string ToString()
-            {
-                return Text;
-            }
-        }
-
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
             if (ChunkHandle)
             {
-                var editor = new System.Windows.Forms.ComboBox();
-                editor.Items.Add(new HandleComboItem() { Text = "", Value = 0 });
+                var editor = new ComboBox();
+                editor.Items.Add(new HandleComboItem {Text = "", Value = 0});
 
-                for (int i = 0; i < cr2w.chunks.Count; i++ )
+                for (var i = 0; i < cr2w.chunks.Count; i++)
                 {
-                    editor.Items.Add(new HandleComboItem() { Text = cr2w.chunks[i].Type + " #" + (i+1).ToString(), Value = i + 1 });
+                    editor.Items.Add(new HandleComboItem {Text = cr2w.chunks[i].Type + " #" + (i + 1), Value = i + 1});
                 }
 
                 editor.SelectedIndexChanged += delegate(object sender, EventArgs e)
                 {
-                    var item = (HandleComboItem)((System.Windows.Forms.ComboBox)sender).SelectedItem;
+                    var item = (HandleComboItem) ((ComboBox) sender).SelectedItem;
                     if (item != null)
                     {
                         ChunkIndex = item.Value;
@@ -150,11 +134,22 @@ namespace W3Edit.CR2W.Types
             }
             else
             {
-                var editor = new W3Edit.CR2W.Editors.PtrEditor();
-                editor.HandlePath.DataBindings.Add("Text", this, "Handle", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-                editor.FileType.DataBindings.Add("Text", this, "FileType", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-                editor.Flags.DataBindings.Add("Text", this, "Flags", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+                var editor = new PtrEditor();
+                editor.HandlePath.DataBindings.Add("Text", this, "Handle", true, DataSourceUpdateMode.OnPropertyChanged);
+                editor.FileType.DataBindings.Add("Text", this, "FileType", true, DataSourceUpdateMode.OnPropertyChanged);
+                editor.Flags.DataBindings.Add("Text", this, "Flags", true, DataSourceUpdateMode.OnPropertyChanged);
                 return editor;
+            }
+        }
+
+        internal class HandleComboItem
+        {
+            public int Value { get; set; }
+            public string Text { get; set; }
+
+            public override string ToString()
+            {
+                return Text;
             }
         }
     }

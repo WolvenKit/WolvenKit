@@ -1,25 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
+using System.Windows.Forms;
 
 namespace W3Edit.CR2W.Types
 {
     public class CPtr : CVariable
     {
-        public Int32 val;
+        public int val;
+
+        public CPtr(CR2WFile cr2w)
+            : base(cr2w)
+        {
+        }
 
         public int ChunkIndex
         {
-            get
-            {
-                return val - 1;
-            }
-            set
-            {
-                val = value + 1;
-            }
+            get { return val - 1; }
+            set { val = value + 1; }
         }
 
         public string PtrTargetType
@@ -62,13 +59,7 @@ namespace W3Edit.CR2W.Types
             }
         }
 
-        public CPtr(CR2WFile cr2w)
-            : base(cr2w)
-        {
-
-        }
-
-        public override void Read(BinaryReader file, UInt32 size)
+        public override void Read(BinaryReader file, uint size)
         {
             val = file.ReadInt32();
         }
@@ -80,9 +71,9 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is Int32)
+            if (val is int)
             {
-                this.val = (Int32)val;
+                this.val = (int) val;
             }
             return this;
         }
@@ -94,35 +85,25 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CPtr)base.Copy(context);
+            var var = (CPtr) base.Copy(context);
             context.ptrs.Add(var);
             var.val = val;
             return var;
         }
 
-        internal class PtrComboItem
+        public override Control GetEditor()
         {
-            public int Value { get; set; }
-            public string Text { get; set; }
-            public override string ToString()
-            {
-                return Text;
-            }
-        }
+            var editor = new ComboBox();
+            editor.Items.Add(new PtrComboItem {Text = "", Value = 0});
 
-        public override System.Windows.Forms.Control GetEditor()
-        {
-            var editor = new System.Windows.Forms.ComboBox();
-            editor.Items.Add(new PtrComboItem() { Text = "", Value = 0 });
-
-            for (int i = 0; i < cr2w.chunks.Count; i++)
+            for (var i = 0; i < cr2w.chunks.Count; i++)
             {
-                editor.Items.Add(new PtrComboItem() { Text = cr2w.chunks[i].Type + " #" + (i + 1).ToString(), Value = i + 1 });
+                editor.Items.Add(new PtrComboItem {Text = cr2w.chunks[i].Type + " #" + (i + 1), Value = i + 1});
             }
 
             editor.SelectedIndexChanged += delegate(object sender, EventArgs e)
             {
-                var item = (PtrComboItem)((System.Windows.Forms.ComboBox)sender).SelectedItem;
+                var item = (PtrComboItem) ((ComboBox) sender).SelectedItem;
                 if (item != null)
                 {
                     ChunkIndex = item.Value - 1;
@@ -139,7 +120,18 @@ namespace W3Edit.CR2W.Types
 
         public override string ToString()
         {
-            return PtrTargetType + " #" + (ChunkIndex+1).ToString();
+            return PtrTargetType + " #" + (ChunkIndex + 1);
+        }
+
+        internal class PtrComboItem
+        {
+            public int Value { get; set; }
+            public string Text { get; set; }
+
+            public override string ToString()
+            {
+                return Text;
+            }
         }
     }
 }

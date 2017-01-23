@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.IO.MemoryMappedFiles;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Doboz;
+using Ionic.Zlib;
+using LZ4;
 
 namespace W3Edit.Bundles
 {
     public class BundleItem
     {
         public Bundle Bundle { get; set; }
-
         public string Name { get; set; }
         public byte[] Hash { get; set; }
         public uint Unknown { get; set; }
@@ -22,7 +19,6 @@ namespace W3Edit.Bundles
         public byte[] Unknown2 { get; set; }
         public uint Unknown3 { get; set; }
         public uint Compression { get; set; }
-
         public string DateString { get; set; }
 
         public string CompressionType
@@ -54,36 +50,39 @@ namespace W3Edit.Bundles
                     switch (CompressionType)
                     {
                         case "None":
-                            {
-                                viewstream.CopyTo(output);
-                            }
+                        {
+                            viewstream.CopyTo(output);
+                        }
                             break;
                         case "Lz4":
-                            {
-                                var buffer = new byte[ZSize];
-                                var c = viewstream.Read(buffer, 0, buffer.Length);
-                                var uncompressed = LZ4.LZ4Codec.Decode(buffer, 0, c, (int)Size);
-                                output.Write(uncompressed, 0, uncompressed.Length);
-                            }
+                        {
+                            var buffer = new byte[ZSize];
+                            var c = viewstream.Read(buffer, 0, buffer.Length);
+                            var uncompressed = LZ4Codec.Decode(buffer, 0, c, (int) Size);
+                            output.Write(uncompressed, 0, uncompressed.Length);
+                        }
                             break;
                         case "Doboz":
-                            {
-                                var buffer = new byte[ZSize];
-                                var c = viewstream.Read(buffer, 0, buffer.Length);
-                                var uncompressed = Doboz.DobozCodec.Decode(buffer, 0, c);
-                                output.Write(uncompressed, 0, uncompressed.Length);
-                            }
+                        {
+                            var buffer = new byte[ZSize];
+                            var c = viewstream.Read(buffer, 0, buffer.Length);
+                            var uncompressed = DobozCodec.Decode(buffer, 0, c);
+                            output.Write(uncompressed, 0, uncompressed.Length);
+                        }
 
                             break;
                         case "Zlib":
-                            {
-                                var zlib = new Ionic.Zlib.ZlibStream(viewstream, Ionic.Zlib.CompressionMode.Decompress);
-                                zlib.CopyTo(output);
-                            }
+                        {
+                            var zlib = new ZlibStream(viewstream, CompressionMode.Decompress);
+                            zlib.CopyTo(output);
+                        }
                             break;
 
                         default:
-                            throw new MissingCompressionException("Unhandled compression algorithm.") { Compression = Compression };
+                            throw new MissingCompressionException("Unhandled compression algorithm.")
+                            {
+                                Compression = Compression
+                            };
                     }
 
                     viewstream.Close();

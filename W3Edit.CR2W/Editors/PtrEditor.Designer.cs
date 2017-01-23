@@ -30,10 +30,10 @@ namespace W3Edit.CR2W.Editors
         private void InitializeComponent()
         {
             this.lblType = new System.Windows.Forms.Label();
-            this.txType = new System.Windows.Forms.TextBox();
-            this.txHandle = new System.Windows.Forms.TextBox();
+            this.FileType = new System.Windows.Forms.TextBox();
+            this.HandlePath = new System.Windows.Forms.TextBox();
             this.lblHandle = new System.Windows.Forms.Label();
-            this.txFlags = new System.Windows.Forms.TextBox();
+            this.Flags = new System.Windows.Forms.TextBox();
             this.lblFlags = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -48,19 +48,19 @@ namespace W3Edit.CR2W.Editors
             // 
             // txType
             // 
-            this.txType.Location = new System.Drawing.Point(40, 0);
-            this.txType.Name = "txType";
-            this.txType.Size = new System.Drawing.Size(121, 20);
-            this.txType.TabIndex = 1;
+            this.FileType.Location = new System.Drawing.Point(40, 0);
+            this.FileType.Name = "FileType";
+            this.FileType.Size = new System.Drawing.Size(121, 20);
+            this.FileType.TabIndex = 1;
             // 
             // txHandle
             // 
-            this.txHandle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.HandlePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txHandle.Location = new System.Drawing.Point(214, 0);
-            this.txHandle.Name = "txHandle";
-            this.txHandle.Size = new System.Drawing.Size(160, 20);
-            this.txHandle.TabIndex = 3;
+            this.HandlePath.Location = new System.Drawing.Point(214, 0);
+            this.HandlePath.Name = "HandlePath";
+            this.HandlePath.Size = new System.Drawing.Size(160, 20);
+            this.HandlePath.TabIndex = 3;
             // 
             // lblHandle
             // 
@@ -73,11 +73,11 @@ namespace W3Edit.CR2W.Editors
             // 
             // txFlags
             // 
-            this.txFlags.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txFlags.Location = new System.Drawing.Point(418, 0);
-            this.txFlags.Name = "txFlags";
-            this.txFlags.Size = new System.Drawing.Size(52, 20);
-            this.txFlags.TabIndex = 5;
+            this.Flags.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Flags.Location = new System.Drawing.Point(418, 0);
+            this.Flags.Name = "Flags";
+            this.Flags.Size = new System.Drawing.Size(52, 20);
+            this.Flags.TabIndex = 5;
             // 
             // lblFlags
             // 
@@ -93,11 +93,11 @@ namespace W3Edit.CR2W.Editors
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.txFlags);
+            this.Controls.Add(this.Flags);
             this.Controls.Add(this.lblFlags);
-            this.Controls.Add(this.txHandle);
+            this.Controls.Add(this.HandlePath);
             this.Controls.Add(this.lblHandle);
-            this.Controls.Add(this.txType);
+            this.Controls.Add(this.FileType);
             this.Controls.Add(this.lblType);
             this.Name = "PtrEditor";
             this.Size = new System.Drawing.Size(473, 21);
@@ -109,10 +109,7 @@ namespace W3Edit.CR2W.Editors
         #endregion
 
         private System.Windows.Forms.Label lblType;
-        private System.Windows.Forms.TextBox txType;
-        private System.Windows.Forms.TextBox txHandle;
         private System.Windows.Forms.Label lblHandle;
-        private System.Windows.Forms.TextBox txFlags;
         private System.Windows.Forms.Label lblFlags;
     }
 }

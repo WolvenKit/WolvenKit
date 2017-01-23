@@ -1,21 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
+using System.Windows.Forms;
+using W3Edit.CR2W.Editors;
 
 namespace W3Edit.CR2W.Types
 {
     public class CSoft : CVariable
     {
+        public CSoft(CR2WFile cr2w)
+            : base(cr2w)
+        {
+        }
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public UInt16 val
+        public ushort val
         {
             get
             {
-                var newfiletype = (UInt16)cr2w.GetStringIndex(FileType, true);
-                return (UInt16)(cr2w.GetHandleIndex(Handle, newfiletype, Flags, true) + 1);
+                var newfiletype = (ushort) cr2w.GetStringIndex(FileType, true);
+                return (ushort) (cr2w.GetHandleIndex(Handle, newfiletype, Flags, true) + 1);
             }
             set
             {
@@ -29,18 +32,10 @@ namespace W3Edit.CR2W.Types
         }
 
         public string Handle { get; set; }
-
         public string FileType { get; set; }
-
         public ushort Flags { get; set; }
 
-        public CSoft(CR2WFile cr2w)
-            : base(cr2w)
-        {
-
-        }
-
-        public override void Read(BinaryReader file, UInt32 size)
+        public override void Read(BinaryReader file, uint size)
         {
             val = file.ReadUInt16();
         }
@@ -52,9 +47,9 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is UInt16)
+            if (val is ushort)
             {
-                this.val = (UInt16)val;
+                this.val = (ushort) val;
             }
             return this;
         }
@@ -66,7 +61,7 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CSoft)base.Copy(context);
+            var var = (CSoft) base.Copy(context);
 
             var.FileType = FileType;
             var.Flags = Flags;
@@ -79,12 +74,12 @@ namespace W3Edit.CR2W.Types
             return FileType + ": " + Handle;
         }
 
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
-            var editor = new W3Edit.CR2W.Editors.PtrEditor();
-            editor.HandlePath.DataBindings.Add("Text", this, "Handle", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            editor.FileType.DataBindings.Add("Text", this, "FileType", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            editor.Flags.DataBindings.Add("Text", this, "Flags", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            var editor = new PtrEditor();
+            editor.HandlePath.DataBindings.Add("Text", this, "Handle", true, DataSourceUpdateMode.OnPropertyChanged);
+            editor.FileType.DataBindings.Add("Text", this, "FileType", true, DataSourceUpdateMode.OnPropertyChanged);
+            editor.Flags.DataBindings.Add("Text", this, "Flags", true, DataSourceUpdateMode.OnPropertyChanged);
             return editor;
         }
     }

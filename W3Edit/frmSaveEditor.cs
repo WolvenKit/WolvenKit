@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using W3SavegameEditor.Core;
 using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 using W3SavegameEditor.Core.Savegame;
 using W3SavegameEditor.Core.Savegame.Variables;
 using W3SavegameEditor.Models;
@@ -16,9 +11,7 @@ using W3SavegameEditor.Models;
 namespace W3Edit
 {
     public partial class frmSaveEditor : Form
-    {      
-        public static List<SavegameModel> Savegames { get; set; }
-
+    {
         public frmSaveEditor()
         {
             InitializeComponent();
@@ -27,15 +20,19 @@ namespace W3Edit
             UpdateSaveTree(Savegames);
         }
 
+        public static List<SavegameModel> Savegames { get; set; }
+
         public void UpdateSaves()
         {
             Savegames.Clear();
-            string gamesavesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "The Witcher 3\\gamesaves");
+            var gamesavesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "The Witcher 3\\gamesaves");
             var filesPaths = Directory.GetFiles(gamesavesPath, "*.sav");
 
             foreach (var filePath in filesPaths)
             {
-                var thumbnailFilePath = Path.Combine(Path.GetDirectoryName(filePath) ?? "", Path.GetFileNameWithoutExtension(filePath) + ".png");
+                var thumbnailFilePath = Path.Combine(Path.GetDirectoryName(filePath) ?? "",
+                    Path.GetFileNameWithoutExtension(filePath) + ".png");
 
                 Savegames.Add(new SavegameModel
                 {
@@ -68,20 +65,21 @@ namespace W3Edit
                 saveNamesBox.Text = parsedsave.VariableNames.Count().ToString();
                 saveVariableBox.Text = parsedsave.Variables.Count().ToString();
                 variablesList.Items.Clear();
-                foreach (VariableModel node in parsedsave.Variables.Select(ToVariableModel).ToList())
+                foreach (var node in parsedsave.Variables.Select(ToVariableModel).ToList())
                 {
                     var variablenode = new ListViewItem();
                     variablenode.Text = node.Index.ToString();
                     variablenode.SubItems.Add(node.Name);
                     variablenode.SubItems.Add(node.Type);
-                    variablenode.SubItems.Add(node.Value == "" ? "NONE":node.Value);
+                    variablenode.SubItems.Add(node.Value == "" ? "NONE" : node.Value);
                     variablenode.SubItems.Add(node.DebugString);
                     variablenode.SubItems.Add(node.Children.Count().ToString());
                     variablesList.Items.Add(variablenode);
                 }
             }
-            catch{}
-
+            catch
+            {
+            }
         }
 
         private static VariableModel ToVariableModel(Variable v, int i)
@@ -113,8 +111,8 @@ namespace W3Edit
 
         private void toolStripLabel1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Save explorer v0.1\nBased on:https://github.com/Atvaark/W3SavegameEditor ","Info",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            MessageBox.Show("Save explorer v0.1\nBased on:https://github.com/Atvaark/W3SavegameEditor ", "Info",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-        
     }
 }

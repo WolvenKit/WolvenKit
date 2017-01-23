@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace W3Edit.CR2W.Types
 {
@@ -11,23 +8,25 @@ namespace W3Edit.CR2W.Types
     {
         public byte[] guid;
 
-        public string GuidString { 
+        public CGUID(CR2WFile cr2w)
+            : base(cr2w)
+        {
+        }
+
+        public string GuidString
+        {
             get { return new Guid(guid).ToString(); }
-            set { 
+            set
+            {
                 Guid g;
-                if(Guid.TryParse(value, out g)) {
+                if (Guid.TryParse(value, out g))
+                {
                     guid = g.ToByteArray();
                 }
             }
         }
 
-        public CGUID(CR2WFile cr2w)
-            : base(cr2w)
-        {
-
-        }
-
-        public override void Read(BinaryReader file, UInt32 size)
+        public override void Read(BinaryReader file, uint size)
         {
             guid = file.ReadBytes(16);
         }
@@ -41,7 +40,7 @@ namespace W3Edit.CR2W.Types
         {
             if (val is byte[])
             {
-                guid = (byte[])val;
+                guid = (byte[]) val;
             }
 
             return this;
@@ -54,22 +53,22 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CGUID)base.Copy(context);
+            var var = (CGUID) base.Copy(context);
             var.guid = guid;
             return var;
         }
 
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
-            var editor = new System.Windows.Forms.TextBox();
-            editor.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            var editor = new TextBox();
+            editor.Margin = new Padding(3, 3, 3, 0);
             editor.DataBindings.Add("Text", this, "GuidString");
             return editor;
         }
 
         public override string ToString()
         {
-            Guid g = new Guid(guid);
+            var g = new Guid(guid);
 
             return g.ToString();
         }

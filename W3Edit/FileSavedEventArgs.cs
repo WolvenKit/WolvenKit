@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
+using W3Edit.CR2W;
 
 namespace W3Edit
 {
@@ -10,7 +7,6 @@ namespace W3Edit
     {
         public Stream Stream { get; set; }
         public string FileName { get; set; }
-
-        public CR2W.CR2WFile File { get; set; }
+        public CR2WFile File { get; set; }
     }
 }

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using BrightIdeasSoftware;
 using W3Edit.CR2W;
 using W3Edit.CR2W.Editors;
 using W3Edit.CR2W.Types;
@@ -16,58 +14,28 @@ namespace W3Edit
 {
     public partial class frmChunkProperties : DockContent
     {
+        private CR2WChunk chunk;
+
         public frmChunkProperties()
         {
             InitializeComponent();
 
-            treeView.CanExpandGetter = delegate(object x) { return ((VariableListNode)x).ChildCount > 0; };
-            treeView.ChildrenGetter = delegate(object x) { return ((VariableListNode)x).Children; };
+            treeView.CanExpandGetter = x => ((VariableListNode) x).ChildCount > 0;
+            treeView.ChildrenGetter = x => ((VariableListNode) x).Children;
         }
 
-        private CR2WChunk chunk;
-        public CR2WChunk Chunk { 
-            get {
-                return chunk; 
-            }
-            set {
+        public CR2WChunk Chunk
+        {
+            get { return chunk; }
+            set
+            {
                 chunk = value;
                 CreatePropertyLayout(chunk);
             }
         }
 
-
-        internal class VariableListNode
-        {
-            public string Name
-            {
-                get
-                {
-                    if (Variable.Name != null)
-                        return Variable.Name;
-
-                    if (Parent == null)
-                        return "";
-
-                    return Parent.Children.IndexOf(this).ToString();
-                }
-                set
-                {
-                    if (Variable.Name != null)
-                    {
-                        Variable.Name = value;
-                    }
-                }
-            }
-            public string Value { get { return Variable.ToString(); } }
-            public string Type { get { return Variable.Type; } }
-
-            public int ChildCount { get { return Children.Count; } }
-            public List<VariableListNode> Children { get; set; }
-            public VariableListNode Parent { get; set; }
-            public IEditableVariable Variable { get; set; }
-        }
-
         public IEditableVariable EditObject { get; set; }
+        public object Source { get; set; }
 
         public void CreatePropertyLayout(IEditableVariable v)
         {
@@ -87,7 +55,9 @@ namespace W3Edit
                 treeView.Roots = root.Children;
                 treeView.RefreshObjects(root.Children);
 
-                for (var depth = 0; ExpandOneLevel(depth, root.Children); depth++) { }
+                for (var depth = 0; ExpandOneLevel(depth, root.Children); depth++)
+                {
+                }
             }
         }
 
@@ -119,7 +89,8 @@ namespace W3Edit
             return expandedSomething;
         }
 
-        private VariableListNode AddListViewItems(IEditableVariable v, VariableListNode parent = null, int arrayindex = 0)
+        private VariableListNode AddListViewItems(IEditableVariable v, VariableListNode parent = null,
+            int arrayindex = 0)
         {
             var node = new VariableListNode();
             node.Variable = v;
@@ -129,7 +100,7 @@ namespace W3Edit
             var vars = v.GetEditableVariables();
             if (vars != null)
             {
-                for (int i = 0; i < vars.Count; i++)
+                for (var i = 0; i < vars.Count; i++)
                 {
                     node.Children.Add(AddListViewItems(vars[i], node, i));
                 }
@@ -138,11 +109,11 @@ namespace W3Edit
             return node;
         }
 
-        private void treeView_CellEditStarting(object sender, BrightIdeasSoftware.CellEditEventArgs e)
+        private void treeView_CellEditStarting(object sender, CellEditEventArgs e)
         {
             if (e.Column.AspectName == "Value")
             {
-                e.Control = ((VariableListNode)e.RowObject).Variable.GetEditor();
+                e.Control = ((VariableListNode) e.RowObject).Variable.GetEditor();
                 if (e.Control != null)
                 {
                     e.Control.Location = new Point(e.CellBounds.Location.X, e.CellBounds.Location.Y - 1);
@@ -150,9 +121,8 @@ namespace W3Edit
                 }
                 e.Cancel = e.Control == null;
             }
-            else if(e.Column.AspectName == "Name")
+            else if (e.Column.AspectName == "Name")
             {
-
             }
             else
             {
@@ -162,17 +132,15 @@ namespace W3Edit
 
         private void frmChunkProperties_Resize(object sender, EventArgs e)
         {
-
         }
 
         private void frmChunkProperties_Shown(object sender, EventArgs e)
         {
-
         }
 
         private void contextMenu_Opening(object sender, CancelEventArgs e)
         {
-            List<VariableListNode> sNodes = new List<VariableListNode>();
+            var sNodes = new List<VariableListNode>();
             foreach (VariableListNode item in treeView.SelectedObjects)
             {
                 if (item != null && item.Variable != null)
@@ -186,24 +154,22 @@ namespace W3Edit
                 return;
             }
 
-            addVariableToolStripMenuItem.Enabled = sNodes.All(x=> x.Variable.CanAddVariable(null));
-            removeVariableToolStripMenuItem.Enabled = sNodes.All(x=> x.Parent != null && x.Parent.Variable.CanRemoveVariable(x.Variable));
+            addVariableToolStripMenuItem.Enabled = sNodes.All(x => x.Variable.CanAddVariable(null));
+            removeVariableToolStripMenuItem.Enabled =
+                sNodes.All(x => x.Parent != null && x.Parent.Variable.CanRemoveVariable(x.Variable));
             pasteToolStripMenuItem.Enabled = CopyController.VariableTargets != null &&
-                                             sNodes.All(x => x.Variable != null && CopyController.VariableTargets.Any(z=> x.Variable.CanAddVariable(z)));
-            ptrPropertiesToolStripMenuItem.Visible = sNodes.All(x=> x.Variable is CPtr) && sNodes.Count == 1;
+                                             sNodes.All(
+                                                 x =>
+                                                     x.Variable != null &&
+                                                     CopyController.VariableTargets.Any(
+                                                         z => x.Variable.CanAddVariable(z)));
+            ptrPropertiesToolStripMenuItem.Visible = sNodes.All(x => x.Variable is CPtr) && sNodes.Count == 1;
         }
 
         private void copyVariable()
         {
-            List<IEditableVariable> tocopynodes = new List<IEditableVariable>();
-            foreach (VariableListNode item in treeView.SelectedObjects)
-            {
-                if (item != null && item.Variable != null)
-                {
-                    tocopynodes.Add(item.Variable);
-                }
-            }
-            if(tocopynodes.Count > 0)
+            var tocopynodes = (from VariableListNode item in treeView.SelectedObjects where item?.Variable != null select item.Variable).ToList();
+            if (tocopynodes.Count > 0)
             {
                 CopyController.VariableTargets = tocopynodes;
             }
@@ -211,24 +177,22 @@ namespace W3Edit
 
         private void pasteVariable()
         {
-            var node = (VariableListNode)treeView.SelectedObject;
-            if (CopyController.VariableTargets == null || node == null || node.Variable == null || !node.Variable.CanAddVariable(null))
+            var node = (VariableListNode) treeView.SelectedObject;
+            if (CopyController.VariableTargets == null || node == null || node.Variable == null ||
+                !node.Variable.CanAddVariable(null))
             {
                 return;
             }
 
-            if (CopyController.VariableTargets.All(x=> x is CVariable))
+            if (CopyController.VariableTargets.All(x => x is CVariable))
             {
-                foreach (CVariable v in CopyController.VariableTargets.Select(x=> (CVariable)x))
+                foreach (var newvar in from v in CopyController.VariableTargets.Select(x => (CVariable) x) let context = new CR2WCopyAction
                 {
-                    var context = new CR2WCopyAction()
-                    {
-                        SourceFile = v.cr2w,
-                        DestinationFile = node.Variable.CR2WOwner,
-                        MaxIterationDepth = 0,
-                    };
-
-                    var newvar = v.Copy(context);
+                    SourceFile = v.cr2w,
+                    DestinationFile = node.Variable.CR2WOwner,
+                    MaxIterationDepth = 0
+                } select v.Copy(context))
+                {
                     node.Variable.AddVariable(newvar);
 
                     var subnode = AddListViewItems(newvar, node);
@@ -236,14 +200,13 @@ namespace W3Edit
 
                     treeView.RefreshObject(node);
                     treeView.RefreshObject(subnode);
-                    
                 }
             }
         }
 
         private void addVariableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var node = (VariableListNode)treeView.SelectedObject;
+            var node = (VariableListNode) treeView.SelectedObject;
             if (node == null || node.Variable == null || !node.Variable.CanAddVariable(null))
             {
                 return;
@@ -251,9 +214,9 @@ namespace W3Edit
 
             CVariable newvar = null;
 
-            if(node.Variable is CArray)
+            if (node.Variable is CArray)
             {
-                var nodearray = (CArray)node.Variable;
+                var nodearray = (CArray) node.Variable;
                 newvar = CR2WTypeManager.Get().GetByName(nodearray.elementtype, "", Chunk.cr2w, false);
                 if (newvar == null)
                     return;
@@ -261,7 +224,7 @@ namespace W3Edit
             else
             {
                 var frm = new frmAddVariable();
-                if (frm.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                if (frm.ShowDialog() != DialogResult.OK)
                 {
                     return;
                 }
@@ -274,13 +237,14 @@ namespace W3Edit
                 newvar.Type = frm.VariableType;
             }
 
-            if(newvar is CHandle)
+            if (newvar is CHandle)
             {
-                var result = MessageBox.Show("Add as chunk handle? (Yes for chunk handle, No for normal handle)", "Adding handle.", MessageBoxButtons.YesNoCancel);
-                if(result == System.Windows.Forms.DialogResult.Cancel)
+                var result = MessageBox.Show("Add as chunk handle? (Yes for chunk handle, No for normal handle)",
+                    "Adding handle.", MessageBoxButtons.YesNoCancel);
+                if (result == DialogResult.Cancel)
                     return;
 
-                ((CHandle)newvar).ChunkHandle = result == System.Windows.Forms.DialogResult.Yes;
+                ((CHandle) newvar).ChunkHandle = result == DialogResult.Yes;
             }
 
             node.Variable.AddVariable(newvar);
@@ -290,12 +254,11 @@ namespace W3Edit
 
             treeView.RefreshObject(node);
             treeView.RefreshObject(subnode);
-
         }
 
         private void removeVariableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ListView.SelectedIndexCollection col = treeView.SelectedIndices;
+            var col = treeView.SelectedIndices;
             foreach (VariableListNode node in treeView.SelectedObjects)
             {
                 if (node != null && node.Parent != null && node.Parent.Variable.CanRemoveVariable(node.Variable))
@@ -307,10 +270,6 @@ namespace W3Edit
             }
         }
 
-
-
-        public object Source { get; set; }
-
         private void expandAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
             treeView.ExpandAll();
@@ -318,11 +277,11 @@ namespace W3Edit
 
         private void expandAllChildrenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var node = (VariableListNode)treeView.SelectedObject;
-            if(node != null)
+            var node = (VariableListNode) treeView.SelectedObject;
+            if (node != null)
             {
                 treeView.Expand(node);
-                foreach(var c in node.Children)
+                foreach (var c in node.Children)
                 {
                     treeView.Expand(c);
                 }
@@ -336,7 +295,7 @@ namespace W3Edit
 
         private void collapseAllChildrenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var node = (VariableListNode)treeView.SelectedObject;
+            var node = (VariableListNode) treeView.SelectedObject;
             if (node != null)
             {
                 foreach (var c in node.Children)
@@ -356,12 +315,7 @@ namespace W3Edit
             pasteVariable();
         }
 
-        private void editNameToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void treeView_CellClick(object sender, BrightIdeasSoftware.CellClickEventArgs e)
+        private void treeView_CellClick(object sender, CellClickEventArgs e)
         {
             if (e.Column == null || e.Item == null)
                 return;
@@ -370,7 +324,7 @@ namespace W3Edit
             {
                 treeView.StartCellEdit(e.Item, 0);
             }
-            else if(e.Column.AspectName == "Value")
+            else if (e.Column.AspectName == "Value")
             {
                 treeView.StartCellEdit(e.Item, 1);
             }
@@ -378,18 +332,18 @@ namespace W3Edit
 
         private void ptrPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var node = (VariableListNode)treeView.SelectedObject;
-            if (node == null || !(node.Variable is CPtr) || ((CPtr)node.Variable).PtrTarget == null)
+            var node = (VariableListNode) treeView.SelectedObject;
+            if (node == null || !(node.Variable is CPtr) || ((CPtr) node.Variable).PtrTarget == null)
             {
                 return;
             }
 
-            Chunk = ((CPtr)node.Variable).PtrTarget;
+            Chunk = ((CPtr) node.Variable).PtrTarget;
         }
 
         private void copyTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var node = (VariableListNode)treeView.SelectedObject;
+            var node = (VariableListNode) treeView.SelectedObject;
             if (node == null || node.Parent == null || !node.Parent.Variable.CanRemoveVariable(node.Variable))
             {
                 return;
@@ -398,6 +352,38 @@ namespace W3Edit
             Clipboard.SetText(node.Value);
         }
 
+        internal class VariableListNode
+        {
+            public string Name
+            {
+                get
+                {
+                    if (Variable.Name != null)
+                        return Variable.Name;
 
+                    if (Parent == null)
+                        return "";
+
+                    return Parent.Children.IndexOf(this).ToString();
+                }
+                set
+                {
+                    if (Variable.Name != null)
+                    {
+                        Variable.Name = value;
+                    }
+                }
+            }
+
+            public string Value => Variable.ToString();
+
+            public string Type => Variable.Type;
+
+            public int ChildCount => Children.Count;
+
+            public List<VariableListNode> Children { get; set; }
+            public VariableListNode Parent { get; set; }
+            public IEditableVariable Variable { get; set; }
+        }
     }
 }

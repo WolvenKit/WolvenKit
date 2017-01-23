@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace W3Edit.W3Strings
 {
@@ -42,7 +39,6 @@ namespace W3Edit.W3Strings
 
             return result;
         }
-
 
         // first byte:
         //      01111111
@@ -85,7 +81,7 @@ namespace W3Edit.W3Strings
         {
             if (c == 0)
             {
-                stream.Write((byte)128);
+                stream.Write((byte) 128);
                 return;
             }
 
@@ -94,7 +90,7 @@ namespace W3Edit.W3Strings
             var bytes = new List<int>();
             var left = c;
 
-            for (int i = 0; (left > 0); i++)
+            for (var i = 0; (left > 0); i++)
             {
                 if (i == 0)
                 {
@@ -109,14 +105,13 @@ namespace W3Edit.W3Strings
             }
 
 
-            for (int i = 0; i < bytes.Count; i++)
+            for (var i = 0; i < bytes.Count; i++)
             {
                 var last = (i == bytes.Count - 1);
                 var cleft = (bytes.Count - 1) - i;
 
                 if (!last)
                 {
-
                     if (cleft >= 1 && i >= 1)
                     {
                         bytes[i] = bytes[i] | 128;
@@ -136,7 +131,7 @@ namespace W3Edit.W3Strings
                     throw new Exception("No clue what to do here, still need to think about it... :p");
                 }
 
-                stream.Write((byte)bytes[i]);
+                stream.Write((byte) bytes[i]);
             }
         }
     }

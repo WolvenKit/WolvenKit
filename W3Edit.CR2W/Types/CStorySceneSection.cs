@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using W3Edit.CR2W.Editors;
 
 namespace W3Edit.CR2W.Types
@@ -15,24 +11,23 @@ namespace W3Edit.CR2W.Types
         public CStorySceneSection(CR2WFile cr2w) :
             base(cr2w)
         {
-
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public override void Read(BinaryReader file, uint size)
         {
             base.Read(file, size);
 
             var count = file.ReadInt32();
-            for(int i=0; i< count; i++) 
+            for (var i = 0; i < count; i++)
             {
                 var elementsize = file.ReadUInt32();
                 var typeId = file.ReadUInt16();
                 var typeName = cr2w.strings[typeId].str;
 
                 var item = CR2WTypeManager.Get().GetByName(typeName, "", cr2w, false);
-                if(item == null)
+                if (item == null)
                     item = new CVector(cr2w);
-                
+
                 item.Read(file, elementsize);
                 item.Type = typeName;
                 sceneEventElements.Add(item);
@@ -43,22 +38,22 @@ namespace W3Edit.CR2W.Types
         {
             base.Write(file);
 
-            file.Write((UInt32)sceneEventElements.Count);
-            foreach(var item in sceneEventElements)
+            file.Write((uint) sceneEventElements.Count);
+            foreach (var item in sceneEventElements)
             {
                 var startpos = file.BaseStream.Position;
 
-                file.Write((UInt32)0);
+                file.Write((uint) 0);
                 file.Write(item.typeId);
 
                 item.Write(file);
 
                 var endpos = file.BaseStream.Position;
-                var newsize = (UInt32)(endpos - startpos);
+                var newsize = (uint) (endpos - startpos);
 
-                file.Seek((int)startpos, SeekOrigin.Begin);
+                file.Seek((int) startpos, SeekOrigin.Begin);
                 file.Write(newsize);
-                file.Seek((int)endpos, SeekOrigin.Begin);
+                file.Seek((int) endpos, SeekOrigin.Begin);
             }
         }
 
@@ -74,9 +69,9 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CStorySceneSection)base.Copy(context);
+            var var = (CStorySceneSection) base.Copy(context);
 
-            foreach(var item in sceneEventElements)
+            foreach (var item in sceneEventElements)
             {
                 var.sceneEventElements.Add(item.Copy(context));
             }
@@ -87,7 +82,7 @@ namespace W3Edit.CR2W.Types
         public override List<IEditableVariable> GetEditableVariables()
         {
             var list = new List<IEditableVariable>(variables);
-            list.Add(new EditableList<CVariable>(sceneEventElements, cr2w) { Name = "sceneEventElements" });
+            list.Add(new EditableList<CVariable>(sceneEventElements, cr2w) {Name = "sceneEventElements"});
             return list;
         }
     }

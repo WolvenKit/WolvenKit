@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using W3Edit.CR2W.Editors;
 
 namespace W3Edit.CR2W.Types
 {
     public class CEntity : CVector
     {
+        public CArray components;
         public CUInt32 unk1;
         public CUInt32 unk2;
-        public CArray components;
 
         public CEntity(CR2WFile cr2w) :
             base(cr2w)
@@ -26,7 +22,7 @@ namespace W3Edit.CR2W.Types
             components.Name = "components";
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public override void Read(BinaryReader file, uint size)
         {
             base.Read(file, size);
 
@@ -35,7 +31,7 @@ namespace W3Edit.CR2W.Types
 
             var elementcount = file.ReadBit6();
 
-            for(int i=0; i < elementcount; i++)
+            for (var i = 0; i < elementcount; i++)
             {
                 var handle = new CHandle(cr2w);
                 handle.Read(file, 0);
@@ -50,7 +46,7 @@ namespace W3Edit.CR2W.Types
             unk1.Write(file);
             unk2.Write(file);
             file.WriteBit6(components.array.Count);
-            for (int i = 0; i < components.array.Count; i++)
+            for (var i = 0; i < components.array.Count; i++)
             {
                 components.array[i].Write(file);
             }
@@ -68,11 +64,11 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CEntity)base.Copy(context);
+            var var = (CEntity) base.Copy(context);
 
-            var.unk1 = (CUInt32)unk1.Copy(context);
-            var.unk2 = (CUInt32)unk2.Copy(context);
-            var.components = (CArray)components.Copy(context);
+            var.unk1 = (CUInt32) unk1.Copy(context);
+            var.unk2 = (CUInt32) unk2.Copy(context);
+            var.components = (CArray) components.Copy(context);
 
             return var;
         }

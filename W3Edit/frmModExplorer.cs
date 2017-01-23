@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using W3Edit.Mod;
 using WeifenLuo.WinFormsUI.Docking;
@@ -14,6 +7,13 @@ namespace W3Edit
 {
     public partial class frmModExplorer : DockContent
     {
+        public frmModExplorer()
+        {
+            InitializeComponent();
+
+            UpdateModFileList();
+        }
+
         public W3Mod ActiveMod
         {
             get { return ModManager.Get().ActiveMod; }
@@ -25,25 +25,18 @@ namespace W3Edit
         public event EventHandler<RequestFileArgs> RequestFileAdd;
         public event EventHandler<RequestFileArgs> RequestFileRename;
 
-        public frmModExplorer()
-        {
-            InitializeComponent();
-
-            UpdateModFileList();
-        }
-
         public bool DeleteNode(string fullpath)
         {
             var parts = fullpath.Split('\\');
             var current = modFileList.Nodes;
-            for (int i = 0; i < parts.Length; i++)
+            for (var i = 0; i < parts.Length; i++)
             {
                 if (current.ContainsKey(parts[i]))
                 {
                     var node = current[parts[i]];
                     current = node.Nodes;
 
-                    if(i == parts.Length-1)
+                    if (i == parts.Length - 1)
                     {
                         node.Remove();
                         return true;
@@ -58,7 +51,7 @@ namespace W3Edit
             return false;
         }
 
-        public void UpdateModFileList(bool clear=false)
+        public void UpdateModFileList(bool clear = false)
         {
             if (clear)
                 modFileList.Nodes.Clear();
@@ -70,7 +63,7 @@ namespace W3Edit
             {
                 var current = modFileList.Nodes;
                 var parts = item.Split('\\');
-                for (int i = 0; i < parts.Length; i++)
+                for (var i = 0; i < parts.Length; i++)
                 {
                     if (!current.ContainsKey(parts[i]))
                     {
@@ -100,32 +93,30 @@ namespace W3Edit
 
         private void modFileList_DoubleClick(object sender, EventArgs e)
         {
-
-
         }
 
         private void modFileList_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            RequestFileOpen?.Invoke(this, new RequestFileArgs() { File = e.Node.FullPath });
-            
+            RequestFileOpen?.Invoke(this, new RequestFileArgs {File = e.Node.FullPath});
         }
 
         private void removeFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (modFileList.SelectedNode != null && RequestFileDelete != null) 
+            if (modFileList.SelectedNode != null && RequestFileDelete != null)
             {
-                RequestFileDelete(this, new RequestFileArgs() { File = modFileList.SelectedNode.FullPath });
+                RequestFileDelete(this, new RequestFileArgs {File = modFileList.SelectedNode.FullPath});
             }
         }
 
         private void addFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RequestFileAdd(this, new RequestFileArgs() { File =  modFileList.SelectedNode == null ? "" : modFileList.SelectedNode.FullPath });
+            RequestFileAdd(this,
+                new RequestFileArgs {File = modFileList.SelectedNode == null ? "" : modFileList.SelectedNode.FullPath});
         }
 
         private void modFileList_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            if(e.Button == System.Windows.Forms.MouseButtons.Right)
+            if (e.Button == MouseButtons.Right)
             {
                 modFileList.SelectedNode = e.Node;
                 contextMenu.Show(modFileList, e.Location);
@@ -136,7 +127,7 @@ namespace W3Edit
         {
             if (modFileList.SelectedNode != null && RequestFileRename != null)
             {
-                RequestFileRename(this, new RequestFileArgs() { File = modFileList.SelectedNode.FullPath });
+                RequestFileRename(this, new RequestFileArgs {File = modFileList.SelectedNode.FullPath});
             }
         }
     }

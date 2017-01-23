@@ -1,74 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using W3Edit.Bundles;
 using W3Edit.CR2W;
-using W3Edit.CR2W.Editors;
+using W3Edit.CR2W.Types;
 using W3Edit.Mod;
 using WeifenLuo.WinFormsUI.Docking;
-using System.Diagnostics;
-using W3Edit.CR2W.Types;
-using W3Edit.Bundles;
-using System.Runtime.InteropServices;
-using W3Edit.Properties;
 
 namespace W3Edit
 {
     public partial class frmMain : Form
     {
-        private string BaseTitle = "Redkit 2";
+        private readonly string BaseTitle = "Redkit 2";
+        private frmCR2WDocument _activedocument;
+        public List<frmCR2WDocument> OpenDocuments = new List<frmCR2WDocument>();
 
-        public W3Mod ActiveMod 
+        public frmMain()
+        {
+            InitializeComponent();
+            UpdateTitle();
+        }
+
+        public W3Mod ActiveMod
         {
             get { return ModManager.Get().ActiveMod; }
-            set { ModManager.Get().ActiveMod = value; UpdateTitle(); }
+            set
+            {
+                ModManager.Get().ActiveMod = value;
+                UpdateTitle();
+            }
         }
+
         public string Version
         {
             get
             {
-                System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+                var assembly = Assembly.GetExecutingAssembly();
+                var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
                 return fvi.FileVersion;
+            }
+        }
+
+        public frmModExplorer ModExplorer { get; set; }
+
+        public frmOutput Output { get; set; }
+
+        public frmCR2WDocument ActiveDocument
+        {
+            get { return _activedocument; }
+            set
+            {
+                _activedocument = value;
+                UpdateTitle();
             }
         }
 
         private void UpdateTitle()
         {
             Text = BaseTitle + " v" + Version;
-            if(ActiveMod != null) {
+            if (ActiveMod != null)
+            {
                 Text += " [" + ActiveMod.Name + "] ";
             }
 
-            if(ActiveDocument != null && !ActiveDocument.IsDisposed)
+            if (ActiveDocument != null && !ActiveDocument.IsDisposed)
             {
                 Text += Path.GetFileName(ActiveDocument.FileName);
             }
-        }
-
-        public frmModExplorer ModExplorer
-        {
-            get;
-            set;
-        }
-
-        public frmOutput Output
-        {
-            get;
-            set;
-        }
-
-        public frmMain()
-        {
-            InitializeComponent();
-            UpdateTitle();
         }
 
         private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
@@ -80,7 +85,7 @@ namespace W3Edit
             WindowState = FormWindowState.Normal;
             config.MainSize = Size;
             config.MainLocation = Location;
-            
+
             dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"));
         }
 
@@ -92,7 +97,9 @@ namespace W3Edit
             WindowState = config.MainState;
             try
             {
-                dockPanel.LoadFromXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"), DeserializeDockContent);
+                dockPanel.LoadFromXml(
+                    Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"),
+                    DeserializeDockContent);
             }
             catch
             {
@@ -105,9 +112,8 @@ namespace W3Edit
             return null;
         }
 
-        public List<frmCR2WDocument> OpenDocuments = new List<frmCR2WDocument>();
-
-        public frmCR2WDocument LoadDocument(string filename, MemoryStream memoryStream = null, bool suppressErrors = false)
+        public frmCR2WDocument LoadDocument(string filename, MemoryStream memoryStream = null,
+            bool suppressErrors = false)
         {
             if (memoryStream == null && !File.Exists(filename))
                 return null;
@@ -132,16 +138,16 @@ namespace W3Edit
                     doc.LoadFile(filename);
                 }
             }
-            catch(InvalidFileTypeException ex)
+            catch (InvalidFileTypeException ex)
             {
                 if (!suppressErrors)
-                    MessageBox.Show(this ,ex.Message, @"Error opening file.");
+                    MessageBox.Show(this, ex.Message, @"Error opening file.");
 
                 OpenDocuments.Remove(doc);
                 doc.Dispose();
                 return null;
             }
-            catch(MissingTypeException ex)
+            catch (MissingTypeException ex)
             {
                 if (!suppressErrors)
                     MessageBox.Show(this, ex.Message, @"Error opening file.");
@@ -162,7 +168,7 @@ namespace W3Edit
                 ShowOutput();
 
                 output.Append(doc.FileName + ": contains " + doc.File.UnknownTypes.Count + " unknown type(s):\n");
-                foreach(var unk in doc.File.UnknownTypes)
+                foreach (var unk in doc.File.UnknownTypes)
                 {
                     output.Append("\"" + unk + "\", \n");
                 }
@@ -172,7 +178,8 @@ namespace W3Edit
 
             var hasUnknownBytes = false;
 
-            foreach (var t in doc.File.chunks.Where(t => t.unknownBytes?.Bytes != null && t.unknownBytes.Bytes.Length > 0))
+            foreach (
+                var t in doc.File.chunks.Where(t => t.unknownBytes?.Bytes != null && t.unknownBytes.Bytes.Length > 0))
             {
                 output.Append(t.Name + " contains " + t.unknownBytes.Bytes.Length + " unknown bytes. \n");
                 hasUnknownBytes = true;
@@ -185,7 +192,6 @@ namespace W3Edit
             return doc;
         }
 
-
         private void frmMain_MdiChildActivate(object sender, EventArgs e)
         {
             if (sender is frmCR2WDocument)
@@ -193,7 +199,6 @@ namespace W3Edit
                 doc_Activated(sender, e);
             }
         }
-
 
         private void dockPanel_ActiveDocumentChanged(object sender, EventArgs e)
         {
@@ -203,14 +208,14 @@ namespace W3Edit
             }
         }
 
-        void doc_Activated(object sender, EventArgs e)
+        private void doc_Activated(object sender, EventArgs e)
         {
-            ActiveDocument = (frmCR2WDocument)sender;
+            ActiveDocument = (frmCR2WDocument) sender;
         }
 
-        void doc_FormClosed(object sender, FormClosedEventArgs e)
+        private void doc_FormClosed(object sender, FormClosedEventArgs e)
         {
-            var doc = (frmCR2WDocument)sender;
+            var doc = (frmCR2WDocument) sender;
             OpenDocuments.Remove(doc);
 
             if (doc == ActiveDocument)
@@ -233,7 +238,7 @@ namespace W3Edit
 
             explorer.OpenPath(browseToPath);
 
-            if (explorer.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (explorer.ShowDialog() == DialogResult.OK)
             {
                 foreach (ListViewItem depotpath in explorer.SelectedPaths)
                 {
@@ -253,12 +258,12 @@ namespace W3Edit
 
             BundleItem selectedBundle = null;
 
-            if(manager.Items[depotpath].Count > 1)
+            if (manager.Items[depotpath].Count > 1)
             {
                 var bundles = manager.Items[depotpath].ToDictionary(bundle => bundle.Bundle.FileName);
 
                 var dlg = new frmExtractAmbigious(bundles.Keys);
-                if(dlg.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
+                if (dlg.ShowDialog() == DialogResult.Cancel)
                 {
                     return;
                 }
@@ -278,12 +283,13 @@ namespace W3Edit
             }
             catch
             {
-
             }
 
             if (File.Exists(filename))
             {
-                if (MessageBox.Show(filename + " already exists, do you want to overwrite it?", "Add mod file error.", MessageBoxButtons.OKCancel) != System.Windows.Forms.DialogResult.OK)
+                if (
+                    MessageBox.Show(filename + " already exists, do you want to overwrite it?", "Add mod file error.",
+                        MessageBoxButtons.OKCancel) != DialogResult.OK)
                 {
                     return;
                 }
@@ -291,10 +297,10 @@ namespace W3Edit
                 File.Delete(filename);
             }
 
-            selectedBundle.Extract(filename);    
+            selectedBundle.Extract(filename);
         }
 
-        private void UpdateModFileList(bool clear=false)
+        private void UpdateModFileList(bool clear = false)
         {
             ModExplorer?.UpdateModFileList(clear);
         }
@@ -310,13 +316,13 @@ namespace W3Edit
             dlg.Title = "Open Witcher 3 Mod Project";
             dlg.Filter = "Witcher 3 Mod|*.w3modproj";
             dlg.InitialDirectory = MainController.Get().Configuration.InitialModDirectory;
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (dlg.ShowDialog() == DialogResult.OK)
             {
                 MainController.Get().Configuration.InitialModDirectory = Path.GetDirectoryName(dlg.FileName);
 
-                var ser = new XmlSerializer(typeof(W3Mod));
+                var ser = new XmlSerializer(typeof (W3Mod));
                 var modfile = new FileStream(dlg.FileName, FileMode.Open, FileAccess.Read);
-                ActiveMod = (W3Mod)ser.Deserialize(modfile);
+                ActiveMod = (W3Mod) ser.Deserialize(modfile);
                 ActiveMod.FileName = dlg.FileName;
                 modfile.Close();
 
@@ -340,7 +346,7 @@ namespace W3Edit
             ModExplorer.Activate();
         }
 
-        void ModExplorer_RequestFileRename(object sender, RequestFileArgs e)
+        private void ModExplorer_RequestFileRename(object sender, RequestFileArgs e)
         {
             var filename = e.File;
 
@@ -350,9 +356,8 @@ namespace W3Edit
 
             var dlg = new frmRenameDialog();
             dlg.FileName = filename;
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK && dlg.FileName != filename)
+            if (dlg.ShowDialog() == DialogResult.OK && dlg.FileName != filename)
             {
-               
                 var newfullpath = Path.Combine(ActiveMod.FileDirectory, dlg.FileName);
 
                 if (File.Exists(newfullpath))
@@ -365,7 +370,6 @@ namespace W3Edit
                 }
                 catch
                 {
-
                 }
 
                 File.Move(fullpath, newfullpath);
@@ -375,20 +379,22 @@ namespace W3Edit
                 {
                     ModExplorer.DeleteNode(filename);
                     ModExplorer.UpdateModFileList();
-                }               
+                }
             }
         }
 
-        void ModExplorer_RequestAddFile(object sender, RequestFileArgs e)
+        private void ModExplorer_RequestAddFile(object sender, RequestFileArgs e)
         {
             addModFile(e.File);
         }
 
-        void ModExplorer_RequestFileDelete(object sender, RequestFileArgs e)
+        private void ModExplorer_RequestFileDelete(object sender, RequestFileArgs e)
         {
             var filename = e.File;
 
-            if (MessageBox.Show("Are you sure you want to permanently delete this?", "Confirmation", MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
+            if (
+                MessageBox.Show("Are you sure you want to permanently delete this?", "Confirmation",
+                    MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 removeFromMod(filename);
             }
@@ -397,7 +403,7 @@ namespace W3Edit
         private void removeFromMod(string filename)
         {
             // Close open documents
-            foreach (frmCR2WDocument t in OpenDocuments.Where(t => t.FileName == filename))
+            foreach (var t in OpenDocuments.Where(t => t.FileName == filename))
             {
                 t.Close();
                 break;
@@ -416,9 +422,8 @@ namespace W3Edit
                 {
                     Directory.Delete(fullpath, true);
                 }
-                catch(Exception)
+                catch (Exception)
                 {
-
                 }
             }
 
@@ -428,24 +433,25 @@ namespace W3Edit
             SaveMod();
         }
 
-        void ModExplorer_RequestFileOpen(object sender, RequestFileArgs e)
+        private void ModExplorer_RequestFileOpen(object sender, RequestFileArgs e)
         {
             var fullpath = Path.Combine(ActiveMod.FileDirectory, e.File);
 
             var ext = Path.GetExtension(fullpath);
 
-            switch (ext) { 
+            switch (ext)
+            {
                 case ".csv":
                 case ".xml":
                 case ".txt":
                     ShellExecute(fullpath);
-                break;
+                    break;
                 case ".subs":
                     PolymorphExecute(fullpath, ".txt");
                     break;
                 default:
                     LoadDocument(fullpath);
-                break;
+                    break;
             }
         }
 
@@ -455,9 +461,9 @@ namespace W3Edit
             Process.Start(proc);
         }
 
-        private static void PolymorphExecute(string fullpath,string extension)
+        private static void PolymorphExecute(string fullpath, string extension)
         {
-            File.WriteAllBytes(Path.GetTempPath() + "asd." + extension, new byte[] { 0x01 });
+            File.WriteAllBytes(Path.GetTempPath() + "asd." + extension, new byte[] {0x01});
             var programname = new StringBuilder();
             Win32.FindExecutable("asd." + extension, Path.GetTempPath(), programname);
             if (programname.ToString().ToUpper().Contains(".EXE"))
@@ -481,8 +487,6 @@ namespace W3Edit
             Output.Focus();
         }
 
-
-
         private void newModToolStripMenuItem_Click(object sender, EventArgs e)
         {
             createNewMod();
@@ -499,10 +503,11 @@ namespace W3Edit
 
             while (dlg.ShowDialog() == DialogResult.OK)
             {
-                
-                if(dlg.FileName.Contains(' '))
+                if (dlg.FileName.Contains(' '))
                 {
-                    MessageBox.Show(@"The mod path should not contain spaces because wcc_lite.exe will have trouble with that.", "Invalid path");
+                    MessageBox.Show(
+                        @"The mod path should not contain spaces because wcc_lite.exe will have trouble with that.",
+                        "Invalid path");
                     continue;
                 }
 
@@ -521,10 +526,10 @@ namespace W3Edit
                     return;
                 }
 
-                ActiveMod = new W3Mod()
+                ActiveMod = new W3Mod
                 {
                     FileName = dlg.FileName,
-                    Name = modname,
+                    Name = modname
                 };
 
                 ShowModExplorer();
@@ -536,7 +541,7 @@ namespace W3Edit
 
         private void SaveMod()
         {
-            var ser = new XmlSerializer(typeof(W3Mod));
+            var ser = new XmlSerializer(typeof (W3Mod));
             var modfile = new FileStream(ActiveMod.FileName, FileMode.Create, FileAccess.Write);
             ser.Serialize(modfile, ActiveMod);
             modfile.Close();
@@ -563,7 +568,7 @@ namespace W3Edit
             var dlg = new OpenFileDialog();
             dlg.Title = "Open CR2W File";
             dlg.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (dlg.ShowDialog() == DialogResult.OK)
             {
                 MainController.Get().Configuration.InitialFileDirectory = Path.GetDirectoryName(dlg.FileName);
                 LoadDocument(dlg.FileName);
@@ -628,10 +633,16 @@ namespace W3Edit
             saveAllFiles();
 
             var taskPackMod = packMod();
-            while (!taskPackMod.IsCompleted) { Application.DoEvents(); }
+            while (!taskPackMod.IsCompleted)
+            {
+                Application.DoEvents();
+            }
 
             var taskMetaData = createModMetaData();
-            while (!taskMetaData.IsCompleted) { Application.DoEvents(); }
+            while (!taskMetaData.IsCompleted)
+            {
+                Application.DoEvents();
+            }
 
             installMod();
 
@@ -646,10 +657,9 @@ namespace W3Edit
             }
         }
 
-
         private void AddOutput(string text)
         {
-            if(Output != null && !Output.IsDisposed)
+            if (Output != null && !Output.IsDisposed)
             {
                 if (string.IsNullOrWhiteSpace(text))
                     return;
@@ -662,7 +672,6 @@ namespace W3Edit
         {
             var packedDir = Path.Combine(ActiveMod.Directory, "packed");
 
-            
 
             var modName = ActiveMod.Name;
 
@@ -671,7 +680,8 @@ namespace W3Edit
 
             string gameModDir = null;
 
-            gameModDir = Path.Combine(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath), ActiveMod.InstallAsDLC ? @"..\..\DLC\" : @"..\..\Mods\", modName);
+            gameModDir = Path.Combine(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath),
+                ActiveMod.InstallAsDLC ? @"..\..\DLC\" : @"..\..\Mods\", modName);
 
             if (!Directory.Exists(gameModDir))
                 Directory.CreateDirectory(gameModDir);
@@ -679,7 +689,7 @@ namespace W3Edit
             var dirs = Directory.GetDirectories(packedDir, "*", SearchOption.AllDirectories);
             foreach (var dir in dirs)
             {
-                var relativePath = dir.Substring(packedDir.Length+1);
+                var relativePath = dir.Substring(packedDir.Length + 1);
 
                 var fulldir = Path.Combine(gameModDir, relativePath);
 
@@ -690,20 +700,20 @@ namespace W3Edit
             var files = Directory.GetFiles(packedDir, "*", SearchOption.AllDirectories);
             foreach (var file in files)
             {
-                var relativePath = file.Substring(packedDir.Length+1);
+                var relativePath = file.Substring(packedDir.Length + 1);
 
                 var fullpath = Path.Combine(gameModDir, relativePath);
 
                 File.Copy(file, fullpath, true);
             }
 
-            AddOutput("Mod Installed to "+gameModDir+"\n");
+            AddOutput("Mod Installed to " + gameModDir + "\n");
         }
 
         private async Task packMod()
         {
             var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.WCC_Lite) {WorkingDirectory = Path.GetDirectoryName(config.WCC_Lite)};
+            var proc = new ProcessStartInfo(config.WccLite) {WorkingDirectory = Path.GetDirectoryName(config.WccLite)};
             var packedDir = Path.Combine(ActiveMod.Directory, @"packed\content\");
             var uncookedDir = ActiveMod.FileDirectory;
             if (!Directory.Exists(packedDir))
@@ -715,15 +725,15 @@ namespace W3Edit
             proc.WindowStyle = ProcessWindowStyle.Hidden;
             proc.CreateNoWindow = true;
 
-            AddOutput("Executing " + proc.FileName + " " +proc.Arguments + "\n");
+            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n");
 
-            using (Process process = Process.Start(proc))
+            using (var process = Process.Start(proc))
             {
-                using (StreamReader reader = process.StandardOutput)
+                using (var reader = process.StandardOutput)
                 {
                     while (true)
                     {
-                        string result = await reader.ReadLineAsync();
+                        var result = await reader.ReadLineAsync();
 
                         AddOutput(result + "\n");
 
@@ -739,7 +749,7 @@ namespace W3Edit
         private async Task createModMetaData()
         {
             var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.WCC_Lite) {WorkingDirectory = Path.GetDirectoryName(config.WCC_Lite)};
+            var proc = new ProcessStartInfo(config.WccLite) {WorkingDirectory = Path.GetDirectoryName(config.WccLite)};
             var packedDir = Path.Combine(ActiveMod.Directory, @"packed\content\");
 
             proc.Arguments = $"metadatastore -path={packedDir}";
@@ -750,13 +760,13 @@ namespace W3Edit
 
             AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n");
 
-            using (Process process = Process.Start(proc))
+            using (var process = Process.Start(proc))
             {
-                using (StreamReader reader = process.StandardOutput)
+                using (var reader = process.StandardOutput)
                 {
                     while (true)
                     {
-                        string result = await reader.ReadLineAsync();
+                        var result = await reader.ReadLineAsync();
 
                         AddOutput(result + "\n");
 
@@ -766,19 +776,6 @@ namespace W3Edit
                             break;
                     }
                 }
-            }
-        }
-
-        private frmCR2WDocument _activedocument;
-        public frmCR2WDocument ActiveDocument {
-            get 
-            { 
-                return _activedocument; 
-            }
-            set
-            {
-                _activedocument = value;
-                UpdateTitle();
             }
         }
 
@@ -802,15 +799,14 @@ namespace W3Edit
             };
 
 
-
             AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n");
 
-            var documents = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var scriptlog = Path.Combine(documents, @"The Witcher 3\scriptslog.txt");
-            if(File.Exists(scriptlog))
+            if (File.Exists(scriptlog))
                 File.Delete(scriptlog);
 
-            using (Process process = Process.Start(proc))
+            using (var process = Process.Start(proc))
             {
                 //var task1 = RedirectProcessOutput(process);
                 var task2 = RedirectScriptlogOutput(process);
@@ -822,16 +818,15 @@ namespace W3Edit
 
         private async Task RedirectScriptlogOutput(Process process)
         {
-            var documents = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var scriptlog = Path.Combine(documents, @"The Witcher 3\scriptslog.txt");
-            using (FileStream fs = new FileStream(scriptlog, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite))
+            using (var fs = new FileStream(scriptlog, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite))
             {
                 using (var fsr = new StreamReader(fs))
                 {
-
                     while (!process.HasExited)
                     {
-                        string result = await fsr.ReadToEndAsync();
+                        var result = await fsr.ReadToEndAsync();
 
                         AddOutput(result);
 
@@ -845,11 +840,11 @@ namespace W3Edit
 
         private async Task RedirectProcessOutput(Process process)
         {
-            using (StreamReader reader = process.StandardOutput)
+            using (var reader = process.StandardOutput)
             {
                 while (true)
                 {
-                    string result = await reader.ReadLineAsync();
+                    var result = await reader.ReadLineAsync();
 
                     AddOutput(result + "\n");
 
@@ -867,7 +862,7 @@ namespace W3Edit
             while (!File.Exists(MainController.Get().Configuration.ExecutablePath))
             {
                 var sets = new frmSettings();
-                if (sets.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                if (sets.ShowDialog() != DialogResult.OK)
                 {
                     Exit = true;
                     break;
@@ -902,7 +897,7 @@ namespace W3Edit
             {
                 dlg.Mod = ActiveMod;
 
-                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                if (dlg.ShowDialog() == DialogResult.OK)
                 {
                     UpdateTitle();
                     SaveMod();
@@ -923,13 +918,15 @@ namespace W3Edit
 
         private void saveExplorerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (frmSaveEditor sef = new frmSaveEditor())
+            using (var sef = new frmSaveEditor())
                 sef.ShowDialog();
         }
 
         private void joinOurDiscordToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            if (MessageBox.Show(@"Are you sure you would like to join the modding discord?", @"Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (
+                MessageBox.Show(@"Are you sure you would like to join the modding discord?", @"Confirmation",
+                    MessageBoxButtons.YesNo) == DialogResult.Yes)
                 Process.Start("https://discord.gg/qBNgDEX");
         }
 

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using W3Edit.CR2W.Editors;
 
 namespace W3Edit.CR2W.Types
@@ -19,7 +15,7 @@ namespace W3Edit.CR2W.Types
             swfResource.Name = "swfResource";
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public override void Read(BinaryReader file, uint size)
         {
             base.Read(file, size);
             swfResource.Read(file, size);
@@ -44,9 +40,9 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CSwfResource)base.Copy(context);
+            var var = (CSwfResource) base.Copy(context);
 
-            var.swfResource = (CByteArray)swfResource.Copy(context);
+            var.swfResource = (CByteArray) swfResource.Copy(context);
 
             return var;
         }

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using Ionic.Zlib;
 
 namespace W3Edit
 {
@@ -15,12 +13,7 @@ namespace W3Edit
             if (str.Length > bytes.Length)
                 return false;
 
-            for(int i=0; i< str.Length ;i++)
-            {
-                if (bytes[i] != str[i])
-                    return false;
-            }
-            return true;
+            return !str.Where((t, i) => bytes[i] != t).Any();
         }
 
         public static List<string> GetPossibleExtensions(byte[] bytes)
@@ -32,8 +25,8 @@ namespace W3Edit
 
             if (bytes.StartsWith("CFX")
                 || bytes.StartsWith("CWS")
-                 || bytes.StartsWith("FWS")
-                 || bytes.StartsWith("GFX"))
+                || bytes.StartsWith("FWS")
+                || bytes.StartsWith("GFX"))
             {
                 list.Add("Decompressed flash file|*.swf");
 
@@ -77,9 +70,8 @@ namespace W3Edit
             }
 
             reader.BaseStream.Seek(0, SeekOrigin.Begin);
-            return reader.ReadBytes((int)reader.BaseStream.Length);
+            return reader.ReadBytes((int) reader.BaseStream.Length);
         }
-
 
         private static byte[] uncompressToFWS(byte[] bytes)
         {
@@ -91,13 +83,13 @@ namespace W3Edit
 
             var memout = new MemoryStream();
             var writer = new BinaryWriter(memout);
-            writer.Write((byte)'F');
-            writer.Write((byte)'W');
-            writer.Write((byte)'S');
+            writer.Write((byte) 'F');
+            writer.Write((byte) 'W');
+            writer.Write((byte) 'S');
             writer.Write(version);
             writer.Write(size);
 
-            var zlib = new Ionic.Zlib.ZlibStream(mem, Ionic.Zlib.CompressionMode.Decompress);
+            var zlib = new ZlibStream(mem, CompressionMode.Decompress);
             zlib.CopyTo(memout);
 
             return memout.ToArray();
@@ -110,13 +102,13 @@ namespace W3Edit
             var version = reader.ReadByte();
             var size = reader.ReadUInt32();
 
-            writer.Write((byte)'C');
-            writer.Write((byte)'F');
-            writer.Write((byte)'X');
+            writer.Write((byte) 'C');
+            writer.Write((byte) 'F');
+            writer.Write((byte) 'X');
             writer.Write(version);
             writer.Write(size);
 
-            var zlib = new Ionic.Zlib.ZlibStream(reader.BaseStream, Ionic.Zlib.CompressionMode.Compress, true);
+            var zlib = new ZlibStream(reader.BaseStream, CompressionMode.Compress, true);
             zlib.CopyTo(mem);
 
             return mem.ToArray();

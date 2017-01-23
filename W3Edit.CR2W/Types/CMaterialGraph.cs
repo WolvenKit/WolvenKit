@@ -1,28 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using W3Edit.CR2W.Editors;
 
 namespace W3Edit.CR2W.Types
 {
     public class CMaterialGraphParameter : CVariable
     {
-        public CUInt8 unk1, unk2;
         public CName name;
-
+        public CUInt8 unk1, unk2;
 
         public CMaterialGraphParameter(CR2WFile cr2w)
             : base(cr2w)
         {
-            unk1 = new CUInt8(cr2w) { Name = "Type", Type = "UInt8" };
-            unk2 = new CUInt8(cr2w) { Name = "Offset?", Type = "UInt8" };
-            name = new CName(cr2w) { Name = "Name", Type = "CName" };
+            unk1 = new CUInt8(cr2w) {Name = "Type", Type = "UInt8"};
+            unk2 = new CUInt8(cr2w) {Name = "Offset?", Type = "UInt8"};
+            name = new CName(cr2w) {Name = "Name", Type = "CName"};
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public override void Read(BinaryReader file, uint size)
         {
             unk1.Read(file, size);
             unk2.Read(file, size);
@@ -48,7 +43,7 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CMaterialGraphParameter)base.Copy(context);
+            var var = (CMaterialGraphParameter) base.Copy(context);
             var.unk1.val = unk1.val;
             var.unk2.val = unk2.val;
             var.name.val = name.val;
@@ -84,13 +79,13 @@ namespace W3Edit.CR2W.Types
             vertexParameters.Name = "vertexParameters";
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public override void Read(BinaryReader file, uint size)
         {
             base.Read(file, size);
 
             var count = file.ReadSByte();
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 var item = new CMaterialGraphParameter(cr2w);
                 item.Read(file, 0);
@@ -99,7 +94,7 @@ namespace W3Edit.CR2W.Types
 
             var vertexCount = file.ReadSByte();
 
-            for (int i = 0; i < vertexCount; i++)
+            for (var i = 0; i < vertexCount; i++)
             {
                 var item = new CMaterialGraphParameter(cr2w);
                 item.Read(file, 0);
@@ -111,7 +106,6 @@ namespace W3Edit.CR2W.Types
             if (unk1 != 0)
             {
                 // this should be 0...
-
             }
         }
 
@@ -119,21 +113,21 @@ namespace W3Edit.CR2W.Types
         {
             base.Write(file);
 
-            file.Write((SByte)pixelParameters.array.Count);
+            file.Write((sbyte) pixelParameters.array.Count);
             foreach (var item in pixelParameters)
             {
                 var startpos = file.BaseStream.Position;
                 item.Write(file);
             }
 
-            file.Write((SByte)vertexParameters.array.Count);
+            file.Write((sbyte) vertexParameters.array.Count);
             foreach (var item in vertexParameters)
             {
                 var startpos = file.BaseStream.Position;
                 item.Write(file);
             }
 
-            file.Write((int)0);
+            file.Write(0);
         }
 
         public override CVariable SetValue(object val)
@@ -148,9 +142,9 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CMaterialGraph)base.Copy(context);
-            var.pixelParameters = (CArray)pixelParameters.Copy(context);
-            var.vertexParameters = (CArray)vertexParameters.Copy(context);
+            var var = (CMaterialGraph) base.Copy(context);
+            var.pixelParameters = (CArray) pixelParameters.Copy(context);
+            var.vertexParameters = (CArray) vertexParameters.Copy(context);
 
             return var;
         }

@@ -1,24 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using W3Edit.CR2W.Editors;
 
 namespace W3Edit.CR2W.Types
 {
     public class CColor : CVector
     {
+        public CColor(CR2WFile cr2w) :
+            base(cr2w)
+        {
+        }
+
         public Color Color
         {
-            get
-            {
-                return Color.FromArgb(Alpha,Red, Green, Blue);
-            }
-            set 
+            get { return Color.FromArgb(Alpha, Red, Green, Blue); }
+            set
             {
                 Red = value.R;
                 Green = value.G;
@@ -34,7 +30,7 @@ namespace W3Edit.CR2W.Types
                 var valObj = variables.GetVariableByName("Red");
                 if (valObj is CUInt8)
                 {
-                    var val = (CUInt8)valObj;
+                    var val = (CUInt8) valObj;
                     return val.val;
                 }
 
@@ -59,7 +55,7 @@ namespace W3Edit.CR2W.Types
                 var valObj = variables.GetVariableByName("Green");
                 if (valObj is CUInt8)
                 {
-                    var val = (CUInt8)valObj;
+                    var val = (CUInt8) valObj;
                     return val.val;
                 }
 
@@ -84,7 +80,7 @@ namespace W3Edit.CR2W.Types
                 var valObj = variables.GetVariableByName("Blue");
                 if (valObj is CUInt8)
                 {
-                    var val = (CUInt8)valObj;
+                    var val = (CUInt8) valObj;
                     return val.val;
                 }
 
@@ -109,7 +105,7 @@ namespace W3Edit.CR2W.Types
                 var valObj = variables.GetVariableByName("Alpha");
                 if (valObj is CUInt8)
                 {
-                    var val = (CUInt8)valObj;
+                    var val = (CUInt8) valObj;
                     return val.val;
                 }
 
@@ -127,17 +123,11 @@ namespace W3Edit.CR2W.Types
             }
         }
 
-        public CColor(CR2WFile cr2w) :
-            base(cr2w)
-        {
-        }
-
         public override CVariable SetValue(object val)
         {
-
-            if(val is Color)
+            if (val is Color)
             {
-                Color = (Color)val;
+                Color = (Color) val;
             }
 
             return this;
@@ -148,7 +138,7 @@ namespace W3Edit.CR2W.Types
             return new CColor(cr2w);
         }
 
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
             var panel = new Panel();
             panel.BackColor = Color.FromArgb(Red, Green, Blue);
@@ -157,18 +147,18 @@ namespace W3Edit.CR2W.Types
             return panel;
         }
 
-        void panel_Click(object sender, EventArgs e)
+        private void panel_Click(object sender, EventArgs e)
         {
             var dlg = new ColorDialog();
             dlg.Color = Color;
 
-            if(dlg.ShowDialog() == DialogResult.OK)
+            if (dlg.ShowDialog() == DialogResult.OK)
             {
                 Red = dlg.Color.R;
                 Green = dlg.Color.G;
                 Blue = dlg.Color.B;
 
-                ((Panel)sender).BackColor = dlg.Color;
+                ((Panel) sender).BackColor = dlg.Color;
             }
         }
     }

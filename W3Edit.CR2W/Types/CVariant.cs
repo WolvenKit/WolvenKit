@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 using W3Edit.CR2W.Editors;
 
 namespace W3Edit.CR2W.Types
@@ -15,10 +12,9 @@ namespace W3Edit.CR2W.Types
         public CVariant(CR2WFile cr2w)
             : base(cr2w)
         {
-
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public override void Read(BinaryReader file, uint size)
         {
             var typepos = file.BaseStream.Position;
             var typeId = file.ReadUInt16();
@@ -39,23 +35,23 @@ namespace W3Edit.CR2W.Types
             file.Write(var.typeId);
 
             var pos = file.BaseStream.Position;
-            file.Write((UInt32)0);  // size placeholder
+            file.Write((uint) 0); // size placeholder
 
 
             var.Write(file);
             var endpos = file.BaseStream.Position;
 
-            file.Seek((int)pos, SeekOrigin.Begin);
-            var actualsize = (UInt32)(endpos - pos);
+            file.Seek((int) pos, SeekOrigin.Begin);
+            var actualsize = (uint) (endpos - pos);
             file.Write(actualsize); // Write size
-            file.Seek((int)endpos, SeekOrigin.Begin);
+            file.Seek((int) endpos, SeekOrigin.Begin);
         }
 
         public override CVariable SetValue(object val)
         {
             if (val is CVariable)
             {
-                var = (CVariable)val;
+                var = (CVariable) val;
             }
 
             return this;
@@ -68,11 +64,10 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CVariant)base.Copy(context);
+            var var = (CVariant) base.Copy(context);
             var.var = var.Copy(context);
             return var;
         }
-
 
         public override List<IEditableVariable> GetEditableVariables()
         {
@@ -81,7 +76,7 @@ namespace W3Edit.CR2W.Types
             return list;
         }
 
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
             if (var != null)
                 return var.GetEditor();

@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using W3Edit.Bundles;
 
@@ -14,36 +9,21 @@ namespace W3Edit
 {
     public partial class frmBundleExplorer : Form
     {
-        public class BundleListItem : ListViewItem
-        {
-            public bool IsDirectory { get; set; }
-            public BundleTreeNode Node { get; set; }
-
-            public string FullPath { get; set; }
-        }
-        public List<string> Files { get; set; }
-        public BundleTreeNode ActiveNode { get; set; }
-        public BundleTreeNode RootNode { get; set; }
-
-        public ListView.ListViewItemCollection SelectedPaths { 
-            get { return pathlistview.Items; } 
-        }
-
-        public List<BundleItem> FileList;
         public List<string> Autocompletelist;
+        public List<BundleItem> FileList;
 
         public frmBundleExplorer()
         {
             InitializeComponent();
-            
+
             var manager = MainController.Get().BundleManager;
             RootNode = manager.RootNode;
             FileList = GetFiles(RootNode);
             var sorted = GetExtensions(FileList.Select(x => x.Name).ToArray());
-            Array.Sort(sorted, (x, y) => String.Compare(x, y));
+            Array.Sort(sorted, (x, y) => string.Compare(x, y));
             filetypeCB.Items.AddRange(sorted);
             filetypeCB.SelectedIndex = 0;
-            Autocompletelist = FileList.Select(x=> GetFileName(x.Name)).ToList();
+            Autocompletelist = FileList.Select(x => GetFileName(x.Name)).ToList();
             var completelist = new AutoCompleteStringCollection();
             foreach (var name in Autocompletelist)
             {
@@ -52,11 +32,18 @@ namespace W3Edit
             SearchBox.AutoCompleteCustomSource = completelist;
         }
 
-        private void frmBundleExplorer_Load(object sender, EventArgs e)
-        {
+        public List<string> Files { get; set; }
+        public BundleTreeNode ActiveNode { get; set; }
+        public BundleTreeNode RootNode { get; set; }
 
+        public ListView.ListViewItemCollection SelectedPaths
+        {
+            get { return pathlistview.Items; }
         }
 
+        private void frmBundleExplorer_Load(object sender, EventArgs e)
+        {
+        }
 
         public void OpenNode(BundleTreeNode node)
         {
@@ -70,7 +57,7 @@ namespace W3Edit
 
                 if (node.Parent != null)
                 {
-                    fileListView.Items.Add(new BundleListItem()
+                    fileListView.Items.Add(new BundleListItem
                     {
                         Node = node.Parent,
                         Text = "..",
@@ -79,9 +66,9 @@ namespace W3Edit
                     });
                 }
 
-                foreach(var item in node.Directories.OrderBy(x=>x.Key))
+                foreach (var item in node.Directories.OrderBy(x => x.Key))
                 {
-                    fileListView.Items.Add(new BundleListItem()
+                    fileListView.Items.Add(new BundleListItem
                     {
                         Node = item.Value,
                         Text = item.Key,
@@ -93,8 +80,8 @@ namespace W3Edit
 
                 foreach (var item in node.Files.OrderBy(x => x.Key))
                 {
-                    var lastItem = item.Value[item.Value.Count-1];
-                    var listItem = fileListView.Items.Add(new BundleListItem()
+                    var lastItem = item.Value[item.Value.Count - 1];
+                    var listItem = fileListView.Items.Add(new BundleListItem
                     {
                         Node = null,
                         FullPath = lastItem.Name,
@@ -103,7 +90,8 @@ namespace W3Edit
                         ImageKey = "genericFile"
                     });
                     listItem.SubItems.Add(lastItem.Size.ToString());
-                    listItem.SubItems.Add(string.Format("{0}%", (100 - (int)((float)lastItem.ZSize / (float)lastItem.Size * 100.0f))) );
+                    listItem.SubItems.Add(string.Format("{0}%",
+                        (100 - (int) (lastItem.ZSize/(float) lastItem.Size*100.0f))));
                     listItem.SubItems.Add(lastItem.CompressionType);
                     listItem.SubItems.Add(lastItem.DateString);
                 }
@@ -128,8 +116,8 @@ namespace W3Edit
                 var button = new Label();
                 button.Text = link.Name + " >";
                 button.Location = new Point(x, -3);
-                button.Padding = new System.Windows.Forms.Padding(0);
-                button.Margin = new System.Windows.Forms.Padding(0);
+                button.Padding = new Padding(0);
+                button.Margin = new Padding(0);
                 var textSize = TextRenderer.MeasureText(button.Text, button.Font);
                 button.Width = textSize.Width;
                 button.Height = 23;
@@ -138,10 +126,7 @@ namespace W3Edit
                 button.MouseEnter += button_MouseEnter;
                 button.TextAlign = ContentAlignment.MiddleCenter;
                 button.Cursor = Cursors.Hand;
-                button.Click += delegate(object sender, EventArgs e)
-                {
-                    OpenNode(link);
-                };
+                button.Click += delegate { OpenNode(link); };
 
                 pathPanel.Controls.Add(button);
 
@@ -149,15 +134,15 @@ namespace W3Edit
             }
         }
 
-        void button_MouseEnter(object sender, EventArgs e)
+        private void button_MouseEnter(object sender, EventArgs e)
         {
-            var label = (Label)sender;
+            var label = (Label) sender;
             label.BackColor = Color.LightBlue;
         }
 
-        void button_MouseLeave(object sender, EventArgs e)
+        private void button_MouseLeave(object sender, EventArgs e)
         {
-            var label = (Label)sender;
+            var label = (Label) sender;
             label.BackColor = Color.Transparent;
         }
 
@@ -165,8 +150,8 @@ namespace W3Edit
         {
             if (fileListView.SelectedItems.Count > 0)
             {
-                var item = (BundleListItem)fileListView.SelectedItems[0];
-                if (item.IsDirectory) 
+                var item = (BundleListItem) fileListView.SelectedItems[0];
+                if (item.IsDirectory)
                 {
                     OpenNode(item.Node);
                 }
@@ -178,7 +163,7 @@ namespace W3Edit
                         if (i.Text == item.FullPath)
                             cont = true;
                     }
-                    if(!cont)
+                    if (!cont)
                     {
                         var tempnode = new ListViewItem();
                         tempnode.ImageKey = "genericFile";
@@ -192,7 +177,6 @@ namespace W3Edit
 
         private void fileListView_DoubleClick(object sender, EventArgs e)
         {
-            
         }
 
         private void fileListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
@@ -201,33 +185,33 @@ namespace W3Edit
 
         private void fileListView_SelectedIndexChanged(object sender, EventArgs e)
         {
-
         }
 
         private void pathPanel_Click(object sender, EventArgs e)
         {
             pathPanel.Controls.Clear();
-            var textbox = new TextBox();
-            textbox.Location = new Point(16, 2);
-            textbox.Width = pathPanel.Width;
-            textbox.Height = pathPanel.Height;
-            textbox.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
-            textbox.BorderStyle = BorderStyle.None;
+            var textbox = new TextBox
+            {
+                Location = new Point(16, 2),
+                Width = pathPanel.Width,
+                Height = pathPanel.Height,
+                Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top,
+                BorderStyle = BorderStyle.None
+            };
             pathPanel.Controls.Add(textbox);
             textbox.Focus();
 
-            textbox.LostFocus += textbox_LostFocus;
-            textbox.KeyDown += textbox_KeyDown;
             textbox.PreviewKeyDown += textbox_PreviewKeyDown;
+            textbox.LostFocus += textbox_LostFocus;
             textbox.Margin = new Padding(3);
             textbox.Text = ActiveNode.FullPath;
             textbox.SelectAll();
             textbox.AcceptsReturn = true;
         }
 
-        void textbox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        private void textbox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            var textbox = (TextBox)sender;
+            var textbox = (TextBox) sender;
             if (e.KeyCode == Keys.Enter)
             {
                 var browsePath = textbox.Text;
@@ -240,7 +224,7 @@ namespace W3Edit
             var currentNode = RootNode;
             var parts = browsePath.Split('\\');
             var success = false;
-            for (int i = 0; i < parts.Length; i++)
+            for (var i = 0; i < parts.Length; i++)
             {
                 if (currentNode.Directories.ContainsKey(parts[i]))
                 {
@@ -265,19 +249,9 @@ namespace W3Edit
             }
         }
 
-        void textbox_LostFocus(object sender, EventArgs e)
+        private void textbox_LostFocus(object sender, EventArgs e)
         {
             UpdatePathPanel();
-        }
-
-        void textbox_KeyDown(object sender, KeyEventArgs e)
-        {
-
-        }
-
-        private void SearchBox_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -291,7 +265,7 @@ namespace W3Edit
         public string GetFileName(string s)
         {
             var result = "";
-            if(s.Contains('\\'))
+            if (s.Contains('\\'))
             {
                 result = s.Split('\\').Last();
             }
@@ -301,14 +275,17 @@ namespace W3Edit
             }
             return result;
         }
-        public void Search(string s,int i)
+
+        public void Search(string s, int i)
         {
-            var found = SearchFiles(FileList.ToArray(),s,filetypeCB.Items[i].ToString());
+            var found = SearchFiles(FileList.ToArray(), s, filetypeCB.Items[i].ToString());
+            if (found.Length > 1000)
+                found = found.Take(1000).ToArray();
             fileListView.Items.Clear();
             foreach (var file in found)
             {
                 var lastItem = file;
-                var listItem = fileListView.Items.Add(new BundleListItem()
+                var listItem = fileListView.Items.Add(new BundleListItem
                 {
                     Node = null,
                     FullPath = lastItem.Name,
@@ -317,7 +294,7 @@ namespace W3Edit
                     ImageKey = "genericFile"
                 });
                 listItem.SubItems.Add(lastItem.Size.ToString());
-                listItem.SubItems.Add(string.Format("{0}%", (100 - (int)((float)lastItem.ZSize / (float)lastItem.Size * 100.0f))) );
+                listItem.SubItems.Add($"{(100 - (int) (lastItem.ZSize/(float) lastItem.Size*100.0f))}%");
                 listItem.SubItems.Add(lastItem.CompressionType);
                 listItem.SubItems.Add(lastItem.DateString);
             }
@@ -325,45 +302,26 @@ namespace W3Edit
 
         public List<BundleItem> GetFiles(BundleTreeNode mainnode)
         {
-            List<BundleItem> bundfiles = new List<BundleItem>();
+            var bundfiles = new List<BundleItem>();
             foreach (var wfile in mainnode.Files)
             {
-                foreach (var val in wfile.Value)
-                {
-                    bundfiles.Add(val);
-                }
+                bundfiles.AddRange(wfile.Value);
             }
-            foreach (var dir in mainnode.Directories.Values)
-            {
-                var subs = GetFiles(dir);
-                foreach (var subfil in subs)
-                {
-                    bundfiles.Add(subfil);
-                }
-            }
+            bundfiles.AddRange(mainnode.Directories.Values.SelectMany(GetFiles));
             return bundfiles;
         }
 
-        public BundleItem[] SearchFiles(BundleItem[] files,string searchkeyword,string Extension)
+        public BundleItem[] SearchFiles(BundleItem[] files, string searchkeyword, string Extension)
         {
-            List<BundleItem> filtered = new List<BundleItem>();
-            foreach (var file in files)
-            {
-                if ((file.Name.EndsWith(Extension) && file.Name.ToUpper().Contains(searchkeyword.ToUpper())) || (file.Name.ToUpper().Contains(searchkeyword.ToUpper()) && Extension.ToUpper() == "ANY"))
-                {
-                    filtered.Add(file);
-                }
-            }
-            return filtered.ToArray();
+            return files.Where(file => (file.Name.EndsWith(Extension) && file.Name.ToUpper().Contains(searchkeyword.ToUpper())) || (file.Name.ToUpper().Contains(searchkeyword.ToUpper()) && Extension.ToUpper() == "ANY")).ToArray();
         }
 
         public string[] GetExtensions(params string[] filename)
         {
-            List<string> extensions = new List<string>();
-            foreach (var file in filename)
+            var extensions = new List<string>();
+            foreach (var file in filename.Where(file => !extensions.Contains(file.Split('.').Last())))
             {
-                if (!extensions.Contains(file.Split('.').Last()))
-                    extensions.Add(file.Split('.').Last());
+                extensions.Add(file.Split('.').Last());
             }
             return extensions.ToArray();
         }
@@ -391,7 +349,7 @@ namespace W3Edit
                             pathlistview.Items.Add(tempnode);
                         }
                     }
-                }     
+                }
             }
         }
 
@@ -407,19 +365,26 @@ namespace W3Edit
 
         private void fileListView_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            if(e.KeyCode == Keys.Back)
+            if (e.KeyCode == Keys.Back)
             {
-                if(ActiveNode != RootNode)
-                OpenPath(ActiveNode.Parent.FullPath);
+                if (ActiveNode != RootNode)
+                    OpenPath(ActiveNode.Parent.FullPath);
             }
         }
 
         private void SearchBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            if(e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter)
             {
-                Search(SearchBox.Text, filetypeCB.SelectedIndex);               
+                Search(SearchBox.Text, filetypeCB.SelectedIndex);
             }
+        }
+
+        public class BundleListItem : ListViewItem
+        {
+            public bool IsDirectory { get; set; }
+            public BundleTreeNode Node { get; set; }
+            public string FullPath { get; set; }
         }
     }
 }

@@ -1,78 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using W3Edit.CR2W.Types;
 
 namespace W3Edit.CR2W
 {
     public class CR2WFile
     {
+        /// <summary>
+        ///     File structure variables
+        /// </summary>
+        public static readonly byte[] IDString = {(byte) 'C', (byte) 'R', (byte) '2', (byte) 'W'};
 
         /// <summary>
-        /// File structure variables
         /// </summary>
-        public static readonly byte[] IDString = new byte[] { (byte)'C', (byte)'R', (byte)'2', (byte)'W' };
-
-        public UInt32 FileVersion { get; set; }
-        public UInt32 unk2 { get; set; }
-        public UInt32 unk3 { get; set; }
-
-        public UInt32 unk4 { get; set; }
-        public UInt32 unk5 { get; set; }
-
-        public UInt32 cr2wsize { get; set; }
-        public UInt32 buffersize { get; set; }
-
-        public UInt32 unk6 { get; set; }
-        public UInt32 unk7 { get; set; }
-
-        public List<CR2WHeaderData> headers { get; set; }
-        public List<CR2WHeaderString> strings { get; set; }
-        public List<CR2WHeaderHandle> handles { get; set; }
-        public List<CR2WHeaderBlock4> block4 { get; set; }
-        public List<CR2WChunk> chunks { get; set; }
-        public List<CR2WHeaderBlock6> block6 { get; set; }
-        public List<CR2WHeaderBlock7> block7 { get; set; }
-
-        public byte[] bufferdata { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private UInt32 headerOffset;
-
+        private uint headerOffset;
 
         public List<CLocalizedString> LocalizedStrings = new List<CLocalizedString>();
         public List<string> UnknownTypes = new List<string>();
 
-        public string FileName { get; set; }
-
-        /// <summary>
-        /// LocalizedStringSource
-        /// </summary>
-        public ILocalizedStringSource LocalizedStringSource { get; set; }
-        /// <summary>
-        /// EditorController
-        /// </summary>
-        public IVariableEditor EditorController { get; set; }
-
         public CR2WFile()
         {
             headers = new List<CR2WHeaderData>();
-            for (int i = 0; i < 10; i ++ )
+            for (var i = 0; i < 10; i ++)
             {
-                headers.Add(new CR2WHeaderData()
-                {
-                    
-                });
+                headers.Add(new CR2WHeaderData());
             }
-            strings = new List<CR2WHeaderString>();
-            strings.Add(new CR2WHeaderString());
+            strings = new List<CR2WHeaderString> {new CR2WHeaderString()};
             handles = new List<CR2WHeaderHandle>();
             chunks = new List<CR2WChunk>();
             block4 = new List<CR2WHeaderBlock4>();
@@ -87,6 +43,35 @@ namespace W3Edit.CR2W
             Read(file);
         }
 
+        public uint FileVersion { get; set; }
+        public uint unk2 { get; set; }
+        public uint unk3 { get; set; }
+        public uint unk4 { get; set; }
+        public uint unk5 { get; set; }
+        public uint cr2wsize { get; set; }
+        public uint buffersize { get; set; }
+        public uint unk6 { get; set; }
+        public uint unk7 { get; set; }
+        public List<CR2WHeaderData> headers { get; set; }
+        public List<CR2WHeaderString> strings { get; set; }
+        public List<CR2WHeaderHandle> handles { get; set; }
+        public List<CR2WHeaderBlock4> block4 { get; set; }
+        public List<CR2WChunk> chunks { get; set; }
+        public List<CR2WHeaderBlock6> block6 { get; set; }
+        public List<CR2WHeaderBlock7> block7 { get; set; }
+        public byte[] bufferdata { get; set; }
+        public string FileName { get; set; }
+
+        /// <summary>
+        ///     LocalizedStringSource
+        /// </summary>
+        public ILocalizedStringSource LocalizedStringSource { get; set; }
+
+        /// <summary>
+        ///     EditorController
+        /// </summary>
+        public IVariableEditor EditorController { get; set; }
+
         public string GetLocalizedString(uint val)
         {
             if (LocalizedStringSource != null)
@@ -97,7 +82,7 @@ namespace W3Edit.CR2W
 
         public void CreateVariableEditor(CVariable editvar, EVariableEditorAction action)
         {
-            if(EditorController != null)
+            if (EditorController != null)
             {
                 EditorController.CreateVariableEditor(editvar, action);
             }
@@ -127,7 +112,7 @@ namespace W3Edit.CR2W
 
             headers = new List<CR2WHeaderData>();
 
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 var head = new CR2WHeaderData(file);
                 headers.Add(head);
@@ -150,7 +135,7 @@ namespace W3Edit.CR2W
 
                 file.BaseStream.Seek(string_start, SeekOrigin.Begin);
 
-                for (int i = 0; i < string_count; i++)
+                for (var i = 0; i < string_count; i++)
                 {
                     var str = new CR2WHeaderString(file);
                     str.ReadString(file, string_buffer_start);
@@ -167,7 +152,7 @@ namespace W3Edit.CR2W
 
                 file.BaseStream.Seek(handles_start, SeekOrigin.Begin);
 
-                for (int i = 0; i < handles_count; i++)
+                for (var i = 0; i < handles_count; i++)
                 {
                     var handle = new CR2WHeaderHandle(file);
                     handle.ReadString(file, string_buffer_start);
@@ -193,7 +178,7 @@ namespace W3Edit.CR2W
 
                 file.BaseStream.Seek(block4_start, SeekOrigin.Begin);
 
-                for (int i = 0; i < block4_count; i++)
+                for (var i = 0; i < block4_count; i++)
                 {
                     var block = new CR2WHeaderBlock4(file);
                     block4.Add(block);
@@ -209,7 +194,7 @@ namespace W3Edit.CR2W
 
                 file.BaseStream.Seek(chunk_start, SeekOrigin.Begin);
 
-                for (int i = 0; i < chunk_count; i++)
+                for (var i = 0; i < chunk_count; i++)
                 {
                     var chunktypeId = file.ReadUInt16();
 
@@ -229,7 +214,7 @@ namespace W3Edit.CR2W
 
                 file.BaseStream.Seek(block6_start, SeekOrigin.Begin);
 
-                for (int i = 0; i < block6_count; i++)
+                for (var i = 0; i < block6_count; i++)
                 {
                     var block = new CR2WHeaderBlock6(file);
                     block6.Add(block);
@@ -246,7 +231,7 @@ namespace W3Edit.CR2W
 
                 file.BaseStream.Seek(block7_start, SeekOrigin.Begin);
 
-                for (int i = 0; i < block7_count; i++)
+                for (var i = 0; i < block7_count; i++)
                 {
                     var block = new CR2WHeaderBlock7(file);
                     block7.Add(block);
@@ -255,7 +240,7 @@ namespace W3Edit.CR2W
 
             // Read Chunk buffers
             {
-                for (int i = 0; i < chunks.Count; i++)
+                for (var i = 0; i < chunks.Count; i++)
                 {
                     chunks[i].ReadData(file);
                 }
@@ -263,7 +248,7 @@ namespace W3Edit.CR2W
 
             // Read Block7 buffers
             {
-                for (int i = 0; i < block7.Count; i++)
+                for (var i = 0; i < block7.Count; i++)
                 {
                     block7[i].ReadString(file, string_buffer_start);
                     block7[i].ReadData(file);
@@ -272,7 +257,7 @@ namespace W3Edit.CR2W
 
             file.BaseStream.Seek(cr2wsize, SeekOrigin.Begin);
 
-            var actualbuffersize = (int)(buffersize - cr2wsize);
+            var actualbuffersize = (int) (buffersize - cr2wsize);
             if (actualbuffersize > 0)
             {
                 bufferdata = new byte[actualbuffersize];
@@ -308,16 +293,16 @@ namespace W3Edit.CR2W
             file.Write(var.typeId);
 
             var pos = file.BaseStream.Position;
-            file.Write((UInt32)0);  // size placeholder
+            file.Write((uint) 0); // size placeholder
 
-            
+
             var.Write(file);
             var endpos = file.BaseStream.Position;
 
-            file.Seek((int)pos, SeekOrigin.Begin);
-            var actualsize = (UInt32)(endpos - pos);
+            file.Seek((int) pos, SeekOrigin.Begin);
+            var actualsize = (uint) (endpos - pos);
             file.Write(actualsize); // Write size
-            file.Seek((int)endpos, SeekOrigin.Begin);
+            file.Seek((int) endpos, SeekOrigin.Begin);
         }
 
         public void Write(BinaryWriter file)
@@ -337,7 +322,7 @@ namespace W3Edit.CR2W
             // Write headers once to allocate the space for it
             WriteHeader(file);
 
-            headerOffset = (UInt32)file.BaseStream.Position;
+            headerOffset = (uint) file.BaseStream.Position;
 
             // Write buffers
             buffersMem.Seek(0, SeekOrigin.Begin);
@@ -368,12 +353,12 @@ namespace W3Edit.CR2W
             file.Write(unk6);
             file.Write(unk7);
 
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 headers[i].Write(file);
             }
 
-            UInt32 stringbuffer_offset = (UInt32)file.BaseStream.Position;
+            var stringbuffer_offset = (uint) file.BaseStream.Position;
             headers[0].offset = stringbuffer_offset;
 
             // Write string buffers
@@ -381,15 +366,15 @@ namespace W3Edit.CR2W
             var new_string_offsets = new Dictionary<string, uint>();
 
             // Add all strings to dictionary
-            for (int i = 0; i < strings.Count; i++)
+            for (var i = 0; i < strings.Count; i++)
             {
                 string_offsets.AddUnique(strings[i].str, strings[i].offset);
             }
-            for (int i = 0; i < handles.Count; i++)
+            for (var i = 0; i < handles.Count; i++)
             {
                 string_offsets.AddUnique(handles[i].str, handles[i].offset);
             }
-            for (int i = 0; i < block7.Count; i++)
+            for (var i = 0; i < block7.Count; i++)
             {
                 foreach (var str in block7[i].handles)
                 {
@@ -400,15 +385,15 @@ namespace W3Edit.CR2W
             // Write all strings
             foreach (var str in string_offsets)
             {
-                var newoffset = ((UInt32)file.BaseStream.Position) - stringbuffer_offset;
+                var newoffset = ((uint) file.BaseStream.Position) - stringbuffer_offset;
                 new_string_offsets.Add(str.Key, newoffset);
                 file.WriteCR2WString(str.Key);
             }
 
-            headers[0].size = ((UInt32)file.BaseStream.Position - stringbuffer_offset);
+            headers[0].size = ((uint) file.BaseStream.Position - stringbuffer_offset);
 
             // Update all offsets
-            for (int i = 0; i < strings.Count; i++)
+            for (var i = 0; i < strings.Count; i++)
             {
                 var newoffset = new_string_offsets.Get(strings[i].str);
                 if (strings[i].offset != newoffset)
@@ -416,7 +401,7 @@ namespace W3Edit.CR2W
                     strings[i].offset = newoffset;
                 }
             }
-            for (int i = 0; i < handles.Count; i++)
+            for (var i = 0; i < handles.Count; i++)
             {
                 var newoffset = new_string_offsets.Get(handles[i].str);
                 if (newoffset != handles[i].offset)
@@ -424,9 +409,9 @@ namespace W3Edit.CR2W
                     handles[i].offset = newoffset;
                 }
             }
-            for (int i = 0; i < block7.Count; i++)
+            for (var i = 0; i < block7.Count; i++)
             {
-                for (int j = 0; j < block7[i].handles.Count; j++)
+                for (var j = 0; j < block7[i].handles.Count; j++)
                 {
                     var newoffset = new_string_offsets.Get(block7[i].handles[j]);
                     if (newoffset != block7[i].handle_name_offset)
@@ -437,74 +422,73 @@ namespace W3Edit.CR2W
             }
 
 
-            headers[1].size = (UInt32)strings.Count;
-            headers[1].offset = (UInt32)file.BaseStream.Position;
-            for (int i = 0; i < strings.Count; i++)
+            headers[1].size = (uint) strings.Count;
+            headers[1].offset = (uint) file.BaseStream.Position;
+            for (var i = 0; i < strings.Count; i++)
             {
                 strings[i].Write(file);
             }
 
-            headers[2].size = (UInt32)handles.Count;
-            headers[2].offset = (UInt32)file.BaseStream.Position;
-            for (int i = 0; i < handles.Count; i++)
+            headers[2].size = (uint) handles.Count;
+            headers[2].offset = (uint) file.BaseStream.Position;
+            for (var i = 0; i < handles.Count; i++)
             {
                 handles[i].Write(file);
             }
 
-            headers[3].size = (UInt32)block4.Count;
-            headers[3].offset = (UInt32)file.BaseStream.Position;
-            for (int i = 0; i < block4.Count; i++)
+            headers[3].size = (uint) block4.Count;
+            headers[3].offset = (uint) file.BaseStream.Position;
+            for (var i = 0; i < block4.Count; i++)
             {
                 block4[i].Write(file);
             }
 
-            headers[4].size = (UInt32)chunks.Count;
-            headers[4].offset = (UInt32)file.BaseStream.Position;
-            for (int i = 0; i < chunks.Count; i++)
+            headers[4].size = (uint) chunks.Count;
+            headers[4].offset = (uint) file.BaseStream.Position;
+            for (var i = 0; i < chunks.Count; i++)
             {
                 chunks[i].offset += headerOffset;
                 chunks[i].Write(file);
             }
 
-            headers[5].size = (UInt32)block6.Count;
-            headers[5].offset = (UInt32)file.BaseStream.Position;
-            for (int i = 0; i < block6.Count; i++)
+            headers[5].size = (uint) block6.Count;
+            headers[5].offset = (uint) file.BaseStream.Position;
+            for (var i = 0; i < block6.Count; i++)
             {
                 block6[i].Write(file);
             }
 
-            headers[6].size = (UInt32)block7.Count;
-            headers[6].offset = (UInt32)file.BaseStream.Position;
-            for (int i = 0; i < block7.Count; i++)
+            headers[6].size = (uint) block7.Count;
+            headers[6].offset = (uint) file.BaseStream.Position;
+            for (var i = 0; i < block7.Count; i++)
             {
                 block7[i].offset += headerOffset;
                 block7[i].Write(file);
             }
-
         }
 
         private void WriteBuffers(BinaryWriter file)
         {
-            long chunkbuffer_offset = file.BaseStream.Position;
+            var chunkbuffer_offset = file.BaseStream.Position;
             // Write chunk buffers
-            for (int i = 0; i < chunks.Count; i++)
+            for (var i = 0; i < chunks.Count; i++)
             {
                 chunks[i].WriteData(file);
             }
 
             // Write block7
-            for (int i = 0; i < block7.Count; i++)
+            for (var i = 0; i < block7.Count; i++)
             {
                 block7[i].WriteData(file);
             }
 
-            cr2wsize = (UInt32)file.BaseStream.Position;
+            cr2wsize = (uint) file.BaseStream.Position;
 
             if (bufferdata != null)
             {
                 file.Write(bufferdata);
             }
-            buffersize = (UInt32)file.BaseStream.Position;
+            buffersize = (uint) file.BaseStream.Position;
         }
 
         public CR2WChunk CreateChunk(string type, CR2WChunk parent = null)
@@ -514,31 +498,30 @@ namespace W3Edit.CR2W
             chunk.CreateDefaultData();
             if (parent != null)
             {
-                chunk.ParentChunkId = (UInt32)chunks.IndexOf(parent) + 1;
+                chunk.ParentChunkId = (uint) chunks.IndexOf(parent) + 1;
             }
 
             chunks.Add(chunk);
             return chunk;
         }
 
-        public CR2WChunk CreateChunk(string type,CVariable data,CR2WChunk parent = null)
+        public CR2WChunk CreateChunk(string type, CVariable data, CR2WChunk parent = null)
         {
             var chunk = new CR2WChunk(this);
             chunk.Type = type;
             chunk.data = data;
             if (parent != null)
             {
-                chunk.ParentChunkId = (UInt32)chunks.IndexOf(parent) + 1;
+                chunk.ParentChunkId = (uint) chunks.IndexOf(parent) + 1;
             }
 
             chunks.Add(chunk);
             return chunk;
         }
 
-
         public int GetStringIndex(string name, bool addnew = false)
         {
-            for (int i = 0; i < strings.Count; i++)
+            for (var i = 0; i < strings.Count; i++)
             {
                 if (strings[i].str == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(strings[i].str)))
                     return i;
@@ -556,12 +539,12 @@ namespace W3Edit.CR2W
             return -1;
         }
 
-        public int GetHandleIndex(string name, UInt16 filetype, UInt16 flags, bool addnew = false)
+        public int GetHandleIndex(string name, ushort filetype, ushort flags, bool addnew = false)
         {
-            for (int i = 0; i < handles.Count; i++)
+            for (var i = 0; i < handles.Count; i++)
             {
                 if (handles[i].filetype == filetype && handles[i].flags == flags &&
-                        (handles[i].str == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(handles[i].str))))
+                    (handles[i].str == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(handles[i].str))))
                     return i;
             }
 
@@ -581,7 +564,7 @@ namespace W3Edit.CR2W
 
         public CR2WChunk GetChunkByType(string type)
         {
-            for (int i = 0; i < chunks.Count; i++)
+            for (var i = 0; i < chunks.Count; i++)
             {
                 if (chunks[i].Type == type)
                     return chunks[i];
@@ -590,22 +573,21 @@ namespace W3Edit.CR2W
             return null;
         }
 
-
-        public CVector CreateVector(CR2WChunk in_chunk, string type, string varname="")
+        public CVector CreateVector(CR2WChunk in_chunk, string type, string varname = "")
         {
             var var = CreateVector(type, varname);
             in_chunk.data.AddVariable(var);
             return var;
         }
 
-        public CVector CreateVector(CArray in_array, string varname="")
+        public CVector CreateVector(CArray in_array, string varname = "")
         {
             var var = CreateVector("", varname);
             in_array.AddVariable(var);
             return var;
         }
 
-        public CVector CreateVector(string type, string varname="")
+        public CVector CreateVector(string type, string varname = "")
         {
             var var = new CVector(this);
             var.Type = type;
@@ -620,21 +602,20 @@ namespace W3Edit.CR2W
             return var;
         }
 
-        public CVariable CreateVariable(CR2WChunk in_chunk, string type, string varname="")
+        public CVariable CreateVariable(CR2WChunk in_chunk, string type, string varname = "")
         {
             var var = CreateVariable(type, varname);
             in_chunk.data.AddVariable(var);
             return var;
         }
 
-        public CVariable CreateVariable(string type, string varname="")
+        public CVariable CreateVariable(string type, string varname = "")
         {
             var var = CR2WTypeManager.Get().GetByName(type, varname, this, false);
             var.Type = type;
             var.Name = varname;
             return var;
         }
-
 
         public CVariable CreateVariable(CArray in_array, string type)
         {
@@ -666,9 +647,9 @@ namespace W3Edit.CR2W
 
         public CHandle CreateHandle(string type, string handle, string varname = "")
         {
-            Regex reg = new Regex(@"(\w+):(.+)");
-            Match match = reg.Match(type);
-            string targetType = type;
+            var reg = new Regex(@"(\w+):(.+)");
+            var match = reg.Match(type);
+            var targetType = type;
 
             if (match.Success)
             {
@@ -688,7 +669,6 @@ namespace W3Edit.CR2W
 
             return ptr;
         }
-
 
         public CSoft CreateSoft(CArray in_array, string type, string handle, string varname = "")
         {
@@ -711,12 +691,11 @@ namespace W3Edit.CR2W
             return var;
         }
 
-
         public CSoft CreateSoft(string type, string handle, string varname = "")
         {
-            Regex reg = new Regex(@"(\w+):(.+)");
-            Match match = reg.Match(type);
-            string targetType = type;
+            var reg = new Regex(@"(\w+):(.+)");
+            var match = reg.Match(type);
+            var targetType = type;
 
             if (match.Success)
             {
@@ -755,7 +734,7 @@ namespace W3Edit.CR2W
             return var;
         }
 
-        public CPtr CreatePtr(string type, CR2WChunk tochunk, string varname="")
+        public CPtr CreatePtr(string type, CR2WChunk tochunk, string varname = "")
         {
             var ptr = new CPtr(this);
             ptr.Name = varname;
@@ -767,7 +746,6 @@ namespace W3Edit.CR2W
             }
             return ptr;
         }
-
 
         public bool RemoveChunk(CR2WChunk chunk)
         {

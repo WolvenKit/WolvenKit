@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace W3Edit.Mod
+﻿namespace W3Edit.Mod
 {
     public class ModManager
     {
         private static ModManager instance;
+        public W3Mod ActiveMod { get; set; }
 
         public static ModManager Get()
         {
@@ -19,7 +14,5 @@ namespace W3Edit.Mod
 
             return instance;
         }
-
-        public W3Mod ActiveMod { get; set; }
     }
 }

@@ -1,72 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using W3Edit.CR2W.Types;
 
 namespace W3Edit.CR2W
 {
     public class CR2WCopyAction
     {
-        internal List<CPtr> ptrs;
         internal List<CR2WChunk> chunks;
         internal Dictionary<int, int> chunkTranslation;
+        internal List<CPtr> ptrs;
 
+        public CR2WCopyAction()
+        {
+            ptrs = new List<CPtr>();
+            chunks = new List<CR2WChunk>();
+            chunkTranslation = new Dictionary<int, int>();
+        }
 
         public CR2WFile DestinationFile { get; set; }
 
         /// <summary>
-        /// List of excluded property names
+        ///     List of excluded property names
         /// </summary>
         public IEnumerable<string> ExcludeProperties { get; set; }
 
         /// <summary>
-        /// List of excluded chunk types
+        ///     List of excluded chunk types
         /// </summary>
         public IEnumerable<string> ExcludeChunks { get; set; }
 
         /// <summary>
-        /// How many pointers deep the copy action should iterate when doing a deep copy.
+        ///     How many pointers deep the copy action should iterate when doing a deep copy.
         /// </summary>
         public int MaxIterationDepth { get; set; }
+
         public CR2WFile SourceFile { get; set; }
 
         /// <summary>
-        /// Removes all unnessary offsets from story scene sections
-        /// 
-        /// e.g. if all placement offsets are at least z = 10 then it will deduct 10 from all z placement offsets
+        ///     Removes all unnessary offsets from story scene sections
+        ///     e.g. if all placement offsets are at least z = 10 then it will deduct 10 from all z placement offsets
         /// </summary>
         public bool StorySceneRemoveUnnessaryTeleportation { get; set; }
 
         /// <summary>
-        /// Remove all add fact events
-        /// 
-        /// Usefull when you just want to copy the scene and not have facts be applied that could influence the story.
+        ///     Remove all add fact events
+        ///     Usefull when you just want to copy the scene and not have facts be applied that could influence the story.
         /// </summary>
         public bool StorySceneRemoveAddFacts { get; set; }
 
         /// <summary>
-        /// Copy scene dialog sets by name
+        ///     Copy scene dialog sets by name
         /// </summary>
         public bool StorySceneCopyDialogsets { get; set; }
 
         /// <summary>
-        /// Copy scene cameras by name
+        ///     Copy scene cameras by name
         /// </summary>
         public bool StorySceneCopyCameras { get; set; }
 
-        public CR2WCopyAction()
-        {
-            this.ptrs = new List<CPtr>();
-            this.chunks = new List<CR2WChunk>();
-            this.chunkTranslation = new Dictionary<int, int>();
-        }
-
-
-
         /// <summary>
-        /// Deep copies a chunk.
+        ///     Deep copies a chunk.
         /// </summary>
         /// <param name="chunkSource"></param>
         /// <param name="destinationFile"></param>
@@ -79,31 +73,25 @@ namespace W3Edit.CR2W
         /// <param name="storySceneCopyCameras"></param>
         /// <returns></returns>
         public static CR2WChunk CopyChunk(CR2WChunk chunkSource, CR2WFile destinationFile,
-            int maxDepth = -1, 
+            int maxDepth = -1,
             IEnumerable<string> excludeProperties = null,
-            IEnumerable<string> excludeChunks = null, 
-            bool storySceneRemoveUnnessaryTeleportation = false, 
+            IEnumerable<string> excludeChunks = null,
+            bool storySceneRemoveUnnessaryTeleportation = false,
             bool storySceneRemoveAddFacts = false,
-            bool storySceneCopyDialogsets = false, 
+            bool storySceneCopyDialogsets = false,
             bool storySceneCopyCameras = false)
         {
-            var context = new CR2WCopyAction()
+            var context = new CR2WCopyAction
             {
                 SourceFile = chunkSource.cr2w,
                 DestinationFile = destinationFile,
-
                 MaxIterationDepth = maxDepth,
-
                 ExcludeProperties = excludeProperties,
                 ExcludeChunks = excludeChunks,
-
-                
                 StorySceneRemoveUnnessaryTeleportation = storySceneRemoveUnnessaryTeleportation,
                 StorySceneRemoveAddFacts = storySceneRemoveAddFacts,
                 StorySceneCopyDialogsets = storySceneCopyDialogsets,
-                StorySceneCopyCameras = storySceneCopyCameras,
-
-                
+                StorySceneCopyCameras = storySceneCopyCameras
             };
 
 
@@ -115,9 +103,8 @@ namespace W3Edit.CR2W
         }
 
         /// <summary>
-        /// Copies pointers and their chunks.
-        /// 
-        /// Fixes all pointers and parent id's
+        ///     Copies pointers and their chunks.
+        ///     Fixes all pointers and parent id's
         /// </summary>
         public void DeepCopy()
         {
@@ -126,7 +113,8 @@ namespace W3Edit.CR2W
 
             while ((depth < MaxIterationDepth || MaxIterationDepth == -1) && ptrs.Count - ptrIndex > 0)
             {
-                var ptrCount = ptrs.Count; // save current pointer count all, pointers that get added are in a higher depth
+                var ptrCount = ptrs.Count;
+                    // save current pointer count all, pointers that get added are in a higher depth
                 // follow all pointers and copy their chunks
                 for (; ptrIndex < ptrCount; ptrIndex++)
                 {
@@ -142,16 +130,17 @@ namespace W3Edit.CR2W
             // reparent chunks
             foreach (var chunk in chunks)
             {
-                if (chunkTranslation.ContainsKey((int)chunk.ParentChunkId - 1))
+                if (chunkTranslation.ContainsKey((int) chunk.ParentChunkId - 1))
                 {
-                    chunk.ParentChunkId = (UInt32)chunkTranslation[(int)chunk.ParentChunkId - 1] + 1;
+                    chunk.ParentChunkId = (uint) chunkTranslation[(int) chunk.ParentChunkId - 1] + 1;
                 }
                 else if (SourceFile == DestinationFile)
                 {
                     // Don't do anything, pointers are valid.
                 }
                 else
-                {// this chunk's parent was not copied, use the first chunk as parent
+                {
+// this chunk's parent was not copied, use the first chunk as parent
                     chunk.ParentChunkId = 1;
                 }
             }
@@ -163,12 +152,13 @@ namespace W3Edit.CR2W
                 {
                     ptr.ChunkIndex = chunkTranslation[ptr.ChunkIndex];
                 }
-                else if(SourceFile == DestinationFile)
+                else if (SourceFile == DestinationFile)
                 {
                     // Don't do anything, pointers are valid.
                 }
                 else
-                {// this ptr's target was not copied, point to 0
+                {
+// this ptr's target was not copied, point to 0
                     ptr.val = 0;
                 }
             }
@@ -176,13 +166,12 @@ namespace W3Edit.CR2W
 
         public bool ShouldCopy(CVariable item)
         {
-            if (ExcludeProperties != null && 
+            if (ExcludeProperties != null &&
                 ExcludeProperties.Contains(item.Name))
                 return false;
 
             return true;
         }
-
 
         private CR2WChunk CopyChunk(CR2WChunk chunk)
         {
@@ -204,12 +193,12 @@ namespace W3Edit.CR2W
                 {
                     var controlParts = CStoryScene.GetVariableByName("controlParts") as CArray;
                     // Add this chunk to the controlParts
-                    if(controlParts != null)
+                    if (controlParts != null)
                     {
-                        switch(chunkcopy.Type)
+                        switch (chunkcopy.Type)
                         {
                             case "CStorySceneInput":
-                            
+
                             case "CStorySceneScript":
                             case "CStorySceneFlowCondition":
 
@@ -253,7 +242,7 @@ namespace W3Edit.CR2W
 
         private void OnCopyStorySceneSection(CR2WChunk chunkcopy)
         {
-            var storysection = (CStorySceneSection)chunkcopy.data;
+            var storysection = (CStorySceneSection) chunkcopy.data;
 
             if (StorySceneRemoveAddFacts)
             {
@@ -265,25 +254,22 @@ namespace W3Edit.CR2W
                 removeUnnessaryTeleportation(storysection);
             }
 
-            if(StorySceneCopyDialogsets)
+            if (StorySceneCopyDialogsets)
             {
                 copyDialogset(storysection);
             }
 
-            if(StorySceneCopyCameras)
+            if (StorySceneCopyCameras)
             {
                 copyStorySceneCameras(storysection);
             }
-
-
         }
 
         private static void removeStorySceneAddFacts(CStorySceneSection storysection)
         {
-            var factevents = storysection.sceneEventElements.FindAll(delegate(CVariable sectionitem)
-            {
-                return sectionitem.Type == "CStorySceneAddFactEvent";
-            });
+            var factevents =
+                storysection.sceneEventElements.FindAll(
+                    delegate(CVariable sectionitem) { return sectionitem.Type == "CStorySceneAddFactEvent"; });
 
             foreach (var factevent in factevents)
             {
@@ -294,16 +280,16 @@ namespace W3Edit.CR2W
         private void copyStorySceneCameras(CStorySceneSection storysection)
         {
             var CStoryScene = DestinationFile.GetChunkByType("CStoryScene");
-            var cameraInstances = (CArray)CStoryScene.GetVariableByName("cameraDefinitions");
+            var cameraInstances = (CArray) CStoryScene.GetVariableByName("cameraDefinitions");
 
             var CStorySceneSource = SourceFile.GetChunkByType("CStoryScene");
-            var cameraInstancesSource = (CArray)CStorySceneSource.GetVariableByName("cameraDefinitions");
+            var cameraInstancesSource = (CArray) CStorySceneSource.GetVariableByName("cameraDefinitions");
 
             foreach (var e in storysection.sceneEventElements)
             {
                 if (e != null && e is CVector && e.Type == "CStorySceneEventCustomCameraInstance")
                 {
-                    var v = (CVector)e;
+                    var v = (CVector) e;
                     var n = v.GetVariableByName("customCameraName") as CName;
                     if (n != null)
                     {
@@ -320,10 +306,8 @@ namespace W3Edit.CR2W
                             }
                         }
                     }
-
                 }
             }
-           
         }
 
         private CVariable findCameraInstance(CArray cameraInstances, string findCameraName)
@@ -332,7 +316,7 @@ namespace W3Edit.CR2W
             {
                 if (c != null && c is CVector)
                 {
-                    var v = (CVector)c;
+                    var v = (CVector) c;
                     var cameraName = v.GetVariableByName("cameraName") as CName;
                     return (cameraName != null && cameraName.Value == findCameraName);
                 }
@@ -349,7 +333,7 @@ namespace W3Edit.CR2W
             {
                 if (c != null && c.data != null && c.data is CVector)
                 {
-                    var v = (CVector)c.data;
+                    var v = (CVector) c.data;
                     var name = v.GetVariableByName("name") as CName;
                     return (name != null && name.Value == dialogsetName);
                 }
@@ -364,7 +348,7 @@ namespace W3Edit.CR2W
         {
             // see if it has a change dialog set property
             var dlgset = storysection.GetVariableByName("dialogsetChangeTo") as CName;
-            if(dlgset != null) 
+            if (dlgset != null)
             {
                 // see if we already have a dialog set with this name
                 var destdlgset = findDialogset(DestinationFile, dlgset.Value);
@@ -375,13 +359,13 @@ namespace W3Edit.CR2W
                     if (srcdlgset != null)
                     {
                         var CStoryScene = DestinationFile.GetChunkByType("CStoryScene");
-                        var dialogsetInstances = (CArray)CStoryScene.GetVariableByName("dialogsetInstances");
+                        var dialogsetInstances = (CArray) CStoryScene.GetVariableByName("dialogsetInstances");
 
                         var copieddialogset = srcdlgset.Copy(this);
                         DestinationFile.CreatePtr(dialogsetInstances, copieddialogset);
-                        var placementTag = (CTagList)copieddialogset.GetVariableByName("placementTag");
+                        var placementTag = (CTagList) copieddialogset.GetVariableByName("placementTag");
                         placementTag.tags.Clear();
-                        placementTag.tags.Add((CName)DestinationFile.CreateVariable("CName").SetValue("PLAYER"));
+                        placementTag.tags.Add((CName) DestinationFile.CreateVariable("CName").SetValue("PLAYER"));
                     }
                 }
             }
@@ -389,17 +373,16 @@ namespace W3Edit.CR2W
 
         private static void removeUnnessaryTeleportation(CStorySceneSection storysection)
         {
-            
             var placement_x = 0.0f;
             var placement_y = 0.0f;
             var placement_z = 0.0f;
             storysection.sceneEventElements.ForEach(delegate(CVariable sectionvar)
             {
-                var sectionitem = ((CVector)sectionvar);
+                var sectionitem = ((CVector) sectionvar);
 
                 if (sectionitem.Type == "CStorySceneEventOverridePlacement")
                 {
-                    var placement = (CEngineTransform)sectionitem.variables.GetVariableByName("placement");
+                    var placement = (CEngineTransform) sectionitem.variables.GetVariableByName("placement");
 
                     if (placement_x == 0 || Math.Abs(placement.x.val) < Math.Abs(placement_x))
                         placement_x = placement.x.val;
@@ -413,11 +396,11 @@ namespace W3Edit.CR2W
             /// Remove Unnessasary teleportation
             storysection.sceneEventElements.ForEach(delegate(CVariable sectionvar)
             {
-                var sectionitem = ((CVector)sectionvar);
+                var sectionitem = ((CVector) sectionvar);
 
                 if (sectionitem.Type == "CStorySceneEventOverridePlacement")
                 {
-                    var placement = (CEngineTransform)sectionitem.variables.GetVariableByName("placement");
+                    var placement = (CEngineTransform) sectionitem.variables.GetVariableByName("placement");
                     if (placement != null)
                     {
                         placement.x.val -= placement_x;
@@ -427,39 +410,38 @@ namespace W3Edit.CR2W
                 }
                 else if (sectionitem.Type == "CStorySceneEventCustomCamera")
                 {
-                    var cameraDefinition = (CVector)sectionitem.variables.GetVariableByName("cameraDefinition");
-                    var cameraTransform = (CEngineTransform)cameraDefinition.GetVariableByName("cameraTransform");
+                    var cameraDefinition = (CVector) sectionitem.variables.GetVariableByName("cameraDefinition");
+                    var cameraTransform = (CEngineTransform) cameraDefinition.GetVariableByName("cameraTransform");
 
                     cameraTransform.x.val -= placement_x;
                     cameraTransform.y.val -= placement_y;
                     cameraTransform.z.val -= placement_z;
 
-                    var cameraTranslation = (CVector)sectionitem.variables.GetVariableByName("cameraTranslation");
+                    var cameraTranslation = (CVector) sectionitem.variables.GetVariableByName("cameraTranslation");
                     if (cameraTranslation != null)
                     {
-                        ((CFloat)cameraTranslation.GetVariableByName("X")).val -= placement_x;
-                        ((CFloat)cameraTranslation.GetVariableByName("Y")).val -= placement_y;
-                        ((CFloat)cameraTranslation.GetVariableByName("Z")).val -= placement_z;
+                        ((CFloat) cameraTranslation.GetVariableByName("X")).val -= placement_x;
+                        ((CFloat) cameraTranslation.GetVariableByName("Y")).val -= placement_y;
+                        ((CFloat) cameraTranslation.GetVariableByName("Z")).val -= placement_z;
                     }
                 }
                 else if (sectionitem.Type == "CStorySceneEventCameraLight")
                 {
-                    var lightMod1 = (CVector)sectionitem.variables.GetVariableByName("lightMod1");
+                    var lightMod1 = (CVector) sectionitem.variables.GetVariableByName("lightMod1");
                     if (lightMod1 != null)
                     {
-                        var lightOffset = (CVector)lightMod1.GetVariableByName("lightOffset");
+                        var lightOffset = (CVector) lightMod1.GetVariableByName("lightOffset");
 
                         if (lightOffset != null)
                         {
-                            ((CFloat)lightOffset.GetVariableByName("X")).val -= placement_x;
-                            ((CFloat)lightOffset.GetVariableByName("Y")).val -= placement_y;
-                            ((CFloat)lightOffset.GetVariableByName("Z")).val -= placement_z;
+                            ((CFloat) lightOffset.GetVariableByName("X")).val -= placement_x;
+                            ((CFloat) lightOffset.GetVariableByName("Y")).val -= placement_y;
+                            ((CFloat) lightOffset.GetVariableByName("Z")).val -= placement_z;
                         }
                     }
                 }
             });
             ///
         }
-
     }
 }

@@ -1,24 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace W3Edit.CR2W.Types
 {
     public class CString : CVariable
     {
-        public string val { get; set; }
-        public bool isUTF = false;
+        public bool isUTF;
 
         public CString(CR2WFile cr2w)
             : base(cr2w)
         {
-
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public string val { get; set; }
+
+        public override void Read(BinaryReader file, uint size)
         {
             var len = (int) file.ReadByte();
 
@@ -28,7 +25,7 @@ namespace W3Edit.CR2W.Types
                 if (len >= 64)
                 {
                     len = len - 64;
-                    len = (int)file.ReadByte() * 64 + len;
+                    len = file.ReadByte()*64 + len;
                 }
 
                 val = Encoding.Default.GetString(file.ReadBytes(len));
@@ -40,16 +37,16 @@ namespace W3Edit.CR2W.Types
                 if (len >= 64)
                 {
                     len = len - 64;
-                    len = (int)file.ReadByte() * 64 + len;
+                    len = file.ReadByte()*64 + len;
                 }
-                len = len * 2;
+                len = len*2;
                 val = Encoding.Unicode.GetString(file.ReadBytes(len));
             }
         }
 
         public bool RequiresUTF()
         {
-            foreach(var c in val)
+            foreach (var c in val)
             {
                 if (c > 255)
                     return true;
@@ -63,17 +60,17 @@ namespace W3Edit.CR2W.Types
 
             var len = val.Length;
 
-            var secondByte = (int)(val.Length / 64);
-            var firstByte = val.Length - (secondByte * 64);
+            var secondByte = val.Length/64;
+            var firstByte = val.Length - (secondByte*64);
             if (!isUTF)
                 firstByte += 128;
 
             if (secondByte > 0)
                 firstByte += 64;
 
-            file.Write((byte)firstByte);
+            file.Write((byte) firstByte);
             if (secondByte > 0)
-                file.Write((byte)secondByte);
+                file.Write((byte) secondByte);
 
             if (isUTF)
             {
@@ -91,7 +88,7 @@ namespace W3Edit.CR2W.Types
         {
             if (val is string)
             {
-                this.val = (string)val;
+                this.val = (string) val;
             }
             return this;
         }
@@ -103,15 +100,15 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CString)base.Copy(context);
+            var var = (CString) base.Copy(context);
             var.val = val;
             var.isUTF = isUTF;
             return var;
         }
 
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
-            var editor = new System.Windows.Forms.TextBox();
+            var editor = new TextBox();
             editor.DataBindings.Add("Text", this, "val");
             return editor;
         }

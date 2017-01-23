@@ -1,52 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
+using System.Windows.Forms;
 using W3Edit.CR2W.Editors;
 
 namespace W3Edit.CR2W.Types
 {
     public class CByteArray : CVariable, IByteSource
     {
-        private byte[] bytes;
-
-        public byte[] Bytes
-        {
-            get
-            {
-                return bytes;
-            }
-            set
-            {
-                bytes = value;
-            }
-        }
-
         public CByteArray(CR2WFile cr2w)
             : base(cr2w)
         {
-
         }
 
+        public byte[] Bytes { get; set; }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public override void Read(BinaryReader file, uint size)
         {
             var arraysize = file.ReadUInt32();
-            bytes = file.ReadBytes((int)arraysize);
+            Bytes = file.ReadBytes((int) arraysize);
         }
 
         public override void Write(BinaryWriter file)
         {
-            file.Write((UInt32)bytes.Length);
-            file.Write(bytes);
+            file.Write((uint) Bytes.Length);
+            file.Write(Bytes);
         }
 
         public override CVariable SetValue(object val)
         {
             if (val is byte[])
             {
-                bytes = (byte[])val;
+                Bytes = (byte[]) val;
             }
 
             return this;
@@ -59,15 +42,14 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CByteArray)base.Copy(context);
-            var newbytes = new byte[bytes.Length];
-            bytes.CopyTo(newbytes, 0);
-            var.bytes = newbytes;
+            var var = (CByteArray) base.Copy(context);
+            var newbytes = new byte[Bytes.Length];
+            Bytes.CopyTo(newbytes, 0);
+            var.Bytes = newbytes;
             return var;
         }
 
-
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
             var editor = new ByteArrayEditor();
             editor.Variable = this;
@@ -76,7 +58,7 @@ namespace W3Edit.CR2W.Types
 
         public override string ToString()
         {
-            return bytes.Length.ToString() + " bytes";
+            return Bytes.Length + " bytes";
         }
     }
 }

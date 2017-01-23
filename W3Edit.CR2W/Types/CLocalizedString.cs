@@ -1,17 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
+using System.Windows.Forms;
 
 namespace W3Edit.CR2W.Types
 {
     public class CLocalizedString : CVariable
     {
-        public UInt32 val { get; set; }
+        public CLocalizedString(CR2WFile cr2w)
+            : base(cr2w)
+        {
+            if (cr2w != null)
+            {
+                cr2w.LocalizedStrings.Add(this);
+            }
+        }
 
-        public String Text
+        public uint val { get; set; }
+
+        public string Text
         {
             get
             {
@@ -22,16 +27,7 @@ namespace W3Edit.CR2W.Types
             }
         }
 
-        public CLocalizedString(CR2WFile cr2w)
-            : base(cr2w)
-        {
-            if (cr2w != null)
-            {
-                cr2w.LocalizedStrings.Add(this);
-            }
-        }
-
-        public override void Read(BinaryReader file, UInt32 size)
+        public override void Read(BinaryReader file, uint size)
         {
             val = file.ReadUInt32();
         }
@@ -43,13 +39,13 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is UInt32)
+            if (val is uint)
             {
-                this.val = (UInt32)val;
+                this.val = (uint) val;
             }
             else if (val is int)
             {
-                this.val = (UInt32)(int)val;
+                this.val = (uint) (int) val;
             }
             return this;
         }
@@ -61,14 +57,14 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CLocalizedString)base.Copy(context);
+            var var = (CLocalizedString) base.Copy(context);
             var.val = val;
             return var;
         }
 
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
-            var editor = new System.Windows.Forms.TextBox();
+            var editor = new TextBox();
             editor.DataBindings.Add("Text", this, "val");
             return editor;
         }

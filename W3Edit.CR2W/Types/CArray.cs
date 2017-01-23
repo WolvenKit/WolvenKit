@@ -1,9 +1,10 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using W3Edit.CR2W.Editors;
 
 namespace W3Edit.CR2W.Types
@@ -11,9 +12,9 @@ namespace W3Edit.CR2W.Types
     public class CArray : CVariable, IEnumerable<CVariable>
     {
         public List<CVariable> array = new List<CVariable>();
-        public string type;
         public string elementtype;
         public bool fixedTypeArray;
+        public string type;
 
         public CArray(CR2WFile cr2w)
             : base(cr2w)
@@ -25,14 +26,15 @@ namespace W3Edit.CR2W.Types
         {
             this.type = type;
 
-            Regex reg = new Regex(@"(\d+),(\d+),(.+)");
-            Match match = reg.Match(type);
-            if(match.Success) {
-                this.elementtype = match.Groups[3].Value;
+            var reg = new Regex(@"(\d+),(\d+),(.+)");
+            var match = reg.Match(type);
+            if (match.Success)
+            {
+                elementtype = match.Groups[3].Value;
             }
 
             if (elementtype == "")
-                System.Diagnostics.Debugger.Break();
+                Debugger.Break();
         }
 
         public CArray(string type, string elementtype, bool fixedTypeArray, CR2WFile cr2w)
@@ -42,17 +44,27 @@ namespace W3Edit.CR2W.Types
             this.elementtype = elementtype;
             this.fixedTypeArray = fixedTypeArray;
             if (elementtype == "")
-                System.Diagnostics.Debugger.Break();
+                Debugger.Break();
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public virtual IEnumerator<CVariable> GetEnumerator()
+        {
+            return array.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public override void Read(BinaryReader file, uint size)
         {
             var count = file.ReadUInt32();
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 var var = CR2WTypeManager.Get().GetByName(elementtype, i.ToString(), cr2w, false);
-                if(var == null)
+                if (var == null)
                     var = new CVector(cr2w);
                 var.Read(file, 0);
 
@@ -62,8 +74,8 @@ namespace W3Edit.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            file.Write((UInt32)array.Count);
-            for (int i = 0; i < array.Count; i++)
+            file.Write((uint) array.Count);
+            for (var i = 0; i < array.Count; i++)
             {
                 array[i].Write(file);
             }
@@ -73,9 +85,9 @@ namespace W3Edit.CR2W.Types
         {
             array.Clear();
 
-            if(val is IEnumerable<CVariable>)
+            if (val is IEnumerable<CVariable>)
             {
-                var e = (IEnumerable<CVariable>)val;
+                var e = (IEnumerable<CVariable>) val;
                 foreach (var item in e)
                 {
                     AddVariable(item);
@@ -85,7 +97,6 @@ namespace W3Edit.CR2W.Types
             return this;
         }
 
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CArray(cr2w);
@@ -93,18 +104,18 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CArray)base.Copy(context);
+            var var = (CArray) base.Copy(context);
             var.type = type;
             var.elementtype = elementtype;
 
-            foreach(var item in array)
+            foreach (var item in array)
             {
-                 var.AddVariable(item.Copy(context));
+                var.AddVariable(item.Copy(context));
             }
             return var;
         }
 
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
             return null;
         }
@@ -118,7 +129,7 @@ namespace W3Edit.CR2W.Types
         {
             if (child is CVariable)
             {
-                var v = (CVariable)child;
+                var v = (CVariable) child;
                 return array.Contains(v);
             }
 
@@ -145,7 +156,7 @@ namespace W3Edit.CR2W.Types
         {
             if (child is CVariable)
             {
-                var v = (CVariable)child;
+                var v = (CVariable) child;
                 array.Remove(v);
                 v.ParentVariable = null;
 
@@ -154,22 +165,11 @@ namespace W3Edit.CR2W.Types
                     Type = "[" + array.Count + "]" + elementtype;
                 }
             }
-
         }
 
         public override string ToString()
         {
             return "";
-        }
-
-        public virtual IEnumerator<CVariable> GetEnumerator()
-        {
-            return array.GetEnumerator();
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }

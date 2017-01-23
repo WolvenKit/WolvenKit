@@ -1,39 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using W3Edit.CR2W.Editors;
 
 namespace W3Edit.CR2W.Types
 {
     public class CEngineQsTransform : CVariable
     {
-        public CFloat x, y, z;
+        public byte flags;
         public CFloat pitch, yaw, roll, w;
         public CFloat scale_x, scale_y, scale_z;
-        public byte flags;
-
         public string type;
+        public CFloat x, y, z;
 
         public CEngineQsTransform(CR2WFile cr2w)
             : base(cr2w)
         {
-            x = new CFloat(null) { Name = "x", Type = "Float" };
-            y = new CFloat(null) { Name = "y", Type = "Float" };
-            z = new CFloat(null) { Name = "z", Type = "Float" };
-            pitch = new CFloat(null) { Name = "rotation x", Type = "Float" };
-            yaw = new CFloat(null) { Name = "rotation y", Type = "Float" };
-            roll = new CFloat(null) { Name = "rotation z", Type = "Float" };
-            w = new CFloat(null) { Name = "rotation w", Type = "Float" };
-            scale_x = new CFloat(null) { Name = "scale x", Type = "Float" };
-            scale_y = new CFloat(null) { Name = "scale y", Type = "Float" };
-            scale_z = new CFloat(null) { Name = "scale z", Type = "Float" };
+            x = new CFloat(null) {Name = "x", Type = "Float"};
+            y = new CFloat(null) {Name = "y", Type = "Float"};
+            z = new CFloat(null) {Name = "z", Type = "Float"};
+            pitch = new CFloat(null) {Name = "rotation x", Type = "Float"};
+            yaw = new CFloat(null) {Name = "rotation y", Type = "Float"};
+            roll = new CFloat(null) {Name = "rotation z", Type = "Float"};
+            w = new CFloat(null) {Name = "rotation w", Type = "Float"};
+            scale_x = new CFloat(null) {Name = "scale x", Type = "Float"};
+            scale_y = new CFloat(null) {Name = "scale y", Type = "Float"};
+            scale_z = new CFloat(null) {Name = "scale z", Type = "Float"};
 
             w.val = 1;
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public override void Read(BinaryReader file, uint size)
         {
             flags = file.ReadByte();
 
@@ -109,7 +105,7 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CEngineQsTransform)base.Copy(context);
+            var var = (CEngineQsTransform) base.Copy(context);
             var.type = type;
             var.flags = flags;
             var.x.val = x.val;

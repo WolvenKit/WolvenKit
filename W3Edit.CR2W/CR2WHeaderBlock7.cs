@@ -1,26 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace W3Edit.CR2W
 {
     public class CR2WHeaderBlock7
     {
-        public UInt32 handle_name_count;
-        public UInt32 handle_name_offset;
-        public UInt32 unk3 { get; set; }
-        public UInt32 unk4 { get; set; }
-        public UInt32 offset;
-        public UInt32 size { get; set; }
-
-        public byte[] unknowndata;
-
+        public uint handle_name_count;
+        public uint handle_name_offset;
         public List<string> handles = new List<string>();
-
-        public string Handles { get { return string.Join(", ", handles);  } }
+        public uint offset;
+        public byte[] unknowndata;
 
         public CR2WHeaderBlock7()
         {
@@ -31,11 +20,19 @@ namespace W3Edit.CR2W
             Read(file);
         }
 
+        public uint unk3 { get; set; }
+        public uint unk4 { get; set; }
+        public uint size { get; set; }
 
-        public void ReadString(BinaryReader file, UInt32 string_buffer_start)
+        public string Handles
+        {
+            get { return string.Join(", ", handles); }
+        }
+
+        public void ReadString(BinaryReader file, uint string_buffer_start)
         {
             file.BaseStream.Seek(handle_name_offset + string_buffer_start, SeekOrigin.Begin);
-            for (int i = 0; i < handle_name_count; i++)
+            for (var i = 0; i < handle_name_count; i++)
             {
                 handles.Add(file.ReadCR2WString());
             }
@@ -44,17 +41,17 @@ namespace W3Edit.CR2W
         public void ReadData(BinaryReader file)
         {
             file.BaseStream.Seek(offset, SeekOrigin.Begin);
-            unknowndata = file.ReadBytes((int)size);
+            unknowndata = file.ReadBytes((int) size);
         }
 
         public void WriteData(BinaryWriter file)
         {
-            offset = (UInt32)file.BaseStream.Position;
+            offset = (uint) file.BaseStream.Position;
             if (unknowndata != null)
             {
                 file.Write(unknowndata);
             }
-            size = (UInt32)unknowndata.Length;
+            size = (uint) unknowndata.Length;
         }
 
         public void Read(BinaryReader file)

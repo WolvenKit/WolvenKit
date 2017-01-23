@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 using W3Edit.CR2W.Editors;
 
 namespace W3Edit.CR2W.Types
@@ -15,10 +13,9 @@ namespace W3Edit.CR2W.Types
         public CVector(CR2WFile cr2w)
             : base(cr2w)
         {
-
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public override void Read(BinaryReader file, uint size)
         {
             var zero = file.ReadByte();
 
@@ -33,12 +30,12 @@ namespace W3Edit.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            file.Write((byte)0);
-            for (int i = 0; i < variables.Count; i++)
+            file.Write((byte) 0);
+            for (var i = 0; i < variables.Count; i++)
             {
                 cr2w.WriteVariable(file, variables[i]);
             }
-            file.Write((UInt16)0);
+            file.Write((ushort) 0);
         }
 
         public override CVariable Create(CR2WFile cr2w)
@@ -48,7 +45,7 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var obj = (CVector)base.Copy(context);
+            var obj = (CVector) base.Copy(context);
             foreach (var item in variables)
             {
                 if (context.ShouldCopy(item))
@@ -59,7 +56,7 @@ namespace W3Edit.CR2W.Types
             return obj;
         }
 
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
             return null;
         }
@@ -73,7 +70,7 @@ namespace W3Edit.CR2W.Types
         {
             if (child is CVariable)
             {
-                var v = (CVariable)child;
+                var v = (CVariable) child;
                 return variables.Contains(v);
             }
 
@@ -95,7 +92,7 @@ namespace W3Edit.CR2W.Types
         {
             if (child is CVariable)
             {
-                var v = (CVariable)child;
+                var v = (CVariable) child;
                 variables.Remove(v);
                 v.ParentVariable = null;
             }

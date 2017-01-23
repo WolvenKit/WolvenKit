@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using W3Edit.CR2W.Editors;
 
@@ -10,41 +7,28 @@ namespace W3Edit.CR2W.Types
 {
     public class CBytes : CVariable, IByteSource
     {
-        private byte[] bytes;
-
-        public byte[] Bytes
-        {
-            get
-            {
-                return bytes;
-            }
-            set
-            {
-                bytes = value;
-            }
-        }
-
-        public CBytes(CR2WFile cr2w) 
+        public CBytes(CR2WFile cr2w)
             : base(cr2w)
         {
-
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public byte[] Bytes { get; set; }
+
+        public override void Read(BinaryReader file, uint size)
         {
-            bytes = file.ReadBytes((int)size);
+            Bytes = file.ReadBytes((int) size);
         }
 
         public override void Write(BinaryWriter file)
         {
-            file.Write(bytes);
+            file.Write(Bytes);
         }
 
         public override CVariable SetValue(object val)
         {
             if (val is byte[])
             {
-                bytes = (byte[])val;
+                Bytes = (byte[]) val;
             }
 
             return this;
@@ -57,25 +41,24 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CBytes)base.Copy(context);
-            var newbytes = new byte[bytes.Length];
-            bytes.CopyTo(newbytes, 0);
-            var.bytes = newbytes;
+            var var = (CBytes) base.Copy(context);
+            var newbytes = new byte[Bytes.Length];
+            Bytes.CopyTo(newbytes, 0);
+            var.Bytes = newbytes;
             return var;
         }
 
         public override string ToString()
         {
-            return bytes.Length + " bytes";
+            return Bytes.Length + " bytes";
         }
 
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
             var editor = new ByteArrayEditor();
             editor.Variable = this;
             return editor;
         }
-
 
         public override bool CanRemoveVariable(IEditableVariable child)
         {
@@ -95,10 +78,10 @@ namespace W3Edit.CR2W.Types
         {
             if (var is CBytes)
             {
-                var b = (CBytes)var;
+                var b = (CBytes) var;
 
-                bytes = new byte[b.bytes.Length];
-                Buffer.BlockCopy(b.bytes, 0, bytes, 0, b.bytes.Length);
+                Bytes = new byte[b.Bytes.Length];
+                Buffer.BlockCopy(b.Bytes, 0, Bytes, 0, b.Bytes.Length);
             }
         }
     }

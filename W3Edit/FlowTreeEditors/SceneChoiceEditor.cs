@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using W3Edit.CR2W.Types;
 using W3Edit.CR2W;
+using W3Edit.CR2W.Types;
 
 namespace W3Edit.FlowTreeEditors
 {
@@ -26,25 +20,24 @@ namespace W3Edit.FlowTreeEditors
             var choiceLinesObj = Chunk.GetVariableByName("choiceLines");
             if (choiceLinesObj != null && choiceLinesObj is CArray)
             {
-                var choiceLines = ((CArray)choiceLinesObj);
+                var choiceLines = ((CArray) choiceLinesObj);
                 foreach (var choice in choiceLines)
                 {
                     if (choice != null && choice is CPtr)
                     {
-                        var choicePtr = (CPtr)choice;
+                        var choicePtr = (CPtr) choice;
                         if (choicePtr.PtrTarget != null)
                         {
                             var nextLinkElementObj = choicePtr.PtrTarget.GetVariableByName("nextLinkElement");
-                            if(nextLinkElementObj != null && nextLinkElementObj is CPtr)
+                            if (nextLinkElementObj != null && nextLinkElementObj is CPtr)
                             {
-                                var nextLinkElement = (CPtr)nextLinkElementObj;
+                                var nextLinkElement = (CPtr) nextLinkElementObj;
                                 if (nextLinkElement.PtrTarget != null)
                                 {
                                     list.Add(nextLinkElement);
                                 }
                             }
                         }
-                        
                     }
                 }
             }
@@ -61,36 +54,33 @@ namespace W3Edit.FlowTreeEditors
             var sceneElementsObj = Chunk.GetVariableByName("choiceLines");
             if (sceneElementsObj != null && sceneElementsObj is CArray)
             {
-                var sceneElements = (CArray)sceneElementsObj;
+                var sceneElements = (CArray) sceneElementsObj;
                 foreach (var element in sceneElements)
                 {
                     if (element != null && element is CPtr)
                     {
-                        var ptr = (CPtr)element;
+                        var ptr = (CPtr) element;
                         switch (ptr.PtrTargetType)
                         {
                             case "CStorySceneChoiceLine":
                                 var choiceLine = ptr.PtrTarget.GetVariableByName("choiceLine");
 
-                                var label = new Label()
+                                var label = new Label
                                 {
                                     Width = Width,
                                     Height = 20,
                                     Location = new Point(0, y),
                                     AutoEllipsis = true,
                                     AutoSize = false,
-                                    Text = choiceLine != null ? choiceLine.ToString() : "missing choiceLine",
+                                    Text = choiceLine != null ? choiceLine.ToString() : "missing choiceLine"
                                 };
-                                label.Click += delegate(object sender, EventArgs e)
-                                {
-                                    FireSelectEvent(ptr.PtrTarget);
-                                };
+                                label.Click += delegate { FireSelectEvent(ptr.PtrTarget); };
                                 Controls.Add(label);
 
                                 y += label.Height;
                                 break;
 
-                            default: 
+                            default:
                                 break;
                         }
                     }
@@ -104,6 +94,5 @@ namespace W3Edit.FlowTreeEditors
         {
             return new Point(0, i*20 + 21 + 10);
         }
-
     }
 }

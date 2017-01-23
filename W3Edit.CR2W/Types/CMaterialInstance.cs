@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using W3Edit.CR2W.Editors;
 
 namespace W3Edit.CR2W.Types
@@ -15,15 +11,14 @@ namespace W3Edit.CR2W.Types
         public CMaterialInstance(CR2WFile cr2w) :
             base(cr2w)
         {
-
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public override void Read(BinaryReader file, uint size)
         {
             base.Read(file, size);
 
             var count = file.ReadInt32();
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 var elementsize = file.ReadUInt32();
                 var nameId = file.ReadUInt16();
@@ -47,23 +42,23 @@ namespace W3Edit.CR2W.Types
         {
             base.Write(file);
 
-            file.Write((UInt32)instanceParameters.Count);
+            file.Write((uint) instanceParameters.Count);
             foreach (var item in instanceParameters)
             {
                 var startpos = file.BaseStream.Position;
 
-                file.Write((UInt32)0);
+                file.Write((uint) 0);
                 file.Write(item.nameId);
                 file.Write(item.typeId);
 
                 item.Write(file);
 
                 var endpos = file.BaseStream.Position;
-                var newsize = (UInt32)(endpos - startpos);
+                var newsize = (uint) (endpos - startpos);
 
-                file.Seek((int)startpos, SeekOrigin.Begin);
+                file.Seek((int) startpos, SeekOrigin.Begin);
                 file.Write(newsize);
-                file.Seek((int)endpos, SeekOrigin.Begin);
+                file.Seek((int) endpos, SeekOrigin.Begin);
             }
         }
 
@@ -79,7 +74,7 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CMaterialInstance)base.Copy(context);
+            var var = (CMaterialInstance) base.Copy(context);
 
             foreach (var item in instanceParameters)
             {
@@ -92,7 +87,7 @@ namespace W3Edit.CR2W.Types
         public override List<IEditableVariable> GetEditableVariables()
         {
             var list = new List<IEditableVariable>(variables);
-            list.Add(new EditableList<CVariable>(instanceParameters, cr2w) { Name = "instanceParameters" });
+            list.Add(new EditableList<CVariable>(instanceParameters, cr2w) {Name = "instanceParameters"});
             return list;
         }
     }

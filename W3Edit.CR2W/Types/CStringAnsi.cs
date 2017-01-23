@@ -1,41 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace W3Edit.CR2W.Types
 {
     public class CStringAnsi : CVariable
     {
-        public string val { get; set; }
         public bool isUTF;
 
         public CStringAnsi(CR2WFile cr2w)
             : base(cr2w)
         {
-
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public string val { get; set; }
+
+        public override void Read(BinaryReader file, uint size)
         {
-            var len = (int)file.ReadByte();
+            var len = (int) file.ReadByte();
 
             if (len >= 128)
             {
                 len = len - 128;
                 isUTF = true;
-                len = len * 2;
+                len = len*2;
             }
 
             if (isUTF)
             {
-                val = Encoding.Unicode.GetString(file.ReadBytes(len));                
+                val = Encoding.Unicode.GetString(file.ReadBytes(len));
             }
             else
             {
-                val = Encoding.Default.GetString(file.ReadBytes(len)); 
+                val = Encoding.Default.GetString(file.ReadBytes(len));
             }
         }
 
@@ -60,7 +57,7 @@ namespace W3Edit.CR2W.Types
                 len = len + 128;
             }
 
-            file.Write((byte)len);
+            file.Write((byte) len);
 
             if (isUTF)
             {
@@ -76,7 +73,7 @@ namespace W3Edit.CR2W.Types
         {
             if (val is string)
             {
-                this.val = (string)val;
+                this.val = (string) val;
             }
             return this;
         }
@@ -88,16 +85,15 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CStringAnsi)base.Copy(context);
+            var var = (CStringAnsi) base.Copy(context);
             var.val = val;
             var.isUTF = isUTF;
             return var;
         }
 
-
-        public override System.Windows.Forms.Control GetEditor()
+        public override Control GetEditor()
         {
-            var editor = new System.Windows.Forms.TextBox();
+            var editor = new TextBox();
             editor.DataBindings.Add("Text", this, "val");
             return editor;
         }

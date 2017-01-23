@@ -1,26 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace W3Edit.Bundles
 {
     public class BundleManager
     {
-        public Dictionary<string, List<BundleItem>> Items { get; set; }
-        public Dictionary<string, Bundle> Bundles { get; set; }
-        public BundleTreeNode RootNode { get; set; }
-
         public BundleManager()
         {
             Items = new Dictionary<string, List<BundleItem>>();
             Bundles = new Dictionary<string, Bundle>();
         }
 
+        public Dictionary<string, List<BundleItem>> Items { get; set; }
+        public Dictionary<string, Bundle> Bundles { get; set; }
+        public BundleTreeNode RootNode { get; set; }
+
         /// <summary>
-        /// Load a single bundle
+        ///     Load a single bundle
         /// </summary>
         /// <param name="filename"></param>
         public void LoadBundle(string filename)
@@ -42,7 +39,7 @@ namespace W3Edit.Bundles
         }
 
         /// <summary>
-        /// Load every bundle it can find in ..\..\content and ..\..\DLC, also calls RebuildRootNode()
+        ///     Load every bundle it can find in ..\..\content and ..\..\DLC, also calls RebuildRootNode()
         /// </summary>
         /// <param name="exedir">Path to executable directory</param>
         public void LoadAll(string exedir)
@@ -87,7 +84,7 @@ namespace W3Edit.Bundles
         }
 
         /// <summary>
-        /// Rebuilds the bundle tree structure
+        ///     Rebuilds the bundle tree structure
         /// </summary>
         public void RebuildRootNode()
         {
@@ -98,11 +95,11 @@ namespace W3Edit.Bundles
                 var currentNode = RootNode;
                 var parts = item.Key.Split('\\');
 
-                for (int i = 0; i < parts.Length - 1; i++)
+                for (var i = 0; i < parts.Length - 1; i++)
                 {
                     if (!currentNode.Directories.ContainsKey(parts[i]))
                     {
-                        var newNode = new BundleTreeNode()
+                        var newNode = new BundleTreeNode
                         {
                             Parent = currentNode,
                             Name = parts[i]

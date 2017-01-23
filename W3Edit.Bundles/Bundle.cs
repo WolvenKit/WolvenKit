@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace W3Edit.Bundles
 {
     public class Bundle
     {
-        public string FileName { get; set; }
+        private static readonly byte[] IDString =
+        {
+            (byte) 'P', (byte) 'O', (byte) 'T', (byte) 'A', (byte) 'T',
+            (byte) 'O', (byte) '7', (byte) '0'
+        };
 
-        private static readonly byte[] IDString = new byte[] { (byte)'P', (byte)'O', (byte)'T', (byte)'A', (byte)'T', (byte)'O', (byte)'7', (byte)'0' };
         private uint bundlesize;
-        private uint unknown;
         private uint dataoffset;
-
-        public Dictionary<string, BundleItem> Items { get; set; }
+        private uint unknown;
 
         public Bundle(string filename)
         {
@@ -24,6 +23,9 @@ namespace W3Edit.Bundles
 
             ReadTOC();
         }
+
+        public string FileName { get; set; }
+        public Dictionary<string, BundleItem> Items { get; set; }
 
         private void ReadTOC()
         {
@@ -46,7 +48,7 @@ namespace W3Edit.Bundles
 
                 while (reader.BaseStream.Position < dataoffset + 0x20)
                 {
-                    var item = new BundleItem()
+                    var item = new BundleItem
                     {
                         Bundle = this
                     };
@@ -85,12 +87,11 @@ namespace W3Edit.Bundles
                     item.DateString = string.Format(" {0}/{1}/{2} {3}:{4}:{5}", d, m, y, h, n, s);
 
 
-
                     item.Unknown2 = reader.ReadBytes(16);
                     item.Unknown3 = reader.ReadUInt32();
                     item.Compression = reader.ReadUInt32();
 
-                    Items.Add(item.Name ,item);
+                    Items.Add(item.Name, item);
                 }
 
 

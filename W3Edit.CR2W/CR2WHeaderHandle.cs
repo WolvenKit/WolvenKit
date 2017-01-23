@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace W3Edit.CR2W
 {
     public class CR2WHeaderHandle
     {
-        public UInt32 offset;
-        public UInt16 filetype;
-        public UInt16 flags;
-
+        public ushort filetype;
+        public ushort flags;
+        public uint offset;
         public string str;
-
 
         public CR2WHeaderHandle()
         {

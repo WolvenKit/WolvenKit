@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using W3Edit.CR2W.Types;
 
 namespace W3Edit.CR2W
 {
     public interface IVariableEditor
     {
-        void CreateVariableEditor(Types.CVariable editvar, EVariableEditorAction action);
+        void CreateVariableEditor(CVariable editvar, EVariableEditorAction action);
     }
 
     public enum EVariableEditorAction

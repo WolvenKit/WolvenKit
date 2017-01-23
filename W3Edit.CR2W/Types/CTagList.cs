@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using W3Edit.CR2W.Editors;
 
 namespace W3Edit.CR2W.Types
@@ -16,12 +14,11 @@ namespace W3Edit.CR2W.Types
         {
         }
 
-        public override void Read(BinaryReader file, UInt32 size)
+        public override void Read(BinaryReader file, uint size)
         {
-            
             var count = file.ReadByte();
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 var var = new CName(cr2w);
                 var.Read(file, 0);
@@ -31,8 +28,8 @@ namespace W3Edit.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            file.Write((Byte)tags.Count);
-            for (int i = 0; i < tags.Count; i++)
+            file.Write((byte) tags.Count);
+            for (var i = 0; i < tags.Count; i++)
             {
                 tags[i].Write(file);
             }
@@ -50,11 +47,11 @@ namespace W3Edit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CTagList)base.Copy(context);
+            var var = (CTagList) base.Copy(context);
 
             foreach (var tag in tags)
             {
-                var.AddVariable((CName)tag.Copy(context));
+                var.AddVariable((CName) tag.Copy(context));
             }
             return var;
         }
@@ -66,9 +63,9 @@ namespace W3Edit.CR2W.Types
 
         public override void AddVariable(CVariable var)
         {
-            if(var is CName)
+            if (var is CName)
             {
-                var tag = (CName)var;
+                var tag = (CName) var;
                 tags.Add(tag);
                 tag.ParentVariable = this;
             }
@@ -81,9 +78,9 @@ namespace W3Edit.CR2W.Types
 
         public override bool CanRemoveVariable(IEditableVariable child)
         {
-            if(child is CName)
+            if (child is CName)
             {
-                var tag = (CName)child;
+                var tag = (CName) child;
                 return tags.Contains(tag);
             }
 
@@ -94,7 +91,7 @@ namespace W3Edit.CR2W.Types
         {
             if (child is CName)
             {
-                var tag = (CName)child;
+                var tag = (CName) child;
                 tags.Remove(tag);
                 tag.ParentVariable = null;
             }
@@ -103,7 +100,7 @@ namespace W3Edit.CR2W.Types
         public override string ToString()
         {
             var list = new List<string>();
-            foreach(var tag in tags)
+            foreach (var tag in tags)
             {
                 list.Add(tag.Value);
             }
