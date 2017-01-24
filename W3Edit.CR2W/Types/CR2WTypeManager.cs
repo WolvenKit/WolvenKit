@@ -352,9 +352,9 @@ namespace W3Edit.CR2W.Types
                 "CExtAnimOnSlopeEvent"
             };
 
-            for (var i = 0; i < vectors.Length; i++)
+            foreach (string t in vectors)
             {
-                Register(vectors[i], new CVector(null));
+                Register(t, new CVector(null));
             }
 
             var cnames = new[]
@@ -401,17 +401,11 @@ namespace W3Edit.CR2W.Types
             }
         }
 
-        public List<string> AvailableTypes
-        {
-            get { return types.Keys.ToList(); }
-        }
+        public List<string> AvailableTypes => types.Keys.ToList();
 
         public static CR2WTypeManager Get()
         {
-            if (instance == null)
-                instance = new CR2WTypeManager();
-
-            return instance;
+            return instance ?? (instance = new CR2WTypeManager());
         }
 
         public void Register(string name, CVariable var)

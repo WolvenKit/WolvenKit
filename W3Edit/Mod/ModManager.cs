@@ -7,12 +7,7 @@
 
         public static ModManager Get()
         {
-            if (instance == null)
-            {
-                instance = new ModManager();
-            }
-
-            return instance;
+            return instance ?? (instance = new ModManager());
         }
     }
 }
