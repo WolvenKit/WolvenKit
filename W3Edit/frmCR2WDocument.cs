@@ -28,9 +28,11 @@ namespace W3Edit
             {
             }
 
-            chunkList = new frmChunkList();
-            chunkList.File = File;
-            chunkList.DockAreas = DockAreas.Document;
+            chunkList = new frmChunkList
+            {
+                File = File,
+                DockAreas = DockAreas.Document
+            };
             chunkList.Show(dockPanel, DockState.Document);
             chunkList.OnSelectChunk += frmCR2WDocument_OnSelectChunk;
 

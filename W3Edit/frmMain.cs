@@ -234,7 +234,11 @@ namespace W3Edit
         {
             if (ActiveMod == null)
                 return;
-
+            if (Process.GetProcessesByName("Witcher3").Length != 0)
+            {
+                MessageBox.Show("Please close The Witcher 3 before tinkering with the files!","",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                return;
+            }
             var explorer = new frmBundleExplorer();
 
             explorer.OpenPath(browseToPath);
@@ -624,6 +628,11 @@ namespace W3Edit
         {
             if (ActiveMod == null)
                 return;
+            if (Process.GetProcessesByName("Witcher3").Length != 0)
+            {
+                MessageBox.Show("Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
 
             btPack.Enabled = false;
 
@@ -782,9 +791,18 @@ namespace W3Edit
 
         private void btRunGame_Click(object sender, EventArgs e)
         {
+            if (Process.GetProcessesByName("Witcher3").Length != 0)
+            {
+                if (MessageBox.Show(@"The Witcher 3 is already running would you like to close it and restart it with the proper arguments?","", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    var killer = Process.Start("taskkill", "/F /IM witcher3.exe");
+                    killer?.WaitForExit();
+                }
+                else
+                    return;
+            }
             ClearOutput();
             ShowOutput();
-
             executeGame();
         }
 
@@ -834,26 +852,7 @@ namespace W3Edit
                         Application.DoEvents();
                     }
                 }
-
                 fs.Close();
-            }
-        }
-
-        private async Task RedirectProcessOutput(Process process)
-        {
-            using (var reader = process.StandardOutput)
-            {
-                while (true)
-                {
-                    var result = await reader.ReadLineAsync();
-
-                    AddOutput(result + "\n");
-
-                    Application.DoEvents();
-
-                    if (reader.EndOfStream)
-                        break;
-                }
             }
         }
 
@@ -940,6 +939,11 @@ namespace W3Edit
         {
             using (var pw = new frmWCCPatch())
                 pw.ShowDialog();
+        }
+
+        private void outputToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowOutput();
         }
     }
 }

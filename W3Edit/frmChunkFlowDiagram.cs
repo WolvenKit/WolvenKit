@@ -43,6 +43,7 @@ namespace W3Edit
         private int maxdepth;
         private Point selectionEnd;
         private Point selectionStart;
+        public static int zoom = 100;
 
         public frmChunkFlowDiagram()
         {
@@ -226,6 +227,9 @@ namespace W3Edit
 
         private void frmChunkFlowView_Paint(object sender, PaintEventArgs e)
         {
+            float zoommultiplier = zoom/100;
+            label1.Location = new Point(0, 0);
+            zoomImput.Location = new Point(0 + label1.Width, 0);
             foreach (var c in ChunkEditors.Values)
             {
                 bool editorSelected = selectedEditors.Contains(c);
@@ -259,10 +263,10 @@ namespace W3Edit
                 if (editorSelected)
                 {
                     e.Graphics.DrawRectangle(selectionItemHighlight,
-                        c.Location.X - 1,
-                        c.Location.Y - 1,
-                        c.Width + 2,
-                        c.Height + 2);
+                        c.Location.X - 1 * zoommultiplier,
+                        c.Location.Y - 1 * zoommultiplier,
+                        c.Width + 2 * zoommultiplier,
+                        c.Height + 2 * zoommultiplier);
                 }
             }
 
@@ -447,6 +451,8 @@ namespace W3Edit
 
         private void frmChunkFlowDiagram_Load(object sender, EventArgs e)
         {
+            label1.Location = new Point(0, 0);
+            zoomImput.Location = new Point(0 + label1.Width, 0);
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
@@ -495,10 +501,22 @@ namespace W3Edit
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
         }
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void frmChunkFlowDiagram_Click(object sender, EventArgs e)
+        {
+            label1.Focus();
+        }
+
+        private void zoomImput_ValueChanged(object sender, EventArgs e)
+        {
+            zoom = (int)zoomImput.Value;
         }
     }
 }

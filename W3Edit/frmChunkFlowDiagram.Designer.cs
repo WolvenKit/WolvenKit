@@ -33,7 +33,10 @@
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyDisplayTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label1 = new System.Windows.Forms.Label();
+            this.zoomImput = new System.Windows.Forms.NumericUpDown();
             this.contextMenuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.zoomImput)).BeginInit();
             this.SuspendLayout();
             // 
             // contextMenuStrip1
@@ -68,14 +71,35 @@
             this.copyDisplayTextToolStripMenuItem.Text = "Copy Display Text";
             this.copyDisplayTextToolStripMenuItem.Click += new System.EventHandler(this.copyDisplayTextToolStripMenuItem_Click);
             // 
+            // label1
+            // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 14);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(48, 17);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Zoom:";
+            // 
+            // zoomImput
+            // 
+            this.zoomImput.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.zoomImput.Location = new System.Drawing.Point(71, 12);
+            this.zoomImput.Name = "zoomImput";
+            this.zoomImput.Size = new System.Drawing.Size(120, 23);
+            this.zoomImput.TabIndex = 3;
+            this.zoomImput.ValueChanged += new System.EventHandler(this.zoomImput_ValueChanged);
+            // 
             // frmChunkFlowDiagram
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(715, 446);
+            this.ClientSize = new System.Drawing.Size(795, 460);
             this.CloseButton = false;
             this.CloseButtonVisible = false;
             this.ContextMenuStrip = this.contextMenuStrip1;
+            this.Controls.Add(this.zoomImput);
+            this.Controls.Add(this.label1);
             this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.Document)));
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -84,13 +108,16 @@
             this.Text = "Flow Diagram";
             this.Load += new System.EventHandler(this.frmChunkFlowDiagram_Load);
             this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.frmChunkFlowDiagram_Scroll);
+            this.Click += new System.EventHandler(this.frmChunkFlowDiagram_Click);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.frmChunkFlowView_Paint);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmChunkFlowDiagram_KeyDown);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.frmChunkFlowDiagram_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.frmChunkFlowDiagram_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.frmChunkFlowDiagram_MouseUp);
             this.contextMenuStrip1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.zoomImput)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -100,5 +127,7 @@
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyDisplayTextToolStripMenuItem;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown zoomImput;
     }
 }
