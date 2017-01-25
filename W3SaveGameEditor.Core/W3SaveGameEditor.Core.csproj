@@ -1,18 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>7ec04b0e-7274-4a90-9412-2535adf12739</ProjectGuid>
+    <ProjectGuid>{9C026DA7-481D-43C6-8C18-635D69FDB423}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>W3SaveGameEditor.Core</RootNamespace>
-    <AssemblyName>W3SaveGameEditor.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <RootNamespace>W3SavegameEditor.Core</RootNamespace>
+    <AssemblyName>W3SavegameEditor.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -20,34 +21,133 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System"/>
-    
-    <Reference Include="System.Core"/>
-    <Reference Include="System.Xml.Linq"/>
-    <Reference Include="System.Data.DataSetExtensions"/>
-    
-    
-    <Reference Include="Microsoft.CSharp"/>
-    
-    <Reference Include="System.Data"/>
-    
-    <Reference Include="System.Net.Http"/>
-    
-    <Reference Include="System.Xml"/>
+    <Reference Include="LZ4PCL">
+      <HintPath>..\packages\LZ4PCL.1.0.0\lib\portable-net4+netcore45+wpa81+MonoAndroid1+MonoTouch1\LZ4PCL.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="ChunkedLz4\ChunkedLz4File.cs" />
+    <Compile Include="ChunkedLz4\ChunkedLz4FileHeader.cs" />
+    <Compile Include="ChunkedLz4\ChunkedLz4FileTable.cs" />
+    <Compile Include="ChunkedLz4\Lz4Chunk.cs" />
+    <Compile Include="Common\IReadSavegameProgress.cs" />
+    <Compile Include="Common\ReadSavegameProgress.cs" />
+    <Compile Include="Exceptions\ParseVariableException.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Savegame\Attributes\CArrayAttribute.cs" />
+    <Compile Include="Savegame\Attributes\CNameAttribute.cs" />
+    <Compile Include="Savegame\Attributes\CSerializableAttribute.cs" />
+    <Compile Include="Savegame\Attributes\EnumNameAttribute.cs" />
+    <Compile Include="Savegame\Values\AdditionalContent.cs" />
+    <Compile Include="Savegame\Values\EntityStateChangeRequests.cs" />
+    <Compile Include="Savegame\Values\Quests\ExternalDialog.cs" />
+    <Compile Include="Savegame\Values\Fact.cs" />
+    <Compile Include="Savegame\Values\FactEntry.cs" />
+    <Compile Include="Savegame\Values\Facts.cs" />
+    <Compile Include="Savegame\Values\Gwint\CollectionCard.cs" />
+    <Compile Include="Savegame\Values\Journal\CWitcherJournalManager.cs" />
+    <Compile Include="Savegame\Values\Gwint\GwintDeck.cs" />
+    <Compile Include="Savegame\Values\Gwint\GwintDeckCard.cs" />
+    <Compile Include="Savegame\Values\Gwint\GwintDecks.cs" />
+    <Compile Include="Savegame\Values\Gwint\GwintManager.cs" />
+    <Compile Include="Savegame\Values\CWitcherGameResource.cs" />
+    <Compile Include="Savegame\Values\Engine\EntityHandle.cs" />
+    <Compile Include="Savegame\Values\EnvManager.cs" />
+    <Compile Include="Savegame\Values\Engine\EulerAngles.cs" />
+    <Compile Include="Savegame\Values\GameProp.cs" />
+    <Compile Include="Savegame\Values\Engine\GameTime.cs" />
+    <Compile Include="Savegame\Values\Engine\Handle.cs" />
+    <Compile Include="Savegame\Values\IdTag.cs" />
+    <Compile Include="Savegame\Values\IdTagManager.cs" />
+    <Compile Include="Savegame\Values\Journal\JEntryAdvancedInfo.cs" />
+    <Compile Include="Savegame\Values\Journal\JEntryAdvancedInfoGuid.cs" />
+    <Compile Include="Savegame\Values\Journal\JHighlightedObjective.cs" />
+    <Compile Include="Savegame\Values\Journal\JHuntingClue.cs" />
+    <Compile Include="Savegame\Values\Journal\JHuntingClues.cs" />
+    <Compile Include="Savegame\Values\Journal\JMonsterKnown.cs" />
+    <Compile Include="Savegame\Values\Journal\JMonsterKnownGuid.cs" />
+    <Compile Include="Savegame\Values\Journal\JObjectiveCounter.cs" />
+    <Compile Include="Savegame\Values\Journal\JObjectiveCounters.cs" />
+    <Compile Include="Savegame\Values\Journal\JTrackedQuest.cs" />
+    <Compile Include="Savegame\Values\Quests\Quest.cs" />
+    <Compile Include="Savegame\Values\Quests\QuestBlock.cs" />
+    <Compile Include="Savegame\Values\Quests\QuestCondition.cs" />
+    <Compile Include="Savegame\Values\Quests\QuestConditions.cs" />
+    <Compile Include="Savegame\Values\Quests\QuestExternalScenePlayer.cs" />
+    <Compile Include="Savegame\Values\Quests\QuestExternalScenePlayers.cs" />
+    <Compile Include="Savegame\Values\Quests\QuestSystem.cs" />
+    <Compile Include="Savegame\Values\Quests\QuestThread.cs" />
+    <Compile Include="Savegame\Values\Quests\QuestThreadKeyValue.cs" />
+    <Compile Include="Savegame\Values\SavegameRoot.cs" />
+    <Compile Include="Savegame\Values\SaveInfo.cs" />
+    <Compile Include="Savegame\Values\SaveInfoItem.cs" />
+    <Compile Include="Savegame\Values\Gwint\CollectionSize.cs" />
+    <Compile Include="Savegame\Values\Gwint\SelectedDeckIndex.cs" />
+    <Compile Include="Savegame\Values\SGameplayFact.cs" />
+    <Compile Include="Savegame\Values\SGameplayFactRemoval.cs" />
+    <Compile Include="Savegame\Values\TagList.cs" />
+    <Compile Include="Savegame\Values\TimerManager.cs" />
+    <Compile Include="Savegame\Values\Universe.cs" />
+    <Compile Include="Savegame\Values\W3Enum.cs" />
+    <Compile Include="Savegame\Values\W3EnvironmentManager.cs" />
+    <Compile Include="Savegame\Values\WorldInfo.cs" />
+    <Compile Include="Savegame\Values\WorldState.cs" />
+    <Compile Include="Savegame\VariableParsers\AvalVariableParser.cs" />
+    <Compile Include="Savegame\VariableParsers\BlckVariableParser.cs" />
+    <Compile Include="Savegame\VariableParsers\PorpVariableParser.cs" />
+    <Compile Include="Savegame\VariableParsers\SxapVariableParser.cs" />
+    <Compile Include="Savegame\Variables\AvalVariable.cs" />
+    <Compile Include="Savegame\Variables\BlckVariable.cs" />
+    <Compile Include="Savegame\Variables\BsVariable.cs" />
+    <Compile Include="Savegame\Variables\ManuVariable.cs" />
+    <Compile Include="Savegame\Variables\OpVariable.cs" />
+    <Compile Include="Savegame\Variables\PorpVariable.cs" />
+    <Compile Include="Savegame\Variables\SsVariable.cs" />
+    <Compile Include="Savegame\Variables\SxapVariable.cs" />
+    <Compile Include="Savegame\Variables\TypedVariable.cs" />
+    <Compile Include="Savegame\Variables\VariableSet.cs" />
+    <Compile Include="Savegame\SavegameFile.cs" />
+    <Compile Include="Savegame\Variables\UnknownVariable.cs" />
+    <Compile Include="Savegame\Variables\Variable.cs" />
+    <Compile Include="Savegame\Variables\VariableValue.cs" />
+    <Compile Include="Savegame\Variables\VlVariable.cs" />
+    <Compile Include="Savegame\VariableTableEntry.cs" />
+    <Compile Include="Savegame\VariableParser.cs" />
+    <Compile Include="Savegame\VariableParsers\BsVariableParser.cs" />
+    <Compile Include="Savegame\VariableParsers\ManuVariableParser.cs" />
+    <Compile Include="Savegame\VariableParsers\OpVariableParser.cs" />
+    <Compile Include="Savegame\VariableParsers\SsVariableParser.cs" />
+    <Compile Include="Savegame\VariableParsers\VariableParserBase.cs" />
+    <Compile Include="Savegame\VariableParsers\VlVariableParser.cs" />
+    <Compile Include="Savegame\VariableTypeMap.cs" />
+    <Compile Include="Savegame\VariableValueParser.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -57,5 +157,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-
- </Project>
+</Project>
