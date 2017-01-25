@@ -86,8 +86,8 @@ namespace W3Edit
         {
             var set = v as VariableSet;
             var children = set == null
-                ? new List<VariableModel>()
-                : new List<VariableModel>(set.Variables.Select(ToVariableModel));
+                ? new System.Collections.ObjectModel.ObservableCollection<VariableModel>()
+                : new System.Collections.ObjectModel.ObservableCollection<VariableModel>(set.Variables.Select(ToVariableModel));
 
             var typed = v as TypedVariable;
             var type = typed == null
