@@ -75,6 +75,7 @@
             this.aboutRedkit2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.joinOurDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
+            this.wcclitePatcherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -298,6 +299,7 @@
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveExplorerToolStripMenuItem,
+            this.wcclitePatcherToolStripMenuItem,
             this.optionsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(56, 24);
@@ -307,7 +309,7 @@
             // 
             this.saveExplorerToolStripMenuItem.Image = global::W3Edit.Properties.Resources.properties_16xLG;
             this.saveExplorerToolStripMenuItem.Name = "saveExplorerToolStripMenuItem";
-            this.saveExplorerToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.saveExplorerToolStripMenuItem.Size = new System.Drawing.Size(190, 26);
             this.saveExplorerToolStripMenuItem.Text = "Save explorer";
             this.saveExplorerToolStripMenuItem.Click += new System.EventHandler(this.saveExplorerToolStripMenuItem_Click);
             // 
@@ -315,7 +317,7 @@
             // 
             this.optionsToolStripMenuItem.Image = global::W3Edit.Properties.Resources.gear_16xLG;
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(190, 26);
             this.optionsToolStripMenuItem.Text = "Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
@@ -416,6 +418,14 @@
             this.dockPanel.TabIndex = 9;
             this.dockPanel.ActiveDocumentChanged += new System.EventHandler(this.dockPanel_ActiveDocumentChanged);
             // 
+            // wcclitePatcherToolStripMenuItem
+            // 
+            this.wcclitePatcherToolStripMenuItem.Image = global::W3Edit.Properties.Resources.FileGroup_10135_16x;
+            this.wcclitePatcherToolStripMenuItem.Name = "wcclitePatcherToolStripMenuItem";
+            this.wcclitePatcherToolStripMenuItem.Size = new System.Drawing.Size(190, 26);
+            this.wcclitePatcherToolStripMenuItem.Text = "wcc_lite patcher";
+            this.wcclitePatcherToolStripMenuItem.Click += new System.EventHandler(this.wcclitePatcherToolStripMenuItem_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -477,5 +487,6 @@
         private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem wcclitePatcherToolStripMenuItem;
     }
 }

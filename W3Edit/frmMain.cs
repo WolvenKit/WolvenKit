@@ -934,5 +934,11 @@ namespace W3Edit
         {
             UpdateModFileList(true);
         }
+
+        private void wcclitePatcherToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var pw = new frmWCCPatch())
+                pw.ShowDialog();
+        }
     }
 }

@@ -146,6 +146,12 @@
     <Compile Include="frmSaveEditor.Designer.cs">
       <DependentUpon>frmSaveEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmWCCPatch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmWCCPatch.Designer.cs">
+      <DependentUpon>frmWCCPatch.cs</DependentUpon>
+    </Compile>
     <Compile Include="ImportExportUtility.cs" />
     <Compile Include="FlowTreeEditors\ChunkEditor.cs">
       <SubType>UserControl</SubType>
@@ -353,6 +359,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmSettings.resx">
       <DependentUpon>frmSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmWCCPatch.resx">
+      <DependentUpon>frmWCCPatch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
