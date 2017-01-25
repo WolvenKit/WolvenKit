@@ -423,9 +423,13 @@
       <Name>W3Edit.W3Strings</Name>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\Traderai\Desktop\W3SavegameEditor-master\W3SavegameEditor-master\W3SavegameEditor.Core\W3SavegameEditor.Core.csproj">
+    <ProjectReference Include="..\W3SavegameEditor.Core\W3SavegameEditor.Core.csproj">
       <Project>{9c026da7-481d-43c6-8c18-635d69fdb423}</Project>
       <Name>W3SavegameEditor.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\W3SavegameEditor\W3SavegameEditor.csproj">
+      <Project>{92054529-ea59-4cd9-9c24-019d8b5a0867}</Project>
+      <Name>W3SavegameEditor</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
