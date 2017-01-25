@@ -29,7 +29,6 @@ namespace W3Edit
         public Size MainSize { get; set; }
         public string InitialModDirectory { get; set; }
         public string InitialFileDirectory { get; set; }
-        public bool EnableFlowTreeEditor { get; set; }
         public Point MainLocation { get; set; }
         public FormWindowState MainState { get; set; }
         public string InitialExportDirectory { get; set; }
@@ -64,7 +63,6 @@ namespace W3Edit
             {
                 TextLanguage = "en",
                 VoiceLanguage = "en",
-                EnableFlowTreeEditor = true
             };
         }
     }

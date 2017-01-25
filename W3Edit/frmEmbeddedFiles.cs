@@ -23,15 +23,16 @@ namespace W3Edit
             set
             {
                 file = value;
-                updateList();
+                UpdateList();
             }
         }
 
         private void chunkListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
+            UpdateList();
         }
 
-        private void updateList()
+        private void UpdateList()
         {
             if (File == null)
                 return;

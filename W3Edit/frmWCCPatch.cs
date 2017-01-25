@@ -33,43 +33,45 @@ namespace W3Edit
 
         private void btnPatch_Click(object sender, EventArgs e)
         {
-            var savepath = "";
-            using (var sf = new SaveFileDialog())
+            var filepath = '"' + textBox1.Text + '"';
+            try
             {
-                if (sf.ShowDialog() == DialogResult.OK)
+                using (var wc = new WebClient())
                 {
-                    savepath = sf.FileName;
-                }
-                else
-                {
-                    return;
-                }
-            }
-                try
-                {
-                    using (var wc = new WebClient())
+                    wc.DownloadFile("http://skacik.pl/downloads/tw3/rdkt2/patch", "wccpatch");
+                    wc.DownloadFile("http://skacik.pl/downloads/tw3/rdkt2/xdelta3.exe", "patcher.exe");
+                    var proc = new ProcessStartInfo
                     {
-                        wc.DownloadFile("http://skacik.pl/downloads/tw3/rdkt2/patch", "wccpatch");
-                        wc.DownloadFile("http://skacik.pl/downloads/tw3/rdkt2/xdelta3.exe", "patcher.exe");
-                        var proc = new ProcessStartInfo
-                        {
-                            FileName = "patcher.exe",
-                            Arguments = "\"" + textBox1.Text + "\" \"" + "wccpatch" + "\" \"" + savepath + "\"",
-                            UseShellExecute = false,
-                            RedirectStandardOutput = true,
-                            WindowStyle = ProcessWindowStyle.Hidden,
-                            CreateNoWindow = true
-                        };
-                        Process.Start(proc);
-
+                        FileName = "patcher.exe",
+                        Arguments = $" -s {filepath} wccpatch wcc_patched.exe",
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        CreateNoWindow = true
+                    };
+                    var pc = new Process {StartInfo = proc};
+                    pc.Start();
+                    pc.WaitForExit(100000);
+                    File.Delete("wccpatch");
+                    File.Delete("patcher.exe");
+                    File.Delete(textBox1.Text);
+                    if (File.Exists("wcc_patched.exe"))
+                    {
+                        File.Move("wcc_patched.exe", textBox1.Text);
+                        MessageBox.Show("Patched!\n" + textBox1.Text, @"Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    MessageBox.Show("Patched!\n" + textBox1.Text, @"Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                catch (Exception)
-                {
+                    else
+                    {
+                        MessageBox.Show("Failed to patch!Please try reinstalling wcc_lite!","Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
 
-                    throw new Exception("Failed to patch! Please try reinstalling wcc_lite!");
                 }
+               
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to patch! Please try reinstalling wcc_lite!");
+            }
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

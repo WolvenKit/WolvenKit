@@ -53,7 +53,6 @@ namespace W3Edit
             selectionItemHighlight = new Pen(Color.Green, 2.0f);
             selectionItemHighlightBrush = new SolidBrush(Color.Green);
             selectedEditors = new HashSet<ChunkEditor>();
-
             connectionTargetColor = new Pen(Color.Red, 2.0f);
         }
 
@@ -88,7 +87,6 @@ namespace W3Edit
                     case "CStoryScene":
                         getStorySceneRootNodes(rootNodes);
                         break;
-
                     default:
                         break;
                 }
@@ -174,11 +172,8 @@ namespace W3Edit
         {
             if (selectedEditors.Contains(sender))
             {
-                foreach (var c in selectedEditors)
+                foreach (var c in selectedEditors.Where(c => c != sender))
                 {
-                    if (c == sender)
-                        continue;
-
                     c.Location = new Point(c.Location.X + e.Relative.X, c.Location.Y + e.Relative.Y);
                 }
             }
@@ -188,10 +183,7 @@ namespace W3Edit
 
         private void editor_OnSelectChunk(object sender, SelectChunkArgs e)
         {
-            if (OnSelectChunk != null)
-            {
-                OnSelectChunk(sender, e);
-            }
+            OnSelectChunk?.Invoke(sender, e);
         }
 
         private void getStorySceneRootNodes(List<CR2WChunk> rootNodes)
@@ -236,12 +228,7 @@ namespace W3Edit
         {
             foreach (var c in ChunkEditors.Values)
             {
-                var editorSelected = false;
-
-                if (selectedEditors.Contains(c))
-                {
-                    editorSelected = true;
-                }
+                bool editorSelected = selectedEditors.Contains(c);
 
                 var brush = editorSelected ? selectionItemHighlightBrush : Brushes.Black;
                 var pen = editorSelected ? selectionItemHighlight : Pens.Black;
@@ -323,13 +310,6 @@ namespace W3Edit
         {
             var yoffset = 0;
             var xoffset = Math.Max(Math.Min(Math.Abs(x1 - x2)/2, 200), 50);
-
-            //if (x2 < x1)
-            //{
-            //    yoffset = y1 > y2 ? -50 : 50;
-            //    xoffset = 100;
-            //}
-
             g.DrawBezier(c,
                 x1, y1,
                 x1 + xoffset, y1 + yoffset,
@@ -454,13 +434,9 @@ namespace W3Edit
 
             var rect = new Rectangle(x, y, w, h);
 
-            foreach (var c in ChunkEditors.Values)
+            foreach (var c in from c in ChunkEditors.Values let r = new Rectangle(c.Location, c.Size) where rect.IntersectsWith(r) select c)
             {
-                var r = new Rectangle(c.Location, c.Size);
-                if (rect.IntersectsWith(r))
-                {
-                    selectedEditors.Add(c);
-                }
+                selectedEditors.Add(c);
             }
         }
 

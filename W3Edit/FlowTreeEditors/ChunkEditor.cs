@@ -51,15 +51,12 @@ namespace W3Edit.FlowTreeEditors
         {
             if (mouseMoving)
             {
-                if (OnManualMove != null)
+                OnManualMove?.Invoke(this, new MoveEditorArgs
                 {
-                    OnManualMove(this, new MoveEditorArgs
-                    {
-                        Relative =
-                            new Point((Location.X - mouseStart.X + e.X) - Location.X,
-                                (Location.Y - mouseStart.Y + e.Y) - Location.Y)
-                    });
-                }
+                    Relative =
+                        new Point((Location.X - mouseStart.X + e.X) - Location.X,
+                            (Location.Y - mouseStart.Y + e.Y) - Location.Y)
+                });
                 Location = new Point(Location.X - mouseStart.X + e.X, Location.Y - mouseStart.Y + e.Y);
             }
         }
@@ -87,10 +84,7 @@ namespace W3Edit.FlowTreeEditors
 
         public void FireSelectEvent(CR2WChunk c)
         {
-            if (OnSelectChunk != null)
-            {
-                OnSelectChunk(this, new SelectChunkArgs {Chunk = c});
-            }
+            OnSelectChunk?.Invoke(this, new SelectChunkArgs {Chunk = c});
         }
 
         public virtual Point GetConnectionLocation(int i)

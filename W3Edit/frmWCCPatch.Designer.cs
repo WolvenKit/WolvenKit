@@ -66,7 +66,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(29, 199);
+            this.label1.Location = new System.Drawing.Point(57, 199);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(514, 17);
             this.label1.TabIndex = 3;
@@ -109,6 +109,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmWCCPatch";
+            this.ShowIcon = false;
             this.Text = "wcc_lite patcher";
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -34,19 +34,20 @@ namespace W3Edit
             chunkList.Show(dockPanel, DockState.Document);
             chunkList.OnSelectChunk += frmCR2WDocument_OnSelectChunk;
 
-            if (MainController.Get().Configuration.EnableFlowTreeEditor)
+            flowDiagram = new frmChunkFlowDiagram
             {
-                flowDiagram = new frmChunkFlowDiagram();
-                flowDiagram.File = File;
-                flowDiagram.DockAreas = DockAreas.Document;
-                flowDiagram.Show(dockPanel, DockState.Document);
-                flowDiagram.OnSelectChunk += frmCR2WDocument_OnSelectChunk;
-            }
+                File = File,
+                DockAreas = DockAreas.Document
+            };
+            flowDiagram.Show(dockPanel, DockState.Document);
+            flowDiagram.OnSelectChunk += frmCR2WDocument_OnSelectChunk;
 
-            embeddedFiles = new frmEmbeddedFiles();
-            embeddedFiles.File = file;
-            embeddedFiles.DockAreas = DockAreas.Document;
-            embeddedFiles.Hide();
+            embeddedFiles = new frmEmbeddedFiles
+            {
+                File = file,
+                DockAreas = DockAreas.Document
+            };
+            embeddedFiles.Show(dockPanel,DockState.Document);
 
             propertyWindow = new frmChunkProperties();
             propertyWindow.Show(dockPanel, DockState.DockBottom);

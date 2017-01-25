@@ -24,10 +24,7 @@ namespace W3Edit.CR2W
         public uint unk4 { get; set; }
         public uint size { get; set; }
 
-        public string Handles
-        {
-            get { return string.Join(", ", handles); }
-        }
+        public string Handles => string.Join(", ", handles);
 
         public void ReadString(BinaryReader file, uint string_buffer_start)
         {

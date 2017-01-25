@@ -192,6 +192,7 @@ namespace W3Edit
             return doc;
         }
 
+
         private void frmMain_MdiChildActivate(object sender, EventArgs e)
         {
             if (sender is frmCR2WDocument)

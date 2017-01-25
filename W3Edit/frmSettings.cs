@@ -15,8 +15,6 @@ namespace W3Edit
             txTextLanguage.Text = config.TextLanguage;
             txVoiceLanguage.Text = config.VoiceLanguage;
             txWCC_Lite.Text = config.WccLite;
-
-            cbFlowDiagram.Checked = config.EnableFlowTreeEditor;
         }
 
         private void btnBrowseExe_Click(object sender, EventArgs e)
@@ -53,7 +51,6 @@ namespace W3Edit
             config.WccLite = txWCC_Lite.Text;
             config.TextLanguage = txTextLanguage.Text;
             config.VoiceLanguage = txVoiceLanguage.Text;
-            config.EnableFlowTreeEditor = cbFlowDiagram.Checked;
             MainController.Get().ReloadStringManager();
 
             config.Save();
@@ -71,10 +68,6 @@ namespace W3Edit
             {
                 txWCC_Lite.Text = dlg.FileName;
             }
-        }
-
-        private void cbFlowDiagram_CheckedChanged(object sender, EventArgs e)
-        {
         }
     }
 }

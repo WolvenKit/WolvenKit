@@ -134,12 +134,6 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="CopyController.cs" />
     <Compile Include="FileSavedEventArgs.cs" />
-    <Compile Include="frmQuestDesign.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmQuestDesign.Designer.cs">
-      <DependentUpon>frmQuestDesign.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmSaveEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -347,9 +341,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmOutput.resx">
       <DependentUpon>frmOutput.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmQuestDesign.resx">
-      <DependentUpon>frmQuestDesign.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmRenameDialog.resx">
       <DependentUpon>frmRenameDialog.cs</DependentUpon>
