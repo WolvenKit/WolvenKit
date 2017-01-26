@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("Redkit 2")]
-[assembly: AssemblyDescription(@"Redkit 2
+[assembly: AssemblyTitle("Wolven kit")]
+[assembly: AssemblyDescription(@"Wolven kit
 By: Sarcen&Traderain
 Awesome people:
 - CAPA
@@ -16,8 +16,8 @@ Awesome people:
 - Skacik
 - The Witcher 3 modding discord (https://discord.gg/qBNgDEX)")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("CDReject")]
-[assembly: AssemblyProduct("Redkit 2")]
+[assembly: AssemblyCompany("Community")]
+[assembly: AssemblyProduct("Wolven kit")]
 [assembly: AssemblyCopyright("Copyright © 2015-2017")]
 [assembly: AssemblyTrademark("GPL-3.0")]
 [assembly: AssemblyCulture("")]
@@ -26,7 +26,7 @@ Awesome people:
 // to COM components.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
 
-[assembly: ComVisible(false)]
+[assembly: ComVisible(true)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 

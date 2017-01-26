@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using W3Edit.Mod;
 using WeifenLuo.WinFormsUI.Docking;
@@ -102,16 +105,16 @@ namespace W3Edit
 
         private void removeFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (modFileList.SelectedNode != null && RequestFileDelete != null)
+            if (modFileList.SelectedNode != null)
             {
-                RequestFileDelete(this, new RequestFileArgs {File = modFileList.SelectedNode.FullPath});
+                RequestFileDelete?.Invoke(this, new RequestFileArgs {File = modFileList.SelectedNode.FullPath});
             }
         }
 
         private void addFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             RequestFileAdd(this,
-                new RequestFileArgs {File = modFileList.SelectedNode == null ? "" : modFileList.SelectedNode.FullPath});
+                new RequestFileArgs {File = modFileList.SelectedNode?.FullPath ?? ""});
         }
 
         private void modFileList_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -125,9 +128,52 @@ namespace W3Edit
 
         private void renameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (modFileList.SelectedNode != null && RequestFileRename != null)
+            if (modFileList.SelectedNode != null)
             {
-                RequestFileRename(this, new RequestFileArgs {File = modFileList.SelectedNode.FullPath});
+                RequestFileRename?.Invoke(this, new RequestFileArgs {File = modFileList.SelectedNode.FullPath});
+            }
+        }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                Clipboard.SetText(ModManager.Get().ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath);
+            }
+        }
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(File.Exists(Clipboard.GetText()))
+                SafeCopy(Clipboard.GetText(),Clipboard.GetText());
+        }
+
+        private void contextMenu_Opened(object sender, EventArgs e)
+        {
+            pasteToolStripMenuItem.Enabled = File.Exists(Clipboard.GetText());
+            UpdateModFileList(true);
+        }
+
+        public static IEnumerable<string> FallbackPaths(string path)
+        {
+            yield return path;
+
+            var dir = Path.GetDirectoryName(path);
+            var file = Path.GetFileNameWithoutExtension(path);
+            var ext = Path.GetExtension(path);
+
+            yield return Path.Combine(dir, file + " - Copy" + ext);
+            for (var i = 2; ; i++)
+            {
+                yield return Path.Combine(dir, file + " - Copy " + i + ext);
+            }
+        }
+        public static void SafeCopy(string src, string dest)
+        {
+            foreach (var path in FallbackPaths(dest).Where(path => !File.Exists(path)))
+            {
+                File.Copy(src, path);
+                break;
             }
         }
     }

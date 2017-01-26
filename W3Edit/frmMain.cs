@@ -18,7 +18,7 @@ namespace W3Edit
 {
     public partial class frmMain : Form
     {
-        private readonly string BaseTitle = "Redkit 2";
+        private readonly string BaseTitle = "Wolven kit";
         private frmCR2WDocument _activedocument;
         public List<frmCR2WDocument> OpenDocuments = new List<frmCR2WDocument>();
 
