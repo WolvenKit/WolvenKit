@@ -1,4 +1,4 @@
-# Redkit 2
+# Wolven kit
 By: Sarcen&Traderain
 
 Awesome people:
