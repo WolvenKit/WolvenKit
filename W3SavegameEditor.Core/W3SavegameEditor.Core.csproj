@@ -39,7 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LZ4PCL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>F:\Githubrepos\Redkit2\packages\LZ4PCL.1.0.0\lib\portable-net4+netcore45+wpa81+MonoAndroid1+MonoTouch1\LZ4PCL.dll</HintPath>
+      <HintPath>..\packages\LZ4PCL.1.0.0\lib\portable-net4+netcore45+wpa81+MonoAndroid1+MonoTouch1\LZ4PCL.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
