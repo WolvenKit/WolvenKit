@@ -8,4 +8,4 @@ Awesome people:
 - erx
 - Skacik
 - George Tziotis
-- The Witcher 3 modding discord (https://discord.gg/qBNgDEX)
+- The modding discord (https://discord.gg/qBNgDEX)
