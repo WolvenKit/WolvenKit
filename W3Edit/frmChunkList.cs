@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using W3Edit.CR2W;
 using WeifenLuo.WinFormsUI.Docking;
@@ -73,8 +74,7 @@ namespace W3Edit
             if (listView.SelectedObjects.Count == 0)
                 return;
 
-            if (
-                MessageBox.Show(
+            if (MessageBox.Show(
                     "Are you sure you want to delete the selected chunk(s)? \n\n NOTE: Any pointers or handles to these chunks will NOT be deleted.",
                     "Confirmation", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
@@ -92,9 +92,7 @@ namespace W3Edit
         private void copyChunkToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Clipboard.Clear();
-            var chunks = new List<CR2WChunk>();
-            foreach (CR2WChunk item in listView.SelectedObjects)
-                chunks.Add(item);
+            var chunks = listView.SelectedObjects.Cast<CR2WChunk>().ToList();
             CopyController.ChunkList = chunks;
             pasteChunkToolStripMenuItem.Enabled = true;
         }
@@ -108,17 +106,15 @@ namespace W3Edit
                 {
                     try
                     {
-                        var pastedchunk = File.CreateChunk(chunk.Type, chunk.data, chunk.Parent);
+                        var pastedchunk = File.CreateChunk(chunk.Type);
+                        pastedchunk.data = chunk.data;
+
                         listView.AddObject(pastedchunk);
-                        if (OnSelectChunk != null && chunk != null)
-                        {
-                            OnSelectChunk(this, new SelectChunkArgs {Chunk = chunk});
-                        }
-                        listView.RefreshObject(pastedchunk);
+                        OnSelectChunk?.Invoke(this, new SelectChunkArgs {Chunk = chunk});
                     }
                     catch (InvalidChunkTypeException ex)
                     {
-                        MessageBox.Show(ex.Message, "Error adding chunk.");
+                        MessageBox.Show(ex.Message, @"Error adding chunk.");
                     }
                 }
             }

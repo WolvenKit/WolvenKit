@@ -9,8 +9,8 @@ namespace W3Edit
     public partial class frmCR2WDocument : DockContent
     {
         private readonly frmChunkList chunkList;
-        private readonly frmEmbeddedFiles embeddedFiles;
-        private readonly frmChunkFlowDiagram flowDiagram;
+        public frmEmbeddedFiles embeddedFiles;
+        public frmChunkFlowDiagram flowDiagram;
         private CR2WFile file;
         private frmChunkProperties propertyWindow;
 
@@ -41,7 +41,6 @@ namespace W3Edit
                 File = File,
                 DockAreas = DockAreas.Document
             };
-            flowDiagram.Show(dockPanel, DockState.Document);
             flowDiagram.OnSelectChunk += frmCR2WDocument_OnSelectChunk;
 
             embeddedFiles = new frmEmbeddedFiles
@@ -49,8 +48,6 @@ namespace W3Edit
                 File = file,
                 DockAreas = DockAreas.Document
             };
-            embeddedFiles.Show(dockPanel,DockState.Document);
-
             propertyWindow = new frmChunkProperties();
             propertyWindow.Show(dockPanel, DockState.DockBottom);
 

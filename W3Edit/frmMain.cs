@@ -945,5 +945,11 @@ namespace W3Edit
         {
             ShowOutput();
         }
+
+        private void tutorialsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var tf = new frmTutorials();
+                tf.Show(this);
+        }
     }
 }

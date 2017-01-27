@@ -33,7 +33,7 @@
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyDisplayTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label1 = new System.Windows.Forms.Label();
+            this.ZoomLabel = new System.Windows.Forms.Label();
             this.zoomImput = new System.Windows.Forms.NumericUpDown();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.zoomImput)).BeginInit();
@@ -71,23 +71,31 @@
             this.copyDisplayTextToolStripMenuItem.Text = "Copy Display Text";
             this.copyDisplayTextToolStripMenuItem.Click += new System.EventHandler(this.copyDisplayTextToolStripMenuItem_Click);
             // 
-            // label1
+            // ZoomLabel
             // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 14);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(48, 17);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Zoom:";
+            this.ZoomLabel.AutoSize = true;
+            this.ZoomLabel.Location = new System.Drawing.Point(7, 14);
+            this.ZoomLabel.Name = "ZoomLabel";
+            this.ZoomLabel.Size = new System.Drawing.Size(48, 17);
+            this.ZoomLabel.TabIndex = 2;
+            this.ZoomLabel.Text = "Zoom:";
             // 
             // zoomImput
             // 
-            this.zoomImput.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.zoomImput.Location = new System.Drawing.Point(71, 12);
+            this.zoomImput.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
             this.zoomImput.Name = "zoomImput";
             this.zoomImput.Size = new System.Drawing.Size(120, 23);
             this.zoomImput.TabIndex = 3;
+            this.zoomImput.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
             this.zoomImput.ValueChanged += new System.EventHandler(this.zoomImput_ValueChanged);
             // 
             // frmChunkFlowDiagram
@@ -99,7 +107,7 @@
             this.CloseButtonVisible = false;
             this.ContextMenuStrip = this.contextMenuStrip1;
             this.Controls.Add(this.zoomImput);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.ZoomLabel);
             this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.Document)));
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -127,7 +135,7 @@
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyDisplayTextToolStripMenuItem;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label ZoomLabel;
         private System.Windows.Forms.NumericUpDown zoomImput;
     }
 }

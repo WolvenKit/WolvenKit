@@ -12,7 +12,6 @@ namespace W3Edit
         public void AddText(string text)
         {
             txOutput.AppendText(text);
-            //txOutput.Select(txOutput.TextLength, 0);
             txOutput.ScrollToCaret();
         }
 

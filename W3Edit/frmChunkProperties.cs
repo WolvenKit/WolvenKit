@@ -344,12 +344,12 @@ namespace W3Edit
         private void copyTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var node = (VariableListNode) treeView.SelectedObject;
-            if (node == null || node.Parent == null || !node.Parent.Variable.CanRemoveVariable(node.Variable))
+            if (node?.Parent == null || !node.Parent.Variable.CanRemoveVariable(node.Variable))
             {
                 return;
             }
-
-            Clipboard.SetText(node.Value);
+            if(node.Value != null)
+                Clipboard.SetText(node.Value);
         }
 
         internal class VariableListNode

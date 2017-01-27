@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Microsoft.Win32.SafeHandles;
 using W3Edit.CR2W;
 using W3Edit.CR2W.Types;
 using W3Edit.FlowTreeEditors;
@@ -43,7 +44,8 @@ namespace W3Edit
         private int maxdepth;
         private Point selectionEnd;
         private Point selectionStart;
-        public static int zoom = 100;
+        public static float zoom = 100;
+        public static bool zoomchanged = false;
 
         public frmChunkFlowDiagram()
         {
@@ -70,7 +72,7 @@ namespace W3Edit
         public Dictionary<CR2WChunk, ChunkEditor> ChunkEditors { get; set; }
         public event EventHandler<SelectChunkArgs> OnSelectChunk;
 
-        private void createChunkEditors()
+        public void createChunkEditors()
         {
             if (File == null)
                 return;
@@ -193,17 +195,7 @@ namespace W3Edit
             if (controlPartsObj != null && controlPartsObj is CArray)
             {
                 var controlParts = (CArray) controlPartsObj;
-                foreach (var partObj in controlParts)
-                {
-                    if (partObj is CPtr)
-                    {
-                        var part = (CPtr) partObj;
-                        if (part != null && part.PtrTargetType == "CStorySceneInput")
-                        {
-                            rootNodes.Add(part.PtrTarget);
-                        }
-                    }
-                }
+                rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null && part.PtrTargetType == "CStorySceneInput" select part.PtrTarget);
             }
         }
 
@@ -227,9 +219,6 @@ namespace W3Edit
 
         private void frmChunkFlowView_Paint(object sender, PaintEventArgs e)
         {
-            float zoommultiplier = zoom/100;
-            label1.Location = new Point(0, 0);
-            zoomImput.Location = new Point(0 + label1.Width, 0);
             foreach (var c in ChunkEditors.Values)
             {
                 bool editorSelected = selectedEditors.Contains(c);
@@ -263,10 +252,10 @@ namespace W3Edit
                 if (editorSelected)
                 {
                     e.Graphics.DrawRectangle(selectionItemHighlight,
-                        c.Location.X - 1 * zoommultiplier,
-                        c.Location.Y - 1 * zoommultiplier,
-                        c.Width + 2 * zoommultiplier,
-                        c.Height + 2 * zoommultiplier);
+                        c.Location.X - 1,
+                        c.Location.Y - 1,
+                        c.Width + 2,
+                        c.Height + 2);
                 }
             }
 
@@ -310,7 +299,7 @@ namespace W3Edit
             }
         }
 
-        private void DrawConnectionBezier(Graphics g, Pen c, int x1, int y1, int x2, int y2)
+        private static void DrawConnectionBezier(Graphics g, Pen c, int x1, int y1, int x2, int y2)
         {
             var yoffset = 0;
             var xoffset = Math.Max(Math.Min(Math.Abs(x1 - x2)/2, 200), 50);
@@ -327,7 +316,7 @@ namespace W3Edit
         }
 
         private void frmChunkFlowDiagram_KeyDown(object sender, KeyEventArgs e)
-        {
+        {          
         }
 
         private void frmChunkFlowDiagram_MouseDown(object sender, MouseEventArgs e)
@@ -451,8 +440,6 @@ namespace W3Edit
 
         private void frmChunkFlowDiagram_Load(object sender, EventArgs e)
         {
-            label1.Location = new Point(0, 0);
-            zoomImput.Location = new Point(0 + label1.Width, 0);
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
@@ -511,12 +498,12 @@ namespace W3Edit
 
         private void frmChunkFlowDiagram_Click(object sender, EventArgs e)
         {
-            label1.Focus();
+            ZoomLabel.Focus();
         }
 
         private void zoomImput_ValueChanged(object sender, EventArgs e)
         {
-            zoom = (int)zoomImput.Value;
+            zoom = (float)(zoomImput.Value/100);
         }
     }
 }
