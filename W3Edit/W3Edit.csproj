@@ -142,6 +142,12 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="CopyController.cs" />
     <Compile Include="FileSavedEventArgs.cs" />
+    <Compile Include="frmRender.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRender.Designer.cs">
+      <DependentUpon>frmRender.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmSaveEditor.cs">
       <SubType>Form</SubType>
     </Compile>
