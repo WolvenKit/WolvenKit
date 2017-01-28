@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace W3Edit
 {
@@ -68,6 +71,52 @@ namespace W3Edit
             {
                 txWCC_Lite.Text = dlg.FileName;
             }
+        }
+
+        private void locateButton_Click(object sender, EventArgs e)
+        {
+            var locations = GetInstallLocations();
+            if (File.Exists(locations.Item1))
+            {
+                txExecutablePath.Text = locations.Item1;
+            }
+            if (File.Exists(locations.Item2))
+            {
+                txWCC_Lite.Text = locations.Item2;
+            }
+        }
+
+        public static Tuple<string,string> GetInstallLocations()
+        {
+            var witcherexe = "";
+            var wcc_liteexe = "";
+            try
+            {
+                List<KeyValuePair<string, string>> InstalledPrograms = new List<KeyValuePair<string, string>>();
+                foreach (var item in Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall").GetSubKeyNames())
+                {
+                    var programName = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\" + item).GetValue("DisplayName");
+                    var InstallLocation = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\" + item).GetValue("InstallLocation");
+                    if (programName != null && InstallLocation != null)
+                    {
+                        InstalledPrograms.Add(new KeyValuePair<string, string>(programName.ToString(), InstallLocation.ToString()));
+
+                        if (programName.ToString().StartsWith("Witcher 3 Mod Tools"))
+                        {
+                            wcc_liteexe = Directory.GetFiles(InstallLocation.ToString(), "wcc_lite.exe", SearchOption.AllDirectories).First();
+                        }
+                        if (string.Equals(programName, "The Witcher 3 - Wild Hunt"))
+                        {
+                            witcherexe = Directory.GetFiles(InstallLocation.ToString(), "witcher3.exe", SearchOption.AllDirectories).First();
+                        }
+                    }
+                }
+                return new Tuple<string,string>(witcherexe,wcc_liteexe);
+            }
+            catch (Exception)
+            {
+                return new Tuple<string,string>("","");
+            }           
         }
     }
 }

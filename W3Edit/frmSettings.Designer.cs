@@ -34,42 +34,40 @@
             this.btnBrowseExe = new System.Windows.Forms.Button();
             this.btSave = new System.Windows.Forms.Button();
             this.lblLanguage = new System.Windows.Forms.Label();
-            this.txTextLanguage = new System.Windows.Forms.TextBox();
             this.lblVoiceLanguage = new System.Windows.Forms.Label();
-            this.txVoiceLanguage = new System.Windows.Forms.TextBox();
             this.btBrowseWCC_Lite = new System.Windows.Forms.Button();
             this.lblWCC_Lite = new System.Windows.Forms.Label();
             this.txWCC_Lite = new System.Windows.Forms.TextBox();
             this.btCancel = new System.Windows.Forms.Button();
+            this.locateButton = new System.Windows.Forms.Button();
+            this.txTextLanguage = new System.Windows.Forms.TextBox();
+            this.txVoiceLanguage = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // txExecutablePath
             // 
             this.txExecutablePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txExecutablePath.Location = new System.Drawing.Point(17, 34);
-            this.txExecutablePath.Margin = new System.Windows.Forms.Padding(4);
+            this.txExecutablePath.Location = new System.Drawing.Point(13, 28);
             this.txExecutablePath.Name = "txExecutablePath";
-            this.txExecutablePath.Size = new System.Drawing.Size(652, 22);
+            this.txExecutablePath.Size = new System.Drawing.Size(490, 20);
             this.txExecutablePath.TabIndex = 0;
             // 
             // lblExecutable
             // 
             this.lblExecutable.AutoSize = true;
-            this.lblExecutable.Location = new System.Drawing.Point(17, 11);
-            this.lblExecutable.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblExecutable.Location = new System.Drawing.Point(13, 9);
             this.lblExecutable.Name = "lblExecutable";
-            this.lblExecutable.Size = new System.Drawing.Size(176, 17);
+            this.lblExecutable.Size = new System.Drawing.Size(135, 13);
             this.lblExecutable.TabIndex = 1;
             this.lblExecutable.Text = "Witcher 3 executable path:";
             // 
             // btnBrowseExe
             // 
             this.btnBrowseExe.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBrowseExe.Location = new System.Drawing.Point(679, 32);
-            this.btnBrowseExe.Margin = new System.Windows.Forms.Padding(4);
+            this.btnBrowseExe.Location = new System.Drawing.Point(509, 26);
             this.btnBrowseExe.Name = "btnBrowseExe";
-            this.btnBrowseExe.Size = new System.Drawing.Size(100, 28);
+            this.btnBrowseExe.Size = new System.Drawing.Size(75, 23);
             this.btnBrowseExe.TabIndex = 2;
             this.btnBrowseExe.Text = "Browse...";
             this.btnBrowseExe.UseVisualStyleBackColor = true;
@@ -79,10 +77,9 @@
             // 
             this.btSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btSave.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSave.Location = new System.Drawing.Point(677, 214);
-            this.btSave.Margin = new System.Windows.Forms.Padding(4);
+            this.btSave.Location = new System.Drawing.Point(508, 174);
             this.btSave.Name = "btSave";
-            this.btSave.Size = new System.Drawing.Size(100, 28);
+            this.btSave.Size = new System.Drawing.Size(75, 23);
             this.btSave.TabIndex = 3;
             this.btSave.Text = "Save";
             this.btSave.UseVisualStyleBackColor = true;
@@ -91,46 +88,27 @@
             // lblLanguage
             // 
             this.lblLanguage.AutoSize = true;
-            this.lblLanguage.Location = new System.Drawing.Point(16, 114);
-            this.lblLanguage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblLanguage.Location = new System.Drawing.Point(12, 98);
             this.lblLanguage.Name = "lblLanguage";
-            this.lblLanguage.Size = new System.Drawing.Size(164, 17);
+            this.lblLanguage.Size = new System.Drawing.Size(124, 13);
             this.lblLanguage.TabIndex = 5;
             this.lblLanguage.Text = "Text Language (e.g. EN)";
-            // 
-            // txTextLanguage
-            // 
-            this.txTextLanguage.Location = new System.Drawing.Point(16, 138);
-            this.txTextLanguage.Margin = new System.Windows.Forms.Padding(4);
-            this.txTextLanguage.Name = "txTextLanguage";
-            this.txTextLanguage.Size = new System.Drawing.Size(179, 22);
-            this.txTextLanguage.TabIndex = 4;
             // 
             // lblVoiceLanguage
             // 
             this.lblVoiceLanguage.AutoSize = true;
-            this.lblVoiceLanguage.Location = new System.Drawing.Point(204, 114);
-            this.lblVoiceLanguage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblVoiceLanguage.Location = new System.Drawing.Point(153, 98);
             this.lblVoiceLanguage.Name = "lblVoiceLanguage";
-            this.lblVoiceLanguage.Size = new System.Drawing.Size(185, 17);
+            this.lblVoiceLanguage.Size = new System.Drawing.Size(140, 13);
             this.lblVoiceLanguage.TabIndex = 7;
             this.lblVoiceLanguage.Text = "Speech Language (e.g. EN)";
-            // 
-            // txVoiceLanguage
-            // 
-            this.txVoiceLanguage.Location = new System.Drawing.Point(204, 138);
-            this.txVoiceLanguage.Margin = new System.Windows.Forms.Padding(4);
-            this.txVoiceLanguage.Name = "txVoiceLanguage";
-            this.txVoiceLanguage.Size = new System.Drawing.Size(179, 22);
-            this.txVoiceLanguage.TabIndex = 6;
             // 
             // btBrowseWCC_Lite
             // 
             this.btBrowseWCC_Lite.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btBrowseWCC_Lite.Location = new System.Drawing.Point(677, 82);
-            this.btBrowseWCC_Lite.Margin = new System.Windows.Forms.Padding(4);
+            this.btBrowseWCC_Lite.Location = new System.Drawing.Point(508, 72);
             this.btBrowseWCC_Lite.Name = "btBrowseWCC_Lite";
-            this.btBrowseWCC_Lite.Size = new System.Drawing.Size(100, 28);
+            this.btBrowseWCC_Lite.Size = new System.Drawing.Size(75, 23);
             this.btBrowseWCC_Lite.TabIndex = 10;
             this.btBrowseWCC_Lite.Text = "Browse...";
             this.btBrowseWCC_Lite.UseVisualStyleBackColor = true;
@@ -139,10 +117,9 @@
             // lblWCC_Lite
             // 
             this.lblWCC_Lite.AutoSize = true;
-            this.lblWCC_Lite.Location = new System.Drawing.Point(16, 63);
-            this.lblWCC_Lite.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblWCC_Lite.Location = new System.Drawing.Point(12, 56);
             this.lblWCC_Lite.Name = "lblWCC_Lite";
-            this.lblWCC_Lite.Size = new System.Drawing.Size(133, 17);
+            this.lblWCC_Lite.Size = new System.Drawing.Size(103, 13);
             this.lblWCC_Lite.TabIndex = 9;
             this.lblWCC_Lite.Text = "WCC_Lite.exe Path:";
             // 
@@ -150,31 +127,54 @@
             // 
             this.txWCC_Lite.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txWCC_Lite.Location = new System.Drawing.Point(16, 82);
-            this.txWCC_Lite.Margin = new System.Windows.Forms.Padding(4);
+            this.txWCC_Lite.Location = new System.Drawing.Point(12, 72);
             this.txWCC_Lite.Name = "txWCC_Lite";
-            this.txWCC_Lite.Size = new System.Drawing.Size(652, 22);
+            this.txWCC_Lite.Size = new System.Drawing.Size(490, 20);
             this.txWCC_Lite.TabIndex = 8;
             // 
             // btCancel
             // 
             this.btCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btCancel.Location = new System.Drawing.Point(16, 212);
-            this.btCancel.Margin = new System.Windows.Forms.Padding(4);
+            this.btCancel.Location = new System.Drawing.Point(427, 174);
             this.btCancel.Name = "btCancel";
-            this.btCancel.Size = new System.Drawing.Size(100, 28);
+            this.btCancel.Size = new System.Drawing.Size(75, 23);
             this.btCancel.TabIndex = 11;
             this.btCancel.Text = "Cancel";
             this.btCancel.UseVisualStyleBackColor = true;
             // 
+            // locateButton
+            // 
+            this.locateButton.Location = new System.Drawing.Point(13, 158);
+            this.locateButton.Name = "locateButton";
+            this.locateButton.Size = new System.Drawing.Size(112, 39);
+            this.locateButton.TabIndex = 12;
+            this.locateButton.Text = "Try locating the Game and wcc_lite";
+            this.locateButton.UseVisualStyleBackColor = true;
+            this.locateButton.Click += new System.EventHandler(this.locateButton_Click);
+            // 
+            // txTextLanguage
+            // 
+            this.txTextLanguage.Location = new System.Drawing.Point(12, 117);
+            this.txTextLanguage.Name = "txTextLanguage";
+            this.txTextLanguage.Size = new System.Drawing.Size(135, 20);
+            this.txTextLanguage.TabIndex = 4;
+            // 
+            // txVoiceLanguage
+            // 
+            this.txVoiceLanguage.Location = new System.Drawing.Point(153, 117);
+            this.txVoiceLanguage.Name = "txVoiceLanguage";
+            this.txVoiceLanguage.Size = new System.Drawing.Size(135, 20);
+            this.txVoiceLanguage.TabIndex = 6;
+            // 
             // frmSettings
             // 
             this.AcceptButton = this.btSave;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
-            this.ClientSize = new System.Drawing.Size(795, 255);
+            this.ClientSize = new System.Drawing.Size(596, 207);
+            this.Controls.Add(this.locateButton);
             this.Controls.Add(this.btCancel);
             this.Controls.Add(this.btBrowseWCC_Lite);
             this.Controls.Add(this.lblWCC_Lite);
@@ -188,7 +188,6 @@
             this.Controls.Add(this.lblExecutable);
             this.Controls.Add(this.txExecutablePath);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "frmSettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";
@@ -204,12 +203,13 @@
         private System.Windows.Forms.Button btnBrowseExe;
         private System.Windows.Forms.Button btSave;
         private System.Windows.Forms.Label lblLanguage;
-        private System.Windows.Forms.TextBox txTextLanguage;
         private System.Windows.Forms.Label lblVoiceLanguage;
-        private System.Windows.Forms.TextBox txVoiceLanguage;
         private System.Windows.Forms.Button btBrowseWCC_Lite;
         private System.Windows.Forms.Label lblWCC_Lite;
         private System.Windows.Forms.TextBox txWCC_Lite;
         private System.Windows.Forms.Button btCancel;
+        private System.Windows.Forms.Button locateButton;
+        private System.Windows.Forms.TextBox txTextLanguage;
+        private System.Windows.Forms.TextBox txVoiceLanguage;
     }
 }
