@@ -454,6 +454,11 @@ namespace W3Edit
                 case ".subs":
                     PolymorphExecute(fullpath, ".txt");
                     break;
+                case ".usm":
+                    MessageBox.Show(@"These are the movie files of The Witcher 3.
+You need a Video demultiplexer to convert these files to usable ones.
+I recommend: https://sourceforge.net/projects/vgmtoolbox/","Info",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                    break;
                 default:
                     LoadDocument(fullpath);
                     break;
