@@ -151,7 +151,6 @@ namespace W3Edit
         private void contextMenu_Opened(object sender, EventArgs e)
         {
             pasteToolStripMenuItem.Enabled = File.Exists(Clipboard.GetText());
-            UpdateModFileList(true);
         }
 
         public static IEnumerable<string> FallbackPaths(string path)
