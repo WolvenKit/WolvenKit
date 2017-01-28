@@ -178,8 +178,7 @@ namespace W3Edit
         private void pasteVariable()
         {
             var node = (VariableListNode) treeView.SelectedObject;
-            if (CopyController.VariableTargets == null || node == null || node.Variable == null ||
-                !node.Variable.CanAddVariable(null))
+            if (CopyController.VariableTargets == null || node?.Variable == null || !node.Variable.CanAddVariable(null))
             {
                 return;
             }
@@ -207,7 +206,7 @@ namespace W3Edit
         private void addVariableToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var node = (VariableListNode) treeView.SelectedObject;
-            if (node == null || node.Variable == null || !node.Variable.CanAddVariable(null))
+            if (node?.Variable == null || !node.Variable.CanAddVariable(null))
             {
                 return;
             }

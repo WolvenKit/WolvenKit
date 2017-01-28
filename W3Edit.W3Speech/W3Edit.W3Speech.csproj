@@ -42,6 +42,12 @@
     <Compile Include="W3SpeechFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\W3Edit.W3Strings\W3Edit.W3Strings.csproj">
+      <Project>{32d40d10-d6c3-48f0-aeb6-0f41c7e75cfd}</Project>
+      <Name>W3Edit.W3Strings</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

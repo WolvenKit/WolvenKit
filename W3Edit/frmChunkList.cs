@@ -74,9 +74,7 @@ namespace W3Edit
             if (listView.SelectedObjects.Count == 0)
                 return;
 
-            if (MessageBox.Show(
-                    "Are you sure you want to delete the selected chunk(s)? \n\n NOTE: Any pointers or handles to these chunks will NOT be deleted.",
-                    "Confirmation", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (MessageBox.Show("Are you sure you want to delete the selected chunk(s)? \n\n NOTE: Any pointers or handles to these chunks will NOT be deleted.","Confirmation", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 var selected = listView.SelectedObjects;
                 foreach (var obj in selected)
@@ -106,11 +104,12 @@ namespace W3Edit
                 {
                     try
                     {
-                        var pastedchunk = File.CreateChunk(chunk.Type);
+                        var pastedchunk = File.CreateChunk(chunk.Type,chunk.Parent);
                         pastedchunk.data = chunk.data;
-
+                        
                         listView.AddObject(pastedchunk);
-                        OnSelectChunk?.Invoke(this, new SelectChunkArgs {Chunk = chunk});
+
+                        OnSelectChunk?.Invoke(this, new SelectChunkArgs { Chunk = pastedchunk });
                     }
                     catch (InvalidChunkTypeException ex)
                     {
