@@ -36,10 +36,7 @@ namespace W3Edit
         public BundleTreeNode ActiveNode { get; set; }
         public BundleTreeNode RootNode { get; set; }
 
-        public ListView.ListViewItemCollection SelectedPaths
-        {
-            get { return pathlistview.Items; }
-        }
+        public ListView.ListViewItemCollection SelectedPaths => pathlistview.Items;
 
         private void frmBundleExplorer_Load(object sender, EventArgs e)
         {
@@ -385,6 +382,37 @@ namespace W3Edit
             public bool IsDirectory { get; set; }
             public BundleTreeNode Node { get; set; }
             public string FullPath { get; set; }
+        }
+
+        private void btOpen_Click(object sender, EventArgs e)
+        {
+            if (pathlistview.Items.Count < 1)
+            {
+                if (fileListView.SelectedItems.Count > 0)
+                {
+                    foreach (BundleListItem item in fileListView.SelectedItems)
+                    {
+                        if (!item.IsDirectory)
+                        {
+                            var cont = false;
+                            foreach (ListViewItem i in pathlistview.Items)
+                            {
+                                if (i.Text == item.FullPath)
+                                    cont = true;
+                            }
+                            if (!cont)
+                            {
+                                var tempnode = new ListViewItem();
+                                tempnode.ImageKey = "genericFile";
+                                tempnode.ToolTipText = item.FullPath;
+                                tempnode.Text = item.FullPath;
+                                pathlistview.Items.Add(tempnode);
+                            }
+                        }
+                    }
+                }
+            }
+            this.DialogResult = DialogResult.OK;
         }
     }
 }

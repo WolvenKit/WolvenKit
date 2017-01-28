@@ -64,7 +64,6 @@
             // 
             this.btOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btOpen.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btOpen.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btOpen.Location = new System.Drawing.Point(12, 452);
             this.btOpen.Name = "btOpen";
             this.btOpen.Size = new System.Drawing.Size(145, 23);
@@ -72,6 +71,7 @@
             this.btOpen.TabStop = false;
             this.btOpen.Text = "Add marked files to mod";
             this.btOpen.UseVisualStyleBackColor = true;
+            this.btOpen.Click += new System.EventHandler(this.btOpen_Click);
             // 
             // fileListView
             // 
