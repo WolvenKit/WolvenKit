@@ -42,12 +42,13 @@ namespace W3Edit
                 DockAreas = DockAreas.Document
             };
             flowDiagram.OnSelectChunk += frmCR2WDocument_OnSelectChunk;
-
+            flowDiagram.Show(dockPanel,DockState.Document);
             embeddedFiles = new frmEmbeddedFiles
             {
                 File = file,
                 DockAreas = DockAreas.Document
             };
+            embeddedFiles.Show(dockPanel,DockState.Document);
             propertyWindow = new frmChunkProperties();
             propertyWindow.Show(dockPanel, DockState.DockBottom);
 
