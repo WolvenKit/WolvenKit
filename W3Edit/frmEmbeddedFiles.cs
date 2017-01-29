@@ -13,8 +13,8 @@ namespace W3Edit
         public frmEmbeddedFiles()
         {
             InitializeComponent();
-
             listView.ItemSelectionChanged += chunkListView_ItemSelectionChanged;
+            UpdateList();
         }
 
         public CR2WFile File

@@ -414,5 +414,44 @@ namespace W3Edit
             }
             this.DialogResult = DialogResult.OK;
         }
+
+        private void copyPathToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (fileListView.SelectedItems.Count > 0)
+            {
+                var item = ((BundleListItem) fileListView.SelectedItems[0]);
+                if (item?.IsDirectory == false)
+                {
+                    Clipboard.SetText(item.FullPath);
+                }
+            }
+        }
+
+        private void markToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (fileListView.SelectedItems.Count > 0)
+            {
+                foreach (BundleListItem item in fileListView.SelectedItems)
+                {
+                    if (!item.IsDirectory)
+                    {
+                        var cont = false;
+                        foreach (ListViewItem i in pathlistview.Items)
+                        {
+                            if (i.Text == item.FullPath)
+                                cont = true;
+                        }
+                        if (!cont)
+                        {
+                            var tempnode = new ListViewItem();
+                            tempnode.ImageKey = "genericFile";
+                            tempnode.ToolTipText = item.FullPath;
+                            tempnode.Text = item.FullPath;
+                            pathlistview.Items.Add(tempnode);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
