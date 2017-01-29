@@ -52,13 +52,6 @@ namespace W3Edit.Render
             RenderControl_ContextDestroying_ES(sender, e);
         }
 
-        private void Form_Resize(object sender, System.EventArgs e)
-        {
-            Size formSize = this.Size;
-            formSize.Height -= 120;
-            this.glControl1.Size = formSize;
-        }
-
         #region Common Data
 
         private static float _Angle;
