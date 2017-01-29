@@ -107,6 +107,10 @@
       <HintPath>..\packages\OpenGL.Net.0.3.2\lib\net35\OpenGL.Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="OpenGL.Net.WinForms, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenGL.Net.WinForms.0.3.2\lib\net35\OpenGL.Net.WinForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
