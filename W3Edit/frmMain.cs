@@ -112,8 +112,7 @@ namespace W3Edit
             return null;
         }
 
-        public frmCR2WDocument LoadDocument(string filename, MemoryStream memoryStream = null,
-            bool suppressErrors = false)
+        public frmCR2WDocument LoadDocument(string filename, MemoryStream memoryStream = null, bool suppressErrors = false)
         {
             if (memoryStream == null && !File.Exists(filename))
                 return null;
@@ -156,7 +155,30 @@ namespace W3Edit
                 doc.Dispose();
                 return null;
             }
-
+            switch (Path.GetExtension(filename))
+            {
+                case ".w2scene":
+                {
+                    doc.flowDiagram = new frmChunkFlowDiagram
+                    {
+                        File = doc.File,
+                        DockAreas = DockAreas.Document
+                    };
+                    doc.flowDiagram.OnSelectChunk += doc.frmCR2WDocument_OnSelectChunk;
+                    doc.flowDiagram.Show(doc.FormPanel, DockState.Document);
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+            doc.embeddedFiles = new frmEmbeddedFiles
+            {
+                File = doc.File,
+                DockAreas = DockAreas.Document
+            };
+            doc.embeddedFiles.Show(doc.FormPanel, DockState.Document);
             doc.Activated += doc_Activated;
             doc.Show(dockPanel, DockState.Document);
             doc.FormClosed += doc_FormClosed;
@@ -178,8 +200,7 @@ namespace W3Edit
 
             var hasUnknownBytes = false;
 
-            foreach (
-                var t in doc.File.chunks.Where(t => t.unknownBytes?.Bytes != null && t.unknownBytes.Bytes.Length > 0))
+            foreach (var t in doc.File.chunks.Where(t => t.unknownBytes?.Bytes != null && t.unknownBytes.Bytes.Length > 0))
             {
                 output.Append(t.Name + " contains " + t.unknownBytes.Bytes.Length + " unknown bytes. \n");
                 hasUnknownBytes = true;
@@ -429,6 +450,7 @@ namespace W3Edit
                 }
                 catch (Exception)
                 {
+                    AddOutput("Failed to delete " + fullpath + "!");
                 }
             }
 
@@ -457,7 +479,7 @@ namespace W3Edit
                 case ".usm":
                     MessageBox.Show(@"These are the movie files of The Witcher 3.
 You need a Video demultiplexer to convert these files to usable ones.
-I recommend: https://sourceforge.net/projects/vgmtoolbox/","Info",MessageBoxButtons.OK,MessageBoxIcon.Information);
+I recommend: https://sourceforge.net/projects/vgmtoolbox/",@"Info",MessageBoxButtons.OK,MessageBoxIcon.Information);
                     break;
                 default:
                     LoadDocument(fullpath);
