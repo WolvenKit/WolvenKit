@@ -940,7 +940,14 @@ I recommend: https://sourceforge.net/projects/vgmtoolbox/",@"Info",MessageBoxBut
 
         private void addFileToolStripMenuItem_Click_2(object sender, EventArgs e)
         {
-            MessageBox.Show(@"Not implemented yet!"); //TODO: Add this
+            var dlg = new OpenFileDialog();
+            dlg.Title = "Open CR2W File";
+            dlg.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                MainController.Get().Configuration.InitialFileDirectory = Path.GetDirectoryName(dlg.FileName);
+                LoadDocument(dlg.FileName);
+            }
         }
 
         private void saveExplorerToolStripMenuItem_Click(object sender, EventArgs e)
