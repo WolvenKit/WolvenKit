@@ -253,10 +253,9 @@ namespace W3Edit
 
         private void addModFile(bool loadmods,string browseToPath = "")
         {
-            BundleManager manager = null;
             if (ActiveMod == null)
                 return;
-            if (!Directory.Exists(Path.Combine(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath), @"..\..\Mods\")))
+            if (loadmods && !Directory.Exists(Path.Combine(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath), @"..\..\Mods\")))
             {
                 MessageBox.Show(@"Couldn't find the ""/Mods/"" directory in your witcher installation!",@"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
                 return;
@@ -266,36 +265,31 @@ namespace W3Edit
                 MessageBox.Show("Please close The Witcher 3 before tinkering with the files!","",MessageBoxButtons.OK,MessageBoxIcon.Information);
                 return;
             }
-            if (loadmods)
-            {
-                manager = new BundleManager();
-                manager.LoadModsBundles(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath));
-            }
-            var explorer = new frmBundleExplorer(manager ?? MainController.Get().BundleManager);
+            var explorer = new frmBundleExplorer(loadmods ? MainController.Get().BundleManager.ModRootNode : MainController.Get().BundleManager.GameRootNode);
             explorer.OpenPath(browseToPath);
             if (explorer.ShowDialog() == DialogResult.OK)
             {
                 foreach (ListViewItem depotpath in explorer.SelectedPaths)
                 {
-                    AddToMod(depotpath.Text,manager);
+                    AddToMod(depotpath.Text,loadmods);
                 }
                 UpdateModFileList();
                 SaveMod();
             }
         }
 
-        private void AddToMod(string depotpath,BundleManager frommod = null)
+        private void AddToMod(string depotpath,bool mods)
         {
-            var manager = frommod ?? MainController.Get().BundleManager;
+            var manager = MainController.Get().BundleManager;
 
-                if (!manager.Items.ContainsKey(depotpath))
+                if ((mods ? !manager.ModItems.ContainsKey(depotpath):!manager.GameItems.ContainsKey(depotpath)))
                     return;
 
                 BundleItem selectedBundle = null;
 
-                if (manager.Items[depotpath].Count > 1)
+                if (mods ? manager.ModItems[depotpath].Count > 1 : manager.GameItems[depotpath].Count > 1)
                 {
-                    var bundles = manager.Items[depotpath].ToDictionary(bundle => bundle.Bundle.FileName);
+                    var bundles = mods ? manager.ModItems[depotpath].ToDictionary(bundle => bundle.Bundle.FileName) : manager.GameItems[depotpath].ToDictionary(bundle => bundle.Bundle.FileName);
 
                     var dlg = new frmExtractAmbigious(bundles.Keys);
                     if (dlg.ShowDialog() == DialogResult.Cancel)
@@ -307,7 +301,7 @@ namespace W3Edit
                 }
                 else
                 {
-                    selectedBundle = manager.Items[depotpath].Last();
+                    selectedBundle = mods ? manager.ModItems[depotpath].Last() : manager.GameItems[depotpath].Last();
                 }
 
                 var filename = Path.Combine(ActiveMod.FileDirectory, depotpath);
@@ -316,14 +310,15 @@ namespace W3Edit
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(filename));
                 }
-                catch
+                catch(Exception ex)
                 {
+                    AddOutput(ex.Message + "\n");
                 }
 
                 if (File.Exists(filename))
                 {
                     if (
-                        MessageBox.Show(filename + " already exists, do you want to overwrite it?", "Add mod file error.",
+                        MessageBox.Show(filename + @" already exists, do you want to overwrite it?", @"Add mod file error.",
                             MessageBoxButtons.OKCancel) != DialogResult.OK)
                     {
                         return;

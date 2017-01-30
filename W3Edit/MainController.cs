@@ -4,6 +4,7 @@ using W3Edit.Bundles;
 using W3Edit.CR2W;
 using W3Edit.CR2W.Editors;
 using W3Edit.CR2W.Types;
+using W3Edit.Mod;
 using W3Edit.W3Strings;
 
 namespace W3Edit
@@ -40,6 +41,7 @@ namespace W3Edit
                 {
                     bundleManager = new BundleManager();
                     bundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                    BundleManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
                 }
                 return bundleManager;
             }

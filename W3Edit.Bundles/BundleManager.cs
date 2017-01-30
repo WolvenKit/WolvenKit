@@ -8,34 +8,63 @@ namespace W3Edit.Bundles
     {
         public BundleManager()
         {
-            Items = new Dictionary<string, List<BundleItem>>();
-            Bundles = new Dictionary<string, Bundle>();
+            GameItems = new Dictionary<string, List<BundleItem>>();
+            GameBundles = new Dictionary<string, Bundle>();
+            ModItems = new Dictionary<string, List<BundleItem>>();
+            ModBundles = new Dictionary<string, Bundle>();
         }
 
-        public Dictionary<string, List<BundleItem>> Items { get; set; }
-        public Dictionary<string, Bundle> Bundles { get; set; }
-        public BundleTreeNode RootNode { get; set; }
+        public Dictionary<string, List<BundleItem>> GameItems { get; set; }
+        public Dictionary<string, Bundle> GameBundles { get; set; }
+        public BundleTreeNode GameRootNode { get; set; }
+
+        public Dictionary<string, List<BundleItem>> ModItems { get; set; }
+        public Dictionary<string, Bundle> ModBundles { get; set; }
+        public BundleTreeNode ModRootNode { get; set; }
+
 
         /// <summary>
-        ///     Load a single bundle
+        ///     Load a single game bundle
         /// </summary>
         /// <param name="filename"></param>
-        public void LoadBundle(string filename)
+        public void LoadGameBundle(string filename)
         {
-            if (Bundles.ContainsKey(filename))
+            if (GameBundles.ContainsKey(filename))
                 return;
 
             var bundle = new Bundle(filename);
 
             foreach (var item in bundle.Items)
             {
-                if (!Items.ContainsKey(item.Key))
-                    Items.Add(item.Key, new List<BundleItem>());
+                if (!GameItems.ContainsKey(item.Key))
+                    GameItems.Add(item.Key, new List<BundleItem>());
 
-                Items[item.Key].Add(item.Value);
+                GameItems[item.Key].Add(item.Value);
             }
 
-            Bundles.Add(filename, bundle);
+            GameBundles.Add(filename, bundle);
+        }
+
+        /// <summary>
+        ///     Load a single mod bundle
+        /// </summary>
+        /// <param name="filename"></param>
+        public void LoadModBundle(string filename)
+        {
+            if (ModBundles.ContainsKey(filename))
+                return;
+
+            var bundle = new Bundle(filename);
+
+            foreach (var item in bundle.Items)
+            {
+                if (!ModItems.ContainsKey(item.Key))
+                    ModItems.Add(item.Key, new List<BundleItem>());
+
+                ModItems[item.Key].Add(item.Value);
+            }
+
+            ModBundles.Add(filename, bundle);
         }
 
         /// <summary>
@@ -44,7 +73,7 @@ namespace W3Edit.Bundles
         /// <param name="exedir">Path to executable directory</param>
         public void LoadAll(string exedir)
         {
-            Items.Clear();
+            GameItems.Clear();
             var content = Path.Combine(exedir, @"..\..\content\");
 
             var contentdirs = new List<string>(Directory.GetDirectories(content, "content*"));
@@ -53,7 +82,7 @@ namespace W3Edit.Bundles
             {
                 foreach (var file in Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories))
                 {
-                    LoadBundle(file);
+                    LoadGameBundle(file);
                 }
             }
 
@@ -63,7 +92,7 @@ namespace W3Edit.Bundles
             {
                 foreach (var file in Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories))
                 {
-                    LoadBundle(file);
+                    LoadGameBundle(file);
                 }
             }
 
@@ -77,10 +106,10 @@ namespace W3Edit.Bundles
 
                 foreach (var file in Directory.GetFiles(dir ?? "", "*.bundle", SearchOption.AllDirectories).OrderBy(k => k))
                 {
-                    LoadBundle(file);
+                    LoadGameBundle(file);
                 }
             }
-            RebuildRootNode();
+            RebuildGameRootNode();
         }
 
         /// <summary>
@@ -90,7 +119,7 @@ namespace W3Edit.Bundles
         /// <param name="exedir"></param>
         public void LoadModsBundles(string exedir)
         {
-            Items.Clear();
+            ModItems.Clear();
             var mods = Path.Combine(exedir, @"..\..\Mods\");
             var modsdirs = new List<string>(Directory.GetDirectories(mods));
             modsdirs.Sort(new AlphanumComparator<string>());
@@ -98,22 +127,56 @@ namespace W3Edit.Bundles
             {
                 foreach (var file in Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories))
                 {
-                    LoadBundle(file);
+                    LoadModBundle(file);
                 }
             }
-            RebuildRootNode();
+            RebuildModRootNode();
         }
 
         /// <summary>
         ///     Rebuilds the bundle tree structure
         /// </summary>
-        public void RebuildRootNode()
+        public void RebuildModRootNode()
         {
-            RootNode = new BundleTreeNode();
+            ModRootNode = new BundleTreeNode();
 
-            foreach (var item in Items)
+            foreach (var item in ModItems)
             {
-                var currentNode = RootNode;
+                var currentNode = ModRootNode;
+                var parts = item.Key.Split('\\');
+
+                for (var i = 0; i < parts.Length - 1; i++)
+                {
+                    if (!currentNode.Directories.ContainsKey(parts[i]))
+                    {
+                        var newNode = new BundleTreeNode
+                        {
+                            Parent = currentNode,
+                            Name = parts[i]
+                        };
+                        currentNode.Directories.Add(parts[i], newNode);
+                        currentNode = newNode;
+                    }
+                    else
+                    {
+                        currentNode = currentNode.Directories[parts[i]];
+                    }
+                }
+
+                currentNode.Files.Add(parts[parts.Length - 1], item.Value);
+            }
+        }
+
+        /// <summary>
+        ///     Rebuilds the bundle tree structure of the game bundles
+        /// </summary>
+        public void RebuildGameRootNode()
+        {
+            GameRootNode = new BundleTreeNode();
+
+            foreach (var item in GameItems)
+            {
+                var currentNode = GameRootNode;
                 var parts = item.Key.Split('\\');
 
                 for (var i = 0; i < parts.Length - 1; i++)
