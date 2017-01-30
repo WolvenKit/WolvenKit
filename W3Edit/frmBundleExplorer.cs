@@ -13,20 +13,10 @@ namespace W3Edit
         public List<string> Autocompletelist;
         public List<BundleItem> FileList;
 
-        public frmBundleExplorer(bool loadmods)
+        public frmBundleExplorer(BundleManager manager)
         {
             InitializeComponent();
-            if (loadmods)
-            {
-                var manager = new BundleManager();
-                manager.LoadModsBundles(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath));
-                RootNode = manager.RootNode;
-            }
-            else
-            {
-                var manager = MainController.Get().BundleManager;
-                RootNode = manager.RootNode;
-            }
+            RootNode = manager.RootNode;
             FileList = GetFiles(RootNode);
             var sorted = GetExtensions(FileList.Select(x => x.Name).ToArray());
             Array.Sort(sorted, (x, y) => string.Compare(x, y));

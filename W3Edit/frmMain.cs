@@ -253,6 +253,7 @@ namespace W3Edit
 
         private void addModFile(bool loadmods,string browseToPath = "")
         {
+            BundleManager manager = null;
             if (ActiveMod == null)
                 return;
             if (!Directory.Exists(Path.Combine(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath), @"..\..\Mods\")))
@@ -265,22 +266,18 @@ namespace W3Edit
                 MessageBox.Show("Please close The Witcher 3 before tinkering with the files!","",MessageBoxButtons.OK,MessageBoxIcon.Information);
                 return;
             }
-            var manager = new BundleManager();
-            var explorer = new frmBundleExplorer(loadmods);
             if (loadmods)
             {
+                manager = new BundleManager();
                 manager.LoadModsBundles(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath));
             }
+            var explorer = new frmBundleExplorer(manager ?? MainController.Get().BundleManager);
             explorer.OpenPath(browseToPath);
-
             if (explorer.ShowDialog() == DialogResult.OK)
             {
                 foreach (ListViewItem depotpath in explorer.SelectedPaths)
                 {
-                    if(loadmods)
-                        AddToMod(depotpath.Text,manager);
-                    else
-                        AddToMod(depotpath.Text);
+                    AddToMod(depotpath.Text,manager);
                 }
                 UpdateModFileList();
                 SaveMod();
