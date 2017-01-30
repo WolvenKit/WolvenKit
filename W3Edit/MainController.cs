@@ -13,6 +13,7 @@ namespace W3Edit
     {
         private static MainController mainController;
         private BundleManager bundleManager;
+        private BundleManager modbundleManager;
         private W3StringManager w3StringManager;
 
         private MainController()
@@ -41,9 +42,21 @@ namespace W3Edit
                 {
                     bundleManager = new BundleManager();
                     bundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                    BundleManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
                 }
                 return bundleManager;
+            }
+        }
+
+        public BundleManager ModBundleManager
+        {
+            get
+            {
+                if (modbundleManager == null)
+                {
+                    modbundleManager = new BundleManager();
+                    modbundleManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                }
+                return modbundleManager;
             }
         }
 

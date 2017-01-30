@@ -255,79 +255,72 @@ namespace W3Edit
         {
             if (ActiveMod == null)
                 return;
-            if (loadmods && !Directory.Exists(Path.Combine(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath), @"..\..\Mods\")))
-            {
-                MessageBox.Show(@"Couldn't find the ""/Mods/"" directory in your witcher installation!",@"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
-                return;
-            }
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
                 MessageBox.Show("Please close The Witcher 3 before tinkering with the files!","",MessageBoxButtons.OK,MessageBoxIcon.Information);
                 return;
             }
-            var explorer = new frmBundleExplorer(loadmods ? MainController.Get().BundleManager.ModRootNode : MainController.Get().BundleManager.GameRootNode);
+            var explorer = new frmBundleExplorer(loadmods ? MainController.Get().ModBundleManager : MainController.Get().BundleManager);
             explorer.OpenPath(browseToPath);
             if (explorer.ShowDialog() == DialogResult.OK)
             {
                 foreach (ListViewItem depotpath in explorer.SelectedPaths)
                 {
-                    AddToMod(depotpath.Text,loadmods);
+                    AddToMod(depotpath.Text, loadmods ? MainController.Get().ModBundleManager : MainController.Get().BundleManager);
                 }
                 UpdateModFileList();
                 SaveMod();
             }
         }
 
-        private void AddToMod(string depotpath,bool mods)
+        private void AddToMod(string depotpath,BundleManager bmanager)
         {
-            var manager = MainController.Get().BundleManager;
+            var manager = bmanager;
 
-                if ((mods ? !manager.ModItems.ContainsKey(depotpath):!manager.GameItems.ContainsKey(depotpath)))
+            if (!manager.Items.ContainsKey(depotpath))
+                return;
+
+            BundleItem selectedBundle = null;
+
+            if (manager.Items[depotpath].Count > 1)
+            {
+                var bundles = manager.Items[depotpath].ToDictionary(bundle => bundle.Bundle.FileName);
+
+                var dlg = new frmExtractAmbigious(bundles.Keys);
+                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
+                {
                     return;
-
-                BundleItem selectedBundle = null;
-
-                if (mods ? manager.ModItems[depotpath].Count > 1 : manager.GameItems[depotpath].Count > 1)
-                {
-                    var bundles = mods ? manager.ModItems[depotpath].ToDictionary(bundle => bundle.Bundle.FileName) : manager.GameItems[depotpath].ToDictionary(bundle => bundle.Bundle.FileName);
-
-                    var dlg = new frmExtractAmbigious(bundles.Keys);
-                    if (dlg.ShowDialog() == DialogResult.Cancel)
-                    {
-                        return;
-                    }
-
-                    selectedBundle = bundles[dlg.SelectedBundle];
-                }
-                else
-                {
-                    selectedBundle = mods ? manager.ModItems[depotpath].Last() : manager.GameItems[depotpath].Last();
                 }
 
-                var filename = Path.Combine(ActiveMod.FileDirectory, depotpath);
+                selectedBundle = bundles[dlg.SelectedBundle];
+            }
+            else
+            {
+                selectedBundle = manager.Items[depotpath].Last();
+            }
 
-                try
+            var filename = Path.Combine(ActiveMod.FileDirectory, depotpath);
+
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(filename));
+            }
+            catch
+            {
+
+            }
+
+            if (File.Exists(filename))
+            {
+                if (MessageBox.Show(filename + " already exists, do you want to overwrite it?", "Add mod file error.", MessageBoxButtons.OKCancel) != System.Windows.Forms.DialogResult.OK)
                 {
-                    Directory.CreateDirectory(Path.GetDirectoryName(filename));
-                }
-                catch(Exception ex)
-                {
-                    AddOutput(ex.Message + "\n");
+                    return;
                 }
 
-                if (File.Exists(filename))
-                {
-                    if (
-                        MessageBox.Show(filename + @" already exists, do you want to overwrite it?", @"Add mod file error.",
-                            MessageBoxButtons.OKCancel) != DialogResult.OK)
-                    {
-                        return;
-                    }
+                File.Delete(filename);
+            }
 
-                    File.Delete(filename);
-                }
-
-                selectedBundle.Extract(filename);
+            selectedBundle.Extract(filename);
         }
 
         private void UpdateModFileList(bool clear = false)

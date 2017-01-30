@@ -8,52 +8,34 @@ namespace W3Edit.Bundles
     {
         public BundleManager()
         {
-            GameItems = new Dictionary<string, List<BundleItem>>();
-            GameBundles = new Dictionary<string, Bundle>();
-            ModItems = new Dictionary<string, List<BundleItem>>();
-            ModBundles = new Dictionary<string, Bundle>();
+            Items = new Dictionary<string, List<BundleItem>>();
+            Bundles = new Dictionary<string, Bundle>();
         }
 
-        public Dictionary<string, List<BundleItem>> GameItems { get; set; }
-        public Dictionary<string, Bundle> GameBundles { get; set; }
-        public BundleTreeNode GameRootNode { get; set; }
-
-        public Dictionary<string, List<BundleItem>> ModItems { get; set; }
-        public Dictionary<string, Bundle> ModBundles { get; set; }
-        public BundleTreeNode ModRootNode { get; set; }
-
+        public Dictionary<string, List<BundleItem>> Items { get; set; }
+        public Dictionary<string, Bundle> Bundles { get; set; }
+        public BundleTreeNode RootNode { get; set; }
 
         /// <summary>
-        ///     Load a single game bundle
+        ///     Load a single bundle
         /// </summary>
         /// <param name="filename"></param>
-        public void LoadBundle(string filename,bool game)
+        public void LoadBundle(string filename)
         {
-            if (game ? GameBundles.ContainsKey(filename) : ModBundles.ContainsKey(filename))
+            if (Bundles.ContainsKey(filename))
                 return;
 
             var bundle = new Bundle(filename);
 
             foreach (var item in bundle.Items)
             {
-                if (game)
-                {
-                    if (!GameItems.ContainsKey(item.Key))
-                        GameItems.Add(item.Key, new List<BundleItem>());
-                    GameItems[item.Key].Add(item.Value);
-                }
-                else
-                {
-                    if (!ModItems.ContainsKey(item.Key))
-                        ModItems.Add(item.Key, new List<BundleItem>());
-                    ModItems[item.Key].Add(item.Value);
-                }
+                if (!Items.ContainsKey(item.Key))
+                    Items.Add(item.Key, new List<BundleItem>());
 
+                Items[item.Key].Add(item.Value);
             }
-            if (game)
-                GameBundles.Add(filename, bundle);
-            else
-                ModBundles.Add(filename, bundle);
+
+            Bundles.Add(filename, bundle);
         }
 
         /// <summary>
@@ -62,7 +44,6 @@ namespace W3Edit.Bundles
         /// <param name="exedir">Path to executable directory</param>
         public void LoadAll(string exedir)
         {
-            GameItems.Clear();
             var content = Path.Combine(exedir, @"..\..\content\");
 
             var contentdirs = new List<string>(Directory.GetDirectories(content, "content*"));
@@ -71,15 +52,18 @@ namespace W3Edit.Bundles
             {
                 foreach (var file in Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories))
                 {
-                    LoadBundle(file,true);
+                    LoadBundle(file);
                 }
             }
 
             var patchdirs = new List<string>(Directory.GetDirectories(content, "patch*"));
             patchdirs.Sort(new AlphanumComparator<string>());
-            foreach (var file in patchdirs.SelectMany(dir => Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories)))
+            foreach (var dir in patchdirs)
             {
-                LoadBundle(file,true);
+                foreach (var file in Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories))
+                {
+                    LoadBundle(file);
+                }
             }
 
             var dlc = Path.Combine(exedir, @"..\..\DLC\");
@@ -92,10 +76,10 @@ namespace W3Edit.Bundles
 
                 foreach (var file in Directory.GetFiles(dir ?? "", "*.bundle", SearchOption.AllDirectories).OrderBy(k => k))
                 {
-                    LoadBundle(file,true);
+                    LoadBundle(file);
                 }
             }
-            RebuilRootNode(true);
+            RebuildRootNode();
         }
 
         /// <summary>
@@ -105,30 +89,31 @@ namespace W3Edit.Bundles
         /// <param name="exedir"></param>
         public void LoadModsBundles(string exedir)
         {
-            ModItems.Clear();
             var mods = Path.Combine(exedir, @"..\..\Mods\");
+            if (!Directory.Exists(mods))
+                Directory.CreateDirectory(mods);
             var modsdirs = new List<string>(Directory.GetDirectories(mods));
             modsdirs.Sort(new AlphanumComparator<string>());
-            foreach (var file in modsdirs.SelectMany(dir => Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories)))
+            foreach (var dir in modsdirs)
             {
-                LoadBundle(file,false);
+                foreach (var file in Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories))
+                {
+                    LoadBundle(file);
+                }
             }
-            RebuilRootNode(false);
+            RebuildRootNode();
         }
 
         /// <summary>
         ///     Rebuilds the bundle tree structure
         /// </summary>
-        public void RebuilRootNode(bool game)
+        public void RebuildRootNode()
         {
-            if(game)
-                GameRootNode = new BundleTreeNode();
-            else
-                ModRootNode = new BundleTreeNode();
+            RootNode = new BundleTreeNode();
 
-            foreach (var item in (game ? GameItems : ModItems))
+            foreach (var item in Items)
             {
-                var currentNode = game ? GameRootNode : ModRootNode;
+                var currentNode = RootNode;
                 var parts = item.Key.Split('\\');
 
                 for (var i = 0; i < parts.Length - 1; i++)
