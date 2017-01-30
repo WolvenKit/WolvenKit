@@ -27,44 +27,33 @@ namespace W3Edit.Bundles
         ///     Load a single game bundle
         /// </summary>
         /// <param name="filename"></param>
-        public void LoadGameBundle(string filename)
+        public void LoadBundle(string filename,bool game)
         {
-            if (GameBundles.ContainsKey(filename))
+            if (game ? GameBundles.ContainsKey(filename) : ModBundles.ContainsKey(filename))
                 return;
 
             var bundle = new Bundle(filename);
 
             foreach (var item in bundle.Items)
             {
-                if (!GameItems.ContainsKey(item.Key))
-                    GameItems.Add(item.Key, new List<BundleItem>());
+                if (game)
+                {
+                    if (!GameItems.ContainsKey(item.Key))
+                        GameItems.Add(item.Key, new List<BundleItem>());
+                    GameItems[item.Key].Add(item.Value);
+                }
+                else
+                {
+                    if (!ModItems.ContainsKey(item.Key))
+                        ModItems.Add(item.Key, new List<BundleItem>());
+                    ModItems[item.Key].Add(item.Value);
+                }
 
-                GameItems[item.Key].Add(item.Value);
             }
-
-            GameBundles.Add(filename, bundle);
-        }
-
-        /// <summary>
-        ///     Load a single mod bundle
-        /// </summary>
-        /// <param name="filename"></param>
-        public void LoadModBundle(string filename)
-        {
-            if (ModBundles.ContainsKey(filename))
-                return;
-
-            var bundle = new Bundle(filename);
-
-            foreach (var item in bundle.Items)
-            {
-                if (!ModItems.ContainsKey(item.Key))
-                    ModItems.Add(item.Key, new List<BundleItem>());
-
-                ModItems[item.Key].Add(item.Value);
-            }
-
-            ModBundles.Add(filename, bundle);
+            if (game)
+                GameBundles.Add(filename, bundle);
+            else
+                ModBundles.Add(filename, bundle);
         }
 
         /// <summary>
@@ -82,18 +71,15 @@ namespace W3Edit.Bundles
             {
                 foreach (var file in Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories))
                 {
-                    LoadGameBundle(file);
+                    LoadBundle(file,true);
                 }
             }
 
             var patchdirs = new List<string>(Directory.GetDirectories(content, "patch*"));
             patchdirs.Sort(new AlphanumComparator<string>());
-            foreach (var dir in patchdirs)
+            foreach (var file in patchdirs.SelectMany(dir => Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories)))
             {
-                foreach (var file in Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories))
-                {
-                    LoadGameBundle(file);
-                }
+                LoadBundle(file,true);
             }
 
             var dlc = Path.Combine(exedir, @"..\..\DLC\");
@@ -106,10 +92,10 @@ namespace W3Edit.Bundles
 
                 foreach (var file in Directory.GetFiles(dir ?? "", "*.bundle", SearchOption.AllDirectories).OrderBy(k => k))
                 {
-                    LoadGameBundle(file);
+                    LoadBundle(file,true);
                 }
             }
-            RebuildGameRootNode();
+            RebuilRootNode(true);
         }
 
         /// <summary>
@@ -123,60 +109,26 @@ namespace W3Edit.Bundles
             var mods = Path.Combine(exedir, @"..\..\Mods\");
             var modsdirs = new List<string>(Directory.GetDirectories(mods));
             modsdirs.Sort(new AlphanumComparator<string>());
-            foreach (var dir in modsdirs)
+            foreach (var file in modsdirs.SelectMany(dir => Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories)))
             {
-                foreach (var file in Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories))
-                {
-                    LoadModBundle(file);
-                }
+                LoadBundle(file,false);
             }
-            RebuildModRootNode();
+            RebuilRootNode(false);
         }
 
         /// <summary>
         ///     Rebuilds the bundle tree structure
         /// </summary>
-        public void RebuildModRootNode()
+        public void RebuilRootNode(bool game)
         {
-            ModRootNode = new BundleTreeNode();
+            if(game)
+                GameRootNode = new BundleTreeNode();
+            else
+                ModRootNode = new BundleTreeNode();
 
-            foreach (var item in ModItems)
+            foreach (var item in (game ? GameItems : ModItems))
             {
-                var currentNode = ModRootNode;
-                var parts = item.Key.Split('\\');
-
-                for (var i = 0; i < parts.Length - 1; i++)
-                {
-                    if (!currentNode.Directories.ContainsKey(parts[i]))
-                    {
-                        var newNode = new BundleTreeNode
-                        {
-                            Parent = currentNode,
-                            Name = parts[i]
-                        };
-                        currentNode.Directories.Add(parts[i], newNode);
-                        currentNode = newNode;
-                    }
-                    else
-                    {
-                        currentNode = currentNode.Directories[parts[i]];
-                    }
-                }
-
-                currentNode.Files.Add(parts[parts.Length - 1], item.Value);
-            }
-        }
-
-        /// <summary>
-        ///     Rebuilds the bundle tree structure of the game bundles
-        /// </summary>
-        public void RebuildGameRootNode()
-        {
-            GameRootNode = new BundleTreeNode();
-
-            foreach (var item in GameItems)
-            {
-                var currentNode = GameRootNode;
+                var currentNode = game ? GameRootNode : ModRootNode;
                 var parts = item.Key.Split('\\');
 
                 for (var i = 0; i < parts.Length - 1; i++)
