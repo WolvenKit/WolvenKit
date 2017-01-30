@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using W3Edit.Bundles;
@@ -12,12 +13,20 @@ namespace W3Edit
         public List<string> Autocompletelist;
         public List<BundleItem> FileList;
 
-        public frmBundleExplorer()
+        public frmBundleExplorer(bool loadmods)
         {
             InitializeComponent();
-
-            var manager = MainController.Get().BundleManager;
-            RootNode = manager.RootNode;
+            if (loadmods)
+            {
+                var manager = new BundleManager();
+                manager.LoadModsBundles(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath));
+                RootNode = manager.RootNode;
+            }
+            else
+            {
+                var manager = MainController.Get().BundleManager;
+                RootNode = manager.RootNode;
+            }
             FileList = GetFiles(RootNode);
             var sorted = GetExtensions(FileList.Select(x => x.Name).ToArray());
             Array.Sort(sorted, (x, y) => string.Compare(x, y));
@@ -300,11 +309,14 @@ namespace W3Edit
         public List<BundleItem> GetFiles(BundleTreeNode mainnode)
         {
             var bundfiles = new List<BundleItem>();
-            foreach (var wfile in mainnode.Files)
+            if (mainnode?.Files != null)
             {
-                bundfiles.AddRange(wfile.Value);
+                foreach (var wfile in mainnode.Files)
+                {
+                    bundfiles.AddRange(wfile.Value);
+                }
+                bundfiles.AddRange(mainnode.Directories.Values.SelectMany(GetFiles));
             }
-            bundfiles.AddRange(mainnode.Directories.Values.SelectMany(GetFiles));
             return bundfiles;
         }
 

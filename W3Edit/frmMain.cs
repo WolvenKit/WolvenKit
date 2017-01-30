@@ -248,82 +248,94 @@ namespace W3Edit
 
         private void addFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            addModFile();
+            addModFile(false);
         }
 
-        private void addModFile(string browseToPath = "")
+        private void addModFile(bool loadmods,string browseToPath = "")
         {
             if (ActiveMod == null)
                 return;
+            if (!Directory.Exists(Path.Combine(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath), @"..\..\Mods\")))
+            {
+                MessageBox.Show(@"Couldn't find the ""/Mods/"" directory in your witcher installation!",@"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                return;
+            }
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
                 MessageBox.Show("Please close The Witcher 3 before tinkering with the files!","",MessageBoxButtons.OK,MessageBoxIcon.Information);
                 return;
             }
-            var explorer = new frmBundleExplorer();
-
+            var manager = new BundleManager();
+            var explorer = new frmBundleExplorer(loadmods);
+            if (loadmods)
+            {
+                manager.LoadModsBundles(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath));
+            }
             explorer.OpenPath(browseToPath);
 
             if (explorer.ShowDialog() == DialogResult.OK)
             {
                 foreach (ListViewItem depotpath in explorer.SelectedPaths)
                 {
-                    AddToMod(depotpath.Text);
+                    if(loadmods)
+                        AddToMod(depotpath.Text,manager);
+                    else
+                        AddToMod(depotpath.Text);
                 }
                 UpdateModFileList();
                 SaveMod();
             }
         }
 
-        private void AddToMod(string depotpath)
+        private void AddToMod(string depotpath,BundleManager frommod = null)
         {
-            var manager = MainController.Get().BundleManager;
+            var manager = frommod ?? MainController.Get().BundleManager;
 
-            if (!manager.Items.ContainsKey(depotpath))
-                return;
-
-            BundleItem selectedBundle = null;
-
-            if (manager.Items[depotpath].Count > 1)
-            {
-                var bundles = manager.Items[depotpath].ToDictionary(bundle => bundle.Bundle.FileName);
-
-                var dlg = new frmExtractAmbigious(bundles.Keys);
-                if (dlg.ShowDialog() == DialogResult.Cancel)
-                {
+                if (!manager.Items.ContainsKey(depotpath))
                     return;
+
+                BundleItem selectedBundle = null;
+
+                if (manager.Items[depotpath].Count > 1)
+                {
+                    var bundles = manager.Items[depotpath].ToDictionary(bundle => bundle.Bundle.FileName);
+
+                    var dlg = new frmExtractAmbigious(bundles.Keys);
+                    if (dlg.ShowDialog() == DialogResult.Cancel)
+                    {
+                        return;
+                    }
+
+                    selectedBundle = bundles[dlg.SelectedBundle];
+                }
+                else
+                {
+                    selectedBundle = manager.Items[depotpath].Last();
                 }
 
-                selectedBundle = bundles[dlg.SelectedBundle];
-            }
-            else
-            {
-                selectedBundle = manager.Items[depotpath].Last();
-            }
+                var filename = Path.Combine(ActiveMod.FileDirectory, depotpath);
 
-            var filename = Path.Combine(ActiveMod.FileDirectory, depotpath);
-
-            try
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(filename));
-            }
-            catch
-            {
-            }
-
-            if (File.Exists(filename))
-            {
-                if (
-                    MessageBox.Show(filename + " already exists, do you want to overwrite it?", "Add mod file error.",
-                        MessageBoxButtons.OKCancel) != DialogResult.OK)
+                try
                 {
-                    return;
+                    Directory.CreateDirectory(Path.GetDirectoryName(filename));
+                }
+                catch
+                {
                 }
 
-                File.Delete(filename);
-            }
+                if (File.Exists(filename))
+                {
+                    if (
+                        MessageBox.Show(filename + " already exists, do you want to overwrite it?", "Add mod file error.",
+                            MessageBoxButtons.OKCancel) != DialogResult.OK)
+                    {
+                        return;
+                    }
 
-            selectedBundle.Extract(filename);
+                    File.Delete(filename);
+                }
+
+                selectedBundle.Extract(filename);
         }
 
         private void UpdateModFileList(bool clear = false)
@@ -415,7 +427,7 @@ namespace W3Edit
 
         private void ModExplorer_RequestAddFile(object sender, RequestFileArgs e)
         {
-            addModFile(e.File);
+            addModFile(false,e.File);
         }
 
         private void ModExplorer_RequestFileDelete(object sender, RequestFileArgs e)
@@ -652,7 +664,7 @@ I recommend: https://sourceforge.net/projects/vgmtoolbox/",@"Info",MessageBoxBut
             if (ActiveMod == null)
                 return;
 
-            addModFile();
+            addModFile(false);
         }
 
         private void btPack_Click(object sender, EventArgs e)
@@ -916,7 +928,7 @@ I recommend: https://sourceforge.net/projects/vgmtoolbox/",@"Info",MessageBoxBut
 
         private void addFileToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            addModFile();
+            addModFile(false);
         }
 
         private void modSettingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -997,6 +1009,11 @@ I recommend: https://sourceforge.net/projects/vgmtoolbox/",@"Info",MessageBoxBut
             {
                 openMod(ModManager.Get().ActiveMod?.FileName);
             }
+        }
+
+        private void addFileFromOtherModToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            addModFile(true);
         }
     }
 }

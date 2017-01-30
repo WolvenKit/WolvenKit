@@ -44,6 +44,7 @@ namespace W3Edit.Bundles
         /// <param name="exedir">Path to executable directory</param>
         public void LoadAll(string exedir)
         {
+            Items.Clear();
             var content = Path.Combine(exedir, @"..\..\content\");
 
             var contentdirs = new List<string>(Directory.GetDirectories(content, "content*"));
@@ -71,15 +72,35 @@ namespace W3Edit.Bundles
             dlcdirs.Sort(new AlphanumComparator<string>());
             foreach (var dir in dlcdirs)
             {
-                if (Path.GetFileName(dir).StartsWith("mod"))
+                if (Path.GetFileName(dir ?? "").StartsWith("mod"))
                     continue;
 
-                foreach (var file in Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories).OrderBy(k => k))
+                foreach (var file in Directory.GetFiles(dir ?? "", "*.bundle", SearchOption.AllDirectories).OrderBy(k => k))
                 {
                     LoadBundle(file);
                 }
             }
+            RebuildRootNode();
+        }
 
+        /// <summary>
+        /// Loads the .bundle files from the /Mods/ folder
+        /// Note this resets everything
+        /// </summary>
+        /// <param name="exedir"></param>
+        public void LoadModsBundles(string exedir)
+        {
+            Items.Clear();
+            var mods = Path.Combine(exedir, @"..\..\Mods\");
+            var modsdirs = new List<string>(Directory.GetDirectories(mods));
+            modsdirs.Sort(new AlphanumComparator<string>());
+            foreach (var dir in modsdirs)
+            {
+                foreach (var file in Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories))
+                {
+                    LoadBundle(file);
+                }
+            }
             RebuildRootNode();
         }
 
