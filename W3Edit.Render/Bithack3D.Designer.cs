@@ -37,12 +37,12 @@
             // 
             this.glControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.glControl1.ColorBits = ((uint)(24u));
-            this.glControl1.DepthBits = ((uint)(0u));
+            this.glControl1.DepthBits = ((uint)(24u));
             this.glControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.glControl1.Location = new System.Drawing.Point(0, 0);
             this.glControl1.MultisampleBits = ((uint)(0u));
             this.glControl1.Name = "glControl1";
-            this.glControl1.Size = new System.Drawing.Size(601, 350);
+            this.glControl1.Size = new System.Drawing.Size(601, 431);
             this.glControl1.StencilBits = ((uint)(0u));
             this.glControl1.TabIndex = 0;
             this.glControl1.ContextCreated += new System.EventHandler<OpenGL.GlControlEventArgs>(this.RenderControl_ContextCreated);

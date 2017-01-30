@@ -23,27 +23,12 @@ namespace W3Edit.Render
         {
             GlControl glControl = (GlControl)sender;
 
-            if (Gl.CurrentVersion.Api == KhronosVersion.ApiGles2)
-                RenderControl_ContextCreated_ES(sender, e);
-            else
-            {
-                // Here you can allocate resources or initialize state
-                Gl.MatrixMode(MatrixMode.Projection);
-                Gl.LoadIdentity();
-                Gl.Ortho(0.0, 1.0f, 0.0, 1.0, 0.0, 1.0);
-
-                // Uses multisampling, if available
-                if (glControl.MultisampleBits > 0)
-                    Gl.Enable(EnableCap.Multisample);
-            }
+            RenderControl_ContextCreated_ES(sender, e);
         }
 
         private void RenderControl_Render(object sender, GlControlEventArgs e)
         {
-            if (Gl.CurrentVersion.Api == KhronosVersion.ApiGles2)
-                RenderControl_Render_ES(sender, e);
-            else
-                RenderControl_Render_GL(sender, e);
+            RenderControl_Render_ES(sender, e);
         }
 
         private void RenderControl_ContextDestroying(object sender, GlControlEventArgs e)
@@ -54,15 +39,55 @@ namespace W3Edit.Render
 
         #region Common Data
 
-        private static float _Angle;
+        private static float angle;
+        private static float angle_rad;
+        private const float PI_OVER_180 = (float)Math.PI / 180.0f;
 
         /// <summary>
         /// Vertex position array.
         /// </summary>
         private static readonly float[] _ArrayPosition = new float[] {
-            0.0f, 0.0f,
-            0.5f, 1.0f,
-            1.0f, 0.0f
+            -0.5f, -0.5f, -0.5f,
+             0.5f, -0.5f, -0.5f,
+             0.5f,  0.5f, -0.5f,
+             0.5f,  0.5f, -0.5f,
+            -0.5f,  0.5f, -0.5f,
+            -0.5f, -0.5f, -0.5f,
+
+            -0.5f, -0.5f,  0.5f,
+             0.5f, -0.5f,  0.5f,
+             0.5f,  0.5f,  0.5f,
+             0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f,  0.5f,
+            -0.5f, -0.5f,  0.5f,
+
+            -0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f, -0.5f,
+            -0.5f, -0.5f, -0.5f,
+            -0.5f, -0.5f, -0.5f,
+            -0.5f, -0.5f,  0.5f,
+            -0.5f,  0.5f,  0.5f,
+
+             0.5f,  0.5f,  0.5f,
+             0.5f,  0.5f, -0.5f,
+             0.5f, -0.5f, -0.5f,
+             0.5f, -0.5f, -0.5f,
+             0.5f, -0.5f,  0.5f,
+             0.5f,  0.5f,  0.5f,
+
+            -0.5f, -0.5f, -0.5f,
+             0.5f, -0.5f, -0.5f,
+             0.5f, -0.5f,  0.5f,
+             0.5f, -0.5f,  0.5f,
+            -0.5f, -0.5f,  0.5f,
+            -0.5f, -0.5f, -0.5f,
+
+            -0.5f,  0.5f, -0.5f,
+             0.5f,  0.5f, -0.5f,
+             0.5f,  0.5f,  0.5f,
+             0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f, -0.5f
         };
 
         /// <summary>
@@ -71,54 +96,46 @@ namespace W3Edit.Render
         private static readonly float[] _ArrayColor = new float[] {
             1.0f, 0.0f, 0.0f,
             0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 1.0f
+            0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f,
+
+            1.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f,
+
+            1.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f,
+
+            1.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f,
+
+            1.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f,
+
+            1.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f,
         };
-
-        #endregion
-
-        #region GL Resources
-
-        private void RenderControl_Render_GL(object sender, GlControlEventArgs e)
-        {
-            Control senderControl = (Control)sender;
-
-            Gl.Viewport(0, 0, senderControl.ClientSize.Width, senderControl.ClientSize.Height);
-            Gl.Clear(ClearBufferMask.ColorBufferBit);
-
-            // Animate triangle
-            Gl.MatrixMode(MatrixMode.Modelview);
-            Gl.LoadIdentity();
-            Gl.Rotate(_Angle, 0.0f, 0.0f, 1.0f);
-
-            if (Gl.CurrentVersion >= Gl.Version_110)
-            {
-                // Old school OpenGL 1.1
-                // Setup & enable client states to specify vertex arrays, and use Gl.DrawArrays instead of Gl.Begin/End paradigm
-                using (MemoryLock vertexArrayLock = new MemoryLock(_ArrayPosition))
-                using (MemoryLock vertexColorLock = new MemoryLock(_ArrayColor))
-                {
-                    // Note: the use of MemoryLock objects is necessary to pin vertex arrays since they can be reallocated by GC
-                    // at any time between the Gl.VertexPointer execution and the Gl.DrawArrays execution
-
-                    Gl.VertexPointer(2, VertexPointerType.Float, 0, vertexArrayLock.Address);
-                    Gl.EnableClientState(EnableCap.VertexArray);
-
-                    Gl.ColorPointer(3, ColorPointerType.Float, 0, vertexColorLock.Address);
-                    Gl.EnableClientState(EnableCap.ColorArray);
-
-                    Gl.DrawArrays(PrimitiveType.Triangles, 0, 3);
-                }
-            }
-            else
-            {
-                // Old school OpenGL
-                Gl.Begin(PrimitiveType.Triangles);
-                Gl.Color3(1.0f, 0.0f, 0.0f); Gl.Vertex2(0.0f, 0.0f);
-                Gl.Color3(0.0f, 1.0f, 0.0f); Gl.Vertex2(0.5f, 1.0f);
-                Gl.Color3(0.0f, 0.0f, 1.0f); Gl.Vertex2(1.0f, 0.0f);
-                Gl.End();
-            }
-        }
 
         #endregion
 
@@ -127,29 +144,48 @@ namespace W3Edit.Render
         private void RenderControl_Render_ES(object sender, GlControlEventArgs e)
         {
             Control control = (Control)sender;
-            OrthoProjectionMatrix projectionMatrix = new OrthoProjectionMatrix(0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f);
+            PerspectiveProjectionMatrix projectionMatrix = new PerspectiveProjectionMatrix(45.0f, (float)control.Width/(float)control.Height, 0.1f, 100.0f);
+            ModelMatrix viewMatrix = new ModelMatrix();
             ModelMatrix modelMatrix = new ModelMatrix();
 
+            // Move camera
+            viewMatrix.Translate(new Vertex3f(0.0f, 0.0f, -2.0f));
             // Animate triangle
-            modelMatrix.RotateZ(_Angle);
+            /*modelMatrix.LookAtDirection(
+                new Vertex3f(0.0f, 0.0f, 0.0f),
+                new Vertex3f(
+                    (float)Math.Sin(angle_rad),
+                    0.0f,
+                    (float)Math.Cos(angle_rad)
+                ),
+                new Vertex3f(0.0f, 1.0f, 0.0f)
+            );*/
+            //Quaternion Q = new Quaternion(new Vertex3f(0.0f, 1.0f, 0.0f), angle);
+            modelMatrix.RotateZ(angle);
+            modelMatrix.RotateY(angle);
+            //modelMatrix.Translate(Math.Cos(theta), Math.Sin(theta));
+            //modelMatrix.RotateY(theta);
+
+            Gl.UseProgram(Program_Shader);
 
             Gl.Viewport(0, 0, control.Width, control.Height);
-            Gl.Clear(ClearBufferMask.ColorBufferBit);
-
-            Gl.UseProgram(_Es2_Program);
+            Gl.Enable(EnableCap.DepthTest);
+            Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             using (MemoryLock arrayPosition = new MemoryLock(_ArrayPosition))
             using (MemoryLock arrayColor = new MemoryLock(_ArrayColor))
             {
-                Gl.VertexAttribPointer((uint)_Es2_Program_Location_aPosition, 2, Gl.FLOAT, false, 0, arrayPosition.Address);
-                Gl.EnableVertexAttribArray((uint)_Es2_Program_Location_aPosition);
+                Gl.VertexAttribPointer((uint)Program_Location_aPosition, 3, Gl.FLOAT, false, 0, arrayPosition.Address);
+                Gl.EnableVertexAttribArray((uint)Program_Location_aPosition);
 
-                Gl.VertexAttribPointer((uint)_Es2_Program_Location_aColor, 3, Gl.FLOAT, false, 0, arrayColor.Address);
-                Gl.EnableVertexAttribArray((uint)_Es2_Program_Location_aColor);
+                Gl.VertexAttribPointer((uint)Program_Location_aColor, 3, Gl.FLOAT, false, 0, arrayColor.Address);
+                Gl.EnableVertexAttribArray((uint)Program_Location_aColor);
 
-                Gl.UniformMatrix4(_Es2_Program_Location_uMVP, 1, false, (projectionMatrix * modelMatrix).ToArray());
+                Gl.UniformMatrix4(Program_Location_uProjection, 1, false, projectionMatrix.ToArray());
+                Gl.UniformMatrix4(Program_Location_uView, 1, false, viewMatrix.ToArray());
+                Gl.UniformMatrix4(Program_Location_uModel, 1, false, modelMatrix.ToArray());
 
-                Gl.DrawArrays(PrimitiveType.Triangles, 0, 3);
+                Gl.DrawArrays(PrimitiveType.Triangles, 0, 36);
             }
         }
 
@@ -182,52 +218,54 @@ namespace W3Edit.Render
             }
 
             // Program
-            _Es2_Program = Gl.CreateProgram();
-            Gl.AttachShader(_Es2_Program, vertexShader);
-            Gl.AttachShader(_Es2_Program, fragmentShader);
-            Gl.LinkProgram(_Es2_Program);
+            Program_Shader = Gl.CreateProgram();
+            Gl.AttachShader(Program_Shader, vertexShader);
+            Gl.AttachShader(Program_Shader, fragmentShader);
+            Gl.LinkProgram(Program_Shader);
 
             int linked;
-            Gl.GetProgram(_Es2_Program, Gl.LINK_STATUS, out linked);
+            Gl.GetProgram(Program_Shader, Gl.LINK_STATUS, out linked);
 
             if (linked == 0)
             {
-                Gl.GetProgramInfoLog(_Es2_Program, 1024, out infologLength, infolog);
+                Gl.GetProgramInfoLog(Program_Shader, 1024, out infologLength, infolog);
             }
 
-            _Es2_Program_Location_uMVP = Gl.GetUniformLocation(_Es2_Program, "uMVP");
-            _Es2_Program_Location_aPosition = Gl.GetAttribLocation(_Es2_Program, "aPosition");
-            _Es2_Program_Location_aColor = Gl.GetAttribLocation(_Es2_Program, "aColor");
+            Program_Location_uProjection = Gl.GetUniformLocation(Program_Shader, "uProjection");
+            Program_Location_uView = Gl.GetUniformLocation(Program_Shader, "uView");
+            Program_Location_uModel = Gl.GetUniformLocation(Program_Shader, "uModel");
+            Program_Location_aPosition = Gl.GetAttribLocation(Program_Shader, "aPosition");
+            Program_Location_aColor = Gl.GetAttribLocation(Program_Shader, "aColor");
         }
 
         private void RenderControl_ContextDestroying_ES(object sender, OpenGL.GlControlEventArgs e)
         {
-            if (_Es2_Program != 0)
-                Gl.DeleteProgram(_Es2_Program);
-            _Es2_Program = 0;
+            if (Program_Shader != 0)
+                Gl.DeleteProgram(Program_Shader);
+            Program_Shader = 0;
         }
 
-        private uint _Es2_Program;
-
-        private int _Es2_Program_Location_aPosition;
-
-        private int _Es2_Program_Location_aColor;
-
-        private int _Es2_Program_Location_uMVP;
+        private uint Program_Shader;
+        private int Program_Location_aPosition;
+        private int Program_Location_aColor;
+        private int Program_Location_uProjection;
+        private int Program_Location_uView;
+        private int Program_Location_uModel;
 
         private readonly string[] _Es2_ShaderVertexSource = new string[] {
-            "uniform mat4 uMVP;\n",
-            "attribute vec2 aPosition;\n",
+            "uniform mat4 uProjection;\n",
+            "uniform mat4 uView;\n",
+            "uniform mat4 uModel;\n",
+            "attribute vec3 aPosition;\n",
             "attribute vec3 aColor;\n",
             "varying vec3 vColor;\n",
             "void main() {\n",
-            "	gl_Position = uMVP * vec4(aPosition, 0.0, 1.0);\n",
+            "	gl_Position = uProjection*uView*uModel*vec4(aPosition, 1.0);\n",
             "	vColor = aColor;\n",
             "}\n"
         };
 
         private readonly string[] _Es2_ShaderFragmentSource = new string[] {
-            "precision mediump float;\n",
             "varying vec3 vColor;\n",
             "void main() {\n",
             "	gl_FragColor = vec4(vColor, 1.0);\n",
@@ -239,7 +277,8 @@ namespace W3Edit.Render
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
             // Change triangle rotation
-            _Angle = (_Angle + 0.5f) % 90.0f;
+            angle = (angle + 1f) % 360.0f;
+            angle_rad = angle * PI_OVER_180;
 
             // Issue a new frame after this render
             glControl1.Invalidate();
