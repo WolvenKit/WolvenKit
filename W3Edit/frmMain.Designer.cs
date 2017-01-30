@@ -65,10 +65,12 @@
             this.modToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addFileFromBundleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wcclitePatcherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,8 +80,7 @@
             this.joinOurDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tutorialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.reloadProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -242,7 +243,7 @@
             // 
             this.newModToolStripMenuItem.Image = global::W3Edit.Properties.Resources.NewSolutionFolder_6289;
             this.newModToolStripMenuItem.Name = "newModToolStripMenuItem";
-            this.newModToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
+            this.newModToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.newModToolStripMenuItem.Text = "New mod";
             this.newModToolStripMenuItem.Click += new System.EventHandler(this.tbtNewMod_Click);
             // 
@@ -250,19 +251,19 @@
             // 
             this.openModToolStripMenuItem.Image = global::W3Edit.Properties.Resources.Open_6529;
             this.openModToolStripMenuItem.Name = "openModToolStripMenuItem";
-            this.openModToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
+            this.openModToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.openModToolStripMenuItem.Text = "Open mod";
             this.openModToolStripMenuItem.Click += new System.EventHandler(this.tbtOpenMod_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(153, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(128, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -271,6 +272,7 @@
             this.modToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addFileFromBundleToolStripMenuItem,
             this.addFileToolStripMenuItem,
+            this.reloadProjectToolStripMenuItem,
             this.toolStripSeparator4,
             this.settingsToolStripMenuItem});
             this.modToolStripMenuItem.Name = "modToolStripMenuItem";
@@ -292,6 +294,11 @@
             this.addFileToolStripMenuItem.Size = new System.Drawing.Size(188, 26);
             this.addFileToolStripMenuItem.Text = "Add file";
             this.addFileToolStripMenuItem.Click += new System.EventHandler(this.addFileToolStripMenuItem_Click_2);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(185, 6);
             // 
             // settingsToolStripMenuItem
             // 
@@ -316,7 +323,7 @@
             // 
             this.saveExplorerToolStripMenuItem.Image = global::W3Edit.Properties.Resources.properties_16xLG;
             this.saveExplorerToolStripMenuItem.Name = "saveExplorerToolStripMenuItem";
-            this.saveExplorerToolStripMenuItem.Size = new System.Drawing.Size(163, 26);
+            this.saveExplorerToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.saveExplorerToolStripMenuItem.Text = "Save explorer";
             this.saveExplorerToolStripMenuItem.Click += new System.EventHandler(this.saveExplorerToolStripMenuItem_Click);
             // 
@@ -324,15 +331,20 @@
             // 
             this.wcclitePatcherToolStripMenuItem.Image = global::W3Edit.Properties.Resources.FileGroup_10135_16x;
             this.wcclitePatcherToolStripMenuItem.Name = "wcclitePatcherToolStripMenuItem";
-            this.wcclitePatcherToolStripMenuItem.Size = new System.Drawing.Size(163, 26);
+            this.wcclitePatcherToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.wcclitePatcherToolStripMenuItem.Text = "wcc_lite patcher";
             this.wcclitePatcherToolStripMenuItem.Click += new System.EventHandler(this.wcclitePatcherToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(156, 6);
             // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Image = global::W3Edit.Properties.Resources.gear_16xLG;
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(163, 26);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.optionsToolStripMenuItem.Text = "Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
@@ -349,7 +361,7 @@
             // 
             this.modExplorerToolStripMenuItem.Image = global::W3Edit.Properties.Resources.FileGroup_10135_16x;
             this.modExplorerToolStripMenuItem.Name = "modExplorerToolStripMenuItem";
-            this.modExplorerToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
+            this.modExplorerToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.modExplorerToolStripMenuItem.Text = "Mod explorer";
             this.modExplorerToolStripMenuItem.Click += new System.EventHandler(this.modExplorerToolStripMenuItem_Click);
             // 
@@ -357,7 +369,7 @@
             // 
             this.outputToolStripMenuItem.Image = global::W3Edit.Properties.Resources.FileGroup_10135_16x;
             this.outputToolStripMenuItem.Name = "outputToolStripMenuItem";
-            this.outputToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
+            this.outputToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.outputToolStripMenuItem.Text = "Output";
             this.outputToolStripMenuItem.Click += new System.EventHandler(this.outputToolStripMenuItem_Click);
             // 
@@ -375,7 +387,7 @@
             // 
             this.aboutRedkit2ToolStripMenuItem.Image = global::W3Edit.Properties.Resources.info_icon_23818;
             this.aboutRedkit2ToolStripMenuItem.Name = "aboutRedkit2ToolStripMenuItem";
-            this.aboutRedkit2ToolStripMenuItem.Size = new System.Drawing.Size(170, 26);
+            this.aboutRedkit2ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.aboutRedkit2ToolStripMenuItem.Text = "About Wolven kit";
             this.aboutRedkit2ToolStripMenuItem.Click += new System.EventHandler(this.creditsToolStripMenuItem_Click);
             // 
@@ -383,7 +395,7 @@
             // 
             this.joinOurDiscordToolStripMenuItem.Image = global::W3Edit.Properties.Resources._2c21aeda16de354ba5334551a883b481;
             this.joinOurDiscordToolStripMenuItem.Name = "joinOurDiscordToolStripMenuItem";
-            this.joinOurDiscordToolStripMenuItem.Size = new System.Drawing.Size(170, 26);
+            this.joinOurDiscordToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.joinOurDiscordToolStripMenuItem.Text = "Join our discord";
             this.joinOurDiscordToolStripMenuItem.Click += new System.EventHandler(this.joinOurDiscordToolStripMenuItem_Click_1);
             // 
@@ -391,7 +403,7 @@
             // 
             this.tutorialsToolStripMenuItem.Image = global::W3Edit.Properties.Resources.info_icon_23818;
             this.tutorialsToolStripMenuItem.Name = "tutorialsToolStripMenuItem";
-            this.tutorialsToolStripMenuItem.Size = new System.Drawing.Size(170, 26);
+            this.tutorialsToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.tutorialsToolStripMenuItem.Text = "Tutorials";
             this.tutorialsToolStripMenuItem.Click += new System.EventHandler(this.tutorialsToolStripMenuItem_Click);
             // 
@@ -399,7 +411,7 @@
             // 
             this.dockPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dockPanel.Location = new System.Drawing.Point(0, 51);
-            this.dockPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dockPanel.Margin = new System.Windows.Forms.Padding(2);
             this.dockPanel.Name = "dockPanel";
             this.dockPanel.ShowDocumentIcon = true;
             this.dockPanel.Size = new System.Drawing.Size(824, 367);
@@ -452,15 +464,13 @@
             this.dockPanel.TabIndex = 9;
             this.dockPanel.ActiveDocumentChanged += new System.EventHandler(this.dockPanel_ActiveDocumentChanged);
             // 
-            // toolStripSeparator4
+            // reloadProjectToolStripMenuItem
             // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(185, 6);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(160, 6);
+            this.reloadProjectToolStripMenuItem.Image = global::W3Edit.Properties.Resources.refresh;
+            this.reloadProjectToolStripMenuItem.Name = "reloadProjectToolStripMenuItem";
+            this.reloadProjectToolStripMenuItem.Size = new System.Drawing.Size(188, 26);
+            this.reloadProjectToolStripMenuItem.Text = "Reload project";
+            this.reloadProjectToolStripMenuItem.Click += new System.EventHandler(this.reloadProjectToolStripMenuItem_Click);
             // 
             // frmMain
             // 
@@ -527,5 +537,6 @@
         private System.Windows.Forms.ToolStripMenuItem tutorialsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem reloadProjectToolStripMenuItem;
     }
 }

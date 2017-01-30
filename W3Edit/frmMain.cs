@@ -336,25 +336,29 @@ namespace W3Edit
             openMod();
         }
 
-        private void openMod()
+        private void openMod(string file = "")
         {
-            var dlg = new OpenFileDialog();
-            dlg.Title = "Open Witcher 3 Mod Project";
-            dlg.Filter = "Witcher 3 Mod|*.w3modproj";
-            dlg.InitialDirectory = MainController.Get().Configuration.InitialModDirectory;
-            if (dlg.ShowDialog() == DialogResult.OK)
+            if (file == "")
             {
-                MainController.Get().Configuration.InitialModDirectory = Path.GetDirectoryName(dlg.FileName);
-
-                var ser = new XmlSerializer(typeof (W3Mod));
-                var modfile = new FileStream(dlg.FileName, FileMode.Open, FileAccess.Read);
-                ActiveMod = (W3Mod) ser.Deserialize(modfile);
-                ActiveMod.FileName = dlg.FileName;
-                modfile.Close();
-
-                ShowModExplorer();
-                UpdateModFileList(true);
+                var dlg = new OpenFileDialog();
+                dlg.Title = "Open Witcher 3 Mod Project";
+                dlg.Filter = "Witcher 3 Mod|*.w3modproj";
+                dlg.InitialDirectory = MainController.Get().Configuration.InitialModDirectory;
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    file = dlg.FileName;
+                }
             }
+            MainController.Get().Configuration.InitialModDirectory = Path.GetDirectoryName(file);
+
+            var ser = new XmlSerializer(typeof(W3Mod));
+            var modfile = new FileStream(file, FileMode.Open, FileAccess.Read);
+            ActiveMod = (W3Mod)ser.Deserialize(modfile);
+            ActiveMod.FileName = file;
+            modfile.Close();
+
+            ShowModExplorer();
+            UpdateModFileList(true);
         }
 
         private void ShowModExplorer()
@@ -984,6 +988,15 @@ I recommend: https://sourceforge.net/projects/vgmtoolbox/",@"Info",MessageBoxBut
         {
             var tf = new frmTutorials();
                 tf.Show(this);
+        }
+
+        private void reloadProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+            if (File.Exists(ModManager.Get().ActiveMod?.FileName))
+            {
+                openMod(ModManager.Get().ActiveMod?.FileName);
+            }
         }
     }
 }
