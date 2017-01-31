@@ -173,12 +173,15 @@ namespace W3Edit
                     break;
                 }
             }
-            doc.embeddedFiles = new frmEmbeddedFiles
+            if (doc.File.block7.Count > 0)
             {
-                File = doc.File,
-                DockAreas = DockAreas.Document
-            };
-            doc.embeddedFiles.Show(doc.FormPanel, DockState.Document);
+                doc.embeddedFiles = new frmEmbeddedFiles
+                {
+                    File = doc.File,
+                    DockAreas = DockAreas.Document
+                };
+                doc.embeddedFiles.Show(doc.FormPanel, DockState.Document);
+            }
             doc.Activated += doc_Activated;
             doc.Show(dockPanel, DockState.Document);
             doc.FormClosed += doc_FormClosed;
