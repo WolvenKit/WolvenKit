@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace W3Edit.Bundles
 {
@@ -10,11 +12,17 @@ namespace W3Edit.Bundles
         {
             Items = new Dictionary<string, List<BundleItem>>();
             Bundles = new Dictionary<string, Bundle>();
+            FileList = new List<BundleItem>();
+            Extensions = new List<string>();
+            AutocompleteSource = new AutoCompleteStringCollection();
         }
 
         public Dictionary<string, List<BundleItem>> Items { get; set; }
         public Dictionary<string, Bundle> Bundles { get; set; }
         public BundleTreeNode RootNode { get; set; }
+        public List<BundleItem> FileList { get; set; }
+        public List<string> Extensions { get; set; }
+        public AutoCompleteStringCollection AutocompleteSource { get; set; }   
 
         /// <summary>
         ///     Load a single bundle
@@ -105,7 +113,7 @@ namespace W3Edit.Bundles
         }
 
         /// <summary>
-        ///     Rebuilds the bundle tree structure
+        ///     Rebuilds the bundle tree structure also rebuilds NOTE: Filelist,autocomplete,extensions
         /// </summary>
         public void RebuildRootNode()
         {
@@ -136,6 +144,66 @@ namespace W3Edit.Bundles
 
                 currentNode.Files.Add(parts[parts.Length - 1], item.Value);
             }
+            RebuildFileList();
+            RebuildExtensions();
+            RebuildAutoCompleteSource();
+        }
+
+        /// <summary>
+        /// Calls GetFiles on the rootnode
+        /// </summary>
+        public void RebuildFileList()
+        {
+            FileList = GetFiles(RootNode);
+        }
+
+        /// <summary>
+        /// Gets the avaliable extensions in the files
+        /// </summary>
+        public void RebuildExtensions()
+        {
+            foreach (var file in FileList.Where(file => !Extensions.Contains(file.Name.Split('.').Last())))
+            {
+                Extensions.Add(file.Name.Split('.').Last());
+            }
+            Extensions.Sort();
+        }
+
+        /// <summary>
+        /// Gets the distinct filenames from the loaded bundles so they can be used for autocomplete
+        /// </summary>
+        public void RebuildAutoCompleteSource()
+        {
+            AutocompleteSource.AddRange(FileList.Select(x => GetFileName(x.Name)).Distinct().ToArray());
+        }
+
+        /// <summary>
+        /// Deep search for files
+        /// </summary>
+        /// <param name="mainnode">The rootnode to get the files from</param>
+        /// <returns></returns>
+        public List<BundleItem> GetFiles(BundleTreeNode mainnode)
+        {
+            var bundfiles = new List<BundleItem>();
+            if (mainnode?.Files != null)
+            {
+                foreach (var wfile in mainnode.Files)
+                {
+                    bundfiles.AddRange(wfile.Value);
+                }
+                bundfiles.AddRange(mainnode.Directories.Values.SelectMany(GetFiles));
+            }
+            return bundfiles;
+        }
+
+        /// <summary>
+        /// Since File.GetExtension() only works for real paths we need to have this
+        /// </summary>
+        /// <param name="s">Path/Name of the file</param>
+        /// <returns></returns>
+        public string GetFileName(string s)
+        {
+            return s.Contains('\\') ? s.Split('\\').Last() : s;
         }
     }
 }

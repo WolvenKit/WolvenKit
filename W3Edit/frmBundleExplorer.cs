@@ -17,18 +17,10 @@ namespace W3Edit
         {
             InitializeComponent();
             RootNode = manager.RootNode;
-            FileList = GetFiles(RootNode);
-            var sorted = GetExtensions(FileList.Select(x => x.Name).ToArray());
-            Array.Sort(sorted, (x, y) => string.Compare(x, y));
-            filetypeCB.Items.AddRange(sorted);
+            FileList = manager.FileList;
+            filetypeCB.Items.AddRange(manager.Extensions.ToArray());
             filetypeCB.SelectedIndex = 0;
-            Autocompletelist = FileList.Select(x => GetFileName(x.Name)).ToList();
-            var completelist = new AutoCompleteStringCollection();
-            foreach (var name in Autocompletelist)
-            {
-                completelist.Add(name);
-            }
-            SearchBox.AutoCompleteCustomSource = completelist;
+            SearchBox.AutoCompleteCustomSource = manager.AutocompleteSource;
         }
 
         public List<string> Files { get; set; }
@@ -171,18 +163,6 @@ namespace W3Edit
             }
         }
 
-        private void fileListView_DoubleClick(object sender, EventArgs e)
-        {
-        }
-
-        private void fileListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
-        {
-        }
-
-        private void fileListView_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
-
         private void pathPanel_Click(object sender, EventArgs e)
         {
             pathPanel.Controls.Clear();
@@ -256,20 +236,6 @@ namespace W3Edit
             {
                 pathlistview.Items.Remove(item);
             }
-        }
-
-        public string GetFileName(string s)
-        {
-            var result = "";
-            if (s.Contains('\\'))
-            {
-                result = s.Split('\\').Last();
-            }
-            else
-            {
-                result = s;
-            }
-            return result;
         }
 
         public void Search(string s, int i)
