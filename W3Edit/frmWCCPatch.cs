@@ -33,6 +33,14 @@ namespace W3Edit
 
         private void btnPatch_Click(object sender, EventArgs e)
         {
+            if (!File.Exists(textBox1.Text) || Path.GetExtension(textBox1.Text) != ".exe")
+            {
+                MessageBox.Show("Please select wcc_lite.exe before attempting to patch it!",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
             var filepath = '"' + textBox1.Text + '"';
             try
             {
