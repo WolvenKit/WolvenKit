@@ -348,6 +348,10 @@ namespace W3Edit
                 {
                     file = dlg.FileName;
                 }
+                else
+                {
+                    return;
+                }
             }
             MainController.Get().Configuration.InitialModDirectory = Path.GetDirectoryName(file);
 
