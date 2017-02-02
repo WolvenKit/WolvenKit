@@ -421,5 +421,17 @@ namespace W3Edit
                 }
             }
         }
+
+        private void fileListView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.A && e.Control)
+            {
+                fileListView.MultiSelect = true;
+                foreach (ListViewItem item in fileListView.Items)
+                {
+                    item.Selected = true;
+                }
+            }
+        }
     }
 }

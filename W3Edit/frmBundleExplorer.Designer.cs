@@ -38,6 +38,9 @@
             this.colCompressionRatio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colCompressiontype = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colTimeStamp = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.filebrowserMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.copyPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.markToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pathPanel = new System.Windows.Forms.Panel();
             this.SearchBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -50,9 +53,6 @@
             this.button2 = new System.Windows.Forms.Button();
             this.pathlistview = new System.Windows.Forms.ListView();
             this.columnPath = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.filebrowserMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.copyPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.markToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.filebrowserMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -99,6 +99,7 @@
             this.fileListView.TabIndex = 5;
             this.fileListView.UseCompatibleStateImageBehavior = false;
             this.fileListView.View = System.Windows.Forms.View.Details;
+            this.fileListView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.fileListView_KeyDown);
             this.fileListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.fileListView_MouseDoubleClick);
             this.fileListView.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.fileListView_PreviewKeyDown);
             // 
@@ -126,6 +127,28 @@
             // 
             this.colTimeStamp.Text = "TimeStamp";
             this.colTimeStamp.Width = 77;
+            // 
+            // filebrowserMenuStrip
+            // 
+            this.filebrowserMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyPathToolStripMenuItem,
+            this.markToolStripMenuItem});
+            this.filebrowserMenuStrip.Name = "filebrowserMenuStrip";
+            this.filebrowserMenuStrip.Size = new System.Drawing.Size(130, 48);
+            // 
+            // copyPathToolStripMenuItem
+            // 
+            this.copyPathToolStripMenuItem.Name = "copyPathToolStripMenuItem";
+            this.copyPathToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.copyPathToolStripMenuItem.Text = "Copy Path";
+            this.copyPathToolStripMenuItem.Click += new System.EventHandler(this.copyPathToolStripMenuItem_Click);
+            // 
+            // markToolStripMenuItem
+            // 
+            this.markToolStripMenuItem.Name = "markToolStripMenuItem";
+            this.markToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.markToolStripMenuItem.Text = "Mark";
+            this.markToolStripMenuItem.Click += new System.EventHandler(this.markToolStripMenuItem_Click);
             // 
             // pathPanel
             // 
@@ -267,28 +290,6 @@
             // 
             this.columnPath.Text = "Path";
             this.columnPath.Width = 105;
-            // 
-            // filebrowserMenuStrip
-            // 
-            this.filebrowserMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.copyPathToolStripMenuItem,
-            this.markToolStripMenuItem});
-            this.filebrowserMenuStrip.Name = "filebrowserMenuStrip";
-            this.filebrowserMenuStrip.Size = new System.Drawing.Size(153, 70);
-            // 
-            // copyPathToolStripMenuItem
-            // 
-            this.copyPathToolStripMenuItem.Name = "copyPathToolStripMenuItem";
-            this.copyPathToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.copyPathToolStripMenuItem.Text = "Copy Path";
-            this.copyPathToolStripMenuItem.Click += new System.EventHandler(this.copyPathToolStripMenuItem_Click);
-            // 
-            // markToolStripMenuItem
-            // 
-            this.markToolStripMenuItem.Name = "markToolStripMenuItem";
-            this.markToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.markToolStripMenuItem.Text = "Mark";
-            this.markToolStripMenuItem.Click += new System.EventHandler(this.markToolStripMenuItem_Click);
             // 
             // frmBundleExplorer
             // 
