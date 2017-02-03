@@ -51,7 +51,6 @@
             this.openfileButton = new System.Windows.Forms.ToolStripButton();
             this.saveButton = new System.Windows.Forms.ToolStripButton();
             this.saveallButton = new System.Windows.Forms.ToolStripButton();
-            this.refreshButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton7 = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.btPack = new System.Windows.Forms.ToolStripButton();
@@ -65,6 +64,7 @@
             this.modToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addFileFromBundleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addFileFromOtherModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reloadProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,7 +81,6 @@
             this.joinOurDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tutorialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            this.addFileFromOtherModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -96,7 +95,6 @@
             this.openfileButton,
             this.saveButton,
             this.saveallButton,
-            this.refreshButton,
             this.toolStripButton7,
             this.toolStripSeparator2,
             this.btPack,
@@ -162,17 +160,6 @@
             this.saveallButton.Text = "toolStripButton5";
             this.saveallButton.ToolTipText = "Save all";
             this.saveallButton.Click += new System.EventHandler(this.tbtSaveAll_Click);
-            // 
-            // refreshButton
-            // 
-            this.refreshButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.refreshButton.Image = global::W3Edit.Properties.Resources.refresh;
-            this.refreshButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.refreshButton.Name = "refreshButton";
-            this.refreshButton.Size = new System.Drawing.Size(24, 24);
-            this.refreshButton.Text = "toolStripButton6";
-            this.refreshButton.ToolTipText = "Refresh files";
-            this.refreshButton.Click += new System.EventHandler(this.TbtRefresh);
             // 
             // toolStripButton7
             // 
@@ -285,7 +272,7 @@
             // 
             this.addFileFromBundleToolStripMenuItem.Image = global::W3Edit.Properties.Resources.AddNodefromFile_354;
             this.addFileFromBundleToolStripMenuItem.Name = "addFileFromBundleToolStripMenuItem";
-            this.addFileFromBundleToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
+            this.addFileFromBundleToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.addFileFromBundleToolStripMenuItem.Text = "Add file from Bundle";
             this.addFileFromBundleToolStripMenuItem.Click += new System.EventHandler(this.addFileToolStripMenuItem1_Click);
             // 
@@ -293,28 +280,36 @@
             // 
             this.addFileToolStripMenuItem.Image = global::W3Edit.Properties.Resources.AddNodefromFile_354;
             this.addFileToolStripMenuItem.Name = "addFileToolStripMenuItem";
-            this.addFileToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
+            this.addFileToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.addFileToolStripMenuItem.Text = "Add file";
             this.addFileToolStripMenuItem.Click += new System.EventHandler(this.addFileToolStripMenuItem_Click_2);
+            // 
+            // addFileFromOtherModToolStripMenuItem
+            // 
+            this.addFileFromOtherModToolStripMenuItem.Image = global::W3Edit.Properties.Resources.AddNodefromFile_354;
+            this.addFileFromOtherModToolStripMenuItem.Name = "addFileFromOtherModToolStripMenuItem";
+            this.addFileFromOtherModToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.addFileFromOtherModToolStripMenuItem.Text = "Add file from other mod";
+            this.addFileFromOtherModToolStripMenuItem.Click += new System.EventHandler(this.addFileFromOtherModToolStripMenuItem_Click);
             // 
             // reloadProjectToolStripMenuItem
             // 
             this.reloadProjectToolStripMenuItem.Image = global::W3Edit.Properties.Resources.refresh;
             this.reloadProjectToolStripMenuItem.Name = "reloadProjectToolStripMenuItem";
-            this.reloadProjectToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
+            this.reloadProjectToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.reloadProjectToolStripMenuItem.Text = "Reload project";
             this.reloadProjectToolStripMenuItem.Click += new System.EventHandler(this.reloadProjectToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(204, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(200, 6);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Image = global::W3Edit.Properties.Resources.gear_16xLG;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.modSettingsToolStripMenuItem_Click);
             // 
@@ -474,14 +469,6 @@
             this.dockPanel.TabIndex = 9;
             this.dockPanel.ActiveDocumentChanged += new System.EventHandler(this.dockPanel_ActiveDocumentChanged);
             // 
-            // addFileFromOtherModToolStripMenuItem
-            // 
-            this.addFileFromOtherModToolStripMenuItem.Image = global::W3Edit.Properties.Resources.AddNodefromFile_354;
-            this.addFileFromOtherModToolStripMenuItem.Name = "addFileFromOtherModToolStripMenuItem";
-            this.addFileFromOtherModToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
-            this.addFileFromOtherModToolStripMenuItem.Text = "Add file from other mod";
-            this.addFileFromOtherModToolStripMenuItem.Click += new System.EventHandler(this.addFileFromOtherModToolStripMenuItem_Click);
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -534,7 +521,6 @@
         private System.Windows.Forms.ToolStripButton openfileButton;
         private System.Windows.Forms.ToolStripButton saveButton;
         private System.Windows.Forms.ToolStripButton saveallButton;
-        private System.Windows.Forms.ToolStripButton refreshButton;
         private System.Windows.Forms.ToolStripButton toolStripButton7;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton btPack;

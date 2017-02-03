@@ -328,6 +328,7 @@ namespace W3Edit
 
         private void UpdateModFileList(bool clear = false)
         {
+            
             ModExplorer?.UpdateModFileList(true,clear);
         }
 
@@ -969,11 +970,6 @@ I recommend: https://sourceforge.net/projects/vgmtoolbox/",@"Info",MessageBoxBut
                 MessageBox.Show(@"Are you sure you would like to join the modding discord?", @"Confirmation",
                     MessageBoxButtons.YesNo) == DialogResult.Yes)
                 Process.Start("https://discord.gg/qBNgDEX");
-        }
-
-        private void TbtRefresh(object sender, EventArgs e)
-        {
-            UpdateModFileList(true);
         }
 
         private void wcclitePatcherToolStripMenuItem_Click(object sender, EventArgs e)
