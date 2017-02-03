@@ -467,6 +467,8 @@
     <Content Include="Licenses\License.objectlistview.txt" />
     <Content Include="Licenses\License.W3SaveGameEditor.txt" />
     <Content Include="Notes\Filetypes.txt" />
+    <None Include="Resources\ExitIcon.png" />
+    <None Include="Resources\LayerGroupVisibled.png" />
     <None Include="Resources\witcher3_102.ico" />
     <None Include="Resources\witcher3_101.ico" />
     <None Include="Resources\2c21aeda16de354ba5334551a883b481.png" />

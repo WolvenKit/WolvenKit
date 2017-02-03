@@ -271,7 +271,7 @@ namespace W3Edit
                 {
                     AddToMod(depotpath.Text, loadmods ? MainController.Get().ModBundleManager : MainController.Get().BundleManager);
                 }
-                UpdateModFileList();
+                UpdateModFileList(true);
                 SaveMod();
             }
         }
@@ -328,7 +328,7 @@ namespace W3Edit
 
         private void UpdateModFileList(bool clear = false)
         {
-            ModExplorer?.UpdateModFileList(clear);
+            ModExplorer?.UpdateModFileList(true,clear);
         }
 
         private void openModToolStripMenuItem_Click(object sender, EventArgs e)
@@ -376,7 +376,6 @@ namespace W3Edit
                 ModExplorer.RequestFileAdd += ModExplorer_RequestAddFile;
                 ModExplorer.RequestFileRename += ModExplorer_RequestFileRename;
             }
-
             ModExplorer.Activate();
         }
 
@@ -412,7 +411,7 @@ namespace W3Edit
                 if (ModExplorer != null)
                 {
                     ModExplorer.DeleteNode(filename);
-                    ModExplorer.UpdateModFileList();
+                    ModExplorer.UpdateModFileList(true,true);
                 }
             }
         }

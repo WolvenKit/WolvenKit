@@ -93,6 +93,16 @@ namespace W3Edit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ExitIcon {
+            get {
+                object obj = ResourceManager.GetObject("ExitIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap FileGroup_10135_16x {
             get {
                 object obj = ResourceManager.GetObject("FileGroup_10135_16x", resourceCulture);
@@ -126,6 +136,16 @@ namespace W3Edit.Properties {
         internal static System.Drawing.Bitmap info_icon_23818 {
             get {
                 object obj = ResourceManager.GetObject("info-icon-23818", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LayerGroupVisibled {
+            get {
+                object obj = ResourceManager.GetObject("LayerGroupVisibled", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
