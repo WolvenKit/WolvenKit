@@ -258,5 +258,13 @@ namespace W3Edit
         {
             modexplorerSlave.Path = ActiveMod.FileDirectory;
         }
+
+        private void modFileList_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F2 && modFileList.SelectedNode != null)
+            {
+                RequestFileRename?.Invoke(this, new RequestFileArgs { File = modFileList.SelectedNode.FullPath });
+            }
+        }
     }
 }
