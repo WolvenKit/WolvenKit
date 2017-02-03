@@ -38,13 +38,15 @@
             this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.searchstrip = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.searchBox = new System.Windows.Forms.ToolStripTextBox();
             this.resetfilesButton = new System.Windows.Forms.ToolStripButton();
             this.showhideButton = new System.Windows.Forms.ToolStripButton();
+            this.modexplorerSlave = new System.IO.FileSystemWatcher();
             this.contextMenu.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.searchstrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.modexplorerSlave)).BeginInit();
             this.SuspendLayout();
             // 
             // modFileList
@@ -119,18 +121,18 @@
             this.pasteToolStripMenuItem.Text = "Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
-            // toolStrip1
+            // searchstrip
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.searchstrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,
             this.searchBox,
             this.resetfilesButton,
             this.showhideButton});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(484, 25);
-            this.toolStrip1.TabIndex = 1;
-            this.toolStrip1.Text = "toolStrip1";
+            this.searchstrip.Location = new System.Drawing.Point(0, 0);
+            this.searchstrip.Name = "searchstrip";
+            this.searchstrip.Size = new System.Drawing.Size(484, 25);
+            this.searchstrip.TabIndex = 1;
+            this.searchstrip.Text = "toolStrip1";
             // 
             // toolStripLabel1
             // 
@@ -169,13 +171,22 @@
             this.showhideButton.ToolTipText = "Show/Hide folders";
             this.showhideButton.Click += new System.EventHandler(this.showhideButton_Click);
             // 
+            // modexplorerSlave
+            // 
+            this.modexplorerSlave.EnableRaisingEvents = true;
+            this.modexplorerSlave.IncludeSubdirectories = true;
+            this.modexplorerSlave.SynchronizingObject = this;
+            this.modexplorerSlave.Created += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
+            this.modexplorerSlave.Deleted += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
+            this.modexplorerSlave.Renamed += new System.IO.RenamedEventHandler(this.FileChanges_Detected);
+            // 
             // frmModExplorer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 405);
             this.Controls.Add(this.modFileList);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.searchstrip);
             this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 
             | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight) 
             | WeifenLuo.WinFormsUI.Docking.DockAreas.DockTop) 
@@ -185,9 +196,11 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmModExplorer";
             this.Text = "Mod Explorer";
+            this.Shown += new System.EventHandler(this.frmModExplorer_Shown);
             this.contextMenu.ResumeLayout(false);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.searchstrip.ResumeLayout(false);
+            this.searchstrip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.modexplorerSlave)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -203,10 +216,11 @@
         private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip searchstrip;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.ToolStripTextBox searchBox;
         private System.Windows.Forms.ToolStripButton showhideButton;
         private System.Windows.Forms.ToolStripButton resetfilesButton;
+        private System.IO.FileSystemWatcher modexplorerSlave;
     }
 }

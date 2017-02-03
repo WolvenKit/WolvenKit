@@ -229,7 +229,7 @@ namespace W3Edit
 
         private void searchBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (searchBox.Text == Tag)
+            if (searchBox.Text == (string)Tag)
             {
                 this.Tag = searchBox.Text;
                 e.Cancel = true;
@@ -246,6 +246,17 @@ namespace W3Edit
                 FilteredFiles = ActiveMod.Files.Where(x => (x.Contains('\\') ? x.Split('\\').Last() : x).ToUpper().Contains(searchBox.Text.ToUpper())).ToList();
                 UpdateModFileList(FoldersShown, true);
             }
+        }
+
+        private void FileChanges_Detected(object sender, FileSystemEventArgs e)
+        {
+            FilteredFiles = ActiveMod.Files;
+            UpdateModFileList(FoldersShown, true);
+        }
+
+        private void frmModExplorer_Shown(object sender, EventArgs e)
+        {
+            modexplorerSlave.Path = ActiveMod.FileDirectory;
         }
     }
 }
