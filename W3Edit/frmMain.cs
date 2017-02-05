@@ -762,7 +762,21 @@ I recommend: https://sourceforge.net/projects/vgmtoolbox/",@"Info",MessageBoxBut
             var packedDir = Path.Combine(ActiveMod.Directory, @"packed\content\");
             var uncookedDir = ActiveMod.FileDirectory;
             if (!Directory.Exists(packedDir))
+            {
                 Directory.CreateDirectory(packedDir);
+            }
+            else
+            {
+                var di = new DirectoryInfo(packedDir);
+                foreach (var file in di.GetFiles())
+                {
+                    file.Delete();
+                }
+                foreach (var dir in di.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+            }
 
             proc.Arguments = $"pack -dir={uncookedDir} -outdir={packedDir}";
             proc.UseShellExecute = false;
