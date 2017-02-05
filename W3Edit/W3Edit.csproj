@@ -103,6 +103,7 @@
     <Reference Include="LZ4PCL">
       <HintPath>..\packages\LZ4PCL.1.0.0\lib\portable-net4+netcore45+wpa81+MonoAndroid1+MonoTouch1\LZ4PCL.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.JScript" />
     <Reference Include="ObjectListView, Version=2.9.1.1072, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
       <HintPath>..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
       <Private>True</Private>
@@ -163,6 +164,12 @@
     </Compile>
     <Compile Include="frmTutorials.Designer.cs">
       <DependentUpon>frmTutorials.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmUsmPlayer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUsmPlayer.Designer.cs">
+      <DependentUpon>frmUsmPlayer.cs</DependentUpon>
     </Compile>
     <Compile Include="frmWCCPatch.cs">
       <SubType>Form</SubType>
@@ -311,6 +318,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestFileOpenArgs.cs" />
     <Compile Include="SelectChunkArgs.cs" />
+    <Compile Include="Video\ByteConversion.cs" />
+    <Compile Include="Video\Constants.cs" />
+    <Compile Include="Video\CriUsmStream.cs" />
+    <Compile Include="Video\FileUtil.cs" />
+    <Compile Include="Video\MathUtil.cs" />
+    <Compile Include="Video\Mpeg1Stream.cs" />
+    <Compile Include="Video\MpegStream.cs" />
+    <Compile Include="Video\ParseFile.cs" />
+    <Compile Include="Video\SofDecStream.cs" />
     <Compile Include="Win32.cs" />
     <EmbeddedResource Include="frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
@@ -380,6 +396,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmTutorials.resx">
       <DependentUpon>frmTutorials.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmUsmPlayer.resx">
+      <DependentUpon>frmUsmPlayer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmWCCPatch.resx">
       <DependentUpon>frmWCCPatch.cs</DependentUpon>
@@ -498,7 +517,17 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <COMReference Include="WMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

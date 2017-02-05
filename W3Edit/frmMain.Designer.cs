@@ -65,6 +65,7 @@
             this.addFileFromBundleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addFileFromOtherModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createPackedInstallerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reloadProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,7 +82,6 @@
             this.joinOurDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tutorialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            this.createPackedInstallerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -294,6 +294,14 @@
             this.addFileFromOtherModToolStripMenuItem.Text = "Add file from other mod";
             this.addFileFromOtherModToolStripMenuItem.Click += new System.EventHandler(this.addFileFromOtherModToolStripMenuItem_Click);
             // 
+            // createPackedInstallerToolStripMenuItem
+            // 
+            this.createPackedInstallerToolStripMenuItem.Image = global::W3Edit.Properties.Resources.ExpandIcon;
+            this.createPackedInstallerToolStripMenuItem.Name = "createPackedInstallerToolStripMenuItem";
+            this.createPackedInstallerToolStripMenuItem.Size = new System.Drawing.Size(247, 26);
+            this.createPackedInstallerToolStripMenuItem.Text = "Create Packed Installer";
+            this.createPackedInstallerToolStripMenuItem.Click += new System.EventHandler(this.createPackedInstallerToolStripMenuItem_Click);
+            // 
             // reloadProjectToolStripMenuItem
             // 
             this.reloadProjectToolStripMenuItem.Image = global::W3Edit.Properties.Resources.refresh;
@@ -471,14 +479,6 @@
             this.dockPanel.TabIndex = 9;
             this.dockPanel.ActiveDocumentChanged += new System.EventHandler(this.dockPanel_ActiveDocumentChanged);
             // 
-            // createPackedInstallerToolStripMenuItem
-            // 
-            this.createPackedInstallerToolStripMenuItem.Image = global::W3Edit.Properties.Resources.ExpandIcon;
-            this.createPackedInstallerToolStripMenuItem.Name = "createPackedInstallerToolStripMenuItem";
-            this.createPackedInstallerToolStripMenuItem.Size = new System.Drawing.Size(247, 26);
-            this.createPackedInstallerToolStripMenuItem.Text = "Create Packed Installer";
-            this.createPackedInstallerToolStripMenuItem.Click += new System.EventHandler(this.createPackedInstallerToolStripMenuItem_Click);
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -490,7 +490,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(773, 478);
             this.Name = "frmMain";
             this.Text = "Wolven kit";
