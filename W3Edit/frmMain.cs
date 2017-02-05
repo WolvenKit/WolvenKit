@@ -8,6 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using ICSharpCode.SharpZipLib.Core;
+using ICSharpCode.SharpZipLib.Tar;
+using ICSharpCode.SharpZipLib.Zip;
 using W3Edit.Bundles;
 using W3Edit.CR2W;
 using W3Edit.CR2W.Types;
@@ -713,11 +716,15 @@ I recommend: https://sourceforge.net/projects/vgmtoolbox/",@"Info",MessageBoxBut
             }
         }
 
-        private void installMod()
+        private void installMod(string W3ModPackagePath) //TODO: Finish this
         {
+            if(!File.Exists(W3ModPackagePath) || Path.GetExtension(W3ModPackagePath) != ".W3ModPackage")
+            {
+                MessageBox.Show("Corrupted or wrong file!","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);  
+                return;
+            }
+
             var packedDir = Path.Combine(ActiveMod.Directory, "packed");
-
-
             var modName = ActiveMod.Name;
 
             if (!ActiveMod.InstallAsDLC && !modName.StartsWith("mod"))
@@ -753,6 +760,144 @@ I recommend: https://sourceforge.net/projects/vgmtoolbox/",@"Info",MessageBoxBut
             }
 
             AddOutput("Mod Installed to " + gameModDir + "\n");
+        }
+
+        /// <summary>
+        /// Installs the mod from the packed folder of the project to the game
+        /// </summary>
+        private void installMod()
+        {
+            var packedDir = Path.Combine(ActiveMod.Directory, "packed");
+            var modName = ActiveMod.Name;
+
+            if (!ActiveMod.InstallAsDLC && !modName.StartsWith("mod"))
+                modName = "mod" + modName;
+
+            string gameModDir = null;
+
+            gameModDir = Path.Combine(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath),
+                ActiveMod.InstallAsDLC ? @"..\..\DLC\" : @"..\..\Mods\", modName);
+
+            if (!Directory.Exists(gameModDir))
+                Directory.CreateDirectory(gameModDir);
+
+            var dirs = Directory.GetDirectories(packedDir, "*", SearchOption.AllDirectories);
+            foreach (var dir in dirs)
+            {
+                var relativePath = dir.Substring(packedDir.Length + 1);
+
+                var fulldir = Path.Combine(gameModDir, relativePath);
+
+                if (!Directory.Exists(fulldir))
+                    Directory.CreateDirectory(fulldir);
+            }
+
+            var files = Directory.GetFiles(packedDir, "*", SearchOption.AllDirectories);
+            foreach (var file in files)
+            {
+                var relativePath = file.Substring(packedDir.Length + 1);
+
+                var fullpath = Path.Combine(gameModDir, relativePath);
+
+                File.Copy(file, fullpath, true);
+            }
+
+            AddOutput("Mod Installed to " + gameModDir + "\n");
+        }
+
+        private void CreateInstaller()
+        {
+            if (ActiveMod == null)
+                return;
+            ShowOutput();
+            var packeddir = Path.Combine(ActiveMod.Directory, @"packed\");
+            var contentdir = Path.Combine(ActiveMod.Directory, @"packed\content\");
+            if (!Directory.Exists(contentdir))
+            {
+                Directory.CreateDirectory(contentdir);
+            }
+            else
+            {
+                var di = new DirectoryInfo(contentdir);
+                foreach (var file in di.GetFiles())
+                {
+                    file.Delete();
+                }
+                foreach (var dir in di.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+            }
+            var taskPackMod = packMod();
+            while (!taskPackMod.IsCompleted)
+            {
+                Application.DoEvents();
+            }
+
+            var taskMetaData = createModMetaData();
+            while (!taskMetaData.IsCompleted)
+            {
+                Application.DoEvents();
+            }
+            var installdir = Path.Combine(ActiveMod.Directory, @"Installer/");
+            if (!Directory.Exists(installdir))
+                Directory.CreateDirectory(installdir);
+            FileStream fsOut = File.Create(Path.Combine(installdir,ActiveMod.Name + ".W3ModPackage"));
+            ZipOutputStream zipStream = new ZipOutputStream(fsOut);
+            int folderOffset = packeddir.Length + (packeddir.EndsWith("\\") ? 0 : 1);
+            CompressFolder(packeddir,zipStream,folderOffset);
+            CompressFile(ActiveMod.FileName,zipStream);
+            zipStream.IsStreamOwner = true;
+            zipStream.Close();
+            AddOutput("Installer created: " + fsOut.Name + "\n");
+        }
+
+        private void CompressFile(string filename, ZipOutputStream zipStream)
+        {
+            FileInfo fi = new FileInfo(filename);
+
+            string entryName = Path.GetFileName(filename);
+            entryName = ZipEntry.CleanName(entryName);
+            ZipEntry newEntry = new ZipEntry(entryName);
+            newEntry.DateTime = fi.LastWriteTime;
+            newEntry.Size = fi.Length;
+            zipStream.PutNextEntry(newEntry);
+            byte[] buffer = new byte[4096];
+            using (FileStream streamReader = File.OpenRead(filename))
+            {
+                StreamUtils.Copy(streamReader, zipStream, buffer);
+            }
+            zipStream.CloseEntry();
+        }
+
+        private void CompressFolder(string path, ZipOutputStream zipStream, int folderOffset)
+        {
+
+            string[] files = Directory.GetFiles(path);
+
+            foreach (string filename in files)
+            {
+
+                FileInfo fi = new FileInfo(filename);
+
+                string entryName = filename.Substring(folderOffset);
+                entryName = ZipEntry.CleanName(entryName);
+                ZipEntry newEntry = new ZipEntry(entryName);
+                newEntry.DateTime = fi.LastWriteTime; 
+                newEntry.Size = fi.Length;
+                zipStream.PutNextEntry(newEntry);
+                byte[] buffer = new byte[4096];
+                using (FileStream streamReader = File.OpenRead(filename))
+                {
+                    StreamUtils.Copy(streamReader, zipStream, buffer);
+                }
+                zipStream.CloseEntry();
+            }
+            string[] folders = Directory.GetDirectories(path);
+            foreach (string folder in folders)
+            {
+                CompressFolder(folder, zipStream, folderOffset);
+            }
         }
 
         private async Task packMod()
@@ -1015,6 +1160,11 @@ I recommend: https://sourceforge.net/projects/vgmtoolbox/",@"Info",MessageBoxBut
         private void addFileFromOtherModToolStripMenuItem_Click(object sender, EventArgs e)
         {
             addModFile(true);
+        }
+
+        private void createPackedInstallerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CreateInstaller();
         }
     }
 }
