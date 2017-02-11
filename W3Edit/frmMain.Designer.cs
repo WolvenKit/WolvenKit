@@ -100,9 +100,9 @@
             this.toolStripSeparator2,
             this.btPack,
             this.launchgameButton});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 28);
+            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1099, 27);
+            this.toolStrip1.Size = new System.Drawing.Size(824, 27);
             this.toolStrip1.TabIndex = 6;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -212,8 +212,8 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(1099, 28);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
+            this.menuStrip1.Size = new System.Drawing.Size(824, 24);
             this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -225,14 +225,14 @@
             this.toolStripSeparator3,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 24);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // newModToolStripMenuItem
             // 
             this.newModToolStripMenuItem.Image = global::W3Edit.Properties.Resources.NewSolutionFolder_6289;
             this.newModToolStripMenuItem.Name = "newModToolStripMenuItem";
-            this.newModToolStripMenuItem.Size = new System.Drawing.Size(155, 26);
+            this.newModToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.newModToolStripMenuItem.Text = "New mod";
             this.newModToolStripMenuItem.Click += new System.EventHandler(this.tbtNewMod_Click);
             // 
@@ -240,19 +240,19 @@
             // 
             this.openModToolStripMenuItem.Image = global::W3Edit.Properties.Resources.Open_6529;
             this.openModToolStripMenuItem.Name = "openModToolStripMenuItem";
-            this.openModToolStripMenuItem.Size = new System.Drawing.Size(155, 26);
+            this.openModToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.openModToolStripMenuItem.Text = "Open mod";
             this.openModToolStripMenuItem.Click += new System.EventHandler(this.tbtOpenMod_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(152, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(128, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(155, 26);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -267,14 +267,14 @@
             this.toolStripSeparator4,
             this.settingsToolStripMenuItem});
             this.modToolStripMenuItem.Name = "modToolStripMenuItem";
-            this.modToolStripMenuItem.Size = new System.Drawing.Size(52, 24);
+            this.modToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.modToolStripMenuItem.Text = "Mod";
             // 
             // addFileFromBundleToolStripMenuItem
             // 
             this.addFileFromBundleToolStripMenuItem.Image = global::W3Edit.Properties.Resources.AddNodefromFile_354;
             this.addFileFromBundleToolStripMenuItem.Name = "addFileFromBundleToolStripMenuItem";
-            this.addFileFromBundleToolStripMenuItem.Size = new System.Drawing.Size(247, 26);
+            this.addFileFromBundleToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.addFileFromBundleToolStripMenuItem.Text = "Add file from Bundle";
             this.addFileFromBundleToolStripMenuItem.Click += new System.EventHandler(this.addFileToolStripMenuItem1_Click);
             // 
@@ -282,7 +282,7 @@
             // 
             this.addFileToolStripMenuItem.Image = global::W3Edit.Properties.Resources.AddNodefromFile_354;
             this.addFileToolStripMenuItem.Name = "addFileToolStripMenuItem";
-            this.addFileToolStripMenuItem.Size = new System.Drawing.Size(247, 26);
+            this.addFileToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.addFileToolStripMenuItem.Text = "Add file";
             this.addFileToolStripMenuItem.Click += new System.EventHandler(this.addFileToolStripMenuItem_Click_2);
             // 
@@ -290,7 +290,7 @@
             // 
             this.addFileFromOtherModToolStripMenuItem.Image = global::W3Edit.Properties.Resources.AddNodefromFile_354;
             this.addFileFromOtherModToolStripMenuItem.Name = "addFileFromOtherModToolStripMenuItem";
-            this.addFileFromOtherModToolStripMenuItem.Size = new System.Drawing.Size(247, 26);
+            this.addFileFromOtherModToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.addFileFromOtherModToolStripMenuItem.Text = "Add file from other mod";
             this.addFileFromOtherModToolStripMenuItem.Click += new System.EventHandler(this.addFileFromOtherModToolStripMenuItem_Click);
             // 
@@ -298,7 +298,7 @@
             // 
             this.createPackedInstallerToolStripMenuItem.Image = global::W3Edit.Properties.Resources.ExpandIcon;
             this.createPackedInstallerToolStripMenuItem.Name = "createPackedInstallerToolStripMenuItem";
-            this.createPackedInstallerToolStripMenuItem.Size = new System.Drawing.Size(247, 26);
+            this.createPackedInstallerToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.createPackedInstallerToolStripMenuItem.Text = "Create Packed Installer";
             this.createPackedInstallerToolStripMenuItem.Click += new System.EventHandler(this.createPackedInstallerToolStripMenuItem_Click);
             // 
@@ -306,20 +306,20 @@
             // 
             this.reloadProjectToolStripMenuItem.Image = global::W3Edit.Properties.Resources.refresh;
             this.reloadProjectToolStripMenuItem.Name = "reloadProjectToolStripMenuItem";
-            this.reloadProjectToolStripMenuItem.Size = new System.Drawing.Size(247, 26);
+            this.reloadProjectToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.reloadProjectToolStripMenuItem.Text = "Reload project";
             this.reloadProjectToolStripMenuItem.Click += new System.EventHandler(this.reloadProjectToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(244, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(200, 6);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Image = global::W3Edit.Properties.Resources.gear_16xLG;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(247, 26);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.modSettingsToolStripMenuItem_Click);
             // 
@@ -331,14 +331,14 @@
             this.toolStripSeparator5,
             this.optionsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(56, 24);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // saveExplorerToolStripMenuItem
             // 
             this.saveExplorerToolStripMenuItem.Image = global::W3Edit.Properties.Resources.properties_16xLG;
             this.saveExplorerToolStripMenuItem.Name = "saveExplorerToolStripMenuItem";
-            this.saveExplorerToolStripMenuItem.Size = new System.Drawing.Size(190, 26);
+            this.saveExplorerToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.saveExplorerToolStripMenuItem.Text = "Save explorer";
             this.saveExplorerToolStripMenuItem.Click += new System.EventHandler(this.saveExplorerToolStripMenuItem_Click);
             // 
@@ -346,20 +346,20 @@
             // 
             this.wcclitePatcherToolStripMenuItem.Image = global::W3Edit.Properties.Resources.FileGroup_10135_16x;
             this.wcclitePatcherToolStripMenuItem.Name = "wcclitePatcherToolStripMenuItem";
-            this.wcclitePatcherToolStripMenuItem.Size = new System.Drawing.Size(190, 26);
+            this.wcclitePatcherToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.wcclitePatcherToolStripMenuItem.Text = "wcc_lite patcher";
             this.wcclitePatcherToolStripMenuItem.Click += new System.EventHandler(this.wcclitePatcherToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(187, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(156, 6);
             // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Image = global::W3Edit.Properties.Resources.gear_16xLG;
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(190, 26);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.optionsToolStripMenuItem.Text = "Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
@@ -369,14 +369,14 @@
             this.modExplorerToolStripMenuItem,
             this.outputToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.viewToolStripMenuItem.Text = "View";
             // 
             // modExplorerToolStripMenuItem
             // 
             this.modExplorerToolStripMenuItem.Image = global::W3Edit.Properties.Resources.FileGroup_10135_16x;
             this.modExplorerToolStripMenuItem.Name = "modExplorerToolStripMenuItem";
-            this.modExplorerToolStripMenuItem.Size = new System.Drawing.Size(174, 26);
+            this.modExplorerToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.modExplorerToolStripMenuItem.Text = "Mod explorer";
             this.modExplorerToolStripMenuItem.Click += new System.EventHandler(this.modExplorerToolStripMenuItem_Click);
             // 
@@ -384,7 +384,7 @@
             // 
             this.outputToolStripMenuItem.Image = global::W3Edit.Properties.Resources.FileGroup_10135_16x;
             this.outputToolStripMenuItem.Name = "outputToolStripMenuItem";
-            this.outputToolStripMenuItem.Size = new System.Drawing.Size(174, 26);
+            this.outputToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.outputToolStripMenuItem.Text = "Output";
             this.outputToolStripMenuItem.Click += new System.EventHandler(this.outputToolStripMenuItem_Click);
             // 
@@ -395,14 +395,14 @@
             this.joinOurDiscordToolStripMenuItem,
             this.tutorialsToolStripMenuItem});
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.aboutToolStripMenuItem.Text = "Help";
             // 
             // aboutRedkit2ToolStripMenuItem
             // 
             this.aboutRedkit2ToolStripMenuItem.Image = global::W3Edit.Properties.Resources.info_icon_23818;
             this.aboutRedkit2ToolStripMenuItem.Name = "aboutRedkit2ToolStripMenuItem";
-            this.aboutRedkit2ToolStripMenuItem.Size = new System.Drawing.Size(198, 26);
+            this.aboutRedkit2ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.aboutRedkit2ToolStripMenuItem.Text = "About Wolven kit";
             this.aboutRedkit2ToolStripMenuItem.Click += new System.EventHandler(this.creditsToolStripMenuItem_Click);
             // 
@@ -410,7 +410,7 @@
             // 
             this.joinOurDiscordToolStripMenuItem.Image = global::W3Edit.Properties.Resources._2c21aeda16de354ba5334551a883b481;
             this.joinOurDiscordToolStripMenuItem.Name = "joinOurDiscordToolStripMenuItem";
-            this.joinOurDiscordToolStripMenuItem.Size = new System.Drawing.Size(198, 26);
+            this.joinOurDiscordToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.joinOurDiscordToolStripMenuItem.Text = "Join our discord";
             this.joinOurDiscordToolStripMenuItem.Click += new System.EventHandler(this.joinOurDiscordToolStripMenuItem_Click_1);
             // 
@@ -418,18 +418,18 @@
             // 
             this.tutorialsToolStripMenuItem.Image = global::W3Edit.Properties.Resources.info_icon_23818;
             this.tutorialsToolStripMenuItem.Name = "tutorialsToolStripMenuItem";
-            this.tutorialsToolStripMenuItem.Size = new System.Drawing.Size(198, 26);
+            this.tutorialsToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.tutorialsToolStripMenuItem.Text = "Tutorials";
             this.tutorialsToolStripMenuItem.Click += new System.EventHandler(this.tutorialsToolStripMenuItem_Click);
             // 
             // dockPanel
             // 
             this.dockPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dockPanel.Location = new System.Drawing.Point(0, 55);
-            this.dockPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dockPanel.Location = new System.Drawing.Point(0, 0);
+            this.dockPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dockPanel.Name = "dockPanel";
             this.dockPanel.ShowDocumentIcon = true;
-            this.dockPanel.Size = new System.Drawing.Size(1099, 459);
+            this.dockPanel.Size = new System.Drawing.Size(824, 418);
             dockPanelGradient1.EndColor = System.Drawing.SystemColors.ControlLight;
             dockPanelGradient1.StartColor = System.Drawing.SystemColors.ControlLight;
             autoHideStripSkin1.DockStripGradient = dockPanelGradient1;
@@ -481,17 +481,16 @@
             // 
             // frmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1099, 514);
-            this.Controls.Add(this.dockPanel);
+            this.ClientSize = new System.Drawing.Size(824, 418);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.dockPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4);
-            this.MinimumSize = new System.Drawing.Size(773, 478);
+            this.MinimumSize = new System.Drawing.Size(584, 396);
             this.Name = "frmMain";
             this.Text = "Wolven kit";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmMain_FormClosed);

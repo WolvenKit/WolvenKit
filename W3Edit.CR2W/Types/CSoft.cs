@@ -22,12 +22,19 @@ namespace W3Edit.CR2W.Types
             }
             set
             {
-                Handle = cr2w.handles[value - 1].str;
+                if (value > 0)
+                {
+                    Handle = cr2w.handles[value - 1].str;
 
-                var filetype = cr2w.handles[value - 1].filetype;
-                FileType = cr2w.strings[filetype].str;
+                    var filetype = cr2w.handles[value - 1].filetype;
+                    FileType = cr2w.strings[filetype].str;
 
-                Flags = cr2w.handles[value - 1].flags;
+                    Flags = cr2w.handles[value - 1].flags;
+                }
+                else
+                {
+                    //TODO: Log this to console: The file is corrupted but we tried to load it anyway so something may not function properly!
+                }
             }
         }
 

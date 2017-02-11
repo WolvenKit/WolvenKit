@@ -6,9 +6,11 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using W3Edit.Bundles;
 using W3Edit.CR2W;
 using W3Edit.Video;
 using WeifenLuo.WinFormsUI.Docking;
@@ -24,7 +26,7 @@ namespace W3Edit
             videofile = path;       
         }
 
-        public static void Demux(string path)
+        public void Demux(string path)
         {
             var demuxOptions = new MpegStream.DemuxOptionsStruct
             {
@@ -34,31 +36,30 @@ namespace W3Edit
                 SplitAudioStreams = false,
             };
             var cus = new CriUsmStream(path);
-            cus.DemultiplexStreams(demuxOptions);
+            var file = cus.DemultiplexStreams(demuxOptions);
+            var video = file.First(x => GetExtension(x.Key) == "m2v");
+            var tempvideoname = DateTime.Now.Ticks;
+            File.WriteAllBytes(Path.Combine(Path.GetTempPath(),tempvideoname + ".m2v"),video.Value);
+            usmPlayer.SetMedia(new FileInfo(Path.Combine(Path.GetTempPath(), tempvideoname + ".m2v")));
+            usmPlayer.Play();
+            //MessageBox.Show(file.Select(x=> x.Key + ": " + x.Value.Length + "(bytes)").Aggregate("",(c,n)=> c+=n + "\n"));
         }
 
-        private static void PolymorphExecute(string fullpath, string extension)
+        public static string GetExtension(string s)
         {
-            File.WriteAllBytes(Path.GetTempPath() + "asd." + extension, new byte[] { 0x01 });
-            var programname = new StringBuilder();
-            Win32.FindExecutable("asd." + extension, Path.GetTempPath(), programname);
-            if (programname.ToString().ToUpper().Contains(".EXE"))
+            if (s.Contains('.'))
             {
-                Process.Start(programname.ToString(), fullpath);
+                return s.Split('.').Last();
             }
             else
             {
-                throw new InvalidFileTypeException("Invalid file type");
+                return "";
             }
         }
 
         private void frmUsmPlayer_Shown(object sender, EventArgs e)
         {
-            Application.DoEvents();
-            label1.Update();
-            Demux(videofile);          
-            PolymorphExecute(Path.ChangeExtension(Directory.GetFiles(Path.GetDirectoryName(videofile), "*.m2v").FirstOrDefault(), ".m2v"), ".avi");
-            label1.Text = @"Done!";
+            Demux(videofile);                 
         }
     }
 }

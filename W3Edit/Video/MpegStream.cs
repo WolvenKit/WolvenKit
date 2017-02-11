@@ -24,6 +24,39 @@ namespace W3Edit.Video
 
     public abstract class MpegStream
     {
+        public const string DefaultAudioExtension = ".adx";
+        public const string DefaultVideoExtension = ".m2v";
+        public const string HcaAudioExtension = ".hca";
+
+        static readonly byte[] HCA_SIG_BYTES = new byte[] { 0x48, 0x43, 0x41, 0x00 };
+
+        protected static readonly byte[] ALP_BYTES = new byte[] { 0x40, 0x41, 0x4C, 0x50 };
+        protected static readonly byte[] CRID_BYTES = new byte[] { 0x43, 0x52, 0x49, 0x44 };
+        protected static readonly byte[] SFV_BYTES = new byte[] { 0x40, 0x53, 0x46, 0x56 };
+        protected static readonly byte[] SFA_BYTES = new byte[] { 0x40, 0x53, 0x46, 0x41 };
+        protected static readonly byte[] SBT_BYTES = new byte[] { 0x40, 0x53, 0x42, 0x54 };
+        protected static readonly byte[] CUE_BYTES = new byte[] { 0x40, 0x43, 0x55, 0x45 };
+
+        protected static readonly byte[] UTF_BYTES = new byte[] { 0x40, 0x55, 0x54, 0x46 };
+
+        protected static readonly byte[] HEADER_END_BYTES =
+            new byte[] { 0x23, 0x48, 0x45, 0x41, 0x44, 0x45, 0x52, 0x20,
+                         0x45, 0x4E, 0x44, 0x20, 0x20, 0x20, 0x20, 0x20,
+                         0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D,
+                         0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x00 };
+
+        protected static readonly byte[] METADATA_END_BYTES =
+            new byte[] { 0x23, 0x4D, 0x45, 0x54, 0x41, 0x44, 0x41, 0x54,
+                         0x41, 0x20, 0x45, 0x4E, 0x44, 0x20, 0x20, 0x20,
+                         0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D,
+                         0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x00 };
+
+        protected static readonly byte[] CONTENTS_END_BYTES =
+            new byte[] { 0x23, 0x43, 0x4F, 0x4E, 0x54, 0x45, 0x4E, 0x54,
+                         0x53, 0x20, 0x45, 0x4E, 0x44, 0x20, 0x20, 0x20,
+                         0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D,
+                         0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x00 };
+
         protected static readonly byte[] PacketStartBytes = new byte[] { 0x00, 0x00, 0x01, 0xBA };
         protected static readonly byte[] PacketEndBytes = new byte[] { 0x00, 0x00, 0x01, 0xB9 };
 
@@ -211,13 +244,10 @@ namespace W3Edit.Video
 
         protected virtual long GetStartOffset(Stream readStream, long currentOffset) { return 0; }
 
-        protected virtual void DoFinalTasks(FileStream sourceFileStream, Dictionary<uint, FileStream> outputFiles, bool addHeader)
+        public virtual Dictionary<string, byte[]> DemultiplexStreams(DemuxOptionsStruct demuxOptions)
         {
-
-        }
-
-        public virtual void DemultiplexStreams(DemuxOptionsStruct demuxOptions)
-        {
+            var files = new Dictionary<uint, byte[]>();
+            var filenametable = new Dictionary<uint,string>();
             using (FileStream fs = File.OpenRead(this.FilePath))
             {
                 long fileSize = fs.Length;
@@ -241,7 +271,6 @@ namespace W3Edit.Video
 
                 bool eofFlagFound = false;
 
-                Dictionary<uint, FileStream> streamOutputWriters = new Dictionary<uint, FileStream>();
                 string outputFileName;
 
                 byte streamId = 0;          // for types that have multiple streams in the same block ID
@@ -257,19 +286,6 @@ namespace W3Edit.Video
                 {
                     while (currentOffset < fileSize)
                     {
-#if DEBUG
-                        //if (currentOffset == 0x414080e)
-                        //{
-                        //    int gggg = 1;
-                        //}
-
-                        //// hack for bad data (ni no kuni s09.pam)
-                        //if ((currentOffset & 1) == 1)
-                        //{
-                        //    currentOffset = MathUtil.RoundUpToByteAlignment(currentOffset, 0x800);
-                        //}
-#endif               
-
                         try
                         {
                             // get the current block
@@ -349,7 +365,7 @@ namespace W3Edit.Video
                                             }
 
                                             // check if we've already started parsing this stream
-                                            if (!streamOutputWriters.ContainsKey(currentStreamKey))
+                                            if (!files.ContainsKey(currentStreamKey))
                                             {
                                                 // convert block id to little endian for naming
                                                 currentBlockIdNaming = BitConverter.GetBytes(currentStreamKey);
@@ -376,11 +392,8 @@ namespace W3Edit.Video
                                                     outputFileName += this.FileExtensionVideo;
                                                 }
 
-                                                // add output directory
-                                                outputFileName = Path.Combine(Path.GetDirectoryName(this.FilePath), outputFileName);
-
-                                                // add an output stream for writing
-                                                streamOutputWriters[currentStreamKey] = new FileStream(outputFileName, FileMode.Create, FileAccess.ReadWrite);
+                                                filenametable[currentStreamKey] = Path.Combine(Path.GetDirectoryName(this.FilePath), outputFileName);
+                                                files[currentStreamKey] = new byte[0];
                                             }
 
                                             // write the block
@@ -392,14 +405,13 @@ namespace W3Edit.Video
                                                 cutSize = (int)(blockSize - audioBlockSkipSize - audioBlockFooterSize);
                                                 if (cutSize > 0)
                                                 {
-                                                    streamOutputWriters[currentStreamKey].Write(ParseFile.ParseSimpleOffset(fs, currentOffset + currentBlockId.Length + blockSizeArray.Length + audioBlockSkipSize, (int)(blockSize - audioBlockSkipSize)), 0, cutSize);
+                                                    var audioarray = ParseFile.ParseSimpleOffset(fs,
+                                                        currentOffset + currentBlockId.Length +
+                                                        blockSizeArray.Length + audioBlockSkipSize,
+                                                        (int) (blockSize - audioBlockSkipSize));
+                                                    files[currentStreamKey] =
+                                                        files[currentStreamKey].Concat(audioarray.Take(cutSize)).ToArray();
                                                 }
-#if DEBUG
-                                                //else
-                                                //{
-                                                //    int aaa = 1;
-                                                //}
-#endif
                                             }
                                             else
                                             {
@@ -409,14 +421,13 @@ namespace W3Edit.Video
                                                 cutSize = (int)(blockSize - videoBlockSkipSize - videoBlockFooterSize);
                                                 if (cutSize > 0)
                                                 {
-                                                    streamOutputWriters[currentStreamKey].Write(ParseFile.ParseSimpleOffset(fs, currentOffset + currentBlockId.Length + blockSizeArray.Length + videoBlockSkipSize, (int)(blockSize - videoBlockSkipSize)), 0, cutSize);
+                                                    var videoarray = ParseFile.ParseSimpleOffset(fs,
+                                                        currentOffset + currentBlockId.Length +
+                                                        blockSizeArray.Length + videoBlockSkipSize,
+                                                        (int) (blockSize - videoBlockSkipSize));
+                                                    files[currentStreamKey] =
+                                                        files[currentStreamKey].Concat(videoarray.Take(cutSize)).ToArray();
                                                 }
-#if DEBUG
-                                                //else
-                                                //{
-                                                //    int vvv = 1;
-                                                //}
-#endif
                                             }
                                         }
 
@@ -430,7 +441,6 @@ namespace W3Edit.Video
                             }
                             else // this is an undexpected block type
                             {
-                                this.closeAllWriters(streamOutputWriters);
                                 Array.Reverse(currentBlockId);
                                 throw new FormatException(String.Format("Block ID at 0x{0} not found in table: 0x{1}", currentOffset.ToString("X8"), BitConverter.ToUInt32(currentBlockId, 0).ToString("X8")));
                             }
@@ -443,43 +453,113 @@ namespace W3Edit.Video
                         }
                         catch (Exception _ex)
                         {
-                            this.closeAllWriters(streamOutputWriters);
                             throw new Exception(String.Format("Error parsing file at offset {0), '{1}'", currentOffset.ToString("X8"), _ex.Message), _ex);
                         }
                     } // while (currentOffset < fileSize)
                 }
                 else
                 {
-                    this.closeAllWriters(streamOutputWriters);
                     throw new FormatException(String.Format("Cannot find Pack Header for file: {0}{1}", Path.GetFileName(this.FilePath), Environment.NewLine));
                 }
 
                 ///////////////////////////////////
                 // Perform any final tasks needed
                 ///////////////////////////////////
-                this.DoFinalTasks(fs, streamOutputWriters, demuxOptions.AddHeader);
 
                 //////////////////////////
                 // close all open writers
-                //////////////////////////
-                this.closeAllWriters(streamOutputWriters);
+                //////////////////////////;
 
             } // using (FileStream fs = File.OpenRead(path))
+            files = DoFinalTasks(FilePath, files, filenametable, true);
+            return files.ToDictionary(file => filenametable[file.Key], file => file.Value);
         }
 
-        private void closeAllWriters(Dictionary<uint, FileStream> writers)
+        private Dictionary<uint, byte[]> DoFinalTasks(string file, Dictionary<uint, byte[]> outputFiles, Dictionary<uint, string> filenamemap, bool addHeader)
         {
-            //////////////////////////
-            // close all open writers
-            //////////////////////////
-            foreach (uint b in writers.Keys)
+            long headerEndOffset;
+            long metadataEndOffset;
+            long headerSize;
+
+            long footerOffset;
+            long footerSize;
+
+            string sourceFileName;
+            string workingFile;
+            string fileExtension;
+            string destinationFileName;
+
+            foreach (uint streamId in outputFiles.Keys)
             {
-                if (writers[b].CanRead)
+
+                sourceFileName = filenamemap.First(x => x.Key == streamId).Value;
+
+                //--------------------------
+                // get header size
+                //--------------------------
+                headerEndOffset = ParseFile.GetNextOffset(outputFiles[streamId], 0, HEADER_END_BYTES);
+                metadataEndOffset = ParseFile.GetNextOffset(outputFiles[streamId], 0, METADATA_END_BYTES);
+
+                if (metadataEndOffset > headerEndOffset)
                 {
-                    writers[b].Close();
-                    writers[b].Dispose();
+                    headerSize = metadataEndOffset + METADATA_END_BYTES.Length;
+                }
+                else
+                {
+                    headerSize = headerEndOffset + METADATA_END_BYTES.Length;
+                }
+
+                //-----------------
+                // get footer size
+                //-----------------
+                footerOffset = ParseFile.GetNextOffset(outputFiles[streamId], 0, CONTENTS_END_BYTES) - headerSize;
+                footerSize = outputFiles[streamId].Length - footerOffset;
+
+                //------------------------------------------
+                // check data to adjust extension if needed
+                //------------------------------------------
+                if (this.IsThisAnAudioBlock(BitConverter.GetBytes(streamId & 0xFFFFFFF0))) // may need to change mask if more than 0xF streams
+                {
+                    byte[] checkBytes = ParseFile.ParseSimpleOffset(outputFiles[streamId], (int)headerSize, 4);
+
+                    if (ParseFile.CompareSegment(checkBytes, 0, SofdecStream.AixSignatureBytes))
+                    {
+                        fileExtension = SofdecStream.AixAudioExtension;
+                    }
+                    else if (checkBytes[0] == 0x80)
+                    {
+                        fileExtension = SofdecStream.AdxAudioExtension;
+                    }
+                    else if (ParseFile.CompareSegment(checkBytes, 0, HCA_SIG_BYTES))
+                    {
+                        fileExtension = HcaAudioExtension;
+                    }
+                    else
+                    {
+                        fileExtension = ".bin";
+                    }
+                }
+                else
+                {
+                    fileExtension = Path.GetExtension(sourceFileName);
+                }
+
+
+                workingFile = FileUtil.RemoveChunkFromFile(sourceFileName, 0, headerSize);
+                File.Copy(workingFile, sourceFileName, true);
+                File.Delete(workingFile);
+
+                workingFile = FileUtil.RemoveChunkFromFile(sourceFileName, footerOffset, footerSize);
+                destinationFileName = Path.ChangeExtension(sourceFileName, fileExtension);
+                File.Copy(workingFile, destinationFileName, true);
+                File.Delete(workingFile);
+
+                if ((sourceFileName != destinationFileName) && (File.Exists(sourceFileName)))
+                {
+                    File.Delete(sourceFileName);
                 }
             }
+            return outputFiles; //TODO: properly do this
         }
 
         public static int GetMpegStreamType(string path)

@@ -197,7 +197,7 @@ namespace W3Edit.Bundles
         }
 
         /// <summary>
-        /// Since File.GetExtension() only works for real paths we need to have this
+        /// Since File.GetFileName() only works for real paths we need to have this
         /// </summary>
         /// <param name="s">Path/Name of the file</param>
         /// <returns></returns>
