@@ -1,11 +1,14 @@
-﻿namespace W3Edit
+﻿using System.ComponentModel;
+using BrightIdeasSoftware;
+
+namespace W3Edit
 {
     partial class frmEmbeddedFiles
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -99,10 +102,10 @@
 
         #endregion
 
-        private BrightIdeasSoftware.ObjectListView listView;
-        private BrightIdeasSoftware.OLVColumn colSize;
-        private BrightIdeasSoftware.OLVColumn colName;
-        private BrightIdeasSoftware.OLVColumn colUnk3;
-        private BrightIdeasSoftware.OLVColumn colUnk4;
+        private ObjectListView listView;
+        private OLVColumn colSize;
+        private OLVColumn colName;
+        private OLVColumn colUnk3;
+        private OLVColumn colUnk4;
     }
 }

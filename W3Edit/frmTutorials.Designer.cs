@@ -1,11 +1,14 @@
-﻿namespace W3Edit
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace W3Edit
 {
     partial class frmTutorials
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -144,12 +147,12 @@
 
         #endregion
 
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.TreeView treeView1;
-        private System.Windows.Forms.WebBrowser webBrowser1;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
+        private SplitContainer splitContainer1;
+        private TreeView treeView1;
+        private WebBrowser webBrowser1;
+        private PictureBox pictureBox1;
+        private Label label3;
+        private Label label2;
+        private Label label1;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -86,8 +87,8 @@ namespace W3Edit
         {
             var set = v as VariableSet;
             var children = set == null
-                ? new System.Collections.ObjectModel.ObservableCollection<VariableModel>()
-                : new System.Collections.ObjectModel.ObservableCollection<VariableModel>(set.Variables.Select(ToVariableModel));
+                ? new ObservableCollection<VariableModel>()
+                : new ObservableCollection<VariableModel>(set.Variables.Select(ToVariableModel));
 
             var typed = v as TypedVariable;
             var type = typed == null

@@ -1,11 +1,14 @@
-﻿namespace W3Edit
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace W3Edit
 {
     partial class frmAddChunk
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -99,9 +102,9 @@
 
         #endregion
 
-        private System.Windows.Forms.ComboBox txType;
-        private System.Windows.Forms.Button btCancel;
-        private System.Windows.Forms.Button btOK;
-        private System.Windows.Forms.Label lblType;
+        private ComboBox txType;
+        private Button btCancel;
+        private Button btOK;
+        private Label lblType;
     }
 }

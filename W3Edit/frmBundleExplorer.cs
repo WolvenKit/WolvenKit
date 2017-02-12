@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using W3Edit.Bundles;
@@ -380,7 +379,7 @@ namespace W3Edit
                     }
                 }
             }
-            this.DialogResult = DialogResult.OK;
+            DialogResult = DialogResult.OK;
         }
 
         private void copyPathToolStripMenuItem_Click(object sender, EventArgs e)

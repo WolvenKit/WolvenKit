@@ -1,11 +1,15 @@
-﻿namespace W3Edit
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using BrightIdeasSoftware;
+
+namespace W3Edit
 {
     partial class frmChunkProperties
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -223,23 +227,23 @@
 
         #endregion
 
-        private BrightIdeasSoftware.TreeListView treeView;
-        private BrightIdeasSoftware.OLVColumn colName;
-        private BrightIdeasSoftware.OLVColumn colValue;
-        private BrightIdeasSoftware.OLVColumn colType;
-        private System.Windows.Forms.ContextMenuStrip contextMenu;
-        private System.Windows.Forms.ToolStripMenuItem addVariableToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem removeVariableToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem expandAllToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem expandAllChildrenToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem collapseAllToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem collapseAllChildrenToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolSplitPtr;
-        private System.Windows.Forms.ToolStripMenuItem ptrPropertiesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem copyTextToolStripMenuItem;
+        private TreeListView treeView;
+        private OLVColumn colName;
+        private OLVColumn colValue;
+        private OLVColumn colType;
+        private ContextMenuStrip contextMenu;
+        private ToolStripMenuItem addVariableToolStripMenuItem;
+        private ToolStripMenuItem removeVariableToolStripMenuItem;
+        private ToolStripMenuItem expandAllToolStripMenuItem;
+        private ToolStripMenuItem expandAllChildrenToolStripMenuItem;
+        private ToolStripMenuItem collapseAllToolStripMenuItem;
+        private ToolStripMenuItem collapseAllChildrenToolStripMenuItem;
+        private ToolStripSeparator toolStripMenuItem1;
+        private ToolStripSeparator toolStripMenuItem2;
+        private ToolStripMenuItem copyToolStripMenuItem;
+        private ToolStripMenuItem pasteToolStripMenuItem;
+        private ToolStripSeparator toolSplitPtr;
+        private ToolStripMenuItem ptrPropertiesToolStripMenuItem;
+        private ToolStripMenuItem copyTextToolStripMenuItem;
     }
 }

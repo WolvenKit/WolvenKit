@@ -1,11 +1,14 @@
-﻿namespace W3Edit
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace W3Edit
 {
     partial class frmRenameDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -89,8 +92,8 @@
 
         #endregion
 
-        private System.Windows.Forms.Button btOk;
-        private System.Windows.Forms.Button btCancel;
-        private System.Windows.Forms.TextBox txFileName;
+        private Button btOk;
+        private Button btCancel;
+        private TextBox txFileName;
     }
 }

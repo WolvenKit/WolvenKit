@@ -1,11 +1,15 @@
-﻿namespace W3Edit
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using BrightIdeasSoftware;
+
+namespace W3Edit
 {
     partial class frmChunkList
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -140,14 +144,14 @@
 
         #endregion
 
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem addChunkToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem deleteChunkToolStripMenuItem;
-        private BrightIdeasSoftware.ObjectListView listView;
-        private BrightIdeasSoftware.OLVColumn colIndex;
-        private BrightIdeasSoftware.OLVColumn colName;
-        private BrightIdeasSoftware.OLVColumn colDisplay;
-        private System.Windows.Forms.ToolStripMenuItem copyChunkToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem pasteChunkToolStripMenuItem;
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem addChunkToolStripMenuItem;
+        private ToolStripMenuItem deleteChunkToolStripMenuItem;
+        private ObjectListView listView;
+        private OLVColumn colIndex;
+        private OLVColumn colName;
+        private OLVColumn colDisplay;
+        private ToolStripMenuItem copyChunkToolStripMenuItem;
+        private ToolStripMenuItem pasteChunkToolStripMenuItem;
     }
 }

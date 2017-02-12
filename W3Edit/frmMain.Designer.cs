@@ -1,11 +1,15 @@
-﻿namespace W3Edit
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
+
+namespace W3Edit
 {
     partial class frmMain
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -402,7 +406,7 @@
             // 
             this.aboutRedkit2ToolStripMenuItem.Image = global::W3Edit.Properties.Resources.info_icon_23818;
             this.aboutRedkit2ToolStripMenuItem.Name = "aboutRedkit2ToolStripMenuItem";
-            this.aboutRedkit2ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.aboutRedkit2ToolStripMenuItem.Size = new System.Drawing.Size(170, 26);
             this.aboutRedkit2ToolStripMenuItem.Text = "About Wolven kit";
             this.aboutRedkit2ToolStripMenuItem.Click += new System.EventHandler(this.creditsToolStripMenuItem_Click);
             // 
@@ -410,7 +414,7 @@
             // 
             this.joinOurDiscordToolStripMenuItem.Image = global::W3Edit.Properties.Resources._2c21aeda16de354ba5334551a883b481;
             this.joinOurDiscordToolStripMenuItem.Name = "joinOurDiscordToolStripMenuItem";
-            this.joinOurDiscordToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.joinOurDiscordToolStripMenuItem.Size = new System.Drawing.Size(170, 26);
             this.joinOurDiscordToolStripMenuItem.Text = "Join our discord";
             this.joinOurDiscordToolStripMenuItem.Click += new System.EventHandler(this.joinOurDiscordToolStripMenuItem_Click_1);
             // 
@@ -418,7 +422,7 @@
             // 
             this.tutorialsToolStripMenuItem.Image = global::W3Edit.Properties.Resources.info_icon_23818;
             this.tutorialsToolStripMenuItem.Name = "tutorialsToolStripMenuItem";
-            this.tutorialsToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.tutorialsToolStripMenuItem.Size = new System.Drawing.Size(170, 26);
             this.tutorialsToolStripMenuItem.Text = "Tutorials";
             this.tutorialsToolStripMenuItem.Click += new System.EventHandler(this.tutorialsToolStripMenuItem_Click);
             // 
@@ -426,7 +430,7 @@
             // 
             this.dockPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dockPanel.Location = new System.Drawing.Point(0, 0);
-            this.dockPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dockPanel.Margin = new System.Windows.Forms.Padding(2);
             this.dockPanel.Name = "dockPanel";
             this.dockPanel.ShowDocumentIcon = true;
             this.dockPanel.Size = new System.Drawing.Size(824, 418);
@@ -508,43 +512,43 @@
 
         #endregion
 
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem newModToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openModToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem modToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem addFileFromBundleToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem addFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveExplorerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem modExplorerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem aboutRedkit2ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem joinOurDiscordToolStripMenuItem;
-        private System.Windows.Forms.ToolStripButton newmodButton;
-        private System.Windows.Forms.ToolStripButton openmodButton;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton openfileButton;
-        private System.Windows.Forms.ToolStripButton saveButton;
-        private System.Windows.Forms.ToolStripButton saveallButton;
-        private System.Windows.Forms.ToolStripButton toolStripButton7;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripButton btPack;
-        private System.Windows.Forms.ToolStripButton launchgameButton;
-        private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem wcclitePatcherToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem outputToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem tutorialsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-        private System.Windows.Forms.ToolStripMenuItem reloadProjectToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem addFileFromOtherModToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem createPackedInstallerToolStripMenuItem;
+        private ToolStrip toolStrip1;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem fileToolStripMenuItem;
+        private ToolStripMenuItem newModToolStripMenuItem;
+        private ToolStripMenuItem openModToolStripMenuItem;
+        private ToolStripMenuItem modToolStripMenuItem;
+        private ToolStripMenuItem addFileFromBundleToolStripMenuItem;
+        private ToolStripMenuItem addFileToolStripMenuItem;
+        private ToolStripMenuItem settingsToolStripMenuItem;
+        private ToolStripMenuItem toolsToolStripMenuItem;
+        private ToolStripMenuItem saveExplorerToolStripMenuItem;
+        private ToolStripMenuItem optionsToolStripMenuItem;
+        private ToolStripMenuItem viewToolStripMenuItem;
+        private ToolStripMenuItem modExplorerToolStripMenuItem;
+        private ToolStripMenuItem aboutToolStripMenuItem;
+        private ToolStripMenuItem aboutRedkit2ToolStripMenuItem;
+        private ToolStripMenuItem joinOurDiscordToolStripMenuItem;
+        private ToolStripButton newmodButton;
+        private ToolStripButton openmodButton;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripButton openfileButton;
+        private ToolStripButton saveButton;
+        private ToolStripButton saveallButton;
+        private ToolStripButton toolStripButton7;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripButton btPack;
+        private ToolStripButton launchgameButton;
+        private DockPanel dockPanel;
+        private ToolStripSeparator toolStripSeparator3;
+        private ToolStripMenuItem exitToolStripMenuItem;
+        private ToolStripMenuItem wcclitePatcherToolStripMenuItem;
+        private ToolStripMenuItem outputToolStripMenuItem;
+        private ToolStripMenuItem tutorialsToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator4;
+        private ToolStripSeparator toolStripSeparator5;
+        private ToolStripMenuItem reloadProjectToolStripMenuItem;
+        private ToolStripMenuItem addFileFromOtherModToolStripMenuItem;
+        private ToolStripMenuItem createPackedInstallerToolStripMenuItem;
     }
 }

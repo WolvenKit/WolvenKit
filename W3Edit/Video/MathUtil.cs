@@ -1,10 +1,7 @@
 ﻿using System;
 using System.CodeDom.Compiler;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.CSharp;
 
@@ -90,7 +87,7 @@ namespace W3Edit.Video
                 return null;
             }
 
-            System.Reflection.Assembly a = cr.CompiledAssembly;
+            Assembly a = cr.CompiledAssembly;
             object o = a.CreateInstance("CSCodeEvaler.CSCodeEvaler");
 
             Type t = o.GetType();

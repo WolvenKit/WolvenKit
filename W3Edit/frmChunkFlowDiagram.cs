@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Microsoft.Win32.SafeHandles;
 using W3Edit.CR2W;
 using W3Edit.CR2W.Types;
 using W3Edit.FlowTreeEditors;

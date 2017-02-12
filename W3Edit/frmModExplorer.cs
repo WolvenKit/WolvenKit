@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using W3Edit.Bundles;
 using W3Edit.Mod;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -59,6 +59,9 @@ namespace W3Edit
 
         public void UpdateModFileList(bool showfolders,bool clear = false)
         {
+            if (ActiveMod == null)
+                return;
+
             if (FilteredFiles == null || FilteredFiles.Count == 0)
             {
                 FilteredFiles = ActiveMod.Files;
@@ -67,9 +70,6 @@ namespace W3Edit
             {
                 modFileList.Nodes.Clear();
             }
-
-            if (ActiveMod == null)
-                return;
 
             foreach (var item in FilteredFiles)
             {
@@ -200,10 +200,6 @@ namespace W3Edit
             UpdateModFileList(FoldersShown,true);
         }
 
-        private void searchBox_Click(object sender, EventArgs e)
-        {
-        }
-
         private void UpdatefilelistButtonClick(object sender, EventArgs e)
         {
             FoldersShown = true;
@@ -211,32 +207,22 @@ namespace W3Edit
             UpdateModFileList(true,true);
         }
 
-        private void searchBox_TextChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void searchBox_Validated(object sender, EventArgs e)
-        {
-
-        }
-
         private void searchBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
-                this.Validate();
+                Validate();
         }
 
-        private void searchBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void searchBox_Validating(object sender, CancelEventArgs e)
         {
             if (searchBox.Text == (string)Tag)
             {
-                this.Tag = searchBox.Text;
+                Tag = searchBox.Text;
                 e.Cancel = true;
             }
             else
             {
-                this.Tag = searchBox.Text;
+                Tag = searchBox.Text;
                 if (searchBox.Text == "")
                 {
                     FilteredFiles = ActiveMod.Files;
@@ -256,7 +242,8 @@ namespace W3Edit
 
         private void frmModExplorer_Shown(object sender, EventArgs e)
         {
-            modexplorerSlave.Path = ActiveMod.FileDirectory;
+            if(ActiveMod != null)
+                modexplorerSlave.Path = ActiveMod.FileDirectory;
         }
 
         private void modFileList_KeyDown(object sender, KeyEventArgs e)

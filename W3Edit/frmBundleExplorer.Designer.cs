@@ -1,11 +1,14 @@
-﻿namespace W3Edit
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace W3Edit
 {
     partial class frmBundleExplorer
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -322,28 +325,28 @@
 
         #endregion
 
-        private System.Windows.Forms.Button btOpen;
-        private System.Windows.Forms.ImageList treeImages;
-        private System.Windows.Forms.ListView fileListView;
-        private System.Windows.Forms.ColumnHeader colFileName;
-        private System.Windows.Forms.ColumnHeader colFileSize;
-        private System.Windows.Forms.Panel pathPanel;
-        private System.Windows.Forms.ColumnHeader colCompressionRatio;
-        private System.Windows.Forms.ColumnHeader colCompressiontype;
-        private System.Windows.Forms.ColumnHeader colTimeStamp;
-        private System.Windows.Forms.TextBox SearchBox;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button ClearFiles;
-        private System.Windows.Forms.Button MarkSelected;
-        private System.Windows.Forms.ComboBox filetypeCB;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.ListView pathlistview;
-        private System.Windows.Forms.ColumnHeader columnPath;
-        private System.Windows.Forms.ContextMenuStrip filebrowserMenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem copyPathToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem markToolStripMenuItem;
+        private Button btOpen;
+        private ImageList treeImages;
+        private ListView fileListView;
+        private ColumnHeader colFileName;
+        private ColumnHeader colFileSize;
+        private Panel pathPanel;
+        private ColumnHeader colCompressionRatio;
+        private ColumnHeader colCompressiontype;
+        private ColumnHeader colTimeStamp;
+        private TextBox SearchBox;
+        private Label label1;
+        private Button ClearFiles;
+        private Button MarkSelected;
+        private ComboBox filetypeCB;
+        private Button button1;
+        private Label label2;
+        private Label label3;
+        private Button button2;
+        private ListView pathlistview;
+        private ColumnHeader columnPath;
+        private ContextMenuStrip filebrowserMenuStrip;
+        private ToolStripMenuItem copyPathToolStripMenuItem;
+        private ToolStripMenuItem markToolStripMenuItem;
     }
 }

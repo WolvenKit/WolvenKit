@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using W3Edit.Video.Parsefile;
 
 namespace W3Edit.Video
@@ -117,7 +114,7 @@ namespace W3Edit.Video
             int pOffset,
             int pMaxLength)
         {
-            System.Text.Encoding enc = System.Text.Encoding.ASCII;
+            Encoding enc = Encoding.ASCII;
 
             using (BinaryWriter bw =
                 new BinaryWriter(File.Open(pFilePath, FileMode.Open, FileAccess.ReadWrite)))
@@ -289,7 +286,7 @@ namespace W3Edit.Video
                     while ((bytesRead = fs.Read(bytes, 0, maxReadSize)) > 0)
                     {
                         destinationFs.Write(bytes, 0, bytesRead);
-                        totalBytesRead += (long)bytesRead;
+                        totalBytesRead += bytesRead;
 
                         maxReadSize = (currentChunkSize - totalBytesRead) > (long)bytes.Length ? bytes.Length : (int)(currentChunkSize - totalBytesRead);
                     }
@@ -313,7 +310,7 @@ namespace W3Edit.Video
                 while ((bytesRead = fs.Read(bytes, 0, maxReadSize)) > 0)
                 {
                     destinationFs.Write(bytes, 0, bytesRead);
-                    totalBytesRead += (long)bytesRead;
+                    totalBytesRead += bytesRead;
 
                     maxReadSize = (currentChunkSize - totalBytesRead) > (long)bytes.Length ? bytes.Length : (int)(currentChunkSize - totalBytesRead);
                 }
@@ -419,7 +416,7 @@ namespace W3Edit.Video
                 }
 
                 nameByteArray = ParseFile.ParseSimpleOffset(fs, offset, nameLength);
-                destinationFile = ByteConversion.GetAsciiText(FileUtil.ReplaceNullByteWithSpace(nameByteArray)).Trim();
+                destinationFile = ByteConversion.GetAsciiText(ReplaceNullByteWithSpace(nameByteArray)).Trim();
                 destinationFile = Path.Combine(destinationDirectory, destinationFile);
 
                 if (maintainFileExtension)
@@ -510,7 +507,7 @@ namespace W3Edit.Video
                                 // write from file
                                 destinationStream.Write(
                                     ParseFile.ParseSimpleOffset(inputStreams[i], currentOffset, (int)(interleaveValue - sizeDifference)),
-                                    0, (int)(int)(interleaveValue - sizeDifference));
+                                    0, (int)(interleaveValue - sizeDifference));
 
                                 // write padding bytes
                                 bytesRemaining = sizeDifference;

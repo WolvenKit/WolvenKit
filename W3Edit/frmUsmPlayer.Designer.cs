@@ -1,11 +1,14 @@
-﻿namespace W3Edit
+﻿using System.ComponentModel;
+using Vlc.DotNet.Forms;
+
+namespace W3Edit
 {
     partial class frmUsmPlayer
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -64,6 +67,6 @@
 
         #endregion
 
-        private Vlc.DotNet.Forms.VlcControl usmPlayer;
+        private VlcControl usmPlayer;
     }
 }

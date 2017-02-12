@@ -1,11 +1,15 @@
-﻿namespace W3Edit
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
+
+namespace W3Edit
 {
     partial class frmCR2WDocument
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -139,9 +143,9 @@
 
         #endregion
 
-        private System.Windows.Forms.ImageList imageList1;
-        private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel;
-        private WeifenLuo.WinFormsUI.Docking.VS2012LightTheme vS2012LightTheme1;
+        private ImageList imageList1;
+        private DockPanel dockPanel;
+        private VS2012LightTheme vS2012LightTheme1;
 
 
 

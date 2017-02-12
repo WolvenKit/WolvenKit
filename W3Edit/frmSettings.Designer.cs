@@ -1,11 +1,14 @@
-﻿namespace W3Edit
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace W3Edit
 {
     partial class frmSettings
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -198,18 +201,18 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox txExecutablePath;
-        private System.Windows.Forms.Label lblExecutable;
-        private System.Windows.Forms.Button btnBrowseExe;
-        private System.Windows.Forms.Button btSave;
-        private System.Windows.Forms.Label lblLanguage;
-        private System.Windows.Forms.Label lblVoiceLanguage;
-        private System.Windows.Forms.Button btBrowseWCC_Lite;
-        private System.Windows.Forms.Label lblWCC_Lite;
-        private System.Windows.Forms.TextBox txWCC_Lite;
-        private System.Windows.Forms.Button btCancel;
-        private System.Windows.Forms.Button locateButton;
-        private System.Windows.Forms.TextBox txTextLanguage;
-        private System.Windows.Forms.TextBox txVoiceLanguage;
+        private TextBox txExecutablePath;
+        private Label lblExecutable;
+        private Button btnBrowseExe;
+        private Button btSave;
+        private Label lblLanguage;
+        private Label lblVoiceLanguage;
+        private Button btBrowseWCC_Lite;
+        private Label lblWCC_Lite;
+        private TextBox txWCC_Lite;
+        private Button btCancel;
+        private Button locateButton;
+        private TextBox txTextLanguage;
+        private TextBox txVoiceLanguage;
     }
 }

@@ -14,7 +14,7 @@ namespace W3Edit
         private CR2WFile file;
         private frmChunkProperties propertyWindow;
 
-        public DockPanel FormPanel => this.dockPanel;
+        public DockPanel FormPanel => dockPanel;
 
         public frmCR2WDocument()
         {

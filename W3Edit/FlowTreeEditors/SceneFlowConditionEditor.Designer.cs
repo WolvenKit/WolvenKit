@@ -1,11 +1,14 @@
-﻿namespace W3Edit.FlowTreeEditors
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace W3Edit.FlowTreeEditors
 {
     partial class SceneFlowConditionEditor
     {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -74,8 +77,8 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblTrue;
-        private System.Windows.Forms.Label lblFalse;
-        private System.Windows.Forms.Label lblCondition;
+        private Label lblTrue;
+        private Label lblFalse;
+        private Label lblCondition;
     }
 }

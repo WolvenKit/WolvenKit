@@ -1,11 +1,14 @@
-﻿namespace W3Edit
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace W3Edit
 {
     partial class frmSaveEditor
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -330,30 +333,30 @@
 
         #endregion
 
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.TreeView savesTree;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage infoTab;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
-        private System.Windows.Forms.TabPage variableTab;
-        private System.Windows.Forms.PictureBox saveIcon;
-        private System.Windows.Forms.TextBox saveNameBox;
-        private System.Windows.Forms.TextBox saveVariableBox;
-        private System.Windows.Forms.TextBox saveNamesBox;
-        private System.Windows.Forms.TextBox saveVersionBox;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
-        private System.Windows.Forms.ListView variablesList;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.ColumnHeader columnHeader5;
-        private System.Windows.Forms.ColumnHeader columnHeader6;
-        private System.Windows.Forms.ImageList treeImages;
+        private ToolStrip toolStrip1;
+        private SplitContainer splitContainer1;
+        private TreeView savesTree;
+        private TabControl tabControl1;
+        private TabPage infoTab;
+        private Label label4;
+        private Label label3;
+        private Label label2;
+        private Label label1;
+        private ToolStripButton toolStripButton1;
+        private TabPage variableTab;
+        private PictureBox saveIcon;
+        private TextBox saveNameBox;
+        private TextBox saveVariableBox;
+        private TextBox saveNamesBox;
+        private TextBox saveVersionBox;
+        private ToolStripLabel toolStripLabel1;
+        private ListView variablesList;
+        private ColumnHeader columnHeader1;
+        private ColumnHeader columnHeader2;
+        private ColumnHeader columnHeader3;
+        private ColumnHeader columnHeader4;
+        private ColumnHeader columnHeader5;
+        private ColumnHeader columnHeader6;
+        private ImageList treeImages;
     }
 }

@@ -1,19 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using W3Edit.Bundles;
-using W3Edit.CR2W;
 using W3Edit.Video;
-using WeifenLuo.WinFormsUI.Docking;
 
 namespace W3Edit
 {
@@ -33,7 +22,7 @@ namespace W3Edit
                 ExtractAudio = true,
                 ExtractVideo = true,
                 AddHeader = false,
-                SplitAudioStreams = false,
+                SplitAudioStreams = false
             };
             var cus = new CriUsmStream(path);
             var file = cus.DemultiplexStreams(demuxOptions);
@@ -51,10 +40,7 @@ namespace W3Edit
             {
                 return s.Split('.').Last();
             }
-            else
-            {
-                return "";
-            }
+            return "";
         }
 
         private void frmUsmPlayer_Shown(object sender, EventArgs e)

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using W3Edit.Video.Parsefile;
 
 namespace W3Edit.Video
@@ -21,31 +17,31 @@ namespace W3Edit.Video
         public const string DefaultVideoExtension = ".m2v";
         public const string HcaAudioExtension = ".hca";
 
-        static readonly byte[] HCA_SIG_BYTES = new byte[] { 0x48, 0x43, 0x41, 0x00 };
+        static readonly byte[] HCA_SIG_BYTES = { 0x48, 0x43, 0x41, 0x00 };
 
-        protected static readonly byte[] ALP_BYTES = new byte[] { 0x40, 0x41, 0x4C, 0x50 };
-        protected static readonly byte[] CRID_BYTES = new byte[] { 0x43, 0x52, 0x49, 0x44 };
-        protected static readonly byte[] SFV_BYTES = new byte[] { 0x40, 0x53, 0x46, 0x56 };
-        protected static readonly byte[] SFA_BYTES = new byte[] { 0x40, 0x53, 0x46, 0x41 };
-        protected static readonly byte[] SBT_BYTES = new byte[] { 0x40, 0x53, 0x42, 0x54 };
-        protected static readonly byte[] CUE_BYTES = new byte[] { 0x40, 0x43, 0x55, 0x45 };
+        protected static readonly byte[] ALP_BYTES = { 0x40, 0x41, 0x4C, 0x50 };
+        protected static readonly byte[] CRID_BYTES = { 0x43, 0x52, 0x49, 0x44 };
+        protected static readonly byte[] SFV_BYTES = { 0x40, 0x53, 0x46, 0x56 };
+        protected static readonly byte[] SFA_BYTES = { 0x40, 0x53, 0x46, 0x41 };
+        protected static readonly byte[] SBT_BYTES = { 0x40, 0x53, 0x42, 0x54 };
+        protected static readonly byte[] CUE_BYTES = { 0x40, 0x43, 0x55, 0x45 };
 
-        protected static readonly byte[] UTF_BYTES = new byte[] { 0x40, 0x55, 0x54, 0x46 };
+        protected static readonly byte[] UTF_BYTES = { 0x40, 0x55, 0x54, 0x46 };
 
         protected static readonly byte[] HEADER_END_BYTES =
-            new byte[] { 0x23, 0x48, 0x45, 0x41, 0x44, 0x45, 0x52, 0x20,
+            { 0x23, 0x48, 0x45, 0x41, 0x44, 0x45, 0x52, 0x20,
                          0x45, 0x4E, 0x44, 0x20, 0x20, 0x20, 0x20, 0x20,
                          0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D,
                          0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x00 };
 
         protected static readonly byte[] METADATA_END_BYTES =
-            new byte[] { 0x23, 0x4D, 0x45, 0x54, 0x41, 0x44, 0x41, 0x54,
+            { 0x23, 0x4D, 0x45, 0x54, 0x41, 0x44, 0x41, 0x54,
                          0x41, 0x20, 0x45, 0x4E, 0x44, 0x20, 0x20, 0x20,
                          0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D,
                          0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x00 };
 
         protected static readonly byte[] CONTENTS_END_BYTES =
-            new byte[] { 0x23, 0x43, 0x4F, 0x4E, 0x54, 0x45, 0x4E, 0x54,
+            { 0x23, 0x43, 0x4F, 0x4E, 0x54, 0x45, 0x4E, 0x54,
                          0x53, 0x20, 0x45, 0x4E, 0x44, 0x20, 0x20, 0x20,
                          0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D,
                          0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x00 };
@@ -53,17 +49,17 @@ namespace W3Edit.Video
         public CriUsmStream(string path)
             : base(path)
         {
-            this.UsesSameIdForMultipleAudioTracks = true;
-            this.FileExtensionAudio = DefaultAudioExtension;
-            this.FileExtensionVideo = DefaultVideoExtension;
+            UsesSameIdForMultipleAudioTracks = true;
+            FileExtensionAudio = DefaultAudioExtension;
+            FileExtensionVideo = DefaultVideoExtension;
 
-            base.BlockIdDictionary.Clear();
-            base.BlockIdDictionary[BitConverter.ToUInt32(ALP_BYTES, 0)] = new BlockSizeStruct(PacketSizeType.SizeBytes, 4); // @ALP
-            base.BlockIdDictionary[BitConverter.ToUInt32(CRID_BYTES, 0)] = new BlockSizeStruct(PacketSizeType.SizeBytes, 4); // CRID
-            base.BlockIdDictionary[BitConverter.ToUInt32(SFV_BYTES, 0)] = new BlockSizeStruct(PacketSizeType.SizeBytes, 4); // @SFV
-            base.BlockIdDictionary[BitConverter.ToUInt32(SFA_BYTES, 0)] = new BlockSizeStruct(PacketSizeType.SizeBytes, 4); // @SFA
-            base.BlockIdDictionary[BitConverter.ToUInt32(SBT_BYTES, 0)] = new BlockSizeStruct(PacketSizeType.SizeBytes, 4); // @SBT
-            base.BlockIdDictionary[BitConverter.ToUInt32(CUE_BYTES, 0)] = new BlockSizeStruct(PacketSizeType.SizeBytes, 4); // @CUE
+            BlockIdDictionary.Clear();
+            BlockIdDictionary[BitConverter.ToUInt32(ALP_BYTES, 0)] = new BlockSizeStruct(PacketSizeType.SizeBytes, 4); // @ALP
+            BlockIdDictionary[BitConverter.ToUInt32(CRID_BYTES, 0)] = new BlockSizeStruct(PacketSizeType.SizeBytes, 4); // CRID
+            BlockIdDictionary[BitConverter.ToUInt32(SFV_BYTES, 0)] = new BlockSizeStruct(PacketSizeType.SizeBytes, 4); // @SFV
+            BlockIdDictionary[BitConverter.ToUInt32(SFA_BYTES, 0)] = new BlockSizeStruct(PacketSizeType.SizeBytes, 4); // @SFA
+            BlockIdDictionary[BitConverter.ToUInt32(SBT_BYTES, 0)] = new BlockSizeStruct(PacketSizeType.SizeBytes, 4); // @SBT
+            BlockIdDictionary[BitConverter.ToUInt32(CUE_BYTES, 0)] = new BlockSizeStruct(PacketSizeType.SizeBytes, 4); // @CUE
         }
 
         protected override byte[] GetPacketStartBytes() { return CRID_BYTES; }

@@ -1,11 +1,14 @@
-﻿namespace W3Edit
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace W3Edit
 {
     partial class frmAddVariable
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -119,11 +122,11 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblType;
-        private System.Windows.Forms.TextBox txName;
-        private System.Windows.Forms.Label lblName;
-        private System.Windows.Forms.Button btOK;
-        private System.Windows.Forms.Button btCancel;
-        private System.Windows.Forms.ComboBox txType;
+        private Label lblType;
+        private TextBox txName;
+        private Label lblName;
+        private Button btOK;
+        private Button btCancel;
+        private ComboBox txType;
     }
 }

@@ -62,7 +62,7 @@ namespace W3Edit
             return new Configuration
             {
                 TextLanguage = "en",
-                VoiceLanguage = "en",
+                VoiceLanguage = "en"
             };
         }
     }

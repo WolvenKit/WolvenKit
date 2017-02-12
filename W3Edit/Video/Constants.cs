@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace W3Edit.Video
@@ -408,10 +404,10 @@ namespace W3Edit.Video
 
         public void Clear()
         {
-            this.FilePath = String.Empty;
-            this.FileOffset = -1;
-            this.FileLength = -1;
-            this.FileNameLength = -1;
+            FilePath = String.Empty;
+            FileOffset = -1;
+            FileLength = -1;
+            FileNameLength = -1;
         }
     }
 
@@ -446,12 +442,12 @@ namespace W3Edit.Video
         /// </summary>
         public const string LittleEndianByteOrder = "Little Endian";
 
-        public static readonly byte[] RiffHeaderBytes = new byte[] { 0x52, 0x49, 0x46, 0x46 };
-        public static readonly byte[] RiffDataBytes = new byte[] { 0x64, 0x61, 0x74, 0x61 };
-        public static readonly byte[] RiffWaveBytes = new byte[] { 0x57, 0x41, 0x56, 0x45 };
-        public static readonly byte[] RiffFmtBytes = new byte[] { 0x66, 0x6D, 0x74, 0x20 };
+        public static readonly byte[] RiffHeaderBytes = { 0x52, 0x49, 0x46, 0x46 };
+        public static readonly byte[] RiffDataBytes = { 0x64, 0x61, 0x74, 0x61 };
+        public static readonly byte[] RiffWaveBytes = { 0x57, 0x41, 0x56, 0x45 };
+        public static readonly byte[] RiffFmtBytes = { 0x66, 0x6D, 0x74, 0x20 };
 
-        public static readonly byte[] NullByteArray = new byte[] { 0x00 };
+        public static readonly byte[] NullByteArray = { 0x00 };
 
         public const string StringNullTerminator = "\0";
 

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using W3Edit.Video.Parsefile;
 
 namespace W3Edit.Video
@@ -15,12 +10,12 @@ namespace W3Edit.Video
         public const string AdxAudioExtension = ".adx";
         public const string AixAudioExtension = ".aix";
 
-        public static readonly byte[] AixSignatureBytes = new byte[] { 0x41, 0x49, 0x58, 0x46 };
+        public static readonly byte[] AixSignatureBytes = { 0x41, 0x49, 0x58, 0x46 };
 
         public SofdecStream(string path) : base(path)
         {
-            this.FileExtensionAudio = AdxAudioExtension;
-            this.FileExtensionVideo = DefaultVideoExtension;
+            FileExtensionAudio = AdxAudioExtension;
+            FileExtensionVideo = DefaultVideoExtension;
         }
 
         protected override string GetAudioFileExtension(Stream readStream, long currentOffset)
@@ -28,7 +23,7 @@ namespace W3Edit.Video
             string fileExtension;
             byte[] checkBytes;
 
-            int headerSize = this.GetAudioPacketHeaderSize(readStream, currentOffset);
+            int headerSize = GetAudioPacketHeaderSize(readStream, currentOffset);
             checkBytes = ParseFile.ParseSimpleOffset(readStream, (currentOffset + 6 + headerSize), 4);
 
             if (ParseFile.CompareSegment(checkBytes, 0, AixSignatureBytes))

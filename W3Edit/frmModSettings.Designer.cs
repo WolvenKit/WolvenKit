@@ -1,11 +1,14 @@
-﻿namespace W3Edit
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace W3Edit
 {
     partial class frmModSettings
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -110,10 +113,10 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblName;
-        private System.Windows.Forms.TextBox txName;
-        private System.Windows.Forms.CheckBox cbInstallAsDLC;
-        private System.Windows.Forms.Button btSave;
-        private System.Windows.Forms.Button btCancel;
+        private Label lblName;
+        private TextBox txName;
+        private CheckBox cbInstallAsDLC;
+        private Button btSave;
+        private Button btCancel;
     }
 }

@@ -3,10 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace W3Edit.Video.Parsefile
 {
@@ -60,9 +58,9 @@ namespace W3Edit.Video.Parsefile
             byte[] ret = new byte[lengthToCut];
             long currentStreamPosition = stream.Position;
 
-            stream.Seek((long)startingOffset, SeekOrigin.Begin);
+            stream.Seek(startingOffset, SeekOrigin.Begin);
             BinaryReader br = new BinaryReader(stream);
-            ret = br.ReadBytes((int)lengthToCut);
+            ret = br.ReadBytes(lengthToCut);
 
             stream.Position = currentStreamPosition;
 
@@ -870,14 +868,14 @@ namespace W3Edit.Video.Parsefile
                 int read = 0;
                 long totalBytes = 0;
                 byte[] bytes = new byte[Constants.FileReadChunkSize];
-                stream.Seek((long)startingOffset, SeekOrigin.Begin);
+                stream.Seek(startingOffset, SeekOrigin.Begin);
 
                 int maxread = length > (long)bytes.Length ? bytes.Length : (int)length;
 
                 while ((read = stream.Read(bytes, 0, maxread)) > 0)
                 {
                     bw.Write(bytes, 0, read);
-                    totalBytes += (long)read;
+                    totalBytes += read;
 
                     maxread = (length - totalBytes) > (long)bytes.Length ? bytes.Length : (int)(length - totalBytes);
                 }
@@ -890,7 +888,7 @@ namespace W3Edit.Video.Parsefile
                             length.ToString("X8"),
                             Path.GetFileName(fullFilePath)));
 
-                    using (StreamWriter logWriter = new StreamWriter(Path.Combine(fullOutputDirectory, ParseFile.LogFileName), true))
+                    using (StreamWriter logWriter = new StreamWriter(Path.Combine(fullOutputDirectory, LogFileName), true))
                     {
                         logWriter.Write(logInfo.ToString());
                     }
@@ -905,7 +903,7 @@ namespace W3Edit.Video.Parsefile
                             startingOffset.ToString("X8"),
                             (startingOffset + length - 1).ToString("X8")));
 
-                    using (StreamWriter batchWriter = new StreamWriter(Path.Combine(fullOutputDirectory, ParseFile.SnakeBiteBatchFileName), true))
+                    using (StreamWriter batchWriter = new StreamWriter(Path.Combine(fullOutputDirectory, SnakeBiteBatchFileName), true))
                     {
                         batchWriter.Write(snakeBiteBatch.ToString());
                     }
@@ -992,7 +990,7 @@ namespace W3Edit.Video.Parsefile
                             length.ToString("X8"),
                             Path.GetFileName(fullFilePath)));
 
-                    using (StreamWriter logWriter = new StreamWriter(Path.Combine(fullOutputDirectory, ParseFile.LogFileName), true))
+                    using (StreamWriter logWriter = new StreamWriter(Path.Combine(fullOutputDirectory, LogFileName), true))
                     {
                         logWriter.Write(logInfo.ToString());
                     }
@@ -1007,7 +1005,7 @@ namespace W3Edit.Video.Parsefile
                             startingOffset.ToString("X8"),
                             (startingOffset + length - 1).ToString("X8")));
 
-                    using (StreamWriter batchWriter = new StreamWriter(Path.Combine(fullOutputDirectory, ParseFile.SnakeBiteBatchFileName), true))
+                    using (StreamWriter batchWriter = new StreamWriter(Path.Combine(fullOutputDirectory, SnakeBiteBatchFileName), true))
                     {
                         batchWriter.Write(snakeBiteBatch.ToString());
                     }
@@ -1099,7 +1097,7 @@ namespace W3Edit.Video.Parsefile
                             length.ToString("X8"),
                             Path.GetFileName(fullFilePath)));
 
-                    using (StreamWriter logWriter = new StreamWriter(Path.Combine(fullOutputDirectory, ParseFile.LogFileName), true))
+                    using (StreamWriter logWriter = new StreamWriter(Path.Combine(fullOutputDirectory, LogFileName), true))
                     {
                         logWriter.Write(logInfo.ToString());
                     }
@@ -1114,7 +1112,7 @@ namespace W3Edit.Video.Parsefile
                             startingOffset.ToString("X8"),
                             (startingOffset + length - 1).ToString("X8")));
 
-                    using (StreamWriter batchWriter = new StreamWriter(Path.Combine(fullOutputDirectory, ParseFile.SnakeBiteBatchFileName), true))
+                    using (StreamWriter batchWriter = new StreamWriter(Path.Combine(fullOutputDirectory, SnakeBiteBatchFileName), true))
                     {
                         batchWriter.Write(snakeBiteBatch.ToString());
                     }
@@ -1148,14 +1146,14 @@ namespace W3Edit.Video.Parsefile
                 int read = 0;
                 long totalBytes = 0;
                 byte[] bytes = new byte[Constants.FileReadChunkSize];
-                stream.Seek((long)startingOffset, SeekOrigin.Begin);
+                stream.Seek(startingOffset, SeekOrigin.Begin);
 
                 int maxread = length > (long)bytes.Length ? bytes.Length : (int)length;
 
                 while ((read = stream.Read(bytes, 0, maxread)) > 0)
                 {
                     bw.Write(bytes, 0, read);
-                    totalBytes += (long)read;
+                    totalBytes += read;
 
                     maxread = (length - totalBytes) > (long)bytes.Length ? bytes.Length : (int)(length - totalBytes);
                 }
@@ -1202,7 +1200,7 @@ namespace W3Edit.Video.Parsefile
             int j = 0;
             byte[] searchBytes;
             byte[] terminatorBytes = null;
-            System.Text.Encoding enc = System.Text.Encoding.ASCII;
+            Encoding enc = Encoding.ASCII;
 
             long cutStart;
             long cutSize = 0;
@@ -1237,7 +1235,7 @@ namespace W3Edit.Video.Parsefile
                 // convert the search string to bytes
                 for (i = 0; i < searchCriteria.SearchString.Length; i += 2)
                 {
-                    searchBytes[j] = BitConverter.GetBytes(Int16.Parse(searchCriteria.SearchString.Substring(i, 2), System.Globalization.NumberStyles.AllowHexSpecifier, CultureInfo.CurrentCulture))[0];
+                    searchBytes[j] = BitConverter.GetBytes(Int16.Parse(searchCriteria.SearchString.Substring(i, 2), NumberStyles.AllowHexSpecifier, CultureInfo.CurrentCulture))[0];
                     j++;
                 }
             }
@@ -1296,7 +1294,7 @@ namespace W3Edit.Video.Parsefile
 
                 // search for our string
                 // while ((offset = ParseFile.GetNextOffset(fs, previousOffset, searchBytes)) != -1)
-                while ((offset = ParseFile.GetNextOffset(fs, previousOffset, searchBytes,
+                while ((offset = GetNextOffset(fs, previousOffset, searchBytes,
                     searchCriteria.DoSearchStringModulo, searchStringModuloDivisor,
                     searchStringModuloResult)) != -1)
                 {
@@ -1312,7 +1310,7 @@ namespace W3Edit.Video.Parsefile
                         {
                             cutSizeOffset = cutStart + ByteConversion.GetLongValueFromString(searchCriteria.CutSize);
                             previousPosition = fs.Position;
-                            cutSizeBytes = ParseFile.ParseSimpleOffset(
+                            cutSizeBytes = ParseSimpleOffset(
                                 fs,
                                 cutSizeOffset,
                                 (int)ByteConversion.GetLongValueFromString(searchCriteria.CutSizeOffsetSize));
@@ -1422,14 +1420,14 @@ namespace W3Edit.Video.Parsefile
                         {
                             if (!String.IsNullOrEmpty(searchCriteria.ExtraCutSizeBytes))
                             {
-                                cutSize += (long)ByteConversion.GetLongValueFromString(searchCriteria.ExtraCutSizeBytes);
+                                cutSize += ByteConversion.GetLongValueFromString(searchCriteria.ExtraCutSizeBytes);
                             }
 
                             // check minimum cut size
                             if (((minimumCutSize > 0) && (cutSize >= minimumCutSize)) ||
                                 (minimumCutSize < 1))
                             {
-                                ParseFile.ExtractChunkToFile(fs, cutStart, cutSize, Path.Combine(outputFolder, outputFile), outputLog, outputBatchFile);
+                                ExtractChunkToFile(fs, cutStart, cutSize, Path.Combine(outputFolder, outputFile), outputLog, outputBatchFile);
 
                                 ret.AppendFormat(
                                     CultureInfo.CurrentCulture,
@@ -1586,7 +1584,7 @@ namespace W3Edit.Video.Parsefile
 
                     if (cutLength > 0)
                     {
-                        ParseFile.ExtractChunkToFile(fs, cutOffset, cutLength, fileItemArray[j].FilePath, outputLog, outputBatchFile);
+                        ExtractChunkToFile(fs, cutOffset, cutLength, fileItemArray[j].FilePath, outputLog, outputBatchFile);
                         ret.AppendFormat("{0} extracted.{1}", Path.GetFileName(fileItemArray[j].FilePath), Environment.NewLine);
                     }
 
@@ -1673,7 +1671,7 @@ namespace W3Edit.Video.Parsefile
                 {
                     // terminator
                     nameTerminatorBytes = ByteConversion.GetBytesFromHexString(vfsInformation.FileNameTerminatorString);
-                    nameLength = (long)ParseFile.GetSegmentLength(vfsStream, (int)nameOffset, nameTerminatorBytes);
+                    nameLength = GetSegmentLength(vfsStream, (int)nameOffset, nameTerminatorBytes);
                     newFileItem.FileNameLength = nameLength + nameTerminatorBytes.Length;
                 }
 
@@ -1783,49 +1781,45 @@ namespace W3Edit.Video.Parsefile
             long newValue;
 
             // get location of RIFF chunk
-            riffChunkOffset = ParseFile.GetNextOffset(inStream, 0, riffChunkBytes);
+            riffChunkOffset = GetNextOffset(inStream, 0, riffChunkBytes);
 
             if (riffChunkOffset < 0)
             {
                 throw new IndexOutOfRangeException("Cannot find RIFF chunk: " + offsetInfo.RiffChunkString);
             }
-            else
+            riffChunkSize = BitConverter.ToUInt32(ParseSimpleOffset(inStream, riffChunkOffset + 4, 4), 0);
+            riffChunkSize += 8;
+
+            newValueOffset = ByteConversion.GetLongValueFromString(offsetInfo.OffsetValue);
+            newValueLength = ByteConversion.GetLongValueFromString(offsetInfo.OffsetSize);
+
+            switch (offsetInfo.RelativeLocationToRiffChunkString)
             {
-                riffChunkSize = (long)BitConverter.ToUInt32(ParseFile.ParseSimpleOffset(inStream, riffChunkOffset + 4, 4), 0);
-                riffChunkSize += 8;
-
-                newValueOffset = ByteConversion.GetLongValueFromString(offsetInfo.OffsetValue);
-                newValueLength = ByteConversion.GetLongValueFromString(offsetInfo.OffsetSize);
-
-                switch (offsetInfo.RelativeLocationToRiffChunkString)
-                {
-                    case RiffCalculatingOffsetDescription.START_OF_STRING:
-                        newValueOffset += riffChunkOffset;
-                        break;
-                    case RiffCalculatingOffsetDescription.END_OF_STRING:
-                        newValueOffset += riffChunkOffset + riffChunkSize;
-                        break;
-                    default:
-                        throw new InvalidDataException("Unknown relative location string for RIFF: " + offsetInfo.RelativeLocationToRiffChunkString);
-                        break;
-                }
-
-                // get the value
-                newValue = GetVaryingByteValueAtOffset(inStream, newValueOffset, newValueLength, offsetInfo.OffsetByteOrder.Equals(Constants.LittleEndianByteOrder), allowNegativeOffset);
-
-                // apply calculcation
-                if (!String.IsNullOrEmpty(offsetInfo.CalculationString))
-                {
-                    string calculationString =
-                        offsetInfo.CalculationString.Replace(RiffCalculatingOffsetDescription.OFFSET_VARIABLE_STRING, newValue.ToString());
-
-                    newValue = ByteConversion.GetLongValueFromString(MathUtil.Evaluate(calculationString));
-                }
-
-                // return value
-                return newValue;
+                case RiffCalculatingOffsetDescription.START_OF_STRING:
+                    newValueOffset += riffChunkOffset;
+                    break;
+                case RiffCalculatingOffsetDescription.END_OF_STRING:
+                    newValueOffset += riffChunkOffset + riffChunkSize;
+                    break;
+                default:
+                    throw new InvalidDataException("Unknown relative location string for RIFF: " + offsetInfo.RelativeLocationToRiffChunkString);
+                    break;
             }
 
+            // get the value
+            newValue = GetVaryingByteValueAtOffset(inStream, newValueOffset, newValueLength, offsetInfo.OffsetByteOrder.Equals(Constants.LittleEndianByteOrder), allowNegativeOffset);
+
+            // apply calculcation
+            if (!String.IsNullOrEmpty(offsetInfo.CalculationString))
+            {
+                string calculationString =
+                    offsetInfo.CalculationString.Replace(RiffCalculatingOffsetDescription.OFFSET_VARIABLE_STRING, newValue.ToString());
+
+                newValue = ByteConversion.GetLongValueFromString(MathUtil.Evaluate(calculationString));
+            }
+
+            // return value
+            return newValue;
         }
 
         public static long GetCalculatedVaryingByteValueAtAbsoluteOffset(Stream inStream, CalculatingOffsetDescription offsetInfo, bool allowNegativeOffset)
@@ -1874,48 +1868,44 @@ namespace W3Edit.Video.Parsefile
             }
 
             // get location of RIFF chunk
-            byteSearchChunkOffset = ParseFile.GetNextOffset(inStream, 0, byteSearchChunkBytes);
+            byteSearchChunkOffset = GetNextOffset(inStream, 0, byteSearchChunkBytes);
 
             if (byteSearchChunkOffset < 0)
             {
                 throw new IndexOutOfRangeException("Cannot find byte string: " + offsetInfo.ByteString);
             }
-            else
+            byteSearchChunkSize = byteSearchChunkBytes.Length;
+
+            newValueOffset = ByteConversion.GetLongValueFromString(offsetInfo.OffsetValue);
+            newValueLength = ByteConversion.GetLongValueFromString(offsetInfo.OffsetSize);
+
+            switch (offsetInfo.RelativeLocationToByteString)
             {
-                byteSearchChunkSize = byteSearchChunkBytes.Length;
-
-                newValueOffset = ByteConversion.GetLongValueFromString(offsetInfo.OffsetValue);
-                newValueLength = ByteConversion.GetLongValueFromString(offsetInfo.OffsetSize);
-
-                switch (offsetInfo.RelativeLocationToByteString)
-                {
-                    case ByteSearchCalculatingOffsetDescription.START_OF_STRING:
-                        newValueOffset += byteSearchChunkOffset;
-                        break;
-                    case ByteSearchCalculatingOffsetDescription.END_OF_STRING:
-                        newValueOffset += byteSearchChunkOffset + byteSearchChunkSize;
-                        break;
-                    default:
-                        throw new InvalidDataException("Unknown relative location string for bytes string search: " + offsetInfo.RelativeLocationToByteString);
-                        break;
-                }
-
-                // get the value
-                newValue = GetVaryingByteValueAtOffset(inStream, newValueOffset, newValueLength, offsetInfo.OffsetByteOrder.Equals(Constants.LittleEndianByteOrder), allowNegativeOffset);
-
-                // apply calculcation
-                if (!String.IsNullOrEmpty(offsetInfo.CalculationString))
-                {
-                    string calculationString =
-                        offsetInfo.CalculationString.Replace(ByteSearchCalculatingOffsetDescription.OFFSET_VARIABLE_STRING, newValue.ToString());
-
-                    newValue = ByteConversion.GetLongValueFromString(MathUtil.Evaluate(calculationString));
-                }
-
-                // return value
-                return newValue;
+                case ByteSearchCalculatingOffsetDescription.START_OF_STRING:
+                    newValueOffset += byteSearchChunkOffset;
+                    break;
+                case ByteSearchCalculatingOffsetDescription.END_OF_STRING:
+                    newValueOffset += byteSearchChunkOffset + byteSearchChunkSize;
+                    break;
+                default:
+                    throw new InvalidDataException("Unknown relative location string for bytes string search: " + offsetInfo.RelativeLocationToByteString);
+                    break;
             }
 
+            // get the value
+            newValue = GetVaryingByteValueAtOffset(inStream, newValueOffset, newValueLength, offsetInfo.OffsetByteOrder.Equals(Constants.LittleEndianByteOrder), allowNegativeOffset);
+
+            // apply calculcation
+            if (!String.IsNullOrEmpty(offsetInfo.CalculationString))
+            {
+                string calculationString =
+                    offsetInfo.CalculationString.Replace(ByteSearchCalculatingOffsetDescription.OFFSET_VARIABLE_STRING, newValue.ToString());
+
+                newValue = ByteConversion.GetLongValueFromString(MathUtil.Evaluate(calculationString));
+            }
+
+            // return value
+            return newValue;
         }
 
         public static long GetVaryingByteValueAtOffset(Stream inStream, long valueOffset, long valueLength,
@@ -1935,7 +1925,7 @@ namespace W3Edit.Video.Parsefile
                 valueOffset = inStream.Length + valueOffset;
             }
 
-            byte[] newValueBytes = ParseFile.ParseSimpleOffset(inStream, valueOffset, (int)valueLength);
+            byte[] newValueBytes = ParseSimpleOffset(inStream, valueOffset, (int)valueLength);
 
             if (!valueIsLittleEndian)
             {
@@ -1986,14 +1976,13 @@ namespace W3Edit.Video.Parsefile
             char[] illegalFileNameChars = Path.GetInvalidFileNameChars();
             char[] illegalPathChars = Path.GetInvalidPathChars();
 
-            foreach (char c in path.ToCharArray())
+            foreach (char c in path)
             {
                 for (int i = 0; i < illegalFileNameChars.Length; i++)
                 {
                     if (c == illegalFileNameChars[i])
                     {
                         path.Replace(illegalFileNameChars[i], '_');
-                        continue;
                     }
                 }
 
@@ -2002,7 +1991,6 @@ namespace W3Edit.Video.Parsefile
                     if (c == illegalPathChars[i])
                     {
                         path.Replace(illegalPathChars[i], '_');
-                        continue;
                     }
                 }
             }
@@ -2117,7 +2105,7 @@ namespace W3Edit.Video.Parsefile
 
         public static byte ReadByte(Stream inStream, long offset)
         {
-            return (byte)ParseSimpleOffset(inStream, offset, 1)[0];
+            return ParseSimpleOffset(inStream, offset, 1)[0];
         }
 
         public static SByte ReadSByte(Stream inStream, long offset)

@@ -1,11 +1,15 @@
-﻿namespace W3Edit
+﻿using System.ComponentModel;
+using System.IO;
+using System.Windows.Forms;
+
+namespace W3Edit
 {
     partial class frmModExplorer
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -147,9 +151,6 @@
             this.searchBox.Size = new System.Drawing.Size(100, 25);
             this.searchBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchBox_KeyDown);
             this.searchBox.Validating += new System.ComponentModel.CancelEventHandler(this.searchBox_Validating);
-            this.searchBox.Validated += new System.EventHandler(this.searchBox_Validated);
-            this.searchBox.Click += new System.EventHandler(this.searchBox_Click);
-            this.searchBox.TextChanged += new System.EventHandler(this.searchBox_TextChanged);
             // 
             // resetfilesButton
             // 
@@ -209,19 +210,19 @@
 
         #endregion
 
-        private System.Windows.Forms.TreeView modFileList;
-        private System.Windows.Forms.ImageList treeImages;
-        private System.Windows.Forms.ContextMenuStrip contextMenu;
-        private System.Windows.Forms.ToolStripMenuItem removeFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem addFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
-        private System.Windows.Forms.ToolStrip searchstrip;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
-        private System.Windows.Forms.ToolStripTextBox searchBox;
-        private System.Windows.Forms.ToolStripButton showhideButton;
-        private System.Windows.Forms.ToolStripButton resetfilesButton;
-        private System.IO.FileSystemWatcher modexplorerSlave;
+        private TreeView modFileList;
+        private ImageList treeImages;
+        private ContextMenuStrip contextMenu;
+        private ToolStripMenuItem removeFileToolStripMenuItem;
+        private ToolStripMenuItem addFileToolStripMenuItem;
+        private ToolStripMenuItem renameToolStripMenuItem;
+        private ToolStripMenuItem copyToolStripMenuItem;
+        private ToolStripMenuItem pasteToolStripMenuItem;
+        private ToolStrip searchstrip;
+        private ToolStripLabel toolStripLabel1;
+        private ToolStripTextBox searchBox;
+        private ToolStripButton showhideButton;
+        private ToolStripButton resetfilesButton;
+        private FileSystemWatcher modexplorerSlave;
     }
 }

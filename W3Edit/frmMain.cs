@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using ICSharpCode.SharpZipLib.Core;
-using ICSharpCode.SharpZipLib.Tar;
 using ICSharpCode.SharpZipLib.Zip;
 using W3Edit.Bundles;
 using W3Edit.CR2W;
@@ -263,7 +262,7 @@ namespace W3Edit
                 return;
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
-                MessageBox.Show("Please close The Witcher 3 before tinkering with the files!","",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                MessageBox.Show(@"Please close The Witcher 3 before tinkering with the files!","",MessageBoxButtons.OK,MessageBoxIcon.Information);
                 return;
             }
             var explorer = new frmBundleExplorer(loadmods ? MainController.Get().ModBundleManager : MainController.Get().BundleManager);
@@ -286,14 +285,14 @@ namespace W3Edit
             if (!manager.Items.ContainsKey(depotpath))
                 return;
 
-            BundleItem selectedBundle = null;
+            BundleItem selectedBundle;
 
             if (manager.Items[depotpath].Count > 1)
             {
                 var bundles = manager.Items[depotpath].ToDictionary(bundle => bundle.Bundle.FileName);
 
                 var dlg = new frmExtractAmbigious(bundles.Keys);
-                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
+                if (dlg.ShowDialog() == DialogResult.Cancel)
                 {
                     return;
                 }
@@ -311,28 +310,27 @@ namespace W3Edit
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(filename));
             }
-            catch
-            {
-
-            }
+            catch { }
 
             if (File.Exists(filename))
             {
-                if (MessageBox.Show(filename + " already exists, do you want to overwrite it?", "Add mod file error.", MessageBoxButtons.OKCancel) != System.Windows.Forms.DialogResult.OK)
+                if (MessageBox.Show(filename + " already exists, do you want to overwrite it?", "Add mod file error.", MessageBoxButtons.OKCancel) != DialogResult.OK)
                 {
                     return;
                 }
 
                 File.Delete(filename);
             }
-
             selectedBundle.Extract(filename);
         }
 
+        /// <summary>
+        /// Update the list of files in the ModExplorer
+        /// </summary>
+        /// <param name="clear">if true files or completely redrawn</param>
         private void UpdateModFileList(bool clear = false)
-        {
-            
-            ModExplorer?.UpdateModFileList(true,clear);
+        {           
+            ModExplorer.UpdateModFileList(true,clear);
         }
 
         private void openModToolStripMenuItem_Click(object sender, EventArgs e)
@@ -364,9 +362,29 @@ namespace W3Edit
             ActiveMod = (W3Mod)ser.Deserialize(modfile);
             ActiveMod.FileName = file;
             modfile.Close();
-
-            ShowModExplorer();
+            ResetWindows();
             UpdateModFileList(true);
+            AddOutput("\"" + ActiveMod.Name + "\" loaded successfully!");
+        }
+
+        /// <summary>
+        /// Closes all the "file documents", resets modexplorer and clears the output.
+        /// </summary>
+        private void ResetWindows()
+        {
+            if (ActiveMod != null)
+            {
+                foreach (var t in OpenDocuments)
+                {
+                    t.Close();
+                    break;
+                }
+            }
+            ModExplorer?.Close();
+            ModExplorer = null;
+            ShowModExplorer();
+            ShowOutput();
+            ClearOutput();
         }
 
         private void ShowModExplorer()
@@ -583,10 +601,10 @@ namespace W3Edit
                     FileName = dlg.FileName,
                     Name = modname
                 };
-
-                ShowModExplorer();
+                ResetWindows();
                 UpdateModFileList(true);
                 SaveMod();
+                AddOutput("\"" + ActiveMod.Name + "\" sucesfully created and loaded!");
                 break;
             }
         }
@@ -661,14 +679,6 @@ namespace W3Edit
         private void saveFile(frmCR2WDocument d)
         {
             d.SaveFile();
-        }
-
-        private void tbtAddFile_Click(object sender, EventArgs e)
-        {
-            if (ActiveMod == null)
-                return;
-
-            addModFile(false);
         }
 
         private void btPack_Click(object sender, EventArgs e)
@@ -859,6 +869,7 @@ namespace W3Edit
             zipStream.IsStreamOwner = true;
             zipStream.Close();
             AddOutput("Installer created: " + fsOut.Name + "\n");
+            MessageBox.Show("Installer created: " + fsOut.Name,"Done!",MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
 
         private void CompressFile(string filename, ZipOutputStream zipStream)

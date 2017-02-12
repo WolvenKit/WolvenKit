@@ -33,6 +33,12 @@ namespace W3Edit.CR2W.Types
                 }
                 else
                 {
+                    Handle = cr2w.handles[0].str;
+
+                    var filetype = cr2w.handles[0].filetype;
+                    FileType = cr2w.strings[filetype].str;
+
+                    Flags = cr2w.handles[0].flags;
                     //TODO: Log this to console: The file is corrupted but we tried to load it anyway so something may not function properly!
                 }
             }

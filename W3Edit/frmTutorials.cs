@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using W3Edit.Properties;
 
@@ -13,7 +8,7 @@ namespace W3Edit
 {
     public partial class frmTutorials : Form
     {
-        public static readonly List<Tutorial> Tutorials = new List<Tutorial>()
+        public static readonly List<Tutorial> Tutorials = new List<Tutorial>
         {
             new Tutorial("Traderain","Welcome page!",Resources.aERVQbx_460s,"<html><body><h3>Please select a tutorial from the side!<h3><br/></body></html>"),
             new Tutorial("KNG","Example",Resources.geralt,"<html><body><h3>This is an example<h3><br/></body></html>")

@@ -1,11 +1,14 @@
-﻿namespace W3Edit
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace W3Edit
 {
     partial class frmExtractAmbigious
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -98,9 +101,9 @@
 
         #endregion
 
-        private System.Windows.Forms.Button btCancel;
-        private System.Windows.Forms.Button btOk;
-        private System.Windows.Forms.ListBox lsBundleList;
-        private System.Windows.Forms.Label lblMessage;
+        private Button btCancel;
+        private Button btOk;
+        private ListBox lsBundleList;
+        private Label lblMessage;
     }
 }

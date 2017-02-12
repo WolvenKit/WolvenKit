@@ -1,11 +1,15 @@
-﻿namespace W3Edit
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using BrightIdeasSoftware;
+
+namespace W3Edit
 {
     partial class frmHexEditorView
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -228,20 +232,20 @@
 
         #endregion
 
-        private BrightIdeasSoftware.TreeListView treeView;
-        private BrightIdeasSoftware.OLVColumn colName;
-        private BrightIdeasSoftware.OLVColumn colValue;
-        private BrightIdeasSoftware.OLVColumn colType;
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel spacer;
-        private System.Windows.Forms.ToolStripStatusLabel lblPosition;
-        private BrightIdeasSoftware.OLVColumn colEndAt;
-        private BrightIdeasSoftware.OLVColumn colHex;
-        private BrightIdeasSoftware.OLVColumn colMethod;
-        private BrightIdeasSoftware.VirtualObjectListView listView;
-        private BrightIdeasSoftware.OLVColumn colPosition;
-        private BrightIdeasSoftware.OLVColumn colPos;
+        private TreeListView treeView;
+        private OLVColumn colName;
+        private OLVColumn colValue;
+        private OLVColumn colType;
+        private SplitContainer splitContainer1;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel spacer;
+        private ToolStripStatusLabel lblPosition;
+        private OLVColumn colEndAt;
+        private OLVColumn colHex;
+        private OLVColumn colMethod;
+        private VirtualObjectListView listView;
+        private OLVColumn colPosition;
+        private OLVColumn colPos;
 
     }
 }

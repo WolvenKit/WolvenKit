@@ -105,7 +105,7 @@ namespace W3Edit
                         {
                             wcc_liteexe = Directory.GetFiles(InstallLocation.ToString(), "wcc_lite.exe", SearchOption.AllDirectories).First();
                         }
-                        if (string.Equals(programName, "The Witcher 3 - Wild Hunt"))
+                        if (Equals(programName, "The Witcher 3 - Wild Hunt"))
                         {
                             witcherexe = Directory.GetFiles(InstallLocation.ToString(), "witcher3.exe", SearchOption.AllDirectories).First();
                         }

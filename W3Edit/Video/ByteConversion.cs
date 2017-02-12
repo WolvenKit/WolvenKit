@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace W3Edit.Video
 {
@@ -34,7 +31,7 @@ namespace W3Edit.Video
         public static string GetEncodedText(byte[] value, int codePage)
         {
             //return Encoding.Unicode.GetString(value);
-            return System.Text.Encoding.GetEncoding(codePage).GetString(value);
+            return Encoding.GetEncoding(codePage).GetString(value);
         }
 
         /// <summary>
@@ -63,7 +60,7 @@ namespace W3Edit.Video
         /// <returns>String encoded using ASCII.</returns>
         public static string GetAsciiText(byte[] value)
         {
-            System.Text.Encoding ascii = System.Text.Encoding.ASCII;
+            Encoding ascii = Encoding.ASCII;
             return ascii.GetString(value);
         }
 
@@ -76,7 +73,7 @@ namespace W3Edit.Video
         public static string GetAsciiText(byte[] value, long offset)
         {
             StringBuilder sb = new StringBuilder();
-            System.Text.Encoding ascii = System.Text.Encoding.ASCII;
+            Encoding ascii = Encoding.ASCII;
 
             for (long i = offset; i < value.Length; i++)
             {
@@ -84,10 +81,7 @@ namespace W3Edit.Video
                 {
                     break;
                 }
-                else
-                {
-                    sb.Append((char)value[i]);
-                }
+                sb.Append((char)value[i]);
             }
 
             return sb.ToString();
@@ -95,7 +89,7 @@ namespace W3Edit.Video
 
         public static string GetUtf16LeText(byte[] value)
         {
-            System.Text.Encoding encoding = System.Text.Encoding.Unicode;
+            Encoding encoding = Encoding.Unicode;
             return encoding.GetString(value);
         }
 
@@ -124,11 +118,11 @@ namespace W3Edit.Video
             if (parseValue.StartsWith("0x", StringComparison.CurrentCultureIgnoreCase))
             {
                 parseValue = parseValue.Substring(2);
-                ret = long.Parse(parseValue, System.Globalization.NumberStyles.HexNumber, null);
+                ret = long.Parse(parseValue, NumberStyles.HexNumber, null);
             }
             else
             {
-                ret = long.Parse(parseValue, System.Globalization.NumberStyles.Integer, null);
+                ret = long.Parse(parseValue, NumberStyles.Integer, null);
             }
 
             if (isNegative)
@@ -184,7 +178,7 @@ namespace W3Edit.Video
 
             foreach (byte b in tagBytes)
             {
-                if ((int)b > 0x7F)
+                if (b > 0x7F)
                 {
                     predictedCodePage = CodePageJapan;
                     break;
@@ -212,7 +206,7 @@ namespace W3Edit.Video
             // convert the string to bytes
             for (int i = 0; i < hexValue.Length; i += 2)
             {
-                bytes[j] = BitConverter.GetBytes(Int16.Parse(hexValue.Substring(i, 2), System.Globalization.NumberStyles.AllowHexSpecifier, CultureInfo.CurrentCulture))[0];
+                bytes[j] = BitConverter.GetBytes(Int16.Parse(hexValue.Substring(i, 2), NumberStyles.AllowHexSpecifier, CultureInfo.CurrentCulture))[0];
                 j++;
             }
 
@@ -235,16 +229,13 @@ namespace W3Edit.Video
             {
                 return DateTime.Now;
             }
-            else
-            {
-                return new DateTime(
-                    (((xDate & 0xFE00) >> 9) + 0x7BC),
-                    ((xDate & 0x1E0) >> 5),
-                    (xDate & 0x1F),
-                    ((xTime & 0xF800) >> 0xB),
-                    ((xTime & 0x7E0) >> 5),
-                    ((xTime & 0x1F) * 2));
-            }
+            return new DateTime(
+                (((xDate & 0xFE00) >> 9) + 0x7BC),
+                ((xDate & 0x1E0) >> 5),
+                (xDate & 0x1F),
+                ((xTime & 0xF800) >> 0xB),
+                ((xTime & 0x7E0) >> 5),
+                ((xTime & 0x1F) * 2));
         }
 
     }
