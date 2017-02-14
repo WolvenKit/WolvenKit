@@ -17,6 +17,8 @@ namespace W3Edit
     {
         private CR2WFile file;
 
+        private TreeView QuestView;
+
         public string descriptiontext;
 
         public frmJournalEditor()
@@ -61,56 +63,69 @@ namespace W3Edit
                 case "CJournalCreature":
                 {
                     vulnerable_treview.Show();
-                    var creaturename = typenode.GetVariableByName("baseName");
+                    var name = typenode.GetVariableByName("baseName");
                     indeximage_label.Text = typenode.GetVariableByName("image").ToString();
-                    this.Text = $@"Creature editor [{creaturename}]";
-                    descriptiontext += (creaturename + "\n\n");
+                    this.Text = $@"Creature editor [{name}]";
+                    descriptiontext += (name + "\n\n");
                     ParseUsedAgainst((CArray)typenode.GetVariableByName("itemsUsedAgainstCreature"));
                     ParseCJournalCreatureChildren((CArray)typenode.GetVariableByName("children"));
                     break;
                 }
                 case "CJournalCharacter":
                 {
-                    var creaturename = typenode.GetVariableByName("baseName");
+                    var name = typenode.GetVariableByName("baseName");
                     indeximage_label.Text = typenode.GetVariableByName("image").ToString();
-                    this.Text = $@"Character editor [{creaturename}]";
-                    descriptiontext += (creaturename + "\n\n");
+                    this.Text = $@"Character editor [{name}]";
+                    descriptiontext += (name + "\n\n");
                     vulnerable_treview.Hide();
                     ParseCJournalCharacterChildren((CArray)typenode.GetVariableByName("children"));
                     break;
                 }
                 case "CJournalGlossary":
                 {
-                    var creaturename = typenode.GetVariableByName("baseName");
-                    this.Text = $@"Glossary editor [{creaturename}]";
-                    descriptiontext += (creaturename + "\n\n");
+                    var name = typenode.GetVariableByName("baseName");
+                    this.Text = $@"Glossary editor [{name}]";
+                    descriptiontext += (name + "\n\n");
                     vulnerable_treview.Hide();
                     ParseCJournalGlossaryChildren((CArray)typenode.GetVariableByName("children"));
                     break;
                 }
                 case "CJournalTutorial":
                 {
-                    var creaturename = typenode.GetVariableByName("baseName");
-                    indeximage_label.Text = creaturename.ToString();
+                    var name = typenode.GetVariableByName("baseName");
+                    indeximage_label.Text = name.ToString();
                     descriptiontext += typenode.GetVariableByName("description").ToString();
                     vulnerable_treview.Hide();
-                    this.Text = $@"Tutorial editor [{creaturename}]";
+                    this.Text = $@"Tutorial editor [{name}]";
                     break;
                 }
                 case "CJournalStoryBookChapter":
-                    {
-                        var creaturename = typenode.GetVariableByName("baseName");
-                        indeximage_label.Text = creaturename.ToString();
-                        vulnerable_treview.Hide();
-                        this.Text = $@"Tutorial editor [{creaturename}]";
-                        break;
-                    }
+                {
+                    var name = typenode.GetVariableByName("baseName");
+                    indeximage_label.Text = name.ToString();
+                    vulnerable_treview.Hide();
+                    this.Text = $@"Story book editor [{name}]";
+                    break;
+                }
+                case "CJournalQuest":
+                {
+                    descriptionRenderer.Hide();
+                    vulnerable_treview.Hide();
+                    QuestView = new TreeView();
+                    splitContainer1.Panel2.Controls.Add(QuestView);
+                    QuestView.Dock = DockStyle.Fill;
+                    var name = typenode.GetVariableByName("title") + " " + typenode.GetVariableByName("type");
+                    indeximage_label.Text = name;
+                    this.Text = $@"Quest editor [{name}]";
+                    ParseCJournalQuestChild((CArray) typenode.GetVariableByName("children"));
+                    break;
+                }
                 default:
                 {
                     vulnerable_treview.Hide();
-                    var creaturename = typenode.GetVariableByName("baseName");
-                    indeximage_label.Text = creaturename.ToString();
-                    this.Text = $@"{typenode.Type} editor [{creaturename}]";
+                    var name = typenode.GetVariableByName("baseName");
+                    indeximage_label.Text = name.ToString();
+                    this.Text = $@"{typenode.Type} editor [{name}]";
                     break;
                 }
             }
@@ -195,6 +210,96 @@ namespace W3Edit
         }
         #endregion
 
+        #region CJournalQuest
+
+        public void ParseCJournalQuestChild(CArray childs)
+        {
+            foreach (var cVariable in childs)
+            {
+                var child = (CPtr)cVariable;
+                switch (child.PtrTarget.Type)
+                {
+                    case "CJournalQuestDescriptionGroup":
+                        {
+                            ParseCJournalQuestDescriptionGroupChild((CArray)child.PtrTarget.GetVariableByName("children"));
+                            break;
+                        }
+                    case "CJournalQuestPhase":
+                        {
+                            ParseCJournalQuestPhaseChild((CArray)child.PtrTarget.GetVariableByName("children"));
+                            break;
+                        }
+                }
+            }
+        }
+
+        public void ParseCJournalQuestDescriptionGroupChild(CArray childs)
+        {
+            foreach (var cVariable in childs)
+            {
+                var child = (CPtr)cVariable;
+                switch (child.PtrTarget.Type)
+                {
+                    case "CJournalQuestDescriptionEntry":
+                    {
+                        var questnode = new TreeNode(child.PtrTarget.GetVariableByName("baseName").ToString());
+                        questnode.Nodes.Add(new TreeNode(child.PtrTarget.GetVariableByName("description").ToString()));
+                        //QuestView.Nodes.Add(questnode);
+                        break;
+                    }
+                }
+            }
+        }
+
+        public void ParseCJournalQuestPhaseChild(CArray childs)
+        {
+            foreach (var cVariable in childs)
+            {
+                var child = (CPtr)cVariable;
+                switch (child.PtrTarget.Type)
+                {
+                    case "CJournalQuestObjective":
+                        {
+                            var questnode = new TreeNode(child.PtrTarget.GetVariableByName("baseName").ToString());
+                            questnode.Nodes.Add(new TreeNode(child.PtrTarget.GetVariableByName("title").ToString()));
+                            if (child.PtrTarget.GetVariableByName("children") != null)
+                            {
+                                if (((CArray) child.PtrTarget.GetVariableByName("children")).array.Count > 0)
+                                {
+                                    var detailnode = ParseCJournalQuestObjectiveChild((CArray)child.PtrTarget.GetVariableByName("children"));
+                                    if (detailnode.Nodes.Count != 0)
+                                    {
+                                        questnode.Nodes.Add(detailnode);
+                                    }
+                                }
+                            }
+                            QuestView.Nodes.Add(questnode);
+                            break;
+                        }
+                }
+            }
+        }
+
+        public TreeNode ParseCJournalQuestObjectiveChild(CArray childs)
+        {
+            var result = new TreeNode("Details");
+            foreach (var child in childs.Cast<CPtr>())
+            {
+                switch (child.PtrTarget.Type)
+                {
+                    case "CJournalQuestMapPin":
+                    {
+                        var pinnode = new TreeNode("Map pin");
+                        pinnode.Nodes.Add(new TreeNode("Name: " + child.PtrTarget.GetVariableByName("mapPinID")));
+                        pinnode.Nodes.Add(new TreeNode("Radius: " + child.PtrTarget.GetVariableByName("radius")));
+                        result.Nodes.Add(pinnode);
+                        break;
+                    }
+                }
+            }
+            return result;
+        }
+        #endregion
 
         public void RenderDescription(string text)
         {

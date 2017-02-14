@@ -31,9 +31,9 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.entityImage = new System.Windows.Forms.PictureBox();
-            this.descriptionRenderer = new System.Windows.Forms.WebBrowser();
             this.vulnerable_treview = new System.Windows.Forms.TreeView();
             this.indeximage_label = new System.Windows.Forms.Label();
+            this.descriptionRenderer = new System.Windows.Forms.WebBrowser();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -90,16 +90,6 @@
             this.entityImage.TabIndex = 0;
             this.entityImage.TabStop = false;
             // 
-            // descriptionRenderer
-            // 
-            this.descriptionRenderer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.descriptionRenderer.Location = new System.Drawing.Point(0, 0);
-            this.descriptionRenderer.MinimumSize = new System.Drawing.Size(20, 20);
-            this.descriptionRenderer.Name = "descriptionRenderer";
-            this.descriptionRenderer.Size = new System.Drawing.Size(578, 437);
-            this.descriptionRenderer.TabIndex = 0;
-            this.descriptionRenderer.Url = new System.Uri("about:blank", System.UriKind.Absolute);
-            // 
             // vulnerable_treview
             // 
             this.vulnerable_treview.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -116,6 +106,16 @@
             this.indeximage_label.Size = new System.Drawing.Size(42, 17);
             this.indeximage_label.TabIndex = 1;
             this.indeximage_label.Text = "None";
+            // 
+            // descriptionRenderer
+            // 
+            this.descriptionRenderer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.descriptionRenderer.Location = new System.Drawing.Point(0, 0);
+            this.descriptionRenderer.MinimumSize = new System.Drawing.Size(20, 20);
+            this.descriptionRenderer.Name = "descriptionRenderer";
+            this.descriptionRenderer.Size = new System.Drawing.Size(578, 437);
+            this.descriptionRenderer.TabIndex = 0;
+            this.descriptionRenderer.Url = new System.Uri("about:blank", System.UriKind.Absolute);
             // 
             // frmJournalEditor
             // 
@@ -145,8 +145,8 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.PictureBox entityImage;
-        private System.Windows.Forms.WebBrowser descriptionRenderer;
         private System.Windows.Forms.Label indeximage_label;
         private System.Windows.Forms.TreeView vulnerable_treview;
+        private System.Windows.Forms.WebBrowser descriptionRenderer;
     }
 }
