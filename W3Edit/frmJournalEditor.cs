@@ -70,15 +70,49 @@ namespace W3Edit
                     break;
                 }
                 case "CJournalCharacter":
+                {
+                    var creaturename = typenode.GetVariableByName("baseName");
+                    indeximage_label.Text = typenode.GetVariableByName("image").ToString();
+                    this.Text = $@"Character editor [{creaturename}]";
+                    descriptiontext += (creaturename + "\n\n");
+                    vulnerable_treview.Hide();
+                    ParseCJournalCharacterChildren((CArray)typenode.GetVariableByName("children"));
+                    break;
+                }
+                case "CJournalGlossary":
+                {
+                    var creaturename = typenode.GetVariableByName("baseName");
+                    this.Text = $@"Glossary editor [{creaturename}]";
+                    descriptiontext += (creaturename + "\n\n");
+                    vulnerable_treview.Hide();
+                    ParseCJournalGlossaryChildren((CArray)typenode.GetVariableByName("children"));
+                    break;
+                }
+                case "CJournalTutorial":
+                {
+                    var creaturename = typenode.GetVariableByName("baseName");
+                    indeximage_label.Text = creaturename.ToString();
+                    descriptiontext += typenode.GetVariableByName("description").ToString();
+                    vulnerable_treview.Hide();
+                    this.Text = $@"Tutorial editor [{creaturename}]";
+                    break;
+                }
+                case "CJournalStoryBookChapter":
                     {
                         var creaturename = typenode.GetVariableByName("baseName");
-                        indeximage_label.Text = typenode.GetVariableByName("image").ToString();
-                        this.Text = $@"Character editor [{creaturename}]";
-                        descriptiontext += (creaturename + "\n\n");
+                        indeximage_label.Text = creaturename.ToString();
                         vulnerable_treview.Hide();
-                        ParseCJournalCharacterChildren((CArray)typenode.GetVariableByName("children"));
+                        this.Text = $@"Tutorial editor [{creaturename}]";
                         break;
                     }
+                default:
+                {
+                    vulnerable_treview.Hide();
+                    var creaturename = typenode.GetVariableByName("baseName");
+                    indeximage_label.Text = creaturename.ToString();
+                    this.Text = $@"{typenode.Type} editor [{creaturename}]";
+                    break;
+                }
             }
 
         }
@@ -124,6 +158,7 @@ namespace W3Edit
             }
         }
         #endregion
+
         #region CJournalCharacter
         public void ParseCJournalCharacterChildren(CArray childs)
         {
@@ -141,6 +176,24 @@ namespace W3Edit
         }
         #endregion
 
+        #region CJournalGlossary
+
+        public void ParseCJournalGlossaryChildren(CArray childs)
+        {
+            foreach (var cVariable in childs)
+            {
+                var child = (CPtr) cVariable;
+                switch (child.PtrTarget.Type)
+                {
+                    case "CJournalGlossaryDescription":
+                    {
+                        descriptiontext += child.PtrTarget.GetVariableByName("description");
+                        break;
+                    }
+                }
+            }
+        }
+        #endregion
 
 
         public void RenderDescription(string text)
