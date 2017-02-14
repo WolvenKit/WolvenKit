@@ -17,6 +17,8 @@ namespace W3Edit
     {
         private CR2WFile file;
 
+        public string descriptiontext;
+
         public frmJournalEditor()
         {
             InitializeComponent();
@@ -29,6 +31,7 @@ namespace W3Edit
             {
                 file = value;
                 ParseJournal();
+                RenderDescription(descriptiontext);
             }
         }
 
@@ -47,6 +50,7 @@ namespace W3Edit
                         break;
                 }
             }
+
         }
 
         public void ParseJournalType(CPtr pointer)
@@ -56,22 +60,95 @@ namespace W3Edit
             {
                 case "CJournalCreature":
                 {
+                    vulnerable_treview.Show();
+                    var creaturename = typenode.GetVariableByName("baseName");
+                    indeximage_label.Text = typenode.GetVariableByName("image").ToString();
+                    this.Text = $@"Creature editor [{creaturename}]";
+                    descriptiontext += (creaturename + "\n\n");
                     ParseUsedAgainst((CArray)typenode.GetVariableByName("itemsUsedAgainstCreature"));
+                    ParseCJournalCreatureChildren((CArray)typenode.GetVariableByName("children"));
                     break;
                 }
+                case "CJournalCharacter":
+                    {
+                        var creaturename = typenode.GetVariableByName("baseName");
+                        indeximage_label.Text = typenode.GetVariableByName("image").ToString();
+                        this.Text = $@"Character editor [{creaturename}]";
+                        descriptiontext += (creaturename + "\n\n");
+                        vulnerable_treview.Hide();
+                        ParseCJournalCharacterChildren((CArray)typenode.GetVariableByName("children"));
+                        break;
+                    }
             }
 
         }
 
+
+        #region CJournalCreature
         public void ParseUsedAgainst(CArray infos)
         {
-            descriptionbox.AppendText("Items used against:\n");
+            descriptionRenderer.DocumentText += ("Items used against:\n");
             foreach (var info in infos)
             {
-                descriptionbox.AppendText(info.ToString() + "\n");
-                var infolabel = new Label {Text = info.ToString()};
-                splitContainer2.Panel2.Controls.Add(infolabel);
+                vulnerable_treview.Nodes.Add(info.ToString());
             }
+        }
+
+        public void ParseCJournalCreatureChildren(CArray childs)
+        {
+            foreach (CPtr child in childs )
+            {
+                switch (child.PtrTarget.Type)
+                {
+                    case "CJournalCreatureDescriptionGroup":
+                    {
+                        ParseCJournalCreatureDescriptionGroupChildren((CArray)child.PtrTarget.GetVariableByName("children"));
+                        break;
+                    }
+                }
+            }
+        }
+
+        public void ParseCJournalCreatureDescriptionGroupChildren(CArray childs)
+        {
+            foreach (CPtr child in childs)
+            {
+                switch (child.PtrTarget.Type)
+                {
+                    case "CJournalCreatureDescriptionEntry":
+                        {
+                            descriptiontext += ("\n\n" +child.PtrTarget.GetVariableByName("description") + "\n");
+                            break;
+                        }
+                }
+            }
+        }
+        #endregion
+        #region CJournalCharacter
+        public void ParseCJournalCharacterChildren(CArray childs)
+        {
+            foreach (CPtr child in childs)
+            {
+                switch (child.PtrTarget.Type)
+                {
+                    case "CJournalCharacterDescription":
+                    {
+                        descriptiontext += child.PtrTarget.GetVariableByName("description");
+                        break;
+                    }
+                }
+            }
+        }
+        #endregion
+
+
+
+        public void RenderDescription(string text)
+        {
+            descriptionRenderer.Navigate("about:blank");
+            descriptionRenderer.Document?.OpenNew(false);
+            descriptionRenderer.Document?.Write(($"<html><body>{text}</body></html>"));
+            descriptionRenderer.Refresh();
         }
     }
 }

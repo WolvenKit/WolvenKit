@@ -374,7 +374,7 @@ namespace W3Edit
             modfile.Close();
             ResetWindows();
             UpdateModFileList(true);
-            AddOutput("\"" + ActiveMod.Name + "\" loaded successfully!");
+            AddOutput("\"" + ActiveMod.Name + "\" loaded successfully!\n");
         }
 
         /// <summary>
@@ -614,7 +614,7 @@ namespace W3Edit
                 ResetWindows();
                 UpdateModFileList(true);
                 SaveMod();
-                AddOutput("\"" + ActiveMod.Name + "\" sucesfully created and loaded!");
+                AddOutput("\"" + ActiveMod.Name + "\" sucesfully created and loaded!\n");
                 break;
             }
         }

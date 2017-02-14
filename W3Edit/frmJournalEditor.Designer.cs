@@ -29,15 +29,18 @@
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.descriptionbox = new System.Windows.Forms.RichTextBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.entityImage = new System.Windows.Forms.PictureBox();
+            this.descriptionRenderer = new System.Windows.Forms.WebBrowser();
+            this.vulnerable_treview = new System.Windows.Forms.TreeView();
+            this.indeximage_label = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.entityImage)).BeginInit();
             this.SuspendLayout();
@@ -54,19 +57,10 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.descriptionbox);
+            this.splitContainer1.Panel2.Controls.Add(this.descriptionRenderer);
             this.splitContainer1.Size = new System.Drawing.Size(873, 437);
             this.splitContainer1.SplitterDistance = 291;
             this.splitContainer1.TabIndex = 0;
-            // 
-            // descriptionbox
-            // 
-            this.descriptionbox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.descriptionbox.Location = new System.Drawing.Point(0, 0);
-            this.descriptionbox.Name = "descriptionbox";
-            this.descriptionbox.Size = new System.Drawing.Size(578, 437);
-            this.descriptionbox.TabIndex = 0;
-            this.descriptionbox.Text = "";
             // 
             // splitContainer2
             // 
@@ -77,7 +71,12 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.indeximage_label);
             this.splitContainer2.Panel1.Controls.Add(this.entityImage);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.vulnerable_treview);
             this.splitContainer2.Size = new System.Drawing.Size(291, 437);
             this.splitContainer2.SplitterDistance = 368;
             this.splitContainer2.TabIndex = 0;
@@ -90,6 +89,33 @@
             this.entityImage.Size = new System.Drawing.Size(291, 368);
             this.entityImage.TabIndex = 0;
             this.entityImage.TabStop = false;
+            // 
+            // descriptionRenderer
+            // 
+            this.descriptionRenderer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.descriptionRenderer.Location = new System.Drawing.Point(0, 0);
+            this.descriptionRenderer.MinimumSize = new System.Drawing.Size(20, 20);
+            this.descriptionRenderer.Name = "descriptionRenderer";
+            this.descriptionRenderer.Size = new System.Drawing.Size(578, 437);
+            this.descriptionRenderer.TabIndex = 0;
+            this.descriptionRenderer.Url = new System.Uri("about:blank", System.UriKind.Absolute);
+            // 
+            // vulnerable_treview
+            // 
+            this.vulnerable_treview.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.vulnerable_treview.Location = new System.Drawing.Point(0, 0);
+            this.vulnerable_treview.Name = "vulnerable_treview";
+            this.vulnerable_treview.Size = new System.Drawing.Size(291, 65);
+            this.vulnerable_treview.TabIndex = 0;
+            // 
+            // indeximage_label
+            // 
+            this.indeximage_label.AutoSize = true;
+            this.indeximage_label.Location = new System.Drawing.Point(8, 8);
+            this.indeximage_label.Name = "indeximage_label";
+            this.indeximage_label.Size = new System.Drawing.Size(42, 17);
+            this.indeximage_label.TabIndex = 1;
+            this.indeximage_label.Text = "None";
             // 
             // frmJournalEditor
             // 
@@ -105,6 +131,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel1.PerformLayout();
+            this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.entityImage)).EndInit();
@@ -117,6 +145,8 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.PictureBox entityImage;
-        private System.Windows.Forms.RichTextBox descriptionbox;
+        private System.Windows.Forms.WebBrowser descriptionRenderer;
+        private System.Windows.Forms.Label indeximage_label;
+        private System.Windows.Forms.TreeView vulnerable_treview;
     }
 }
