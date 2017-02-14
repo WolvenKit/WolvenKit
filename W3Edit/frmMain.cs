@@ -869,7 +869,12 @@ namespace W3Edit
             zipStream.IsStreamOwner = true;
             zipStream.Close();
             AddOutput("Installer created: " + fsOut.Name + "\n");
-            MessageBox.Show("Installer created: " + fsOut.Name,"Done!",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            if (!File.Exists(fsOut.Name))
+            {
+                AddOutput("Couldn't create installer. Something went wrong.");
+                return;
+            }
+            Process.Start("explorer.exe", "/select, \"" + fsOut.Name + "\"");
         }
 
         private void CompressFile(string filename, ZipOutputStream zipStream)
