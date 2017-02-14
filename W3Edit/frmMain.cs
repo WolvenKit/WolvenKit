@@ -170,6 +170,16 @@ namespace W3Edit
                     doc.flowDiagram.Show(doc.FormPanel, DockState.Document);
                     break;
                 }
+                case ".journal":
+                {
+                    doc.JournalEditor = new frmJournalEditor
+                    {
+                        File = doc.File,
+                        DockAreas = DockAreas.Document
+                    };
+                    doc.JournalEditor.Show(doc.FormPanel, DockState.Document);
+                    break;
+                }
                 default:
                 {
                     break;
@@ -735,50 +745,14 @@ namespace W3Edit
             }
         }
 
-        private void installMod(string W3ModPackagePath) //TODO: Finish this
+        private void installMod(string W3ModPackagePath)
         {
             if(!File.Exists(W3ModPackagePath) || Path.GetExtension(W3ModPackagePath) != ".W3ModPackage")
             {
                 MessageBox.Show("Corrupted or wrong file!","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);  
                 return;
             }
-
-            var packedDir = Path.Combine(ActiveMod.Directory, "packed");
-            var modName = ActiveMod.Name;
-
-            if (!ActiveMod.InstallAsDLC && !modName.StartsWith("mod"))
-                modName = "mod" + modName;
-
-            string gameModDir = null;
-
-            gameModDir = Path.Combine(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath),
-                ActiveMod.InstallAsDLC ? @"..\..\DLC\" : @"..\..\Mods\", modName);
-
-            if (!Directory.Exists(gameModDir))
-                Directory.CreateDirectory(gameModDir);
-
-            var dirs = Directory.GetDirectories(packedDir, "*", SearchOption.AllDirectories);
-            foreach (var dir in dirs)
-            {
-                var relativePath = dir.Substring(packedDir.Length + 1);
-
-                var fulldir = Path.Combine(gameModDir, relativePath);
-
-                if (!Directory.Exists(fulldir))
-                    Directory.CreateDirectory(fulldir);
-            }
-
-            var files = Directory.GetFiles(packedDir, "*", SearchOption.AllDirectories);
-            foreach (var file in files)
-            {
-                var relativePath = file.Substring(packedDir.Length + 1);
-
-                var fullpath = Path.Combine(gameModDir, relativePath);
-
-                File.Copy(file, fullpath, true);
-            }
-
-            AddOutput("Mod Installed to " + gameModDir + "\n");
+            //TODO: Finish this
         }
 
         /// <summary>

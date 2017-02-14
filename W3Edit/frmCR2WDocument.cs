@@ -11,6 +11,7 @@ namespace W3Edit
         private readonly frmChunkList chunkList;
         public frmEmbeddedFiles embeddedFiles;
         public frmChunkFlowDiagram flowDiagram;
+        public frmJournalEditor JournalEditor;
         private CR2WFile file;
         private frmChunkProperties propertyWindow;
 
@@ -58,6 +59,11 @@ namespace W3Edit
                 if (flowDiagram != null && !flowDiagram.IsDisposed)
                 {
                     flowDiagram.File = file;
+                }
+
+                if (JournalEditor != null && !JournalEditor.IsDisposed)
+                {
+                    JournalEditor.File = file;
                 }
 
                 if (embeddedFiles != null && !embeddedFiles.IsDisposed)
