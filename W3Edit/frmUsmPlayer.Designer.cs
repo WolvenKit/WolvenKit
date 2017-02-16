@@ -32,22 +32,21 @@ namespace W3Edit
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUsmPlayer));
-            this.usmPlayer = new Vlc.DotNet.Forms.VlcControl();
+            this.usmPlayer = new AxWMPLib.AxWindowsMediaPlayer();
             ((System.ComponentModel.ISupportInitialize)(this.usmPlayer)).BeginInit();
             this.SuspendLayout();
             // 
             // usmPlayer
             // 
-            this.usmPlayer.BackColor = System.Drawing.Color.Black;
             this.usmPlayer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.usmPlayer.Enabled = true;
             this.usmPlayer.Location = new System.Drawing.Point(0, 0);
             this.usmPlayer.Name = "usmPlayer";
+            this.usmPlayer.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("usmPlayer.OcxState")));
             this.usmPlayer.Size = new System.Drawing.Size(630, 287);
-            this.usmPlayer.Spu = -1;
             this.usmPlayer.TabIndex = 0;
-            this.usmPlayer.Text = "usmPlayer";
-            this.usmPlayer.VlcLibDirectory = ((System.IO.DirectoryInfo)(resources.GetObject("usmPlayer.VlcLibDirectory")));
-            this.usmPlayer.VlcMediaplayerOptions = null;
+            this.usmPlayer.PlayStateChange += new AxWMPLib._WMPOCXEvents_PlayStateChangeEventHandler(this.usmPlayer_PlayStateChange);
+            this.usmPlayer.MediaError += new AxWMPLib._WMPOCXEvents_MediaErrorEventHandler(this.usmPlayer_MediaError);
             // 
             // frmUsmPlayer
             // 
@@ -59,7 +58,6 @@ namespace W3Edit
             this.Name = "frmUsmPlayer";
             this.ShowIcon = false;
             this.Text = "Video preview";
-            this.Shown += new System.EventHandler(this.frmUsmPlayer_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.usmPlayer)).EndInit();
             this.ResumeLayout(false);
 
@@ -67,6 +65,6 @@ namespace W3Edit
 
         #endregion
 
-        private VlcControl usmPlayer;
+        private AxWMPLib.AxWindowsMediaPlayer usmPlayer;
     }
 }

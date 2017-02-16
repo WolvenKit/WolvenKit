@@ -549,10 +549,8 @@ namespace W3Edit
         {
             if (!File.Exists(path) || Path.GetExtension(path) != ".usm")
                 return;
-            using (var usmplayer = new frmUsmPlayer(path))
-            {
-                usmplayer.ShowDialog();
-            }
+            var usmplayer = new frmUsmPlayer(path);
+            usmplayer.Show(dockPanel,DockState.Document);
 
         }
 
