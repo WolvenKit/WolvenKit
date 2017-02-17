@@ -180,6 +180,17 @@ namespace W3Edit
                     doc.JournalEditor.Show(doc.FormPanel, DockState.Document);
                     break;
                 }
+                case ".xbm":
+                {
+                    //TODO: Enable this once it works
+                    /*doc.ImageViewer = new frmImagePreview
+                    {
+                        File = doc.File,
+                        DockAreas = DockAreas.Document
+                    };
+                    doc.ImageViewer.Show(doc.FormPanel,DockState.Document);*/
+                    break;
+                }
                 default:
                 {
                     break;

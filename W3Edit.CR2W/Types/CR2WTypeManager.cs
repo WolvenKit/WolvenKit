@@ -85,6 +85,7 @@ namespace W3Edit.CR2W.Types
             Register("SharedDataBuffer", new CByteArray(null));
 
             Register("CSwfResource", new CSwfResource(null));
+            Register("CBitmapTexture", new CBitmapTexture(null));
 
             Register("Color", new CColor(null));
 

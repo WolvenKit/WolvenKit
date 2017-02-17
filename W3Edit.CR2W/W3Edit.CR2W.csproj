@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -51,6 +52,7 @@
     <Compile Include="CR2WHeaderHandle.cs" />
     <Compile Include="CR2WHeaderString.cs" />
     <Compile Include="CR2WReaderExtensions.cs" />
+    <Compile Include="DDSImageParser.cs" />
     <Compile Include="Editors\ByteArrayEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -66,12 +68,14 @@
     <Compile Include="Editors\PtrEditor.Designer.cs">
       <DependentUpon>PtrEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImageUtility.cs" />
     <Compile Include="IVariableEditor.cs" />
     <Compile Include="ILocalizedStringSource.cs" />
     <Compile Include="InvalidChunkTypeException.cs" />
     <Compile Include="InvalidFileTypeException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Types\CArray.cs" />
+    <Compile Include="Types\CBitmapTexture.cs" />
     <Compile Include="Types\CByteArray.cs" />
     <Compile Include="Types\CBytes.cs" />
     <Compile Include="Types\CColor.cs" />

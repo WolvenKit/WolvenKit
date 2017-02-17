@@ -46,10 +46,7 @@ namespace W3Edit.CR2W.Types
             }
         }
 
-        public CR2WFile CR2WOwner
-        {
-            get { return cr2w; }
-        }
+        public CR2WFile CR2WOwner => cr2w;
 
         public string Name { get; set; }
         public string Type { get; set; }

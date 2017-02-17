@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using Vlc.DotNet.Forms;
 
 namespace W3Edit
 {

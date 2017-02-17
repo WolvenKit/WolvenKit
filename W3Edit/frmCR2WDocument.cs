@@ -12,8 +12,10 @@ namespace W3Edit
         public frmEmbeddedFiles embeddedFiles;
         public frmChunkFlowDiagram flowDiagram;
         public frmJournalEditor JournalEditor;
+        public frmImagePreview ImageViewer;
         private CR2WFile file;
         private frmChunkProperties propertyWindow;
+
 
         public DockPanel FormPanel => dockPanel;
 
@@ -65,6 +67,12 @@ namespace W3Edit
                 {
                     JournalEditor.File = file;
                 }
+
+                if (ImageViewer != null && !ImageViewer.IsDisposed)
+                {
+                    ImageViewer.File = file;
+                }
+
 
                 if (embeddedFiles != null && !embeddedFiles.IsDisposed)
                 {
