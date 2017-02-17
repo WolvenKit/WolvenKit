@@ -115,7 +115,7 @@ namespace W3Edit.CR2W
             data.Name = Name;
 
             var vars = new List<IEditableVariable> {flags, parentPtr, typeName, data};
-            if (unknownBytes != null)
+            if (unknownBytes != null && unknownBytes.Bytes.Length > 0)
             {
                 vars.Add(unknownBytes);
             }
