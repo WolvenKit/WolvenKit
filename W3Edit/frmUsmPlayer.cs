@@ -66,7 +66,7 @@ namespace W3Edit
             this.Close();
         }
 
-        private void videoConverter_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        private void videoConverter_DoWork(object sender, DoWorkEventArgs e)
         {
             Demux(videofile);
             if (Demuxedfiles.Any(x => Path.GetExtension(x.Key) == ".m2v" || Path.GetExtension(x.Key) == ".m1v"))
@@ -75,6 +75,11 @@ namespace W3Edit
                 File.WriteAllBytes(Path.Combine(Path.GetTempPath(), video.Key), video.Value);
                 PlayFile(usmPlayer, Path.Combine(Path.GetTempPath(), video.Key));
             }
+        }
+
+        private void videoConverter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            statusLabel.Hide();
         }
     }
 }
