@@ -1174,5 +1174,11 @@ namespace W3Edit
         {
             CreateInstaller();
         }
+
+        private void witcherIIIModdingToolLicenseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var wcclicense = new frmWCCLicense();
+            wcclicense.Show();
+        }
     }
 }

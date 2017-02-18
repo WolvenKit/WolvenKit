@@ -192,6 +192,12 @@
     <Compile Include="frmUsmPlayer.Designer.cs">
       <DependentUpon>frmUsmPlayer.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmWCCLicense.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmWCCLicense.Designer.cs">
+      <DependentUpon>frmWCCLicense.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmWCCPatch.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -418,6 +424,9 @@
     <EmbeddedResource Include="frmUsmPlayer.resx">
       <DependentUpon>frmUsmPlayer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmWCCLicense.resx">
+      <DependentUpon>frmWCCLicense.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmWCCPatch.resx">
       <DependentUpon>frmWCCPatch.cs</DependentUpon>
     </EmbeddedResource>
@@ -511,6 +520,7 @@
     <None Include="Resources\ExpandIcon.png" />
     <None Include="Resources\ExitIcon.png" />
     <None Include="Resources\LayerGroupVisibled.png" />
+    <None Include="Resources\wcc_eula.rtf" />
     <None Include="Resources\witcher3_102.ico" />
     <None Include="Resources\witcher3_101.ico" />
     <None Include="Resources\2c21aeda16de354ba5334551a883b481.png" />
