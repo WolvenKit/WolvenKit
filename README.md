@@ -34,10 +34,6 @@ A general list of what you should not do with any of our games and services may 
 As you'll see, this is a short document and we may amend these Rules over time. If so, we'll post an updated version up on our website and make reasonable efforts to notify you, where possible. Once we change these Rules, it will become legally binding on you 30 days after we post it online. Please also remember that these Rules are supplemented by our User Agreement ( http://bar.cdprojektred.com/regulations/ )
 These Rules are here for a reason. As a result, if you break any of them or our User Agreement, we reserve the right to cancel or suspend your access to the Game.
 
-## The Witcher 3 Mod Tool License
-
-See [here](wcc_eula.rtf).
-
 ***
 
 ### Team
