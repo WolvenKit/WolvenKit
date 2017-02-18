@@ -33,9 +33,7 @@ namespace W3Edit
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUsmPlayer));
             this.videoConverter = new System.ComponentModel.BackgroundWorker();
             this.statusLabel = new System.Windows.Forms.Label();
-            this.vlcControl1 = new Vlc.DotNet.Forms.VlcControl();
             this.usmPlayer = new Vlc.DotNet.Forms.VlcControl();
-            ((System.ComponentModel.ISupportInitialize)(this.vlcControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.usmPlayer)).BeginInit();
             this.SuspendLayout();
             // 
@@ -55,17 +53,6 @@ namespace W3Edit
             this.statusLabel.Size = new System.Drawing.Size(168, 25);
             this.statusLabel.TabIndex = 1;
             this.statusLabel.Text = "Converting file...";
-            // 
-            // vlcControl1
-            // 
-            this.vlcControl1.BackColor = System.Drawing.Color.Black;
-            this.vlcControl1.Location = new System.Drawing.Point(0, 0);
-            this.vlcControl1.Name = "vlcControl1";
-            this.vlcControl1.Size = new System.Drawing.Size(0, 0);
-            this.vlcControl1.Spu = -1;
-            this.vlcControl1.TabIndex = 0;
-            this.vlcControl1.VlcLibDirectory = null;
-            this.vlcControl1.VlcMediaplayerOptions = null;
             // 
             // usmPlayer
             // 
@@ -91,7 +78,6 @@ namespace W3Edit
             this.Name = "frmUsmPlayer";
             this.ShowIcon = false;
             this.Text = "Video preview";
-            ((System.ComponentModel.ISupportInitialize)(this.vlcControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.usmPlayer)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -101,7 +87,6 @@ namespace W3Edit
         #endregion
         private BackgroundWorker videoConverter;
         private System.Windows.Forms.Label statusLabel;
-        private Vlc.DotNet.Forms.VlcControl vlcControl1;
         private Vlc.DotNet.Forms.VlcControl usmPlayer;
     }
 }
