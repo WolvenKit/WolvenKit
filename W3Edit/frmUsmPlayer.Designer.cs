@@ -32,6 +32,7 @@ namespace W3Edit
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUsmPlayer));
             this.usmPlayer = new AxWMPLib.AxWindowsMediaPlayer();
+            this.videoConverter = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.usmPlayer)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,6 +47,10 @@ namespace W3Edit
             this.usmPlayer.TabIndex = 0;
             this.usmPlayer.PlayStateChange += new AxWMPLib._WMPOCXEvents_PlayStateChangeEventHandler(this.usmPlayer_PlayStateChange);
             this.usmPlayer.MediaError += new AxWMPLib._WMPOCXEvents_MediaErrorEventHandler(this.usmPlayer_MediaError);
+            // 
+            // videoConverter
+            // 
+            this.videoConverter.DoWork += new System.ComponentModel.DoWorkEventHandler(this.videoConverter_DoWork);
             // 
             // frmUsmPlayer
             // 
@@ -65,5 +70,6 @@ namespace W3Edit
         #endregion
 
         private AxWMPLib.AxWindowsMediaPlayer usmPlayer;
+        private BackgroundWorker videoConverter;
     }
 }

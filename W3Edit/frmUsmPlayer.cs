@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -19,13 +20,7 @@ namespace W3Edit
             InitializeComponent();
             Demuxedfiles = new List<KeyValuePair<string, byte[]>>();
             videofile = path;
-            Demux(videofile);
-            if (Demuxedfiles.Any(x => Path.GetExtension(x.Key) == ".m2v" || Path.GetExtension(x.Key) == ".m1v"))
-            {
-                var video = Demuxedfiles.First(x => Path.GetExtension(x.Key) == ".m2v" || Path.GetExtension(x.Key) == ".m1v");
-                File.WriteAllBytes(Path.Combine(Path.GetTempPath(), video.Key), video.Value);
-                PlayFile(usmPlayer, Path.Combine(Path.GetTempPath(), video.Key));
-            }
+            videoConverter.RunWorkerAsync();
         }
 
         public void Demux(string path)
@@ -69,6 +64,17 @@ namespace W3Edit
         {
             MessageBox.Show(@"Cannot play media file.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             this.Close();
+        }
+
+        private void videoConverter_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            Demux(videofile);
+            if (Demuxedfiles.Any(x => Path.GetExtension(x.Key) == ".m2v" || Path.GetExtension(x.Key) == ".m1v"))
+            {
+                var video = Demuxedfiles.First(x => Path.GetExtension(x.Key) == ".m2v" || Path.GetExtension(x.Key) == ".m1v");
+                File.WriteAllBytes(Path.Combine(Path.GetTempPath(), video.Key), video.Value);
+                PlayFile(usmPlayer, Path.Combine(Path.GetTempPath(), video.Key));
+            }
         }
     }
 }

@@ -41,6 +41,10 @@
       <HintPath>..\packages\AssimpNet.3.3.2\lib\net45\AssimpNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Meta.Vlc, Version=16.5.1.0, Culture=neutral, PublicKeyToken=721a8c5379fa4056, processorArchitecture=x86">
+      <HintPath>..\packages\Meta.Vlc.16.05.01\lib\net45\x86\Meta.Vlc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="OpenGL.Net">
       <HintPath>..\packages\OpenGL.Net.0.3.2\lib\net35\OpenGL.Net.dll</HintPath>
     </Reference>
