@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using OpenGL;
@@ -21,20 +14,18 @@ namespace W3Edit.Render
 
         private void RenderControl_ContextCreated(object sender, GlControlEventArgs e)
         {
-            GlControl glControl = (GlControl)sender;
-
-            RenderControl_ContextCreated_ES(sender, e);
+            RenderControl_ContextCreated_GLSL(sender, e);
         }
 
         private void RenderControl_Render(object sender, GlControlEventArgs e)
         {
-            RenderControl_Render_ES(sender, e);
+            RenderControl_Render_GLSL(sender, e);
         }
 
+        // Disposing resources allocated in RenderControl_ContextCreated
         private void RenderControl_ContextDestroying(object sender, GlControlEventArgs e)
         {
-            // Here you can dispose resources allocated in RenderControl_ContextCreated
-            RenderControl_ContextDestroying_ES(sender, e);
+            RenderControl_ContextDestroying_GLSL(sender, e);
         }
 
         #region Common Data
@@ -43,241 +34,74 @@ namespace W3Edit.Render
         private static float angle_rad;
         private const float PI_OVER_180 = (float)Math.PI / 180.0f;
 
-        /// <summary>
-        /// Vertex position array.
-        /// </summary>
-        private static readonly float[] _ArrayPosition = new float[] {
-            -0.5f, -0.5f, -0.5f,
-             0.5f, -0.5f, -0.5f,
-             0.5f,  0.5f, -0.5f,
-             0.5f,  0.5f, -0.5f,
-            -0.5f,  0.5f, -0.5f,
-            -0.5f, -0.5f, -0.5f,
-
-            -0.5f, -0.5f,  0.5f,
-             0.5f, -0.5f,  0.5f,
-             0.5f,  0.5f,  0.5f,
-             0.5f,  0.5f,  0.5f,
-            -0.5f,  0.5f,  0.5f,
-            -0.5f, -0.5f,  0.5f,
-
-            -0.5f,  0.5f,  0.5f,
-            -0.5f,  0.5f, -0.5f,
-            -0.5f, -0.5f, -0.5f,
-            -0.5f, -0.5f, -0.5f,
-            -0.5f, -0.5f,  0.5f,
-            -0.5f,  0.5f,  0.5f,
-
-             0.5f,  0.5f,  0.5f,
-             0.5f,  0.5f, -0.5f,
-             0.5f, -0.5f, -0.5f,
-             0.5f, -0.5f, -0.5f,
-             0.5f, -0.5f,  0.5f,
-             0.5f,  0.5f,  0.5f,
-
-            -0.5f, -0.5f, -0.5f,
-             0.5f, -0.5f, -0.5f,
-             0.5f, -0.5f,  0.5f,
-             0.5f, -0.5f,  0.5f,
-            -0.5f, -0.5f,  0.5f,
-            -0.5f, -0.5f, -0.5f,
-
-            -0.5f,  0.5f, -0.5f,
-             0.5f,  0.5f, -0.5f,
-             0.5f,  0.5f,  0.5f,
-             0.5f,  0.5f,  0.5f,
-            -0.5f,  0.5f,  0.5f,
-            -0.5f,  0.5f, -0.5f
-        };
-
-        /// <summary>
-        /// Vertex color array.
-        /// </summary>
-        private static readonly float[] _ArrayColor = new float[] {
-            1.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 1.0f,
-
-            1.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 1.0f,
-
-            1.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 1.0f,
-
-            1.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 1.0f,
-
-            1.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 1.0f,
-
-            1.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 1.0f,
-        };
+        private Shader modelShader;
+        private Model modelNanosuit;
 
         #endregion
 
-        #region ES Resources
+        #region GLSL Resources
 
-        private void RenderControl_Render_ES(object sender, GlControlEventArgs e)
+        private void RenderControl_Render_GLSL(object sender, GlControlEventArgs e)
         {
             Control control = (Control)sender;
+            modelShader.Use();
+
             PerspectiveProjectionMatrix projectionMatrix = new PerspectiveProjectionMatrix(45.0f, (float)control.Width/(float)control.Height, 0.1f, 100.0f);
             ModelMatrix viewMatrix = new ModelMatrix();
             ModelMatrix modelMatrix = new ModelMatrix();
-
-            // Move camera
-            viewMatrix.Translate(new Vertex3f(0.0f, 0.0f, -2.0f));
-            // Animate triangle
-            /*modelMatrix.LookAtDirection(
-                new Vertex3f(0.0f, 0.0f, 0.0f),
-                new Vertex3f(
-                    (float)Math.Sin(angle_rad),
-                    0.0f,
-                    (float)Math.Cos(angle_rad)
-                ),
-                new Vertex3f(0.0f, 1.0f, 0.0f)
-            );*/
-            //Quaternion Q = new Quaternion(new Vertex3f(0.0f, 1.0f, 0.0f), angle);
-            modelMatrix.RotateZ(angle);
-            modelMatrix.RotateY(angle);
-            //modelMatrix.Translate(Math.Cos(theta), Math.Sin(theta));
-            //modelMatrix.RotateY(theta);
-
-            Gl.UseProgram(Program_Shader);
+            modelMatrix.Translate(new Vertex3f(0.0f, -1.5f, -2.0f));
+            modelMatrix.Scale(new Vertex3f(0.2f, 0.2f, 0.2f));
 
             Gl.Viewport(0, 0, control.Width, control.Height);
-            Gl.Enable(EnableCap.DepthTest);
+            Gl.ClearColor(0.05f, 0.05f, 0.05f, 1.0f);
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            using (MemoryLock arrayPosition = new MemoryLock(_ArrayPosition))
-            using (MemoryLock arrayColor = new MemoryLock(_ArrayColor))
-            {
-                Gl.VertexAttribPointer((uint)Program_Location_aPosition, 3, Gl.FLOAT, false, 0, arrayPosition.Address);
-                Gl.EnableVertexAttribArray((uint)Program_Location_aPosition);
+            //viewMatrix.RotateY(angle);
+            //viewMatrix.LookAtDirection(new Vertex3f(0.0f, 0.0f, 3.0f), new Vertex3f(-4.37113883e-08f, 0.0f, 2.0f), new Vertex3f(0.0f, 1.0f, 0.0f));
+            Gl.UniformMatrix4(modelShader.uLocation_Projection, 1, false, projectionMatrix.ToArray());
+            Gl.UniformMatrix4(modelShader.uLocation_View, 1, false, viewMatrix.ToArray());
+            Gl.UniformMatrix4(modelShader.uLocation_Model, 1, false, modelMatrix.ToArray());
 
-                Gl.VertexAttribPointer((uint)Program_Location_aColor, 3, Gl.FLOAT, false, 0, arrayColor.Address);
-                Gl.EnableVertexAttribArray((uint)Program_Location_aColor);
-
-                Gl.UniformMatrix4(Program_Location_uProjection, 1, false, projectionMatrix.ToArray());
-                Gl.UniformMatrix4(Program_Location_uView, 1, false, viewMatrix.ToArray());
-                Gl.UniformMatrix4(Program_Location_uModel, 1, false, modelMatrix.ToArray());
-
-                Gl.DrawArrays(PrimitiveType.Triangles, 0, 36);
-            }
+            modelNanosuit.Draw(modelShader);
         }
 
-        private void RenderControl_ContextCreated_ES(object sender, GlControlEventArgs e)
+        private void RenderControl_ContextCreated_GLSL(object sender, GlControlEventArgs e)
         {
-            StringBuilder infolog = new StringBuilder(1024);
-            int infologLength;
-            int compiled;
+            modelShader = new Shader(Shaders.Model.VertexSource, Shaders.Model.FragmentSource);
+            modelShader.uLocation_Projection = Gl.GetUniformLocation(modelShader.Program, Shaders.Model.uLocation_Projection);
+            modelShader.uLocation_View = Gl.GetUniformLocation(modelShader.Program, Shaders.Model.uLocation_View);
+            modelShader.uLocation_Model = Gl.GetUniformLocation(modelShader.Program, Shaders.Model.uLocation_Model);
 
-            infolog.EnsureCapacity(1024);
+            modelNanosuit = new Model("../../Models/nanosuit/nanosuit.obj");
 
-            // Vertex shader
-            uint vertexShader = Gl.CreateShader(Gl.VERTEX_SHADER);
-            Gl.ShaderSource(vertexShader, _Es2_ShaderVertexSource);
-            Gl.CompileShader(vertexShader);
-            Gl.GetShader(vertexShader, Gl.COMPILE_STATUS, out compiled);
-            if (compiled == 0)
-            {
-                Gl.GetShaderInfoLog(vertexShader, 1024, out infologLength, infolog);
-            }
-
-            // Fragment shader
-            uint fragmentShader = Gl.CreateShader(Gl.FRAGMENT_SHADER);
-            Gl.ShaderSource(fragmentShader, _Es2_ShaderFragmentSource);
-            Gl.CompileShader(fragmentShader);
-            Gl.GetShader(fragmentShader, Gl.COMPILE_STATUS, out compiled);
-            if (compiled == 0)
-            {
-                Gl.GetShaderInfoLog(fragmentShader, 1024, out infologLength, infolog);
-            }
-
-            // Program
-            Program_Shader = Gl.CreateProgram();
-            Gl.AttachShader(Program_Shader, vertexShader);
-            Gl.AttachShader(Program_Shader, fragmentShader);
-            Gl.LinkProgram(Program_Shader);
-
-            int linked;
-            Gl.GetProgram(Program_Shader, Gl.LINK_STATUS, out linked);
-
-            if (linked == 0)
-            {
-                Gl.GetProgramInfoLog(Program_Shader, 1024, out infologLength, infolog);
-            }
-
-            Program_Location_uProjection = Gl.GetUniformLocation(Program_Shader, "uProjection");
-            Program_Location_uView = Gl.GetUniformLocation(Program_Shader, "uView");
-            Program_Location_uModel = Gl.GetUniformLocation(Program_Shader, "uModel");
-            Program_Location_aPosition = Gl.GetAttribLocation(Program_Shader, "aPosition");
-            Program_Location_aColor = Gl.GetAttribLocation(Program_Shader, "aColor");
+            Gl.Enable(EnableCap.DepthTest);
         }
 
-        private void RenderControl_ContextDestroying_ES(object sender, OpenGL.GlControlEventArgs e)
+        private void RenderControl_ContextDestroying_GLSL(object sender, OpenGL.GlControlEventArgs e)
         {
-            if (Program_Shader != 0)
-                Gl.DeleteProgram(Program_Shader);
-            Program_Shader = 0;
+            if (modelShader.Program != 0)
+                Gl.DeleteProgram(modelShader.Program);
+            modelShader.Program = 0;
+
+            for (int i = 0; i < modelNanosuit.meshes.Count; i++)
+            {
+                Gl.DeleteVertexArrays(modelNanosuit.meshes[i].VAO);
+                Gl.DeleteBuffers(modelNanosuit.meshes[i].VBO);
+                Gl.DeleteBuffers(modelNanosuit.meshes[i].EBO);
+            }
+
+            for (int i = 0; i < modelNanosuit.textures_loaded.Count; i++)
+            {
+                Gl.DeleteTextures(modelNanosuit.textures_loaded[i].id);
+            }
         }
-
-        private uint Program_Shader;
-        private int Program_Location_aPosition;
-        private int Program_Location_aColor;
-        private int Program_Location_uProjection;
-        private int Program_Location_uView;
-        private int Program_Location_uModel;
-
-        private readonly string[] _Es2_ShaderVertexSource = new string[] {
-            "uniform mat4 uProjection;\n",
-            "uniform mat4 uView;\n",
-            "uniform mat4 uModel;\n",
-            "attribute vec3 aPosition;\n",
-            "attribute vec3 aColor;\n",
-            "varying vec3 vColor;\n",
-            "void main() {\n",
-            "	gl_Position = uProjection*uView*uModel*vec4(aPosition, 1.0);\n",
-            "	vColor = aColor;\n",
-            "}\n"
-        };
-
-        private readonly string[] _Es2_ShaderFragmentSource = new string[] {
-            "varying vec3 vColor;\n",
-            "void main() {\n",
-            "	gl_FragColor = vec4(vColor, 1.0);\n",
-            "}\n"
-        };
 
         #endregion
 
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
-            // Change triangle rotation
-            angle = (angle + 1f) % 360.0f;
+            // Change camera rotation
+            angle = (angle + 4f) % 360.0f;
             angle_rad = angle * PI_OVER_180;
 
             // Issue a new frame after this render
