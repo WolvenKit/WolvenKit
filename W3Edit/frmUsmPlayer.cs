@@ -15,6 +15,7 @@ namespace W3Edit
     {
         public static List<KeyValuePair<string, byte[]>> Demuxedfiles;
         public string videofile;
+
         public frmUsmPlayer(string path)
         {
             InitializeComponent();
@@ -47,25 +48,6 @@ namespace W3Edit
             return s.Contains('.') ? s.Split('.').Last() : "";
         }
 
-        private void PlayFile(AxWMPLib.AxWindowsMediaPlayer Player,String url)
-        {
-            Player.URL = url;
-        }
-
-        private void usmPlayer_PlayStateChange(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
-        {
-            if ((e.newState == (int)WMPLib.WMPPlayState.wmppsStopped))
-            {
-                this.Close();
-            }
-        }
-
-        private void usmPlayer_MediaError(object sender, AxWMPLib._WMPOCXEvents_MediaErrorEvent e)
-        {
-            MessageBox.Show(@"Cannot play media file.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            this.Close();
-        }
-
         private void videoConverter_DoWork(object sender, DoWorkEventArgs e)
         {
             Demux(videofile);
@@ -73,7 +55,7 @@ namespace W3Edit
             {
                 var video = Demuxedfiles.First(x => Path.GetExtension(x.Key) == ".m2v" || Path.GetExtension(x.Key) == ".m1v");
                 File.WriteAllBytes(Path.Combine(Path.GetTempPath(), video.Key), video.Value);
-                PlayFile(usmPlayer, Path.Combine(Path.GetTempPath(), video.Key));
+                usmPlayer.Play(new FileInfo(Path.Combine(Path.GetTempPath(), video.Key)));
             }
         }
 

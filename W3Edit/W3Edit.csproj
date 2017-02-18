@@ -107,10 +107,6 @@
     <Reference Include="LZ4PCL">
       <HintPath>..\packages\LZ4PCL.1.0.0\lib\portable-net4+netcore45+wpa81+MonoAndroid1+MonoTouch1\LZ4PCL.dll</HintPath>
     </Reference>
-    <Reference Include="Meta.Vlc, Version=16.5.1.0, Culture=neutral, PublicKeyToken=721a8c5379fa4056, processorArchitecture=x86">
-      <HintPath>..\packages\Meta.Vlc.16.05.01\lib\net45\x86\Meta.Vlc.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.JScript" />
     <Reference Include="ObjectListView, Version=2.9.1.1072, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
       <HintPath>..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
@@ -141,6 +137,18 @@
     <Reference Include="vgmtutil, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libs\VGMToolbox\vgmtutil.dll</HintPath>
+    </Reference>
+    <Reference Include="Vlc.DotNet.Core, Version=2.1.132.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
+      <HintPath>..\packages\Vlc.DotNet.Core.2.1.132\lib\net45\x86\Vlc.DotNet.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Vlc.DotNet.Core.Interops, Version=2.1.132.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
+      <HintPath>..\packages\Vlc.DotNet.Core.Interops.2.1.132\lib\net45\x86\Vlc.DotNet.Core.Interops.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Vlc.DotNet.Forms, Version=2.1.132.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
+      <HintPath>..\packages\Vlc.DotNet.Forms.2.1.132\lib\net45\x86\Vlc.DotNet.Forms.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="WeifenLuo.WinFormsUI.Docking">
       <HintPath>..\packages\DockPanelSuite.3.0.0-alpha8\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
@@ -550,25 +558,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="AxWMPLib">
-      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>aximp</WrapperTool>
-      <Isolated>False</Isolated>
-    </COMReference>
-    <COMReference Include="WMPLib">
-      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

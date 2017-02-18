@@ -31,23 +31,13 @@ namespace W3Edit
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUsmPlayer));
-            this.usmPlayer = new AxWMPLib.AxWindowsMediaPlayer();
             this.videoConverter = new System.ComponentModel.BackgroundWorker();
             this.statusLabel = new System.Windows.Forms.Label();
+            this.vlcControl1 = new Vlc.DotNet.Forms.VlcControl();
+            this.usmPlayer = new Vlc.DotNet.Forms.VlcControl();
+            ((System.ComponentModel.ISupportInitialize)(this.vlcControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.usmPlayer)).BeginInit();
             this.SuspendLayout();
-            // 
-            // usmPlayer
-            // 
-            this.usmPlayer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.usmPlayer.Enabled = true;
-            this.usmPlayer.Location = new System.Drawing.Point(0, 0);
-            this.usmPlayer.Name = "usmPlayer";
-            this.usmPlayer.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("usmPlayer.OcxState")));
-            this.usmPlayer.Size = new System.Drawing.Size(630, 287);
-            this.usmPlayer.TabIndex = 0;
-            this.usmPlayer.PlayStateChange += new AxWMPLib._WMPOCXEvents_PlayStateChangeEventHandler(this.usmPlayer_PlayStateChange);
-            this.usmPlayer.MediaError += new AxWMPLib._WMPOCXEvents_MediaErrorEventHandler(this.usmPlayer_MediaError);
             // 
             // videoConverter
             // 
@@ -66,6 +56,30 @@ namespace W3Edit
             this.statusLabel.TabIndex = 1;
             this.statusLabel.Text = "Converting file...";
             // 
+            // vlcControl1
+            // 
+            this.vlcControl1.BackColor = System.Drawing.Color.Black;
+            this.vlcControl1.Location = new System.Drawing.Point(0, 0);
+            this.vlcControl1.Name = "vlcControl1";
+            this.vlcControl1.Size = new System.Drawing.Size(0, 0);
+            this.vlcControl1.Spu = -1;
+            this.vlcControl1.TabIndex = 0;
+            this.vlcControl1.VlcLibDirectory = null;
+            this.vlcControl1.VlcMediaplayerOptions = null;
+            // 
+            // usmPlayer
+            // 
+            this.usmPlayer.BackColor = System.Drawing.Color.Black;
+            this.usmPlayer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.usmPlayer.Location = new System.Drawing.Point(0, 0);
+            this.usmPlayer.Name = "usmPlayer";
+            this.usmPlayer.Size = new System.Drawing.Size(630, 287);
+            this.usmPlayer.Spu = -1;
+            this.usmPlayer.TabIndex = 2;
+            this.usmPlayer.Text = "USM Player";
+            this.usmPlayer.VlcLibDirectory = ((System.IO.DirectoryInfo)(resources.GetObject("usmPlayer.VlcLibDirectory")));
+            this.usmPlayer.VlcMediaplayerOptions = null;
+            // 
             // frmUsmPlayer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -77,6 +91,7 @@ namespace W3Edit
             this.Name = "frmUsmPlayer";
             this.ShowIcon = false;
             this.Text = "Video preview";
+            ((System.ComponentModel.ISupportInitialize)(this.vlcControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.usmPlayer)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -84,9 +99,9 @@ namespace W3Edit
         }
 
         #endregion
-
-        private AxWMPLib.AxWindowsMediaPlayer usmPlayer;
         private BackgroundWorker videoConverter;
         private System.Windows.Forms.Label statusLabel;
+        private Vlc.DotNet.Forms.VlcControl vlcControl1;
+        private Vlc.DotNet.Forms.VlcControl usmPlayer;
     }
 }
