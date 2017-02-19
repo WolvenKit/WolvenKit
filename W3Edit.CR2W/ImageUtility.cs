@@ -23,7 +23,6 @@ namespace W3Edit.CR2W
         /// <returns>A proper dds file</returns>
         public static Bitmap Xbm2Dds(CR2WChunk imagechunk)
         {
-            throw new NotImplementedException("Writing the file still needs fixing!");
             var image = ((CBitmapTexture)(imagechunk.data)).Image;
             var compression = imagechunk.GetVariableByName("compression").ToString();
             var width = int.Parse(imagechunk.GetVariableByName("width").ToString());
@@ -61,16 +60,25 @@ namespace W3Edit.CR2W
             using (var bw = new BinaryWriter(tempfile))
             {
                 bw.Write(ddsheader);
-                bw.Seek(0xC, SeekOrigin.Begin);
+                bw.Seek(0xC, SeekOrigin.Current);
                 bw.Write(height);
-                bw.Seek(0x10, SeekOrigin.Begin);
+                bw.Seek(0x10, SeekOrigin.Current);
                 bw.Write(width);
-                bw.Seek(0x54, SeekOrigin.Begin);
+                bw.Seek(0x54, SeekOrigin.Current);
                 bw.Write(dxt);
-                bw.Seek(128, SeekOrigin.Begin);
+                bw.Seek(128, SeekOrigin.Current);
                 bw.Write(image.Bytes);
             }
-            return new DdsImage(tempfile.GetBuffer()).BitmapImage;
+            try
+            {
+                File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\asd.dds",tempfile.GetBuffer());
+                return new DdsImage(tempfile.GetBuffer()).BitmapImage;
+            }
+            catch
+            {
+                return SystemIcons.Error.ToBitmap();
+            }
+            
         }
 
         /// <summary>

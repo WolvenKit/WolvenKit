@@ -182,13 +182,12 @@ namespace W3Edit
                 }
                 case ".xbm":
                 {
-                    //TODO: Enable this once it works
-                    /*doc.ImageViewer = new frmImagePreview
+                    doc.ImageViewer = new frmImagePreview
                     {
                         File = doc.File,
                         DockAreas = DockAreas.Document
                     };
-                    doc.ImageViewer.Show(doc.FormPanel,DockState.Document);*/
+                    doc.ImageViewer.Show(doc.FormPanel,DockState.Document);
                     break;
                 }
                 default:
