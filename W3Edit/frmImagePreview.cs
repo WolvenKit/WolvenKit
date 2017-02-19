@@ -1,14 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using W3Edit.CR2W;
 using W3Edit.CR2W.Types;
@@ -51,7 +42,7 @@ namespace W3Edit
             using (var sf = new SaveFileDialog())
             {
                 sf.Title = @"Choose a location to save.";
-                sf.Filter = @"Bitmap | *.bmp;Jpeg image | *.jpg; PNG image | *.png;";
+                sf.Filter = @"Bitmap Image (.bmp)|*.bmp|Gif Image (.gif)|*.gif|JPEG Image (.jpeg)|*.jpeg|Png Image (.png)|*.png|Tiff Image (.tiff)|*.tiff|Wmf Image (.wmf)|*.wmf"; ;
                 if (sf.ShowDialog() == DialogResult.OK)
                 {
                     ImageBox.Image.Save(sf.FileName);
@@ -64,23 +55,15 @@ namespace W3Edit
             using (var of = new OpenFileDialog())
             {
                 of.Title = @"Choose an image";
-                of.Filter = @"Bitmap | *.bmp;Jpeg image | *.jpg; PNG image | *.png;";
+                of.Filter = @"DDS Image | *.dds";
                 if (of.ShowDialog() == DialogResult.OK)
                 {
-                    //TODO: Replace image
+                    if (File.chunks[0].Type == "CBitmapTexture")
+                    {
+                        ((CBitmapTexture)File.chunks[0].data).Image.Bytes = ImageUtility.Dds2Xbm(System.IO.File.ReadAllBytes(of.FileName));
+                    }
                 }
             }
         }
     }
 }
-
-/* Bmp { get; }
-   Emf { get; }
-   Exif { get; }
-   Gif { get; }
-   Icon { get; }
-   Jpeg { get; }
-   MemoryBmp { get; }
-   Png { get; }
-   Tiff { get; }
-   Wmf { get; }*/

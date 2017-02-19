@@ -40,6 +40,7 @@
             // 
             // ImageBox
             // 
+            this.ImageBox.ContextMenuStrip = this.contextMenuStrip1;
             this.ImageBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ImageBox.Location = new System.Drawing.Point(0, 0);
             this.ImageBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
@@ -56,7 +57,7 @@
             this.saveImageAsToolStripMenuItem,
             this.replaceImageToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(184, 110);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(184, 82);
             // 
             // copyImageToolStripMenuItem
             // 
