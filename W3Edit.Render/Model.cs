@@ -52,8 +52,8 @@ namespace W3Edit.Render
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form { TopMost = true }, "ERROR::ASSIMP::" + ex.ToString());
-                Environment.Exit(1);
+                MessageBox.Show(Program.bithack3D, "ERROR::ASSIMP::" + ex.ToString());
+                Program.bithack3D.BeginInvoke(new MethodInvoker(Program.bithack3D.Close));
             }
         }
 

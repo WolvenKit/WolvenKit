@@ -45,7 +45,6 @@ namespace W3Edit.Render
         private void RenderControl_Render_GLSL(object sender, GlControlEventArgs e)
         {
             Control control = (Control)sender;
-            modelShader.Use();
 
             PerspectiveProjectionMatrix projectionMatrix = new PerspectiveProjectionMatrix(45.0f, (float)control.Width/(float)control.Height, 0.1f, 100.0f);
             ModelMatrix viewMatrix = new ModelMatrix();
@@ -57,6 +56,7 @@ namespace W3Edit.Render
             Gl.ClearColor(0.05f, 0.05f, 0.05f, 1.0f);
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+            modelShader.Use();
             //viewMatrix.RotateY(angle);
             //viewMatrix.LookAtDirection(new Vertex3f(0.0f, 0.0f, 3.0f), new Vertex3f(-4.37113883e-08f, 0.0f, 2.0f), new Vertex3f(0.0f, 1.0f, 0.0f));
             Gl.UniformMatrix4(modelShader.uLocation_Projection, 1, false, projectionMatrix.ToArray());
@@ -68,13 +68,17 @@ namespace W3Edit.Render
 
         private void RenderControl_ContextCreated_GLSL(object sender, GlControlEventArgs e)
         {
+            // Loading shaders, initing OpenGL
             modelShader = new Shader(Shaders.Model.VertexSource, Shaders.Model.FragmentSource);
             modelShader.uLocation_Projection = Gl.GetUniformLocation(modelShader.Program, Shaders.Model.uLocation_Projection);
             modelShader.uLocation_View = Gl.GetUniformLocation(modelShader.Program, Shaders.Model.uLocation_View);
             modelShader.uLocation_Model = Gl.GetUniformLocation(modelShader.Program, Shaders.Model.uLocation_Model);
+            Gl.Enable(EnableCap.DepthTest);
 
+            // OpenFileDialog for importing 3D models
             OpenFileDialog open3dModel = new OpenFileDialog();
             open3dModel.InitialDirectory = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\Models"));
+            // If dir not found then use exe dir
             if( Directory.Exists(open3dModel.InitialDirectory) == false )
             {
                 open3dModel.InitialDirectory = Environment.CurrentDirectory;
@@ -88,17 +92,15 @@ namespace W3Edit.Render
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(new Form { TopMost = true }, "Error: Could not read file from disk. Original error: " + ex.Message);
-                    Environment.Exit(1);
+                    MessageBox.Show(this, "Error: Could not read file from disk. Original error: " + ex.Message);
+                    this.BeginInvoke(new MethodInvoker(Close));
                 }
             }
             else
             {
-                MessageBox.Show(new Form { TopMost = true }, "No file selected!");
-                Environment.Exit(1);
+                MessageBox.Show(this, "No file selected!");
+                this.BeginInvoke(new MethodInvoker(Close));
             }
-
-            Gl.Enable(EnableCap.DepthTest);
         }
 
         private void RenderControl_ContextDestroying_GLSL(object sender, OpenGL.GlControlEventArgs e)
@@ -107,16 +109,22 @@ namespace W3Edit.Render
                 Gl.DeleteProgram(modelShader.Program);
             modelShader.Program = 0;
 
-            for (int i = 0; i < modelNanosuit.meshes.Count; i++)
+            if (modelNanosuit != null)
             {
-                Gl.DeleteVertexArrays(modelNanosuit.meshes[i].VAO);
-                Gl.DeleteBuffers(modelNanosuit.meshes[i].VBO);
-                Gl.DeleteBuffers(modelNanosuit.meshes[i].EBO);
+                for (int i = 0; i < modelNanosuit.meshes.Count; i++)
+                {
+                    Gl.DeleteVertexArrays(modelNanosuit.meshes[i].VAO);
+                    Gl.DeleteBuffers(modelNanosuit.meshes[i].VBO);
+                    Gl.DeleteBuffers(modelNanosuit.meshes[i].EBO);
+                }
             }
 
-            for (int i = 0; i < modelNanosuit.textures_loaded.Count; i++)
+            if (modelNanosuit != null)
             {
-                Gl.DeleteTextures(modelNanosuit.textures_loaded[i].id);
+                for (int i = 0; i < modelNanosuit.textures_loaded.Count; i++)
+                {
+                    Gl.DeleteTextures(modelNanosuit.textures_loaded[i].id);
+                }
             }
         }
 
