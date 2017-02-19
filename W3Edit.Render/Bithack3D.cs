@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 
 using OpenGL;
+using System.IO;
 
 namespace W3Edit.Render
 {
@@ -72,7 +73,30 @@ namespace W3Edit.Render
             modelShader.uLocation_View = Gl.GetUniformLocation(modelShader.Program, Shaders.Model.uLocation_View);
             modelShader.uLocation_Model = Gl.GetUniformLocation(modelShader.Program, Shaders.Model.uLocation_Model);
 
-            modelNanosuit = new Model("../../Models/nanosuit/nanosuit.obj");
+            OpenFileDialog open3dModel = new OpenFileDialog();
+            open3dModel.InitialDirectory = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\Models"));
+            if( Directory.Exists(open3dModel.InitialDirectory) == false )
+            {
+                open3dModel.InitialDirectory = Environment.CurrentDirectory;
+            }
+
+            if (open3dModel.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    modelNanosuit = new Model( Path.GetFullPath(open3dModel.FileName).Replace(@"\", "/") );
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(new Form { TopMost = true }, "Error: Could not read file from disk. Original error: " + ex.Message);
+                    Environment.Exit(1);
+                }
+            }
+            else
+            {
+                MessageBox.Show(new Form { TopMost = true }, "No file selected!");
+                Environment.Exit(1);
+            }
 
             Gl.Enable(EnableCap.DepthTest);
         }

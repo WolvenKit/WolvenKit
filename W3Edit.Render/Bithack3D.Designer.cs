@@ -66,6 +66,7 @@
             this.Name = "Bithack3D";
             this.Text = "3D Bithack";
             this.ResumeLayout(false);
+            this.TopMost = true;
 
         }
 
