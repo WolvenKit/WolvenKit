@@ -85,6 +85,10 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CrashReporter.NET, Version=1.5.1.0, Culture=neutral, PublicKeyToken=986591a91592b7e6, processorArchitecture=MSIL">
+      <HintPath>..\packages\CrashReporter.NET.Official.1.5.1\lib\net40\CrashReporter.NET.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Doboz">
       <HintPath>..\packages\doboz4net.1.0.1\lib\net40-client\Doboz.dll</HintPath>
     </Reference>

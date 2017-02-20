@@ -15,11 +15,6 @@ namespace W3Edit.CR2W
         /// <summary>
         /// Convert a CBitmapTexture's image to a DDS image
         /// </summary>
-        /// <param name="file">The mixed up DDS image from the cr2w</param>
-        /// <param name="image">The byte[] array if the image</param>
-        /// <param name="width">Width of the image</param>
-        /// <param name="height">Height of the image</param>
-        /// <param name="compression">The type of compression the file uses</param>
         /// <returns>A proper dds file</returns>
         public static Bitmap Xbm2Dds(CR2WChunk imagechunk)
         {
@@ -43,13 +38,13 @@ namespace W3Edit.CR2W
             switch (compression)
             {
                 case "TCM_DXTNoAlpha":
-                    dxt = new byte[] {0x44,0x58,0x54,0x31 };
+                    dxt = new byte[] {0x44,0x58,0x54,0x31};
                     break;
                 case "TCM_DXTAlpha":
-                    dxt = new byte[] {0x44,0x58,0x54,0x35 };
+                    dxt = new byte[] {0x44,0x58,0x54,0x35};
                     break;
                 case "TCM_NormalsHigh":
-                    dxt = new byte[] {0x44,0x58,0x54,0x35 };
+                    dxt = new byte[] {0x44,0x58,0x54,0x35};
                     break;
                 case "TCM_Normals":
                     dxt = new byte[] {0x44, 0x58, 0x54, 0x31};
@@ -60,18 +55,20 @@ namespace W3Edit.CR2W
             using (var bw = new BinaryWriter(tempfile))
             {
                 bw.Write(ddsheader);
-                bw.Seek(0xC, SeekOrigin.Current);
+                bw.Seek(0xC, SeekOrigin.Begin);
                 bw.Write(height);
-                bw.Seek(0x10, SeekOrigin.Current);
+                bw.Seek(0x10, SeekOrigin.Begin);
                 bw.Write(width);
-                bw.Seek(0x54, SeekOrigin.Current);
+                bw.Seek(0x54, SeekOrigin.Begin);
                 bw.Write(dxt);
-                bw.Seek(128, SeekOrigin.Current);
+                bw.Seek(128, SeekOrigin.Begin);
                 bw.Write(image.Bytes);
             }
             try
             {
+#if DEBUG
                 File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\asd.dds",tempfile.GetBuffer());
+#endif
                 return new DdsImage(tempfile.GetBuffer()).BitmapImage;
             }
             catch
