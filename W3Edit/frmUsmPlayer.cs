@@ -55,6 +55,7 @@ namespace W3Edit
             {
                 var video = Demuxedfiles.First(x => Path.GetExtension(x.Key) == ".m2v" || Path.GetExtension(x.Key) == ".m1v");
                 File.WriteAllBytes(Path.Combine(Path.GetTempPath(), video.Key), video.Value);
+                
                 usmPlayer.Play(new FileInfo(Path.Combine(Path.GetTempPath(), video.Key)));
             }
         }
