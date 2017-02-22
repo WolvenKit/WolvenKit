@@ -257,14 +257,17 @@ namespace W3Edit
 
         private void removeVariableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var col = treeView.SelectedIndices;
             foreach (VariableListNode node in treeView.SelectedObjects)
             {
-                if (node != null && node.Parent != null && node.Parent.Variable.CanRemoveVariable(node.Variable))
+                if (node?.Parent != null && node.Parent.Variable.CanRemoveVariable(node.Variable))
                 {
                     node.Parent.Variable.RemoveVariable(node.Variable);
                     node.Parent.Children.Remove(node);
-                    treeView.RefreshObject(node.Parent);
+                    try
+                    {
+                        treeView.RefreshObject(node.Parent);
+                    }
+                    catch  {  } //TODO: Do this better, works now but it shouldn't be done like this. :p
                 }
             }
         }

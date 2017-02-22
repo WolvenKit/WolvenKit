@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
-using VGMToolbox.format;
+using W3Edit.Scaleform;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace W3Edit
