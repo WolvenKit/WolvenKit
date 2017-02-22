@@ -239,7 +239,10 @@ namespace W3Edit
 
         public void Search(string s, int i)
         {
-            var found = SearchFiles(FileList.ToArray(), s, filetypeCB.Items[i].ToString());
+            var extension = "";
+            if (filetypeCB.SelectedIndex != -1)
+                extension = filetypeCB.Items[i].ToString();
+            var found = SearchFiles(FileList.ToArray(), s, extension);
             if (found.Length > 1000)
                 found = found.Take(1000).ToArray();
             fileListView.Items.Clear();
@@ -431,6 +434,11 @@ namespace W3Edit
                     item.Selected = true;
                 }
             }
+        }
+
+        private void clearSearch_Click(object sender, EventArgs e)
+        {
+            OpenNode(RootNode);
         }
     }
 }
