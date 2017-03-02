@@ -816,6 +816,29 @@ namespace W3Edit.Scaleform
             ExtractChunkToFile(stream, startingOffset, length, filePath, false, false);
         }
 
+        public static MemoryStream ExtractChunkToMemoryStream(MemoryStream stream, long startingOffset, long length)
+        {
+            var ret = new MemoryStream();
+            BinaryWriter bw = null;
+            bw = new BinaryWriter(ret);
+
+            int read = 0;
+            long totalBytes = 0;
+            byte[] bytes = new byte[Constants.FileReadChunkSize];
+            stream.Seek((long)startingOffset, SeekOrigin.Begin);
+
+            int maxread = length > (long)bytes.Length ? bytes.Length : (int)length;
+
+            while ((read = stream.Read(bytes, 0, maxread)) > 0)
+            {
+                bw.Write(bytes, 0, read);
+                totalBytes += (long)read;
+
+                maxread = (length - totalBytes) > (long)bytes.Length ? bytes.Length : (int)(length - totalBytes);
+            }
+            return ret;
+        }
+
         public static void ExtractChunkToFile(Stream stream, long startingOffset, long length,
             string filePath, bool outputLogFile)
         {

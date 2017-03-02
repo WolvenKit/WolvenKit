@@ -176,12 +176,6 @@
     <Compile Include="frmJournalEditor.Designer.cs">
       <DependentUpon>frmJournalEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmRender.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmRender.Designer.cs">
-      <DependentUpon>frmRender.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmSaveEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -416,9 +410,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmRenameDialog.resx">
       <DependentUpon>frmRenameDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmRender.resx">
-      <DependentUpon>frmRender.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmSaveEditor.resx">
       <DependentUpon>frmSaveEditor.cs</DependentUpon>

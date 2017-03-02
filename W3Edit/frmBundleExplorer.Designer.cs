@@ -311,12 +311,14 @@ namespace W3Edit
             // 
             // clearSearch
             // 
+            this.clearSearch.BackColor = System.Drawing.Color.Transparent;
+            this.clearSearch.BackgroundImage = global::W3Edit.Properties.Resources.ExitIcon;
+            this.clearSearch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.clearSearch.Location = new System.Drawing.Point(524, 49);
             this.clearSearch.Name = "clearSearch";
             this.clearSearch.Size = new System.Drawing.Size(30, 30);
             this.clearSearch.TabIndex = 18;
-            this.clearSearch.Text = "X";
-            this.clearSearch.UseVisualStyleBackColor = true;
+            this.clearSearch.UseVisualStyleBackColor = false;
             this.clearSearch.Click += new System.EventHandler(this.clearSearch_Click);
             // 
             // frmBundleExplorer

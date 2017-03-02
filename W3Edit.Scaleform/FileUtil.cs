@@ -220,11 +220,28 @@ namespace W3Edit.Scaleform
             }
         }
 
+        public static byte[] RemoveChunkFromStream(MemoryStream source, long startingOffset, long length)
+        {
+            int bytesRead;
+            byte[] bytes = new byte[1024];
+
+            var ret = ParseFile.ExtractChunkToMemoryStream(source, 0, startingOffset);
+            // append remainder
+            source.Position = startingOffset + length;
+            bytesRead = source.Read(bytes, 0, bytes.Length);
+
+            while (bytesRead > 0)
+            {
+                ret.Write(bytes, 0, bytesRead);
+                bytesRead = source.Read(bytes, 0, bytes.Length);
+            }
+            return ret.GetBuffer();
+        }
+   
         public static string RemoveChunkFromFile(string path, long startingOffset, long length)
         {
             string fullPath = Path.GetFullPath(path);
 
-            int bytesRead;
             byte[] bytes = new byte[1024];
 
             string ret = String.Empty;
@@ -242,7 +259,7 @@ namespace W3Edit.Scaleform
                     using (FileStream outFs = File.Open(destinationPath, FileMode.Append, FileAccess.Write))
                     {
                         sourceFs.Position = startingOffset + length;
-                        bytesRead = sourceFs.Read(bytes, 0, bytes.Length);
+                        var bytesRead = sourceFs.Read(bytes, 0, bytes.Length);
 
                         while (bytesRead > 0)
                         {

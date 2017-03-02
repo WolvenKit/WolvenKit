@@ -133,7 +133,7 @@ namespace W3Edit.Scaleform
             return checkBytes;
         }
 
-        protected override void DoFinalTasks(FileStream sourceFileStream, Dictionary<uint, FileStream> outputFiles, bool addHeader)
+        protected override Dictionary<string,byte[]> DoFinalTasks(FileStream sourceFileStream,Dictionary<uint,string> Filenametable, Dictionary<uint, MemoryStream> outputFiles, bool addHeader)
         {
             long headerEndOffset;
             long metadataEndOffset;
@@ -143,13 +143,12 @@ namespace W3Edit.Scaleform
             long footerSize;
 
             string sourceFileName;
-            string workingFile;
+            byte[] workingFile;
             string fileExtension;
-            string destinationFileName;
-
+            Dictionary<string,byte[]> Files = new Dictionary<string, byte[]>();
             foreach (uint streamId in outputFiles.Keys)
             {
-                sourceFileName = outputFiles[streamId].Name;
+                sourceFileName = Filenametable[streamId];
 
                 //--------------------------
                 // get header size
@@ -201,23 +200,13 @@ namespace W3Edit.Scaleform
                     fileExtension = Path.GetExtension(sourceFileName);
                 }
 
+                workingFile = FileUtil.RemoveChunkFromStream(outputFiles[streamId], 0, headerSize);
+                workingFile = FileUtil.RemoveChunkFromStream(new MemoryStream(workingFile), footerOffset, footerSize);
+                Files.Add(Path.ChangeExtension(Filenametable[streamId],fileExtension), workingFile);
                 outputFiles[streamId].Close();
                 outputFiles[streamId].Dispose();
-
-                workingFile = FileUtil.RemoveChunkFromFile(sourceFileName, 0, headerSize);
-                File.Copy(workingFile, sourceFileName, true);
-                File.Delete(workingFile);
-
-                workingFile = FileUtil.RemoveChunkFromFile(sourceFileName, footerOffset, footerSize);
-                destinationFileName = Path.ChangeExtension(sourceFileName, fileExtension);
-                File.Copy(workingFile, destinationFileName, true);
-                File.Delete(workingFile);
-
-                if ((sourceFileName != destinationFileName) && (File.Exists(sourceFileName)))
-                {
-                    File.Delete(sourceFileName);
-                }
             }
+            return Files;
         }
     }
 }

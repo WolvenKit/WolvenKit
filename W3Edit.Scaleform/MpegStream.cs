@@ -196,12 +196,12 @@ namespace W3Edit.Scaleform
 
         protected virtual long GetStartOffset(Stream readStream, long currentOffset) { return 0; }
 
-        protected virtual void DoFinalTasks(FileStream sourceFileStream, Dictionary<uint, FileStream> outputFiles, bool addHeader)
+        protected virtual Dictionary<string, byte[]> DoFinalTasks(FileStream sourceFileStream,Dictionary<uint,string> filenametable, Dictionary<uint, MemoryStream> outputFiles, bool addHeader)
         {
-
+            return null;
         }
 
-        public virtual void DemultiplexStreams(DemuxOptionsStruct demuxOptions)
+        public virtual Dictionary<string,byte[]> DemultiplexStreams(DemuxOptionsStruct demuxOptions)
         {
             using (FileStream fs = File.OpenRead(this.FilePath))
             {
@@ -226,7 +226,9 @@ namespace W3Edit.Scaleform
 
                 bool eofFlagFound = false;
 
-                Dictionary<uint, FileStream> streamOutputWriters = new Dictionary<uint, FileStream>();
+                Dictionary<uint, MemoryStream> streamOutputWriters = new Dictionary<uint, MemoryStream>();
+                Dictionary<uint,string> FilenameTable = new Dictionary<uint, string>();
+
                 string outputFileName;
 
                 byte streamId = 0;          // for types that have multiple streams in the same block ID
@@ -242,19 +244,6 @@ namespace W3Edit.Scaleform
                 {
                     while (currentOffset < fileSize)
                     {
-#if DEBUG
-                        //if (currentOffset == 0x414080e)
-                        //{
-                        //    int gggg = 1;
-                        //}
-
-                        //// hack for bad data (ni no kuni s09.pam)
-                        //if ((currentOffset & 1) == 1)
-                        //{
-                        //    currentOffset = MathUtil.RoundUpToByteAlignment(currentOffset, 0x800);
-                        //}
-#endif               
-
                         try
                         {
                             // get the current block
@@ -362,10 +351,9 @@ namespace W3Edit.Scaleform
                                                 }
 
                                                 // add output directory
-                                                outputFileName = Path.Combine(Path.GetDirectoryName(this.FilePath), outputFileName);
-
+                                                FilenameTable[currentStreamKey] = outputFileName;
                                                 // add an output stream for writing
-                                                streamOutputWriters[currentStreamKey] = new FileStream(outputFileName, FileMode.Create, FileAccess.ReadWrite);
+                                                streamOutputWriters[currentStreamKey] = new MemoryStream();
                                             }
 
                                             // write the block
@@ -379,12 +367,6 @@ namespace W3Edit.Scaleform
                                                 {
                                                     streamOutputWriters[currentStreamKey].Write(ParseFile.ParseSimpleOffset(fs, currentOffset + currentBlockId.Length + blockSizeArray.Length + audioBlockSkipSize, (int)(blockSize - audioBlockSkipSize)), 0, cutSize);
                                                 }
-#if DEBUG
-                                                //else
-                                                //{
-                                                //    int aaa = 1;
-                                                //}
-#endif
                                             }
                                             else
                                             {
@@ -396,12 +378,6 @@ namespace W3Edit.Scaleform
                                                 {
                                                     streamOutputWriters[currentStreamKey].Write(ParseFile.ParseSimpleOffset(fs, currentOffset + currentBlockId.Length + blockSizeArray.Length + videoBlockSkipSize, (int)(blockSize - videoBlockSkipSize)), 0, cutSize);
                                                 }
-#if DEBUG
-                                                //else
-                                                //{
-                                                //    int vvv = 1;
-                                                //}
-#endif
                                             }
                                         }
 
@@ -442,7 +418,7 @@ namespace W3Edit.Scaleform
                 ///////////////////////////////////
                 // Perform any final tasks needed
                 ///////////////////////////////////
-                this.DoFinalTasks(fs, streamOutputWriters, demuxOptions.AddHeader);
+                return this.DoFinalTasks(fs,FilenameTable, streamOutputWriters, demuxOptions.AddHeader);
 
                 //////////////////////////
                 // close all open writers
@@ -452,7 +428,7 @@ namespace W3Edit.Scaleform
             } // using (FileStream fs = File.OpenRead(path))
         }
 
-        private void closeAllWriters(Dictionary<uint, FileStream> writers)
+        private void closeAllWriters(Dictionary<uint, MemoryStream> writers)
         {
             //////////////////////////
             // close all open writers
