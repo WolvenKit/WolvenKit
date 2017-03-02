@@ -11,9 +11,11 @@ namespace W3Edit
     {
         public List<string> Autocompletelist;
         public List<BundleItem> FileList;
+        public BundleManager Manager;
 
         public frmBundleExplorer(BundleManager manager)
         {
+            Manager = manager;
             InitializeComponent();
             RootNode = manager.RootNode;
             FileList = manager.FileList;
@@ -32,9 +34,9 @@ namespace W3Edit
         {
         }
 
-        public void OpenNode(BundleTreeNode node)
+        public void OpenNode(BundleTreeNode node,bool reset = false)
         {
-            if (ActiveNode != node)
+            if (ActiveNode != node || reset)
             {
                 ActiveNode = node;
 
@@ -438,7 +440,7 @@ namespace W3Edit
 
         private void clearSearch_Click(object sender, EventArgs e)
         {
-            OpenNode(RootNode);
+            OpenNode(RootNode,true);
         }
     }
 }
