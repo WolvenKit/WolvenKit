@@ -1,8 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.IO.MemoryMappedFiles;
 using Doboz;
 using Ionic.Zlib;
 using LZ4;
+using Snappy;
 
 namespace W3Edit.Bundles
 {
@@ -25,19 +27,27 @@ namespace W3Edit.Bundles
         {
             get
             {
-                if (Compression == 0)
-                    return "None";
-
-                if ((Compression & 4) == 4)
-                    return "Lz4";
-
-                if ((Compression & 2) == 2)
-                    return "Doboz";
-
-                if ((Compression & 1) == 1)
-                    return "Zlib";
-
-                return "Unknown";
+                switch (Compression)
+                {
+                    case 0:
+                        return "None";
+                    case 1:
+                        return "Zlib";
+                    case 2:
+                        return "Snappy";
+                    case 3:
+                        return "Doboz";
+                    case 4:
+                        return "Lz4";
+                    case 5:
+                        return "Lz4";
+                    default:
+                        return "Unknown";
+                }
+                /* TODO:
+                 * http://aluigi.altervista.org/bms/witcher3.bms
+                 * 2 should be snappy
+                 */
             }
         }
 
@@ -52,32 +62,38 @@ namespace W3Edit.Bundles
                         case "None":
                         {
                             viewstream.CopyTo(output);
-                        }
                             break;
+                        }
                         case "Lz4":
                         {
                             var buffer = new byte[ZSize];
                             var c = viewstream.Read(buffer, 0, buffer.Length);
                             var uncompressed = LZ4Codec.Decode(buffer, 0, c, (int) Size);
                             output.Write(uncompressed, 0, uncompressed.Length);
-                        }
                             break;
+                        }
+                        case "Snappy":
+                        {
+                            var buffer = new byte[ZSize];
+                            var c = viewstream.Read(buffer, 0, buffer.Length);
+                            var uncompressed = SnappyCodec.Uncompress(buffer);
+                            output.Write(uncompressed,0,uncompressed.Length);
+                            break;
+                        }
                         case "Doboz":
                         {
                             var buffer = new byte[ZSize];
                             var c = viewstream.Read(buffer, 0, buffer.Length);
                             var uncompressed = DobozCodec.Decode(buffer, 0, c);
                             output.Write(uncompressed, 0, uncompressed.Length);
-                        }
-
                             break;
+                        }
                         case "Zlib":
                         {
                             var zlib = new ZlibStream(viewstream, CompressionMode.Decompress);
                             zlib.CopyTo(output);
-                        }
                             break;
-
+                        }
                         default:
                             throw new MissingCompressionException("Unhandled compression algorithm.")
                             {
