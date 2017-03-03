@@ -163,8 +163,18 @@ namespace W3Edit
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(File.Exists(Clipboard.GetText()))
-                SafeCopy(Clipboard.GetText(),Clipboard.GetText());
+            if (File.Exists(Clipboard.GetText()))
+            {
+                FileAttributes attr = File.GetAttributes(ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath);
+                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                {
+                    SafeCopy(Clipboard.GetText(), ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath + "\\" + Path.GetFileName(Clipboard.GetText()));
+                }
+                else
+                {
+                    SafeCopy(Clipboard.GetText(), Path.GetDirectoryName(ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath) + "\\" + Path.GetFileName(Clipboard.GetText()));
+                }
+            }
         }
 
         private void contextMenu_Opened(object sender, EventArgs e)
