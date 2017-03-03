@@ -6,62 +6,60 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
-using VGMToolbox.format;
+using W3Edit.Scaleform;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace W3Edit
 {
     public partial class frmUsmPlayer : DockContent
     {
-        public static List<KeyValuePair<string, byte[]>> Demuxedfiles;
+        public static Dictionary<string, byte[]> Demuxedfiles;
         public string videofile;
 
         public frmUsmPlayer(string path)
         {
             InitializeComponent();
-            Demuxedfiles = new List<KeyValuePair<string, byte[]>>();
+            Demuxedfiles = new Dictionary<string, byte[]>();
             videofile = path;
             videoConverter.RunWorkerAsync();
+            Text = @"Video Preview [" + Path.GetFileNameWithoutExtension(path) + @"]";
+        }
+
+        public override sealed string Text
+        {
+            get { return base.Text; }
+            set { base.Text = value; }
         }
 
         public void Demux(string path)
         {
-            var demuxOptions = new MpegStream.DemuxOptionsStruct
+            Demuxedfiles = new CriUsmStream(path).DemultiplexStreams(new MpegStream.DemuxOptionsStruct
             {
                 ExtractAudio = true,
                 ExtractVideo = true,
                 AddHeader = false,
-                SplitAudioStreams = false  
-            };
-            var cus = new CriUsmStream(path);
-            cus.DemultiplexStreams(demuxOptions);
-            foreach (var file in Directory.GetFiles(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path) + "_*").Where(File.Exists))
-            {
-                Demuxedfiles.Add(new KeyValuePair<string, byte[]>(Path.GetFileName(file), File.ReadAllBytes(file)));
-                File.Delete(file);
-            }
-            //TODO: Convert the vgmtoolbox code so it works in memory :p
-        }
-
-        public static string GetExtension(string s)
-        {
-            return s.Contains('.') ? s.Split('.').Last() : "";
+                SplitAudioStreams = false
+            });
         }
 
         private void videoConverter_DoWork(object sender, DoWorkEventArgs e)
         {
             Demux(videofile);
-            if (Demuxedfiles.Any(x => Path.GetExtension(x.Key) == ".m2v" || Path.GetExtension(x.Key) == ".m1v"))
+            foreach (var demuxedfile in Demuxedfiles)
             {
-                var video = Demuxedfiles.First(x => Path.GetExtension(x.Key) == ".m2v" || Path.GetExtension(x.Key) == ".m1v");
-                File.WriteAllBytes(Path.Combine(Path.GetTempPath(), video.Key), video.Value);
-                usmPlayer.Play(new FileInfo(Path.Combine(Path.GetTempPath(), video.Key)));
+#if DEBUG
+                File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + demuxedfile.Key,
+                    demuxedfile.Value);
+#endif
             }
         }
 
         private void videoConverter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             statusLabel.Hide();
+            string tempfile = Path.GetTempFileName();
+            File.WriteAllBytes(Path.GetTempPath() + "\\" + Demuxedfiles.First(x => x.Key.EndsWith("m2v")).Key, Demuxedfiles.First(x => x.Key.EndsWith("m2v")).Value);
+            usmPlayer.Play(new FileInfo(Path.GetTempPath() + "\\" + Demuxedfiles.First(x => x.Key.EndsWith("m2v")).Key));
         }
     }
 }

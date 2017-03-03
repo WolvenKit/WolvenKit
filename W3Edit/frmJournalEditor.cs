@@ -109,7 +109,7 @@ namespace W3Edit
                 }
                 case "CJournalQuest":
                 {
-                    descriptionRenderer.Hide();
+                    textRender.Hide();
                     vulnerable_treview.Hide();
                     QuestView = new TreeView();
                     splitContainer1.Panel2.Controls.Add(QuestView);
@@ -136,7 +136,7 @@ namespace W3Edit
         #region CJournalCreature
         public void ParseUsedAgainst(CArray infos)
         {
-            descriptionRenderer.DocumentText += ("Items used against:\n");
+            textRender.Text += ("Items used against:\n");
             foreach (var info in infos)
             {
                 vulnerable_treview.Nodes.Add(info.ToString());
@@ -303,10 +303,13 @@ namespace W3Edit
 
         public void RenderDescription(string text)
         {
-            descriptionRenderer.Navigate("about:blank");
-            descriptionRenderer.Document?.OpenNew(false);
-            descriptionRenderer.Document?.Write(($"<html><body>{text}</body></html>"));
-            descriptionRenderer.Refresh();
-        }
+            var webBrowser = new WebBrowser();
+            webBrowser.CreateControl(); // only if needed
+            webBrowser.DocumentText = ($"<html><body>{text}</body></html>");
+            Application.DoEvents();
+            webBrowser.Document.ExecCommand("SelectAll", false, null);
+            webBrowser.Document.ExecCommand("Copy", false, null);
+            textRender.Paste();
+        }  
     }
 }

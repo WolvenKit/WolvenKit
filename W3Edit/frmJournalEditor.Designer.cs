@@ -30,10 +30,10 @@
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.indeximage_label = new System.Windows.Forms.Label();
             this.entityImage = new System.Windows.Forms.PictureBox();
             this.vulnerable_treview = new System.Windows.Forms.TreeView();
-            this.indeximage_label = new System.Windows.Forms.Label();
-            this.descriptionRenderer = new System.Windows.Forms.WebBrowser();
+            this.textRender = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -57,9 +57,9 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.descriptionRenderer);
-            this.splitContainer1.Size = new System.Drawing.Size(873, 437);
-            this.splitContainer1.SplitterDistance = 291;
+            this.splitContainer1.Panel2.Controls.Add(this.textRender);
+            this.splitContainer1.Size = new System.Drawing.Size(955, 500);
+            this.splitContainer1.SplitterDistance = 318;
             this.splitContainer1.TabIndex = 0;
             // 
             // splitContainer2
@@ -77,51 +77,54 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.vulnerable_treview);
-            this.splitContainer2.Size = new System.Drawing.Size(291, 437);
-            this.splitContainer2.SplitterDistance = 368;
+            this.splitContainer2.Size = new System.Drawing.Size(318, 500);
+            this.splitContainer2.SplitterDistance = 421;
             this.splitContainer2.TabIndex = 0;
-            // 
-            // entityImage
-            // 
-            this.entityImage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.entityImage.Location = new System.Drawing.Point(0, 0);
-            this.entityImage.Name = "entityImage";
-            this.entityImage.Size = new System.Drawing.Size(291, 368);
-            this.entityImage.TabIndex = 0;
-            this.entityImage.TabStop = false;
-            // 
-            // vulnerable_treview
-            // 
-            this.vulnerable_treview.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.vulnerable_treview.Location = new System.Drawing.Point(0, 0);
-            this.vulnerable_treview.Name = "vulnerable_treview";
-            this.vulnerable_treview.Size = new System.Drawing.Size(291, 65);
-            this.vulnerable_treview.TabIndex = 0;
             // 
             // indeximage_label
             // 
             this.indeximage_label.AutoSize = true;
+            this.indeximage_label.BackColor = System.Drawing.Color.LightGray;
             this.indeximage_label.Location = new System.Drawing.Point(8, 8);
             this.indeximage_label.Name = "indeximage_label";
             this.indeximage_label.Size = new System.Drawing.Size(42, 17);
             this.indeximage_label.TabIndex = 1;
             this.indeximage_label.Text = "None";
             // 
-            // descriptionRenderer
+            // entityImage
             // 
-            this.descriptionRenderer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.descriptionRenderer.Location = new System.Drawing.Point(0, 0);
-            this.descriptionRenderer.MinimumSize = new System.Drawing.Size(20, 20);
-            this.descriptionRenderer.Name = "descriptionRenderer";
-            this.descriptionRenderer.Size = new System.Drawing.Size(578, 437);
-            this.descriptionRenderer.TabIndex = 0;
-            this.descriptionRenderer.Url = new System.Uri("about:blank", System.UriKind.Absolute);
+            this.entityImage.BackColor = System.Drawing.Color.LightGray;
+            this.entityImage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.entityImage.Location = new System.Drawing.Point(0, 0);
+            this.entityImage.Name = "entityImage";
+            this.entityImage.Size = new System.Drawing.Size(318, 421);
+            this.entityImage.TabIndex = 0;
+            this.entityImage.TabStop = false;
+            // 
+            // vulnerable_treview
+            // 
+            this.vulnerable_treview.BackColor = System.Drawing.Color.LightGray;
+            this.vulnerable_treview.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.vulnerable_treview.Location = new System.Drawing.Point(0, 0);
+            this.vulnerable_treview.Name = "vulnerable_treview";
+            this.vulnerable_treview.Size = new System.Drawing.Size(318, 75);
+            this.vulnerable_treview.TabIndex = 0;
+            // 
+            // textRender
+            // 
+            this.textRender.BackColor = System.Drawing.Color.LightGray;
+            this.textRender.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textRender.Location = new System.Drawing.Point(0, 0);
+            this.textRender.Name = "textRender";
+            this.textRender.Size = new System.Drawing.Size(633, 500);
+            this.textRender.TabIndex = 0;
+            this.textRender.Text = "";
             // 
             // frmJournalEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(873, 437);
+            this.ClientSize = new System.Drawing.Size(955, 500);
             this.Controls.Add(this.splitContainer1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Name = "frmJournalEditor";
@@ -147,6 +150,6 @@
         private System.Windows.Forms.PictureBox entityImage;
         private System.Windows.Forms.Label indeximage_label;
         private System.Windows.Forms.TreeView vulnerable_treview;
-        private System.Windows.Forms.WebBrowser descriptionRenderer;
+        private System.Windows.Forms.RichTextBox textRender;
     }
 }

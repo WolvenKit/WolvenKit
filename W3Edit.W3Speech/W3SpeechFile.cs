@@ -30,33 +30,35 @@ namespace W3Edit.W3Speech
             Console.WriteLine("Magic: " + new string(magic));
             var version = br.ReadUInt16(); //Should be 162
             Console.WriteLine("Version: " + version);
-            ushort key1 = br.ReadUInt16();
+            var key1 = br.ReadUInt16();
             Console.WriteLine("Key: " + key1.ToString("X"));
-            List<W3SoundInfo> SoundInfoList = new List<W3SoundInfo>();
+            var soundInfoList = new List<W3SoundInfo>();
             var count = br.ReadBit6();
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
-                var sound = new W3SoundInfo();
-                sound.id = br.ReadUInt32();
-                sound.id_high = br.ReadUInt32();
-                sound.wave_offs = br.ReadUInt32();
-                sound.wave_size = br.ReadUInt32();
-                sound.cr2w_offs = br.ReadUInt32();
-                sound.cr2w_size = br.ReadUInt32();
-                SoundInfoList.Add(sound);
+                var sound = new W3SoundInfo
+                {
+                    id = br.ReadUInt32(),
+                    id_high = br.ReadUInt32(),
+                    wave_offs = br.ReadUInt32(),
+                    wave_size = br.ReadUInt32(),
+                    cr2w_offs = br.ReadUInt32(),
+                    cr2w_size = br.ReadUInt32()
+                };
+                soundInfoList.Add(sound);
             }
-            ushort key2 = br.ReadUInt16();
-            key1 = (ushort)((int)(key1 << 16) | (int)key2);
+            var key2 = br.ReadUInt16();
+            key1 = (ushort)(key1 << 16 | key2);
             Console.WriteLine("Key: " + key1.ToString("X"));
             var magic_n_lang = W3LanguageKey.Get(key1);
             Console.WriteLine("Magic: " + magic_n_lang.Key + " Language: " + magic_n_lang.Language);
-            SoundInfoList.Select(x => x.id = ~magic_n_lang.Key);
-            SoundInfoList.OrderBy(x => x.id);
+            soundInfoList.Select(x => x.id = ~magic_n_lang.Key);
+            soundInfoList.OrderBy(x => x.id);
             Console.WriteLine("Sorting sound entries...");
-            List<string> FileInfo = new List<string>();
-            SoundInfoList.ForEach(sound => FileInfo.Add("Id: " + sound.id + " Id_high: " + sound.id_high + " Wawe offset: " + sound.wave_offs + " Wawe size: " + sound.wave_size + " CR2W Size: " + sound.cr2w_size + " CR2W Offset: " + sound.cr2w_offs));
-            File.WriteAllLines("log.txt", FileInfo);
-            foreach (W3SoundInfo t in SoundInfoList)
+            var fileInfo = new List<string>();
+            soundInfoList.ForEach(sound => fileInfo.Add("Id: " + sound.id + " Id_high: " + sound.id_high + " Wawe offset: " + sound.wave_offs + " Wawe size: " + sound.wave_size + " CR2W Size: " + sound.cr2w_size + " CR2W Offset: " + sound.cr2w_offs));
+            File.WriteAllLines("log.txt", fileInfo);
+            foreach (var t in soundInfoList)
             {
                 if (t.wave_size > 0)
                 {
@@ -69,8 +71,8 @@ namespace W3Edit.W3Speech
                     t.CR2W_File = br.ReadBytes((int)t.cr2w_size);
                 }
             }
-            Console.WriteLine("Wave file count: " + SoundInfoList.Count(x => x.wave_size > 0));
-            Console.WriteLine("CR2W file count: " + SoundInfoList.Count(x => x.cr2w_size > 0));
+            Console.WriteLine("Wave file count: " + soundInfoList.Count(x => x.wave_size > 0));
+            Console.WriteLine("CR2W file count: " + soundInfoList.Count(x => x.cr2w_size > 0));
         }
 
         public void Write(BinaryWriter bw)

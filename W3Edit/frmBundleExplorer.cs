@@ -11,9 +11,11 @@ namespace W3Edit
     {
         public List<string> Autocompletelist;
         public List<BundleItem> FileList;
+        public BundleManager Manager;
 
         public frmBundleExplorer(BundleManager manager)
         {
+            Manager = manager;
             InitializeComponent();
             RootNode = manager.RootNode;
             FileList = manager.FileList;
@@ -32,9 +34,9 @@ namespace W3Edit
         {
         }
 
-        public void OpenNode(BundleTreeNode node)
+        public void OpenNode(BundleTreeNode node,bool reset = false)
         {
-            if (ActiveNode != node)
+            if (ActiveNode != node || reset)
             {
                 ActiveNode = node;
 
@@ -239,7 +241,10 @@ namespace W3Edit
 
         public void Search(string s, int i)
         {
-            var found = SearchFiles(FileList.ToArray(), s, filetypeCB.Items[i].ToString());
+            var extension = "";
+            if (filetypeCB.SelectedIndex != -1)
+                extension = filetypeCB.Items[i].ToString();
+            var found = SearchFiles(FileList.ToArray(), s, extension);
             if (found.Length > 1000)
                 found = found.Take(1000).ToArray();
             fileListView.Items.Clear();
@@ -431,6 +436,11 @@ namespace W3Edit
                     item.Selected = true;
                 }
             }
+        }
+
+        private void clearSearch_Click(object sender, EventArgs e)
+        {
+            OpenNode(RootNode,true);
         }
     }
 }
