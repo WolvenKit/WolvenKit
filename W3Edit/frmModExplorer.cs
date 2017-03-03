@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -251,6 +252,14 @@ namespace W3Edit
             if (e.KeyCode == Keys.F2 && modFileList.SelectedNode != null)
             {
                 RequestFileRename?.Invoke(this, new RequestFileArgs { File = modFileList.SelectedNode.FullPath });
+            }
+        }
+
+        private void showFileInExplorerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                Process.Start("explorer.exe", "/select, \"" + ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath + "\"");
             }
         }
     }
