@@ -42,14 +42,14 @@ namespace W3Edit
             this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.showFileInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchstrip = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.searchBox = new System.Windows.Forms.ToolStripTextBox();
             this.resetfilesButton = new System.Windows.Forms.ToolStripButton();
             this.showhideButton = new System.Windows.Forms.ToolStripButton();
             this.modexplorerSlave = new System.IO.FileSystemWatcher();
-            this.showFileInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.contextMenu.SuspendLayout();
             this.searchstrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.modexplorerSlave)).BeginInit();
@@ -68,7 +68,6 @@ namespace W3Edit
             this.modFileList.TabIndex = 0;
             this.modFileList.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.modFileList_NodeMouseClick);
             this.modFileList.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.modFileList_NodeMouseDoubleClick);
-            this.modFileList.DoubleClick += new System.EventHandler(this.modFileList_DoubleClick);
             this.modFileList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.modFileList_KeyDown);
             // 
             // treeImages
@@ -91,7 +90,7 @@ namespace W3Edit
             this.toolStripSeparator1,
             this.showFileInExplorerToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(185, 188);
+            this.contextMenu.Size = new System.Drawing.Size(185, 166);
             this.contextMenu.Opened += new System.EventHandler(this.contextMenu_Opened);
             // 
             // addFileToolStripMenuItem
@@ -130,6 +129,18 @@ namespace W3Edit
             this.pasteToolStripMenuItem.Text = "Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(181, 6);
+            // 
+            // showFileInExplorerToolStripMenuItem
+            // 
+            this.showFileInExplorerToolStripMenuItem.Name = "showFileInExplorerToolStripMenuItem";
+            this.showFileInExplorerToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.showFileInExplorerToolStripMenuItem.Text = "Show file in explorer";
+            this.showFileInExplorerToolStripMenuItem.Click += new System.EventHandler(this.showFileInExplorerToolStripMenuItem_Click);
+            // 
             // searchstrip
             // 
             this.searchstrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -153,8 +164,7 @@ namespace W3Edit
             // 
             this.searchBox.Name = "searchBox";
             this.searchBox.Size = new System.Drawing.Size(100, 25);
-            this.searchBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchBox_KeyDown);
-            this.searchBox.Validating += new System.ComponentModel.CancelEventHandler(this.searchBox_Validating);
+            this.searchBox.TextChanged += new System.EventHandler(this.searchBox_TextChanged);
             // 
             // resetfilesButton
             // 
@@ -185,18 +195,6 @@ namespace W3Edit
             this.modexplorerSlave.Created += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
             this.modexplorerSlave.Deleted += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
             this.modexplorerSlave.Renamed += new System.IO.RenamedEventHandler(this.FileChanges_Detected);
-            // 
-            // showFileInExplorerToolStripMenuItem
-            // 
-            this.showFileInExplorerToolStripMenuItem.Name = "showFileInExplorerToolStripMenuItem";
-            this.showFileInExplorerToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
-            this.showFileInExplorerToolStripMenuItem.Text = "Show file in explorer";
-            this.showFileInExplorerToolStripMenuItem.Click += new System.EventHandler(this.showFileInExplorerToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(181, 6);
             // 
             // frmModExplorer
             // 

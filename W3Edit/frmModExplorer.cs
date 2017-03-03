@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -113,11 +112,6 @@ namespace W3Edit
             }
         }
 
-        private void modFileList_DoubleClick(object sender, EventArgs e)
-        {
-
-        }
-
         private void modFileList_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             RequestFileOpen?.Invoke(this, new RequestFileArgs {File = e.Node.FullPath});
@@ -133,7 +127,7 @@ namespace W3Edit
 
         private void addFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RequestFileAdd(this,new RequestFileArgs {File = modFileList.SelectedNode?.FullPath ?? ""});
+            RequestFileAdd?.Invoke(this,new RequestFileArgs {File = modFileList.SelectedNode?.FullPath ?? ""});
         }
 
         private void modFileList_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -218,31 +212,16 @@ namespace W3Edit
             UpdateModFileList(true,true);
         }
 
-        private void searchBox_KeyDown(object sender, KeyEventArgs e)
+        private void searchBox_TextChanged(object sender, EventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-                Validate();
-        }
-
-        private void searchBox_Validating(object sender, CancelEventArgs e)
-        {
-            if (searchBox.Text == (string)Tag)
+            if (searchBox.Text == "")
             {
-                Tag = searchBox.Text;
-                e.Cancel = true;
+                FilteredFiles = ActiveMod.Files;
+                UpdateModFileList(true, true);
+                return;
             }
-            else
-            {
-                Tag = searchBox.Text;
-                if (searchBox.Text == "")
-                {
-                    FilteredFiles = ActiveMod.Files;
-                    UpdateModFileList(true, true);
-                    return;
-                }
-                FilteredFiles = ActiveMod.Files.Where(x => (x.Contains('\\') ? x.Split('\\').Last() : x).ToUpper().Contains(searchBox.Text.ToUpper())).ToList();
-                UpdateModFileList(FoldersShown, true);
-            }
+            FilteredFiles = ActiveMod.Files.Where(x => (x.Contains('\\') ? x.Split('\\').Last() : x).ToUpper().Contains(searchBox.Text.ToUpper())).ToList();
+            UpdateModFileList(FoldersShown, true);
         }
 
         private void FileChanges_Detected(object sender, FileSystemEventArgs e)
