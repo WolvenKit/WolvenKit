@@ -44,12 +44,11 @@
             this.glControl1.Name = "glControl1";
             this.glControl1.Size = new System.Drawing.Size(601, 431);
             this.glControl1.StencilBits = ((uint)(0u));
-            //this.glControl1.Version = KhronosVersion.Parse("3.3");
-            //this.glControl1.ContextProfile = GlControl.ProfileType.Core;
             this.glControl1.TabIndex = 0;
             this.glControl1.ContextCreated += new System.EventHandler<OpenGL.GlControlEventArgs>(this.RenderControl_ContextCreated);
             this.glControl1.ContextDestroying += new System.EventHandler<OpenGL.GlControlEventArgs>(this.RenderControl_ContextDestroying);
             this.glControl1.Render += new System.EventHandler<OpenGL.GlControlEventArgs>(this.RenderControl_Render);
+            this.glControl1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.glControl1_MouseMove);
             // 
             // AnimationTimer
             // 
@@ -65,8 +64,8 @@
             this.Controls.Add(this.glControl1);
             this.Name = "Bithack3D";
             this.Text = "3D Bithack";
-            this.ResumeLayout(false);
             this.TopMost = true;
+            this.ResumeLayout(false);
 
         }
 

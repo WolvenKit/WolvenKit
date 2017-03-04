@@ -31,8 +31,12 @@ namespace W3Edit.Render
 
         #region Common Data
 
-        private static float angle;
-        private static float angle_rad;
+        private static Vertex3f model_direction;
+        private static double model_X_rotation;
+
+        private static bool model_autorotating;
+        private static float angle_autorotate;
+        //private static float angle_autorotate_rad;
         private const float PI_OVER_180 = (float)Math.PI / 180.0f;
 
         private Shader modelShader;
@@ -57,7 +61,8 @@ namespace W3Edit.Render
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             modelShader.Use();
-            //viewMatrix.RotateY(angle);
+            if(model_autorotating)
+                modelMatrix.RotateY(angle_autorotate);
             //viewMatrix.LookAtDirection(new Vertex3f(0.0f, 0.0f, 3.0f), new Vertex3f(-4.37113883e-08f, 0.0f, 2.0f), new Vertex3f(0.0f, 1.0f, 0.0f));
             Gl.UniformMatrix4(modelShader.uLocation_Projection, 1, false, projectionMatrix.ToArray());
             Gl.UniformMatrix4(modelShader.uLocation_View, 1, false, viewMatrix.ToArray());
@@ -74,6 +79,9 @@ namespace W3Edit.Render
             modelShader.uLocation_View = Gl.GetUniformLocation(modelShader.Program, Shaders.Model.uLocation_View);
             modelShader.uLocation_Model = Gl.GetUniformLocation(modelShader.Program, Shaders.Model.uLocation_Model);
             Gl.Enable(EnableCap.DepthTest);
+
+            // By default autorotate model
+            model_autorotating = true;
 
             // OpenFileDialog for importing 3D models
             OpenFileDialog open3dModel = new OpenFileDialog();
@@ -133,11 +141,30 @@ namespace W3Edit.Render
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
             // Change camera rotation
-            angle = (angle + 4f) % 360.0f;
-            angle_rad = angle * PI_OVER_180;
+            angle_autorotate = (angle_autorotate + 1f) % 360.0f;
+            //angle_autorotate_rad = angle_autorotate * PI_OVER_180;
 
             // Issue a new frame after this render
             glControl1.Invalidate();
         }
+
+        #region event handlers
+        private static double currentPositionX = 0;
+
+        private void glControl1_MouseMove(object sender, MouseEventArgs e)
+        {
+            model_autorotating = false;
+            if (e.Button == MouseButtons.Left)
+            {
+                double deltaDirection = currentPositionX - e.X;
+                model_X_rotation = deltaDirection;
+                currentPositionX = e.X;
+            }
+            else
+            {
+                currentPositionX = e.X;
+            }
+        }
+        #endregion
     }
 }
