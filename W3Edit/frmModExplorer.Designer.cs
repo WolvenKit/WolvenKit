@@ -42,6 +42,8 @@ namespace W3Edit
             this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.showFileInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchstrip = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.searchBox = new System.Windows.Forms.ToolStripTextBox();
@@ -66,7 +68,6 @@ namespace W3Edit
             this.modFileList.TabIndex = 0;
             this.modFileList.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.modFileList_NodeMouseClick);
             this.modFileList.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.modFileList_NodeMouseDoubleClick);
-            this.modFileList.DoubleClick += new System.EventHandler(this.modFileList_DoubleClick);
             this.modFileList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.modFileList_KeyDown);
             // 
             // treeImages
@@ -85,46 +86,60 @@ namespace W3Edit
             this.removeFileToolStripMenuItem,
             this.renameToolStripMenuItem,
             this.copyToolStripMenuItem,
-            this.pasteToolStripMenuItem});
+            this.pasteToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.showFileInExplorerToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(122, 134);
+            this.contextMenu.Size = new System.Drawing.Size(185, 166);
             this.contextMenu.Opened += new System.EventHandler(this.contextMenu_Opened);
             // 
             // addFileToolStripMenuItem
             // 
             this.addFileToolStripMenuItem.Image = global::W3Edit.Properties.Resources.AddNodefromFile_354;
             this.addFileToolStripMenuItem.Name = "addFileToolStripMenuItem";
-            this.addFileToolStripMenuItem.Size = new System.Drawing.Size(121, 26);
+            this.addFileToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
             this.addFileToolStripMenuItem.Text = "Add File";
             this.addFileToolStripMenuItem.Click += new System.EventHandler(this.addFileToolStripMenuItem_Click);
             // 
             // removeFileToolStripMenuItem
             // 
             this.removeFileToolStripMenuItem.Name = "removeFileToolStripMenuItem";
-            this.removeFileToolStripMenuItem.Size = new System.Drawing.Size(121, 26);
+            this.removeFileToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
             this.removeFileToolStripMenuItem.Text = "Delete";
             this.removeFileToolStripMenuItem.Click += new System.EventHandler(this.removeFileToolStripMenuItem_Click);
             // 
             // renameToolStripMenuItem
             // 
             this.renameToolStripMenuItem.Name = "renameToolStripMenuItem";
-            this.renameToolStripMenuItem.Size = new System.Drawing.Size(121, 26);
+            this.renameToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
             this.renameToolStripMenuItem.Text = "Rename";
             this.renameToolStripMenuItem.Click += new System.EventHandler(this.renameToolStripMenuItem_Click);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(121, 26);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
             // pasteToolStripMenuItem
             // 
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(121, 26);
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
             this.pasteToolStripMenuItem.Text = "Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(181, 6);
+            // 
+            // showFileInExplorerToolStripMenuItem
+            // 
+            this.showFileInExplorerToolStripMenuItem.Name = "showFileInExplorerToolStripMenuItem";
+            this.showFileInExplorerToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.showFileInExplorerToolStripMenuItem.Text = "Show file in explorer";
+            this.showFileInExplorerToolStripMenuItem.Click += new System.EventHandler(this.showFileInExplorerToolStripMenuItem_Click);
             // 
             // searchstrip
             // 
@@ -149,8 +164,7 @@ namespace W3Edit
             // 
             this.searchBox.Name = "searchBox";
             this.searchBox.Size = new System.Drawing.Size(100, 25);
-            this.searchBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchBox_KeyDown);
-            this.searchBox.Validating += new System.ComponentModel.CancelEventHandler(this.searchBox_Validating);
+            this.searchBox.TextChanged += new System.EventHandler(this.searchBox_TextChanged);
             // 
             // resetfilesButton
             // 
@@ -224,5 +238,7 @@ namespace W3Edit
         private ToolStripButton showhideButton;
         private ToolStripButton resetfilesButton;
         private FileSystemWatcher modexplorerSlave;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem showFileInExplorerToolStripMenuItem;
     }
 }
