@@ -49,7 +49,7 @@ artifacts/
 *_i.h
 *.ilk
 *.meta
-!*.obj
+*.obj
 *.pch
 *.pdb
 *.pgc
@@ -250,3 +250,7 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+# Ignore folders
+W3Edit.Render/Models/**
+!W3Edit.Render/Models/**

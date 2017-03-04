@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 using OpenGL;
 using Assimp;
@@ -49,10 +50,10 @@ namespace W3Edit.Render
                 // Process ASSIMP's root node recursively
                 this.processNode(scene.RootNode, scene);
             }
-            catch (AssimpException ex)
+            catch (Exception ex)
             {
-                Console.WriteLine("ERROR::ASSIMP::" + ex.ToString());
-                return;
+                MessageBox.Show(Program.bithack3D, "ERROR::ASSIMP::" + ex.ToString());
+                Program.bithack3D.BeginInvoke(new MethodInvoker(Program.bithack3D.Close));
             }
         }
 

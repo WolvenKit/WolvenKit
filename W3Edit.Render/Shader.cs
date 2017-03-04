@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Windows.Forms;
 
 using OpenGL;
 
@@ -39,7 +40,8 @@ namespace W3Edit.Render
             }
             catch (Exception)
             {
-                Console.WriteLine("ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ");
+                MessageBox.Show(Render.Program.bithack3D, "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ");
+                Render.Program.bithack3D.BeginInvoke(new MethodInvoker(Render.Program.bithack3D.Close));
             }
             // 2. Compile shaders
             CompileShaders(vertexCode, fragmentCode);
@@ -60,8 +62,8 @@ namespace W3Edit.Render
             {
                 int length;
                 Gl.GetShaderInfoLog(vertex, 512, out length, infoLog);
-                Console.WriteLine("ERROR::SHADER::VERTEX::COMPILATION_FAILED");
-                Console.WriteLine(infoLog.ToString());
+                MessageBox.Show(Render.Program.bithack3D, "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" + infoLog.ToString());
+                Render.Program.bithack3D.BeginInvoke(new MethodInvoker(Render.Program.bithack3D.Close));
             }
             // Fragment Shader
             fragment = Gl.CreateShader(Gl.FRAGMENT_SHADER);
@@ -73,8 +75,8 @@ namespace W3Edit.Render
             {
                 int length;
                 Gl.GetShaderInfoLog(vertex, 512, out length, infoLog);
-                Console.WriteLine("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED");
-                Console.WriteLine(infoLog.ToString());
+                MessageBox.Show(Render.Program.bithack3D, "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" + infoLog.ToString());
+                Render.Program.bithack3D.BeginInvoke(new MethodInvoker(Render.Program.bithack3D.Close));
             }
             // Shader Program
             this.Program = Gl.CreateProgram();
@@ -87,8 +89,8 @@ namespace W3Edit.Render
             {
                 int length;
                 Gl.GetProgramInfoLog(this.Program, 512, out length, infoLog);
-                Console.WriteLine("ERROR::SHADER::PROGRAM::LINKING_FAILED");
-                Console.WriteLine(infoLog.ToString());
+                MessageBox.Show(Render.Program.bithack3D, "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" + infoLog.ToString());
+                Render.Program.bithack3D.BeginInvoke(new MethodInvoker(Render.Program.bithack3D.Close));
             }
             // Delete the shaders as they're linked into our program now and no longer necessery
             Gl.DeleteShader(vertex);
