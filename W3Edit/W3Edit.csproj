@@ -85,9 +85,66 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ActiproSoftware.Shared.Net20">
+      <HintPath>..\Atflib\ActiproSoftware.Shared.Net20.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.SyntaxEditor.Addons.DotNet.Net20">
+      <HintPath>..\Atflib\ActiproSoftware.SyntaxEditor.Addons.DotNet.Net20.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.SyntaxEditor.Net20">
+      <HintPath>..\Atflib\ActiproSoftware.SyntaxEditor.Net20.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.WinUICore.Net20">
+      <HintPath>..\Atflib\ActiproSoftware.WinUICore.Net20.dll</HintPath>
+    </Reference>
+    <Reference Include="Atf.Atgi">
+      <HintPath>..\Atflib\Atf.Atgi.dll</HintPath>
+    </Reference>
+    <Reference Include="Atf.Collada">
+      <HintPath>..\Atflib\Atf.Collada.dll</HintPath>
+    </Reference>
+    <Reference Include="Atf.Core">
+      <HintPath>..\Atflib\Atf.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Atf.Gui">
+      <HintPath>..\Atflib\Atf.Gui.dll</HintPath>
+    </Reference>
+    <Reference Include="Atf.Gui.OpenGL">
+      <HintPath>..\Atflib\Atf.Gui.OpenGL.dll</HintPath>
+    </Reference>
+    <Reference Include="Atf.Gui.WinForms">
+      <HintPath>..\Atflib\Atf.Gui.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Atf.Gui.Wpf">
+      <HintPath>..\Atflib\Atf.Gui.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Atf.IronPython">
+      <HintPath>..\Atflib\Atf.IronPython.dll</HintPath>
+    </Reference>
+    <Reference Include="Atf.Osc">
+      <HintPath>..\Atflib\Atf.Osc.dll</HintPath>
+    </Reference>
+    <Reference Include="Atf.Subversion">
+      <HintPath>..\Atflib\Atf.Subversion.dll</HintPath>
+    </Reference>
+    <Reference Include="Atf.SyntaxEditorControl">
+      <HintPath>..\Atflib\Atf.SyntaxEditorControl.dll</HintPath>
+    </Reference>
+    <Reference Include="Bespoke.Common">
+      <HintPath>..\Atflib\Bespoke.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Bespoke.Common.Osc">
+      <HintPath>..\Atflib\Bespoke.Common.Osc.dll</HintPath>
+    </Reference>
     <Reference Include="CrashReporter.NET, Version=1.5.1.0, Culture=neutral, PublicKeyToken=986591a91592b7e6, processorArchitecture=MSIL">
       <HintPath>..\packages\CrashReporter.NET.Official.1.5.1\lib\net40\CrashReporter.NET.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="CustomToolDomGen">
+      <HintPath>..\Atflib\CustomToolDomGen.dll</HintPath>
+    </Reference>
+    <Reference Include="DDSUtils">
+      <HintPath>..\Atflib\DDSUtils.dll</HintPath>
     </Reference>
     <Reference Include="Doboz">
       <HintPath>..\packages\doboz4net.1.0.1\lib\net40-client\Doboz.dll</HintPath>
@@ -100,6 +157,15 @@
       <HintPath>..\packages\MarkerMetro.Unity.Ionic.Zlib.2.0.0.14\lib\net35\Ionic.ZLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="IronPython">
+      <HintPath>..\Atflib\IronPython.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPython.Modules">
+      <HintPath>..\Atflib\IronPython.Modules.dll</HintPath>
+    </Reference>
+    <Reference Include="libcrashreport_net">
+      <HintPath>..\Atflib\libcrashreport_net.dll</HintPath>
+    </Reference>
     <Reference Include="LZ4, Version=1.0.10.93, Culture=neutral, PublicKeyToken=62e1b5ec1eec9bdd, processorArchitecture=MSIL">
       <HintPath>..\packages\lz4net.1.0.10.93\lib\net4-client\LZ4.dll</HintPath>
       <Private>True</Private>
@@ -107,7 +173,16 @@
     <Reference Include="LZ4PCL">
       <HintPath>..\packages\LZ4PCL.1.0.0\lib\portable-net4+netcore45+wpa81+MonoAndroid1+MonoTouch1\LZ4PCL.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Dynamic">
+      <HintPath>..\Atflib\Microsoft.Dynamic.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.JScript" />
+    <Reference Include="Microsoft.Scripting">
+      <HintPath>..\Atflib\Microsoft.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.BaseCodeGeneratorWithSite">
+      <HintPath>..\Atflib\Microsoft.VisualStudio.BaseCodeGeneratorWithSite.dll</HintPath>
+    </Reference>
     <Reference Include="ObjectListView, Version=2.9.1.1072, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
       <HintPath>..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
       <Private>True</Private>
@@ -120,12 +195,25 @@
       <HintPath>..\packages\OpenGL.Net.WinForms.0.3.2\lib\net35\OpenGL.Net.WinForms.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SharpDX">
+      <HintPath>..\Atflib\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct2D1">
+      <HintPath>..\Atflib\SharpDX.Direct2D1.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DXGI">
+      <HintPath>..\Atflib\SharpDX.DXGI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing.Design" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Atflib\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -134,6 +222,18 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Tao.Cg">
+      <HintPath>..\Atflib\Tao.Cg.dll</HintPath>
+    </Reference>
+    <Reference Include="Tao.DevIl">
+      <HintPath>..\Atflib\Tao.DevIl.dll</HintPath>
+    </Reference>
+    <Reference Include="Tao.OpenGl">
+      <HintPath>..\Atflib\Tao.OpenGl.dll</HintPath>
+    </Reference>
+    <Reference Include="Tao.Platform.Windows">
+      <HintPath>..\Atflib\Tao.Platform.Windows.dll</HintPath>
+    </Reference>
     <Reference Include="Vlc.DotNet.Core, Version=2.1.132.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
       <HintPath>..\packages\Vlc.DotNet.Core.2.1.132\lib\net45\x86\Vlc.DotNet.Core.dll</HintPath>
       <Private>True</Private>
@@ -145,6 +245,11 @@
     <Reference Include="Vlc.DotNet.Forms, Version=2.1.132.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
       <HintPath>..\packages\Vlc.DotNet.Forms.2.1.132\lib\net45\x86\Vlc.DotNet.Forms.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="VSLangProj, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\Atflib\VSLangProj.dll</HintPath>
     </Reference>
     <Reference Include="WeifenLuo.WinFormsUI.Docking">
       <HintPath>..\packages\DockPanelSuite.3.0.0-alpha8\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
