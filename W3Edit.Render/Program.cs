@@ -5,6 +5,7 @@ namespace W3Edit.Render
 {
     static class Program
     {
+        public static Bithack3D bithack3D;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -13,7 +14,8 @@ namespace W3Edit.Render
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Bithack3D());
+            bithack3D = new Bithack3D();
+            Application.Run(bithack3D);
         }
     }
 }

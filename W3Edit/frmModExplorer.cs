@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -112,11 +112,6 @@ namespace W3Edit
             }
         }
 
-        private void modFileList_DoubleClick(object sender, EventArgs e)
-        {
-
-        }
-
         private void modFileList_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             RequestFileOpen?.Invoke(this, new RequestFileArgs {File = e.Node.FullPath});
@@ -132,7 +127,7 @@ namespace W3Edit
 
         private void addFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RequestFileAdd(this,new RequestFileArgs {File = modFileList.SelectedNode?.FullPath ?? ""});
+            RequestFileAdd?.Invoke(this,new RequestFileArgs {File = modFileList.SelectedNode?.FullPath ?? ""});
         }
 
         private void modFileList_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -162,8 +157,18 @@ namespace W3Edit
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(File.Exists(Clipboard.GetText()))
-                SafeCopy(Clipboard.GetText(),Clipboard.GetText());
+            if (File.Exists(Clipboard.GetText()))
+            {
+                FileAttributes attr = File.GetAttributes(ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath);
+                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                {
+                    SafeCopy(Clipboard.GetText(), ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath + "\\" + Path.GetFileName(Clipboard.GetText()));
+                }
+                else
+                {
+                    SafeCopy(Clipboard.GetText(), Path.GetDirectoryName(ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath) + "\\" + Path.GetFileName(Clipboard.GetText()));
+                }
+            }
         }
 
         private void contextMenu_Opened(object sender, EventArgs e)
@@ -207,31 +212,16 @@ namespace W3Edit
             UpdateModFileList(true,true);
         }
 
-        private void searchBox_KeyDown(object sender, KeyEventArgs e)
+        private void searchBox_TextChanged(object sender, EventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-                Validate();
-        }
-
-        private void searchBox_Validating(object sender, CancelEventArgs e)
-        {
-            if (searchBox.Text == (string)Tag)
+            if (searchBox.Text == "")
             {
-                Tag = searchBox.Text;
-                e.Cancel = true;
+                FilteredFiles = ActiveMod.Files;
+                UpdateModFileList(true, true);
+                return;
             }
-            else
-            {
-                Tag = searchBox.Text;
-                if (searchBox.Text == "")
-                {
-                    FilteredFiles = ActiveMod.Files;
-                    UpdateModFileList(true, true);
-                    return;
-                }
-                FilteredFiles = ActiveMod.Files.Where(x => (x.Contains('\\') ? x.Split('\\').Last() : x).ToUpper().Contains(searchBox.Text.ToUpper())).ToList();
-                UpdateModFileList(FoldersShown, true);
-            }
+            FilteredFiles = ActiveMod.Files.Where(x => (x.Contains('\\') ? x.Split('\\').Last() : x).ToUpper().Contains(searchBox.Text.ToUpper())).ToList();
+            UpdateModFileList(FoldersShown, true);
         }
 
         private void FileChanges_Detected(object sender, FileSystemEventArgs e)
@@ -251,6 +241,14 @@ namespace W3Edit
             if (e.KeyCode == Keys.F2 && modFileList.SelectedNode != null)
             {
                 RequestFileRename?.Invoke(this, new RequestFileArgs { File = modFileList.SelectedNode.FullPath });
+            }
+        }
+
+        private void showFileInExplorerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                Process.Start("explorer.exe", "/select, \"" + ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath + "\"");
             }
         }
     }
