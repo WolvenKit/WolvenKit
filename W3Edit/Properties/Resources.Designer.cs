@@ -93,6 +93,26 @@ namespace W3Edit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Editing_Collapse_icon {
+            get {
+                object obj = ResourceManager.GetObject("Editing-Collapse-icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Editing_Expand_icon {
+            get {
+                object obj = ResourceManager.GetObject("Editing-Expand-icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ExitIcon {
             get {
                 object obj = ResourceManager.GetObject("ExitIcon", resourceCulture);
