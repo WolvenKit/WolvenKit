@@ -618,6 +618,8 @@
     <None Include="Resources\geralt.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Editing-Collapse-icon.png" />
+    <None Include="Resources\Editing-Expand-icon.png" />
     <Content Include="wolven_kit_icon.ico" />
     <Content Include="Licenses\License.doboz4net.txt" />
     <Content Include="Licenses\License.dockpanelsuit.txt" />

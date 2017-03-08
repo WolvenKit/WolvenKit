@@ -251,5 +251,15 @@ namespace W3Edit
                 Process.Start("explorer.exe", "/select, \"" + ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath + "\"");
             }
         }
+
+        private void ExpandBTN_Click(object sender, EventArgs e)
+        {
+            modFileList.ExpandAll();
+        }
+
+        private void CollapseBTN_Click(object sender, EventArgs e)
+        {
+            modFileList.CollapseAll();
+        }
     }
 }
