@@ -58,14 +58,14 @@ namespace W3Edit.CR2W
                 using (var bw = new BinaryWriter(tempfile))
                 {
                     bw.Write(ddsheader);
-                    bw.Seek(0xC, SeekOrigin.Current);
+                    bw.Seek(0xC, SeekOrigin.Begin);
                     bw.Write(height);
-                    bw.Seek(0x10, SeekOrigin.Current);
+                    bw.Seek(0x10, SeekOrigin.Begin);
                     bw.Write(width);
-                    bw.Seek(0x54, SeekOrigin.Current);
+                    bw.Seek(0x54, SeekOrigin.Begin);
                     bw.Write(dxt);
                     bw.Seek(128, SeekOrigin.Begin);
-                    bw.Write(image.Bytes);                
+                    bw.Write(image.Bytes);
                 }
                 tempfile.Flush();
 #if DEBUG
@@ -73,7 +73,7 @@ namespace W3Edit.CR2W
 #endif
                 return new DdsImage(tempfile.GetBuffer()).BitmapImage;
             }
-            catch
+            catch(Exception)
             {
                 return null;
             }

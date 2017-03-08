@@ -104,7 +104,7 @@ namespace W3Edit
                     try
                     {
                         var pastedchunk = File.CreateChunk(chunk.Type,chunk.Parent);
-                        pastedchunk.data = chunk.data;
+                        pastedchunk.data = chunk.data.Copy(new CR2WCopyAction());
                         
                         listView.AddObject(pastedchunk);
 
