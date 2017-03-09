@@ -13,7 +13,6 @@ namespace W3Edit
         public frmEmbeddedFiles()
         {
             InitializeComponent();
-            listView.ItemSelectionChanged += chunkListView_ItemSelectionChanged;
             UpdateList();
         }
 
@@ -25,11 +24,6 @@ namespace W3Edit
                 file = value;
                 UpdateList();
             }
-        }
-
-        private void chunkListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
-        {
-            UpdateList();
         }
 
         private void UpdateList()
