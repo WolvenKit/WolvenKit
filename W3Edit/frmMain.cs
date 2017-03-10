@@ -716,20 +716,28 @@ namespace W3Edit
             ClearOutput();
 
             saveAllFiles();
-
+            var taskcookMod = cookMod();
+            while (!taskcookMod.IsCompleted)
+            {
+                Application.DoEvents();
+            }
             var taskPackMod = packMod();
             while (!taskPackMod.IsCompleted)
             {
                 Application.DoEvents();
             }
-
+            var taskPackTextureCache = packTextures();
+            while (!taskPackTextureCache.IsCompleted)
+            {
+                Application.DoEvents();
+            }
             var taskMetaData = createModMetaData();
             while (!taskMetaData.IsCompleted)
             {
                 Application.DoEvents();
             }
 
-            installMod();
+            InstallMod();
 
             btPack.Enabled = true;
         }
@@ -766,7 +774,7 @@ namespace W3Edit
         /// <summary>
         /// Installs the mod from the packed folder of the project to the game
         /// </summary>
-        private void installMod()
+        private void InstallMod()
         {
             var packedDir = Path.Combine(ActiveMod.Directory, "packed");
             var modName = ActiveMod.Name;
@@ -904,6 +912,88 @@ namespace W3Edit
             foreach (string folder in folders)
             {
                 CompressFolder(folder, zipStream, folderOffset);
+            }
+        }
+
+        private async Task cookMod()
+        {
+            var config = MainController.Get().Configuration;
+            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
+            var cookedDir = Path.Combine(ActiveMod.Directory, @"cooked\content\");
+            var uncookedDir = ActiveMod.FileDirectory;
+            proc.Arguments = $"cook -platform=pc -mod={uncookedDir} -basedir={uncookedDir}  -outdir={cookedDir}";
+            proc.UseShellExecute = false;
+            proc.RedirectStandardOutput = true;
+            proc.WindowStyle = ProcessWindowStyle.Hidden;
+            proc.CreateNoWindow = true;
+            if (!Directory.Exists(cookedDir))
+            {
+                Directory.CreateDirectory(cookedDir);
+            }
+            else
+            {
+                var di = new DirectoryInfo(cookedDir);
+                foreach (var file in di.GetFiles())
+                {
+                    file.Delete();
+                }
+                foreach (var dir in di.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+            }
+            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n");
+
+            using (var process = Process.Start(proc))
+            {
+                using (var reader = process.StandardOutput)
+                {
+                    while (true)
+                    {
+                        var result = await reader.ReadLineAsync();
+
+                        AddOutput(result + "\n");
+
+                        Application.DoEvents();
+
+                        if (reader.EndOfStream)
+                            break;
+                    }
+                }
+            }
+        }
+
+        private async Task packTextures()
+        {
+            var config = MainController.Get().Configuration;
+            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
+            var packedDir = Path.Combine(ActiveMod.Directory, @"packed\content\");
+            var cookedDir = Path.Combine(ActiveMod.Directory, @"cooked\content\");
+            var uncookedDir = ActiveMod.FileDirectory;
+            proc.Arguments = $"buildcache textures -basedir={uncookedDir} -platform=pc -db={cookedDir}\\cook.db  -out={packedDir}\\texture.cache";
+            proc.UseShellExecute = false;
+            proc.RedirectStandardOutput = true;
+            proc.WindowStyle = ProcessWindowStyle.Hidden;
+            proc.CreateNoWindow = true;
+
+            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n");
+
+            using (var process = Process.Start(proc))
+            {
+                using (var reader = process.StandardOutput)
+                {
+                    while (true)
+                    {
+                        var result = await reader.ReadLineAsync();
+
+                        AddOutput(result + "\n");
+
+                        Application.DoEvents();
+
+                        if (reader.EndOfStream)
+                            break;
+                    }
+                }
             }
         }
 
