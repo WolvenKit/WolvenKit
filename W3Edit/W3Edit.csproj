@@ -97,44 +97,20 @@
     <Reference Include="ActiproSoftware.WinUICore.Net20">
       <HintPath>..\Atflib\ActiproSoftware.WinUICore.Net20.dll</HintPath>
     </Reference>
-    <Reference Include="Atf.Atgi">
-      <HintPath>..\Atflib\Atf.Atgi.dll</HintPath>
-    </Reference>
-    <Reference Include="Atf.Collada">
-      <HintPath>..\Atflib\Atf.Collada.dll</HintPath>
-    </Reference>
     <Reference Include="Atf.Core">
       <HintPath>..\Atflib\Atf.Core.dll</HintPath>
     </Reference>
     <Reference Include="Atf.Gui">
       <HintPath>..\Atflib\Atf.Gui.dll</HintPath>
     </Reference>
-    <Reference Include="Atf.Gui.OpenGL">
-      <HintPath>..\Atflib\Atf.Gui.OpenGL.dll</HintPath>
-    </Reference>
     <Reference Include="Atf.Gui.WinForms">
       <HintPath>..\Atflib\Atf.Gui.WinForms.dll</HintPath>
-    </Reference>
-    <Reference Include="Atf.Gui.Wpf">
-      <HintPath>..\Atflib\Atf.Gui.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Atf.IronPython">
       <HintPath>..\Atflib\Atf.IronPython.dll</HintPath>
     </Reference>
-    <Reference Include="Atf.Osc">
-      <HintPath>..\Atflib\Atf.Osc.dll</HintPath>
-    </Reference>
-    <Reference Include="Atf.Subversion">
-      <HintPath>..\Atflib\Atf.Subversion.dll</HintPath>
-    </Reference>
     <Reference Include="Atf.SyntaxEditorControl">
       <HintPath>..\Atflib\Atf.SyntaxEditorControl.dll</HintPath>
-    </Reference>
-    <Reference Include="Bespoke.Common">
-      <HintPath>..\Atflib\Bespoke.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Bespoke.Common.Osc">
-      <HintPath>..\Atflib\Bespoke.Common.Osc.dll</HintPath>
     </Reference>
     <Reference Include="CrashReporter.NET, Version=1.5.1.0, Culture=neutral, PublicKeyToken=986591a91592b7e6, processorArchitecture=MSIL">
       <HintPath>..\packages\CrashReporter.NET.Official.1.5.1\lib\net40\CrashReporter.NET.dll</HintPath>
@@ -142,6 +118,9 @@
     </Reference>
     <Reference Include="CustomToolDomGen">
       <HintPath>..\Atflib\CustomToolDomGen.dll</HintPath>
+    </Reference>
+    <Reference Include="Cyotek.Windows.Forms.ColorPicker">
+      <HintPath>..\Atflib\Cyotek.Windows.Forms.ColorPicker.dll</HintPath>
     </Reference>
     <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
       <HintPath>..\packages\CyotekImageBox.1.2.0-beta1\lib\net20\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
@@ -166,9 +145,6 @@
     </Reference>
     <Reference Include="IronPython.Modules">
       <HintPath>..\Atflib\IronPython.Modules.dll</HintPath>
-    </Reference>
-    <Reference Include="libcrashreport_net">
-      <HintPath>..\Atflib\libcrashreport_net.dll</HintPath>
     </Reference>
     <Reference Include="LZ4, Version=1.0.10.93, Culture=neutral, PublicKeyToken=62e1b5ec1eec9bdd, processorArchitecture=MSIL">
       <HintPath>..\packages\lz4net.1.0.10.93\lib\net4-client\LZ4.dll</HintPath>
