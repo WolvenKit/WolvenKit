@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Cyotek.Windows.Forms;
 using W3Edit.CR2W;
 using W3Edit.CR2W.Types;
 using WeifenLuo.WinFormsUI.Docking;
@@ -14,8 +15,6 @@ namespace W3Edit
         public frmImagePreview()
         {
             InitializeComponent();
-            ImageBox.SizeMode = PictureBoxSizeMode.Zoom;
-
         }
 
         public CR2WFile File
@@ -23,7 +22,7 @@ namespace W3Edit
             get { return _file; }
             set {
                 _file = value;
-                ImageBox.Image = GetImage(value) ?? SystemIcons.Warning.ToBitmap();
+                ImagePreviewControl.Image = GetImage(value) ?? SystemIcons.Warning.ToBitmap();
             }
         }
 
@@ -34,7 +33,7 @@ namespace W3Edit
 
         private void copyImageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Clipboard.SetImage(ImageBox.Image);
+            Clipboard.SetImage(ImagePreviewControl.Image);
         }
 
         private void saveImageAsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -45,7 +44,7 @@ namespace W3Edit
                 sf.Filter = @"Bitmap Image (.bmp)|*.bmp|Gif Image (.gif)|*.gif|JPEG Image (.jpeg)|*.jpeg|Png Image (.png)|*.png|Tiff Image (.tiff)|*.tiff|Wmf Image (.wmf)|*.wmf"; ;
                 if (sf.ShowDialog() == DialogResult.OK)
                 {
-                    ImageBox.Image.Save(sf.FileName);
+                    ImagePreviewControl.Image.Save(sf.FileName);
                 }
             }
         }
@@ -55,14 +54,21 @@ namespace W3Edit
             using (var of = new OpenFileDialog())
             {
                 of.Title = @"Choose an image";
-                of.Filter = @"DDS Image | *.dds";
+                of.Filter = @"Bitmap Image (.bmp)|*.bmp|Gif Image (.gif)|*.gif|JPEG Image (.jpeg)|*.jpeg|Png Image (.png)|*.png|Tiff Image (.tiff)|*.tiff|Wmf Image (.wmf)|*.wmf"; ;
                 if (of.ShowDialog() == DialogResult.OK)
                 {
-                    if (File.chunks[0].Type == "CBitmapTexture")
-                    {
-                        ((CBitmapTexture)File.chunks[0].data).Image.Bytes = ImageUtility.Dds2Xbm(System.IO.File.ReadAllBytes(of.FileName));
-                    }
+                    ImagePreviewControl.Image = Image.FromFile(of.FileName);
+                    UpdateFileWithImage(ImagePreviewControl.Image);
                 }
+            }
+        }
+
+        public void UpdateFileWithImage(Image image)
+        {
+            //TODO: Finish this
+            if (File.chunks[0].Type == "CBitmapTexture")
+            {
+                //((CBitmapTexture)File.chunks[0].data).Image.Bytes = ImageUtility.Dds2Xbm(System.IO.File.ReadAllBytes(of.FileName));
             }
         }
     }
