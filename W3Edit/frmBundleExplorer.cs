@@ -15,8 +15,8 @@ namespace W3Edit
 
         public frmBundleExplorer(BundleManager manager)
         {
-            Manager = manager;
             InitializeComponent();
+            Manager = manager;
             RootNode = manager.RootNode;
             FileList = manager.FileList;
             filetypeCB.Items.AddRange(manager.Extensions.ToArray());
@@ -38,15 +38,16 @@ namespace W3Edit
         {
             if (ActiveNode != node || reset)
             {
+                
                 ActiveNode = node;
 
                 UpdatePathPanel();
 
                 fileListView.Items.Clear();
-
+                List<BundleListItem> res = new List<BundleListItem>();
                 if (node.Parent != null)
                 {
-                    fileListView.Items.Add(new BundleListItem
+                    res.Add(new BundleListItem
                     {
                         Node = node.Parent,
                         Text = "..",
@@ -55,35 +56,31 @@ namespace W3Edit
                     });
                 }
 
-                foreach (var item in node.Directories.OrderBy(x => x.Key))
+                res.AddRange(node.Directories.OrderBy(x => x.Key).Select(item => new BundleListItem
                 {
-                    fileListView.Items.Add(new BundleListItem
-                    {
-                        Node = item.Value,
-                        Text = item.Key,
-                        IsDirectory = true,
-                        ImageKey = "openFolder"
-                    });
-                }
+                    Node = item.Value, Text = item.Key, IsDirectory = true, ImageKey = "openFolder"
+                }));
 
 
                 foreach (var item in node.Files.OrderBy(x => x.Key))
                 {
                     var lastItem = item.Value[item.Value.Count - 1];
-                    var listItem = fileListView.Items.Add(new BundleListItem
+                    var listItem = new BundleListItem
                     {
                         Node = null,
                         FullPath = lastItem.Name,
                         Text = item.Key,
                         IsDirectory = false,
                         ImageKey = "genericFile"
-                    });
+                    };
                     listItem.SubItems.Add(lastItem.Size.ToString());
                     listItem.SubItems.Add(string.Format("{0}%",
                         (100 - (int) (lastItem.ZSize/(float) lastItem.Size*100.0f))));
                     listItem.SubItems.Add(lastItem.CompressionType);
                     listItem.SubItems.Add(lastItem.DateString);
+                    res.Add(listItem);
                 }
+                fileListView.Items.AddRange(res.ToArray());
             }
         }
 
@@ -248,22 +245,25 @@ namespace W3Edit
             if (found.Length > 1000)
                 found = found.Take(1000).ToArray();
             fileListView.Items.Clear();
+            var results = new List<BundleListItem>();
             foreach (var file in found)
             {
                 var lastItem = file;
-                var listItem = fileListView.Items.Add(new BundleListItem
+                var listItem = new BundleListItem
                 {
                     Node = null,
                     FullPath = lastItem.Name,
                     Text = file.Name,
                     IsDirectory = false,
                     ImageKey = "genericFile"
-                });
+                };
                 listItem.SubItems.Add(lastItem.Size.ToString());
                 listItem.SubItems.Add($"{(100 - (int) (lastItem.ZSize/(float) lastItem.Size*100.0f))}%");
                 listItem.SubItems.Add(lastItem.CompressionType);
                 listItem.SubItems.Add(lastItem.DateString);
+                results.Add(listItem);
             }
+            fileListView.Items.AddRange(results.ToArray());
         }
 
         public List<BundleItem> GetFiles(BundleTreeNode mainnode)
@@ -280,9 +280,9 @@ namespace W3Edit
             return bundfiles;
         }
 
-        public BundleItem[] SearchFiles(BundleItem[] files, string searchkeyword, string Extension)
+        public BundleItem[] SearchFiles(BundleItem[] files, string searchkeyword, string extension)
         {
-            return files.Where(file => (file.Name.EndsWith(Extension) && file.Name.ToUpper().Contains(searchkeyword.ToUpper())) || (file.Name.ToUpper().Contains(searchkeyword.ToUpper()) && Extension.ToUpper() == "ANY")).ToArray();
+            return files.AsParallel().Where(file => (file.Name.EndsWith(extension) && file.Name.ToUpper().Contains(searchkeyword.ToUpper())) || (file.Name.ToUpper().Contains(searchkeyword.ToUpper()) && extension.ToUpper() == "ANY")).ToArray();
         }
 
         public string[] GetExtensions(params string[] filename)
