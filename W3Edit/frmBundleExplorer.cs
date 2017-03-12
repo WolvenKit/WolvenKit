@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using W3Edit.Bundles;
 
@@ -282,7 +283,15 @@ namespace W3Edit
 
         public BundleItem[] SearchFiles(BundleItem[] files, string searchkeyword, string extension)
         {
-            return files.AsParallel().Where(file => (file.Name.EndsWith(extension) && file.Name.ToUpper().Contains(searchkeyword.ToUpper())) || (file.Name.ToUpper().Contains(searchkeyword.ToUpper()) && extension.ToUpper() == "ANY")).ToArray();
+            if (regexCheckbox.Checked)
+            {
+                return files.Where(item => new Regex(searchkeyword).IsMatch(item.Name)).ToArray();
+            }
+            if (currentfolderCheckBox.Checked)
+            {
+                return caseCheckBox.Checked ? files.Where(item => item.Name.StartsWith(ActiveNode.FullPath) && item.Name.ToUpper().Contains(searchkeyword.ToUpper()) &&(item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")).ToArray() : files.Where(item => item.Name.StartsWith(ActiveNode.FullPath) && item.Name.Contains(searchkeyword) && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")).ToArray();
+            }
+            return caseCheckBox.Checked ? files.Where(item =>  item.Name.ToUpper().Contains(searchkeyword.ToUpper()) && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")).ToArray() : files.Where(item => item.Name.Contains(searchkeyword) && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")).ToArray();
         }
 
         public string[] GetExtensions(params string[] filename)
