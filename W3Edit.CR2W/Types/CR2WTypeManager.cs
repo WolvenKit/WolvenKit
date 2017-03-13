@@ -99,6 +99,8 @@ namespace W3Edit.CR2W.Types
 
             Register("CSkeletalAnimationSetEntry", new CSkeletalAnimationSetEntry(null));
 
+            //Register("CParticleEmitter", new CParticleEmitter(null)); TODO: FIX
+
 
             var vectors = new[]
             {

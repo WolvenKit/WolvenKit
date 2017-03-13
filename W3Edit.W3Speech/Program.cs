@@ -11,12 +11,11 @@ namespace W3Edit.W3Speech
     {
         public static void Main(string[] args)
         {
-            throw new NotImplementedException("This is only for testing shouldn't be used yet!");
-            var file = "";
-            using (BinaryReader br = new BinaryReader(new MemoryStream(File.ReadAllBytes(file))))
+            var file = "F:\\Witcher_modding\\The Witcher 3 - Wild Hunt\\content\\content1\\enpc.w3speech";
+            Console.Title = "Reading " + Path.GetFileName(file) + "!";
+            using (var br = new BinaryReader(new MemoryStream(File.ReadAllBytes(file))))
             {
-              var sfile = new W3Speech();
-                sfile.Read(br);
+              new W3Speech().Read(br);
             }
         }
     }

@@ -93,6 +93,7 @@
     <Compile Include="Types\CMaterialInstance.cs" />
     <Compile Include="Types\CMeshComponent.cs" />
     <Compile Include="Types\CName.cs" />
+    <Compile Include="Types\CParticleEmitter.cs" />
     <Compile Include="Types\CPtr.cs" />
     <Compile Include="Types\CQuestScriptBlock.cs" />
     <Compile Include="Types\CR2WTypeManager.cs" />
