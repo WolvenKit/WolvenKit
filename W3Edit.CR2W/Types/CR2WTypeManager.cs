@@ -104,6 +104,7 @@ namespace W3Edit.CR2W.Types
 
             var vectors = new[]
             {
+                "CMaterialParameterVector",
                 "CStorySceneRandomizer",
                 "ApertureDofParams", "Box", "EulerAngles", "Vector2",
                 "CEventGeneratorCameraParams", "CGenericGrassMask", "CGlobalLightingTrajectory",
