@@ -584,6 +584,10 @@
       <Project>{031dd6da-b643-4c2a-a30d-a2e2212724c2}</Project>
       <Name>W3Edit.Scaleform</Name>
     </ProjectReference>
+    <ProjectReference Include="..\W3Edit.Textures\W3Edit.Cache.csproj">
+      <Project>{17cf5901-6e1f-467f-afe0-3cc04dc9688a}</Project>
+      <Name>W3Edit.Cache</Name>
+    </ProjectReference>
     <ProjectReference Include="..\W3Edit.W3Speech\W3Edit.W3Speech.csproj">
       <Project>{c025f253-c78b-4a3b-87e7-1b2a1a453b97}</Project>
       <Name>W3Edit.W3Speech</Name>
