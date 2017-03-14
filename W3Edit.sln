@@ -22,7 +22,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3Edit.Render", "W3Edit.Ren
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3Edit.Scaleform", "W3Edit.Scaleform\W3Edit.Scaleform.csproj", "{031DD6DA-B643-4C2A-A30D-A2E2212724C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3Edit.Textures", "W3Edit.Textures\W3Edit.Textures.csproj", "{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3Edit.Cache", "W3Edit.Textures\W3Edit.Cache.csproj", "{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
