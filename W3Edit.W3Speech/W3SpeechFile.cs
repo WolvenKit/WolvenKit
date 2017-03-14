@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Media;
+using System.Xml.Linq;
 using W3Edit.W3Strings;
 
 namespace W3Edit.W3Speech
 {
     public class W3SoundInfo
     {
+        public string Filename;
         public uint id;
         public uint id_high;
         public uint wave_offs;
@@ -26,16 +29,13 @@ namespace W3Edit.W3Speech
         public W3LanguageKey Key;
         public List<W3SoundInfo> SoundInfoList;
 
-        public void Read(BinaryReader br)
+        public void Read(BinaryReader br,XDocument soundbanksinfo)
         {
             var magic = br.ReadBytes(4);
             if (!magic.SequenceEqual(IDString))
                 throw new Exception("Not a valid w3speech file!");
-            Console.WriteLine("Version: " + magic);
             var version = br.ReadUInt32();
-            Console.WriteLine("Version: " + version);
             var key1 = br.ReadUInt16();
-            Console.WriteLine("Key1: " + key1);
             SoundInfoList = new List<W3SoundInfo>();
             var count = br.ReadBit6();
             for (var i = 0; i < count; i++)
@@ -53,16 +53,14 @@ namespace W3Edit.W3Speech
                 br.ReadUInt32();
                 SoundInfoList.Add(sound);
             }
-            Console.WriteLine("Position after fileinfo: " + br.BaseStream.Position);
             var key2 = br.ReadUInt16();
-            Console.WriteLine("Key2: " + key2);
             var magicKey = (key1 << 16 | key2);
-            Console.WriteLine("Bitmagic key: " + magicKey);
-            var Key = W3LanguageKey.Get((uint)magicKey);
-            Console.WriteLine("Magic: " + Key.Key + " Language: " + Key.Language);
-            
-            SoundInfoList.OrderBy(x => x.id).ToList().ForEach(x=> x.id |= Key.Key);
-            Console.WriteLine("Sorting sound entries...");
+            var languageKey = W3LanguageKey.Get((uint)magicKey);
+            foreach (var w3SoundInfo in SoundInfoList)
+            {
+                w3SoundInfo.id |= languageKey.Key; //TODO: Fix this then the xml thing can be enabled
+            }
+            SoundInfoList = SoundInfoList.OrderBy(x => x.id).ToList();
             foreach (var t in SoundInfoList)
             {
                 if (t.wave_size > 0)
@@ -75,11 +73,24 @@ namespace W3Edit.W3Speech
                     br.BaseStream.Seek(t.cr2w_offs, SeekOrigin.Begin);
                     t.CR2W_File = br.ReadBytes((int)t.cr2w_size);
                 }
+                t.Filename = GetSoundBankName(t.id, soundbanksinfo);
             }
-            Console.WriteLine("Wave file count: " + SoundInfoList.Count(x => x.wave_size > 0));
-            Console.WriteLine("CR2W file count: " + SoundInfoList.Count(x => x.cr2w_size > 0));
-            Console.ReadKey();
         }
+
+        public string GetSoundBankName(uint id, XDocument soundbanksinfo)
+        {
+            return "";
+            //TODO: Finish this after the magic bitoperation is fixed
+            try
+            {
+                return soundbanksinfo.Descendants("File")
+                        .First(x => x.Attributes().Any(y => int.Parse(y.Value) == id))
+                        .Element("ShortName")
+                        .Value;
+            }
+            catch { return ""; } 
+        }
+        
 
         public void Write(BinaryWriter bw)
         {

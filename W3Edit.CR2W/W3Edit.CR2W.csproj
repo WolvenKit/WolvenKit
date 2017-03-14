@@ -53,7 +53,6 @@
     <Compile Include="CR2WHeaderHandle.cs" />
     <Compile Include="CR2WHeaderString.cs" />
     <Compile Include="CR2WReaderExtensions.cs" />
-    <Compile Include="DDSImageParser.cs" />
     <Compile Include="Editors\ByteArrayEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -69,7 +68,6 @@
     <Compile Include="Editors\PtrEditor.Designer.cs">
       <DependentUpon>PtrEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="ImageUtility.cs" />
     <Compile Include="IVariableEditor.cs" />
     <Compile Include="ILocalizedStringSource.cs" />
     <Compile Include="InvalidChunkTypeException.cs" />
