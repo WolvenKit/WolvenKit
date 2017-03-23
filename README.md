@@ -27,6 +27,12 @@
 - http://forums.cdprojektred.com/forum/en/the-witcher-series/the-witcher-3-wild-hunt/mod-discussions
 
 ***
+
+## Building
+Visual Studio 2015 required. All the required files are either nuget packages which will be automatically downloaded once you press build or included in the package.
+
+***
+
 ## Contibuting:
 Please do! Fork the project and please do you changes in small incremental steps with descriptive commit messages. Code quality is not the biggest concern but please don't do stupid mistakes which may lead to the denial of the pull request.
 
