@@ -291,7 +291,7 @@ namespace W3Edit
             // 
             this.addFileFromBundleToolStripMenuItem.Image = global::W3Edit.Properties.Resources.AddNodefromFile_354;
             this.addFileFromBundleToolStripMenuItem.Name = "addFileFromBundleToolStripMenuItem";
-            this.addFileFromBundleToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.addFileFromBundleToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
             this.addFileFromBundleToolStripMenuItem.Text = "Add file from Bundle";
             this.addFileFromBundleToolStripMenuItem.Click += new System.EventHandler(this.addFileToolStripMenuItem1_Click);
             // 
@@ -299,7 +299,7 @@ namespace W3Edit
             // 
             this.addFileToolStripMenuItem.Image = global::W3Edit.Properties.Resources.AddNodefromFile_354;
             this.addFileToolStripMenuItem.Name = "addFileToolStripMenuItem";
-            this.addFileToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.addFileToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
             this.addFileToolStripMenuItem.Text = "Add file";
             this.addFileToolStripMenuItem.Click += new System.EventHandler(this.addFileToolStripMenuItem_Click_2);
             // 
@@ -307,7 +307,7 @@ namespace W3Edit
             // 
             this.addFileFromOtherModToolStripMenuItem.Image = global::W3Edit.Properties.Resources.AddNodefromFile_354;
             this.addFileFromOtherModToolStripMenuItem.Name = "addFileFromOtherModToolStripMenuItem";
-            this.addFileFromOtherModToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.addFileFromOtherModToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
             this.addFileFromOtherModToolStripMenuItem.Text = "Add file from other mod";
             this.addFileFromOtherModToolStripMenuItem.Click += new System.EventHandler(this.addFileFromOtherModToolStripMenuItem_Click);
             // 
@@ -315,7 +315,7 @@ namespace W3Edit
             // 
             this.createPackedInstallerToolStripMenuItem.Image = global::W3Edit.Properties.Resources.ExpandIcon;
             this.createPackedInstallerToolStripMenuItem.Name = "createPackedInstallerToolStripMenuItem";
-            this.createPackedInstallerToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.createPackedInstallerToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
             this.createPackedInstallerToolStripMenuItem.Text = "Create Packed Installer";
             this.createPackedInstallerToolStripMenuItem.Click += new System.EventHandler(this.createPackedInstallerToolStripMenuItem_Click);
             // 
@@ -323,20 +323,20 @@ namespace W3Edit
             // 
             this.reloadProjectToolStripMenuItem.Image = global::W3Edit.Properties.Resources.refresh;
             this.reloadProjectToolStripMenuItem.Name = "reloadProjectToolStripMenuItem";
-            this.reloadProjectToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.reloadProjectToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
             this.reloadProjectToolStripMenuItem.Text = "Reload project";
             this.reloadProjectToolStripMenuItem.Click += new System.EventHandler(this.reloadProjectToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(200, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(204, 6);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Image = global::W3Edit.Properties.Resources.gear_16xLG;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.modSettingsToolStripMenuItem_Click);
             // 
@@ -537,6 +537,7 @@ namespace W3Edit
             this.chunkToolStripMenuItem.Name = "chunkToolStripMenuItem";
             this.chunkToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
             this.chunkToolStripMenuItem.Text = "Chunk";
+            this.chunkToolStripMenuItem.Click += new System.EventHandler(this.chunkToolStripMenuItem_Click);
             // 
             // toolStripSeparator6
             // 

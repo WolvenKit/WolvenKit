@@ -1297,6 +1297,9 @@ namespace W3Edit
 
         private void scriptToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (ActiveMod == null)
+                return;
+
             var scriptsdirectory = (ActiveMod.FileDirectory + "\\scripts");
             if (!Directory.Exists(scriptsdirectory))
             {
@@ -1313,7 +1316,12 @@ namespace W3Edit
                 string tempFileName = $"{fileNameOnly}({count++})";
                 if (path != null) newFullPath = Path.Combine(path, tempFileName + extension);
             }
-            File.WriteAllLines(newFullPath, new string[] {@"/*",$"Wolven kit - {Version}",DateTime.Now.ToString("d"),@"*/"});
+            File.WriteAllLines(newFullPath, new[] {@"/*",$"Wolven kit - {Version}",DateTime.Now.ToString("d"),@"*/"});
+        }
+
+        private void chunkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(@"Not implemented yet. I'm not sure how this should work yet.",@"Info",MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
     }
 }
