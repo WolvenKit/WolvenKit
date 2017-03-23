@@ -28,6 +28,7 @@ namespace W3Edit
         {
             InitializeComponent();
             UpdateTitle();
+            buildDateToolStripMenuItem.Text = Assembly.GetExecutingAssembly().GetLinkerTime().ToString("yyyy MMMM dd");
         }
 
         public W3Mod ActiveMod
