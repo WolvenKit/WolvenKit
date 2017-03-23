@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
+using Sce.Atf;
 using W3Edit.Bundles;
 using W3Edit.CR2W;
 using W3Edit.CR2W.Types;
@@ -529,6 +530,9 @@ namespace W3Edit
                 case ".usm":
                     LoadUsmFile(fullpath);
                     break;
+                case ".ws":
+                    PolymorphExecute(fullpath,".txt");
+                    break;
                 default:
                     LoadDocument(fullpath);
                     break;
@@ -709,7 +713,6 @@ namespace W3Edit
                 MessageBox.Show("Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-
             btPack.Enabled = false;
 
             ShowOutput();
@@ -717,25 +720,38 @@ namespace W3Edit
             ClearOutput();
 
             saveAllFiles();
-            var taskcookMod = cookMod();
-            while (!taskcookMod.IsCompleted)
-            {
-                Application.DoEvents();
-            }
+
             var taskPackMod = packMod();
             while (!taskPackMod.IsCompleted)
             {
                 Application.DoEvents();
             }
-            var taskPackTextureCache = packTextures();
-            while (!taskPackTextureCache.IsCompleted)
+
+            if (ActiveMod.Files.Any(x => x.EndsWith(".xbm")))
             {
-                Application.DoEvents();
+                var taskcookMod = cookMod();
+                while (!taskcookMod.IsCompleted)
+                {
+                    Application.DoEvents();
+                }
+                var taskPackTextureCache = packTextures();
+                while (!taskPackTextureCache.IsCompleted)
+                {
+                    Application.DoEvents();
+                }
             }
+
             var taskMetaData = createModMetaData();
             while (!taskMetaData.IsCompleted)
             {
                 Application.DoEvents();
+            }
+
+            if (Directory.Exists((ActiveMod.FileDirectory + "\\scripts")) && Directory.GetFiles((ActiveMod.FileDirectory + "\\scripts")).Any())
+            {
+                if(!Directory.Exists(Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\")))
+                    Directory.CreateDirectory(Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\"));
+                Directory.GetFiles((ActiveMod.FileDirectory + "\\scripts")).ForEach(x=> File.Copy(x, Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\") + Path.GetFileName(x)));
             }
 
             InstallMod();
@@ -1223,9 +1239,7 @@ namespace W3Edit
 
         private void joinOurDiscordToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            if (
-                MessageBox.Show(@"Are you sure you would like to join the modding discord?", @"Confirmation",
-                    MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show(@"Are you sure you would like to join the modding discord?", @"Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 Process.Start("https://discord.gg/qBNgDEX");
         }
 
@@ -1269,6 +1283,37 @@ namespace W3Edit
         {
             var wcclicense = new frmWCCLicense();
             wcclicense.Show();
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveActiveFile();
+        }
+
+        private void saveAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveAllFiles();
+        }
+
+        private void scriptToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var scriptsdirectory = (ActiveMod.FileDirectory + "\\scripts");
+            if (!Directory.Exists(scriptsdirectory))
+            {
+                Directory.CreateDirectory(scriptsdirectory);
+            }
+            var fullPath = scriptsdirectory + "\\" + "blank_script.ws";
+            var count = 1;
+            var fileNameOnly = Path.GetFileNameWithoutExtension(fullPath);
+            var extension = Path.GetExtension(fullPath);
+            var path = Path.GetDirectoryName(fullPath);
+            var newFullPath = fullPath;
+            while (File.Exists(newFullPath))
+            {
+                string tempFileName = $"{fileNameOnly}({count++})";
+                if (path != null) newFullPath = Path.Combine(path, tempFileName + extension);
+            }
+            File.WriteAllLines(newFullPath, new string[] {@"/*",$"Wolven kit - {Version}",DateTime.Now.ToString("d"),@"*/"});
         }
     }
 }

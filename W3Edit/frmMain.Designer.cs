@@ -88,6 +88,12 @@ namespace W3Edit
             this.witcherIIIModdingToolLicenseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.buildDateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -229,6 +235,10 @@ namespace W3Edit
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newModToolStripMenuItem,
             this.openModToolStripMenuItem,
+            this.toolStripSeparator6,
+            this.newFileToolStripMenuItem,
+            this.saveToolStripMenuItem,
+            this.saveAllToolStripMenuItem,
             this.toolStripSeparator3,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -239,7 +249,7 @@ namespace W3Edit
             // 
             this.newModToolStripMenuItem.Image = global::W3Edit.Properties.Resources.NewSolutionFolder_6289;
             this.newModToolStripMenuItem.Name = "newModToolStripMenuItem";
-            this.newModToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.newModToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
             this.newModToolStripMenuItem.Text = "New mod";
             this.newModToolStripMenuItem.Click += new System.EventHandler(this.tbtNewMod_Click);
             // 
@@ -247,19 +257,19 @@ namespace W3Edit
             // 
             this.openModToolStripMenuItem.Image = global::W3Edit.Properties.Resources.Open_6529;
             this.openModToolStripMenuItem.Name = "openModToolStripMenuItem";
-            this.openModToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.openModToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
             this.openModToolStripMenuItem.Text = "Open mod";
             this.openModToolStripMenuItem.Click += new System.EventHandler(this.tbtOpenMod_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(128, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(153, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -410,7 +420,7 @@ namespace W3Edit
             // 
             this.aboutRedkit2ToolStripMenuItem.Image = global::W3Edit.Properties.Resources.info_icon_23818;
             this.aboutRedkit2ToolStripMenuItem.Name = "aboutRedkit2ToolStripMenuItem";
-            this.aboutRedkit2ToolStripMenuItem.Size = new System.Drawing.Size(248, 22);
+            this.aboutRedkit2ToolStripMenuItem.Size = new System.Drawing.Size(252, 26);
             this.aboutRedkit2ToolStripMenuItem.Text = "About Wolven kit";
             this.aboutRedkit2ToolStripMenuItem.Click += new System.EventHandler(this.creditsToolStripMenuItem_Click);
             // 
@@ -418,7 +428,7 @@ namespace W3Edit
             // 
             this.joinOurDiscordToolStripMenuItem.Image = global::W3Edit.Properties.Resources._2c21aeda16de354ba5334551a883b481;
             this.joinOurDiscordToolStripMenuItem.Name = "joinOurDiscordToolStripMenuItem";
-            this.joinOurDiscordToolStripMenuItem.Size = new System.Drawing.Size(248, 22);
+            this.joinOurDiscordToolStripMenuItem.Size = new System.Drawing.Size(252, 26);
             this.joinOurDiscordToolStripMenuItem.Text = "Join our discord";
             this.joinOurDiscordToolStripMenuItem.Click += new System.EventHandler(this.joinOurDiscordToolStripMenuItem_Click_1);
             // 
@@ -426,7 +436,7 @@ namespace W3Edit
             // 
             this.tutorialsToolStripMenuItem.Image = global::W3Edit.Properties.Resources.info_icon_23818;
             this.tutorialsToolStripMenuItem.Name = "tutorialsToolStripMenuItem";
-            this.tutorialsToolStripMenuItem.Size = new System.Drawing.Size(248, 22);
+            this.tutorialsToolStripMenuItem.Size = new System.Drawing.Size(252, 26);
             this.tutorialsToolStripMenuItem.Text = "Tutorials";
             this.tutorialsToolStripMenuItem.Click += new System.EventHandler(this.tutorialsToolStripMenuItem_Click);
             // 
@@ -434,7 +444,7 @@ namespace W3Edit
             // 
             this.witcherIIIModdingToolLicenseToolStripMenuItem.Image = global::W3Edit.Properties.Resources.witcher3_101;
             this.witcherIIIModdingToolLicenseToolStripMenuItem.Name = "witcherIIIModdingToolLicenseToolStripMenuItem";
-            this.witcherIIIModdingToolLicenseToolStripMenuItem.Size = new System.Drawing.Size(248, 22);
+            this.witcherIIIModdingToolLicenseToolStripMenuItem.Size = new System.Drawing.Size(252, 26);
             this.witcherIIIModdingToolLicenseToolStripMenuItem.Text = "Witcher III Modding Tool License";
             this.witcherIIIModdingToolLicenseToolStripMenuItem.Click += new System.EventHandler(this.witcherIIIModdingToolLicenseToolStripMenuItem_Click);
             // 
@@ -502,6 +512,52 @@ namespace W3Edit
             this.buildDateToolStripMenuItem.ShowShortcutKeys = false;
             this.buildDateToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
             this.buildDateToolStripMenuItem.Text = "Build date";
+            // 
+            // newFileToolStripMenuItem
+            // 
+            this.newFileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.scriptToolStripMenuItem,
+            this.chunkToolStripMenuItem});
+            this.newFileToolStripMenuItem.Image = global::W3Edit.Properties.Resources.FileGroup_10135_16x;
+            this.newFileToolStripMenuItem.Name = "newFileToolStripMenuItem";
+            this.newFileToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
+            this.newFileToolStripMenuItem.Text = "New file";
+            // 
+            // scriptToolStripMenuItem
+            // 
+            this.scriptToolStripMenuItem.Image = global::W3Edit.Properties.Resources.FileGroup_10135_16x;
+            this.scriptToolStripMenuItem.Name = "scriptToolStripMenuItem";
+            this.scriptToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
+            this.scriptToolStripMenuItem.Text = "Script";
+            this.scriptToolStripMenuItem.Click += new System.EventHandler(this.scriptToolStripMenuItem_Click);
+            // 
+            // chunkToolStripMenuItem
+            // 
+            this.chunkToolStripMenuItem.Image = global::W3Edit.Properties.Resources.AddNodefromFile_354;
+            this.chunkToolStripMenuItem.Name = "chunkToolStripMenuItem";
+            this.chunkToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
+            this.chunkToolStripMenuItem.Text = "Chunk";
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(153, 6);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Image = global::W3Edit.Properties.Resources.Save_6530;
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // saveAllToolStripMenuItem
+            // 
+            this.saveAllToolStripMenuItem.Image = global::W3Edit.Properties.Resources.Saveall_6518;
+            this.saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
+            this.saveAllToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
+            this.saveAllToolStripMenuItem.Text = "Save all";
+            this.saveAllToolStripMenuItem.Click += new System.EventHandler(this.saveAllToolStripMenuItem_Click);
             // 
             // frmMain
             // 
@@ -572,5 +628,11 @@ namespace W3Edit
         private ToolStripMenuItem createPackedInstallerToolStripMenuItem;
         private ToolStripMenuItem witcherIIIModdingToolLicenseToolStripMenuItem;
         private ToolStripMenuItem buildDateToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator6;
+        private ToolStripMenuItem newFileToolStripMenuItem;
+        private ToolStripMenuItem scriptToolStripMenuItem;
+        private ToolStripMenuItem chunkToolStripMenuItem;
+        private ToolStripMenuItem saveToolStripMenuItem;
+        private ToolStripMenuItem saveAllToolStripMenuItem;
     }
 }
