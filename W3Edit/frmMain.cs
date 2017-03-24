@@ -767,14 +767,14 @@ namespace W3Edit
             }
         }
 
-        private void AddOutput(string text)
+        private void AddOutput(string text,frmOutput.Logtype type = frmOutput.Logtype.Normal)
         {
             if (Output != null && !Output.IsDisposed)
             {
                 if (string.IsNullOrWhiteSpace(text))
                     return;
 
-                Output.AddText(text);
+                Output.AddText(text,type);
             }
         }
 
@@ -828,7 +828,7 @@ namespace W3Edit
                 File.Copy(file, fullpath, true);
             }
 
-            AddOutput("Mod Installed to " + gameModDir + "\n");
+            AddOutput("Mod Installed to " + gameModDir + "\n",frmOutput.Logtype.Success);
         }
 
         private void CreateInstaller()
@@ -875,10 +875,10 @@ namespace W3Edit
             CompressFile(ActiveMod.FileName,zipStream);
             zipStream.IsStreamOwner = true;
             zipStream.Close();
-            AddOutput("Installer created: " + fsOut.Name + "\n");
+            AddOutput("Installer created: " + fsOut.Name + "\n",frmOutput.Logtype.Success);
             if (!File.Exists(fsOut.Name))
             {
-                AddOutput("Couldn't create installer. Something went wrong.");
+                AddOutput("Couldn't create installer. Something went wrong.",frmOutput.Logtype.Error);
                 return;
             }
             Process.Start("explorer.exe", "/select, \"" + fsOut.Name + "\"");
@@ -959,7 +959,7 @@ namespace W3Edit
                     dir.Delete(true);
                 }
             }
-            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n");
+            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n",frmOutput.Logtype.Important);
 
             using (var process = Process.Start(proc))
             {
@@ -969,7 +969,7 @@ namespace W3Edit
                     {
                         var result = await reader.ReadLineAsync();
 
-                        AddOutput(result + "\n");
+                        AddOutput(result + "\n", frmOutput.Logtype.Wcc);
 
                         Application.DoEvents();
 
@@ -993,7 +993,7 @@ namespace W3Edit
             proc.WindowStyle = ProcessWindowStyle.Hidden;
             proc.CreateNoWindow = true;
 
-            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n");
+            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
 
             using (var process = Process.Start(proc))
             {
@@ -1003,7 +1003,7 @@ namespace W3Edit
                     {
                         var result = await reader.ReadLineAsync();
 
-                        AddOutput(result + "\n");
+                        AddOutput(result + "\n", frmOutput.Logtype.Wcc);
 
                         Application.DoEvents();
 
@@ -1043,7 +1043,7 @@ namespace W3Edit
             proc.WindowStyle = ProcessWindowStyle.Hidden;
             proc.CreateNoWindow = true;
 
-            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n");
+            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
 
             using (var process = Process.Start(proc))
             {
@@ -1053,7 +1053,7 @@ namespace W3Edit
                     {
                         var result = await reader.ReadLineAsync();
 
-                        AddOutput(result + "\n");
+                        AddOutput(result + "\n", frmOutput.Logtype.Wcc);
 
                         Application.DoEvents();
 
@@ -1076,7 +1076,7 @@ namespace W3Edit
             proc.WindowStyle = ProcessWindowStyle.Hidden;
             proc.CreateNoWindow = true;
 
-            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n");
+            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
 
             using (var process = Process.Start(proc))
             {
@@ -1086,7 +1086,7 @@ namespace W3Edit
                     {
                         var result = await reader.ReadLineAsync();
 
-                        AddOutput(result + "\n");
+                        AddOutput(result + "\n",frmOutput.Logtype.Wcc);
 
                         Application.DoEvents();
 

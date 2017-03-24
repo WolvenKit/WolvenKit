@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -6,14 +8,40 @@ namespace W3Edit
 {
     public partial class frmOutput : DockContent
     {
+        public enum Logtype
+        {
+            Normal,
+            Error,
+            Important,
+            Success,
+            Wcc
+        }
+
         public frmOutput()
         {
             InitializeComponent();
         }
 
-        public void AddText(string text)
+        public void AddText(string text,Logtype type = Logtype.Normal)
         {
-            txOutput.AppendText(text);
+            switch (type)
+            {
+                case Logtype.Error:
+                    txOutput.AppendText(text,Color.DarkRed);
+                    break;
+                case Logtype.Important:
+                    txOutput.AppendText(text, Color.DarkBlue);
+                    break;
+                case Logtype.Wcc:
+                    txOutput.AppendText(text);
+                    break;
+                case Logtype.Success:
+                    txOutput.AppendText(text, Color.LimeGreen);
+                    break;
+                default:
+                    txOutput.AppendText("[" + DateTime.Now.ToString("G") + "]: " + text);
+                    break;
+            }
             txOutput.ScrollToCaret();
         }
 
@@ -38,6 +66,24 @@ namespace W3Edit
                     File.WriteAllLines(sf.FileName,txOutput.Lines);
                 }
             }
+        }
+
+        private void clearToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            Clear();
+        }
+    }
+
+    public static class RichTextBoxExtensions
+    {
+        public static void AppendText(this RichTextBox box, string text, Color color)
+        {
+            box.SelectionStart = box.TextLength;
+            box.SelectionLength = 0;
+
+            box.SelectionColor = color;
+            box.AppendText("["+ DateTime.Now.ToString("G") + "]: " + text);
+            box.SelectionColor = box.ForeColor;
         }
     }
 }
