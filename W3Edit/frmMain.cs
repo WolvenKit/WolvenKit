@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
+using Sce.Atf;
 using W3Edit.Bundles;
 using W3Edit.CR2W;
 using W3Edit.CR2W.Types;
@@ -28,6 +29,7 @@ namespace W3Edit
         {
             InitializeComponent();
             UpdateTitle();
+            buildDateToolStripMenuItem.Text = Assembly.GetExecutingAssembly().GetLinkerTime().ToString("yyyy MMMM dd");
         }
 
         public W3Mod ActiveMod
@@ -528,6 +530,9 @@ namespace W3Edit
                 case ".usm":
                     LoadUsmFile(fullpath);
                     break;
+                case ".ws":
+                    PolymorphExecute(fullpath,".txt");
+                    break;
                 default:
                     LoadDocument(fullpath);
                     break;
@@ -711,7 +716,6 @@ namespace W3Edit
                 MessageBox.Show("Please close The Witcher 3 before tinkering with the files_size!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-
             btPack.Enabled = false;
 
             ShowOutput();
@@ -719,25 +723,38 @@ namespace W3Edit
             ClearOutput();
 
             saveAllFiles();
-            var taskcookMod = cookMod();
-            while (!taskcookMod.IsCompleted)
-            {
-                Application.DoEvents();
-            }
+
             var taskPackMod = packMod();
             while (!taskPackMod.IsCompleted)
             {
                 Application.DoEvents();
             }
-            var taskPackTextureCache = packTextures();
-            while (!taskPackTextureCache.IsCompleted)
+
+            if (ActiveMod.Files.Any(x => x.EndsWith(".xbm")))
             {
-                Application.DoEvents();
+                var taskcookMod = cookMod();
+                while (!taskcookMod.IsCompleted)
+                {
+                    Application.DoEvents();
+                }
+                var taskPackTextureCache = packTextures();
+                while (!taskPackTextureCache.IsCompleted)
+                {
+                    Application.DoEvents();
+                }
             }
+
             var taskMetaData = createModMetaData();
             while (!taskMetaData.IsCompleted)
             {
                 Application.DoEvents();
+            }
+
+            if (Directory.Exists((ActiveMod.FileDirectory + "\\scripts")) && Directory.GetFiles((ActiveMod.FileDirectory + "\\scripts")).Any())
+            {
+                if(!Directory.Exists(Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\")))
+                    Directory.CreateDirectory(Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\"));
+                Directory.GetFiles((ActiveMod.FileDirectory + "\\scripts")).ForEach(x=> File.Copy(x, Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\") + Path.GetFileName(x)));
             }
 
             InstallMod();
@@ -753,14 +770,14 @@ namespace W3Edit
             }
         }
 
-        private void AddOutput(string text)
+        private void AddOutput(string text,frmOutput.Logtype type = frmOutput.Logtype.Normal)
         {
             if (Output != null && !Output.IsDisposed)
             {
                 if (string.IsNullOrWhiteSpace(text))
                     return;
 
-                Output.AddText(text);
+                Output.AddText(text,type);
             }
         }
 
@@ -814,7 +831,7 @@ namespace W3Edit
                 File.Copy(file, fullpath, true);
             }
 
-            AddOutput("Mod Installed to " + gameModDir + "\n");
+            AddOutput("Mod Installed to " + gameModDir + "\n",frmOutput.Logtype.Success);
         }
 
         private void CreateInstaller()
@@ -861,10 +878,10 @@ namespace W3Edit
             CompressFile(ActiveMod.FileName,zipStream);
             zipStream.IsStreamOwner = true;
             zipStream.Close();
-            AddOutput("Installer created: " + fsOut.Name + "\n");
+            AddOutput("Installer created: " + fsOut.Name + "\n",frmOutput.Logtype.Success);
             if (!File.Exists(fsOut.Name))
             {
-                AddOutput("Couldn't create installer. Something went wrong.");
+                AddOutput("Couldn't create installer. Something went wrong.",frmOutput.Logtype.Error);
                 return;
             }
             Process.Start("explorer.exe", "/select, \"" + fsOut.Name + "\"");
@@ -945,7 +962,7 @@ namespace W3Edit
                     dir.Delete(true);
                 }
             }
-            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n");
+            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n",frmOutput.Logtype.Important);
 
             using (var process = Process.Start(proc))
             {
@@ -955,7 +972,7 @@ namespace W3Edit
                     {
                         var result = await reader.ReadLineAsync();
 
-                        AddOutput(result + "\n");
+                        AddOutput(result + "\n", frmOutput.Logtype.Wcc);
 
                         Application.DoEvents();
 
@@ -979,7 +996,7 @@ namespace W3Edit
             proc.WindowStyle = ProcessWindowStyle.Hidden;
             proc.CreateNoWindow = true;
 
-            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n");
+            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
 
             using (var process = Process.Start(proc))
             {
@@ -989,7 +1006,7 @@ namespace W3Edit
                     {
                         var result = await reader.ReadLineAsync();
 
-                        AddOutput(result + "\n");
+                        AddOutput(result + "\n", frmOutput.Logtype.Wcc);
 
                         Application.DoEvents();
 
@@ -1029,7 +1046,7 @@ namespace W3Edit
             proc.WindowStyle = ProcessWindowStyle.Hidden;
             proc.CreateNoWindow = true;
 
-            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n");
+            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
 
             using (var process = Process.Start(proc))
             {
@@ -1039,7 +1056,7 @@ namespace W3Edit
                     {
                         var result = await reader.ReadLineAsync();
 
-                        AddOutput(result + "\n");
+                        AddOutput(result + "\n", frmOutput.Logtype.Wcc);
 
                         Application.DoEvents();
 
@@ -1062,7 +1079,7 @@ namespace W3Edit
             proc.WindowStyle = ProcessWindowStyle.Hidden;
             proc.CreateNoWindow = true;
 
-            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n");
+            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
 
             using (var process = Process.Start(proc))
             {
@@ -1072,7 +1089,7 @@ namespace W3Edit
                     {
                         var result = await reader.ReadLineAsync();
 
-                        AddOutput(result + "\n");
+                        AddOutput(result + "\n",frmOutput.Logtype.Wcc);
 
                         Application.DoEvents();
 
@@ -1225,9 +1242,7 @@ namespace W3Edit
 
         private void joinOurDiscordToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            if (
-                MessageBox.Show(@"Are you sure you would like to join the modding discord?", @"Confirmation",
-                    MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show(@"Are you sure you would like to join the modding discord?", @"Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 Process.Start("https://discord.gg/qBNgDEX");
         }
 
@@ -1271,6 +1286,45 @@ namespace W3Edit
         {
             var wcclicense = new frmWCCLicense();
             wcclicense.Show();
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveActiveFile();
+        }
+
+        private void saveAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveAllFiles();
+        }
+
+        private void scriptToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ActiveMod == null)
+                return;
+
+            var scriptsdirectory = (ActiveMod.FileDirectory + "\\scripts");
+            if (!Directory.Exists(scriptsdirectory))
+            {
+                Directory.CreateDirectory(scriptsdirectory);
+            }
+            var fullPath = scriptsdirectory + "\\" + "blank_script.ws";
+            var count = 1;
+            var fileNameOnly = Path.GetFileNameWithoutExtension(fullPath);
+            var extension = Path.GetExtension(fullPath);
+            var path = Path.GetDirectoryName(fullPath);
+            var newFullPath = fullPath;
+            while (File.Exists(newFullPath))
+            {
+                string tempFileName = $"{fileNameOnly}({count++})";
+                if (path != null) newFullPath = Path.Combine(path, tempFileName + extension);
+            }
+            File.WriteAllLines(newFullPath, new[] {@"/*",$"Wolven kit - {Version}",DateTime.Now.ToString("d"),@"*/"});
+        }
+
+        private void chunkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(@"Not implemented yet. I'm not sure how this should work yet.",@"Info",MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
     }
 }
