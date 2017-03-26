@@ -85,18 +85,6 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ActiproSoftware.Shared.Net20">
-      <HintPath>..\Atflib\ActiproSoftware.Shared.Net20.dll</HintPath>
-    </Reference>
-    <Reference Include="ActiproSoftware.SyntaxEditor.Addons.DotNet.Net20">
-      <HintPath>..\Atflib\ActiproSoftware.SyntaxEditor.Addons.DotNet.Net20.dll</HintPath>
-    </Reference>
-    <Reference Include="ActiproSoftware.SyntaxEditor.Net20">
-      <HintPath>..\Atflib\ActiproSoftware.SyntaxEditor.Net20.dll</HintPath>
-    </Reference>
-    <Reference Include="ActiproSoftware.WinUICore.Net20">
-      <HintPath>..\Atflib\ActiproSoftware.WinUICore.Net20.dll</HintPath>
-    </Reference>
     <Reference Include="Atf.Core">
       <HintPath>..\Atflib\Atf.Core.dll</HintPath>
     </Reference>

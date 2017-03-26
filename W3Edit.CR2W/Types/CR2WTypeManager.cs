@@ -88,6 +88,7 @@ namespace W3Edit.CR2W.Types
             Register("CBitmapTexture", new CBitmapTexture(null));
 
             Register("Color", new CColor(null));
+            //Register("CColorShift", new CColorShift(null)); TODO: Enable once fixed
 
             Register("CEntity", new CEntity(null));
             Register("CMeshComponent", new CMeshComponent(null));
@@ -99,7 +100,7 @@ namespace W3Edit.CR2W.Types
 
             Register("CSkeletalAnimationSetEntry", new CSkeletalAnimationSetEntry(null));
 
-            //Register("CParticleEmitter", new CParticleEmitter(null)); TODO: FIX
+            //Register("CParticleEmitter", new CParticleEmitter(null)); TODO: Enable once fixed
 
 
             var vectors = new[]
@@ -118,7 +119,7 @@ namespace W3Edit.CR2W.Types
                 "SWorldSkyboxParameters", "CEntityAppearance", "SBlockDesc", "SCachedConnections",
                 "QuestScriptParam", "StorySceneCameraDefinition", "CStorySceneVoicetagMapping",
                 "SStorySceneCameraLightMod", "SCurveData", "SCurveDataEntry", "CStorySceneSectionVariantElementInfo",
-                "CStorySceneEventCameraInterpolationKey", "SItemNameProperty", "CColorShift", "SAbilityAttributeValue",
+                "CStorySceneEventCameraInterpolationKey", "SItemNameProperty", "SAbilityAttributeValue",
                 "CAreaEnvironmentParams", "CEnvGameplayEffectsParameters", "CEnvWindParameters",
                 "CEnvFinalColorBalanceParameters",
                 "CEnvSharpenParameters",

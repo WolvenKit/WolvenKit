@@ -29,9 +29,7 @@ namespace W3Edit
                     Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "cr2wdocument_layout.xml"),
                     DeserializeDockContent);
             }
-            catch
-            {
-            }
+            catch { }
 
             chunkList = new frmChunkList
             {

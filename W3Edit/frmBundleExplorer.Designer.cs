@@ -80,7 +80,7 @@ namespace W3Edit
             this.btOpen.Size = new System.Drawing.Size(145, 23);
             this.btOpen.TabIndex = 3;
             this.btOpen.TabStop = false;
-            this.btOpen.Text = "Add marked files to mod";
+            this.btOpen.Text = "Add marked files_size to mod";
             this.btOpen.UseVisualStyleBackColor = true;
             this.btOpen.Click += new System.EventHandler(this.btOpen_Click);
             // 
@@ -261,7 +261,7 @@ namespace W3Edit
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(67, 13);
             this.label3.TabIndex = 15;
-            this.label3.Text = "Marked files:";
+            this.label3.Text = "Marked files_size:";
             // 
             // button2
             // 

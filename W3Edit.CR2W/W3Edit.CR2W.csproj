@@ -32,6 +32,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cyotek.Windows.Forms.ColorPicker">
+      <HintPath>..\Atflib\Cyotek.Windows.Forms.ColorPicker.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -78,6 +81,7 @@
     <Compile Include="Types\CByteArray.cs" />
     <Compile Include="Types\CBytes.cs" />
     <Compile Include="Types\CColor.cs" />
+    <Compile Include="Types\CColorShift.cs" />
     <Compile Include="Types\CDateTime.cs" />
     <Compile Include="Types\CEngineQsTranform.cs" />
     <Compile Include="Types\CEngineTransform.cs" />

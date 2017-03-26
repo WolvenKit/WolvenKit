@@ -50,6 +50,8 @@
     <Compile Include="ImageUtility.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sound_Cache.cs" />
+    <Compile Include="Texture_Cache.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -59,9 +61,6 @@
       <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>
       <Name>W3Edit.CR2W</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

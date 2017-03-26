@@ -282,7 +282,7 @@ namespace W3Edit
                 return;
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
-                MessageBox.Show(@"Please close The Witcher 3 before tinkering with the files!","",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                MessageBox.Show(@"Please close The Witcher 3 before tinkering with the files_size!","",MessageBoxButtons.OK,MessageBoxIcon.Information);
                 return;
             }
             var explorer = new frmBundleExplorer(loadmods ? MainController.Get().ModBundleManager : MainController.Get().BundleManager);
@@ -345,9 +345,9 @@ namespace W3Edit
         }
 
         /// <summary>
-        /// Update the list of files in the ModExplorer
+        /// Update the list of files_size in the ModExplorer
         /// </summary>
-        /// <param name="clear">if true files or completely redrawn</param>
+        /// <param name="clear">if true files_size or completely redrawn</param>
         private void UpdateModFileList(bool clear = false)
         {           
             ModExplorer.UpdateModFileList(true,clear);
@@ -673,7 +673,9 @@ namespace W3Edit
             if (ActiveDocument != null && !ActiveDocument.IsDisposed)
             {
                 saveFile(ActiveDocument);
+                AddOutput("Saved!");
             }
+            
         }
 
         private void tbtSaveAll_Click(object sender, EventArgs e)
@@ -692,6 +694,7 @@ namespace W3Edit
             {
                 saveFile(d);
             }
+            AddOutput("All files saved!");
         }
 
         private void saveFile(frmCR2WDocument d)
@@ -705,7 +708,7 @@ namespace W3Edit
                 return;
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
-                MessageBox.Show("Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Please close The Witcher 3 before tinkering with the files_size!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
