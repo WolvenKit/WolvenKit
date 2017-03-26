@@ -678,7 +678,7 @@ namespace W3Edit
             if (ActiveDocument != null && !ActiveDocument.IsDisposed)
             {
                 saveFile(ActiveDocument);
-                AddOutput("Saved!");
+                AddOutput("Saved!\n");
             }
             
         }
@@ -699,7 +699,7 @@ namespace W3Edit
             {
                 saveFile(d);
             }
-            AddOutput("All files saved!");
+            AddOutput("All files saved!\n");
         }
 
         private void saveFile(frmCR2WDocument d)
