@@ -256,6 +256,12 @@
     <Compile Include="frmSaveEditor.Designer.cs">
       <DependentUpon>frmSaveEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmTextInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTextInput.Designer.cs">
+      <DependentUpon>frmTextInput.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmTutorials.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -494,6 +500,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmSettings.resx">
       <DependentUpon>frmSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTextInput.resx">
+      <DependentUpon>frmTextInput.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmTutorials.resx">
       <DependentUpon>frmTutorials.cs</DependentUpon>

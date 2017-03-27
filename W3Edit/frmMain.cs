@@ -284,7 +284,7 @@ namespace W3Edit
                 return;
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
-                MessageBox.Show(@"Please close The Witcher 3 before tinkering with the files_size!","",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                MessageBox.Show(@"Please close The Witcher 3 before tinkering with the files!","",MessageBoxButtons.OK,MessageBoxIcon.Information);
                 return;
             }
             var explorer = new frmBundleExplorer(loadmods ? MainController.Get().ModBundleManager : MainController.Get().BundleManager);
@@ -347,9 +347,9 @@ namespace W3Edit
         }
 
         /// <summary>
-        /// Update the list of files_size in the ModExplorer
+        /// Update the list of files in the ModExplorer
         /// </summary>
-        /// <param name="clear">if true files_size or completely redrawn</param>
+        /// <param name="clear">if true files or completely redrawn</param>
         private void UpdateModFileList(bool clear = false)
         {           
             ModExplorer.UpdateModFileList(true,clear);
@@ -713,7 +713,7 @@ namespace W3Edit
                 return;
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
-                MessageBox.Show("Please close The Witcher 3 before tinkering with the files_size!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             btPack.Enabled = false;
@@ -1100,30 +1100,20 @@ namespace W3Edit
             }
         }
 
-        private void btRunGame_Click(object sender, EventArgs e)
+        private async void executeGame(string args = "")
         {
+            if(ActiveMod == null)
+                return;
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
-                if (MessageBox.Show(@"The Witcher 3 is already running would you like to close it and restart it with the proper arguments?","", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    var killer = Process.Start("taskkill", "/F /IM witcher3.exe");
-                    killer?.WaitForExit();
-                }
-                else
-                    return;
+                MessageBox.Show(@"Game is already running!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
-            ClearOutput();
-            ShowOutput();
-            executeGame();
-        }
-
-        private async void executeGame()
-        {
             var config = MainController.Get().Configuration;
             var proc = new ProcessStartInfo(config.ExecutablePath)
             {
                 WorkingDirectory = Path.GetDirectoryName(config.ExecutablePath),
-                Arguments = "-debugscripts",
+                Arguments = args == "" ? "-debugscripts" : args,
                 UseShellExecute = false,
                 RedirectStandardOutput = true
             };
@@ -1138,10 +1128,8 @@ namespace W3Edit
 
             using (var process = Process.Start(proc))
             {
-                //var task1 = RedirectProcessOutput(process);
                 var task2 = RedirectScriptlogOutput(process);
 
-                //await task1;
                 await task2;
             }
         }
@@ -1325,6 +1313,20 @@ namespace W3Edit
         private void chunkToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show(@"Not implemented yet. I'm not sure how this should work yet.",@"Info",MessageBoxButtons.OK,MessageBoxIcon.Information);
+        }
+
+        private void launchWithCostumParametersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var getparams = new Input("Please give the commands to launch the game with!");
+            if (getparams.ShowDialog() == DialogResult.OK)
+            {
+                executeGame(getparams.Resulttext);
+            }
+        }
+
+        private void launchGameForDebuggingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            executeGame();
         }
     }
 }

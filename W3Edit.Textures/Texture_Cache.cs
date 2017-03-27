@@ -25,7 +25,7 @@ namespace W3Edit.Textures
                 Console.WriteLine("Chunk block offset: " + chunksBlock);
                 Console.WriteLine("IDString: " + idString);
                 Console.WriteLine("Version: " + version);
-                Console.Title = "Texture cache: " + Path.GetFileName(filepath) + " with " + texturenum + " files_size!";
+                Console.Title = "Texture cache: " + Path.GetFileName(filepath) + " with " + texturenum + " files!";
                 var jmp = -(20 + 12 + (texturenum * 52) + namesBlock + (chunksBlock * 4));
                 Console.WriteLine("JUMP: " + jmp);
                 br.BaseStream.Seek(jmp, SeekOrigin.End);

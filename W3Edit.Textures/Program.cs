@@ -38,7 +38,7 @@ namespace W3Edit.Textures
             Console.Title = "*.cache parser test";
             using (var of = new OpenFileDialog())
             {
-                of.Filter = "Witcher 3 Cache files_size | *.cache";
+                of.Filter = "Witcher 3 Cache files | *.cache";
                 if (of.ShowDialog() == DialogResult.OK)
                 {
                     Console.WriteLine("Got file: " + Path.GetFileName(of.FileName) + "->" +

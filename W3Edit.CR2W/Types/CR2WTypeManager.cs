@@ -7105,7 +7105,8 @@ namespace W3Edit.CR2W.Types
 
         public void Register(string name, CVariable var)
         {
-            types.Add(name, new CR2WTypeDefinition(name, var));
+            if(!types.ContainsKey(name))
+                types.Add(name, new CR2WTypeDefinition(name, var));
         }
 
         public CVariable GetByName(string name, string varname, CR2WFile cr2w, bool readUnknownAsBytes = true)
