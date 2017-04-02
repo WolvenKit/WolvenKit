@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using IronPython.Runtime;
+using Microsoft.Scripting.Utils;
 using W3Edit.Bundles;
 
 namespace W3Edit
@@ -294,6 +296,21 @@ namespace W3Edit
             return caseCheckBox.Checked ? files.Where(item =>  item.Name.ToUpper().Contains(searchkeyword.ToUpper()) && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")).ToArray() : files.Where(item => item.Name.Contains(searchkeyword) && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")).ToArray();
         }
 
+        public ListViewItem[] CollectFiles(BundleTreeNode root)
+        {
+            var res = root.Files.Select(file => file.Key).Select(x => new ListViewItem()
+            {
+                ImageKey = "genericFile",
+                ToolTipText = x,
+                Text = x
+            }).ToList();
+            foreach (var dr in root.Directories)
+            {
+                res.AddRange(CollectFiles(dr.Value));
+            }
+            return res.ToArray();
+        }
+
         public string[] GetExtensions(params string[] filename)
         {
             var extensions = new List<string>();
@@ -450,6 +467,24 @@ namespace W3Edit
         private void clearSearch_Click(object sender, EventArgs e)
         {
             OpenNode(RootNode,true);
+        }
+
+        private void markAllFilesOfFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (fileListView.SelectedItems.Count > 0)
+            {
+                foreach (BundleListItem item in fileListView.SelectedItems)
+                {
+                    if (item.IsDirectory)
+                    {
+                        var files = CollectFiles(item.Node);
+                        if (files.Length > 1000)
+                            pathlistview.Items.AddRange(files.Take(1000).ToArray());
+                        else
+                            pathlistview.Items.AddRange(files);
+                    }
+                }
+            }
         }
     }
 }
