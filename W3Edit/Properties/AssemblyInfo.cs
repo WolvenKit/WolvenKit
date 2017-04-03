@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 By: Sarcen&Traderain
 Awesome people:
 - CAPA
-- remr
+- rmemr
 - KNG
 - erx
 - Skacik
@@ -43,5 +43,5 @@ Awesome people:
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: AssemblyVersion("0.0.8.*")]
-[assembly: AssemblyFileVersion("0.0.8.0")]
+[assembly: AssemblyVersion("0.0.9.*")]
+[assembly: AssemblyFileVersion("0.0.9.0")]
