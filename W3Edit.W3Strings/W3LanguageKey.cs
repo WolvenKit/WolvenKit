@@ -1,40 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
+using LanguageKey = System.UInt32;
+using LanguageMagic = System.UInt32;
+using LanguageNeutralID = System.UInt32;
+using LanguageSpecificID = System.UInt32;
 
 namespace W3Edit.W3Strings
 {
-    public class W3LanguageKey
+    public class W3Language
     {
-        private static readonly Dictionary<uint, W3LanguageKey> languageKeys = new Dictionary<uint, W3LanguageKey>
-        {
-            {0x00000000, new W3LanguageKey(0x00000000, "__")},
-            {0x83496237, new W3LanguageKey(0x73946816, "pl")},
-            {0x43975139, new W3LanguageKey(0x79321793, "en")},
-            {0x75886138, new W3LanguageKey(0x42791159, "de")},
-            {0x45931894, new W3LanguageKey(0x12375973, "it")},
-            {0x23863176, new W3LanguageKey(0x75921975, "fr")},
-            {0x24987354, new W3LanguageKey(0x21793217, "cz")},
-            {0x18796651, new W3LanguageKey(0x42387566, "es")},
-            {0x18632176, new W3LanguageKey(0x16875467, "zh")},
-            {0x63481486, new W3LanguageKey(0x42386347, "ru")},
-            {0x42378932, new W3LanguageKey(0x67823218, "hu")},
-            {0x54834893, new W3LanguageKey(0x59825646, "jp")}
-        };
+        public readonly LanguageKey Key;
+        public readonly LanguageMagic Magic;
+        public readonly string Handle;
 
-        public W3LanguageKey(uint key, string language)
+        public static readonly IEnumerable<W3Language> languages = new List<W3Language>
+        {
+            new W3Language(0x00000000, 0x00000000, "__"),
+            new W3Language(0x83496237, 0x73946816, "pl"),
+            new W3Language(0x43975139, 0x79321793, "en"),
+            new W3Language(0x75886138, 0x42791159, "de"),
+            new W3Language(0x45931894, 0x12375973, "it"),
+            new W3Language(0x23863176, 0x75921975, "fr"),
+            new W3Language(0x24987354, 0x21793217, "cz"),
+            new W3Language(0x18796651, 0x42387566, "es"),
+            new W3Language(0x18632176, 0x16875467, "zh"),
+            new W3Language(0x63481486, 0x42386347, "ru"),
+            new W3Language(0x42378932, 0x67823218, "hu"),
+            new W3Language(0x54834893, 0x59825646, "jp")
+        }.AsReadOnly();
+
+        public W3Language(LanguageKey key, LanguageMagic magic, string handle)
         {
             Key = key;
-            Language = language;
+            Magic = magic;
+            Handle = handle;
         }
 
-        public uint Key { get; set; }
-        public string Language { get; set; }
-
-        public static W3LanguageKey Get(uint key)
+        public static LanguageNeutralID languageNeutralID(LanguageSpecificID specificID, W3Language language)
         {
-            if (languageKeys.ContainsKey(key))
-                return languageKeys[key];
-            throw new Exception("Missing language key: " + key);
+            return specificID ^ language.Magic;
+        }
+
+        public static LanguageSpecificID languageSpecificID(LanguageNeutralID specificID, W3Language language)
+        {
+            return specificID ^ language.Magic;
         }
     }
 }

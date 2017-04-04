@@ -77,14 +77,15 @@ namespace W3Edit.W3Strings
         //// is signed?
         //if b & 0b1000_0000 == 128 { -1 * value as i32 } else { value as i32 }
 
-        public static void WriteBit6(this BinaryWriter stream, int c)
+        public static UInt32 WriteBit6(this BinaryWriter stream, int c)
         {
             if (c == 0)
             {
                 stream.Write((byte) 128);
-                return;
+                return 1;
             }
 
+            UInt32 written = 0;
             var str2 = Convert.ToString(c, 2);
 
             var bytes = new List<int>();
@@ -132,7 +133,9 @@ namespace W3Edit.W3Strings
                 }
 
                 stream.Write((byte) bytes[i]);
+                written += 1;
             }
+            return written;
         }
     }
 }
