@@ -101,7 +101,7 @@ namespace W3Edit.W3Speech
             {
                 var langSpecificID = br.ReadUInt32();
                 var id_high = br.ReadUInt32();
-                var wave_offs = br.ReadUInt32();
+                var wave_offs = br.ReadUInt32() + 4;
                 br.ReadUInt32();
                 var wave_size = br.ReadUInt32() - 12;
                 br.ReadUInt32();
@@ -133,8 +133,8 @@ namespace W3Edit.W3Speech
             UInt64 pos = 4 + 4 + 2 + bytes_written_count + ((UInt64)inputList.Count * 10 * 4) + 2;
             var itemInfos = inputList.Select(pair =>
             {
-                var wave_offset = pos;
-                var cr2w_offset = wave_offset + pair.wave_size + 12;
+                var wave_offset = pos + 4;
+                var cr2w_offset = wave_offset + pair.wave_size + 8;
                 pos = cr2w_offset + pair.cr2w_size;
                 return new W3SoundInfo(pair.id, pair.id_high, wave_offset, pair.wave_size, cr2w_offset, pair.cr2w_size);
             }).ToList();
@@ -143,7 +143,7 @@ namespace W3Edit.W3Speech
                 byte[] zeros = new byte[] { 0, 0, 0, 0 };
                 bw.Write((UInt32)W3Language.languageSpecificID(info.id, language));
                 bw.Write((UInt32)info.id_high);
-                bw.Write((UInt32)info.wave_offs);
+                bw.Write((UInt32)info.wave_offs - 4);
                 bw.Write(zeros);
                 bw.Write((UInt32)info.wave_size + 12);
                 bw.Write(zeros);
