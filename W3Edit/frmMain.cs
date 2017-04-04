@@ -717,48 +717,55 @@ namespace W3Edit
                 return;
             }
             btPack.Enabled = false;
-
-            ShowOutput();
-
-            ClearOutput();
-
-            saveAllFiles();
-
-            var taskPackMod = packMod();
-            while (!taskPackMod.IsCompleted)
+            var packsettings = new frmPackSettings();
+            if (packsettings.ShowDialog() == DialogResult.OK)
             {
-                Application.DoEvents();
-            }
+                ShowOutput();
 
-            if (ActiveMod.Files.Any(x => x.EndsWith(".xbm")))
-            {
-                var taskcookMod = cookMod();
-                while (!taskcookMod.IsCompleted)
+                ClearOutput();
+
+                saveAllFiles();
+
+                if (packsettings.PackBundles)
                 {
-                    Application.DoEvents();
+                    var taskPackMod = packMod();
+                    while (!taskPackMod.IsCompleted)
+                    {
+                        Application.DoEvents();
+                    }
                 }
-                var taskPackTextureCache = packTextures();
-                while (!taskPackTextureCache.IsCompleted)
+
+                if (packsettings.GenTexCache)
                 {
-                    Application.DoEvents();
+                    var taskcookMod = cookMod();
+                    while (!taskcookMod.IsCompleted)
+                    {
+                        Application.DoEvents();
+                    }
+                    var taskPackTextureCache = packTextures();
+                    while (!taskPackTextureCache.IsCompleted)
+                    {
+                        Application.DoEvents();
+                    }
                 }
+                if (packsettings.GenMetadata)
+                {
+                    var taskMetaData = createModMetaData();
+                    while (!taskMetaData.IsCompleted)
+                    {
+                        Application.DoEvents();
+                    }
+                }
+
+                if (Directory.Exists((ActiveMod.FileDirectory + "\\scripts")) && Directory.GetFiles((ActiveMod.FileDirectory + "\\scripts")).Any())
+                {
+                    if (!Directory.Exists(Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\")))
+                        Directory.CreateDirectory(Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\"));
+                    Directory.GetFiles((ActiveMod.FileDirectory + "\\scripts")).ForEach(x => File.Copy(x, Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\") + Path.GetFileName(x)));
+                }
+
+                InstallMod();
             }
-
-            var taskMetaData = createModMetaData();
-            while (!taskMetaData.IsCompleted)
-            {
-                Application.DoEvents();
-            }
-
-            if (Directory.Exists((ActiveMod.FileDirectory + "\\scripts")) && Directory.GetFiles((ActiveMod.FileDirectory + "\\scripts")).Any())
-            {
-                if(!Directory.Exists(Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\")))
-                    Directory.CreateDirectory(Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\"));
-                Directory.GetFiles((ActiveMod.FileDirectory + "\\scripts")).ForEach(x=> File.Copy(x, Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\") + Path.GetFileName(x)));
-            }
-
-            InstallMod();
-
             btPack.Enabled = true;
         }
 

@@ -250,6 +250,12 @@
     <Compile Include="frmJournalEditor.Designer.cs">
       <DependentUpon>frmJournalEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmPackSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPackSettings.Designer.cs">
+      <DependentUpon>frmPackSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmSaveEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -491,6 +497,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmOutput.resx">
       <DependentUpon>frmOutput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPackSettings.resx">
+      <DependentUpon>frmPackSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmRenameDialog.resx">
       <DependentUpon>frmRenameDialog.cs</DependentUpon>
