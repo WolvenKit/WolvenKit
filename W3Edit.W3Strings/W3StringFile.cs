@@ -42,7 +42,7 @@ namespace W3Edit.W3Strings
             stream.BaseStream.Seek(10, SeekOrigin.Begin);
 
             // Read block 1
-            block1count = stream.ReadBit6();
+            block1count = stream.ReadBit6().value;
             block1 = new List<W3StringBlock1>();
             for (var i = 0; i < block1count; i++)
             {
@@ -51,7 +51,7 @@ namespace W3Edit.W3Strings
             }
 
             // Read block 2
-            block2count = stream.ReadBit6();
+            block2count = stream.ReadBit6().value;
             block2 = new List<W3StringBlock2>();
             for (var i = 0; i < block2count; i++)
             {
@@ -61,7 +61,7 @@ namespace W3Edit.W3Strings
 
 
             // Read block 3
-            block3count = stream.ReadBit6();
+            block3count = stream.ReadBit6().value;
 
             var str_start = stream.BaseStream.Position;
 

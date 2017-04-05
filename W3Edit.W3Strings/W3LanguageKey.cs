@@ -9,9 +9,9 @@ namespace W3Edit.W3Strings
 {
     public class W3Language
     {
-        public readonly LanguageKey Key;
-        public readonly LanguageMagic Magic;
-        public readonly string Handle;
+        public readonly LanguageKey Key;  // The unique identifier of the language as found in .w3speech files.
+        public readonly LanguageMagic Magic;  // A value used to convert language specific and neutral IDs to one another.
+        public readonly string Handle;  // An abbreviation for the language, such as "pl", "en", "de" and many more. 
 
         public static readonly IEnumerable<W3Language> languages = new List<W3Language>
         {
