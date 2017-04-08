@@ -15,6 +15,61 @@ namespace W3Edit
 		public frmStringsGui()
 		{
 			InitializeComponent();
+
+			comboBoxLanguagesMode.SelectedIndex = 0;
+		}
+
+		private void comboBoxLanguagesMode_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		/*
+			toolStrip Buttons
+		*/
+
+		private void toolStripButtonSave_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void toolStripButtonOpen_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void toolStripButtonGenerateXML_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void toolStripButtonGenerateScripts_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		/*
+			toolStrip Menus
+		*/
+
+		private void newToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void openToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void fromXMLToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void fromScriptsToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+
 		}
 	}
 }
