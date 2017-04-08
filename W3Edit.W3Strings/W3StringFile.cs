@@ -37,7 +37,7 @@ namespace W3Edit.W3Strings
             stream.BaseStream.Seek(-2, SeekOrigin.End);
             key2 = stream.ReadUInt16();
             var key = (uint)(key1 << 16 | key2);
-            language = W3Language.languages.First(lang => lang.Key == key);
+            language = W3Language.languages.First(lang => lang.Key.value == key);
 
             stream.BaseStream.Seek(10, SeekOrigin.Begin);
 
@@ -46,7 +46,7 @@ namespace W3Edit.W3Strings
             block1 = new List<W3StringBlock1>();
             for (var i = 0; i < block1count; i++)
             {
-                var newblock = new W3StringBlock1(stream, language.Magic);
+                var newblock = new W3StringBlock1(stream, language.Magic.value);
                 block1.Add(newblock);
             }
 
@@ -55,7 +55,7 @@ namespace W3Edit.W3Strings
             block2 = new List<W3StringBlock2>();
             for (var i = 0; i < block2count; i++)
             {
-                var block = new W3StringBlock2(stream, language.Magic);
+                var block = new W3StringBlock2(stream, language.Magic.value);
                 block2.Add(block);
             }
 
@@ -77,7 +77,7 @@ namespace W3Edit.W3Strings
 
                 stream.BaseStream.Seek(offset, SeekOrigin.Begin);
 
-                var string_key = (ushort)(language.Magic >> 8 & 0xffff);
+                var string_key = (ushort)(language.Magic.value >> 8 & 0xffff);
 
                 for (var i = 0; i < block.strlen; i++)
                 {
@@ -118,7 +118,7 @@ namespace W3Edit.W3Strings
                 foreach (var block in block1)
                 {
                     block.Modified = false;
-                    var string_key = (ushort)(language.Magic >> 8 & 0xffff);
+                    var string_key = (ushort)(language.Magic.value >> 8 & 0xffff);
 
                     block.offset = (uint)strbufw.BaseStream.Position / 2;
                     block.strlen = (uint)block.str.Length;
@@ -147,13 +147,13 @@ namespace W3Edit.W3Strings
             stream.WriteBit6(block1.Count);
             foreach (var block in block1Unsorted)
             {
-                block.Write(stream, language.Magic);
+                block.Write(stream, language.Magic.value);
             }
 
             stream.WriteBit6(block2.Count);
             foreach (var block in block2)
             {
-                block.Write(stream, language.Magic);
+                block.Write(stream, language.Magic.value);
             }
 
             //block3count

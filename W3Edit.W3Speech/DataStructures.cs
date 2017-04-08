@@ -1,21 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using W3Edit.W3Strings;
-using LanguageNeutralID = System.UInt32;
 
 namespace W3Edit.W3Speech
 {
+    /// <summary>
+    /// Describes the items found within the w3speech format.
+    /// </summary>
     public class ItemInfo
     {
-        public readonly LanguageNeutralID id; // ID that is the same across all languages (language neutral).
+        /// <summary>
+        /// ID as found in the w3speech format.
+        /// </summary>
+        public readonly LanguageSpecificID id;
         public readonly UInt32 id_high;
-        public readonly UInt64 wem_offs;  // Offset of the start of the raw wem data, not including the leading 4 bytes of size information.
-        public readonly UInt64 wem_size;  // Size of the raw data.
-        public readonly UInt64 cr2w_offs;  // Offset of the start of the raw cr2w data.
-        public readonly UInt64 cr2w_size;  // Size of the raw data.
+        /// <summary>
+        /// Offset of the start of the raw wem data, not including the leading 4 bytes of size information.
+        /// </summary>
+        public readonly UInt32 wem_offs;
+        /// <summary>
+        /// Size of the raw data, not including the leading 4 bytes and the trailing 8 bytes.
+        /// </summary>
+        public readonly UInt32 wem_size;
+        /// <summary>
+        /// Offset of the start of the raw cr2w data.
+        /// </summary>
+        public readonly UInt32 cr2w_offs;
+        /// <summary>
+        /// Size of the raw data.
+        /// </summary>
+        public readonly UInt32 cr2w_size;
+        /// <summary>
+        /// Duration in seconds.
+        /// </summary>
+        public readonly Single duration;
 
-        public ItemInfo(LanguageNeutralID id, UInt32 id_high, UInt64 wem_offs, UInt64 wem_size, UInt64 cr2w_offs, UInt64 cr2w_size)
+        public ItemInfo(LanguageSpecificID id, UInt32 id_high, UInt32 wem_offs, UInt32 wem_size, UInt32 cr2w_offs, UInt32 cr2w_size, Single duration)
         {
             this.id = id;
             this.id_high = id_high;
@@ -23,58 +45,83 @@ namespace W3Edit.W3Speech
             this.wem_size = wem_size;
             this.cr2w_offs = cr2w_offs;
             this.cr2w_size = cr2w_size;
+            this.duration = duration;
         }
-    }
 
-    public class Item
-    {
-        public enum ItemType { Wem, Cr2w };
-
-        public readonly LanguageNeutralID id; // ID that is the same across all languages (language neutral).
-        public readonly UInt32 id_high;
-        public readonly UInt64 size;  // Size of the raw data.
-        public readonly ItemType item_type; // Is it wem or cr2w data?
-        public readonly BinaryReader data;  // The raw data.
-
-        public Item(LanguageNeutralID id, UInt32 id_high, UInt64 size, ItemType item_type, BinaryReader data)
+        public override string ToString()
         {
-            this.id = id;
-            this.id_high = id_high;
-            this.size = size;
-            this.item_type = item_type;
-            this.data = data;
+            return $"ItemInfo({id},{id_high},{wem_offs},{wem_size},{cr2w_offs},{cr2w_size},{duration.ToString(CultureInfo.InvariantCulture)})";
         }
     }
 
+    /// <summary>
+    /// Describes the w3speech format.
+    /// </summary>
     public class Info
     {
-        public readonly String id;  // Usually CPSW.
-        public readonly UInt32 version;  // Usually 163 or 162.
-        public readonly W3Language language;  // Language information.
-        public readonly IEnumerable<ItemInfo> item_infos;  // Information about the items.
-        public readonly IEnumerable<Item> items;  // The items.
+        /// <summary>
+        /// Usually CPSW.
+        /// </summary>
+        public readonly String id;
+        /// <summary>
+        /// Usually 163 or 162.
+        /// </summary>
+        public readonly UInt32 version;
+        /// <summary>
+        /// Language key.
+        /// </summary>
+        public readonly W3LanguageKey language_key;
+        /// <summary>
+        /// Information about the items.
+        /// </summary>
+        public readonly IEnumerable<ItemInfo> item_infos;
 
-        public Info(String id, uint version, W3Language language, IEnumerable<ItemInfo> item_infos, IEnumerable<Item> items)
+        public Info(String id, UInt32 version, W3LanguageKey language_key, IEnumerable<ItemInfo> item_infos)
         {
             this.id = id;
             this.version = version;
-            this.language = language;
+            this.language_key = language_key;
             this.item_infos = item_infos;
-            this.items = items;
+        }
+
+        public override string ToString()
+        {
+            return $"Info({id},{version},{language_key},[{String.Join(",", item_infos)}])";
         }
     }
 
+    /// <summary>
+    /// Used by Coder.Encode to describe the items to encode.
+    /// </summary>
     public class WemCr2wInputPair
     {
-        public readonly LanguageNeutralID id; // ID that is the same across all languages (language neutral).
+        /// <summary>
+        /// ID as found in the w3speech format.
+        /// </summary>
+        public readonly LanguageSpecificID id;
         public readonly UInt32 id_high;
-        public readonly BinaryReader wem;  // The raw wem data.
-        public readonly UInt64 wem_size;  // Size of the wem data.
-        public readonly float duration;  // Duration in seconds.
-        public readonly BinaryReader cr2w;  // The raw cr2w data.
-        public readonly UInt64 cr2w_size;  // Size of the cr2w data.
+        /// <summary>
+        /// The raw wem data.
+        /// </summary>
+        public readonly Func<Stream> wem;
+        /// <summary>
+        /// Size of the wem data.
+        /// </summary>
+        public readonly UInt32 wem_size;
+        /// <summary>
+        /// Duration in seconds.
+        /// </summary>
+        public readonly Single duration;
+        /// <summary>
+        /// The raw cr2w data.
+        /// </summary>
+        public readonly Func<Stream> cr2w;
+        /// <summary>
+        /// Size of the cr2w data.
+        /// </summary>
+        public readonly UInt32 cr2w_size;
 
-        public WemCr2wInputPair(LanguageNeutralID id, UInt32 id_high, BinaryReader wem, UInt64 wem_size, float duration, BinaryReader cr2w, UInt64 cr2w_size)
+        public WemCr2wInputPair(LanguageSpecificID id, UInt32 id_high, Func<Stream> wem, UInt32 wem_size, Single duration, Func<Stream> cr2w, UInt32 cr2w_size)
         {
             this.id = id;
             this.id_high = id_high;
@@ -83,6 +130,47 @@ namespace W3Edit.W3Speech
             this.duration = duration;
             this.cr2w = cr2w;
             this.cr2w_size = cr2w_size;
+        }
+
+        public override string ToString()
+        {
+            return $"WemCr2wInputPair({id},{id_high},{wem},{wem_size},{duration.ToString(CultureInfo.InvariantCulture)},{cr2w},{cr2w_size})";
+        }
+    }
+
+    /// <summary>
+    /// ID that is the same across all languages (language neutral).
+    /// </summary>
+    public class LanguageNeutralID
+    {
+        public readonly UInt32 value;
+
+        public LanguageNeutralID(UInt32 value)
+        {
+            this.value = value;
+        }
+
+        public override string ToString()
+        {
+            return $"LanguageNeutralID({value})";
+        }
+    }
+
+    /// <summary>
+    /// The language specific id as found in w3speech files.
+    /// </summary>
+    public class LanguageSpecificID
+    {
+        public readonly UInt32 value;
+
+        public LanguageSpecificID(UInt32 value)
+        {
+            this.value = value;
+        }
+
+        public override string ToString()
+        {
+            return $"LanguageSpecificID({value})";
         }
     }
 }

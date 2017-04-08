@@ -46,6 +46,8 @@
   <ItemGroup>
     <Compile Include="Coder.cs" />
     <Compile Include="DataStructures.cs" />
+    <Compile Include="FileTools.cs" />
+    <Compile Include="LanguageTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
