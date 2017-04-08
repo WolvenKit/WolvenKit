@@ -1120,7 +1120,7 @@ namespace W3Edit
             var proc = new ProcessStartInfo(config.ExecutablePath)
             {
                 WorkingDirectory = Path.GetDirectoryName(config.ExecutablePath),
-                Arguments = args == "" ? "-debugscripts" : args,
+                Arguments = args == "" ? "-net -debugscripts" : args,
                 UseShellExecute = false,
                 RedirectStandardOutput = true
             };
