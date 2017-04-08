@@ -262,6 +262,12 @@
     <Compile Include="frmSaveEditor.Designer.cs">
       <DependentUpon>frmSaveEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmStringsGui.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmStringsGui.Designer.cs">
+      <DependentUpon>frmStringsGui.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmTextInput.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -509,6 +515,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmSettings.resx">
       <DependentUpon>frmSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmStringsGui.resx">
+      <DependentUpon>frmStringsGui.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmTextInput.resx">
       <DependentUpon>frmTextInput.cs</DependentUpon>
