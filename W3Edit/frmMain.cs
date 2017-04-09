@@ -1232,7 +1232,13 @@ namespace WolvenKit
                 sef.ShowDialog();
         }
 
-        private void joinOurDiscordToolStripMenuItem_Click_1(object sender, EventArgs e)
+		private void stringsGUIToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			using (var sg = new frmStringsGui())
+				sg.ShowDialog();
+		}
+
+		private void joinOurDiscordToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             if (MessageBox.Show(@"Are you sure you would like to join the modding discord?", @"Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 Process.Start("https://discord.gg/qBNgDEX");
@@ -1332,6 +1338,6 @@ namespace WolvenKit
         {
             executeGame();
         }
-        
-    }
+
+	}
 }
