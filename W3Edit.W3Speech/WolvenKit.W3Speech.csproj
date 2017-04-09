@@ -44,8 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="W3SpeechFile.cs" />
+    <Compile Include="Coder.cs" />
+    <Compile Include="DataStructures.cs" />
+    <Compile Include="FileTools.cs" />
+    <Compile Include="LanguageTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StreamTools.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\W3Edit.W3Strings\WolvenKit.W3Strings.csproj">
