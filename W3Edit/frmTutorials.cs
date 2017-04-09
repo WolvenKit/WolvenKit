@@ -2,9 +2,9 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using W3Edit.Properties;
+using WolvenKit.Properties;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public partial class frmTutorials : Form
     {

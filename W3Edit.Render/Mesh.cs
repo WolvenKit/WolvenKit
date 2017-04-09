@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
-
-using OpenGL;
 using Assimp.Unmanaged;
+using OpenGL;
 
-namespace W3Edit.Render
+namespace WolvenKit.Render
 {
     #region Structs
     [StructLayout(LayoutKind.Explicit)]

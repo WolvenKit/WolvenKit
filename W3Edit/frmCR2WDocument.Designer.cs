@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace W3Edit
+namespace WolvenKit
 {
     partial class frmCR2WDocument
     {

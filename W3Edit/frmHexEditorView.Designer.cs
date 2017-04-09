@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using BrightIdeasSoftware;
 
-namespace W3Edit
+namespace WolvenKit
 {
     partial class frmHexEditorView
     {

@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{031DD6DA-B643-4C2A-A30D-A2E2212724C2}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>W3Edit.Scaleform</RootNamespace>
-    <AssemblyName>W3Edit.Scaleform</AssemblyName>
+    <RootNamespace>WolvenKit.Cache</RootNamespace>
+    <AssemblyName>WolvenKit.Cache</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -20,18 +22,22 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -41,21 +47,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ByteConversion.cs" />
-    <Compile Include="ByteSearchCalculatingOffsetDescription.cs" />
-    <Compile Include="CalculatingOffsetDescription.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="CriUsmStream.cs" />
-    <Compile Include="FileUtil.cs" />
-    <Compile Include="HCAFile.cs" />
-    <Compile Include="MathUtil.cs" />
-    <Compile Include="Mpeg1Stream.cs" />
-    <Compile Include="MpegStream.cs" />
-    <Compile Include="OffsetDescription.cs" />
-    <Compile Include="ParseFile.cs" />
+    <Compile Include="DDSHeader.cs" />
+    <Compile Include="DDSImageParser.cs" />
+    <Compile Include="ImageUtility.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RiffCalculatingOffestDescription.cs" />
-    <Compile Include="SofdecStream.cs" />
+    <Compile Include="Sound_Cache.cs" />
+    <Compile Include="Texture_Cache.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\W3Edit.CR2W\WolvenKit.CR2W.csproj">
+      <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>
+      <Name>WolvenKit.CR2W</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\W3Edit.W3Strings\WolvenKit.W3Strings.csproj">
+      <Project>{32d40d10-d6c3-48f0-aeb6-0f41c7e75cfd}</Project>
+      <Name>WolvenKit.W3Strings</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

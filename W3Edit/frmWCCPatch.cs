@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Windows.Forms;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public partial class frmWCCPatch : Form
     {

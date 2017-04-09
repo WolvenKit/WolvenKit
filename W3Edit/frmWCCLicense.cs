@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using W3Edit.Properties;
+using WolvenKit.Properties;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public partial class frmWCCLicense : Form
     {

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace W3Edit.Scaleform
+namespace WolvenKit.Scaleform
 {
     public class Mpeg1Stream : MpegStream
     {

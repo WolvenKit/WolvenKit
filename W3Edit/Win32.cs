@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public class Win32
     {
