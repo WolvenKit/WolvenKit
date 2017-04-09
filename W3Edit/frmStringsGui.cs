@@ -8,10 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using System.Xml.Linq;
+
 namespace W3Edit
 {
 	public partial class frmStringsGui : Form
 	{
+		int counter = 0;
+		int modID = 666;
+
 		public frmStringsGui()
 		{
 			InitializeComponent();
@@ -23,6 +28,10 @@ namespace W3Edit
 		{
 
 		}
+
+		/*
+			Events
+		*/
 
 		/*
 			toolStrip Buttons
@@ -40,7 +49,7 @@ namespace W3Edit
 
 		private void toolStripButtonGenerateXML_Click(object sender, EventArgs e)
 		{
-
+			ReadXML();
 		}
 
 		private void toolStripButtonGenerateScripts_Click(object sender, EventArgs e)
@@ -64,12 +73,57 @@ namespace W3Edit
 
 		private void fromXMLToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-
+			ReadXML();
 		}
 
 		private void fromScriptsToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 
+		}
+
+		/*
+			End of events
+		*/
+
+		private void ReadXML()
+		{
+			XDocument doc = XDocument.Load(GetXMLPath());
+			foreach (var vars in doc.Descendants("UserConfig").Descendants("Group").Descendants("VisibleVars"))
+			{
+				foreach (var var in vars.Descendants("Var"))
+				{
+					String name = var.Attribute("displayName").Value;
+					dataGridViewStrings.Rows.Add(counter + 2110000000 + modID, DisplayNameToKey(name), name);
+					++counter;
+				}	
+			}
+		}
+
+		private string GetXMLPath()
+		{
+			OpenFileDialog openFileDialog = new OpenFileDialog();
+			if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			{
+				return openFileDialog.FileName;
+			}
+			else
+				return "";
+		}
+
+		private string DisplayNameToKey(string name)
+		{
+			char[] nameConverted = name.ToCharArray(0, name.Length);
+			string stringKey = "";
+			for (int i = 0; i < nameConverted.Length; ++i)
+				if (nameConverted[i] == ' ')
+				{
+					nameConverted[i] = '_';
+					stringKey += nameConverted[i];
+				}
+				else
+					stringKey += nameConverted[i];
+
+			return stringKey;
 		}
 	}
 }

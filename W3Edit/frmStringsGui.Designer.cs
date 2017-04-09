@@ -32,24 +32,24 @@
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.generateStringsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.fromXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.fromScriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonGenerateXML = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonGenerateScripts = new System.Windows.Forms.ToolStripButton();
 			this.splitContainerMain = new System.Windows.Forms.SplitContainer();
-			this.listView1 = new System.Windows.Forms.ListView();
-			this.columnHeaderID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeaderSKey = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeaderLocalisation = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.splitContainerTabs = new System.Windows.Forms.SplitContainer();
-			this.comboBoxLanguagesMode = new System.Windows.Forms.ComboBox();
 			this.tabControlLanguages = new System.Windows.Forms.TabControl();
 			this.tabPageAllLanguages = new System.Windows.Forms.TabPage();
-			this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.fromXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.fromScriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.comboBoxLanguagesMode = new System.Windows.Forms.ComboBox();
+			this.dataGridViewStrings = new System.Windows.Forms.DataGridView();
+			this.ColumnID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ColumnStringKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ColumnLocalisation = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
@@ -61,6 +61,7 @@
 			this.splitContainerTabs.Panel2.SuspendLayout();
 			this.splitContainerTabs.SuspendLayout();
 			this.tabControlLanguages.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridViewStrings)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// menuStrip1
@@ -86,9 +87,16 @@
 			// newToolStripMenuItem
 			// 
 			this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-			this.newToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+			this.newToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
 			this.newToolStripMenuItem.Text = "New";
 			this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
+			// 
+			// openToolStripMenuItem
+			// 
+			this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+			this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+			this.openToolStripMenuItem.Text = "Open";
+			this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
 			// 
 			// generateStringsToolStripMenuItem
 			// 
@@ -98,6 +106,20 @@
 			this.generateStringsToolStripMenuItem.Name = "generateStringsToolStripMenuItem";
 			this.generateStringsToolStripMenuItem.Size = new System.Drawing.Size(105, 20);
 			this.generateStringsToolStripMenuItem.Text = "Generate Strings";
+			// 
+			// fromXMLToolStripMenuItem
+			// 
+			this.fromXMLToolStripMenuItem.Name = "fromXMLToolStripMenuItem";
+			this.fromXMLToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.fromXMLToolStripMenuItem.Text = "From XML";
+			this.fromXMLToolStripMenuItem.Click += new System.EventHandler(this.fromXMLToolStripMenuItem_Click);
+			// 
+			// fromScriptsToolStripMenuItem
+			// 
+			this.fromScriptsToolStripMenuItem.Name = "fromScriptsToolStripMenuItem";
+			this.fromScriptsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.fromScriptsToolStripMenuItem.Text = "From Scripts";
+			this.fromScriptsToolStripMenuItem.Click += new System.EventHandler(this.fromScriptsToolStripMenuItem_Click);
 			// 
 			// toolStrip1
 			// 
@@ -162,35 +184,10 @@
 			// 
 			// splitContainerMain.Panel2
 			// 
-			this.splitContainerMain.Panel2.Controls.Add(this.listView1);
+			this.splitContainerMain.Panel2.Controls.Add(this.dataGridViewStrings);
 			this.splitContainerMain.Size = new System.Drawing.Size(1086, 488);
 			this.splitContainerMain.SplitterDistance = 25;
 			this.splitContainerMain.TabIndex = 2;
-			// 
-			// listView1
-			// 
-			this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeaderID,
-            this.columnHeaderSKey,
-            this.columnHeaderLocalisation});
-			this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.listView1.Location = new System.Drawing.Point(0, 0);
-			this.listView1.Name = "listView1";
-			this.listView1.Size = new System.Drawing.Size(1086, 459);
-			this.listView1.TabIndex = 0;
-			this.listView1.UseCompatibleStateImageBehavior = false;
-			// 
-			// columnHeaderID
-			// 
-			this.columnHeaderID.Text = "ID";
-			// 
-			// columnHeaderSKey
-			// 
-			this.columnHeaderSKey.Text = "String Key";
-			// 
-			// columnHeaderLocalisation
-			// 
-			this.columnHeaderLocalisation.Text = "Localisation";
 			// 
 			// splitContainerTabs
 			// 
@@ -208,19 +205,6 @@
 			this.splitContainerTabs.Size = new System.Drawing.Size(1086, 25);
 			this.splitContainerTabs.SplitterDistance = 923;
 			this.splitContainerTabs.TabIndex = 0;
-			// 
-			// comboBoxLanguagesMode
-			// 
-			this.comboBoxLanguagesMode.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.comboBoxLanguagesMode.FormattingEnabled = true;
-			this.comboBoxLanguagesMode.Items.AddRange(new object[] {
-            "All Languages",
-            "Separate Languages"});
-			this.comboBoxLanguagesMode.Location = new System.Drawing.Point(0, 0);
-			this.comboBoxLanguagesMode.Name = "comboBoxLanguagesMode";
-			this.comboBoxLanguagesMode.Size = new System.Drawing.Size(159, 21);
-			this.comboBoxLanguagesMode.TabIndex = 0;
-			this.comboBoxLanguagesMode.SelectedIndexChanged += new System.EventHandler(this.comboBoxLanguagesMode_SelectedIndexChanged);
 			// 
 			// tabControlLanguages
 			// 
@@ -242,26 +226,47 @@
 			this.tabPageAllLanguages.Text = "All Languages";
 			this.tabPageAllLanguages.UseVisualStyleBackColor = true;
 			// 
-			// openToolStripMenuItem
+			// comboBoxLanguagesMode
 			// 
-			this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-			this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.openToolStripMenuItem.Text = "Open";
-			this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+			this.comboBoxLanguagesMode.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.comboBoxLanguagesMode.FormattingEnabled = true;
+			this.comboBoxLanguagesMode.Items.AddRange(new object[] {
+            "All Languages",
+            "Separate Languages"});
+			this.comboBoxLanguagesMode.Location = new System.Drawing.Point(0, 0);
+			this.comboBoxLanguagesMode.Name = "comboBoxLanguagesMode";
+			this.comboBoxLanguagesMode.Size = new System.Drawing.Size(159, 21);
+			this.comboBoxLanguagesMode.TabIndex = 0;
+			this.comboBoxLanguagesMode.SelectedIndexChanged += new System.EventHandler(this.comboBoxLanguagesMode_SelectedIndexChanged);
 			// 
-			// fromXMLToolStripMenuItem
+			// dataGridViewStrings
 			// 
-			this.fromXMLToolStripMenuItem.Name = "fromXMLToolStripMenuItem";
-			this.fromXMLToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.fromXMLToolStripMenuItem.Text = "From XML";
-			this.fromXMLToolStripMenuItem.Click += new System.EventHandler(this.fromXMLToolStripMenuItem_Click);
+			this.dataGridViewStrings.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+			this.dataGridViewStrings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dataGridViewStrings.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnID,
+            this.ColumnStringKey,
+            this.ColumnLocalisation});
+			this.dataGridViewStrings.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dataGridViewStrings.Location = new System.Drawing.Point(0, 0);
+			this.dataGridViewStrings.Name = "dataGridViewStrings";
+			this.dataGridViewStrings.Size = new System.Drawing.Size(1086, 459);
+			this.dataGridViewStrings.TabIndex = 0;
 			// 
-			// fromScriptsToolStripMenuItem
+			// ColumnID
 			// 
-			this.fromScriptsToolStripMenuItem.Name = "fromScriptsToolStripMenuItem";
-			this.fromScriptsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.fromScriptsToolStripMenuItem.Text = "From Scripts";
-			this.fromScriptsToolStripMenuItem.Click += new System.EventHandler(this.fromScriptsToolStripMenuItem_Click);
+			this.ColumnID.HeaderText = "ID";
+			this.ColumnID.Name = "ColumnID";
+			// 
+			// ColumnStringKey
+			// 
+			this.ColumnStringKey.HeaderText = "String Key";
+			this.ColumnStringKey.Name = "ColumnStringKey";
+			// 
+			// ColumnLocalisation
+			// 
+			this.ColumnLocalisation.HeaderText = "Localisation";
+			this.ColumnLocalisation.Name = "ColumnLocalisation";
 			// 
 			// frmStringsGui
 			// 
@@ -287,6 +292,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerTabs)).EndInit();
 			this.splitContainerTabs.ResumeLayout(false);
 			this.tabControlLanguages.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.dataGridViewStrings)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -304,10 +310,6 @@
 		private System.Windows.Forms.ToolStripButton toolStripButtonGenerateScripts;
 		private System.Windows.Forms.SplitContainer splitContainerMain;
 		private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
-		private System.Windows.Forms.ListView listView1;
-		private System.Windows.Forms.ColumnHeader columnHeaderID;
-		private System.Windows.Forms.ColumnHeader columnHeaderSKey;
-		private System.Windows.Forms.ColumnHeader columnHeaderLocalisation;
 		private System.Windows.Forms.SplitContainer splitContainerTabs;
 		private System.Windows.Forms.TabControl tabControlLanguages;
 		private System.Windows.Forms.TabPage tabPageAllLanguages;
@@ -315,5 +317,9 @@
 		private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem fromXMLToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem fromScriptsToolStripMenuItem;
+		private System.Windows.Forms.DataGridView dataGridViewStrings;
+		private System.Windows.Forms.DataGridViewTextBoxColumn ColumnID;
+		private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStringKey;
+		private System.Windows.Forms.DataGridViewTextBoxColumn ColumnLocalisation;
 	}
 }
