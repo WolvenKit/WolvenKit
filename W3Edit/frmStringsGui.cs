@@ -25,6 +25,8 @@ namespace WolvenKit
 
         bool noPrefix = false;
 
+        string[] languages = new string[16] {"ar", "br", "cz", "de", "en", "es", "esMX", "fr", "hu", "it", "jp", "kr", "pl", "ru", "tr", "zh"};
+
         public frmStringsGui()
         {
             InitializeComponent();
@@ -47,12 +49,15 @@ namespace WolvenKit
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
-
+            if (dataGridViewStrings.Rows.Count != 1)
+                SaveCSV();
+            else
+                MessageBox.Show("Current file is empty.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
         private void toolStripButtonOpen_Click(object sender, EventArgs e)
         {
-
+            OpenCSV();
         }
 
         private void toolStripButtonGenerateXML_Click(object sender, EventArgs e)
@@ -61,8 +66,7 @@ namespace WolvenKit
                 ReadXML();
             else
             {
-                MessageBox.Show("Enter mod ID.", "Wolven Kit",
-                MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("Enter mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 textBoxModID.Text = "";
             }
         }
@@ -92,8 +96,7 @@ namespace WolvenKit
                 ReadXML();
             else
             {
-                MessageBox.Show("Enter mod ID.", "Wolven Kit",
-                MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("Enter mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 textBoxModID.Text = "";
             }
         }
@@ -236,6 +239,92 @@ namespace WolvenKit
             else
                 modID = Convert.ToInt32(textBoxModID.Text);
             return true;
+        }
+
+        private void SaveCSV()
+        {
+            var sb = new StringBuilder();
+
+            foreach (DataGridViewRow row in dataGridViewStrings.Rows)
+            {
+                var cells = row.Cells.Cast<DataGridViewCell>();
+                //sb.AppendLine(string.Join("|", cells.Select(cell => "\"" + cell.Value + "\"").ToArray()));
+                sb.AppendLine(string.Join("|", cells.Select(cell => cell.Value).ToArray()));
+            }
+                      
+            int languagesCount = languages.Count();
+            string outputPath = GetCSVOutputPath();
+
+            if (outputPath != "")
+            {
+                for (int i = 0; i < languagesCount; ++i)
+                {
+                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath + languages[i] + ".csv"))
+                    {
+                        file.WriteLine(";meta[language=" + languages[i] + "]");
+                        file.WriteLine("; id | key(hex) | key(str) | text");
+
+                        string csv = sb.ToString();
+
+                        // leaving space for the hex key empty
+                        string[] splittedCsv = csv.Split('\n');
+
+                        int splittedCsvLength = splittedCsv.Length;
+                        for (int j = 0; j < splittedCsvLength; ++j)
+                            if (splittedCsv[j].Length >= 10)
+                                splittedCsv[j] = splittedCsv[j].Insert(10, "|");
+
+                        csv = String.Join("\n", splittedCsv);
+
+                        file.WriteLine(csv);
+                    }
+                }
+            }
+            MessageBox.Show("Files saved.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+        }
+
+        private string GetCSVOutputPath()
+        {
+            FolderBrowserDialog fbw = new FolderBrowserDialog();
+            if (fbw.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                return fbw.SelectedPath;
+            }
+            else
+                return "";
+        }
+
+        private void OpenCSV()
+        {
+            string filePath;
+            OpenFileDialog ofd = new OpenFileDialog();
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                filePath = ofd.FileName;
+                List<string[]> rows = File.ReadAllLines(filePath).Select(x => x.Split('|')).ToList();
+                DataTable dt = new DataTable();
+
+                dataGridViewStrings.Columns.Clear();
+
+                dt.Columns.Add("ID");
+                dt.Columns.Add("Hex key placeholder");
+                dt.Columns.Add("String Key");
+                dt.Columns.Add("Localisation");
+
+                rows.RemoveRange(0, 2);
+
+                int id = Convert.ToInt32(rows[0][0]);
+                modID = (id - 2110000000) / 1000;
+                textBoxModID.Text = Convert.ToString(modID);
+
+                rows.ForEach(x => {
+                    dt.Rows.Add(x);
+                });
+                
+                dataGridViewStrings.DataSource = dt;
+                dataGridViewStrings.Columns["Hex key placeholder"].Visible = false;
+            }
+            
         }
     }
 }
