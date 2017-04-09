@@ -109,7 +109,7 @@ namespace W3Edit.W3Speech
                 var cr2w_file_name = neutral_id.value.ToString("D10") + "(" + item.id_high.ToString("D10") + ").cr2w";
                 var cr2w_output = new BinaryWriter(new FileStream(dir + cr2w_file_name, FileMode.Create));
                 input.BaseStream.Seek((int)item.cr2w_offs, SeekOrigin.Begin);
-                StreamTools.Transfer(item.wem_size, input.BaseStream, cr2w_output.BaseStream);
+                StreamTools.Transfer(item.cr2w_size, input.BaseStream, cr2w_output.BaseStream);
                 cr2w_output.Close();
             });
             input.Close();
