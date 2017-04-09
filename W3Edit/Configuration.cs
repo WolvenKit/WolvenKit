@@ -3,7 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public class Configuration
     {

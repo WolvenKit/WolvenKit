@@ -37,7 +37,7 @@ using System.Text;
  * to see the most recent modifications 
  */
 
-namespace W3Edit.Bundles
+namespace WolvenKit.Bundles
 {
     internal class AlphanumComparator<T> : IComparer<T>
     {

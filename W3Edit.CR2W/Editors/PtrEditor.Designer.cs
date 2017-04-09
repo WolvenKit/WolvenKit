@@ -1,5 +1,4 @@
-﻿using System.Windows.Forms;
-namespace W3Edit.CR2W.Editors
+﻿namespace WolvenKit.CR2W.Editors
 {
     partial class PtrEditor
     {

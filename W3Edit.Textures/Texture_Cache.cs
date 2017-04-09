@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using W3Edit.CR2W;
+using WolvenKit.CR2W;
 
-namespace W3Edit.Textures
+namespace WolvenKit.Cache
 {
     class Texture_Cache
     {

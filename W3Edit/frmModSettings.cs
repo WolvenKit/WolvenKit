@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
-using W3Edit.Mod;
+using WolvenKit.Mod;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public partial class frmModSettings : Form
     {

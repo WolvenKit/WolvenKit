@@ -1,4 +1,4 @@
-﻿namespace W3Edit.Render
+﻿namespace WolvenKit.Render
 {
     partial class Bithack3D
     {

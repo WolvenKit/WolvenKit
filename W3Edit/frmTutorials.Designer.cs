@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace W3Edit
+namespace WolvenKit
 {
     partial class frmTutorials
     {
@@ -118,7 +118,7 @@ namespace W3Edit
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::W3Edit.Properties.Resources.aERVQbx_460s;
+            this.pictureBox1.Image = global::WolvenKit.Properties.Resources.aERVQbx_460s;
             this.pictureBox1.Location = new System.Drawing.Point(25, 25);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(183, 165);

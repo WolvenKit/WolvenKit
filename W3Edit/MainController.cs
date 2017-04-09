@@ -1,12 +1,12 @@
 ﻿using System.IO;
 using System.Windows.Forms;
-using W3Edit.Bundles;
-using W3Edit.CR2W;
-using W3Edit.CR2W.Editors;
-using W3Edit.CR2W.Types;
+using WolvenKit.Bundles;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.Editors;
+using WolvenKit.CR2W.Types;
 using WolvenKit.W3Strings;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public class MainController : IVariableEditor, ILocalizedStringSource
     {

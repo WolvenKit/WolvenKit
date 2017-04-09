@@ -7,9 +7,9 @@ using System.Linq;
 using System.Windows.Forms;
 using W3SavegameEditor.Core.Savegame;
 using W3SavegameEditor.Core.Savegame.Variables;
-using W3SavegameEditor.Models;
+using W3SavegameEditor.Core.SaveModels;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public partial class frmSaveEditor : Form
     {

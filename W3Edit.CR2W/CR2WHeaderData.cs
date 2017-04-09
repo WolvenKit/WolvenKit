@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace W3Edit.CR2W
+namespace WolvenKit.CR2W
 {
     public class CR2WHeaderData
     {

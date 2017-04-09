@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
-namespace W3Edit.Scaleform
+namespace WolvenKit.Scaleform
 {
     public class SofdecStream : Mpeg1Stream
     {

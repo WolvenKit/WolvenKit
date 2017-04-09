@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Cyotek.Windows.Forms;
 
-namespace W3Edit.CR2W.Types
+namespace WolvenKit.CR2W.Types
 {
     class CColorShift : CVector
     {

@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
-using W3Edit.CR2W.Types;
+using WolvenKit.CR2W.Types;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public partial class frmAddChunk : Form
     {

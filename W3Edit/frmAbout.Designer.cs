@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace W3Edit
+namespace WolvenKit
 {
     partial class frmAbout
     {
@@ -70,7 +70,7 @@ namespace W3Edit
             // 
             // logoPictureBox
             // 
-            this.logoPictureBox.BackgroundImage = global::W3Edit.Properties.Resources.aERVQbx_460s;
+            this.logoPictureBox.BackgroundImage = global::WolvenKit.Properties.Resources.aERVQbx_460s;
             this.logoPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.logoPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logoPictureBox.Location = new System.Drawing.Point(4, 4);

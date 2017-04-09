@@ -8,9 +8,8 @@ using System.Windows.Input;
 using W3SavegameEditor.Core.Common;
 using W3SavegameEditor.Core.Savegame;
 using W3SavegameEditor.Core.Savegame.Variables;
-using W3SavegameEditor.Models;
 
-namespace W3SavegameEditor.ViewModels
+namespace W3SavegameEditor.Core.SaveModels
 {
     public class SavegameViewModel : INotifyPropertyChanged
     {

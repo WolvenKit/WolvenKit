@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using W3Edit.CR2W;
 
-namespace W3Edit.Textures
+namespace WolvenKit.Cache
 {
     //TEXTURE.CACHE HCXT + INT32(VERSION?) AT THE END
     //SOUNDPC.CACHE CS3W AT THE START
@@ -52,8 +48,8 @@ namespace W3Edit.Textures
                         }
                         case Cachetype.Sound:
                         {
-                            SoundCache.Read(of.FileName);
-                            break;
+							new SoundCache(of.FileName);
+							break;
                         }
                         default:
                             MessageBox.Show("Unsupported file!"); 

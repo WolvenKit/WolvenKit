@@ -1,4 +1,4 @@
-﻿namespace W3Edit.Mod
+﻿namespace WolvenKit.Mod
 {
     public class ModManager
     {

@@ -1,4 +1,4 @@
-﻿namespace W3SavegameEditor.Models
+﻿namespace W3SavegameEditor.Core.SaveModels
 {
     public class SavegameModel
     {

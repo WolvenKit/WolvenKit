@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public partial class frmExtractAmbigious : Form
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Ionic.Zlib;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public static class ImportExportUtility
     {

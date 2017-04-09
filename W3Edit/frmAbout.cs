@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace W3Edit
+namespace WolvenKit
 {
     partial class frmAbout : Form
     {

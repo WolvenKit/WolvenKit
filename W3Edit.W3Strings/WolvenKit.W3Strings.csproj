@@ -7,10 +7,11 @@
     <ProjectGuid>{32D40D10-D6C3-48F0-AEB6-0F41C7E75CFD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>W3Edit.W3Strings</RootNamespace>
-    <AssemblyName>W3Edit.W3Strings</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>WolvenKit.W3Strings</RootNamespace>
+    <AssemblyName>WolvenKit.W3Strings</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

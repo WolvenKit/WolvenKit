@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using BrightIdeasSoftware;
 
-namespace W3Edit
+namespace WolvenKit
 {
     partial class frmEmbeddedFiles
     {

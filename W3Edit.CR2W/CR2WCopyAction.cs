@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using W3Edit.CR2W.Types;
+using WolvenKit.CR2W.Types;
 
-namespace W3Edit.CR2W
+namespace WolvenKit.CR2W
 {
     public class CR2WCopyAction
     {

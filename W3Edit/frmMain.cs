@@ -10,14 +10,16 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
+using Microsoft.VisualBasic.FileIO;
 using Sce.Atf;
-using W3Edit.Bundles;
-using W3Edit.CR2W;
-using W3Edit.CR2W.Types;
-using W3Edit.Mod;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.Bundles;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
+using WolvenKit.Mod;
+using SearchOption = System.IO.SearchOption;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public partial class frmMain : Form
     {
@@ -294,9 +296,9 @@ namespace W3Edit
                 foreach (ListViewItem depotpath in explorer.SelectedPaths)
                 {
                     AddToMod(depotpath.Text, loadmods ? MainController.Get().ModBundleManager : MainController.Get().BundleManager);
-                }
-                UpdateModFileList(true);
+                }              
                 SaveMod();
+                UpdateModFileList(true);
             }
         }
 
@@ -336,12 +338,7 @@ namespace W3Edit
 
             if (File.Exists(filename))
             {
-                if (MessageBox.Show(filename + " already exists, do you want to overwrite it?", "Add mod file error.", MessageBoxButtons.OKCancel) != DialogResult.OK)
-                {
-                    return;
-                }
-
-                File.Delete(filename);
+                FileSystem.DeleteFile(filename, UIOption.AllDialogs, RecycleOption.SendToRecycleBin);
             }
             selectedBundle.Extract(filename);
         }
@@ -469,9 +466,9 @@ namespace W3Edit
         {
             var filename = e.File;
 
-            if (
-                MessageBox.Show("Are you sure you want to permanently delete this?", "Confirmation",
-                    MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if ( MessageBox.Show(
+                     "Are you sure you want to permanently delete this?", "Confirmation", MessageBoxButtons.OKCancel
+                 ) == DialogResult.OK   )
             {
                 removeFromMod(filename);
             }
@@ -1120,7 +1117,7 @@ namespace W3Edit
             var proc = new ProcessStartInfo(config.ExecutablePath)
             {
                 WorkingDirectory = Path.GetDirectoryName(config.ExecutablePath),
-                Arguments = args == "" ? "-debugscripts" : args,
+                Arguments = args == "" ? "-net -debugscripts" : args,
                 UseShellExecute = false,
                 RedirectStandardOutput = true
             };
@@ -1189,7 +1186,7 @@ namespace W3Edit
             openMod();
         }
 
-        private void addFileToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void addFileFromBundleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             addModFile(false);
         }
@@ -1217,7 +1214,7 @@ namespace W3Edit
                 cf.ShowDialog();
         }
 
-        private void addFileToolStripMenuItem_Click_2(object sender, EventArgs e)
+        private void addFileToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             var dlg = new OpenFileDialog();
             dlg.Title = "Open CR2W File";
@@ -1235,7 +1232,13 @@ namespace W3Edit
                 sef.ShowDialog();
         }
 
-        private void joinOurDiscordToolStripMenuItem_Click_1(object sender, EventArgs e)
+		private void stringsGUIToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			using (var sg = new frmStringsGui())
+				sg.ShowDialog();
+		}
+
+		private void joinOurDiscordToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             if (MessageBox.Show(@"Are you sure you would like to join the modding discord?", @"Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 Process.Start("https://discord.gg/qBNgDEX");
@@ -1267,7 +1270,7 @@ namespace W3Edit
             }
         }
 
-        private void addFileFromOtherModToolStripMenuItem_Click(object sender, EventArgs e)
+        private void addFileFromOtherModToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             addModFile(true);
         }
@@ -1335,5 +1338,6 @@ namespace W3Edit
         {
             executeGame();
         }
-    }
+
+	}
 }

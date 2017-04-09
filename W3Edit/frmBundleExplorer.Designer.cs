@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace W3Edit
+namespace WolvenKit
 {
     partial class frmBundleExplorer
     {
@@ -33,7 +33,6 @@ namespace W3Edit
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmBundleExplorer));
-            this.treeImages = new System.Windows.Forms.ImageList(this.components);
             this.btOpen = new System.Windows.Forms.Button();
             this.fileListView = new System.Windows.Forms.ListView();
             this.colFileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -44,6 +43,7 @@ namespace W3Edit
             this.filebrowserMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.markToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.markAllFilesOfFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pathPanel = new System.Windows.Forms.Panel();
             this.SearchBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -60,17 +60,20 @@ namespace W3Edit
             this.regexCheckbox = new System.Windows.Forms.CheckBox();
             this.currentfolderCheckBox = new System.Windows.Forms.CheckBox();
             this.caseCheckBox = new System.Windows.Forms.CheckBox();
-            this.markAllFilesOfFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.detailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.largeIconToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.smallIconToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.treeImages = new System.Windows.Forms.ImageList(this.components);
             this.filebrowserMenuStrip.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // treeImages
-            // 
-            this.treeImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("treeImages.ImageStream")));
-            this.treeImages.TransparentColor = System.Drawing.Color.Transparent;
-            this.treeImages.Images.SetKeyName(0, "genericFile");
-            this.treeImages.Images.SetKeyName(1, "normalFolder");
-            this.treeImages.Images.SetKeyName(2, "openFolder");
             // 
             // btOpen
             // 
@@ -101,10 +104,11 @@ namespace W3Edit
             this.fileListView.ContextMenuStrip = this.filebrowserMenuStrip;
             this.fileListView.FullRowSelect = true;
             this.fileListView.HideSelection = false;
-            this.fileListView.Location = new System.Drawing.Point(16, 111);
+            this.fileListView.LargeImageList = this.treeImages;
+            this.fileListView.Location = new System.Drawing.Point(16, 150);
             this.fileListView.Margin = new System.Windows.Forms.Padding(4);
             this.fileListView.Name = "fileListView";
-            this.fileListView.Size = new System.Drawing.Size(903, 495);
+            this.fileListView.Size = new System.Drawing.Size(903, 456);
             this.fileListView.SmallImageList = this.treeImages;
             this.fileListView.TabIndex = 5;
             this.fileListView.UseCompatibleStateImageBehavior = false;
@@ -162,6 +166,13 @@ namespace W3Edit
             this.markToolStripMenuItem.Text = "Mark";
             this.markToolStripMenuItem.Click += new System.EventHandler(this.markToolStripMenuItem_Click);
             // 
+            // markAllFilesOfFolderToolStripMenuItem
+            // 
+            this.markAllFilesOfFolderToolStripMenuItem.Name = "markAllFilesOfFolderToolStripMenuItem";
+            this.markAllFilesOfFolderToolStripMenuItem.Size = new System.Drawing.Size(230, 26);
+            this.markAllFilesOfFolderToolStripMenuItem.Text = "Mark all files of folder";
+            this.markAllFilesOfFolderToolStripMenuItem.Click += new System.EventHandler(this.markAllFilesOfFolderToolStripMenuItem_Click);
+            // 
             // pathPanel
             // 
             this.pathPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -170,7 +181,7 @@ namespace W3Edit
             this.pathPanel.BackColor = System.Drawing.SystemColors.Window;
             this.pathPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pathPanel.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.pathPanel.Location = new System.Drawing.Point(16, 15);
+            this.pathPanel.Location = new System.Drawing.Point(16, 51);
             this.pathPanel.Margin = new System.Windows.Forms.Padding(4);
             this.pathPanel.Name = "pathPanel";
             this.pathPanel.Size = new System.Drawing.Size(886, 24);
@@ -184,7 +195,7 @@ namespace W3Edit
             this.SearchBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.SearchBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.SearchBox.CausesValidation = false;
-            this.SearchBox.Location = new System.Drawing.Point(96, 53);
+            this.SearchBox.Location = new System.Drawing.Point(96, 89);
             this.SearchBox.Margin = new System.Windows.Forms.Padding(4);
             this.SearchBox.Name = "SearchBox";
             this.SearchBox.Size = new System.Drawing.Size(416, 22);
@@ -196,7 +207,7 @@ namespace W3Edit
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(19, 57);
+            this.label1.Location = new System.Drawing.Point(19, 93);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(57, 17);
@@ -236,7 +247,7 @@ namespace W3Edit
             this.filetypeCB.FormattingEnabled = true;
             this.filetypeCB.Items.AddRange(new object[] {
             "Any"});
-            this.filetypeCB.Location = new System.Drawing.Point(615, 53);
+            this.filetypeCB.Location = new System.Drawing.Point(615, 89);
             this.filetypeCB.Margin = new System.Windows.Forms.Padding(4);
             this.filetypeCB.Name = "filetypeCB";
             this.filetypeCB.Size = new System.Drawing.Size(160, 24);
@@ -245,7 +256,7 @@ namespace W3Edit
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(788, 50);
+            this.button1.Location = new System.Drawing.Point(788, 86);
             this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(115, 28);
@@ -258,7 +269,7 @@ namespace W3Edit
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(561, 57);
+            this.label2.Location = new System.Drawing.Point(561, 93);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(44, 17);
@@ -269,7 +280,7 @@ namespace W3Edit
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(924, 23);
+            this.label3.Location = new System.Drawing.Point(922, 51);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(88, 17);
@@ -299,11 +310,12 @@ namespace W3Edit
             this.pathlistview.FullRowSelect = true;
             this.pathlistview.GridLines = true;
             this.pathlistview.HideSelection = false;
-            this.pathlistview.Location = new System.Drawing.Point(928, 50);
+            this.pathlistview.LargeImageList = this.treeImages;
+            this.pathlistview.Location = new System.Drawing.Point(928, 80);
             this.pathlistview.Margin = new System.Windows.Forms.Padding(4);
             this.pathlistview.Name = "pathlistview";
             this.pathlistview.ShowItemToolTips = true;
-            this.pathlistview.Size = new System.Drawing.Size(139, 555);
+            this.pathlistview.Size = new System.Drawing.Size(139, 525);
             this.pathlistview.SmallImageList = this.treeImages;
             this.pathlistview.TabIndex = 14;
             this.pathlistview.UseCompatibleStateImageBehavior = false;
@@ -318,9 +330,9 @@ namespace W3Edit
             // 
             this.clearSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.clearSearch.BackColor = System.Drawing.Color.Transparent;
-            this.clearSearch.BackgroundImage = global::W3Edit.Properties.Resources.ExitIcon;
+            this.clearSearch.BackgroundImage = global::WolvenKit.Properties.Resources.ExitIcon;
             this.clearSearch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.clearSearch.Location = new System.Drawing.Point(524, 49);
+            this.clearSearch.Location = new System.Drawing.Point(524, 85);
             this.clearSearch.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.clearSearch.Name = "clearSearch";
             this.clearSearch.Size = new System.Drawing.Size(29, 30);
@@ -331,7 +343,7 @@ namespace W3Edit
             // regexCheckbox
             // 
             this.regexCheckbox.AutoSize = true;
-            this.regexCheckbox.Location = new System.Drawing.Point(23, 85);
+            this.regexCheckbox.Location = new System.Drawing.Point(23, 121);
             this.regexCheckbox.Margin = new System.Windows.Forms.Padding(4);
             this.regexCheckbox.Name = "regexCheckbox";
             this.regexCheckbox.Size = new System.Drawing.Size(70, 21);
@@ -342,7 +354,7 @@ namespace W3Edit
             // currentfolderCheckBox
             // 
             this.currentfolderCheckBox.AutoSize = true;
-            this.currentfolderCheckBox.Location = new System.Drawing.Point(107, 85);
+            this.currentfolderCheckBox.Location = new System.Drawing.Point(107, 121);
             this.currentfolderCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.currentfolderCheckBox.Name = "currentfolderCheckBox";
             this.currentfolderCheckBox.Size = new System.Drawing.Size(196, 21);
@@ -353,7 +365,7 @@ namespace W3Edit
             // caseCheckBox
             // 
             this.caseCheckBox.AutoSize = true;
-            this.caseCheckBox.Location = new System.Drawing.Point(316, 85);
+            this.caseCheckBox.Location = new System.Drawing.Point(316, 121);
             this.caseCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.caseCheckBox.Name = "caseCheckBox";
             this.caseCheckBox.Size = new System.Drawing.Size(121, 21);
@@ -361,18 +373,112 @@ namespace W3Edit
             this.caseCheckBox.Text = "Case sensitive";
             this.caseCheckBox.UseVisualStyleBackColor = true;
             // 
-            // markAllFilesOfFolderToolStripMenuItem
+            // menuStrip1
             // 
-            this.markAllFilesOfFolderToolStripMenuItem.Name = "markAllFilesOfFolderToolStripMenuItem";
-            this.markAllFilesOfFolderToolStripMenuItem.Size = new System.Drawing.Size(230, 26);
-            this.markAllFilesOfFolderToolStripMenuItem.Text = "Mark all files of folder";
-            this.markAllFilesOfFolderToolStripMenuItem.Click += new System.EventHandler(this.markAllFilesOfFolderToolStripMenuItem_Click);
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.helpToolStripMenuItem,
+            this.editToolStripMenuItem,
+            this.bookmarkToolStripMenuItem,
+            this.tabsToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1081, 28);
+            this.menuStrip1.TabIndex = 24;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.detailsToolStripMenuItem,
+            this.largeIconToolStripMenuItem,
+            this.smallIconToolStripMenuItem,
+            this.listToolStripMenuItem,
+            this.tileToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+            this.helpToolStripMenuItem.Text = "View";
+            // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.Enabled = false;
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(47, 24);
+            this.editToolStripMenuItem.Text = "Edit";
+            // 
+            // bookmarkToolStripMenuItem
+            // 
+            this.bookmarkToolStripMenuItem.Enabled = false;
+            this.bookmarkToolStripMenuItem.Name = "bookmarkToolStripMenuItem";
+            this.bookmarkToolStripMenuItem.Size = new System.Drawing.Size(88, 24);
+            this.bookmarkToolStripMenuItem.Text = "Bookmark";
+            // 
+            // tabsToolStripMenuItem
+            // 
+            this.tabsToolStripMenuItem.Enabled = false;
+            this.tabsToolStripMenuItem.Name = "tabsToolStripMenuItem";
+            this.tabsToolStripMenuItem.Size = new System.Drawing.Size(50, 24);
+            this.tabsToolStripMenuItem.Text = "Tabs";
+            // 
+            // detailsToolStripMenuItem
+            // 
+            this.detailsToolStripMenuItem.Name = "detailsToolStripMenuItem";
+            this.detailsToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.detailsToolStripMenuItem.Text = "Details";
+            this.detailsToolStripMenuItem.Click += new System.EventHandler(this.detailsToolStripMenuItem_Click);
+            // 
+            // largeIconToolStripMenuItem
+            // 
+            this.largeIconToolStripMenuItem.Name = "largeIconToolStripMenuItem";
+            this.largeIconToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.largeIconToolStripMenuItem.Text = "LargeIcon";
+            this.largeIconToolStripMenuItem.Click += new System.EventHandler(this.largeIconToolStripMenuItem_Click);
+            // 
+            // smallIconToolStripMenuItem
+            // 
+            this.smallIconToolStripMenuItem.Name = "smallIconToolStripMenuItem";
+            this.smallIconToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.smallIconToolStripMenuItem.Text = "SmallIcon";
+            this.smallIconToolStripMenuItem.Click += new System.EventHandler(this.smallIconToolStripMenuItem_Click);
+            // 
+            // listToolStripMenuItem
+            // 
+            this.listToolStripMenuItem.Name = "listToolStripMenuItem";
+            this.listToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.listToolStripMenuItem.Text = "List";
+            this.listToolStripMenuItem.Click += new System.EventHandler(this.listToolStripMenuItem_Click);
+            // 
+            // tileToolStripMenuItem
+            // 
+            this.tileToolStripMenuItem.Name = "tileToolStripMenuItem";
+            this.tileToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.tileToolStripMenuItem.Text = "Tile";
+            this.tileToolStripMenuItem.Click += new System.EventHandler(this.tileToolStripMenuItem_Click);
+            // 
+            // treeImages
+            // 
+            this.treeImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("treeImages.ImageStream")));
+            this.treeImages.TransparentColor = System.Drawing.Color.Transparent;
+            this.treeImages.Images.SetKeyName(0, "genericFile");
+            this.treeImages.Images.SetKeyName(1, "normalFolder");
+            this.treeImages.Images.SetKeyName(2, "openFolder");
+            this.treeImages.Images.SetKeyName(3, "csv");
+            this.treeImages.Images.SetKeyName(4, "redswf");
+            this.treeImages.Images.SetKeyName(5, "env");
+            this.treeImages.Images.SetKeyName(6, "journal");
+            this.treeImages.Images.SetKeyName(7, "w2beh");
+            this.treeImages.Images.SetKeyName(8, "xml");
+            this.treeImages.Images.SetKeyName(9, "w2behtree");
+            this.treeImages.Images.SetKeyName(10, "w2scene");
+            this.treeImages.Images.SetKeyName(11, "w2p");
+            this.treeImages.Images.SetKeyName(12, "w2rig");
             // 
             // frmBundleExplorer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1081, 646);
+            this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.caseCheckBox);
             this.Controls.Add(this.currentfolderCheckBox);
             this.Controls.Add(this.regexCheckbox);
@@ -391,12 +497,15 @@ namespace W3Edit
             this.Controls.Add(this.fileListView);
             this.Controls.Add(this.btOpen);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "frmBundleExplorer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Bundle Explorer";
+            this.Text = "Asset browser";
             this.Load += new System.EventHandler(this.frmBundleExplorer_Load);
             this.filebrowserMenuStrip.ResumeLayout(false);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -405,7 +514,6 @@ namespace W3Edit
         #endregion
 
         private Button btOpen;
-        private ImageList treeImages;
         private ListView fileListView;
         private ColumnHeader colFileName;
         private ColumnHeader colFileSize;
@@ -432,5 +540,16 @@ namespace W3Edit
         private CheckBox currentfolderCheckBox;
         private CheckBox caseCheckBox;
         private ToolStripMenuItem markAllFilesOfFolderToolStripMenuItem;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem helpToolStripMenuItem;
+        private ToolStripMenuItem detailsToolStripMenuItem;
+        private ToolStripMenuItem largeIconToolStripMenuItem;
+        private ToolStripMenuItem smallIconToolStripMenuItem;
+        private ToolStripMenuItem listToolStripMenuItem;
+        private ToolStripMenuItem tileToolStripMenuItem;
+        private ToolStripMenuItem editToolStripMenuItem;
+        private ToolStripMenuItem bookmarkToolStripMenuItem;
+        private ToolStripMenuItem tabsToolStripMenuItem;
+        private ImageList treeImages;
     }
 }

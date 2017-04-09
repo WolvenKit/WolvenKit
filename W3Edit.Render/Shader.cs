@@ -2,10 +2,9 @@
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-
 using OpenGL;
 
-namespace W3Edit.Render
+namespace WolvenKit.Render
 {
     class Shader
     {
