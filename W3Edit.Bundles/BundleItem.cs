@@ -1,12 +1,11 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.IO.MemoryMappedFiles;
 using Doboz;
 using Ionic.Zlib;
 using LZ4;
 using Snappy;
 
-namespace W3Edit.Bundles
+namespace WolvenKit.Bundles
 {
     public class BundleItem
     {

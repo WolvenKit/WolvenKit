@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace W3Edit
+namespace WolvenKit
 {
     partial class frmUsmPlayer
     {

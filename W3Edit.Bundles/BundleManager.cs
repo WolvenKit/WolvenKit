@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace W3Edit.Bundles
+namespace WolvenKit.Bundles
 {
     public class BundleManager
     {

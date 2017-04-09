@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using W3Edit.CR2W;
-using W3Edit.CR2W.Types;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
 
-namespace W3Edit.FlowTreeEditors
+namespace WolvenKit.FlowTreeEditors
 {
     public partial class SceneFlowConditionEditor : ChunkEditor
     {

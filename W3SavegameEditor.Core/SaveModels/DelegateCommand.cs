@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace W3SavegameEditor
+namespace W3SavegameEditor.Core.SaveModels
 {
     public class DelegateCommand : ICommand
     {

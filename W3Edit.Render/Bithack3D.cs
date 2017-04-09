@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Windows.Forms;
-
-using OpenGL;
 using System.IO;
+using System.Windows.Forms;
+using OpenGL;
 
-namespace W3Edit.Render
+namespace WolvenKit.Render
 {
     public partial class Bithack3D : Form
     {

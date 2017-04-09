@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace W3Edit.FlowTreeEditors
+namespace WolvenKit.FlowTreeEditors
 {
     partial class SceneFlowConditionEditor
     {

@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using W3Edit.CR2W.Types;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
 
-namespace W3Edit.CR2W
+namespace WolvenKit.Textures
 {
     public class ImageUtility
     {

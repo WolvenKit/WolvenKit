@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using W3Edit.CR2W.Types;
+using WolvenKit.CR2W.Types;
 
-namespace W3Edit.CR2W
+namespace WolvenKit.CR2W
 {
     public class CR2WFile
     {

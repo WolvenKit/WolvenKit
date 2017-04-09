@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Cyotek.Windows.Forms;
-using W3Edit.CR2W;
-using W3Edit.CR2W.Types;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.CR2W;
+using WolvenKit.Textures;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public partial class frmImagePreview : DockContent
     {

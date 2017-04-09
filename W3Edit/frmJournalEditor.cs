@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows.Forms;
-using W3Edit.CR2W;
-using W3Edit.CR2W.Types;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public partial class frmJournalEditor : DockContent
     {

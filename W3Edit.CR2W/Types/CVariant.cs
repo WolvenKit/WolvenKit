@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using W3Edit.CR2W.Editors;
+using WolvenKit.CR2W.Editors;
 
-namespace W3Edit.CR2W.Types
+namespace WolvenKit.CR2W.Types
 {
     public class CVariant : CVariable
     {

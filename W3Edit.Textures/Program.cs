@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using W3Edit.CR2W;
 
-namespace W3Edit.Textures
+namespace WolvenKit.Textures
 {
     //TEXTURE.CACHE HCXT + INT32(VERSION?) AT THE END
     //SOUNDPC.CACHE CS3W AT THE START

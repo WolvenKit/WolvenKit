@@ -2,10 +2,10 @@
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using W3Edit.CR2W;
-using W3Edit.CR2W.Types;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
 
-namespace W3Edit.FlowTreeEditors
+namespace WolvenKit.FlowTreeEditors
 {
     public partial class SceneSectionEditor : SceneLinkEditor
     {

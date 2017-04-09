@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using W3Edit.CR2W.Editors;
-using W3Edit.CR2W.Types;
+using WolvenKit.CR2W.Editors;
+using WolvenKit.CR2W.Types;
 
-namespace W3Edit.CR2W
+namespace WolvenKit.CR2W
 {
     [Serializable]
     public class CR2WChunk : IEditableVariable

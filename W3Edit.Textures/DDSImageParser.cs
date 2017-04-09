@@ -2,16 +2,13 @@
 Created by: https://gist.github.com/soeminnminn/e9c4c99867743a717f5b
 Ported from the DevIL library
 */
+
 using System;
-using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace W3Edit.CR2W
+namespace WolvenKit.Textures
 {
     #region DDSImage Class
     public class DdsImage : IDisposable

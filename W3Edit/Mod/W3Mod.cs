@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace W3Edit.Mod
+namespace WolvenKit.Mod
 {
     public class W3Mod
     {

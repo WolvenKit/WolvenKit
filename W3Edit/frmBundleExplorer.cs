@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using IronPython.Runtime;
-using Microsoft.Scripting.Utils;
-using W3Edit.Bundles;
+using WolvenKit.Bundles;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public partial class frmBundleExplorer : Form
     {
@@ -74,7 +73,7 @@ namespace W3Edit
                         FullPath = lastItem.Name,
                         Text = item.Key,
                         IsDirectory = false,
-                        ImageKey = "genericFile"
+                        ImageKey = GetImageKey(item.Key)
                     };
                     listItem.SubItems.Add(lastItem.Size.ToString());
                     listItem.SubItems.Add(string.Format("{0}%",
@@ -155,7 +154,7 @@ namespace W3Edit
                     if (!cont)
                     {
                         var tempnode = new ListViewItem();
-                        tempnode.ImageKey = "genericFile";
+                        tempnode.ImageKey = GetImageKey(item.FullPath);
                         tempnode.Text = item.FullPath;
                         tempnode.ToolTipText = item.FullPath;
                         pathlistview.Items.Add(tempnode);
@@ -194,6 +193,20 @@ namespace W3Edit
                 var browsePath = textbox.Text;
                 OpenPath(browsePath);
             }
+        }
+
+        public string GetImageKey(string filename)
+        {
+            try
+            {
+                if (treeImages.Images.ContainsKey(Path.GetExtension(filename).Replace(".", "")))
+                {
+                    return Path.GetExtension(filename).Replace(".", "");
+                }
+            }
+            catch  { }
+
+            return "genericFile";
         }
 
         public void OpenPath(string browsePath)
@@ -258,7 +271,7 @@ namespace W3Edit
                     FullPath = lastItem.Name,
                     Text = file.Name,
                     IsDirectory = false,
-                    ImageKey = "genericFile"
+                    ImageKey = GetImageKey(file.Name)
                 };
                 listItem.SubItems.Add(lastItem.Size.ToString());
                 listItem.SubItems.Add($"{(100 - (int) (lastItem.ZSize/(float) lastItem.Size*100.0f))}%");
@@ -300,7 +313,7 @@ namespace W3Edit
         {
             var res = root.Files.Select(file => file.Key).Select(x => new ListViewItem()
             {
-                ImageKey = "genericFile",
+                ImageKey = GetImageKey(x),
                 ToolTipText = x,
                 Text = x
             }).ToList();
@@ -338,7 +351,7 @@ namespace W3Edit
                         if (!cont)
                         {
                             var tempnode = new ListViewItem();
-                            tempnode.ImageKey = "genericFile";
+                            tempnode.ImageKey = GetImageKey(item.FullPath);
                             tempnode.ToolTipText = item.FullPath;
                             tempnode.Text = item.FullPath;
                             pathlistview.Items.Add(tempnode);
@@ -364,6 +377,21 @@ namespace W3Edit
             {
                 if (ActiveNode != RootNode)
                     OpenPath(ActiveNode.Parent.FullPath);
+            }
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (ActiveNode != RootNode)
+                {
+                    if (fileListView.SelectedItems.Count > 0)
+                    {
+                        var item = (BundleListItem) fileListView.SelectedItems[0];
+                        if (item.IsDirectory)
+                        {
+                            OpenNode(item.Node);
+                        }
+                    }
+
+                }              
             }
         }
 
@@ -401,7 +429,7 @@ namespace W3Edit
                             if (!cont)
                             {
                                 var tempnode = new ListViewItem();
-                                tempnode.ImageKey = "genericFile";
+                                tempnode.ImageKey = GetImageKey(item.FullPath);
                                 tempnode.ToolTipText = item.FullPath;
                                 tempnode.Text = item.FullPath;
                                 pathlistview.Items.Add(tempnode);
@@ -442,7 +470,7 @@ namespace W3Edit
                         if (!cont)
                         {
                             var tempnode = new ListViewItem();
-                            tempnode.ImageKey = "genericFile";
+                            tempnode.ImageKey = GetImageKey(item.FullPath);
                             tempnode.ToolTipText = item.FullPath;
                             tempnode.Text = item.FullPath;
                             pathlistview.Items.Add(tempnode);
@@ -485,6 +513,31 @@ namespace W3Edit
                     }
                 }
             }
+        }
+
+        private void detailsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fileListView.View = View.Details; 
+        }
+
+        private void largeIconToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fileListView.View = View.LargeIcon;
+        }
+
+        private void smallIconToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fileListView.View = View.SmallIcon;
+        }
+
+        private void listToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fileListView.View = View.List;
+        }
+
+        private void tileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fileListView.View = View.Tile;
         }
     }
 }

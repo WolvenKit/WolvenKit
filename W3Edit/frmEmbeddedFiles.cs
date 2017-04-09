@@ -1,10 +1,9 @@
 ﻿using System.IO;
-using System.Windows.Forms;
 using BrightIdeasSoftware;
-using W3Edit.CR2W;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.CR2W;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public partial class frmEmbeddedFiles : DockContent
     {
