@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace W3Edit.W3Strings
+namespace WolvenKit.W3Strings
 {
     public class W3Language
     {

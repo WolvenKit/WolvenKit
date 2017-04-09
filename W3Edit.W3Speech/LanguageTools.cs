@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using W3Edit.W3Strings;
+﻿using WolvenKit.W3Strings;
 
-namespace W3Edit.W3Speech
+namespace WolvenKit.W3Speech
 {
     public static class LanguageTools
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace W3Edit.W3Speech
+namespace WolvenKit.W3Speech
 {
     public static class StreamTools
     {

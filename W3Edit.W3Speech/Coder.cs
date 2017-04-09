@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using W3Edit.W3Strings;
+using WolvenKit.W3Strings;
 
-namespace W3Edit.W3Speech
+namespace WolvenKit.W3Speech
 {
     public static class Coder
     {

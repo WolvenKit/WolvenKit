@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using W3Edit.W3Strings;
+using WolvenKit.W3Strings;
 
-namespace W3Edit.W3Speech
+namespace WolvenKit.W3Speech
 {
     /// <summary>
     /// Describes the items found within the w3speech format.
