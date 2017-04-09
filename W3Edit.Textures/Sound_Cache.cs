@@ -4,75 +4,96 @@ using System.IO;
 using System.Linq;
 using WolvenKit.CR2W;
 
-namespace WolvenKit.Textures
+namespace WolvenKit.Cache
 {
-    public class Soundfile
+    class SoundCache
     {
-        public string Name;
-        public long NameOffset;
-        public byte[] Content;
-        public long ContentOffset;
+        public byte[] Magic = { (byte)'C', (byte)'S', (byte)'3', (byte)'W' };
+        public long version = 2;
+        public Int64 Unknown1;
+        public Int64 InfoOffset;
+        public Int64 FileCount;
+        public Int64 NamesOffset;
+        public Int64 NamesSize;
+        public Int64 Unknown2;
+        public Int64 Unknown3;
 
-    }
-    public class SoundCache
-    {
-        public static uint Version;
-        public static uint InfoOffset;
-        public static uint FilesSize;
-        public static uint NamesOffset;
-        public static uint NamesSize;
-
-        public List<Soundfile> Files = new List<Soundfile>(); 
-
-
-        public static void Read(string file)
+        public class SoundFileInfo
         {
-            using (var br = new BinaryReader(new FileStream(file, FileMode.Open)))
+            public Int64 NameOffset;
+            public Int64 Offset;
+            public Int64 Size;
+        }
+
+        public class SoundFile
+        {
+            public SoundFileInfo Info;
+            public byte[] Content;
+            public string name;
+        }
+
+        public SoundCache(string FileName)
+        {
+            this.Read(new BinaryReader(new FileStream(FileName, FileMode.Open)));
+        }
+
+        public List<SoundFile> Files;
+
+        public void Read(BinaryReader br)
+        {
+            Files = new List<SoundFile>();
+            if (!br.ReadBytes(4).SequenceEqual(Magic))
+                throw new InvalidDataException("Wrong Magic in soundcache!");
+            if (br.ReadInt32() != 2)
+                throw new Exception("Invalid soundcache version!");
+            Unknown1 = br.ReadInt64();
+            Console.WriteLine("Unknown: " + Unknown1);
+            InfoOffset = br.ReadInt64();
+            Console.WriteLine("Info offset: " + InfoOffset);
+            FileCount = br.ReadInt64();
+            Console.WriteLine("FilesOffset: " + FileCount);
+            NamesOffset = br.ReadInt64();
+            Console.WriteLine("NamesOffset: " + NamesOffset);
+            NamesSize = br.ReadInt64();
+            Console.WriteLine("NamesSize: " + NamesSize);
+            Unknown2 = br.ReadInt64();
+            Console.WriteLine("Unknown: " + Unknown2);
+            Unknown3 = br.ReadInt64();
+            Console.WriteLine("Unknown: " + Unknown3);
+
+            br.BaseStream.Seek(InfoOffset, SeekOrigin.Begin);
+            for (int i = 0; i < FileCount; i++)
             {
-                Console.WriteLine("Magic: " + new string(br.ReadBytes(4).Select(x=>(char)x).ToArray()));
-                Version = br.ReadUInt32();
-                Console.WriteLine("Version: " + Version.ToString("x8"));
-                var dummy = br.ReadUInt64();
-                if (Version >= 2)
-                {
-                    InfoOffset = (uint)br.ReadUInt64();
-                    FilesSize = (uint)br.ReadUInt64();
-                    NamesOffset = (uint)br.ReadUInt64();
-                    NamesSize = (uint)br.ReadUInt64();
-                }
-                else
-                {
-                    InfoOffset = br.ReadUInt32();
-                    FilesSize = br.ReadUInt32();
-                    NamesOffset = br.ReadUInt32();
-                    NamesSize = br.ReadUInt32();
-                }
-                br.BaseStream.Seek(NamesOffset, SeekOrigin.Begin);
-                var names = br.ReadBytes((int)NamesSize);
-                
-                Console.WriteLine("Version: " + Version);
-                Console.WriteLine("Info offset: " + InfoOffset + "\nFile count: " + FilesSize + "\nName offset: " + NamesOffset);
-                br.BaseStream.Seek((int)InfoOffset, SeekOrigin.Begin);
-                for (var i = 0; i < (int)FilesSize; i++)
-                {
-                    var tempfile = new Soundfile();
-                    long nameOff = BitConverter.ToUInt32(br.ReadBytes(8), 0);
-                    long offset = BitConverter.ToUInt32(br.ReadBytes(8), 0);
-                    br.ReadUInt32(); BitConverter.ToUInt32(br.ReadBytes(8), 0);
-                    br.BaseStream.Seek(nameOff, SeekOrigin.Begin);
-                    tempfile.NameOffset = offset;
-                    tempfile.Name = br.ReadCR2WString();
-                    br.BaseStream.Seek(offset, SeekOrigin.Begin);
-                    Console.WriteLine("File: " + tempfile.Name);
-                }
-
-
+                var sf = new SoundFile();
+                sf.Info = new SoundFileInfo();
+                sf.Info.NameOffset = br.ReadInt64();
+                sf.Info.Offset = br.ReadInt64();
+                sf.Info.Size = br.ReadInt64();
+                Files.Add(sf);
+            }
+            Console.WriteLine("Files:\n");
+            foreach (SoundFile t in Files)
+            {
+                br.BaseStream.Seek(NamesOffset + t.Info.NameOffset, SeekOrigin.Begin);
+                t.name = br.ReadCR2WString();
+                br.BaseStream.Seek(t.Info.Offset, SeekOrigin.Begin);
+                t.Content = br.ReadBytes((int)t.Info.Size);
+                Console.WriteLine("\t" + t.name + "\tSize: " + t.Info.Size + " bytes");
             }
         }
 
-        public static void Write()
+        public void Write(BinaryWriter bw)
         {
-            
+            bw.Write(Magic);
+            bw.Write(version);
+            bw.Write(Unknown1);
+            bw.Write(InfoOffset);
+            bw.Write(FileCount);
+            bw.Write(NamesOffset);
+            bw.Write(NamesSize);
+            bw.Write(Unknown2);
+            bw.Write(Unknown3);
+            //TODO: Write file contents and names
         }
     }
 }

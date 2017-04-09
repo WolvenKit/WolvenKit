@@ -5,7 +5,7 @@ using System.Linq;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 
-namespace WolvenKit.Textures
+namespace WolvenKit.Cache
 {
     public class ImageUtility
     {

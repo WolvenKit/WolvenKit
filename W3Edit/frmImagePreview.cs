@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.CR2W;
-using WolvenKit.Textures;
+using WolvenKit.Cache;
 
 namespace WolvenKit
 {

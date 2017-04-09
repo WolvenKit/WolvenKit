@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using WolvenKit.CR2W;
 
-namespace WolvenKit.Textures
+namespace WolvenKit.Cache
 {
     class Texture_Cache
     {

@@ -62,6 +62,10 @@
       <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>
       <Name>WolvenKit.CR2W</Name>
     </ProjectReference>
+    <ProjectReference Include="..\W3Edit.W3Strings\WolvenKit.W3Strings.csproj">
+      <Project>{32d40d10-d6c3-48f0-aeb6-0f41c7e75cfd}</Project>
+      <Name>WolvenKit.W3Strings</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

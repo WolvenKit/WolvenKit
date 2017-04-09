@@ -8,7 +8,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace WolvenKit.Textures
+namespace WolvenKit.Cache
 {
     #region DDSImage Class
     public class DdsImage : IDisposable

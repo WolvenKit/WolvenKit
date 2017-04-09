@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace WolvenKit.Textures
+namespace WolvenKit.Cache
 {
     //TEXTURE.CACHE HCXT + INT32(VERSION?) AT THE END
     //SOUNDPC.CACHE CS3W AT THE START
