@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DDSHeader.cs" />
     <Compile Include="DDSImageParser.cs" />
     <Compile Include="ImageUtility.cs" />
     <Compile Include="Program.cs" />

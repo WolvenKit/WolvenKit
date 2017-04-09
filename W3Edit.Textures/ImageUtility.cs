@@ -25,11 +25,12 @@ namespace W3Edit.CR2W
                 var compression = imagechunk.GetVariableByName("compression").ToString();
                 var width = int.Parse(imagechunk.GetVariableByName("width").ToString());
                 var height = int.Parse(imagechunk.GetVariableByName("height").ToString());
+                var mips = imagechunk.GetVariableByName("residentMipIndex")!=null ? int.Parse(imagechunk.GetVariableByName("residentMipIndex").ToString()) : 0;
                 var tempfile = new MemoryStream();
                 /* DDS magic header contains:
                  *      Required .dds flags for compressed texture without pitch
                  * More on: https://msdn.microsoft.com/en-us/library/windows/desktop/bb943982(v=vs.85).aspx */
-                byte[] ddsheader = 
+                /*byte[] ddsheader = 
                 {
                     0x44, 0x44, 0x53, 0x20, 0x7C, 0x00, 0x00, 0x00, 0x07, 0x10, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00,
                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
@@ -39,26 +40,26 @@ namespace W3Edit.CR2W
                     0x05, 0x00, 0x00, 0x00, 0x44, 0x58, 0x54, 0x31, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x10, 0x40, 0x00,
                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-                };
-                byte[] dxt;
+                };*/
+                uint dxt;
                 switch (compression)
                 {
                     case "TCM_DXTNoAlpha":
-                        dxt = new byte[] { 0x44, 0x58, 0x54, 0x31 };
+                        dxt = Textures.DDSHeader.Format_DXT5;
                         break;
                     case "TCM_DXTAlpha":
-                        dxt = new byte[] { 0x44, 0x58, 0x54, 0x35 };
+                        dxt = Textures.DDSHeader.Format_DXT5;
                         break;
-                    case "TCM_NormalsHigh":
-                        dxt = new byte[] { 0x44, 0x58, 0x54, 0x35 };
+                    /*case "TCM_NormalsHigh":
+                        dxt = Textures.DDSHeader.Format_DXT5;
                         break;
                     case "TCM_Normals":
-                        dxt = new byte[] { 0x44, 0x58, 0x54, 0x31 };
-                        break;
+                        dxt = Textures.DDSHeader.Format_DXT5;
+                        break;*/
                     default:
                         throw new Exception("Invalid compression type! [" + compression + "]");
                 }
-                using (var bw = new BinaryWriter(tempfile))
+                /*using (var bw = new BinaryWriter(tempfile))
                 {
                     bw.Write(ddsheader);
                     bw.Seek(0xC, SeekOrigin.Begin);
@@ -69,6 +70,13 @@ namespace W3Edit.CR2W
                     bw.Write(dxt);
                     bw.Seek(128, SeekOrigin.Begin);
                     bw.Write(image.Bytes);
+                }*/
+                Textures.DDSHeader ddsheader = new Textures.DDSHeader();
+                using (var bw = new BinaryWriter(tempfile))
+                {
+                    bw.Write(ddsheader.generate((uint)width, (uint)height, (uint)mips, dxt).ToArray());
+                    //bw.Write(image.Bytes);
+                    bw.Write( (new ArraySegment<byte>(image.Bytes, 20, image.Bytes.Length - 20)).ToArray() );
                 }
                 tempfile.Flush();
 #if DEBUG
