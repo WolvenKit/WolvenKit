@@ -57,7 +57,7 @@ namespace WolvenKit
 
         private void toolStripButtonGenerateXML_Click(object sender, EventArgs e)
         {
-            if (textBoxModID.Text != "")
+            if (textBoxModID.Text != "" && FillModIDIfValid())
                 ReadXML();
             else
             {
@@ -88,7 +88,7 @@ namespace WolvenKit
 
         private void fromXMLToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(textBoxModID.Text != "")
+            if (textBoxModID.Text != "" && FillModIDIfValid())
                 ReadXML();
             else
             {
@@ -111,6 +111,9 @@ namespace WolvenKit
         {
             // to do: check tags for custom display names, add prefixes to keys
             string path = GetXMLPath();
+
+            // to prevent ID being 0 when Leave event for text box wasn't triggered
+            FillModIDIfValid();
 
             if (path != "")
             {
@@ -193,13 +196,7 @@ namespace WolvenKit
 
         private void textBoxModID_Leave(object sender, EventArgs e)
         {
-            if (!IsIDValid(textBoxModID.Text))
-            {
-                MessageBox.Show("Invalid Mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                textBoxModID.Text = "";
-            }
-            else
-                modID = Convert.ToInt32(textBoxModID.Text);
+            FillModIDIfValid();
         }
         private void textBoxModID_KeyDown(object sender, KeyEventArgs e)
         {
@@ -227,6 +224,18 @@ namespace WolvenKit
                 return true;
 
             return false;
+        }
+        private bool FillModIDIfValid()
+        {
+            if (!IsIDValid(textBoxModID.Text))
+            {
+                MessageBox.Show("Invalid Mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                textBoxModID.Text = "";
+                return false;
+            }
+            else
+                modID = Convert.ToInt32(textBoxModID.Text);
+            return true;
         }
     }
 }
