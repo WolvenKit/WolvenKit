@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3Edit.Render", "W3Edit.Ren
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3Edit.Scaleform", "W3Edit.Scaleform\W3Edit.Scaleform.csproj", "{031DD6DA-B643-4C2A-A30D-A2E2212724C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "W3Edit.Cache", "W3Edit.Textures\W3Edit.Cache.csproj", "{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -104,6 +106,18 @@ Global
 		{031DD6DA-B643-4C2A-A30D-A2E2212724C2}.Release|x64.Build.0 = Release|Any CPU
 		{031DD6DA-B643-4C2A-A30D-A2E2212724C2}.Release|x86.ActiveCfg = Release|Any CPU
 		{031DD6DA-B643-4C2A-A30D-A2E2212724C2}.Release|x86.Build.0 = Release|Any CPU
+		{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}.Debug|x64.Build.0 = Debug|Any CPU
+		{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}.Debug|x86.Build.0 = Debug|Any CPU
+		{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}.Release|x64.ActiveCfg = Release|Any CPU
+		{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}.Release|x64.Build.0 = Release|Any CPU
+		{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}.Release|x86.ActiveCfg = Release|Any CPU
+		{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

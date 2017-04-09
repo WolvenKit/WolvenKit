@@ -261,5 +261,11 @@ namespace W3Edit
         {
             modFileList.CollapseAll();
         }
+
+        private void copyRelativePathToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(modFileList.SelectedNode != null)
+                Clipboard.SetText(modFileList.SelectedNode.FullPath);
+        }
     }
 }

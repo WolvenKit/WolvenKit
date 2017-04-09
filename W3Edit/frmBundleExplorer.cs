@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using IronPython.Runtime;
+using Microsoft.Scripting.Utils;
 using W3Edit.Bundles;
 
 namespace W3Edit
@@ -15,8 +18,8 @@ namespace W3Edit
 
         public frmBundleExplorer(BundleManager manager)
         {
-            Manager = manager;
             InitializeComponent();
+            Manager = manager;
             RootNode = manager.RootNode;
             FileList = manager.FileList;
             filetypeCB.Items.AddRange(manager.Extensions.ToArray());
@@ -38,15 +41,16 @@ namespace W3Edit
         {
             if (ActiveNode != node || reset)
             {
+                
                 ActiveNode = node;
 
                 UpdatePathPanel();
 
                 fileListView.Items.Clear();
-
+                List<BundleListItem> res = new List<BundleListItem>();
                 if (node.Parent != null)
                 {
-                    fileListView.Items.Add(new BundleListItem
+                    res.Add(new BundleListItem
                     {
                         Node = node.Parent,
                         Text = "..",
@@ -55,35 +59,31 @@ namespace W3Edit
                     });
                 }
 
-                foreach (var item in node.Directories.OrderBy(x => x.Key))
+                res.AddRange(node.Directories.OrderBy(x => x.Key).Select(item => new BundleListItem
                 {
-                    fileListView.Items.Add(new BundleListItem
-                    {
-                        Node = item.Value,
-                        Text = item.Key,
-                        IsDirectory = true,
-                        ImageKey = "openFolder"
-                    });
-                }
+                    Node = item.Value, Text = item.Key, IsDirectory = true, ImageKey = "openFolder"
+                }));
 
 
                 foreach (var item in node.Files.OrderBy(x => x.Key))
                 {
                     var lastItem = item.Value[item.Value.Count - 1];
-                    var listItem = fileListView.Items.Add(new BundleListItem
+                    var listItem = new BundleListItem
                     {
                         Node = null,
                         FullPath = lastItem.Name,
                         Text = item.Key,
                         IsDirectory = false,
                         ImageKey = "genericFile"
-                    });
+                    };
                     listItem.SubItems.Add(lastItem.Size.ToString());
                     listItem.SubItems.Add(string.Format("{0}%",
                         (100 - (int) (lastItem.ZSize/(float) lastItem.Size*100.0f))));
                     listItem.SubItems.Add(lastItem.CompressionType);
                     listItem.SubItems.Add(lastItem.DateString);
+                    res.Add(listItem);
                 }
+                fileListView.Items.AddRange(res.ToArray());
             }
         }
 
@@ -248,22 +248,25 @@ namespace W3Edit
             if (found.Length > 1000)
                 found = found.Take(1000).ToArray();
             fileListView.Items.Clear();
+            var results = new List<BundleListItem>();
             foreach (var file in found)
             {
                 var lastItem = file;
-                var listItem = fileListView.Items.Add(new BundleListItem
+                var listItem = new BundleListItem
                 {
                     Node = null,
                     FullPath = lastItem.Name,
                     Text = file.Name,
                     IsDirectory = false,
                     ImageKey = "genericFile"
-                });
+                };
                 listItem.SubItems.Add(lastItem.Size.ToString());
                 listItem.SubItems.Add($"{(100 - (int) (lastItem.ZSize/(float) lastItem.Size*100.0f))}%");
                 listItem.SubItems.Add(lastItem.CompressionType);
                 listItem.SubItems.Add(lastItem.DateString);
+                results.Add(listItem);
             }
+            fileListView.Items.AddRange(results.ToArray());
         }
 
         public List<BundleItem> GetFiles(BundleTreeNode mainnode)
@@ -280,9 +283,32 @@ namespace W3Edit
             return bundfiles;
         }
 
-        public BundleItem[] SearchFiles(BundleItem[] files, string searchkeyword, string Extension)
+        public BundleItem[] SearchFiles(BundleItem[] files, string searchkeyword, string extension)
         {
-            return files.Where(file => (file.Name.EndsWith(Extension) && file.Name.ToUpper().Contains(searchkeyword.ToUpper())) || (file.Name.ToUpper().Contains(searchkeyword.ToUpper()) && Extension.ToUpper() == "ANY")).ToArray();
+            if (regexCheckbox.Checked)
+            {
+                return files.Where(item => new Regex(searchkeyword).IsMatch(item.Name)).ToArray();
+            }
+            if (currentfolderCheckBox.Checked)
+            {
+                return caseCheckBox.Checked ? files.Where(item => item.Name.StartsWith(ActiveNode.FullPath) && item.Name.ToUpper().Contains(searchkeyword.ToUpper()) &&(item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")).Distinct().ToArray() : files.Where(item => item.Name.StartsWith(ActiveNode.FullPath) && item.Name.Contains(searchkeyword) && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")).Distinct().ToArray();
+            }
+            return caseCheckBox.Checked ? files.Where(item =>  item.Name.ToUpper().Contains(searchkeyword.ToUpper()) && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")).ToArray() : files.Where(item => item.Name.Contains(searchkeyword) && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")).ToArray();
+        }
+
+        public ListViewItem[] CollectFiles(BundleTreeNode root)
+        {
+            var res = root.Files.Select(file => file.Key).Select(x => new ListViewItem()
+            {
+                ImageKey = "genericFile",
+                ToolTipText = x,
+                Text = x
+            }).ToList();
+            foreach (var dr in root.Directories)
+            {
+                res.AddRange(CollectFiles(dr.Value));
+            }
+            return res.ToArray();
         }
 
         public string[] GetExtensions(params string[] filename)
@@ -441,6 +467,24 @@ namespace W3Edit
         private void clearSearch_Click(object sender, EventArgs e)
         {
             OpenNode(RootNode,true);
+        }
+
+        private void markAllFilesOfFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (fileListView.SelectedItems.Count > 0)
+            {
+                foreach (BundleListItem item in fileListView.SelectedItems)
+                {
+                    if (item.IsDirectory)
+                    {
+                        var files = CollectFiles(item.Node);
+                        if (files.Length > 1000)
+                            pathlistview.Items.AddRange(files.Take(1000).ToArray());
+                        else
+                            pathlistview.Items.AddRange(files);
+                    }
+                }
+            }
         }
     }
 }

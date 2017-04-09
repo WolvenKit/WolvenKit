@@ -32,6 +32,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cyotek.Windows.Forms.ColorPicker">
+      <HintPath>..\Atflib\Cyotek.Windows.Forms.ColorPicker.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -53,7 +56,6 @@
     <Compile Include="CR2WHeaderHandle.cs" />
     <Compile Include="CR2WHeaderString.cs" />
     <Compile Include="CR2WReaderExtensions.cs" />
-    <Compile Include="DDSImageParser.cs" />
     <Compile Include="Editors\ByteArrayEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -69,7 +71,6 @@
     <Compile Include="Editors\PtrEditor.Designer.cs">
       <DependentUpon>PtrEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="ImageUtility.cs" />
     <Compile Include="IVariableEditor.cs" />
     <Compile Include="ILocalizedStringSource.cs" />
     <Compile Include="InvalidChunkTypeException.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Types\CByteArray.cs" />
     <Compile Include="Types\CBytes.cs" />
     <Compile Include="Types\CColor.cs" />
+    <Compile Include="Types\CColorShift.cs" />
     <Compile Include="Types\CDateTime.cs" />
     <Compile Include="Types\CEngineQsTranform.cs" />
     <Compile Include="Types\CEngineTransform.cs" />
@@ -93,6 +95,7 @@
     <Compile Include="Types\CMaterialInstance.cs" />
     <Compile Include="Types\CMeshComponent.cs" />
     <Compile Include="Types\CName.cs" />
+    <Compile Include="Types\CParticleEmitter.cs" />
     <Compile Include="Types\CPtr.cs" />
     <Compile Include="Types\CQuestScriptBlock.cs" />
     <Compile Include="Types\CR2WTypeManager.cs" />

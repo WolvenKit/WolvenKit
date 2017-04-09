@@ -85,56 +85,20 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ActiproSoftware.Shared.Net20">
-      <HintPath>..\Atflib\ActiproSoftware.Shared.Net20.dll</HintPath>
-    </Reference>
-    <Reference Include="ActiproSoftware.SyntaxEditor.Addons.DotNet.Net20">
-      <HintPath>..\Atflib\ActiproSoftware.SyntaxEditor.Addons.DotNet.Net20.dll</HintPath>
-    </Reference>
-    <Reference Include="ActiproSoftware.SyntaxEditor.Net20">
-      <HintPath>..\Atflib\ActiproSoftware.SyntaxEditor.Net20.dll</HintPath>
-    </Reference>
-    <Reference Include="ActiproSoftware.WinUICore.Net20">
-      <HintPath>..\Atflib\ActiproSoftware.WinUICore.Net20.dll</HintPath>
-    </Reference>
-    <Reference Include="Atf.Atgi">
-      <HintPath>..\Atflib\Atf.Atgi.dll</HintPath>
-    </Reference>
-    <Reference Include="Atf.Collada">
-      <HintPath>..\Atflib\Atf.Collada.dll</HintPath>
-    </Reference>
     <Reference Include="Atf.Core">
       <HintPath>..\Atflib\Atf.Core.dll</HintPath>
     </Reference>
     <Reference Include="Atf.Gui">
       <HintPath>..\Atflib\Atf.Gui.dll</HintPath>
     </Reference>
-    <Reference Include="Atf.Gui.OpenGL">
-      <HintPath>..\Atflib\Atf.Gui.OpenGL.dll</HintPath>
-    </Reference>
     <Reference Include="Atf.Gui.WinForms">
       <HintPath>..\Atflib\Atf.Gui.WinForms.dll</HintPath>
-    </Reference>
-    <Reference Include="Atf.Gui.Wpf">
-      <HintPath>..\Atflib\Atf.Gui.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Atf.IronPython">
       <HintPath>..\Atflib\Atf.IronPython.dll</HintPath>
     </Reference>
-    <Reference Include="Atf.Osc">
-      <HintPath>..\Atflib\Atf.Osc.dll</HintPath>
-    </Reference>
-    <Reference Include="Atf.Subversion">
-      <HintPath>..\Atflib\Atf.Subversion.dll</HintPath>
-    </Reference>
     <Reference Include="Atf.SyntaxEditorControl">
       <HintPath>..\Atflib\Atf.SyntaxEditorControl.dll</HintPath>
-    </Reference>
-    <Reference Include="Bespoke.Common">
-      <HintPath>..\Atflib\Bespoke.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Bespoke.Common.Osc">
-      <HintPath>..\Atflib\Bespoke.Common.Osc.dll</HintPath>
     </Reference>
     <Reference Include="CrashReporter.NET, Version=1.5.1.0, Culture=neutral, PublicKeyToken=986591a91592b7e6, processorArchitecture=MSIL">
       <HintPath>..\packages\CrashReporter.NET.Official.1.5.1\lib\net40\CrashReporter.NET.dll</HintPath>
@@ -142,6 +106,13 @@
     </Reference>
     <Reference Include="CustomToolDomGen">
       <HintPath>..\Atflib\CustomToolDomGen.dll</HintPath>
+    </Reference>
+    <Reference Include="Cyotek.Windows.Forms.ColorPicker">
+      <HintPath>..\Atflib\Cyotek.Windows.Forms.ColorPicker.dll</HintPath>
+    </Reference>
+    <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
+      <HintPath>..\packages\CyotekImageBox.1.2.0-beta1\lib\net20\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="DDSUtils">
       <HintPath>..\Atflib\DDSUtils.dll</HintPath>
@@ -162,9 +133,6 @@
     </Reference>
     <Reference Include="IronPython.Modules">
       <HintPath>..\Atflib\IronPython.Modules.dll</HintPath>
-    </Reference>
-    <Reference Include="libcrashreport_net">
-      <HintPath>..\Atflib\libcrashreport_net.dll</HintPath>
     </Reference>
     <Reference Include="LZ4, Version=1.0.10.93, Culture=neutral, PublicKeyToken=62e1b5ec1eec9bdd, processorArchitecture=MSIL">
       <HintPath>..\packages\lz4net.1.0.10.93\lib\net4-client\LZ4.dll</HintPath>
@@ -254,12 +222,13 @@
     <Reference Include="WeifenLuo.WinFormsUI.Docking">
       <HintPath>..\packages\DockPanelSuite.3.0.0-alpha8\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
     </Reference>
-    <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2015, Version=2.11.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
-      <HintPath>..\packages\DockPanelSuite.ThemeVS2015.2.12.0\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
+    <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2015, Version=2.13.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>..\packages\DockPanelSuite.ThemeVS2015.2.13.0\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssmeblyExtensions.cs" />
     <Compile Include="frmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -281,11 +250,23 @@
     <Compile Include="frmJournalEditor.Designer.cs">
       <DependentUpon>frmJournalEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmPackSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPackSettings.Designer.cs">
+      <DependentUpon>frmPackSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmSaveEditor.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmSaveEditor.Designer.cs">
       <DependentUpon>frmSaveEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmTextInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTextInput.Designer.cs">
+      <DependentUpon>frmTextInput.cs</DependentUpon>
     </Compile>
     <Compile Include="frmTutorials.cs">
       <SubType>Form</SubType>
@@ -458,6 +439,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FlowTreeEditors\ChunkEditor.resx">
       <DependentUpon>ChunkEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FlowTreeEditors\SceneFlowConditionEditor.resx">
       <DependentUpon>SceneFlowConditionEditor.cs</DependentUpon>
@@ -467,12 +449,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmAddChunk.resx">
       <DependentUpon>frmAddChunk.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmAddVariable.resx">
       <DependentUpon>frmAddVariable.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmBundleExplorer.resx">
       <DependentUpon>frmBundleExplorer.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmChunkFlowDiagram.resx">
       <DependentUpon>frmChunkFlowDiagram.cs</DependentUpon>
@@ -513,6 +498,9 @@
     <EmbeddedResource Include="frmOutput.resx">
       <DependentUpon>frmOutput.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmPackSettings.resx">
+      <DependentUpon>frmPackSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmRenameDialog.resx">
       <DependentUpon>frmRenameDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -521,6 +509,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmSettings.resx">
       <DependentUpon>frmSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTextInput.resx">
+      <DependentUpon>frmTextInput.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmTutorials.resx">
       <DependentUpon>frmTutorials.cs</DependentUpon>
@@ -599,6 +590,10 @@
     <ProjectReference Include="..\W3Edit.Scaleform\W3Edit.Scaleform.csproj">
       <Project>{031dd6da-b643-4c2a-a30d-a2e2212724c2}</Project>
       <Name>W3Edit.Scaleform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\W3Edit.Textures\W3Edit.Cache.csproj">
+      <Project>{17cf5901-6e1f-467f-afe0-3cc04dc9688a}</Project>
+      <Name>W3Edit.Cache</Name>
     </ProjectReference>
     <ProjectReference Include="..\W3Edit.W3Speech\W3Edit.W3Speech.csproj">
       <Project>{c025f253-c78b-4a3b-87e7-1b2a1a453b97}</Project>

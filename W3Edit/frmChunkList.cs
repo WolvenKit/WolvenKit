@@ -105,7 +105,7 @@ namespace W3Edit
                     {
                         var pastedchunk = File.CreateChunk(chunk.Type,chunk.Parent);
                         pastedchunk.data = chunk.data.Copy(new CR2WCopyAction());
-                        
+                        //TODO: Unknownbytes
                         listView.AddObject(pastedchunk);
 
                         OnSelectChunk?.Invoke(this, new SelectChunkArgs { Chunk = pastedchunk });

@@ -44,10 +44,6 @@ namespace W3Edit.Bundles
                     default:
                         return "Unknown";
                 }
-                /* TODO:
-                 * http://aluigi.altervista.org/bms/witcher3.bms
-                 * 2 should be snappy
-                 */
             }
         }
 

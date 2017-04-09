@@ -50,8 +50,9 @@ namespace W3Edit
             this.resetfilesButton = new System.Windows.Forms.ToolStripButton();
             this.showhideButton = new System.Windows.Forms.ToolStripButton();
             this.ExpandBTN = new System.Windows.Forms.ToolStripButton();
-            this.modexplorerSlave = new System.IO.FileSystemWatcher();
             this.CollapseBTN = new System.Windows.Forms.ToolStripButton();
+            this.modexplorerSlave = new System.IO.FileSystemWatcher();
+            this.copyRelativePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenu.SuspendLayout();
             this.searchstrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.modexplorerSlave)).BeginInit();
@@ -89,10 +90,11 @@ namespace W3Edit
             this.renameToolStripMenuItem,
             this.copyToolStripMenuItem,
             this.pasteToolStripMenuItem,
+            this.copyRelativePathToolStripMenuItem,
             this.toolStripSeparator1,
             this.showFileInExplorerToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(221, 166);
+            this.contextMenu.Size = new System.Drawing.Size(221, 220);
             this.contextMenu.Opened += new System.EventHandler(this.contextMenu_Opened);
             // 
             // addFileToolStripMenuItem
@@ -202,15 +204,6 @@ namespace W3Edit
             this.ExpandBTN.Text = "Expand all";
             this.ExpandBTN.Click += new System.EventHandler(this.ExpandBTN_Click);
             // 
-            // modexplorerSlave
-            // 
-            this.modexplorerSlave.EnableRaisingEvents = true;
-            this.modexplorerSlave.IncludeSubdirectories = true;
-            this.modexplorerSlave.SynchronizingObject = this;
-            this.modexplorerSlave.Created += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
-            this.modexplorerSlave.Deleted += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
-            this.modexplorerSlave.Renamed += new System.IO.RenamedEventHandler(this.FileChanges_Detected);
-            // 
             // CollapseBTN
             // 
             this.CollapseBTN.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -221,6 +214,22 @@ namespace W3Edit
             this.CollapseBTN.Text = "Collapse all";
             this.CollapseBTN.ToolTipText = "Collapse all";
             this.CollapseBTN.Click += new System.EventHandler(this.CollapseBTN_Click);
+            // 
+            // modexplorerSlave
+            // 
+            this.modexplorerSlave.EnableRaisingEvents = true;
+            this.modexplorerSlave.IncludeSubdirectories = true;
+            this.modexplorerSlave.SynchronizingObject = this;
+            this.modexplorerSlave.Created += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
+            this.modexplorerSlave.Deleted += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
+            this.modexplorerSlave.Renamed += new System.IO.RenamedEventHandler(this.FileChanges_Detected);
+            // 
+            // copyRelativePathToolStripMenuItem
+            // 
+            this.copyRelativePathToolStripMenuItem.Name = "copyRelativePathToolStripMenuItem";
+            this.copyRelativePathToolStripMenuItem.Size = new System.Drawing.Size(220, 26);
+            this.copyRelativePathToolStripMenuItem.Text = "Copy relative path";
+            this.copyRelativePathToolStripMenuItem.Click += new System.EventHandler(this.copyRelativePathToolStripMenuItem_Click);
             // 
             // frmModExplorer
             // 
@@ -268,5 +277,6 @@ namespace W3Edit
         private ToolStripMenuItem showFileInExplorerToolStripMenuItem;
         private ToolStripButton ExpandBTN;
         private ToolStripButton CollapseBTN;
+        private ToolStripMenuItem copyRelativePathToolStripMenuItem;
     }
 }
