@@ -7,7 +7,7 @@ using W3Edit.W3Strings;
 
 namespace W3Edit.W3Speech
 {
-    static class FileTools
+    public static class FileTools
     {
         /// <summary>
         /// Parse all files in the directory path to input pairs.
