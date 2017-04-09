@@ -68,9 +68,10 @@ namespace W3Edit.W3Speech
                     .Select(t =>
                     {
                         var duration_offset = t.Item3 - position + t.Item4;
-                        br.BaseStream.Seek((long)(duration_offset), SeekOrigin.Current);
+                        StreamTools.Skip(duration_offset, br.BaseStream);
+                        position += duration_offset;
                         var duration = br.ReadSingle();
-                        position += duration_offset + 4;
+                        position += 4;
                         return new ItemInfo(new LanguageSpecificID(t.Item1), t.Item2, t.Item3, t.Item4, t.Item5, t.Item6, duration);
                     })
                     .ToList()
@@ -133,22 +134,12 @@ namespace W3Edit.W3Speech
             {
                 var wem = pair.wem.Invoke();
                 bw.Write((UInt32)pair.wem_size);
-                UInt64 c = 0;
-                while (c < pair.wem_size)
-                {
-                    bw.BaseStream.WriteByte((byte)wem.ReadByte());
-                    c += 1;
-                }
+                StreamTools.Transfer(pair.wem_size, wem, bw.BaseStream);
                 wem.Close();
-                bw.Write((Single)pair.duration);
+                bw.Write(pair.duration);
                 bw.Write((UInt32)4);
                 var cr2w = pair.cr2w.Invoke();
-                c = 0;
-                while (c < pair.cr2w_size)
-                {
-                    bw.BaseStream.WriteByte((byte)cr2w.ReadByte());
-                    c += 1;
-                }
+                StreamTools.Transfer(pair.cr2w_size, cr2w, bw.BaseStream);
                 cr2w.Close();
             });
         }
