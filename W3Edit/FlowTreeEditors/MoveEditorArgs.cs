@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace W3Edit.FlowTreeEditors
+namespace WolvenKit.FlowTreeEditors
 {
     public class MoveEditorArgs
     {

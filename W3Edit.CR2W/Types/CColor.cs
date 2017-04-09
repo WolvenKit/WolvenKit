@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace W3Edit.CR2W.Types
+namespace WolvenKit.CR2W.Types
 {
     public class CColor : CVector
     {

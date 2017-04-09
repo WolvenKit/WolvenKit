@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace W3Edit.Bundles
+namespace WolvenKit.Bundles
 {
     public class Bundle
     {

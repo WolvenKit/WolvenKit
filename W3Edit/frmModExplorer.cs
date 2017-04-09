@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using W3Edit.Mod;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.Mod;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public partial class frmModExplorer : DockContent
     {
@@ -77,8 +77,16 @@ namespace W3Edit
                 if (!showfolders)
                 {
                     var newNode = current.Add(item, item);
-                    newNode.ImageKey = "genericFile";
-                    newNode.SelectedImageKey = "genericFile";
+                    if (treeImages.Images.ContainsKey(Path.GetExtension(item).Replace(".", "")))
+                    {
+                        newNode.ImageKey = Path.GetExtension(item).Replace(".", "");
+                        newNode.ImageKey = Path.GetExtension(item).Replace(".", "");
+                    }
+                    else
+                    {
+                        newNode.ImageKey = "genericFile";
+                        newNode.ImageKey = "genericFile";
+                    }
                 }
                 else
                 {
@@ -91,8 +99,16 @@ namespace W3Edit
                             var newNode = current.Add(parts[i], parts[i]);
                             if (i == parts.Length - 1)
                             {
-                                newNode.ImageKey = "genericFile";
-                                newNode.SelectedImageKey = "genericFile";
+                                if (treeImages.Images.ContainsKey(Path.GetExtension(item).Replace(".", "")))
+                                {
+                                    newNode.ImageKey = Path.GetExtension(item).Replace(".", "");
+                                    newNode.ImageKey = Path.GetExtension(item).Replace(".", "");
+                                }
+                                else
+                                {
+                                    newNode.ImageKey = "genericFile";
+                                    newNode.ImageKey = "genericFile";
+                                }
                             }
                             else
                             {
@@ -230,6 +246,7 @@ namespace W3Edit
             UpdateModFileList(FoldersShown, true);
         }
 
+
         private void frmModExplorer_Shown(object sender, EventArgs e)
         {
             if(ActiveMod != null)
@@ -267,5 +284,6 @@ namespace W3Edit
             if(modFileList.SelectedNode != null)
                 Clipboard.SetText(modFileList.SelectedNode.FullPath);
         }
+
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace W3Edit.Render
+namespace WolvenKit.Render
 {
     static class Program
     {

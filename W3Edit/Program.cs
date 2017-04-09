@@ -3,7 +3,7 @@ using System.Threading;
 using System.Windows.Forms;
 using CrashReporterDotNET;
 
-namespace W3Edit
+namespace WolvenKit
 {
     internal static class Program
     {

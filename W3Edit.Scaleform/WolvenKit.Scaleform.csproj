@@ -7,8 +7,8 @@
     <ProjectGuid>{031DD6DA-B643-4C2A-A30D-A2E2212724C2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>W3Edit.Scaleform</RootNamespace>
-    <AssemblyName>W3Edit.Scaleform</AssemblyName>
+    <RootNamespace>WolvenKit.Scaleform</RootNamespace>
+    <AssemblyName>WolvenKit.Scaleform</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

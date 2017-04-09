@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace W3Edit.FlowTreeEditors
+namespace WolvenKit.FlowTreeEditors
 {
     partial class SceneSectionEditor
     {

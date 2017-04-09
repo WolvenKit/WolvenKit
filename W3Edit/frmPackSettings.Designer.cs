@@ -1,4 +1,4 @@
-﻿namespace W3Edit
+﻿namespace WolvenKit
 {
     partial class frmPackSettings
     {

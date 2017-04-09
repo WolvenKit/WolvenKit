@@ -4,7 +4,7 @@ using System.IO;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public partial class frmOutput : DockContent
     {

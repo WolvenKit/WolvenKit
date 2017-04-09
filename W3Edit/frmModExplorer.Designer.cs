@@ -2,7 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 
-namespace W3Edit
+namespace WolvenKit
 {
     partial class frmModExplorer
     {
@@ -42,6 +42,7 @@ namespace W3Edit
             this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyRelativePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.showFileInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchstrip = new System.Windows.Forms.ToolStrip();
@@ -52,7 +53,6 @@ namespace W3Edit
             this.ExpandBTN = new System.Windows.Forms.ToolStripButton();
             this.CollapseBTN = new System.Windows.Forms.ToolStripButton();
             this.modexplorerSlave = new System.IO.FileSystemWatcher();
-            this.copyRelativePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenu.SuspendLayout();
             this.searchstrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.modexplorerSlave)).BeginInit();
@@ -67,7 +67,7 @@ namespace W3Edit
             this.modFileList.Location = new System.Drawing.Point(0, 27);
             this.modFileList.Name = "modFileList";
             this.modFileList.SelectedImageIndex = 0;
-            this.modFileList.Size = new System.Drawing.Size(484, 378);
+            this.modFileList.Size = new System.Drawing.Size(484, 555);
             this.modFileList.TabIndex = 0;
             this.modFileList.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.modFileList_NodeMouseClick);
             this.modFileList.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.modFileList_NodeMouseDoubleClick);
@@ -80,6 +80,16 @@ namespace W3Edit
             this.treeImages.Images.SetKeyName(0, "genericFile");
             this.treeImages.Images.SetKeyName(1, "normalFolder");
             this.treeImages.Images.SetKeyName(2, "openFolder");
+            this.treeImages.Images.SetKeyName(3, "csv");
+            this.treeImages.Images.SetKeyName(4, "redswf");
+            this.treeImages.Images.SetKeyName(5, "env");
+            this.treeImages.Images.SetKeyName(6, "journal");
+            this.treeImages.Images.SetKeyName(7, "w2beh");
+            this.treeImages.Images.SetKeyName(8, "xml");
+            this.treeImages.Images.SetKeyName(9, "w2behtree");
+            this.treeImages.Images.SetKeyName(10, "w2scene");
+            this.treeImages.Images.SetKeyName(11, "w2p");
+            this.treeImages.Images.SetKeyName(12, "w2rig");
             // 
             // contextMenu
             // 
@@ -94,12 +104,12 @@ namespace W3Edit
             this.toolStripSeparator1,
             this.showFileInExplorerToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(221, 220);
+            this.contextMenu.Size = new System.Drawing.Size(221, 192);
             this.contextMenu.Opened += new System.EventHandler(this.contextMenu_Opened);
             // 
             // addFileToolStripMenuItem
             // 
-            this.addFileToolStripMenuItem.Image = global::W3Edit.Properties.Resources.AddNodefromFile_354;
+            this.addFileToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.AddNodefromFile_354;
             this.addFileToolStripMenuItem.Name = "addFileToolStripMenuItem";
             this.addFileToolStripMenuItem.Size = new System.Drawing.Size(220, 26);
             this.addFileToolStripMenuItem.Text = "Add File";
@@ -132,6 +142,13 @@ namespace W3Edit
             this.pasteToolStripMenuItem.Size = new System.Drawing.Size(220, 26);
             this.pasteToolStripMenuItem.Text = "Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
+            // 
+            // copyRelativePathToolStripMenuItem
+            // 
+            this.copyRelativePathToolStripMenuItem.Name = "copyRelativePathToolStripMenuItem";
+            this.copyRelativePathToolStripMenuItem.Size = new System.Drawing.Size(220, 26);
+            this.copyRelativePathToolStripMenuItem.Text = "Copy relative path";
+            this.copyRelativePathToolStripMenuItem.Click += new System.EventHandler(this.copyRelativePathToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -176,7 +193,7 @@ namespace W3Edit
             // resetfilesButton
             // 
             this.resetfilesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.resetfilesButton.Image = global::W3Edit.Properties.Resources.ExitIcon;
+            this.resetfilesButton.Image = global::WolvenKit.Properties.Resources.ExitIcon;
             this.resetfilesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.resetfilesButton.Name = "resetfilesButton";
             this.resetfilesButton.Size = new System.Drawing.Size(24, 24);
@@ -186,7 +203,7 @@ namespace W3Edit
             // showhideButton
             // 
             this.showhideButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.showhideButton.Image = global::W3Edit.Properties.Resources.LayerGroupVisibled;
+            this.showhideButton.Image = global::WolvenKit.Properties.Resources.LayerGroupVisibled;
             this.showhideButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.showhideButton.Name = "showhideButton";
             this.showhideButton.Size = new System.Drawing.Size(24, 24);
@@ -197,7 +214,7 @@ namespace W3Edit
             // ExpandBTN
             // 
             this.ExpandBTN.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.ExpandBTN.Image = global::W3Edit.Properties.Resources.Editing_Expand_icon;
+            this.ExpandBTN.Image = global::WolvenKit.Properties.Resources.Editing_Expand_icon;
             this.ExpandBTN.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ExpandBTN.Name = "ExpandBTN";
             this.ExpandBTN.Size = new System.Drawing.Size(24, 24);
@@ -207,7 +224,7 @@ namespace W3Edit
             // CollapseBTN
             // 
             this.CollapseBTN.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.CollapseBTN.Image = global::W3Edit.Properties.Resources.Editing_Collapse_icon;
+            this.CollapseBTN.Image = global::WolvenKit.Properties.Resources.Editing_Collapse_icon;
             this.CollapseBTN.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.CollapseBTN.Name = "CollapseBTN";
             this.CollapseBTN.Size = new System.Drawing.Size(24, 24);
@@ -220,22 +237,14 @@ namespace W3Edit
             this.modexplorerSlave.EnableRaisingEvents = true;
             this.modexplorerSlave.IncludeSubdirectories = true;
             this.modexplorerSlave.SynchronizingObject = this;
-            this.modexplorerSlave.Created += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
             this.modexplorerSlave.Deleted += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
             this.modexplorerSlave.Renamed += new System.IO.RenamedEventHandler(this.FileChanges_Detected);
-            // 
-            // copyRelativePathToolStripMenuItem
-            // 
-            this.copyRelativePathToolStripMenuItem.Name = "copyRelativePathToolStripMenuItem";
-            this.copyRelativePathToolStripMenuItem.Size = new System.Drawing.Size(220, 26);
-            this.copyRelativePathToolStripMenuItem.Text = "Copy relative path";
-            this.copyRelativePathToolStripMenuItem.Click += new System.EventHandler(this.copyRelativePathToolStripMenuItem_Click);
             // 
             // frmModExplorer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 405);
+            this.ClientSize = new System.Drawing.Size(484, 582);
             this.Controls.Add(this.modFileList);
             this.Controls.Add(this.searchstrip);
             this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 

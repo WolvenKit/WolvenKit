@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace W3Edit.Bundles
+namespace WolvenKit.Bundles
 {
     public class MissingCompressionException : Exception
     {

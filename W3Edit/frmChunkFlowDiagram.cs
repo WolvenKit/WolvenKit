@@ -5,12 +5,12 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using W3Edit.CR2W;
-using W3Edit.CR2W.Types;
-using W3Edit.FlowTreeEditors;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
+using WolvenKit.FlowTreeEditors;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public partial class frmChunkFlowDiagram : DockContent
     {

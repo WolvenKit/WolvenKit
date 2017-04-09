@@ -6,11 +6,11 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
-using W3Edit.CR2W;
-using W3Edit.CR2W.Editors;
-using W3Edit.CR2W.Types;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.Editors;
+using WolvenKit.CR2W.Types;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public partial class frmHexEditorView : Form, IVirtualListDataSource
     {

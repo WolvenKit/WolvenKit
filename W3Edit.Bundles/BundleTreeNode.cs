@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace W3Edit.Bundles
+namespace WolvenKit.Bundles
 {
     public class BundleTreeNode
     {

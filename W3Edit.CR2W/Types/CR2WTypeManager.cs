@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace W3Edit.CR2W.Types
+namespace WolvenKit.CR2W.Types
 {
     public class CR2WTypeDefinition
     {

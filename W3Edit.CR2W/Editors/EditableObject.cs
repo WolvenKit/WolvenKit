@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using W3Edit.CR2W.Types;
+using WolvenKit.CR2W.Types;
 
-namespace W3Edit.CR2W.Editors
+namespace WolvenKit.CR2W.Editors
 {
     public class EditableObject : IEditableVariable
     {

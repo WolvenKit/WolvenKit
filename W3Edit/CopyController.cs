@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using W3Edit.CR2W;
-using W3Edit.CR2W.Editors;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.Editors;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public class CopyController
     {

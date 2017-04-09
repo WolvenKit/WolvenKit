@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace W3Edit.W3Strings
+namespace WolvenKit.W3Strings
 {
     public class W3StringBlock2
     {

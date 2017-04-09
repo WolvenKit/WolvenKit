@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Windows.Forms;
-using W3Edit.Scaleform;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.Scaleform;
 
-namespace W3Edit
+namespace WolvenKit
 {
     public partial class frmUsmPlayer : DockContent
     {
