@@ -6,18 +6,32 @@ namespace WolvenKit.W3Strings
 {
     public static class W3StringExtensions
     {
-        public static int ReadBit6(this BinaryReader stream)
+        public class ReadBit6Result
+        {
+            public readonly int value;
+            public readonly int length;
+
+            public ReadBit6Result(int value, int length)
+            {
+                this.value = value;
+                this.length = length;
+            }
+        }
+
+        public static ReadBit6Result ReadBit6(this BinaryReader stream)
         {
             var result = 0;
             var shift = 0;
             byte b = 0;
             var i = 1;
+            var length = 0;
 
             do
             {
                 b = stream.ReadByte();
+                length += 1;
                 if (b == 128)
-                    return 0;
+                    return new ReadBit6Result(0, length);
                 byte s = 6;
                 byte mask = 255;
                 if (b > 127)
@@ -37,7 +51,7 @@ namespace WolvenKit.W3Strings
                 i = i + 1;
             } while (!(b < 64 || (i >= 3 && b < 128)));
 
-            return result;
+            return new ReadBit6Result(result, length);
         }
 
         // first byte:
@@ -77,14 +91,15 @@ namespace WolvenKit.W3Strings
         //// is signed?
         //if b & 0b1000_0000 == 128 { -1 * value as i32 } else { value as i32 }
 
-        public static void WriteBit6(this BinaryWriter stream, int c)
+        public static UInt32 WriteBit6(this BinaryWriter stream, int c)
         {
             if (c == 0)
             {
-                stream.Write((byte) 128);
-                return;
+                stream.Write((byte)128);
+                return 1;
             }
 
+            UInt32 written = 0;
             var str2 = Convert.ToString(c, 2);
 
             var bytes = new List<int>();
@@ -131,8 +146,10 @@ namespace WolvenKit.W3Strings
                     throw new Exception("No clue what to do here, still need to think about it... :p");
                 }
 
-                stream.Write((byte) bytes[i]);
+                stream.Write((byte)bytes[i]);
+                written += 1;
             }
+            return written;
         }
     }
 }
