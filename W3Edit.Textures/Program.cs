@@ -48,8 +48,8 @@ namespace WolvenKit.Cache
                         }
                         case Cachetype.Sound:
                         {
-                            SoundCache.Read(of.FileName);
-                            break;
+							new SoundCache(of.FileName);
+							break;
                         }
                         default:
                             MessageBox.Show("Unsupported file!"); 

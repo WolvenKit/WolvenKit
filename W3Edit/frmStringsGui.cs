@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 using System.Xml.Linq;
 
-namespace W3Edit
+namespace WolvenKit
 {
 	public partial class frmStringsGui : Form
 	{

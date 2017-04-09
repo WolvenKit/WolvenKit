@@ -1,4 +1,4 @@
-﻿namespace W3Edit
+﻿namespace WolvenKit
 {
 	partial class frmStringsGui
 	{
@@ -110,14 +110,14 @@
 			// fromXMLToolStripMenuItem
 			// 
 			this.fromXMLToolStripMenuItem.Name = "fromXMLToolStripMenuItem";
-			this.fromXMLToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.fromXMLToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
 			this.fromXMLToolStripMenuItem.Text = "From XML";
 			this.fromXMLToolStripMenuItem.Click += new System.EventHandler(this.fromXMLToolStripMenuItem_Click);
 			// 
 			// fromScriptsToolStripMenuItem
 			// 
 			this.fromScriptsToolStripMenuItem.Name = "fromScriptsToolStripMenuItem";
-			this.fromScriptsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.fromScriptsToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
 			this.fromScriptsToolStripMenuItem.Text = "From Scripts";
 			this.fromScriptsToolStripMenuItem.Click += new System.EventHandler(this.fromScriptsToolStripMenuItem_Click);
 			// 
