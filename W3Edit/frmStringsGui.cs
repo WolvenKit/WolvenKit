@@ -13,10 +13,17 @@ using System.IO;
 
 namespace WolvenKit
 {
+    enum EDisplayNameType
+    {
+        VAR,
+        GROUP
+    }
     public partial class frmStringsGui : Form
     {
         int counter = 0;
         int modID = 0;
+
+        bool noPrefix = false;
 
         public frmStringsGui()
         {
@@ -102,6 +109,7 @@ namespace WolvenKit
 
         private void ReadXML()
         {
+            // to do: check tags for custom display names, add prefixes to keys
             string path = GetXMLPath();
 
             if (path != "")
@@ -110,17 +118,29 @@ namespace WolvenKit
                 File.WriteAllLines(path, new string[] { "<?xml version=\"1.0\" encoding=\"utf-8\"?>" }.ToList().Concat(File.ReadAllLines(path).Skip(1).ToArray()));
 
                 XDocument doc = XDocument.Load(path);
+
+                // vars displayNames
                 foreach (var vars in doc.Descendants("UserConfig").Descendants("Group").Descendants("VisibleVars"))
                 {
                     foreach (var var in vars.Descendants("Var"))
                     {
                         String name = var.Attribute("displayName").Value;
-                        dataGridViewStrings.Rows.Add(counter + 2110000000 + modID, DisplayNameToKey(name), name);
+                        dataGridViewStrings.Rows.Add(counter + 2110000000 + modID * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                        ++counter;
+                    }
+                }
+                // groups displayNames
+                foreach (var vars in doc.Descendants("UserConfig"))
+                {
+                    foreach (var var in vars.Descendants("Group"))
+                    {
+                        String name = var.Attribute("displayName").Value;
+                        dataGridViewStrings.Rows.Add(counter + 2110000000 + modID * 1000, DisplayNameToKey(name, EDisplayNameType.GROUP), name);
                         ++counter;
                     }
                 }
             }
-                
+
         }
 
         private string GetXMLPath()
@@ -134,10 +154,14 @@ namespace WolvenKit
                 return "";
         }
 
-        private string DisplayNameToKey(string name)
+        private string DisplayNameToKey(string name, EDisplayNameType nameType)
         {
             char[] nameConverted = name.ToCharArray(0, name.Length);
             string stringKey = "";
+
+            if (nameType == EDisplayNameType.VAR && !noPrefix)
+                stringKey += "option_";
+
             for (int i = 0; i < nameConverted.Length; ++i)
                 if (nameConverted[i] == ' ')
                 {
@@ -147,6 +171,12 @@ namespace WolvenKit
                 else
                     stringKey += nameConverted[i];
 
+            if (nameType == EDisplayNameType.GROUP && !noPrefix)
+            {
+                string[] stringKeySplitted = stringKey.Split('.');
+                stringKey = "panel_" + stringKeySplitted[stringKeySplitted.Length - 1];
+            }
+
             return stringKey;
         }
 
@@ -154,8 +184,7 @@ namespace WolvenKit
         {
             if (!IsIDValid(textBoxModID.Text))
             {
-                MessageBox.Show("Invalid Mod ID.", "Wolven Kit",
-                MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("Invalid Mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 textBoxModID.Text = "";
             }
             else
