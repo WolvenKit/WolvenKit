@@ -129,6 +129,17 @@ namespace WolvenKit
                         ++counter;
                     }
                 }
+                // optionsArray vars displayNames
+                foreach (var vars in doc.Descendants("UserConfig").Descendants("Group").Descendants("VisibleVars").Descendants("OptionsArray"))
+                {
+                    foreach (var var in vars.Descendants("Option"))
+                    {
+                        String name = var.Attribute("displayName").Value;
+                        dataGridViewStrings.Rows.Add(counter + 2110000000 + modID * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                        ++counter;
+                    }
+                }
+
                 // groups displayNames
                 foreach (var vars in doc.Descendants("UserConfig"))
                 {
