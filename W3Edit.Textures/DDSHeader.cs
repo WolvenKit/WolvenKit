@@ -1,33 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace W3Edit.Textures
 {
+    /// <summary>
+    /// DDSHeader class, creates proper DDS header with generate() function
+    /// </summary>
     class DDSHeader
     {
         // Implemented from https://github.com/hhrhhr/Lua-utils-for-Witcher-3/blob/master/mod_dds_header.lua
         // DDS header[32]
-        private char _fourcc = (char)1, _size = (char)2, _flags = (char)3, _height = (char)4;
-        private char _width = (char)5, _pitch = (char)6, _depth = (char)7, _mipmaps = (char)8;
+        private byte _fourcc = 1, _size = 2, _flags = 3, _height = 4;
+        private byte _width = 5, _pitch = 6, _depth = 7, _mipmaps = 8;
         // reserved[44]
         //  9 10 11 12
         // 13 14 15 16
         // 17 18 19
         // DDSPixelFormat[32]
-        private char _psize = (char)20, _pflags = (char)21, _pfourcc = (char)22, _pbpp = (char)23;
-        private char _prmask = (char)24, _pgmask = (char)25, _pbmask = (char)26, _pamask = (char)27;
+        private byte _psize = 20, _pflags = 21, _pfourcc = 22, _pbpp = 23;
+        private byte _prmask = 24, _pgmask = 25, _pbmask = 26, _pamask = 27;
         // DDSCaps[16]
-        private char _caps1 = (char)28, _caps2 = (char)29, _caps3 = (char)30, _caps4 = (char)31;
+        private byte _caps1 = 28, _caps2 = 29, _caps3 = 30, _caps4 = 31;
         //
-        private char _notused = (char)32;
+        private byte _notused = 32;
         // DDSHeader10[20]
-        private char _dxgiFmt = (char)33, _resDim = (char)34, _miscFlag = (char)35, _arraySize = (char)36;
-        private char _reserved = (char)37;
+        private byte _dxgiFmt = 33, _resDim = 34, _miscFlag = 35, _arraySize = 36;
+        private byte _reserved = 37;
 
-        private Dictionary<char, uint> self = new Dictionary<char, uint>();
+        private Dictionary<byte, uint> self = new Dictionary<byte, uint>();
 
         static uint MAKEFOURCC(string fourcc)
         {
@@ -53,20 +53,21 @@ namespace W3Edit.Textures
         static uint Format_RGB = 0;
         static uint Format_RGBA = Format_RGB;
         // DX9 formats.
-        public static uint Format_DXT1 = 1;
-        public static uint Format_DXT1a = 2; // DXT1 with binary alpha.
-        public static uint Format_DXT3 = 3;
-        public static uint Format_DXT5 = 4;
-        public static uint Format_DXT5n = 5; // Compressed HILO: R= 1, G= y, B= 0, A= x
+        public const uint Format_DXT1 = 1;
+        public const uint Format_DXT1a = 2; // DXT1 with binary alpha.
+        public const uint Format_DXT3 = 3;
+        public const uint Format_DXT5 = 4;
+        public const uint Format_DXT5n = 5; // Compressed HILO: R= 1, G= y, B= 0, A= x
         // DX10 formats.
-        public static uint Format_BC1 = Format_DXT1;
-        public static uint Format_BC1a = Format_DXT1a;
-        public static uint Format_BC2 = Format_DXT3;
-        public static uint Format_BC3 = Format_DXT5;
-        public static uint Format_BC3n = Format_DXT5n;
-        public static uint Format_BC4 = 6; // ATI1
-        public static uint Format_BC5 = 7; // 3DC, ATI2
+        public uint Format_BC1 = Format_DXT1;
+        public uint Format_BC1a = Format_DXT1a;
+        public uint Format_BC2 = Format_DXT3;
+        public uint Format_BC3 = Format_DXT5;
+        public uint Format_BC3n = Format_DXT5n;
+        public uint Format_BC4 = 6; // ATI1
+        public uint Format_BC5 = 7; // 3DC, ATI2
 
+#pragma warning disable 0414
         static uint DDSD_CAPS = 0x00000001;
         static uint DDSD_HEIGHT = 0x00000002;
         static uint DDSD_WIDTH = 0x00000004;
@@ -97,7 +98,7 @@ namespace W3Edit.Textures
         static uint D3D10_RESOURCE_DIMENSION_TEXTURE1D = 2;
         static uint D3D10_RESOURCE_DIMENSION_TEXTURE2D = 3;
         static uint D3D10_RESOURCE_DIMENSION_TEXTURE3D = 4;
-
+#pragma warning restore 0414
 
         // init
         public DDSHeader()
@@ -111,12 +112,12 @@ namespace W3Edit.Textures
             self[_depth] = 0;
             self[_mipmaps] = 0;
             // reserved
-            for (char i = (char)9; i <= 17; i++)
+            for (byte i = 9; i <= 17; i++)
             {
                 self[i] = 0;
             }
-            self[(char)18] = MAKEFOURCC("_LUA");
-            self[(char)19] = MAKEFOURCC("_DDS");
+            self[18] = MAKEFOURCC("_LUA");
+            self[19] = MAKEFOURCC("_DDS");
             // pixel format
             self[_psize] = 32;
             self[_pflags] = 0;
@@ -305,12 +306,15 @@ namespace W3Edit.Textures
             if (fmt == Format_RGBA)
                 return computePitch(width, bpp) * depth * height;
             else
-                return (uint)(blockSize(fmt) * ((width + 3) / 4) * ((height + 3) / 4));
+                return blockSize(fmt) * ((width + 3) / 4) * ((height + 3) / 4);
         }
 
         //-----------------------------------------------------------------------------
-
-        public List<byte> generate(uint width = 256, uint height = 256, uint mips = 1, uint fmt = 1, uint bpp = 16, bool cubemap = false, uint depth = 0, bool normal = false)
+        /// <summary>
+        /// Generates proper DDS header
+        /// </summary>
+        /// <returns>Header in List of bytes</returns>
+        public List<byte> generate(uint width = 256, uint height = 256, uint mips = 1, uint fmt = Format_DXT1, uint bpp = 16, bool cubemap = false, uint depth = 0, bool normal = false)
         {
             set_width(width);
             set_height(height);
@@ -335,7 +339,7 @@ namespace W3Edit.Textures
                 if (bpp == 8)
                     set_pixel_format(bpp, 0x0f00, 0x00f0, 0x000f, 0xf000);
                 else if (bpp == 16)
-                    // TODO: check this
+                    // -TODO: check this
                     set_pixel_format(bpp, 0x03f000, 0x000fc0, 0x00003f, 0xfc0000);
                 else if (bpp == 32)
                     set_pixel_format(bpp, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
@@ -366,14 +370,14 @@ namespace W3Edit.Textures
                 }
             }
 
-            //TODO: swapBytes()
+            // -TODO: swapBytes()
 
-            uint header_size = (uint)(128 / 4);
+            uint header_size = (128 / 4);
             if (hasDX10Header())
-                header_size = (uint)((128 + 20) / 4);
+                header_size = ((128 + 20) / 4);
 
             List<byte> header = new List<byte>();
-            for (char i = (char)1; i < header_size; i++)
+            for (byte i = 1; i < header_size; i++)
                 header.AddRange( BitConverter.GetBytes(self[i]) );
 
             return header;
