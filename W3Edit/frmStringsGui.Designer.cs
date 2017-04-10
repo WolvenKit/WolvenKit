@@ -41,6 +41,7 @@
             this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonGenerateXML = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonGenerateScripts = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonEncode = new System.Windows.Forms.ToolStripButton();
             this.splitContainerMain = new System.Windows.Forms.SplitContainer();
             this.splitContainerTabs = new System.Windows.Forms.SplitContainer();
             this.tabControlLanguages = new System.Windows.Forms.TabControl();
@@ -129,7 +130,8 @@
             this.toolStripButtonSave,
             this.toolStripButtonOpen,
             this.toolStripButtonGenerateXML,
-            this.toolStripButtonGenerateScripts});
+            this.toolStripButtonGenerateScripts,
+            this.toolStripButtonEncode});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1086, 25);
@@ -171,6 +173,16 @@
             this.toolStripButtonGenerateScripts.Size = new System.Drawing.Size(143, 22);
             this.toolStripButtonGenerateScripts.Text = "Generate From Scripts";
             this.toolStripButtonGenerateScripts.Click += new System.EventHandler(this.toolStripButtonGenerateScripts_Click);
+            // 
+            // toolStripButtonEncode
+            // 
+            this.toolStripButtonEncode.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonEncode.Image")));
+            this.toolStripButtonEncode.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonEncode.Name = "toolStripButtonEncode";
+            this.toolStripButtonEncode.Size = new System.Drawing.Size(66, 22);
+            this.toolStripButtonEncode.Text = "Encode";
+            this.toolStripButtonEncode.ToolTipText = "toolStripButtonEncode";
+            this.toolStripButtonEncode.Click += new System.EventHandler(this.toolStripButtonEncode_Click);
             // 
             // splitContainerMain
             // 
@@ -347,5 +359,6 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn ColumnLocalisation;
         private System.Windows.Forms.TextBox textBoxModID;
         private System.Windows.Forms.Label labelModID;
+        private System.Windows.Forms.ToolStripButton toolStripButtonEncode;
     }
 }

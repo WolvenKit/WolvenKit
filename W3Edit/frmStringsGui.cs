@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 using System.Xml.Linq;
 using System.IO;
+using System.Diagnostics;
 
 namespace WolvenKit
 {
@@ -163,10 +164,11 @@ namespace WolvenKit
 
         private string GetXMLPath()
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "XML | *.xml;";
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                return openFileDialog.FileName;
+                return ofd.FileName;
             }
             else
                 return "";
@@ -242,7 +244,8 @@ namespace WolvenKit
             return true;
         }
 
-        private void SaveCSV()
+        // save without .csv extension to create proper w3string name
+        private void SaveCSVForEncoding(string outputPath)
         {
             var sb = new StringBuilder();
 
@@ -252,6 +255,53 @@ namespace WolvenKit
                 sb.AppendLine(string.Join("|", cells.Select(cell => cell.Value).ToArray()));
             }
                       
+            int languagesCount = languages.Count();
+
+            for (int i = 0; i < languagesCount; ++i)
+            {
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath + "\\" + languages[i]))
+                {
+                    file.WriteLine(";meta[language=" + languages[i] + "]");
+                    file.WriteLine("; id | key(hex) | key(str) | text");
+
+                    string csv = sb.ToString();
+
+                    // leaving space for the hex key empty
+                    if (!fileOpened)
+                    {
+                        List<string> splittedCsv = csv.Split('\n').ToList();
+                        int splittedCsvLength = splittedCsv.Count();
+                        for (int j = 0; j < splittedCsvLength; ++j)
+                            if (splittedCsv[j].Length >= 10)
+                                splittedCsv[j] = splittedCsv[j].Insert(10, "|");
+                            else if (splittedCsv[j] == "\r" || splittedCsv[j] == "")
+                            //else if (splittedCsv[j] == "")
+                            { 
+                                // remove empty rows
+                                splittedCsv.RemoveAt(j);
+                                --splittedCsvLength;
+                                --j;
+                            }
+
+                        csv = String.Join("\n", splittedCsv);
+                    }
+
+                    file.WriteLine(csv);
+                }
+                
+            }
+        }
+
+        private void SaveCSV()
+        {
+            var sb = new StringBuilder();
+
+            foreach (DataGridViewRow row in dataGridViewStrings.Rows)
+            {
+                var cells = row.Cells.Cast<DataGridViewCell>();
+                sb.AppendLine(string.Join("|", cells.Select(cell => cell.Value).ToArray()));
+            }
+
             int languagesCount = languages.Count();
             string outputPath = GetCSVOutputPath();
 
@@ -269,22 +319,28 @@ namespace WolvenKit
                         // leaving space for the hex key empty
                         if (!fileOpened)
                         {
-                            string[] splittedCsv = csv.Split('\n');
-
-                            int splittedCsvLength = splittedCsv.Length;
+                            List<string> splittedCsv = csv.Split('\n').ToList();
+                            int splittedCsvLength = splittedCsv.Count();
                             for (int j = 0; j < splittedCsvLength; ++j)
                                 if (splittedCsv[j].Length >= 10)
                                     splittedCsv[j] = splittedCsv[j].Insert(10, "|");
+                                else if (splittedCsv[j] == "\r" || splittedCsv[j] == "")
+                                //else if (splittedCsv[j] == "")
+                                {
+                                    // remove empty rows
+                                    splittedCsv.RemoveAt(j);
+                                    --splittedCsvLength;
+                                    --j;
+                                }
 
                             csv = String.Join("\n", splittedCsv);
                         }
-                        
 
                         file.WriteLine(csv);
                     }
                 }
+                MessageBox.Show("Files saved.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
-            MessageBox.Show("Files saved.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
         private string GetCSVOutputPath()
@@ -302,6 +358,7 @@ namespace WolvenKit
         {
             string filePath;
             OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "CSV | *.csv;";
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 filePath = ofd.FileName;
@@ -315,8 +372,13 @@ namespace WolvenKit
                 dt.Columns.Add("String Key");
                 dt.Columns.Add("Localisation");
 
-                rows.RemoveRange(0, 2);
-
+                for (int i = 0; i < rows.Count(); ++i)
+                    if (rows[i][0][0] == ';')
+                    {
+                        rows.RemoveAt(i);
+                        --i;
+                    }
+                        
                 int id = Convert.ToInt32(rows[0][0]);
                 modID = (id - 2110000000) / 1000;
                 textBoxModID.Text = Convert.ToString(modID);
@@ -330,6 +392,56 @@ namespace WolvenKit
                 fileOpened = true;
             }
             
+        }
+
+        private void toolStripButtonEncode_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewStrings.Rows.Count != 1)
+                EncodeCSV();
+            else
+                MessageBox.Show("Current file is empty.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);         
+        }
+
+        private void EncodeCSV()
+        {
+            string outputPath = GetEncodedOutputPath();
+
+            List<string> csvFiles = new List<string>();
+
+            for (int i = 0; i < languages.Count(); ++i)
+                csvFiles.Add(outputPath + "\\" + languages[i]);
+
+            if (outputPath != "")
+            {
+                SaveCSVForEncoding(outputPath);
+                foreach (var file in csvFiles)
+                {
+                    Process encoderProc = new Process();
+
+                    encoderProc.StartInfo.Arguments = "--encode " + "\"" + file + "\"" + " --id-space " + Convert.ToString(modID);
+                    encoderProc.StartInfo.FileName = Environment.CurrentDirectory + "\\w3strings.exe";
+                    encoderProc.EnableRaisingEvents = true;
+                    encoderProc.StartInfo.RedirectStandardOutput = true;
+                    encoderProc.StartInfo.UseShellExecute = false;
+                    encoderProc.StartInfo.CreateNoWindow = true;
+                    encoderProc.Start();
+                    string test = encoderProc.StandardOutput.ReadToEnd();
+                    encoderProc.WaitForExit();
+                    bool dd = true;
+                }
+                MessageBox.Show("Files encoded.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+                
+        }
+
+        private string GetEncodedOutputPath()
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                return fbd.SelectedPath;
+            }
+            return "";
         }
     }
 }
