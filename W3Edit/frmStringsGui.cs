@@ -24,6 +24,7 @@ namespace WolvenKit
         int modID = 0;
 
         bool noPrefix = false;
+        bool fileOpened = false;
 
         string[] languages = new string[16] {"ar", "br", "cz", "de", "en", "es", "esMX", "fr", "hu", "it", "jp", "kr", "pl", "ru", "tr", "zh"};
 
@@ -248,7 +249,6 @@ namespace WolvenKit
             foreach (DataGridViewRow row in dataGridViewStrings.Rows)
             {
                 var cells = row.Cells.Cast<DataGridViewCell>();
-                //sb.AppendLine(string.Join("|", cells.Select(cell => "\"" + cell.Value + "\"").ToArray()));
                 sb.AppendLine(string.Join("|", cells.Select(cell => cell.Value).ToArray()));
             }
                       
@@ -267,14 +267,18 @@ namespace WolvenKit
                         string csv = sb.ToString();
 
                         // leaving space for the hex key empty
-                        string[] splittedCsv = csv.Split('\n');
+                        if (!fileOpened)
+                        {
+                            string[] splittedCsv = csv.Split('\n');
 
-                        int splittedCsvLength = splittedCsv.Length;
-                        for (int j = 0; j < splittedCsvLength; ++j)
-                            if (splittedCsv[j].Length >= 10)
-                                splittedCsv[j] = splittedCsv[j].Insert(10, "|");
+                            int splittedCsvLength = splittedCsv.Length;
+                            for (int j = 0; j < splittedCsvLength; ++j)
+                                if (splittedCsv[j].Length >= 10)
+                                    splittedCsv[j] = splittedCsv[j].Insert(10, "|");
 
-                        csv = String.Join("\n", splittedCsv);
+                            csv = String.Join("\n", splittedCsv);
+                        }
+                        
 
                         file.WriteLine(csv);
                     }
@@ -288,7 +292,7 @@ namespace WolvenKit
             FolderBrowserDialog fbw = new FolderBrowserDialog();
             if (fbw.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                return fbw.SelectedPath;
+                return fbw.SelectedPath + "//";
             }
             else
                 return "";
@@ -323,6 +327,7 @@ namespace WolvenKit
                 
                 dataGridViewStrings.DataSource = dt;
                 dataGridViewStrings.Columns["Hex key placeholder"].Visible = false;
+                fileOpened = true;
             }
             
         }
