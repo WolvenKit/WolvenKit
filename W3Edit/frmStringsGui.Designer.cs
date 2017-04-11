@@ -286,7 +286,7 @@
             // 
             this.textBoxModID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxModID.Location = new System.Drawing.Point(927, 25);
-            this.textBoxModID.MaxLength = 6;
+            this.textBoxModID.MaxLength = 0;
             this.textBoxModID.Name = "textBoxModID";
             this.textBoxModID.Size = new System.Drawing.Size(100, 20);
             this.textBoxModID.TabIndex = 3;
