@@ -298,7 +298,6 @@ namespace WolvenKit
 					AddToMod(depotpath.Text, loadmods ? MainController.Get().ModBundleManager : MainController.Get().BundleManager);
 				}              
 				SaveMod();
-				UpdateModFileList(true);
 			}
 		}
 
