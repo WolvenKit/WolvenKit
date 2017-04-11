@@ -413,15 +413,45 @@ namespace WolvenKit
                 dt.Columns.Add("Localisation");
 
                 for (int i = 0; i < rows.Count(); ++i)
-                    if (rows[i][0][0] == ';')
+                    if (rows[i].Length == 1)
                     {
                         rows.RemoveAt(i);
                         --i;
                     }
-                        
-                int id = Convert.ToInt32(rows[0][0]);
-                modIDs[0] = (id - 2110000000) / 1000;
-                textBoxModID.Text = Convert.ToString(modIDs[0]);
+                    else if (rows[i][0][0] == ';') // need to be separated in two statements so this won't compare an empty row
+                    {
+                        rows.RemoveAt(i);
+                        --i;
+                    }
+
+                modIDs.Clear();
+                modIDs.Add((Convert.ToInt32(rows[0][0]) - 2110000000) / 1000);
+
+                // get multiple ids
+                foreach (var row in rows)
+                {
+                    int currentRowID = Convert.ToInt32((Convert.ToInt32(row[0]) - 2110000000) / 1000);
+                    foreach (var addedID in modIDs.ToList()) // to prevent modified collection exception
+                        if (currentRowID != addedID)
+                            if (!multipleIDs)
+                            {
+                                multipleIDs = true;
+                                modIDs.Add(currentRowID);
+                            }
+
+                }
+
+                textBoxModID.Text = "";
+                if (multipleIDs)
+                {
+                    foreach (var id in modIDs)
+                        textBoxModID.Text += Convert.ToString(id) + ";";
+                    // delete last ;
+                    textBoxModID.Text = textBoxModID.Text.Remove(textBoxModID.Text.Length - 1);
+                }
+                    
+                else
+                    textBoxModID.Text = Convert.ToString(modIDs[0]);
 
                 rows.ForEach(x => {
                     dt.Rows.Add(x);
