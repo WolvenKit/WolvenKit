@@ -85,6 +85,7 @@ namespace WolvenKit
 
         public static MainController Get()
         {
+            
             if (mainController == null)
             {
                 mainController = new MainController();
@@ -97,8 +98,14 @@ namespace WolvenKit
         public void Initialize()
         {
             Configuration = Configuration.Load();
-
             Window = new frmMain();
+            w3StringManager = new W3StringManager();
+            w3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
+            bundleManager = new BundleManager();
+            bundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+            modbundleManager = new BundleManager();
+            modbundleManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+
         }
 
         public frmCR2WDocument LoadDocument(string filename, bool suppressErrors = false)

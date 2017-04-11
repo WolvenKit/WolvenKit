@@ -237,6 +237,7 @@ namespace WolvenKit
             this.modexplorerSlave.EnableRaisingEvents = true;
             this.modexplorerSlave.IncludeSubdirectories = true;
             this.modexplorerSlave.SynchronizingObject = this;
+            this.modexplorerSlave.Created += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
             this.modexplorerSlave.Deleted += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
             this.modexplorerSlave.Renamed += new System.IO.RenamedEventHandler(this.FileChanges_Detected);
             // 

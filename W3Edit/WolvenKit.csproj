@@ -176,6 +176,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing.Design" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
@@ -250,6 +251,12 @@
     </Compile>
     <Compile Include="frmJournalEditor.Designer.cs">
       <DependentUpon>frmJournalEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMenuCreator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMenuCreator.Designer.cs">
+      <DependentUpon>frmMenuCreator.cs</DependentUpon>
     </Compile>
     <Compile Include="frmPackSettings.cs">
       <SubType>Form</SubType>
@@ -495,6 +502,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMenuCreator.resx">
+      <DependentUpon>frmMenuCreator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmModExplorer.resx">
       <DependentUpon>frmModExplorer.cs</DependentUpon>

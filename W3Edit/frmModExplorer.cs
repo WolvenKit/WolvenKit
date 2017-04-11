@@ -284,6 +284,5 @@ namespace WolvenKit
             if(modFileList.SelectedNode != null)
                 Clipboard.SetText(modFileList.SelectedNode.FullPath);
         }
-
     }
 }
