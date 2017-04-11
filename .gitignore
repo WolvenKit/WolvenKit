@@ -254,4 +254,3 @@ paket-files/
 # Ignore folders
 W3Edit.Render/Models/**
 !W3Edit.Render/Models/**
-/stringsEncoder/w3strings.exe

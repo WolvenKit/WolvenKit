@@ -27,7 +27,8 @@ namespace WolvenKit
         bool noPrefix = false;
         bool fileOpened = false;
         bool multipleIDs = false;
-        bool addMods = false;
+
+        List<string> groups = new List<string>();
 
         int idsLimit = 1000;
 
@@ -120,20 +121,12 @@ namespace WolvenKit
 
         private void GenerateFromXML()
         {
-            DialogResult result;
-            if (textBoxModID.Text != "" && FillModIDIfValid() && dataGridViewStrings.Rows.Count != 1)
+            if (textBoxModID.Text != "" && FillModIDIfValid())
                 ReadXML();
-            else if (textBoxModID.Text == "" || !FillModIDIfValid() && dataGridViewStrings.Rows.Count != 1)
+            else 
             {
                 MessageBox.Show("Enter mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 textBoxModID.Text = "";
-            }
-            else if (textBoxModID.Text != "" && FillModIDIfValid() && dataGridViewStrings.Rows.Count == 1)
-            {
-                result = MessageBox.Show("Add 'panel_Mods'?.", "Wolven Kit", MessageBoxButtons.YesNo);
-                if (result == DialogResult.Yes)
-                    addMods = true;
-                ReadXML();
             }
         }
 
@@ -151,14 +144,7 @@ namespace WolvenKit
                 File.WriteAllLines(path, new string[] { "<?xml version=\"1.0\" encoding=\"utf-8\"?>" }.ToList().Concat(File.ReadAllLines(path).Skip(1).ToArray()));
 
                 XDocument doc = XDocument.Load(path);
-
-                if (addMods)
-                {
-                    dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, "panel_Mods", "Mods");
-                    ++counter;
-                }
                 
-
                 // vars displayNames
                 foreach (var vars in doc.Descendants("UserConfig").Descendants("Group").Descendants("VisibleVars"))
                 {
@@ -166,11 +152,11 @@ namespace WolvenKit
                     {
                         String name = var.Attribute("displayName").Value;
                         if (!multipleIDs)
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name), name);
                         else if (counter > idsLimit)
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, DisplayNameToKey(name), name);
                         else
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name), name);
 
                         ++counter;
                     }
@@ -182,11 +168,11 @@ namespace WolvenKit
                     {
                         String name = var.Attribute("displayName").Value;
                         if (!multipleIDs)
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name), name);
                         else if (counter > idsLimit)
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, DisplayNameToKey(name), name);
                         else
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name), name);
 
                         ++counter;
                     }
@@ -198,13 +184,23 @@ namespace WolvenKit
                     foreach (var var in vars.Descendants("Group"))
                     {
                         String name = var.Attribute("displayName").Value;
-                        if (!multipleIDs)
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name, EDisplayNameType.GROUP), name);
-                        else if (counter > idsLimit)
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, DisplayNameToKey(name, EDisplayNameType.GROUP), name);
-                        else
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name, EDisplayNameType.GROUP), name);
 
+                        List<string> groupNames = DisplayNameToKeyGroup(name);
+
+                        foreach (var groupName in groupNames)
+                        {
+                            List<string> splitGroupName = groupName.Split('_').ToList();
+                            splitGroupName.RemoveAt(0);
+                            string localisationName = String.Join("", splitGroupName);
+
+                            if (!multipleIDs)
+                                dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, groupName, localisationName);
+                            else if (counter > idsLimit)
+                                dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, groupName, localisationName);
+                            else
+                                dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, groupName, localisationName);
+                        }
+                            
                         ++counter;
                     }
                 }
@@ -224,13 +220,11 @@ namespace WolvenKit
                 return "";
         }
 
-        private string DisplayNameToKey(string name, EDisplayNameType nameType)
+        private List<string> DisplayNameToKeyGroup(string name)
         {
             char[] nameConverted = name.ToCharArray(0, name.Length);
+            List<string> stringKeys = new List<string>();
             string stringKey = "";
-
-            if (nameType == EDisplayNameType.VAR && !noPrefix)
-                stringKey += "option_";
 
             for (int i = 0; i < nameConverted.Length; ++i)
                 if (nameConverted[i] == ' ')
@@ -241,15 +235,42 @@ namespace WolvenKit
                 else
                     stringKey += nameConverted[i];
 
-            if (nameType == EDisplayNameType.GROUP && !noPrefix)
+            
+            string[] stringKeySplitted = stringKey.Split('.');
+
+            if (groups.Count() == 0)
+                groups.Add(stringKeySplitted[stringKeySplitted.Length - 1]);
+            for (int i = 0; i < stringKeySplitted.Length; ++i)
             {
-                string[] stringKeySplitted = stringKey.Split('.');
-                stringKey = "panel_" + stringKeySplitted[stringKeySplitted.Length - 1];
+                for (int j = 0; j < groups.Count(); ++j)
+                    if (!groups.Contains(stringKeySplitted[i]))
+                    {
+                        groups.Add(stringKeySplitted[i]);
+                        stringKeys.Add("panel_" + stringKeySplitted[i]);
+                    }
             }
+                            
+            return stringKeys;
+        }
+
+        private string DisplayNameToKey(string name)
+        {
+            char[] nameConverted = name.ToCharArray(0, name.Length);
+            string stringKey = "";
+
+            stringKey += "option_";
+
+            for (int i = 0; i < nameConverted.Length; ++i)
+                if (nameConverted[i] == ' ')
+                {
+                    nameConverted[i] = '_';
+                    stringKey += nameConverted[i];
+                }
+                else
+                    stringKey += nameConverted[i];
 
             return stringKey;
         }
-
 
         private bool IsIDValid(string id)
         {
