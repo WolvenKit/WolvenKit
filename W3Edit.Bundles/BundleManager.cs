@@ -21,7 +21,30 @@ namespace WolvenKit.Bundles
         public BundleTreeNode RootNode { get; set; }
         public List<BundleItem> FileList { get; set; }
         public List<string> Extensions { get; set; }
-        public AutoCompleteStringCollection AutocompleteSource { get; set; }   
+        public AutoCompleteStringCollection AutocompleteSource { get; set; }
+
+        /// <summary>
+        ///     Load a single bundle
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="keepfoldername"></param>
+        public void LoadModBundle(string filename)
+        {
+            if (Bundles.ContainsKey(filename))
+                return;
+
+            var bundle = new Bundle(filename);
+
+            foreach (var item in bundle.Items)
+            {
+                if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Key))
+                    Items.Add(GetModFolder(filename) + "\\" + item.Key, new List<BundleItem>());
+
+                Items[GetModFolder(filename) + "\\" +item.Key].Add(item.Value);
+            }
+
+            Bundles.Add(filename, bundle);
+        }
 
         /// <summary>
         ///     Load a single bundle
@@ -105,10 +128,20 @@ namespace WolvenKit.Bundles
             {
                 foreach (var file in Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories))
                 {
-                    LoadBundle(file);
+                    LoadModBundle(file);
                 }
             }
             RebuildRootNode();
+        }
+
+        public string GetModFolder(string path)
+        {
+            if (path.Split('\\').Length > 3)
+            {
+                var split = path.Split('\\');
+                return split[split.Length - 3];
+            }
+            return path;
         }
 
         /// <summary>
