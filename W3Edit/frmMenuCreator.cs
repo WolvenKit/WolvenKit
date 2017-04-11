@@ -31,7 +31,7 @@ namespace WolvenKit
             sf.Filter = "XML Files | *.xml";
             if (sf.ShowDialog() == DialogResult.OK)
             {
-                XDocument menu = new XDocument(new XElement("UserConfig", Menu.Groups.Select(ParseGroup).ToArray()));
+                var menu = new XDocument(new XElement("UserConfig", Menu.Groups.Select(SerializeGroup)));
                 menu.Declaration = new XDeclaration("1.0", "UTF-16", "no");
                 menu.Save(sf.FileName);
             }
@@ -42,32 +42,61 @@ namespace WolvenKit
 
         }
 
-        public static XElement ParseGroup(WitcheMenuGroup group)
+        public static XElement SerializeGroup(WitcheMenuGroup group)
         {
             if (group.SubGroups == null || group.SubGroups.Count == 0)
             {
-                return new XElement("Group", new XAttribute("id", group.ID), new XAttribute("displayName", group.DisplayName));
+
+                return new XElement("Group",
+                    new XAttribute("id", group.ID),
+                    new XAttribute("displayName", group.DisplayName),
+                    new XElement("VisibleVars",group.Variables.Select(SerializeVariable)),
+                    SerializePresets(group.Presets));
             }
             return new XElement("Group", new XAttribute("id", group.ID), new XAttribute("displayName", group.DisplayName),
-                group.SubGroups.Select(ParseGroup).ToArray());
+                group.SubGroups.Select(SerializeGroup).ToArray());
         }
 
-        public static XElement ParseVariables(WitcherMenuVariable var)
+        public static XElement SerializeVariable(WitcherMenuVariable var)
         {
             switch (var.Variabletype)
             {
                 case WitcherMenuVariableType.Option:
-                    return new XElement("Group", new XAttribute("id", var.ID), new XAttribute("displayName", var.DisplayName));
+                    return new XElement("Var",
+                        new XAttribute("id", var.ID),
+                        new XAttribute("displayName", var.DisplayName),
+                        new XAttribute("displayType",var.Variabletype),
+                        new XAttribute("tags",var.Tags.Aggregate("", (c, n) => c += ";" + n)),
+                        SerializeOptions(var.Options));
                 case WitcherMenuVariableType.Slider:
-                    return new XElement("Group", new XAttribute("id", var.ID), new XAttribute("displayName", var.DisplayName));
+                    return new XElement("Var",
+                        new XAttribute("id", var.ID),
+                        new XAttribute("displayName", var.DisplayName),
+                        new XAttribute("displayType", var.Variabletype + ";" + var.MinValue + ";" + var.MaxValue + ";" + var.Step),
+                        new XAttribute("tags", var.Tags.Aggregate("", (c, n) => c += ";" + n)));
                 case WitcherMenuVariableType.Toggle:
-                    return new XElement("Group", new XAttribute("id", var.ID), new XAttribute("displayName", var.DisplayName));
+                    return new XElement("Var",
+                        new XAttribute("id", var.ID),
+                        new XAttribute("displayName", var.DisplayName),
+                        new XAttribute("displayType", var.Variabletype),
+                        new XAttribute("tags", var.Tags.Aggregate("", (c, n) => c += ";" + n)));
                 default:
                     throw new Exception("Invalid variable type!");
             }   
         }
 
-        public static XElement ParsePresets(List<WitcherMenuPreset> presets)
+        public static XElement SerializeOptions(List<WitcherVariableOption> presets)
+        {
+            return new XElement("OptionsArray", presets.Select(x =>
+                                 new XElement("Option",
+                                     new XAttribute("id", x.ID),
+                                     new XAttribute("displayName", x.DisplayName),
+                                     x.Entries.Select(y => new XElement("Entry",
+                                                             new XAttribute("varId", y.VarId),
+                                                             new XAttribute("value", y.Value))).ToArray())));
+        }
+
+        public static XElement SerializePresets(List<WitcherMenuPreset> presets)
         {
             return new XElement("PresetsArray",presets.Select(x=>
                                 new XElement("Preset",
@@ -77,11 +106,6 @@ namespace WolvenKit
                                     x.Entries.Select(y=> new XElement("Entry",
                                                             new XAttribute("varId",y.VarId),
                                                             new XAttribute("value",y.Value))).ToArray())));
-        }
-
-        public void propertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
-        {
-           
         }
 
         [RefreshProperties(RefreshProperties.All)]
@@ -159,7 +183,7 @@ typeof(System.Drawing.Design.UITypeEditor))]
             [Category("Options")]
             [Description("The different options this option variable has.")]
             [Editor(typeof(DescriptiveCollectionEditor), typeof(UITypeEditor))]
-            public List<PresetEntry> Options
+            public List<WitcherVariableOption> Options
             {
                 get { return _entries; }
                 set { _entries = value; }
@@ -190,9 +214,36 @@ typeof(System.Drawing.Design.UITypeEditor))]
             }
             private string step = "";
 
-            private List<PresetEntry> _entries = new List<PresetEntry>();
+            private List<WitcherVariableOption> _entries = new List<WitcherVariableOption>();
 
             private WitcherMenuVariableType variableType = WitcherMenuVariableType.Toggle;
+        }
+
+        [RefreshProperties(RefreshProperties.All)]
+        public class WitcherVariableOption : WitcherMenuElement
+        {
+            [Category("Sections")]
+            [Description("The tags of this option.")]
+            [Editor(@"System.Windows.Forms.Design.StringCollectionEditor," +
+            "System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+           typeof(System.Drawing.Design.UITypeEditor))]
+            public List<string> Tags
+            {
+                get { return tags; }
+                set { tags = value; }
+            }
+            private List<string> tags = new List<string>();
+
+            [Category("Sections")]
+            [Description("The entries inside this option.")]
+            [Editor(typeof(DescriptiveCollectionEditor), typeof(UITypeEditor))]
+            public List<PresetEntry> Entries
+            {
+                get { return _entries; }
+                set { _entries = value; }
+            }
+
+            private List<PresetEntry> _entries = new List<PresetEntry>();
         }
 
         [RefreshProperties(RefreshProperties.All)]
@@ -294,6 +345,5 @@ typeof(System.Drawing.Design.UITypeEditor))]
                 }
             }
         }
-
     }
 }
