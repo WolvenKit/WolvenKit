@@ -199,9 +199,8 @@ namespace WolvenKit
                                 dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, groupName, localisationName);
                             else
                                 dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, groupName, localisationName);
+                            ++counter;
                         }
-                            
-                        ++counter;
                     }
                 }
             }
@@ -239,7 +238,11 @@ namespace WolvenKit
             string[] stringKeySplitted = stringKey.Split('.');
 
             if (groups.Count() == 0)
+            {
                 groups.Add(stringKeySplitted[stringKeySplitted.Length - 1]);
+                stringKeys.Add("panel_" + stringKeySplitted[stringKeySplitted.Length - 1]);
+            }
+                
             for (int i = 0; i < stringKeySplitted.Length; ++i)
             {
                 for (int j = 0; j < groups.Count(); ++j)
