@@ -22,10 +22,13 @@ namespace WolvenKit
     public partial class frmStringsGui : Form
     {
         int counter = 0;
-        int modID = 0;
+        List<int> modIDs = new List<int> { 0 };
 
         bool noPrefix = false;
         bool fileOpened = false;
+        bool multipleIDs = false;
+
+        int idsLimit = 50;
 
         string[] languages = new string[16] {"ar", "br", "cz", "de", "en", "es", "esMX", "fr", "hu", "it", "jp", "kr", "pl", "ru", "tr", "zh"};
 
@@ -133,7 +136,13 @@ namespace WolvenKit
                     foreach (var var in vars.Descendants("Var"))
                     {
                         String name = var.Attribute("displayName").Value;
-                        dataGridViewStrings.Rows.Add(counter + 2110000000 + modID * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                        if (!multipleIDs)
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                        else if (counter > idsLimit)
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                        else
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+
                         ++counter;
                     }
                 }
@@ -143,7 +152,13 @@ namespace WolvenKit
                     foreach (var var in vars.Descendants("Option"))
                     {
                         String name = var.Attribute("displayName").Value;
-                        dataGridViewStrings.Rows.Add(counter + 2110000000 + modID * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                        if (!multipleIDs)
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                        else if (counter > idsLimit)
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                        else
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+
                         ++counter;
                     }
                 }
@@ -154,7 +169,13 @@ namespace WolvenKit
                     foreach (var var in vars.Descendants("Group"))
                     {
                         String name = var.Attribute("displayName").Value;
-                        dataGridViewStrings.Rows.Add(counter + 2110000000 + modID * 1000, DisplayNameToKey(name, EDisplayNameType.GROUP), name);
+                        if (!multipleIDs)
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name, EDisplayNameType.GROUP), name);
+                        else if (counter > idsLimit)
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, DisplayNameToKey(name, EDisplayNameType.GROUP), name);
+                        else
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name, EDisplayNameType.GROUP), name);
+
                         ++counter;
                     }
                 }
@@ -225,14 +246,22 @@ namespace WolvenKit
                         ++validCharCount;
                         break;
                     }
+                    else if (convertedId[i] == ';')
+                    {
+                        multipleIDs = true;
+                        ++validCharCount;
+                        break;
+                    }
             }
-            if (validCharCount == idLength)
+            if (validCharCount == idLength && validCharCount != 0)
                 return true;
 
             return false;
         }
         private bool FillModIDIfValid()
         {
+            modIDs.Clear();
+            string[] splittedIDs;
             if (!IsIDValid(textBoxModID.Text))
             {
                 MessageBox.Show("Invalid Mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
@@ -240,7 +269,18 @@ namespace WolvenKit
                 return false;
             }
             else
-                modID = Convert.ToInt32(textBoxModID.Text);
+            {
+                if (!multipleIDs)
+                    modIDs.Add(Convert.ToInt32(textBoxModID.Text));
+                else
+                {
+                    splittedIDs = textBoxModID.Text.Split(';');
+                    foreach (var id in splittedIDs)
+                        modIDs.Add(Convert.ToInt32(id));
+                }
+                    
+            }
+                
             return true;
         }
 
@@ -380,8 +420,8 @@ namespace WolvenKit
                     }
                         
                 int id = Convert.ToInt32(rows[0][0]);
-                modID = (id - 2110000000) / 1000;
-                textBoxModID.Text = Convert.ToString(modID);
+                modIDs[0] = (id - 2110000000) / 1000;
+                textBoxModID.Text = Convert.ToString(modIDs[0]);
 
                 rows.ForEach(x => {
                     dt.Rows.Add(x);
@@ -418,7 +458,7 @@ namespace WolvenKit
                 {
                     Process encoderProc = new Process();
 
-                    encoderProc.StartInfo.Arguments = "--encode " + "\"" + file + "\"" + " --id-space " + Convert.ToString(modID);
+                    encoderProc.StartInfo.Arguments = "--encode " + "\"" + file + "\"" + " --id-space " + Convert.ToString(modIDs[0]);
                     encoderProc.StartInfo.FileName = Environment.CurrentDirectory + "\\w3strings.exe";
                     encoderProc.EnableRaisingEvents = true;
                     encoderProc.StartInfo.RedirectStandardOutput = true;
@@ -427,7 +467,6 @@ namespace WolvenKit
                     encoderProc.Start();
                     string test = encoderProc.StandardOutput.ReadToEnd();
                     encoderProc.WaitForExit();
-                    bool dd = true;
                 }
                 MessageBox.Show("Files encoded.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }

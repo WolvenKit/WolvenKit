@@ -284,6 +284,7 @@
             // 
             // textBoxModID
             // 
+            this.textBoxModID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxModID.Location = new System.Drawing.Point(927, 25);
             this.textBoxModID.MaxLength = 6;
             this.textBoxModID.Name = "textBoxModID";
@@ -294,12 +295,13 @@
             // 
             // labelModID
             // 
+            this.labelModID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelModID.AutoSize = true;
-            this.labelModID.Location = new System.Drawing.Point(876, 28);
+            this.labelModID.Location = new System.Drawing.Point(734, 25);
             this.labelModID.Name = "labelModID";
-            this.labelModID.Size = new System.Drawing.Size(45, 13);
+            this.labelModID.Size = new System.Drawing.Size(187, 13);
             this.labelModID.TabIndex = 4;
-            this.labelModID.Text = "Mod ID:";
+            this.labelModID.Text = "Mod ID (separate multiple IDs with \";\")";
             // 
             // frmStringsGui
             // 
