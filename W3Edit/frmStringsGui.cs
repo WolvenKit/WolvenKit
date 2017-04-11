@@ -27,8 +27,9 @@ namespace WolvenKit
         bool noPrefix = false;
         bool fileOpened = false;
         bool multipleIDs = false;
+        bool addMods = false;
 
-        int idsLimit = 50;
+        int idsLimit = 1000;
 
         string[] languages = new string[16] {"ar", "br", "cz", "de", "en", "es", "esMX", "fr", "hu", "it", "jp", "kr", "pl", "ru", "tr", "zh"};
 
@@ -67,13 +68,7 @@ namespace WolvenKit
 
         private void toolStripButtonGenerateXML_Click(object sender, EventArgs e)
         {
-            if (textBoxModID.Text != "" && FillModIDIfValid())
-                ReadXML();
-            else
-            {
-                MessageBox.Show("Enter mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                textBoxModID.Text = "";
-            }
+            GenerateFromXML();
         }
 
         private void toolStripButtonGenerateScripts_Click(object sender, EventArgs e)
@@ -97,23 +92,50 @@ namespace WolvenKit
 
         private void fromXMLToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (textBoxModID.Text != "" && FillModIDIfValid())
-                ReadXML();
-            else
-            {
-                MessageBox.Show("Enter mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                textBoxModID.Text = "";
-            }
+            GenerateFromXML();
         }
 
         private void fromScriptsToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
+        /*
+            Other 
+        */
+        private void textBoxModID_Leave(object sender, EventArgs e)
+        {
+            FillModIDIfValid();
+        }
+        private void textBoxModID_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                dataGridViewStrings.Focus();
+            }
+        }
 
         /*
             End of events
         */
+
+        private void GenerateFromXML()
+        {
+            DialogResult result;
+            if (textBoxModID.Text != "" && FillModIDIfValid() && dataGridViewStrings.Rows.Count != 1)
+                ReadXML();
+            else if (textBoxModID.Text == "" || !FillModIDIfValid() && dataGridViewStrings.Rows.Count != 1)
+            {
+                MessageBox.Show("Enter mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                textBoxModID.Text = "";
+            }
+            else if (textBoxModID.Text != "" && FillModIDIfValid() && dataGridViewStrings.Rows.Count == 1)
+            {
+                result = MessageBox.Show("Add 'panel_Mods'?.", "Wolven Kit", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                    addMods = true;
+                ReadXML();
+            }
+        }
 
         private void ReadXML()
         {
@@ -129,6 +151,13 @@ namespace WolvenKit
                 File.WriteAllLines(path, new string[] { "<?xml version=\"1.0\" encoding=\"utf-8\"?>" }.ToList().Concat(File.ReadAllLines(path).Skip(1).ToArray()));
 
                 XDocument doc = XDocument.Load(path);
+
+                if (addMods)
+                {
+                    dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, "panel_Mods", "Mods");
+                    ++counter;
+                }
+                
 
                 // vars displayNames
                 foreach (var vars in doc.Descendants("UserConfig").Descendants("Group").Descendants("VisibleVars"))
@@ -221,17 +250,7 @@ namespace WolvenKit
             return stringKey;
         }
 
-        private void textBoxModID_Leave(object sender, EventArgs e)
-        {
-            FillModIDIfValid();
-        }
-        private void textBoxModID_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyData == Keys.Enter)
-            {
-                dataGridViewStrings.Focus();
-            }
-        }
+
         private bool IsIDValid(string id)
         {
             char[] digits = new char[10] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', };
