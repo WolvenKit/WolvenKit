@@ -28,7 +28,9 @@ namespace WolvenKit
         bool fileOpened = false;
         bool multipleIDs = false;
 
-        int idsLimit = 50;
+        List<string> groups = new List<string>();
+
+        int idsLimit = 1000;
 
         string[] languages = new string[16] {"ar", "br", "cz", "de", "en", "es", "esMX", "fr", "hu", "it", "jp", "kr", "pl", "ru", "tr", "zh"};
 
@@ -67,13 +69,7 @@ namespace WolvenKit
 
         private void toolStripButtonGenerateXML_Click(object sender, EventArgs e)
         {
-            if (textBoxModID.Text != "" && FillModIDIfValid())
-                ReadXML();
-            else
-            {
-                MessageBox.Show("Enter mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                textBoxModID.Text = "";
-            }
+            GenerateFromXML();
         }
 
         private void toolStripButtonGenerateScripts_Click(object sender, EventArgs e)
@@ -97,23 +93,42 @@ namespace WolvenKit
 
         private void fromXMLToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (textBoxModID.Text != "" && FillModIDIfValid())
-                ReadXML();
-            else
-            {
-                MessageBox.Show("Enter mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                textBoxModID.Text = "";
-            }
+            GenerateFromXML();
         }
 
         private void fromScriptsToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
+        /*
+            Other 
+        */
+        private void textBoxModID_Leave(object sender, EventArgs e)
+        {
+            FillModIDIfValid();
+        }
+        private void textBoxModID_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                dataGridViewStrings.Focus();
+            }
+        }
 
         /*
             End of events
         */
+
+        private void GenerateFromXML()
+        {
+            if (textBoxModID.Text != "" && FillModIDIfValid())
+                ReadXML();
+            else 
+            {
+                MessageBox.Show("Enter mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                textBoxModID.Text = "";
+            }
+        }
 
         private void ReadXML()
         {
@@ -129,7 +144,7 @@ namespace WolvenKit
                 File.WriteAllLines(path, new string[] { "<?xml version=\"1.0\" encoding=\"utf-8\"?>" }.ToList().Concat(File.ReadAllLines(path).Skip(1).ToArray()));
 
                 XDocument doc = XDocument.Load(path);
-
+                
                 // vars displayNames
                 foreach (var vars in doc.Descendants("UserConfig").Descendants("Group").Descendants("VisibleVars"))
                 {
@@ -137,11 +152,11 @@ namespace WolvenKit
                     {
                         String name = var.Attribute("displayName").Value;
                         if (!multipleIDs)
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name), name);
                         else if (counter > idsLimit)
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, DisplayNameToKey(name), name);
                         else
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name), name);
 
                         ++counter;
                     }
@@ -153,11 +168,11 @@ namespace WolvenKit
                     {
                         String name = var.Attribute("displayName").Value;
                         if (!multipleIDs)
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name), name);
                         else if (counter > idsLimit)
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, DisplayNameToKey(name), name);
                         else
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name, EDisplayNameType.VAR), name);
+                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name), name);
 
                         ++counter;
                     }
@@ -169,14 +184,23 @@ namespace WolvenKit
                     foreach (var var in vars.Descendants("Group"))
                     {
                         String name = var.Attribute("displayName").Value;
-                        if (!multipleIDs)
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name, EDisplayNameType.GROUP), name);
-                        else if (counter > idsLimit)
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, DisplayNameToKey(name, EDisplayNameType.GROUP), name);
-                        else
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name, EDisplayNameType.GROUP), name);
 
-                        ++counter;
+                        List<string> groupNames = DisplayNameToKeyGroup(name);
+
+                        foreach (var groupName in groupNames)
+                        {
+                            List<string> splitGroupName = groupName.Split('_').ToList();
+                            splitGroupName.RemoveAt(0);
+                            string localisationName = String.Join("", splitGroupName);
+
+                            if (!multipleIDs)
+                                dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, groupName, localisationName);
+                            else if (counter > idsLimit)
+                                dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, groupName, localisationName);
+                            else
+                                dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, groupName, localisationName);
+                            ++counter;
+                        }
                     }
                 }
             }
@@ -195,13 +219,11 @@ namespace WolvenKit
                 return "";
         }
 
-        private string DisplayNameToKey(string name, EDisplayNameType nameType)
+        private List<string> DisplayNameToKeyGroup(string name)
         {
             char[] nameConverted = name.ToCharArray(0, name.Length);
+            List<string> stringKeys = new List<string>();
             string stringKey = "";
-
-            if (nameType == EDisplayNameType.VAR && !noPrefix)
-                stringKey += "option_";
 
             for (int i = 0; i < nameConverted.Length; ++i)
                 if (nameConverted[i] == ' ')
@@ -212,26 +234,47 @@ namespace WolvenKit
                 else
                     stringKey += nameConverted[i];
 
-            if (nameType == EDisplayNameType.GROUP && !noPrefix)
+            
+            string[] stringKeySplitted = stringKey.Split('.');
+
+            if (groups.Count() == 0)
             {
-                string[] stringKeySplitted = stringKey.Split('.');
-                stringKey = "panel_" + stringKeySplitted[stringKeySplitted.Length - 1];
+                groups.Add(stringKeySplitted[stringKeySplitted.Length - 1]);
+                stringKeys.Add("panel_" + stringKeySplitted[stringKeySplitted.Length - 1]);
             }
+                
+            for (int i = 0; i < stringKeySplitted.Length; ++i)
+            {
+                for (int j = 0; j < groups.Count(); ++j)
+                    if (!groups.Contains(stringKeySplitted[i]))
+                    {
+                        groups.Add(stringKeySplitted[i]);
+                        stringKeys.Add("panel_" + stringKeySplitted[i]);
+                    }
+            }
+                            
+            return stringKeys;
+        }
+
+        private string DisplayNameToKey(string name)
+        {
+            char[] nameConverted = name.ToCharArray(0, name.Length);
+            string stringKey = "";
+
+            stringKey += "option_";
+
+            for (int i = 0; i < nameConverted.Length; ++i)
+                if (nameConverted[i] == ' ')
+                {
+                    nameConverted[i] = '_';
+                    stringKey += nameConverted[i];
+                }
+                else
+                    stringKey += nameConverted[i];
 
             return stringKey;
         }
 
-        private void textBoxModID_Leave(object sender, EventArgs e)
-        {
-            FillModIDIfValid();
-        }
-        private void textBoxModID_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyData == Keys.Enter)
-            {
-                dataGridViewStrings.Focus();
-            }
-        }
         private bool IsIDValid(string id)
         {
             char[] digits = new char[10] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', };
