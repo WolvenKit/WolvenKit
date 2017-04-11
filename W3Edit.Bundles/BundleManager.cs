@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace WolvenKit.Bundles
@@ -78,36 +79,24 @@ namespace WolvenKit.Bundles
 
             var contentdirs = new List<string>(Directory.GetDirectories(content, "content*"));
             contentdirs.Sort(new AlphanumComparator<string>());
-            foreach (var dir in contentdirs)
+            foreach (var file in contentdirs.SelectMany(dir => Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories)))
             {
-                foreach (var file in Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories))
-                {
-                    LoadBundle(file);
-                }
+                LoadBundle(file);
             }
 
             var patchdirs = new List<string>(Directory.GetDirectories(content, "patch*"));
             patchdirs.Sort(new AlphanumComparator<string>());
-            foreach (var dir in patchdirs)
+            foreach (var file in patchdirs.SelectMany(dir => Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories)))
             {
-                foreach (var file in Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories))
-                {
-                    LoadBundle(file);
-                }
+                LoadBundle(file);
             }
 
             var dlc = Path.Combine(exedir, @"..\..\DLC\");
             var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
             dlcdirs.Sort(new AlphanumComparator<string>());
-            foreach (var dir in dlcdirs)
+            foreach (var file in dlcdirs.Where(dir => new Regex("(DLC..)|(DLC.)|(bob)|(EP.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.bundle", SearchOption.AllDirectories).OrderBy(k => k)))
             {
-                if (Path.GetFileName(dir ?? "").StartsWith("mod"))
-                    continue;
-
-                foreach (var file in Directory.GetFiles(dir ?? "", "*.bundle", SearchOption.AllDirectories).OrderBy(k => k))
-                {
-                    LoadBundle(file);
-                }
+                LoadBundle(file);
             }
             RebuildRootNode();
         }
@@ -124,22 +113,26 @@ namespace WolvenKit.Bundles
                 Directory.CreateDirectory(mods);
             var modsdirs = new List<string>(Directory.GetDirectories(mods));
             modsdirs.Sort(new AlphanumComparator<string>());
-            foreach (var dir in modsdirs)
+            foreach (var file in modsdirs.SelectMany(dir => Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories)))
             {
-                foreach (var file in Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories))
-                {
-                    LoadModBundle(file);
-                }
+                LoadModBundle(file);
+            }
+
+            var dlc = Path.Combine(exedir, @"..\..\DLC\");
+            var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
+            dlcdirs.Sort(new AlphanumComparator<string>());
+            foreach (var file in dlcdirs.Where(dir => !new Regex("(DLC..)|(DLC.)|(bob)|(EP.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.bundle", SearchOption.AllDirectories).OrderBy(k => k)))
+            {
+                LoadModBundle(file);
             }
             RebuildRootNode();
         }
 
         public string GetModFolder(string path)
         {
-            if (path.Split('\\').Length > 3)
+            if (path.Split('\\').Length > 3 && path.Split('\\').Contains("content"))
             {
-                var split = path.Split('\\');
-                return split[split.Length - 3];
+                return path.Split('\\')[path.Split('\\').ToList().IndexOf(path.Split('\\').FirstOrDefault(x => x == "content")) - 1];
             }
             return path;
         }
