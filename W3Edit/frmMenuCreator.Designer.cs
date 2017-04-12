@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
+            this.MenuEditor = new System.Windows.Forms.PropertyGrid();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -36,13 +36,13 @@
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // propertyGrid1
+            // MenuEditor
             // 
-            this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.propertyGrid1.Location = new System.Drawing.Point(0, 0);
-            this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(485, 413);
-            this.propertyGrid1.TabIndex = 1;
+            this.MenuEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MenuEditor.Location = new System.Drawing.Point(0, 0);
+            this.MenuEditor.Name = "MenuEditor";
+            this.MenuEditor.Size = new System.Drawing.Size(485, 413);
+            this.MenuEditor.TabIndex = 1;
             // 
             // menuStrip1
             // 
@@ -84,7 +84,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(485, 413);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.propertyGrid1);
+            this.Controls.Add(this.MenuEditor);
             this.Name = "frmMenuCreator";
             this.Text = "Menu Creator";
             this.menuStrip1.ResumeLayout(false);
@@ -96,7 +96,7 @@
 
         #endregion
 
-        private System.Windows.Forms.PropertyGrid propertyGrid1;
+        private System.Windows.Forms.PropertyGrid MenuEditor;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;

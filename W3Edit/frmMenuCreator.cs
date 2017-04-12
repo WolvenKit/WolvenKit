@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Data;
-using System.Drawing;
 using System.Drawing.Design;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -15,31 +11,78 @@ namespace WolvenKit
 {
     public partial class frmMenuCreator : Form
     {
-        public static WitcherMenu Menu;
+        public WitcherMenu Menu;
+
+        public const string BrokenXmlHeader = "<?xml version=\"1.0\" encoding=\"UTF-16\"?>";
 
         public frmMenuCreator()
         {
             InitializeComponent();
             Menu = new WitcherMenu();
-            propertyGrid1.SelectedObject = Menu;
+            MenuEditor.SelectedObject = Menu;
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var sf = new SaveFileDialog();
-            sf.Title = "Select a path to save the serialized menu.";
-            sf.Filter = "XML Files | *.xml";
-            if (sf.ShowDialog() == DialogResult.OK)
+            try
             {
-                var menu = new XDocument(new XElement("UserConfig", Menu.Groups.Select(SerializeGroup)));
-                menu.Declaration = new XDeclaration("1.0", "UTF-16", "no");
-                menu.Save(sf.FileName);
+                var sf = new SaveFileDialog
+                {
+                    Title = "Select a path to save the serialized menu.",
+                    Filter = "XML Files | *.xml"
+                };
+                if (sf.ShowDialog() == DialogResult.OK)
+                {
+                    var menu = new XDocument(new XElement("UserConfig", Menu.Groups.Select(SerializeGroup)));
+                    menu.Save(sf.FileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to save the document!\n" + ex.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
         }
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            try
+            {
+                var of = new OpenFileDialog
+                {
+                    Title = @"Select the xml file to load!",
+                    Filter = @"XML Files | *.xml"
+                };
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    var loadedxml = XDocument.Load(of.FileName);
+                    Menu.Groups = loadedxml.Root?.Elements("Group").Select(DeserializeGroup).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(@"Couldn't load the selected xml file.
+Please make sure you have selected a valid one.
+Exception: " + ex.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
+        }
 
+        public static WitcheMenuGroup DeserializeGroup(XElement element)
+        {
+            var ret = new WitcheMenuGroup();
+            if (!element.Elements("Group").Any())
+            {
+                ret.ID = element.Attribute("id")?.Value;
+                ret.DisplayName = element.Attribute("displayName")?.Value;
+                ret.Presets = element.Element("PresetsArray") == null ? new List<WitcherMenuPreset>() : DeserializePresets(element.Element("PresetsArray"));
+                ret.Variables = element.Element("VisibleVars")?.Elements("Var").Select(DeserializeVariable).ToList();
+            } 
+            else
+            {
+                ret.ID = element.Attribute("id")?.Value;
+                ret.DisplayName = element.Attribute("displayName")?.Value;
+                ret.SubGroups = element.Elements("Group").Select(DeserializeGroup).ToList();
+            }
+            return ret;
         }
 
         public static XElement SerializeGroup(WitcheMenuGroup group)
@@ -55,6 +98,41 @@ namespace WolvenKit
             }
             return new XElement("Group", new XAttribute("id", group.ID), new XAttribute("displayName", group.DisplayName),
                 group.SubGroups.Select(SerializeGroup).ToArray());
+        }
+
+        public static WitcherMenuVariable DeserializeVariable(XElement element)
+        {
+            var ret = new WitcherMenuVariable
+            {
+                ID = element.Attribute("id")?.Value,
+                DisplayName = element.Attribute("displayName")?.Value,
+                Tags = element.Attribute("tags")?.Value.Split(';').ToList()
+            };
+            if (element.Attribute("displayType") != null && element.Attribute("displayType").Value.StartsWith("TOGGLE"))
+            {
+                ret.Variabletype = WitcherMenuVariableType.Toggle;
+            }
+            else if (element.Attribute("displayType").Value.StartsWith("SLIDER"))
+            {
+                ret.Variabletype = WitcherMenuVariableType.Slider;
+                var split =  element.Attribute("displayType").Value.Split(';');
+                if (split.Length > 3)
+                {
+                    ret.MaxValue = split[1];
+                    ret.MaxValue = split[2];
+                    ret.Step = split[3];
+                }
+            }
+            else if (element.Attribute("displayType").Value.StartsWith("OPTIONS"))
+            {
+                ret.Variabletype = WitcherMenuVariableType.Option;
+                ret.Options = DeseralizeOptions(element.Element("OptionsArray"));
+            }
+            else
+            {
+                throw new Exception("Invalid variable type! Can't parse. Type: " + element.Attribute("displayType")?.Value);
+            }
+            return ret;
         }
 
         public static XElement SerializeVariable(WitcherMenuVariable var)
@@ -85,6 +163,29 @@ namespace WolvenKit
             }   
         }
 
+        public static List<WitcherVariableOption> DeseralizeOptions(XElement element)
+        {
+            var ret = new List<WitcherVariableOption>();
+            foreach (var option in element.Elements("Option"))
+            {
+                var wvo = new WitcherVariableOption
+                {
+                    ID = element.Attribute("id")?.Value,
+                    DisplayName = element.Attribute("displayName")?.Value
+                };
+                foreach (var ent in option.Elements("Entry").Select(entry => new PresetEntry
+                {
+                    VarId = entry.Attribute("varId")?.Value,
+                    Value = entry.Attribute("value")?.Value
+                }))
+                {
+                    wvo.Entries.Add(ent);
+                }
+                ret.Add(wvo);
+            }
+            return ret;
+        }
+
         public static XElement SerializeOptions(List<WitcherVariableOption> presets)
         {
             return new XElement("OptionsArray", presets.Select(x =>
@@ -94,6 +195,29 @@ namespace WolvenKit
                                      x.Entries.Select(y => new XElement("Entry",
                                                              new XAttribute("varId", y.VarId),
                                                              new XAttribute("value", y.Value))).ToArray())));
+        }
+
+        public static List<WitcherMenuPreset> DeserializePresets(XElement element)
+        {
+            var ret = new List<WitcherMenuPreset>();
+            foreach (var xElement in element.Elements("Preset"))
+            {
+                var preset = new WitcherMenuPreset
+                {
+                    ID = xElement.Attribute("id")?.Value,
+                    DisplayName = xElement.Attribute("displayName")?.Value,
+                    Tags = xElement.Attribute("tags")?.Value.Split(';').ToList()
+                };
+                foreach (var pentry in xElement.Elements("Entry").Select(entry => new PresetEntry
+                {
+                    VarId = entry.Attribute("varId")?.Value,
+                    Value = entry.Attribute("value")?.Value
+                }))
+                {
+                    preset.Entries.Add(pentry);
+                }
+            }
+            return ret;
         }
 
         public static XElement SerializePresets(List<WitcherMenuPreset> presets)
@@ -222,18 +346,6 @@ typeof(System.Drawing.Design.UITypeEditor))]
         [RefreshProperties(RefreshProperties.All)]
         public class WitcherVariableOption : WitcherMenuElement
         {
-            [Category("Sections")]
-            [Description("The tags of this option.")]
-            [Editor(@"System.Windows.Forms.Design.StringCollectionEditor," +
-            "System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
-           typeof(System.Drawing.Design.UITypeEditor))]
-            public List<string> Tags
-            {
-                get { return tags; }
-                set { tags = value; }
-            }
-            private List<string> tags = new List<string>();
-
             [Category("Sections")]
             [Description("The entries inside this option.")]
             [Editor(typeof(DescriptiveCollectionEditor), typeof(UITypeEditor))]
