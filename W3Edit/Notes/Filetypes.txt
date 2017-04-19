@@ -1,4 +1,0 @@
-﻿Filetype: .subs They can be opened with normal text editors
-Structure:
-First line: Start of the subtitle (miliseconds)
-After that each line: (start in ms), (end in ms), text
