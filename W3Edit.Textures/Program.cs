@@ -5,79 +5,85 @@ using System.Windows.Forms;
 
 namespace WolvenKit.Cache
 {
-    //TEXTURE.CACHE HCXT + INT32(VERSION?) AT THE END
-    //SOUNDPC.CACHE CS3W AT THE START
-    //STATICSHADER.CACHE,SHADER.CACHE  RDHS + INT32(VERSION?) AT THE END
-    //COLLISION.CACHE CC3W AT THE START
-    //FURSHADER.CACHE?
-    internal class Program
-    {
-        public static byte[] TextureIdString = { (byte)'H', (byte)'C', (byte)'X', (byte)'T' };
-        public static byte[] SoundIdString = { (byte)'C', (byte)'S', (byte)'3', (byte)'W' };
-        public static byte[] ShaderIdString = { (byte)'R', (byte)'D', (byte)'H', (byte)'S' };
-        public static byte[] CollisionIdString = { (byte)'C', (byte)'C', (byte)'3', (byte)'W' };
-        public static byte[] DepIdString = { (byte)'S', (byte)'P', (byte)'E', (byte)'D' };
+	//TEXTURE.CACHE HCXT + INT32(VERSION?) AT THE END
+	//SOUNDPC.CACHE CS3W AT THE START
+	//STATICSHADER.CACHE,SHADER.CACHE  RDHS + INT32(VERSION?) AT THE END
+	//COLLISION.CACHE CC3W AT THE START
+	//FURSHADER.CACHE?
+	internal class Program
+	{
+		public static byte[] TextureIdString = { (byte)'H', (byte)'C', (byte)'X', (byte)'T' };
+		public static byte[] SoundIdString = { (byte)'C', (byte)'S', (byte)'3', (byte)'W' };
+		public static byte[] ShaderIdString = { (byte)'R', (byte)'D', (byte)'H', (byte)'S' };
+		public static byte[] CollisionIdString = { (byte)'C', (byte)'C', (byte)'3', (byte)'W' };
+		public static byte[] DepIdString = { (byte)'S', (byte)'P', (byte)'E', (byte)'D' };
 
-        public enum Cachetype
-        {
-            Texture,
-            Sound,
-            Shader,
-            Collision,
-            Dep,
-            Unknown
-        }
+		public enum Cachetype
+		{
+			Texture,
+			Sound,
+			Shader,
+			Collision,
+			Dep,
+			Unknown
+		}
 
-        [STAThread]
-        private static void Main(string[] args)
-        {
-            Console.Title = "*.cache parser test";
-            using (var of = new OpenFileDialog())
-            {
-                of.Filter = "Witcher 3 Cache files | *.cache";
-                if (of.ShowDialog() == DialogResult.OK)
-                {
-                    Console.WriteLine("Got file: " + Path.GetFileName(of.FileName) + "->" +
-                                      GetCacheTypeOfFile(of.FileName));
-                    switch (GetCacheTypeOfFile(of.FileName))
-                    {
-                        case Cachetype.Texture:
-                        {
-                            Texture_Cache.Read(of.FileName);
-                            break;
-                        }
-                        case Cachetype.Sound:
-                        {
-							new SoundCache(of.FileName);
+		[STAThread]
+		private static void Main(string[] args)
+		{
+			Console.Title = "*.cache parser test";
+			using (var of = new OpenFileDialog())
+			{
+				of.Filter = "Witcher 3 Cache files | *.cache";
+				if (of.ShowDialog() == DialogResult.OK)
+				{
+					Console.WriteLine("Got file: " + Path.GetFileName(of.FileName) + "->" +
+									  GetCacheTypeOfFile(of.FileName));
+					Console.WriteLine("Please wait parsing file...");
+					switch (GetCacheTypeOfFile(of.FileName))
+					{
+						case Cachetype.Texture:
+						{
+							var cf = new Texture_Cache();
+							cf.Read(of.FileName);
+							Console.WriteLine("Files:\n");
+							cf.Images.ToList().ForEach(x=> Console.WriteLine("\t" + x.Key.filename));
 							break;
-                        }
-                        default:
-                            MessageBox.Show("Unsupported file!"); 
-                            break;
-                    }
-                }
-                Console.ReadKey();
-            }
-        }
+						}
+						case Cachetype.Sound:
+						{
+							var sc = new SoundCache(of.FileName);
+							Console.WriteLine("Files:\n");
+							sc.Files.ForEach(x=> Console.WriteLine("\t" + x.name));
+							break;
+						}
+						default:
+							MessageBox.Show("Unsupported file!"); 
+							break;
+					}
+				}
+				Console.ReadLine();
+			}
+		}
 
-        public static Cachetype GetCacheTypeOfFile(string path)
-        {
-            using (var br = new BinaryReader(new FileStream(path,FileMode.Open)))
-            {
-                var idString = br.ReadBytes(4);
-                br.BaseStream.Seek(-8, SeekOrigin.End);
-                var idStringBack = br.ReadBytes(4);
-                if (idStringBack.SequenceEqual(TextureIdString))
-                    return Cachetype.Texture;
-                if(idString.SequenceEqual(SoundIdString))
-                    return Cachetype.Sound;
-                if(idString.SequenceEqual(DepIdString))
-                    return Cachetype.Dep;
-                if(idString.SequenceEqual(CollisionIdString))
-                    return Cachetype.Collision;
-                return idStringBack.SequenceEqual(ShaderIdString) ? Cachetype.Shader : Cachetype.Unknown;
-            }   
-        }
+		public static Cachetype GetCacheTypeOfFile(string path)
+		{
+			using (var br = new BinaryReader(new FileStream(path,FileMode.Open)))
+			{
+				var idString = br.ReadBytes(4);
+				br.BaseStream.Seek(-8, SeekOrigin.End);
+				var idStringBack = br.ReadBytes(4);
+				if (idStringBack.SequenceEqual(TextureIdString))
+					return Cachetype.Texture;
+				if(idString.SequenceEqual(SoundIdString))
+					return Cachetype.Sound;
+				if(idString.SequenceEqual(DepIdString))
+					return Cachetype.Dep;
+				if(idString.SequenceEqual(CollisionIdString))
+					return Cachetype.Collision;
+				return idStringBack.SequenceEqual(ShaderIdString) ? Cachetype.Shader : Cachetype.Unknown;
+			}   
+		}
 
-    }
+	}
 }
