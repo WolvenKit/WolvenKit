@@ -12,6 +12,7 @@ using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic.FileIO;
 using Sce.Atf;
+using SharpDX.Direct2D1.Effects;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Bundles;
 using WolvenKit.CR2W;
@@ -305,22 +306,22 @@ namespace WolvenKit
 		{
 			var manager = bmanager;
 
-			if (!manager.Items.ContainsKey(depotpath))
-				return;
+			if (!manager.Items.Any(x=> x.Value.Any(y=> y.Name == depotpath)))
+			    return;
 
 			BundleItem selectedBundle;
 
-			if (manager.Items[depotpath].Count > 1)
+			if (manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath)))
 			{
-				var bundles = manager.Items[depotpath].ToDictionary(bundle => bundle.Bundle.FileName);
+				var bundles = manager.FileList.Where(x=> x.Name == depotpath).Select(y=>new KeyValuePair<string,BundleItem>(y.Bundle.FileName, y));
 
-				var dlg = new frmExtractAmbigious(bundles.Keys);
+				var dlg = new frmExtractAmbigious(bundles.Select(x=> x.Key).ToList());
 				if (dlg.ShowDialog() == DialogResult.Cancel)
 				{
 					return;
 				}
 
-				selectedBundle = bundles[dlg.SelectedBundle];
+				selectedBundle = bundles.FirstOrDefault(x=> x.Key == dlg.SelectedBundle).Value;
 			}
 			else
 			{

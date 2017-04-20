@@ -70,7 +70,7 @@ namespace WolvenKit.Bundles
         }
 
         /// <summary>
-        ///     Load every bundle it can find in ..\..\content and ..\..\DLC, also calls RebuildRootNode()
+        ///     Load every non-mod bundle it can find in ..\..\content and ..\..\DLC, also calls RebuildRootNode()
         /// </summary>
         /// <param name="exedir">Path to executable directory</param>
         public void LoadAll(string exedir)
@@ -94,7 +94,7 @@ namespace WolvenKit.Bundles
             var dlc = Path.Combine(exedir, @"..\..\DLC\");
             var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
             dlcdirs.Sort(new AlphanumComparator<string>());
-            foreach (var file in dlcdirs.Where(dir => new Regex("(DLC..)|(DLC.)|(bob)|(EP.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.bundle", SearchOption.AllDirectories).OrderBy(k => k)))
+            foreach (var file in dlcdirs.Where(dir => new Regex("(DLC..)|(DLC.)|(BOB)|(ep.)|(bob)|(EP.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.bundle", SearchOption.AllDirectories).OrderBy(k => k)))
             {
                 LoadBundle(file);
             }
@@ -113,7 +113,8 @@ namespace WolvenKit.Bundles
                 Directory.CreateDirectory(mods);
             var modsdirs = new List<string>(Directory.GetDirectories(mods));
             modsdirs.Sort(new AlphanumComparator<string>());
-            foreach (var file in modsdirs.SelectMany(dir => Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories)))
+            var modbundles = modsdirs.SelectMany(dir => Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories)).ToList();
+            foreach (var file in modbundles)
             {
                 LoadModBundle(file);
             }
@@ -121,14 +122,14 @@ namespace WolvenKit.Bundles
             var dlc = Path.Combine(exedir, @"..\..\DLC\");
             var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
             dlcdirs.Sort(new AlphanumComparator<string>());
-            foreach (var file in dlcdirs.Where(dir => !new Regex("(DLC..)|(DLC.)|(bob)|(EP.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.bundle", SearchOption.AllDirectories).OrderBy(k => k)))
+            foreach (var file in dlcdirs.Where(dir => !new Regex("(DLC..)|(DLC.)|(BOB)|(bob)|(EP.)|(ep.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.bundle", SearchOption.AllDirectories).OrderBy(k => k)))
             {
                 LoadModBundle(file);
             }
             RebuildRootNode();
         }
 
-        public string GetModFolder(string path)
+        public static string GetModFolder(string path)
         {
             if (path.Split('\\').Length > 3 && path.Split('\\').Contains("content"))
             {
