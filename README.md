@@ -3,6 +3,7 @@
 
 - George Tziotis
 - erxv
+- Nightingale
 - rmemr
 - kote2ster
 - Murzinio
