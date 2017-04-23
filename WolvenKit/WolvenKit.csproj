@@ -85,37 +85,9 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Atf.Core">
-      <HintPath>..\Atflib\Atf.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Atf.Gui">
-      <HintPath>..\Atflib\Atf.Gui.dll</HintPath>
-    </Reference>
-    <Reference Include="Atf.Gui.WinForms">
-      <HintPath>..\Atflib\Atf.Gui.WinForms.dll</HintPath>
-    </Reference>
-    <Reference Include="Atf.IronPython">
-      <HintPath>..\Atflib\Atf.IronPython.dll</HintPath>
-    </Reference>
-    <Reference Include="Atf.SyntaxEditorControl">
-      <HintPath>..\Atflib\Atf.SyntaxEditorControl.dll</HintPath>
-    </Reference>
-    <Reference Include="CrashReporter.NET, Version=1.5.1.0, Culture=neutral, PublicKeyToken=986591a91592b7e6, processorArchitecture=MSIL">
-      <HintPath>..\packages\CrashReporter.NET.Official.1.5.1\lib\net40\CrashReporter.NET.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="CustomToolDomGen">
-      <HintPath>..\Atflib\CustomToolDomGen.dll</HintPath>
-    </Reference>
-    <Reference Include="Cyotek.Windows.Forms.ColorPicker">
-      <HintPath>..\Atflib\Cyotek.Windows.Forms.ColorPicker.dll</HintPath>
-    </Reference>
     <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
       <HintPath>..\packages\CyotekImageBox.1.2.0-beta1\lib\net20\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="DDSUtils">
-      <HintPath>..\Atflib\DDSUtils.dll</HintPath>
     </Reference>
     <Reference Include="Doboz">
       <HintPath>..\packages\doboz4net.1.0.1\lib\net40-client\Doboz.dll</HintPath>
@@ -128,12 +100,6 @@
       <HintPath>..\packages\MarkerMetro.Unity.Ionic.Zlib.2.0.0.14\lib\net35\Ionic.ZLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="IronPython">
-      <HintPath>..\Atflib\IronPython.dll</HintPath>
-    </Reference>
-    <Reference Include="IronPython.Modules">
-      <HintPath>..\Atflib\IronPython.Modules.dll</HintPath>
-    </Reference>
     <Reference Include="LZ4, Version=1.0.10.93, Culture=neutral, PublicKeyToken=62e1b5ec1eec9bdd, processorArchitecture=MSIL">
       <HintPath>..\packages\lz4net.1.0.10.93\lib\net4-client\LZ4.dll</HintPath>
       <Private>True</Private>
@@ -141,17 +107,8 @@
     <Reference Include="LZ4PCL">
       <HintPath>..\packages\LZ4PCL.1.0.0\lib\portable-net4+netcore45+wpa81+MonoAndroid1+MonoTouch1\LZ4PCL.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Dynamic">
-      <HintPath>..\Atflib\Microsoft.Dynamic.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.JScript" />
-    <Reference Include="Microsoft.Scripting">
-      <HintPath>..\Atflib\Microsoft.Scripting.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Microsoft.VisualStudio.BaseCodeGeneratorWithSite">
-      <HintPath>..\Atflib\Microsoft.VisualStudio.BaseCodeGeneratorWithSite.dll</HintPath>
-    </Reference>
     <Reference Include="ObjectListView, Version=2.9.1.1072, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
       <HintPath>..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
       <Private>True</Private>
@@ -635,6 +592,8 @@
   <ItemGroup>
     <None Include="Resources\Editing-Collapse-icon.png" />
     <None Include="Resources\Editing-Expand-icon.png" />
+    <None Include="Resources\mail.png" />
+    <None Include="Resources\player_record.png" />
     <Content Include="wolven_kit_icon.ico" />
     <Content Include="Licenses\License.doboz4net.txt" />
     <Content Include="Licenses\License.dockpanelsuit.txt" />

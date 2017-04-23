@@ -11,7 +11,6 @@ using System.Xml.Serialization;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic.FileIO;
-using Sce.Atf;
 using SharpDX.Direct2D1.Effects;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Bundles;
@@ -758,7 +757,7 @@ namespace WolvenKit
 				{
 					if (!Directory.Exists(Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\")))
 						Directory.CreateDirectory(Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\"));
-					Directory.GetFiles((ActiveMod.FileDirectory + "\\scripts")).ForEach(x => File.Copy(x, Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\") + Path.GetFileName(x)));
+					Directory.GetFiles((ActiveMod.FileDirectory + "\\scripts")).ToList().ForEach(x => File.Copy(x, Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\") + Path.GetFileName(x)));
 				}
 
 				InstallMod();
@@ -1346,5 +1345,24 @@ namespace WolvenKit
 				fmc.ShowDialog();
 			}
 		}
-	}
+
+        private void recordStepsToReproduceBugToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show(@"This will launch an app that will help you record the steps needed to reproduce the bug/problem.
+After its done it saves a zip file.
+Please send that to hambalko.bence@gmail.com with a short description about the problem.
+Would you like to open the problem steps recorder?","Bug reporting",MessageBoxButtons.YesNo,MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Process.Start("psr.exe");
+            }
+        }
+
+        private void reportABugToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("When reporting a bug please create a reproducion file at Help->Record steps to reproduce.",
+                "Bug reporting",
+                MessageBoxButtons.OK,MessageBoxIcon.Information);
+            Process.Start($"mailto:{"hambalko.bence@gmail.com"}?Subject={"WolvenKit bug report"}&Body={"Short description of bug:"}");
+        }
+    }
 }

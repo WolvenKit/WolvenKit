@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Cyotek.Windows.Forms.ColorPicker">
-      <HintPath>..\Atflib\Cyotek.Windows.Forms.ColorPicker.dll</HintPath>
+      <HintPath>..\Libs\Cyotek.Windows.Forms.ColorPicker.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
