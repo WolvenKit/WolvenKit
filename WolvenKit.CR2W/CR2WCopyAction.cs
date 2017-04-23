@@ -393,7 +393,7 @@ namespace WolvenKit.CR2W
                 }
             });
 
-            /// Remove Unnessasary teleportation
+            // Remove Unnessasary teleportation
             storysection.sceneEventElements.ForEach(delegate(CVariable sectionvar)
             {
                 var sectionitem = ((CVector) sectionvar);
