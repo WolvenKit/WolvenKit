@@ -13,74 +13,143 @@ namespace WolvenKit.Net
 {
     class Program
     {
-        public static Socket GameSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        public static readonly IPEndPoint GameAdress = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 37001);
+        public static Socket GameSocket = new Socket(SocketType.Stream,ProtocolType.Tcp);
+        public static ManualResetEvent connectDone = new ManualResetEvent(false) ;
+        public static ManualResetEvent sendDone = new ManualResetEvent(false) ;
+        public static ManualResetEvent receiveDone = new ManualResetEvent(false) ;
+        public static string response;
+
         public static byte[] _recieveBuffer = new byte[8192 * 32];
 
         public static void Main(string[] args)
         {
-            var tries = 0;
-            Console.Title = "Witcher 3 Debug Protocol test";
-            for (;;)
-            {
-                Console.WriteLine($"[{tries}] Connecting to the game.");
-                Thread.Sleep(100);
-                Console.Clear();
-                Console.WriteLine($"[{tries}] Connecting to the game..");
-                Thread.Sleep(100);
-                Console.Clear();
-                Console.WriteLine($"[{tries}] Connecting to the game...");
-                Thread.Sleep(100);
-                if (ConnectToGame())
-                    break;
-                tries++;
-                Console.WriteLine("Couldn't connect to the game!\nPlease launch \"The Witcher 3: The Wild Hunt\" with the -net command line parameter!");
-                Thread.Sleep(1000);
-                Console.Clear();
-            }   
-            Console.Clear();
-            Console.WriteLine("Connected to the game!");
-            Console.Title = "Witcher 3 Debug Protocol test - [Connected]";
-            BeginRecieve();
-            //TODO: Async loop and response parsing
-
-
-
+            Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 37001), GameSocket);
+            
+            Send(GameSocket,new byte[0]);
+            Receive(GameSocket);
             Console.ReadLine();
         }
 
-        public static void BeginRecieve()
+
+
+        public static void Connect(EndPoint remoteEP, Socket client)
         {
-            Console.WriteLine("Recieving!");
-            GameSocket.BeginReceive(_recieveBuffer, 0, _recieveBuffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), null);
+            client.BeginConnect(remoteEP,
+                new AsyncCallback(ConnectCallback), client);
+
+            connectDone.WaitOne();
         }
 
-        private static void ReceiveCallback(IAsyncResult AR)
+        private static void ConnectCallback(IAsyncResult ar)
         {
-            int recieved = GameSocket.EndReceive(AR);
+            try
+            { 
+                Socket client = (Socket)ar.AsyncState;
+                client.EndConnect(ar);
 
-            if (recieved <= 0)
-                return;
-            byte[] recData = new byte[recieved];
-            Buffer.BlockCopy(_recieveBuffer, 0, recData, 0, recieved);
+                Console.WriteLine("Connected to game's socket: {0}",
+                    client.RemoteEndPoint.ToString());
 
-            //TODO: Actually parse the data
-            File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\response.bin",recData);
-
-            GameSocket.BeginReceive(_recieveBuffer, 0, _recieveBuffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), null);
+                connectDone.Set();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
 
-        private static void SendData(byte[] data)
-        {
-            SocketAsyncEventArgs socketAsyncData = new SocketAsyncEventArgs();
-            socketAsyncData.SetBuffer(data, 0, data.Length);
-            GameSocket.SendAsync(socketAsyncData);
+        private static void Send(Socket client, byte[] data)
+        { 
+            client.BeginSend(data, 0, data.Length, SocketFlags.None,
+                new AsyncCallback(SendCallback), client);
         }
 
-        public static bool ConnectToGame()
+        private static void SendCallback(IAsyncResult ar)
         {
-            GameSocket.Connect(GameAdress);
-            return GameSocket.Connected;
+            try
+            {
+                // Retrieve the socket from the state object.  
+                Socket client = (Socket)ar.AsyncState;
+
+                // Complete sending the data to the remote device.  
+                int bytesSent = client.EndSend(ar);
+                Console.WriteLine("Sent {0} bytes to server.", bytesSent);
+
+                // Signal that all bytes have been sent.  
+                sendDone.Set();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
+
+        public class StateObject
+        {
+            // Client socket.  
+            public Socket workSocket = null;
+            // Size of receive buffer.  
+            public const int BufferSize = 256;
+            // Receive buffer.  
+            public byte[] buffer = new byte[BufferSize];
+            // Received data string.  
+            public StringBuilder sb = new StringBuilder();
+        }
+
+        public static void Receive(Socket client)
+        {
+            try
+            {
+                // Create the state object.  
+                StateObject state = new StateObject();
+                state.workSocket = client;
+
+                // Begin receiving the data from the remote device.  
+                client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                    new AsyncCallback(ReceiveCallback), state);
+                Console.WriteLine("Recieving...");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+
+        private static void ReceiveCallback(IAsyncResult ar)
+        {
+            try
+            {
+                // Retrieve the state object and the client socket   
+                // from the asynchronous state object.  
+                StateObject state = (StateObject)ar.AsyncState;
+                Socket client = state.workSocket;
+                // Read data from the remote device.  
+                int bytesRead = client.EndReceive(ar);
+                if (bytesRead > 0)
+                {
+                    // There might be more data, so store the data received so far.  
+                    state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
+                    //  Get the rest of the data.  
+                    client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                        new AsyncCallback(ReceiveCallback), state);
+                }
+                else
+                {
+                    // All the data has arrived; put it in response.  
+                    if (state.sb.Length > 1)
+                    {
+                        response = state.sb.ToString();
+                    }
+                    // Signal that all bytes have been received.  
+                    receiveDone.Set();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+
+
     }
 }
