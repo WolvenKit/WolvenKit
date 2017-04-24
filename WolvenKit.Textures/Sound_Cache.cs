@@ -30,8 +30,18 @@ namespace WolvenKit.Cache
         public class SoundFile
         {
             public SoundFileInfo Info;
-            public byte[] Content;
-            public string name;
+            public string Name;
+
+            public byte[] Extract(string parentfile)
+            {
+                byte[] ret;
+                using (var br = new BinaryReader(new FileStream(parentfile, FileMode.Open)))
+                {
+                    br.BaseStream.Seek(this.Info.Offset, SeekOrigin.Begin);
+                    ret = br.ReadBytes((int)this.Info.Size);
+                }
+                return ret;
+            }
         }
 
         public SoundCache(string FileName)
@@ -85,13 +95,10 @@ namespace WolvenKit.Cache
                 }
                 Files.Add(sf);
             }
-            Console.WriteLine("Files:\n");
             foreach (SoundFile t in Files)
             {
                 br.BaseStream.Seek(NamesOffset + t.Info.NameOffset, SeekOrigin.Begin);
-                t.name = br.ReadCR2WString();
-                br.BaseStream.Seek(t.Info.Offset, SeekOrigin.Begin);
-                t.Content = br.ReadBytes((int)t.Info.Size);
+                t.Name = br.ReadCR2WString();
             }
         }
 
