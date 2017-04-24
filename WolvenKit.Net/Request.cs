@@ -22,26 +22,26 @@ namespace WolvenKit.Net
             return Append(payload,new []{(byte)'!', (byte)'?',Value});
         }
 
-        public static byte[] Utf8(this byte[] payload, string text)
+        public static byte[] AppendUtf8(this byte[] payload, string text)
         {
             return payload.Append(Const.TypeStringUtf8).AppendByte((byte)text.Length).Append(Encoding.UTF8.GetBytes(text));
         }
 
-        public static byte[] Utf16(this byte[] payload, string text)
+        public static byte[] AppendUtf16(this byte[] payload, string text)
         {
-            return payload.Append(Const.TypeStringUtf16).len_short(text.Length).Append(Encoding.Unicode.GetBytes(text));
+            return payload.Append(Const.TypeStringUtf16).AppendLenShort(text.Length).Append(Encoding.Unicode.GetBytes(text));
         }
 
-        public static byte[] len_short(this byte[] payload, int len)
+        public static byte[] AppendLenShort(this byte[] payload, int len)
         {
             return payload.Append(new[] {(byte) '!', (byte) 'H', (byte) len});
         }
 
-        public static byte[] AppendInt32(this byte[] payload, Int32 value)
+        public static byte[] AppendInt32(this byte[] payload, uint value)
         {
             var iv = value;
             if ((iv & 0x80000000) != 0)
-                iv = (int)(-0x100000000 + iv);
+                iv = (uint)(-0x100000000 + iv);
             return payload.Append(Const.TypeInt32).Append(new[] {(byte) '!', (byte) 'l', (byte) iv});
         }
 

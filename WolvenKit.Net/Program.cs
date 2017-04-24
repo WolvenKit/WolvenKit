@@ -17,15 +17,14 @@ namespace WolvenKit.Net
         public static ManualResetEvent connectDone = new ManualResetEvent(false) ;
         public static ManualResetEvent sendDone = new ManualResetEvent(false) ;
         public static ManualResetEvent receiveDone = new ManualResetEvent(false) ;
-        public static string response;
+        public static Response.Data response;
 
         public static byte[] _recieveBuffer = new byte[8192 * 32];
 
         public static void Main(string[] args)
         {
-            Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 37001), GameSocket);
-            
-            Send(GameSocket,new byte[0]);
+            Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 37001), GameSocket);          
+            Send(GameSocket,Request.Init().AppendUtf8(Const.NsScripts).AppendUtf8(Const.SReload));
             Receive(GameSocket);
             Console.ReadLine();
         }
@@ -92,8 +91,6 @@ namespace WolvenKit.Net
             public const int BufferSize = 256;
             // Receive buffer.  
             public byte[] buffer = new byte[BufferSize];
-            // Received data string.  
-            public StringBuilder sb = new StringBuilder();
         }
 
         public static void Receive(Socket client)
@@ -127,8 +124,6 @@ namespace WolvenKit.Net
                 int bytesRead = client.EndReceive(ar);
                 if (bytesRead > 0)
                 {
-                    // There might be more data, so store the data received so far.  
-                    state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
                     //  Get the rest of the data.  
                     client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                         new AsyncCallback(ReceiveCallback), state);
@@ -136,9 +131,9 @@ namespace WolvenKit.Net
                 else
                 {
                     // All the data has arrived; put it in response.  
-                    if (state.sb.Length > 1)
+                    if (state.buffer.Length > 1)
                     {
-                        response = state.sb.ToString();
+                        response = new Response.Data(state.buffer);
                     }
                     // Signal that all bytes have been received.  
                     receiveDone.Set();
