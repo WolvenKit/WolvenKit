@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace WolvenKit.Net
@@ -14,12 +9,10 @@ namespace WolvenKit.Net
     class Program
     {
         public static Socket GameSocket = new Socket(SocketType.Stream,ProtocolType.Tcp);
-        public static ManualResetEvent connectDone = new ManualResetEvent(false) ;
-        public static ManualResetEvent sendDone = new ManualResetEvent(false) ;
-        public static ManualResetEvent receiveDone = new ManualResetEvent(false) ;
-        public static Response.Data response;
-
-        public static byte[] _recieveBuffer = new byte[8192 * 32];
+        public static ManualResetEvent ConnectDone = new ManualResetEvent(false) ;
+        public static ManualResetEvent SendDone = new ManualResetEvent(false) ;
+        public static ManualResetEvent ReceiveDone = new ManualResetEvent(false) ;
+        public static Response.Data Response;
 
         public static void Main(string[] args)
         {
@@ -31,32 +24,39 @@ namespace WolvenKit.Net
             Send(GameSocket, Request.Init().AppendUtf8(Const.CmdBind).AppendUtf8(Const.NsScriptProfiler).End());
             Send(GameSocket, Request.Init().AppendUtf8(Const.CmdBind).AppendUtf8(Const.NsScripts).End());
             Send(GameSocket, Request.Init().AppendUtf8(Const.CmdBind).AppendUtf8(Const.NsUtility).End());
-            Send(GameSocket,Request.Init().AppendUtf8(Const.NsScripts).AppendUtf8(Const.SReload).End());
+            Send(GameSocket, Commands.Modlis());
+            //Send(GameSocket,Request.Init().AppendUtf8(Const.NsScripts).AppendUtf8(Const.SReload).End());
             Receive(GameSocket);
-            Console.ReadLine();
+            for (;;)
+            {
+                if (Console.KeyAvailable)
+                {
+                    Console.Write("> ");
+                    Send(GameSocket, Commands.Execute(Console.ReadLine()));
+                }
+            }
         }
 
 
-
-        public static void Connect(EndPoint remoteEP, Socket client)
+        public static void Connect(EndPoint remoteEp, Socket client)
         {
-            client.BeginConnect(remoteEP,
-                new AsyncCallback(ConnectCallback), client);
+            client.BeginConnect(remoteEp,
+                ConnectCallback, client);
 
-            connectDone.WaitOne();
+            ConnectDone.WaitOne();
         }
 
         private static void ConnectCallback(IAsyncResult ar)
         {
             try
             { 
-                Socket client = (Socket)ar.AsyncState;
+                var client = (Socket)ar.AsyncState;
                 client.EndConnect(ar);
 
                 Console.WriteLine("Connected to game's socket: {0}",
-                    client.RemoteEndPoint.ToString());
+                    client.RemoteEndPoint);
 
-                connectDone.Set();
+                ConnectDone.Set();
             }
             catch (Exception e)
             {
@@ -67,7 +67,7 @@ namespace WolvenKit.Net
         private static void Send(Socket client, byte[] data)
         { 
             client.BeginSend(data, 0, data.Length, SocketFlags.None,
-                new AsyncCallback(SendCallback), client);
+                SendCallback, client);
         }
 
         private static void SendCallback(IAsyncResult ar)
@@ -75,14 +75,14 @@ namespace WolvenKit.Net
             try
             {
                 // Retrieve the socket from the state object.  
-                Socket client = (Socket)ar.AsyncState;
+                var client = (Socket)ar.AsyncState;
 
                 // Complete sending the data to the remote device.  
-                int bytesSent = client.EndSend(ar);
+                var bytesSent = client.EndSend(ar);
                 Console.WriteLine("Sent {0} bytes to server.", bytesSent);
 
                 // Signal that all bytes have been sent.  
-                sendDone.Set();
+                SendDone.Set();
             }
             catch (Exception e)
             {
@@ -93,11 +93,11 @@ namespace WolvenKit.Net
         public class StateObject
         {
             // Client socket.  
-            public Socket workSocket = null;
+            public Socket WorkSocket;
             // Size of receive buffer.  
-            public const int BufferSize = 256;
+            public const int BufferSize = 8192 * 32;
             // Receive buffer.  
-            public byte[] buffer = new byte[BufferSize];
+            public byte[] Buffer = new byte[BufferSize];
         }
 
         public static void Receive(Socket client)
@@ -105,13 +105,12 @@ namespace WolvenKit.Net
             try
             {
                 // Create the state object.  
-                StateObject state = new StateObject();
-                state.workSocket = client;
+                var state = new StateObject();
+                state.WorkSocket = client;
 
                 // Begin receiving the data from the remote device.  
-                client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                    new AsyncCallback(ReceiveCallback), state);
-                Console.WriteLine("Recieving...");
+                client.BeginReceive(state.Buffer, 0, StateObject.BufferSize, 0,
+                    ReceiveCallback, state);
             }
             catch (Exception e)
             {
@@ -121,35 +120,30 @@ namespace WolvenKit.Net
 
         private static void ReceiveCallback(IAsyncResult ar)
         {
-            try
-            {
                 // Retrieve the state object and the client socket   
                 // from the asynchronous state object.  
-                StateObject state = (StateObject)ar.AsyncState;
-                Socket client = state.workSocket;
+                var state = (StateObject)ar.AsyncState;
+                var client = state.WorkSocket;
                 // Read data from the remote device.  
-                int bytesRead = client.EndReceive(ar);
-                if (bytesRead > 0)
+                var bytesRead = client.EndReceive(ar);
+                if (state.WorkSocket.Available > 0)
                 {
-                    //  Get the rest of the data.  
-                    client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                        new AsyncCallback(ReceiveCallback), state);
+                    client.BeginReceive(state.Buffer, 0, StateObject.BufferSize, 0, ReceiveCallback, state);
                 }
                 else
                 {
-                    // All the data has arrived; put it in response.  
-                    if (state.buffer.Length > 1)
+                    // All the data has arrived; put it in response.
+                    if (state.Buffer.Length > 1)
                     {
-                        response = new Response.Data(state.buffer);
+                        File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\res.bin",state.Buffer);
+                        Response = new Response.Data(state.Buffer);
+                        Console.WriteLine($"Recieved packet [{Response.Length} bytes]:");
+                        Response.Params.ForEach(x=> Console.WriteLine("\t" + x.Type + ": " + x.ToString()));
                     }
-                    // Signal that all bytes have been received.  
-                    receiveDone.Set();
+                    // Signal that all bytes have been received.
+                    ReceiveDone.Set();
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
+
         }
 
 

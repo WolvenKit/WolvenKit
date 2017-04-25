@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+// ReSharper disable InconsistentNaming
 
 namespace WolvenKit.Net
 {
@@ -19,12 +19,14 @@ namespace WolvenKit.Net
             {
                 using (var br = new BinaryReader(new MemoryStream(recievedBytes)))
                 {
-                    this.Head = br.ReadBytes(4);
-                    this.Length = br.ReadUInt16();
+                    this.Head = br.ReadBytes(2);
+                    this.Length = BitConverter.ToUInt16(br.ReadBytes(2).Reverse().ToArray(),0);
                     this.Params = new List<Param>();
                     for (;;)
                     {
-                        var type = (ParamType)br.ReadUInt16();
+                        if (!(br.BaseStream.Length - br.BaseStream.Position > 4))
+                            break;
+                        var type = (ParamType)(BitConverter.ToUInt16(br.ReadBytes(2).Reverse().ToArray(), 0));
                         if (type == ParamType.PacketEnd)
                             break;
                         switch (type)
@@ -33,8 +35,9 @@ namespace WolvenKit.Net
                             {
                                 var param = new StringAnsi
                                 {
-                                    Unknown = br.ReadUInt16(),
-                                    length = br.ReadUInt16()
+                                    Unknown = BitConverter.ToUInt16(br.ReadBytes(2).Reverse().ToArray(), 0),
+                                    length = BitConverter.ToUInt16(br.ReadBytes(2).Reverse().ToArray(), 0),
+                                    Type = ParamType.StringAnsi
                                 };
                                 param.Value = Encoding.ASCII.GetString(br.ReadBytes(param.length));
                                 this.Params.Add(param);
@@ -44,39 +47,56 @@ namespace WolvenKit.Net
                             {
                                 var param = new StringUtf16
                                 {
-                                    Unknown = br.ReadUInt16(),
-                                    length = br.ReadUInt16()
+                                    Unknown = BitConverter.ToUInt16(br.ReadBytes(2).Reverse().ToArray(), 0),
+                                    length = BitConverter.ToUInt16(br.ReadBytes(2).Reverse().ToArray(), 0),
+                                    Type = ParamType.StringUtf16
                                 };
-                                param.Value = Encoding.Unicode.GetString(br.ReadBytes(param.length*2));
+                                param.Value = Encoding.BigEndianUnicode.GetString(br.ReadBytes(param.length*2));
                                 this.Params.Add(param);
                                 break;
                             }
                             case ParamType.Byte:
                             {
-                                var param = new Byte_ {Value = br.ReadSByte()};
+                                var param = new Byte_
+                                {
+                                    Value = br.ReadSByte(),
+                                    Type = ParamType.Byte
+                                };
                                 this.Params.Add(param);
                                 break;
                             }
                             case ParamType.Uint32:
                             {
-                                var param = new Uint_32 {Value = br.ReadUInt32()};
+                                var param = new Uint_32
+                                {
+                                    Value = BitConverter.ToUInt32(br.ReadBytes(4).Reverse().ToArray(), 0),
+                                    Type = ParamType.Uint32
+                                };
                                 this.Params.Add(param);
                                 break;
                             }
                             case ParamType.Int32:
                             {
-                                var param = new Int_32 {Value = br.ReadInt32()};
+                                var param = new Int_32
+                                {
+                                    Value = BitConverter.ToInt32(br.ReadBytes(4).Reverse().ToArray(), 0),
+                                    Type = ParamType.Int32
+                                };
                                 this.Params.Add(param);
                                 break;
                             }
                             case ParamType.Int64:
                             {
-                                var param = new Int_64 {Value = br.ReadInt64()};
+                                var param = new Int_64
+                                {
+                                    Value = BitConverter.ToInt64(br.ReadBytes(4).Reverse().ToArray(), 0),
+                                    Type = ParamType.Int64
+                                };
                                 this.Params.Add(param);
                                 break;
                             }
                             default:
-                                throw new ArgumentOutOfRangeException();
+                                break;
                         }
                     }
                 }
@@ -93,6 +113,11 @@ namespace WolvenKit.Net
             public UInt16 Unknown;
             public UInt16 length;
             public string Value;
+
+            public override string ToString()
+            {
+                return Value;
+            }
         }
 
         public class StringUtf16 : Param
@@ -100,29 +125,54 @@ namespace WolvenKit.Net
             public UInt16 Unknown;
             public UInt16 length;
             public string Value;
+
+            public override string ToString()
+            {
+                return Value;
+            }
         }
 
-        // ReSharper disable once InconsistentNaming
         public class Byte_ : Param
         {
             public sbyte Value;
+
+            public override string ToString()
+            {
+                return "0x" + Value.ToString("X");
+            }
         }
 
         public class Uint_32 : Param
         {
             public UInt32 Value;
+
+            public override string ToString()
+            {
+                return Value.ToString();
+            }
         }
 
         public class Int_32 : Param
         {
             public Int32 Value;
+
+            public override string ToString()
+            {
+                return Value.ToString();
+            }
         }
 
         public class Int_64 : Param
         {
             public Int64 Value;
-        }
 
+            public override string ToString()
+            {
+                return Value.ToString();
+            }
+        }
+        
+        
         public enum ParamType
         {
             StringAnsi = 0xAC08,
