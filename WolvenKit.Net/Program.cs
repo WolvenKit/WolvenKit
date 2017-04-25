@@ -23,8 +23,15 @@ namespace WolvenKit.Net
 
         public static void Main(string[] args)
         {
-            Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 37001), GameSocket);          
-            Send(GameSocket,Request.Init().AppendUtf8(Const.NsScripts).AppendUtf8(Const.SReload));
+            Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 37001), GameSocket);
+            Send(GameSocket, Request.Init().AppendUtf8(Const.CmdBind).AppendUtf8(Const.NsConfig).End());
+            Send(GameSocket, Request.Init().AppendUtf8(Const.CmdBind).AppendUtf8(Const.NsRemote).End());
+            Send(GameSocket, Request.Init().AppendUtf8(Const.CmdBind).AppendUtf8(Const.NsScriptCompiler).End());
+            Send(GameSocket, Request.Init().AppendUtf8(Const.CmdBind).AppendUtf8(Const.NsScriptDebugger).End());
+            Send(GameSocket, Request.Init().AppendUtf8(Const.CmdBind).AppendUtf8(Const.NsScriptProfiler).End());
+            Send(GameSocket, Request.Init().AppendUtf8(Const.CmdBind).AppendUtf8(Const.NsScripts).End());
+            Send(GameSocket, Request.Init().AppendUtf8(Const.CmdBind).AppendUtf8(Const.NsUtility).End());
+            Send(GameSocket,Request.Init().AppendUtf8(Const.NsScripts).AppendUtf8(Const.SReload).End());
             Receive(GameSocket);
             Console.ReadLine();
         }
