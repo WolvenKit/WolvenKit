@@ -47,14 +47,14 @@ namespace WolvenKit.Cache
 							var cf = new Texture_Cache();
 							cf.Read(of.FileName);
 							Console.WriteLine("Files:\n");
-							cf.Images.ToList().ForEach(x=> Console.WriteLine("\t" + x.Key.filename));
+							//cf.Images.ToList().ForEach(x=> Console.WriteLine("\t" + x.Key.filename));
 							break;
 						}
 						case Cachetype.Sound:
 						{
 							var sc = new SoundCache(of.FileName);
 							Console.WriteLine("Files:\n");
-							sc.Files.ForEach(x=> Console.WriteLine("\t" + x.name));
+							//sc.Files.ForEach(x=> Console.WriteLine("\t" + x.name));
 							break;
 						}
 						default:

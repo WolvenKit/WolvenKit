@@ -306,7 +306,7 @@ namespace WolvenKit
 			var manager = bmanager;
 
 			if (!manager.Items.Any(x=> x.Value.Any(y=> y.Name == depotpath)))
-			    return;
+				return;
 
 			BundleItem selectedBundle;
 
@@ -1346,23 +1346,29 @@ namespace WolvenKit
 			}
 		}
 
-        private void recordStepsToReproduceBugToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show(@"This will launch an app that will help you record the steps needed to reproduce the bug/problem.
+		private void recordStepsToReproduceBugToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (MessageBox.Show(@"This will launch an app that will help you record the steps needed to reproduce the bug/problem.
 After its done it saves a zip file.
 Please send that to hambalko.bence@gmail.com with a short description about the problem.
 Would you like to open the problem steps recorder?","Bug reporting",MessageBoxButtons.YesNo,MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                Process.Start("psr.exe");
-            }
-        }
+			{
+				Process.Start("psr.exe");
+			}
+		}
 
-        private void reportABugToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("When reporting a bug please create a reproducion file at Help->Record steps to reproduce.",
-                "Bug reporting",
-                MessageBoxButtons.OK,MessageBoxIcon.Information);
-            Process.Start($"mailto:{"hambalko.bence@gmail.com"}?Subject={"WolvenKit bug report"}&Body={"Short description of bug:"}");
-        }
-    }
+		private void reportABugToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show("When reporting a bug please create a reproducion file at Help->Record steps to reproduce.",
+				"Bug reporting",
+				MessageBoxButtons.OK,MessageBoxIcon.Information);
+			Process.Start($"mailto:{"hambalko.bence@gmail.com"}?Subject={"WolvenKit bug report"}&Body={"Short description of bug:"}");
+		}
+
+		private void gameDebuggerToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			var gdb = new frmDebug();
+			gdb.Show();
+		}
+	}
 }

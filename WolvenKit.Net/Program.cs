@@ -6,36 +6,15 @@ using System.Threading;
 
 namespace WolvenKit.Net
 {
-    class Program
+    class Net
     {
         public static Socket GameSocket = new Socket(SocketType.Stream,ProtocolType.Tcp);
+        public static IPEndPoint DebugProtoclAdress = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 37001);
+
         public static ManualResetEvent ConnectDone = new ManualResetEvent(false) ;
         public static ManualResetEvent SendDone = new ManualResetEvent(false) ;
         public static ManualResetEvent ReceiveDone = new ManualResetEvent(false) ;
         public static Response.Data Response;
-
-        public static void Main(string[] args)
-        {
-            Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 37001), GameSocket);
-            Send(GameSocket, Request.Init().AppendUtf8(Const.CmdBind).AppendUtf8(Const.NsConfig).End());
-            Send(GameSocket, Request.Init().AppendUtf8(Const.CmdBind).AppendUtf8(Const.NsRemote).End());
-            Send(GameSocket, Request.Init().AppendUtf8(Const.CmdBind).AppendUtf8(Const.NsScriptCompiler).End());
-            Send(GameSocket, Request.Init().AppendUtf8(Const.CmdBind).AppendUtf8(Const.NsScriptDebugger).End());
-            Send(GameSocket, Request.Init().AppendUtf8(Const.CmdBind).AppendUtf8(Const.NsScriptProfiler).End());
-            Send(GameSocket, Request.Init().AppendUtf8(Const.CmdBind).AppendUtf8(Const.NsScripts).End());
-            Send(GameSocket, Request.Init().AppendUtf8(Const.CmdBind).AppendUtf8(Const.NsUtility).End());
-            Send(GameSocket, Commands.Modlis());
-            //Send(GameSocket,Request.Init().AppendUtf8(Const.NsScripts).AppendUtf8(Const.SReload).End());
-            Receive(GameSocket);
-            for (;;)
-            {
-                if (Console.KeyAvailable)
-                {
-                    Console.Write("> ");
-                    Send(GameSocket, Commands.Execute(Console.ReadLine()));
-                }
-            }
-        }
 
 
         public static void Connect(EndPoint remoteEp, Socket client)
