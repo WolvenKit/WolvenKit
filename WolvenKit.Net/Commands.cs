@@ -71,7 +71,7 @@ namespace WolvenKit.Net
         {
             return Request.Init()
                     .AppendUtf8(Const.NsConfig)
-                    .AppendInt32(0xCC00CC00)
+                    .AppendInt32(unchecked((Int32)0xCC00CC00))
                     .AppendUtf8(Const.CfgList)
                     .AppendUtf8(section)
                     .AppendUtf8(name)
@@ -87,8 +87,8 @@ namespace WolvenKit.Net
         {
             return Request.Init()
                     .AppendUtf8(Const.NsRemote)
-                    .AppendInt32(0x12345678)
-                    .AppendInt32(0x81160008)
+                    .AppendInt32(unchecked((Int32)0x12345678))
+                    .AppendInt32(unchecked((Int32)0x81160008))
                     .AppendUtf8(command)
                     .End();
         }
