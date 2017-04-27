@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WolvenKit.Net
 {
-    class Commands
+    public static class Commands
     {
         public static List<byte[]> Init()
         {

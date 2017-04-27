@@ -7,7 +7,7 @@ using System.Text;
 
 namespace WolvenKit.Net
 {
-    class Response
+    public class Response
     {
         public class Data
         {

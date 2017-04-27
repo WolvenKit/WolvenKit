@@ -48,13 +48,13 @@
             this.sectionTextBox = new System.Windows.Forms.TextBox();
             this.ClassnameTextBox = new System.Windows.Forms.TextBox();
             this.FuncNameTextBox = new System.Windows.Forms.TextBox();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.VarListButton = new System.Windows.Forms.Button();
+            this.GetOpcodeButton = new System.Windows.Forms.Button();
+            this.ScriptReloadButton = new System.Windows.Forms.Button();
+            this.GetPathButton = new System.Windows.Forms.Button();
+            this.listmodsButton = new System.Windows.Forms.Button();
             this.CommandTextBox = new System.Windows.Forms.TextBox();
-            this.button3 = new System.Windows.Forms.Button();
+            this.CCommandButton = new System.Windows.Forms.Button();
             this.logbox = new System.Windows.Forms.RichTextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copySelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -123,6 +123,7 @@
             this.taskkillButton.TabIndex = 4;
             this.taskkillButton.Text = "Taskkill game";
             this.taskkillButton.UseVisualStyleBackColor = true;
+            this.taskkillButton.Click += new System.EventHandler(this.taskkillButton_Click);
             // 
             // startcostumGameButton
             // 
@@ -132,6 +133,7 @@
             this.startcostumGameButton.TabIndex = 3;
             this.startcostumGameButton.Text = "Start game with costum commands";
             this.startcostumGameButton.UseVisualStyleBackColor = true;
+            this.startcostumGameButton.Click += new System.EventHandler(this.startcostumGameButton_Click);
             // 
             // startnetGameButton
             // 
@@ -141,6 +143,7 @@
             this.startnetGameButton.TabIndex = 2;
             this.startnetGameButton.Text = "Start game with -net";
             this.startnetGameButton.UseVisualStyleBackColor = true;
+            this.startnetGameButton.Click += new System.EventHandler(this.startnetGameButton_Click);
             // 
             // connectButton
             // 
@@ -173,13 +176,13 @@
             this.utilities.Controls.Add(this.sectionTextBox);
             this.utilities.Controls.Add(this.ClassnameTextBox);
             this.utilities.Controls.Add(this.FuncNameTextBox);
-            this.utilities.Controls.Add(this.button8);
-            this.utilities.Controls.Add(this.button7);
-            this.utilities.Controls.Add(this.button6);
-            this.utilities.Controls.Add(this.button5);
-            this.utilities.Controls.Add(this.button4);
+            this.utilities.Controls.Add(this.VarListButton);
+            this.utilities.Controls.Add(this.GetOpcodeButton);
+            this.utilities.Controls.Add(this.ScriptReloadButton);
+            this.utilities.Controls.Add(this.GetPathButton);
+            this.utilities.Controls.Add(this.listmodsButton);
             this.utilities.Controls.Add(this.CommandTextBox);
-            this.utilities.Controls.Add(this.button3);
+            this.utilities.Controls.Add(this.CCommandButton);
             this.utilities.Location = new System.Drawing.Point(4, 25);
             this.utilities.Name = "utilities";
             this.utilities.Padding = new System.Windows.Forms.Padding(3);
@@ -241,96 +244,102 @@
             // nameTextBox
             // 
             this.nameTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.nameTextBox.Location = new System.Drawing.Point(256, 208);
+            this.nameTextBox.Location = new System.Drawing.Point(271, 208);
             this.nameTextBox.Name = "nameTextBox";
-            this.nameTextBox.Size = new System.Drawing.Size(484, 30);
+            this.nameTextBox.Size = new System.Drawing.Size(469, 30);
             this.nameTextBox.TabIndex = 10;
             // 
             // sectionTextBox
             // 
             this.sectionTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.sectionTextBox.Location = new System.Drawing.Point(256, 172);
+            this.sectionTextBox.Location = new System.Drawing.Point(271, 172);
             this.sectionTextBox.Name = "sectionTextBox";
-            this.sectionTextBox.Size = new System.Drawing.Size(484, 30);
+            this.sectionTextBox.Size = new System.Drawing.Size(469, 30);
             this.sectionTextBox.TabIndex = 9;
             // 
             // ClassnameTextBox
             // 
             this.ClassnameTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.ClassnameTextBox.Location = new System.Drawing.Point(256, 126);
+            this.ClassnameTextBox.Location = new System.Drawing.Point(271, 126);
             this.ClassnameTextBox.Name = "ClassnameTextBox";
-            this.ClassnameTextBox.Size = new System.Drawing.Size(484, 30);
+            this.ClassnameTextBox.Size = new System.Drawing.Size(469, 30);
             this.ClassnameTextBox.TabIndex = 8;
             // 
             // FuncNameTextBox
             // 
             this.FuncNameTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.FuncNameTextBox.Location = new System.Drawing.Point(256, 90);
+            this.FuncNameTextBox.Location = new System.Drawing.Point(271, 90);
             this.FuncNameTextBox.Name = "FuncNameTextBox";
-            this.FuncNameTextBox.Size = new System.Drawing.Size(484, 30);
+            this.FuncNameTextBox.Size = new System.Drawing.Size(469, 30);
             this.FuncNameTextBox.TabIndex = 7;
             // 
-            // button8
+            // VarListButton
             // 
-            this.button8.Location = new System.Drawing.Point(8, 172);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(124, 49);
-            this.button8.TabIndex = 6;
-            this.button8.Text = "Varlist";
-            this.button8.UseVisualStyleBackColor = true;
+            this.VarListButton.Location = new System.Drawing.Point(8, 172);
+            this.VarListButton.Name = "VarListButton";
+            this.VarListButton.Size = new System.Drawing.Size(124, 49);
+            this.VarListButton.TabIndex = 6;
+            this.VarListButton.Text = "Varlist";
+            this.VarListButton.UseVisualStyleBackColor = true;
+            this.VarListButton.Click += new System.EventHandler(this.VarListButton_Click);
             // 
-            // button7
+            // GetOpcodeButton
             // 
-            this.button7.Location = new System.Drawing.Point(8, 97);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(124, 49);
-            this.button7.TabIndex = 5;
-            this.button7.Text = "Get Opcode";
-            this.button7.UseVisualStyleBackColor = true;
+            this.GetOpcodeButton.Location = new System.Drawing.Point(8, 97);
+            this.GetOpcodeButton.Name = "GetOpcodeButton";
+            this.GetOpcodeButton.Size = new System.Drawing.Size(124, 49);
+            this.GetOpcodeButton.TabIndex = 5;
+            this.GetOpcodeButton.Text = "Get Opcode";
+            this.GetOpcodeButton.UseVisualStyleBackColor = true;
+            this.GetOpcodeButton.Click += new System.EventHandler(this.GetOpcodeButton_Click);
             // 
-            // button6
+            // ScriptReloadButton
             // 
-            this.button6.Location = new System.Drawing.Point(295, 260);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(124, 43);
-            this.button6.TabIndex = 4;
-            this.button6.Text = "Reload scripts";
-            this.button6.UseVisualStyleBackColor = true;
+            this.ScriptReloadButton.Location = new System.Drawing.Point(295, 260);
+            this.ScriptReloadButton.Name = "ScriptReloadButton";
+            this.ScriptReloadButton.Size = new System.Drawing.Size(124, 43);
+            this.ScriptReloadButton.TabIndex = 4;
+            this.ScriptReloadButton.Text = "Reload scripts";
+            this.ScriptReloadButton.UseVisualStyleBackColor = true;
+            this.ScriptReloadButton.Click += new System.EventHandler(this.ScriptReloadButton_Click);
             // 
-            // button5
+            // GetPathButton
             // 
-            this.button5.Location = new System.Drawing.Point(156, 260);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(124, 43);
-            this.button5.TabIndex = 3;
-            this.button5.Text = "Get scripts path of game";
-            this.button5.UseVisualStyleBackColor = true;
+            this.GetPathButton.Location = new System.Drawing.Point(156, 260);
+            this.GetPathButton.Name = "GetPathButton";
+            this.GetPathButton.Size = new System.Drawing.Size(124, 43);
+            this.GetPathButton.TabIndex = 3;
+            this.GetPathButton.Text = "Get scripts path of game";
+            this.GetPathButton.UseVisualStyleBackColor = true;
+            this.GetPathButton.Click += new System.EventHandler(this.GetPathButton_Click);
             // 
-            // button4
+            // listmodsButton
             // 
-            this.button4.Location = new System.Drawing.Point(17, 260);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(124, 43);
-            this.button4.TabIndex = 2;
-            this.button4.Text = "List installed mods";
-            this.button4.UseVisualStyleBackColor = true;
+            this.listmodsButton.Location = new System.Drawing.Point(17, 260);
+            this.listmodsButton.Name = "listmodsButton";
+            this.listmodsButton.Size = new System.Drawing.Size(124, 43);
+            this.listmodsButton.TabIndex = 2;
+            this.listmodsButton.Text = "List installed mods";
+            this.listmodsButton.UseVisualStyleBackColor = true;
+            this.listmodsButton.Click += new System.EventHandler(this.listmodsButton_Click);
             // 
             // CommandTextBox
             // 
             this.CommandTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.CommandTextBox.Location = new System.Drawing.Point(256, 24);
+            this.CommandTextBox.Location = new System.Drawing.Point(271, 24);
             this.CommandTextBox.Name = "CommandTextBox";
-            this.CommandTextBox.Size = new System.Drawing.Size(484, 30);
+            this.CommandTextBox.Size = new System.Drawing.Size(469, 30);
             this.CommandTextBox.TabIndex = 1;
             // 
-            // button3
+            // CCommandButton
             // 
-            this.button3.Location = new System.Drawing.Point(8, 15);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(124, 49);
-            this.button3.TabIndex = 0;
-            this.button3.Text = "Send console command";
-            this.button3.UseVisualStyleBackColor = true;
+            this.CCommandButton.Location = new System.Drawing.Point(8, 15);
+            this.CCommandButton.Name = "CCommandButton";
+            this.CCommandButton.Size = new System.Drawing.Size(124, 49);
+            this.CCommandButton.TabIndex = 0;
+            this.CCommandButton.Text = "Send console command";
+            this.CCommandButton.UseVisualStyleBackColor = true;
+            this.CCommandButton.Click += new System.EventHandler(this.CCommandButton_Click);
             // 
             // logbox
             // 
@@ -381,7 +390,7 @@
             this.Controls.Add(this.splitContainer1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmDebug";
-            this.Text = "Game Debugger - Disconnected";
+            this.Text = "Game Debugger";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -411,18 +420,18 @@
         private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.TabPage utilities;
         private System.Windows.Forms.HelpProvider helpProvider1;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button GetPathButton;
+        private System.Windows.Forms.Button listmodsButton;
         private System.Windows.Forms.TextBox CommandTextBox;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button CCommandButton;
+        private System.Windows.Forms.Button ScriptReloadButton;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox nameTextBox;
         private System.Windows.Forms.TextBox sectionTextBox;
         private System.Windows.Forms.TextBox ClassnameTextBox;
         private System.Windows.Forms.TextBox FuncNameTextBox;
-        private System.Windows.Forms.Button button8;
-        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button VarListButton;
+        private System.Windows.Forms.Button GetOpcodeButton;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label6;
