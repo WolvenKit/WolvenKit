@@ -61,6 +61,7 @@
             this.copyAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.DataRecieveWorker = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -75,6 +76,7 @@
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -85,8 +87,9 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.logbox);
-            this.splitContainer1.Size = new System.Drawing.Size(794, 651);
-            this.splitContainer1.SplitterDistance = 346;
+            this.splitContainer1.Size = new System.Drawing.Size(596, 529);
+            this.splitContainer1.SplitterDistance = 281;
+            this.splitContainer1.SplitterWidth = 3;
             this.splitContainer1.TabIndex = 0;
             // 
             // tabControl1
@@ -95,9 +98,10 @@
             this.tabControl1.Controls.Add(this.utilities);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(794, 346);
+            this.tabControl1.Size = new System.Drawing.Size(596, 281);
             this.tabControl1.TabIndex = 2;
             // 
             // game
@@ -107,19 +111,21 @@
             this.game.Controls.Add(this.startnetGameButton);
             this.game.Controls.Add(this.connectButton);
             this.game.Controls.Add(this.statusLabel);
-            this.game.Location = new System.Drawing.Point(4, 25);
+            this.game.Location = new System.Drawing.Point(4, 22);
+            this.game.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.game.Name = "game";
-            this.game.Padding = new System.Windows.Forms.Padding(3);
-            this.game.Size = new System.Drawing.Size(786, 317);
+            this.game.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.game.Size = new System.Drawing.Size(588, 255);
             this.game.TabIndex = 0;
             this.game.Text = "Game";
             this.game.UseVisualStyleBackColor = true;
             // 
             // taskkillButton
             // 
-            this.taskkillButton.Location = new System.Drawing.Point(8, 201);
+            this.taskkillButton.Location = new System.Drawing.Point(6, 163);
+            this.taskkillButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.taskkillButton.Name = "taskkillButton";
-            this.taskkillButton.Size = new System.Drawing.Size(160, 45);
+            this.taskkillButton.Size = new System.Drawing.Size(120, 37);
             this.taskkillButton.TabIndex = 4;
             this.taskkillButton.Text = "Taskkill game";
             this.taskkillButton.UseVisualStyleBackColor = true;
@@ -127,9 +133,10 @@
             // 
             // startcostumGameButton
             // 
-            this.startcostumGameButton.Location = new System.Drawing.Point(8, 266);
+            this.startcostumGameButton.Location = new System.Drawing.Point(6, 216);
+            this.startcostumGameButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.startcostumGameButton.Name = "startcostumGameButton";
-            this.startcostumGameButton.Size = new System.Drawing.Size(160, 45);
+            this.startcostumGameButton.Size = new System.Drawing.Size(120, 37);
             this.startcostumGameButton.TabIndex = 3;
             this.startcostumGameButton.Text = "Start game with costum commands";
             this.startcostumGameButton.UseVisualStyleBackColor = true;
@@ -137,9 +144,10 @@
             // 
             // startnetGameButton
             // 
-            this.startnetGameButton.Location = new System.Drawing.Point(8, 136);
+            this.startnetGameButton.Location = new System.Drawing.Point(6, 110);
+            this.startnetGameButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.startnetGameButton.Name = "startnetGameButton";
-            this.startnetGameButton.Size = new System.Drawing.Size(160, 45);
+            this.startnetGameButton.Size = new System.Drawing.Size(120, 37);
             this.startnetGameButton.TabIndex = 2;
             this.startnetGameButton.Text = "Start game with -net";
             this.startnetGameButton.UseVisualStyleBackColor = true;
@@ -147,9 +155,10 @@
             // 
             // connectButton
             // 
-            this.connectButton.Location = new System.Drawing.Point(8, 19);
+            this.connectButton.Location = new System.Drawing.Point(6, 15);
+            this.connectButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.connectButton.Name = "connectButton";
-            this.connectButton.Size = new System.Drawing.Size(160, 46);
+            this.connectButton.Size = new System.Drawing.Size(120, 37);
             this.connectButton.TabIndex = 0;
             this.connectButton.Text = "Connect";
             this.connectButton.UseVisualStyleBackColor = true;
@@ -159,9 +168,10 @@
             // 
             this.statusLabel.AutoSize = true;
             this.statusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.statusLabel.Location = new System.Drawing.Point(174, 36);
+            this.statusLabel.Location = new System.Drawing.Point(130, 29);
+            this.statusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(99, 29);
+            this.statusLabel.Size = new System.Drawing.Size(76, 24);
             this.statusLabel.TabIndex = 1;
             this.statusLabel.Text = "Status: -";
             // 
@@ -183,10 +193,11 @@
             this.utilities.Controls.Add(this.listmodsButton);
             this.utilities.Controls.Add(this.CommandTextBox);
             this.utilities.Controls.Add(this.CCommandButton);
-            this.utilities.Location = new System.Drawing.Point(4, 25);
+            this.utilities.Location = new System.Drawing.Point(4, 22);
+            this.utilities.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.utilities.Name = "utilities";
-            this.utilities.Padding = new System.Windows.Forms.Padding(3);
-            this.utilities.Size = new System.Drawing.Size(786, 317);
+            this.utilities.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.utilities.Size = new System.Drawing.Size(588, 255);
             this.utilities.TabIndex = 1;
             this.utilities.Text = "Utilities";
             this.utilities.UseVisualStyleBackColor = true;
@@ -195,9 +206,10 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label6.Location = new System.Drawing.Point(138, 126);
+            this.label6.Location = new System.Drawing.Point(104, 102);
+            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(117, 25);
+            this.label6.Size = new System.Drawing.Size(92, 20);
             this.label6.TabIndex = 15;
             this.label6.Text = "Classname:";
             // 
@@ -205,9 +217,10 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label5.Location = new System.Drawing.Point(138, 90);
+            this.label5.Location = new System.Drawing.Point(104, 73);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(111, 25);
+            this.label5.Size = new System.Drawing.Size(89, 20);
             this.label5.TabIndex = 14;
             this.label5.Text = "Funcname:";
             // 
@@ -215,9 +228,10 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label4.Location = new System.Drawing.Point(138, 208);
+            this.label4.Location = new System.Drawing.Point(104, 169);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(70, 25);
+            this.label4.Size = new System.Drawing.Size(55, 20);
             this.label4.TabIndex = 13;
             this.label4.Text = "Name:";
             // 
@@ -225,9 +239,10 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label3.Location = new System.Drawing.Point(138, 172);
+            this.label3.Location = new System.Drawing.Point(104, 140);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(84, 25);
+            this.label3.Size = new System.Drawing.Size(67, 20);
             this.label3.TabIndex = 12;
             this.label3.Text = "Section:";
             // 
@@ -235,49 +250,55 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label2.Location = new System.Drawing.Point(138, 24);
+            this.label2.Location = new System.Drawing.Point(104, 20);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(109, 25);
+            this.label2.Size = new System.Drawing.Size(86, 20);
             this.label2.TabIndex = 11;
             this.label2.Text = "Command:";
             // 
             // nameTextBox
             // 
             this.nameTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.nameTextBox.Location = new System.Drawing.Point(271, 208);
+            this.nameTextBox.Location = new System.Drawing.Point(203, 169);
+            this.nameTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.nameTextBox.Name = "nameTextBox";
-            this.nameTextBox.Size = new System.Drawing.Size(469, 30);
+            this.nameTextBox.Size = new System.Drawing.Size(353, 26);
             this.nameTextBox.TabIndex = 10;
             // 
             // sectionTextBox
             // 
             this.sectionTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.sectionTextBox.Location = new System.Drawing.Point(271, 172);
+            this.sectionTextBox.Location = new System.Drawing.Point(203, 140);
+            this.sectionTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.sectionTextBox.Name = "sectionTextBox";
-            this.sectionTextBox.Size = new System.Drawing.Size(469, 30);
+            this.sectionTextBox.Size = new System.Drawing.Size(353, 26);
             this.sectionTextBox.TabIndex = 9;
             // 
             // ClassnameTextBox
             // 
             this.ClassnameTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.ClassnameTextBox.Location = new System.Drawing.Point(271, 126);
+            this.ClassnameTextBox.Location = new System.Drawing.Point(203, 102);
+            this.ClassnameTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ClassnameTextBox.Name = "ClassnameTextBox";
-            this.ClassnameTextBox.Size = new System.Drawing.Size(469, 30);
+            this.ClassnameTextBox.Size = new System.Drawing.Size(353, 26);
             this.ClassnameTextBox.TabIndex = 8;
             // 
             // FuncNameTextBox
             // 
             this.FuncNameTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.FuncNameTextBox.Location = new System.Drawing.Point(271, 90);
+            this.FuncNameTextBox.Location = new System.Drawing.Point(203, 73);
+            this.FuncNameTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.FuncNameTextBox.Name = "FuncNameTextBox";
-            this.FuncNameTextBox.Size = new System.Drawing.Size(469, 30);
+            this.FuncNameTextBox.Size = new System.Drawing.Size(353, 26);
             this.FuncNameTextBox.TabIndex = 7;
             // 
             // VarListButton
             // 
-            this.VarListButton.Location = new System.Drawing.Point(8, 172);
+            this.VarListButton.Location = new System.Drawing.Point(6, 140);
+            this.VarListButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.VarListButton.Name = "VarListButton";
-            this.VarListButton.Size = new System.Drawing.Size(124, 49);
+            this.VarListButton.Size = new System.Drawing.Size(93, 40);
             this.VarListButton.TabIndex = 6;
             this.VarListButton.Text = "Varlist";
             this.VarListButton.UseVisualStyleBackColor = true;
@@ -285,9 +306,10 @@
             // 
             // GetOpcodeButton
             // 
-            this.GetOpcodeButton.Location = new System.Drawing.Point(8, 97);
+            this.GetOpcodeButton.Location = new System.Drawing.Point(6, 79);
+            this.GetOpcodeButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.GetOpcodeButton.Name = "GetOpcodeButton";
-            this.GetOpcodeButton.Size = new System.Drawing.Size(124, 49);
+            this.GetOpcodeButton.Size = new System.Drawing.Size(93, 40);
             this.GetOpcodeButton.TabIndex = 5;
             this.GetOpcodeButton.Text = "Get Opcode";
             this.GetOpcodeButton.UseVisualStyleBackColor = true;
@@ -295,9 +317,10 @@
             // 
             // ScriptReloadButton
             // 
-            this.ScriptReloadButton.Location = new System.Drawing.Point(295, 260);
+            this.ScriptReloadButton.Location = new System.Drawing.Point(221, 211);
+            this.ScriptReloadButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ScriptReloadButton.Name = "ScriptReloadButton";
-            this.ScriptReloadButton.Size = new System.Drawing.Size(124, 43);
+            this.ScriptReloadButton.Size = new System.Drawing.Size(93, 35);
             this.ScriptReloadButton.TabIndex = 4;
             this.ScriptReloadButton.Text = "Reload scripts";
             this.ScriptReloadButton.UseVisualStyleBackColor = true;
@@ -305,9 +328,10 @@
             // 
             // GetPathButton
             // 
-            this.GetPathButton.Location = new System.Drawing.Point(156, 260);
+            this.GetPathButton.Location = new System.Drawing.Point(117, 211);
+            this.GetPathButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.GetPathButton.Name = "GetPathButton";
-            this.GetPathButton.Size = new System.Drawing.Size(124, 43);
+            this.GetPathButton.Size = new System.Drawing.Size(93, 35);
             this.GetPathButton.TabIndex = 3;
             this.GetPathButton.Text = "Get scripts path of game";
             this.GetPathButton.UseVisualStyleBackColor = true;
@@ -315,9 +339,10 @@
             // 
             // listmodsButton
             // 
-            this.listmodsButton.Location = new System.Drawing.Point(17, 260);
+            this.listmodsButton.Location = new System.Drawing.Point(13, 211);
+            this.listmodsButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.listmodsButton.Name = "listmodsButton";
-            this.listmodsButton.Size = new System.Drawing.Size(124, 43);
+            this.listmodsButton.Size = new System.Drawing.Size(93, 35);
             this.listmodsButton.TabIndex = 2;
             this.listmodsButton.Text = "List installed mods";
             this.listmodsButton.UseVisualStyleBackColor = true;
@@ -326,16 +351,18 @@
             // CommandTextBox
             // 
             this.CommandTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.CommandTextBox.Location = new System.Drawing.Point(271, 24);
+            this.CommandTextBox.Location = new System.Drawing.Point(203, 20);
+            this.CommandTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.CommandTextBox.Name = "CommandTextBox";
-            this.CommandTextBox.Size = new System.Drawing.Size(469, 30);
+            this.CommandTextBox.Size = new System.Drawing.Size(353, 26);
             this.CommandTextBox.TabIndex = 1;
             // 
             // CCommandButton
             // 
-            this.CCommandButton.Location = new System.Drawing.Point(8, 15);
+            this.CCommandButton.Location = new System.Drawing.Point(6, 12);
+            this.CCommandButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.CCommandButton.Name = "CCommandButton";
-            this.CCommandButton.Size = new System.Drawing.Size(124, 49);
+            this.CCommandButton.Size = new System.Drawing.Size(93, 40);
             this.CCommandButton.TabIndex = 0;
             this.CCommandButton.Text = "Send console command";
             this.CCommandButton.UseVisualStyleBackColor = true;
@@ -346,8 +373,9 @@
             this.logbox.ContextMenuStrip = this.contextMenuStrip1;
             this.logbox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logbox.Location = new System.Drawing.Point(0, 0);
+            this.logbox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.logbox.Name = "logbox";
-            this.logbox.Size = new System.Drawing.Size(794, 301);
+            this.logbox.Size = new System.Drawing.Size(596, 245);
             this.logbox.TabIndex = 0;
             this.logbox.Text = "";
             // 
@@ -359,36 +387,41 @@
             this.copyAllToolStripMenuItem,
             this.saveToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(178, 82);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(149, 70);
             // 
             // copySelectedToolStripMenuItem
             // 
             this.copySelectedToolStripMenuItem.Name = "copySelectedToolStripMenuItem";
-            this.copySelectedToolStripMenuItem.Size = new System.Drawing.Size(177, 26);
+            this.copySelectedToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.copySelectedToolStripMenuItem.Text = "Copy selected";
             this.copySelectedToolStripMenuItem.Click += new System.EventHandler(this.copySelectedToolStripMenuItem_Click);
             // 
             // copyAllToolStripMenuItem
             // 
             this.copyAllToolStripMenuItem.Name = "copyAllToolStripMenuItem";
-            this.copyAllToolStripMenuItem.Size = new System.Drawing.Size(177, 26);
+            this.copyAllToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.copyAllToolStripMenuItem.Text = "Copy all";
             this.copyAllToolStripMenuItem.Click += new System.EventHandler(this.copyAllToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(177, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
+            // DataRecieveWorker
+            // 
+            this.DataRecieveWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.DataRecieveWorker_DoWork);
+            // 
             // frmDebug
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(794, 651);
+            this.ClientSize = new System.Drawing.Size(596, 529);
             this.Controls.Add(this.splitContainer1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "frmDebug";
             this.Text = "Game Debugger";
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -438,5 +471,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button taskkillButton;
         private System.Windows.Forms.Button startcostumGameButton;
+        private System.ComponentModel.BackgroundWorker DataRecieveWorker;
     }
 }

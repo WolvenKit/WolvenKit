@@ -64,6 +64,7 @@ namespace WolvenKit
                 {
                     statusLabel.Text = "Status: Connected";
                     MessageBox.Show("Connected!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DataRecieveWorker.RunWorkerAsync();
                 }
                 else
                 {
@@ -125,6 +126,8 @@ namespace WolvenKit
         private void AddOutput(string text)
         {
             logbox.AppendText(text + "\n");
+            logbox.SelectionStart = logbox.Text.Length;
+            logbox.ScrollToCaret();
         }
 
         private void CCommandButton_Click(object sender, EventArgs e)
@@ -157,7 +160,51 @@ namespace WolvenKit
             Send(GameSocket, Commands.Reload());
         }
 
-        #region Network callbacks
+        #region Network stuff
+        private void DataRecieveWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            logbox.Invoke((MethodInvoker)delegate {
+                AddOutput("Started recieving!");
+            });
+            byte[] dataIn = new byte[8192 * 32];
+            while (GameSocket.Connected)
+            {
+                try
+                {
+                    var bytesRead = GameSocket.Receive(dataIn, dataIn.Length, SocketFlags.None);
+                    if (bytesRead != -1)
+                    {
+                        Response = new Response.Data(dataIn);
+                        logbox.Invoke((MethodInvoker)delegate {
+                            AddOutput("\nRecieved packet of " + Response.Params.Count + " params [" + bytesRead + " bytes]:");
+                            Response.Params.ForEach(x => AddOutput(x.Type.ToString() + ": " + x.ToString()));
+                        });
+                    }
+                    else
+                    {
+                        // -1 Bytes read should indicate the client shutdown on their end
+                        break;
+                    }
+                }
+                catch (SocketException)
+                {
+                    // You could exit this loop depending on the SocketException
+                }
+                catch (ThreadAbortException)
+                {
+                    MessageBox.Show("Fatal error with the socket!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    logbox.Invoke((MethodInvoker)delegate {
+                        AddOutput("Error: " + ex.Message);
+                    });
+                }
+            }
+            GameSocket?.Close();
+        }
+
         public void Connect(EndPoint remoteEp, Socket client)
         {
             client.BeginConnect(remoteEp,ConnectCallback, client);
@@ -193,7 +240,9 @@ namespace WolvenKit
             {
                 var client = (Socket)ar.AsyncState;
                 var bytesSent = client.EndSend(ar);
-                AddOutput($"Sent {bytesSent} bytes to server."); 
+                logbox.Invoke((MethodInvoker)delegate {
+                    AddOutput("Sent " + bytesSent + " bytes.");
+                });
             }
             catch (Exception e)
             {
@@ -201,54 +250,6 @@ namespace WolvenKit
             }
             SendDone.Set();
         }
-
-        public class StateObject
-        {
-            // Client socket.  
-            public Socket WorkSocket;
-            // Size of receive buffer.  
-            public const int BufferSize = 8192 * 32;
-            // Receive buffer.  
-            public byte[] Buffer = new byte[BufferSize];
-        }
-
-        public static void Receive(Socket client)
-        {
-            try
-            {
-                var state = new StateObject {WorkSocket = client};
-                client.BeginReceive(state.Buffer, 0, StateObject.BufferSize, 0,
-                    ReceiveCallback, state);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-        }
-
-        private static void ReceiveCallback(IAsyncResult ar)
-        {
-            var state = (StateObject)ar.AsyncState;
-            var client = state.WorkSocket;
-            var bytesRead = client.EndReceive(ar);
-            if (state.WorkSocket.Available > 0)
-            {
-                client.BeginReceive(state.Buffer, 0, StateObject.BufferSize, 0, ReceiveCallback, state);
-            }
-            else
-            {
-                if (state.Buffer.Length > 1)
-                {
-                    File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\res.bin", state.Buffer);
-                    Response = new Response.Data(state.Buffer);
-                    Console.WriteLine($"Recieved packet [{Response.Length} bytes]:");
-                    Response.Params.ForEach(x => Console.WriteLine("\t" + x.Type + ": " + x.ToString()));
-                }
-                ReceiveDone.Set();
-            }
-
-        }
-
         #endregion
     }
 }
