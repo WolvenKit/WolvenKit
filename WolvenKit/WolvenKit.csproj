@@ -188,6 +188,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssmeblyExtensions.cs" />
+    <Compile Include="Commonfunctions.cs" />
     <Compile Include="frmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -410,6 +411,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestFileOpenArgs.cs" />
     <Compile Include="SelectChunkArgs.cs" />
+    <Compile Include="SortableBindinglist.cs" />
     <Compile Include="Win32.cs" />
     <EmbeddedResource Include="frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>

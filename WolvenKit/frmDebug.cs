@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VanWassenhove.Util;
 using WolvenKit.Net;
 
 namespace WolvenKit
@@ -26,15 +27,28 @@ namespace WolvenKit
         public static ManualResetEvent ReceiveDone = new ManualResetEvent(false);
         public static Response.Data Response;
 
+        public event EventHandler VarlistRecieved;
+
+        public static SortableBindingList<Net.Variable> Variables = new SortableBindingList<Variable>();
+
         public frmDebug()
         {
             InitializeComponent();
-            statusLabel.Text = GameSocket.Connected ? "Status: Connected" : "Status: Disconnected";
+            if (GameSocket.Connected)
+            {
+                statusLabel.Text = "Status: Connected";
+                DataRecieveWorker.RunWorkerAsync();
+            }
+            else
+            {
+                statusLabel.Text = "Status: -";
+            }
+            VarlistRecieved += UpdateVarDgv;
         }
 
         private void copySelectedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(logbox.SelectedText);
+            Clipboard.SetText(logbox.SelectedText ?? "");
         }
 
         private void copyAllToolStripMenuItem_Click(object sender, EventArgs e)
@@ -55,7 +69,7 @@ namespace WolvenKit
         {
             if (GameSocket.Connected)
             {
-                MessageBox.Show("Already connected!");
+                Commonfunctions.SendNotification("Already connected!");
             }
             else
             {
@@ -63,13 +77,13 @@ namespace WolvenKit
                 if (GameSocket.Connected)
                 {
                     statusLabel.Text = "Status: Connected";
-                    MessageBox.Show("Connected!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Commonfunctions.SendNotification("Connected!");
                     DataRecieveWorker.RunWorkerAsync();
                 }
                 else
                 {
                     statusLabel.Text = "Status: Error";
-                    MessageBox.Show("Failed to connect!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Commonfunctions.SendNotification("Failed to connect!");
                 }
             }
         }
@@ -104,7 +118,7 @@ namespace WolvenKit
                 return;
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
-                MessageBox.Show(@"Game is already running!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Commonfunctions.SendNotification("Game is already running!");
                 return;
             }
             var config = MainController.Get().Configuration;
@@ -160,6 +174,58 @@ namespace WolvenKit
             Send(GameSocket, Commands.Reload());
         }
 
+        public void UpdateVarDgv(object source,EventArgs args)
+        {
+            varDGV.Invoke((MethodInvoker) delegate
+            {
+                varDGV.DataSource = Variables;
+                varDGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                for (var i = 0; i < varDGV.Columns.Count; i++)
+                {
+                    varDGV.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    varDGV.Columns[i].ReadOnly = true;
+                    varDGV.Columns[i].SortMode = DataGridViewColumnSortMode.Automatic;
+                }
+            });
+        }
+
+        public void CheckResponse(Response.Data resdata)
+        {
+            //If we haven't recieved anything return
+            if (resdata == null)
+                return;
+
+            if (resdata.Params.First().Type == Net.Response.ParamType.Int32)
+            {
+                if ((ulong)((Response.Int_32) (resdata.Params.First())).Value == 0xFFFFFFFFCC00CC00)
+                {
+                    for (int i = 2; i < resdata.Params.Count; i++)
+                    {
+                        if (i+4 > resdata.Params.Count)
+                            break;
+                        var variable = new Net.Variable();
+                        variable.byte1 = resdata.Params[i].ToString();
+                        i++;
+                        variable.byte2 = resdata.Params[i].ToString();
+                        i++;
+                        variable.Varname = resdata.Params[i].ToString();
+                        i++;
+                        variable.Section = resdata.Params[i].ToString();
+                        i++;
+                        variable.Value = resdata.Params[i].ToString();
+                        Variables.Add(variable);
+                    }
+                }
+            }
+            VarlistRecieved?.Invoke(this,null);
+        }
+
+        private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("To use this you need to send the game a varlist command (Utilities tab) with your desired criteria. After that's done this will be updated with the variables",
+                "Info",MessageBoxButtons.OK,MessageBoxIcon.Information);
+        }
+
         #region Network stuff
         private void DataRecieveWorker_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -175,9 +241,11 @@ namespace WolvenKit
                     if (bytesRead != -1)
                     {
                         Response = new Response.Data(dataIn);
-                        logbox.Invoke((MethodInvoker)delegate {
-                            AddOutput("\nRecieved packet of " + Response.Params.Count + " params [" + bytesRead + " bytes]:");
-                            Response.Params.ForEach(x => AddOutput(x.Type.ToString() + ": " + x.ToString()));
+                        CheckResponse(Response);
+                        logbox.Invoke((MethodInvoker)delegate 
+                        {
+                            AddOutput("\nRecieved packet of " + Response.Params.Count + " params [" + bytesRead + " bytes]:\n" +
+                                Response.Params.Aggregate("",(c,n) => c += (n.Type.ToString() + ": " + n.ToString()) + "\n"));
                         });
                     }
                     else
@@ -246,10 +314,18 @@ namespace WolvenKit
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                Debug.WriteLine(e.ToString());
             }
             SendDone.Set();
         }
         #endregion
+
+        private void varDGV_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (varDGV.CurrentCell.ColumnIndex == 2) 
+            {
+                varDGV.BeginEdit(true);
+            }
+        }
     }
 }
