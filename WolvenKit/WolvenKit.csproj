@@ -246,12 +246,6 @@
     <Compile Include="frmTextInput.Designer.cs">
       <DependentUpon>frmTextInput.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmTutorials.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmTutorials.Designer.cs">
-      <DependentUpon>frmTutorials.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmUsmPlayer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -500,9 +494,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmTextInput.resx">
       <DependentUpon>frmTextInput.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmTutorials.resx">
-      <DependentUpon>frmTutorials.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmUsmPlayer.resx">
       <DependentUpon>frmUsmPlayer.cs</DependentUpon>

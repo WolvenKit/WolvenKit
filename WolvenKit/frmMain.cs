@@ -1254,10 +1254,9 @@ namespace WolvenKit
 			ShowOutput();
 		}
 
-		private void tutorialsToolStripMenuItem_Click(object sender, EventArgs e)
+		private void WitcherScriptToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			var tf = new frmTutorials();
-				tf.Show(this);
+			Process.Start("https://witcherscript.readthedocs.io");
 		}
 
 		private void reloadProjectToolStripMenuItem_Click(object sender, EventArgs e)

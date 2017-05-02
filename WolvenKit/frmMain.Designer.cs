@@ -86,6 +86,7 @@ namespace WolvenKit
             this.saveExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wcclitePatcherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stringsEncoderGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gameDebuggerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCreatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -102,7 +103,6 @@ namespace WolvenKit
             this.aboutRedkit2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buildDateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            this.gameDebuggerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -455,6 +455,13 @@ namespace WolvenKit
             this.stringsEncoderGUIToolStripMenuItem.Text = "Strings Encoder GUI";
             this.stringsEncoderGUIToolStripMenuItem.Click += new System.EventHandler(this.stringsGUIToolStripMenuItem_Click);
             // 
+            // gameDebuggerToolStripMenuItem
+            // 
+            this.gameDebuggerToolStripMenuItem.Name = "gameDebuggerToolStripMenuItem";
+            this.gameDebuggerToolStripMenuItem.Size = new System.Drawing.Size(215, 26);
+            this.gameDebuggerToolStripMenuItem.Text = "Game debugger";
+            this.gameDebuggerToolStripMenuItem.Click += new System.EventHandler(this.gameDebuggerToolStripMenuItem_Click);
+            // 
             // menuCreatorToolStripMenuItem
             // 
             this.menuCreatorToolStripMenuItem.Name = "menuCreatorToolStripMenuItem";
@@ -527,8 +534,8 @@ namespace WolvenKit
             this.tutorialsToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.info_icon_23818;
             this.tutorialsToolStripMenuItem.Name = "tutorialsToolStripMenuItem";
             this.tutorialsToolStripMenuItem.Size = new System.Drawing.Size(301, 26);
-            this.tutorialsToolStripMenuItem.Text = "Tutorials";
-            this.tutorialsToolStripMenuItem.Click += new System.EventHandler(this.tutorialsToolStripMenuItem_Click);
+            this.tutorialsToolStripMenuItem.Text = "Witcherscript documentation";
+            this.tutorialsToolStripMenuItem.Click += new System.EventHandler(this.WitcherScriptToolStripMenuItem_Click);
             // 
             // witcherIIIModdingToolLicenseToolStripMenuItem
             // 
@@ -632,13 +639,6 @@ namespace WolvenKit
             this.dockPanel.TabIndex = 9;
             this.dockPanel.ActiveDocumentChanged += new System.EventHandler(this.dockPanel_ActiveDocumentChanged);
             // 
-            // gameDebuggerToolStripMenuItem
-            // 
-            this.gameDebuggerToolStripMenuItem.Name = "gameDebuggerToolStripMenuItem";
-            this.gameDebuggerToolStripMenuItem.Size = new System.Drawing.Size(215, 26);
-            this.gameDebuggerToolStripMenuItem.Text = "Game debugger";
-            this.gameDebuggerToolStripMenuItem.Click += new System.EventHandler(this.gameDebuggerToolStripMenuItem_Click);
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -650,7 +650,7 @@ namespace WolvenKit
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(773, 475);
             this.Name = "frmMain";
             this.Text = "Wolven kit";
