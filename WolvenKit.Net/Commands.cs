@@ -110,5 +110,17 @@ namespace WolvenKit.Net
                         .AppendUtf16(funcname);
             return classname == null ? req.AppendByte(0).End() : req.AppendByte(1).AppendUtf16(classname).End();
         }
+
+        public static byte[] SetVar(string section, string name, string value)
+        {
+            return Request.Init()
+                        .AppendUtf8("Config")
+                        .AppendInt32(BitConverter.ToInt32(new[] { (byte)0xCC, (byte)0x00, (byte)0xCC, (byte)0x00 }, 0))
+                        .AppendUtf8("set")
+                        .AppendUtf8(section)
+                        .AppendUtf8(name)
+                        .AppendUtf16(value)
+                        .End();
+        }
     }
 }

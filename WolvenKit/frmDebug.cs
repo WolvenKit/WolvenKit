@@ -19,7 +19,7 @@ namespace WolvenKit
 {
     public partial class frmDebug : Form
     {
-        public static Socket GameSocket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+        public static Socket GameSocket;
         public static IPEndPoint DebugProtoclAdress = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 37001);
 
         public static ManualResetEvent ConnectDone = new ManualResetEvent(false);
@@ -29,20 +29,12 @@ namespace WolvenKit
 
         public event EventHandler VarlistRecieved;
 
-        public static SortableBindingList<Net.Variable> Variables = new SortableBindingList<Variable>();
+        public static SortableBindingList<Variable> Variables = new SortableBindingList<Variable>();
 
         public frmDebug()
         {
             InitializeComponent();
-            if (GameSocket.Connected)
-            {
-                statusLabel.Text = "Status: Connected";
-                DataRecieveWorker.RunWorkerAsync();
-            }
-            else
-            {
-                statusLabel.Text = "Status: -";
-            }
+            GameSocket = new Socket(SocketType.Stream, ProtocolType.Tcp);
             VarlistRecieved += UpdateVarDgv;
         }
 
@@ -73,7 +65,7 @@ namespace WolvenKit
             }
             else
             {
-                Connect(DebugProtoclAdress, GameSocket);
+                Connect(DebugProtoclAdress, GameSocket);   
                 if (GameSocket.Connected)
                 {
                     statusLabel.Text = "Status: Connected";
@@ -180,11 +172,15 @@ namespace WolvenKit
             {
                 varDGV.DataSource = Variables;
                 varDGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                for (var i = 0; i < varDGV.Columns.Count; i++)
+                if (varDGV.ColumnCount > 0)
                 {
-                    varDGV.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                    varDGV.Columns[i].ReadOnly = true;
-                    varDGV.Columns[i].SortMode = DataGridViewColumnSortMode.Automatic;
+                    for (var i = 0; i < varDGV.Columns.Count; i++)
+                    {
+                        varDGV.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                        varDGV.Columns[i].ReadOnly = true;
+                        varDGV.Columns[i].SortMode = DataGridViewColumnSortMode.Automatic;
+                    }
+                    varDGV.Columns[varDGV.Columns.Count - 1].ReadOnly = false;
                 }
             });
         }
@@ -199,22 +195,25 @@ namespace WolvenKit
             {
                 if ((ulong)((Response.Int_32) (resdata.Params.First())).Value == 0xFFFFFFFFCC00CC00)
                 {
-                    for (int i = 2; i < resdata.Params.Count; i++)
+                    varDGV.Invoke((MethodInvoker)delegate
                     {
-                        if (i+4 > resdata.Params.Count)
-                            break;
-                        var variable = new Net.Variable();
-                        variable.byte1 = resdata.Params[i].ToString();
-                        i++;
-                        variable.byte2 = resdata.Params[i].ToString();
-                        i++;
-                        variable.Varname = resdata.Params[i].ToString();
-                        i++;
-                        variable.Section = resdata.Params[i].ToString();
-                        i++;
-                        variable.Value = resdata.Params[i].ToString();
-                        Variables.Add(variable);
-                    }
+                        for (int i = 2; i < resdata.Params.Count; i++)
+                        {
+                            if (i + 4 > resdata.Params.Count)
+                                break;
+                            var variable = new Net.Variable();
+                            variable.byte1 = resdata.Params[i].ToString();
+                            i++;
+                            variable.byte2 = resdata.Params[i].ToString();
+                            i++;
+                            variable.Varname = resdata.Params[i].ToString();
+                            i++;
+                            variable.Section = resdata.Params[i].ToString();
+                            i++;
+                            variable.Value = resdata.Params[i].ToString();
+                            Variables.Add(variable);
+                        }
+                    });
                 }
             }
             VarlistRecieved?.Invoke(this,null);
@@ -226,13 +225,31 @@ namespace WolvenKit
                 "Info",MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
 
+        private void varDGV_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (varDGV.CurrentCell.ColumnIndex == 2)
+            {
+                varDGV.BeginEdit(true);
+            }
+        }
+
+        private void varDGV_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 2)
+            {
+                Send(GameSocket, Commands.SetVar(varDGV[e.ColumnIndex, 0].Value.ToString(),
+                    varDGV[e.ColumnIndex, 1].Value.ToString(),
+                    varDGV[e.ColumnIndex, 2].Value.ToString()));
+            }
+        }
+
         #region Network stuff
         private void DataRecieveWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             logbox.Invoke((MethodInvoker)delegate {
                 AddOutput("Started recieving!");
             });
-            byte[] dataIn = new byte[8192 * 32];
+            var dataIn = new byte[8192 * 32];
             while (GameSocket.Connected)
             {
                 try
@@ -266,7 +283,7 @@ namespace WolvenKit
                 catch (Exception ex)
                 {
                     logbox.Invoke((MethodInvoker)delegate {
-                        AddOutput("Error: " + ex.Message);
+                        AddOutput("Error: " + ex.Message + "\n\n" + ex.StackTrace);
                     });
                 }
             }
@@ -289,7 +306,7 @@ namespace WolvenKit
             }
             catch (Exception e)
             {
-                AddOutput(e.ToString());
+                Debug.WriteLine(e.ToString());
             }
             ConnectDone.Set();
         }
@@ -320,12 +337,10 @@ namespace WolvenKit
         }
         #endregion
 
-        private void varDGV_CellEnter(object sender, DataGridViewCellEventArgs e)
+        private void frmDebug_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (varDGV.CurrentCell.ColumnIndex == 2) 
-            {
-                varDGV.BeginEdit(true);
-            }
+            DataRecieveWorker.CancelAsync();
+            GameSocket.Close();
         }
     }
 }

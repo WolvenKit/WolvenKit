@@ -392,6 +392,7 @@
             this.varDGV.Size = new System.Drawing.Size(787, 288);
             this.varDGV.TabIndex = 1;
             this.varDGV.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.varDGV_CellEnter);
+            this.varDGV.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.varDGV_CellValueChanged);
             // 
             // menuStrip1
             // 
@@ -430,31 +431,32 @@
             this.copyAllToolStripMenuItem,
             this.saveToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(178, 82);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(172, 76);
             // 
             // copySelectedToolStripMenuItem
             // 
             this.copySelectedToolStripMenuItem.Name = "copySelectedToolStripMenuItem";
-            this.copySelectedToolStripMenuItem.Size = new System.Drawing.Size(177, 26);
+            this.copySelectedToolStripMenuItem.Size = new System.Drawing.Size(171, 24);
             this.copySelectedToolStripMenuItem.Text = "Copy selected";
             this.copySelectedToolStripMenuItem.Click += new System.EventHandler(this.copySelectedToolStripMenuItem_Click);
             // 
             // copyAllToolStripMenuItem
             // 
             this.copyAllToolStripMenuItem.Name = "copyAllToolStripMenuItem";
-            this.copyAllToolStripMenuItem.Size = new System.Drawing.Size(177, 26);
+            this.copyAllToolStripMenuItem.Size = new System.Drawing.Size(171, 24);
             this.copyAllToolStripMenuItem.Text = "Copy all";
             this.copyAllToolStripMenuItem.Click += new System.EventHandler(this.copyAllToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(177, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(171, 24);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // DataRecieveWorker
             // 
+            this.DataRecieveWorker.WorkerSupportsCancellation = true;
             this.DataRecieveWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.DataRecieveWorker_DoWork);
             // 
             // frmDebug
@@ -468,6 +470,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "frmDebug";
             this.Text = "Game Debugger";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmDebug_FormClosing);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
