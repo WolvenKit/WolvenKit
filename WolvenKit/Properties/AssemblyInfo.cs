@@ -7,14 +7,26 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Wolven kit")]
 [assembly: AssemblyDescription(@"Wolven kit
-By: Sarcen&Traderain
-Awesome people:
-- CAPA
-- rmemr
-- KNG
-- erx
-- Skacik
-- The Witcher 3 modding discord (https://discord.gg/qBNgDEX)")]
+Team:
+
+Project lead: Traderain
+
+George Tziotis
+erxv
+Nightingale
+rmemr
+kote2ster
+Murzinio
+Other people who helped the project:
+
+CAPA
+DJ_Kovrik
+KNG
+SkacikPL
+Mezziaz
+The modding discord (https://discord.gg/qBNgDEX)
+Based on the code from Sarcen's W3Edit by Sarcen.
+For any questions contact: The Witcher 3 modding discord (https://discord.gg/qBNgDEX)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Community")]
 [assembly: AssemblyProduct("Wolven kit")]
@@ -43,5 +55,5 @@ Awesome people:
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: AssemblyVersion("0.1.0.*")]
-[assembly: AssemblyFileVersion("0.1.0.0")]
+[assembly: AssemblyVersion("0.1.1.*")]
+[assembly: AssemblyFileVersion("0.1.1.0")]
