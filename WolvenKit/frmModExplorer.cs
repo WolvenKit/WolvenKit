@@ -279,6 +279,11 @@ namespace WolvenKit
             modFileList.CollapseAll();
         }
 
+        public void StopMonitoringDirectory()
+        {
+            modexplorerSlave.Dispose();
+        }
+
         private void copyRelativePathToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if(modFileList.SelectedNode != null)

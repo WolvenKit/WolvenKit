@@ -17,5 +17,10 @@ namespace WolvenKit
 
         [DllImport("shell32.dll")]
         public static extern int FindExecutable(string lpFile, string lpDirectory, [Out] StringBuilder lpResult);
+
+        [DllImport("kernel32.dll", EntryPoint = "MoveFileW", SetLastError = true,
+        CharSet = CharSet.Unicode, ExactSpelling = true,
+        CallingConvention = CallingConvention.StdCall)]
+        public static extern bool MoveFile(string lpExistingFileName, string lpNewFileName);
     }
 }

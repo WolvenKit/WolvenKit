@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 using WolvenKit.Mod;
 
@@ -31,6 +32,7 @@ namespace WolvenKit
                 return;
 
             mod.Name = txName.Text;
+            mod.FileName = Path.Combine(Path.GetDirectoryName(Mod.FileName), mod.Name) + ".w3modproj";
             mod.InstallAsDLC = cbInstallAsDLC.Checked;
         }
     }

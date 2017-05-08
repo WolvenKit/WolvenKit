@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace WolvenKit.Mod
 {
-    public class W3Mod
+    public class W3Mod : ICloneable
     {
         [XmlIgnore]
         public string FileName { get; set; }
@@ -28,24 +30,24 @@ namespace WolvenKit.Mod
         {
             get
             {
-                var list = new List<string>();
-
                 if (!System.IO.Directory.Exists(FileDirectory))
                 {
                     System.IO.Directory.CreateDirectory(FileDirectory);
                 }
-
-                var allFiles = System.IO.Directory.GetFiles(FileDirectory, "*", SearchOption.AllDirectories);
-                foreach (var file in allFiles)
-                {
-                    // Relative paths
-                    list.Add(file.Substring(FileDirectory.Length + 1));
-                }
-
-                return list;
+                return System.IO.Directory.EnumerateFiles(FileDirectory, "*", SearchOption.AllDirectories)
+                                        .Select(file => file.Substring(FileDirectory.Length + 1)).ToList();
             }
         }
 
         public bool InstallAsDLC { get; set; }
+
+        public object Clone()
+        {
+            var clone = new W3Mod();
+            clone.Name = Name;
+            clone.InstallAsDLC = InstallAsDLC;
+            clone.FileName = FileName;
+            return clone;
+        }
     }
 }
