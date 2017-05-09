@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Cache", "WolvenKi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Net", "WolvenKit.Net\WolvenKit.Net.csproj", "{F60B8974-617D-45B5-BD33-68A9F739DE4F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Wwise", "WolvenKit.Wwise\WolvenKit.Wwise.csproj", "{DCBBE807-CD6E-493E-8C04-DB976A1591EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -132,6 +134,18 @@ Global
 		{F60B8974-617D-45B5-BD33-68A9F739DE4F}.Release|x64.Build.0 = Release|Any CPU
 		{F60B8974-617D-45B5-BD33-68A9F739DE4F}.Release|x86.ActiveCfg = Release|Any CPU
 		{F60B8974-617D-45B5-BD33-68A9F739DE4F}.Release|x86.Build.0 = Release|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Debug|x64.Build.0 = Debug|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Debug|x86.Build.0 = Debug|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Release|x64.ActiveCfg = Release|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Release|x64.Build.0 = Release|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Release|x86.ActiveCfg = Release|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
