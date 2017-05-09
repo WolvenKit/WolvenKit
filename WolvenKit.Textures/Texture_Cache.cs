@@ -12,7 +12,7 @@ using WolvenKit.CR2W;
 
 namespace WolvenKit.Cache
 {
-    public class SoundCacheItem
+    public class TextureCacheItem
     {
         public string Filename;
         public uint Id;
@@ -73,7 +73,7 @@ namespace WolvenKit.Cache
     public class TextureCache
     {
         //The images packed into this Texture cache file
-        public List<SoundCacheItem> Images;
+        public List<TextureCacheItem> Images;
 
         public string Filename;
         public List<uint> Chunkoffsets;
@@ -90,7 +90,7 @@ namespace WolvenKit.Cache
             Chunkoffsets = new List<uint>();
             using (var br = new BinaryReader(new FileStream(filepath, FileMode.Open)))
             {
-                Images = new List<SoundCacheItem>();
+                Images = new List<TextureCacheItem>();
                 br.BaseStream.Seek(-20, SeekOrigin.End);
                 TextureCount = br.ReadUInt32();
                 NamesBlockOffset = br.ReadUInt32();
@@ -110,7 +110,7 @@ namespace WolvenKit.Cache
                 }
                 for (var i = 0; i < TextureCount; i++)
                 {
-                    var ti = new SoundCacheItem();
+                    var ti = new TextureCacheItem();
                     ti.Filename = Names[i];
                     ti.Id = br.ReadUInt32();                //number (unique???)
                     ti.Filenameoffset = br.ReadUInt32();    //filename, start offset in block2
