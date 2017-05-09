@@ -10,38 +10,15 @@ namespace WolvenKit.Cache
     public class SoundCache
     {
         public byte[] Magic = { (byte)'C', (byte)'S', (byte)'3', (byte)'W' };
-        public long version = 2;
-        public Int64 Unknown1;
-        public Int64 InfoOffset;
-        public Int64 FileCount;
-        public Int64 NamesOffset;
-        public Int64 NamesSize;
-        public Int64 Unknown2;
-        public Int64 Unknown3;
+        public long Version = 2;
+        public long Unknown1;
+        public long InfoOffset;
+        public long FileCount;
+        public long NamesOffset;
+        public long NamesSize;
+        public long Unknown2;
+        public long Unknown3;
         public string FileName;
-
-        public class SoundCacheItem
-        {
-            //Name of the bundled item in the archive.
-            public string Name;
-            //Name of the cache file this file is in. (Needed for Extract() )
-            public string ParentFile;
-
-            public Int64 NameOffset;
-            public Int64 Offset;
-            public Int64 Size;
-
-            public void Extract(Stream output)
-            {
-                using (var file = MemoryMappedFile.CreateFromFile(this.ParentFile, FileMode.Open))
-                {
-                    using (var viewstream = file.CreateViewStream(Offset, Size, MemoryMappedFileAccess.Read))
-                    {
-                       viewstream.CopyTo(output);
-                    }
-                }
-            }
-        }
 
         public SoundCache(string fileName)
         {
@@ -57,8 +34,8 @@ namespace WolvenKit.Cache
             Files = new List<SoundCacheItem>();
             if (!br.ReadBytes(4).SequenceEqual(Magic))
                 throw new InvalidDataException("Wrong Magic in soundcache!");
-            version = br.ReadInt32();
-            if (version >= 2)
+            Version = br.ReadInt32();
+            if (Version >= 2)
             {
                 Unknown1 = br.ReadInt64();
                 InfoOffset = br.ReadInt64();
@@ -80,7 +57,7 @@ namespace WolvenKit.Cache
             for (var i = 0; i < FileCount; i++)
             {
                 var sf = new SoundCacheItem();
-                if (version >= 2)
+                if (Version >= 2)
                 {
                     sf.NameOffset = br.ReadInt64();
                     sf.Offset = br.ReadInt64();
@@ -105,7 +82,7 @@ namespace WolvenKit.Cache
         public void Write(BinaryWriter bw)
         {
             bw.Write(Magic);
-            bw.Write(version);
+            bw.Write(Version);
             bw.Write(Unknown1);
             bw.Write(InfoOffset);
             bw.Write(FileCount);
@@ -114,6 +91,38 @@ namespace WolvenKit.Cache
             bw.Write(Unknown2);
             bw.Write(Unknown3);
             //TODO: Write file contents and names
+        }
+    }
+
+    public class SoundCacheItem
+    {
+        //Name of the bundled item in the archive.
+        public string Name;
+        //Name of the cache file this file is in. (Needed for Extract() )
+        public string ParentFile;
+
+        public long NameOffset;
+        public long Offset;
+        public long Size;
+
+        public void Extract(Stream output)
+        {
+            using (var file = MemoryMappedFile.CreateFromFile(this.ParentFile, FileMode.Open))
+            {
+                using (var viewstream = file.CreateViewStream(Offset, Size, MemoryMappedFileAccess.Read))
+                {
+                    viewstream.CopyTo(output);
+                }
+            }
+        }
+
+        public void Extract(string filename)
+        {
+            using (var output = new FileStream(filename, FileMode.CreateNew, FileAccess.Write))
+            {
+                Extract(output);
+                output.Close();
+            }
         }
     }
 }

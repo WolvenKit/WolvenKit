@@ -1,12 +1,9 @@
 ﻿using Ionic.Zlib;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using W3Edit.Textures;
 using WolvenKit.CR2W;
 
@@ -14,6 +11,8 @@ namespace WolvenKit.Cache
 {
     public class TextureCacheItem
     {
+        public string ParentFile;
+
         public string Filename;
         public uint Id;
         public uint Filenameoffset;
@@ -33,40 +32,49 @@ namespace WolvenKit.Cache
         public uint Dxt;
         public uint Unk3;
 
-        public byte[] Extract(string parentfile)
+        public int ZSize;
+        public int Size;
+        public uint Part;
+
+        public void Extract(Stream output)
         {
-            byte[] ret;
-            using (var br = new BinaryReader(new FileStream(parentfile, FileMode.Open)))
+            using (var file = MemoryMappedFile.CreateFromFile(this.ParentFile, FileMode.Open))
             {
-                uint fmt = 0;
-                if (Dxt == 7) fmt = 1;
-                else if (Dxt == 8) fmt = 4;
-                else if (Dxt == 10) fmt = 4;
-                else if (Dxt == 13) fmt = 3;
-                else if (Dxt == 14) fmt = 6;
-                else if (Dxt == 15) fmt = 4;
-                else if (Dxt == 253) fmt = 0;
-                else if (Dxt == 0) fmt = 0;
-                else throw new Exception("Invalid image!");
-                var cubemap = (Type == 3 || Type == 0) && (Typeinfo == 6);
-                uint depth = 0;
-                if (Typeinfo > 1 && Type == 4) depth = Typeinfo;
-                if (Type == 3 && Dxt == 253) Bpp = 32;
-                br.BaseStream.Seek(Startoffset * 4096, SeekOrigin.Begin);
-                var zsize = br.ReadInt32();
-                var size = br.ReadInt32(); //Uncompressed size
-                var part = br.ReadByte();
-                var comp = br.ReadBytes(zsize);
-                var header = new DDSHeader();
-                if (Typeinfo == 6 && (Dxt == 253 || Dxt == 0))
-                    ret = new byte[0];
-                else
-                    ret = header.generate(Width, Height, 1, fmt, Bpp, cubemap, depth)
-                        .Concat(new[] {(byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00})
-                        .Concat(ZlibStream.UncompressBuffer(comp))
-                        .ToArray();
+                using (var viewstream = file.CreateViewStream((Startoffset * 4096)+9, ZSize, MemoryMappedFileAccess.Read))
+                {
+                    uint fmt = 0;
+                    if (Dxt == 7) fmt = 1;
+                    else if (Dxt == 8) fmt = 4;
+                    else if (Dxt == 10) fmt = 4;
+                    else if (Dxt == 13) fmt = 3;
+                    else if (Dxt == 14) fmt = 6;
+                    else if (Dxt == 15) fmt = 4;
+                    else if (Dxt == 253) fmt = 0;
+                    else if (Dxt == 0) fmt = 0;
+                    else throw new Exception("Invalid image!");
+                    var cubemap = (Type == 3 || Type == 0) && (Typeinfo == 6);
+                    uint depth = 0;
+                    if (Typeinfo > 1 && Type == 4) depth = Typeinfo;
+                    if (Type == 3 && Dxt == 253) Bpp = 32;                  
+                    var header = new DDSHeader().generate(Width, Height, 1, fmt, Bpp, cubemap, depth)
+                            .Concat(new[] { (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00 }).ToArray();
+                    output.Write(header,0,header.Length);
+                    if (!(Typeinfo == 6 && (Dxt == 253 || Dxt == 0)))
+                    {
+                        var zlib = new ZlibStream(viewstream, CompressionMode.Decompress);
+                        zlib.CopyTo(output);
+                    }
+                }
             }
-            return ret;
+        }
+
+        public void Extract(string filename)
+        {
+            using (var output = new FileStream(filename, FileMode.CreateNew, FileAccess.Write))
+            {
+                Extract(output);
+                output.Close();
+            }
         }
     }
 
@@ -112,6 +120,7 @@ namespace WolvenKit.Cache
                 {
                     var ti = new TextureCacheItem();
                     ti.Filename = Names[i];
+                    ti.ParentFile = Filename;
                     ti.Id = br.ReadUInt32();                //number (unique???)
                     ti.Filenameoffset = br.ReadUInt32();    //filename, start offset in block2
                     ti.Startoffset = br.ReadUInt32();       //* 4096 = start offset, first chunk
@@ -134,6 +143,13 @@ namespace WolvenKit.Cache
                 for (var i = 0; i < 3; i++)
                 {
                     br.ReadBytes(4);
+                }
+                foreach (var t in Images)
+                {
+                    br.BaseStream.Seek(t.Startoffset * 4096, SeekOrigin.Begin);
+                    t.ZSize = br.ReadInt32();
+                    t.Size = br.ReadInt32(); //Uncompressed size
+                    t.Part = br.ReadByte();
                 }
             }
         }

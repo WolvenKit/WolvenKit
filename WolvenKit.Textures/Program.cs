@@ -48,6 +48,7 @@ namespace WolvenKit.Cache
 							cf.Read(of.FileName);
 							Console.WriteLine("Files:\n");
 							cf.Images.ToList().ForEach(x=> Console.WriteLine("\t" + x.Filename));
+							cf.Images.First().Extract(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\asd.dds");
 							break;
 						}
 						case Cachetype.Sound:

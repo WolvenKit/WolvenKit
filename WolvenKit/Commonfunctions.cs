@@ -53,5 +53,17 @@ namespace WolvenKit
             Thread.Sleep(1); // This makes the difference between whether it works or not. Sleep(0) is not enough.
             Directory.Delete(target_dir);
         }
+
+        public static string GetRelativePath(string filespec, string folder)
+        {
+            Uri pathUri = new Uri(filespec);
+            // Folders must end in a slash
+            if (!folder.EndsWith(Path.DirectorySeparatorChar.ToString()))
+            {
+                folder += Path.DirectorySeparatorChar;
+            }
+            Uri folderUri = new Uri(folder);
+            return Uri.UnescapeDataString(folderUri.MakeRelativeUri(pathUri).ToString().Replace('/', Path.DirectorySeparatorChar));
+        }
     }
 }
