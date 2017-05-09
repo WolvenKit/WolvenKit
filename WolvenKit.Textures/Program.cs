@@ -44,10 +44,10 @@ namespace WolvenKit.Cache
 					{
 						case Cachetype.Texture:
 						{
-							var cf = new Texture_Cache();
+							var cf = new TextureCache();
 							cf.Read(of.FileName);
 							Console.WriteLine("Files:\n");
-							//cf.Images.ToList().ForEach(x=> Console.WriteLine("\t" + x.Key.filename));
+							cf.Images.ToList().ForEach(x=> Console.WriteLine("\t" + x.Filename));
 							break;
 						}
 						case Cachetype.Sound:
