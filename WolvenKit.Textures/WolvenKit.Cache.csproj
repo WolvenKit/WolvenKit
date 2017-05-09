@@ -56,6 +56,7 @@
     <Compile Include="ImageUtility.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SoundBanksInfo.cs" />
     <Compile Include="Sound_Cache.cs" />
     <Compile Include="Texture_Cache.cs" />
   </ItemGroup>

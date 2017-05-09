@@ -34,7 +34,7 @@ namespace WolvenKit.Cache
 			Console.Title = "*.cache parser test";
 			using (var of = new OpenFileDialog())
 			{
-				of.Filter = "Witcher 3 Cache files | *.cache";
+				of.Filter = "Witcher 3 Cache files | *.cache | XML Files | *.xml";
 				if (of.ShowDialog() == DialogResult.OK)
 				{
 					Console.WriteLine("Got file: " + Path.GetFileName(of.FileName) + "->" +
@@ -59,7 +59,12 @@ namespace WolvenKit.Cache
 							break;
 						}
 						default:
-							MessageBox.Show("Unsupported file!"); 
+					        if (Path.GetExtension(of.FileName) == ".xml")
+					            new SoundBanksInfo(of.FileName);
+					        else
+					        {
+                                MessageBox.Show("Unsupported file!");
+                            }
 							break;
 					}
 				}
