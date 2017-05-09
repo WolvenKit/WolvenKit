@@ -54,7 +54,7 @@ namespace WolvenKit.Cache
 						{
 							var sc = new SoundCache(of.FileName);
 							Console.WriteLine("Files:\n");
-							//sc.Files.ForEach(x=> Console.WriteLine("\t" + x.name));
+							sc.Files.ForEach(x=> Console.WriteLine("\t" + x.Name));
 							break;
 						}
 						default:

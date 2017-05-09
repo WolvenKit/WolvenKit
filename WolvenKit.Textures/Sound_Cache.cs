@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using WolvenKit.CR2W;
 
 namespace WolvenKit.Cache
@@ -19,45 +18,46 @@ namespace WolvenKit.Cache
         public Int64 NamesSize;
         public Int64 Unknown2;
         public Int64 Unknown3;
+        public string FileName;
 
-        public class SoundFileInfo
+        public class SoundCacheItem
         {
+            //Name of the bundled item in the archive.
+            public string Name;
+            //Name of the cache file this file is in. (Needed for Extract() )
+            public string ParentFile;
+
             public Int64 NameOffset;
             public Int64 Offset;
             public Int64 Size;
-        }
 
-        public class SoundFile
-        {
-            public SoundFileInfo Info;
-            public string Name;
-
-            public byte[] Extract(string parentfile)
+            public void Extract(Stream output)
             {
-                byte[] ret;
-                using (var br = new BinaryReader(new FileStream(parentfile, FileMode.Open)))
+                using (var file = MemoryMappedFile.CreateFromFile(this.ParentFile, FileMode.Open))
                 {
-                    br.BaseStream.Seek(this.Info.Offset, SeekOrigin.Begin);
-                    ret = br.ReadBytes((int)this.Info.Size);
+                    using (var viewstream = file.CreateViewStream(Offset, Size, MemoryMappedFileAccess.Read))
+                    {
+                       viewstream.CopyTo(output);
+                    }
                 }
-                return ret;
             }
         }
 
-        public SoundCache(string FileName)
+        public SoundCache(string fileName)
         {
-            this.Read(new BinaryReader(new FileStream(FileName, FileMode.Open)));
+            FileName = fileName;
+            Read(new BinaryReader(new FileStream(fileName, FileMode.Open)));
         }
 
-        public List<SoundFile> Files;
+        public List<SoundCacheItem> Files;
 
         public void Read(BinaryReader br)
         {
 
-            Files = new List<SoundFile>();
+            Files = new List<SoundCacheItem>();
             if (!br.ReadBytes(4).SequenceEqual(Magic))
                 throw new InvalidDataException("Wrong Magic in soundcache!");
-            var version = br.ReadInt32();
+            version = br.ReadInt32();
             if (version >= 2)
             {
                 Unknown1 = br.ReadInt64();
@@ -74,31 +74,31 @@ namespace WolvenKit.Cache
                 NamesOffset = br.ReadUInt32();
                 NamesSize = br.ReadUInt32();
             }
-            //Unknown2 = br.ReadInt64();
-            //Unknown3 = br.ReadInt64();
+            Unknown2 = br.ReadInt64();
+            Unknown3 = br.ReadInt64();
             br.BaseStream.Seek(InfoOffset, SeekOrigin.Begin);
-            for (int i = 0; i < FileCount; i++)
+            for (var i = 0; i < FileCount; i++)
             {
-                var sf = new SoundFile();
-                sf.Info = new SoundFileInfo();
+                var sf = new SoundCacheItem();
                 if (version >= 2)
                 {
-                    sf.Info.NameOffset = br.ReadInt64();
-                    sf.Info.Offset = br.ReadInt64();
-                    sf.Info.Size = br.ReadInt64();
+                    sf.NameOffset = br.ReadInt64();
+                    sf.Offset = br.ReadInt64();
+                    sf.Size = br.ReadInt64();
                 }
                 else
                 {
-                    sf.Info.NameOffset = br.ReadUInt32();
-                    sf.Info.Offset = br.ReadUInt32();
-                    sf.Info.Size = br.ReadUInt32();
+                    sf.NameOffset = br.ReadUInt32();
+                    sf.Offset = br.ReadUInt32();
+                    sf.Size = br.ReadUInt32();
                 }
                 Files.Add(sf);
             }
-            foreach (SoundFile t in Files)
+            foreach (var f in Files)
             {
-                br.BaseStream.Seek(NamesOffset + t.Info.NameOffset, SeekOrigin.Begin);
-                t.Name = br.ReadCR2WString();
+                br.BaseStream.Seek(NamesOffset + f.NameOffset, SeekOrigin.Begin);
+                f.Name = br.ReadCR2WString();
+                f.ParentFile = this.FileName;
             }
         }
 
