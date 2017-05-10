@@ -32,6 +32,7 @@ This repository is created to demonstrate how **REDengine 3** reads and writes f
 - https://bitbucket.org/jlouis/witcherconverter
 - https://sourceforge.net/projects/vgmtoolbox/
 - http://forums.cdprojektred.com/forum/en/the-witcher-series/the-witcher-3-wild-hunt/mod-discussions
+- https://bitbucket.org/zabb65/payday-2-modding-information
 
 ***
 
