@@ -24,7 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Render", "WolvenK
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Scaleform", "WolvenKit.Scaleform\WolvenKit.Scaleform.csproj", "{031DD6DA-B643-4C2A-A30D-A2E2212724C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Cache", "WolvenKit.Textures\WolvenKit.Cache.csproj", "{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Cache", "WolvenKit.Cache\WolvenKit.Cache.csproj", "{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Net", "WolvenKit.Net\WolvenKit.Net.csproj", "{F60B8974-617D-45B5-BD33-68A9F739DE4F}"
 EndProject

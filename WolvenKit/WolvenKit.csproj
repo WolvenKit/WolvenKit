@@ -574,7 +574,7 @@
       <Project>{031dd6da-b643-4c2a-a30d-a2e2212724c2}</Project>
       <Name>WolvenKit.Scaleform</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.Textures\WolvenKit.Cache.csproj">
+    <ProjectReference Include="..\WolvenKit.Cache\WolvenKit.Cache.csproj">
       <Project>{17cf5901-6e1f-467f-afe0-3cc04dc9688a}</Project>
       <Name>WolvenKit.Cache</Name>
     </ProjectReference>
