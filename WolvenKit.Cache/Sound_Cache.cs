@@ -90,6 +90,7 @@ namespace WolvenKit.Cache
             bw.Write(NamesSize);
             bw.Write(Unknown2);
             bw.Write(Unknown3);
+
             //TODO: Write file contents and names
         }
     }

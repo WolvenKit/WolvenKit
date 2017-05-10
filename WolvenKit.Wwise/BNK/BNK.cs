@@ -2,9 +2,9 @@
 using System.IO;
 using System.Linq;
 using System.Threading;
-using SoundBankParser.Sections;
+using WolvenKit.Wwise.BNK.Sections;
 
-namespace SoundBankParser
+namespace WolvenKit.Wwise.BNK
 {
     public class StaticStorage
     {

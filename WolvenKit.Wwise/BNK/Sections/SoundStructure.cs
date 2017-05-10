@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace SoundBankParser.Sections
+namespace WolvenKit.Wwise.BNK.Sections
 {
     internal class SoundStructure_effect
     {

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace SoundBankParser.Sections
+namespace WolvenKit.Wwise.BNK.Sections
 {
     internal class Unknown
     {

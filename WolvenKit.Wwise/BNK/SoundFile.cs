@@ -1,6 +1,6 @@
-﻿using SoundBankParser.Sections;
+﻿using WolvenKit.Wwise.BNK.Sections;
 
-namespace SoundBankParser
+namespace WolvenKit.Wwise.BNK
 {
     public class SoundFile
     {
