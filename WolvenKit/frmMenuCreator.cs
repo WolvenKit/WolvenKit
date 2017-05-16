@@ -24,8 +24,8 @@ namespace WolvenKit
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            try
-            {
+            //try
+            //{
                 var sf = new SaveFileDialog
                 {
                     Title = "Select a path to save the serialized menu.",
@@ -36,17 +36,17 @@ namespace WolvenKit
                     var menu = new XDocument(new XElement("UserConfig", Menu.Groups.Select(SerializeGroup)));
                     menu.Save(sf.FileName);
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Failed to save the document!\n" + ex.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Failed to save the document!\n" + ex.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            //}
         }
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            try
-            {
+            //try
+            //{
                 var of = new OpenFileDialog
                 {
                     Title = @"Select the xml file to load!",
@@ -57,47 +57,36 @@ namespace WolvenKit
                     var loadedxml = XDocument.Load(of.FileName);
                     Menu.Groups = loadedxml.Root?.Elements("Group").Select(DeserializeGroup).ToList();
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(@"Couldn't load the selected xml file.
-Please make sure you have selected a valid one.
-Exception: " + ex.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
-            }
+           // }
+           // catch (Exception ex)
+           // {
+           //     MessageBox.Show(@"Couldn't load the selected xml file.
+//Please make sure you have selected a valid one.
+//Exception: " + ex.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+//            }
         }
 
         public static WitcheMenuGroup DeserializeGroup(XElement element)
         {
-            var ret = new WitcheMenuGroup();
-            if (!element.Elements("Group").Any())
+            return new WitcheMenuGroup
             {
-                ret.ID = element.Attribute("id")?.Value;
-                ret.DisplayName = element.Attribute("displayName")?.Value;
-                ret.Presets = element.Element("PresetsArray") == null ? new List<WitcherMenuPreset>() : DeserializePresets(element.Element("PresetsArray"));
-                ret.Variables = element.Element("VisibleVars")?.Elements("Var").Select(DeserializeVariable).ToList();
-            } 
-            else
-            {
-                ret.ID = element.Attribute("id")?.Value;
-                ret.DisplayName = element.Attribute("displayName")?.Value;
-                ret.SubGroups = element.Elements("Group").Select(DeserializeGroup).ToList();
-            }
-            return ret;
+                ID = element.Attribute("id")?.Value,
+                DisplayName = element.Attribute("displayName")?.Value,
+                Presets = DeserializePresets(element.Element("PresetsArray")),
+                Variables = element.Element("VisibleVars")?.Elements("Var").Select(DeserializeVariable).ToList()
+            };
         }
 
         public static XElement SerializeGroup(WitcheMenuGroup group)
         {
-            if (group.SubGroups == null || group.SubGroups.Count == 0)
-            {
-
-                return new XElement("Group",
-                    new XAttribute("id", group.ID),
-                    new XAttribute("displayName", group.DisplayName),
-                    new XElement("VisibleVars",group.Variables.Select(SerializeVariable)),
-                    SerializePresets(group.Presets));
-            }
-            return new XElement("Group", new XAttribute("id", group.ID), new XAttribute("displayName", group.DisplayName),
-                group.SubGroups.Select(SerializeGroup).ToArray());
+            var serialized = new XElement("Group",
+                new XAttribute("id", group.ID),
+                new XAttribute("displayName", group.DisplayName));
+            if(group.Variables != null)
+                serialized.Add(new XElement("VisibleVars", group.Variables.Select(SerializeVariable)));
+            if (group.Presets != null)
+                serialized.Add(SerializePresets(group.Presets));
+            return serialized;
         }
 
         public static WitcherMenuVariable DeserializeVariable(XElement element)
@@ -118,7 +107,7 @@ Exception: " + ex.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
                 var split =  element.Attribute("displayType").Value.Split(';');
                 if (split.Length > 3)
                 {
-                    ret.MaxValue = split[1];
+                    ret.MinValue = split[1];
                     ret.MaxValue = split[2];
                     ret.Step = split[3];
                 }
@@ -144,20 +133,21 @@ Exception: " + ex.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
                         new XAttribute("id", var.ID),
                         new XAttribute("displayName", var.DisplayName),
                         new XAttribute("displayType",var.Variabletype),
-                        new XAttribute("tags",var.Tags.Aggregate("", (c, n) => c += ";" + n)),
+                        new XAttribute("tags",string.Join(";", var.Tags)),
                         SerializeOptions(var.Options));
                 case WitcherMenuVariableType.Slider:
                     return new XElement("Var",
                         new XAttribute("id", var.ID),
                         new XAttribute("displayName", var.DisplayName),
-                        new XAttribute("displayType", var.Variabletype + ";" + var.MinValue + ";" + var.MaxValue + ";" + var.Step),
-                        new XAttribute("tags", var.Tags.Aggregate("", (c, n) => c += ";" + n)));
+                        new XAttribute("displayType",
+                            var.Variabletype + ";" + var.MinValue + ";" + var.MaxValue + ";" + var.Step),
+                        new XAttribute("tags", string.Join(";", var.Tags)));
                 case WitcherMenuVariableType.Toggle:
                     return new XElement("Var",
                         new XAttribute("id", var.ID),
                         new XAttribute("displayName", var.DisplayName),
                         new XAttribute("displayType", var.Variabletype),
-                        new XAttribute("tags", var.Tags.Aggregate("", (c, n) => c += ";" + n)));
+                        new XAttribute("tags", string.Join(";", var.Tags)));
                 default:
                     throw new Exception("Invalid variable type!");
             }   
@@ -170,14 +160,10 @@ Exception: " + ex.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
             {
                 var wvo = new WitcherVariableOption
                 {
-                    ID = element.Attribute("id")?.Value,
-                    DisplayName = element.Attribute("displayName")?.Value
+                    ID = option.Attribute("id")?.Value,
+                    DisplayName = option.Attribute("displayName")?.Value
                 };
-                foreach (var ent in option.Elements("Entry").Select(entry => new PresetEntry
-                {
-                    VarId = entry.Attribute("varId")?.Value,
-                    Value = entry.Attribute("value")?.Value
-                }))
+                foreach (var ent in option.Elements("Entry").Select(entry => new PresetEntry { VarId = entry.Attribute("varId")?.Value, Value = entry.Attribute("value")?.Value }))
                 {
                     wvo.Entries.Add(ent);
                 }
@@ -199,6 +185,8 @@ Exception: " + ex.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
 
         public static List<WitcherMenuPreset> DeserializePresets(XElement element)
         {
+            if(element == null)
+                return null;
             var ret = new List<WitcherMenuPreset>();
             foreach (var xElement in element.Elements("Preset"))
             {
@@ -216,6 +204,7 @@ Exception: " + ex.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
                 {
                     preset.Entries.Add(pentry);
                 }
+                ret.Add(preset);
             }
             return ret;
         }
@@ -226,7 +215,7 @@ Exception: " + ex.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
                                 new XElement("Preset",
                                     new XAttribute("id",x.ID),
                                     new XAttribute("displayName", x.DisplayName),
-                                    new XAttribute("tags", x.Tags.Aggregate("",(c,n)=> c += ";" + n)),
+                                    new XAttribute("tags", string.Join(";", x.Tags)),
                                     x.Entries.Select(y=> new XElement("Entry",
                                                             new XAttribute("varId",y.VarId),
                                                             new XAttribute("value",y.Value))).ToArray())));
@@ -251,14 +240,6 @@ Exception: " + ex.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
         [RefreshProperties(RefreshProperties.All)]
         public class WitcheMenuGroup : WitcherMenuElement
         {
-            [Category("Sections")]
-            [Description("The SubGroups of the group if this is not null then everything else isn't serialized.")]
-            [Editor(typeof(DescriptiveCollectionEditor), typeof(UITypeEditor))]
-            public List<WitcheMenuGroup> SubGroups
-            {
-                get { return subgroups; }
-                set { subgroups = value; }
-            }
             private List<WitcheMenuGroup> subgroups = new List<WitcheMenuGroup>();
             [Category("Sections")]
             [Description("The variables of the group. These are the actual settings (sliders,toggles,options)")]

@@ -57,6 +57,7 @@
     <Compile Include="BNK\Sections\STID.cs" />
     <Compile Include="BNK\Sections\Unknown.cs" />
     <Compile Include="BNK\SoundFile.cs" />
+    <Compile Include="SoundBanksInfo.cs" />
     <Compile Include="WEM\ImaAdpcmCodec.cs" />
     <Compile Include="WEM\RiffChunk.cs" />
     <Compile Include="WEM\RiffFile.cs" />
