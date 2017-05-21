@@ -1,2 +1,5 @@
 language: csharp
 solution: WolvenKit.sln
+
+install:
+ - msbuild WolvenKit.sln
