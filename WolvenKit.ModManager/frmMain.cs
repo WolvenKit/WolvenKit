@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ICSharpCode.SharpZipLib.Core;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace WolvenKit.ModManager
 {
@@ -47,6 +49,7 @@ namespace WolvenKit.ModManager
                         }
                     }
                 }
+                UpdateModAndDlcList();
             }
             catch (Exception e)
             {
@@ -55,14 +58,13 @@ namespace WolvenKit.ModManager
                 MessageBox.Show($"Sorry there was an error launching the application. Please restart.\n{e.StackTrace}","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
                 Environment.Exit(0x01);    
             }
-            UpdateModAndDlcList();
 
         }
 
         public void UpdateModAndDlcList()
         {
-            ModList.Items.AddRange(Directory.GetDirectories(ModFolder).Select(x => new ListViewItem(Path.GetFileName(x))).ToArray());
-            DLCList.Items.AddRange(Directory.GetDirectories(DlcFolder).Select(x => new ListViewItem(Path.GetFileName(x))).ToArray());
+            MODList.Items.AddRange(Directory.GetDirectories(ModFolder).Select(x => new ListViewItem(Path.GetFileName(x)) {Checked = true}).ToArray());
+            MODList.Items.AddRange(Directory.GetDirectories(DlcFolder).Select(x => new ListViewItem(Path.GetFileName(x)) {Checked = true}).ToArray());   
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -74,7 +76,17 @@ namespace WolvenKit.ModManager
 
         private void addModToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //TODO: load w3modpackage
+            using (var of = new OpenFileDialog())
+            {
+                of.Filter = "Witcher 3 Mod Installer package | *.W3ModPackage";
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    using (var inform = new frmInstall(of.FileName))
+                    {
+                        inform.ShowDialog();
+                    }
+                }
+            }
         }
 
         private void addDLCToolStripMenuItem_Click(object sender, EventArgs e)

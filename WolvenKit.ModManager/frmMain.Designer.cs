@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -37,20 +38,13 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.mods = new System.Windows.Forms.TabPage();
-            this.dlcs = new System.Windows.Forms.TabPage();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.ModList = new System.Windows.Forms.ListView();
-            this.DLCList = new System.Windows.Forms.ListView();
+            this.MODList = new System.Windows.Forms.ListView();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.mods.SuspendLayout();
-            this.dlcs.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -77,14 +71,14 @@
             // addModToolStripMenuItem
             // 
             this.addModToolStripMenuItem.Name = "addModToolStripMenuItem";
-            this.addModToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.addModToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.addModToolStripMenuItem.Text = "Add mod";
             this.addModToolStripMenuItem.Click += new System.EventHandler(this.addModToolStripMenuItem_Click);
             // 
             // addDLCToolStripMenuItem
             // 
             this.addDLCToolStripMenuItem.Name = "addDLCToolStripMenuItem";
-            this.addDLCToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.addDLCToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.addDLCToolStripMenuItem.Text = "Add DLC";
             this.addDLCToolStripMenuItem.Click += new System.EventHandler(this.addDLCToolStripMenuItem_Click);
             // 
@@ -113,7 +107,7 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -125,7 +119,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.tabControl1);
+            this.splitContainer1.Panel1.Controls.Add(this.MODList);
             // 
             // splitContainer1.Panel2
             // 
@@ -133,39 +127,6 @@
             this.splitContainer1.Size = new System.Drawing.Size(1057, 600);
             this.splitContainer1.SplitterDistance = 352;
             this.splitContainer1.TabIndex = 1;
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.mods);
-            this.tabControl1.Controls.Add(this.dlcs);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(352, 600);
-            this.tabControl1.TabIndex = 0;
-            // 
-            // mods
-            // 
-            this.mods.Controls.Add(this.ModList);
-            this.mods.Location = new System.Drawing.Point(4, 22);
-            this.mods.Name = "mods";
-            this.mods.Padding = new System.Windows.Forms.Padding(3);
-            this.mods.Size = new System.Drawing.Size(344, 574);
-            this.mods.TabIndex = 0;
-            this.mods.Text = "Mods";
-            this.mods.UseVisualStyleBackColor = true;
-            // 
-            // dlcs
-            // 
-            this.dlcs.Controls.Add(this.DLCList);
-            this.dlcs.Location = new System.Drawing.Point(4, 22);
-            this.dlcs.Name = "dlcs";
-            this.dlcs.Padding = new System.Windows.Forms.Padding(3);
-            this.dlcs.Size = new System.Drawing.Size(344, 574);
-            this.dlcs.TabIndex = 1;
-            this.dlcs.Text = "DLCs";
-            this.dlcs.UseVisualStyleBackColor = true;
             // 
             // richTextBox1
             // 
@@ -176,27 +137,16 @@
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
-            // ModList
+            // MODList
             // 
-            this.ModList.CheckBoxes = true;
-            this.ModList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ModList.Location = new System.Drawing.Point(3, 3);
-            this.ModList.Name = "ModList";
-            this.ModList.Size = new System.Drawing.Size(338, 568);
-            this.ModList.TabIndex = 0;
-            this.ModList.UseCompatibleStateImageBehavior = false;
-            this.ModList.View = System.Windows.Forms.View.List;
-            // 
-            // DLCList
-            // 
-            this.DLCList.CheckBoxes = true;
-            this.DLCList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DLCList.Location = new System.Drawing.Point(3, 3);
-            this.DLCList.Name = "DLCList";
-            this.DLCList.Size = new System.Drawing.Size(338, 568);
-            this.DLCList.TabIndex = 0;
-            this.DLCList.UseCompatibleStateImageBehavior = false;
-            this.DLCList.View = System.Windows.Forms.View.List;
+            this.MODList.CheckBoxes = true;
+            this.MODList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MODList.Location = new System.Drawing.Point(0, 0);
+            this.MODList.Name = "MODList";
+            this.MODList.Size = new System.Drawing.Size(352, 600);
+            this.MODList.TabIndex = 0;
+            this.MODList.UseCompatibleStateImageBehavior = false;
+            this.MODList.View = System.Windows.Forms.View.List;
             // 
             // frmMain
             // 
@@ -205,6 +155,7 @@
             this.ClientSize = new System.Drawing.Size(1057, 624);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "frmMain";
             this.Text = "Witcher 3 Mod Manager";
@@ -214,9 +165,6 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
-            this.mods.ResumeLayout(false);
-            this.dlcs.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -233,12 +181,8 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage mods;
-        private System.Windows.Forms.TabPage dlcs;
         private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.ListView ModList;
-        private System.Windows.Forms.ListView DLCList;
+        private System.Windows.Forms.ListView MODList;
     }
 }
 
