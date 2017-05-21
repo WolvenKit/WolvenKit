@@ -105,7 +105,6 @@
             this.Controls.Add(this.VersionLabel);
             this.Controls.Add(this.ModNameLabel);
             this.Controls.Add(this.FilesTreeView);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmInstall";
             this.Text = "Installing: None";
             this.ResumeLayout(false);
