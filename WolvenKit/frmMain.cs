@@ -194,7 +194,24 @@ namespace WolvenKit
 					doc.ImageViewer.Show(doc.FormPanel,DockState.Document);
 					break;
 				}
-				default:
+                //TODO: Remove this once it's done
+#if DEBUG
+                case ".redfur":
+                case ".redcloth":
+			    {
+                    var apexfile = new Apex(doc.File);
+			        using (var sf = new SaveFileDialog())
+			        {
+			            sf.Filter = "XML Files | *.xml";
+			            if (sf.ShowDialog() == DialogResult.OK)
+			            {
+			                apexfile.Write(sf.FileName);
+			            }
+			        }
+                    break;
+			    }
+#endif
+                default:
 				{
 					break;
 				}
@@ -360,13 +377,13 @@ namespace WolvenKit
 		{
 			if (file == "")
 			{
-			    var dlg = new OpenFileDialog
-			    {
-			        Title = "Open Witcher 3 Mod Project",
-			        Filter = "Witcher 3 Mod|*.w3modproj",
-			        InitialDirectory = MainController.Get().Configuration.InitialModDirectory
-			    };
-			    if (dlg.ShowDialog() == DialogResult.OK)
+				var dlg = new OpenFileDialog
+				{
+					Title = "Open Witcher 3 Mod Project",
+					Filter = "Witcher 3 Mod|*.w3modproj",
+					InitialDirectory = MainController.Get().Configuration.InitialModDirectory
+				};
+				if (dlg.ShowDialog() == DialogResult.OK)
 				{
 					file = dlg.FileName;
 				}
@@ -1196,7 +1213,7 @@ namespace WolvenKit
 		{
 			if (ActiveMod == null)
 				return;
-            //With this cloned it won't get modified when we change it in dlg
+			//With this cloned it won't get modified when we change it in dlg
 			var oldmod = (W3Mod)ActiveMod.Clone();
 			using (var dlg = new frmModSettings())
 			{
@@ -1206,11 +1223,11 @@ namespace WolvenKit
 				{
 					if (oldmod.Name != dlg.Mod.Name)
 					{
-                        MainController.Get()?.Window?.ModExplorer?.StopMonitoringDirectory();
+						MainController.Get()?.Window?.ModExplorer?.StopMonitoringDirectory();
 						//Close all docs so they won't cause problems
 						OpenDocuments.ForEach(x=> x.Close());
 						//Move the files directory
-                        Directory.Move(oldmod.Directory,Path.Combine(Path.GetDirectoryName(oldmod.Directory),dlg.Mod.Name));
+						Directory.Move(oldmod.Directory,Path.Combine(Path.GetDirectoryName(oldmod.Directory),dlg.Mod.Name));
 						//Delete the old directory
 						if(Directory.Exists(oldmod.Directory))
 							Commonfunctions.DeleteFilesAndFoldersRecursively(oldmod.Directory);
@@ -1218,14 +1235,14 @@ namespace WolvenKit
 						if(File.Exists(oldmod.FileName))
 							File.Delete(oldmod.FileName);
 					}
-                    //Save the new settings and update the title
+					//Save the new settings and update the title
 					UpdateTitle();
 					SaveMod();
-                    if (File.Exists(ModManager.Get().ActiveMod?.FileName))
-                    {
-                        openMod(ModManager.Get().ActiveMod?.FileName);
-                    }
-                    Commonfunctions.SendNotification("Succesfully updated mod settings!");
+					if (File.Exists(ModManager.Get().ActiveMod?.FileName))
+					{
+						openMod(ModManager.Get().ActiveMod?.FileName);
+					}
+					Commonfunctions.SendNotification("Succesfully updated mod settings!");
 				}
 			}
 		}

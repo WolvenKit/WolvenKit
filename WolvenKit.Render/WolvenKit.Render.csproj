@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Apex.cs" />
     <Compile Include="Bithack3D.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -106,6 +107,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\nanosuit\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj">
+      <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>
+      <Name>WolvenKit.CR2W</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\AssimpNet.3.3.2\build\AssimpNet.targets" Condition="Exists('..\packages\AssimpNet.3.3.2\build\AssimpNet.targets')" />

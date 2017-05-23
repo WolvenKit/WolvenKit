@@ -187,6 +187,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Apex.cs" />
     <Compile Include="AssmeblyExtensions.cs" />
     <Compile Include="Commonfunctions.cs" />
     <Compile Include="frmAbout.cs">

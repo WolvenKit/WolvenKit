@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Text;
 using WolvenKit.CR2W;
 
 namespace WolvenKit.Cache
@@ -85,11 +86,16 @@ namespace WolvenKit.Cache
             bw.Write(Version);
             bw.Write(Unknown1);
             bw.Write(InfoOffset);
-            bw.Write(FileCount);
+            bw.Write(Files.Count);
             bw.Write(NamesOffset);
-            bw.Write(NamesSize);
+            bw.Write(Files.Sum(x=> Encoding.Default.GetBytes(x.Name).Length+1)); //Sum(bw.WriteCR2WString()); Name + 0x00
             bw.Write(Unknown2);
             bw.Write(Unknown3);
+
+            foreach (var soundfile in Files)
+            {
+                bw.WriteCR2WString(soundfile.Name);
+            }
 
             //TODO: Write file contents and names
         }
