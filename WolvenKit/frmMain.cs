@@ -194,24 +194,24 @@ namespace WolvenKit
 					doc.ImageViewer.Show(doc.FormPanel,DockState.Document);
 					break;
 				}
-                //TODO: Remove this once it's done
+				//TODO: Remove this once it's done
 #if DEBUG
-                case ".redfur":
-                case ".redcloth":
-			    {
-                    var apexfile = new Apex(doc.File);
-			        using (var sf = new SaveFileDialog())
-			        {
-			            sf.Filter = "XML Files | *.xml";
-			            if (sf.ShowDialog() == DialogResult.OK)
-			            {
-			                apexfile.Write(sf.FileName);
-			            }
-			        }
-                    break;
-			    }
+				case ".redfur":
+				case ".redcloth":
+				{
+					var apexfile = new Apex(doc.File);
+					using (var sf = new SaveFileDialog())
+					{
+						sf.Filter = "XML Files | *.xml";
+						if (sf.ShowDialog() == DialogResult.OK)
+						{
+							apexfile.Write(sf.FileName);
+						}
+					}
+					break;
+				}
 #endif
-                default:
+				default:
 				{
 					break;
 				}
