@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit", "WolvenKit\WolvenKit.csproj", "{12FD792B-EC76-4969-8B42-9671025D5108}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -29,8 +29,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Net", "WolvenKit.Net\WolvenKit.Net.csproj", "{F60B8974-617D-45B5-BD33-68A9F739DE4F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Wwise", "WolvenKit.Wwise\WolvenKit.Wwise.csproj", "{DCBBE807-CD6E-493E-8C04-DB976A1591EA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.ModManager", "WolvenKit.ModManager\WolvenKit.ModManager.csproj", "{0DC37A2A-6611-46F6-A372-7B27C0109C85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -150,18 +148,6 @@ Global
 		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Release|x64.Build.0 = Release|Any CPU
 		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Release|x86.ActiveCfg = Release|Any CPU
 		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Release|x86.Build.0 = Release|Any CPU
-		{0DC37A2A-6611-46F6-A372-7B27C0109C85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0DC37A2A-6611-46F6-A372-7B27C0109C85}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0DC37A2A-6611-46F6-A372-7B27C0109C85}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{0DC37A2A-6611-46F6-A372-7B27C0109C85}.Debug|x64.Build.0 = Debug|Any CPU
-		{0DC37A2A-6611-46F6-A372-7B27C0109C85}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{0DC37A2A-6611-46F6-A372-7B27C0109C85}.Debug|x86.Build.0 = Debug|Any CPU
-		{0DC37A2A-6611-46F6-A372-7B27C0109C85}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0DC37A2A-6611-46F6-A372-7B27C0109C85}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0DC37A2A-6611-46F6-A372-7B27C0109C85}.Release|x64.ActiveCfg = Release|Any CPU
-		{0DC37A2A-6611-46F6-A372-7B27C0109C85}.Release|x64.Build.0 = Release|Any CPU
-		{0DC37A2A-6611-46F6-A372-7B27C0109C85}.Release|x86.ActiveCfg = Release|Any CPU
-		{0DC37A2A-6611-46F6-A372-7B27C0109C85}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
