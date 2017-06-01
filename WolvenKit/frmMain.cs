@@ -11,7 +11,6 @@ using System.Xml.Serialization;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.VisualBasic.FileIO;
-using SharpDX.Direct2D1.Effects;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Bundles;
 using WolvenKit.CR2W;

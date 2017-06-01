@@ -69,6 +69,10 @@
       <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>
       <Name>WolvenKit.CR2W</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WolvenKit.Save\WolvenKit.Save.csproj">
+      <Project>{9c026da7-481d-43c6-8c18-635d69fdb423}</Project>
+      <Name>WolvenKit.Save</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WolvenKit.W3Strings\WolvenKit.W3Strings.csproj">
       <Project>{32d40d10-d6c3-48f0-aeb6-0f41c7e75cfd}</Project>
       <Name>WolvenKit.W3Strings</Name>

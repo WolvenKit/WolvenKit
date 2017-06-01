@@ -5,21 +5,24 @@ using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
 using WolvenKit.CR2W;
+using W3SavegameEditor;
 
 namespace WolvenKit.Cache
 {
     public class SoundCache
     {
-        public byte[] Magic = { (byte)'C', (byte)'S', (byte)'3', (byte)'W' };
+        public byte[] Magic = {(byte) 'C', (byte) 'S', (byte) '3', (byte) 'W'};
         public long Version = 2;
-        public long Unknown1;
+        public long Unknown1; //Possibly NOP
         public long InfoOffset;
         public long FileCount;
         public long NamesOffset;
         public long NamesSize;
-        public long Unknown2;
-        public long Unknown3;
+        public long BufferSize;
+        public long Checksum;
         public string FileName;
+
+        public List<SoundCacheItem> Files;
 
         public SoundCache(string fileName)
         {
@@ -27,7 +30,10 @@ namespace WolvenKit.Cache
             Read(new BinaryReader(new FileStream(fileName, FileMode.Open)));
         }
 
-        public List<SoundCacheItem> Files;
+        public void CalculateCheksum()
+        {
+
+        }
 
         public void Read(BinaryReader br)
         {
@@ -52,8 +58,8 @@ namespace WolvenKit.Cache
                 NamesOffset = br.ReadUInt32();
                 NamesSize = br.ReadUInt32();
             }
-            Unknown2 = br.ReadInt64();
-            Unknown3 = br.ReadInt64();
+            BufferSize = br.ReadInt64();
+            Checksum = br.ReadInt64();
             br.BaseStream.Seek(InfoOffset, SeekOrigin.Begin);
             for (var i = 0; i < FileCount; i++)
             {
@@ -88,16 +94,32 @@ namespace WolvenKit.Cache
             bw.Write(InfoOffset);
             bw.Write(Files.Count);
             bw.Write(NamesOffset);
-            bw.Write(Files.Sum(x=> Encoding.Default.GetBytes(x.Name).Length+1)); //Sum(bw.WriteCR2WString()); Name + 0x00
-            bw.Write(Unknown2);
-            bw.Write(Unknown3);
+            bw.Write(Files.Sum(x => Encoding.Default.GetBytes(x.Name).Length + 1));
+                //Sum(bw.WriteCR2WString()); Name + 0x00
+            bw.Write(BufferSize);
+            bw.Write(Checksum);
 
             foreach (var soundfile in Files)
             {
                 bw.WriteCR2WString(soundfile.Name);
             }
 
-            //TODO: Write file contents and names
+
+        }
+
+        private static uint HashFnv(string input)
+        {
+            const uint FnvHashInitial = 0x811C9DC5;
+            const int FnvHashPrime = 0x1000193;
+            var fnvHash = FnvHashInitial;
+            var data = Encoding.ASCII.GetBytes(input);
+            foreach (var t in data)
+            {
+                fnvHash ^= t;
+                fnvHash *= FnvHashPrime;
+            }
+            fnvHash *= FnvHashPrime;
+            return fnvHash;
         }
     }
 
