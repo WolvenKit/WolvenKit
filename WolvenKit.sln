@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Net", "WolvenKit.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Wwise", "WolvenKit.Wwise\WolvenKit.Wwise.csproj", "{DCBBE807-CD6E-493E-8C04-DB976A1591EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Interfaces", "WolvenKit.Interfaces\WolvenKit.Interfaces.csproj", "{4D1019F1-F099-450F-85B8-697E0332A94F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -148,6 +150,18 @@ Global
 		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Release|x64.Build.0 = Release|Any CPU
 		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Release|x86.ActiveCfg = Release|Any CPU
 		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Release|x86.Build.0 = Release|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Debug|x64.Build.0 = Debug|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Debug|x86.Build.0 = Debug|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Release|x64.ActiveCfg = Release|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Release|x64.Build.0 = Release|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Release|x86.ActiveCfg = Release|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,10 +2,11 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using WolvenKit.Interfaces;
 
 namespace WolvenKit.Bundles
 {
-    public class Bundle
+    public class Bundle : IWitcherArchiveType
     {
         private static readonly byte[] IDString =
         {

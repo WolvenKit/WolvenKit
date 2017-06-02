@@ -5,10 +5,11 @@ using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
 using WolvenKit.CR2W;
+using WolvenKit.Interfaces;
 
 namespace WolvenKit.Cache
 {
-    public class SoundCache
+    public class SoundCache : IWitcherArchiveType
     {
         public byte[] Magic = { (byte)'C', (byte)'S', (byte)'3', (byte)'W' };
         public long Version = 2;
@@ -19,7 +20,7 @@ namespace WolvenKit.Cache
         public long NamesSize;
         public long Unknown2;
         public long Unknown3;
-        public string FileName;
+        public string FileName { get; set; }
 
         public SoundCache(string fileName)
         {
@@ -101,16 +102,45 @@ namespace WolvenKit.Cache
         }
     }
 
-    public class SoundCacheItem
+    public class SoundCacheItem : IWitcherFile
     {
+        public IWitcherArchiveType Bundle { get; set; }
         //Name of the bundled item in the archive.
-        public string Name;
+        public string Name { get; set; }
         //Name of the cache file this file is in. (Needed for Extract() )
         public string ParentFile;
 
         public long NameOffset;
-        public long Offset;
-        public long Size;
+        public long Offset { get; set; }
+
+        public long Size { get; set; }
+        public uint ZSize { get; set; }
+        public uint Compression { get; set; }
+        public string DateString { get; set; }
+
+        public string CompressionType
+        {
+            get
+            {
+                switch (Compression)
+                {
+                    case 0:
+                        return "None";
+                    case 1:
+                        return "Zlib";
+                    case 2:
+                        return "Snappy";
+                    case 3:
+                        return "Doboz";
+                    case 4:
+                        return "Lz4";
+                    case 5:
+                        return "Lz4";
+                    default:
+                        return "Unknown";
+                }
+            }
+        }
 
         public void Extract(Stream output)
         {

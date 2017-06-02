@@ -37,9 +37,9 @@ using System.Text;
  * to see the most recent modifications 
  */
 
-namespace WolvenKit.Bundles
+namespace WolvenKit.Interfaces
 {
-    internal class AlphanumComparator<T> : IComparer<T>
+    public class AlphanumComparator<T> : IComparer<T>
     {
         public int Compare(T x, T y)
         {

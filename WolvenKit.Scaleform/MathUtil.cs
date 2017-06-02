@@ -19,7 +19,7 @@ namespace WolvenKit.Scaleform
                 results = Eval(expression);
                 outputValue = System.Convert.ToString((long)System.Convert.ToUInt64(results), 10);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 outputValue = null;
             }

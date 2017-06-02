@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using WolvenKit.Interfaces;
 
 namespace WolvenKit.Bundles
 {
-    public class BundleTreeNode
+    public class BundleTreeNode : IWitcherTreeNode
     {
         public BundleTreeNode()
         {
-            Directories = new Dictionary<string, BundleTreeNode>();
-            Files = new Dictionary<string, List<BundleItem>>();
+            Directories = new Dictionary<string, IWitcherTreeNode>();
+            Files = new Dictionary<string, List<IWitcherFile>>();
             Name = "";
         }
 
@@ -21,7 +22,7 @@ namespace WolvenKit.Bundles
                 while (true)
                 {
                     path = Path.Combine(current.Name, path);
-                    current = current.Parent;
+                    current = current.Parent as BundleTreeNode;
                     if (current == null)
                         break;
                 }
@@ -31,8 +32,8 @@ namespace WolvenKit.Bundles
         }
 
         public string Name { get; set; }
-        public BundleTreeNode Parent { get; set; }
-        public Dictionary<string, BundleTreeNode> Directories { get; set; }
-        public Dictionary<string, List<BundleItem>> Files { get; set; }
+        public IWitcherTreeNode Parent { get; set; }
+        public Dictionary<string, IWitcherTreeNode> Directories { get; set; }
+        public Dictionary<string, List<IWitcherFile>> Files { get; set; }
     }
 }

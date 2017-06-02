@@ -6,29 +6,33 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using WolvenKit.Bundles;
+using WolvenKit.Interfaces;
 
 namespace WolvenKit
 {
     public partial class frmBundleExplorer : Form
     {
         public List<string> Autocompletelist;
-        public List<BundleItem> FileList;
-        public BundleManager Manager;
+        public List<IWitcherFile> FileList;
+        public List<IWitcherArchive> Managers;
 
-        public frmBundleExplorer(BundleManager manager)
+        public frmBundleExplorer(List<IWitcherArchive> archives)
         {
             InitializeComponent();
-            Manager = manager;
-            RootNode = manager.RootNode;
-            FileList = manager.FileList;
-            filetypeCB.Items.AddRange(manager.Extensions.ToArray());
-            filetypeCB.SelectedIndex = 0;
-            SearchBox.AutoCompleteCustomSource = manager.AutocompleteSource;
+            Managers = archives;
+            foreach (var arch in archives)
+            {
+                RootNode = arch.RootNode;
+                FileList = arch.FileList;
+                filetypeCB.Items.AddRange(arch.Extensions.ToArray());
+                filetypeCB.SelectedIndex = 0;
+                SearchBox.AutoCompleteCustomSource = arch.AutocompleteSource;
+            }
         }
 
         public List<string> Files { get; set; }
-        public BundleTreeNode ActiveNode { get; set; }
-        public BundleTreeNode RootNode { get; set; }
+        public IWitcherTreeNode ActiveNode { get; set; }
+        public IWitcherTreeNode RootNode { get; set; }
 
         public ListView.ListViewItemCollection SelectedPaths => pathlistview.Items;
 
@@ -36,11 +40,10 @@ namespace WolvenKit
         {
         }
 
-        public void OpenNode(BundleTreeNode node,bool reset = false)
+        public void OpenNode(IWitcherTreeNode node,bool reset = false)
         {
             if (ActiveNode != node || reset)
             {
-                
                 ActiveNode = node;
 
                 UpdatePathPanel();
@@ -60,7 +63,10 @@ namespace WolvenKit
 
                 res.AddRange(node.Directories.OrderBy(x => x.Key).Select(item => new BundleListItem
                 {
-                    Node = item.Value, Text = item.Key, IsDirectory = true, ImageKey = "openFolder"
+                    Node = item.Value,
+                    Text = item.Key,
+                    IsDirectory = true,
+                    ImageKey = "openFolder"
                 }));
 
 
@@ -77,7 +83,7 @@ namespace WolvenKit
                     };
                     listItem.SubItems.Add(lastItem.Size.ToString());
                     listItem.SubItems.Add(string.Format("{0}%",
-                        (100 - (int) (lastItem.ZSize/(float) lastItem.Size*100.0f))));
+                        (100 - (int)(lastItem.ZSize / (float)lastItem.Size * 100.0f))));
                     listItem.SubItems.Add(lastItem.CompressionType);
                     listItem.SubItems.Add(lastItem.DateString);
                     res.Add(listItem);
@@ -88,7 +94,7 @@ namespace WolvenKit
 
         private void UpdatePathPanel()
         {
-            var nodes = new List<BundleTreeNode>();
+            var nodes = new List<IWitcherTreeNode>();
             var c = ActiveNode;
             while (c != null)
             {
@@ -282,9 +288,9 @@ namespace WolvenKit
             fileListView.Items.AddRange(results.ToArray());
         }
 
-        public List<BundleItem> GetFiles(BundleTreeNode mainnode)
+        public List<IWitcherFile> GetFiles(IWitcherTreeNode mainnode)
         {
-            var bundfiles = new List<BundleItem>();
+            var bundfiles = new List<IWitcherFile>();
             if (mainnode?.Files != null)
             {
                 foreach (var wfile in mainnode.Files)
@@ -296,7 +302,7 @@ namespace WolvenKit
             return bundfiles;
         }
 
-        public BundleItem[] SearchFiles(BundleItem[] files, string searchkeyword, string extension)
+        public IWitcherFile[] SearchFiles(IWitcherFile[] files, string searchkeyword, string extension)
         {
             if (regexCheckbox.Checked)
             {
@@ -309,7 +315,7 @@ namespace WolvenKit
             return caseCheckBox.Checked ? files.Where(item =>  item.Name.ToUpper().Contains(searchkeyword.ToUpper()) && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")).ToArray() : files.Where(item => item.Name.Contains(searchkeyword) && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")).ToArray();
         }
 
-        public ListViewItem[] CollectFiles(BundleTreeNode root)
+        public ListViewItem[] CollectFiles(IWitcherTreeNode root)
         {
             var res = root.Files.Select(file => file.Key).Select(x => new ListViewItem()
             {
@@ -406,7 +412,7 @@ namespace WolvenKit
         public class BundleListItem : ListViewItem
         {
             public bool IsDirectory { get; set; }
-            public BundleTreeNode Node { get; set; }
+            public IWitcherTreeNode Node { get; set; }
             public string FullPath { get; set; }
         }
 

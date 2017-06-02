@@ -3,24 +3,25 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using WolvenKit.Interfaces;
 
 namespace WolvenKit.Bundles
 {
-    public class BundleManager
+    public class BundleManager : IWitcherArchive
     {
         public BundleManager()
         {
-            Items = new Dictionary<string, List<BundleItem>>();
+            Items = new Dictionary<string, List<IWitcherFile>>();
             Bundles = new Dictionary<string, Bundle>();
-            FileList = new List<BundleItem>();
+            FileList = new List<IWitcherFile>();
             Extensions = new List<string>();
             AutocompleteSource = new AutoCompleteStringCollection();
         }
 
-        public Dictionary<string, List<BundleItem>> Items { get; set; }
+        public Dictionary<string, List<IWitcherFile>> Items { get; set; }
         public Dictionary<string, Bundle> Bundles { get; set; }
-        public BundleTreeNode RootNode { get; set; }
-        public List<BundleItem> FileList { get; set; }
+        public IWitcherTreeNode RootNode { get; set; }
+        public List<IWitcherFile> FileList { get; set; }
         public List<string> Extensions { get; set; }
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
 
@@ -39,7 +40,7 @@ namespace WolvenKit.Bundles
             foreach (var item in bundle.Items)
             {
                 if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Key))
-                    Items.Add(GetModFolder(filename) + "\\" + item.Key, new List<BundleItem>());
+                    Items.Add(GetModFolder(filename) + "\\" + item.Key, new List<IWitcherFile>());
 
                 Items[GetModFolder(filename) + "\\" +item.Key].Add(item.Value);
             }
@@ -61,7 +62,7 @@ namespace WolvenKit.Bundles
             foreach (var item in bundle.Items)
             {
                 if (!Items.ContainsKey(item.Key))
-                    Items.Add(item.Key, new List<BundleItem>());
+                    Items.Add(item.Key, new List<IWitcherFile>());
 
                 Items[item.Key].Add(item.Value);
             }
@@ -156,7 +157,7 @@ namespace WolvenKit.Bundles
                     {
                         var newNode = new BundleTreeNode
                         {
-                            Parent = currentNode,
+                            Parent = currentNode as BundleTreeNode,
                             Name = parts[i]
                         };
                         currentNode.Directories.Add(parts[i], newNode);
@@ -208,9 +209,9 @@ namespace WolvenKit.Bundles
         /// </summary>
         /// <param name="mainnode">The rootnode to get the files from</param>
         /// <returns></returns>
-        public List<BundleItem> GetFiles(BundleTreeNode mainnode)
+        public List<IWitcherFile> GetFiles(IWitcherTreeNode mainnode)
         {
-            var bundfiles = new List<BundleItem>();
+            var bundfiles = new List<IWitcherFile>();
             if (mainnode?.Files != null)
             {
                 foreach (var wfile in mainnode.Files)
