@@ -20,7 +20,7 @@ namespace WolvenKit.Bundles
 
         public Dictionary<string, List<IWitcherFile>> Items { get; set; }
         public Dictionary<string, Bundle> Bundles { get; set; }
-        public IWitcherTreeNode RootNode { get; set; }
+        public WitcherTreeNode RootNode { get; set; }
         public List<IWitcherFile> FileList { get; set; }
         public List<string> Extensions { get; set; }
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
@@ -144,7 +144,8 @@ namespace WolvenKit.Bundles
         /// </summary>
         public void RebuildRootNode()
         {
-            RootNode = new BundleTreeNode();
+            RootNode = new WitcherTreeNode();
+            RootNode.Name = "Bundles";
 
             foreach (var item in Items)
             {
@@ -155,9 +156,9 @@ namespace WolvenKit.Bundles
                 {
                     if (!currentNode.Directories.ContainsKey(parts[i]))
                     {
-                        var newNode = new BundleTreeNode
+                        var newNode = new WitcherTreeNode
                         {
-                            Parent = currentNode as BundleTreeNode,
+                            Parent = currentNode,
                             Name = parts[i]
                         };
                         currentNode.Directories.Add(parts[i], newNode);
@@ -209,7 +210,7 @@ namespace WolvenKit.Bundles
         /// </summary>
         /// <param name="mainnode">The rootnode to get the files from</param>
         /// <returns></returns>
-        public List<IWitcherFile> GetFiles(IWitcherTreeNode mainnode)
+        public List<IWitcherFile> GetFiles(WitcherTreeNode mainnode)
         {
             var bundfiles = new List<IWitcherFile>();
             if (mainnode?.Files != null)

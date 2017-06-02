@@ -21,7 +21,8 @@ namespace WolvenKit
         {
             InitializeComponent();
             Managers = archives;
-            RootNode = new ParentRootNode();
+            RootNode = new WitcherTreeNode();
+            RootNode.Name = "Root";
             //FileList = arch.FileList;
             foreach (var arch in archives)
             {
@@ -37,8 +38,8 @@ namespace WolvenKit
         }
 
         public List<string> Files { get; set; }
-        public IWitcherTreeNode ActiveNode { get; set; }
-        public IWitcherTreeNode RootNode { get; set; }
+        public WitcherTreeNode ActiveNode { get; set; }
+        public WitcherTreeNode RootNode { get; set; }
 
         public ListView.ListViewItemCollection SelectedPaths => pathlistview.Items;
 
@@ -46,7 +47,7 @@ namespace WolvenKit
         {
         }
 
-        public void OpenNode(IWitcherTreeNode node,bool reset = false)
+        public void OpenNode(WitcherTreeNode node,bool reset = false)
         {
             if (ActiveNode != node || reset)
             {
@@ -100,7 +101,7 @@ namespace WolvenKit
 
         private void UpdatePathPanel()
         {
-            var nodes = new List<IWitcherTreeNode>();
+            var nodes = new List<WitcherTreeNode>();
             var c = ActiveNode;
             while (c != null)
             {
@@ -294,7 +295,7 @@ namespace WolvenKit
             fileListView.Items.AddRange(results.ToArray());
         }
 
-        public List<IWitcherFile> GetFiles(IWitcherTreeNode mainnode)
+        public List<IWitcherFile> GetFiles(WitcherTreeNode mainnode)
         {
             var bundfiles = new List<IWitcherFile>();
             if (mainnode?.Files != null)
@@ -321,7 +322,7 @@ namespace WolvenKit
             return caseCheckBox.Checked ? files.Where(item =>  item.Name.ToUpper().Contains(searchkeyword.ToUpper()) && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")).ToArray() : files.Where(item => item.Name.Contains(searchkeyword) && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")).ToArray();
         }
 
-        public ListViewItem[] CollectFiles(IWitcherTreeNode root)
+        public ListViewItem[] CollectFiles(WitcherTreeNode root)
         {
             var res = root.Files.Select(file => file.Key).Select(x => new ListViewItem()
             {
@@ -418,7 +419,7 @@ namespace WolvenKit
         public class BundleListItem : ListViewItem
         {
             public bool IsDirectory { get; set; }
-            public IWitcherTreeNode Node { get; set; }
+            public WitcherTreeNode Node { get; set; }
             public string FullPath { get; set; }
         }
 

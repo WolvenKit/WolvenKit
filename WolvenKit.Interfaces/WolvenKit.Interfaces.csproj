@@ -49,8 +49,7 @@
     <Compile Include="IWitcherArchive.cs" />
     <Compile Include="IWitcherArchiveType.cs" />
     <Compile Include="IWitcherFile.cs" />
-    <Compile Include="IWitcherTreeNode.cs" />
-    <Compile Include="ParentRootNode.cs" />
+    <Compile Include="WitcherTreeNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

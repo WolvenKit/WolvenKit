@@ -23,7 +23,7 @@ namespace WolvenKit.Cache
 
         public Dictionary<string, List<IWitcherFile>> Items { get; set; }
         public Dictionary<string, SoundCache> Bundles { get; set; }
-        public IWitcherTreeNode RootNode { get; set; }
+        public WitcherTreeNode RootNode { get; set; }
         public List<IWitcherFile> FileList { get; set; }
         public List<string> Extensions { get; set; }
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
@@ -147,7 +147,8 @@ namespace WolvenKit.Cache
         /// </summary>
         public void RebuildRootNode()
         {
-            RootNode = new SoundTreeNode();
+            RootNode = new WitcherTreeNode();
+            RootNode.Name = "Sounds";
 
             foreach (var item in Items)
             {
@@ -158,7 +159,7 @@ namespace WolvenKit.Cache
                 {
                     if (!currentNode.Directories.ContainsKey(parts[i]))
                     {
-                        var newNode = new SoundTreeNode
+                        var newNode = new WitcherTreeNode
                         {
                             Parent = currentNode,
                             Name = parts[i]
@@ -212,7 +213,7 @@ namespace WolvenKit.Cache
         /// </summary>
         /// <param name="mainnode">The rootnode to get the files from</param>
         /// <returns></returns>
-        public List<IWitcherFile> GetFiles(IWitcherTreeNode mainnode)
+        public List<IWitcherFile> GetFiles(WitcherTreeNode mainnode)
         {
             var bundfiles = new List<IWitcherFile>();
             if (mainnode?.Files != null)

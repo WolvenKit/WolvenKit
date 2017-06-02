@@ -10,7 +10,7 @@ namespace WolvenKit.Interfaces
 {
     public interface IWitcherArchive
     {
-        IWitcherTreeNode RootNode { get; set; }
+        WitcherTreeNode RootNode { get; set; }
         List<IWitcherFile> FileList { get; set; }
         List<string> Extensions { get; set; }
         AutoCompleteStringCollection AutocompleteSource { get; set; }

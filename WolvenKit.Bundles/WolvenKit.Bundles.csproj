@@ -67,7 +67,6 @@
     <Compile Include="Bundle.cs" />
     <Compile Include="BundleItem.cs" />
     <Compile Include="BundleManager.cs" />
-    <Compile Include="BundleTreeNode.cs" />
     <Compile Include="InvalidFileTypeException.cs" />
     <Compile Include="MissingCompressionException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
