@@ -18,6 +18,8 @@ using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 using WolvenKit.Mod;
 using SearchOption = System.IO.SearchOption;
+using WolvenKit.Interfaces;
+using WolvenKit.Cache;
 
 namespace WolvenKit
 {
@@ -306,7 +308,8 @@ namespace WolvenKit
                 MessageBox.Show(@"Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            var explorer = new frmBundleExplorer(loadmods ? MainController.Get().ModBundleManager : MainController.Get().BundleManager);
+            //var explorer = new frmBundleExplorer(loadmods ? MainController.Get().ModBundleManager : MainController.Get().BundleManager);
+            var explorer = new frmBundleExplorer(new List<IWitcherArchive> { new BundleManager(), new SoundManager() } );
             explorer.OpenPath(browseToPath);
             if (explorer.ShowDialog() == DialogResult.OK)
             {
@@ -318,18 +321,18 @@ namespace WolvenKit
             }
         }
 
-        private void AddToMod(string depotpath, BundleManager bmanager)
+        private void AddToMod(string depotpath, IWitcherArchive bmanager)
         {
             var manager = bmanager;
 
             if (!manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath)))
                 return;
 
-            BundleItem selectedBundle;
+            IWitcherFile selectedBundle;
 
             if (manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath)))
             {
-                var bundles = manager.FileList.Where(x => x.Name == depotpath).Select(y => new KeyValuePair<string, BundleItem>(y.Bundle.FileName, y));
+                var bundles = manager.FileList.Where(x => x.Name == depotpath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
 
                 var dlg = new frmExtractAmbigious(bundles.Select(x => x.Key).ToList());
                 if (dlg.ShowDialog() == DialogResult.Cancel)

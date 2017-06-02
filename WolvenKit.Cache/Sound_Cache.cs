@@ -5,24 +5,22 @@ using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
 using WolvenKit.CR2W;
-using W3SavegameEditor;
+using WolvenKit.Interfaces;
 
 namespace WolvenKit.Cache
 {
-    public class SoundCache
+    public class SoundCache : IWitcherArchiveType
     {
-        public byte[] Magic = {(byte) 'C', (byte) 'S', (byte) '3', (byte) 'W'};
+        public byte[] Magic = { (byte)'C', (byte)'S', (byte)'3', (byte)'W' };
         public long Version = 2;
-        public long Unknown1; //Possibly NOP
+        public long Unknown1;
         public long InfoOffset;
         public long FileCount;
         public long NamesOffset;
         public long NamesSize;
-        public long BufferSize;
-        public long Checksum;
-        public string FileName;
-
-        public List<SoundCacheItem> Files;
+        public long Unknown2;
+        public long Unknown3;
+        public string FileName { get; set; }
 
         public SoundCache(string fileName)
         {
@@ -30,10 +28,7 @@ namespace WolvenKit.Cache
             Read(new BinaryReader(new FileStream(fileName, FileMode.Open)));
         }
 
-        public void CalculateCheksum()
-        {
-
-        }
+        public List<SoundCacheItem> Files;
 
         public void Read(BinaryReader br)
         {
@@ -58,8 +53,8 @@ namespace WolvenKit.Cache
                 NamesOffset = br.ReadUInt32();
                 NamesSize = br.ReadUInt32();
             }
-            BufferSize = br.ReadInt64();
-            Checksum = br.ReadInt64();
+            Unknown2 = br.ReadInt64();
+            Unknown3 = br.ReadInt64();
             br.BaseStream.Seek(InfoOffset, SeekOrigin.Begin);
             for (var i = 0; i < FileCount; i++)
             {
@@ -94,45 +89,58 @@ namespace WolvenKit.Cache
             bw.Write(InfoOffset);
             bw.Write(Files.Count);
             bw.Write(NamesOffset);
-            bw.Write(Files.Sum(x => Encoding.Default.GetBytes(x.Name).Length + 1));
-                //Sum(bw.WriteCR2WString()); Name + 0x00
-            bw.Write(BufferSize);
-            bw.Write(Checksum);
+            bw.Write(Files.Sum(x=> Encoding.Default.GetBytes(x.Name).Length+1)); //Sum(bw.WriteCR2WString()); Name + 0x00
+            bw.Write(Unknown2);
+            bw.Write(Unknown3);
 
             foreach (var soundfile in Files)
             {
                 bw.WriteCR2WString(soundfile.Name);
             }
 
-
-        }
-
-        private static uint HashFnv(string input)
-        {
-            const uint FnvHashInitial = 0x811C9DC5;
-            const int FnvHashPrime = 0x1000193;
-            var fnvHash = FnvHashInitial;
-            var data = Encoding.ASCII.GetBytes(input);
-            foreach (var t in data)
-            {
-                fnvHash ^= t;
-                fnvHash *= FnvHashPrime;
-            }
-            fnvHash *= FnvHashPrime;
-            return fnvHash;
+            //TODO: Write file contents and names
         }
     }
 
-    public class SoundCacheItem
+    public class SoundCacheItem : IWitcherFile
     {
+        public IWitcherArchiveType Bundle { get; set; }
         //Name of the bundled item in the archive.
-        public string Name;
+        public string Name { get; set; }
         //Name of the cache file this file is in. (Needed for Extract() )
         public string ParentFile;
 
         public long NameOffset;
-        public long Offset;
-        public long Size;
+        public long Offset { get; set; }
+
+        public long Size { get; set; }
+        public uint ZSize { get; set; }
+        public uint Compression { get; set; }
+        public string DateString { get; set; }
+
+        public string CompressionType
+        {
+            get
+            {
+                switch (Compression)
+                {
+                    case 0:
+                        return "None";
+                    case 1:
+                        return "Zlib";
+                    case 2:
+                        return "Snappy";
+                    case 3:
+                        return "Doboz";
+                    case 4:
+                        return "Lz4";
+                    case 5:
+                        return "Lz4";
+                    default:
+                        return "Unknown";
+                }
+            }
+        }
 
         public void Extract(Stream output)
         {

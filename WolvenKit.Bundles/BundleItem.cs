@@ -4,18 +4,19 @@ using Doboz;
 using Ionic.Zlib;
 using LZ4;
 using Snappy;
+using WolvenKit.Interfaces;
 
 namespace WolvenKit.Bundles
 {
-    public class BundleItem
+    public class BundleItem : IWitcherFile
     {
-        public Bundle Bundle { get; set; }
+        public IWitcherArchiveType Bundle { get; set; }
         public string Name { get; set; }
         public byte[] Hash { get; set; }
         public uint Unknown { get; set; }
-        public uint Size { get; set; }
+        public long Size { get; set; }
         public uint ZSize { get; set; }
-        public uint Offset { get; set; }
+        public long Offset { get; set; }
         public ulong TimeStamp { get; set; }
         public byte[] Unknown2 { get; set; }
         public uint Unknown3 { get; set; }

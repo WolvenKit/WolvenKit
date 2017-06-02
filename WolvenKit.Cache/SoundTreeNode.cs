@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using WolvenKit.Interfaces;
 
-namespace WolvenKit.Bundles
+namespace WolvenKit.Cache
 {
-    public class BundleTreeNode : IWitcherTreeNode
+    class SoundTreeNode : IWitcherTreeNode
     {
-        public BundleTreeNode()
+        public SoundTreeNode()
         {
             Directories = new Dictionary<string, IWitcherTreeNode>();
             Files = new Dictionary<string, List<IWitcherFile>>();
@@ -22,7 +26,7 @@ namespace WolvenKit.Bundles
                 while (true)
                 {
                     path = Path.Combine(current.Name, path);
-                    current = current.Parent as BundleTreeNode;
+                    current = current.Parent as SoundTreeNode;
                     if (current == null)
                         break;
                 }
