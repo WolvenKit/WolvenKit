@@ -1,7 +1,0 @@
-language: csharp
-solution: WolvenKit.sln
-install:
-  - nuget restore WolvenKit.sln
-  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
-script:
-  - xbuild /p:Configuration=Release WolvenKit.sln
