@@ -4,17 +4,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WolvenKit.Interfaces;
 
-namespace WolvenKit.Cache
+namespace WolvenKit.Interfaces
 {
-    class SoundTreeNode : IWitcherTreeNode
+    public class ParentRootNode : IWitcherTreeNode
     {
-        public SoundTreeNode()
+        public ParentRootNode()
         {
             Directories = new Dictionary<string, IWitcherTreeNode>();
             Files = new Dictionary<string, List<IWitcherFile>>();
-            Name = "Sounds";
+            Name = "Root";
         }
 
         public string FullPath
@@ -26,7 +25,7 @@ namespace WolvenKit.Cache
                 while (true)
                 {
                     path = Path.Combine(current.Name, path);
-                    current = current.Parent as SoundTreeNode;
+                    current = current.Parent as ParentRootNode;
                     if (current == null)
                         break;
                 }

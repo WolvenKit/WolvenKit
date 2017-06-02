@@ -308,8 +308,7 @@ namespace WolvenKit
                 MessageBox.Show(@"Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            //var explorer = new frmBundleExplorer(loadmods ? MainController.Get().ModBundleManager : MainController.Get().BundleManager);
-            var explorer = new frmBundleExplorer(new List<IWitcherArchive> { new BundleManager(), new SoundManager() } );
+            var explorer = new frmBundleExplorer(new List<IWitcherArchive> { MainController.Get().BundleManager, MainController.Get().SoundManager } );
             explorer.OpenPath(browseToPath);
             if (explorer.ShowDialog() == DialogResult.OK)
             {

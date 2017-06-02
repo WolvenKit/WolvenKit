@@ -10,7 +10,7 @@ namespace WolvenKit.Bundles
         {
             Directories = new Dictionary<string, IWitcherTreeNode>();
             Files = new Dictionary<string, List<IWitcherFile>>();
-            Name = "";
+            Name = "Bundles";
         }
 
         public string FullPath

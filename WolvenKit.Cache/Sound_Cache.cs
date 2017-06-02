@@ -115,30 +115,13 @@ namespace WolvenKit.Cache
 
         public long Size { get; set; }
         public uint ZSize { get; set; }
-        public uint Compression { get; set; }
         public string DateString { get; set; }
 
         public string CompressionType
         {
             get
             {
-                switch (Compression)
-                {
-                    case 0:
-                        return "None";
-                    case 1:
-                        return "Zlib";
-                    case 2:
-                        return "Snappy";
-                    case 3:
-                        return "Doboz";
-                    case 4:
-                        return "Lz4";
-                    case 5:
-                        return "Lz4";
-                    default:
-                        return "Unknown";
-                }
+                  return "None";
             }
         }
 

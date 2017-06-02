@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using WolvenKit.Bundles;
+using WolvenKit.Cache;
 using WolvenKit.Interfaces;
 
 namespace WolvenKit
@@ -20,13 +21,18 @@ namespace WolvenKit
         {
             InitializeComponent();
             Managers = archives;
+            RootNode = new ParentRootNode();
+            //FileList = arch.FileList;
             foreach (var arch in archives)
             {
-                RootNode = arch.RootNode;
-                FileList = arch.FileList;
+                RootNode.Directories[arch.RootNode.Name] = arch.RootNode;
+                arch.RootNode.Parent = RootNode;
                 filetypeCB.Items.AddRange(arch.Extensions.ToArray());
                 filetypeCB.SelectedIndex = 0;
-                SearchBox.AutoCompleteCustomSource = arch.AutocompleteSource;
+                for (int i = 0; i < arch.AutocompleteSource.Count; i++)
+                {
+                    SearchBox.AutoCompleteCustomSource.Add(arch.AutocompleteSource[i]);
+                }
             }
         }
 
