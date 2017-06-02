@@ -39,7 +39,7 @@ namespace WolvenKit.Render
         private static Vertex3f modelAngle = new Vertex3f();
 
         private static bool model_autorotating;
-        private static float angle_autorotate = 0;
+        //private static float angle_autorotate = 0;
         //private static float angle_autorotate_rad;
         private const float PI_OVER_180 = (float)Math.PI / 180.0f;
 

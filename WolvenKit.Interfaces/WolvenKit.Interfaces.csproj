@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}</ProjectGuid>
+    <ProjectGuid>{4D1019F1-F099-450F-85B8-697E0332A94F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WolvenKit.Cache</RootNamespace>
-    <AssemblyName>WolvenKit.Cache</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <RootNamespace>WolvenKit.Interfaces</RootNamespace>
+    <AssemblyName>WolvenKit.Interfaces</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,29 +21,21 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ionic.ZLib, Version=2.0.0.14, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MarkerMetro.Unity.Ionic.Zlib.2.0.0.14\lib\net35\Ionic.ZLib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -54,33 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DDSHeader.cs" />
-    <Compile Include="DDSImageParser.cs" />
-    <Compile Include="ImageUtility.cs" />
-    <Compile Include="Cache.cs" />
+    <Compile Include="AlphanumComparator.cs" />
+    <Compile Include="IWitcherArchive.cs" />
+    <Compile Include="IWitcherArchiveType.cs" />
+    <Compile Include="IWitcherFile.cs" />
+    <Compile Include="WitcherTreeNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SoundBanksInfo.cs" />
-    <Compile Include="SoundManager.cs" />
-    <Compile Include="Sound_Cache.cs" />
-    <Compile Include="Texture_Cache.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj">
-      <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>
-      <Name>WolvenKit.CR2W</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.Interfaces\WolvenKit.Interfaces.csproj">
-      <Project>{4d1019f1-f099-450f-85b8-697e0332a94f}</Project>
-      <Name>WolvenKit.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.W3Strings\WolvenKit.W3Strings.csproj">
-      <Project>{32d40d10-d6c3-48f0-aeb6-0f41c7e75cfd}</Project>
-      <Name>WolvenKit.W3Strings</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

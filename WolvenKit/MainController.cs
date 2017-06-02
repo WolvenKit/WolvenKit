@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Windows.Forms;
 using WolvenKit.Bundles;
+using WolvenKit.Cache;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Types;
@@ -11,6 +12,7 @@ namespace WolvenKit
     public class MainController : IVariableEditor, ILocalizedStringSource
     {
         private static MainController mainController;
+        private SoundManager soundManager;
         private BundleManager bundleManager;
         private BundleManager modbundleManager;
         private W3StringManager w3StringManager;
@@ -43,6 +45,19 @@ namespace WolvenKit
                     bundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
                 }
                 return bundleManager;
+            }
+        }
+
+        public SoundManager SoundManager
+        {
+            get
+            {
+                if (soundManager == null)
+                {
+                    soundManager = new SoundManager();
+                    soundManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                }
+                return soundManager;
             }
         }
 

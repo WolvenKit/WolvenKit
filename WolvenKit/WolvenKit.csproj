@@ -567,6 +567,10 @@
       <Name>WolvenKit.CR2W</Name>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
+    <ProjectReference Include="..\WolvenKit.Interfaces\WolvenKit.Interfaces.csproj">
+      <Project>{4d1019f1-f099-450f-85b8-697e0332a94f}</Project>
+      <Name>WolvenKit.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WolvenKit.Net\WolvenKit.Net.csproj">
       <Project>{f60b8974-617d-45b5-bd33-68a9f739de4f}</Project>
       <Name>WolvenKit.Net</Name>

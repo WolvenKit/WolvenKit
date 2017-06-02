@@ -1,25 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using WolvenKit.Interfaces;
 
-namespace WolvenKit.Bundles
+namespace WolvenKit.Cache
 {
-    public class BundleManager : IWitcherArchive
+    public class SoundManager : IWitcherArchive
     {
-        public BundleManager()
+        public SoundManager()
         {
             Items = new Dictionary<string, List<IWitcherFile>>();
-            Bundles = new Dictionary<string, Bundle>();
+            Bundles = new Dictionary<string, SoundCache>();
             FileList = new List<IWitcherFile>();
             Extensions = new List<string>();
             AutocompleteSource = new AutoCompleteStringCollection();
         }
 
         public Dictionary<string, List<IWitcherFile>> Items { get; set; }
-        public Dictionary<string, Bundle> Bundles { get; set; }
+        public Dictionary<string, SoundCache> Bundles { get; set; }
         public WitcherTreeNode RootNode { get; set; }
         public List<IWitcherFile> FileList { get; set; }
         public List<string> Extensions { get; set; }
@@ -35,14 +38,14 @@ namespace WolvenKit.Bundles
             if (Bundles.ContainsKey(filename))
                 return;
 
-            var bundle = new Bundle(filename);
+            var bundle = new SoundCache(filename);
 
-            foreach (var item in bundle.Items)
+            foreach (var item in bundle.Files)
             {
-                if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Key))
-                    Items.Add(GetModFolder(filename) + "\\" + item.Key, new List<IWitcherFile>());
+                if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Name))
+                    Items.Add(GetModFolder(filename) + "\\" + item.Name, new List<IWitcherFile>());
 
-                Items[GetModFolder(filename) + "\\" +item.Key].Add(item.Value);
+                Items[GetModFolder(filename) + "\\" + item.Name].Add(item);
             }
 
             Bundles.Add(filename, bundle);
@@ -57,14 +60,14 @@ namespace WolvenKit.Bundles
             if (Bundles.ContainsKey(filename))
                 return;
 
-            var bundle = new Bundle(filename);
+            var bundle = new SoundCache(filename);
 
-            foreach (var item in bundle.Items)
+            foreach (var item in bundle.Files)
             {
-                if (!Items.ContainsKey(item.Key))
-                    Items.Add(item.Key, new List<IWitcherFile>());
+                if (!Items.ContainsKey(item.Name))
+                    Items.Add(item.Name, new List<IWitcherFile>());
 
-                Items[item.Key].Add(item.Value);
+                Items[item.Name].Add(item);
             }
 
             Bundles.Add(filename, bundle);
@@ -80,14 +83,14 @@ namespace WolvenKit.Bundles
 
             var contentdirs = new List<string>(Directory.GetDirectories(content, "content*"));
             contentdirs.Sort(new AlphanumComparator<string>());
-            foreach (var file in contentdirs.SelectMany(dir => Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories)))
+            foreach (var file in contentdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Sound)))
             {
                 LoadBundle(file);
             }
 
             var patchdirs = new List<string>(Directory.GetDirectories(content, "patch*"));
             patchdirs.Sort(new AlphanumComparator<string>());
-            foreach (var file in patchdirs.SelectMany(dir => Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories)))
+            foreach (var file in patchdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Sound)))
             {
                 LoadBundle(file);
             }
@@ -95,7 +98,7 @@ namespace WolvenKit.Bundles
             var dlc = Path.Combine(exedir, @"..\..\DLC\");
             var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
             dlcdirs.Sort(new AlphanumComparator<string>());
-            foreach (var file in dlcdirs.Where(dir => new Regex("(DLC..)|(DLC.)|(BOB)|(ep.)|(bob)|(EP.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.bundle", SearchOption.AllDirectories).OrderBy(k => k)))
+            foreach (var file in dlcdirs.Where(dir => new Regex("(DLC..)|(DLC.)|(BOB)|(ep.)|(bob)|(EP.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.cache", SearchOption.AllDirectories).OrderBy(k => k).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Sound)))
             {
                 LoadBundle(file);
             }
@@ -114,7 +117,7 @@ namespace WolvenKit.Bundles
                 Directory.CreateDirectory(mods);
             var modsdirs = new List<string>(Directory.GetDirectories(mods));
             modsdirs.Sort(new AlphanumComparator<string>());
-            var modbundles = modsdirs.SelectMany(dir => Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories)).ToList();
+            var modbundles = modsdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Sound)).ToList();
             foreach (var file in modbundles)
             {
                 LoadModBundle(file);
@@ -123,7 +126,7 @@ namespace WolvenKit.Bundles
             var dlc = Path.Combine(exedir, @"..\..\DLC\");
             var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
             dlcdirs.Sort(new AlphanumComparator<string>());
-            foreach (var file in dlcdirs.Where(dir => !new Regex("(DLC..)|(DLC.)|(BOB)|(bob)|(EP.)|(ep.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.bundle", SearchOption.AllDirectories).OrderBy(k => k)))
+            foreach (var file in dlcdirs.Where(dir => !new Regex("(DLC..)|(DLC.)|(BOB)|(bob)|(EP.)|(ep.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.cache", SearchOption.AllDirectories).OrderBy(k => k).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Sound)))
             {
                 LoadModBundle(file);
             }
@@ -145,7 +148,7 @@ namespace WolvenKit.Bundles
         public void RebuildRootNode()
         {
             RootNode = new WitcherTreeNode();
-            RootNode.Name = "Bundles";
+            RootNode.Name = "Sounds";
 
             foreach (var item in Items)
             {

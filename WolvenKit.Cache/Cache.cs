@@ -10,7 +10,7 @@ namespace WolvenKit.Cache
 	//STATICSHADER.CACHE,SHADER.CACHE  RDHS + INT32(VERSION?) AT THE END
 	//COLLISION.CACHE CC3W AT THE START
 	//FURSHADER.CACHE?
-	internal class Program
+	internal class Cache
 	{
 		public static byte[] TextureIdString = { (byte)'H', (byte)'C', (byte)'X', (byte)'T' };
 		public static byte[] SoundIdString = { (byte)'C', (byte)'S', (byte)'3', (byte)'W' };
@@ -26,50 +26,6 @@ namespace WolvenKit.Cache
 			Collision,
 			Dep,
 			Unknown
-		}
-
-		[STAThread]
-		private static void Main(string[] args)
-		{
-			Console.Title = "*.cache parser test";
-			using (var of = new OpenFileDialog())
-			{
-				of.Filter = "Witcher 3 Cache files | *.cache | XML Files | *.xml";
-				if (of.ShowDialog() == DialogResult.OK)
-				{
-					Console.WriteLine("Got file: " + Path.GetFileName(of.FileName) + "->" +
-									  GetCacheTypeOfFile(of.FileName));
-					Console.WriteLine("Please wait parsing file...");
-					switch (GetCacheTypeOfFile(of.FileName))
-					{
-						case Cachetype.Texture:
-						{
-							var cf = new TextureCache();
-							cf.Read(of.FileName);
-							Console.WriteLine("Files:\n");
-							cf.Images.ToList().ForEach(x=> Console.WriteLine("\t" + x.Filename));
-							cf.Images.First().Extract(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\asd.dds");
-							break;
-						}
-						case Cachetype.Sound:
-						{
-							var sc = new SoundCache(of.FileName);
-							Console.WriteLine("Files:\n");
-							sc.Files.ForEach(x=> Console.WriteLine("\t" + x.Name));
-							break;
-						}
-						default:
-					        if (Path.GetExtension(of.FileName) == ".xml")
-					            new SoundBanksInfo(of.FileName);
-					        else
-					        {
-                                MessageBox.Show("Unsupported file!");
-                            }
-							break;
-					}
-				}
-				Console.ReadLine();
-			}
 		}
 
 		public static Cachetype GetCacheTypeOfFile(string path)
