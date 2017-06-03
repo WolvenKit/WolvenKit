@@ -17,6 +17,9 @@ namespace WolvenKit
         private SoundManager modsoundmanager;
         private BundleManager bundleManager;
         private BundleManager modbundleManager;
+        private TextureManager textureManager;
+        private TextureManager modTextureManager;
+
         private W3StringManager w3StringManager;
 
         private MainController()
@@ -86,6 +89,32 @@ namespace WolvenKit
                     modsoundmanager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
                 }
                 return modsoundmanager;
+            }
+        }
+
+        public TextureManager TextureManager
+        {
+            get
+            {
+                if (textureManager == null)
+                {
+                    textureManager = new TextureManager();
+                    textureManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                }
+                return textureManager;
+            }
+        }
+
+        public TextureManager ModTextureManager
+        {
+            get
+            {
+                if (modTextureManager == null)
+                {
+                    modTextureManager = new TextureManager();
+                    modTextureManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                }
+                return modTextureManager;
             }
         }
 

@@ -30,7 +30,7 @@ namespace WolvenKit.Cache
 
 		public static Cachetype GetCacheTypeOfFile(string path)
 		{
-			using (var br = new BinaryReader(new FileStream(path,FileMode.Open)))
+			using (var br = new BinaryReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
 			{
 			    try
 			    {
