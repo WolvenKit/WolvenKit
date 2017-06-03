@@ -15,27 +15,26 @@ namespace WolvenKit.Cache
         public SoundManager()
         {
             Items = new Dictionary<string, List<IWitcherFile>>();
-            Bundles = new Dictionary<string, SoundCache>();
+            Archives = new Dictionary<string, SoundCache>();
             FileList = new List<IWitcherFile>();
             Extensions = new List<string>();
             AutocompleteSource = new AutoCompleteStringCollection();
         }
 
         public Dictionary<string, List<IWitcherFile>> Items { get; set; }
-        public Dictionary<string, SoundCache> Bundles { get; set; }
+        public Dictionary<string, SoundCache> Archives { get; set; }
         public WitcherTreeNode RootNode { get; set; }
         public List<IWitcherFile> FileList { get; set; }
         public List<string> Extensions { get; set; }
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
 
         /// <summary>
-        ///     Load a single bundle
+        ///     Load a single mod soundcache
         /// </summary>
         /// <param name="filename"></param>
-        /// <param name="keepfoldername"></param>
         public void LoadModBundle(string filename)
         {
-            if (Bundles.ContainsKey(filename))
+            if (Archives.ContainsKey(filename))
                 return;
 
             var bundle = new SoundCache(filename);
@@ -48,16 +47,16 @@ namespace WolvenKit.Cache
                 Items[GetModFolder(filename) + "\\" + item.Name].Add(item);
             }
 
-            Bundles.Add(filename, bundle);
+            Archives.Add(filename, bundle);
         }
 
         /// <summary>
-        ///     Load a single bundle
+        ///     Load a single soundcache
         /// </summary>
         /// <param name="filename"></param>
         public void LoadBundle(string filename)
         {
-            if (Bundles.ContainsKey(filename))
+            if (Archives.ContainsKey(filename))
                 return;
 
             var bundle = new SoundCache(filename);
@@ -70,7 +69,7 @@ namespace WolvenKit.Cache
                 Items[item.Name].Add(item);
             }
 
-            Bundles.Add(filename, bundle);
+            Archives.Add(filename, bundle);
         }
 
         /// <summary>
@@ -106,7 +105,7 @@ namespace WolvenKit.Cache
         }
 
         /// <summary>
-        /// Loads the .bundle files from the /Mods/ folder
+        /// Loads the .cache soundcache files from the /Mods/ folder
         /// Note this resets everything
         /// </summary>
         /// <param name="exedir"></param>
@@ -143,7 +142,7 @@ namespace WolvenKit.Cache
         }
 
         /// <summary>
-        ///     Rebuilds the bundle tree structure also rebuilds NOTE: Filelist,autocomplete,extensions
+        ///     Rebuilds the soundcache tree structure also rebuilds NOTE: Filelist,autocomplete,extensions
         /// </summary>
         public void RebuildRootNode()
         {

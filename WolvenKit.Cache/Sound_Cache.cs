@@ -58,7 +58,7 @@ namespace WolvenKit.Cache
             br.BaseStream.Seek(InfoOffset, SeekOrigin.Begin);
             for (var i = 0; i < FileCount; i++)
             {
-                var sf = new SoundCacheItem();
+                var sf = new SoundCacheItem(this);
                 if (Version >= 2)
                 {
                     sf.NameOffset = br.ReadInt64();
@@ -116,6 +116,11 @@ namespace WolvenKit.Cache
         public long Size { get; set; }
         public uint ZSize { get; set; }
         public string DateString { get; set; }
+
+        public SoundCacheItem(IWitcherArchiveType Parent)
+        {
+            this.Bundle = Parent;
+        }
 
         public string CompressionType
         {

@@ -32,18 +32,25 @@ namespace WolvenKit.Cache
 		{
 			using (var br = new BinaryReader(new FileStream(path,FileMode.Open)))
 			{
-				var idString = br.ReadBytes(4);
-				br.BaseStream.Seek(-8, SeekOrigin.End);
-				var idStringBack = br.ReadBytes(4);
-				if (idStringBack.SequenceEqual(TextureIdString))
-					return Cachetype.Texture;
-				if(idString.SequenceEqual(SoundIdString))
-					return Cachetype.Sound;
-				if(idString.SequenceEqual(DepIdString))
-					return Cachetype.Dep;
-				if(idString.SequenceEqual(CollisionIdString))
-					return Cachetype.Collision;
-				return idStringBack.SequenceEqual(ShaderIdString) ? Cachetype.Shader : Cachetype.Unknown;
+			    try
+			    {
+                    var idString = br.ReadBytes(4);
+                    br.BaseStream.Seek(-8, SeekOrigin.End);
+                    var idStringBack = br.ReadBytes(4);
+                    if (idStringBack.SequenceEqual(TextureIdString))
+                        return Cachetype.Texture;
+                    if (idString.SequenceEqual(SoundIdString))
+                        return Cachetype.Sound;
+                    if (idString.SequenceEqual(DepIdString))
+                        return Cachetype.Dep;
+                    if (idString.SequenceEqual(CollisionIdString))
+                        return Cachetype.Collision;
+                    return idStringBack.SequenceEqual(ShaderIdString) ? Cachetype.Shader : Cachetype.Unknown;
+                }
+			    catch (Exception)
+			    {
+			        return Cachetype.Unknown;
+			    }
 			}   
 		}
 
