@@ -28,6 +28,7 @@ namespace WolvenKit
         bool fileOpened = false;
         bool multipleIDs = false;
 
+        string currentModID = "";
         List<string> groups = new List<string>();
 
         int idsLimit = 1000;
@@ -106,6 +107,7 @@ namespace WolvenKit
         private void textBoxModID_Leave(object sender, EventArgs e)
         {
             FillModIDIfValid();
+            currentModID = textBoxModID.Text;
         }
         private void textBoxModID_KeyDown(object sender, KeyEventArgs e)
         {
@@ -305,16 +307,25 @@ namespace WolvenKit
         {
             modIDs.Clear();
             string[] splittedIDs;
+            
             if (!IsIDValid(textBoxModID.Text))
             {
                 MessageBox.Show("Invalid Mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                textBoxModID.Text = "";
+
+                if (currentModID != "")
+                    textBoxModID.Text = currentModID;
+                else
+                    textBoxModID.Text = "";
+
                 return false;
             }
             else
             {
                 if (!multipleIDs)
+                {
                     modIDs.Add(Convert.ToInt32(textBoxModID.Text));
+                    UpdateModID();
+                }
                 else
                 {
                     splittedIDs = textBoxModID.Text.Split(';');
@@ -325,6 +336,21 @@ namespace WolvenKit
             }
                 
             return true;
+        }
+
+        private void UpdateModID()
+        {
+            DataTable dt = (DataTable)dataGridViewStrings.DataSource;
+            int counter = 0;
+            int newModID = modIDs[0] * 1000 + 2110000000;
+            foreach (DataRow row in dt.Rows)
+            {
+                //int id = Convert.ToInt32(row.ItemArray[0]);
+                int newModIDRow = newModID + counter;
+                row[0] = newModIDRow.ToString();
+                var test = row.ItemArray[0];
+                ++counter;
+            }
         }
 
         // save without .csv extension to create proper w3string name
@@ -496,6 +522,7 @@ namespace WolvenKit
                 else
                     textBoxModID.Text = Convert.ToString(modIDs[0]);
 
+                currentModID = textBoxModID.Text;
                 rows.ForEach(x => {
                     dt.Rows.Add(x);
                 });
