@@ -3,26 +3,34 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit", "W3Edit\WolvenKit.csproj", "{12FD792B-EC76-4969-8B42-9671025D5108}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit", "WolvenKit\WolvenKit.csproj", "{12FD792B-EC76-4969-8B42-9671025D5108}"
 	ProjectSection(ProjectDependencies) = postProject
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA} = {DCBBE807-CD6E-493E-8C04-DB976A1591EA}
+		{8BE56F4F-3B98-4BD8-8052-2B5E630AF3D7} = {8BE56F4F-3B98-4BD8-8052-2B5E630AF3D7}
 		{9C026DA7-481D-43C6-8C18-635D69FDB423} = {9C026DA7-481D-43C6-8C18-635D69FDB423}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.CR2W", "W3Edit.CR2W\WolvenKit.CR2W.csproj", "{F3129E02-31AD-4327-A9EF-7C52D777C71F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.CR2W", "WolvenKit.CR2W\WolvenKit.CR2W.csproj", "{F3129E02-31AD-4327-A9EF-7C52D777C71F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.W3Strings", "W3Edit.W3Strings\WolvenKit.W3Strings.csproj", "{32D40D10-D6C3-48F0-AEB6-0F41C7E75CFD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.W3Strings", "WolvenKit.W3Strings\WolvenKit.W3Strings.csproj", "{32D40D10-D6C3-48F0-AEB6-0F41C7E75CFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Bundles", "W3Edit.Bundles\WolvenKit.Bundles.csproj", "{5BD2292A-24DB-4B4A-A5B1-5D435769C289}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Bundles", "WolvenKit.Bundles\WolvenKit.Bundles.csproj", "{5BD2292A-24DB-4B4A-A5B1-5D435769C289}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.W3Speech", "W3Edit.W3Speech\WolvenKit.W3Speech.csproj", "{C025F253-C78B-4A3B-87E7-1B2A1A453B97}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.W3Speech", "WolvenKit.W3Speech\WolvenKit.W3Speech.csproj", "{C025F253-C78B-4A3B-87E7-1B2A1A453B97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Save", "W3SavegameEditor.Core\WolvenKit.Save.csproj", "{9C026DA7-481D-43C6-8C18-635D69FDB423}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Save", "WolvenKit.Save\WolvenKit.Save.csproj", "{9C026DA7-481D-43C6-8C18-635D69FDB423}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Render", "W3Edit.Render\WolvenKit.Render.csproj", "{8BE56F4F-3B98-4BD8-8052-2B5E630AF3D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Render", "WolvenKit.Render\WolvenKit.Render.csproj", "{8BE56F4F-3B98-4BD8-8052-2B5E630AF3D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Scaleform", "W3Edit.Scaleform\WolvenKit.Scaleform.csproj", "{031DD6DA-B643-4C2A-A30D-A2E2212724C2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Scaleform", "WolvenKit.Scaleform\WolvenKit.Scaleform.csproj", "{031DD6DA-B643-4C2A-A30D-A2E2212724C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Cache", "W3Edit.Textures\WolvenKit.Cache.csproj", "{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Cache", "WolvenKit.Cache\WolvenKit.Cache.csproj", "{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Net", "WolvenKit.Net\WolvenKit.Net.csproj", "{F60B8974-617D-45B5-BD33-68A9F739DE4F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Wwise", "WolvenKit.Wwise\WolvenKit.Wwise.csproj", "{DCBBE807-CD6E-493E-8C04-DB976A1591EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Interfaces", "WolvenKit.Interfaces\WolvenKit.Interfaces.csproj", "{4D1019F1-F099-450F-85B8-697E0332A94F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -118,6 +126,42 @@ Global
 		{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}.Release|x64.Build.0 = Release|Any CPU
 		{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}.Release|x86.ActiveCfg = Release|Any CPU
 		{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}.Release|x86.Build.0 = Release|Any CPU
+		{F60B8974-617D-45B5-BD33-68A9F739DE4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F60B8974-617D-45B5-BD33-68A9F739DE4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F60B8974-617D-45B5-BD33-68A9F739DE4F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F60B8974-617D-45B5-BD33-68A9F739DE4F}.Debug|x64.Build.0 = Debug|Any CPU
+		{F60B8974-617D-45B5-BD33-68A9F739DE4F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F60B8974-617D-45B5-BD33-68A9F739DE4F}.Debug|x86.Build.0 = Debug|Any CPU
+		{F60B8974-617D-45B5-BD33-68A9F739DE4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F60B8974-617D-45B5-BD33-68A9F739DE4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F60B8974-617D-45B5-BD33-68A9F739DE4F}.Release|x64.ActiveCfg = Release|Any CPU
+		{F60B8974-617D-45B5-BD33-68A9F739DE4F}.Release|x64.Build.0 = Release|Any CPU
+		{F60B8974-617D-45B5-BD33-68A9F739DE4F}.Release|x86.ActiveCfg = Release|Any CPU
+		{F60B8974-617D-45B5-BD33-68A9F739DE4F}.Release|x86.Build.0 = Release|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Debug|x64.Build.0 = Debug|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Debug|x86.Build.0 = Debug|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Release|x64.ActiveCfg = Release|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Release|x64.Build.0 = Release|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Release|x86.ActiveCfg = Release|Any CPU
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA}.Release|x86.Build.0 = Release|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Debug|x64.Build.0 = Debug|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Debug|x86.Build.0 = Debug|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Release|x64.ActiveCfg = Release|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Release|x64.Build.0 = Release|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Release|x86.ActiveCfg = Release|Any CPU
+		{4D1019F1-F099-450F-85B8-697E0332A94F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
