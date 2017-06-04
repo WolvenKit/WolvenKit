@@ -322,25 +322,22 @@ namespace WolvenKit
 
         private void AddToMod(string depotpath, List<IWitcherArchive> managers)
         {
-
-            foreach (var manager in managers)
+            foreach (var manager in managers.Where(manager => manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath))))
             {
-                if (!manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath)))
-                    continue;
-
                 IWitcherFile selectedBundle;
 
                 if (manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath)))
                 {
                     var archives = manager.FileList.Where(x => x.Name == depotpath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
-
-                    var dlg = new frmExtractAmbigious(archives.Select(x => x.Key).ToList());
-                    if (dlg.ShowDialog() == DialogResult.Cancel)
+                    if (archives.Count() > 1)
                     {
-                        continue;
+                        var dlg = new frmExtractAmbigious(archives.Select(x => x.Key).ToList());
+                        if (dlg.ShowDialog() == DialogResult.Cancel)
+                        {
+                            return;
+                        }
+                        selectedBundle = archives.FirstOrDefault(x => x.Key == dlg.SelectedBundle).Value;
                     }
-
-                    selectedBundle = archives.FirstOrDefault(x => x.Key == dlg.SelectedBundle).Value;
                 }
                 else
                 {
@@ -360,6 +357,7 @@ namespace WolvenKit
                     FileSystem.DeleteFile(filename, UIOption.AllDialogs, RecycleOption.SendToRecycleBin);
                 }
                 selectedBundle.Extract(filename);
+                return;
             }
         }
 
