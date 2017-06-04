@@ -324,10 +324,9 @@ namespace WolvenKit
         {
             foreach (var manager in managers.Where(manager => manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath))))
             {
-                IWitcherFile selectedBundle;
-
                 if (manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath)))
                 {
+                    var filename = Path.Combine(ActiveMod.FileDirectory, depotpath);
                     var archives = manager.FileList.Where(x => x.Name == depotpath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
                     if (archives.Count() > 1)
                     {
@@ -336,28 +335,32 @@ namespace WolvenKit
                         {
                             return;
                         }
-                        selectedBundle = archives.FirstOrDefault(x => x.Key == dlg.SelectedBundle).Value;
+                        var selectedBundle = archives.FirstOrDefault(x => x.Key == dlg.SelectedBundle).Value;
+                        try
+                        {
+                            Directory.CreateDirectory(Path.GetDirectoryName(filename));
+                            if (File.Exists(filename))
+                            {
+                                File.Delete(filename);
+                            }
+                            selectedBundle.Extract(filename);
+                        } catch { }
+                        return;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Directory.CreateDirectory(Path.GetDirectoryName(filename));
+                            if (File.Exists(filename))
+                            {
+                                File.Delete(filename);
+                            }
+                            archives.FirstOrDefault().Value.Extract(filename);
+                        } catch { }
+                        return;
                     }
                 }
-                else
-                {
-                    selectedBundle = manager.Items[depotpath].Last();
-                }
-
-                var filename = Path.Combine(ActiveMod.FileDirectory, depotpath);
-
-                try
-                {
-                    Directory.CreateDirectory(Path.GetDirectoryName(filename));
-                }
-                catch { }
-
-                if (File.Exists(filename))
-                {
-                    FileSystem.DeleteFile(filename, UIOption.AllDialogs, RecycleOption.SendToRecycleBin);
-                }
-                selectedBundle.Extract(filename);
-                return;
             }
         }
 
