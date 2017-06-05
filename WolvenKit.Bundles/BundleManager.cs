@@ -93,11 +93,14 @@ namespace WolvenKit.Bundles
             }
 
             var dlc = Path.Combine(exedir, @"..\..\DLC\");
-            var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
-            dlcdirs.Sort(new AlphanumComparator<string>());
-            foreach (var file in dlcdirs.Where(dir => new Regex("(DLC..)|(DLC.)|(BOB)|(ep.)|(bob)|(EP.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.bundle", SearchOption.AllDirectories).OrderBy(k => k)))
+            if (Directory.Exists(dlc))
             {
-                LoadBundle(file);
+                var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
+                dlcdirs.Sort(new AlphanumComparator<string>());
+                foreach (var file in dlcdirs.Where(dir => new Regex("(DLC..)|(DLC.)|(BOB)|(ep.)|(bob)|(EP.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.bundle", SearchOption.AllDirectories).OrderBy(k => k)))
+                {
+                    LoadBundle(file);
+                }
             }
             RebuildRootNode();
         }
@@ -121,11 +124,14 @@ namespace WolvenKit.Bundles
             }
 
             var dlc = Path.Combine(exedir, @"..\..\DLC\");
-            var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
-            dlcdirs.Sort(new AlphanumComparator<string>());
-            foreach (var file in dlcdirs.Where(dir => !new Regex("(DLC..)|(DLC.)|(BOB)|(bob)|(EP.)|(ep.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.bundle", SearchOption.AllDirectories).OrderBy(k => k)))
+            if (Directory.Exists(dlc))
             {
-                LoadModBundle(file);
+                var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
+                dlcdirs.Sort(new AlphanumComparator<string>());
+                foreach (var file in dlcdirs.Where(dir => !new Regex("(DLC..)|(DLC.)|(BOB)|(bob)|(EP.)|(ep.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.bundle", SearchOption.AllDirectories).OrderBy(k => k)))
+                {
+                    LoadModBundle(file);
+                }
             }
             RebuildRootNode();
         }
