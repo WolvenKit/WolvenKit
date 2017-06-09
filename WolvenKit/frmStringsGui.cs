@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using System.IO;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace WolvenKit
 {
@@ -76,7 +77,7 @@ namespace WolvenKit
 
         private void toolStripButtonGenerateScripts_Click(object sender, EventArgs e)
         {
-
+            ReadScripts();
         }
 
         /*
@@ -142,6 +143,65 @@ namespace WolvenKit
                 MessageBox.Show("Enter mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 textBoxModID.Text = "";
             }
+        }
+
+        private void ReadScripts()
+        {
+            var activeMod = MainController.Get().Window.ActiveMod;
+            string scriptsDir = "";
+            if (activeMod != null)
+                scriptsDir = (activeMod.FileDirectory + "\\scripts");
+
+            string contents = "";
+            if (Directory.Exists(scriptsDir))
+            {
+                foreach (string file in Directory.EnumerateFiles(scriptsDir, "*.ws"))
+                    contents += File.ReadAllText(file);
+            }
+            else
+            {
+                FolderBrowserDialog fbw = new FolderBrowserDialog();
+                if (fbw.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (string file in Directory.EnumerateFiles(fbw.SelectedPath, "*.ws"))
+                        contents += File.ReadAllText(file);
+                }
+            }
+
+            Regex regex = new Regex("(\"modString_.+)\"");
+            MatchCollection matches = regex.Matches(contents);
+            if (matches.Count > 0)
+            {
+                List<string> strings = new List<string>();
+
+                int counter = 0;
+                foreach (Match match in matches)
+                {
+                    strings.Add((counter + 2110000000 + modIDs[0] * 1000).ToString() + "||" + match.Value + "|" + match.Value);
+                    ++counter;
+                }
+                List<string[]> rows = strings.Select(x => x.Split('|')).ToList();
+
+                DataTable dt = new DataTable();
+                rowAddedAutomatically = true;
+
+                dataGridViewStrings.Columns.Clear();
+
+                dt.Columns.Add("ID");
+                dt.Columns.Add("Hex key placeholder");
+                dt.Columns.Add("String Key");
+                dt.Columns.Add("Localisation");
+
+                currentModID = textBoxModID.Text;
+                rows.ForEach(x => {
+                    dt.Rows.Add(x);
+                });
+
+                dataGridViewStrings.DataSource = dt;
+                dataGridViewStrings.Columns["Hex key placeholder"].Visible = false;
+                //fileOpened = true;
+            }
+            rowAddedAutomatically = false;
         }
 
         private void ReadXML()
@@ -354,6 +414,10 @@ namespace WolvenKit
         private void UpdateModID()
         {
             DataTable dt = (DataTable)dataGridViewStrings.DataSource;
+            // to do - fix for empty dataGridView
+            if (dt == null)
+                return;
+            
             int counter = 0;
             int newModID = modIDs[0] * 1000 + 2110000000;
             foreach (DataRow row in dt.Rows)

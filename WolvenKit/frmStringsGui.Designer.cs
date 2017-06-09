@@ -266,7 +266,7 @@
             this.dataGridViewStrings.Name = "dataGridViewStrings";
             this.dataGridViewStrings.Size = new System.Drawing.Size(1086, 459);
             this.dataGridViewStrings.TabIndex = 0;
-            this.dataGridViewStrings.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(dataGridViewStrings_CellValidated);
+            this.dataGridViewStrings.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewStrings_CellValidated);
             // 
             // ColumnID
             // 
