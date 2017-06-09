@@ -27,6 +27,7 @@ namespace WolvenKit
         bool noPrefix = false;
         bool fileOpened = false;
         bool multipleIDs = false;
+        bool rowAddedAutomatically = false;
 
         string currentModID = "";
         List<string> groups = new List<string>();
@@ -109,12 +110,23 @@ namespace WolvenKit
             FillModIDIfValid();
             currentModID = textBoxModID.Text;
         }
+
         private void textBoxModID_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter)
             {
                 dataGridViewStrings.Focus();
             }
+        }
+
+        private void dataGridViewStrings_CellValidated(object sender, DataGridViewCellEventArgs e)
+        {
+            if (rowAddedAutomatically)
+                return;
+
+
+            dataGridViewStrings.Rows[dataGridViewStrings.Rows.Count - 2].Cells[0].Value = 
+                Convert.ToInt32(dataGridViewStrings.Rows[dataGridViewStrings.Rows.Count - 3].Cells[0].Value) + 1;
         }
 
         /*
@@ -134,6 +146,7 @@ namespace WolvenKit
 
         private void ReadXML()
         {
+            rowAddedAutomatically = true;
             // to do: check tags for custom display names, add prefixes to keys
             string path = GetXMLPath();
 
@@ -206,7 +219,7 @@ namespace WolvenKit
                     }
                 }
             }
-
+            rowAddedAutomatically = false;
         }
 
         private string GetXMLPath()
@@ -465,6 +478,7 @@ namespace WolvenKit
 
         private void OpenCSV()
         {
+            rowAddedAutomatically = true;
             string filePath;
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "CSV | *.csv;";
@@ -531,7 +545,9 @@ namespace WolvenKit
                 dataGridViewStrings.Columns["Hex key placeholder"].Visible = false;
                 fileOpened = true;
             }
-            
+            rowAddedAutomatically = false;
+
+
         }
 
         private void toolStripButtonEncode_Click(object sender, EventArgs e)
