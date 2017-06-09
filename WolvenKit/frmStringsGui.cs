@@ -35,7 +35,9 @@ namespace WolvenKit
 
         int idsLimit = 1000;
 
-        string[] languages = new string[16] {"ar", "br", "cz", "de", "en", "es", "esMX", "fr", "hu", "it", "jp", "kr", "pl", "ru", "tr", "zh"};
+        string[] languages = new string[16] { "ar", "br", "cz", "de", "en", "es", "esMX", "fr", "hu", "it", "jp", "kr", "pl", "ru", "tr", "zh" };
+
+        DataTable dataTableGridViewSource;
 
         public frmStringsGui()
         {
@@ -126,7 +128,7 @@ namespace WolvenKit
                 return;
 
 
-            dataGridViewStrings.Rows[dataGridViewStrings.Rows.Count - 2].Cells[0].Value = 
+            dataGridViewStrings.Rows[dataGridViewStrings.Rows.Count - 2].Cells[0].Value =
                 Convert.ToInt32(dataGridViewStrings.Rows[dataGridViewStrings.Rows.Count - 3].Cells[0].Value) + 1;
         }
 
@@ -138,7 +140,7 @@ namespace WolvenKit
         {
             if (textBoxModID.Text != "" && FillModIDIfValid())
                 ReadXML();
-            else 
+            else
             {
                 MessageBox.Show("Enter mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 textBoxModID.Text = "";
@@ -182,26 +184,17 @@ namespace WolvenKit
                 }
                 List<string[]> rows = strings.Select(x => x.Split('|')).ToList();
 
-                DataTable dt = new DataTable();
+                CreateDataTableIfNeeded();
                 rowAddedAutomatically = true;
-
-                dataGridViewStrings.Columns.Clear();
-
-                dt.Columns.Add("ID");
-                dt.Columns.Add("Hex key placeholder");
-                dt.Columns.Add("String Key");
-                dt.Columns.Add("Localisation");
 
                 currentModID = textBoxModID.Text;
                 rows.ForEach(x => {
-                    dt.Rows.Add(x);
+                    dataTableGridViewSource.Rows.Add(x);
                 });
 
-                dataGridViewStrings.DataSource = dt;
-                dataGridViewStrings.Columns["Hex key placeholder"].Visible = false;
-                //fileOpened = true;
             }
             rowAddedAutomatically = false;
+            UpdateModID();
         }
 
         private void ReadXML()
@@ -218,8 +211,10 @@ namespace WolvenKit
                 //Fix encoding
                 File.WriteAllLines(path, new string[] { "<?xml version=\"1.0\" encoding=\"utf-8\"?>" }.ToList().Concat(File.ReadAllLines(path).Skip(1).ToArray()));
 
+                //dataTableGridViewSource = (DataTable)dataGridViewStrings.DataSource;
+                CreateDataTableIfNeeded();
                 XDocument doc = XDocument.Load(path);
-                
+
                 // vars displayNames
                 foreach (var vars in doc.Descendants("UserConfig").Descendants("Group").Descendants("VisibleVars"))
                 {
@@ -227,11 +222,11 @@ namespace WolvenKit
                     {
                         String name = var.Attribute("displayName").Value;
                         if (!multipleIDs)
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name), name);
+                            dataTableGridViewSource.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, "", DisplayNameToKey(name), name);
                         else if (counter > idsLimit)
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, DisplayNameToKey(name), name);
+                            dataTableGridViewSource.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, "", DisplayNameToKey(name), name);
                         else
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name), name);
+                            dataTableGridViewSource.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, "", DisplayNameToKey(name), name);
 
                         ++counter;
                     }
@@ -243,11 +238,11 @@ namespace WolvenKit
                     {
                         String name = var.Attribute("displayName").Value;
                         if (!multipleIDs)
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name), name);
+                            dataTableGridViewSource.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, "", DisplayNameToKey(name), name);
                         else if (counter > idsLimit)
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, DisplayNameToKey(name), name);
+                            dataTableGridViewSource.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, "", DisplayNameToKey(name), name);
                         else
-                            dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, DisplayNameToKey(name), name);
+                            dataTableGridViewSource.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, "", DisplayNameToKey(name), name);
 
                         ++counter;
                     }
@@ -269,17 +264,18 @@ namespace WolvenKit
                             string localisationName = String.Join("", splitGroupName);
 
                             if (!multipleIDs)
-                                dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, groupName, localisationName);
+                                dataTableGridViewSource.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, "", groupName, localisationName);
                             else if (counter > idsLimit)
-                                dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, groupName, localisationName);
+                                dataTableGridViewSource.Rows.Add(counter + 2110000000 + modIDs[1] * 1000, "", groupName, localisationName);
                             else
-                                dataGridViewStrings.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, groupName, localisationName);
+                                dataTableGridViewSource.Rows.Add(counter + 2110000000 + modIDs[0] * 1000, "", groupName, localisationName);
                             ++counter;
                         }
                     }
                 }
             }
             rowAddedAutomatically = false;
+            UpdateModID();
         }
 
         private string GetXMLPath()
@@ -309,7 +305,7 @@ namespace WolvenKit
                 else
                     stringKey += nameConverted[i];
 
-            
+
             string[] stringKeySplitted = stringKey.Split('.');
 
             if (groups.Count() == 0)
@@ -317,7 +313,7 @@ namespace WolvenKit
                 groups.Add(stringKeySplitted[stringKeySplitted.Length - 1]);
                 stringKeys.Add("panel_" + stringKeySplitted[stringKeySplitted.Length - 1]);
             }
-                
+
             for (int i = 0; i < stringKeySplitted.Length; ++i)
             {
                 for (int j = 0; j < groups.Count(); ++j)
@@ -327,7 +323,7 @@ namespace WolvenKit
                         stringKeys.Add("panel_" + stringKeySplitted[i]);
                     }
             }
-                            
+
             return stringKeys;
         }
 
@@ -380,7 +376,7 @@ namespace WolvenKit
         {
             modIDs.Clear();
             string[] splittedIDs;
-            
+
             if (!IsIDValid(textBoxModID.Text))
             {
                 MessageBox.Show("Invalid Mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
@@ -405,22 +401,21 @@ namespace WolvenKit
                     foreach (var id in splittedIDs)
                         modIDs.Add(Convert.ToInt32(id));
                 }
-                    
+
             }
-                
+
             return true;
         }
 
         private void UpdateModID()
         {
-            DataTable dt = (DataTable)dataGridViewStrings.DataSource;
             // to do - fix for empty dataGridView
-            if (dt == null)
+            if (dataTableGridViewSource == null)
                 return;
-            
+
             int counter = 0;
             int newModID = modIDs[0] * 1000 + 2110000000;
-            foreach (DataRow row in dt.Rows)
+            foreach (DataRow row in dataTableGridViewSource.Rows)
             {
                 //int id = Convert.ToInt32(row.ItemArray[0]);
                 int newModIDRow = newModID + counter;
@@ -440,7 +435,7 @@ namespace WolvenKit
                 var cells = row.Cells.Cast<DataGridViewCell>();
                 sb.AppendLine(string.Join("|", cells.Select(cell => cell.Value).ToArray()));
             }
-                      
+
             int languagesCount = languages.Count();
 
             for (int i = 0; i < languagesCount; ++i)
@@ -462,7 +457,7 @@ namespace WolvenKit
                                 splittedCsv[j] = splittedCsv[j].Insert(10, "|");
                             else if (splittedCsv[j] == "\r" || splittedCsv[j] == "")
                             //else if (splittedCsv[j] == "")
-                            { 
+                            {
                                 // remove empty rows
                                 splittedCsv.RemoveAt(j);
                                 --splittedCsvLength;
@@ -474,7 +469,7 @@ namespace WolvenKit
 
                     file.WriteLine(csv);
                 }
-                
+
             }
         }
 
@@ -540,6 +535,24 @@ namespace WolvenKit
                 return "";
         }
 
+        private void CreateDataTableIfNeeded()
+        {
+            if (dataTableGridViewSource == null)
+            {
+                dataTableGridViewSource = new DataTable();
+
+                dataGridViewStrings.Columns.Clear();
+
+                dataTableGridViewSource.Columns.Add("Id");
+                dataTableGridViewSource.Columns.Add("Hex Key");
+                dataTableGridViewSource.Columns.Add("String Key");
+                dataTableGridViewSource.Columns.Add("Localisation");
+                
+                dataGridViewStrings.DataSource = dataTableGridViewSource;
+                dataGridViewStrings.Columns[1].Visible = false;
+            }
+        }
+
         private void OpenCSV()
         {
             rowAddedAutomatically = true;
@@ -550,15 +563,8 @@ namespace WolvenKit
             {
                 filePath = ofd.FileName;
                 List<string[]> rows = File.ReadAllLines(filePath).Select(x => x.Split('|')).ToList();
-                DataTable dt = new DataTable();
 
-                dataGridViewStrings.Columns.Clear();
-
-                dt.Columns.Add("ID");
-                dt.Columns.Add("Hex key placeholder");
-                dt.Columns.Add("String Key");
-                dt.Columns.Add("Localisation");
-
+                CreateDataTableIfNeeded();
                 for (int i = 0; i < rows.Count(); ++i)
                     if (rows[i].Length == 1)
                     {
@@ -602,15 +608,13 @@ namespace WolvenKit
 
                 currentModID = textBoxModID.Text;
                 rows.ForEach(x => {
-                    dt.Rows.Add(x);
+                    dataTableGridViewSource.Rows.Add(x);
                 });
                 
-                dataGridViewStrings.DataSource = dt;
-                dataGridViewStrings.Columns["Hex key placeholder"].Visible = false;
                 fileOpened = true;
             }
             rowAddedAutomatically = false;
-
+            UpdateModID();
 
         }
 

@@ -48,11 +48,12 @@
             this.tabPageAllLanguages = new System.Windows.Forms.TabPage();
             this.comboBoxLanguagesMode = new System.Windows.Forms.ComboBox();
             this.dataGridViewStrings = new System.Windows.Forms.DataGridView();
-            this.ColumnID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnStringKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnLocalisation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.textBoxModID = new System.Windows.Forms.TextBox();
             this.labelModID = new System.Windows.Forms.Label();
+            this.ColumnID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnHexKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnStringKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnLocalisation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
@@ -259,6 +260,7 @@
             this.dataGridViewStrings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewStrings.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnID,
+            this.ColumnHexKey,
             this.ColumnStringKey,
             this.ColumnLocalisation});
             this.dataGridViewStrings.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -267,21 +269,6 @@
             this.dataGridViewStrings.Size = new System.Drawing.Size(1086, 459);
             this.dataGridViewStrings.TabIndex = 0;
             this.dataGridViewStrings.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewStrings_CellValidated);
-            // 
-            // ColumnID
-            // 
-            this.ColumnID.HeaderText = "ID";
-            this.ColumnID.Name = "ColumnID";
-            // 
-            // ColumnStringKey
-            // 
-            this.ColumnStringKey.HeaderText = "String Key";
-            this.ColumnStringKey.Name = "ColumnStringKey";
-            // 
-            // ColumnLocalisation
-            // 
-            this.ColumnLocalisation.HeaderText = "Localisation";
-            this.ColumnLocalisation.Name = "ColumnLocalisation";
             // 
             // textBoxModID
             // 
@@ -303,6 +290,27 @@
             this.labelModID.Size = new System.Drawing.Size(187, 13);
             this.labelModID.TabIndex = 4;
             this.labelModID.Text = "Mod ID (separate multiple IDs with \";\")";
+            // 
+            // ColumnID
+            // 
+            this.ColumnID.HeaderText = "ID";
+            this.ColumnID.Name = "ColumnID";
+            // 
+            // ColumnHexKey
+            // 
+            this.ColumnHexKey.HeaderText = "Hex key";
+            this.ColumnHexKey.Name = "ColumnHexKey";
+            this.ColumnHexKey.Visible = false;
+            // 
+            // ColumnStringKey
+            // 
+            this.ColumnStringKey.HeaderText = "String Key";
+            this.ColumnStringKey.Name = "ColumnStringKey";
+            // 
+            // ColumnLocalisation
+            // 
+            this.ColumnLocalisation.HeaderText = "Localisation";
+            this.ColumnLocalisation.Name = "ColumnLocalisation";
             // 
             // frmStringsGui
             // 
@@ -357,11 +365,12 @@
 		private System.Windows.Forms.ToolStripMenuItem fromXMLToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem fromScriptsToolStripMenuItem;
 		private System.Windows.Forms.DataGridView dataGridViewStrings;
-		private System.Windows.Forms.DataGridViewTextBoxColumn ColumnID;
-		private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStringKey;
-		private System.Windows.Forms.DataGridViewTextBoxColumn ColumnLocalisation;
         private System.Windows.Forms.TextBox textBoxModID;
         private System.Windows.Forms.Label labelModID;
         private System.Windows.Forms.ToolStripButton toolStripButtonEncode;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnHexKey;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStringKey;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnLocalisation;
     }
 }
