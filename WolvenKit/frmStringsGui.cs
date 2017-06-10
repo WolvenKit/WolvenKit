@@ -44,6 +44,7 @@ namespace WolvenKit
             InitializeComponent();
 
             comboBoxLanguagesMode.SelectedIndex = 0;
+            CreateDataTable();
         }
 
         private void comboBoxLanguagesMode_SelectedIndexChanged(object sender, EventArgs e)
@@ -127,9 +128,18 @@ namespace WolvenKit
             if (rowAddedAutomatically)
                 return;
 
+            if(textBoxModID.Text == "")
+            {
+                AskForModID();
+                //dataGridViewStrings.Rows.Clear();
+                return;
+            }
 
-            dataGridViewStrings.Rows[dataGridViewStrings.Rows.Count - 2].Cells[0].Value =
-                Convert.ToInt32(dataGridViewStrings.Rows[dataGridViewStrings.Rows.Count - 3].Cells[0].Value) + 1;
+            if (dataGridViewStrings.Rows.Count >= 3)
+                dataGridViewStrings.Rows[dataGridViewStrings.Rows.Count - 2].Cells[0].Value =
+                    Convert.ToInt32(dataGridViewStrings.Rows[dataGridViewStrings.Rows.Count - 3].Cells[0].Value) + 1;
+            else
+                dataGridViewStrings.Rows[0].Cells[0].Value = modIDs[0] * 1000 + 2110000000;
         }
 
         /*
@@ -141,10 +151,13 @@ namespace WolvenKit
             if (textBoxModID.Text != "" && FillModIDIfValid())
                 ReadXML();
             else
-            {
-                MessageBox.Show("Enter mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                textBoxModID.Text = "";
-            }
+                AskForModID();
+        }
+
+        private void AskForModID()
+        {
+            MessageBox.Show("Enter mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            textBoxModID.Text = "";
         }
 
         private void ReadScripts()
@@ -170,7 +183,7 @@ namespace WolvenKit
                 }
             }
 
-            Regex regex = new Regex("(\"modString_.+)\"");
+            Regex regex = new Regex("\"modString_(.+)\"");
             MatchCollection matches = regex.Matches(contents);
             if (matches.Count > 0)
             {
@@ -179,12 +192,11 @@ namespace WolvenKit
                 int counter = 0;
                 foreach (Match match in matches)
                 {
-                    strings.Add((counter + 2110000000 + modIDs[0] * 1000).ToString() + "||" + match.Value + "|" + match.Value);
+                    strings.Add((counter + 2110000000 + modIDs[0] * 1000).ToString() + "||" + match.Groups[1].Value + "|" + match.Groups[1].Value);
                     ++counter;
                 }
                 List<string[]> rows = strings.Select(x => x.Split('|')).ToList();
 
-                CreateDataTableIfNeeded();
                 rowAddedAutomatically = true;
 
                 currentModID = textBoxModID.Text;
@@ -212,7 +224,6 @@ namespace WolvenKit
                 File.WriteAllLines(path, new string[] { "<?xml version=\"1.0\" encoding=\"utf-8\"?>" }.ToList().Concat(File.ReadAllLines(path).Skip(1).ToArray()));
 
                 //dataTableGridViewSource = (DataTable)dataGridViewStrings.DataSource;
-                CreateDataTableIfNeeded();
                 XDocument doc = XDocument.Load(path);
 
                 // vars displayNames
@@ -367,9 +378,11 @@ namespace WolvenKit
                         break;
                     }
             }
-            if (validCharCount == idLength && validCharCount != 0)
+            if (!multipleIDs && idLength > 4)
+                return false;
+            else if (validCharCount == idLength && validCharCount != 0)
                 return true;
-
+            
             return false;
         }
         private bool FillModIDIfValid()
@@ -409,6 +422,7 @@ namespace WolvenKit
 
         private void UpdateModID()
         {
+            rowAddedAutomatically = true;
             // to do - fix for empty dataGridView
             if (dataTableGridViewSource == null)
                 return;
@@ -423,6 +437,7 @@ namespace WolvenKit
                 var test = row.ItemArray[0];
                 ++counter;
             }
+            rowAddedAutomatically = false;
         }
 
         // save without .csv extension to create proper w3string name
@@ -535,7 +550,7 @@ namespace WolvenKit
                 return "";
         }
 
-        private void CreateDataTableIfNeeded()
+        private void CreateDataTable()
         {
             if (dataTableGridViewSource == null)
             {
@@ -564,7 +579,6 @@ namespace WolvenKit
                 filePath = ofd.FileName;
                 List<string[]> rows = File.ReadAllLines(filePath).Select(x => x.Split('|')).ToList();
 
-                CreateDataTableIfNeeded();
                 for (int i = 0; i < rows.Count(); ++i)
                     if (rows[i].Length == 1)
                     {

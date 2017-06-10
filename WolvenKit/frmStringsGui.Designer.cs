@@ -48,12 +48,12 @@
             this.tabPageAllLanguages = new System.Windows.Forms.TabPage();
             this.comboBoxLanguagesMode = new System.Windows.Forms.ComboBox();
             this.dataGridViewStrings = new System.Windows.Forms.DataGridView();
-            this.textBoxModID = new System.Windows.Forms.TextBox();
-            this.labelModID = new System.Windows.Forms.Label();
             this.ColumnID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnHexKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnStringKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnLocalisation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.textBoxModID = new System.Windows.Forms.TextBox();
+            this.labelModID = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
@@ -270,27 +270,6 @@
             this.dataGridViewStrings.TabIndex = 0;
             this.dataGridViewStrings.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewStrings_CellValidated);
             // 
-            // textBoxModID
-            // 
-            this.textBoxModID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxModID.Location = new System.Drawing.Point(927, 25);
-            this.textBoxModID.MaxLength = 0;
-            this.textBoxModID.Name = "textBoxModID";
-            this.textBoxModID.Size = new System.Drawing.Size(100, 20);
-            this.textBoxModID.TabIndex = 3;
-            this.textBoxModID.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxModID_KeyDown);
-            this.textBoxModID.Leave += new System.EventHandler(this.textBoxModID_Leave);
-            // 
-            // labelModID
-            // 
-            this.labelModID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelModID.AutoSize = true;
-            this.labelModID.Location = new System.Drawing.Point(734, 25);
-            this.labelModID.Name = "labelModID";
-            this.labelModID.Size = new System.Drawing.Size(187, 13);
-            this.labelModID.TabIndex = 4;
-            this.labelModID.Text = "Mod ID (separate multiple IDs with \";\")";
-            // 
             // ColumnID
             // 
             this.ColumnID.HeaderText = "ID";
@@ -311,6 +290,27 @@
             // 
             this.ColumnLocalisation.HeaderText = "Localisation";
             this.ColumnLocalisation.Name = "ColumnLocalisation";
+            // 
+            // textBoxModID
+            // 
+            this.textBoxModID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxModID.Location = new System.Drawing.Point(927, 25);
+            this.textBoxModID.MaxLength = 0;
+            this.textBoxModID.Name = "textBoxModID";
+            this.textBoxModID.Size = new System.Drawing.Size(100, 20);
+            this.textBoxModID.TabIndex = 3;
+            this.textBoxModID.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxModID_KeyDown);
+            this.textBoxModID.Leave += new System.EventHandler(this.textBoxModID_Leave);
+            // 
+            // labelModID
+            // 
+            this.labelModID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelModID.AutoSize = true;
+            this.labelModID.Location = new System.Drawing.Point(734, 25);
+            this.labelModID.Name = "labelModID";
+            this.labelModID.Size = new System.Drawing.Size(187, 13);
+            this.labelModID.TabIndex = 4;
+            this.labelModID.Text = "Mod ID (separate multiple IDs with \";\")";
             // 
             // frmStringsGui
             // 
