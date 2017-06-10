@@ -6,6 +6,7 @@ using WolvenKit.CR2W;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Types;
 using WolvenKit.W3Strings;
+using WolvenKit.Interfaces;
 
 namespace WolvenKit
 {
@@ -13,8 +14,12 @@ namespace WolvenKit
     {
         private static MainController mainController;
         private SoundManager soundManager;
+        private SoundManager modsoundmanager;
         private BundleManager bundleManager;
         private BundleManager modbundleManager;
+        private TextureManager textureManager;
+        private TextureManager modTextureManager;
+
         private W3StringManager w3StringManager;
 
         private MainController()
@@ -48,6 +53,19 @@ namespace WolvenKit
             }
         }
 
+        public BundleManager ModBundleManager
+        {
+            get
+            {
+                if (modbundleManager == null)
+                {
+                    modbundleManager = new BundleManager();
+                    modbundleManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                }
+                return modbundleManager;
+            }
+        }
+
         public SoundManager SoundManager
         {
             get
@@ -61,16 +79,42 @@ namespace WolvenKit
             }
         }
 
-        public BundleManager ModBundleManager
+        public SoundManager ModSoundManager
         {
             get
             {
-                if (modbundleManager == null)
+                if (modsoundmanager == null)
                 {
-                    modbundleManager = new BundleManager();
-                    modbundleManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                    modsoundmanager = new SoundManager();
+                    modsoundmanager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
                 }
-                return modbundleManager;
+                return modsoundmanager;
+            }
+        }
+
+        public TextureManager TextureManager
+        {
+            get
+            {
+                if (textureManager == null)
+                {
+                    textureManager = new TextureManager();
+                    textureManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                }
+                return textureManager;
+            }
+        }
+
+        public TextureManager ModTextureManager
+        {
+            get
+            {
+                if (modTextureManager == null)
+                {
+                    modTextureManager = new TextureManager();
+                    modTextureManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                }
+                return modTextureManager;
             }
         }
 

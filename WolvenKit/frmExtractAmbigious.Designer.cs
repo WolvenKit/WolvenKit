@@ -80,7 +80,7 @@ namespace WolvenKit
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Size = new System.Drawing.Size(789, 16);
             this.lblMessage.TabIndex = 9;
-            this.lblMessage.Text = "The file you are trying to extract exists in one or more bundles, select one.";
+            this.lblMessage.Text = "The file you are trying to extract exists in one or more archives, select one.\r\n";
             // 
             // frmExtractAmbigious
             // 

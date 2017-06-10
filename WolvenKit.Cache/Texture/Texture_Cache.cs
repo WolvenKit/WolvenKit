@@ -6,17 +6,23 @@ using System.IO.MemoryMappedFiles;
 using System.Linq;
 using W3Edit.Textures;
 using WolvenKit.CR2W;
+using WolvenKit.Interfaces;
 
 namespace WolvenKit.Cache
 {
-    public class TextureCacheItem
+    public class TextureCacheItem : IWitcherFile
     {
+        public IWitcherArchiveType Bundle { get; set; }
+        public string DateString { get; set; }
+
+        public string CompressionType => "Zlib";
+
         public string ParentFile;
 
-        public string Filename;
+        public string Name { get; set; }
         public uint Id;
         public uint Filenameoffset;
-        public uint Startoffset;
+        public long Offset { get; set; }
         public uint PackedSize;
         public uint UnpackedSize;
         public uint Bpp;
@@ -32,15 +38,20 @@ namespace WolvenKit.Cache
         public uint Dxt;
         public uint Unk3;
 
-        public int ZSize;
-        public int Size;
+        public long Size { get; set; }
+        public uint ZSize { get; set; }
         public uint Part;
+
+        public TextureCacheItem(IWitcherArchiveType parent)
+        {
+            Bundle = parent;
+        }
 
         public void Extract(Stream output)
         {
             using (var file = MemoryMappedFile.CreateFromFile(this.ParentFile, FileMode.Open))
             {
-                using (var viewstream = file.CreateViewStream((Startoffset * 4096)+9, ZSize, MemoryMappedFileAccess.Read))
+                using (var viewstream = file.CreateViewStream((Offset * 4096)+9, ZSize, MemoryMappedFileAccess.Read))
                 {
                     uint fmt = 0;
                     if (Dxt == 7) fmt = 1;
@@ -78,12 +89,12 @@ namespace WolvenKit.Cache
         }
     }
 
-    public class TextureCache
+    public class TextureCache : IWitcherArchiveType
     {
         //The images packed into this Texture cache file
-        public List<TextureCacheItem> Images;
+        public List<TextureCacheItem> Files;
 
-        public string Filename;
+        public string FileName { get; set; }
         public List<uint> Chunkoffsets;
         public uint TextureCount;
         public uint NamesBlockOffset;
@@ -92,13 +103,18 @@ namespace WolvenKit.Cache
         public uint Version;
         public List<string> Names;
 
+        public TextureCache(string filename)
+        {
+            this.Read(filename);
+        }
+
         public void Read(string filepath)
         {
-            Filename = filepath;
+            FileName = filepath;
             Chunkoffsets = new List<uint>();
             using (var br = new BinaryReader(new FileStream(filepath, FileMode.Open)))
             {
-                Images = new List<TextureCacheItem>();
+                Files = new List<TextureCacheItem>();
                 br.BaseStream.Seek(-20, SeekOrigin.End);
                 TextureCount = br.ReadUInt32();
                 NamesBlockOffset = br.ReadUInt32();
@@ -118,12 +134,12 @@ namespace WolvenKit.Cache
                 }
                 for (var i = 0; i < TextureCount; i++)
                 {
-                    var ti = new TextureCacheItem();
-                    ti.Filename = Names[i];
-                    ti.ParentFile = Filename;
+                    var ti = new TextureCacheItem(this);
+                    ti.Name = Names[i];
+                    ti.ParentFile = FileName;
                     ti.Id = br.ReadUInt32();                //number (unique???)
                     ti.Filenameoffset = br.ReadUInt32();    //filename, start offset in block2
-                    ti.Startoffset = br.ReadUInt32();       //* 4096 = start offset, first chunk
+                    ti.Offset = br.ReadUInt32();       //* 4096 = start offset, first chunk
                     ti.PackedSize = br.ReadUInt32();       //packed size (all chunks)
                     ti.UnpackedSize = br.ReadUInt32();     //unpacked size
                     ti.Bpp = br.ReadUInt32();               //bpp? always 16
@@ -138,16 +154,16 @@ namespace WolvenKit.Cache
                     ti.Dxt = br.ReadByte();                 //0-RGBA?, 7-DXT1, 8-DXT5, 10-???, 13-DXT3, 14-ATI1, 15-???, 253-???
                     ti.Type = br.ReadByte();                //3-cubemaps, 4-texture
                     ti.Unk3 = br.ReadUInt16();              //0/1 ???
-                    Images.Add(ti);
+                    Files.Add(ti);
                 }
                 for (var i = 0; i < 3; i++)
                 {
                     br.ReadBytes(4);
                 }
-                foreach (var t in Images)
+                foreach (var t in Files)
                 {
-                    br.BaseStream.Seek(t.Startoffset * 4096, SeekOrigin.Begin);
-                    t.ZSize = br.ReadInt32();
+                    br.BaseStream.Seek(t.Offset * 4096, SeekOrigin.Begin);
+                    t.ZSize = br.ReadUInt32();
                     t.Size = br.ReadInt32(); //Uncompressed size
                     t.Part = br.ReadByte();
                 }

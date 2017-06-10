@@ -308,57 +308,60 @@ namespace WolvenKit
                 MessageBox.Show(@"Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            var explorer = new frmBundleExplorer(new List<IWitcherArchive> { MainController.Get().BundleManager, MainController.Get().SoundManager } );
+            var explorer = new frmBundleExplorer(loadmods ? new List<IWitcherArchive> { MainController.Get().ModBundleManager, MainController.Get().ModSoundManager, MainController.Get().ModTextureManager } : new List<IWitcherArchive> { MainController.Get().BundleManager, MainController.Get().SoundManager, MainController.Get().TextureManager });
             explorer.OpenPath(browseToPath);
             if (explorer.ShowDialog() == DialogResult.OK)
             {
                 foreach (ListViewItem depotpath in explorer.SelectedPaths)
                 {
-                    AddToMod(depotpath.Text, loadmods ? MainController.Get().ModBundleManager : MainController.Get().BundleManager);
+                    AddToMod(depotpath.Text, loadmods ? new List<IWitcherArchive> { MainController.Get().ModBundleManager, MainController.Get().ModSoundManager, MainController.Get().ModTextureManager } : new List<IWitcherArchive> { MainController.Get().BundleManager, MainController.Get().SoundManager, MainController.Get().TextureManager });
                 }
                 SaveMod();
             }
         }
 
-        private void AddToMod(string depotpath, IWitcherArchive bmanager)
+        private void AddToMod(string depotpath, List<IWitcherArchive> managers)
         {
-            var manager = bmanager;
-
-            if (!manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath)))
-                return;
-
-            IWitcherFile selectedBundle;
-
-            if (manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath)))
+            foreach (var manager in managers.Where(manager => manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath))))
             {
-                var bundles = manager.FileList.Where(x => x.Name == depotpath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
-
-                var dlg = new frmExtractAmbigious(bundles.Select(x => x.Key).ToList());
-                if (dlg.ShowDialog() == DialogResult.Cancel)
+                if (manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath)))
                 {
-                    return;
+                    var filename = Path.Combine(ActiveMod.FileDirectory, depotpath);
+                    var archives = manager.FileList.Where(x => x.Name == depotpath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
+                    if (archives.Count() > 1)
+                    {
+                        var dlg = new frmExtractAmbigious(archives.Select(x => x.Key).ToList());
+                        if (dlg.ShowDialog() == DialogResult.Cancel)
+                        {
+                            return;
+                        }
+                        var selectedBundle = archives.FirstOrDefault(x => x.Key == dlg.SelectedBundle).Value;
+                        try
+                        {
+                            Directory.CreateDirectory(Path.GetDirectoryName(filename));
+                            if (File.Exists(filename))
+                            {
+                                File.Delete(filename);
+                            }
+                            selectedBundle.Extract(filename);
+                        } catch { }
+                        return;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Directory.CreateDirectory(Path.GetDirectoryName(filename));
+                            if (File.Exists(filename))
+                            {
+                                File.Delete(filename);
+                            }
+                            archives.FirstOrDefault().Value.Extract(filename);
+                        } catch { }
+                        return;
+                    }
                 }
-
-                selectedBundle = bundles.FirstOrDefault(x => x.Key == dlg.SelectedBundle).Value;
             }
-            else
-            {
-                selectedBundle = manager.Items[depotpath].Last();
-            }
-
-            var filename = Path.Combine(ActiveMod.FileDirectory, depotpath);
-
-            try
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(filename));
-            }
-            catch { }
-
-            if (File.Exists(filename))
-            {
-                FileSystem.DeleteFile(filename, UIOption.AllDialogs, RecycleOption.SendToRecycleBin);
-            }
-            selectedBundle.Extract(filename);
         }
 
         /// <summary>
