@@ -128,7 +128,7 @@ namespace WolvenKit
             if (rowAddedAutomatically)
                 return;
 
-            if(textBoxModID.Text == "")
+            if (textBoxModID.Text == "")
             {
                 AskForModID();
                 //dataGridViewStrings.Rows.Clear();
@@ -382,7 +382,7 @@ namespace WolvenKit
                 return false;
             else if (validCharCount == idLength && validCharCount != 0)
                 return true;
-            
+
             return false;
         }
         private bool FillModIDIfValid()
@@ -444,10 +444,14 @@ namespace WolvenKit
         private void SaveCSVForEncoding(string outputPath)
         {
             var sb = new StringBuilder();
-
+            //dataGridViewStrings.Rows[dataGridViewStrings.Rows.Count - 1].;
             foreach (DataGridViewRow row in dataGridViewStrings.Rows)
             {
+                if (row.Cells[0].Value == DBNull.Value)
+                    continue;
                 var cells = row.Cells.Cast<DataGridViewCell>();
+
+
                 sb.AppendLine(string.Join("|", cells.Select(cell => cell.Value).ToArray()));
             }
 
@@ -468,9 +472,9 @@ namespace WolvenKit
                         List<string> splittedCsv = csv.Split('\n').ToList();
                         int splittedCsvLength = splittedCsv.Count();
                         for (int j = 0; j < splittedCsvLength; ++j)
-                            if (splittedCsv[j].Length >= 10)
-                                splittedCsv[j] = splittedCsv[j].Insert(10, "|");
-                            else if (splittedCsv[j] == "\r" || splittedCsv[j] == "")
+                            //if (splittedCsv[j].Length >= 10)
+                            //splittedCsv[j] = splittedCsv[j].Insert(10, "|");
+                            if (splittedCsv[j] == "\r" || splittedCsv[j] == "")
                             //else if (splittedCsv[j] == "")
                             {
                                 // remove empty rows
@@ -562,7 +566,7 @@ namespace WolvenKit
                 dataTableGridViewSource.Columns.Add("Hex Key");
                 dataTableGridViewSource.Columns.Add("String Key");
                 dataTableGridViewSource.Columns.Add("Localisation");
-                
+
                 dataGridViewStrings.DataSource = dataTableGridViewSource;
                 dataGridViewStrings.Columns[1].Visible = false;
             }
@@ -616,7 +620,7 @@ namespace WolvenKit
                     // delete last ;
                     textBoxModID.Text = textBoxModID.Text.Remove(textBoxModID.Text.Length - 1);
                 }
-                    
+
                 else
                     textBoxModID.Text = Convert.ToString(modIDs[0]);
 
@@ -624,7 +628,7 @@ namespace WolvenKit
                 rows.ForEach(x => {
                     dataTableGridViewSource.Rows.Add(x);
                 });
-                
+
                 fileOpened = true;
             }
             rowAddedAutomatically = false;
@@ -637,7 +641,7 @@ namespace WolvenKit
             if (dataGridViewStrings.Rows.Count != 1)
                 EncodeCSV();
             else
-                MessageBox.Show("Current file is empty.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);         
+                MessageBox.Show("Current file is empty.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
         private void EncodeCSV()
@@ -668,7 +672,7 @@ namespace WolvenKit
                 }
                 MessageBox.Show("Files encoded.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
-                
+
         }
 
         private string GetEncodedOutputPath()
