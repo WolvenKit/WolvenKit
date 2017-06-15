@@ -25,7 +25,6 @@ namespace WolvenKit
         int counter = 0;
         List<int> modIDs = new List<int> { 0 };
 
-        bool noPrefix = false;
         bool fileOpened = false;
         bool multipleIDs = false;
         bool rowAddedAutomatically = false;
@@ -49,6 +48,11 @@ namespace WolvenKit
 
         private void comboBoxLanguagesMode_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (comboBoxLanguagesMode.SelectedIndex == 1)
+            {
+                ShowWIPMessage();
+                comboBoxLanguagesMode.SelectedIndex = 0;
+            }
 
         }
 
@@ -94,7 +98,7 @@ namespace WolvenKit
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            OpenCSV();
         }
 
         private void fromXMLToolStripMenuItem_Click(object sender, EventArgs e)
@@ -104,8 +108,17 @@ namespace WolvenKit
 
         private void fromScriptsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            ReadScripts();
         }
+
+        private void toolStripButtonEncode_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewStrings.Rows.Count != 1)
+                EncodeCSV();
+            else
+                MessageBox.Show("Current file is empty.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+        }
+
         /*
             Other 
         */
@@ -131,7 +144,6 @@ namespace WolvenKit
             if (textBoxModID.Text == "")
             {
                 AskForModID();
-                //dataGridViewStrings.Rows.Clear();
                 return;
             }
 
@@ -431,7 +443,6 @@ namespace WolvenKit
             int newModID = modIDs[0] * 1000 + 2110000000;
             foreach (DataRow row in dataTableGridViewSource.Rows)
             {
-                //int id = Convert.ToInt32(row.ItemArray[0]);
                 int newModIDRow = newModID + counter;
                 row[0] = newModIDRow.ToString();
                 var test = row.ItemArray[0];
@@ -440,11 +451,9 @@ namespace WolvenKit
             rowAddedAutomatically = false;
         }
 
-        // save without .csv extension to create proper w3string name
-        private void SaveCSVForEncoding(string outputPath)
+        private void SaveCSV()
         {
             var sb = new StringBuilder();
-            //dataGridViewStrings.Rows[dataGridViewStrings.Rows.Count - 1].;
             foreach (DataGridViewRow row in dataGridViewStrings.Rows)
             {
                 if (row.Cells[0].Value == DBNull.Value)
@@ -456,10 +465,12 @@ namespace WolvenKit
             }
 
             int languagesCount = languages.Count();
-
+            string outputPath = GetCSVOutputPath();
+            if (outputPath == "")
+                return;
             for (int i = 0; i < languagesCount; ++i)
             {
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath + "\\" + languages[i]))
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath + "\\" + languages[i] + ".csv"))
                 {
                     file.WriteLine(";meta[language=" + languages[i] + "]");
                     file.WriteLine("; id | key(hex) | key(str) | text");
@@ -472,10 +483,7 @@ namespace WolvenKit
                         List<string> splittedCsv = csv.Split('\n').ToList();
                         int splittedCsvLength = splittedCsv.Count();
                         for (int j = 0; j < splittedCsvLength; ++j)
-                            //if (splittedCsv[j].Length >= 10)
-                            //splittedCsv[j] = splittedCsv[j].Insert(10, "|");
                             if (splittedCsv[j] == "\r" || splittedCsv[j] == "")
-                            //else if (splittedCsv[j] == "")
                             {
                                 // remove empty rows
                                 splittedCsv.RemoveAt(j);
@@ -489,57 +497,6 @@ namespace WolvenKit
                     file.WriteLine(csv);
                 }
 
-            }
-        }
-
-        private void SaveCSV()
-        {
-            var sb = new StringBuilder();
-
-            foreach (DataGridViewRow row in dataGridViewStrings.Rows)
-            {
-                var cells = row.Cells.Cast<DataGridViewCell>();
-                sb.AppendLine(string.Join("|", cells.Select(cell => cell.Value).ToArray()));
-            }
-
-            int languagesCount = languages.Count();
-            string outputPath = GetCSVOutputPath();
-
-            if (outputPath != "")
-            {
-                for (int i = 0; i < languagesCount; ++i)
-                {
-                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath + languages[i] + ".csv"))
-                    {
-                        file.WriteLine(";meta[language=" + languages[i] + "]");
-                        file.WriteLine("; id | key(hex) | key(str) | text");
-
-                        string csv = sb.ToString();
-
-                        // leaving space for the hex key empty
-                        if (!fileOpened)
-                        {
-                            List<string> splittedCsv = csv.Split('\n').ToList();
-                            int splittedCsvLength = splittedCsv.Count();
-                            for (int j = 0; j < splittedCsvLength; ++j)
-                                if (splittedCsv[j].Length >= 10)
-                                    splittedCsv[j] = splittedCsv[j].Insert(10, "|");
-                                else if (splittedCsv[j] == "\r" || splittedCsv[j] == "")
-                                //else if (splittedCsv[j] == "")
-                                {
-                                    // remove empty rows
-                                    splittedCsv.RemoveAt(j);
-                                    --splittedCsvLength;
-                                    --j;
-                                }
-
-                            csv = String.Join("\n", splittedCsv);
-                        }
-
-                        file.WriteLine(csv);
-                    }
-                }
-                MessageBox.Show("Files saved.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
 
@@ -633,56 +590,16 @@ namespace WolvenKit
             }
             rowAddedAutomatically = false;
             UpdateModID();
-
-        }
-
-        private void toolStripButtonEncode_Click(object sender, EventArgs e)
-        {
-            if (dataGridViewStrings.Rows.Count != 1)
-                EncodeCSV();
-            else
-                MessageBox.Show("Current file is empty.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
         private void EncodeCSV()
         {
-            string outputPath = GetEncodedOutputPath();
-
-            List<string> csvFiles = new List<string>();
-
-            for (int i = 0; i < languages.Count(); ++i)
-                csvFiles.Add(outputPath + "\\" + languages[i]);
-
-            if (outputPath != "")
-            {
-                SaveCSVForEncoding(outputPath);
-                foreach (var file in csvFiles)
-                {
-                    Process encoderProc = new Process();
-
-                    encoderProc.StartInfo.Arguments = "--encode " + "\"" + file + "\"" + " --id-space " + Convert.ToString(modIDs[0]);
-                    encoderProc.StartInfo.FileName = Environment.CurrentDirectory + "\\w3strings.exe";
-                    encoderProc.EnableRaisingEvents = true;
-                    encoderProc.StartInfo.RedirectStandardOutput = true;
-                    encoderProc.StartInfo.UseShellExecute = false;
-                    encoderProc.StartInfo.CreateNoWindow = true;
-                    encoderProc.Start();
-                    string test = encoderProc.StandardOutput.ReadToEnd();
-                    encoderProc.WaitForExit();
-                }
-                MessageBox.Show("Files encoded.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-            }
-
+            MessageBox.Show("Files encoded.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
-        private string GetEncodedOutputPath()
+        private void ShowWIPMessage()
         {
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
-            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                return fbd.SelectedPath;
-            }
-            return "";
+            MessageBox.Show("Work in progress.", "Coming soon(tm)", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
     }
 }
