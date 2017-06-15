@@ -34,7 +34,7 @@ namespace WolvenKit
 
         int idsLimit = 1000;
 
-        string[] languages = new string[16] { "ar", "br", "cz", "de", "en", "es", "esMX", "fr", "hu", "it", "jp", "kr", "pl", "ru", "tr", "zh" };
+        IEnumerable<W3Strings.W3Language> languages = W3Strings.W3Language.languages;
 
         DataTable dataTableGridViewSource;
 
@@ -114,7 +114,7 @@ namespace WolvenKit
         private void toolStripButtonEncode_Click(object sender, EventArgs e)
         {
             if (dataGridViewStrings.Rows.Count != 1)
-                EncodeCSV();
+                Encode();
             else
                 MessageBox.Show("Current file is empty.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
@@ -468,11 +468,11 @@ namespace WolvenKit
             string outputPath = GetCSVOutputPath();
             if (outputPath == "")
                 return;
-            for (int i = 0; i < languagesCount; ++i)
+            foreach (var language in languages)
             {
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath + "\\" + languages[i] + ".csv"))
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath + "\\" + language.Handle + ".csv"))
                 {
-                    file.WriteLine(";meta[language=" + languages[i] + "]");
+                    file.WriteLine(";meta[language=" + language.Handle + "]");
                     file.WriteLine("; id | key(hex) | key(str) | text");
 
                     string csv = sb.ToString();
@@ -592,9 +592,41 @@ namespace WolvenKit
             UpdateModID();
         }
 
-        private void EncodeCSV()
+        private void Encode()
         {
-            MessageBox.Show("Files encoded.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            var activeMod = MainController.Get().Window.ActiveMod;
+            string stringsDir = "";
+            if (activeMod != null)
+                stringsDir = (activeMod.FileDirectory + "\\strings");
+            if (!Directory.Exists(stringsDir))
+                Directory.CreateDirectory(activeMod.FileDirectory + "\\strings");
+
+            var strings = new List<List<string>>();
+            foreach (DataGridViewRow row in dataGridViewStrings.Rows)
+            {
+                if (row.Cells[0].Value == DBNull.Value || row.Cells[0].Value == null)
+                    continue;
+
+                var str = new List<string>();
+                var cells = row.Cells.Cast<DataGridViewCell>();
+                foreach (var cell in cells)
+                {
+                    if (cell == cells.ElementAt(1))
+                        continue;
+                    str.Add(cell.Value.ToString());
+                }
+                strings.Add(str);
+            }
+            foreach (var lang in languages)
+            {
+                var w3tringFile = new W3Strings.W3StringFile();
+                w3tringFile.Create(strings, lang.Handle);
+                using (var bw = new BinaryWriter(File.OpenWrite(stringsDir + "\\" + lang.Handle + ".w3strings")))
+                {
+                    w3tringFile.Write(bw);
+                }
+            }
+            MessageBox.Show("Strings encoded.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
         private void ShowWIPMessage()
