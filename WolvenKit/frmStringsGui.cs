@@ -174,6 +174,11 @@ namespace WolvenKit
 
         private void ReadScripts()
         {
+            if (textBoxModID.Text == "")
+            {
+                AskForModID();
+                return;
+            }
             var activeMod = MainController.Get().Window.ActiveMod;
             string scriptsDir = "";
             if (activeMod != null)
@@ -465,7 +470,7 @@ namespace WolvenKit
             }
 
             int languagesCount = languages.Count();
-            string outputPath = GetCSVOutputPath();
+            string outputPath = GetPath();
             if (outputPath == "")
                 return;
             foreach (var language in languages)
@@ -500,7 +505,7 @@ namespace WolvenKit
             }
         }
 
-        private string GetCSVOutputPath()
+        private string GetPath()
         {
             FolderBrowserDialog fbw = new FolderBrowserDialog();
             if (fbw.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -597,9 +602,13 @@ namespace WolvenKit
             var activeMod = MainController.Get().Window.ActiveMod;
             string stringsDir = "";
             if (activeMod != null)
+            {
                 stringsDir = (activeMod.FileDirectory + "\\strings");
-            if (!Directory.Exists(stringsDir))
-                Directory.CreateDirectory(activeMod.FileDirectory + "\\strings");
+                if (!Directory.Exists(stringsDir))
+                    Directory.CreateDirectory(activeMod.FileDirectory + "\\strings");
+            }
+            else
+                stringsDir = GetPath();
 
             var strings = new List<List<string>>();
             foreach (DataGridViewRow row in dataGridViewStrings.Rows)
