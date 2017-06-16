@@ -146,6 +146,7 @@
             this.toolStripButtonSave.Name = "toolStripButtonSave";
             this.toolStripButtonSave.Size = new System.Drawing.Size(51, 22);
             this.toolStripButtonSave.Text = "Save";
+            this.toolStripButtonSave.ToolTipText = "Save to CSV file.";
             this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
             // 
             // toolStripButtonOpen
@@ -155,6 +156,7 @@
             this.toolStripButtonOpen.Name = "toolStripButtonOpen";
             this.toolStripButtonOpen.Size = new System.Drawing.Size(56, 22);
             this.toolStripButtonOpen.Text = "Open";
+            this.toolStripButtonOpen.ToolTipText = "Open CSV file.";
             this.toolStripButtonOpen.Click += new System.EventHandler(this.toolStripButtonOpen_Click);
             // 
             // toolStripButtonGenerateXML
@@ -164,6 +166,7 @@
             this.toolStripButtonGenerateXML.Name = "toolStripButtonGenerateXML";
             this.toolStripButtonGenerateXML.Size = new System.Drawing.Size(132, 22);
             this.toolStripButtonGenerateXML.Text = "Generate From XML";
+            this.toolStripButtonGenerateXML.ToolTipText = "Generate strings from menu XML.";
             this.toolStripButtonGenerateXML.Click += new System.EventHandler(this.toolStripButtonGenerateXML_Click);
             // 
             // toolStripButtonGenerateScripts
@@ -173,6 +176,7 @@
             this.toolStripButtonGenerateScripts.Name = "toolStripButtonGenerateScripts";
             this.toolStripButtonGenerateScripts.Size = new System.Drawing.Size(143, 22);
             this.toolStripButtonGenerateScripts.Text = "Generate From Scripts";
+            this.toolStripButtonGenerateScripts.ToolTipText = "Generate strings from scripts (strings with specified prefix in scripts).";
             this.toolStripButtonGenerateScripts.Click += new System.EventHandler(this.toolStripButtonGenerateScripts_Click);
             // 
             // toolStripButtonEncode
@@ -182,7 +186,7 @@
             this.toolStripButtonEncode.Name = "toolStripButtonEncode";
             this.toolStripButtonEncode.Size = new System.Drawing.Size(66, 22);
             this.toolStripButtonEncode.Text = "Encode";
-            this.toolStripButtonEncode.ToolTipText = "toolStripButtonEncode";
+            this.toolStripButtonEncode.ToolTipText = "Encode w3string files.";
             this.toolStripButtonEncode.Click += new System.EventHandler(this.toolStripButtonEncode_Click);
             // 
             // splitContainerMain
