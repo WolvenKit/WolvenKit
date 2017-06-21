@@ -92,7 +92,7 @@ namespace WolvenKit
                     listItem.SubItems.Add(string.Format("{0}%",
                         (100 - (int)(lastItem.ZSize / (float)lastItem.Size * 100.0f))));
                     listItem.SubItems.Add(lastItem.CompressionType);
-                    listItem.SubItems.Add(lastItem.DateString);
+                    listItem.SubItems.Add(lastItem.Bundle.TypeName);
                     res.Add(listItem);
                 }
                 fileListView.Items.AddRange(res.ToArray());
@@ -289,7 +289,7 @@ namespace WolvenKit
                 listItem.SubItems.Add(lastItem.Size.ToString());
                 listItem.SubItems.Add($"{(100 - (int) (lastItem.ZSize/(float) lastItem.Size*100.0f))}%");
                 listItem.SubItems.Add(lastItem.CompressionType);
-                listItem.SubItems.Add(lastItem.DateString);
+                listItem.SubItems.Add(lastItem.Bundle.TypeName);
                 results.Add(listItem);
             }
             fileListView.Items.AddRange(results.ToArray());

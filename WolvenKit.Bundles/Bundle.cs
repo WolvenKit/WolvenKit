@@ -25,6 +25,7 @@ namespace WolvenKit.Bundles
             ReadTOC();
         }
 
+        public string TypeName { get { return "Bundle"; } }
         public string FileName { get; set; }
         public Dictionary<string, BundleItem> Items { get; set; }
 

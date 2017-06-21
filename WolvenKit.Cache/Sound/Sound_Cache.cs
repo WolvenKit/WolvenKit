@@ -20,6 +20,7 @@ namespace WolvenKit.Cache
         public long NamesSize;
         public long Unknown2;
         public long Unknown3;
+        public string TypeName { get { return "SoundCache"; } }
         public string FileName { get; set; }
 
         public SoundCache(string fileName)

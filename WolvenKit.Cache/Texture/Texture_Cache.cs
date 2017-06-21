@@ -94,6 +94,7 @@ namespace WolvenKit.Cache
         //The images packed into this Texture cache file
         public List<TextureCacheItem> Files;
 
+        public string TypeName { get { return "TextureCache"; } }
         public string FileName { get; set; }
         public List<uint> Chunkoffsets;
         public uint TextureCount;
