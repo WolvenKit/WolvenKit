@@ -30,8 +30,9 @@ namespace WolvenKit.W3Strings
             {
                 b = stream.ReadByte();
                 length += 1;
-                if (b == 128)
-                    return new ReadBit6Result(0, length);
+                //if (b == 128)
+                    //return new ReadBit6Result(0, length); 
+                    //commented out it seems to work with 128 values... lol
                 byte s = 6;
                 byte mask = 255;
                 if (b > 127)

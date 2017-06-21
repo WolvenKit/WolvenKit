@@ -7,6 +7,7 @@ using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Types;
 using WolvenKit.W3Strings;
 using WolvenKit.Interfaces;
+using System.Collections.Generic;
 
 namespace WolvenKit
 {
@@ -33,7 +34,7 @@ namespace WolvenKit
                 if (w3StringManager == null)
                 {
                     w3StringManager = new W3StringManager();
-                    w3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
+                    //w3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
                 }
 
                 return w3StringManager;
@@ -272,5 +273,7 @@ namespace WolvenKit
                 editvar.SetValue(((MemoryStream) args.Stream).ToArray());
             }
         }
+
+
     }
 }

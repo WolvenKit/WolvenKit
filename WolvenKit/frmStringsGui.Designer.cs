@@ -33,12 +33,14 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generateStringsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fromXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fromScriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonImport = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonGenerateXML = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonGenerateScripts = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonEncode = new System.Windows.Forms.ToolStripButton();
@@ -83,7 +85,8 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem,
-            this.openToolStripMenuItem});
+            this.openToolStripMenuItem,
+            this.importToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -91,16 +94,22 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            // 
+            // importToolStripMenuItem
+            // 
+            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.importToolStripMenuItem.Text = "Import";
             // 
             // generateStringsToolStripMenuItem
             // 
@@ -130,6 +139,7 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonSave,
             this.toolStripButtonOpen,
+            this.toolStripButtonImport,
             this.toolStripButtonGenerateXML,
             this.toolStripButtonGenerateScripts,
             this.toolStripButtonEncode});
@@ -158,6 +168,16 @@
             this.toolStripButtonOpen.Text = "Open";
             this.toolStripButtonOpen.ToolTipText = "Open CSV file.";
             this.toolStripButtonOpen.Click += new System.EventHandler(this.toolStripButtonOpen_Click);
+            // 
+            // toolStripButtonImport
+            // 
+            this.toolStripButtonImport.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonImport.Image")));
+            this.toolStripButtonImport.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonImport.Name = "toolStripButtonImport";
+            this.toolStripButtonImport.Size = new System.Drawing.Size(63, 22);
+            this.toolStripButtonImport.Text = "Import";
+            this.toolStripButtonImport.ToolTipText = "Import existing w3string file.";
+            this.toolStripButtonImport.Click += new System.EventHandler(this.toolStripButtonImport_Click);
             // 
             // toolStripButtonGenerateXML
             // 
@@ -376,5 +396,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnHexKey;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStringKey;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnLocalisation;
+        private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton toolStripButtonImport;
     }
 }

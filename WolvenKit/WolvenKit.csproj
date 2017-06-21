@@ -241,6 +241,12 @@
     <Compile Include="frmStringsGui.Designer.cs">
       <DependentUpon>frmStringsGui.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmStringsGuiImporter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmStringsGuiImporter.Designer.cs">
+      <DependentUpon>frmStringsGuiImporter.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmTextInput.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -492,6 +498,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmStringsGui.resx">
       <DependentUpon>frmStringsGui.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmStringsGuiImporter.resx">
+      <DependentUpon>frmStringsGuiImporter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmTextInput.resx">
       <DependentUpon>frmTextInput.cs</DependentUpon>

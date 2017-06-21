@@ -87,6 +87,19 @@ namespace WolvenKit
             ReadScripts();
         }
 
+        private void toolStripButtonEncode_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewStrings.Rows.Count != 1)
+                Encode();
+            else
+                MessageBox.Show("Current file is empty.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+        }
+
+        private void toolStripButtonImport_Click(object sender, EventArgs e)
+        {
+            ImportW3Strings();
+        }
+
         /*
             toolStrip Menus
         */
@@ -109,14 +122,6 @@ namespace WolvenKit
         private void fromScriptsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ReadScripts();
-        }
-
-        private void toolStripButtonEncode_Click(object sender, EventArgs e)
-        {
-            if (dataGridViewStrings.Rows.Count != 1)
-                Encode();
-            else
-                MessageBox.Show("Current file is empty.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
         /*
@@ -157,6 +162,23 @@ namespace WolvenKit
         /*
             End of events
         */
+
+        private void ImportW3Strings()
+        {
+            var importer = new frmStringsGuiImporter();
+            importer.ShowDialog();
+            var stringsManager = MainController.Get().W3StringManager;
+            var strings = stringsManager.GetImportedStrings();
+            if (strings == null)
+                return;
+
+            foreach (var str in strings)
+            {
+                dataTableGridViewSource.Rows.Add(str[0], str[1], "", str[2]);
+            }
+
+            stringsManager.ClearImportedStrings();
+        }
 
         private void GenerateFromXML()
         {
@@ -309,7 +331,7 @@ namespace WolvenKit
         private string GetXMLPath()
         {
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "XML | *.xml;";
+            ofd.Filter = "XML | *.xml";
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 return ofd.FileName;

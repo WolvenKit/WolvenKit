@@ -10,6 +10,8 @@ namespace WolvenKit.W3Strings
         public Dictionary<uint, bool> Keys { get; private set; }
         public string Language { get; private set; }
 
+        private List<List<string>> importedStrings = new List<List<string>>();
+
         public void Load(string newlanguage, string path, bool onlyIfLanguageChanged = false)
         {
             if (onlyIfLanguageChanged && Language == newlanguage)
@@ -94,6 +96,27 @@ namespace WolvenKit.W3Strings
             }
 
             return null;
+        }
+
+        public void SaveImportedStrings(List<List<string>> strings)
+        {
+            foreach (var str in strings)
+                importedStrings.Add(str);
+        }
+
+        public List<List<string>> GetImportedStrings()
+        {
+            return importedStrings;
+        }
+
+        public void ClearImportedStrings()
+        {
+            importedStrings.Clear();
+        }
+
+        public void Test()
+        {
+            importedStrings.Add(new List<string>() { "0", "0", "0" });
         }
     }
 }
