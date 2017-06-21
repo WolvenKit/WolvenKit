@@ -25,6 +25,7 @@ namespace WolvenKit.Cache
         public Dictionary<string, SoundCache> Archives { get; set; }
         public WitcherTreeNode RootNode { get; set; }
         public List<IWitcherFile> FileList { get; set; }
+        public string TypeName { get { return "SoundManager"; } }
         public List<string> Extensions { get; set; }
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
 

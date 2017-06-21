@@ -14,7 +14,7 @@ namespace WolvenKit
     public partial class frmBundleExplorer : Form
     {
         public List<string> Autocompletelist;
-        public List<IWitcherFile> FileList;
+        public List<IWitcherFile> FileList = new List<IWitcherFile>();
         public List<IWitcherArchive> Managers;
 
         public frmBundleExplorer(List<IWitcherArchive> archives)
@@ -23,11 +23,13 @@ namespace WolvenKit
             Managers = archives;
             RootNode = new WitcherTreeNode();
             RootNode.Name = "Root";
-            //FileList = arch.FileList;
             foreach (var arch in archives)
             {
+                FileList.AddRange(arch.FileList);
                 RootNode.Directories[arch.RootNode.Name] = arch.RootNode;
                 arch.RootNode.Parent = RootNode;
+                extensionCB.Items.Add(arch.TypeName);
+                extensionCB.SelectedIndex = 0;
                 filetypeCB.Items.AddRange(arch.Extensions.ToArray());
                 filetypeCB.SelectedIndex = 0;
                 for (int i = 0; i < arch.AutocompleteSource.Count; i++)
