@@ -315,7 +315,9 @@ namespace WolvenKit
         }
 
         private void frmChunkFlowDiagram_KeyDown(object sender, KeyEventArgs e)
-        {          
+        {
+            zoom -= 10;
+            Invalidate();
         }
 
         private void frmChunkFlowDiagram_MouseDown(object sender, MouseEventArgs e)
@@ -483,26 +485,6 @@ namespace WolvenKit
             {
                 Clipboard.SetText(text.ToString());
             }
-        }
-
-        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void frmChunkFlowDiagram_Click(object sender, EventArgs e)
-        {
-            ZoomLabel.Focus();
-        }
-
-        private void zoomImput_ValueChanged(object sender, EventArgs e)
-        {
-            zoom = (float)(zoomImput.Value/100);
         }
     }
 }

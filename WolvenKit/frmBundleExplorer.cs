@@ -267,12 +267,15 @@ namespace WolvenKit
             }
         }
 
-        public void Search(string s, int i)
+        public void Search(string s, int bundleTypeIdx, int fileTypeIdx)
         {
             var extension = "";
+            var bundletype = "";
             if (filetypeCB.SelectedIndex != -1)
-                extension = filetypeCB.Items[i].ToString();
-            var found = SearchFiles(FileList.ToArray(), s, extension);
+                extension = filetypeCB.Items[fileTypeIdx].ToString();
+            if (extensionCB.SelectedIndex != -1)
+                bundletype = extensionCB.Items[bundleTypeIdx].ToString();
+            var found = SearchFiles(FileList.ToArray(), s, bundletype, extension);
             if (found.Length > 1000)
                 found = found.Take(1000).ToArray();
             fileListView.Items.Clear();
@@ -311,7 +314,7 @@ namespace WolvenKit
             return bundfiles;
         }
 
-        public IWitcherFile[] SearchFiles(IWitcherFile[] files, string searchkeyword, string extension)
+        public IWitcherFile[] SearchFiles(IWitcherFile[] files, string searchkeyword, string bundletype, string extension)
         {
             if (regexCheckbox.Checked)
             {
@@ -378,7 +381,7 @@ namespace WolvenKit
 
         private void SearchButton_Click(object sender, EventArgs e)
         {
-            Search(SearchBox.Text, filetypeCB.SelectedIndex);
+            Search(SearchBox.Text, extensionCB.SelectedIndex, filetypeCB.SelectedIndex);
         }
 
         private void Clear_Click(object sender, EventArgs e)
@@ -414,7 +417,7 @@ namespace WolvenKit
         {
             if (e.KeyCode == Keys.Enter)
             {
-                Search(SearchBox.Text, filetypeCB.SelectedIndex);
+                Search(SearchBox.Text, extensionCB.SelectedIndex, filetypeCB.SelectedIndex);
             }
         }
 
