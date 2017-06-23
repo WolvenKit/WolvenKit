@@ -28,6 +28,13 @@ namespace WolvenKit.FlowTreeEditors
             }
         }
 
+        private Size originalSize;
+        public Size OriginalSize
+        {
+            get { return originalSize; }
+            set { originalSize = value; }
+        }
+
         public virtual string GetCopyText()
         {
             return chunk.Name;

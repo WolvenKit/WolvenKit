@@ -72,7 +72,7 @@ namespace WolvenKit
             // frmChunkFlowDiagram
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.AutoScroll = true;
+            this.AutoScroll = false;
             this.ClientSize = new System.Drawing.Size(795, 460);
             this.CloseButton = false;
             this.CloseButtonVisible = false;
@@ -84,12 +84,12 @@ namespace WolvenKit
             this.ShowIcon = false;
             this.Text = "Flow Diagram";
             this.Load += new System.EventHandler(this.frmChunkFlowDiagram_Load);
-            this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.frmChunkFlowDiagram_Scroll);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.frmChunkFlowView_Paint);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmChunkFlowDiagram_KeyDown);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.frmChunkFlowDiagram_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.frmChunkFlowDiagram_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.frmChunkFlowDiagram_MouseUp);
+            this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.frmChunkFlowDiagram_Scroll);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 

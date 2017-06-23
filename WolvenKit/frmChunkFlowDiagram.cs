@@ -40,6 +40,8 @@ namespace WolvenKit
         private CR2WFile file;
         private bool isConnecting;
         private bool isSelecting;
+        private bool isMoving;
+        private Point prevMousePos;
         private int maxdepth;
         private Point selectionEnd;
         private Point selectionStart;
@@ -127,7 +129,7 @@ namespace WolvenKit
                     maxheight = c.Location.Y + c.Height;
             }
 
-            AutoScrollMinSize = new Size(maxwidth + 100, maxheight + 100);
+            //AutoScrollMinSize = new Size(this.Width, this.Height);
         }
 
         private void createEditor(int depth, CR2WChunk c)
@@ -140,6 +142,7 @@ namespace WolvenKit
             editor.OnSelectChunk += editor_OnSelectChunk;
             editor.OnManualMove += editor_OnMove;
             editor.LocationChanged += editor_LocationChanged;
+            editor.OriginalSize = editor.Size;
 
             Controls.Add(editor);
             ChunkEditors.Add(c, editor);
@@ -309,14 +312,25 @@ namespace WolvenKit
                 x2, y2);
         }
 
-        private void frmChunkFlowDiagram_Scroll(object sender, ScrollEventArgs e)
+        private void frmChunkFlowDiagram_Scroll(object sender, MouseEventArgs e)
         {
+            float prevZoom = zoom;
+            if(e.Delta > 0)
+                zoom += 7;
+            else
+                zoom -= 7;
+            if (zoom < 23)
+                zoom = 23;
+            foreach (ChunkEditor c in Controls)
+            {
+                c.Size = new Size((int)(c.OriginalSize.Width * zoom / 100), (int)(c.OriginalSize.Height * zoom / 100));
+                c.Left = (int)(c.Left * zoom / prevZoom);
+            }
             Invalidate();
         }
 
         private void frmChunkFlowDiagram_KeyDown(object sender, KeyEventArgs e)
         {
-            zoom -= 10;
             Invalidate();
         }
 
@@ -324,31 +338,39 @@ namespace WolvenKit
         {
             if (e.Button == MouseButtons.Left)
             {
-                foreach (var c in ChunkEditors.Values)
+                if (Form.ModifierKeys != Keys.Control)
                 {
-                    var conns = c.GetConnections();
-                    if (conns != null)
+                    foreach (var c in ChunkEditors.Values)
                     {
-                        for (var i = 0; i < conns.Count; i++)
+                        var conns = c.GetConnections();
+                        if (conns != null)
                         {
-                            var sp = c.GetConnectionLocation(i);
-
-                            var rect = new Rectangle(c.Location.X + c.Width, c.Location.Y + sp.Y - connectionPointSize/2,
-                                connectionPointSize, connectionPointSize);
-                            if (rect.Contains(e.Location))
+                            for (var i = 0; i < conns.Count; i++)
                             {
-                                connectingSource = conns[i];
-                                connectingSourceEditor = c;
-                                connectingSourceIndex = i;
-                                isConnecting = true;
-                                return;
+                                var sp = c.GetConnectionLocation(i);
+
+                                var rect = new Rectangle(c.Location.X + c.Width, c.Location.Y + sp.Y - connectionPointSize / 2,
+                                    connectionPointSize, connectionPointSize);
+                                if (rect.Contains(e.Location))
+                                {
+                                    connectingSource = conns[i];
+                                    connectingSourceEditor = c;
+                                    connectingSourceIndex = i;
+                                    isConnecting = true;
+                                    return;
+                                }
                             }
                         }
                     }
-                }
 
-                selectionStart = e.Location;
-                isSelecting = true;
+                    selectionStart = e.Location;
+                    isSelecting = true;
+                }
+                else
+                {
+                    prevMousePos = e.Location;
+                    isMoving = true;
+                }
             }
         }
 
@@ -371,6 +393,18 @@ namespace WolvenKit
 
                 Invalidate();
             }
+
+            if (isMoving)
+            {
+                foreach(Control c in Controls)
+                {
+                    c.Left -= prevMousePos.X - e.Location.X;
+                    c.Top -= prevMousePos.Y - e.Location.Y;
+                }
+
+                Invalidate();
+            }
+            prevMousePos = e.Location;
         }
 
         private void CheckConnectTarget()
@@ -404,6 +438,13 @@ namespace WolvenKit
                 isConnecting = false;
 
                 DoConnect();
+
+                Invalidate();
+            }
+
+            if (isMoving)
+            {
+                isMoving = false;
 
                 Invalidate();
             }
