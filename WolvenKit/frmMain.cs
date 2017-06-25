@@ -322,7 +322,46 @@ namespace WolvenKit
 
         private void AddToMod(string depotpath, List<IWitcherArchive> managers)
         {
-                return;
+            foreach (var manager in managers.Where(manager => manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath))))
+            {
+                if (manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath)))
+                {
+                    var filename = Path.Combine(ActiveMod.FileDirectory, depotpath);
+                    var archives = manager.FileList.Where(x => x.Name == depotpath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
+                    if (archives.Count() > 1)
+                    {
+                        var dlg = new frmExtractAmbigious(archives.Select(x => x.Key).ToList());
+                        if (dlg.ShowDialog() == DialogResult.Cancel)
+                        {
+                            return;
+                        }
+                        var selectedBundle = archives.FirstOrDefault(x => x.Key == dlg.SelectedBundle).Value;
+                        try
+                        {
+                            Directory.CreateDirectory(Path.GetDirectoryName(filename));
+                            if (File.Exists(filename))
+                            {
+                                File.Delete(filename);
+                            }
+                            selectedBundle.Extract(filename);
+                        } catch { }
+                        return;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Directory.CreateDirectory(Path.GetDirectoryName(filename));
+                            if (File.Exists(filename))
+                            {
+                                File.Delete(filename);
+                            }
+                            archives.FirstOrDefault().Value.Extract(filename);
+                        } catch { }
+                        return;
+                    }
+                }
+            }
         }
 
         /// <summary>
