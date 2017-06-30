@@ -104,6 +104,21 @@ namespace WolvenKit
             toolStrip Menus
         */
 
+        private void idToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            idToolStripMenuItem.Checked = dataGridViewStrings.Columns[0].Visible = !idToolStripMenuItem.Checked;
+        }
+
+        private void hexKeyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            hexKeyToolStripMenuItem.Checked = dataGridViewStrings.Columns[1].Visible = !hexKeyToolStripMenuItem.Checked;
+        }
+
+        private void stringKeyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            stringKeyToolStripMenuItem.Checked = dataGridViewStrings.Columns[2].Visible = !stringKeyToolStripMenuItem.Checked;
+        }
+
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
@@ -552,7 +567,9 @@ namespace WolvenKit
                 dataTableGridViewSource.Columns.Add("Localisation");
 
                 dataGridViewStrings.DataSource = dataTableGridViewSource;
-                dataGridViewStrings.Columns[1].Visible = false;
+
+                dataGridViewStrings.Columns[0].ReadOnly = true;
+                dataGridViewStrings.Columns[1].ReadOnly = true;
             }
         }
 
@@ -664,5 +681,6 @@ namespace WolvenKit
         {
             MessageBox.Show("Work in progress.", "Coming soon(tm)", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
+
     }
 }

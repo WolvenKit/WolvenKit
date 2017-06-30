@@ -37,6 +37,10 @@
             this.generateStringsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fromXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fromScriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.idToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hexKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stringKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
@@ -74,7 +78,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.generateStringsToolStripMenuItem});
+            this.generateStringsToolStripMenuItem,
+            this.viewToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1086, 24);
@@ -133,6 +138,43 @@
             this.fromScriptsToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.fromScriptsToolStripMenuItem.Text = "From Scripts";
             this.fromScriptsToolStripMenuItem.Click += new System.EventHandler(this.fromScriptsToolStripMenuItem_Click);
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.idToolStripMenuItem,
+            this.hexKeyToolStripMenuItem,
+            this.stringKeyToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "View";
+            // 
+            // idToolStripMenuItem
+            // 
+            this.idToolStripMenuItem.Checked = true;
+            this.idToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.idToolStripMenuItem.Name = "idToolStripMenuItem";
+            this.idToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.idToolStripMenuItem.Text = "ID";
+            this.idToolStripMenuItem.Click += new System.EventHandler(this.idToolStripMenuItem_Click);
+            // 
+            // hexKeyToolStripMenuItem
+            // 
+            this.hexKeyToolStripMenuItem.Checked = true;
+            this.hexKeyToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.hexKeyToolStripMenuItem.Name = "hexKeyToolStripMenuItem";
+            this.hexKeyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.hexKeyToolStripMenuItem.Text = "Hex Key";
+            this.hexKeyToolStripMenuItem.Click += new System.EventHandler(this.hexKeyToolStripMenuItem_Click);
+            // 
+            // stringKeyToolStripMenuItem
+            // 
+            this.stringKeyToolStripMenuItem.Checked = true;
+            this.stringKeyToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.stringKeyToolStripMenuItem.Name = "stringKeyToolStripMenuItem";
+            this.stringKeyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.stringKeyToolStripMenuItem.Text = "String Key";
+            this.stringKeyToolStripMenuItem.Click += new System.EventHandler(this.stringKeyToolStripMenuItem_Click);
             // 
             // toolStrip1
             // 
@@ -398,5 +440,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnLocalisation;
         private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButtonImport;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem idToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem hexKeyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stringKeyToolStripMenuItem;
     }
 }
