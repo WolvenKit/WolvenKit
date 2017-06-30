@@ -172,11 +172,36 @@ namespace WolvenKit
                     Convert.ToInt32(dataGridViewStrings.Rows[dataGridViewStrings.Rows.Count - 3].Cells[0].Value) + 1;
             else
                 dataGridViewStrings.Rows[0].Cells[0].Value = modIDs[0] * 1000 + 2110000000;
+
+            HashStringKeys();
         }
 
         /*
             End of events
         */
+
+        private void HashStringKeys()
+        {
+            foreach (DataGridViewRow row in dataGridViewStrings.Rows)
+            {
+                if (row.Cells[2].Value == null)
+                    return;
+                string key = row.Cells[2].Value.ToString();
+                if (key == "")
+                    return;
+                char[] keyConverted = key.ToCharArray();
+                uint hash = 0;
+                foreach (char c in keyConverted)
+                {
+                    hash *= 31;
+                    hash += (uint)c;
+                }
+                string hex_key = hash.ToString("X");
+                row.Cells[1].Value = hex_key;
+            }
+            
+
+        }
 
         private void ImportW3Strings()
         {
