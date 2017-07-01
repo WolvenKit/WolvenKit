@@ -520,6 +520,14 @@ namespace WolvenKit
 
         private void SaveCSV()
         {
+            dataGridViewStrings.EndEdit();
+            if (dataGridViewStrings.Rows.Count >= 3)
+                dataGridViewStrings.Rows[dataGridViewStrings.Rows.Count - 2].Cells[0].Value =
+                    Convert.ToInt32(dataGridViewStrings.Rows[dataGridViewStrings.Rows.Count - 3].Cells[0].Value) + 1;
+            else
+                dataGridViewStrings.Rows[0].Cells[0].Value = modIDs[0] * 1000 + 2110000000;
+            HashStringKeys();
+
             var sb = new StringBuilder();
             foreach (DataGridViewRow row in dataGridViewStrings.Rows)
             {
@@ -563,7 +571,6 @@ namespace WolvenKit
 
                     file.WriteLine(csv);
                 }
-
             }
         }
 
@@ -595,6 +602,9 @@ namespace WolvenKit
 
                 dataGridViewStrings.Columns[0].ReadOnly = true;
                 dataGridViewStrings.Columns[1].ReadOnly = true;
+
+                foreach (DataGridViewColumn column in dataGridViewStrings.Columns)
+                    column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
         }
 

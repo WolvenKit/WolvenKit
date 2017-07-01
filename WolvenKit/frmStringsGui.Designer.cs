@@ -154,7 +154,7 @@
             this.idToolStripMenuItem.Checked = true;
             this.idToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.idToolStripMenuItem.Name = "idToolStripMenuItem";
-            this.idToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.idToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.idToolStripMenuItem.Text = "ID";
             this.idToolStripMenuItem.Click += new System.EventHandler(this.idToolStripMenuItem_Click);
             // 
@@ -163,7 +163,7 @@
             this.hexKeyToolStripMenuItem.Checked = true;
             this.hexKeyToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.hexKeyToolStripMenuItem.Name = "hexKeyToolStripMenuItem";
-            this.hexKeyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.hexKeyToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.hexKeyToolStripMenuItem.Text = "Hex Key";
             this.hexKeyToolStripMenuItem.Click += new System.EventHandler(this.hexKeyToolStripMenuItem_Click);
             // 
@@ -172,7 +172,7 @@
             this.stringKeyToolStripMenuItem.Checked = true;
             this.stringKeyToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.stringKeyToolStripMenuItem.Name = "stringKeyToolStripMenuItem";
-            this.stringKeyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.stringKeyToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.stringKeyToolStripMenuItem.Text = "String Key";
             this.stringKeyToolStripMenuItem.Click += new System.EventHandler(this.stringKeyToolStripMenuItem_Click);
             // 
