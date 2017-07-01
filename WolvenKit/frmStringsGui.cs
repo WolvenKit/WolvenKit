@@ -205,7 +205,14 @@ namespace WolvenKit
 
         private void ImportW3Strings()
         {
-            var importer = new frmStringsGuiImporter();
+            var guiStrings = new List<string>();
+
+            foreach (DataGridViewRow row in dataGridViewStrings.Rows)
+                if (row.Cells[3].Value != null)
+                    guiStrings.Add(row.Cells[3].Value.ToString());
+
+            var importer = new frmStringsGuiImporter(guiStrings);
+
             importer.ShowDialog();
             var stringsManager = MainController.Get().W3StringManager;
             var strings = stringsManager.GetImportedStrings();
@@ -218,6 +225,7 @@ namespace WolvenKit
             }
 
             stringsManager.ClearImportedStrings();
+            UpdateModID();
         }
 
         private void GenerateFromXML()

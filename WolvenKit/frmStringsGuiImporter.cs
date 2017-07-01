@@ -16,6 +16,7 @@ namespace WolvenKit
     {
         W3Strings.W3StringManager stringsManager;
         List<List<string>> strings = new List<List<string>>();
+        List<string> guiStrings;
 
         bool matchCaseSearch = false;
 
@@ -43,6 +44,16 @@ namespace WolvenKit
         {
             if (e.KeyData == Keys.Enter)
                 Search();
+        }
+
+        public frmStringsGuiImporter(List<string> guiStrings)
+        {
+            this.guiStrings = guiStrings;
+
+            InitializeComponent();
+
+            stringsManager = MainController.Get().W3StringManager;
+            comboBoxLanguage.Text = MainController.Get().Configuration.TextLanguage;
         }
 
         public frmStringsGuiImporter()
@@ -105,6 +116,21 @@ namespace WolvenKit
             }
             FillListView(strings);
             toolStripStatusLabelStringsCount.Text = "Strings Loaded: " + strings.Count.ToString();
+
+            if (guiStrings.Count == 0)
+                return;
+
+            var matchedStringsCounter = 0;
+            foreach (ListViewItem item in listViewStrings.Items)
+            {
+                if (guiStrings.Contains(item.Text))
+                {
+                    item.ForeColor = Color.Blue;
+                    ++matchedStringsCounter;
+                }
+                if (matchedStringsCounter == guiStrings.Count)
+                    return;
+            }
         }
 
         private void FillListView(List<List<string>> strings)
