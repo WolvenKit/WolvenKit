@@ -20,6 +20,7 @@ namespace WolvenKit.Cache
         public long NamesSize;
         public long Unknown2;
         public long Unknown3;
+        public string TypeName { get { return "SoundCache"; } }
         public string FileName { get; set; }
 
         public SoundCache(string fileName)
@@ -76,7 +77,7 @@ namespace WolvenKit.Cache
             foreach (var f in Files)
             {
                 br.BaseStream.Seek(NamesOffset + f.NameOffset, SeekOrigin.Begin);
-                f.Name = br.ReadCR2WString();
+                f.Name = f.Bundle.TypeName + "\\" + br.ReadCR2WString();
                 f.ParentFile = this.FileName;
             }
         }

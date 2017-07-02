@@ -25,6 +25,7 @@ namespace WolvenKit.Bundles
             ReadTOC();
         }
 
+        public string TypeName { get { return "Bundle"; } }
         public string FileName { get; set; }
         public Dictionary<string, BundleItem> Items { get; set; }
 
@@ -56,7 +57,7 @@ namespace WolvenKit.Bundles
 
                     var strname = Encoding.Default.GetString(reader.ReadBytes(0x100));
 
-                    item.Name = strname.Substring(0, strname.IndexOf('\0'));
+                    item.Name = item.Bundle.TypeName + "\\" + strname.Substring(0, strname.IndexOf('\0'));
                     item.Hash = reader.ReadBytes(16);
                     item.Unknown = reader.ReadUInt32();
                     item.Size = reader.ReadUInt32();

@@ -14,7 +14,7 @@ namespace WolvenKit
     public partial class frmBundleExplorer : Form
     {
         public List<string> Autocompletelist;
-        public List<IWitcherFile> FileList;
+        public List<IWitcherFile> FileList = new List<IWitcherFile>();
         public List<IWitcherArchive> Managers;
 
         public frmBundleExplorer(List<IWitcherArchive> archives)
@@ -23,11 +23,13 @@ namespace WolvenKit
             Managers = archives;
             RootNode = new WitcherTreeNode();
             RootNode.Name = "Root";
-            //FileList = arch.FileList;
             foreach (var arch in archives)
             {
+                FileList.AddRange(arch.FileList);
                 RootNode.Directories[arch.RootNode.Name] = arch.RootNode;
                 arch.RootNode.Parent = RootNode;
+                extensionCB.Items.Add(arch.TypeName);
+                extensionCB.SelectedIndex = 0;
                 filetypeCB.Items.AddRange(arch.Extensions.ToArray());
                 filetypeCB.SelectedIndex = 0;
                 for (int i = 0; i < arch.AutocompleteSource.Count; i++)
@@ -92,7 +94,7 @@ namespace WolvenKit
                     listItem.SubItems.Add(string.Format("{0}%",
                         (100 - (int)(lastItem.ZSize / (float)lastItem.Size * 100.0f))));
                     listItem.SubItems.Add(lastItem.CompressionType);
-                    listItem.SubItems.Add(lastItem.DateString);
+                    listItem.SubItems.Add(lastItem.Bundle.TypeName);
                     res.Add(listItem);
                 }
                 fileListView.Items.AddRange(res.ToArray());
@@ -265,12 +267,15 @@ namespace WolvenKit
             }
         }
 
-        public void Search(string s, int i)
+        public void Search(string s, int bundleTypeIdx, int fileTypeIdx)
         {
             var extension = "";
+            var bundletype = "";
             if (filetypeCB.SelectedIndex != -1)
-                extension = filetypeCB.Items[i].ToString();
-            var found = SearchFiles(FileList.ToArray(), s, extension);
+                extension = filetypeCB.Items[fileTypeIdx].ToString();
+            if (extensionCB.SelectedIndex != -1)
+                bundletype = extensionCB.Items[bundleTypeIdx].ToString();
+            var found = SearchFiles(FileList.ToArray(), s, bundletype, extension);
             if (found.Length > 1000)
                 found = found.Take(1000).ToArray();
             fileListView.Items.Clear();
@@ -289,7 +294,7 @@ namespace WolvenKit
                 listItem.SubItems.Add(lastItem.Size.ToString());
                 listItem.SubItems.Add($"{(100 - (int) (lastItem.ZSize/(float) lastItem.Size*100.0f))}%");
                 listItem.SubItems.Add(lastItem.CompressionType);
-                listItem.SubItems.Add(lastItem.DateString);
+                listItem.SubItems.Add(lastItem.Bundle.TypeName);
                 results.Add(listItem);
             }
             fileListView.Items.AddRange(results.ToArray());
@@ -309,7 +314,7 @@ namespace WolvenKit
             return bundfiles;
         }
 
-        public IWitcherFile[] SearchFiles(IWitcherFile[] files, string searchkeyword, string extension)
+        public IWitcherFile[] SearchFiles(IWitcherFile[] files, string searchkeyword, string bundletype, string extension)
         {
             if (regexCheckbox.Checked)
             {
@@ -376,7 +381,7 @@ namespace WolvenKit
 
         private void SearchButton_Click(object sender, EventArgs e)
         {
-            Search(SearchBox.Text, filetypeCB.SelectedIndex);
+            Search(SearchBox.Text, extensionCB.SelectedIndex, filetypeCB.SelectedIndex);
         }
 
         private void Clear_Click(object sender, EventArgs e)
@@ -412,7 +417,7 @@ namespace WolvenKit
         {
             if (e.KeyCode == Keys.Enter)
             {
-                Search(SearchBox.Text, filetypeCB.SelectedIndex);
+                Search(SearchBox.Text, extensionCB.SelectedIndex, filetypeCB.SelectedIndex);
             }
         }
 
