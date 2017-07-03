@@ -20,6 +20,7 @@ namespace WolvenKit
         VAR,
         GROUP
     }
+
     public partial class frmStringsGui : Form
     {
         int counter = 0;
@@ -28,13 +29,17 @@ namespace WolvenKit
         bool fileOpened = false;
         bool multipleIDs = false;
         bool rowAddedAutomatically = false;
-
+        bool abortedSwitchingBackToAllLanguages = false;
+        
         string currentModID = "";
         List<string> groups = new List<string>();
 
         int idsLimit = 1000;
 
         IEnumerable<W3Strings.W3Language> languages = W3Strings.W3Language.languages;
+        string languageTabSelected = "ar";
+
+        List<LanguageStringsCollection> languagesStrings = new List<LanguageStringsCollection>();
 
         DataTable dataTableGridViewSource;
 
@@ -48,12 +53,74 @@ namespace WolvenKit
 
         private void comboBoxLanguagesMode_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (abortedSwitchingBackToAllLanguages)
+            {
+                abortedSwitchingBackToAllLanguages = false;
+                //return;
+            }
+            //var tabePagesLanguages = new List<System.Windows.Forms.TabPage>();
             if (comboBoxLanguagesMode.SelectedIndex == 1)
             {
-                ShowWIPMessage();
-                comboBoxLanguagesMode.SelectedIndex = 0;
-            }
+                tabControlLanguages.Controls.Clear();
 
+                var allLanguagesStrings = new List<List<string>>();
+
+                foreach (DataGridViewRow row in dataGridViewStrings.Rows)
+                {
+                    if (row.Cells[0].Value != null)
+                        allLanguagesStrings.Add(new List<string>() { row.Cells[0].Value.ToString(), row.Cells[1].Value.ToString(), row.Cells[2].Value.ToString(), row.Cells[3].Value.ToString() });
+                }
+
+                languagesStrings.Add(new LanguageStringsCollection("all", allLanguagesStrings));
+
+
+                foreach (var language in languages)
+                {
+                    var languageStrings = new List<List<string>>();
+
+                    foreach (var str in allLanguagesStrings)
+                        languageStrings.Add(new List<string>() { str[0], str[1], str[2], str[3] });
+
+                    languagesStrings.Add(new LanguageStringsCollection(language.Handle, languageStrings));
+
+                    var newTabPage = new System.Windows.Forms.TabPage();
+                    newTabPage.Location = new System.Drawing.Point(4, 22);
+                    newTabPage.Name = "tabPage" + language.Handle;
+                    newTabPage.Padding = new System.Windows.Forms.Padding(3);
+                    newTabPage.Size = new System.Drawing.Size(998, 0);
+                    newTabPage.TabIndex = 0;
+                    newTabPage.Text = language.Handle;
+                    newTabPage.UseVisualStyleBackColor = true;
+                    tabControlLanguages.Controls.Add(newTabPage);
+                }
+            }
+            else if(dataTableGridViewSource != null)
+            {
+                var result = MessageBox.Show("Are you sure? English strings will be used for all languages.", "Wolven Kit", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk);
+                if (result == DialogResult.Cancel)
+                {
+                    comboBoxLanguagesMode.SelectedIndex = 1;
+                    abortedSwitchingBackToAllLanguages = true;
+                    return;
+                }
+
+                tabControlLanguages.Controls.Clear();
+
+                dataTableGridViewSource.Rows.Clear();
+                foreach (var str in languagesStrings[7].strings)
+                    dataTableGridViewSource.Rows.Add(str[0], str[1], str[2], str[3]);
+                languagesStrings.Clear();
+
+                var newTabPage = new System.Windows.Forms.TabPage();
+                newTabPage.Location = new System.Drawing.Point(4, 22);
+                newTabPage.Name = "tabPageAllLanguages";
+                newTabPage.Padding = new System.Windows.Forms.Padding(3);
+                newTabPage.Size = new System.Drawing.Size(998, 0);
+                newTabPage.TabIndex = 0;
+                newTabPage.Text = "All Languages";
+                newTabPage.UseVisualStyleBackColor = true;
+                tabControlLanguages.Controls.Add(newTabPage);
+            }
         }
 
         /*
@@ -199,7 +266,7 @@ namespace WolvenKit
                 string hex_key = hash.ToString("X");
                 row.Cells[1].Value = hex_key;
             }
-            
+
 
         }
 
@@ -287,7 +354,8 @@ namespace WolvenKit
                 rowAddedAutomatically = true;
 
                 currentModID = textBoxModID.Text;
-                rows.ForEach(x => {
+                rows.ForEach(x =>
+                {
                     dataTableGridViewSource.Rows.Add(x);
                 });
 
@@ -529,57 +597,100 @@ namespace WolvenKit
         private void SaveCSV()
         {
             dataGridViewStrings.EndEdit();
-            if (dataGridViewStrings.Rows.Count >= 3)
-                dataGridViewStrings.Rows[dataGridViewStrings.Rows.Count - 2].Cells[0].Value =
-                    Convert.ToInt32(dataGridViewStrings.Rows[dataGridViewStrings.Rows.Count - 3].Cells[0].Value) + 1;
-            else
-                dataGridViewStrings.Rows[0].Cells[0].Value = modIDs[0] * 1000 + 2110000000;
             HashStringKeys();
 
-            var sb = new StringBuilder();
-            foreach (DataGridViewRow row in dataGridViewStrings.Rows)
-            {
-                if (row.Cells[0].Value == DBNull.Value)
-                    continue;
-                var cells = row.Cells.Cast<DataGridViewCell>();
-
-
-                sb.AppendLine(string.Join("|", cells.Select(cell => cell.Value).ToArray()));
-            }
-
-            int languagesCount = languages.Count();
             string outputPath = GetPath();
             if (outputPath == "")
                 return;
-            foreach (var language in languages)
+            var sb = new StringBuilder();
+
+            if (comboBoxLanguagesMode.SelectedIndex == 0)
             {
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath + "\\" + language.Handle + ".csv"))
+                if (dataGridViewStrings.Rows.Count >= 3)
+                    dataGridViewStrings.Rows[dataGridViewStrings.Rows.Count - 2].Cells[0].Value =
+                        Convert.ToInt32(dataGridViewStrings.Rows[dataGridViewStrings.Rows.Count - 3].Cells[0].Value) + 1;
+                else
+                    dataGridViewStrings.Rows[0].Cells[0].Value = modIDs[0] * 1000 + 2110000000;
+
+                foreach (DataGridViewRow row in dataGridViewStrings.Rows)
                 {
-                    file.WriteLine(";meta[language=" + language.Handle + "]");
-                    file.WriteLine("; id | key(hex) | key(str) | text");
+                    if (row.Cells[0].Value == DBNull.Value)
+                        continue;
+                    var cells = row.Cells.Cast<DataGridViewCell>();
 
-                    string csv = sb.ToString();
 
-                    // leaving space for the hex key empty
-                    if (!fileOpened)
+                    sb.AppendLine(string.Join("|", cells.Select(cell => cell.Value).ToArray()));
+                }
+
+                int languagesCount = languages.Count();
+
+                foreach (var language in languages)
+                {
+                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath + "\\" + language.Handle + ".csv"))
                     {
-                        List<string> splittedCsv = csv.Split('\n').ToList();
-                        int splittedCsvLength = splittedCsv.Count();
-                        for (int j = 0; j < splittedCsvLength; ++j)
-                            if (splittedCsv[j] == "\r" || splittedCsv[j] == "")
-                            {
-                                // remove empty rows
-                                splittedCsv.RemoveAt(j);
-                                --splittedCsvLength;
-                                --j;
-                            }
+                        file.WriteLine(";meta[language=" + language.Handle + "]");
+                        file.WriteLine("; id | key(hex) | key(str) | text");
 
-                        csv = String.Join("\n", splittedCsv);
+                        string csv = sb.ToString();
+
+                        // leaving space for the hex key empty
+                        if (!fileOpened)
+                        {
+                            List<string> splittedCsv = csv.Split('\n').ToList();
+                            int splittedCsvLength = splittedCsv.Count();
+                            for (int j = 0; j < splittedCsvLength; ++j)
+                                if (splittedCsv[j] == "\r" || splittedCsv[j] == "")
+                                {
+                                    // remove empty rows
+                                    splittedCsv.RemoveAt(j);
+                                    --splittedCsvLength;
+                                    --j;
+                                }
+
+                            csv = String.Join("\n", splittedCsv);
+                        }
+
+                        file.WriteLine(csv);
                     }
-
-                    file.WriteLine(csv);
                 }
             }
+            else
+            {
+                foreach (var language in languagesStrings)
+                {
+                    foreach (var line in language.strings)
+                        sb.AppendLine(string.Join("|", line.ToArray()));
+
+                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath + "\\" + language.language + ".csv"))
+                    {
+                        file.WriteLine(";meta[language=" + language.language + "]");
+                        file.WriteLine("; id | key(hex) | key(str) | text");
+
+                        string csv = sb.ToString();
+
+                        // leaving space for the hex key empty
+                        if (!fileOpened)
+                        {
+                            List<string> splittedCsv = csv.Split('\n').ToList();
+                            int splittedCsvLength = splittedCsv.Count();
+                            for (int j = 0; j < splittedCsvLength; ++j)
+                                if (splittedCsv[j] == "\r" || splittedCsv[j] == "")
+                                {
+                                    // remove empty rows
+                                    splittedCsv.RemoveAt(j);
+                                    --splittedCsvLength;
+                                    --j;
+                                }
+
+                            csv = String.Join("\n", splittedCsv);
+                        }
+
+                        file.WriteLine(csv);
+                    }
+                    sb.Clear();
+                }
+            }
+            
         }
 
         private string GetPath()
@@ -614,6 +725,7 @@ namespace WolvenKit
                 foreach (DataGridViewColumn column in dataGridViewStrings.Columns)
                     column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
+
         }
 
         private void OpenCSV()
@@ -669,7 +781,8 @@ namespace WolvenKit
                     textBoxModID.Text = Convert.ToString(modIDs[0]);
 
                 currentModID = textBoxModID.Text;
-                rows.ForEach(x => {
+                rows.ForEach(x =>
+                {
                     dataTableGridViewSource.Rows.Add(x);
                 });
 
@@ -692,31 +805,52 @@ namespace WolvenKit
             else
                 stringsDir = GetPath();
 
-            var strings = new List<List<string>>();
-            foreach (DataGridViewRow row in dataGridViewStrings.Rows)
+            if (comboBoxLanguagesMode.SelectedIndex == 0)
             {
-                if (row.Cells[0].Value == DBNull.Value || row.Cells[0].Value == null)
-                    continue;
-
-                var str = new List<string>();
-                var cells = row.Cells.Cast<DataGridViewCell>();
-                foreach (var cell in cells)
+                var strings = new List<List<string>>();
+                foreach (DataGridViewRow row in dataGridViewStrings.Rows)
                 {
-                    if (cell == cells.ElementAt(1))
+                    if (row.Cells[0].Value == DBNull.Value || row.Cells[0].Value == null)
                         continue;
-                    str.Add(cell.Value.ToString());
+
+                    var str = new List<string>();
+                    var cells = row.Cells.Cast<DataGridViewCell>();
+                    foreach (var cell in cells)
+                    {
+                        if (cell == cells.ElementAt(1))
+                            continue;
+                        str.Add(cell.Value.ToString());
+                    }
+                    strings.Add(str);
                 }
-                strings.Add(str);
-            }
-            foreach (var lang in languages)
-            {
-                var w3tringFile = new W3Strings.W3StringFile();
-                w3tringFile.Create(strings, lang.Handle);
-                using (var bw = new BinaryWriter(File.OpenWrite(stringsDir + "\\" + lang.Handle + ".w3strings")))
+                foreach (var lang in languages)
                 {
-                    w3tringFile.Write(bw);
+                    var w3tringFile = new W3Strings.W3StringFile();
+                    w3tringFile.Create(strings, lang.Handle);
+                    using (var bw = new BinaryWriter(File.OpenWrite(stringsDir + "\\" + lang.Handle + ".w3strings")))
+                    {
+                        w3tringFile.Write(bw);
+                    }
                 }
             }
+            else
+                foreach (var lang in languagesStrings)
+                {
+                    if (lang.language == "all")
+                        continue;
+                    var w3tringFile = new W3Strings.W3StringFile();
+                    var stringsBlock1Strings = new List<List<string>>();
+                    foreach (var str in lang.strings)
+                    {
+                        stringsBlock1Strings.Add(new List<string>() { str[0], str[2], str[3] });
+                    }
+                    w3tringFile.Create(stringsBlock1Strings, lang.language);
+                    using (var bw = new BinaryWriter(File.OpenWrite(stringsDir + "\\" + lang.language + ".w3strings")))
+                    {
+                        w3tringFile.Write(bw);
+                    }
+                }
+
             MessageBox.Show("Strings encoded.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
@@ -725,5 +859,55 @@ namespace WolvenKit
             MessageBox.Show("Work in progress.", "Coming soon(tm)", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
+        private void tabControlLanguages_Selected(object sender, TabControlEventArgs e)
+        {
+            if (e.TabPage == null)
+                return;
+
+            dataGridViewStrings.EndEdit();
+
+            foreach (var language in languagesStrings)
+                if (language.language == languageTabSelected)
+                {
+                    language.strings.Clear();
+
+                    foreach (DataGridViewRow row in dataGridViewStrings.Rows)
+                    {
+                        if (row.Cells[0].Value != null)
+                        {
+                            language.strings.Add(new List<string>() { row.Cells[0].Value.ToString(), row.Cells[1].Value.ToString(), row.Cells[2].Value.ToString(), row.Cells[3].Value.ToString() });
+                        }
+                    }
+                    break;
+                }
+
+            foreach (var language in languagesStrings)
+            {
+                if (language.language == e.TabPage.Text)
+                {
+                    dataTableGridViewSource.Clear();
+
+                    foreach (var str in language.strings)
+                        dataTableGridViewSource.Rows.Add(str[0], str[1], str[2], str[3]);
+                    break;
+                }
+            }
+
+            if (e.TabPage != null)
+                languageTabSelected = e.TabPage.Text;
+
+        }
+
+    }
+    class LanguageStringsCollection
+    {
+        public string language;
+        public List<List<string>> strings;
+
+        public LanguageStringsCollection(string language, List<List<string>> strings)
+        {
+            this.language = language;
+            this.strings = strings;
+        }
     }
 }

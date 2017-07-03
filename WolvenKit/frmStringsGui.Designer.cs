@@ -82,7 +82,7 @@
             this.viewToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1086, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1184, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -187,7 +187,7 @@
             this.toolStripButtonEncode});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1086, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1184, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -266,7 +266,7 @@
             // splitContainerMain.Panel2
             // 
             this.splitContainerMain.Panel2.Controls.Add(this.dataGridViewStrings);
-            this.splitContainerMain.Size = new System.Drawing.Size(1086, 488);
+            this.splitContainerMain.Size = new System.Drawing.Size(1184, 488);
             this.splitContainerMain.SplitterDistance = 25;
             this.splitContainerMain.TabIndex = 2;
             // 
@@ -283,8 +283,8 @@
             // splitContainerTabs.Panel2
             // 
             this.splitContainerTabs.Panel2.Controls.Add(this.comboBoxLanguagesMode);
-            this.splitContainerTabs.Size = new System.Drawing.Size(1086, 25);
-            this.splitContainerTabs.SplitterDistance = 923;
+            this.splitContainerTabs.Size = new System.Drawing.Size(1184, 25);
+            this.splitContainerTabs.SplitterDistance = 1006;
             this.splitContainerTabs.TabIndex = 0;
             // 
             // tabControlLanguages
@@ -294,29 +294,30 @@
             this.tabControlLanguages.Location = new System.Drawing.Point(0, 0);
             this.tabControlLanguages.Name = "tabControlLanguages";
             this.tabControlLanguages.SelectedIndex = 0;
-            this.tabControlLanguages.Size = new System.Drawing.Size(923, 25);
+            this.tabControlLanguages.Size = new System.Drawing.Size(1006, 25);
             this.tabControlLanguages.TabIndex = 0;
+            this.tabControlLanguages.Selected += new System.Windows.Forms.TabControlEventHandler(tabControlLanguages_Selected);
             // 
             // tabPageAllLanguages
             // 
             this.tabPageAllLanguages.Location = new System.Drawing.Point(4, 22);
             this.tabPageAllLanguages.Name = "tabPageAllLanguages";
             this.tabPageAllLanguages.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageAllLanguages.Size = new System.Drawing.Size(915, 0);
+            this.tabPageAllLanguages.Size = new System.Drawing.Size(998, 0);
             this.tabPageAllLanguages.TabIndex = 0;
             this.tabPageAllLanguages.Text = "All Languages";
             this.tabPageAllLanguages.UseVisualStyleBackColor = true;
             // 
             // comboBoxLanguagesMode
             // 
-            this.comboBoxLanguagesMode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxLanguagesMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxLanguagesMode.FormattingEnabled = true;
             this.comboBoxLanguagesMode.Items.AddRange(new object[] {
             "All Languages",
             "Separate Languages"});
-            this.comboBoxLanguagesMode.Location = new System.Drawing.Point(0, 0);
+            this.comboBoxLanguagesMode.Location = new System.Drawing.Point(15, 0);
             this.comboBoxLanguagesMode.Name = "comboBoxLanguagesMode";
-            this.comboBoxLanguagesMode.Size = new System.Drawing.Size(159, 21);
+            this.comboBoxLanguagesMode.Size = new System.Drawing.Size(156, 21);
             this.comboBoxLanguagesMode.TabIndex = 0;
             this.comboBoxLanguagesMode.SelectedIndexChanged += new System.EventHandler(this.comboBoxLanguagesMode_SelectedIndexChanged);
             // 
@@ -332,7 +333,7 @@
             this.dataGridViewStrings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewStrings.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewStrings.Name = "dataGridViewStrings";
-            this.dataGridViewStrings.Size = new System.Drawing.Size(1086, 459);
+            this.dataGridViewStrings.Size = new System.Drawing.Size(1184, 459);
             this.dataGridViewStrings.TabIndex = 0;
             this.dataGridViewStrings.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewStrings_CellValidated);
             // 
@@ -360,7 +361,7 @@
             // textBoxModID
             // 
             this.textBoxModID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxModID.Location = new System.Drawing.Point(927, 25);
+            this.textBoxModID.Location = new System.Drawing.Point(1025, 25);
             this.textBoxModID.MaxLength = 0;
             this.textBoxModID.Name = "textBoxModID";
             this.textBoxModID.Size = new System.Drawing.Size(100, 20);
@@ -372,7 +373,7 @@
             // 
             this.labelModID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelModID.AutoSize = true;
-            this.labelModID.Location = new System.Drawing.Point(734, 25);
+            this.labelModID.Location = new System.Drawing.Point(832, 25);
             this.labelModID.Name = "labelModID";
             this.labelModID.Size = new System.Drawing.Size(187, 13);
             this.labelModID.TabIndex = 4;
@@ -382,7 +383,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1086, 537);
+            this.ClientSize = new System.Drawing.Size(1184, 537);
             this.Controls.Add(this.labelModID);
             this.Controls.Add(this.textBoxModID);
             this.Controls.Add(this.splitContainerMain);
@@ -390,6 +391,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.MinimumSize = new System.Drawing.Size(1200, 0);
             this.Name = "frmStringsGui";
             this.Text = "Automated Strings GUI";
             this.menuStrip1.ResumeLayout(false);
