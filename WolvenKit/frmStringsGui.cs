@@ -219,7 +219,7 @@ namespace WolvenKit
         {
             if (e.KeyData == Keys.Enter)
             {
-                dataGridViewStrings.Focus();
+                splitContainerMain.Focus();
             }
         }
 
@@ -241,6 +241,11 @@ namespace WolvenKit
                 dataGridViewStrings.Rows[0].Cells[0].Value = modIDs[0] * 1000 + 2110000000;
 
             HashStringKeys();
+        }
+
+        private void dataGridViewStrings_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            UpdateModID();
         }
 
         /*
@@ -266,12 +271,16 @@ namespace WolvenKit
                 string hex_key = hash.ToString("X");
                 row.Cells[1].Value = hex_key;
             }
-
-
         }
 
         private void ImportW3Strings()
         {
+            if (textBoxModID.Text == "")
+            {
+                AskForModID();
+                return;
+            }
+
             var guiStrings = new List<string>();
 
             foreach (DataGridViewRow row in dataGridViewStrings.Rows)
@@ -540,6 +549,20 @@ namespace WolvenKit
 
             return false;
         }
+
+        private bool AreAllIDsValid(string[] splittedIDs)
+        {
+            foreach (string modID in splittedIDs)
+            {
+                int count = splittedIDs.Count(f => f == modID);
+                if (modID.Length > 4)
+                    return false;
+                else if (count > 1)
+                    return false;
+            }
+            return true;
+        }
+
         private bool FillModIDIfValid()
         {
             modIDs.Clear();
@@ -558,14 +581,30 @@ namespace WolvenKit
             }
             else
             {
+                
                 if (!multipleIDs)
                 {
                     modIDs.Add(Convert.ToInt32(textBoxModID.Text));
+                    dataGridViewStrings.Visible = true;
                     UpdateModID();
                 }
                 else
                 {
                     splittedIDs = textBoxModID.Text.Split(';');
+
+                    if (!AreAllIDsValid(splittedIDs))
+                    {
+                        MessageBox.Show("Invalid Mod ID.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+
+                        if (currentModID != "")
+                            textBoxModID.Text = currentModID;
+                        else
+                            textBoxModID.Text = "";
+
+                        return false;
+                    }
+                    else if (!dataGridViewStrings.Visible)
+                        dataGridViewStrings.Visible = true;
                     foreach (var id in splittedIDs)
                         modIDs.Add(Convert.ToInt32(id));
                 }
@@ -590,6 +629,12 @@ namespace WolvenKit
                 row[0] = newModIDRow.ToString();
                 var test = row.ItemArray[0];
                 ++counter;
+                if (counter / idsLimit >= modIDs.Count)
+                {
+                    MessageBox.Show("Number of strings exceeds "+ counter +", number of IDs: " + modIDs.Count + "\nStrings Limit per one modID is " + idsLimit + " Enter more modIDs.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    dataTableGridViewSource.Clear();
+                    break;
+                }
             }
             rowAddedAutomatically = false;
         }
@@ -788,6 +833,8 @@ namespace WolvenKit
 
                 fileOpened = true;
             }
+            dataGridViewStrings.Visible = true;
+
             rowAddedAutomatically = false;
             UpdateModID();
         }

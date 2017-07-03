@@ -296,7 +296,7 @@
             this.tabControlLanguages.SelectedIndex = 0;
             this.tabControlLanguages.Size = new System.Drawing.Size(1006, 25);
             this.tabControlLanguages.TabIndex = 0;
-            this.tabControlLanguages.Selected += new System.Windows.Forms.TabControlEventHandler(tabControlLanguages_Selected);
+            this.tabControlLanguages.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControlLanguages_Selected);
             // 
             // tabPageAllLanguages
             // 
@@ -335,7 +335,9 @@
             this.dataGridViewStrings.Name = "dataGridViewStrings";
             this.dataGridViewStrings.Size = new System.Drawing.Size(1184, 459);
             this.dataGridViewStrings.TabIndex = 0;
+            this.dataGridViewStrings.Visible = false;
             this.dataGridViewStrings.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewStrings_CellValidated);
+            this.dataGridViewStrings.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridViewStrings_UserDeletedRow);
             // 
             // ColumnID
             // 
@@ -391,7 +393,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.MinimumSize = new System.Drawing.Size(1200, 0);
+            this.MinimumSize = new System.Drawing.Size(1200, 39);
             this.Name = "frmStringsGui";
             this.Text = "Automated Strings GUI";
             this.menuStrip1.ResumeLayout(false);
