@@ -885,6 +885,18 @@ namespace WolvenKit
                 {
                     if (lang.language == "all")
                         continue;
+                    else if (lang.language == languageTabSelected)
+                    {
+                        lang.strings.Clear();
+
+                        foreach (DataGridViewRow row in dataGridViewStrings.Rows)
+                        {
+                            if (row.Cells[0].Value != null)
+                            {
+                                lang.strings.Add(new List<string>() { row.Cells[0].Value.ToString(), row.Cells[1].Value.ToString(), row.Cells[2].Value.ToString(), row.Cells[3].Value.ToString() });
+                            }
+                        }
+                    }
                     var w3tringFile = new W3Strings.W3StringFile();
                     var stringsBlock1Strings = new List<List<string>>();
                     foreach (var str in lang.strings)
