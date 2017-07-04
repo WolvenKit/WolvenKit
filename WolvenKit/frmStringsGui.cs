@@ -370,7 +370,9 @@ namespace WolvenKit
 
             }
             rowAddedAutomatically = false;
+
             UpdateModID();
+            HashStringKeys();
         }
 
         private void ReadXML()
@@ -450,6 +452,8 @@ namespace WolvenKit
                 }
             }
             rowAddedAutomatically = false;
+
+            HashStringKeys();
             UpdateModID();
         }
 
@@ -836,11 +840,16 @@ namespace WolvenKit
             dataGridViewStrings.Visible = true;
 
             rowAddedAutomatically = false;
+
+            HashStringKeys();
             UpdateModID();
         }
 
         private void Encode()
         {
+            dataGridViewStrings.EndEdit();
+            HashStringKeys();
+
             var activeMod = MainController.Get().Window.ActiveMod;
             string stringsDir = "";
             if (activeMod != null)
