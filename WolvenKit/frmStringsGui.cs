@@ -673,8 +673,8 @@ namespace WolvenKit
                 {
                     using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath + "\\" + language.Handle + ".csv"))
                     {
-                        file.WriteLine(";meta[language=" + language.Handle + "]");
-                        file.WriteLine("; id | key(hex) | key(str) | text");
+                        file.WriteLine(";meta[language=" + language.Handle + "]", Encoding.UTF8);
+                        file.WriteLine("; id | key(hex) | key(str) | text", Encoding.UTF8);
 
                         string csv = sb.ToString();
 
@@ -695,7 +695,7 @@ namespace WolvenKit
                             csv = String.Join("\n", splittedCsv);
                         }
 
-                        file.WriteLine(csv);
+                        file.WriteLine(csv, Encoding.UTF8);
                     }
                 }
             }
@@ -708,8 +708,8 @@ namespace WolvenKit
 
                     using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath + "\\" + language.language + ".csv"))
                     {
-                        file.WriteLine(";meta[language=" + language.language + "]");
-                        file.WriteLine("; id | key(hex) | key(str) | text");
+                        file.WriteLine(";meta[language=" + language.language + "]", Encoding.UTF8);
+                        file.WriteLine("; id | key(hex) | key(str) | text", Encoding.UTF8);
 
                         string csv = sb.ToString();
 
@@ -730,7 +730,7 @@ namespace WolvenKit
                             csv = String.Join("\n", splittedCsv);
                         }
 
-                        file.WriteLine(csv);
+                        file.WriteLine(csv, Encoding.UTF8);
                     }
                     sb.Clear();
                 }
@@ -782,7 +782,7 @@ namespace WolvenKit
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 filePath = ofd.FileName;
-                List<string[]> rows = File.ReadAllLines(filePath).Select(x => x.Split('|')).ToList();
+                List<string[]> rows = File.ReadAllLines(filePath, Encoding.UTF8).Select(x => x.Split('|')).ToList();
 
                 for (int i = 0; i < rows.Count(); ++i)
                     if (rows[i].Length == 1)
