@@ -89,6 +89,8 @@ namespace WolvenKit.W3Strings
             block1 = new List<W3StringBlock1>();
             for (var i = 0; i < block1count; i++)
             {
+                if (strings[i][0] == "")
+                    continue;
                 var newblock = new W3StringBlock1(Convert.ToUInt32(strings[i][0]), strings[i][2], language.Magic.value);
                 block1.Add(newblock);
             }
@@ -103,6 +105,8 @@ namespace WolvenKit.W3Strings
             block2 = new List<W3StringBlock2>();
             for (var i = 0; i < block2count; i++)
             {
+                if (strings[i][0] == "")
+                    continue;
                 var block = new W3StringBlock2(Convert.ToUInt32(strings[i][0]), strings[i][1], strings[i][2]);
                 block2.Add(block);
             }
