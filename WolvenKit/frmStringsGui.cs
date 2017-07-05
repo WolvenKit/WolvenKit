@@ -30,7 +30,7 @@ namespace WolvenKit
         bool multipleIDs = false;
         bool rowAddedAutomatically = false;
         bool abortedSwitchingBackToAllLanguages = false;
-        
+
         string currentModID = "";
         List<string> groups = new List<string>();
 
@@ -94,7 +94,7 @@ namespace WolvenKit
                     tabControlLanguages.Controls.Add(newTabPage);
                 }
             }
-            else if(dataTableGridViewSource != null)
+            else if (dataTableGridViewSource != null)
             {
                 var result = MessageBox.Show("Are you sure? English strings will be used for all languages.", "Wolven Kit", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk);
                 if (result == DialogResult.Cancel)
@@ -188,12 +188,22 @@ namespace WolvenKit
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            dataTableGridViewSource.Clear();
+            CreateDataTable();
+            modIDs.Clear();
+            textBoxModID.Text = "";
+            dataGridViewStrings.Visible = false;
+            languagesStrings.Clear();
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenCSV();
+        }
+
+        private void importToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ImportW3Strings();
         }
 
         private void fromXMLToolStripMenuItem_Click(object sender, EventArgs e)
@@ -318,6 +328,20 @@ namespace WolvenKit
             textBoxModID.Text = "";
         }
 
+        public string ShowScriptPrefixDialog()
+        {
+            frmStringsGuiScriptsPrefixDialog testDialog = new frmStringsGuiScriptsPrefixDialog();
+            var prefix = "";
+            if (testDialog.ShowDialog(this) == DialogResult.OK)
+                prefix = testDialog.prefix;
+            else
+                prefix = "Cancelled";
+
+            testDialog.Dispose();
+
+            return prefix;
+        }
+
         private void ReadScripts()
         {
             if (textBoxModID.Text == "")
@@ -325,28 +349,44 @@ namespace WolvenKit
                 AskForModID();
                 return;
             }
+            
             var activeMod = MainController.Get().Window.ActiveMod;
             string scriptsDir = "";
             if (activeMod != null)
                 scriptsDir = (activeMod.FileDirectory + "\\scripts");
 
+            var prefix = ShowScriptPrefixDialog();
+            if (prefix == "Cancelled")
+                return;
+            else if (prefix == "")
+            {
+                MessageBox.Show("Empty prefix.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                return;
+            }
+
+            dataGridViewStrings.Visible = true;
+
             string contents = "";
             if (Directory.Exists(scriptsDir))
             {
-                foreach (string file in Directory.EnumerateFiles(scriptsDir, "*.ws"))
-                    contents += File.ReadAllText(file);
+                string[] filenames = Directory.GetFiles(scriptsDir, "*.ws*", SearchOption.AllDirectories).Select(x => Path.GetFullPath(x)).ToArray();
+
+                foreach (var file in filenames)
+                    contents += (File.ReadAllText(file));
             }
             else
             {
                 FolderBrowserDialog fbw = new FolderBrowserDialog();
                 if (fbw.ShowDialog() == DialogResult.OK)
                 {
-                    foreach (string file in Directory.EnumerateFiles(fbw.SelectedPath, "*.ws"))
-                        contents += File.ReadAllText(file);
+                    string[] filenames = Directory.GetFiles(fbw.SelectedPath, "*.ws*", SearchOption.AllDirectories).Select(x => Path.GetFullPath(x)).ToArray();
+
+                    foreach (var file in filenames)
+                        contents += (File.ReadAllText(file));
                 }
             }
 
-            Regex regex = new Regex("\"modString_(.+)\"");
+            Regex regex = new Regex("\"(" + prefix + ".+)\"");
             MatchCollection matches = regex.Matches(contents);
             if (matches.Count > 0)
             {
@@ -369,6 +409,9 @@ namespace WolvenKit
                 });
 
             }
+            else
+                MessageBox.Show("No matches.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+
             rowAddedAutomatically = false;
 
             UpdateModID();
@@ -585,7 +628,7 @@ namespace WolvenKit
             }
             else
             {
-                
+
                 if (!multipleIDs)
                 {
                     modIDs.Add(Convert.ToInt32(textBoxModID.Text));
@@ -635,7 +678,7 @@ namespace WolvenKit
                 ++counter;
                 if (counter / idsLimit >= modIDs.Count)
                 {
-                    MessageBox.Show("Number of strings exceeds "+ counter +", number of IDs: " + modIDs.Count + "\nStrings Limit per one modID is " + idsLimit + " Enter more modIDs.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    MessageBox.Show("Number of strings exceeds " + counter + ", number of IDs: " + modIDs.Count + "\nStrings Limit per one modID is " + idsLimit + " Enter more modIDs.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                     dataTableGridViewSource.Clear();
                     break;
                 }
@@ -739,7 +782,7 @@ namespace WolvenKit
                     sb.Clear();
                 }
             }
-            
+
         }
 
         private string GetPath()
@@ -837,6 +880,9 @@ namespace WolvenKit
 
                 fileOpened = true;
             }
+            else
+                return;
+
             dataGridViewStrings.Visible = true;
 
             rowAddedAutomatically = false;
@@ -965,8 +1011,8 @@ namespace WolvenKit
                 languageTabSelected = e.TabPage.Text;
 
         }
-
     }
+
     class LanguageStringsCollection
     {
         public string language;
