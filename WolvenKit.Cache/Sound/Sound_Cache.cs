@@ -14,6 +14,10 @@ namespace WolvenKit.Cache
     /// </summary>
     public class SoundCache : IWitcherArchiveType
     {
+        public const long BIT_LENGTH_32 = 1;
+        public const long BIT_LENGTH_64 = 2;
+        public const long CACHE_BUFFER_SIZE = 4096;
+
         public static byte[] Magic = { (byte)'C', (byte)'S', (byte)'3', (byte)'W' };
         public static long Version = 1;
         public static UInt32 Unknown1 = 0x00000000;
@@ -83,7 +87,7 @@ namespace WolvenKit.Cache
         /// Calculates the FNV64 hash for the soundcache.
         /// </summary>
         /// <returns></returns>
-        public static uint CalculateBuffer(List<string> Files2Buffer)
+        public static uint CalculateChecksum(List<string> Files2Buffer)
         {
             uint fnvHash = 0x811C9DC5;
             byte[] data = Encoding.ASCII.GetBytes(GetNames(Files2Buffer) + GetInfo(Files2Buffer));
@@ -160,11 +164,24 @@ namespace WolvenKit.Cache
         {
             using (var bw = new BinaryWriter(new FileStream(OutPath, FileMode.Create)))
             {
-                if((DataOffset + TotalDataSize(FileList) + GetNames(FileList).Length + GetInfo(FileList).Length) > 0xFFFFFFFF)
+                var data_array = BuildInfos(FileList);
+                var buffersize = FileList.Max(x => new FileInfo(x).Length);
+                if (buffersize <= CACHE_BUFFER_SIZE)
+                    buffersize = CACHE_BUFFER_SIZE;
+                else
+                {
+                    var fremainder = buffersize % CACHE_BUFFER_SIZE;
+                    buffersize += (CACHE_BUFFER_SIZE - fremainder);
+                }
+
+                if ((DataOffset + TotalDataSize(FileList) + GetNames(FileList).Length + GetInfo(FileList).Length) > 0xFFFFFFFF)
                 {
                     Version = 2;
                     DataOffset += 0x10;
+                    for (int i = 0; i < data_array.Count; i++)
+                        data_array[i].Offset = -1;
                 }
+                
 
                 bw.Write(Magic);
                 bw.Write(Version);
@@ -182,10 +199,23 @@ namespace WolvenKit.Cache
                     bw.Write((UInt32)(DataOffset + TotalDataSize(FileList)));
                 }
                 bw.Write(GetNames(FileList).Length);
+
+                bw.Write(buffersize);
+                bw.Write((long)(CalculateChecksum(FileList)));
+
                 if (Version >= 2)
                     bw.Write((UInt32)(Unk3));
-
-                //TODO: Offsets
+                foreach (var data in data_array)
+                {
+                    if(data.Offset != -1)
+                    {
+                        bw.Write(data.NameOffset);
+                        bw.Write(data.Offset);
+                        bw.Write(data.Size);
+                    }
+                }
+                bw.Write(GetNames(FileList));
+                bw.Write(GetInfo(FileList));                
             }
         }
     }
