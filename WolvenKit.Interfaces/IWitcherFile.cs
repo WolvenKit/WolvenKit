@@ -14,7 +14,6 @@ namespace WolvenKit.Interfaces
         long Size { get; set; }
         uint ZSize { get; set; }
         long Offset { get; set; }
-        string DateString { get; set; }
         string CompressionType { get; }
 
         void Extract(Stream output);
