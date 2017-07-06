@@ -594,8 +594,10 @@ namespace WolvenKit
 
         public void LoadDDSFile(string path)
         {
-            var dockedImage = new frmTextureFile(path);
+            var dockedImage = new frmTextureFile();
             dockedImage.Show(dockPanel, DockState.Document);
+            dockedImage.Text = Path.GetFileName(path);
+            dockedImage.LoadImage(path);
         }
 
         private void ShowOutput()
