@@ -40,7 +40,7 @@ namespace WolvenKit.Cache
 
             var bundle = new SoundCache(filename);
 
-            foreach (var item in bundle.Files)
+            foreach (var item in bundle.IncludedFiles)
             {
                 if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Name))
                     Items.Add(GetModFolder(filename) + "\\" + item.Name, new List<IWitcherFile>());
@@ -62,7 +62,7 @@ namespace WolvenKit.Cache
 
             var bundle = new SoundCache(filename);
 
-            foreach (var item in bundle.Files)
+            foreach (var item in bundle.IncludedFiles)
             {
                 if (!Items.ContainsKey(item.Name))
                     Items.Add(item.Name, new List<IWitcherFile>());

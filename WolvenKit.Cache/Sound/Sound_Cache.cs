@@ -14,43 +14,79 @@ namespace WolvenKit.Cache
     /// </summary>
     public class SoundCache : IWitcherArchiveType
     {
-        public byte[] Magic = { (byte)'C', (byte)'S', (byte)'3', (byte)'W' };
-        public long Version = 2;
-        public long Unknown1;
+        public static byte[] Magic = { (byte)'C', (byte)'S', (byte)'3', (byte)'W' };
+        public static long Version = 1;
+        public static UInt32 Unknown1 = 0x00000000;
+        public static UInt32 Unknown2 = 0x00000000;
         public long InfoOffset;
         public long FileCount;
         public long NamesOffset;
         public long NamesSize;
+        public static UInt32 Unk3 = 1;
+        public static long DataOffset = 0x30;
         public long buffsize;
         public long checksum;
         public string TypeName { get { return "SoundCache"; } }
         public string FileName { get; set; }
 
-        public string Names => Files.Aggregate("\0",(c, n) => c += n.Name) + "\0";
+        /// <summary>
+        /// The files packed into the original soundcache.
+        /// </summary>
+        public List<SoundCacheItem> Files;
 
-        public string GetInfo()
-        {
-            var buff = new StringBuilder();
-
-            return buff.ToString();
-        }
-
+        /// <summary>
+        /// Normal constructor.
+        /// </summary>
+        /// <param name="fileName"></param>
         public SoundCache(string fileName)
         {
             FileName = fileName;
             Read(new BinaryReader(new FileStream(fileName, FileMode.Open)));
         }
 
-        public List<SoundCacheItem> Files;
+        /// <summary>
+        /// Returns to concated null terminated names string.
+        /// </summary>
+        /// <param name="FileList">The list of files to concat.</param>
+        /// <returns>The concatenated string.</returns>
+        public static string GetNames(List<string> FileList)
+        {
+            return FileList.Aggregate("\0", (c, n) => c += Path.GetFileName(n)) + "\0";
+        }
+        
+        public static long TotalDataSize(List<string> FileList)
+        {
+            return FileList.Sum(x => new FileInfo(x).Length);
+        }
+
+        /// <summary>
+        /// Calculates the offsets and such for the files.
+        /// </summary>
+        /// <param name="FileList">The files to analyze.</param>
+        /// <returns>The list of files with calculated offsets.</returns>
+        public static string GetInfo(List<string> FileList)
+        {
+            throw new NotImplementedException("TODO: Finish this!");
+        }
+
+        /// <summary>
+        /// Builds the details of the files.
+        /// </summary>
+        /// <param name="FileList"></param>
+        /// <returns></returns>
+        public static List<SoundCacheItem> BuildInfos(List<string> FileList)
+        {
+            throw new NotImplementedException("TODO: Finish this!");
+        }
 
         /// <summary>
         /// Calculates the FNV64 hash for the soundcache.
         /// </summary>
         /// <returns></returns>
-        public uint CalculateBuffer()
+        public static uint CalculateBuffer(List<string> Files2Buffer)
         {
             uint fnvHash = 0x811C9DC5;
-            byte[] data = Encoding.ASCII.GetBytes(this.Names + this.GetInfo());
+            byte[] data = Encoding.ASCII.GetBytes(GetNames(Files2Buffer) + GetInfo(Files2Buffer));
             for (int i = 0; i < data.Length; i++)
             {
                 fnvHash ^= data[i];
@@ -64,27 +100,29 @@ namespace WolvenKit.Cache
         /// Reads the soundcache file.
         /// </summary>
         /// <param name="br">The binaryreader to read the file contents from.</param>
-        public void Read(BinaryReader br)
+        public void Read(BinaryReader br) 
         {
             Files = new List<SoundCacheItem>();
             if (!br.ReadBytes(4).SequenceEqual(Magic))
                 throw new InvalidDataException("Wrong Magic in soundcache!");
             Version = br.ReadInt32();
-            Unknown1 = br.ReadInt64();
+            Unknown1 = br.ReadUInt32();
+            Unknown2 = br.ReadUInt32();
             if (Version >= 2)
             {
                 InfoOffset = br.ReadInt64();
                 FileCount = br.ReadInt64();
                 NamesOffset = br.ReadInt64();
-                NamesSize = br.ReadInt64();
             }
             else
             {
                 InfoOffset = br.ReadUInt32();
                 FileCount = br.ReadUInt32();
                 NamesOffset = br.ReadUInt32();
-                NamesSize = br.ReadUInt32();
             }
+            NamesSize = br.ReadUInt32();
+            if (Version >= 2)
+                Unk3 = br.ReadUInt32();      
             buffsize = br.ReadInt64();
             checksum = br.ReadInt64();
             br.BaseStream.Seek(InfoOffset, SeekOrigin.Begin);
@@ -118,36 +156,36 @@ namespace WolvenKit.Cache
         /// </summary>
         /// <param name="Files">The files to pack. Have to be *.bnk & *.wem</param>
         /// <param name="OutPath">The path to write the completed soundcache to.</param>
-        public void Write(List<string> Files,string OutPath)
+        public static void Write(List<string> FileList, string OutPath)
         {
             using (var bw = new BinaryWriter(new FileStream(OutPath, FileMode.Create)))
             {
-                var data_offset = 0;
+                if((DataOffset + TotalDataSize(FileList) + GetNames(FileList).Length + GetInfo(FileList).Length) > 0xFFFFFFFF)
+                {
+                    Version = 2;
+                    DataOffset += 0x10;
+                }
 
                 bw.Write(Magic);
                 bw.Write(Version);
                 bw.Write(Unknown1);
                 if (Version >= 2)
                 {
-                    bw.Write(InfoOffset);
-                    bw.Write(FileCount);
-                    bw.Write(NamesOffset);
-                    bw.Write(NamesSize);
+                    bw.Write((UInt64)(DataOffset + TotalDataSize(FileList) + GetNames(FileList).Length));
+                    bw.Write((UInt64)FileList.Count);
+                    bw.Write((UInt64)(DataOffset + TotalDataSize(FileList)));
                 }
                 else
                 {
-                    bw.Write((UInt32)InfoOffset);
-                    bw.Write((UInt32)Files.Count);
-                    bw.Write((UInt32)NamesOffset);
-                    bw.Write((UInt32)NamesSize);
+                    bw.Write((UInt32)(DataOffset + TotalDataSize(FileList) + GetNames(FileList).Length));
+                    bw.Write((UInt32)FileList.Count);
+                    bw.Write((UInt32)(DataOffset + TotalDataSize(FileList)));
                 }
-                bw.Write(buffsize);
-                bw.Write(checksum);
+                bw.Write(GetNames(FileList).Length);
+                if (Version >= 2)
+                    bw.Write((UInt32)(Unk3));
 
-                foreach (var soundfile in Files)
-                {
-                    bw.WriteCR2WString(Path.GetFileName(soundfile));
-                }
+                //TODO: Offsets
             }
         }
     }
@@ -170,7 +208,6 @@ namespace WolvenKit.Cache
 
         public long Size { get; set; }
         public uint ZSize { get; set; }
-        public string DateString { get; set; }
 
         public SoundCacheItem(IWitcherArchiveType Parent)
         {
