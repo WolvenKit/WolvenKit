@@ -62,6 +62,7 @@
             // 
             // textBoxPos
             // 
+            this.textBoxPos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.textBoxPos.BackColor = System.Drawing.SystemColors.WindowText;
             this.textBoxPos.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxPos.ForeColor = System.Drawing.SystemColors.Window;
@@ -74,6 +75,7 @@
             // 
             // textBoxRotation
             // 
+            this.textBoxRotation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.textBoxRotation.BackColor = System.Drawing.SystemColors.WindowText;
             this.textBoxRotation.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxRotation.ForeColor = System.Drawing.SystemColors.Window;
@@ -86,6 +88,7 @@
             // 
             // textBoxFPS
             // 
+            this.textBoxFPS.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.textBoxFPS.BackColor = System.Drawing.SystemColors.WindowText;
             this.textBoxFPS.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxFPS.ForeColor = System.Drawing.SystemColors.Window;
@@ -98,6 +101,7 @@
             // 
             // textBoxTip
             // 
+            this.textBoxTip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.textBoxTip.BackColor = System.Drawing.SystemColors.WindowText;
             this.textBoxTip.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxTip.ForeColor = System.Drawing.SystemColors.Window;
