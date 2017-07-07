@@ -553,6 +553,9 @@ namespace WolvenKit
                 case ".ws":
                     PolymorphExecute(fullpath, ".txt");
                     break;
+                case ".dds":
+                    LoadDDSFile(fullpath);
+                    break;
                 default:
                     LoadDocument(fullpath);
                     break;
@@ -587,6 +590,14 @@ namespace WolvenKit
             var usmplayer = new frmUsmPlayer(path);
             usmplayer.Show(dockPanel, DockState.Document);
 
+        }
+
+        public void LoadDDSFile(string path)
+        {
+            var dockedImage = new frmTextureFile();
+            dockedImage.Show(dockPanel, DockState.Document);
+            dockedImage.Text = Path.GetFileName(path);
+            dockedImage.LoadImage(path);
         }
 
         private void ShowOutput()
