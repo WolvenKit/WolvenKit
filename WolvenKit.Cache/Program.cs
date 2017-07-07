@@ -24,9 +24,9 @@ namespace WolvenKit.Cache
                         var sc = new SoundCache(of.FileName);
                         foreach (var item in sc.Files)
                         {
-                            item.Extract(Path.GetDirectoryName(of.FileName) + "\\Sounds\\" + item.Name);
+                            item.Extract(Path.GetDirectoryName(of.FileName) + "\\sf\\" + item.Name);
                         }
-                        SoundCache.Write(Directory.GetFiles(Path.GetDirectoryName(of.FileName) + "\\Sounds\\").ToList(), Path.GetDirectoryName(of.FileName) + "\\Sounds\\soundpc_clone.cache");
+                        SoundCache.Write(Directory.GetFiles(Path.GetDirectoryName(of.FileName) + "\\sf\\SoundCache").ToList(), Path.GetDirectoryName(of.FileName) + "\\Sounds\\soundpc_clone.cache");
                         Console.WriteLine();
                     }
                 }

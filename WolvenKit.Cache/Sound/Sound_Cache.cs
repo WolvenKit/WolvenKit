@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using WolvenKit.CR2W;
 using WolvenKit.Interfaces;
+using System.Security.Cryptography;
 
 namespace WolvenKit.Cache
 {
@@ -45,7 +46,8 @@ namespace WolvenKit.Cache
         public SoundCache(string fileName)
         {
             FileName = fileName;
-            Read(new BinaryReader(new FileStream(fileName, FileMode.Open)));
+            using(var br = new BinaryReader(new FileStream(fileName, FileMode.Open)))
+                Read(br);
         }
 
         /// <summary>
@@ -57,30 +59,50 @@ namespace WolvenKit.Cache
         {
             return FileList.Aggregate("\0", (c, n) => c += Path.GetFileName(n)) + "\0";
         }
-        
-        public static long TotalDataSize(List<string> FileList)
-        {
-            return FileList.Sum(x => new FileInfo(x).Length);
-        }
 
-        /// <summary>
-        /// Calculates the offsets and such for the files.
-        /// </summary>
-        /// <param name="FileList">The files to analyze.</param>
-        /// <returns>The list of files with calculated offsets.</returns>
-        public static string GetInfo(List<string> FileList)
-        {
-            throw new NotImplementedException("TODO: Finish this!");
-        }
+        public static long TotalDataSize(List<string> FileList) => FileList.Sum(x => new FileInfo(x).Length);
 
         /// <summary>
         /// Builds the details of the files.
         /// </summary>
         /// <param name="FileList"></param>
         /// <returns></returns>
-        public static List<SoundCacheItem> BuildInfos(List<string> FileList)
+        public static List<SoundCacheItem> BuildInfo(List<string> FileList)
         {
-            throw new NotImplementedException("TODO: Finish this!");
+            var res = new List<SoundCacheItem>();
+            foreach (var item in FileList)
+            {
+                var si = new SoundCacheItem(null);
+                res.Add(si);
+            }
+            return res;
+        }
+
+        public static byte[] GetInfo(List<string> FileList)
+        {
+            //TODO:Fix this.
+            throw new NotImplementedException("Not implemented yet!");
+            var ms = new MemoryStream();
+            var noofset = 0;
+            var offset = DataOffset;
+            if(Version >= 2)
+            {
+                foreach (var item in FileList)
+                {
+                    //Uint64
+
+                }
+            }
+            else
+            {
+                foreach (var item in FileList)
+                {
+                    //Uint32
+
+                }
+            }
+
+            return ms.GetBuffer();
         }
 
         /// <summary>
@@ -164,7 +186,7 @@ namespace WolvenKit.Cache
         {
             using (var bw = new BinaryWriter(new FileStream(OutPath, FileMode.Create)))
             {
-                var data_array = BuildInfos(FileList);
+                var data_array = BuildInfo(FileList);
                 var buffersize = FileList.Max(x => new FileInfo(x).Length);
                 if (buffersize <= CACHE_BUFFER_SIZE)
                     buffersize = CACHE_BUFFER_SIZE;
@@ -180,8 +202,7 @@ namespace WolvenKit.Cache
                     DataOffset += 0x10;
                     for (int i = 0; i < data_array.Count; i++)
                         data_array[i].Offset = -1;
-                }
-                
+                }             
 
                 bw.Write(Magic);
                 bw.Write(Version);
@@ -199,19 +220,15 @@ namespace WolvenKit.Cache
                     bw.Write((UInt32)(DataOffset + TotalDataSize(FileList)));
                 }
                 bw.Write(GetNames(FileList).Length);
-
                 bw.Write(buffersize);
                 bw.Write((long)(CalculateChecksum(FileList)));
-
                 if (Version >= 2)
                     bw.Write((UInt32)(Unk3));
-                foreach (var data in data_array)
+                for (int i = 0; i < FileList.Count; i++)
                 {
-                    if(data.Offset != -1)
+                    if (data_array[i].Offset != -1)
                     {
-                        bw.Write(data.NameOffset);
-                        bw.Write(data.Offset);
-                        bw.Write(data.Size);
+                        bw.Write(File.ReadAllBytes(FileList[i]));
                     }
                 }
                 bw.Write(GetNames(FileList));
