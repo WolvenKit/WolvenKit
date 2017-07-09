@@ -391,16 +391,34 @@ namespace WolvenKit
             if (matches.Count > 0)
             {
                 List<string> strings = new List<string>();
+                var convertToLower = false;
 
                 int counter = 0;
                 foreach (Match match in matches)
                 {
-                    strings.Add((counter + 2110000000 + modIDs[0] * 1000).ToString() + "||" + match.Groups[1].Value + "|" + match.Groups[1].Value);
+                    if (match.Groups[1].Value.ToLower() != match.Groups[1].Value && !convertToLower)
+                    {
+                        var result = MessageBox.Show("Found uppercase string keys. String keys called in scripts must be all lowercase. " +
+                            "Do you want to read them as lowercase? You will need to change the string keys in the scripts, or pass them to StrLower() function.", "Wolven Kit", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk);
+                        if (result == DialogResult.OK)
+                            convertToLower = true;
+                    }
+
                     ++counter;
                 }
+                if (convertToLower)
+                    foreach (Match match in matches)
+                        strings.Add((counter + 2110000000 + modIDs[0] * 1000).ToString() + "||" + match.Groups[1].Value + "|" + match.Groups[1].Value.ToLower());
+                else
+                    foreach (Match match in matches)
+                        strings.Add((counter + 2110000000 + modIDs[0] * 1000).ToString() + "||" + match.Groups[1].Value + "|" + match.Groups[1].Value);
+
+
+
                 List<string[]> rows = strings.Select(x => x.Split('|')).ToList();
 
                 rowAddedAutomatically = true;
+
 
                 currentModID = textBoxModID.Text;
                 rows.ForEach(x =>
