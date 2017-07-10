@@ -1,147 +1,97 @@
 ﻿using System;
-using System.IO;
+using System.Drawing;
+using System.Collections;
+using System.ComponentModel;
 using System.Windows.Forms;
-using OpenGL;
+using System.Data;
+using System.Threading;
+using IrrlichtLime;
+using IrrlichtLime.Core;
+using IrrlichtLime.Video;
+using IrrlichtLime.Scene;
+using IrrlichtLime.GUI;
 
 namespace WolvenKit.Render
 {
     public partial class Bithack3D : Form
     {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private Thread irrThread;
         public Bithack3D()
         {
+            //
+            // Required for Windows Form Designer support
+            //
             InitializeComponent();
+
+            // start an irrlicht thread
+            ThreadStart irrThreadStart = new ThreadStart(startIrr);
+            irrThread = new Thread(irrThreadStart);
+            irrThread.Start();
         }
 
-        private void RenderControl_ContextCreated(object sender, GlControlEventArgs e)
-        {
-            RenderControl_ContextCreated_GLSL(sender, e);
-        }
 
-        private void RenderControl_Render(object sender, GlControlEventArgs e)
+        public void startIrr()
         {
-            renderStarted = true;
-            RenderControl_Render_GLSL(sender, e);
-            UpdateRichTextBox();
-        }
+            IrrlichtCreationParameters irrparam = new IrrlichtCreationParameters();
+            if (irrlichtPanel.InvokeRequired)
+                irrlichtPanel.Invoke(new MethodInvoker(delegate { irrparam.WindowID = irrlichtPanel.Handle; }));
+            irrparam.DriverType = DriverType.Direct3D9;
+            irrparam.BitsPerPixel = 16;
 
-        // Disposing resources allocated in RenderControl_ContextCreated
-        private void RenderControl_ContextDestroying(object sender, GlControlEventArgs e)
-        {
-            RenderControl_ContextDestroying_GLSL(sender, e);
+            IrrlichtDevice device = IrrlichtDevice.CreateDevice(irrparam);
+
+            device.SetWindowCaption("Hello World! - Irrlicht Engine Demo");
+
+            VideoDriver driver = device.VideoDriver;
+            SceneManager smgr = device.SceneManager;
+            GUIEnvironment gui = device.GUIEnvironment;
+
+            gui.AddStaticText("Hello World! This is the Irrlicht Software renderer!",
+                new Recti(10, 10, 260, 22), true);
+
+            AnimatedMesh mesh = smgr.GetMesh("../../Media/sydney.md2");
+            AnimatedMeshSceneNode node = smgr.AddAnimatedMeshSceneNode(mesh);
+
+            if (node != null)
+            {
+                node.SetMaterialFlag(MaterialFlag.Lighting, false);
+                node.SetMD2Animation(AnimationTypeMD2.Stand);
+                node.SetMaterialTexture(0, driver.GetTexture("../../Media/sydney.bmp"));
+            }
+
+            smgr.AddCameraSceneNode(null, new Vector3Df(0, 30, -40), new Vector3Df(0, 5, 0));
+
+            while (device.Run())
+            {
+                driver.BeginScene(ClearBufferFlag.All, new IrrlichtLime.Video.Color(100, 101, 140));
+
+                smgr.DrawAll();
+                gui.DrawAll();
+
+                driver.EndScene();
+
+                this.Invoke(new MethodInvoker(delegate { UpdateRichTextBox(); }));
+            }
+
+            device.Drop();
         }
 
         #region Common Data
 
-        private static bool renderStarted = false;
-
         //private static Quaternion modelAngle = new Quaternion(new Vertex3f(), 0);
-        private static Vertex3f modelPosition = new Vertex3f(0.0f, -1.5f, -2.0f);
-        private static Vertex3f modelAngle = new Vertex3f();
+        private static Vector3Df modelPosition = new Vector3Df(0.0f, -1.5f, -2.0f);
+        private static Vector3Df modelAngle = new Vector3Df();
 
-        private static bool model_autorotating;
+        private static bool model_autorotating = true;
         //private static float angle_autorotate = 0;
         //private static float angle_autorotate_rad;
         private const float PI_OVER_180 = (float)Math.PI / 180.0f;
 
-        private Shader modelShader;
-        private Model modelNanosuit;
-
         #endregion
 
-        #region GLSL Resources
-
-        private void RenderControl_Render_GLSL(object sender, GlControlEventArgs e)
-        {
-            Control control = (Control)sender;
-
-            PerspectiveProjectionMatrix projectionMatrix = new PerspectiveProjectionMatrix(45.0f, (float)control.Width/(float)control.Height, 0.1f, 100.0f);
-            ModelMatrix viewMatrix = new ModelMatrix();
-            ModelMatrix modelMatrix = new ModelMatrix();
-            modelMatrix.Translate(new Vertex3f(modelPosition.X, modelPosition.Y, modelPosition.Z));
-            modelMatrix.Scale(new Vertex3f(0.2f, 0.2f, 0.2f));
-
-            Gl.Viewport(0, 0, control.Width, control.Height);
-            Gl.ClearColor(0.05f, 0.05f, 0.05f, 1.0f);
-            Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-            modelShader.Use();
-            modelMatrix.RotateX(modelAngle.X);
-            modelMatrix.RotateY(modelAngle.Y);
-            modelMatrix.RotateZ(modelAngle.Z);
-            //viewMatrix.Translate(new Vertex3f(-2.0f * (float)Math.Sin(modelAngle.Y * PI_OVER_180), 0.0f, -2.0f*(float)Math.Cos(modelAngle.Y*PI_OVER_180)));
-            Gl.UniformMatrix4(modelShader.uLocation_Projection, 1, false, projectionMatrix.ToArray());
-            Gl.UniformMatrix4(modelShader.uLocation_View, 1, false, viewMatrix.ToArray());
-            Gl.UniformMatrix4(modelShader.uLocation_Model, 1, false, modelMatrix.ToArray());
-
-            modelNanosuit.Draw(modelShader);
-        }
-
-        private void RenderControl_ContextCreated_GLSL(object sender, GlControlEventArgs e)
-        {
-            // Loading shaders, initing OpenGL
-            modelShader = new Shader(Shaders.Model.VertexSource, Shaders.Model.FragmentSource);
-            modelShader.uLocation_Projection = Gl.GetUniformLocation(modelShader.Program, Shaders.Model.uLocation_Projection);
-            modelShader.uLocation_View = Gl.GetUniformLocation(modelShader.Program, Shaders.Model.uLocation_View);
-            modelShader.uLocation_Model = Gl.GetUniformLocation(modelShader.Program, Shaders.Model.uLocation_Model);
-            Gl.Enable(EnableCap.DepthTest);
-
-            // By default autorotate model
-            model_autorotating = true;
-
-            // OpenFileDialog for importing 3D models
-            OpenFileDialog open3dModel = new OpenFileDialog();
-            open3dModel.InitialDirectory = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\Models"));
-            // If dir not found then use exe dir
-            if( Directory.Exists(open3dModel.InitialDirectory) == false )
-            {
-                open3dModel.InitialDirectory = Environment.CurrentDirectory;
-            }
-
-            if (open3dModel.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    modelNanosuit = new Model( Path.GetFullPath(open3dModel.FileName).Replace(@"\", "/") );
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(this, "Error: Could not read file from disk. Original error: " + ex.Message);
-                    this.BeginInvoke(new MethodInvoker(Close));
-                }
-            }
-            else
-            {
-                MessageBox.Show(this, "No file selected!");
-                this.BeginInvoke(new MethodInvoker(Close));
-            }
-        }
-
-        private void RenderControl_ContextDestroying_GLSL(object sender, OpenGL.GlControlEventArgs e)
-        {
-            if (modelShader.Program != 0)
-                Gl.DeleteProgram(modelShader.Program);
-            modelShader.Program = 0;
-
-            if (modelNanosuit != null)
-            {
-                for (int i = 0; i < modelNanosuit.meshes.Count; i++)
-                {
-                    Gl.DeleteVertexArrays(modelNanosuit.meshes[i].VAO);
-                    Gl.DeleteBuffers(modelNanosuit.meshes[i].VBO);
-                    Gl.DeleteBuffers(modelNanosuit.meshes[i].EBO);
-                }
-            }
-
-            if (modelNanosuit != null)
-            {
-                for (int i = 0; i < modelNanosuit.textures_loaded.Count; i++)
-                {
-                    Gl.DeleteTextures(modelNanosuit.textures_loaded[i].id);
-                }
-            }
-        }
-
-        #endregion
         private static int previousTick = 0;
         private static int deltaTick = 0;
 
@@ -157,7 +107,7 @@ namespace WolvenKit.Render
             previousTick = currentTick;
 
             // Issue a new frame after this render
-            glControl1.Invalidate();
+            irrlichtPanel.Invalidate();
         }
 
         private void UpdateRichTextBox()
@@ -171,7 +121,12 @@ namespace WolvenKit.Render
         }
 
         #region event handlers
-        private static float currentLeftPosX = 0;
+        private void Bithack3D_Closed(object sender, System.EventArgs e)
+        {
+            irrThread.Abort();
+        }
+
+        /*private static float currentLeftPosX = 0;
         private static float currentLeftPosY = 0;
         private static float currentRightPosX = 0;
         private static float currentRightPosY = 0;
@@ -183,14 +138,14 @@ namespace WolvenKit.Render
                 model_autorotating = false;
                 // Around Y axis
                 float deltaDirection = currentLeftPosX - e.X;
-                modelAngle.Y = (modelAngle.Y - deltaDirection/4.0f) % 360.0f;
+                modelAngle.Y = (modelAngle.Y - deltaDirection / 4.0f) % 360.0f;
                 if (modelAngle.Y < 0)
                     modelAngle.Y = 360.0f + modelAngle.Y;
                 currentLeftPosX = e.X;
 
                 // Around X axis
                 deltaDirection = currentLeftPosY - e.Y;
-                modelAngle.X = (modelAngle.X - deltaDirection/40.0f) % 360.0f;
+                modelAngle.X = (modelAngle.X - deltaDirection / 40.0f) % 360.0f;
                 if (modelAngle.X < 0)
                     modelAngle.X = 360.0f + modelAngle.X;
                 currentLeftPosY = e.Y;
@@ -204,11 +159,11 @@ namespace WolvenKit.Render
             {
                 model_autorotating = false;
                 float deltaDirection = currentRightPosX - e.X;
-                modelPosition.X = modelPosition.X - deltaDirection/100;
+                modelPosition.X = modelPosition.X - deltaDirection / 100;
                 currentRightPosX = e.X;
 
                 deltaDirection = currentRightPosY - e.Y;
-                modelPosition.Y = modelPosition.Y + deltaDirection/100;
+                modelPosition.Y = modelPosition.Y + deltaDirection / 100;
                 currentRightPosY = e.Y;
             }
             else
@@ -221,12 +176,12 @@ namespace WolvenKit.Render
         private void Bithack3D_MouseWheel(object sender, MouseEventArgs e)
         {
             if (renderStarted)
-                modelPosition.Z = modelPosition.Z + (float)e.Delta/1000.0f;
+                modelPosition.Z = modelPosition.Z + (float)e.Delta / 1000.0f;
         }
 
         private void Bithack3D_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Space)
+            if (e.KeyCode == Keys.Space)
             {
                 // Restart autorotation
                 model_autorotating = true;
@@ -235,7 +190,7 @@ namespace WolvenKit.Render
                 modelPosition.Y = -1.5f;
                 modelPosition.Z = -2.0f;
             }
-        }
+        }*/
         #endregion
     }
 }

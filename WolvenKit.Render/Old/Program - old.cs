@@ -1,25 +1,21 @@
 ﻿using System;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
 using System.Windows.Forms;
-using System.Data;
-using System.Threading;
-using IrrlichtLime;
 
 namespace WolvenKit.Render
 {
-    static class Program
+    /*static class Program
     {
+        public static Bithack3D bithack3D;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main(string[] args)
+        static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Bithack3D());
+            bithack3D = new Bithack3D();
+            Application.Run(bithack3D);
         }
-    }
+    }*/
 }
