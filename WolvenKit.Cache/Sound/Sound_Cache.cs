@@ -57,16 +57,16 @@ namespace WolvenKit.Cache
         /// <returns>The concatenated string.</returns>
         public static string GetNames(List<string> FileList)
         {
-            return FileList.Aggregate("\0", (c, n) => c += Path.GetFileName(n)) + "\0";
+            return FileList.Aggregate("", (c, n) => c += Path.GetFileName(n)) + "\0";
         }
 
         public static long TotalDataSize(List<string> FileList) => FileList.Sum(x => new FileInfo(x).Length);
 
         /// <summary>
-        /// Builds the details of the files.
+        /// Builds the details of the files. Note: This is just a placeholder array. For actual details call BuildInfo();
         /// </summary>
-        /// <param name="FileList"></param>
-        /// <returns></returns>
+        /// <param name="FileList">The list of details to build the info for.</param>
+        /// <returns>The initialized list of files.</returns>
         public static List<SoundCacheItem> BuildInfo(List<string> FileList)
         {
             var res = new List<SoundCacheItem>();
@@ -78,31 +78,40 @@ namespace WolvenKit.Cache
             return res;
         }
 
+        /// <summary>
+        /// Builds the fileinfo table. Offset,size etc.
+        /// </summary>
+        /// <param name="FileList">The list of files to build the info for.</param>
+        /// <returns></returns>
         public static byte[] GetInfo(List<string> FileList)
         {
-            //TODO:Fix this.
-            throw new NotImplementedException("Not implemented yet!");
-            var ms = new MemoryStream();
-            var noofset = 0;
-            var offset = DataOffset;
-            if(Version >= 2)
+            using (var ms = new MemoryStream())
+            using (var bw = new BinaryWriter(ms))
             {
+                long base_offset = 0x30;
+                long name_offset = 0x0;
                 foreach (var item in FileList)
                 {
-                    //Uint64
+                    if (Version >= 2)
+                    {
+                        bw.Write((UInt64)name_offset);
+                        name_offset += Path.GetFileName(item).Length;
+                        bw.Write((UInt64)base_offset);
+                        base_offset += new FileInfo(item).Length;
+                        bw.Write((UInt64)new FileInfo(item).Length);
 
+                    }
+                    else
+                    {
+                        bw.Write((UInt32)name_offset);
+                        name_offset += Path.GetFileName(item).Length;
+                        bw.Write((UInt32)base_offset);
+                        base_offset += new FileInfo(item).Length;
+                        bw.Write((UInt32)new FileInfo(item).Length);
+                    }
                 }
+                return ms.GetBuffer();
             }
-            else
-            {
-                foreach (var item in FileList)
-                {
-                    //Uint32
-
-                }
-            }
-
-            return ms.GetBuffer();
         }
 
         /// <summary>
