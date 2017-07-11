@@ -32,7 +32,6 @@ namespace WolvenKit.Render
             irrThread.Start();
         }
 
-
         public void startIrr()
         {
             IrrlichtCreationParameters irrparam = new IrrlichtCreationParameters();
@@ -62,18 +61,22 @@ namespace WolvenKit.Render
                 node.SetMaterialTexture(0, driver.GetTexture("../../Media/sydney.bmp"));
             }
 
-            smgr.AddCameraSceneNode(null, new Vector3Df(0, 30, -40), new Vector3Df(0, 5, 0));
+            smgr.AddCameraSceneNode(null, new Vector3Df(50, 5, 0), new Vector3Df(0, 5, 0));
 
             while (device.Run())
             {
                 driver.BeginScene(ClearBufferFlag.All, new IrrlichtLime.Video.Color(100, 101, 140));
 
+                this.Invoke(new MethodInvoker(delegate {
+                    node.Position = modelPosition;
+                    node.Rotation = modelAngle;
+                    UpdateRichTextBox();
+                }));
+
                 smgr.DrawAll();
                 gui.DrawAll();
 
                 driver.EndScene();
-
-                this.Invoke(new MethodInvoker(delegate { UpdateRichTextBox(); }));
             }
 
             device.Drop();
@@ -82,7 +85,7 @@ namespace WolvenKit.Render
         #region Common Data
 
         //private static Quaternion modelAngle = new Quaternion(new Vertex3f(), 0);
-        private static Vector3Df modelPosition = new Vector3Df(0.0f, -1.5f, -2.0f);
+        private static Vector3Df modelPosition = new Vector3Df(0.0f, 0.0f, 0.0f);
         private static Vector3Df modelAngle = new Vector3Df();
 
         private static bool model_autorotating = true;
@@ -107,7 +110,7 @@ namespace WolvenKit.Render
             previousTick = currentTick;
 
             // Issue a new frame after this render
-            irrlichtPanel.Invalidate();
+            // irrlichtPanel.Invalidate();
         }
 
         private void UpdateRichTextBox()
@@ -126,28 +129,29 @@ namespace WolvenKit.Render
             irrThread.Abort();
         }
 
-        /*private static float currentLeftPosX = 0;
+        private static bool renderStarted = true;
+        private static float currentLeftPosX = 0;
         private static float currentLeftPosY = 0;
         private static float currentRightPosX = 0;
         private static float currentRightPosY = 0;
 
-        private void glControl1_MouseMove(object sender, MouseEventArgs e)
+        private void irrlichtPanel_MouseMove(object sender, MouseEventArgs e)
         {
             if (renderStarted && e.Button == MouseButtons.Left)
             {
                 model_autorotating = false;
                 // Around Y axis
                 float deltaDirection = currentLeftPosX - e.X;
-                modelAngle.Y = (modelAngle.Y - deltaDirection / 4.0f) % 360.0f;
+                modelAngle.Y = (modelAngle.Y + deltaDirection / 4.0f) % 360.0f;
                 if (modelAngle.Y < 0)
                     modelAngle.Y = 360.0f + modelAngle.Y;
                 currentLeftPosX = e.X;
 
                 // Around X axis
                 deltaDirection = currentLeftPosY - e.Y;
-                modelAngle.X = (modelAngle.X - deltaDirection / 40.0f) % 360.0f;
-                if (modelAngle.X < 0)
-                    modelAngle.X = 360.0f + modelAngle.X;
+                modelAngle.Z = (modelAngle.Z + deltaDirection / 40.0f) % 360.0f;
+                if (modelAngle.Z < 0)
+                    modelAngle.Z = 360.0f + modelAngle.Z;
                 currentLeftPosY = e.Y;
             }
             else
@@ -159,7 +163,7 @@ namespace WolvenKit.Render
             {
                 model_autorotating = false;
                 float deltaDirection = currentRightPosX - e.X;
-                modelPosition.X = modelPosition.X - deltaDirection / 100;
+                modelPosition.Z = modelPosition.Z - deltaDirection / 100;
                 currentRightPosX = e.X;
 
                 deltaDirection = currentRightPosY - e.Y;
@@ -176,7 +180,7 @@ namespace WolvenKit.Render
         private void Bithack3D_MouseWheel(object sender, MouseEventArgs e)
         {
             if (renderStarted)
-                modelPosition.Z = modelPosition.Z + (float)e.Delta / 1000.0f;
+                modelPosition.X = modelPosition.X + (float)e.Delta / 1000.0f;
         }
 
         private void Bithack3D_KeyDown(object sender, KeyEventArgs e)
@@ -187,10 +191,31 @@ namespace WolvenKit.Render
                 model_autorotating = true;
                 modelAngle.X = modelAngle.Y = modelAngle.Z = 0;
                 modelPosition.X = 0;
-                modelPosition.Y = -1.5f;
-                modelPosition.Z = -2.0f;
+                modelPosition.Y = 0;
+                modelPosition.Z = 0;
             }
-        }*/
+        }
+
+        private bool resizing = false;
+
+        private void Bithack3D_ResizeEnd(object sender, EventArgs e)
+        {
+            if (resizing)
+            {
+                irrThread.Abort();
+                // start an irrlicht thread
+                ThreadStart irrThreadStart = new ThreadStart(startIrr);
+                irrThread = new Thread(irrThreadStart);
+                irrThread.Start();
+                resizing = false;
+            }
+        }
+
+        private void Bithack3D_Resize(object sender, EventArgs e)
+        {
+            resizing = true;
+        }
         #endregion
+
     }
 }

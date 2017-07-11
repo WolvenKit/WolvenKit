@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.textBoxTip = new System.Windows.Forms.TextBox();
             this.textBoxFPS = new System.Windows.Forms.TextBox();
             this.textBoxRotation = new System.Windows.Forms.TextBox();
             this.textBoxPos = new System.Windows.Forms.TextBox();
             this.irrlichtPanel = new System.Windows.Forms.Panel();
+            this.animationTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // textBoxTip
@@ -95,6 +97,13 @@
             this.irrlichtPanel.Name = "irrlichtPanel";
             this.irrlichtPanel.Size = new System.Drawing.Size(549, 413);
             this.irrlichtPanel.TabIndex = 1;
+            this.irrlichtPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.irrlichtPanel_MouseMove);
+            // 
+            // animationTimer
+            // 
+            this.animationTimer.Enabled = true;
+            this.animationTimer.Interval = 16;
+            this.animationTimer.Tick += new System.EventHandler(this.AnimationTimer_Tick);
             // 
             // Bithack3D
             // 
@@ -106,9 +115,14 @@
             this.Controls.Add(this.textBoxRotation);
             this.Controls.Add(this.textBoxPos);
             this.Controls.Add(this.irrlichtPanel);
-            this.Closed += new System.EventHandler(this.Bithack3D_Closed);
+            this.KeyPreview = true;
             this.Name = "Bithack3D";
             this.Text = "Bithack3D";
+            this.Closed += new System.EventHandler(this.Bithack3D_Closed);
+            this.ResizeEnd += new System.EventHandler(this.Bithack3D_ResizeEnd);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Bithack3D_KeyDown);
+            this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.Bithack3D_MouseWheel);
+            this.Resize += new System.EventHandler(this.Bithack3D_Resize);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -121,5 +135,6 @@
         private System.Windows.Forms.TextBox textBoxRotation;
         private System.Windows.Forms.TextBox textBoxPos;
         private System.Windows.Forms.Panel irrlichtPanel;
+        private System.Windows.Forms.Timer animationTimer;
     }
 }
