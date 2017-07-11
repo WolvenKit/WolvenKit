@@ -118,7 +118,8 @@
             this.KeyPreview = true;
             this.Name = "Bithack3D";
             this.Text = "Bithack3D";
-            this.Closed += new System.EventHandler(this.Bithack3D_Closed);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Bithack3D_FormClosing);
+            this.Load += new System.EventHandler(this.Bithack3D_Load);
             this.ResizeEnd += new System.EventHandler(this.Bithack3D_ResizeEnd);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Bithack3D_KeyDown);
             this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.Bithack3D_MouseWheel);

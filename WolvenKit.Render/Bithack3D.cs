@@ -25,61 +25,87 @@ namespace WolvenKit.Render
             // Required for Windows Form Designer support
             //
             InitializeComponent();
+        }
 
-            // start an irrlicht thread
-            ThreadStart irrThreadStart = new ThreadStart(startIrr);
+        private void StartIrrThread()
+        {
+            ThreadStart irrThreadStart = new ThreadStart(StartIrr);
             irrThread = new Thread(irrThreadStart);
+            irrThread.IsBackground = true;
             irrThread.Start();
         }
 
-        public void startIrr()
+        private void RestartIrrThread()
         {
-            IrrlichtCreationParameters irrparam = new IrrlichtCreationParameters();
-            if (irrlichtPanel.InvokeRequired)
-                irrlichtPanel.Invoke(new MethodInvoker(delegate { irrparam.WindowID = irrlichtPanel.Handle; }));
-            irrparam.DriverType = DriverType.Direct3D9;
-            irrparam.BitsPerPixel = 16;
+            irrThread.Abort();
+            // restart an irrlicht thread
+            StartIrrThread();
+            resizing = false;
+        }
 
-            IrrlichtDevice device = IrrlichtDevice.CreateDevice(irrparam);
-
-            device.SetWindowCaption("Hello World! - Irrlicht Engine Demo");
-
-            VideoDriver driver = device.VideoDriver;
-            SceneManager smgr = device.SceneManager;
-            GUIEnvironment gui = device.GUIEnvironment;
-
-            gui.AddStaticText("Hello World! This is the Irrlicht Software renderer!",
-                new Recti(10, 10, 260, 22), true);
-
-            AnimatedMesh mesh = smgr.GetMesh("../../Media/sydney.md2");
-            AnimatedMeshSceneNode node = smgr.AddAnimatedMeshSceneNode(mesh);
-
-            if (node != null)
+        private void StartIrr()
+        {
+            try
             {
+                IrrlichtCreationParameters irrparam = new IrrlichtCreationParameters();
+                if (irrlichtPanel.InvokeRequired)
+                    irrlichtPanel.Invoke(new MethodInvoker(delegate { irrparam.WindowID = irrlichtPanel.Handle; }));
+                irrparam.DriverType = DriverType.Direct3D9;
+                irrparam.BitsPerPixel = 16;
+
+                IrrlichtDevice device = IrrlichtDevice.CreateDevice(irrparam);
+
+                if (device == null) throw new Exception("Could not create device for engine!");
+
+                device.SetWindowCaption("Hello World! - Irrlicht Engine Demo");
+
+                VideoDriver driver = device.VideoDriver;
+                SceneManager smgr = device.SceneManager;
+                GUIEnvironment gui = device.GUIEnvironment;
+
+                gui.AddStaticText("Hello World! This is the Irrlicht Software renderer!",
+                    new Recti(10, 10, 260, 22), true);
+
+                //AnimatedMesh mesh = smgr.GetMesh("../../Models/lamp/rv_lamp_post_3.obj");
+                AnimatedMesh mesh = smgr.GetMesh("../../Media/sydney.md2");
+                AnimatedMeshSceneNode node = smgr.AddAnimatedMeshSceneNode(mesh);
+
+                if (node == null) throw new Exception("Could not load file!");
+
                 node.SetMaterialFlag(MaterialFlag.Lighting, false);
-                node.SetMD2Animation(AnimationTypeMD2.Stand);
-                node.SetMaterialTexture(0, driver.GetTexture("../../Media/sydney.bmp"));
+                if(mesh.MeshType == AnimatedMeshType.MD2)
+                    node.SetMD2Animation(AnimationTypeMD2.Stand);
+                //node.SetMaterialTexture(0, driver.GetTexture("../../Media/sydney.bmp"));
+
+                smgr.AddCameraSceneNode(null, new Vector3Df(node.BoundingBox.Radius*2, node.BoundingBox.Radius, 0), new Vector3Df(0, node.BoundingBox.Radius, 0));
+
+                while (device.Run())
+                {
+                    driver.BeginScene(ClearBufferFlag.All, new IrrlichtLime.Video.Color(100, 101, 140));
+
+                    this.Invoke(new MethodInvoker(delegate
+                    {
+                        node.Position = modelPosition;
+                        node.Rotation = modelAngle;
+                        UpdateRichTextBox();
+                    }));
+
+                    smgr.DrawAll();
+                    gui.DrawAll();
+
+                    driver.EndScene();
+                }
+
+                device.Drop();
             }
-
-            smgr.AddCameraSceneNode(null, new Vector3Df(50, 5, 0), new Vector3Df(0, 5, 0));
-
-            while (device.Run())
+            catch (Exception ex)
             {
-                driver.BeginScene(ClearBufferFlag.All, new IrrlichtLime.Video.Color(100, 101, 140));
-
-                this.Invoke(new MethodInvoker(delegate {
-                    node.Position = modelPosition;
-                    node.Rotation = modelAngle;
-                    UpdateRichTextBox();
-                }));
-
-                smgr.DrawAll();
-                gui.DrawAll();
-
-                driver.EndScene();
+                if (!(ex is ThreadAbortException))
+                {
+                    MessageBox.Show(ex.Message);
+                    this.Invoke(new MethodInvoker(delegate { this.Close(); }));
+                }
             }
-
-            device.Drop();
         }
 
         #region Common Data
@@ -124,7 +150,13 @@ namespace WolvenKit.Render
         }
 
         #region event handlers
-        private void Bithack3D_Closed(object sender, System.EventArgs e)
+        private void Bithack3D_Load(object sender, EventArgs e)
+        {
+            // start an irrlicht thread
+            StartIrrThread();
+        }
+
+        private void Bithack3D_FormClosing(object sender, FormClosingEventArgs e)
         {
             irrThread.Abort();
         }
@@ -197,23 +229,25 @@ namespace WolvenKit.Render
         }
 
         private bool resizing = false;
+        FormWindowState prevState = FormWindowState.Normal;
 
         private void Bithack3D_ResizeEnd(object sender, EventArgs e)
         {
             if (resizing)
             {
-                irrThread.Abort();
-                // start an irrlicht thread
-                ThreadStart irrThreadStart = new ThreadStart(startIrr);
-                irrThread = new Thread(irrThreadStart);
-                irrThread.Start();
-                resizing = false;
+                RestartIrrThread();
             }
         }
 
         private void Bithack3D_Resize(object sender, EventArgs e)
         {
             resizing = true;
+
+            if (prevState != WindowState)
+            {
+                prevState = WindowState;
+                RestartIrrThread();
+            }
         }
         #endregion
 
