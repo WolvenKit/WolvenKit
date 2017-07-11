@@ -57,7 +57,7 @@ namespace WolvenKit.Cache
         /// <returns>The concatenated string.</returns>
         public static string GetNames(List<string> FileList)
         {
-            return FileList.Aggregate("", (c, n) => c += Path.GetFileName(n)) + "\0";
+            return string.Join("\0",FileList.Select(x=> Path.GetFileName(x))) + "\0";
         }
 
         public static long TotalDataSize(List<string> FileList) => FileList.Sum(x => new FileInfo(x).Length);
@@ -95,41 +95,43 @@ namespace WolvenKit.Cache
                     if (Version >= 2)
                     {
                         bw.Write((UInt64)name_offset);
-                        name_offset += Path.GetFileName(item).Length;
+                        name_offset += Path.GetFileName(item).Length + 1;
                         bw.Write((UInt64)base_offset);
                         base_offset += new FileInfo(item).Length;
-                        bw.Write((UInt64)new FileInfo(item).Length);
-
+                        bw.Write((UInt64)(new FileInfo(item).Length));
                     }
                     else
                     {
                         bw.Write((UInt32)name_offset);
-                        name_offset += Path.GetFileName(item).Length;
+                        name_offset += Path.GetFileName(item).Length + 1;
                         bw.Write((UInt32)base_offset);
                         base_offset += new FileInfo(item).Length;
-                        bw.Write((UInt32)new FileInfo(item).Length);
+                        bw.Write((UInt32)(new FileInfo(item).Length));
                     }
                 }
-                return ms.GetBuffer();
+                var pos = ms.Position;
+                return ms.GetBuffer().Take((int)pos).ToArray();
             }
         }
 
         /// <summary>
-        /// Calculates the FNV64 hash for the soundcache.
+        /// Calculates the FNV1A64 hash for the soundcache.
         /// </summary>
         /// <returns></returns>
-        public static uint CalculateChecksum(List<string> Files2Buffer)
+        public static ulong CalculateChecksum(List<string> Files2Buffer)
         {
-            uint fnvHash = 0x811C9DC5;
-            byte[] data = Encoding.ASCII.GetBytes(GetNames(Files2Buffer) + GetInfo(Files2Buffer));
-            for (int i = 0; i < data.Length; i++)
+            byte[] bytes = Encoding.ASCII.GetBytes(GetNames(Files2Buffer) + GetInfo(Files2Buffer));
+            const ulong fnv64Offset = 0xcbf29ce484222325;
+            const ulong fnv64Prime = 0x100000001b3;
+            ulong hash = fnv64Offset;
+            for (var i = 0; i < bytes.Length; i++)
             {
-                fnvHash ^= data[i];
-                fnvHash *= 0x1000193;
+                hash = hash ^ bytes[i];
+                hash = (hash * fnv64Prime) % 0x1000000000000000;
             }
-            fnvHash *= 0x1000193; //TODO: Check if this is actually needed.
-            return fnvHash;
+            return hash;
         }
+
 
         /// <summary>
         /// Reads the soundcache file.
@@ -197,25 +199,28 @@ namespace WolvenKit.Cache
             {
                 var data_array = BuildInfo(FileList);
                 var buffersize = FileList.Max(x => new FileInfo(x).Length);
+
+                if ((DataOffset + TotalDataSize(FileList) + GetNames(FileList).Length + GetInfo(FileList).Length) > 0xFFFFFFFF) //Switch to 64bit
+                {
+                    Version = 2;
+                    DataOffset += 0x10;
+                    for (int i = 0; i < data_array.Count; i++)
+                        data_array[i].Offset = -1;
+                }
+
                 if (buffersize <= CACHE_BUFFER_SIZE)
                     buffersize = CACHE_BUFFER_SIZE;
                 else
                 {
                     var fremainder = buffersize % CACHE_BUFFER_SIZE;
                     buffersize += (CACHE_BUFFER_SIZE - fremainder);
-                }
-
-                if ((DataOffset + TotalDataSize(FileList) + GetNames(FileList).Length + GetInfo(FileList).Length) > 0xFFFFFFFF)
-                {
-                    Version = 2;
-                    DataOffset += 0x10;
-                    for (int i = 0; i < data_array.Count; i++)
-                        data_array[i].Offset = -1;
-                }             
+                }      
 
                 bw.Write(Magic);
-                bw.Write(Version);
-                bw.Write(Unknown1);
+                bw.Write((UInt32)Version);
+                bw.Write((UInt32)Unknown1);
+                bw.Write((UInt32)Unknown2);
+
                 if (Version >= 2)
                 {
                     bw.Write((UInt64)(DataOffset + TotalDataSize(FileList) + GetNames(FileList).Length));
@@ -228,18 +233,17 @@ namespace WolvenKit.Cache
                     bw.Write((UInt32)FileList.Count);
                     bw.Write((UInt32)(DataOffset + TotalDataSize(FileList)));
                 }
-                bw.Write(GetNames(FileList).Length);
-                bw.Write(buffersize);
-                bw.Write((long)(CalculateChecksum(FileList)));
+                bw.Write((UInt32)GetNames(FileList).Length);
+                bw.Write((UInt64)buffersize);
+                bw.Write((UInt64)((long)(CalculateChecksum(FileList))));
+
                 if (Version >= 2)
                     bw.Write((UInt32)(Unk3));
+                //Write the actual contents of the files.
                 for (int i = 0; i < FileList.Count; i++)
-                {
                     if (data_array[i].Offset != -1)
-                    {
                         bw.Write(File.ReadAllBytes(FileList[i]));
-                    }
-                }
+                //Write filenames and the offsets and such for the files.
                 bw.Write(GetNames(FileList));
                 bw.Write(GetInfo(FileList));                
             }
