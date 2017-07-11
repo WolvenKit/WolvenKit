@@ -75,20 +75,19 @@ namespace WolvenKit.Render
                 node.SetMaterialFlag(MaterialFlag.Lighting, false);
                 if(mesh.MeshType == AnimatedMeshType.MD2)
                     node.SetMD2Animation(AnimationTypeMD2.Stand);
-                //node.SetMaterialTexture(0, driver.GetTexture("../../Media/sydney.bmp"));
+                node.SetMaterialTexture(0, driver.GetTexture("../../Media/sydney.bmp"));
 
-                smgr.AddCameraSceneNode(null, new Vector3Df(node.BoundingBox.Radius*2, node.BoundingBox.Radius, 0), new Vector3Df(0, node.BoundingBox.Radius, 0));
+                smgr.AddCameraSceneNode(null, new Vector3Df(node.BoundingBox.Radius*2f, node.BoundingBox.Extent.Y/2f, 0), new Vector3Df(0, node.BoundingBox.Extent.Y/2f, 0));
+
+                MethodInvoker UpdateRichTextBoxInvoker = new MethodInvoker(delegate { UpdateRichTextBox(); });
 
                 while (device.Run())
                 {
                     driver.BeginScene(ClearBufferFlag.All, new IrrlichtLime.Video.Color(100, 101, 140));
 
-                    this.Invoke(new MethodInvoker(delegate
-                    {
-                        node.Position = modelPosition;
-                        node.Rotation = modelAngle;
-                        UpdateRichTextBox();
-                    }));
+                    node.Position = modelPosition;
+                    node.Rotation = modelAngle;
+                    this.Invoke(UpdateRichTextBoxInvoker);
 
                     smgr.DrawAll();
                     gui.DrawAll();
@@ -162,10 +161,8 @@ namespace WolvenKit.Render
         }
 
         private static bool renderStarted = true;
-        private static float currentLeftPosX = 0;
-        private static float currentLeftPosY = 0;
-        private static float currentRightPosX = 0;
-        private static float currentRightPosY = 0;
+        private static float currentPosX = 0;
+        private static float currentPosY = 0;
 
         private void irrlichtPanel_MouseMove(object sender, MouseEventArgs e)
         {
@@ -173,39 +170,54 @@ namespace WolvenKit.Render
             {
                 model_autorotating = false;
                 // Around Y axis
-                float deltaDirection = currentLeftPosX - e.X;
+                float deltaDirection = currentPosX - e.X;
                 modelAngle.Y = (modelAngle.Y + deltaDirection / 4.0f) % 360.0f;
                 if (modelAngle.Y < 0)
                     modelAngle.Y = 360.0f + modelAngle.Y;
-                currentLeftPosX = e.X;
 
                 // Around X axis
-                deltaDirection = currentLeftPosY - e.Y;
+                deltaDirection = currentPosY - e.Y;
                 modelAngle.Z = (modelAngle.Z + deltaDirection / 40.0f) % 360.0f;
                 if (modelAngle.Z < 0)
                     modelAngle.Z = 360.0f + modelAngle.Z;
-                currentLeftPosY = e.Y;
             }
-            else
-            {
-                currentLeftPosX = e.X;
-                currentLeftPosY = e.Y;
-            }
-            if (renderStarted && e.Button == MouseButtons.Right)
+            else if (renderStarted && e.Button == MouseButtons.Right)
             {
                 model_autorotating = false;
-                float deltaDirection = currentRightPosX - e.X;
+                float deltaDirection = currentPosX - e.X;
                 modelPosition.Z = modelPosition.Z - deltaDirection / 100;
-                currentRightPosX = e.X;
 
-                deltaDirection = currentRightPosY - e.Y;
+                deltaDirection = currentPosY - e.Y;
                 modelPosition.Y = modelPosition.Y + deltaDirection / 100;
-                currentRightPosY = e.Y;
             }
-            else
+            currentPosX = e.X;
+            currentPosY = e.Y;
+
+            // This method should only work when the mouse is captured by the Form.
+            // For instance, when the left mouse button is pressed:
+            if (!(e.Button == MouseButtons.Left || e.Button == MouseButtons.Right))
+                return;
+
+            Point p = PointToScreen(e.Location);
+            int x = p.X;
+            int y = p.Y;
+            Rectangle bounds = this.Bounds;
+
+            if (x <= bounds.Left + 1)
+                x = bounds.Right - 10;
+            else if (x >= bounds.Right - 9)
+                x = bounds.Left + 2;
+
+            if (y <= bounds.Top + 8)
+                y = bounds.Bottom - 2;
+            else if (y >= bounds.Bottom - 1)
+                y = bounds.Top + 9;
+
+            if (x != p.X || y != p.Y)
             {
-                currentRightPosX = e.X;
-                currentRightPosY = e.Y;
+                Cursor.Position = new Point(x, y);
+                currentPosX = x - (bounds.Left + 1);
+                currentPosY = y - (bounds.Top + 1);
             }
         }
 
