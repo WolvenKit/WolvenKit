@@ -962,56 +962,134 @@ namespace WolvenKit
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 filePath = ofd.FileName;
-                List<string[]> rows = File.ReadAllLines(filePath, Encoding.UTF8).Select(x => x.Split('|')).ToList();
 
-                for (int i = 0; i < rows.Count(); ++i)
-                    if (rows[i].Length == 1)
-                    {
-                        rows.RemoveAt(i);
-                        --i;
-                    }
-                    else if (rows[i][0][0] == ';') // need to be separated in two statements so this won't compare an empty row
-                    {
-                        rows.RemoveAt(i);
-                        --i;
-                    }
-
-                modIDs.Clear();
-                modIDs.Add((Convert.ToInt32(rows[0][0]) - 2110000000) / 1000);
-
-                // get multiple ids
-                foreach (var row in rows)
+                if (comboBoxLanguagesMode.SelectedIndex == 1)
                 {
-                    int currentRowID = Convert.ToInt32((Convert.ToInt32(row[0]) - 2110000000) / 1000);
-                    foreach (var addedID in modIDs.ToList()) // to prevent modified collection exception
-                        if (currentRowID != addedID)
-                            if (!multipleIDs)
-                            {
-                                multipleIDs = true;
-                                modIDs.Add(currentRowID);
-                            }
+                    List<string[]> rows = File.ReadAllLines(filePath, Encoding.UTF8).Select(x => x.Split('|')).ToList();
 
+                    var language = Regex.Match(rows[0][0], "language=([a-z]+)]").Groups[1].Value;
+
+                    for (int i = 0; i < rows.Count(); ++i)
+                        if (rows[i].Length == 1)
+                        {
+                            rows.RemoveAt(i);
+                            --i;
+                        }
+                        else if (rows[i][0][0] == ';') // need to be separated in two statements so this won't compare an empty row
+                        {
+                            rows.RemoveAt(i);
+                            --i;
+                        }
+
+                    modIDs.Clear();
+                    modIDs.Add((Convert.ToInt32(rows[0][0]) - 2110000000) / 1000);
+
+                    // get multiple ids
+                    foreach (var row in rows)
+                    {
+                        int currentRowID = Convert.ToInt32((Convert.ToInt32(row[0]) - 2110000000) / 1000);
+                        foreach (var addedID in modIDs.ToList()) // to prevent modified collection exception
+                            if (currentRowID != addedID)
+                                if (!multipleIDs)
+                                {
+                                    multipleIDs = true;
+                                    modIDs.Add(currentRowID);
+                                }
+
+                    }
+
+                    textBoxModID.Text = "";
+                    if (multipleIDs)
+                    {
+                        foreach (var id in modIDs)
+                            textBoxModID.Text += Convert.ToString(id) + ";";
+                        // delete last ;
+                        textBoxModID.Text = textBoxModID.Text.Remove(textBoxModID.Text.Length - 1);
+                    }
+
+                    else
+                        textBoxModID.Text = Convert.ToString(modIDs[0]);
+                    var strings = new List<List<string>>();
+
+                    rows.ForEach(x =>
+                    {
+                        strings.Add(new List<string>() { x[0], x[1], x[2], x[3] });
+                    });
+
+                    foreach (var lang in languagesStrings)
+                    {
+                        if (lang.language == language)
+                        {
+
+                            lang.strings = strings;
+
+                            if (lang.language == "ar" && languageTabSelected == "ar")
+                                foreach (var str in lang.strings)
+                                    dataTableGridViewSource.Rows.Add(str[0], str[1], str[2], str[3]);
+                            break;
+                        }
+                    }
+
+                    fileOpened = true;
+                    HashStringKeys();
+                    UpdateModID();
+                    dataGridViewStrings.Visible = true;
+                    rowAddedAutomatically = false;
                 }
-
-                textBoxModID.Text = "";
-                if (multipleIDs)
-                {
-                    foreach (var id in modIDs)
-                        textBoxModID.Text += Convert.ToString(id) + ";";
-                    // delete last ;
-                    textBoxModID.Text = textBoxModID.Text.Remove(textBoxModID.Text.Length - 1);
-                }
-
                 else
-                    textBoxModID.Text = Convert.ToString(modIDs[0]);
-
-                currentModID = textBoxModID.Text;
-                rows.ForEach(x =>
                 {
-                    dataTableGridViewSource.Rows.Add(x);
-                });
+                    List<string[]> rows = File.ReadAllLines(filePath, Encoding.UTF8).Select(x => x.Split('|')).ToList();
 
-                fileOpened = true;
+                    for (int i = 0; i < rows.Count(); ++i)
+                        if (rows[i].Length == 1)
+                        {
+                            rows.RemoveAt(i);
+                            --i;
+                        }
+                        else if (rows[i][0][0] == ';') // need to be separated in two statements so this won't compare an empty row
+                        {
+                            rows.RemoveAt(i);
+                            --i;
+                        }
+
+                    modIDs.Clear();
+                    modIDs.Add((Convert.ToInt32(rows[0][0]) - 2110000000) / 1000);
+
+                    // get multiple ids
+                    foreach (var row in rows)
+                    {
+                        int currentRowID = Convert.ToInt32((Convert.ToInt32(row[0]) - 2110000000) / 1000);
+                        foreach (var addedID in modIDs.ToList()) // to prevent modified collection exception
+                            if (currentRowID != addedID)
+                                if (!multipleIDs)
+                                {
+                                    multipleIDs = true;
+                                    modIDs.Add(currentRowID);
+                                }
+
+                    }
+
+                    textBoxModID.Text = "";
+                    if (multipleIDs)
+                    {
+                        foreach (var id in modIDs)
+                            textBoxModID.Text += Convert.ToString(id) + ";";
+                        // delete last ;
+                        textBoxModID.Text = textBoxModID.Text.Remove(textBoxModID.Text.Length - 1);
+                    }
+
+                    else
+                        textBoxModID.Text = Convert.ToString(modIDs[0]);
+
+                    currentModID = textBoxModID.Text;
+                    rows.ForEach(x =>
+                    {
+                        dataTableGridViewSource.Rows.Add(x);
+                    });
+
+                    fileOpened = true;
+                }
+                
             }
             else
                 return;
@@ -1145,6 +1223,8 @@ namespace WolvenKit
             if (e.TabPage != null)
                 languageTabSelected = e.TabPage.Text;
 
+            HashStringKeys();
+            UpdateModID();
         }
     }
 
