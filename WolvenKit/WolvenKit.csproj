@@ -121,15 +121,6 @@
       <HintPath>..\packages\OpenGL.Net.WinForms.0.3.2\lib\net35\OpenGL.Net.WinForms.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SharpDX">
-      <HintPath>..\Atflib\SharpDX.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct2D1">
-      <HintPath>..\Atflib\SharpDX.Direct2D1.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.DXGI">
-      <HintPath>..\Atflib\SharpDX.DXGI.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -137,10 +128,6 @@
     <Reference Include="System.Drawing.Design" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Atflib\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -149,18 +136,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Tao.Cg">
-      <HintPath>..\Atflib\Tao.Cg.dll</HintPath>
-    </Reference>
-    <Reference Include="Tao.DevIl">
-      <HintPath>..\Atflib\Tao.DevIl.dll</HintPath>
-    </Reference>
-    <Reference Include="Tao.OpenGl">
-      <HintPath>..\Atflib\Tao.OpenGl.dll</HintPath>
-    </Reference>
-    <Reference Include="Tao.Platform.Windows">
-      <HintPath>..\Atflib\Tao.Platform.Windows.dll</HintPath>
-    </Reference>
     <Reference Include="Vlc.DotNet.Core, Version=2.1.132.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
       <HintPath>..\packages\Vlc.DotNet.Core.2.1.132\lib\net45\x86\Vlc.DotNet.Core.dll</HintPath>
       <Private>True</Private>

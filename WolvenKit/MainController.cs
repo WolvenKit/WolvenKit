@@ -131,13 +131,13 @@ namespace WolvenKit
             switch (action)
             {
                 case EVariableEditorAction.Export:
-                    exportBytes(editvar);
+                    ExportBytes(editvar);
                     break;
                 case EVariableEditorAction.Import:
-                    importBytes(editvar);
+                    ImportBytes(editvar);
                     break;
                 case EVariableEditorAction.Open:
-                    openEditorFor(editvar);
+                    OpenEditorFor(editvar);
                     break;
             }
         }
@@ -175,10 +175,9 @@ namespace WolvenKit
             W3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath), true);
         }
 
-        private void importBytes(CVariable editvar)
+        private void ImportBytes(CVariable editvar)
         {
-            var dlg = new OpenFileDialog();
-            dlg.InitialDirectory = Get().Configuration.InitialExportDirectory;
+            var dlg = new OpenFileDialog() { InitialDirectory = Get().Configuration.InitialExportDirectory };
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
@@ -191,12 +190,11 @@ namespace WolvenKit
                         var bytes = ImportExportUtility.GetImportBytes(reader);
                         editvar.SetValue(bytes);
                     }
-                    fs.Close();
                 }
             }
         }
 
-        private void exportBytes(CVariable editvar)
+        private void ExportBytes(CVariable editvar)
         {
             var dlg = new SaveFileDialog();
             byte[] bytes = null;
@@ -220,15 +218,13 @@ namespace WolvenKit
                         bytes = ImportExportUtility.GetExportBytes(bytes, Path.GetExtension(dlg.FileName));
                         writer.Write(bytes);
                     }
-                    fs.Close();
                 }
             }
         }
 
-        private void openHexEditorFor(CVariable editvar)
+        private void OpenHexEditorFor(CVariable editvar)
         {
-            var editor = new frmHexEditorView();
-            editor.File = editvar.cr2w;
+            var editor = new frmHexEditorView() { File = editvar.cr2w };
 
             if (editvar is IByteSource)
             {
@@ -239,7 +235,7 @@ namespace WolvenKit
             editor.Show();
         }
 
-        private void openEditorFor(CVariable editvar)
+        private void OpenEditorFor(CVariable editvar)
         {
             byte[] bytes = null;
 
@@ -253,17 +249,17 @@ namespace WolvenKit
                 var doc = LoadDocument(editvar.cr2w.FileName + ":" + editvar.FullName, new MemoryStream(bytes), true);
                 if (doc != null)
                 {
-                    doc.OnFileSaved += onVariableEditorSave;
+                    doc.OnFileSaved += OnVariableEditorSave;
                     doc.SaveTarget = editvar;
                 }
                 else
                 {
-                    openHexEditorFor(editvar);
+                    OpenHexEditorFor(editvar);
                 }
             }
         }
 
-        private void onVariableEditorSave(object sender, FileSavedEventArgs args)
+        private void OnVariableEditorSave(object sender, FileSavedEventArgs args)
         {
             if (args.Stream is MemoryStream)
             {

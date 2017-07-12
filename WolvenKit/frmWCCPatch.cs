@@ -69,7 +69,7 @@ namespace WolvenKit
                 }
                
             }
-            catch (Exception ex)
+            catch
             {
                 throw new Exception("Failed to patch! Please try reinstalling wcc_lite!");
             }

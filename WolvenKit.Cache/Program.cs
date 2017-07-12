@@ -15,15 +15,15 @@ namespace WolvenKit.Cache
         [STAThread]
         public static void Main(string[] args)
         {
-            /*using (var fb = new FolderBrowserDialog())
+            using (var fb = new FolderBrowserDialog())
             {
                 if(fb.ShowDialog() == DialogResult.OK)
                 {
                     IntenseTest(Directory.GetFiles(fb.SelectedPath,"soundspc.cache",SearchOption.AllDirectories).ToList());
                     MessageBox.Show("Operation completed!");
                 }
-            }*/
-            using (var of = new OpenFileDialog())
+            }
+           /*using (var of = new OpenFileDialog())
             {
                 of.Filter = "Witcher 3 Sound cache files | *.cache";
                 of.Multiselect = true;
@@ -31,7 +31,7 @@ namespace WolvenKit.Cache
                 {
                     IntenseTest(of.FileNames.ToList());
                 }
-            }
+            }*/
             Console.ReadLine();
         }
 

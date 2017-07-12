@@ -11,15 +11,15 @@ namespace WolvenKit
 {
     public partial class frmMenuCreator : Form
     {
-        public WitcherMenu Menu;
+        private WitcherMenu MenuObject;
 
         public const string BrokenXmlHeader = "<?xml version=\"1.0\" encoding=\"UTF-16\"?>";
 
         public frmMenuCreator()
         {
             InitializeComponent();
-            Menu = new WitcherMenu();
-            MenuEditor.SelectedObject = Menu;
+            MenuObject = new WitcherMenu();
+            MenuEditor.SelectedObject = MenuObject;
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -33,7 +33,7 @@ namespace WolvenKit
                 };
                 if (sf.ShowDialog() == DialogResult.OK)
                 {
-                    var menu = new XDocument(new XElement("UserConfig", Menu.Groups.Select(SerializeGroup)));
+                    var menu = new XDocument(new XElement("UserConfig", MenuObject.Groups.Select(SerializeGroup)));
                     menu.Save(sf.FileName);
                 }
             //}
@@ -55,7 +55,7 @@ namespace WolvenKit
                 if (of.ShowDialog() == DialogResult.OK)
                 {
                     var loadedxml = XDocument.Load(of.FileName);
-                    Menu.Groups = loadedxml.Root?.Elements("Group").Select(DeserializeGroup).ToList();
+                    MenuObject.Groups = loadedxml.Root?.Elements("Group").Select(DeserializeGroup).ToList();
                 }
            // }
            // catch (Exception ex)

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WolvenKit
 {
-    public class Win32
+    public class NativeMethods
     {
         // offset of window style value
         public const int GWL_STYLE = -16;
@@ -21,6 +21,6 @@ namespace WolvenKit
         [DllImport("kernel32.dll", EntryPoint = "MoveFileW", SetLastError = true,
         CharSet = CharSet.Unicode, ExactSpelling = true,
         CallingConvention = CallingConvention.StdCall)]
-        public static extern bool MoveFile(string lpExistingFileName, string lpNewFileName);
+        private static extern bool MoveFile(string lpExistingFileName, string lpNewFileName);
     }
 }

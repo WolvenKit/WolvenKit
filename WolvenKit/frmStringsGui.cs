@@ -427,7 +427,6 @@ namespace WolvenKit
                     encoderProc.Start();
                     string test = encoderProc.StandardOutput.ReadToEnd();
                     encoderProc.WaitForExit();
-                    bool dd = true;
                 }
                 MessageBox.Show("Files encoded.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }

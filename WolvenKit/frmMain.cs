@@ -451,8 +451,7 @@ namespace WolvenKit
             if (!File.Exists(fullpath))
                 return;
 
-            var dlg = new frmRenameDialog();
-            dlg.FileName = filename;
+            var dlg = new frmRenameDialog() { FileName = filename };
             if (dlg.ShowDialog() == DialogResult.OK && dlg.FileName != filename)
             {
                 var newfullpath = Path.Combine(ActiveMod.FileDirectory, dlg.FileName);
@@ -569,7 +568,7 @@ namespace WolvenKit
         {
             File.WriteAllBytes(Path.GetTempPath() + "asd." + extension, new byte[] { 0x01 });
             var programname = new StringBuilder();
-            Win32.FindExecutable("asd." + extension, Path.GetTempPath(), programname);
+            NativeMethods.FindExecutable("asd." + extension, Path.GetTempPath(), programname);
             if (programname.ToString().ToUpper().Contains(".EXE"))
             {
                 Process.Start(programname.ToString(), fullpath);
@@ -678,8 +677,7 @@ namespace WolvenKit
 
         private void tbtOpen_Click(object sender, EventArgs e)
         {
-            var dlg = new OpenFileDialog();
-            dlg.Title = "Open CR2W File";
+            var dlg = new OpenFileDialog() { Title = "Open CR2W File" };
             dlg.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
             if (dlg.ShowDialog() == DialogResult.OK)
             {
@@ -920,9 +918,7 @@ namespace WolvenKit
 
             string entryName = Path.GetFileName(filename);
             entryName = ZipEntry.CleanName(entryName);
-            ZipEntry newEntry = new ZipEntry(entryName);
-            newEntry.DateTime = fi.LastWriteTime;
-            newEntry.Size = fi.Length;
+            ZipEntry newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length};
             zipStream.PutNextEntry(newEntry);
             byte[] buffer = new byte[4096];
             using (FileStream streamReader = File.OpenRead(filename))
@@ -944,9 +940,7 @@ namespace WolvenKit
 
                 string entryName = filename.Substring(folderOffset);
                 entryName = ZipEntry.CleanName(entryName);
-                ZipEntry newEntry = new ZipEntry(entryName);
-                newEntry.DateTime = fi.LastWriteTime;
-                newEntry.Size = fi.Length;
+                ZipEntry newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
                 zipStream.PutNextEntry(newEntry);
                 byte[] buffer = new byte[4096];
                 using (FileStream streamReader = File.OpenRead(filename))
@@ -1260,8 +1254,7 @@ namespace WolvenKit
 
         private void addFileToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            var dlg = new OpenFileDialog();
-            dlg.Title = "Open CR2W File";
+            var dlg = new OpenFileDialog() { Title = "Open CR2W File" };
             dlg.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
             if (dlg.ShowDialog() == DialogResult.OK)
             {
@@ -1276,7 +1269,7 @@ namespace WolvenKit
                 sef.ShowDialog();
         }
 
-        private void stringsGUIToolStripMenuItem_Click(object sender, EventArgs e)
+        private void StringsGUIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (var sg = new frmStringsGui())
                 sg.ShowDialog();
@@ -1294,7 +1287,7 @@ namespace WolvenKit
                 pw.ShowDialog();
         }
 
-        private void outputToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OutputToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowOutput();
         }
@@ -1304,7 +1297,7 @@ namespace WolvenKit
             Process.Start("https://witcherscript.readthedocs.io");
         }
 
-        private void reloadProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ReloadProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (File.Exists(ModManager.Get().ActiveMod?.FileName))
             {
@@ -1312,7 +1305,7 @@ namespace WolvenKit
             }
         }
 
-        private void addFileFromOtherModToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void AddFileFromOtherModToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             addModFile(true);
         }
@@ -1328,12 +1321,12 @@ namespace WolvenKit
             wcclicense.Show();
         }
 
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             saveActiveFile();
         }
 
-        private void saveAllToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaveAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
             saveAllFiles();
         }
@@ -1376,7 +1369,7 @@ namespace WolvenKit
             }
         }
 
-        private void launchGameForDebuggingToolStripMenuItem_Click(object sender, EventArgs e)
+        private void LaunchGameForDebuggingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             executeGame();
         }
@@ -1389,7 +1382,7 @@ namespace WolvenKit
             }
         }
 
-        private void recordStepsToReproduceBugToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RecordStepsToReproduceBugToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show(@"This will launch an app that will help you record the steps needed to reproduce the bug/problem.
 After its done it saves a zip file.
@@ -1400,7 +1393,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             }
         }
 
-        private void reportABugToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ReportABugToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("When reporting a bug please create a reproducion file at Help->Record steps to reproduce.",
                 "Bug reporting",
@@ -1408,7 +1401,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             Process.Start($"mailto:{"hambalko.bence@gmail.com"}?Subject={"WolvenKit bug report"}&Body={"Short description of bug:"}");
         }
 
-        private void gameDebuggerToolStripMenuItem_Click(object sender, EventArgs e)
+        private void GameDebuggerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var gdb = new frmDebug();
             gdb.Show();

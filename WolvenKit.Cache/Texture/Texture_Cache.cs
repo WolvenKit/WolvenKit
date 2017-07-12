@@ -84,7 +84,6 @@ namespace WolvenKit.Cache
             using (var output = new FileStream(filename, FileMode.CreateNew, FileAccess.Write))
             {
                 Extract(output);
-                output.Close();
             }
         }
     }

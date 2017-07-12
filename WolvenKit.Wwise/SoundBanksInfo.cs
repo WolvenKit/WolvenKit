@@ -13,8 +13,7 @@ namespace WolvenKit.Cache
         //<DialogueEvents />
         public List<SoundBankFile> StreamedFiles = new List<SoundBankFile>(); 
         public List<SoundBank> Banks = new List<SoundBank>(); 
-
-
+        
         public SoundBanksInfo(string fileName)
         {
             XDocument file = XDocument.Load(fileName);
@@ -28,6 +27,21 @@ namespace WolvenKit.Cache
         public void Save(string path)
         {
             //TODO: Save with the new files. This needs to be designed well so we can add new sounds easily.
+        }
+
+        public void AddStreamedFile(params string[] Files)
+        {
+            //TODO: Figure this out
+        }
+
+        public void AddBank()
+        {
+            //TODO: Complete this.
+        }
+
+        public void CreatePlaylist(params string[] Files)
+        {
+            //TODO: Figure this out.
         }
     }
 

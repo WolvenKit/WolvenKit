@@ -39,7 +39,7 @@ namespace WolvenKit
             });
         }
 
-        private void videoConverter_DoWork(object sender, DoWorkEventArgs e)
+        private void VideoConverter_DoWork(object sender, DoWorkEventArgs e)
         {
             Demux(videofile);
             foreach (var demuxedfile in Demuxedfiles)
@@ -51,7 +51,7 @@ namespace WolvenKit
             }
         }
 
-        private void videoConverter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void VideoConverter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             statusLabel.Hide();
             string tempfile = Path.GetTempFileName();

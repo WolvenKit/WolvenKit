@@ -1,6 +1,8 @@
-﻿namespace WolvenKit
+﻿using System;
+
+namespace WolvenKit
 {
-    public class RequestFileArgs
+    public class RequestFileArgs : EventArgs
     {
         public string File { get; set; }
     }
