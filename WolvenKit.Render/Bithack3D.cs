@@ -10,6 +10,7 @@ using IrrlichtLime.Core;
 using IrrlichtLime.Video;
 using IrrlichtLime.Scene;
 using IrrlichtLime.GUI;
+using System.IO;
 
 namespace WolvenKit.Render
 {
@@ -66,8 +67,7 @@ namespace WolvenKit.Render
                 gui.AddStaticText("Hello World! This is the Irrlicht Software renderer!",
                     new Recti(10, 10, 260, 22), true);
 
-                //AnimatedMesh mesh = smgr.GetMesh("../../Models/lamp/rv_lamp_post_3.obj");
-                AnimatedMesh mesh = smgr.GetMesh("../../Media/sydney.md2");
+                AnimatedMesh mesh = smgr.GetMesh(modelPath);
                 AnimatedMeshSceneNode node = smgr.AddAnimatedMeshSceneNode(mesh);
 
                 if (node == null) throw new Exception("Could not load file!");
@@ -75,9 +75,10 @@ namespace WolvenKit.Render
                 node.SetMaterialFlag(MaterialFlag.Lighting, false);
                 if(mesh.MeshType == AnimatedMeshType.MD2)
                     node.SetMD2Animation(AnimationTypeMD2.Stand);
-                node.SetMaterialTexture(0, driver.GetTexture("../../Media/sydney.bmp"));
+                //node.SetMaterialTexture(0, driver.GetTexture("../../Media/sydney.bmp"));
 
-                smgr.AddCameraSceneNode(null, new Vector3Df(node.BoundingBox.Radius*2f, node.BoundingBox.Extent.Y/2f, 0), new Vector3Df(0, node.BoundingBox.Extent.Y/2f, 0));
+                smgr.AddCameraSceneNode(null, new Vector3Df(node.BoundingBox.Radius*2f, node.BoundingBox.Radius, 0), new Vector3Df(0, node.BoundingBox.Radius, 0));
+                scaleMul = node.BoundingBox.Radius/2;
 
                 MethodInvoker UpdateRichTextBoxInvoker = new MethodInvoker(delegate { UpdateRichTextBox(); });
 
@@ -109,9 +110,12 @@ namespace WolvenKit.Render
 
         #region Common Data
 
+        private string modelPath = "";
+
         //private static Quaternion modelAngle = new Quaternion(new Vertex3f(), 0);
         private static Vector3Df modelPosition = new Vector3Df(0.0f, 0.0f, 0.0f);
         private static Vector3Df modelAngle = new Vector3Df();
+        private static float scaleMul = 1;
 
         private static bool model_autorotating = true;
         //private static float angle_autorotate = 0;
@@ -151,6 +155,33 @@ namespace WolvenKit.Render
         #region event handlers
         private void Bithack3D_Load(object sender, EventArgs e)
         {
+            // OpenFileDialog for importing 3D models
+            OpenFileDialog open3dModel = new OpenFileDialog();
+            open3dModel.InitialDirectory = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\Models"));
+            // If dir not found then use exe dir
+            if (Directory.Exists(open3dModel.InitialDirectory) == false)
+            {
+                open3dModel.InitialDirectory = Environment.CurrentDirectory;
+            }
+
+            if (open3dModel.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    modelPath = Path.GetFullPath(open3dModel.FileName).Replace(@"\", "/");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, "Error: Could not read file from disk. Original error: " + ex.Message);
+                    this.BeginInvoke(new MethodInvoker(Close));
+                }
+            }
+            else
+            {
+                MessageBox.Show(this, "No file selected!");
+                this.BeginInvoke(new MethodInvoker(Close));
+            }
+
             // start an irrlicht thread
             StartIrrThread();
         }
@@ -185,10 +216,10 @@ namespace WolvenKit.Render
             {
                 model_autorotating = false;
                 float deltaDirection = currentPosX - e.X;
-                modelPosition.Z = modelPosition.Z - deltaDirection / 100;
+                modelPosition.Z = modelPosition.Z - deltaDirection * scaleMul / 100;
 
                 deltaDirection = currentPosY - e.Y;
-                modelPosition.Y = modelPosition.Y + deltaDirection / 100;
+                modelPosition.Y = modelPosition.Y + deltaDirection * scaleMul / 100;
             }
             currentPosX = e.X;
             currentPosY = e.Y;
