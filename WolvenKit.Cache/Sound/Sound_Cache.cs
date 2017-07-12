@@ -46,7 +46,7 @@ namespace WolvenKit.Cache
         public SoundCache(string fileName)
         {
             FileName = fileName;
-            using(var br = new BinaryReader(new FileStream(fileName, FileMode.Open)))
+            using (var br = new BinaryReader(new FileStream(fileName, FileMode.Open)))
                 Read(br);
         }
 
@@ -55,11 +55,16 @@ namespace WolvenKit.Cache
         /// </summary>
         /// <param name="FileList">The list of files to concat.</param>
         /// <returns>The concatenated string.</returns>
-        public static string GetNames(List<string> FileList)
+        public static byte[] GetNames(List<string> FileList)
         {
-            return string.Join("\0",FileList.Select(x=> Path.GetFileName(x))) + "\0";
+            return Encoding.UTF8.GetBytes(string.Join("\0",FileList.Select(x=> Path.GetFileName(x).Trim())) + "\0");
         }
 
+        /// <summary>
+        /// Calculates the total size of the data.
+        /// </summary>
+        /// <param name="FileList">The list of file to calculate the sum of.</param>
+        /// <returns>The size of the files.</returns>
         public static long TotalDataSize(List<string> FileList) => FileList.Sum(x => new FileInfo(x).Length);
 
         /// <summary>
@@ -71,10 +76,7 @@ namespace WolvenKit.Cache
         {
             var res = new List<SoundCacheItem>();
             foreach (var item in FileList)
-            {
-                var si = new SoundCacheItem(null);
-                res.Add(si);
-            }
+                res.Add(new SoundCacheItem(null));
             return res;
         }
 
@@ -89,7 +91,7 @@ namespace WolvenKit.Cache
             using (var bw = new BinaryWriter(ms))
             {
                 long base_offset = 0x30;
-                long name_offset = 0x0;
+                long name_offset = 0x00;
                 foreach (var item in FileList)
                 {
                     if (Version >= 2)
@@ -109,25 +111,24 @@ namespace WolvenKit.Cache
                         bw.Write((UInt32)(new FileInfo(item).Length));
                     }
                 }
-                var pos = ms.Position;
-                return ms.GetBuffer().Take((int)pos).ToArray();
+                return ms.ToArray();
             }
         }
 
         /// <summary>
-        /// Calculates the FNV1A64 hash for the soundcache.
+        /// Calculates the FNV1A64 hash (with a slight change) for the soundcache.
         /// </summary>
         /// <returns></returns>
         public static ulong CalculateChecksum(List<string> Files2Buffer)
         {
-            byte[] bytes = Encoding.ASCII.GetBytes(GetNames(Files2Buffer) + GetInfo(Files2Buffer));
+            byte[] bytes = (GetNames(Files2Buffer).Concat(GetInfo(Files2Buffer))).ToArray();
             const ulong fnv64Offset = 0xcbf29ce484222325;
             const ulong fnv64Prime = 0x100000001b3;
             ulong hash = fnv64Offset;
-            for (var i = 0; i < bytes.Length; i++)
+            foreach (var b in bytes)
             {
-                hash = hash ^ bytes[i];
-                hash = (hash * fnv64Prime) % 0x1000000000000000;
+                hash = hash ^ b;
+                hash = (hash * fnv64Prime) % 0xFFFFFFFFFFFFFFFF;
             }
             return hash;
         }
@@ -218,8 +219,8 @@ namespace WolvenKit.Cache
 
                 bw.Write(Magic);
                 bw.Write((UInt32)Version);
-                bw.Write((UInt32)Unknown1);
-                bw.Write((UInt32)Unknown2);
+                bw.Write(Unknown1);
+                bw.Write(Unknown2);
 
                 if (Version >= 2)
                 {
@@ -234,11 +235,12 @@ namespace WolvenKit.Cache
                     bw.Write((UInt32)(DataOffset + TotalDataSize(FileList)));
                 }
                 bw.Write((UInt32)GetNames(FileList).Length);
-                bw.Write((UInt64)buffersize);
-                bw.Write((UInt64)((long)(CalculateChecksum(FileList))));
 
                 if (Version >= 2)
-                    bw.Write((UInt32)(Unk3));
+                    bw.Write((Unk3));
+
+                bw.Write((UInt64)buffersize);
+                bw.Write((CalculateChecksum(FileList))); //TODO: Check why the last byte is wrong!
                 //Write the actual contents of the files.
                 for (int i = 0; i < FileList.Count; i++)
                     if (data_array[i].Offset != -1)
