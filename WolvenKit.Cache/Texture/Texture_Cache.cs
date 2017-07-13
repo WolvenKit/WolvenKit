@@ -81,6 +81,7 @@ namespace WolvenKit.Cache
 
         public void Extract(string filename)
         {
+            filename = Path.ChangeExtension(filename, ".dds");
             using (var output = new FileStream(filename, FileMode.CreateNew, FileAccess.Write))
             {
                 Extract(output);
