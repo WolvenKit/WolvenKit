@@ -19,7 +19,7 @@ namespace WolvenKit.Cache
             {
                 if(fb.ShowDialog() == DialogResult.OK)
                 {
-                    IntenseTest(Directory.GetFiles(fb.SelectedPath,"soundspc.cache",SearchOption.AllDirectories).ToList());
+                    //IntenseTest(Directory.GetFiles(fb.SelectedPath,"soundspc.cache",SearchOption.AllDirectories).ToList());
                     MessageBox.Show("Operation completed!");
                 }
             }
@@ -35,7 +35,7 @@ namespace WolvenKit.Cache
             Console.ReadLine();
         }
 
-        public static void IntenseTest(List<string> Files2Test)
+        /*public static void IntenseTest(List<string> Files2Test)
         {
             var xdoc = new XDocument(new XElement("SoundCacheTest",
                 Files2Test.Select(x=> new XElement("Result",new XAttribute("FileName",x),
@@ -92,6 +92,6 @@ namespace WolvenKit.Cache
             using (var md5 = MD5.Create())
                 using (var stream = File.OpenRead(FileName))
                 return BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "");
-        }
+        }*/
     }
 }

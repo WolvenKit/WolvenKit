@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace WolvenKit.Cache
 {
-    public class SoundBanksInfo
+    public class SoundBanksInfoXML
     {
         public string PlatForm;
         public string SchemaVersion;
@@ -15,7 +15,7 @@ namespace WolvenKit.Cache
         public List<SoundBank> Banks = new List<SoundBank>(); 
 
 
-        public SoundBanksInfo(string fileName)
+        public SoundBanksInfoXML(string fileName)
         {
             XDocument file = XDocument.Load(fileName);
             PlatForm = file.Root?.Attribute("Platform")?.Value;
@@ -31,14 +31,14 @@ namespace WolvenKit.Cache
         }
     }
 
-    public class SoundBankFile
+    public class XMLSoundBankFile
     {
         public string Id;
         public string Language;
         public string ShortName;
         public string Path;
 
-        public SoundBankFile(XElement elem)
+        public XMLSoundBankFile(XElement elem)
         {
             Id = elem.Attribute("Id")?.Value;
             Language = elem.Attribute("Language")?.Value;
@@ -48,7 +48,7 @@ namespace WolvenKit.Cache
 
     }
 
-    public class SoundBank
+    public class XMLSoundBank
     {
         public string Id;
         public string Language;
@@ -61,7 +61,7 @@ namespace WolvenKit.Cache
         public List<SoundBankFile> IncludedPrefetchFiles = new List<SoundBankFile>();
         // <ExternalSources />
 
-        public SoundBank(XElement elem)
+        public XMLSoundBank(XElement elem)
         {
             Id = elem.Attribute("Id")?.Value;
             Language = elem.Attribute("Language")?.Value;
