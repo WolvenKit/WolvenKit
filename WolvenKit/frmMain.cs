@@ -739,11 +739,8 @@ namespace WolvenKit
             if (packsettings.ShowDialog() == DialogResult.OK)
             {
                 ShowOutput();
-
                 ClearOutput();
-
                 saveAllFiles();
-
                 if (packsettings.PackBundles)
                 {
                     var taskPackMod = packMod();
@@ -766,6 +763,7 @@ namespace WolvenKit
                         Application.DoEvents();
                     }
                 }
+
                 if (packsettings.GenMetadata)
                 {
                     var taskMetaData = createModMetaData();
@@ -774,6 +772,9 @@ namespace WolvenKit
                         Application.DoEvents();
                     }
                 }
+
+                if(packsettings.Sound)
+                    SoundCache.Write(Directory.EnumerateFiles(ActiveMod.FileDirectory).Where(file => file.ToLower().EndsWith("wem") || file.ToLower().EndsWith("bnk")).ToList(), Path.Combine(ActiveMod.Directory, @"packed\\content\\soundspc.cache"));
 
                 if (Directory.Exists((ActiveMod.FileDirectory + "\\scripts")) && Directory.GetFiles((ActiveMod.FileDirectory + "\\scripts")).Any())
                 {
