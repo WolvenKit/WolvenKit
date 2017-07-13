@@ -585,13 +585,27 @@
     <None Include="Resources\mail.png" />
     <None Include="Resources\player_record.png" />
     <Content Include="wolven_kit_icon.ico" />
-    <Content Include="Licenses\License.doboz4net.txt" />
-    <Content Include="Licenses\License.dockpanelsuit.txt" />
-    <Content Include="Licenses\License.dotnetzip.txt" />
-    <Content Include="Licenses\License.dotnetzip.zlib.txt" />
-    <Content Include="Licenses\License.lz4net.txt" />
-    <Content Include="Licenses\License.objectlistview.txt" />
-    <Content Include="Licenses\License.W3SaveGameEditor.txt" />
+    <Content Include="Licenses\License.doboz4net.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Licenses\License.dockpanelsuit.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Licenses\License.dotnetzip.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Licenses\License.dotnetzip.zlib.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Licenses\License.lz4net.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Licenses\License.objectlistview.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Licenses\License.W3SaveGameEditor.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Notes\Filetypes.txt" />
     <None Include="Resources\ExpandIcon.png" />
     <None Include="Resources\ExitIcon.png" />
