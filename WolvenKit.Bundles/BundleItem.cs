@@ -13,13 +13,13 @@ namespace WolvenKit.Bundles
         public IWitcherArchiveType Bundle { get; set; }
         public string Name { get; set; }
         public byte[] Hash { get; set; }
-        public uint Unknown { get; set; }
+        public uint Empty { get; set; }
         public long Size { get; set; }
         public uint ZSize { get; set; }
         public long Offset { get; set; }
         public ulong TimeStamp { get; set; }
-        public byte[] Unknown2 { get; set; }
-        public uint Unknown3 { get; set; }
+        public byte[] Zero { get; set; }
+        public uint UniqueId { get; set; }
         public uint Compression { get; set; }
         public string DateString { get; set; }
 

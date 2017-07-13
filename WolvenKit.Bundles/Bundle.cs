@@ -16,7 +16,7 @@ namespace WolvenKit.Bundles
 
         private uint bundlesize;
         private uint dataoffset;
-        private uint unknown;
+        private uint dummysize;
 
         public Bundle(string filename)
         {
@@ -43,7 +43,7 @@ namespace WolvenKit.Bundles
                 }
 
                 bundlesize = reader.ReadUInt32();
-                unknown = reader.ReadUInt32();
+                dummysize = reader.ReadUInt32();
                 dataoffset = reader.ReadUInt32();
 
                 reader.BaseStream.Seek(0x20, SeekOrigin.Begin);
@@ -59,7 +59,7 @@ namespace WolvenKit.Bundles
 
                     item.Name = item.Bundle.TypeName + "\\" + strname.Substring(0, strname.IndexOf('\0'));
                     item.Hash = reader.ReadBytes(16);
-                    item.Unknown = reader.ReadUInt32();
+                    item.Empty = reader.ReadUInt32();
                     item.Size = reader.ReadUInt32();
                     item.ZSize = reader.ReadUInt32();
                     item.Offset = reader.ReadUInt32();
@@ -89,8 +89,8 @@ namespace WolvenKit.Bundles
                     item.DateString = string.Format(" {0}/{1}/{2} {3}:{4}:{5}", d, m, y, h, n, s);
 
 
-                    item.Unknown2 = reader.ReadBytes(16);
-                    item.Unknown3 = reader.ReadUInt32();
+                    item.Zero = reader.ReadBytes(16);    //00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 (always, in every archive)
+                    item.UniqueId = reader.ReadUInt32();    //Depending on the .bundle archive, this is either 0 (patch.bundle) or a random value
                     item.Compression = reader.ReadUInt32();
 
                     Items.Add(item.Name, item);
