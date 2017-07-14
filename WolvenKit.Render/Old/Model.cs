@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Assimp;
 using OpenGL;
+using System.IO;
 
 namespace WolvenKit.Render
 {
@@ -51,7 +52,7 @@ namespace WolvenKit.Render
             }
             catch (Exception ex)
             {
-                MessageBox.Show(Program.bithack3D, "ERROR::ASSIMP::" + ex.ToString());
+                MessageBox.Show(Program.bithack3D, ex.ToString());
                 Program.bithack3D.BeginInvoke(new MethodInvoker(Program.bithack3D.Close));
             }
         }
@@ -93,9 +94,12 @@ namespace WolvenKit.Render
                 vertex.Position.Z = mesh.Vertices[i].Z;
                 //vertex.Position = vector;
                 // Normals
-                vertex.Normal.X = mesh.Normals[i].X;
-                vertex.Normal.Y = mesh.Normals[i].Y;
-                vertex.Normal.Z = mesh.Normals[i].Z;
+                if (mesh.HasNormals)
+                {
+                    vertex.Normal.X = mesh.Normals[i].X;
+                    vertex.Normal.Y = mesh.Normals[i].Y;
+                    vertex.Normal.Z = mesh.Normals[i].Z;
+                }
                 //vertex.Normal = vector;
                 // Texture Coordinates
                 if (mesh.HasTextureCoords(0)) // Does the mesh contain texture coordinates?
@@ -182,8 +186,8 @@ namespace WolvenKit.Render
             filename = directory + '/' + filename;
             uint textureID = Gl.GenTexture();
 
-            Bitmap bitmap = new Bitmap(filename);
-            System.Drawing.Imaging.BitmapData imageData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
+            Bitmap bitmap = LoadImage(filename);
+            System.Drawing.Imaging.BitmapData imageData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height),
                 System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
             // Assign texture to ID
@@ -200,6 +204,17 @@ namespace WolvenKit.Render
 
             bitmap.Dispose();
             return textureID;
+        }
+
+        private Bitmap LoadImage(string filename)
+        {
+            switch(Path.GetExtension(filename))
+            {
+                case ".tga":
+                    return TargaImage.LoadTargaImage(filename);
+                default:
+                    return new Bitmap(filename);
+            }
         }
         #endregion
     }
