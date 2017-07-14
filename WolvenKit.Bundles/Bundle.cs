@@ -14,9 +14,24 @@ namespace WolvenKit.Bundles
             (byte) 'O', (byte) '7', (byte) '0'
         };
 
+        private static int HEADER_SIZE = 32;
+        private static int ALIGNMENT_TARGET = 4096;
+        private static string FOOTER_DATA = "AlignmentUnused"; //The bundle's final filesize should be an even multiple of 16; garbage data should be appended at the end if necessary to make this happen [appears to be unnecessary/optional, as far as the game cares]
+
         private uint bundlesize;
         private uint dataoffset;
         private uint dummysize;
+
+        public static int GetHeaderEntrySize => 100 +      //filename
+                    16 +                                //hash/checksum
+                    4 +                                 //0
+                    4 +                                 //uncompressed size
+                    4 +                                 //compressed size
+                    4 +                                 //data offset
+                    8 +                                 //timestamp
+                    16 +                                //0
+                    4 +                                 //purpose unknown
+                    4;                                  //compression algo
 
         public Bundle(string filename)
         {
@@ -98,6 +113,46 @@ namespace WolvenKit.Bundles
 
 
                 reader.Close();
+            }
+        }
+
+        /// <summary>
+        /// Packs files to a bundle.
+        /// </summary>
+        /// <param name="Outputpath">The path to save the bundle to with the packed files.</param>
+        /// <param name="Files">The Files to pack</param>
+        public static void Write(string Outputpath, params string[] Files)
+        {
+            //https://github.com/ketwaroo/stuff/blob/master/witcher3/bundle-repack.php
+            //http://aluigi.altervista.org/bms/witcher3.bms
+            //https://github.com/ngoedde/The-Witcher-3-XBundle
+            //https://github.com/adam-roth/bundle-explorer/ <-- this may be the best.
+
+            using (var fs = new FileStream(Outputpath, FileMode.Create))
+            using (var bw = new BinaryWriter(fs))
+            {
+                var dataoffset = 0;
+                var bundlesize = 0;
+                var dummysize = 0;
+
+                int writePosition = HEADER_SIZE;
+                foreach (var f in Files)
+                    writePosition += GetHeaderEntrySize;
+                dataoffset = writePosition - HEADER_SIZE;
+
+
+                bw.Write(IDString);
+                bw.Write(bundlesize);
+                bw.Write(dummysize);
+                bw.Write(dataoffset);
+                foreach (var f in Files)
+                {
+
+
+
+
+
+                }
             }
         }
     }

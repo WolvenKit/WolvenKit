@@ -10,10 +10,7 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
-using Microsoft.VisualBasic.FileIO;
-
 using WeifenLuo.WinFormsUI.Docking;
-using WolvenKit.Bundles;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 using WolvenKit.Mod;
