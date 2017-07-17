@@ -82,6 +82,10 @@
       <Project>{4d1019f1-f099-450f-85b8-697e0332a94f}</Project>
       <Name>WolvenKit.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WolvenKit.W3Strings\WolvenKit.W3Strings.csproj">
+      <Project>{32d40d10-d6c3-48f0-aeb6-0f41c7e75cfd}</Project>
+      <Name>WolvenKit.W3Strings</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\VVVV.FreeImage.3.15.1.1\build\net40\VVVV.FreeImage.targets" Condition="Exists('..\packages\VVVV.FreeImage.3.15.1.1\build\net40\VVVV.FreeImage.targets')" />
