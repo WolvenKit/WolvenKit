@@ -121,6 +121,7 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing.Design" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
@@ -138,14 +139,14 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vlc.DotNet.Core, Version=2.1.134.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
-      <HintPath>..\packages\Vlc.DotNet.Core.2.1.134\lib\net45\x86\Vlc.DotNet.Core.dll</HintPath>
+    <Reference Include="Vlc.DotNet.Core, Version=2.1.142.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=MSIL">
+      <HintPath>..\packages\Vlc.DotNet.Core.2.1.142\lib\net45\AnyCPU\Vlc.DotNet.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Vlc.DotNet.Core.Interops, Version=2.1.134.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
-      <HintPath>..\packages\Vlc.DotNet.Core.Interops.2.1.134\lib\net45\x86\Vlc.DotNet.Core.Interops.dll</HintPath>
+    <Reference Include="Vlc.DotNet.Core.Interops, Version=2.1.142.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=MSIL">
+      <HintPath>..\packages\Vlc.DotNet.Core.Interops.2.1.142\lib\net45\AnyCPU\Vlc.DotNet.Core.Interops.dll</HintPath>
     </Reference>
-    <Reference Include="Vlc.DotNet.Forms, Version=2.1.134.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
-      <HintPath>..\packages\Vlc.DotNet.Forms.2.1.134\lib\net45\x86\Vlc.DotNet.Forms.dll</HintPath>
+    <Reference Include="Vlc.DotNet.Forms, Version=2.1.142.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=MSIL">
+      <HintPath>..\packages\Vlc.DotNet.Forms.2.1.142\lib\net45\AnyCPU\Vlc.DotNet.Forms.dll</HintPath>
     </Reference>
     <Reference Include="VSLangProj, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
@@ -155,8 +156,8 @@
     <Reference Include="WeifenLuo.WinFormsUI.Docking">
       <HintPath>..\packages\DockPanelSuite.3.0.0-alpha8\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
     </Reference>
-    <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2015, Version=2.15.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
-      <HintPath>..\packages\DockPanelSuite.ThemeVS2015.2.15.0\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
+    <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2015, Version=2.16.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>..\packages\DockPanelSuite.ThemeVS2015.2.16.0\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
