@@ -11,21 +11,35 @@ using IrrlichtLime.Video;
 using IrrlichtLime.Scene;
 using IrrlichtLime.GUI;
 using System.IO;
+using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.CR2W;
 
 namespace WolvenKit.Render
 {
-    public partial class Bithack3D : Form
+    public partial class frmRender : DockContent
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private Thread irrThread;
-        public Bithack3D()
+        public frmRender()
         {
             //
             // Required for Windows Form Designer support
             //
             InitializeComponent();
+        }
+
+        private CR2WFile _file;
+
+        public CR2WFile File
+        {
+            get { return _file; }
+            set
+            {
+                _file = value;
+                //ImagePreviewControl.Image = GetImage(value) ?? SystemIcons.Warning.ToBitmap();
+            }
         }
 
         private void StartIrrThread()

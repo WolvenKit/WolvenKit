@@ -196,6 +196,17 @@ namespace WolvenKit
                         doc.ImageViewer.Show(doc.FormPanel, DockState.Document);
                         break;
                     }
+                case ".w2ent":
+                case ".w3ent":
+                    {
+                        doc.RenderViewer = new Render.frmRender
+                        {
+                            File = doc.File,
+                            DockAreas = DockAreas.Document
+                        };
+                        doc.RenderViewer.Show(doc.FormPanel, DockState.Document);
+                        break;
+                    }
                 //TODO: Remove this once it's done
 #if DEBUG
                 case ".redfur":
