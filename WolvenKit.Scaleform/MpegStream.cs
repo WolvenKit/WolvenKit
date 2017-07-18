@@ -388,7 +388,7 @@ namespace WolvenKit.Scaleform
                             }
                             else // this is an undexpected block type
                             {
-                                this.closeAllWriters(streamOutputWriters);
+                                this.CloseAllWriters(streamOutputWriters);
                                 Array.Reverse(currentBlockId);
                                 throw new FormatException(String.Format("Block ID at 0x{0} not found in table: 0x{1}", currentOffset.ToString("X8"), BitConverter.ToUInt32(currentBlockId, 0).ToString("X8")));
                             }
@@ -401,31 +401,21 @@ namespace WolvenKit.Scaleform
                         }
                         catch (Exception _ex)
                         {
-                            this.closeAllWriters(streamOutputWriters);
+                            this.CloseAllWriters(streamOutputWriters);
                             throw new Exception(String.Format("Error parsing file at offset {0), '{1}'", currentOffset.ToString("X8"), _ex.Message), _ex);
                         }
                     } // while (currentOffset < fileSize)
                 }
                 else
                 {
-                    this.closeAllWriters(streamOutputWriters);
+                    this.CloseAllWriters(streamOutputWriters);
                     throw new FormatException(String.Format("Cannot find Pack Header for file: {0}{1}", Path.GetFileName(this.FilePath), Environment.NewLine));
                 }
-
-                ///////////////////////////////////
-                // Perform any final tasks needed
-                ///////////////////////////////////
                 return this.DoFinalTasks(fs,FilenameTable, streamOutputWriters, demuxOptions.AddHeader);
-
-                //////////////////////////
-                // close all open writers
-                //////////////////////////
-                this.closeAllWriters(streamOutputWriters);
-
-            } // using (FileStream fs = File.OpenRead(path))
+            }
         }
 
-        private void closeAllWriters(Dictionary<uint, MemoryStream> writers)
+        private void CloseAllWriters(Dictionary<uint, MemoryStream> writers)
         {
             //////////////////////////
             // close all open writers

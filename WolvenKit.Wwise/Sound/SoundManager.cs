@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WolvenKit.Interfaces;
+using WolvenKit.Cache;
 
 namespace WolvenKit.Cache
 {
@@ -25,6 +26,7 @@ namespace WolvenKit.Cache
         public Dictionary<string, SoundCache> Archives { get; set; }
         public WitcherTreeNode RootNode { get; set; }
         public List<IWitcherFile> FileList { get; set; }
+        public string TypeName { get { return "SoundManager"; } }
         public List<string> Extensions { get; set; }
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
 
@@ -152,9 +154,10 @@ namespace WolvenKit.Cache
         /// </summary>
         public void RebuildRootNode()
         {
-            RootNode = new WitcherTreeNode();
-            RootNode.Name = "Sounds";
-
+            RootNode = new WitcherTreeNode()
+            {
+                Name = "Sounds"
+            };
             foreach (var item in Items)
             {
                 var currentNode = RootNode;

@@ -55,5 +55,5 @@ For any questions contact: The Witcher 3 modding discord (https://discord.gg/qBN
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: AssemblyVersion("0.1.1.*")]
-[assembly: AssemblyFileVersion("0.1.1.0")]
+[assembly: AssemblyVersion("0.2.0.*")]
+[assembly: AssemblyFileVersion("0.2.0.0")]

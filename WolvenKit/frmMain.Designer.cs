@@ -227,7 +227,7 @@ namespace WolvenKit
             this.launchGameForDebuggingToolStripMenuItem.Name = "launchGameForDebuggingToolStripMenuItem";
             this.launchGameForDebuggingToolStripMenuItem.Size = new System.Drawing.Size(293, 26);
             this.launchGameForDebuggingToolStripMenuItem.Text = "Launch game for debugging";
-            this.launchGameForDebuggingToolStripMenuItem.Click += new System.EventHandler(this.launchGameForDebuggingToolStripMenuItem_Click);
+            this.launchGameForDebuggingToolStripMenuItem.Click += new System.EventHandler(this.LaunchGameForDebuggingToolStripMenuItem_Click);
             // 
             // launchWithCostumParametersToolStripMenuItem
             // 
@@ -335,7 +335,7 @@ namespace WolvenKit
             this.addFileFromOtherModToolStripMenuItem.Name = "addFileFromOtherModToolStripMenuItem";
             this.addFileFromOtherModToolStripMenuItem.Size = new System.Drawing.Size(247, 26);
             this.addFileFromOtherModToolStripMenuItem.Text = "Add file from other mod";
-            this.addFileFromOtherModToolStripMenuItem.Click += new System.EventHandler(this.addFileFromOtherModToolStripMenuItem_Click_1);
+            this.addFileFromOtherModToolStripMenuItem.Click += new System.EventHandler(this.AddFileFromOtherModToolStripMenuItem_Click_1);
             // 
             // addFileToolStripMenuItem
             // 
@@ -356,7 +356,7 @@ namespace WolvenKit
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(247, 26);
             this.saveToolStripMenuItem.Text = "Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // saveAllToolStripMenuItem
             // 
@@ -364,7 +364,7 @@ namespace WolvenKit
             this.saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
             this.saveAllToolStripMenuItem.Size = new System.Drawing.Size(247, 26);
             this.saveAllToolStripMenuItem.Text = "Save all";
-            this.saveAllToolStripMenuItem.Click += new System.EventHandler(this.saveAllToolStripMenuItem_Click);
+            this.saveAllToolStripMenuItem.Click += new System.EventHandler(this.SaveAllToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
@@ -403,7 +403,7 @@ namespace WolvenKit
             this.reloadProjectToolStripMenuItem.Name = "reloadProjectToolStripMenuItem";
             this.reloadProjectToolStripMenuItem.Size = new System.Drawing.Size(233, 26);
             this.reloadProjectToolStripMenuItem.Text = "Reload project";
-            this.reloadProjectToolStripMenuItem.Click += new System.EventHandler(this.reloadProjectToolStripMenuItem_Click);
+            this.reloadProjectToolStripMenuItem.Click += new System.EventHandler(this.ReloadProjectToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
@@ -453,14 +453,14 @@ namespace WolvenKit
             this.stringsEncoderGUIToolStripMenuItem.Name = "stringsEncoderGUIToolStripMenuItem";
             this.stringsEncoderGUIToolStripMenuItem.Size = new System.Drawing.Size(215, 26);
             this.stringsEncoderGUIToolStripMenuItem.Text = "Strings Encoder GUI";
-            this.stringsEncoderGUIToolStripMenuItem.Click += new System.EventHandler(this.stringsGUIToolStripMenuItem_Click);
+            this.stringsEncoderGUIToolStripMenuItem.Click += new System.EventHandler(this.StringsGUIToolStripMenuItem_Click);
             // 
             // gameDebuggerToolStripMenuItem
             // 
             this.gameDebuggerToolStripMenuItem.Name = "gameDebuggerToolStripMenuItem";
             this.gameDebuggerToolStripMenuItem.Size = new System.Drawing.Size(215, 26);
             this.gameDebuggerToolStripMenuItem.Text = "Game debugger";
-            this.gameDebuggerToolStripMenuItem.Click += new System.EventHandler(this.gameDebuggerToolStripMenuItem_Click);
+            this.gameDebuggerToolStripMenuItem.Click += new System.EventHandler(this.GameDebuggerToolStripMenuItem_Click);
             // 
             // menuCreatorToolStripMenuItem
             // 
@@ -505,7 +505,7 @@ namespace WolvenKit
             this.outputToolStripMenuItem.Name = "outputToolStripMenuItem";
             this.outputToolStripMenuItem.Size = new System.Drawing.Size(174, 26);
             this.outputToolStripMenuItem.Text = "Output";
-            this.outputToolStripMenuItem.Click += new System.EventHandler(this.outputToolStripMenuItem_Click);
+            this.outputToolStripMenuItem.Click += new System.EventHandler(this.OutputToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -551,7 +551,7 @@ namespace WolvenKit
             this.reportABugToolStripMenuItem.Name = "reportABugToolStripMenuItem";
             this.reportABugToolStripMenuItem.Size = new System.Drawing.Size(301, 26);
             this.reportABugToolStripMenuItem.Text = "Report a bug";
-            this.reportABugToolStripMenuItem.Click += new System.EventHandler(this.reportABugToolStripMenuItem_Click);
+            this.reportABugToolStripMenuItem.Click += new System.EventHandler(this.ReportABugToolStripMenuItem_Click);
             // 
             // recordStepsToReproduceBugToolStripMenuItem
             // 
@@ -559,7 +559,7 @@ namespace WolvenKit
             this.recordStepsToReproduceBugToolStripMenuItem.Name = "recordStepsToReproduceBugToolStripMenuItem";
             this.recordStepsToReproduceBugToolStripMenuItem.Size = new System.Drawing.Size(301, 26);
             this.recordStepsToReproduceBugToolStripMenuItem.Text = "Record steps to reproduce bug";
-            this.recordStepsToReproduceBugToolStripMenuItem.Click += new System.EventHandler(this.recordStepsToReproduceBugToolStripMenuItem_Click);
+            this.recordStepsToReproduceBugToolStripMenuItem.Click += new System.EventHandler(this.RecordStepsToReproduceBugToolStripMenuItem_Click);
             // 
             // toolStripSeparator7
             // 

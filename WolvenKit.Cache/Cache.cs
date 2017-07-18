@@ -10,7 +10,7 @@ namespace WolvenKit.Cache
 	//STATICSHADER.CACHE,SHADER.CACHE  RDHS + INT32(VERSION?) AT THE END
 	//COLLISION.CACHE CC3W AT THE START
 	//FURSHADER.CACHE?
-	internal class Cache
+	public class Cache
 	{
 		public static byte[] TextureIdString = { (byte)'H', (byte)'C', (byte)'X', (byte)'T' };
 		public static byte[] SoundIdString = { (byte)'C', (byte)'S', (byte)'3', (byte)'W' };

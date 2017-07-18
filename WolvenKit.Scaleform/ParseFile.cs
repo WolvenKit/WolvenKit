@@ -1531,7 +1531,7 @@ namespace WolvenKit.Scaleform
                     {
                         fileItem = GetNextVfsRecord(headerFs, vfsInformation, currentOffset, currentFileCount, sourcePath, outputFolderPath);
                     }
-                    catch (Exception exp)
+                    catch
                     {
                         //throw new Exception("foo", exp);
                     }
@@ -1677,7 +1677,6 @@ namespace WolvenKit.Scaleform
                             break;
                         default:
                             throw new Exception("Invalid relative location type for relative file name offset.");
-                            break;
                     }
                 }
 
@@ -1827,7 +1826,6 @@ namespace WolvenKit.Scaleform
                         break;
                     default:
                         throw new InvalidDataException("Unknown relative location string for RIFF: " + offsetInfo.RelativeLocationToRiffChunkString);
-                        break;
                 }
 
                 // get the value
@@ -1917,7 +1915,6 @@ namespace WolvenKit.Scaleform
                         break;
                     default:
                         throw new InvalidDataException("Unknown relative location string for bytes string search: " + offsetInfo.RelativeLocationToByteString);
-                        break;
                 }
 
                 // get the value

@@ -39,8 +39,8 @@ namespace WolvenKit
             // 
             // videoConverter
             // 
-            this.videoConverter.DoWork += new System.ComponentModel.DoWorkEventHandler(this.videoConverter_DoWork);
-            this.videoConverter.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.videoConverter_RunWorkerCompleted);
+            this.videoConverter.DoWork += new System.ComponentModel.DoWorkEventHandler(this.VideoConverter_DoWork);
+            this.videoConverter.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.VideoConverter_RunWorkerCompleted);
             // 
             // statusLabel
             // 

@@ -232,7 +232,7 @@ namespace WolvenKit.Scaleform
                 ret.Write(bytes, 0, bytesRead);
                 bytesRead = source.Read(bytes, 0, bytes.Length);
             }
-            return ret.GetBuffer();
+            return ret.ToArray();
         }
    
         public static string RemoveChunkFromFile(string path, long startingOffset, long length)

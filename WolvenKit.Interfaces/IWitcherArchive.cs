@@ -12,6 +12,7 @@ namespace WolvenKit.Interfaces
     {
         WitcherTreeNode RootNode { get; set; }
         List<IWitcherFile> FileList { get; set; }
+        string TypeName { get; }
         List<string> Extensions { get; set; }
         AutoCompleteStringCollection AutocompleteSource { get; set; }
         Dictionary<string, List<IWitcherFile>> Items { get; set; }

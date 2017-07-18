@@ -1991,6 +1991,7 @@ namespace WolvenKit.Cache
     /// <summary>
     /// Thrown when an invalid file header has been encountered.
     /// </summary>
+    [Serializable]
     public class InvalidFileHeaderException : Exception
     {
     }
@@ -1998,6 +1999,7 @@ namespace WolvenKit.Cache
     /// <summary>
     /// Thrown when the data does not contain a DDS image.
     /// </summary>
+    [Serializable]
     public class NotADDSImageException : Exception
     {
 
@@ -2006,6 +2008,7 @@ namespace WolvenKit.Cache
     /// <summary>
     /// Thrown when there is an unknown compressor used in the DDS file.
     /// </summary>
+    [Serializable]
     public class UnknownFileFormatException : Exception
     {
     }

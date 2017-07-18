@@ -71,7 +71,7 @@ namespace WolvenKit
                 {
                     treeView.Expand(c);
 
-                    if ((Win32.GetWindowLong(treeView.Handle, Win32.GWL_STYLE) & Win32.WS_VSCROLL) == Win32.WS_VSCROLL)
+                    if ((NativeMethods.GetWindowLong(treeView.Handle, NativeMethods.GWL_STYLE) & NativeMethods.WS_VSCROLL) == NativeMethods.WS_VSCROLL)
                     {
                         treeView.Collapse(c);
                         return false;
@@ -92,11 +92,12 @@ namespace WolvenKit
         private VariableListNode AddListViewItems(IEditableVariable v, VariableListNode parent = null,
             int arrayindex = 0)
         {
-            var node = new VariableListNode();
-            node.Variable = v;
-            node.Children = new List<VariableListNode>();
-            node.Parent = parent;
-
+            var node = new VariableListNode()
+            {
+                Variable = v,
+                Children = new List<VariableListNode>(),
+                Parent = parent
+            };
             var vars = v.GetEditableVariables();
             if (vars != null)
             {

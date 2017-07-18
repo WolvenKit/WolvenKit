@@ -81,10 +81,10 @@ namespace WolvenKit.Cache
 
         public void Extract(string filename)
         {
+            filename = Path.ChangeExtension(filename, ".dds");
             using (var output = new FileStream(filename, FileMode.CreateNew, FileAccess.Write))
             {
                 Extract(output);
-                output.Close();
             }
         }
     }
@@ -94,6 +94,7 @@ namespace WolvenKit.Cache
         //The images packed into this Texture cache file
         public List<TextureCacheItem> Files;
 
+        public string TypeName { get { return "TextureCache"; } }
         public string FileName { get; set; }
         public List<uint> Chunkoffsets;
         public uint TextureCount;
@@ -135,7 +136,7 @@ namespace WolvenKit.Cache
                 for (var i = 0; i < TextureCount; i++)
                 {
                     var ti = new TextureCacheItem(this);
-                    ti.Name = Names[i];
+                    ti.Name = ti.Bundle.TypeName + "\\" + Names[i];
                     ti.ParentFile = FileName;
                     ti.Id = br.ReadUInt32();                //number (unique???)
                     ti.Filenameoffset = br.ReadUInt32();    //filename, start offset in block2

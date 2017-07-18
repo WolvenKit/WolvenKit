@@ -43,13 +43,20 @@ namespace WolvenKit.W3Strings
             }
 
             var dlc = Path.Combine(exedir, @"..\..\DLC\");
-            foreach (var dir in Directory.GetDirectories(dlc))
+            try
             {
-                var strs = Directory.GetFiles(dir, Language + ".w3strings", SearchOption.AllDirectories);
-                foreach (var file in strs)
+                foreach (var dir in Directory.GetDirectories(dlc))
                 {
-                    OpenFile(file);
+                    var strs = Directory.GetFiles(dir, Language + ".w3strings", SearchOption.AllDirectories);
+                    foreach (var file in strs)
+                    {
+                        OpenFile(file);
+                    }
                 }
+            }
+            catch(DirectoryNotFoundException)
+            {
+                Directory.CreateDirectory(dlc);
             }
         }
 

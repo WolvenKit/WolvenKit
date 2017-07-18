@@ -60,9 +60,9 @@ namespace WolvenKit.Cache
                 }
                 tempfile.Flush();
 #if DEBUG
-                //File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\asd.dds",tempfile.GetBuffer());
+                //File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\asd.dds",tempfile.ToArray());
 #endif
-                return new DdsImage(tempfile.GetBuffer()).BitmapImage;
+                return new DdsImage(tempfile.ToArray()).BitmapImage;
             }
             catch(Exception e)
             {
