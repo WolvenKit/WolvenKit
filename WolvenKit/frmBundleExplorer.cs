@@ -17,6 +17,8 @@ namespace WolvenKit
         public List<IWitcherFile> FileList = new List<IWitcherFile>();
         public List<IWitcherArchive> Managers;
 
+        public event EventHandler<Tuple<List<IWitcherArchive>, ListView.ListViewItemCollection>> RequestFileAdd;
+
         public frmBundleExplorer(List<IWitcherArchive> archives)
         {
             InitializeComponent();
@@ -456,7 +458,8 @@ namespace WolvenKit
                     }
                 }
             }
-            DialogResult = DialogResult.OK;
+            RequestFileAdd.Invoke(this, new Tuple<List<IWitcherArchive>, ListView.ListViewItemCollection>(Managers, SelectedPaths));
+            pathlistview.Clear();
         }
 
         private void copyPathToolStripMenuItem_Click(object sender, EventArgs e)

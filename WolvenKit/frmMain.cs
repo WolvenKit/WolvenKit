@@ -306,15 +306,18 @@ namespace WolvenKit
                 return;
             }
             var explorer = new frmBundleExplorer(loadmods ? new List<IWitcherArchive> { MainController.Get().ModBundleManager, MainController.Get().ModSoundManager, MainController.Get().ModTextureManager } : new List<IWitcherArchive> { MainController.Get().BundleManager, MainController.Get().SoundManager, MainController.Get().TextureManager });
+            explorer.RequestFileAdd += Assetbrowser_FileAdd;
             explorer.OpenPath(browseToPath);
-            if (explorer.ShowDialog() == DialogResult.OK)
+            explorer.Show();
+        }
+
+        private void Assetbrowser_FileAdd(object sender, Tuple<List<IWitcherArchive>, ListView.ListViewItemCollection> Details)
+        {
+            foreach (ListViewItem depotpath in Details.Item2)
             {
-                foreach (ListViewItem depotpath in explorer.SelectedPaths)
-                {
-                    AddToMod(depotpath.Text, loadmods ? new List<IWitcherArchive> { MainController.Get().ModBundleManager, MainController.Get().ModSoundManager, MainController.Get().ModTextureManager } : new List<IWitcherArchive> { MainController.Get().BundleManager, MainController.Get().SoundManager, MainController.Get().TextureManager });
-                }
-                SaveMod();
+                AddToMod(depotpath.Text, Details.Item1);
             }
+            SaveMod();
         }
 
         private void AddToMod(string depotpath, List<IWitcherArchive> managers)
