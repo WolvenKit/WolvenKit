@@ -7,6 +7,7 @@ using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Types;
 using WolvenKit.W3Strings;
 using WolvenKit.Interfaces;
+using Newtonsoft.Json;
 
 namespace WolvenKit
 {
@@ -32,8 +33,26 @@ namespace WolvenKit
             {
                 if (w3StringManager == null)
                 {
-                    w3StringManager = new W3StringManager();
-                    w3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
+                    try
+                    {
+                        if (File.Exists("string_cache.json"))
+                        {
+                            w3StringManager = JsonConvert.DeserializeObject<W3StringManager>("string_cache.json");
+                        }
+                        else
+                        {
+                            w3StringManager = new W3StringManager();
+                            w3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
+                            File.WriteAllText("string_cache.json", JsonConvert.SerializeObject(W3StringManager));
+                        }
+                    }
+                    catch (System.Exception)
+                    {
+                        if (File.Exists("string_cache.json"))
+                            File.Delete("string_cache.json");
+                        w3StringManager = new W3StringManager();
+                        w3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
+                    }
                 }
 
                 return w3StringManager;
@@ -46,8 +65,26 @@ namespace WolvenKit
             {
                 if (bundleManager == null)
                 {
-                    bundleManager = new BundleManager();
-                    bundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                    try
+                    {
+                        if (File.Exists("bundle_cache.json"))
+                        {
+                            bundleManager = JsonConvert.DeserializeObject<BundleManager>("bundle_cache.json");
+                        }
+                        else
+                        {
+                            bundleManager = new BundleManager();
+                            bundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                            File.WriteAllText("bundle_cache.json", JsonConvert.SerializeObject(bundleManager));
+                        }
+                    }
+                    catch (System.Exception)
+                    {
+                        if (File.Exists("bundle_cache.json"))
+                            File.Delete("bundle_cache.json");
+                        bundleManager = new BundleManager();
+                        bundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                    }
                 }
                 return bundleManager;
             }
@@ -72,8 +109,26 @@ namespace WolvenKit
             {
                 if (soundManager == null)
                 {
-                    soundManager = new SoundManager();
-                    soundManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                    try
+                    {
+                        if (File.Exists("sound_cache.json"))
+                        {
+                            soundManager = JsonConvert.DeserializeObject<SoundManager>("sound_cache.json");
+                        }
+                        else
+                        {
+                            soundManager = new SoundManager();
+                            soundManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                            File.WriteAllText("sound_cache.json", JsonConvert.SerializeObject(soundManager));
+                        }
+                    }
+                    catch (System.Exception)
+                    {
+                        if (File.Exists("sound_cache.json"))
+                            File.Delete("sound_cache.json");
+                        soundManager = new SoundManager();
+                        soundManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                    }
                 }
                 return soundManager;
             }
@@ -98,8 +153,26 @@ namespace WolvenKit
             {
                 if (textureManager == null)
                 {
-                    textureManager = new TextureManager();
-                    textureManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                    try
+                    {
+                        if (File.Exists("texture_cache.json"))
+                        {
+                            textureManager = JsonConvert.DeserializeObject<TextureManager>("texture_cache.json");
+                        }
+                        else
+                        {
+                            textureManager = new TextureManager();
+                            textureManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                            File.WriteAllText("texture_cache.json", JsonConvert.SerializeObject(textureManager));
+                        }
+                    }
+                    catch (System.Exception)
+                    {
+                        if (File.Exists("texture_cache.json"))
+                            File.Delete("texture_cache.json");
+                        textureManager = new TextureManager();
+                        textureManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                    }
                 }
                 return textureManager;
             }
