@@ -13,6 +13,7 @@ namespace WolvenKit
         public frmChunkFlowDiagram flowDiagram;
         public frmJournalEditor JournalEditor;
         public frmImagePreview ImageViewer;
+        public Render.frmRender RenderViewer;
         private CR2WFile file;
         private frmChunkProperties propertyWindow;
 
@@ -71,6 +72,11 @@ namespace WolvenKit
                     ImageViewer.File = file;
                 }
 
+                if (RenderViewer != null && !RenderViewer.IsDisposed)
+                {
+                    RenderViewer.File = file;
+                }
+                
 
                 if (embeddedFiles != null && !embeddedFiles.IsDisposed)
                 {

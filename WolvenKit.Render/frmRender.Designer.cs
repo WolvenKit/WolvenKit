@@ -1,6 +1,6 @@
 ﻿namespace WolvenKit.Render
 {
-    partial class Bithack3D
+    partial class frmRender
     {
         /// <summary>
         /// Required designer variable.
