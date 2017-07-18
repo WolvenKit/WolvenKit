@@ -11,7 +11,7 @@ using WolvenKit.Interfaces;
 
 namespace WolvenKit
 {
-    public partial class frmBundleExplorer : Form
+    public partial class frmAssetBrowser : Form
     {
         public List<string> Autocompletelist;
         public List<IWitcherFile> FileList = new List<IWitcherFile>();
@@ -19,7 +19,7 @@ namespace WolvenKit
 
         public event EventHandler<Tuple<List<IWitcherArchive>, ListView.ListViewItemCollection>> RequestFileAdd;
 
-        public frmBundleExplorer(List<IWitcherArchive> archives)
+        public frmAssetBrowser(List<IWitcherArchive> archives)
         {
             InitializeComponent();
             Managers = archives;
