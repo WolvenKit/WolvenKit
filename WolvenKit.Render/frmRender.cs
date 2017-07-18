@@ -240,7 +240,8 @@ namespace WolvenKit.Render
 
             // This method should only work when the mouse is captured by the Form.
             // For instance, when the left mouse button is pressed:
-            if (!(e.Button == MouseButtons.Left || e.Button == MouseButtons.Right))
+            // It traps the mouse to be able to scroll infinitely
+            /*if (!(e.Button == MouseButtons.Left || e.Button == MouseButtons.Right))
                 return;
 
             Point p = PointToScreen(e.Location);
@@ -263,7 +264,7 @@ namespace WolvenKit.Render
                 Cursor.Position = new Point(x, y);
                 currentPosX = x - (bounds.Left + 1);
                 currentPosY = y - (bounds.Top + 1);
-            }
+            }*/
         }
 
         private void Bithack3D_MouseWheel(object sender, MouseEventArgs e)
@@ -303,6 +304,15 @@ namespace WolvenKit.Render
             if (prevState != WindowState)
             {
                 prevState = WindowState;
+                RestartIrrThread();
+            }
+        }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+            if( !(irrThread is null) )
+            {
                 RestartIrrThread();
             }
         }
