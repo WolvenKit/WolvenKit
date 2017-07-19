@@ -352,7 +352,7 @@ namespace WolvenKit.Render
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
-            if( !(irrThread is null) )
+            if (irrThread != null)
             {
                 RestartIrrThread();
             }
