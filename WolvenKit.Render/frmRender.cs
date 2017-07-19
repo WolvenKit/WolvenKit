@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
 using System.Windows.Forms;
-using System.Data;
 using System.Threading;
 using IrrlichtLime;
 using IrrlichtLime.Core;
@@ -13,6 +9,8 @@ using IrrlichtLime.GUI;
 using System.IO;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
+using System.Collections.Generic;
 
 namespace WolvenKit.Render
 {
@@ -38,7 +36,49 @@ namespace WolvenKit.Render
             set
             {
                 _file = value;
-                //ImagePreviewControl.Image = GetImage(value) ?? SystemIcons.Warning.ToBitmap();
+                switch (Path.GetExtension(_file.FileName))
+                {
+                    case ".w2mesh":
+                        foreach (var chunk in _file.chunks)
+                        {
+                            if (chunk.Type == "CMesh")
+                            {
+                                var cookedDatas = chunk.GetVariableByName("cookedData") as CVector;
+                                foreach (var cookedData in cookedDatas.variables)
+                                {
+                                    if (cookedData.Name == "renderChunks")
+                                    {
+                                        var bytes = ((CByteArray)cookedData).Bytes;
+                                        List<SVertexBufferInfos> verticesBuffer = new List<SVertexBufferInfos>();
+                                        var nbBuffers = bytes[0];
+                                        int curr = 1;
+                                        for (uint i = 0; i < nbBuffers; i++)
+                                        {
+                                            SVertexBufferInfos buffInfo = new SVertexBufferInfos();
+
+                                            curr += 1; // Unknown
+                                            buffInfo.verticesCoordsOffset = bytes.SubArray(ref curr, 4).GetUint();
+                                            buffInfo.uvOffset = bytes.SubArray(ref curr, 4).GetUint();
+                                            buffInfo.normalsOffset = bytes.SubArray(ref curr, 4).GetUint();
+
+                                            curr += 9; // Unknown
+                                            buffInfo.indicesOffset = bytes.SubArray(ref curr, 4).GetUint();
+                                            curr += 1; // 0x1D
+
+                                            buffInfo.nbVertices = bytes.SubArray(ref curr, 2).GetUshort();
+                                            buffInfo.nbIndices = bytes.SubArray(ref curr, 4).GetUint();
+                                            curr += 3; // Unknown
+                                            buffInfo.lod = bytes.SubArray(ref curr, 1).GetByte(); // lod ?
+
+                                            verticesBuffer.Add(buffInfo);
+                                        }
+                                    }
+                                }
+                            }
+                            // System.Collections.Generic.List<CR2W.Editors.IEditableVariable> editable = chunk.GetEditableVariables();
+                        }
+                        break;
+                }
             }
         }
 
@@ -170,7 +210,7 @@ namespace WolvenKit.Render
         private void Bithack3D_Load(object sender, EventArgs e)
         {
             // OpenFileDialog for importing 3D models
-            OpenFileDialog open3dModel = new OpenFileDialog();
+            /*OpenFileDialog open3dModel = new OpenFileDialog();
             open3dModel.InitialDirectory = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\Models"));
             // If dir not found then use exe dir
             if (Directory.Exists(open3dModel.InitialDirectory) == false)
@@ -194,7 +234,8 @@ namespace WolvenKit.Render
             {
                 MessageBox.Show(this, "No file selected!");
                 this.BeginInvoke(new MethodInvoker(Close));
-            }
+            }*/
+            this.BeginInvoke(new MethodInvoker(Close));
 
             // start an irrlicht thread
             StartIrrThread();

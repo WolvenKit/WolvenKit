@@ -195,6 +195,7 @@ namespace WolvenKit
                     }
                 case ".w2ent":
                 case ".w3ent":
+                case ".w2mesh":
                     {
                         doc.RenderViewer = new Render.frmRender
                         {
