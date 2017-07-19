@@ -46,5 +46,7 @@ Visual Studio 2015 required. All the required files are either nuget packages wh
 
 ## Contibuting:
 Please do! Fork the project and please do you changes in small incremental steps with descriptive commit messages. Code quality is not the biggest concern but please don't do stupid mistakes which may lead to the denial of the pull request. Please create an issue when implementing a feature so people don't work on the same feature/issue.
-
+For any questions:
+PM me on discord: Traderain#3279 or reach me at: hambalko.bence@gmail.com.
+Alternatively you can join our discord: https://discord.gg/qBNgDEX
 ***
