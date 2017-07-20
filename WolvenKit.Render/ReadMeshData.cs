@@ -1,11 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using IrrlichtLime.Core;
 
 namespace WolvenKit.Render
 {
+    public class SBufferInfos
+    {
+        public uint vertexBufferOffset = 0;
+        public uint vertexBufferSize = 0;
+
+        public uint indexBufferOffset = 0;
+        public uint indexBufferSize = 0;
+
+        public Vector3Df quantizationScale = new Vector3Df(1, 1, 1);
+        public Vector3Df quantizationOffset = new Vector3Df(0, 0, 0);
+
+        public List<SVertexBufferInfos> verticesBuffer = new List<SVertexBufferInfos>();
+    };
+
     // Informations about the .buffer file
     public class SVertexBufferInfos
     {
@@ -21,8 +33,29 @@ namespace WolvenKit.Render
         public byte lod = 1;
     };
 
+    // Information to load a mesh from the buffer
+    public class SMeshInfos
+    {
+        public enum EMeshVertexType
+        {
+            EMVT_STATIC,
+            EMVT_SKINNED
+        };
 
-    public static class ReadMeshData
+        public uint numVertices = 0;
+        public uint numIndices = 0;
+        public uint numBonesPerVertex = 4;
+
+        public uint firstVertex = 0;
+        public uint firstIndex = 0;
+
+        public EMeshVertexType vertexType = EMeshVertexType.EMVT_STATIC;
+
+        public uint materialID = 0;
+    };
+
+
+    public static class ExtensionMethods
     {
         public static T[] SubArray<T>(this T[] data, ref int currIndex, int length)
         {

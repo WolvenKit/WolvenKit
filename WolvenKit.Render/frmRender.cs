@@ -35,49 +35,175 @@ namespace WolvenKit.Render
             get { return _file; }
             set
             {
-                _file = value;
-                switch (Path.GetExtension(_file.FileName))
+                try
                 {
-                    case ".w2mesh":
-                        foreach (var chunk in _file.chunks)
-                        {
-                            if (chunk.Type == "CMesh")
+                    _file = value;
+                    SBufferInfos bufferInfos = new SBufferInfos();
+                    List<SMeshInfos> meshInfos = new List<SMeshInfos>();
+                    switch (Path.GetExtension(_file.FileName))
+                    {
+                        case ".w2mesh":
+                            foreach (var chunk in _file.chunks)
                             {
-                                var cookedDatas = chunk.GetVariableByName("cookedData") as CVector;
-                                foreach (var cookedData in cookedDatas.variables)
+                                if (chunk.Type == "CMesh")
                                 {
-                                    if (cookedData.Name == "renderChunks")
+                                    List<SVertexBufferInfos> vertexBufferInfos = new List<SVertexBufferInfos>();
+                                    var cookedDatas = chunk.GetVariableByName("cookedData") as CVector;
+                                    foreach (var cookedData in cookedDatas.variables)
                                     {
-                                        var bytes = ((CByteArray)cookedData).Bytes;
-                                        List<SVertexBufferInfos> verticesBuffer = new List<SVertexBufferInfos>();
-                                        var nbBuffers = bytes[0];
-                                        int curr = 1;
-                                        for (uint i = 0; i < nbBuffers; i++)
+                                        if (cookedData.Name == "renderChunks")
                                         {
-                                            SVertexBufferInfos buffInfo = new SVertexBufferInfos();
+                                            var bytes = ((CByteArray)cookedData).Bytes;
+                                            var nbBuffers = bytes[0];
+                                            int curr = 1;
+                                            for (uint i = 0; i < nbBuffers; i++)
+                                            {
+                                                SVertexBufferInfos buffInfo = new SVertexBufferInfos();
 
-                                            curr += 1; // Unknown
-                                            buffInfo.verticesCoordsOffset = bytes.SubArray(ref curr, 4).GetUint();
-                                            buffInfo.uvOffset = bytes.SubArray(ref curr, 4).GetUint();
-                                            buffInfo.normalsOffset = bytes.SubArray(ref curr, 4).GetUint();
+                                                curr += 1; // Unknown
+                                                buffInfo.verticesCoordsOffset = bytes.SubArray(ref curr, 4).GetUint();
+                                                buffInfo.uvOffset = bytes.SubArray(ref curr, 4).GetUint();
+                                                buffInfo.normalsOffset = bytes.SubArray(ref curr, 4).GetUint();
 
-                                            curr += 9; // Unknown
-                                            buffInfo.indicesOffset = bytes.SubArray(ref curr, 4).GetUint();
-                                            curr += 1; // 0x1D
+                                                curr += 9; // Unknown
+                                                buffInfo.indicesOffset = bytes.SubArray(ref curr, 4).GetUint();
+                                                curr += 1; // 0x1D
 
-                                            buffInfo.nbVertices = bytes.SubArray(ref curr, 2).GetUshort();
-                                            buffInfo.nbIndices = bytes.SubArray(ref curr, 4).GetUint();
-                                            curr += 3; // Unknown
-                                            buffInfo.lod = bytes.SubArray(ref curr, 1).GetByte(); // lod ?
+                                                buffInfo.nbVertices = bytes.SubArray(ref curr, 2).GetUshort();
+                                                buffInfo.nbIndices = bytes.SubArray(ref curr, 4).GetUint();
+                                                curr += 3; // Unknown
+                                                buffInfo.lod = bytes.SubArray(ref curr, 1).GetByte(); // lod ?
 
-                                            verticesBuffer.Add(buffInfo);
+                                                vertexBufferInfos.Add(buffInfo);
+                                            }
                                         }
+                                        else if (cookedData.Name == "indexBufferOffset")
+                                        {
+                                            bufferInfos.indexBufferOffset = uint.Parse(cookedData.ToString());
+                                        }
+                                        else if (cookedData.Name == "indexBufferSize")
+                                        {
+                                            bufferInfos.indexBufferSize = uint.Parse(cookedData.ToString());
+                                        }
+                                        else if (cookedData.Name == "vertexBufferOffset")
+                                        {
+                                            bufferInfos.vertexBufferOffset = uint.Parse(cookedData.ToString());
+                                        }
+                                        else if (cookedData.Name == "vertexBufferSize")
+                                        {
+                                            bufferInfos.vertexBufferSize = uint.Parse(cookedData.ToString());
+                                        }
+                                        else if (cookedData.Name == "quantizationOffset")
+                                        {
+                                            bufferInfos.quantizationOffset.X = float.Parse((cookedData as CVector).variables[0].ToString());
+                                            bufferInfos.quantizationOffset.Y = float.Parse((cookedData as CVector).variables[1].ToString());
+                                            bufferInfos.quantizationOffset.Z = float.Parse((cookedData as CVector).variables[2].ToString());
+                                        }
+                                        else if (cookedData.Name == "quantizationScale")
+                                        {
+                                            bufferInfos.quantizationScale.X = float.Parse((cookedData as CVector).variables[0].ToString());
+                                            bufferInfos.quantizationScale.Y = float.Parse((cookedData as CVector).variables[1].ToString());
+                                            bufferInfos.quantizationScale.Z = float.Parse((cookedData as CVector).variables[2].ToString());
+                                        }
+                                    }
+                                    bufferInfos.verticesBuffer = vertexBufferInfos;
+                                    var meshChunks = chunk.GetVariableByName("chunks") as CArray;
+                                    foreach (var meshChunk in meshChunks.array)
+                                    foreach (var mesh in (meshChunk as CVector).variables)
+                                    {
+                                        SMeshInfos meshInfo = new SMeshInfos();
+                                        if (mesh.Name == "numVertices")
+                                        {
+                                            meshInfo.numVertices = uint.Parse(mesh.ToString());
+                                        }
+                                        else if (mesh.Name == "numIndices")
+                                        {
+                                            meshInfo.numIndices = uint.Parse(mesh.ToString());
+                                        }
+                                        else if (mesh.Name == "numBonesPerVertex")
+                                        {
+                                            meshInfo.numBonesPerVertex = uint.Parse(mesh.ToString());
+                                        }
+                                        else if (mesh.Name == "firstVertex")
+                                        {
+                                            meshInfo.firstVertex = uint.Parse(mesh.ToString());
+                                        }
+                                        else if (mesh.Name == "firstIndex")
+                                        {
+                                            meshInfo.firstIndex = uint.Parse(mesh.ToString());
+                                        }
+                                        else if (mesh.Name == "vertexType")
+                                        {
+                                            if ((mesh as CName).Value == "MVT_StaticMesh")
+                                                meshInfo.vertexType = SMeshInfos.EMeshVertexType.EMVT_STATIC;
+                                            else if ((mesh as CName).Value == "MVT_SkinnedMesh")
+                                                meshInfo.vertexType = SMeshInfos.EMeshVertexType.EMVT_SKINNED;
+                                        }
+                                        else if (mesh.Name == "materialID")
+                                        {
+                                            meshInfo.materialID = uint.Parse(mesh.ToString());
+                                        }
+                                        meshInfos.Add(meshInfo);
                                     }
                                 }
                             }
-                            // System.Collections.Generic.List<CR2W.Editors.IEditableVariable> editable = chunk.GetEditableVariables();
+                            break;
+                    }
+
+                    foreach (var meshInfo in meshInfos)
+                    {
+                        SVertexBufferInfos vBufferInf;
+                        uint nbVertices = 0;
+                        uint firstVertexOffset = 0;
+                        uint nbIndices = 0;
+                        uint firstIndiceOffset = 0;
+                        for (int i = 0; i < bufferInfos.verticesBuffer.Count; i++)
+                        {
+                            nbVertices += bufferInfos.verticesBuffer[i].nbVertices;
+                            if (nbVertices > meshInfo.firstVertex)
+                            {
+                                vBufferInf = bufferInfos.verticesBuffer[i];
+                                // the index of the first vertex in the buffer
+                                firstVertexOffset = meshInfo.firstVertex - (nbVertices - vBufferInf.nbVertices);
+                                break;
+                            }
                         }
-                        break;
+                        for (int i = 0; i < bufferInfos.verticesBuffer.Count; i++)
+                        {
+                            nbIndices += bufferInfos.verticesBuffer[i].nbIndices;
+                            if (nbIndices > meshInfo.firstIndex)
+                            {
+                                vBufferInf = bufferInfos.verticesBuffer[i];
+                                firstIndiceOffset = meshInfo.firstIndex - (nbIndices - vBufferInf.nbIndices);
+                                break;
+                            }
+                        }
+
+                        using (StreamReader sr = new StreamReader(_file.FileName + ".1.buffer"))
+                        {
+                            /*IrrlichtCreationParameters irrparam = new IrrlichtCreationParameters();
+                            if (irrlichtPanel.InvokeRequired)
+                                irrlichtPanel.Invoke(new MethodInvoker(delegate { irrparam.WindowID = irrlichtPanel.Handle; }));
+                            irrparam.DriverType = DriverType.Direct3D9;
+                            irrparam.BitsPerPixel = 16;
+
+                            IrrlichtDevice device = IrrlichtDevice.CreateDevice(irrparam);
+
+                            if (device == null) throw new Exception("Could not create device for engine!");
+
+                            device.SetWindowCaption("Hello World! - Irrlicht Engine Demo");
+
+                            VideoDriver driver = device.VideoDriver;
+                            SceneManager smgr = device.SceneManager;
+                            GUIEnvironment gui = device.GUIEnvironment;
+
+                            SkinnedMesh buffer = smgr.CreateSkinnedMesh();*/
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, ex.Message);
                 }
             }
         }
