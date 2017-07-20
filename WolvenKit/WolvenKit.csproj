@@ -391,6 +391,7 @@
     <Compile Include="SelectChunkArgs.cs" />
     <Compile Include="SortableBindinglist.cs" />
     <Compile Include="Win32.cs" />
+    <Compile Include="WKPackage.cs" />
     <EmbeddedResource Include="frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
     </EmbeddedResource>

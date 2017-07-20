@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -911,8 +912,8 @@ namespace WolvenKit
             FileStream fsOut = File.Create(Path.Combine(installdir, ActiveMod.Name + ".W3ModPackage"));
             ZipOutputStream zipStream = new ZipOutputStream(fsOut);
             int folderOffset = packeddir.Length + (packeddir.EndsWith("\\") ? 0 : 1);
-            CompressFolder(packeddir, zipStream, folderOffset);
-            CompressFile(ActiveMod.FileName, zipStream);
+            Commonfunctions.CompressFolder(packeddir, zipStream, folderOffset);
+            Commonfunctions.CompressFile(ActiveMod.FileName, zipStream);
             zipStream.IsStreamOwner = true;
             zipStream.Close();
             AddOutput("Installer created: " + fsOut.Name + "\n", frmOutput.Logtype.Success);
@@ -922,50 +923,6 @@ namespace WolvenKit
                 return;
             }
             Process.Start("explorer.exe", "/select, \"" + fsOut.Name + "\"");
-        }
-
-        private void CompressFile(string filename, ZipOutputStream zipStream)
-        {
-            FileInfo fi = new FileInfo(filename);
-
-            string entryName = Path.GetFileName(filename);
-            entryName = ZipEntry.CleanName(entryName);
-            ZipEntry newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length};
-            zipStream.PutNextEntry(newEntry);
-            byte[] buffer = new byte[4096];
-            using (FileStream streamReader = File.OpenRead(filename))
-            {
-                StreamUtils.Copy(streamReader, zipStream, buffer);
-            }
-            zipStream.CloseEntry();
-        }
-
-        private void CompressFolder(string path, ZipOutputStream zipStream, int folderOffset)
-        {
-
-            string[] files = Directory.GetFiles(path);
-
-            foreach (string filename in files)
-            {
-
-                FileInfo fi = new FileInfo(filename);
-
-                string entryName = filename.Substring(folderOffset);
-                entryName = ZipEntry.CleanName(entryName);
-                ZipEntry newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
-                zipStream.PutNextEntry(newEntry);
-                byte[] buffer = new byte[4096];
-                using (FileStream streamReader = File.OpenRead(filename))
-                {
-                    StreamUtils.Copy(streamReader, zipStream, buffer);
-                }
-                zipStream.CloseEntry();
-            }
-            string[] folders = Directory.GetDirectories(path);
-            foreach (string folder in folders)
-            {
-                CompressFolder(folder, zipStream, folderOffset);
-            }
         }
 
         private async Task cookMod()
