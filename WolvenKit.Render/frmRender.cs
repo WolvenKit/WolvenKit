@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
 using System.Windows.Forms;
-using System.Data;
 using System.Threading;
 using IrrlichtLime;
 using IrrlichtLime.Core;
@@ -11,21 +7,79 @@ using IrrlichtLime.Video;
 using IrrlichtLime.Scene;
 using IrrlichtLime.GUI;
 using System.IO;
+using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
+using System.Collections.Generic;
 
 namespace WolvenKit.Render
 {
-    public partial class Bithack3D : Form
+    public partial class frmRender : DockContent
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private Thread irrThread;
-        public Bithack3D()
+        public frmRender()
         {
             //
             // Required for Windows Form Designer support
             //
             InitializeComponent();
+        }
+
+        private CR2WFile _file;
+
+        public CR2WFile File
+        {
+            get { return _file; }
+            set
+            {
+                _file = value;
+                switch (Path.GetExtension(_file.FileName))
+                {
+                    case ".w2mesh":
+                        foreach (var chunk in _file.chunks)
+                        {
+                            if (chunk.Type == "CMesh")
+                            {
+                                var cookedDatas = chunk.GetVariableByName("cookedData") as CVector;
+                                foreach (var cookedData in cookedDatas.variables)
+                                {
+                                    if (cookedData.Name == "renderChunks")
+                                    {
+                                        var bytes = ((CByteArray)cookedData).Bytes;
+                                        List<SVertexBufferInfos> verticesBuffer = new List<SVertexBufferInfos>();
+                                        var nbBuffers = bytes[0];
+                                        int curr = 1;
+                                        for (uint i = 0; i < nbBuffers; i++)
+                                        {
+                                            SVertexBufferInfos buffInfo = new SVertexBufferInfos();
+
+                                            curr += 1; // Unknown
+                                            buffInfo.verticesCoordsOffset = bytes.SubArray(ref curr, 4).GetUint();
+                                            buffInfo.uvOffset = bytes.SubArray(ref curr, 4).GetUint();
+                                            buffInfo.normalsOffset = bytes.SubArray(ref curr, 4).GetUint();
+
+                                            curr += 9; // Unknown
+                                            buffInfo.indicesOffset = bytes.SubArray(ref curr, 4).GetUint();
+                                            curr += 1; // 0x1D
+
+                                            buffInfo.nbVertices = bytes.SubArray(ref curr, 2).GetUshort();
+                                            buffInfo.nbIndices = bytes.SubArray(ref curr, 4).GetUint();
+                                            curr += 3; // Unknown
+                                            buffInfo.lod = bytes.SubArray(ref curr, 1).GetByte(); // lod ?
+
+                                            verticesBuffer.Add(buffInfo);
+                                        }
+                                    }
+                                }
+                            }
+                            // System.Collections.Generic.List<CR2W.Editors.IEditableVariable> editable = chunk.GetEditableVariables();
+                        }
+                        break;
+                }
+            }
         }
 
         private void StartIrrThread()
@@ -156,7 +210,7 @@ namespace WolvenKit.Render
         private void Bithack3D_Load(object sender, EventArgs e)
         {
             // OpenFileDialog for importing 3D models
-            OpenFileDialog open3dModel = new OpenFileDialog();
+            /*OpenFileDialog open3dModel = new OpenFileDialog();
             open3dModel.InitialDirectory = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\Models"));
             // If dir not found then use exe dir
             if (Directory.Exists(open3dModel.InitialDirectory) == false)
@@ -180,7 +234,8 @@ namespace WolvenKit.Render
             {
                 MessageBox.Show(this, "No file selected!");
                 this.BeginInvoke(new MethodInvoker(Close));
-            }
+            }*/
+            this.BeginInvoke(new MethodInvoker(Close));
 
             // start an irrlicht thread
             StartIrrThread();
@@ -226,7 +281,8 @@ namespace WolvenKit.Render
 
             // This method should only work when the mouse is captured by the Form.
             // For instance, when the left mouse button is pressed:
-            if (!(e.Button == MouseButtons.Left || e.Button == MouseButtons.Right))
+            // It traps the mouse to be able to scroll infinitely
+            /*if (!(e.Button == MouseButtons.Left || e.Button == MouseButtons.Right))
                 return;
 
             Point p = PointToScreen(e.Location);
@@ -249,7 +305,7 @@ namespace WolvenKit.Render
                 Cursor.Position = new Point(x, y);
                 currentPosX = x - (bounds.Left + 1);
                 currentPosY = y - (bounds.Top + 1);
-            }
+            }*/
         }
 
         private void Bithack3D_MouseWheel(object sender, MouseEventArgs e)
@@ -289,6 +345,15 @@ namespace WolvenKit.Render
             if (prevState != WindowState)
             {
                 prevState = WindowState;
+                RestartIrrThread();
+            }
+        }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+            if (irrThread != null)
+            {
                 RestartIrrThread();
             }
         }
