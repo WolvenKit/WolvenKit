@@ -646,7 +646,6 @@
     <Content Include="Licenses\License.W3SaveGameEditor.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Notes\Filetypes.txt" />
     <None Include="Resources\ExpandIcon.png" />
     <None Include="Resources\ExitIcon.png" />
     <None Include="Resources\LayerGroupVisibled.png" />
