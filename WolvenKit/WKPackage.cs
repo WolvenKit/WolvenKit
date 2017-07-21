@@ -67,6 +67,7 @@ namespace WolvenKit
         /// <param name="Largedescription">Aditional description of the mod. [OPTIONAL]</param>
         /// <param name="license">The License of the mod. [OPTIONAL]</param>
         /// <param name="Colors">Header background color, If true the header text will be black otherwise white, Icon bacground color. [REQUIRED]</param>
+        /// /// <param name="Contents">The commands to run on the games files. eg.: adding new lines to xmls and such. [OPTIONAL]</param>
         /// <returns></returns>
         public static XDocument CreateModAssembly(
             Version version,
@@ -76,7 +77,8 @@ namespace WolvenKit
             string Largedescription,
             string license,
             Tuple<Color,bool,
-            Color> Colors)
+            Color> Colors,
+            List<XElement> Contents)
         {
             if (version == null || name == null || Author.Item1 == null || Colors == null)
             {
@@ -84,6 +86,7 @@ namespace WolvenKit
             }
             var rootnode = new XElement("package",new XAttribute("version",version.ToString(2)), new XAttribute("name",name));
             var authorelement = new XElement("author",new XElement("displayName",Author.Item1));
+            var metadataelement = new XElement("metadata");
             if (Author.Item2 != null || Author.Item2 != "")
                 authorelement.Add(new XElement("actionLink",Author.Item2));
             if (Author.Item3 != null || Author.Item3 != "")
@@ -94,14 +97,16 @@ namespace WolvenKit
                 authorelement.Add(new XElement("twitter", Author.Item5));
             if (Author.Item6 != null || Author.Item6 != "")
                 authorelement.Add(new XElement("youtube", Author.Item6));
-            rootnode.Add(authorelement);
+            metadataelement.Add(authorelement);
             if(description?.Length > 0)
-                rootnode.Add(new XElement("description",description));
+                metadataelement.Add(new XElement("description",description));
             if (Largedescription?.Length > 0)
-                rootnode.Add(new XElement("largeDescription", Largedescription));
+                metadataelement.Add(new XElement("largeDescription", Largedescription));
             if (license?.Length > 0)
-                rootnode.Add(new XElement("license", license));
+                metadataelement.Add(new XElement("license", license));
+            rootnode.Add(metadataelement);
             rootnode.Add(new XElement("colors",new XElement("headerBackground",Colors.Item1,new XAttribute("useBlackTextColor",Colors.Item2)),new XElement("iconBackground",Colors.Item3)));
+            rootnode.Add(new XElement("content", Contents));
             return new XDocument(new XDeclaration("1.0", "UTF-8", "True"),rootnode);
         }
     }
