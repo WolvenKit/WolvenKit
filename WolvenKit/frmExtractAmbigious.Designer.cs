@@ -35,6 +35,7 @@ namespace WolvenKit
             this.btOk = new System.Windows.Forms.Button();
             this.lsBundleList = new System.Windows.Forms.ListBox();
             this.lblMessage = new System.Windows.Forms.Label();
+            this.dnamaCHB = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // btCancel
@@ -56,7 +57,7 @@ namespace WolvenKit
             this.btOk.Name = "btOk";
             this.btOk.Size = new System.Drawing.Size(75, 23);
             this.btOk.TabIndex = 6;
-            this.btOk.Text = "Ok";
+            this.btOk.Text = "Select";
             this.btOk.UseVisualStyleBackColor = true;
             // 
             // lsBundleList
@@ -82,11 +83,22 @@ namespace WolvenKit
             this.lblMessage.TabIndex = 9;
             this.lblMessage.Text = "The file you are trying to extract exists in one or more archives, select one.\r\n";
             // 
+            // dnamaCHB
+            // 
+            this.dnamaCHB.AutoSize = true;
+            this.dnamaCHB.Location = new System.Drawing.Point(597, 315);
+            this.dnamaCHB.Name = "dnamaCHB";
+            this.dnamaCHB.Size = new System.Drawing.Size(124, 17);
+            this.dnamaCHB.TabIndex = 10;
+            this.dnamaCHB.Text = "Do not ask me again";
+            this.dnamaCHB.UseVisualStyleBackColor = true;
+            // 
             // frmExtractAmbigious
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(814, 346);
+            this.Controls.Add(this.dnamaCHB);
             this.Controls.Add(this.lblMessage);
             this.Controls.Add(this.lsBundleList);
             this.Controls.Add(this.btCancel);
@@ -96,6 +108,7 @@ namespace WolvenKit
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Extract ambigious";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -105,5 +118,6 @@ namespace WolvenKit
         private Button btOk;
         private ListBox lsBundleList;
         private Label lblMessage;
+        private CheckBox dnamaCHB;
     }
 }

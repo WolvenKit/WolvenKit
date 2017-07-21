@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -326,15 +327,22 @@ namespace WolvenKit
                 MessageBox.Show(@"Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+            var skipping = false;
             foreach (ListViewItem depotpath in Details.Item2)
             {
-                AddToMod(depotpath.Text, Details.Item1);
+                skipping = AddToMod(depotpath.Text, skipping, Details.Item1);
             }
             SaveMod();
         }
 
-        private void AddToMod(string depotpath, List<IWitcherArchive> managers)
+        /// <summary>
+        /// Scans the given archivemanagers for a file. If found, extracts it to the project.
+        /// </summary>
+        /// <param name="depotpath">Filename.</param>
+        /// <param name="managers">The managers.</param>
+        private bool AddToMod(string depotpath, bool skipping, List<IWitcherArchive> managers)
         {
+            bool skip = skipping;
             foreach (var manager in managers.Where(manager => manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath))))
             {
                 if (manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath)))
@@ -343,10 +351,16 @@ namespace WolvenKit
                     var archives = manager.FileList.Where(x => x.Name == depotpath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
                     if (archives.Count() > 1)
                     {
+
                         var dlg = new frmExtractAmbigious(archives.Select(x => x.Key).ToList());
-                        if (dlg.ShowDialog() == DialogResult.Cancel)
+                        if (!skip)
                         {
-                            return;
+                            var res = dlg.ShowDialog();
+                            skip = dlg.Skip;
+                            if (res == DialogResult.Cancel)
+                            {
+                                return skip;
+                            }
                         }
                         var selectedBundle = archives.FirstOrDefault(x => x.Key == dlg.SelectedBundle).Value;
                         try
@@ -358,23 +372,22 @@ namespace WolvenKit
                             }
                             selectedBundle.Extract(filename);
                         } catch { }
-                        return;
+                        return skip;
                     }
-                    else
+                    try
                     {
-                        try
+                        Directory.CreateDirectory(Path.GetDirectoryName(filename));
+                        if (File.Exists(filename))
                         {
-                            Directory.CreateDirectory(Path.GetDirectoryName(filename));
-                            if (File.Exists(filename))
-                            {
-                                File.Delete(filename);
-                            }
-                            archives.FirstOrDefault().Value.Extract(filename);
-                        } catch { }
-                        return;
+                            File.Delete(filename);
+                        }
+                        archives.FirstOrDefault().Value.Extract(filename);
                     }
+                    catch { }
+                    return skip;
                 }
             }
+            return skip;
         }
 
         /// <summary>
