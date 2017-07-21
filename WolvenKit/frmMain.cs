@@ -313,11 +313,6 @@ namespace WolvenKit
         {
             if (ActiveMod == null)
                 return;
-            if (Process.GetProcessesByName("Witcher3").Length != 0)
-            {
-                MessageBox.Show(@"Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
             var explorer = new frmAssetBrowser(loadmods ? new List<IWitcherArchive> { MainController.Get().ModBundleManager, MainController.Get().ModSoundManager, MainController.Get().ModTextureManager } : new List<IWitcherArchive> { MainController.Get().BundleManager, MainController.Get().SoundManager, MainController.Get().TextureManager });
             explorer.RequestFileAdd += Assetbrowser_FileAdd;
             explorer.OpenPath(browseToPath);
@@ -326,6 +321,11 @@ namespace WolvenKit
 
         private void Assetbrowser_FileAdd(object sender, Tuple<List<IWitcherArchive>, ListView.ListViewItemCollection> Details)
         {
+            if (Process.GetProcessesByName("Witcher3").Length != 0)
+            {
+                MessageBox.Show(@"Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
             foreach (ListViewItem depotpath in Details.Item2)
             {
                 AddToMod(depotpath.Text, Details.Item1);
