@@ -58,7 +58,10 @@ namespace WolvenKit
                 comboBoxLanguagesMode.SelectedIndex = 1;
                 languagesStrings.Clear();
 
-                var csvDir = (activeMod.FileDirectory + "\\strings_CSV");
+                var csvDir = (activeMod.Directory + "..\\strings\\CSV");
+                if (!Directory.Exists(csvDir))
+                    return;
+
                 string[] fileNames = Directory.GetFiles(csvDir, "*.csv*", SearchOption.AllDirectories).Select(x => Path.GetFullPath(x)).ToArray();
 
                 rowAddedAutomatically = true;
@@ -495,7 +498,7 @@ namespace WolvenKit
         private void ReadXML()
         {
             rowAddedAutomatically = true;
-            // to do: check tags for custom display names, add prefixes to keys
+            //TODO check tags for custom display names, add prefixes to keys
             string path = GetXMLPath();
 
             // to prevent ID being 0 when Leave event for text box wasn't triggered
@@ -728,7 +731,7 @@ namespace WolvenKit
         private void UpdateModID()
         {
             rowAddedAutomatically = true;
-            // to do - fix for empty dataGridView
+            //TODO - fix for empty dataGridView
             if (dataTableGridViewSource == null)
                 return;
 
@@ -759,9 +762,9 @@ namespace WolvenKit
             var outputPath = "";
             if (activeMod != null)
             {
-                outputPath = (activeMod.FileDirectory + "\\strings_CSV");
+                outputPath = (activeMod.Directory + "\\strings\\CSV");
                 if (!Directory.Exists(outputPath))
-                    Directory.CreateDirectory(activeMod.FileDirectory + "\\strings_CSV");
+                    Directory.CreateDirectory(activeMod.Directory + "\\strings\\CSV");
             }
             else
                 outputPath = GetPath();
@@ -1006,9 +1009,9 @@ namespace WolvenKit
             string stringsDir = "";
             if (activeMod != null)
             {
-                stringsDir = (activeMod.FileDirectory + "\\strings");
+                stringsDir = (activeMod.Directory + "\\strings");
                 if (!Directory.Exists(stringsDir))
-                    Directory.CreateDirectory(activeMod.FileDirectory + "\\strings");
+                    Directory.CreateDirectory(activeMod.Directory + "\\strings");
             }
             else
                 stringsDir = GetPath();
