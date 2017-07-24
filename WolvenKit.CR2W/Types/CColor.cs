@@ -6,10 +6,7 @@ namespace WolvenKit.CR2W.Types
 {
     public class CColor : CVector
     {
-        public CColor(CR2WFile cr2w) :
-            base(cr2w)
-        {
-        }
+        public CColor(CR2WFile cr2w) : base(cr2w)  { }
 
         public Color Color
         {

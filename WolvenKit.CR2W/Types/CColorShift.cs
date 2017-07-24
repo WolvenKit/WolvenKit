@@ -7,23 +7,44 @@ namespace WolvenKit.CR2W.Types
 {
     class CColorShift : CVector
     {
-        public CColorShift(CR2WFile cr2w) : base(cr2w)
-        {
+        public HslColor Color = new HslColor(System.Drawing.Color.Black);
 
+        public CColorShift(CR2WFile cr2w) : base(cr2w) {  }
+
+
+        public override CVariable Create(CR2WFile cr2w)
+        {
+            return new CColorShift(cr2w);
         }
-        private HslColor _color = new HslColor(Color.Black);
+
+        public override CVariable SetValue(object val)
+        {
+            if (val is Color)
+            {
+                Color = (Color)val;
+            }
+            return this;
+        }
 
         public override Control GetEditor()
         {
-            _color.H = ((CUInt16)this.GetVariableByName("hue")).val/360;
-            _color.S = ((CInt8)this.GetVariableByName("saturation")).val/360;
-            _color.L = ((CInt8)this.GetVariableByName("luminance")).val/360;
-            var btn = new Button();
-            btn.BackColor = _color;
-            btn.Text = "Pick color";
-            btn.Click += panel_Click;
-            btn.Height = 18;
-            return btn;
+            var panel = new Panel();
+            if (((CUInt16) this.GetVariableByName("hue")) != null)
+                Color.H = ((CUInt16) this.GetVariableByName("hue")).val / 360;
+            else
+                Color.H = 0;
+            if (((CInt8) this.GetVariableByName("saturation")) != null)
+                Color.S = ((CInt8) this.GetVariableByName("saturation")).val / 360;
+            else
+                Color.S = 0;
+            if (((CInt8) this.GetVariableByName("luminance")) != null)
+                Color.L = ((CInt8) this.GetVariableByName("luminance")).val / 360;
+            else
+                Color.L = 0;
+            panel.BackColor = Color;
+            panel.Click += panel_Click;
+            panel.Height = 18;
+            return panel;
         }
 
         private void panel_Click(object sender, EventArgs e)
@@ -33,16 +54,21 @@ namespace WolvenKit.CR2W.Types
             {
                 Dock = DockStyle.Fill
             });
-            ((ColorEditor)dlg.Controls[0]).HslColor = _color;
-
-            if (dlg.ShowDialog() == DialogResult.OK)
+            ((ColorEditor)dlg.Controls[0]).HslColor = Color;
+            if(dlg.ShowDialog() == DialogResult.OK)
             {
-                _color = ((ColorEditor)dlg.Controls[0]).HslColor;
-                ((CUInt16) this.GetVariableByName("hue")).val = (ushort)(_color.H*360);
-                ((CInt8) this.GetVariableByName("saturation")).val = (sbyte)(_color.S*360);
-                ((CInt8) this.GetVariableByName("luminance")).val = (sbyte)(_color.L*360);
-                ((Panel)sender).BackColor = _color.ToRgbColor(); 
+                Color = ((ColorEditor)dlg.Controls[0]).HslColor;
+                if (((CUInt16)this.GetVariableByName("hue")) == null)
+                    cr2w.CreateVariable(this, "CUInt16", "hue");
+                ((CUInt16)this.GetVariableByName("hue")).val = (ushort)(Color.H * 360);
+                if (((CInt8)this.GetVariableByName("saturation")) == null)
+                    cr2w.CreateVariable(this, "CInt8", "saturation");
+                ((CInt8)this.GetVariableByName("saturation")).val = (sbyte)(Color.S * 360);
+                if (((CInt8)this.GetVariableByName("luminance")) == null)
+                    cr2w.CreateVariable(this, "CInt8", "luminance");
+                ((CInt8)this.GetVariableByName("luminance")).val = (sbyte)(Color.L * 360);
             }
+            ((Panel)sender).BackColor = Color.ToRgbColor();
         }
     }
 }

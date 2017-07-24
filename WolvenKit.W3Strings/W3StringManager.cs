@@ -12,6 +12,7 @@ namespace WolvenKit.W3Strings
 
         public void Load(string newlanguage, string path, bool onlyIfLanguageChanged = false)
         {
+            return;
             if (onlyIfLanguageChanged && Language == newlanguage)
                 return;
 
