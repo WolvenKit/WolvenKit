@@ -34,11 +34,11 @@ namespace WolvenKit.CR2W.Types
             else
                 Color.H = 0;
             if (((CInt8) this.GetVariableByName("saturation")) != null)
-                Color.S = ((CInt8) this.GetVariableByName("saturation")).val / 360;
+                Color.S = ((CInt8) this.GetVariableByName("saturation")).val / 100;
             else
                 Color.S = 0;
             if (((CInt8) this.GetVariableByName("luminance")) != null)
-                Color.L = ((CInt8) this.GetVariableByName("luminance")).val / 360;
+                Color.L = ((CInt8) this.GetVariableByName("luminance")).val / 100;
             else
                 Color.L = 0;
             panel.BackColor = Color;
@@ -63,10 +63,10 @@ namespace WolvenKit.CR2W.Types
                 ((CUInt16)this.GetVariableByName("hue")).val = (ushort)(Color.H * 360);
                 if (((CInt8)this.GetVariableByName("saturation")) == null)
                     cr2w.CreateVariable(this, "CInt8", "saturation");
-                ((CInt8)this.GetVariableByName("saturation")).val = (sbyte)(Color.S * 360);
+                ((CInt8)this.GetVariableByName("saturation")).val = (sbyte)(Color.S * 100);
                 if (((CInt8)this.GetVariableByName("luminance")) == null)
                     cr2w.CreateVariable(this, "CInt8", "luminance");
-                ((CInt8)this.GetVariableByName("luminance")).val = (sbyte)(Color.L * 360);
+                ((CInt8)this.GetVariableByName("luminance")).val = (sbyte)(Color.L * 100);
             }
             ((Panel)sender).BackColor = Color.ToRgbColor();
         }
