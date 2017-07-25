@@ -633,6 +633,12 @@
       <Link>Irrlicht.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\box.png" />
+    <None Include="Resources\box--arrow.png" />
+    <None Include="Resources\bug.png" />
+    <None Include="Resources\exclamation-red.png" />
+    <None Include="Resources\edit-letter-spacing.png" />
+    <None Include="Resources\ui-menu-blue.png" />
     <Content Include="wolven_kit_icon.ico" />
     <Content Include="Licenses\License.doboz4net.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
