@@ -42,11 +42,13 @@ namespace WolvenKit
             }
         }
 
-        public static void CompressFile(string filename, ZipOutputStream zipStream)
+        public static void CompressFile(string filename, ZipOutputStream zipStream, string nameOverride = "")
         {
             FileInfo fi = new FileInfo(filename);
 
             string entryName = Path.GetFileName(filename);
+            if (nameOverride != "")
+                entryName = nameOverride;
             entryName = ZipEntry.CleanName(entryName);
             ZipEntry newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
             zipStream.PutNextEntry(newEntry);
@@ -58,7 +60,7 @@ namespace WolvenKit
             zipStream.CloseEntry();
         }
 
-        public static byte[] Xdoc2ToBytaArray(XDocument xdoc)
+        public static byte[] XDocToByteArray(XDocument xdoc)
         {
             MemoryStream ms = new MemoryStream();
             XmlWriterSettings xws = new XmlWriterSettings();

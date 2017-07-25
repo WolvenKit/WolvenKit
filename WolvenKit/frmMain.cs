@@ -34,9 +34,6 @@ namespace WolvenKit
             InitializeComponent();
             UpdateTitle();
             buildDateToolStripMenuItem.Text = Assembly.GetExecutingAssembly().GetLinkerTime().ToString("yyyy MMMM dd");
-           // var asd = new WKPackage(WKPackage.CreateModAssembly(new Version(0, 1), "Test mod", new Tuple<string, string, string, string, string, string>("Traderain", null, null, null, null, null), "Test mod thing", "Yep", "GPL", new Tuple<Color, bool, Color>(Color.Brown, true, Color.Brown),new List<XElement>()), "D:\\The Witcher 3\\bin\\splashscreen.bmp", "D:\\files");
-          //  asd.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\test.wkp");
-          //  Process.Start("explorer.exe", "/select, \"" + Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\test.wkp" + "\"");
         }
 
         public W3Mod ActiveMod

@@ -51,8 +51,8 @@ namespace WolvenKit
             ZipOutputStream zipStream = new ZipOutputStream(fsOut);
             int folderOffset = RootFolder.Length + (RootFolder.EndsWith("\\") ? 0 : 1);
             Commonfunctions.CompressFolder(RootFolder, zipStream, folderOffset);
-            Commonfunctions.CompressFile(Icon, zipStream);
-            Commonfunctions.CompressStream(Commonfunctions.Xdoc2ToBytaArray(Assembly), "Assembly.xml", zipStream);
+            Commonfunctions.CompressFile(Icon, zipStream, "Icon" + Path.GetExtension(Icon));
+            Commonfunctions.CompressStream(Commonfunctions.XDocToByteArray(Assembly), "Assembly.xml", zipStream);
             zipStream.IsStreamOwner = true;
             zipStream.Close();
         }

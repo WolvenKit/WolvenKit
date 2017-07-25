@@ -45,7 +45,7 @@ namespace WolvenKit
                             ParseAssemblyInfo(ms.ToArray());
                         }
                     }
-                    if (entryFileName == "splashscreen.bmp")
+                    if (Path.GetFileNameWithoutExtension(entryFileName) == "Icon")
                     {
                         byte[] buffer = new byte[4096];
                         Stream zipStream = zf.GetInputStream(zipEntry);
@@ -88,7 +88,17 @@ namespace WolvenKit
                 modnameLBL.ForeColor = Color.White;
                 authorLBL.ForeColor = Color.White;
             }
-            detailWB.DocumentText = $"<html><body><h3>Mod description</h3><p>{metanode?.Element("description")}</p><hr><h3>Aditional information</h3><p>Created by {metanode?.Element("author")?.Element("displayName")?.Value}<br>Version {v}<br>License {metanode?.Element("license")?.Value}</p<hr></body></html>";
+            detailWB.DocumentText = $@"<html>
+<body>
+    <h3>Mod description</h3>
+    <p>{metanode?.Element("description")}</p>
+    <hr>
+    <h3>Aditional information</h3>
+    <p>Created by {metanode?.Element("author")?.Element("displayName")?.Value}<br>
+    Version {v}<br>License {metanode?.Element("license")?.Value}</p>
+    <hr>
+</body>
+</html>";
         }
 
         private void installBTN_Click(object sender, EventArgs e)
