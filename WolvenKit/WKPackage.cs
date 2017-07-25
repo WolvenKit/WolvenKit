@@ -105,7 +105,7 @@ namespace WolvenKit
             if (license?.Length > 0)
                 metadataelement.Add(new XElement("license", license));
             rootnode.Add(metadataelement);
-            rootnode.Add(new XElement("colors",new XElement("headerBackground",Colors.Item1,new XAttribute("useBlackTextColor",Colors.Item2)),new XElement("iconBackground",Colors.Item3)));
+            rootnode.Add(new XElement("colors",new XElement("headerBackground", ColorTranslator.ToHtml(Colors.Item1),new XAttribute("useBlackTextColor",Colors.Item2)),new XElement("iconBackground",ColorTranslator.ToHtml(Colors.Item3))));
             rootnode.Add(new XElement("content", Contents));
             return new XDocument(new XDeclaration("1.0", "UTF-8", "True"),rootnode);
         }

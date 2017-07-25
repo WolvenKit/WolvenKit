@@ -208,6 +208,12 @@
     <Compile Include="frmImagePreview.Designer.cs">
       <DependentUpon>frmImagePreview.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmInstallPackage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmInstallPackage.Designer.cs">
+      <DependentUpon>frmInstallPackage.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmJournalEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -463,6 +469,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmImagePreview.resx">
       <DependentUpon>frmImagePreview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmInstallPackage.resx">
+      <DependentUpon>frmInstallPackage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmJournalEditor.resx">
       <DependentUpon>frmJournalEditor.cs</DependentUpon>
