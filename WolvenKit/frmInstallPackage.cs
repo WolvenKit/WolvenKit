@@ -77,7 +77,7 @@ namespace WolvenKit
             var colornode = data.Root.Element("colors");
             backgroundimagePB.BackColor = ColorTranslator.FromHtml(colornode?.Element("headerBackground")?.Value ?? "0xFFFFFFFF");
             logoPB.BackColor = ColorTranslator.FromHtml(colornode?.Element("iconBackground")?.Value ?? "0xFFFFFFFF");
-            if (colornode?.Element("headerBackground")?.Element("useBlackTextColor")?.Value == "true")
+            if (colornode?.Element("headerBackground")?.Attribute("useBlackTextColor")?.Value == "true")
             {
                 modnameLBL.ForeColor = Color.Black;
                 authorLBL.ForeColor = Color.Black;
@@ -88,14 +88,28 @@ namespace WolvenKit
                 modnameLBL.ForeColor = Color.White;
                 authorLBL.ForeColor = Color.White;
             }
+            List<string> adition = new List<string>();
+            if(metanode?.Element("author")?.Element("twitter")?.Value != "")
+                adition.Add($@"<a href={"\"" + metanode?.Element("author")?.Element("twitter")?.Value + "\""} target={"\"_blank\""}>Twitter</a>");
+            if (metanode?.Element("author")?.Element("web")?.Value != "")
+                adition.Add($@"<a href={"\"" + metanode?.Element("author")?.Element("web")?.Value + "\""} target={"\"_blank\""}>Website</a>");
+            if (metanode?.Element("author")?.Element("facebook")?.Value != "")
+                adition.Add($@"<a href={"\"" + metanode?.Element("author")?.Element("facebook")?.Value + "\""} target={"\"_blank\""}>Facebook</a>");
+            if (metanode?.Element("author")?.Element("youtube")?.Value != "")
+                adition.Add($@"<a href={"\"" + metanode?.Element("author")?.Element("youtube")?.Value + "\""} target={"\"_blank\""}>YouTube</a>");
+            var authorlink = metanode?.Element("author")?.Element("displayName")?.Value;
+            if (metanode?.Element("author")?.Element("actionLink")?.Value != "")
+                authorlink = $@"<a href={"\"" + metanode?.Element("author")?.Element("actionLink")?.Value + "\""} target={"\"_blank\""}>{metanode?.Element("author")?.Element("displayName")?.Value}</a>";
             detailWB.DocumentText = $@"<html>
 <body>
     <h3>Mod description</h3>
     <p>{metanode?.Element("description")}</p>
     <hr>
     <h3>Aditional information</h3>
-    <p>Created by {metanode?.Element("author")?.Element("displayName")?.Value}<br>
-    Version {v}<br>License {metanode?.Element("license")?.Value}</p>
+    <p>Created by {authorlink}<br>
+    Version {v}<br>
+    License {metanode?.Element("license")?.Value}
+    {adition.Aggregate("",(c,n) => c += "<br>" + n)}</p>
     <hr>
 </body>
 </html>";
