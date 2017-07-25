@@ -948,7 +948,7 @@ namespace WolvenKit
                 AddOutput("Couldn't create installer. Something went wrong.", frmOutput.Logtype.Error);
                 return;
             }
-            Process.Start("explorer.exe", "/select, \"" + fsOut.Name + "\"");
+            Commonfunctions.ShowFileInExplorer(fsOut.Name);
         }
 
         private async Task cookMod()

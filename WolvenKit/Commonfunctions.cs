@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -40,6 +41,11 @@ namespace WolvenKit
                     ni.ShowBalloonTip(3000, "WolvenKit", msg, ToolTipIcon.Info);
                 }
             }
+        }
+
+        public static void ShowFileInExplorer(string path)
+        {
+            Process.Start("explorer.exe", "/select, \"" + path + "\"");
         }
 
         public static void CompressFile(string filename, ZipOutputStream zipStream, string nameOverride = "")
