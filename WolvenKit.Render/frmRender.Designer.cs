@@ -47,7 +47,7 @@
             this.textBoxTip.Margin = new System.Windows.Forms.Padding(0);
             this.textBoxTip.Multiline = true;
             this.textBoxTip.Name = "textBoxTip";
-            this.textBoxTip.Size = new System.Drawing.Size(83, 54);
+            this.textBoxTip.Size = new System.Drawing.Size(91, 54);
             this.textBoxTip.TabIndex = 5;
             this.textBoxTip.Text = "[Space] Reset\r\n[LMouse] Rotate\r\n[RMouse] Move\r\n[Wheel] Zoom";
             // 
@@ -105,7 +105,7 @@
             this.animationTimer.Interval = 16;
             this.animationTimer.Tick += new System.EventHandler(this.AnimationTimer_Tick);
             // 
-            // Bithack3D
+            // frmRender
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -115,9 +115,10 @@
             this.Controls.Add(this.textBoxRotation);
             this.Controls.Add(this.textBoxPos);
             this.Controls.Add(this.irrlichtPanel);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.KeyPreview = true;
-            this.Name = "Bithack3D";
-            this.Text = "Bithack3D";
+            this.Name = "frmRender";
+            this.Text = "Renderer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Bithack3D_FormClosing);
             this.Load += new System.EventHandler(this.Bithack3D_Load);
             this.ResizeEnd += new System.EventHandler(this.Bithack3D_ResizeEnd);

@@ -194,7 +194,13 @@ namespace WolvenKit
                         break;
                     }
                 case ".w2ent":
-                case ".w3ent":
+                    {
+                        CHandle mesh = doc.File.chunks[2].GetVariableByName("mesh") as CHandle;
+                        var docW2Mesh = LoadDocument(Path.GetDirectoryName(filename) + @"\model\" + Path.GetFileName(mesh.Handle));
+                        if (docW2Mesh == null)
+                            MessageBox.Show(".w2mesh file not found in model folder!" + "\n" + "Did you extract it properly?");
+                        break;
+                    }
                 case ".w2mesh":
                     {
                         doc.RenderViewer = new Render.frmRender
