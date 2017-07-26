@@ -26,7 +26,7 @@ namespace WolvenKit
 
         public CR2WChunk Chunk
         {
-            get { return chunk; }
+            get => chunk;
             set
             {
                 chunk = value;
@@ -124,6 +124,7 @@ namespace WolvenKit
             }
             else if (e.Column.AspectName == "Name")
             {
+
             }
             else
             {
@@ -141,29 +142,16 @@ namespace WolvenKit
 
         private void contextMenu_Opening(object sender, CancelEventArgs e)
         {
-            var sNodes = new List<VariableListNode>();
-            foreach (VariableListNode item in treeView.SelectedObjects)
-            {
-                if (item != null && item.Variable != null)
-                {
-                    sNodes.Add(item);
-                }
-            }
-            if (sNodes == null || sNodes.ToArray().Length <= 0)
+            var sNodes = treeView.SelectedObjects.Cast<VariableListNode>().Where(item => item?.Variable != null).ToList();
+            if (sNodes.ToArray().Length <= 0)
             {
                 e.Cancel = true;
                 return;
             }
 
             addVariableToolStripMenuItem.Enabled = sNodes.All(x => x.Variable.CanAddVariable(null));
-            removeVariableToolStripMenuItem.Enabled =
-                sNodes.All(x => x.Parent != null && x.Parent.Variable.CanRemoveVariable(x.Variable));
-            pasteToolStripMenuItem.Enabled = CopyController.VariableTargets != null &&
-                                             sNodes.All(
-                                                 x =>
-                                                     x.Variable != null &&
-                                                     CopyController.VariableTargets.Any(
-                                                         z => x.Variable.CanAddVariable(z)));
+            removeVariableToolStripMenuItem.Enabled = sNodes.All(x => x.Parent != null && x.Parent.Variable.CanRemoveVariable(x.Variable));
+            pasteToolStripMenuItem.Enabled = CopyController.VariableTargets != null && sNodes.All(x => x.Variable != null && CopyController.VariableTargets.Any(z => x.Variable.CanAddVariable(z)));
             ptrPropertiesToolStripMenuItem.Visible = sNodes.All(x => x.Variable is CPtr) && sNodes.Count == 1;
         }
 
@@ -336,10 +324,8 @@ namespace WolvenKit
         private void ptrPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var node = (VariableListNode) treeView.SelectedObject;
-            if (node == null || !(node.Variable is CPtr) || ((CPtr) node.Variable).PtrTarget == null)
-            {
+            if ((node?.Variable as CPtr)?.PtrTarget == null)
                 return;
-            }
 
             Chunk = ((CPtr) node.Variable).PtrTarget;
         }
@@ -348,11 +334,9 @@ namespace WolvenKit
         {
             var node = (VariableListNode) treeView.SelectedObject;
             if (node?.Parent == null || !node.Parent.Variable.CanRemoveVariable(node.Variable))
-            {
                 return;
-            }
             if(node.Value != null)
-                Clipboard.SetText(node.Value);
+                Clipboard.SetText(node.Value ?? (node.Type + ":??"));
         }
 
         internal class VariableListNode
@@ -364,10 +348,7 @@ namespace WolvenKit
                     if (Variable.Name != null)
                         return Variable.Name;
 
-                    if (Parent == null)
-                        return "";
-
-                    return Parent.Children.IndexOf(this).ToString();
+                    return Parent?.Children.IndexOf(this).ToString() ?? "";
                 }
                 set
                 {

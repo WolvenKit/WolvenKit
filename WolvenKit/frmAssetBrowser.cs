@@ -459,7 +459,7 @@ namespace WolvenKit
                 }
             }
             RequestFileAdd.Invoke(this, new Tuple<List<IWitcherArchive>, ListView.ListViewItemCollection>(Managers, SelectedPaths));
-            pathlistview.Clear();
+            pathlistview.Items.Clear();
         }
 
         private void copyPathToolStripMenuItem_Click(object sender, EventArgs e)

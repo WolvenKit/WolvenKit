@@ -45,12 +45,12 @@ namespace WolvenKit.CR2W
 
         public uint FileVersion { get; set; }
         public uint unk2 { get; set; }
-        public uint unk3 { get; set; }
-        public uint unk4 { get; set; }
+        public uint date { get; set; }
+        public uint time { get; set; }
         public uint unk5 { get; set; }
         public uint cr2wsize { get; set; }
         public uint buffersize { get; set; }
-        public uint unk6 { get; set; }
+        public uint crc32 { get; set; }
         public uint unk7 { get; set; }
         public List<CR2WHeaderData> headers { get; set; }
         public List<CR2WHeaderString> strings { get; set; }
@@ -90,24 +90,24 @@ namespace WolvenKit.CR2W
 
         public void Read(BinaryReader file)
         {
-            var filetype = file.ReadBytes(4);
+            var mw = file.ReadBytes(4);
 
-            if (!IDString.SequenceEqual(filetype))
+            if (!IDString.SequenceEqual(mw))
             {
                 throw new InvalidFileTypeException("Invalid file type");
             }
 
             FileVersion = file.ReadUInt32();
             unk2 = file.ReadUInt32();
-            unk3 = file.ReadUInt32();
+            date = file.ReadUInt32();
 
-            unk4 = file.ReadUInt32();
+            time = file.ReadUInt32();
             unk5 = file.ReadUInt32();
 
             cr2wsize = file.ReadUInt32();
             buffersize = file.ReadUInt32();
 
-            unk6 = file.ReadUInt32();
+            crc32 = file.ReadUInt32();
             unk7 = file.ReadUInt32();
 
             headers = new List<CR2WHeaderData>();
@@ -342,15 +342,15 @@ namespace WolvenKit.CR2W
 
             file.Write(FileVersion);
             file.Write(unk2);
-            file.Write(unk3);
+            file.Write(date);
 
-            file.Write(unk4);
+            file.Write(time);
             file.Write(unk5);
 
             file.Write(cr2wsize);
             file.Write(buffersize);
 
-            file.Write(unk6);
+            file.Write(crc32);
             file.Write(unk7);
 
             for (var i = 0; i < 10; i++)

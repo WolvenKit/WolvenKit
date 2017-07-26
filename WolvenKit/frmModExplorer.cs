@@ -265,7 +265,7 @@ namespace WolvenKit
         {
             if (modFileList.SelectedNode != null)
             {
-                Process.Start("explorer.exe", "/select, \"" + ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath + "\"");
+                Commonfunctions.ShowFileInExplorer(ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath);
             }
         }
 

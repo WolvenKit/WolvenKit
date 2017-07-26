@@ -208,6 +208,12 @@
     <Compile Include="frmImagePreview.Designer.cs">
       <DependentUpon>frmImagePreview.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmInstallPackage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmInstallPackage.Designer.cs">
+      <DependentUpon>frmInstallPackage.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmJournalEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -411,6 +417,7 @@
     <Compile Include="SelectChunkArgs.cs" />
     <Compile Include="SortableBindinglist.cs" />
     <Compile Include="Win32.cs" />
+    <Compile Include="WKPackage.cs" />
     <EmbeddedResource Include="frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
     </EmbeddedResource>
@@ -462,6 +469,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmImagePreview.resx">
       <DependentUpon>frmImagePreview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmInstallPackage.resx">
+      <DependentUpon>frmInstallPackage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmJournalEditor.resx">
       <DependentUpon>frmJournalEditor.cs</DependentUpon>
@@ -623,6 +633,12 @@
       <Link>Irrlicht.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\box.png" />
+    <None Include="Resources\box--arrow.png" />
+    <None Include="Resources\bug.png" />
+    <None Include="Resources\exclamation-red.png" />
+    <None Include="Resources\edit-letter-spacing.png" />
+    <None Include="Resources\ui-menu-blue.png" />
     <Content Include="wolven_kit_icon.ico" />
     <Content Include="Licenses\License.doboz4net.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -645,7 +661,6 @@
     <Content Include="Licenses\License.W3SaveGameEditor.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Notes\Filetypes.txt" />
     <None Include="Resources\ExpandIcon.png" />
     <None Include="Resources\ExitIcon.png" />
     <None Include="Resources\LayerGroupVisibled.png" />

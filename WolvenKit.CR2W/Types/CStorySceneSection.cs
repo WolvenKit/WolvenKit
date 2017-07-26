@@ -24,9 +24,7 @@ namespace WolvenKit.CR2W.Types
                 var typeId = file.ReadUInt16();
                 var typeName = cr2w.strings[typeId].str;
 
-                var item = CR2WTypeManager.Get().GetByName(typeName, "", cr2w, false);
-                if (item == null)
-                    item = new CVector(cr2w);
+                var item = CR2WTypeManager.Get().GetByName(typeName, "", cr2w, false) ?? new CVector(cr2w);
 
                 item.Read(file, elementsize);
                 item.Type = typeName;

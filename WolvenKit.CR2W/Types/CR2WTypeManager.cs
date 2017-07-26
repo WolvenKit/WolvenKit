@@ -88,6 +88,7 @@ namespace WolvenKit.CR2W.Types
             Register("CBitmapTexture", new CBitmapTexture(null));
 
             Register("Color", new CColor(null));
+            Register("CColorShift",new CColorShift(null));
 
             Register("CEntity", new CEntity(null));
             Register("CMeshComponent", new CMeshComponent(null));
@@ -115,7 +116,7 @@ namespace WolvenKit.CR2W.Types
                 "SWorldSkyboxParameters", "CEntityAppearance", "SBlockDesc", "SCachedConnections",
                 "QuestScriptParam", "StorySceneCameraDefinition", "CStorySceneVoicetagMapping",
                 "SStorySceneCameraLightMod", "SCurveData", "SCurveDataEntry", "CStorySceneSectionVariantElementInfo",
-                "CStorySceneEventCameraInterpolationKey", "SItemNameProperty", "CColorShift", "SAbilityAttributeValue",
+                "CStorySceneEventCameraInterpolationKey", "SItemNameProperty", "SAbilityAttributeValue",
                 "CAreaEnvironmentParams", "CEnvGameplayEffectsParameters", "CEnvWindParameters",
                 "CEnvFinalColorBalanceParameters",
                 "CEnvSharpenParameters",
@@ -396,9 +397,9 @@ namespace WolvenKit.CR2W.Types
             };
 
 
-            for (var i = 0; i < cnames.Length; i++)
+            foreach (string t in cnames)
             {
-                Register(cnames[i], new CName(null));
+                Register(t, new CName(null));
             }
         }
 
@@ -411,7 +412,10 @@ namespace WolvenKit.CR2W.Types
 
         public void Register(string name, CVariable var)
         {
-            types.Add(name, new CR2WTypeDefinition(name, var));
+            if (types.ContainsKey(name))
+                types[name] = new CR2WTypeDefinition(name, var);
+            else
+                types.Add(name, new CR2WTypeDefinition(name, var));
         }
 
         public CVariable GetByName(string name, string varname, CR2WFile cr2w, bool readUnknownAsBytes = true)

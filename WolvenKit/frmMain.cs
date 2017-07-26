@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
@@ -318,11 +321,6 @@ namespace WolvenKit
         {
             if (ActiveMod == null)
                 return;
-            if (Process.GetProcessesByName("Witcher3").Length != 0)
-            {
-                MessageBox.Show(@"Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
             var explorer = new frmAssetBrowser(loadmods ? new List<IWitcherArchive> { MainController.Get().ModBundleManager, MainController.Get().ModSoundManager, MainController.Get().ModTextureManager } : new List<IWitcherArchive> { MainController.Get().BundleManager, MainController.Get().SoundManager, MainController.Get().TextureManager });
             explorer.RequestFileAdd += Assetbrowser_FileAdd;
             explorer.OpenPath(browseToPath);
@@ -331,15 +329,27 @@ namespace WolvenKit
 
         private void Assetbrowser_FileAdd(object sender, Tuple<List<IWitcherArchive>, ListView.ListViewItemCollection> Details)
         {
+            if (Process.GetProcessesByName("Witcher3").Length != 0)
+            {
+                MessageBox.Show(@"Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            var skipping = false;
             foreach (ListViewItem depotpath in Details.Item2)
             {
-                AddToMod(depotpath.Text, Details.Item1);
+                skipping = AddToMod(depotpath.Text, skipping, Details.Item1);
             }
             SaveMod();
         }
 
-        private void AddToMod(string depotpath, List<IWitcherArchive> managers)
+        /// <summary>
+        /// Scans the given archivemanagers for a file. If found, extracts it to the project.
+        /// </summary>
+        /// <param name="depotpath">Filename.</param>
+        /// <param name="managers">The managers.</param>
+        private bool AddToMod(string depotpath, bool skipping, List<IWitcherArchive> managers)
         {
+            bool skip = skipping;
             foreach (var manager in managers.Where(manager => manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath))))
             {
                 if (manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath)))
@@ -348,10 +358,16 @@ namespace WolvenKit
                     var archives = manager.FileList.Where(x => x.Name == depotpath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
                     if (archives.Count() > 1)
                     {
+
                         var dlg = new frmExtractAmbigious(archives.Select(x => x.Key).ToList());
-                        if (dlg.ShowDialog() == DialogResult.Cancel)
+                        if (!skip)
                         {
-                            return;
+                            var res = dlg.ShowDialog();
+                            skip = dlg.Skip;
+                            if (res == DialogResult.Cancel)
+                            {
+                                return skip;
+                            }
                         }
                         var selectedBundle = archives.FirstOrDefault(x => x.Key == dlg.SelectedBundle).Value;
                         try
@@ -363,23 +379,22 @@ namespace WolvenKit
                             }
                             selectedBundle.Extract(filename);
                         } catch { }
-                        return;
+                        return skip;
                     }
-                    else
+                    try
                     {
-                        try
+                        Directory.CreateDirectory(Path.GetDirectoryName(filename));
+                        if (File.Exists(filename))
                         {
-                            Directory.CreateDirectory(Path.GetDirectoryName(filename));
-                            if (File.Exists(filename))
-                            {
-                                File.Delete(filename);
-                            }
-                            archives.FirstOrDefault().Value.Extract(filename);
-                        } catch { }
-                        return;
+                            File.Delete(filename);
+                        }
+                        archives.FirstOrDefault().Value.Extract(filename);
                     }
+                    catch { }
+                    return skip;
                 }
             }
+            return skip;
         }
 
         /// <summary>
@@ -929,8 +944,8 @@ namespace WolvenKit
             FileStream fsOut = File.Create(Path.Combine(installdir, ActiveMod.Name + ".W3ModPackage"));
             ZipOutputStream zipStream = new ZipOutputStream(fsOut);
             int folderOffset = packeddir.Length + (packeddir.EndsWith("\\") ? 0 : 1);
-            CompressFolder(packeddir, zipStream, folderOffset);
-            CompressFile(ActiveMod.FileName, zipStream);
+            Commonfunctions.CompressFolder(packeddir, zipStream, folderOffset);
+            Commonfunctions.CompressFile(ActiveMod.FileName, zipStream);
             zipStream.IsStreamOwner = true;
             zipStream.Close();
             AddOutput("Installer created: " + fsOut.Name + "\n", frmOutput.Logtype.Success);
@@ -939,51 +954,7 @@ namespace WolvenKit
                 AddOutput("Couldn't create installer. Something went wrong.", frmOutput.Logtype.Error);
                 return;
             }
-            Process.Start("explorer.exe", "/select, \"" + fsOut.Name + "\"");
-        }
-
-        private void CompressFile(string filename, ZipOutputStream zipStream)
-        {
-            FileInfo fi = new FileInfo(filename);
-
-            string entryName = Path.GetFileName(filename);
-            entryName = ZipEntry.CleanName(entryName);
-            ZipEntry newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length};
-            zipStream.PutNextEntry(newEntry);
-            byte[] buffer = new byte[4096];
-            using (FileStream streamReader = File.OpenRead(filename))
-            {
-                StreamUtils.Copy(streamReader, zipStream, buffer);
-            }
-            zipStream.CloseEntry();
-        }
-
-        private void CompressFolder(string path, ZipOutputStream zipStream, int folderOffset)
-        {
-
-            string[] files = Directory.GetFiles(path);
-
-            foreach (string filename in files)
-            {
-
-                FileInfo fi = new FileInfo(filename);
-
-                string entryName = filename.Substring(folderOffset);
-                entryName = ZipEntry.CleanName(entryName);
-                ZipEntry newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
-                zipStream.PutNextEntry(newEntry);
-                byte[] buffer = new byte[4096];
-                using (FileStream streamReader = File.OpenRead(filename))
-                {
-                    StreamUtils.Copy(streamReader, zipStream, buffer);
-                }
-                zipStream.CloseEntry();
-            }
-            string[] folders = Directory.GetDirectories(path);
-            foreach (string folder in folders)
-            {
-                CompressFolder(folder, zipStream, folderOffset);
-            }
+            Commonfunctions.ShowFileInExplorer(fsOut.Name);
         }
 
         private async Task cookMod()
@@ -1290,6 +1261,19 @@ namespace WolvenKit
             {
                 MainController.Get().Configuration.InitialFileDirectory = Path.GetDirectoryName(dlg.FileName);
                 LoadDocument(dlg.FileName);
+            }
+        }
+
+        private void packageInstallerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var of = new OpenFileDialog())
+            {
+                of.Filter = "WolvenKit Package | *.wkp";
+                if(of.ShowDialog() == DialogResult.OK)
+                    using (var pi = new frmInstallPackage(of.FileName))
+                        pi.ShowDialog();
+                else
+                    Commonfunctions.SendNotification("Invalid file!");
             }
         }
 
