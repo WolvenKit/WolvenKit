@@ -17,71 +17,289 @@ namespace WolvenKit.Render
     public partial class frmRender : DockContent
     {
         /// <summary>
-        /// Required designer variable.
+        /// Thread variable for irrlicht thread.
         /// </summary>
         private Thread irrThread;
+
+        /// <summary>
+        /// Form constructor.
+        /// </summary>
         public frmRender()
         {
-            //
             // Required for Windows Form Designer support
-            //
             InitializeComponent();
         }
 
         private CR2WFile _file;
 
+        /// <summary>
+        /// Witcher file containing mesh data.
+        /// </summary>
         public CR2WFile File
         {
             get { return _file; }
             set
             {
-                _file = value;
-                switch (Path.GetExtension(_file.FileName))
+                try
                 {
-                    case ".w2mesh":
-                        foreach (var chunk in _file.chunks)
-                        {
-                            if (chunk.Type == "CMesh")
-                            {
-                                var cookedDatas = chunk.GetVariableByName("cookedData") as CVector;
-                                foreach (var cookedData in cookedDatas.variables)
-                                {
-                                    if (cookedData.Name == "renderChunks")
-                                    {
-                                        var bytes = ((CByteArray)cookedData).Bytes;
-                                        List<SVertexBufferInfos> verticesBuffer = new List<SVertexBufferInfos>();
-                                        var nbBuffers = bytes[0];
-                                        int curr = 1;
-                                        for (uint i = 0; i < nbBuffers; i++)
-                                        {
-                                            SVertexBufferInfos buffInfo = new SVertexBufferInfos();
-
-                                            curr += 1; // Unknown
-                                            buffInfo.verticesCoordsOffset = bytes.SubArray(ref curr, 4).GetUint();
-                                            buffInfo.uvOffset = bytes.SubArray(ref curr, 4).GetUint();
-                                            buffInfo.normalsOffset = bytes.SubArray(ref curr, 4).GetUint();
-
-                                            curr += 9; // Unknown
-                                            buffInfo.indicesOffset = bytes.SubArray(ref curr, 4).GetUint();
-                                            curr += 1; // 0x1D
-
-                                            buffInfo.nbVertices = bytes.SubArray(ref curr, 2).GetUshort();
-                                            buffInfo.nbIndices = bytes.SubArray(ref curr, 4).GetUint();
-                                            curr += 3; // Unknown
-                                            buffInfo.lod = bytes.SubArray(ref curr, 1).GetByte(); // lod ?
-
-                                            verticesBuffer.Add(buffInfo);
-                                        }
-                                    }
-                                }
-                            }
-                            // System.Collections.Generic.List<CR2W.Editors.IEditableVariable> editable = chunk.GetEditableVariables();
-                        }
-                        break;
+                    _file = value;
+                    
+                    switch (Path.GetExtension(_file.FileName))
+                    {
+                        case ".w2mesh":
+                            ReadMeshBufferInfos();
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, ex.Message);
                 }
             }
         }
 
+        /// <summary>
+        /// Reads mesh buffer infos.
+        /// </summary>
+        void ReadMeshBufferInfos()
+        {
+            SBufferInfos bufferInfos = new SBufferInfos();
+            List<SMeshInfos> meshInfos = new List<SMeshInfos>();
+
+            // *************** READ CHUNK INFOS ***************
+            foreach (var chunk in _file.chunks)
+            {
+                if (chunk.Type == "CMesh")
+                {
+                    List<SVertexBufferInfos> vertexBufferInfos = new List<SVertexBufferInfos>();
+                    var cookedDatas = chunk.GetVariableByName("cookedData") as CVector;
+                    foreach (var cookedData in cookedDatas.variables)
+                    {
+                        if (cookedData.Name == "renderChunks")
+                        {
+                            var bytes = ((CByteArray)cookedData).Bytes;
+                            var nbBuffers = bytes[0];
+                            int curr = 1;
+                            for (uint i = 0; i < nbBuffers; i++)
+                            {
+                                SVertexBufferInfos buffInfo = new SVertexBufferInfos();
+
+                                curr += 1; // Unknown
+                                buffInfo.verticesCoordsOffset = bytes.SubArray(ref curr, 4).GetUint();
+                                buffInfo.uvOffset = bytes.SubArray(ref curr, 4).GetUint();
+                                buffInfo.normalsOffset = bytes.SubArray(ref curr, 4).GetUint();
+
+                                curr += 9; // Unknown
+                                buffInfo.indicesOffset = bytes.SubArray(ref curr, 4).GetUint();
+                                curr += 1; // 0x1D
+
+                                buffInfo.nbVertices = bytes.SubArray(ref curr, 2).GetUshort();
+                                buffInfo.nbIndices = bytes.SubArray(ref curr, 4).GetUint();
+                                curr += 3; // Unknown
+                                buffInfo.lod = bytes.SubArray(ref curr, 1).GetByte(); // lod ?
+
+                                vertexBufferInfos.Add(buffInfo);
+                            }
+                        }
+                        else if (cookedData.Name == "indexBufferOffset")
+                        {
+                            bufferInfos.indexBufferOffset = uint.Parse(cookedData.ToString());
+                        }
+                        else if (cookedData.Name == "indexBufferSize")
+                        {
+                            bufferInfos.indexBufferSize = uint.Parse(cookedData.ToString());
+                        }
+                        else if (cookedData.Name == "vertexBufferOffset")
+                        {
+                            bufferInfos.vertexBufferOffset = uint.Parse(cookedData.ToString());
+                        }
+                        else if (cookedData.Name == "vertexBufferSize")
+                        {
+                            bufferInfos.vertexBufferSize = uint.Parse(cookedData.ToString());
+                        }
+                        else if (cookedData.Name == "quantizationOffset")
+                        {
+                            bufferInfos.quantizationOffset.X = float.Parse((cookedData as CVector).variables[0].ToString());
+                            bufferInfos.quantizationOffset.Y = float.Parse((cookedData as CVector).variables[1].ToString());
+                            bufferInfos.quantizationOffset.Z = float.Parse((cookedData as CVector).variables[2].ToString());
+                        }
+                        else if (cookedData.Name == "quantizationScale")
+                        {
+                            bufferInfos.quantizationScale.X = float.Parse((cookedData as CVector).variables[0].ToString());
+                            bufferInfos.quantizationScale.Y = float.Parse((cookedData as CVector).variables[1].ToString());
+                            bufferInfos.quantizationScale.Z = float.Parse((cookedData as CVector).variables[2].ToString());
+                        }
+                    }
+                    bufferInfos.verticesBuffer = vertexBufferInfos;
+                    var meshChunks = chunk.GetVariableByName("chunks") as CArray;
+                    foreach (var meshChunk in meshChunks.array)
+                    {
+                        SMeshInfos meshInfo = new SMeshInfos();
+                        foreach (var mesh in (meshChunk as CVector).variables)
+                        {
+                            if (mesh.Name == "numVertices")
+                            {
+                                meshInfo.numVertices = uint.Parse(mesh.ToString());
+                            }
+                            else if (mesh.Name == "numIndices")
+                            {
+                                meshInfo.numIndices = uint.Parse(mesh.ToString());
+                            }
+                            else if (mesh.Name == "numBonesPerVertex")
+                            {
+                                meshInfo.numBonesPerVertex = uint.Parse(mesh.ToString());
+                            }
+                            else if (mesh.Name == "firstVertex")
+                            {
+                                meshInfo.firstVertex = uint.Parse(mesh.ToString());
+                            }
+                            else if (mesh.Name == "firstIndex")
+                            {
+                                meshInfo.firstIndex = uint.Parse(mesh.ToString());
+                            }
+                            else if (mesh.Name == "vertexType")
+                            {
+                                if ((mesh as CName).Value == "MVT_StaticMesh")
+                                    meshInfo.vertexType = SMeshInfos.EMeshVertexType.EMVT_STATIC;
+                                else if ((mesh as CName).Value == "MVT_SkinnedMesh")
+                                    meshInfo.vertexType = SMeshInfos.EMeshVertexType.EMVT_SKINNED;
+                            }
+                            else if (mesh.Name == "materialID")
+                            {
+                                meshInfo.materialID = uint.Parse(mesh.ToString());
+                            }
+                        }
+                        meshInfos.Add(meshInfo);
+                    }
+                }
+            }
+
+            // *************** READ MESH BUFFER INFOS ***************
+            foreach (var meshInfo in meshInfos)
+            {
+                // IMPLEMENTED FROM jlouis' witcherconverter
+                // http://jlouisb.users.sourceforge.net/
+                // https://bitbucket.org/jlouis/witcherconverter
+
+                SVertexBufferInfos vBufferInf = new SVertexBufferInfos();
+                uint nbVertices = 0;
+                uint firstVertexOffset = 0;
+                uint nbIndices = 0;
+                uint firstIndiceOffset = 0;
+                for (int i = 0; i < bufferInfos.verticesBuffer.Count; i++)
+                {
+                    nbVertices += bufferInfos.verticesBuffer[i].nbVertices;
+                    if (nbVertices > meshInfo.firstVertex)
+                    {
+                        vBufferInf = bufferInfos.verticesBuffer[i];
+                        // the index of the first vertex in the buffer
+                        firstVertexOffset = meshInfo.firstVertex - (nbVertices - vBufferInf.nbVertices);
+                        break;
+                    }
+                }
+                for (int i = 0; i < bufferInfos.verticesBuffer.Count; i++)
+                {
+                    nbIndices += bufferInfos.verticesBuffer[i].nbIndices;
+                    if (nbIndices > meshInfo.firstIndex)
+                    {
+                        vBufferInf = bufferInfos.verticesBuffer[i];
+                        firstIndiceOffset = meshInfo.firstIndex - (nbIndices - vBufferInf.nbIndices);
+                        break;
+                    }
+                }
+
+                using (StreamReader sr = new StreamReader(_file.FileName + ".1.buffer"))
+                {
+                    uint vertexSize = 8;
+                    if (meshInfo.vertexType == SMeshInfos.EMeshVertexType.EMVT_SKINNED)
+                        vertexSize += meshInfo.numBonesPerVertex * 2;
+
+                    sr.BaseStream.Seek(vBufferInf.verticesCoordsOffset + firstVertexOffset * vertexSize, SeekOrigin.Begin);
+
+                    List<Vertex3D> vertex3DCoords = new List<Vertex3D>();
+                    Color defaultColor = new Color(255, 255, 255, 255);
+                    for (int i = 0; i < meshInfo.numVertices; i++)
+                    {
+                        ushort x, y, z, w;
+
+                        byte[] buff = new byte[2];
+                        sr.BaseStream.Read(buff, 0, 2);
+                        x = buff.GetUshort();
+                        sr.BaseStream.Read(buff, 0, 2);
+                        y = buff.GetUshort();
+                        sr.BaseStream.Read(buff, 0, 2);
+                        z = buff.GetUshort();
+                        sr.BaseStream.Read(buff, 0, 2);
+                        w = buff.GetUshort();
+
+                        // skip skinning data
+                        if (meshInfo.vertexType == SMeshInfos.EMeshVertexType.EMVT_SKINNED)
+                        {
+                            sr.BaseStream.Seek(meshInfo.numBonesPerVertex * 2, SeekOrigin.Current);
+                        }
+
+                        Vertex3D vertex3DCoord = new Vertex3D();
+                        vertex3DCoord.Position = new Vector3Df(x, y, z) / 65535f * bufferInfos.quantizationScale + bufferInfos.quantizationOffset;
+                        vertex3DCoord.Color = defaultColor;
+                        vertex3DCoords.Add(vertex3DCoord);
+                    }
+
+                    sr.BaseStream.Seek(vBufferInf.uvOffset + firstVertexOffset * 4, SeekOrigin.Begin);
+
+                    for (int i = 0; i < meshInfo.numVertices; i++)
+                    {
+                        ushort u, v;
+
+                        byte[] buff = new byte[2];
+                        sr.BaseStream.Read(buff, 0, 2);
+                        u = buff.GetUshort();
+                        sr.BaseStream.Read(buff, 0, 2);
+                        v = buff.GetUshort();
+
+                        float uf = u.ToFloat();
+                        float vf = v.ToFloat();
+
+                        Vertex3D vertex3DCoord = vertex3DCoords[i];
+                        vertex3DCoord.TCoords = new Vector2Df(uf, vf);
+                        vertex3DCoords[i] = vertex3DCoord;
+                    }
+
+                    // Indices -------------------------------------------------------------------
+                    sr.BaseStream.Seek(bufferInfos.indexBufferOffset + vBufferInf.indicesOffset + firstIndiceOffset * 2, SeekOrigin.Begin);
+
+                    List<ushort> indices = new List<ushort>();
+                    for (int i = 0; i < meshInfo.numIndices; i++)
+                        indices.Add(0);
+
+                    for (int i = 0; i < meshInfo.numIndices; i++)
+                    {
+                        ushort index;
+
+                        byte[] buff = new byte[2];
+                        sr.BaseStream.Read(buff, 0, 2);
+                        index = buff.GetUshort();
+
+                        // Indice need to be inversed for the normals
+                        if (i % 3 == 0)
+                            indices[i] = index;
+                        else if (i % 3 == 1)
+                            indices[i + 1] = index;
+                        else if (i % 3 == 2)
+                            indices[i - 1] = index;
+                    }
+
+                    MeshBuffer meshBuff = MeshBuffer.Create(VertexType.Standard, IndexType._16Bit);
+                    staticMesh.AddMeshBuffer(meshBuff);
+                    meshBuff.Append(vertex3DCoords, indices);
+                    meshBuff.RecalculateBoundingBox();
+                    meshBuff.Drop();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Starts an irrlicht thread.
+        /// </summary>
         private void StartIrrThread()
         {
             ThreadStart irrThreadStart = new ThreadStart(StartIrr);
@@ -90,6 +308,9 @@ namespace WolvenKit.Render
             irrThread.Start();
         }
 
+        /// <summary>
+        /// Restarts an irrlicht thread.
+        /// </summary>
         private void RestartIrrThread()
         {
             irrThread.Abort();
@@ -98,6 +319,9 @@ namespace WolvenKit.Render
             resizing = false;
         }
 
+        /// <summary>
+        /// The irrlicht thread for rendering.
+        /// </summary>
         private void StartIrr()
         {
             try
@@ -121,24 +345,29 @@ namespace WolvenKit.Render
                 gui.AddStaticText("Hello World! This is the Irrlicht Software renderer!",
                     new Recti(10, 10, 260, 22), true);
 
-                AnimatedMesh mesh = smgr.GetMesh(modelPath);
-                AnimatedMeshSceneNode node = smgr.AddAnimatedMeshSceneNode(mesh);
+                //AnimatedMesh mesh = smgr.GetMesh(modelPath);
+                //AnimatedMeshSceneNode node = smgr.AddAnimatedMeshSceneNode(mesh);
+
+                smgr.MeshManipulator.RecalculateNormals(staticMesh);
+                MeshSceneNode node = smgr.AddMeshSceneNode(staticMesh);
 
                 if (node == null) throw new Exception("Could not load file!");
 
+                node.Scale = new Vector3Df(3.0f);
                 node.SetMaterialFlag(MaterialFlag.Lighting, false);
-                if(mesh.MeshType == AnimatedMeshType.MD2)
-                    node.SetMD2Animation(AnimationTypeMD2.Stand);
+                //if(mesh.MeshType == AnimatedMeshType.MD2)
+                    //node.SetMD2Animation(AnimationTypeMD2.Stand);
                 //node.SetMaterialTexture(0, driver.GetTexture("../../Media/sydney.bmp"));
 
-                smgr.AddCameraSceneNode(null, new Vector3Df(node.BoundingBox.Radius*2f, node.BoundingBox.Radius, 0), new Vector3Df(0, node.BoundingBox.Radius, 0));
-                scaleMul = node.BoundingBox.Radius/2;
+                CameraSceneNode camera = smgr.AddCameraSceneNode(null, new Vector3Df(node.BoundingBox.Radius, 0, 0), new Vector3Df(0, 0, 0));
+                camera.NearValue = 0.001f;
+                scaleMul = node.BoundingBox.Radius/4;
 
-                MethodInvoker UpdateRichTextBoxInvoker = new MethodInvoker(delegate { UpdateRichTextBox(); });
+                MethodInvoker UpdateRichTextBoxInvoker = new MethodInvoker(delegate { UpdateRichTextBox(driver.FPS); });
 
                 while (device.Run())
                 {
-                    driver.BeginScene(ClearBufferFlag.All, new IrrlichtLime.Video.Color(100, 101, 140));
+                    driver.BeginScene(ClearBufferFlag.All, new Color(100, 101, 140));
 
                     node.Position = modelPosition;
                     node.Rotation = modelAngle;
@@ -154,55 +383,55 @@ namespace WolvenKit.Render
             }
             catch (Exception ex)
             {
-                if (!(ex is ThreadAbortException))
+                if (!(ex is ThreadAbortException) && !this.IsDisposed)
                 {
                     MessageBox.Show(ex.Message);
-                    this.Invoke(new MethodInvoker(delegate { this.Close(); }));
+                    //this.Invoke(new MethodInvoker(delegate { this.Close(); }));
                 }
             }
         }
 
         #region Common Data
 
-        private string modelPath = "";
+        //private string modelPath = "";
+        private StaticMesh staticMesh = StaticMesh.Create();
 
         //private static Quaternion modelAngle = new Quaternion(new Vertex3f(), 0);
-        private static Vector3Df modelPosition = new Vector3Df(0.0f, 0.0f, 0.0f);
-        private static Vector3Df modelAngle = new Vector3Df();
-        private static float scaleMul = 1;
+        private Vector3Df modelPosition = new Vector3Df(0.0f);
+        private Vector3Df modelAngle = new Vector3Df(270.0f, 270.0f, 0.0f);
+        private float scaleMul = 1;
 
-        private static bool model_autorotating = true;
+        private bool modelAutorotating = true;
         //private static float angle_autorotate = 0;
         //private static float angle_autorotate_rad;
         private const float PI_OVER_180 = (float)Math.PI / 180.0f;
 
         #endregion
 
-        private static int previousTick = 0;
-        private static int deltaTick = 0;
-
+        /// <summary>
+        /// Timer ticks for auto rotation.
+        /// </summary>
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
             // Change camera rotation
-            if (model_autorotating)
+            if (modelAutorotating)
                 modelAngle.Y = (modelAngle.Y + 1f) % 360.0f;
             //angle_autorotate_rad = angle_autorotate * PI_OVER_180;
-
-            var currentTick = Environment.TickCount;
-            deltaTick = currentTick - previousTick;
-            previousTick = currentTick;
 
             // Issue a new frame after this render
             // irrlichtPanel.Invalidate();
         }
 
-        private void UpdateRichTextBox()
+        /// <summary>
+        /// Updates textboxes.
+        /// </summary>
+        private void UpdateRichTextBox(int FPS)
         {
             this.textBoxPos.Text = String.Format("X: {0} Y: {1} Z: {2}", modelPosition.X, modelPosition.Y, modelPosition.Z);
             this.textBoxPos.Width = TextRenderer.MeasureText(this.textBoxPos.Text, this.textBoxPos.Font).Width;
-            this.textBoxRotation.Text = String.Format("Yaw: {0} Pitch: {1}", modelAngle.Y, modelAngle.X);
+            this.textBoxRotation.Text = String.Format("Yaw: {0} Roll: {1}", modelAngle.Y, modelAngle.Z);
             this.textBoxRotation.Width = TextRenderer.MeasureText(this.textBoxRotation.Text, this.textBoxRotation.Font).Width;
-            this.textBoxFPS.Text = String.Format("FPS: {0}", deltaTick == 0 ? 0 : 1000 / deltaTick);
+            this.textBoxFPS.Text = String.Format("FPS: {0}", FPS);
             this.textBoxFPS.Width = TextRenderer.MeasureText(this.textBoxFPS.Text, this.textBoxFPS.Font).Width;
         }
 
@@ -235,7 +464,6 @@ namespace WolvenKit.Render
                 MessageBox.Show(this, "No file selected!");
                 this.BeginInvoke(new MethodInvoker(Close));
             }*/
-            this.BeginInvoke(new MethodInvoker(Close));
 
             // start an irrlicht thread
             StartIrrThread();
@@ -247,37 +475,37 @@ namespace WolvenKit.Render
         }
 
         private static bool renderStarted = true;
-        private static float currentPosX = 0;
-        private static float currentPosY = 0;
+        private static float currCursorPosX = 0;
+        private static float currCursorPosY = 0;
 
         private void irrlichtPanel_MouseMove(object sender, MouseEventArgs e)
         {
             if (renderStarted && e.Button == MouseButtons.Left)
             {
-                model_autorotating = false;
+                modelAutorotating = false;
                 // Around Y axis
-                float deltaDirection = currentPosX - e.X;
+                float deltaDirection = currCursorPosX - e.X;
                 modelAngle.Y = (modelAngle.Y + deltaDirection / 4.0f) % 360.0f;
                 if (modelAngle.Y < 0)
                     modelAngle.Y = 360.0f + modelAngle.Y;
 
-                // Around X axis
-                deltaDirection = currentPosY - e.Y;
-                modelAngle.Z = (modelAngle.Z + deltaDirection / 40.0f) % 360.0f;
+                // Around Z axis
+                deltaDirection = currCursorPosY - e.Y;
+                modelAngle.Z = (modelAngle.Z + deltaDirection / 20.0f) % 360.0f;
                 if (modelAngle.Z < 0)
                     modelAngle.Z = 360.0f + modelAngle.Z;
             }
             else if (renderStarted && e.Button == MouseButtons.Right)
             {
-                model_autorotating = false;
-                float deltaDirection = currentPosX - e.X;
+                modelAutorotating = false;
+                float deltaDirection = currCursorPosX - e.X;
                 modelPosition.Z = modelPosition.Z - deltaDirection * scaleMul / 100;
 
-                deltaDirection = currentPosY - e.Y;
+                deltaDirection = currCursorPosY - e.Y;
                 modelPosition.Y = modelPosition.Y + deltaDirection * scaleMul / 100;
             }
-            currentPosX = e.X;
-            currentPosY = e.Y;
+            currCursorPosX = e.X;
+            currCursorPosY = e.Y;
 
             // This method should only work when the mouse is captured by the Form.
             // For instance, when the left mouse button is pressed:
@@ -319,11 +547,9 @@ namespace WolvenKit.Render
             if (e.KeyCode == Keys.Space)
             {
                 // Restart autorotation
-                model_autorotating = true;
+                modelAutorotating = true;
                 modelAngle.X = modelAngle.Y = modelAngle.Z = 0;
-                modelPosition.X = 0;
-                modelPosition.Y = 0;
-                modelPosition.Z = 0;
+                modelPosition.X = modelPosition.Y = modelPosition.Z = 0;
             }
         }
 

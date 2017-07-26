@@ -26,7 +26,7 @@ namespace WolvenKit
 
         public CR2WChunk Chunk
         {
-            get => chunk;
+            get { return chunk; }
             set
             {
                 chunk = value;
