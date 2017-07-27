@@ -70,6 +70,8 @@ namespace WolvenKit
             }
         }
 
+        public frmStringsGui stringsGui;
+
         private void UpdateTitle()
         {
             Text = BaseTitle + " v" + Version;
@@ -773,6 +775,16 @@ namespace WolvenKit
         {
             if (ActiveMod == null)
                 return;
+
+            if (stringsGui == null)
+                stringsGui = new frmStringsGui();
+            if (stringsGui.AreHashesDifferent())
+            {
+                var result = MessageBox.Show("There are not encoded CSV files in your mod, do you want to open Strings Encoder GUI?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (result == DialogResult.Yes)
+                    stringsGui.ShowDialog();
+            }
+
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
                 MessageBox.Show("Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -825,6 +837,13 @@ namespace WolvenKit
                     if (!Directory.Exists(Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\")))
                         Directory.CreateDirectory(Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\"));
                     Directory.GetFiles((ActiveMod.FileDirectory + "\\scripts")).ToList().ForEach(x => File.Copy(x, Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\") + Path.GetFileName(x)));
+                }
+
+                if (packsettings.Strings)
+                {
+                    var files = Directory.GetFiles((ActiveMod.Directory + "\\strings")).Where(s => Path.GetExtension(s) == ".w3strings").ToList();
+
+                    files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.Directory, @"packed\\content\\") + Path.GetFileName(x)));
                 }
 
                 InstallMod();
@@ -1278,8 +1297,13 @@ namespace WolvenKit
 
         private void StringsGUIToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var sg = new frmStringsGui())
-                sg.ShowDialog();
+            if (stringsGui == null)
+            {
+                stringsGui = new frmStringsGui();
+                stringsGui.ShowDialog();
+            }
+            else
+                stringsGui.ShowDialog();
         }
 
         private void joinOurDiscordToolStripMenuItem_Click_1(object sender, EventArgs e)

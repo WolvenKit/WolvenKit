@@ -245,6 +245,18 @@
     <Compile Include="frmStringsGui.Designer.cs">
       <DependentUpon>frmStringsGui.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmStringsGuiImporter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmStringsGuiImporter.Designer.cs">
+      <DependentUpon>frmStringsGuiImporter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmStringsGuiScriptsPrefixDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmStringsGuiScriptsPrefixDialog.Designer.cs">
+      <DependentUpon>frmStringsGuiScriptsPrefixDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmTextInput.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -507,6 +519,12 @@
     <EmbeddedResource Include="frmStringsGui.resx">
       <DependentUpon>frmStringsGui.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmStringsGuiImporter.resx">
+      <DependentUpon>frmStringsGuiImporter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmStringsGuiScriptsPrefixDialog.resx">
+      <DependentUpon>frmStringsGuiScriptsPrefixDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmTextInput.resx">
       <DependentUpon>frmTextInput.cs</DependentUpon>
     </EmbeddedResource>
@@ -692,7 +710,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(SolutionDir)w3strings.exe $(ProjectDir)$(OutDir)</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

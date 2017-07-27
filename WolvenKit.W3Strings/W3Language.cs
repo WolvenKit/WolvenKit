@@ -23,7 +23,11 @@ namespace WolvenKit.W3Strings
         /// </summary>
         public static readonly IEnumerable<W3Language> languages = new List<W3Language>
         {
-            new W3Language(new W3LanguageKey(0x00000000), new W3LanguageMagic(0x00000000), "__"),
+            new W3Language(new W3LanguageKey(0x00000000), new W3LanguageMagic(0x00000000), "ar"),
+            new W3Language(new W3LanguageKey(0x00000000), new W3LanguageMagic(0x00000000), "br"),
+            new W3Language(new W3LanguageKey(0x00000000), new W3LanguageMagic(0x00000000), "esMX"),
+            new W3Language(new W3LanguageKey(0x00000000), new W3LanguageMagic(0x00000000), "kr"),
+            new W3Language(new W3LanguageKey(0x00000000), new W3LanguageMagic(0x00000000), "tr"),
             new W3Language(new W3LanguageKey(0x83496237), new W3LanguageMagic(0x73946816), "pl"),
             new W3Language(new W3LanguageKey(0x43975139), new W3LanguageMagic(0x79321793), "en"),
             new W3Language(new W3LanguageKey(0x75886138), new W3LanguageMagic(0x42791159), "de"),

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
+using System.IO;
 
 namespace WolvenKit
 {
@@ -11,6 +12,7 @@ namespace WolvenKit
         public bool GenTexCache => texturecachecCHB.Checked;
         public bool Scripts => scriptsCHB.Checked;
         public bool Sound => soundCHB.Checked;
+        public bool Strings => stringsCHB.Checked;
 
         public frmPackSettings()
         {
@@ -21,6 +23,8 @@ namespace WolvenKit
                 scriptsCHB.Checked = true;
             if (MainController.Get().Window.ActiveMod.Files.Any(x => x.EndsWith(".wem") || x.EndsWith(".bnk")))
                 scriptsCHB.Checked = true;
+            if (Directory.Exists((MainController.Get().Window.ActiveMod.Directory + "\\strings")) && Directory.GetFiles((MainController.Get().Window.ActiveMod.Directory + "\\strings")).Any(x => x.EndsWith(".w3strings")))
+                stringsCHB.Checked = true;
         }
 
         private void button1_Click(object sender, EventArgs e)
