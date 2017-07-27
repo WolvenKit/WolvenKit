@@ -6,27 +6,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 
 [assembly: AssemblyTitle("Wolven kit")]
-[assembly: AssemblyDescription(@"Wolven kit
-Team:
-
-Project lead: Traderain
-
-George Tziotis
-erxv
-Nightingale
-rmemr
-kote2ster
-Murzinio
-Other people who helped the project:
-
-CAPA
-DJ_Kovrik
-KNG
-SkacikPL
-Mezziaz
-The modding discord (https://discord.gg/qBNgDEX)
-Based on the code from Sarcen's W3Edit by Sarcen.
-For any questions contact: The Witcher 3 modding discord (https://discord.gg/qBNgDEX)")]
+[assembly: AssemblyDescription("Wolven kit a tool to operate with the game \"The Witcher 3: Wild Hunt\" in various ways.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Community")]
 [assembly: AssemblyProduct("Wolven kit")]
@@ -55,5 +35,5 @@ For any questions contact: The Witcher 3 modding discord (https://discord.gg/qBN
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: AssemblyVersion("0.2.0.*")]
-[assembly: AssemblyFileVersion("0.2.0.0")]
+[assembly: AssemblyVersion("0.2.1.*")]
+[assembly: AssemblyFileVersion("0.2.1.0")]
