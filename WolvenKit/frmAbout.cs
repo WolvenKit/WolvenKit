@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Drawing;
+using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -14,7 +15,31 @@ namespace WolvenKit
             labelVersion.Text = string.Format("Version {0}", AssemblyVersion);
             labelCopyright.Text = AssemblyCopyright;
             labelCompanyName.Text = AssemblyCompany;
-            textBoxDescription.Text = AssemblyDescription;
+            
+            webBrowser1.DocumentText = $@"
+<html>
+    <body bgcolor={ColorTranslator.ToHtml(SystemColors.Control)}>
+        <center>
+        <h3>Credits</h3> <br><br>   
+        Project lead: Traderain<br><br>
+        kote2ster<br>
+        (Major programming&Reverse engineering)<br><br> 
+        rmemr<br>
+        Nightingale<br>
+        (Major reverse enginering)<br><br> 
+        Murzinio<br>
+        (Programming)<br><br> 
+        <br><br>
+        <b>Based on the code from {"\"Sarcen's Witcher 3 Mod Editor\""} by Sarcen </b><br>
+        <h3>Special thanks to</h3><br>
+        SkacikPL<br>
+        KNG<br>
+        erx<br>
+        rmemr<br>
+        Cthulhu<br>
+        <center>
+    <body>
+</html>";
         }
 
         #region Assembly Attribute Accessors
