@@ -742,6 +742,16 @@ namespace WolvenKit
         {
             if (ActiveMod == null)
                 return;
+
+            if (stringsGui == null)
+                stringsGui = new frmStringsGui();
+            if (stringsGui.AreHashesDifferent())
+            {
+                var result = MessageBox.Show("There are not encoded CSV files in your mod, do you want to open Strings Encoder GUI?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (result == DialogResult.Yes)
+                    stringsGui.ShowDialog();
+            }
+
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
                 MessageBox.Show("Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);

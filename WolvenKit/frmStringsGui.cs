@@ -55,7 +55,7 @@ namespace WolvenKit
 
             if (activeMod != null)
             {
-                var csvDir = (activeMod.Directory + "..\\strings\\CSV");
+                var csvDir = (activeMod.Directory + "\\strings\\CSV");
                 if (!Directory.Exists(csvDir))
                     return;
 
