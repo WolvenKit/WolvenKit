@@ -851,16 +851,6 @@ namespace WolvenKit
             }
         }
 
-        private void installMod(string W3ModPackagePath)
-        {
-            if (!File.Exists(W3ModPackagePath) || Path.GetExtension(W3ModPackagePath) != ".W3ModPackage")
-            {
-                MessageBox.Show("Corrupted or wrong file!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            //TODO: Finish this
-        }
-
         /// <summary>
         /// Installs the mod from the packed folder of the project to the game
         /// </summary>
@@ -906,6 +896,9 @@ namespace WolvenKit
 
         private void CreateInstaller()
         {
+            throw new NotImplementedException("Not implemented yet!");
+            //TODO: Once we have a GUI and such enable this.
+            // We should probably wait with this untill we have the Mod/Dlc project thing going on for us and no wcc_lite.
             if (ActiveMod == null)
                 return;
             ShowOutput();
@@ -941,7 +934,7 @@ namespace WolvenKit
             var installdir = Path.Combine(ActiveMod.Directory, @"Installer/");
             if (!Directory.Exists(installdir))
                 Directory.CreateDirectory(installdir);
-            FileStream fsOut = File.Create(Path.Combine(installdir, ActiveMod.Name + ".W3ModPackage"));
+            FileStream fsOut = File.Create(Path.Combine(installdir, ActiveMod.Name + ".wkp"));
             ZipOutputStream zipStream = new ZipOutputStream(fsOut);
             int folderOffset = packeddir.Length + (packeddir.EndsWith("\\") ? 0 : 1);
             Commonfunctions.CompressFolder(packeddir, zipStream, folderOffset);

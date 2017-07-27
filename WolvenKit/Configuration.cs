@@ -14,7 +14,7 @@ namespace WolvenKit
                 var path = Application.ExecutablePath;
                 var filename = Path.GetFileNameWithoutExtension(path);
                 var dir = Path.GetDirectoryName(path);
-                return Path.Combine(dir, filename + "_config.xml");
+                return Path.Combine(dir ?? "", filename + "_config.xml");
             }
         }
 

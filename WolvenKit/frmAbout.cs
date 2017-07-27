@@ -14,17 +14,16 @@ namespace WolvenKit
             labelProductName.Text = AssemblyProduct;
             labelVersion.Text = string.Format("Version {0}", AssemblyVersion);
             labelCopyright.Text = AssemblyCopyright;
-            labelCompanyName.Text = AssemblyCompany;
+            labelCompanyName.Text = AssemblyTrademark;
             
             webBrowser1.DocumentText = $@"
 <html>
     <body bgcolor={ColorTranslator.ToHtml(SystemColors.Control)}>
         <center>
-        <h3>Credits</h3> <br><br>   
+        <h3>Credits</h3> <br>   
         Project lead: Traderain<br><br>
         kote2ster<br>
         (Major programming&Reverse engineering)<br><br> 
-        rmemr<br>
         Nightingale<br>
         (Major reverse enginering)<br><br> 
         Murzinio<br>
@@ -109,17 +108,17 @@ namespace WolvenKit
             }
         }
 
-        public string AssemblyCompany
+        public string AssemblyTrademark
         {
             get
             {
                 var attributes = Assembly.GetExecutingAssembly()
-                    .GetCustomAttributes(typeof (AssemblyCompanyAttribute), false);
+                    .GetCustomAttributes(typeof (AssemblyTrademarkAttribute), false);
                 if (attributes.Length == 0)
                 {
                     return "";
                 }
-                return ((AssemblyCompanyAttribute) attributes[0]).Company;
+                return ((AssemblyTrademarkAttribute) attributes[0]).Trademark;
             }
         }
 
