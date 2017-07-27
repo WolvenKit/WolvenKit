@@ -55,14 +55,16 @@ namespace WolvenKit
 
             if (activeMod != null)
             {
-                comboBoxLanguagesMode.SelectedIndex = 1;
-                languagesStrings.Clear();
-
                 var csvDir = (activeMod.Directory + "..\\strings\\CSV");
                 if (!Directory.Exists(csvDir))
                     return;
 
                 string[] fileNames = Directory.GetFiles(csvDir, "*.csv*", SearchOption.AllDirectories).Select(x => Path.GetFullPath(x)).ToArray();
+                if (fileNames.Length == 0)
+                    return;
+
+                comboBoxLanguagesMode.SelectedIndex = 1;
+                languagesStrings.Clear();
 
                 rowAddedAutomatically = true;
 
@@ -76,7 +78,7 @@ namespace WolvenKit
                     List<string[]> rows = ParseCSV(file);
 
                     var firstLine = File.ReadLines(file, Encoding.UTF8).First();
-                    var language = Regex.Match(firstLine, "language=([a-z]+)]").Groups[1].Value;
+                    var language = Regex.Match(firstLine, "language=([a-zA-Z]+)]").Groups[1].Value;
 
                     var strings = new List<List<string>>();
 
@@ -859,6 +861,7 @@ namespace WolvenKit
                 }
             }
 
+            WriteHash("csv");
             fileIsSaved = true;
         }
 
@@ -1076,7 +1079,136 @@ namespace WolvenKit
                     }
                 }
 
+            WriteHash("encoded");
+
             MessageBox.Show("Strings encoded.", "Wolven Kit", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+        }
+
+        // to check for not encoded csvs, function from Sound_Cache.cs (FNV1A64)
+        private ulong CalculateHash(byte[] bytes)
+        {
+            const ulong fnv64Offset = 0xcbf29ce484222325;
+            const ulong fnv64Prime = 0x100000001b3;
+            ulong hash = fnv64Offset;
+            foreach (var b in bytes)
+            {
+                hash = hash ^ b;
+                hash = (hash * fnv64Prime) % 0xFFFFFFFFFFFFFFFF;
+            }
+            return hash;
+        }
+
+        private void WriteHash(string type) // encoded strings hash/csv hash
+        {
+            var toHash = "";
+            var outputPath = "";
+
+            if (type == "encoded")
+            {
+                var stringsDir = activeMod.Directory + "\\strings";
+                if (!Directory.Exists(stringsDir))
+                    return;
+
+                outputPath = stringsDir;
+
+                if (comboBoxLanguagesMode.SelectedIndex == 1)
+                    foreach (var lang in languagesStrings)
+                        foreach (var str in lang.strings)
+                            foreach (var column in str)
+                                toHash += column;
+
+                else
+                    foreach (DataGridViewRow row in dataGridViewStrings.Rows)
+                        foreach (DataGridViewCell cell in row.Cells)
+                            if (cell.Value != null)
+                                toHash += cell.Value.ToString();
+            }
+
+            if (type == "csv")
+            {
+                var csvDir = activeMod.Directory + "\\strings\\CSV";
+                if (!Directory.Exists(csvDir))
+                    return;
+
+                string[] fileNames = Directory.GetFiles(csvDir, "*.csv*", SearchOption.AllDirectories).Select(x => Path.GetFullPath(x)).ToArray();
+                if (fileNames.Length == 0)
+                    return;
+
+                outputPath = csvDir;
+
+                var cells = new List<string>();
+
+                foreach (var file in fileNames)
+                {
+                    var content = File.ReadAllLines(file);
+                    //var splittedContent = content.Split('|');
+
+                    foreach (var line in content)
+                    {
+                        if (line.Contains(";"))
+                            continue;
+                        var splitted = line.Split('|');
+
+                        foreach(var cell in splitted)
+                        {
+                            if (cell == "")
+                                continue;
+
+                            cells.Add(cell);
+                        }
+                    }
+                }
+
+                foreach (var cell in cells)
+                    toHash += cell;
+            }
+
+            var hash = CalculateHash(Encoding.ASCII.GetBytes(toHash));
+
+            using (var bw = new BinaryWriter(File.OpenWrite(outputPath + "\\hash")))
+            {
+                bw.Write(hash);
+            }
+        }
+
+        public bool AreHashesDifferent()
+        {
+            if (activeMod == null)
+                return false;
+
+            var stringsHashPath = activeMod.Directory + "\\strings\\hash";
+            if (!File.Exists(stringsHashPath))
+                return false;
+
+            byte[] hash;
+            using (var br = new BinaryReader(File.OpenRead(stringsHashPath)))
+            {
+                hash = br.ReadBytes(32);
+            }
+
+            ulong hashStringsBytesSum = 0;
+
+            foreach (var b in hash)
+                hashStringsBytesSum += b;
+
+            var csvHashPath = activeMod.Directory + "\\strings\\CSV\\hash";
+            if (!File.Exists(csvHashPath))
+                return false;
+
+            using (var br = new BinaryReader(File.OpenRead(csvHashPath)))
+            {
+                hash = br.ReadBytes(32);
+            }
+
+            ulong hashCsvBytesSum = 0;
+
+            foreach (var b in hash)
+                hashCsvBytesSum += b;
+
+            if (hashStringsBytesSum == hashCsvBytesSum)
+                return true;
+
+            return false;
         }
 
         private void ShowWIPMessage()
