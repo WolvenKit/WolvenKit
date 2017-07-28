@@ -57,6 +57,14 @@ namespace WolvenKit.Cache
             this.FileNameTableEndOffset = br.ReadUInt32();
             this.NumberOfFiles = br.ReadUInt32();
             this.FileNameTableStartOffset = br.ReadUInt32();
+            Console.WriteLine($"IDString: " + new string(Encoding.ASCII.GetChars(IdString)));
+            Console.WriteLine("Version: " + Version);
+            Console.WriteLine("Unknown1: " + Unknown1);
+            Console.WriteLine("Unknown2: " + Unknown2);
+            Console.WriteLine("Filename table start: " + FileNameTableStartOffset);
+            Console.WriteLine("Filename table end: " + FileNameTableEndOffset);
+            Console.WriteLine("Filecount: " + NumberOfFiles);
+            Console.WriteLine();
             FileNames = new List<string>();
             br.BaseStream.Seek(this.FileNameTableStartOffset, SeekOrigin.Begin);
             for (int i = 0; i < this.NumberOfFiles; i++)
@@ -76,11 +84,12 @@ namespace WolvenKit.Cache
                 Console.WriteLine("\tUnknown 4:" + br.ReadUInt64());
                 Console.WriteLine("\tUnknown 5:" + br.ReadUInt64());
                 Console.WriteLine("\tCompression type:" + br.ReadUInt64());
-                Console.WriteLine("Pos: " + br.BaseStream.Position);
-
             }
         }
     }
+
+
+
 
     public class ShaderCache
     {
@@ -137,13 +146,6 @@ namespace WolvenKit.Cache
                     case Cache.Cachetype.Collision:
                     {
                         var cc = new CollisionCache(of.FileName);
-                        Console.WriteLine($"IDString: " + new string(Encoding.ASCII.GetChars(cc.IdString)));
-                        Console.WriteLine("Version: " + cc.Version);
-                        Console.WriteLine("Unknown1: " + cc.Unknown1);
-                        Console.WriteLine("Unknown2: " + cc.Unknown2);
-                        Console.WriteLine("Filename table start: " + cc.FileNameTableStartOffset);
-                        Console.WriteLine("Filename table end: " + cc.FileNameTableEndOffset);
-                        Console.WriteLine("Filecount: " + cc.NumberOfFiles);
                         break;
                     }
                     case Cache.Cachetype.Shader:
