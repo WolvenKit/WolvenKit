@@ -323,6 +323,14 @@ namespace WolvenKit
         {
             if (ActiveMod == null)
                 return;
+            if (Application.OpenForms.OfType<frmAssetBrowser>().Any())
+            {
+                var frm = Application.OpenForms.OfType<frmAssetBrowser>().First();
+                frm.WindowState = FormWindowState.Minimized;
+                frm.Show();
+                frm.WindowState = FormWindowState.Normal;
+                return;
+            }
             var explorer = new frmAssetBrowser(loadmods ? new List<IWitcherArchive> { MainController.Get().ModBundleManager, MainController.Get().ModSoundManager, MainController.Get().ModTextureManager } : new List<IWitcherArchive> { MainController.Get().BundleManager, MainController.Get().SoundManager, MainController.Get().TextureManager });
             explorer.RequestFileAdd += Assetbrowser_FileAdd;
             explorer.OpenPath(browseToPath);
