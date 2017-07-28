@@ -9,6 +9,28 @@ using System.Xml;
 
 namespace WolvenKit.Cache
 {
+ /*
+    FileTable + "null terminated"
+    0x00
+    Int32 NULL;
+    for(int i = 0;i < filecount;i++)
+    {
+	    0xC Null byte
+	    Int32 Offset;
+	    Int32 Size;
+	    Int32 Unk1;
+	    Int32 NULL;
+	    In64 Unk2;
+	    0x00
+	    Int64 Unk3;
+	    0x00
+	    Int64 Unk4;
+	    Int64 Unk5;
+	    Int32 Comtype?
+	    Int32 NULL;
+	    Int32 Unk6;	
+    }   
+*/
     public class CollisionCache
     {
         public byte[] IdString = { (byte)'C', (byte)'C', (byte)'3', (byte)'W' };
@@ -41,24 +63,21 @@ namespace WolvenKit.Cache
             {
                 this.FileNames.Add(br.ReadCR2WString());
             }
-            br.ReadUInt32();
             foreach (var fileName in FileNames)
             {
-                br.BaseStream.Seek(0xC, SeekOrigin.Current);
+                br.ReadUInt64();
+                br.ReadUInt64();
                 Console.WriteLine(fileName);
                 Console.WriteLine("\tOffset: " + br.ReadUInt32());
                 Console.WriteLine("\tSize: " + br.ReadUInt32());
-                Console.WriteLine("\tUnknown 1:" + br.ReadUInt32());
-                br.ReadUInt32(); //NULL
+                Console.WriteLine("\tUnknown 1:" + br.ReadUInt64());
                 Console.WriteLine("\tUnknown 2:" + br.ReadUInt64());
-                br.ReadUInt32();
                 Console.WriteLine("\tUnknown 3:" + br.ReadUInt64());
-                br.ReadUInt32();
                 Console.WriteLine("\tUnknown 4:" + br.ReadUInt64());
                 Console.WriteLine("\tUnknown 5:" + br.ReadUInt64());
-                Console.WriteLine("\tComtype:" + br.ReadUInt32());
-                br.ReadUInt32(); //NULL
-                Console.WriteLine("\tUnknown 6:" + br.ReadUInt32());
+                Console.WriteLine("\tCompression type:" + br.ReadUInt64());
+                Console.WriteLine("Pos: " + br.BaseStream.Position);
+
             }
         }
     }
