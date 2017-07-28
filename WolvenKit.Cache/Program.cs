@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace WolvenKit.Cache
 {
@@ -39,6 +40,25 @@ namespace WolvenKit.Cache
             for (int i = 0; i < this.NumberOfFiles; i++)
             {
                 this.FileNames.Add(br.ReadCR2WString());
+            }
+            br.ReadUInt32();
+            foreach (var fileName in FileNames)
+            {
+                br.BaseStream.Seek(0xC, SeekOrigin.Current);
+                Console.WriteLine(fileName);
+                Console.WriteLine("\tOffset: " + br.ReadUInt32());
+                Console.WriteLine("\tSize: " + br.ReadUInt32());
+                Console.WriteLine("\tUnknown 1:" + br.ReadUInt32());
+                br.ReadUInt32(); //NULL
+                Console.WriteLine("\tUnknown 2:" + br.ReadUInt64());
+                br.ReadUInt32();
+                Console.WriteLine("\tUnknown 3:" + br.ReadUInt64());
+                br.ReadUInt32();
+                Console.WriteLine("\tUnknown 4:" + br.ReadUInt64());
+                Console.WriteLine("\tUnknown 5:" + br.ReadUInt64());
+                Console.WriteLine("\tComtype:" + br.ReadUInt32());
+                br.ReadUInt32(); //NULL
+                Console.WriteLine("\tUnknown 6:" + br.ReadUInt32());
             }
         }
     }
@@ -77,8 +97,7 @@ namespace WolvenKit.Cache
                 br.BaseStream.Seek(0x30, SeekOrigin.Current);
                 Files.Add(new Tuple<byte[], int>(info,hash));
                 len = br.ReadInt32();
-
-            } while ((len + 0x30 + 4 + br.BaseStream.Position) > br.BaseStream.Length);
+            } while ((len + 0x30 + 4 + br.BaseStream.Position) < br.BaseStream.Length);
         }
 
 
