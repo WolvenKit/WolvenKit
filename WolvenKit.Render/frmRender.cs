@@ -8,6 +8,7 @@ using IrrlichtLime.Scene;
 using IrrlichtLime.GUI;
 using System.IO;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.Cache;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 using System.Collections.Generic;
@@ -64,7 +65,6 @@ namespace WolvenKit.Render
         void ReadMeshBufferInfos()
         {
             SBufferInfos bufferInfos = new SBufferInfos();
-            List<SMeshInfos> meshInfos = new List<SMeshInfos>();
 
             // *************** READ CHUNK INFOS ***************
             foreach (var chunk in _file.chunks)
@@ -171,6 +171,10 @@ namespace WolvenKit.Render
                         }
                         meshInfos.Add(meshInfo);
                     }
+                }
+                else if (chunk.Type == "CMaterialInstance")
+                {
+                    materialInstances.Add(chunk.data as CMaterialInstance);
                 }
             }
 
@@ -316,7 +320,6 @@ namespace WolvenKit.Render
             irrThread.Abort();
             // restart an irrlicht thread
             StartIrrThread();
-            resizing = false;
         }
 
         /// <summary>
@@ -334,7 +337,7 @@ namespace WolvenKit.Render
 
                 IrrlichtDevice device = IrrlichtDevice.CreateDevice(irrparam);
 
-                if (device == null) throw new Exception("Could not create device for engine!");
+                if (device == null) throw new NullReferenceException("Could not create device for engine!");
 
                 device.SetWindowCaption("Hello World! - Irrlicht Engine Demo");
 
@@ -355,9 +358,7 @@ namespace WolvenKit.Render
 
                 node.Scale = new Vector3Df(3.0f);
                 node.SetMaterialFlag(MaterialFlag.Lighting, false);
-                //if(mesh.MeshType == AnimatedMeshType.MD2)
-                    //node.SetMD2Animation(AnimationTypeMD2.Stand);
-                //node.SetMaterialTexture(0, driver.GetTexture("../../Media/sydney.bmp"));
+                SetMaterials(driver, node);
 
                 CameraSceneNode camera = smgr.AddCameraSceneNode(null, new Vector3Df(node.BoundingBox.Radius, 0, 0), new Vector3Df(0, 0, 0));
                 camera.NearValue = 0.001f;
@@ -381,9 +382,11 @@ namespace WolvenKit.Render
 
                 device.Drop();
             }
+            catch (NullReferenceException) { }
+            catch (ThreadAbortException) { }
             catch (Exception ex)
             {
-                if (!(ex is ThreadAbortException) && !this.IsDisposed)
+                if (!this.IsDisposed)
                 {
                     MessageBox.Show(ex.Message);
                     //this.Invoke(new MethodInvoker(delegate { this.Close(); }));
@@ -391,10 +394,73 @@ namespace WolvenKit.Render
             }
         }
 
+        /// <summary>
+        /// Sets the material textures for the mesh.
+        /// </summary>
+        private void SetMaterials(VideoDriver driver, MeshSceneNode node)
+        {
+            List<Material> materials = new List<Material>();
+            //mat.Type = MaterialType.Solid;
+            foreach (var materialInstance in materialInstances)
+            {
+                Material mat = new Material();
+                foreach (var material in materialInstance.instanceParameters)
+                {
+                    switch (material.Name)
+                    {
+                        case "Diffuse":
+                            Texture diffTexture = GetTexture(driver, (material as CHandle).Handle);
+                            mat.SetTexture(0, diffTexture);
+                            break;
+                        case "Normal":
+                            Texture normTexture = GetTexture(driver, (material as CHandle).Handle);
+                            mat.SetTexture(1, normTexture);
+                            //mat.Type = MaterialType.NormalMapSolid;
+                            break;
+                    }
+                }
+                materials.Add(mat);
+            }
+            for (int i = 0; i < meshInfos.Count; i++)
+            {
+                if (meshInfos[i].materialID < materials.Count)
+                {
+                    Material mat = materials[(int)meshInfos[i].materialID];
+                    node.SetMaterialTexture(i, mat.GetTexture(i));
+                }
+            }
+        }
+
+        private bool suppressTextureWarning = false;
+
+        /// <summary>
+        /// Try to get the texture file.
+        /// </summary>
+        private Texture GetTexture(VideoDriver driver, string handleFilename)
+        {
+            string texturePath = Path.GetDirectoryName(_file.FileName) + @"\" + Path.GetFileNameWithoutExtension(handleFilename);
+            string[] textureFileExtensions = { ".dds", ".bmp", ".tga", ".jpg", ".jpeg", ".png", ".xbm" };
+            Texture texture = null;
+            foreach (var textureFileExtension in textureFileExtensions)
+            {
+                texture = driver.GetTexture(texturePath + textureFileExtension);
+                if (texture != null) break;
+            }
+            //ImageUtility.Xbm2Dds();
+            if (texture == null && !suppressTextureWarning)
+            {
+                suppressTextureWarning = true;
+                MessageBox.Show("Have you extracted texture files properly?" + "\n\n" + "Could not parse texture: " + texturePath, "Missing texture!");
+            }
+            return texture;
+        }
+
         #region Common Data
 
         //private string modelPath = "";
         private StaticMesh staticMesh = StaticMesh.Create();
+        private List<CMaterialInstance> materialInstances = new List<CMaterialInstance>();
+        List<SMeshInfos> meshInfos = new List<SMeshInfos>();
 
         //private static Quaternion modelAngle = new Quaternion(new Vertex3f(), 0);
         private Vector3Df modelPosition = new Vector3Df(0.0f);
@@ -464,6 +530,9 @@ namespace WolvenKit.Render
                 MessageBox.Show(this, "No file selected!");
                 this.BeginInvoke(new MethodInvoker(Close));
             }*/
+
+            resizeTimer.Tick += ResizeTimer;
+            resizeTimer.Interval = 1000;
 
             // start an irrlicht thread
             StartIrrThread();
@@ -548,36 +617,26 @@ namespace WolvenKit.Render
             {
                 // Restart autorotation
                 modelAutorotating = true;
-                modelAngle.X = modelAngle.Y = modelAngle.Z = 0;
-                modelPosition.X = modelPosition.Y = modelPosition.Z = 0;
+                modelAngle = new Vector3Df(270.0f, 270.0f, 0.0f);
+                modelPosition = new Vector3Df(0.0f);
             }
         }
 
-        private bool resizing = false;
-        FormWindowState prevState = FormWindowState.Normal;
+        private void Bithack3D_ResizeEnd(object sender, EventArgs e) { }
 
-        private void Bithack3D_ResizeEnd(object sender, EventArgs e)
-        {
-            if (resizing)
-            {
-                RestartIrrThread();
-            }
-        }
+        private void Bithack3D_Resize(object sender, EventArgs e) { }
 
-        private void Bithack3D_Resize(object sender, EventArgs e)
-        {
-            resizing = true;
-
-            if (prevState != WindowState)
-            {
-                prevState = WindowState;
-                RestartIrrThread();
-            }
-        }
+        private System.Windows.Forms.Timer resizeTimer = new System.Windows.Forms.Timer();
 
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
+            resizeTimer.Start();
+        }
+
+        private void ResizeTimer(object sender, EventArgs e)
+        {
+            resizeTimer.Stop();
             if (irrThread != null)
             {
                 RestartIrrThread();

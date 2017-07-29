@@ -203,7 +203,7 @@ namespace WolvenKit
                         CHandle mesh = doc.File.chunks[2].GetVariableByName("mesh") as CHandle;
                         var docW2Mesh = LoadDocument(Path.GetDirectoryName(filename) + @"\model\" + Path.GetFileName(mesh.Handle));
                         if (docW2Mesh == null)
-                            MessageBox.Show(".w2mesh file not found in model folder!" + "\n" + "Did you extract it properly?");
+                            MessageBox.Show(".w2mesh file not found in model folder!" + "\n" + "Have you extracted it properly?");
                         break;
                     }
                 case ".w2mesh":
