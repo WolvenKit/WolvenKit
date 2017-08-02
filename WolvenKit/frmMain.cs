@@ -326,6 +326,8 @@ namespace WolvenKit
             if (Application.OpenForms.OfType<frmAssetBrowser>().Any())
             {
                 var frm = Application.OpenForms.OfType<frmAssetBrowser>().First();
+                if(!string.IsNullOrEmpty(browseToPath))
+                    frm.OpenPath(browseToPath);
                 frm.WindowState = FormWindowState.Minimized;
                 frm.Show();
                 frm.WindowState = FormWindowState.Normal;
@@ -364,8 +366,8 @@ namespace WolvenKit
             {
                 if (manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath)))
                 {
-                    var filename = Path.Combine(ActiveMod.FileDirectory, depotpath);
                     var archives = manager.FileList.Where(x => x.Name == depotpath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
+                    var filename = Path.Combine(ActiveMod.FileDirectory,archives.First().Value.Bundle.TypeName, depotpath);
                     if (archives.Count() > 1)
                     {
 

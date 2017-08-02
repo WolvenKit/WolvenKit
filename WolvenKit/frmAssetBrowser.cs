@@ -250,7 +250,7 @@ namespace WolvenKit
                 }
             }
 
-            if (success)
+            if (success || currentNode != RootNode)
             {
                 OpenNode(currentNode);
             }
