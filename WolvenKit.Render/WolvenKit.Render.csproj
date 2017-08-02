@@ -109,6 +109,10 @@
     <Folder Include="Models\nanosuit\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WolvenKit.Cache\WolvenKit.Cache.csproj">
+      <Project>{17cf5901-6e1f-467f-afe0-3cc04dc9688a}</Project>
+      <Name>WolvenKit.Cache</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj">
       <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>
       <Name>WolvenKit.CR2W</Name>
