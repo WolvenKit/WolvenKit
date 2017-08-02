@@ -59,7 +59,7 @@ namespace WolvenKit
             }
             catch (Exception e)
             {
-                MessageBox.Show("Failed to load the package!");
+                MessageBox.Show("Failed to load the package!\n" + e.Message);
                 this.Close();
             }
         }

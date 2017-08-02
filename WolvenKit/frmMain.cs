@@ -203,7 +203,7 @@ namespace WolvenKit
                         CHandle mesh = doc.File.chunks[2].GetVariableByName("mesh") as CHandle;
                         var docW2Mesh = LoadDocument(Path.GetDirectoryName(filename) + @"\model\" + Path.GetFileName(mesh.Handle));
                         if (docW2Mesh == null)
-                            MessageBox.Show(".w2mesh file not found in model folder!" + "\n" + "Did you extract it properly?");
+                            MessageBox.Show(".w2mesh file not found in model folder!" + "\n" + "Have you extracted it properly?");
                         break;
                     }
                 case ".w2mesh":
@@ -326,6 +326,8 @@ namespace WolvenKit
             if (Application.OpenForms.OfType<frmAssetBrowser>().Any())
             {
                 var frm = Application.OpenForms.OfType<frmAssetBrowser>().First();
+                if(!string.IsNullOrEmpty(browseToPath))
+                    frm.OpenPath(browseToPath);
                 frm.WindowState = FormWindowState.Minimized;
                 frm.Show();
                 frm.WindowState = FormWindowState.Normal;
@@ -364,8 +366,8 @@ namespace WolvenKit
             {
                 if (manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath)))
                 {
-                    var filename = Path.Combine(ActiveMod.FileDirectory, depotpath);
                     var archives = manager.FileList.Where(x => x.Name == depotpath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
+                    var filename = Path.Combine(ActiveMod.FileDirectory,archives.First().Value.Bundle.TypeName, depotpath);
                     if (archives.Count() > 1)
                     {
 

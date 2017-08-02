@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using WolvenKit.CR2W;
 using WolvenKit.Interfaces;
-using System.Security.Cryptography;
+using WolvenKit.Wwise.SoundCache;
 
 namespace WolvenKit.Cache
 {
@@ -48,6 +48,14 @@ namespace WolvenKit.Cache
             FileName = fileName;
             using (var br = new BinaryReader(new FileStream(fileName, FileMode.Open)))
                 Read(br);
+        }
+
+        /// <summary>
+        /// Empty ctor
+        /// </summary>
+        public SoundCache()
+        {
+
         }
 
         /// <summary>
@@ -184,7 +192,7 @@ namespace WolvenKit.Cache
             foreach (var f in Files)
             {
                 br.BaseStream.Seek(NamesOffset + f.NameOffset, SeekOrigin.Begin);
-                f.Name = f.Bundle.TypeName + "\\" + br.ReadCR2WString();
+                f.Name = br.ReadCR2WString();
                 f.ParentFile = this.FileName;
             }
         }
@@ -248,59 +256,6 @@ namespace WolvenKit.Cache
                 //Write filenames and the offsets and such for the files.
                 bw.Write(GetNames(FileList));
                 bw.Write(GetInfo(FileList));                
-            }
-        }
-    }
-
-    public class SoundCacheItem : IWitcherFile
-    {
-        public IWitcherArchiveType Bundle { get; set; }
-        /// <summary>
-        /// Name of the bundled item in the archive.
-        /// </summary>
-        public string Name { get; set; }
-        /// <summary>
-        /// Name of the cache file this file is in. (Needed for Extracting the file)
-        /// </summary>
-        public string ParentFile;
-
-        
-        public long NameOffset;
-        public long Offset { get; set; }
-
-        public long Size { get; set; }
-        public uint ZSize { get; set; }
-
-        public SoundCacheItem(IWitcherArchiveType Parent)
-        {
-            this.Bundle = Parent;
-        }
-
-        public string CompressionType
-        {
-            get
-            {
-                  return "None";
-            }
-        }
-
-        public void Extract(Stream output)
-        {
-            using (var file = MemoryMappedFile.CreateFromFile(this.ParentFile, FileMode.Open))
-            {
-                using (var viewstream = file.CreateViewStream(Offset, Size, MemoryMappedFileAccess.Read))
-                {
-                    viewstream.CopyTo(output);
-                }
-            }
-        }
-
-        public void Extract(string filename)
-        {
-            using (var output = new FileStream(filename, FileMode.CreateNew, FileAccess.Write))
-            {
-                Extract(output);
-                output.Close();
             }
         }
     }

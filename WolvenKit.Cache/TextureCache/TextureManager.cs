@@ -7,26 +7,25 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WolvenKit.Interfaces;
-using WolvenKit.Cache;
 
 namespace WolvenKit.Cache
 {
-    public class SoundManager : IWitcherArchive
+    public class TextureManager : IWitcherArchive
     {
-        public SoundManager()
+        public TextureManager()
         {
             Items = new Dictionary<string, List<IWitcherFile>>();
-            Archives = new Dictionary<string, SoundCache>();
+            Archives = new Dictionary<string, TextureCache>();
             FileList = new List<IWitcherFile>();
             Extensions = new List<string>();
             AutocompleteSource = new AutoCompleteStringCollection();
         }
 
         public Dictionary<string, List<IWitcherFile>> Items { get; set; }
-        public Dictionary<string, SoundCache> Archives { get; set; }
+        public Dictionary<string, TextureCache> Archives { get; set; }
         public WitcherTreeNode RootNode { get; set; }
         public List<IWitcherFile> FileList { get; set; }
-        public string TypeName { get { return "SoundManager"; } }
+        public string TypeName { get { return "TextureCacheManager"; } }
         public List<string> Extensions { get; set; }
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
 
@@ -39,7 +38,7 @@ namespace WolvenKit.Cache
             if (Archives.ContainsKey(filename))
                 return;
 
-            var bundle = new SoundCache(filename);
+            var bundle = new TextureCache(filename);
 
             foreach (var item in bundle.Files)
             {
@@ -61,7 +60,7 @@ namespace WolvenKit.Cache
             if (Archives.ContainsKey(filename))
                 return;
 
-            var bundle = new SoundCache(filename);
+            var bundle = new TextureCache(filename);
 
             foreach (var item in bundle.Files)
             {
@@ -84,14 +83,14 @@ namespace WolvenKit.Cache
 
             var contentdirs = new List<string>(Directory.GetDirectories(content, "content*"));
             contentdirs.Sort(new AlphanumComparator<string>());
-            foreach (var file in contentdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Sound)))
+            foreach (var file in contentdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Texture)))
             {
                 LoadBundle(file);
             }
 
             var patchdirs = new List<string>(Directory.GetDirectories(content, "patch*"));
             patchdirs.Sort(new AlphanumComparator<string>());
-            foreach (var file in patchdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Sound)))
+            foreach (var file in patchdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Texture)))
             {
                 LoadBundle(file);
             }
@@ -101,7 +100,7 @@ namespace WolvenKit.Cache
             {
                 var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
                 dlcdirs.Sort(new AlphanumComparator<string>());
-                foreach (var file in dlcdirs.Where(dir => new Regex("(DLC..)|(DLC.)|(BOB)|(ep.)|(bob)|(EP.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.cache", SearchOption.AllDirectories).OrderBy(k => k).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Sound)))
+                foreach (var file in dlcdirs.Where(dir => new Regex("(DLC..)|(DLC.)|(BOB)|(ep.)|(bob)|(EP.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.cache", SearchOption.AllDirectories).OrderBy(k => k).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Texture)))
                 {
                     LoadBundle(file);
                 }
@@ -121,7 +120,7 @@ namespace WolvenKit.Cache
                 Directory.CreateDirectory(mods);
             var modsdirs = new List<string>(Directory.GetDirectories(mods));
             modsdirs.Sort(new AlphanumComparator<string>());
-            var modbundles = modsdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Sound)).ToList();
+            var modbundles = modsdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Texture)).ToList();
             foreach (var file in modbundles)
             {
                 LoadModBundle(file);
@@ -132,7 +131,7 @@ namespace WolvenKit.Cache
             {
                 var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
                 dlcdirs.Sort(new AlphanumComparator<string>());
-                foreach (var file in dlcdirs.Where(dir => !new Regex("(DLC..)|(DLC.)|(BOB)|(bob)|(EP.)|(ep.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.cache", SearchOption.AllDirectories).OrderBy(k => k).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Sound)))
+                foreach (var file in dlcdirs.Where(dir => !new Regex("(DLC..)|(DLC.)|(BOB)|(bob)|(EP.)|(ep.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.cache", SearchOption.AllDirectories).OrderBy(k => k).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Texture)))
                 {
                     LoadModBundle(file);
                 }
@@ -154,10 +153,9 @@ namespace WolvenKit.Cache
         /// </summary>
         public void RebuildRootNode()
         {
-            RootNode = new WitcherTreeNode()
-            {
-                Name = "Sounds"
-            };
+            RootNode = new WitcherTreeNode();
+            RootNode.Name = new TextureCache().TypeName;
+
             foreach (var item in Items)
             {
                 var currentNode = RootNode;

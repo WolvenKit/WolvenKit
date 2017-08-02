@@ -22,7 +22,7 @@ namespace WolvenKit.Bundles
         public Dictionary<string, Bundle> Bundles { get; set; }
         public WitcherTreeNode RootNode { get; set; }
         public List<IWitcherFile> FileList { get; set; }
-        public string TypeName { get { return "Bundle"; } }
+        public string TypeName { get { return "BundleManager"; } }
         public List<string> Extensions { get; set; }
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
 
@@ -152,8 +152,7 @@ namespace WolvenKit.Bundles
         public void RebuildRootNode()
         {
             RootNode = new WitcherTreeNode();
-            RootNode.Name = "Bundles";
-
+            RootNode.Name = new Bundle().TypeName;
             foreach (var item in Items)
             {
                 var currentNode = RootNode;

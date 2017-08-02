@@ -30,7 +30,7 @@ namespace WolvenKit.Interfaces
                         break;
                 }
 
-                return path;
+                return path ?? "";
             }
         }
 
