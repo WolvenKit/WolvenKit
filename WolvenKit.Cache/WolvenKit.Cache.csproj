@@ -60,6 +60,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CollisionCache\CollisionCacheItem.cs" />
+    <Compile Include="CollisionCache\Collision_Cache.cs" />
     <Compile Include="DDSHeader.cs" />
     <Compile Include="DDSImageParser.cs" />
     <Compile Include="ImageUtility.cs" />

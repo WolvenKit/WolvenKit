@@ -31,62 +31,6 @@ namespace WolvenKit.Cache
 	    Int32 Unk6;	
     }   
 */
-    public class CollisionCache
-    {
-        public byte[] IdString = { (byte)'C', (byte)'C', (byte)'3', (byte)'W' };
-        public uint Version;
-        public uint Unknown1;
-        public uint Unknown2;
-        public uint FileNameTableEndOffset;
-        public uint NumberOfFiles;
-        public uint FileNameTableStartOffset;
-        public List<string> FileNames;
-
-        public CollisionCache(string Filename)
-        {
-            this.Read(new BinaryReader(new FileStream(Filename, FileMode.Open)));
-        }
-
-        public void Read(BinaryReader br)
-        {
-            if (!br.ReadBytes(4).SequenceEqual(IdString))
-                throw new Exception("Invalid file!");
-            this.Version = br.ReadUInt32();
-            this.Unknown1 = br.ReadUInt32();
-            this.Unknown2 = br.ReadUInt32();
-            this.FileNameTableEndOffset = br.ReadUInt32();
-            this.NumberOfFiles = br.ReadUInt32();
-            this.FileNameTableStartOffset = br.ReadUInt32();
-            Console.WriteLine($"IDString: " + new string(Encoding.ASCII.GetChars(IdString)));
-            Console.WriteLine("Version: " + Version);
-            Console.WriteLine("Unknown1: " + Unknown1);
-            Console.WriteLine("Unknown2: " + Unknown2);
-            Console.WriteLine("Filename table start: " + FileNameTableStartOffset);
-            Console.WriteLine("Filename table end: " + FileNameTableEndOffset);
-            Console.WriteLine("Filecount: " + NumberOfFiles);
-            Console.WriteLine();
-            FileNames = new List<string>();
-            br.BaseStream.Seek(this.FileNameTableStartOffset, SeekOrigin.Begin);
-            for (int i = 0; i < this.NumberOfFiles; i++)
-            {
-                this.FileNames.Add(br.ReadCR2WString());
-            }
-            foreach (var fileName in FileNames)
-            {
-                br.ReadUInt64();
-                br.ReadUInt64();
-                Console.WriteLine(fileName);
-                Console.WriteLine("\tOffset: " + br.ReadUInt32());
-                Console.WriteLine("\tSize: " + br.ReadUInt32());
-                Console.WriteLine("\tUnknown 1:" + br.ReadUInt64());
-                Console.WriteLine("\tUnknown 2:" + br.ReadUInt64());
-                Console.WriteLine("\tUnknown 3:" + br.ReadUInt64());
-                Console.WriteLine("\tUnknown 4:" + br.ReadUInt64());
-                Console.WriteLine("\tUnknown 5:" + br.ReadUInt64());
-                Console.WriteLine("\tCompression type:" + br.ReadUInt64());
-            }
-        }
-    }
 
 
 
@@ -145,7 +89,7 @@ namespace WolvenKit.Cache
                 {
                     case Cache.Cachetype.Collision:
                     {
-                        var cc = new CollisionCache(of.FileName);
+                        var cc = new CollisionCache.CollisionCache(of.FileName);
                         break;
                     }
                     case Cache.Cachetype.Shader:

@@ -34,7 +34,8 @@ namespace WolvenKit
             var limit = -1;
             if(limitCB.Checked)
             {
-                int.TryParse(limitTB.Text, out var result);
+                int result;
+                int.TryParse(limitTB.Text,out result);
             }
             if (File == null)
                 return;
