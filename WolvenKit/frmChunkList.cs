@@ -31,11 +31,19 @@ namespace WolvenKit
 
         private void updateList(string keyword = "")
         {
+            var limit = -1;
+            if(limitCB.Checked)
+            {
+                int.TryParse(limitTB.Text, out var result);
+            }
             if (File == null)
                 return;
             if(!string.IsNullOrEmpty(keyword))
             {
-                listView.Objects = File.chunks.Where(x => x.Name.ToUpper().Contains(searchTB.Text.ToUpper()));
+                if(limit != -1)
+                    listView.Objects = File.chunks.Where(x => x.Name.ToUpper().Contains(searchTB.Text.ToUpper())).Take(limit);
+                else
+                    listView.Objects = File.chunks.Where(x => x.Name.ToUpper().Contains(searchTB.Text.ToUpper()));
             }
             else
             {
