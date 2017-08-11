@@ -19,7 +19,6 @@ namespace WolvenKit
         public frmChunkProperties()
         {
             InitializeComponent();
-
             treeView.CanExpandGetter = x => ((VariableListNode) x).ChildCount > 0;
             treeView.ChildrenGetter = x => ((VariableListNode) x).Children;
         }
