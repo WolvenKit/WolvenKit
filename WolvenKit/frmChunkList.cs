@@ -13,7 +13,7 @@ namespace WolvenKit
         public frmChunkList()
         {
             InitializeComponent();
-
+            limitTB.Enabled = limitCB.Checked;
             listView.ItemSelectionChanged += chunkListView_ItemSelectionChanged;
         }
 
@@ -29,12 +29,27 @@ namespace WolvenKit
 
         public event EventHandler<SelectChunkArgs> OnSelectChunk;
 
-        private void updateList()
+        private void updateList(string keyword = "")
         {
+            var limit = -1;
+            if(limitCB.Checked)
+            {
+                int result;
+                int.TryParse(limitTB.Text,out result);
+            }
             if (File == null)
                 return;
-
-            listView.Objects = File.chunks;
+            if(!string.IsNullOrEmpty(keyword))
+            {
+                if(limit != -1)
+                    listView.Objects = File.chunks.Where(x => x.Name.ToUpper().Contains(searchTB.Text.ToUpper())).Take(limit);
+                else
+                    listView.Objects = File.chunks.Where(x => x.Name.ToUpper().Contains(searchTB.Text.ToUpper()));
+            }
+            else
+            {
+                listView.Objects = File.chunks;
+            }
         }
 
         private void chunkListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
@@ -116,6 +131,27 @@ namespace WolvenKit
                     }
                 }
             }
+        }
+
+        private void searchBTN_Click(object sender, EventArgs e)
+        {
+            updateList(searchTB.Text);
+        }
+
+        private void resetBTN_Click(object sender, EventArgs e)
+        {
+            updateList();
+        }
+
+        private void limitCB_CheckStateChanged(object sender, EventArgs e)
+        {
+            limitTB.Enabled = limitCB.Checked;
+        }
+
+        private void searchTB_KeyUp(object sender, KeyEventArgs e)
+        {
+            if(e.KeyValue == (int)Keys.Enter)
+                updateList(searchTB.Text);
         }
     }
 }

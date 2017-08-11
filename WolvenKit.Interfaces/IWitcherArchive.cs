@@ -16,10 +16,5 @@ namespace WolvenKit.Interfaces
         List<string> Extensions { get; set; }
         AutoCompleteStringCollection AutocompleteSource { get; set; }
         Dictionary<string, List<IWitcherFile>> Items { get; set; }
-        /*string FileName { get; set; }
-        string ParentFile { get; set; }
-
-        void Extract(string fileName);
-        void Extract(Stream output);*/
     }
 }
