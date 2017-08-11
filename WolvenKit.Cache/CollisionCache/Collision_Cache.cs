@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -70,6 +71,7 @@ namespace WolvenKit.Cache.CollisionCache
                 Comtype = br.ReadUInt64()
             }))
             {
+                Debug.WriteLine("Filename: " + ci.Name);
                 Files.Add(ci);
             }
         }
