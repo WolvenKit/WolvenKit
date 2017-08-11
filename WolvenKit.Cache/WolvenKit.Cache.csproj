@@ -79,9 +79,9 @@
       <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>
       <Name>WolvenKit.CR2W</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.Interfaces\WolvenKit.Interfaces.csproj">
+    <ProjectReference Include="..\WolvenKit.Interfaces\WolvenKit.Common.csproj">
       <Project>{4d1019f1-f099-450f-85b8-697e0332a94f}</Project>
-      <Name>WolvenKit.Interfaces</Name>
+      <Name>WolvenKit.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\WolvenKit.W3Strings\WolvenKit.W3Strings.csproj">
       <Project>{32d40d10-d6c3-48f0-aeb6-0f41c7e75cfd}</Project>
