@@ -9,32 +9,6 @@ using System.Xml;
 
 namespace WolvenKit.Cache
 {
- /*
-    FileTable + "null terminated"
-    0x00
-    Int32 NULL;
-    for(int i = 0;i < filecount;i++)
-    {
-	    0xC Null byte
-	    Int32 Offset;
-	    Int32 Size;
-	    Int32 Unk1;
-	    Int32 NULL;
-	    In64 Unk2;
-	    0x00
-	    Int64 Unk3;
-	    0x00
-	    Int64 Unk4;
-	    Int64 Unk5;
-	    Int32 Comtype?
-	    Int32 NULL;
-	    Int32 Unk6;	
-    }   
-*/
-
-
-
-
     public class ShaderCache
     {
         public byte[] IdString = { (byte)'R', (byte)'D', (byte)'H', (byte)'S' };
@@ -90,6 +64,18 @@ namespace WolvenKit.Cache
                     case Cache.Cachetype.Collision:
                     {
                         var cc = new CollisionCache.CollisionCache(of.FileName);
+                        Console.WriteLine("Parsing: " + of.FileName);
+                        Console.WriteLine();
+                            if (!Directory.Exists(Path.GetDirectoryName(of.FileName) + "\\Ex"))
+                                Directory.CreateDirectory(Path.GetDirectoryName(of.FileName) + "\\Ex");
+                        foreach (var f in cc.Files)
+                        {                            
+                            Console.WriteLine("\t" + f.Name);
+                            if(!File.Exists(Path.GetDirectoryName(of.FileName) + "\\Ex\\" + Path.GetFileName(f.Name)))
+                                f.Extract(Path.GetDirectoryName(of.FileName) + "\\Ex\\" + Path.GetFileName(f.Name));
+                            Console.WriteLine("EXTRACTED!");
+                        }
+                        Console.WriteLine();
                         break;
                     }
                     case Cache.Cachetype.Shader:
@@ -99,9 +85,8 @@ namespace WolvenKit.Cache
                         Console.WriteLine("Version: " + sc.Version);
                         Console.WriteLine("FileTableOffset1: " + sc.FileTableOffset1);
                         Console.WriteLine("FileTableOffset2: " + sc.FileTableOffset2);
-                        Console.WriteLine("UNK: " + sc.Unk1);
                         Console.WriteLine("Filecount: " + sc.Files.Count);
-                        Console.WriteLine("Version: " + sc.Version);
+                        Console.WriteLine("Files:");
                         break;
                     }
                     default:
@@ -109,31 +94,6 @@ namespace WolvenKit.Cache
                 }
             }
             Console.ReadLine();
-        }
-    }
-
-    public static class BREXT
-    {
-        public static string ReadCR2WString(this BinaryReader file, int len = 0)
-        {
-            string str = null;
-            if (len > 0)
-            {
-                str = Encoding.Default.GetString(file.ReadBytes(len));
-            }
-            else
-            {
-                var sb = new StringBuilder();
-                while (true)
-                {
-                    var c = (char)file.ReadByte();
-                    if (c == 0)
-                        break;
-                    sb.Append(c);
-                }
-                str = sb.ToString();
-            }
-            return str;
         }
     }
 }

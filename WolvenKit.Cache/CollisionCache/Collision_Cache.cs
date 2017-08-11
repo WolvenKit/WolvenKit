@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WolvenKit.CR2W;
 using WolvenKit.Interfaces;
 
 namespace WolvenKit.Cache.CollisionCache
@@ -21,7 +22,7 @@ namespace WolvenKit.Cache.CollisionCache
         public ulong Buffersize;
         public ulong CheckSum;
 
-        public List<string> FileNames;
+        public List<string> FileNames = new List<string>();
         public List<CollisionCacheItem> Files = new List<CollisionCacheItem>(); 
 
         public string TypeName => "CollisionCache";
@@ -29,7 +30,9 @@ namespace WolvenKit.Cache.CollisionCache
 
         public CollisionCache(string filename)
         {
-            this.Read(new BinaryReader(new FileStream(filename, FileMode.Open)));
+            this.FileName = filename;
+            using (var br = new BinaryReader(new FileStream(filename, FileMode.Open)))
+                this.Read(br);
         }
 
         public void Read(BinaryReader br)
