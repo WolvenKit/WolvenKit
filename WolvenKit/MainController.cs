@@ -8,24 +8,37 @@ using WolvenKit.CR2W.Types;
 using WolvenKit.W3Strings;
 using WolvenKit.Interfaces;
 using Newtonsoft.Json;
+using System.ComponentModel;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace WolvenKit
 {
-    public class MainController : IVariableEditor, ILocalizedStringSource
+    public class MainController : IVariableEditor, ILocalizedStringSource, INotifyPropertyChanged
     {
         private static MainController mainController;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private string projectstatus = "Idle";
+        public string ProjectStatus
+        {
+            get { return projectstatus; }
+            set { SetField(ref projectstatus, value, "ProjectStatus"); }
+        }
+
+        private MainController()
+        {
+        }
+
+#region Archive Managers
         private SoundManager soundManager;
         private SoundManager modsoundmanager;
         private BundleManager bundleManager;
         private BundleManager modbundleManager;
         private TextureManager textureManager;
         private TextureManager modTextureManager;
-
         private W3StringManager w3StringManager;
-
-        private MainController()
-        {
-        }
 
         public W3StringManager W3StringManager
         {
@@ -190,6 +203,7 @@ namespace WolvenKit
                 return modTextureManager;
             }
         }
+#endregion
 
         public Configuration Configuration { get; private set; }
         public frmMain Window { get; private set; }
@@ -340,6 +354,19 @@ namespace WolvenKit
                 var editvar = (CVariable) doc.SaveTarget;
                 editvar.SetValue(((MemoryStream) args.Stream).ToArray());
             }
+        }
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetField<T>(ref T field, T value, string propertyName)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
         }
     }
 }

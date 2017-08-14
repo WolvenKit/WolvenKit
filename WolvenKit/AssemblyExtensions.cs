@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace WolvenKit
 {
-    public static class AssmeblyExtensions
+    public static class AssemblyExtensions
     {
         public static DateTime GetLinkerTime(this Assembly assembly, TimeZoneInfo target = null)
         {

@@ -9,6 +9,9 @@ namespace WolvenKit
 {
     public partial class frmSettings : Form
     {
+        public string witcherexe = "";
+        public string wccLiteexe = "";
+
         public frmSettings()
         {
             InitializeComponent();
@@ -75,22 +78,16 @@ namespace WolvenKit
 
         private void locateButton_Click(object sender, EventArgs e)
         {
-            var locations = GetInstallLocations();
-            if (File.Exists(locations.Item1))
-            {
-                txExecutablePath.Text = locations.Item1;
-            }
-            if (File.Exists(locations.Item2))
-            {
-                txWCC_Lite.Text = locations.Item2;
-            }
+            exeSearcherSlave.RunWorkerAsync();
         }
 
-        public static Tuple<string,string> GetInstallLocations()
+        private void exeSearcherSlave_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            var witcherexe = "";
-            var wccLiteexe = "";
-            const string uninstallkey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\"; 
+            const string uninstallkey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
+            var w3 = "";
+            var wcc = "";
+            int count = Registry.LocalMachine.OpenSubKey(uninstallkey).GetSubKeyNames().Length;
+            int index = 0;
             try
             {
                 Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey).GetSubKeyNames(), item =>
@@ -101,20 +98,58 @@ namespace WolvenKit
                     {
                         if (programName.ToString().StartsWith("Witcher 3 Mod Tools"))
                         {
-                            wccLiteexe = Directory.GetFiles(installLocation.ToString(), "wcc_lite.exe", SearchOption.AllDirectories).First();
+                            wcc = Directory.GetFiles(installLocation.ToString(), "wcc_lite.exe", SearchOption.AllDirectories).First();
                         }
                         if (Equals(programName, "The Witcher 3 - Wild Hunt"))
                         {
-                            witcherexe = Directory.GetFiles(installLocation.ToString(), "witcher3.exe", SearchOption.AllDirectories).First();
+                            w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe", SearchOption.AllDirectories).First();
                         }
                     }
+                    index++;
+                    exeSearcherSlave.ReportProgress(0, new Tuple<string, string, int, int>(w3, wcc, index, count));
                 });
-                return new Tuple<string,string>(witcherexe,wccLiteexe);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return new Tuple<string,string>("","");
-            }           
+                Console.Error.WriteLine(ex.ToString());
+            }
+        }
+
+        private void exeSearcherSlave_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            if (File.Exists(witcherexe))
+            {
+                txExecutablePath.Text = witcherexe;
+            }
+            if (File.Exists(wccLiteexe))
+            {
+                txWCC_Lite.Text = wccLiteexe;
+            }
+            if (witcherexe != "" && wccLiteexe != "")
+            {
+                MessageBox.Show("Found the game and wcc_lite!","Info",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                return;
+            }
+            if (wccLiteexe != "")
+            {
+                MessageBox.Show("Found wcc_lite!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (witcherexe != "")
+            {
+                MessageBox.Show("Found the game!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            MessageBox.Show("Couldn!t manage to find the game nor wcc_lite!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+        }
+
+        private void exeSearcherSlave_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            var report = (e.UserState as Tuple<string, string, int, int>);
+            witcherexe = report.Item1;
+            wccLiteexe = report.Item2;
+            this.Text = "Settings | Locating Game and wcc_lite [" + report.Item3 + "/" + report.Item4 + "]";
         }
     }
 }

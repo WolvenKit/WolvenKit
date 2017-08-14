@@ -58,9 +58,27 @@ namespace WolvenKit.CR2W.Types
 
         public override Control GetEditor()
         {
+            var enumtypes = typeof(Enums).GetNestedTypes();
+            bool found = false;
+            foreach (var item in enumtypes)
+            {
+                if(item.Name == this.Type)
+                {
+                    ComboBox cb = new ComboBox();
+                    cb.Items.AddRange(item.GetEnumNames());
+                    cb.SelectedValue = this.Type;
+                    cb.SelectedValueChanged += HandleEnumPick;
+                    return cb;
+                }
+            }
             var editor = new TextBox();
             editor.DataBindings.Add("Text", this, "Value");
             return editor;
+        }
+
+        private void HandleEnumPick(object sender, System.EventArgs e)
+        {
+            SetValue((sender as ComboBox).SelectedItem);
         }
 
         public override string ToString()

@@ -34,8 +34,7 @@ namespace WolvenKit
             var limit = -1;
             if(limitCB.Checked)
             {
-                int result;
-                int.TryParse(limitTB.Text,out result);
+                int.TryParse(limitTB.Text,out limit);
             }
             if (File == null)
                 return;
@@ -118,12 +117,10 @@ namespace WolvenKit
                 {
                     try
                     {
-                        var pastedchunk = File.CreateChunk(chunk.Type,chunk.Parent);
-                        pastedchunk.data = chunk.data.Copy(new CR2WCopyAction());
-                        //TODO: Unknownbytes
+                        var pastedchunk = CR2WCopyAction.CopyChunk(chunk, chunk.CR2WOwner);
                         listView.AddObject(pastedchunk);
-
                         OnSelectChunk?.Invoke(this, new SelectChunkArgs { Chunk = pastedchunk });
+                        MainController.Get().ProjectStatus = "Chunk copied";
                     }
                     catch (InvalidChunkTypeException ex)
                     {
