@@ -111,6 +111,7 @@ namespace WolvenKit
 
         private void treeView_CellEditStarting(object sender, CellEditEventArgs e)
         {
+            var variable = (e.RowObject as VariableListNode).Variable;
             if (e.Column.AspectName == "Value")
             {
                 e.Control = ((VariableListNode) e.RowObject).Variable.GetEditor();
@@ -118,12 +119,12 @@ namespace WolvenKit
                 {
                     e.Control.Location = new Point(e.CellBounds.Location.X, e.CellBounds.Location.Y - 1);
                     e.Control.Width = e.CellBounds.Width;
-                }
+                }                
                 e.Cancel = e.Control == null;
             }
             else if (e.Column.AspectName == "Name")
             {
-
+                //Normal textbox is good for this.
             }
             else
             {
