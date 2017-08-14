@@ -648,10 +648,32 @@ namespace WolvenKit.Render
         {
             using (var sf = new SaveFileDialog())
             {
-                sf.Filter = "Obj files | *.obj";
+                sf.Filter = "Irrlicht mesh | *.irrm | Collada mesh | *.coll | STL Mesh | *.stl | OBJ Mesh | *.obj | PLY Mesh | *.ply | B3D Mesh | *.b3d";
                 if(sf.ShowDialog() == DialogResult.OK)
                 {
-                    var mw = smgr.CreateMeshWriter(MeshWriterType.Obj);
+                    MeshWriterType mwt = MeshWriterType.Obj;
+                    switch(Path.GetExtension(sf.FileName))
+                    {
+                        case "irrm":
+                            mwt = MeshWriterType.IrrMesh;
+                            break;
+                        case "coll":
+                            mwt = MeshWriterType.Collada;
+                            break;
+                        case "obj":
+                            mwt = MeshWriterType.Obj;
+                            break;
+                        case "stl":
+                            mwt = MeshWriterType.Stl;
+                            break;
+                        case "ply":
+                            mwt = MeshWriterType.Ply;
+                            break;
+                        case "b3d":
+                            mwt = MeshWriterType.B3d;
+                            break;
+                    }
+                    var mw = smgr.CreateMeshWriter(mwt);
                     if(mw.WriteMesh(device.FileSystem.CreateWriteFile(sf.FileName), staticMesh, MeshWriterFlag.None))
                         MessageBox.Show(this,"Sucessfully wrote file!","WolvenKit",MessageBoxButtons.OK,MessageBoxIcon.Information);
                     else
