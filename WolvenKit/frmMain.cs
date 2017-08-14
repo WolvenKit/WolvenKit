@@ -34,6 +34,8 @@ namespace WolvenKit
             InitializeComponent();
             UpdateTitle();
             buildDateToolStripMenuItem.Text = Assembly.GetExecutingAssembly().GetLinkerTime().ToString("yyyy MMMM dd");
+            MainController.Get().PropertyChanged += MainControllerUpdated;
+
         }
 
         public W3Mod ActiveMod
@@ -71,6 +73,12 @@ namespace WolvenKit
         }
 
         public frmStringsGui stringsGui;
+
+        private void MainControllerUpdated(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ProjectStatus")
+                statusLBL.Text = ((MainController)sender).ProjectStatus;
+        }
 
         private void UpdateTitle()
         {
@@ -198,14 +206,14 @@ namespace WolvenKit
                         doc.ImageViewer.Show(doc.FormPanel, DockState.Document);
                         break;
                     }
-                case ".w2ent":
+                /*case ".w2ent":
                     {
                         CHandle mesh = doc.File.chunks[2].GetVariableByName("mesh") as CHandle;
                         var docW2Mesh = LoadDocument(Path.GetDirectoryName(filename) + @"\model\" + Path.GetFileName(mesh.Handle));
                         if (docW2Mesh == null)
                             MessageBox.Show(".w2mesh file not found in model folder!" + "\n" + "Have you extracted it properly?");
                         break;
-                    }
+                    }*/
                 case ".w2mesh":
                     {
                         doc.RenderViewer = new Render.frmRender
@@ -323,6 +331,16 @@ namespace WolvenKit
         {
             if (ActiveMod == null)
                 return;
+            if (Application.OpenForms.OfType<frmAssetBrowser>().Any())
+            {
+                var frm = Application.OpenForms.OfType<frmAssetBrowser>().First();
+                if(!string.IsNullOrEmpty(browseToPath))
+                    frm.OpenPath(browseToPath);
+                frm.WindowState = FormWindowState.Minimized;
+                frm.Show();
+                frm.WindowState = FormWindowState.Normal;
+                return;
+            }
             var explorer = new frmAssetBrowser(loadmods ? new List<IWitcherArchive> { MainController.Get().ModBundleManager, MainController.Get().ModSoundManager, MainController.Get().ModTextureManager } : new List<IWitcherArchive> { MainController.Get().BundleManager, MainController.Get().SoundManager, MainController.Get().TextureManager });
             explorer.RequestFileAdd += Assetbrowser_FileAdd;
             explorer.OpenPath(browseToPath);
@@ -336,12 +354,14 @@ namespace WolvenKit
                 MessageBox.Show(@"Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+            MainController.Get().ProjectStatus = "Busy";
             var skipping = false;
             foreach (ListViewItem depotpath in Details.Item2)
             {
                 skipping = AddToMod(depotpath.Text, skipping, Details.Item1);
             }
             SaveMod();
+            MainController.Get().ProjectStatus = "Ready";
         }
 
         /// <summary>
@@ -356,8 +376,8 @@ namespace WolvenKit
             {
                 if (manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath)))
                 {
-                    var filename = Path.Combine(ActiveMod.FileDirectory, depotpath);
                     var archives = manager.FileList.Where(x => x.Name == depotpath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
+                    var filename = Path.Combine(ActiveMod.FileDirectory,archives.First().Value.Bundle.TypeName, depotpath);
                     if (archives.Count() > 1)
                     {
 
@@ -442,6 +462,7 @@ namespace WolvenKit
             ResetWindows();
             UpdateModFileList(true);
             AddOutput("\"" + ActiveMod.Name + "\" loaded successfully!\n");
+            MainController.Get().ProjectStatus = "Ready";
         }
 
         /// <summary>
@@ -512,6 +533,7 @@ namespace WolvenKit
                     ModExplorer.UpdateModFileList(true, true);
                 }
             }
+            MainController.Get().ProjectStatus = "File renamed";
         }
 
         private void ModExplorer_RequestAddFile(object sender, RequestFileArgs e)
@@ -750,6 +772,8 @@ namespace WolvenKit
         private void tbtSaveAll_Click(object sender, EventArgs e)
         {
             saveAllFiles();
+            MainController.Get().ProjectStatus = "Item saved";
+            AddOutput("Saved!\n");
         }
 
         private void saveAllFiles()
@@ -764,6 +788,7 @@ namespace WolvenKit
                 saveFile(d);
             }
             AddOutput("All files saved!\n");
+            MainController.Get().ProjectStatus = "Item(s) Saved";
         }
 
         private void saveFile(frmCR2WDocument d)
@@ -847,6 +872,7 @@ namespace WolvenKit
                 }
 
                 InstallMod();
+                MainController.Get().ProjectStatus = "Mod Packed&Installed";
             }
             btPack.Enabled = true;
         }
@@ -857,6 +883,7 @@ namespace WolvenKit
             {
                 Output.Clear();
             }
+            MainController.Get().ProjectStatus = "Output cleared";
         }
 
         private void AddOutput(string text, frmOutput.Logtype type = frmOutput.Logtype.Normal)
@@ -966,6 +993,7 @@ namespace WolvenKit
                 AddOutput("Couldn't create installer. Something went wrong.", frmOutput.Logtype.Error);
                 return;
             }
+            MainController.Get().ProjectStatus = "Ready";
             Commonfunctions.ShowFileInExplorer(fsOut.Name);
         }
 
@@ -1015,6 +1043,7 @@ namespace WolvenKit
                     }
                 }
             }
+            MainController.Get().ProjectStatus = "Mod cooked";
         }
 
         private async Task packTextures()
@@ -1049,6 +1078,7 @@ namespace WolvenKit
                     }
                 }
             }
+            MainController.Get().ProjectStatus = "TextureCache generated";
         }
 
         private async Task packMod()
@@ -1099,6 +1129,7 @@ namespace WolvenKit
                     }
                 }
             }
+            MainController.Get().ProjectStatus = "Ready";
         }
 
         private async Task createModMetaData()
@@ -1132,6 +1163,7 @@ namespace WolvenKit
                     }
                 }
             }
+            MainController.Get().ProjectStatus = "Metadata packed";
         }
 
         private async void executeGame(string args = "")
@@ -1200,6 +1232,8 @@ namespace WolvenKit
                     Exit = true;
                     break;
                 }
+                else
+                    MainController.Get().ProjectStatus = "Ready";
             }
 
             if (Exit)

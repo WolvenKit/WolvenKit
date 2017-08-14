@@ -58,9 +58,10 @@
     <Compile Include="BNK\Sections\Unknown.cs" />
     <Compile Include="BNK\SoundFile.cs" />
     <Compile Include="SoundBanksInfo.cs" />
-    <Compile Include="Sound\SoundBanksInfo.cs" />
-    <Compile Include="Sound\SoundManager.cs" />
-    <Compile Include="Sound\Sound_Cache.cs" />
+    <Compile Include="SoundCache\SoundBanksInfo.cs" />
+    <Compile Include="SoundCache\SoundCacheItem.cs" />
+    <Compile Include="SoundCache\SoundManager.cs" />
+    <Compile Include="SoundCache\Sound_Cache.cs" />
     <Compile Include="WEM\ImaAdpcmCodec.cs" />
     <Compile Include="WEM\RiffChunk.cs" />
     <Compile Include="WEM\RiffFile.cs" />
@@ -80,9 +81,9 @@
       <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>
       <Name>WolvenKit.CR2W</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.Interfaces\WolvenKit.Interfaces.csproj">
+    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj">
       <Project>{4d1019f1-f099-450f-85b8-697e0332a94f}</Project>
-      <Name>WolvenKit.Interfaces</Name>
+      <Name>WolvenKit.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

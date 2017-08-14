@@ -104,6 +104,11 @@ namespace WolvenKit.Cache
         public uint Version;
         public List<string> Names;
 
+        public TextureCache()
+        {
+
+        }
+
         public TextureCache(string filename)
         {
             this.Read(filename);
@@ -136,7 +141,7 @@ namespace WolvenKit.Cache
                 for (var i = 0; i < TextureCount; i++)
                 {
                     var ti = new TextureCacheItem(this);
-                    ti.Name = ti.Bundle.TypeName + "\\" + Names[i];
+                    ti.Name = Names[i];
                     ti.ParentFile = FileName;
                     ti.Id = br.ReadUInt32();                //number (unique???)
                     ti.Filenameoffset = br.ReadUInt32();    //filename, start offset in block2

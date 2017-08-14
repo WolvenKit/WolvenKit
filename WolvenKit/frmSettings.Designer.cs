@@ -45,6 +45,7 @@ namespace WolvenKit
             this.locateButton = new System.Windows.Forms.Button();
             this.txTextLanguage = new System.Windows.Forms.TextBox();
             this.txVoiceLanguage = new System.Windows.Forms.TextBox();
+            this.exeSearcherSlave = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // txExecutablePath
@@ -80,7 +81,7 @@ namespace WolvenKit
             // 
             this.btSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btSave.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSave.Location = new System.Drawing.Point(508, 174);
+            this.btSave.Location = new System.Drawing.Point(508, 161);
             this.btSave.Name = "btSave";
             this.btSave.Size = new System.Drawing.Size(75, 23);
             this.btSave.TabIndex = 3;
@@ -139,7 +140,7 @@ namespace WolvenKit
             // 
             this.btCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btCancel.Location = new System.Drawing.Point(427, 174);
+            this.btCancel.Location = new System.Drawing.Point(427, 161);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(75, 23);
             this.btCancel.TabIndex = 11;
@@ -148,7 +149,7 @@ namespace WolvenKit
             // 
             // locateButton
             // 
-            this.locateButton.Location = new System.Drawing.Point(13, 158);
+            this.locateButton.Location = new System.Drawing.Point(13, 143);
             this.locateButton.Name = "locateButton";
             this.locateButton.Size = new System.Drawing.Size(112, 39);
             this.locateButton.TabIndex = 12;
@@ -170,13 +171,21 @@ namespace WolvenKit
             this.txVoiceLanguage.Size = new System.Drawing.Size(135, 20);
             this.txVoiceLanguage.TabIndex = 6;
             // 
+            // exeSearcherSlave
+            // 
+            this.exeSearcherSlave.WorkerReportsProgress = true;
+            this.exeSearcherSlave.WorkerSupportsCancellation = true;
+            this.exeSearcherSlave.DoWork += new System.ComponentModel.DoWorkEventHandler(this.exeSearcherSlave_DoWork);
+            this.exeSearcherSlave.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.exeSearcherSlave_ProgressChanged);
+            this.exeSearcherSlave.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.exeSearcherSlave_RunWorkerCompleted);
+            // 
             // frmSettings
             // 
             this.AcceptButton = this.btSave;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
-            this.ClientSize = new System.Drawing.Size(596, 207);
+            this.ClientSize = new System.Drawing.Size(596, 194);
             this.Controls.Add(this.locateButton);
             this.Controls.Add(this.btCancel);
             this.Controls.Add(this.btBrowseWCC_Lite);
@@ -214,5 +223,6 @@ namespace WolvenKit
         private Button locateButton;
         private TextBox txTextLanguage;
         private TextBox txVoiceLanguage;
+        private BackgroundWorker exeSearcherSlave;
     }
 }

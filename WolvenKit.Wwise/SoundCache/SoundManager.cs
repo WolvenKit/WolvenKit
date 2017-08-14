@@ -7,25 +7,26 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WolvenKit.Interfaces;
+using WolvenKit.Cache;
 
 namespace WolvenKit.Cache
 {
-    public class TextureManager : IWitcherArchive
+    public class SoundManager : IWitcherArchive
     {
-        public TextureManager()
+        public SoundManager()
         {
             Items = new Dictionary<string, List<IWitcherFile>>();
-            Archives = new Dictionary<string, TextureCache>();
+            Archives = new Dictionary<string, SoundCache>();
             FileList = new List<IWitcherFile>();
             Extensions = new List<string>();
             AutocompleteSource = new AutoCompleteStringCollection();
         }
 
         public Dictionary<string, List<IWitcherFile>> Items { get; set; }
-        public Dictionary<string, TextureCache> Archives { get; set; }
+        public Dictionary<string, SoundCache> Archives { get; set; }
         public WitcherTreeNode RootNode { get; set; }
         public List<IWitcherFile> FileList { get; set; }
-        public string TypeName { get { return "TextureManager"; } }
+        public string TypeName { get { return "Sound"; } }
         public List<string> Extensions { get; set; }
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
 
@@ -38,7 +39,7 @@ namespace WolvenKit.Cache
             if (Archives.ContainsKey(filename))
                 return;
 
-            var bundle = new TextureCache(filename);
+            var bundle = new SoundCache(filename);
 
             foreach (var item in bundle.Files)
             {
@@ -60,7 +61,7 @@ namespace WolvenKit.Cache
             if (Archives.ContainsKey(filename))
                 return;
 
-            var bundle = new TextureCache(filename);
+            var bundle = new SoundCache(filename);
 
             foreach (var item in bundle.Files)
             {
@@ -83,14 +84,14 @@ namespace WolvenKit.Cache
 
             var contentdirs = new List<string>(Directory.GetDirectories(content, "content*"));
             contentdirs.Sort(new AlphanumComparator<string>());
-            foreach (var file in contentdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Texture)))
+            foreach (var file in contentdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Sound)))
             {
                 LoadBundle(file);
             }
 
             var patchdirs = new List<string>(Directory.GetDirectories(content, "patch*"));
             patchdirs.Sort(new AlphanumComparator<string>());
-            foreach (var file in patchdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Texture)))
+            foreach (var file in patchdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Sound)))
             {
                 LoadBundle(file);
             }
@@ -100,7 +101,7 @@ namespace WolvenKit.Cache
             {
                 var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
                 dlcdirs.Sort(new AlphanumComparator<string>());
-                foreach (var file in dlcdirs.Where(dir => new Regex("(DLC..)|(DLC.)|(BOB)|(ep.)|(bob)|(EP.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.cache", SearchOption.AllDirectories).OrderBy(k => k).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Texture)))
+                foreach (var file in dlcdirs.Where(dir => new Regex("(DLC..)|(DLC.)|(BOB)|(ep.)|(bob)|(EP.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.cache", SearchOption.AllDirectories).OrderBy(k => k).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Sound)))
                 {
                     LoadBundle(file);
                 }
@@ -120,7 +121,7 @@ namespace WolvenKit.Cache
                 Directory.CreateDirectory(mods);
             var modsdirs = new List<string>(Directory.GetDirectories(mods));
             modsdirs.Sort(new AlphanumComparator<string>());
-            var modbundles = modsdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Texture)).ToList();
+            var modbundles = modsdirs.SelectMany(dir => Directory.GetFiles(dir, "*.cache", SearchOption.AllDirectories).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Sound)).ToList();
             foreach (var file in modbundles)
             {
                 LoadModBundle(file);
@@ -131,7 +132,7 @@ namespace WolvenKit.Cache
             {
                 var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
                 dlcdirs.Sort(new AlphanumComparator<string>());
-                foreach (var file in dlcdirs.Where(dir => !new Regex("(DLC..)|(DLC.)|(BOB)|(bob)|(EP.)|(ep.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.cache", SearchOption.AllDirectories).OrderBy(k => k).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Texture)))
+                foreach (var file in dlcdirs.Where(dir => !new Regex("(DLC..)|(DLC.)|(BOB)|(bob)|(EP.)|(ep.)").IsMatch(Path.GetFileName(dir ?? ""))).SelectMany(dir => Directory.GetFiles(dir ?? "", "*.cache", SearchOption.AllDirectories).OrderBy(k => k).Where(x => Cache.GetCacheTypeOfFile(x) == Cache.Cachetype.Sound)))
                 {
                     LoadModBundle(file);
                 }
@@ -154,7 +155,7 @@ namespace WolvenKit.Cache
         public void RebuildRootNode()
         {
             RootNode = new WitcherTreeNode();
-            RootNode.Name = "Textures";
+            RootNode.Name = new SoundCache().TypeName;
 
             foreach (var item in Items)
             {

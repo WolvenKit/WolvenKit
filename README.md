@@ -40,6 +40,7 @@ This repository is created to demonstrate how **REDengine 3** reads and writes f
 - http://forums.cdprojektred.com/forum/en/the-witcher-series/the-witcher-3-wild-hunt/mod-discussions
 - https://bitbucket.org/zabb65/payday-2-modding-information
 - https://modworkshop.net/showthread.php?tid=101
+- https://github.com/Atvaark/W3SavegameEditor
 
 ***
 
