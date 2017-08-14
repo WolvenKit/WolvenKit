@@ -2013,7 +2013,7 @@ namespace WolvenKit.CR2W.Types
                 "CExtAnimItemSyncEvent",
                 "CExtAnimLocationAdjustmentEvent",
                 "CExtAnimMaterialBasedFxEvent",
-                "CExtAnimOnSlopeEvent"
+                "CExtAnimOnSlopeEvent",
                 "CExtAnimRaiseEventEvent",
                 "CExtAnimSoundEvent",
                 "CFXDefinition",
