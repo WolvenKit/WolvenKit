@@ -35,6 +35,14 @@
             this.textBoxPos = new System.Windows.Forms.TextBox();
             this.irrlichtPanel = new System.Windows.Forms.Panel();
             this.animationTimer = new System.Windows.Forms.Timer(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.replaceTexturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportTexturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportCurrentAnimationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importAnimationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBoxTip
@@ -60,7 +68,7 @@
             this.textBoxFPS.Location = new System.Drawing.Point(0, 346);
             this.textBoxFPS.Margin = new System.Windows.Forms.Padding(0);
             this.textBoxFPS.Name = "textBoxFPS";
-            this.textBoxFPS.Size = new System.Drawing.Size(100, 13);
+            this.textBoxFPS.Size = new System.Drawing.Size(100, 16);
             this.textBoxFPS.TabIndex = 4;
             this.textBoxFPS.Text = "FPS: 60";
             // 
@@ -73,7 +81,7 @@
             this.textBoxRotation.Location = new System.Drawing.Point(0, 333);
             this.textBoxRotation.Margin = new System.Windows.Forms.Padding(0);
             this.textBoxRotation.Name = "textBoxRotation";
-            this.textBoxRotation.Size = new System.Drawing.Size(100, 13);
+            this.textBoxRotation.Size = new System.Drawing.Size(100, 16);
             this.textBoxRotation.TabIndex = 3;
             this.textBoxRotation.Text = "Yaw:0 Pitch:0 Roll: 0";
             // 
@@ -86,12 +94,13 @@
             this.textBoxPos.Location = new System.Drawing.Point(0, 320);
             this.textBoxPos.Margin = new System.Windows.Forms.Padding(0);
             this.textBoxPos.Name = "textBoxPos";
-            this.textBoxPos.Size = new System.Drawing.Size(100, 13);
+            this.textBoxPos.Size = new System.Drawing.Size(100, 16);
             this.textBoxPos.TabIndex = 2;
             this.textBoxPos.Text = "X: 0 Y:0 Z:0";
             // 
             // irrlichtPanel
             // 
+            this.irrlichtPanel.ContextMenuStrip = this.contextMenuStrip1;
             this.irrlichtPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.irrlichtPanel.Location = new System.Drawing.Point(0, 0);
             this.irrlichtPanel.Name = "irrlichtPanel";
@@ -105,9 +114,64 @@
             this.animationTimer.Interval = 16;
             this.animationTimer.Tick += new System.EventHandler(this.AnimationTimer_Tick);
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exportToolStripMenuItem,
+            this.importToolStripMenuItem,
+            this.replaceTexturesToolStripMenuItem,
+            this.exportTexturesToolStripMenuItem,
+            this.exportCurrentAnimationToolStripMenuItem,
+            this.importAnimationToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(243, 148);
+            // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(242, 24);
+            this.exportToolStripMenuItem.Text = "Export";
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
+            // 
+            // importToolStripMenuItem
+            // 
+            this.importToolStripMenuItem.Enabled = false;
+            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(242, 24);
+            this.importToolStripMenuItem.Text = "Import";
+            // 
+            // replaceTexturesToolStripMenuItem
+            // 
+            this.replaceTexturesToolStripMenuItem.Enabled = false;
+            this.replaceTexturesToolStripMenuItem.Name = "replaceTexturesToolStripMenuItem";
+            this.replaceTexturesToolStripMenuItem.Size = new System.Drawing.Size(242, 24);
+            this.replaceTexturesToolStripMenuItem.Text = "Replace textures";
+            // 
+            // exportTexturesToolStripMenuItem
+            // 
+            this.exportTexturesToolStripMenuItem.Enabled = false;
+            this.exportTexturesToolStripMenuItem.Name = "exportTexturesToolStripMenuItem";
+            this.exportTexturesToolStripMenuItem.Size = new System.Drawing.Size(242, 24);
+            this.exportTexturesToolStripMenuItem.Text = "Export textures";
+            // 
+            // exportCurrentAnimationToolStripMenuItem
+            // 
+            this.exportCurrentAnimationToolStripMenuItem.Enabled = false;
+            this.exportCurrentAnimationToolStripMenuItem.Name = "exportCurrentAnimationToolStripMenuItem";
+            this.exportCurrentAnimationToolStripMenuItem.Size = new System.Drawing.Size(242, 24);
+            this.exportCurrentAnimationToolStripMenuItem.Text = "Export current animation";
+            // 
+            // importAnimationToolStripMenuItem
+            // 
+            this.importAnimationToolStripMenuItem.Enabled = false;
+            this.importAnimationToolStripMenuItem.Name = "importAnimationToolStripMenuItem";
+            this.importAnimationToolStripMenuItem.Size = new System.Drawing.Size(242, 24);
+            this.importAnimationToolStripMenuItem.Text = "Import animation";
+            // 
             // frmRender
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(549, 413);
             this.Controls.Add(this.textBoxTip);
@@ -125,6 +189,7 @@
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Bithack3D_KeyDown);
             this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.Bithack3D_MouseWheel);
             this.Resize += new System.EventHandler(this.Bithack3D_Resize);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -138,5 +203,12 @@
         private System.Windows.Forms.TextBox textBoxPos;
         private System.Windows.Forms.Panel irrlichtPanel;
         private System.Windows.Forms.Timer animationTimer;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem replaceTexturesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportTexturesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportCurrentAnimationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem importAnimationToolStripMenuItem;
     }
 }

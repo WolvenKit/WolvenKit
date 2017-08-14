@@ -66,7 +66,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Apex.cs" />
     <Compile Include="frmRender.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -105,9 +104,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\nanosuit\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Cache\WolvenKit.Cache.csproj">
       <Project>{17cf5901-6e1f-467f-afe0-3cc04dc9688a}</Project>
