@@ -1134,12 +1134,36 @@ namespace WolvenKit
             saveAllFiles();
         }
 
-        private void scriptToolStripMenuItem_Click(object sender, EventArgs e)
+        private void DLCScriptToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (ActiveMod == null)
                 return;
 
-            var scriptsdirectory = (ActiveMod.FileDirectory + "\\scripts");
+            var scriptsdirectory = (ActiveMod.DlcDirectory + "\\scripts");
+            if (!Directory.Exists(scriptsdirectory))
+            {
+                Directory.CreateDirectory(scriptsdirectory);
+            }
+            var fullPath = scriptsdirectory + "\\" + "blank_script.ws";
+            var count = 1;
+            var fileNameOnly = Path.GetFileNameWithoutExtension(fullPath);
+            var extension = Path.GetExtension(fullPath);
+            var path = Path.GetDirectoryName(fullPath);
+            var newFullPath = fullPath;
+            while (File.Exists(newFullPath))
+            {
+                string tempFileName = $"{fileNameOnly}({count++})";
+                if (path != null) newFullPath = Path.Combine(path, tempFileName + extension);
+            }
+            File.WriteAllLines(newFullPath, new[] { @"/*", $"Wolven kit - {Version}", DateTime.Now.ToString("d"), @"*/" });
+        }
+
+        private void ModscriptToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ActiveMod == null)
+                return;
+
+            var scriptsdirectory = (ActiveMod.ModDirectory + "\\scripts");
             if (!Directory.Exists(scriptsdirectory))
             {
                 Directory.CreateDirectory(scriptsdirectory);
