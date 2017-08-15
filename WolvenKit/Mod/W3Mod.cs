@@ -9,10 +9,7 @@ namespace WolvenKit.Mod
     public class W3Mod : ICloneable
     {
         [XmlIgnore]
-        public string FileName { get; set; }
-
-        [XmlIgnore]
-        public string Directory
+        public string ProjectDirectory
         {
             get { return Path.Combine(Path.GetDirectoryName(FileName), Name); }
         }
@@ -20,26 +17,85 @@ namespace WolvenKit.Mod
         [XmlIgnore]
         public string FileDirectory
         {
-            get { return Path.Combine(Directory, "files"); }
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "files");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
+            }
         }
 
-        public string Name { get; set; }
+        [XmlIgnore]
+        public string ModDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "files","Mod");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
+            }
+        }
+
+        [XmlIgnore]
+        public string DlcDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "files","DLC");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
+            }
+        }
 
         [XmlIgnore]
         public List<string> Files
         {
             get
             {
-                if (!System.IO.Directory.Exists(FileDirectory))
+                if (!Directory.Exists(FileDirectory))
                 {
-                    System.IO.Directory.CreateDirectory(FileDirectory);
+                    Directory.CreateDirectory(FileDirectory);
                 }
-                return System.IO.Directory.EnumerateFiles(FileDirectory, "*", SearchOption.AllDirectories)
-                                        .Select(file => file.Substring(FileDirectory.Length + 1)).ToList();
+                return Directory.EnumerateFiles(FileDirectory, "*", SearchOption.AllDirectories).Select(file => file.Substring(FileDirectory.Length + 1)).ToList();
             }
         }
 
+        [XmlIgnore]
+        public List<string> ModFiles
+        {
+            get
+            {
+                if (!Directory.Exists(ModDirectory))
+                {
+                    Directory.CreateDirectory(ModDirectory);
+                }
+                return Directory.EnumerateFiles(ModDirectory, "*", SearchOption.AllDirectories).Select(file => file.Substring(ModDirectory.Length + 1)).ToList();
+            }
+        }
+
+        [XmlIgnore]
+        public List<string> DLCFiles
+        {
+            get
+            {
+                if (!Directory.Exists(DlcDirectory))
+                {
+                    Directory.CreateDirectory(DlcDirectory);
+                }
+                return Directory.EnumerateFiles(DlcDirectory, "*", SearchOption.AllDirectories).Select(file => file.Substring(DlcDirectory.Length + 1)).ToList();
+            }
+        }
+
+
+        [XmlIgnore]
+        public string FileName { get; set; }
+
         public bool InstallAsDLC { get; set; }
+
+        public string Name { get; set; }
 
         public object Clone()
         {

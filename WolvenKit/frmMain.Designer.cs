@@ -61,6 +61,7 @@ namespace WolvenKit
             this.rungameToolStrip = new System.Windows.Forms.ToolStripDropDownButton();
             this.launchGameForDebuggingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.launchWithCostumParametersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.packProjectAndLaunchGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -221,7 +222,8 @@ namespace WolvenKit
             this.rungameToolStrip.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.rungameToolStrip.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.launchGameForDebuggingToolStripMenuItem,
-            this.launchWithCostumParametersToolStripMenuItem});
+            this.launchWithCostumParametersToolStripMenuItem,
+            this.packProjectAndLaunchGameToolStripMenuItem});
             this.rungameToolStrip.Image = global::WolvenKit.Properties.Resources.witcher3_101;
             this.rungameToolStrip.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.rungameToolStrip.Name = "rungameToolStrip";
@@ -241,6 +243,13 @@ namespace WolvenKit
             this.launchWithCostumParametersToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
             this.launchWithCostumParametersToolStripMenuItem.Text = "Launch with costum parameters";
             this.launchWithCostumParametersToolStripMenuItem.Click += new System.EventHandler(this.launchWithCostumParametersToolStripMenuItem_Click);
+            // 
+            // packProjectAndLaunchGameToolStripMenuItem
+            // 
+            this.packProjectAndLaunchGameToolStripMenuItem.Name = "packProjectAndLaunchGameToolStripMenuItem";
+            this.packProjectAndLaunchGameToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
+            this.packProjectAndLaunchGameToolStripMenuItem.Text = "Pack project and launch game";
+            this.packProjectAndLaunchGameToolStripMenuItem.Click += new System.EventHandler(this.packProjectAndLaunchGameToolStripMenuItem_Click);
             // 
             // menuStrip1
             // 
@@ -780,5 +789,6 @@ namespace WolvenKit
         private ToolStripLabel statusLBL;
         private ToolStripSeparator toolStripSeparator9;
         private ToolStripProgressBar toolStripProgressBar1;
+        private ToolStripMenuItem packProjectAndLaunchGameToolStripMenuItem;
     }
 }

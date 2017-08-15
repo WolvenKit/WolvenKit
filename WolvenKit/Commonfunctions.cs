@@ -43,9 +43,34 @@ namespace WolvenKit
             }
         }
 
+        public static void ShowWIPMessage()
+        {
+            MessageBox.Show("Work in progress.", "Coming soon(tm)", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+        }
+
         public static void ShowFileInExplorer(string path)
         {
             Process.Start("explorer.exe", "/select, \"" + path + "\"");
+        }
+
+        public static void MoveDirectory(string source, string target)
+        {
+            var sourcePath = source.TrimEnd('\\', ' ');
+            var targetPath = target.TrimEnd('\\', ' ');
+            var files = Directory.EnumerateFiles(sourcePath, "*", SearchOption.AllDirectories)
+                                 .GroupBy(s => Path.GetDirectoryName(s));
+            foreach (var folder in files)
+            {
+                var targetFolder = folder.Key.Replace(sourcePath, targetPath);
+                Directory.CreateDirectory(targetFolder);
+                foreach (var file in folder)
+                {
+                    var targetFile = Path.Combine(targetFolder, Path.GetFileName(file));
+                    if (File.Exists(targetFile)) File.Delete(targetFile);
+                    File.Move(file, targetFile);
+                }
+            }
+            Directory.Delete(source, true);
         }
 
         public static void CompressFile(string filename, ZipOutputStream zipStream, string nameOverride = "")

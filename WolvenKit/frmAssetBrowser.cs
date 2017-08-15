@@ -17,7 +17,7 @@ namespace WolvenKit
         public List<IWitcherFile> FileList = new List<IWitcherFile>();
         public List<IWitcherArchive> Managers;
 
-        public event EventHandler<Tuple<List<IWitcherArchive>, ListView.ListViewItemCollection>> RequestFileAdd;
+        public event EventHandler<Tuple<List<IWitcherArchive>, ListView.ListViewItemCollection,bool>> RequestFileAdd;
 
         public frmAssetBrowser(List<IWitcherArchive> archives)
         {
@@ -396,22 +396,18 @@ namespace WolvenKit
             if (e.KeyCode == Keys.Back)
             {
                 if (ActiveNode != RootNode)
-                    OpenPath(ActiveNode.Parent.FullPath);
+                    OpenNode(ActiveNode.Parent);
             }
             if (e.KeyCode == Keys.Enter)
             {
-                if (ActiveNode != RootNode)
+                if (fileListView.SelectedItems.Count > 0)
                 {
-                    if (fileListView.SelectedItems.Count > 0)
+                    var item = (BundleListItem)fileListView.SelectedItems[0];
+                    if (item.IsDirectory)
                     {
-                        var item = (BundleListItem) fileListView.SelectedItems[0];
-                        if (item.IsDirectory)
-                        {
-                            OpenNode(item.Node);
-                        }
+                        OpenNode(item.Node);
                     }
-
-                }              
+                }
             }
         }
 
@@ -458,7 +454,39 @@ namespace WolvenKit
                     }
                 }
             }
-            RequestFileAdd.Invoke(this, new Tuple<List<IWitcherArchive>, ListView.ListViewItemCollection>(Managers, SelectedPaths));
+            RequestFileAdd.Invoke(this, new Tuple<List<IWitcherArchive>, ListView.ListViewItemCollection,bool>(Managers, SelectedPaths,false));
+            pathlistview.Items.Clear();
+        }
+
+        private void AddDLCFile_Click(object sender, EventArgs e)
+        {
+            if (pathlistview.Items.Count < 1)
+            {
+                if (fileListView.SelectedItems.Count > 0)
+                {
+                    foreach (BundleListItem item in fileListView.SelectedItems)
+                    {
+                        if (!item.IsDirectory)
+                        {
+                            var cont = false;
+                            foreach (ListViewItem i in pathlistview.Items)
+                            {
+                                if (i.Text == item.FullPath)
+                                    cont = true;
+                            }
+                            if (!cont)
+                            {
+                                var tempnode = new ListViewItem();
+                                tempnode.ImageKey = GetImageKey(item.FullPath);
+                                tempnode.ToolTipText = item.FullPath;
+                                tempnode.Text = item.FullPath;
+                                pathlistview.Items.Add(tempnode);
+                            }
+                        }
+                    }
+                }
+            }
+            RequestFileAdd.Invoke(this, new Tuple<List<IWitcherArchive>, ListView.ListViewItemCollection,bool>(Managers, SelectedPaths,true));
             pathlistview.Items.Clear();
         }
 

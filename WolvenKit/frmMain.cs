@@ -28,6 +28,7 @@ namespace WolvenKit
         private readonly string BaseTitle = "Wolven kit";
         private frmCR2WDocument _activedocument;
         public List<frmCR2WDocument> OpenDocuments = new List<frmCR2WDocument>();
+        public static Task Packer;
 
         public frmMain()
         {
@@ -347,7 +348,7 @@ namespace WolvenKit
             explorer.Show();
         }
 
-        private void Assetbrowser_FileAdd(object sender, Tuple<List<IWitcherArchive>, ListView.ListViewItemCollection> Details)
+        private void Assetbrowser_FileAdd(object sender, Tuple<List<IWitcherArchive>, ListView.ListViewItemCollection,bool> Details)
         {
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
@@ -358,7 +359,7 @@ namespace WolvenKit
             var skipping = false;
             foreach (ListViewItem depotpath in Details.Item2)
             {
-                skipping = AddToMod(depotpath.Text, skipping, Details.Item1);
+                skipping = AddToMod(depotpath.Text, skipping, Details.Item1,Details.Item3);
             }
             SaveMod();
             MainController.Get().ProjectStatus = "Ready";
@@ -369,7 +370,7 @@ namespace WolvenKit
         /// </summary>
         /// <param name="depotpath">Filename.</param>
         /// <param name="managers">The managers.</param>
-        private bool AddToMod(string depotpath, bool skipping, List<IWitcherArchive> managers)
+        private bool AddToMod(string depotpath, bool skipping, List<IWitcherArchive> managers,bool AddAsDLC)
         {
             bool skip = skipping;
             foreach (var manager in managers.Where(manager => manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath))))
@@ -377,7 +378,7 @@ namespace WolvenKit
                 if (manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath)))
                 {
                     var archives = manager.FileList.Where(x => x.Name == depotpath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
-                    var filename = Path.Combine(ActiveMod.FileDirectory,archives.First().Value.Bundle.TypeName, depotpath);
+                    var filename = Path.Combine(ActiveMod.FileDirectory,AddAsDLC ? "DLC":"Mod",archives.First().Value.Bundle.TypeName, depotpath);
                     if (archives.Count() > 1)
                     {
 
@@ -798,83 +799,7 @@ namespace WolvenKit
 
         private void btPack_Click(object sender, EventArgs e)
         {
-            if (ActiveMod == null)
-                return;
-
-            if (stringsGui == null)
-                stringsGui = new frmStringsGui();
-            if (stringsGui.AreHashesDifferent())
-            {
-                var result = MessageBox.Show("There are not encoded CSV files in your mod, do you want to open Strings Encoder GUI?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                if (result == DialogResult.Yes)
-                    stringsGui.ShowDialog();
-            }
-
-            if (Process.GetProcessesByName("Witcher3").Length != 0)
-            {
-                MessageBox.Show("Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-            btPack.Enabled = false;
-            var packsettings = new frmPackSettings();
-            if (packsettings.ShowDialog() == DialogResult.OK)
-            {
-                ShowOutput();
-                ClearOutput();
-                saveAllFiles();
-                if (packsettings.PackBundles)
-                {
-                    var taskPackMod = packMod();
-                    while (!taskPackMod.IsCompleted)
-                    {
-                        Application.DoEvents();
-                    }
-                }
-
-                if (packsettings.GenTexCache)
-                {
-                    var taskcookMod = cookMod();
-                    while (!taskcookMod.IsCompleted)
-                    {
-                        Application.DoEvents();
-                    }
-                    var taskPackTextureCache = packTextures();
-                    while (!taskPackTextureCache.IsCompleted)
-                    {
-                        Application.DoEvents();
-                    }
-                }
-
-                if (packsettings.GenMetadata)
-                {
-                    var taskMetaData = createModMetaData();
-                    while (!taskMetaData.IsCompleted)
-                    {
-                        Application.DoEvents();
-                    }
-                }
-
-                if(packsettings.Sound)
-                    SoundCache.Write(Directory.EnumerateFiles(ActiveMod.FileDirectory).Where(file => file.ToLower().EndsWith("wem") || file.ToLower().EndsWith("bnk")).ToList(), Path.Combine(ActiveMod.Directory, @"packed\\content\\soundspc.cache"));
-
-                if (Directory.Exists((ActiveMod.FileDirectory + "\\scripts")) && Directory.GetFiles((ActiveMod.FileDirectory + "\\scripts")).Any())
-                {
-                    if (!Directory.Exists(Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\")))
-                        Directory.CreateDirectory(Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\"));
-                    Directory.GetFiles((ActiveMod.FileDirectory + "\\scripts")).ToList().ForEach(x => File.Copy(x, Path.Combine(ActiveMod.Directory, @"packed\\content\\scripts\\") + Path.GetFileName(x)));
-                }
-
-                if (packsettings.Strings)
-                {
-                    var files = Directory.GetFiles((ActiveMod.Directory + "\\strings")).Where(s => Path.GetExtension(s) == ".w3strings").ToList();
-
-                    files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.Directory, @"packed\\content\\") + Path.GetFileName(x)));
-                }
-
-                InstallMod();
-                MainController.Get().ProjectStatus = "Mod Packed&Installed";
-            }
-            btPack.Enabled = true;
+            PackProject();
         }
 
         private void ClearOutput()
@@ -897,47 +822,29 @@ namespace WolvenKit
             }
         }
 
+        private void PackProject()
+        {
+            if (Packer != null && (Packer.Status == TaskStatus.Running || Packer.Status == TaskStatus.WaitingToRun || Packer.Status == TaskStatus.WaitingForActivation))
+            {
+                MessageBox.Show("Packing task already running. Please wait!", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Warning);                
+            }
+            else
+                Packer = PackAndInstallMod();
+        }
+
         /// <summary>
-        /// Installs the mod from the packed folder of the project to the game
+        /// Installs the project from the packed folder of the project to the game
         /// </summary>
         private void InstallMod()
         {
-            var packedDir = Path.Combine(ActiveMod.Directory, "packed");
+            var packedDir = Path.Combine(ActiveMod.ProjectDirectory, "packed");
             var modName = ActiveMod.Name;
 
-            if (!ActiveMod.InstallAsDLC && !modName.StartsWith("mod"))
-                modName = "mod" + modName;
-
-            string gameModDir = null;
-
-            gameModDir = Path.Combine(Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath),
-                ActiveMod.InstallAsDLC ? @"..\..\DLC\" : @"..\..\Mods\", modName);
-
-            if (!Directory.Exists(gameModDir))
-                Directory.CreateDirectory(gameModDir);
-
-            var dirs = Directory.GetDirectories(packedDir, "*", SearchOption.AllDirectories);
-            foreach (var dir in dirs)
+            foreach (var folder in Directory.GetDirectories(packedDir,"*",SearchOption.TopDirectoryOnly))
             {
-                var relativePath = dir.Substring(packedDir.Length + 1);
-
-                var fulldir = Path.Combine(gameModDir, relativePath);
-
-                if (!Directory.Exists(fulldir))
-                    Directory.CreateDirectory(fulldir);
+                Commonfunctions.MoveDirectory(folder, MainController.Get().Configuration.GameRootDir);
             }
-
-            var files = Directory.GetFiles(packedDir, "*", SearchOption.AllDirectories);
-            foreach (var file in files)
-            {
-                var relativePath = file.Substring(packedDir.Length + 1);
-
-                var fullpath = Path.Combine(gameModDir, relativePath);
-
-                File.Copy(file, fullpath, true);
-            }
-
-            AddOutput("Mod Installed to " + gameModDir + "\n", frmOutput.Logtype.Success);
+            AddOutput(modName + " installed!" + "\n", frmOutput.Logtype.Success);
         }
 
         private void CreateInstaller()
@@ -948,8 +855,8 @@ namespace WolvenKit
             if (ActiveMod == null)
                 return;
             ShowOutput();
-            var packeddir = Path.Combine(ActiveMod.Directory, @"packed\");
-            var contentdir = Path.Combine(ActiveMod.Directory, @"packed\content\");
+            var packeddir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\");
+            var contentdir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\content\");
             if (!Directory.Exists(contentdir))
             {
                 Directory.CreateDirectory(contentdir);
@@ -966,7 +873,7 @@ namespace WolvenKit
                     dir.Delete(true);
                 }
             }
-            var taskPackMod = packMod();
+            var taskPackMod = packBundles();
             while (!taskPackMod.IsCompleted)
             {
                 Application.DoEvents();
@@ -977,7 +884,7 @@ namespace WolvenKit
             {
                 Application.DoEvents();
             }
-            var installdir = Path.Combine(ActiveMod.Directory, @"Installer/");
+            var installdir = Path.Combine(ActiveMod.ProjectDirectory, @"Installer/");
             if (!Directory.Exists(installdir))
                 Directory.CreateDirectory(installdir);
             FileStream fsOut = File.Create(Path.Combine(installdir, ActiveMod.Name + ".wkp"));
@@ -995,175 +902,6 @@ namespace WolvenKit
             }
             MainController.Get().ProjectStatus = "Ready";
             Commonfunctions.ShowFileInExplorer(fsOut.Name);
-        }
-
-        private async Task cookMod()
-        {
-            var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
-            var cookedDir = Path.Combine(ActiveMod.Directory, @"cooked\content\");
-            var uncookedDir = ActiveMod.FileDirectory;
-            proc.Arguments = $"cook -platform=pc -mod={uncookedDir} -basedir={uncookedDir}  -outdir={cookedDir}";
-            proc.UseShellExecute = false;
-            proc.RedirectStandardOutput = true;
-            proc.WindowStyle = ProcessWindowStyle.Hidden;
-            proc.CreateNoWindow = true;
-            if (!Directory.Exists(cookedDir))
-            {
-                Directory.CreateDirectory(cookedDir);
-            }
-            else
-            {
-                var di = new DirectoryInfo(cookedDir);
-                foreach (var file in di.GetFiles())
-                {
-                    file.Delete();
-                }
-                foreach (var dir in di.GetDirectories())
-                {
-                    dir.Delete(true);
-                }
-            }
-            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
-
-            using (var process = Process.Start(proc))
-            {
-                using (var reader = process.StandardOutput)
-                {
-                    while (true)
-                    {
-                        var result = await reader.ReadLineAsync();
-
-                        AddOutput(result + "\n", frmOutput.Logtype.Wcc);
-
-                        Application.DoEvents();
-
-                        if (reader.EndOfStream)
-                            break;
-                    }
-                }
-            }
-            MainController.Get().ProjectStatus = "Mod cooked";
-        }
-
-        private async Task packTextures()
-        {
-            var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
-            var packedDir = Path.Combine(ActiveMod.Directory, @"packed\content\");
-            var cookedDir = Path.Combine(ActiveMod.Directory, @"cooked\content\");
-            var uncookedDir = ActiveMod.FileDirectory;
-            proc.Arguments = $"buildcache textures -basedir={uncookedDir} -platform=pc -db={cookedDir}\\cook.db  -out={packedDir}\\texture.cache";
-            proc.UseShellExecute = false;
-            proc.RedirectStandardOutput = true;
-            proc.WindowStyle = ProcessWindowStyle.Hidden;
-            proc.CreateNoWindow = true;
-
-            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
-
-            using (var process = Process.Start(proc))
-            {
-                using (var reader = process.StandardOutput)
-                {
-                    while (true)
-                    {
-                        var result = await reader.ReadLineAsync();
-
-                        AddOutput(result + "\n", frmOutput.Logtype.Wcc);
-
-                        Application.DoEvents();
-
-                        if (reader.EndOfStream)
-                            break;
-                    }
-                }
-            }
-            MainController.Get().ProjectStatus = "TextureCache generated";
-        }
-
-        private async Task packMod()
-        {
-            var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
-            var packedDir = Path.Combine(ActiveMod.Directory, @"packed\content\");
-            var uncookedDir = ActiveMod.FileDirectory;
-            if (!Directory.Exists(packedDir))
-            {
-                Directory.CreateDirectory(packedDir);
-            }
-            else
-            {
-                var di = new DirectoryInfo(packedDir);
-                foreach (var file in di.GetFiles())
-                {
-                    file.Delete();
-                }
-                foreach (var dir in di.GetDirectories())
-                {
-                    dir.Delete(true);
-                }
-            }
-
-            proc.Arguments = $"pack -dir={uncookedDir} -outdir={packedDir}";
-            proc.UseShellExecute = false;
-            proc.RedirectStandardOutput = true;
-            proc.WindowStyle = ProcessWindowStyle.Hidden;
-            proc.CreateNoWindow = true;
-
-            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
-
-            using (var process = Process.Start(proc))
-            {
-                using (var reader = process.StandardOutput)
-                {
-                    while (true)
-                    {
-                        var result = await reader.ReadLineAsync();
-
-                        AddOutput(result + "\n", frmOutput.Logtype.Wcc);
-
-                        Application.DoEvents();
-
-                        if (reader.EndOfStream)
-                            break;
-                    }
-                }
-            }
-            MainController.Get().ProjectStatus = "Ready";
-        }
-
-        private async Task createModMetaData()
-        {
-            var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
-            var packedDir = Path.Combine(ActiveMod.Directory, @"packed\content\");
-
-            proc.Arguments = $"metadatastore -path={packedDir}";
-            proc.UseShellExecute = false;
-            proc.RedirectStandardOutput = true;
-            proc.WindowStyle = ProcessWindowStyle.Hidden;
-            proc.CreateNoWindow = true;
-
-            AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
-
-            using (var process = Process.Start(proc))
-            {
-                using (var reader = process.StandardOutput)
-                {
-                    while (true)
-                    {
-                        var result = await reader.ReadLineAsync();
-
-                        AddOutput(result + "\n", frmOutput.Logtype.Wcc);
-
-                        Application.DoEvents();
-
-                        if (reader.EndOfStream)
-                            break;
-                    }
-                }
-            }
-            MainController.Get().ProjectStatus = "Metadata packed";
         }
 
         private async void executeGame(string args = "")
@@ -1273,10 +1011,10 @@ namespace WolvenKit
                         //Close all docs so they won't cause problems
                         OpenDocuments.ForEach(x => x.Close());
                         //Move the files directory
-                        Directory.Move(oldmod.Directory, Path.Combine(Path.GetDirectoryName(oldmod.Directory), dlg.Mod.Name));
+                        Directory.Move(oldmod.ProjectDirectory, Path.Combine(Path.GetDirectoryName(oldmod.ProjectDirectory), dlg.Mod.Name));
                         //Delete the old directory
-                        if (Directory.Exists(oldmod.Directory))
-                            Commonfunctions.DeleteFilesAndFoldersRecursively(oldmod.Directory);
+                        if (Directory.Exists(oldmod.ProjectDirectory))
+                            Commonfunctions.DeleteFilesAndFoldersRecursively(oldmod.ProjectDirectory);
                         //Delete the old mod project file
                         if (File.Exists(oldmod.FileName))
                             File.Delete(oldmod.FileName);
@@ -1470,6 +1208,461 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
         {
             var gdb = new frmDebug();
             gdb.Show();
+        }
+
+        private void packProjectAndLaunchGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var pack = PackAndInstallMod();
+            while (!pack.IsCompleted)
+                Application.DoEvents();
+            var getparams = new Input("Please give the commands to launch the game with!");
+            if (getparams.ShowDialog() == DialogResult.OK)
+            {
+                executeGame(getparams.Resulttext);
+            }
+        }
+
+        private async Task PackAndInstallMod()
+        {
+            if (ActiveMod == null)
+                return;
+            if (Process.GetProcessesByName("Witcher3").Length != 0)
+            {
+                MessageBox.Show("Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var packsettings = new frmPackSettings();
+            if (packsettings.ShowDialog() == DialogResult.OK)
+            {
+                btPack.Enabled = false;
+                ShowOutput();
+                ClearOutput();
+                saveAllFiles();
+
+                //Handle strings.
+                if (packsettings.Strings)
+                {
+                    if (stringsGui == null)
+                        stringsGui = new frmStringsGui();
+                    if (stringsGui.AreHashesDifferent())
+                    {
+                        var result = MessageBox.Show("There are not encoded CSV files in your mod, do you want to open Strings Encoder GUI?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                        if (result == DialogResult.Yes)
+                            stringsGui.ShowDialog();
+                    }
+                }
+
+                //Handle bundle packing.
+                if (packsettings.PackBundles)
+                {
+                    await packBundles();
+                }
+
+                //Handle texture caching
+                if (packsettings.GenTexCache)
+                {
+                    await cookMod();
+                    await packTextures();
+                }
+
+                //Handle metadata generation.
+                if (packsettings.GenMetadata)
+                {
+                    await createModMetaData();
+                }
+
+                //Handle sound caching
+                if (packsettings.Sound)
+                {
+                    if (Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, MainController.Get().SoundManager.TypeName), "*.wem | *.bnk").Any())
+                        SoundCache.Write(Directory.EnumerateFiles(Path.Combine(ActiveMod.ModDirectory, MainController.Get().SoundManager.TypeName))
+                            .Where(file => file.ToLower().EndsWith("wem") || file.ToLower().EndsWith("bnk"))
+                            .ToList(), Path.Combine(ActiveMod.ProjectDirectory, @"packed\\Mods\\content\\soundspc.cache"));
+                    if (Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, MainController.Get().SoundManager.TypeName), "*.wem | *.bnk").Any())
+                        SoundCache.Write(Directory.EnumerateFiles(Path.Combine(ActiveMod.DlcDirectory, MainController.Get().SoundManager.TypeName))
+                            .Where(file => file.ToLower().EndsWith("wem") || file.ToLower().EndsWith("bnk"))
+                            .ToList(), Path.Combine(ActiveMod.ProjectDirectory, @"packed\\DLC\\content\\soundspc.cache"));
+                }
+
+                //Handle scripts
+                if (Directory.Exists((ActiveMod.ModDirectory + "\\scripts")) && Directory.GetFiles((ActiveMod.ModDirectory + "\\scripts")).Any())
+                {
+                    if (!Directory.Exists(Path.Combine(ActiveMod.ModDirectory, @"packed\\content\\scripts\\")))
+                        Directory.CreateDirectory(Path.Combine(ActiveMod.ModDirectory, @"packed\\content\\scripts\\"));
+                    Directory.GetFiles((ActiveMod.ModDirectory + "\\scripts")).ToList().ForEach(x => File.Copy(x, Path.Combine(ActiveMod.ProjectDirectory, @"packed\\content\\scripts\\") + Path.GetFileName(x)));
+                }
+
+                if (Directory.Exists((ActiveMod.DlcDirectory + "\\scripts")) && Directory.GetFiles((ActiveMod.DlcDirectory + "\\scripts")).Any())
+                {
+                    if (!Directory.Exists(Path.Combine(ActiveMod.DlcDirectory, @"packed\\content\\scripts\\")))
+                        Directory.CreateDirectory(Path.Combine(ActiveMod.DlcDirectory, @"packed\\content\\scripts\\"));
+                    Directory.GetFiles((ActiveMod.DlcDirectory + "\\scripts")).ToList().ForEach(x => File.Copy(x, Path.Combine(ActiveMod.ProjectDirectory, @"packed\\content\\scripts\\") + Path.GetFileName(x)));
+                }
+
+                if (packsettings.Strings)
+                {
+                    var files = Directory.GetFiles((ActiveMod.ProjectDirectory + "\\strings")).Where(s => Path.GetExtension(s) == ".w3strings").ToList();
+
+                    files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.ProjectDirectory, @"packed\\DLC\\content\\") + Path.GetFileName(x)));
+                    files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.ProjectDirectory, @"packed\\Mods\\content\\") + Path.GetFileName(x)));
+                }
+
+                InstallMod();
+                MainController.Get().ProjectStatus = "Mod Packed&Installed";
+                btPack.Enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Packs the bundles for the DLC and the Mod. Always call this first since this cleans the direactories.
+        /// </summary>
+        private async Task packBundles()
+        {
+            var config = MainController.Get().Configuration;
+            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
+            var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\" + ActiveMod.Name + @"\content\");
+            var DlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\" + ActiveMod.Name + @"\content\");
+            #region Directory cleanup
+            if (!Directory.Exists(modpackDir))
+            {
+                Directory.CreateDirectory(modpackDir);
+            }
+            else
+            {
+                var di = new DirectoryInfo(modpackDir);
+                foreach (var file in di.GetFiles())
+                {
+                    file.Delete();
+                }
+                foreach (var dir in di.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+            }
+            if (!Directory.Exists(DlcpackDir))
+            {
+                Directory.CreateDirectory(DlcpackDir);
+            }
+            else
+            {
+                var di = new DirectoryInfo(DlcpackDir);
+                foreach (var file in di.GetFiles())
+                {
+                    file.Delete();
+                }
+                foreach (var dir in di.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+            }
+            #endregion
+            #region Mod Bundle Packing
+            if (Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, MainController.Get().BundleManager.TypeName)).Any())
+            {
+                MainController.Get().ProjectStatus = "Packing mod bundles";
+                proc.Arguments = $"pack -dir={Path.Combine(ActiveMod.ModDirectory, MainController.Get().BundleManager.TypeName)} -outdir={modpackDir}";
+                proc.UseShellExecute = false;
+                proc.RedirectStandardOutput = true;
+                proc.WindowStyle = ProcessWindowStyle.Hidden;
+                proc.CreateNoWindow = true;
+
+                AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
+
+                using (var process = Process.Start(proc))
+                {
+                    using (var reader = process.StandardOutput)
+                    {
+                        while (true)
+                        {
+                            var result = await reader.ReadLineAsync();
+
+                            AddOutput(result + "\n", frmOutput.Logtype.Wcc);
+
+                            Application.DoEvents();
+
+                            if (reader.EndOfStream)
+                                break;
+                        }
+                    }
+                }
+            }
+            #endregion
+            #region DLC Bundle Packing
+                if (Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, MainController.Get().BundleManager.TypeName)).Any())
+                {
+                    MainController.Get().ProjectStatus = "Packing dlc bundles";
+                    proc.Arguments = $"pack -dir={Path.Combine(ActiveMod.DlcDirectory, MainController.Get().BundleManager.TypeName)} -outdir={DlcpackDir}";
+                    proc.UseShellExecute = false;
+                    proc.RedirectStandardOutput = true;
+                    proc.WindowStyle = ProcessWindowStyle.Hidden;
+                    proc.CreateNoWindow = true;
+
+                    AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
+
+                    using (var process = Process.Start(proc))
+                    {
+                        using (var reader = process.StandardOutput)
+                        {
+                            while (true)
+                            {
+                                var result = await reader.ReadLineAsync();
+
+                                AddOutput(result + "\n", frmOutput.Logtype.Wcc);
+
+                                Application.DoEvents();
+
+                                if (reader.EndOfStream)
+                                    break;
+                            }
+                        }
+                    }
+                }
+                #endregion
+        }
+
+        private async Task createModMetaData()
+        {
+            var config = MainController.Get().Configuration;
+            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
+            var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\" + ActiveMod.Name + @"\content\");
+            var DlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\" + ActiveMod.Name + @"\content\");
+            #region Mod metadata Packing
+                //We only pack this if we have bundles.
+                if (Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, MainController.Get().BundleManager.TypeName)).Any())
+                {
+                    MainController.Get().ProjectStatus = "Packing mod metadata";
+                    proc.Arguments = $"metadatastore -path={modpackDir}";
+                    proc.UseShellExecute = false;
+                    proc.RedirectStandardOutput = true;
+                    proc.WindowStyle = ProcessWindowStyle.Hidden;
+                    proc.CreateNoWindow = true;
+
+                    AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
+
+                    using (var process = Process.Start(proc))
+                    {
+                        using (var reader = process.StandardOutput)
+                        {
+                            while (true)
+                            {
+                                var result = await reader.ReadLineAsync();
+
+                                AddOutput(result + "\n", frmOutput.Logtype.Wcc);
+
+                                Application.DoEvents();
+
+                                if (reader.EndOfStream)
+                                    break;
+                            }
+                        }
+                    }
+                }
+                #endregion
+            #region DLC metadata Packing
+                //We only pack this if we have bundles.
+                if (Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, MainController.Get().BundleManager.TypeName)).Any())
+                {
+                    MainController.Get().ProjectStatus = "Packing DLC metadata";
+                    proc.Arguments = $"metadatastore -path={DlcpackDir}";
+                    proc.UseShellExecute = false;
+                    proc.RedirectStandardOutput = true;
+                    proc.WindowStyle = ProcessWindowStyle.Hidden;
+                    proc.CreateNoWindow = true;
+
+                    AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
+
+                    using (var process = Process.Start(proc))
+                    {
+                        using (var reader = process.StandardOutput)
+                        {
+                            while (true)
+                            {
+                                var result = await reader.ReadLineAsync();
+
+                                AddOutput(result + "\n", frmOutput.Logtype.Wcc);
+
+                                Application.DoEvents();
+
+                                if (reader.EndOfStream)
+                                    break;
+                            }
+                        }
+                    }
+                }
+                #endregion
+        }
+
+        private async Task cookMod()
+        {
+            var config = MainController.Get().Configuration;
+            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
+            var cookedModDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\Mod\");
+            var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\");
+            #region Cook Mod
+            if (Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, MainController.Get().BundleManager.TypeName)).Any())
+            {
+                MainController.Get().ProjectStatus = "Cooking mod";
+                proc.Arguments = $"cook -platform=pc -mod={Path.Combine(ActiveMod.ModDirectory,MainController.Get().TextureManager.TypeName)} -basedir={Path.Combine(ActiveMod.ModDirectory, MainController.Get().TextureManager.TypeName)}  -outdir={cookedModDir}";
+                proc.UseShellExecute = false;
+                proc.RedirectStandardOutput = true;
+                proc.WindowStyle = ProcessWindowStyle.Hidden;
+                proc.CreateNoWindow = true;
+                if (!Directory.Exists(cookedModDir))
+                {
+                    Directory.CreateDirectory(cookedModDir);
+                }
+                else
+                {
+                    var di = new DirectoryInfo(cookedModDir);
+                    foreach (var file in di.GetFiles())
+                    {
+                        file.Delete();
+                    }
+                    foreach (var dir in di.GetDirectories())
+                    {
+                        dir.Delete(true);
+                    }
+                }
+                AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
+
+                using (var process = Process.Start(proc))
+                {
+                    using (var reader = process.StandardOutput)
+                    {
+                        while (true)
+                        {
+                            var result = await reader.ReadLineAsync();
+
+                            AddOutput(result + "\n", frmOutput.Logtype.Wcc);
+
+                            Application.DoEvents();
+
+                            if (reader.EndOfStream)
+                                break;
+                        }
+                    }
+                }
+            }
+            #endregion
+            #region Cook DLC
+            if (Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, MainController.Get().BundleManager.TypeName)).Any())
+            {
+                MainController.Get().ProjectStatus = "Cooking DLC";
+                proc.Arguments = $"cook -platform=pc -mod={Path.Combine(ActiveMod.DlcDirectory, MainController.Get().TextureManager.TypeName)} -basedir={Path.Combine(ActiveMod.DlcDirectory, MainController.Get().TextureManager.TypeName)}  -outdir={cookedDLCDir}";
+                proc.UseShellExecute = false;
+                proc.RedirectStandardOutput = true;
+                proc.WindowStyle = ProcessWindowStyle.Hidden;
+                proc.CreateNoWindow = true;
+                if (!Directory.Exists(cookedDLCDir))
+                {
+                    Directory.CreateDirectory(cookedDLCDir);
+                }
+                else
+                {
+                    var di = new DirectoryInfo(cookedDLCDir);
+                    foreach (var file in di.GetFiles())
+                    {
+                        file.Delete();
+                    }
+                    foreach (var dir in di.GetDirectories())
+                    {
+                        dir.Delete(true);
+                    }
+                }
+                AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
+
+                using (var process = Process.Start(proc))
+                {
+                    using (var reader = process.StandardOutput)
+                    {
+                        while (true)
+                        {
+                            var result = await reader.ReadLineAsync();
+
+                            AddOutput(result + "\n", frmOutput.Logtype.Wcc);
+
+                            Application.DoEvents();
+
+                            if (reader.EndOfStream)
+                                break;
+                        }
+                    }
+                }
+            }
+            #endregion
+        }
+
+        private async Task packTextures()
+        {
+            var config = MainController.Get().Configuration;
+            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
+            var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\" + ActiveMod.Name + @"\content\");
+            var DlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\" + ActiveMod.Name + @"\content\");
+            var cookedModDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\Mod\");
+            var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\");
+            #region Mod texture caching
+            if (Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, MainController.Get().BundleManager.TypeName)).Any())
+            {
+                MainController.Get().ProjectStatus = "Caching mod textures";
+                proc.Arguments = $"buildcache textures -basedir={Path.Combine(ActiveMod.ModDirectory, MainController.Get().TextureManager.TypeName)} -platform=pc -db={cookedModDir}\\cook.db  -out={modpackDir}\\texture.cache";
+                proc.UseShellExecute = false;
+                proc.RedirectStandardOutput = true;
+                proc.WindowStyle = ProcessWindowStyle.Hidden;
+                proc.CreateNoWindow = true;
+
+                AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
+
+                using (var process = Process.Start(proc))
+                {
+                    using (var reader = process.StandardOutput)
+                    {
+                        while (true)
+                        {
+                            var result = await reader.ReadLineAsync();
+
+                            AddOutput(result + "\n", frmOutput.Logtype.Wcc);
+
+                            Application.DoEvents();
+
+                            if (reader.EndOfStream)
+                                break;
+                        }
+                    }
+                }
+            }
+            #endregion
+            #region DLC texture caching
+            if (Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, MainController.Get().BundleManager.TypeName)).Any())
+            {
+                MainController.Get().ProjectStatus = "Caching DLC textures";
+                proc.Arguments = $"buildcache textures -basedir={Path.Combine(ActiveMod.DlcDirectory, MainController.Get().TextureManager.TypeName)} -platform=pc -db={cookedDLCDir}\\cook.db  -out={DlcpackDir}\\texture.cache";
+                proc.UseShellExecute = false;
+                proc.RedirectStandardOutput = true;
+                proc.WindowStyle = ProcessWindowStyle.Hidden;
+                proc.CreateNoWindow = true;
+
+                AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
+
+                using (var process = Process.Start(proc))
+                {
+                    using (var reader = process.StandardOutput)
+                    {
+                        while (true)
+                        {
+                            var result = await reader.ReadLineAsync();
+
+                            AddOutput(result + "\n", frmOutput.Logtype.Wcc);
+
+                            Application.DoEvents();
+
+                            if (reader.EndOfStream)
+                                break;
+                        }
+                    }
+                }
+            }
+            #endregion
         }
     }
 }
