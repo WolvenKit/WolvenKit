@@ -296,7 +296,7 @@ namespace WolvenKit.Render
                     staticMesh.AddMeshBuffer(meshBuff);
                     meshBuff.Append(vertex3DCoords, indices);
                     meshBuff.RecalculateBoundingBox();
-                    meshBuff.Drop();
+                    meshBuff.Drop();            
                 }
             }
         }
@@ -335,25 +335,20 @@ namespace WolvenKit.Render
                 irrparam.DriverType = DriverType.Direct3D9;
                 irrparam.BitsPerPixel = 16;
 
-                IrrlichtDevice device = IrrlichtDevice.CreateDevice(irrparam);
+                device = IrrlichtDevice.CreateDevice(irrparam);
 
                 if (device == null) throw new NullReferenceException("Could not create device for engine!");
 
-                device.SetWindowCaption("Hello World! - Irrlicht Engine Demo");
-
-                VideoDriver driver = device.VideoDriver;
-                SceneManager smgr = device.SceneManager;
-                GUIEnvironment gui = device.GUIEnvironment;
-
-                gui.AddStaticText("Hello World! This is the Irrlicht Software renderer!",
-                    new Recti(10, 10, 260, 22), true);
+                driver = device.VideoDriver;
+                smgr  = device.SceneManager;
+                gui = device.GUIEnvironment;
 
                 //AnimatedMesh mesh = smgr.GetMesh(modelPath);
                 //AnimatedMeshSceneNode node = smgr.AddAnimatedMeshSceneNode(mesh);
 
                 smgr.MeshManipulator.RecalculateNormals(staticMesh);
                 MeshSceneNode node = smgr.AddMeshSceneNode(staticMesh);
-
+ 
                 if (node == null) throw new Exception("Could not load file!");
 
                 node.Scale = new Vector3Df(3.0f);
@@ -466,6 +461,11 @@ namespace WolvenKit.Render
         private Vector3Df modelPosition = new Vector3Df(0.0f);
         private Vector3Df modelAngle = new Vector3Df(270.0f, 270.0f, 0.0f);
         private float scaleMul = 1;
+
+        private IrrlichtDevice device;
+        private VideoDriver driver;
+        private SceneManager smgr;
+        private GUIEnvironment gui;
 
         private bool modelAutorotating = true;
         //private static float angle_autorotate = 0;
@@ -644,5 +644,42 @@ namespace WolvenKit.Render
         }
         #endregion
 
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var sf = new SaveFileDialog())
+            {
+                sf.Filter = "Irrlicht mesh | *.irrm | Collada mesh | *.coll | STL Mesh | *.stl | OBJ Mesh | *.obj | PLY Mesh | *.ply | B3D Mesh | *.b3d";
+                if(sf.ShowDialog() == DialogResult.OK)
+                {
+                    MeshWriterType mwt = MeshWriterType.Obj;
+                    switch(Path.GetExtension(sf.FileName))
+                    {
+                        case "irrm":
+                            mwt = MeshWriterType.IrrMesh;
+                            break;
+                        case "coll":
+                            mwt = MeshWriterType.Collada;
+                            break;
+                        case "obj":
+                            mwt = MeshWriterType.Obj;
+                            break;
+                        case "stl":
+                            mwt = MeshWriterType.Stl;
+                            break;
+                        case "ply":
+                            mwt = MeshWriterType.Ply;
+                            break;
+                        case "b3d":
+                            mwt = MeshWriterType.B3d;
+                            break;
+                    }
+                    var mw = smgr.CreateMeshWriter(mwt);
+                    if(mw.WriteMesh(device.FileSystem.CreateWriteFile(sf.FileName), staticMesh, MeshWriterFlag.None))
+                        MessageBox.Show(this,"Sucessfully wrote file!","WolvenKit",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                    else
+                        MessageBox.Show(this, "Failed tos file!", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
     }
 }
