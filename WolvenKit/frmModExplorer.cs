@@ -289,5 +289,29 @@ namespace WolvenKit
             if(modFileList.SelectedNode != null)
                 Clipboard.SetText(modFileList.SelectedNode.FullPath);
         }
+
+        private void markAsModDlcFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                var filename = modFileList.SelectedNode.FullPath;
+                var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
+                if (!File.Exists(fullpath))
+                    return;
+                var newfullpath = Path.Combine(new[] { ActiveMod.FileDirectory, filename.Split('\\')[0] == "DLC" ? "Mod" : "DLC" }.Concat(filename.Split('\\').Skip(1).ToArray()).ToArray());
+
+                if (File.Exists(newfullpath))
+                    return;
+                try
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(newfullpath));
+                }
+                catch
+                {
+                }
+                File.Move(fullpath, newfullpath);
+                MainController.Get().ProjectStatus = "File moved";
+            }
+        }
     }
 }
