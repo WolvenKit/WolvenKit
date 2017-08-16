@@ -853,7 +853,7 @@ namespace WolvenKit
                 var dirs = Directory.GetDirectories(packedDir, "*", SearchOption.TopDirectoryOnly);
                 foreach (var folder in dirs)
                 {
-                    Commonfunctions.DirectoryCopy(folder, MainController.Get().Configuration.GameRootDir, true,true);
+                    Commonfunctions.DirectoryCopy(folder, MainController.Get().Configuration.GameRootDir, true);
                 }
                 AddOutput(ActiveMod.Name + " installed!" + "\n", frmOutput.Logtype.Success);
             }
