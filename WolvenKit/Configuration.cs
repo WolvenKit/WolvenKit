@@ -38,7 +38,7 @@ namespace WolvenKit
         [XmlIgnore]
         public string GameModDir => Path.Combine(ExecutablePath, @"..\..\Mods\");
         [XmlIgnore]
-        public string GameRootDir => Path.Combine(ExecutablePath, @"..\..\");
+        public string GameRootDir => Path.Combine(ExecutablePath, @"..\..\..\");
 
 
         ~Configuration()

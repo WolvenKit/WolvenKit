@@ -847,14 +847,20 @@ namespace WolvenKit
         /// </summary>
         private void InstallMod()
         {
-            var packedDir = Path.Combine(ActiveMod.ProjectDirectory, "packed");
-            var modName = ActiveMod.Name;
-
-            foreach (var folder in Directory.GetDirectories(packedDir,"*",SearchOption.TopDirectoryOnly))
+            try
             {
-                Commonfunctions.CopyDirectory(folder, MainController.Get().Configuration.GameRootDir);
+                var packedDir = Path.Combine(ActiveMod.ProjectDirectory, "packed");
+                var dirs = Directory.GetDirectories(packedDir, "*", SearchOption.TopDirectoryOnly);
+                foreach (var folder in dirs)
+                {
+                    Commonfunctions.DirectoryCopy(folder, MainController.Get().Configuration.GameRootDir, true,true);
+                }
+                AddOutput(ActiveMod.Name + " installed!" + "\n", frmOutput.Logtype.Success);
             }
-            AddOutput(modName + " installed!" + "\n", frmOutput.Logtype.Success);
+            catch (Exception ex)
+            {
+                AddOutput(ex.ToString(),frmOutput.Logtype.Error);
+            }
         }
 
         private void CreateInstaller()
@@ -1477,7 +1483,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             }
             catch (Exception ex)
             {
-                AddOutput(ex.ToString());
+                AddOutput(ex.ToString(),frmOutput.Logtype.Error);
             }            
             #endregion
         }
@@ -1524,7 +1530,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             }
             catch (Exception ex)
             {
-                AddOutput(ex.ToString());
+                AddOutput(ex.ToString(),frmOutput.Logtype.Error);
             }
             #endregion
             #region DLC metadata Packing
@@ -1563,7 +1569,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             }
             catch (Exception ex)
             {
-                AddOutput(ex.ToString());
+                AddOutput(ex.ToString(),frmOutput.Logtype.Error);
             }
             #endregion
         }
@@ -1624,7 +1630,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             }
             catch (Exception ex)
             {
-                AddOutput(ex.ToString());
+                AddOutput(ex.ToString(),frmOutput.Logtype.Error);
             }
             #endregion
             #region Cook DLC
@@ -1677,7 +1683,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             }
             catch (Exception ex)
             {
-                AddOutput(ex.ToString());
+                AddOutput(ex.ToString(),frmOutput.Logtype.Error);
             }
             #endregion
         }
@@ -1725,7 +1731,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             }
             catch (Exception ex)
             {
-                AddOutput(ex.ToString());
+                AddOutput(ex.ToString(),frmOutput.Logtype.Error);
             }
             #endregion
             #region DLC texture caching
@@ -1763,7 +1769,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             }
             catch (Exception ex)
             {
-                AddOutput(ex.ToString());
+                AddOutput(ex.ToString(),frmOutput.Logtype.Error);
             }            
             #endregion
         }
