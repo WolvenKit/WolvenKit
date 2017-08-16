@@ -53,24 +53,31 @@ namespace WolvenKit
             Process.Start("explorer.exe", "/select, \"" + path + "\"");
         }
 
-        public static void MoveDirectory(string source, string target)
+        public static void CopyDirectory(string sourceDirectory, string targetDirectory)
         {
-            var sourcePath = source.TrimEnd('\\', ' ');
-            var targetPath = target.TrimEnd('\\', ' ');
-            var files = Directory.EnumerateFiles(sourcePath, "*", SearchOption.AllDirectories)
-                                 .GroupBy(s => Path.GetDirectoryName(s));
-            foreach (var folder in files)
+            DirectoryInfo diSource = new DirectoryInfo(sourceDirectory);
+            DirectoryInfo diTarget = new DirectoryInfo(targetDirectory);
+
+            CopyAll(diSource, diTarget);
+        }
+
+        public static void CopyAll(DirectoryInfo source, DirectoryInfo target)
+        {
+            Directory.CreateDirectory(target.FullName);
+
+            // Copy each file into the new directory.
+            foreach (FileInfo fi in source.GetFiles())
             {
-                var targetFolder = folder.Key.Replace(sourcePath, targetPath);
-                Directory.CreateDirectory(targetFolder);
-                foreach (var file in folder)
-                {
-                    var targetFile = Path.Combine(targetFolder, Path.GetFileName(file));
-                    if (File.Exists(targetFile)) File.Delete(targetFile);
-                    File.Move(file, targetFile);
-                }
+                fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
             }
-            Directory.Delete(source, true);
+
+            // Copy each subdirectory using recursion.
+            foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
+            {
+                DirectoryInfo nextTargetSubDir =
+                    target.CreateSubdirectory(diSourceSubDir.Name);
+                CopyAll(diSourceSubDir, nextTargetSubDir);
+            }
         }
 
         public static void CompressFile(string filename, ZipOutputStream zipStream, string nameOverride = "")
