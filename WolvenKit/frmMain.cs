@@ -849,12 +849,24 @@ namespace WolvenKit
         {
             try
             {
+                if(File.Exists(ActiveMod.ProjectDirectory + "\\install_log.xml"))
+                {
+                    XDocument log = XDocument.Load(ActiveMod.ProjectDirectory + "\\install_log.xml");
+                    foreach (var file in log.Descendants("file"))
+                    {
+                        if (File.Exists(file.Value))
+                            File.Delete(file.Value);
+                    }
+                    File.Delete(ActiveMod.ProjectDirectory + "\\install_log.xml");
+                }
                 var packedDir = Path.Combine(ActiveMod.ProjectDirectory, "packed");
                 var dirs = Directory.GetDirectories(packedDir, "*", SearchOption.TopDirectoryOnly);
+                XDocument installlog = new XDocument(new XElement("InstalLog"));
                 foreach (var folder in dirs)
                 {
-                    Commonfunctions.DirectoryCopy(folder, MainController.Get().Configuration.GameRootDir, true);
+                    installlog.Root.Add(Commonfunctions.DirectoryCopy(folder, MainController.Get().Configuration.GameRootDir, true));
                 }
+                installlog.Save(ActiveMod.ProjectDirectory + "\\install_log.xml");
                 AddOutput(ActiveMod.Name + " installed!" + "\n", frmOutput.Logtype.Success);
             }
             catch (Exception ex)

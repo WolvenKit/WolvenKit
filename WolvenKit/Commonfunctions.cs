@@ -53,8 +53,9 @@ namespace WolvenKit
             Process.Start("explorer.exe", "/select, \"" + path + "\"");
         }
 
-        public static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+        public static XElement DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
         {
+            XElement Root = new XElement("Copy");
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);
             DirectoryInfo[] dirs = dir.GetDirectories();
 
@@ -81,6 +82,7 @@ namespace WolvenKit
                 string temppath = Path.Combine(destDirName, file.Name);
 
                 // Copy the file.
+                Root.Add(new XElement("file", file.FullName));
                 file.CopyTo(temppath, true);
             }
 
@@ -94,9 +96,10 @@ namespace WolvenKit
                     string temppath = Path.Combine(destDirName, subdir.Name);
 
                     // Copy the subdirectories.
-                    DirectoryCopy(subdir.FullName, temppath, copySubDirs);
+                    Root.Add(new XElement("Directory",new XAttribute("Path",temppath), DirectoryCopy(subdir.FullName, temppath, copySubDirs)));
                 }
             }
+            return Root;
         }
 
         public static void CompressFile(string filename, ZipOutputStream zipStream, string nameOverride = "")
