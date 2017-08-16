@@ -114,6 +114,7 @@ namespace WolvenKit
             this.listView.TabIndex = 4;
             this.listView.UseCompatibleStateImageBehavior = false;
             this.listView.View = System.Windows.Forms.View.Details;
+            this.listView.ItemsChanged += new System.EventHandler<BrightIdeasSoftware.ItemsChangedEventArgs>(this.listView_ItemsChanged);
             // 
             // colIndex
             // 

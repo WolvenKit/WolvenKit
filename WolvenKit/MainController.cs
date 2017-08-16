@@ -27,6 +27,11 @@ namespace WolvenKit
             set { SetField(ref projectstatus, value, "ProjectStatus"); }
         }
 
+        /// <summary>
+        /// Shows wheteher there are unsaved changes in the project.
+        /// </summary>
+        public bool ProjectUnsaved = false;
+
         private MainController()
         {
         }

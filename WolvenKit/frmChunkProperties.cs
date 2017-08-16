@@ -369,5 +369,10 @@ namespace WolvenKit
             public VariableListNode Parent { get; set; }
             public IEditableVariable Variable { get; set; }
         }
+
+        private void treeView_ItemsChanged(object sender, ItemsChangedEventArgs e)
+        {
+            MainController.Get().ProjectUnsaved = true;
+        }
     }
 }

@@ -96,6 +96,14 @@ namespace WolvenKit
             }
         }
 
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (MainController.Get().ProjectUnsaved)
+                if (MessageBox.Show("There are unsaved changes in your project. Would you like to save them?","WolvenKit",MessageBoxButtons.YesNo,MessageBoxIcon.Question) == DialogResult.Yes)
+                    saveAllFiles();
+
+        }
+
         private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
         {
             var config = MainController.Get().Configuration;
@@ -791,6 +799,7 @@ namespace WolvenKit
             }
             AddOutput("All files saved!\n");
             MainController.Get().ProjectStatus = "Item(s) Saved";
+            MainController.Get().ProjectUnsaved = false;
         }
 
         private void saveFile(frmCR2WDocument d)
