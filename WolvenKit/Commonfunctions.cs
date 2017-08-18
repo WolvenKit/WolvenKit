@@ -96,7 +96,8 @@ namespace WolvenKit
                     string temppath = Path.Combine(destDirName, subdir.Name);
 
                     // Copy the subdirectories.
-                    Root.Add(new XElement("Directory",new XAttribute("Path",temppath), DirectoryCopy(subdir.FullName, temppath, copySubDirs)));
+                    if(Directory.GetFiles(subdir.FullName,"*",SearchOption.AllDirectories).Any())
+                        Root.Add(new XElement("Directory",new XAttribute("Path",temppath), DirectoryCopy(subdir.FullName, temppath, copySubDirs)));
                 }
             }
             return Root;
