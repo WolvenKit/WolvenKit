@@ -39,7 +39,7 @@ namespace WolvenKit
             this.colFileSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colCompressionRatio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colCompressiontype = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colTimeStamp = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.filebrowserMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.markToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -102,7 +102,7 @@ namespace WolvenKit
             this.colFileSize,
             this.colCompressionRatio,
             this.colCompressiontype,
-            this.colTimeStamp});
+            this.colType});
             this.fileListView.ContextMenuStrip = this.filebrowserMenuStrip;
             this.fileListView.FullRowSelect = true;
             this.fileListView.HideSelection = false;
@@ -138,10 +138,10 @@ namespace WolvenKit
             this.colCompressiontype.Text = "Compression Type";
             this.colCompressiontype.Width = 83;
             // 
-            // colTimeStamp
+            // colType
             // 
-            this.colTimeStamp.Text = "TimeStamp";
-            this.colTimeStamp.Width = 77;
+            this.colType.Text = "Type";
+            this.colType.Width = 77;
             // 
             // filebrowserMenuStrip
             // 
@@ -545,7 +545,7 @@ namespace WolvenKit
         private Panel pathPanel;
         private ColumnHeader colCompressionRatio;
         private ColumnHeader colCompressiontype;
-        private ColumnHeader colTimeStamp;
+        private ColumnHeader colType;
         private TextBox SearchBox;
         private Label label1;
         private Button ClearFiles;

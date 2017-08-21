@@ -357,7 +357,7 @@ namespace WolvenKit
             explorer.Show();
         }
 
-        private void Assetbrowser_FileAdd(object sender, Tuple<List<IWitcherArchive>, ListView.ListViewItemCollection,bool> Details)
+        private void Assetbrowser_FileAdd(object sender, Tuple<List<IWitcherArchive>, List<WitcherListItem>,bool> Details)
         {
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
@@ -366,9 +366,9 @@ namespace WolvenKit
             }
             MainController.Get().ProjectStatus = "Busy";
             var skipping = false;
-            foreach (ListViewItem depotpath in Details.Item2)
+            foreach (WitcherListItem item in Details.Item2)
             {
-                skipping = AddToMod(depotpath.Text, skipping, Details.Item1,Details.Item3);
+                skipping = AddToMod(item, skipping, Details.Item1,Details.Item3);
             }
             SaveMod();
             MainController.Get().ProjectStatus = "Ready";
@@ -379,15 +379,16 @@ namespace WolvenKit
         /// </summary>
         /// <param name="depotpath">Filename.</param>
         /// <param name="managers">The managers.</param>
-        private bool AddToMod(string depotpath, bool skipping, List<IWitcherArchive> managers,bool AddAsDLC)
+        private bool AddToMod(WitcherListItem item, bool skipping, List<IWitcherArchive> managers,bool AddAsDLC)
         {
             bool skip = skipping;
-            foreach (var manager in managers.Where(manager => manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath))))
+            var depotpath = item.ExplorerPath ?? item.FullPath ?? "";
+            foreach (var manager in managers.Where(manager => depotpath.StartsWith(Path.Combine("Root",manager.TypeName))))
             {
-                if (manager.Items.Any(x => x.Value.Any(y => y.Name == depotpath)))
+                if (manager.Items.Any(x => x.Value.Any(y => y.Name == item.FullPath)))
                 {
-                    var archives = manager.FileList.Where(x => x.Name == depotpath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
-                    var filename = Path.Combine(ActiveMod.FileDirectory,AddAsDLC ? "DLC":"Mod",archives.First().Value.Bundle.TypeName, depotpath);
+                    var archives = manager.FileList.Where(x => x.Name == item.FullPath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
+                    var filename = Path.Combine(ActiveMod.FileDirectory,AddAsDLC ? "DLC":"Mod",archives.First().Value.Bundle.TypeName, item.FullPath);
                     if (archives.Count() > 1)
                     {
 
