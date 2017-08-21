@@ -357,7 +357,7 @@ namespace WolvenKit
             explorer.Show();
         }
 
-        private void Assetbrowser_FileAdd(object sender, Tuple<List<IWitcherArchive>, List<WitcherListItem>,bool> Details)
+        private void Assetbrowser_FileAdd(object sender, Tuple<List<IWitcherArchive>, List<WitcherListViewItem>,bool> Details)
         {
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
@@ -366,7 +366,7 @@ namespace WolvenKit
             }
             MainController.Get().ProjectStatus = "Busy";
             var skipping = false;
-            foreach (WitcherListItem item in Details.Item2)
+            foreach (WitcherListViewItem item in Details.Item2)
             {
                 skipping = AddToMod(item, skipping, Details.Item1,Details.Item3);
             }
@@ -379,7 +379,7 @@ namespace WolvenKit
         /// </summary>
         /// <param name="depotpath">Filename.</param>
         /// <param name="managers">The managers.</param>
-        private bool AddToMod(WitcherListItem item, bool skipping, List<IWitcherArchive> managers,bool AddAsDLC)
+        private bool AddToMod(WitcherListViewItem item, bool skipping, List<IWitcherArchive> managers,bool AddAsDLC)
         {
             bool skip = skipping;
             var depotpath = item.ExplorerPath ?? item.FullPath ?? "";

@@ -9,7 +9,7 @@ using WolvenKit.Interfaces;
 
 namespace WolvenKit
 {
-    public class WitcherListItem : ListViewItem, ICloneable
+    public class WitcherListViewItem : ListViewItem, ICloneable
     {
         public bool IsDirectory { get; set; }
         public WitcherTreeNode Node { get; set; }
@@ -25,7 +25,7 @@ namespace WolvenKit
 
         public override object Clone()
         {
-            var c = (WitcherListItem)this.MemberwiseClone();
+            var c = (WitcherListViewItem)this.MemberwiseClone();
             c.IsDirectory = IsDirectory;
             c.Node = Node;
             c.FullPath = FullPath;

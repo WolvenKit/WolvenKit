@@ -21,18 +21,18 @@ namespace WolvenKit
         public WitcherTreeNode ActiveNode { get; set; }
         public WitcherTreeNode RootNode { get; set; }
 
-        public List<WitcherListItem> SelectedPaths
+        public List<WitcherListViewItem> SelectedPaths
         {
             get
             {
-                var ret = new List<WitcherListItem>();
-                foreach (WitcherListItem item in pathlistview.Items)
+                var ret = new List<WitcherListViewItem>();
+                foreach (WitcherListViewItem item in pathlistview.Items)
                     ret.Add(item);
                 return ret;
             }
         }
 
-        public event EventHandler<Tuple<List<IWitcherArchive>, List<WitcherListItem>, bool>> RequestFileAdd;
+        public event EventHandler<Tuple<List<IWitcherArchive>, List<WitcherListViewItem>, bool>> RequestFileAdd;
 
         public frmAssetBrowser(List<IWitcherArchive> archives)
         {
@@ -69,10 +69,10 @@ namespace WolvenKit
                 UpdatePathPanel();
 
                 fileListView.Items.Clear();
-                List<WitcherListItem> res = new List<WitcherListItem>();
+                List<WitcherListViewItem> res = new List<WitcherListViewItem>();
                 if (node.Parent != null)
                 {
-                    res.Add(new WitcherListItem
+                    res.Add(new WitcherListViewItem
                     {
                         Node = node.Parent,
                         Text = "..",
@@ -81,7 +81,7 @@ namespace WolvenKit
                     });
                 }
 
-                res.AddRange(node.Directories.OrderBy(x => x.Key).Select(item => new WitcherListItem
+                res.AddRange(node.Directories.OrderBy(x => x.Key).Select(item => new WitcherListViewItem
                 {
                     Node = item.Value,
                     Text = item.Key,
@@ -93,7 +93,7 @@ namespace WolvenKit
                 foreach (var item in node.Files.OrderBy(x => x.Key))
                 {
                     var lastItem = item.Value[item.Value.Count - 1];
-                    var listItem = new WitcherListItem
+                    var listItem = new WitcherListViewItem
                     {
                         Node = node,
                         FullPath = lastItem.Name,
@@ -164,7 +164,7 @@ namespace WolvenKit
         {
             if (fileListView.SelectedItems.Count > 0)
             {
-                var item = (WitcherListItem) fileListView.SelectedItems[0].Clone();
+                var item = (WitcherListViewItem) fileListView.SelectedItems[0].Clone();
                 if (item.IsDirectory)
                 {
                     OpenNode(item.Node);
@@ -172,14 +172,14 @@ namespace WolvenKit
                 else
                 {
                     var cont = false;
-                    foreach (WitcherListItem i in pathlistview.Items)
+                    foreach (WitcherListViewItem i in pathlistview.Items)
                     {
                         if (i.Text == item.FullPath)
                             cont = true;
                     }
                     if (!cont)
                     {
-                        var tempnode = new WitcherListItem
+                        var tempnode = new WitcherListViewItem
                         {
                             ImageKey = GetImageKey(item.FullPath),
                             Text = item.FullPath,
@@ -295,11 +295,11 @@ namespace WolvenKit
             if (found.Length > 1000)
                 found = found.Take(1000).ToArray();
             fileListView.Items.Clear();
-            var results = new List<WitcherListItem>();
+            var results = new List<WitcherListViewItem>();
             foreach (var file in found)
             {
                 var lastItem = file;
-                var listItem = new WitcherListItem
+                var listItem = new WitcherListViewItem
                 {
                     Node = null,
                     FullPath = lastItem.Name,
@@ -343,9 +343,9 @@ namespace WolvenKit
             return caseCheckBox.Checked ? files.Where(item =>  item.Name.ToUpper().Contains(searchkeyword.ToUpper()) && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")).ToArray() : files.Where(item => item.Name.Contains(searchkeyword) && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")).ToArray();
         }
 
-        public WitcherListItem[] CollectFiles(WitcherTreeNode root)
+        public WitcherListViewItem[] CollectFiles(WitcherTreeNode root)
         {
-            var res = root.Files.Select(file => file.Key).Select(x => new WitcherListItem()
+            var res = root.Files.Select(file => file.Key).Select(x => new WitcherListViewItem()
             {
                 ImageKey = GetImageKey(x),
                 ToolTipText = x,
@@ -372,19 +372,19 @@ namespace WolvenKit
         {
             if (fileListView.SelectedItems.Count > 0)
             {
-                foreach (WitcherListItem item in fileListView.SelectedItems)
+                foreach (WitcherListViewItem item in fileListView.SelectedItems)
                 {
                     if (!item.IsDirectory)
                     {
                         var cont = false;
-                        foreach (WitcherListItem i in pathlistview.Items)
+                        foreach (WitcherListViewItem i in pathlistview.Items)
                         {
                             if (i.Text == item.FullPath)
                                 cont = true;
                         }
                         if (!cont)
                         {
-                            var tempnode = new WitcherListItem
+                            var tempnode = new WitcherListViewItem
                             {
                                 ImageKey = GetImageKey(item.FullPath),
                                 Text = item.FullPath,
@@ -421,7 +421,7 @@ namespace WolvenKit
             {
                 if (fileListView.SelectedItems.Count > 0)
                 {
-                    var item = (WitcherListItem)fileListView.SelectedItems[0];
+                    var item = (WitcherListViewItem)fileListView.SelectedItems[0];
                     if (item.IsDirectory)
                     {
                         OpenNode(item.Node);
@@ -444,19 +444,19 @@ namespace WolvenKit
             {
                 if (fileListView.SelectedItems.Count > 0)
                 {
-                    foreach (WitcherListItem item in fileListView.SelectedItems)
+                    foreach (WitcherListViewItem item in fileListView.SelectedItems)
                     {
                         if (!item.IsDirectory)
                         {
                             var cont = false;
-                            foreach (WitcherListItem i in pathlistview.Items)
+                            foreach (WitcherListViewItem i in pathlistview.Items)
                             {
                                 if (i.Text == item.FullPath)
                                     cont = true;
                             }
                             if (!cont)
                             {
-                                var tempnode = new WitcherListItem
+                                var tempnode = new WitcherListViewItem
                                 {
                                     ImageKey = GetImageKey(item.FullPath),
                                     Text = item.FullPath,
@@ -471,7 +471,7 @@ namespace WolvenKit
                     }
                 }
             }
-            RequestFileAdd.Invoke(this, new Tuple<List<IWitcherArchive>, List<WitcherListItem>,bool>(Managers, SelectedPaths,false));
+            RequestFileAdd.Invoke(this, new Tuple<List<IWitcherArchive>, List<WitcherListViewItem>,bool>(Managers, SelectedPaths,false));
             pathlistview.Items.Clear();
         }
 
@@ -481,19 +481,19 @@ namespace WolvenKit
             {
                 if (fileListView.SelectedItems.Count > 0)
                 {
-                    foreach (WitcherListItem item in fileListView.SelectedItems)
+                    foreach (WitcherListViewItem item in fileListView.SelectedItems)
                     {
                         if (!item.IsDirectory)
                         {
                             var cont = false;
-                            foreach (WitcherListItem i in pathlistview.Items)
+                            foreach (WitcherListViewItem i in pathlistview.Items)
                             {
                                 if (i.Text == item.FullPath)
                                     cont = true;
                             }
                             if (!cont)
                             {
-                                var tempnode = new WitcherListItem
+                                var tempnode = new WitcherListViewItem
                                 {
                                     ImageKey = GetImageKey(item.FullPath),
                                     Text = item.FullPath,
@@ -508,7 +508,7 @@ namespace WolvenKit
                     }
                 }
             }
-            RequestFileAdd.Invoke(this, new Tuple<List<IWitcherArchive>, List<WitcherListItem>,bool>(Managers, SelectedPaths,true));
+            RequestFileAdd.Invoke(this, new Tuple<List<IWitcherArchive>, List<WitcherListViewItem>,bool>(Managers, SelectedPaths,true));
             pathlistview.Items.Clear();
         }
 
@@ -516,7 +516,7 @@ namespace WolvenKit
         {
             if (fileListView.SelectedItems.Count > 0)
             {
-                var item = ((WitcherListItem) fileListView.SelectedItems[0]);
+                var item = ((WitcherListViewItem) fileListView.SelectedItems[0]);
                 if (item?.IsDirectory == false)
                 {
                     Clipboard.SetText(item.FullPath);
@@ -528,19 +528,19 @@ namespace WolvenKit
         {
             if (fileListView.SelectedItems.Count > 0)
             {
-                foreach (WitcherListItem item in fileListView.SelectedItems)
+                foreach (WitcherListViewItem item in fileListView.SelectedItems)
                 {
                     if (!item.IsDirectory)
                     {
                         var cont = false;
-                        foreach (WitcherListItem i in pathlistview.Items)
+                        foreach (WitcherListViewItem i in pathlistview.Items)
                         {
                             if (i.Text == item.FullPath)
                                 cont = true;
                         }
                         if (!cont)
                         {
-                            var tempnode = new WitcherListItem
+                            var tempnode = new WitcherListViewItem
                             {
                                 ImageKey = GetImageKey(item.FullPath),
                                 Text = item.FullPath,
@@ -561,7 +561,7 @@ namespace WolvenKit
             if (e.KeyCode == Keys.A && e.Control)
             {
                 fileListView.MultiSelect = true;
-                foreach (WitcherListItem item in fileListView.Items)
+                foreach (WitcherListViewItem item in fileListView.Items)
                 {
                     item.Selected = true;
                 }
@@ -577,7 +577,7 @@ namespace WolvenKit
         {
             if (fileListView.SelectedItems.Count > 0)
             {
-                foreach (WitcherListItem item in fileListView.SelectedItems)
+                foreach (WitcherListViewItem item in fileListView.SelectedItems)
                 {
                     if (item.IsDirectory)
                     {
