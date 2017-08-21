@@ -1342,7 +1342,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                         Directory.CreateDirectory(Path.Combine(ActiveMod.ModDirectory, "scripts"));
                     Directory.GetFiles((ActiveMod.ModDirectory + "\\scripts")).ToList().ForEach(x =>
                     {
-                        var dest = Path.Combine(modpackDir, Path.GetFileName(x), "scripts");
+                        var dest = Path.Combine(modpackDir, "scripts", Path.GetFileName(x));
                         Directory.CreateDirectory(Path.GetDirectoryName(dest));
                         File.Copy(x, dest, true);
                     });
@@ -1354,7 +1354,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                         Directory.CreateDirectory(Path.Combine(ActiveMod.DlcDirectory, "scripts"));
                     Directory.GetFiles((ActiveMod.DlcDirectory + "\\scripts")).ToList().ForEach(x =>
                     {
-                        var dest = Path.Combine(DlcpackDir, Path.GetFileName(x), "scripts");
+                        var dest = Path.Combine(DlcpackDir, "scripts", Path.GetFileName(x));
                         Directory.CreateDirectory(Path.GetDirectoryName(dest));
                         File.Copy(x, dest, true);
                     });
