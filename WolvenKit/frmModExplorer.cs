@@ -143,7 +143,7 @@ namespace WolvenKit
 
         private void addFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RequestFileAdd?.Invoke(this,new RequestFileArgs {File = modFileList.SelectedNode?.FullPath ?? ""});
+            RequestFileAdd?.Invoke(this,new RequestFileArgs {File = GetExplorerString(modFileList.SelectedNode?.FullPath ?? "")});
         }
 
         private void modFileList_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -287,7 +287,7 @@ namespace WolvenKit
         private void copyRelativePathToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if(modFileList.SelectedNode != null)
-                Clipboard.SetText(modFileList.SelectedNode.FullPath);
+                Clipboard.SetText(GetArchivePath(modFileList.SelectedNode.FullPath));
         }
 
         private void markAsModDlcFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -312,6 +312,27 @@ namespace WolvenKit
                 File.Move(fullpath, newfullpath);
                 MainController.Get().ProjectStatus = "File moved";
             }
+        }
+
+        public string GetExplorerString(string s)
+        {
+            if (s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Length > 1)
+            {
+                var r = string.Join(Path.DirectorySeparatorChar.ToString(), new[] { "Root" }.Concat(s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Skip(1)).ToArray());
+                return string.Join(Path.DirectorySeparatorChar.ToString(), new[] {"Root" }.Concat(s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Skip(1)).ToArray());
+            }
+            else
+                return s;
+        }
+
+        public string GetArchivePath(string s)
+        {
+            if (s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Length > 2)
+            {
+                return string.Join(Path.DirectorySeparatorChar.ToString(), s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Skip(2).ToArray());
+            }
+            else
+                return s;
         }
     }
 }
