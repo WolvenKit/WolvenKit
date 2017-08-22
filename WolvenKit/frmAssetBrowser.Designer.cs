@@ -261,7 +261,7 @@ namespace WolvenKit
             this.filetypeCB.FormattingEnabled = true;
             this.filetypeCB.Items.AddRange(new object[] {
             "Any"});
-            this.filetypeCB.Location = new System.Drawing.Point(481, 72);
+            this.filetypeCB.Location = new System.Drawing.Point(481, 71);
             this.filetypeCB.Name = "filetypeCB";
             this.filetypeCB.Size = new System.Drawing.Size(104, 21);
             this.filetypeCB.TabIndex = 11;
@@ -281,11 +281,11 @@ namespace WolvenKit
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(441, 75);
+            this.label2.Location = new System.Drawing.Point(419, 75);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(34, 13);
+            this.label2.Size = new System.Drawing.Size(56, 13);
             this.label2.TabIndex = 13;
-            this.label2.Text = "Type:";
+            this.label2.Text = "Extension:";
             // 
             // label3
             // 
@@ -467,9 +467,9 @@ namespace WolvenKit
             this.lExtension.AutoSize = true;
             this.lExtension.Location = new System.Drawing.Point(269, 75);
             this.lExtension.Name = "lExtension";
-            this.lExtension.Size = new System.Drawing.Size(56, 13);
+            this.lExtension.Size = new System.Drawing.Size(34, 13);
             this.lExtension.TabIndex = 25;
-            this.lExtension.Text = "Extension:";
+            this.lExtension.Text = "Type:";
             // 
             // extensionCB
             // 
@@ -478,7 +478,7 @@ namespace WolvenKit
             this.extensionCB.FormattingEnabled = true;
             this.extensionCB.Items.AddRange(new object[] {
             "Any"});
-            this.extensionCB.Location = new System.Drawing.Point(331, 72);
+            this.extensionCB.Location = new System.Drawing.Point(309, 71);
             this.extensionCB.Name = "extensionCB";
             this.extensionCB.Size = new System.Drawing.Size(104, 21);
             this.extensionCB.TabIndex = 26;
