@@ -176,6 +176,7 @@
   <ItemGroup>
     <Compile Include="Apex.cs" />
     <Compile Include="AssemblyExtensions.cs" />
+    <Compile Include="WitcherListViewItem.cs" />
     <Compile Include="Commonfunctions.cs" />
     <Compile Include="frmAbout.cs">
       <SubType>Form</SubType>

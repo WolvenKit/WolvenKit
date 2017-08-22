@@ -150,5 +150,10 @@ namespace WolvenKit
             if(e.KeyValue == (int)Keys.Enter)
                 updateList(searchTB.Text);
         }
+
+        private void listView_ItemsChanged(object sender, BrightIdeasSoftware.ItemsChangedEventArgs e)
+        {
+            MainController.Get().ProjectUnsaved = true;
+        }
     }
 }

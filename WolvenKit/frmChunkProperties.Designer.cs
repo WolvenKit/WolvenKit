@@ -49,9 +49,9 @@ namespace WolvenKit
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolSplitPtr = new System.Windows.Forms.ToolStripSeparator();
             this.ptrPropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.treeView)).BeginInit();
             this.contextMenu.SuspendLayout();
             this.SuspendLayout();
@@ -62,6 +62,7 @@ namespace WolvenKit
             this.treeView.AllColumns.Add(this.colValue);
             this.treeView.AllColumns.Add(this.colType);
             this.treeView.AlternateRowBackColor = System.Drawing.Color.LightCyan;
+            this.treeView.CellEditUseWholeCell = false;
             this.treeView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colName,
             this.colValue,
@@ -71,7 +72,6 @@ namespace WolvenKit
             this.treeView.FullRowSelect = true;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
-            this.treeView.OwnerDraw = true;
             this.treeView.ShowGroups = false;
             this.treeView.Size = new System.Drawing.Size(813, 493);
             this.treeView.TabIndex = 1;
@@ -81,6 +81,7 @@ namespace WolvenKit
             this.treeView.VirtualMode = true;
             this.treeView.CellEditStarting += new BrightIdeasSoftware.CellEditEventHandler(this.treeView_CellEditStarting);
             this.treeView.CellClick += new System.EventHandler<BrightIdeasSoftware.CellClickEventArgs>(this.treeView_CellClick);
+            this.treeView.ItemsChanged += new System.EventHandler<BrightIdeasSoftware.ItemsChangedEventArgs>(this.treeView_ItemsChanged);
             // 
             // colName
             // 
@@ -117,7 +118,7 @@ namespace WolvenKit
             this.toolSplitPtr,
             this.ptrPropertiesToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(185, 264);
+            this.contextMenu.Size = new System.Drawing.Size(185, 242);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // expandAllToolStripMenuItem
@@ -186,6 +187,13 @@ namespace WolvenKit
             this.pasteToolStripMenuItem.Text = "Paste Variable";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
+            // copyTextToolStripMenuItem
+            // 
+            this.copyTextToolStripMenuItem.Name = "copyTextToolStripMenuItem";
+            this.copyTextToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.copyTextToolStripMenuItem.Text = "Copy Text";
+            this.copyTextToolStripMenuItem.Click += new System.EventHandler(this.copyTextToolStripMenuItem_Click);
+            // 
             // toolSplitPtr
             // 
             this.toolSplitPtr.Name = "toolSplitPtr";
@@ -197,13 +205,6 @@ namespace WolvenKit
             this.ptrPropertiesToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.ptrPropertiesToolStripMenuItem.Text = "Ptr Properties";
             this.ptrPropertiesToolStripMenuItem.Click += new System.EventHandler(this.ptrPropertiesToolStripMenuItem_Click);
-            // 
-            // copyTextToolStripMenuItem
-            // 
-            this.copyTextToolStripMenuItem.Name = "copyTextToolStripMenuItem";
-            this.copyTextToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.copyTextToolStripMenuItem.Text = "Copy Text";
-            this.copyTextToolStripMenuItem.Click += new System.EventHandler(this.copyTextToolStripMenuItem_Click);
             // 
             // frmChunkProperties
             // 

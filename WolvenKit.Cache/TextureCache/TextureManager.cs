@@ -25,7 +25,7 @@ namespace WolvenKit.Cache
         public Dictionary<string, TextureCache> Archives { get; set; }
         public WitcherTreeNode RootNode { get; set; }
         public List<IWitcherFile> FileList { get; set; }
-        public string TypeName { get { return "TextureCacheManager"; } }
+        public string TypeName { get { return new TextureCache().TypeName; } }
         public List<string> Extensions { get; set; }
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
 
