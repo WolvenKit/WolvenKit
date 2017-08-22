@@ -15,6 +15,17 @@ namespace WolvenKit
         public WitcherTreeNode Node { get; set; }
         public string FullPath { get; set; }
 
+        public WitcherListViewItem() { }
+
+        public WitcherListViewItem(IWitcherFile wf)
+        {
+            IsDirectory = false;
+            Node = new WitcherTreeNode();
+            Node.Name = Path.Combine("Root", wf.Bundle.TypeName, Path.GetDirectoryName(wf.Name));
+            FullPath = wf.Name;
+            this.Text = wf.Name;
+        }
+
         public string ExplorerPath
         {
             get

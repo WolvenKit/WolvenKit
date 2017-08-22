@@ -300,18 +300,11 @@ namespace WolvenKit
             var results = new List<WitcherListViewItem>();
             foreach (var file in found)
             {
-                var lastItem = file;
-                var listItem = new WitcherListViewItem
-                {
-                    FullPath = lastItem.Name,
-                    Text = file.Name,
-                    IsDirectory = false,
-                    ImageKey = GetImageKey(file.Name)
-                };
-                listItem.SubItems.Add(lastItem.Size.ToString());
-                listItem.SubItems.Add($"{(100 - (int) (lastItem.ZSize/(float) lastItem.Size*100.0f))}%");
-                listItem.SubItems.Add(lastItem.CompressionType);
-                listItem.SubItems.Add(lastItem.Bundle.TypeName);
+                var listItem = new WitcherListViewItem(file.Item2);
+                listItem.SubItems.Add(file.Item2.ToString());
+                listItem.SubItems.Add($"{(100 - (int) (file.Item2.ZSize/(float)file.Item2.Size*100.0f))}%");
+                listItem.SubItems.Add(file.Item2.CompressionType);
+                listItem.SubItems.Add(file.Item2.Bundle.TypeName);
                 results.Add(listItem);
             }
             fileListView.Items.AddRange(results.ToArray());
@@ -331,17 +324,17 @@ namespace WolvenKit
             return bundfiles;
         }
 
-        public IWitcherFile[] SearchFiles(IWitcherFile[] files, string searchkeyword, string bundletype, string extension)
+        public Tuple<WitcherListViewItem,IWitcherFile>[] SearchFiles(IWitcherFile[] files, string searchkeyword, string bundletype, string extension)
         {
             if (regexCheckbox.Checked)
             {
-                return files.Where(item => new Regex(searchkeyword).IsMatch(item.Name)).ToArray();
+                return files.Where(item => new Regex(searchkeyword).IsMatch(item.Name)).Select(x=> new Tuple<WitcherListViewItem,IWitcherFile>(new WitcherListViewItem(x),x)).ToArray();
             }
             if (currentfolderCheckBox.Checked)
             {
-                return caseCheckBox.Checked ? files.Where(item => item.Name.StartsWith(ActiveNode.FullPath) && item.Name.ToUpper().Contains(searchkeyword.ToUpper()) &&(item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")).Distinct().ToArray() : files.Where(item => item.Name.StartsWith(ActiveNode.FullPath) && item.Name.Contains(searchkeyword) && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")).Distinct().ToArray();
+                return caseCheckBox.Checked ? files.Where(item => item.Name.StartsWith(ActiveNode.FullPath) && item.Name.ToUpper().Contains(searchkeyword.ToUpper()) &&(item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")).Distinct().Select(x => new Tuple<WitcherListViewItem,IWitcherFile>(new WitcherListViewItem(x),x)).ToArray() : files.Where(item => item.Name.StartsWith(ActiveNode.FullPath) && item.Name.Contains(searchkeyword) && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")).Distinct().Select(x => new Tuple<WitcherListViewItem,IWitcherFile>(new WitcherListViewItem(x),x)).ToArray();
             }
-            return caseCheckBox.Checked ? files.Where(item =>  item.Name.ToUpper().Contains(searchkeyword.ToUpper()) && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")).ToArray() : files.Where(item => item.Name.Contains(searchkeyword) && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")).ToArray();
+            return caseCheckBox.Checked ? files.Where(item =>  item.Name.ToUpper().Contains(searchkeyword.ToUpper()) && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")).Select(x => new Tuple<WitcherListViewItem,IWitcherFile>(new WitcherListViewItem(x),x)).ToArray() : files.Where(item => item.Name.Contains(searchkeyword) && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")).Select(x => new Tuple<WitcherListViewItem,IWitcherFile>(new WitcherListViewItem(x),x)).ToArray();
         }
 
         public WitcherListViewItem[] CollectFiles(WitcherTreeNode root)
