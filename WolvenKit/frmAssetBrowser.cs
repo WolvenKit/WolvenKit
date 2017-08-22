@@ -244,6 +244,8 @@ namespace WolvenKit
         {
             var currentNode = RootNode;
             var parts = browsePath.Split('\\');
+            if (parts.Length > 0 && parts[0] == "Root")
+                parts = parts.Skip(1).ToArray();
             var success = false;
             for (var i = 0; i < parts.Length; i++)
             {
@@ -301,7 +303,6 @@ namespace WolvenKit
                 var lastItem = file;
                 var listItem = new WitcherListViewItem
                 {
-                    Node = null,
                     FullPath = lastItem.Name,
                     Text = file.Name,
                     IsDirectory = false,
