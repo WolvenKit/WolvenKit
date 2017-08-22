@@ -427,6 +427,19 @@ namespace WolvenKit
                     {
                         OpenNode(item.Node);
                     }
+                    else
+                    {
+                        var tempnode = new WitcherListViewItem
+                        {
+                            ImageKey = GetImageKey(item.FullPath),
+                            Text = item.FullPath,
+                            ToolTipText = item.FullPath,
+                            IsDirectory = item.IsDirectory,
+                            Node = item.Node,
+                            FullPath = item.FullPath
+                        };
+                        pathlistview.Items.Add(tempnode);
+                    }
                 }
             }
         }
