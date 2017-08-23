@@ -1451,6 +1451,10 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     }
                 }
             }
+            catch (DirectoryNotFoundException ex)
+            {
+                AddOutput("Mod Bundle directory not found. Bundles will not be packed for mod. \n", frmOutput.Logtype.Important);
+            }
             catch (Exception ex)
             {
                 AddOutput(ex.ToString() + "\n", frmOutput.Logtype.Error);
@@ -1488,6 +1492,10 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                         }
                     }
                 }
+            }
+            catch (DirectoryNotFoundException ex)
+            {
+                AddOutput("DLC Bundle directory not found. Bundles will not packed for DLC. \n", frmOutput.Logtype.Important);
             }
             catch (Exception ex)
             {
@@ -1536,6 +1544,10 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     }
                 }
             }
+            catch (DirectoryNotFoundException ex)
+            {
+                AddOutput("Mod wasn't bundled. Metadata won't be generated. \n", frmOutput.Logtype.Important);
+            }
             catch (Exception ex)
             {
                 AddOutput(ex.ToString() + "\n", frmOutput.Logtype.Error);
@@ -1574,6 +1586,10 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                         }
                     }
                 }
+            }
+            catch(DirectoryNotFoundException ex)
+            {
+                AddOutput("DLC wasn't bundled. Metadata won't be generated. \n", frmOutput.Logtype.Important);
             }
             catch (Exception ex)
             {
@@ -1636,6 +1652,10 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     }
                 }
             }
+            catch (DirectoryNotFoundException ex)
+            {
+                AddOutput("Mod TextureCache folder not found. Mod won't be cooked. \n", frmOutput.Logtype.Important);
+            }
             catch (Exception ex)
             {
                 AddOutput(ex.ToString() + "\n", frmOutput.Logtype.Error);
@@ -1689,6 +1709,10 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     }
                 }
             }
+            catch (DirectoryNotFoundException ex)
+            {
+                AddOutput("DLC TextureCache folder not found. DLC won't be cooked. \n", frmOutput.Logtype.Important);
+            }
             catch (Exception ex)
             {
                 AddOutput(ex.ToString() + "\n", frmOutput.Logtype.Error);
@@ -1737,6 +1761,10 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     }
                 }
             }
+            catch (DirectoryNotFoundException ex)
+            {
+                AddOutput("Mod wasn't cooked. Textures won't be cached. \n", frmOutput.Logtype.Important);
+            }
             catch (Exception ex)
             {
                 AddOutput(ex.ToString() + "\n", frmOutput.Logtype.Error);
@@ -1774,6 +1802,10 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                         }
                     }
                 }
+            }
+            catch (DirectoryNotFoundException ex)
+            {
+                AddOutput("DLC wasn't cooked. Textures won't be cached. \n", frmOutput.Logtype.Important);
             }
             catch (Exception ex)
             {
