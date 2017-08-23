@@ -850,23 +850,57 @@ namespace WolvenKit
         {
             try
             {
+                //Check if we have installed this mod before. If so do a little cleanup.
                 if(File.Exists(ActiveMod.ProjectDirectory + "\\install_log.xml"))
                 {
                     XDocument log = XDocument.Load(ActiveMod.ProjectDirectory + "\\install_log.xml");
-                    foreach (var file in log.Descendants("file"))
+                    var dirs = log.Root.Element("Files")?.Descendants("Directory");
+                    if(dirs != null)
                     {
-                        if (File.Exists(file.Value))
-                            File.Delete(file.Value);
+                        //Loop throught dirs and delete the old files in them.
+                        foreach (var d in dirs)
+                        {
+                            foreach (var f in d.Elements("file"))
+                            {
+                                if (File.Exists(f.Value))
+                                {
+                                    File.Delete(f.Value);
+                                    Debug.WriteLine("File delete: " + f.Value);
+                                }
+                            }
+                        }
+                        //Delete the empty directories.
+                        foreach (var d in dirs)
+                        {
+                            if (d.Attribute("Path") != null)
+                            {
+                                if (Directory.Exists(d.Attribute("Path").Value))
+                                {
+                                    if (!(Directory.GetFiles(d.Attribute("Path").Value,"*",SearchOption.AllDirectories).Any()))
+                                    {
+                                        Directory.Delete(d.Attribute("Path").Value, true);
+                                        Debug.WriteLine("Directory delete: " + d.Attribute("Path").Value);
+                                    }
+                                }
+                            }
+                        }
+                        
                     }
+                    //Delete the old install log. We will make a new one so this is not needed anymore.
                     File.Delete(ActiveMod.ProjectDirectory + "\\install_log.xml");
                 }
-                XDocument installlog = new XDocument(new XElement("InstalLog"));
-                installlog.Root.Add(Commonfunctions.DirectoryCopy(Path.Combine(ActiveMod.ProjectDirectory, "packed"), MainController.Get().Configuration.GameRootDir, true));
+                XDocument installlog = new XDocument(new XElement("InstalLog",new XAttribute("Project",ActiveMod.Name),new XAttribute("Build_date",DateTime.Now.ToString())));
+                var fileroot = new XElement("Files");
+                //Copy and log the files.
+                fileroot.Add(Commonfunctions.DirectoryCopy(Path.Combine(ActiveMod.ProjectDirectory, "packed"), MainController.Get().Configuration.GameRootDir, true));
+                installlog.Root.Add(fileroot);
+                //Save the log.
                 installlog.Save(ActiveMod.ProjectDirectory + "\\install_log.xml");
                 AddOutput(ActiveMod.Name + " installed!" + "\n", frmOutput.Logtype.Success);
             }
             catch (Exception ex)
             {
+                //If we screwed up something. Log it.
                 AddOutput(ex.ToString() + "\n", frmOutput.Logtype.Error);
             }
         }
@@ -957,7 +991,6 @@ namespace WolvenKit
             using (var process = Process.Start(proc))
             {
                 var task2 = RedirectScriptlogOutput(process);
-
                 await task2;
             }
         }
