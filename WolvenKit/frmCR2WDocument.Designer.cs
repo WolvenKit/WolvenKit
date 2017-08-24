@@ -51,7 +51,6 @@ namespace WolvenKit
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCR2WDocument));
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            this.vS2012LightTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2012LightTheme();
             this.SuspendLayout();
             // 
             // imageList1
@@ -120,9 +119,7 @@ namespace WolvenKit
             dockPaneStripToolWindowGradient1.InactiveTabGradient = tabGradient7;
             dockPaneStripSkin1.ToolWindowGradient = dockPaneStripToolWindowGradient1;
             dockPanelSkin1.DockPaneStripSkin = dockPaneStripSkin1;
-            this.dockPanel.Theme = vS2012LightTheme1;
             this.dockPanel.TabIndex = 1;
-            this.dockPanel.Theme = this.vS2012LightTheme1;
             // 
             // frmCR2WDocument
             // 
@@ -145,7 +142,6 @@ namespace WolvenKit
 
         private ImageList imageList1;
         private DockPanel dockPanel;
-        private VS2012LightTheme vS2012LightTheme1;
 
 
 

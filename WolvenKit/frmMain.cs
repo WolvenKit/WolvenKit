@@ -910,7 +910,9 @@ namespace WolvenKit
             throw new NotImplementedException("Not implemented yet!");
             //TODO: Once we have a GUI and such enable this.
             // We should probably wait with this untill we have the Mod/Dlc project thing going on for us and no wcc_lite.
+#pragma warning disable CS0162 // Unreachable code detected
             if (ActiveMod == null)
+#pragma warning restore CS0162 // Unreachable code detected
                 return;
             ShowOutput();
             var packeddir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\");
@@ -1484,7 +1486,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     }
                 }
             }
-            catch (DirectoryNotFoundException ex)
+            catch (DirectoryNotFoundException)
             {
                 AddOutput("Mod Bundle directory not found. Bundles will not be packed for mod. \n", frmOutput.Logtype.Important);
             }
@@ -1526,7 +1528,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     }
                 }
             }
-            catch (DirectoryNotFoundException ex)
+            catch (DirectoryNotFoundException)
             {
                 AddOutput("DLC Bundle directory not found. Bundles will not packed for DLC. \n", frmOutput.Logtype.Important);
             }
@@ -1577,7 +1579,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     }
                 }
             }
-            catch (DirectoryNotFoundException ex)
+            catch (DirectoryNotFoundException)
             {
                 AddOutput("Mod wasn't bundled. Metadata won't be generated. \n", frmOutput.Logtype.Important);
             }
@@ -1620,7 +1622,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     }
                 }
             }
-            catch(DirectoryNotFoundException ex)
+            catch(DirectoryNotFoundException)
             {
                 AddOutput("DLC wasn't bundled. Metadata won't be generated. \n", frmOutput.Logtype.Important);
             }
@@ -1685,7 +1687,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     }
                 }
             }
-            catch (DirectoryNotFoundException ex)
+            catch (DirectoryNotFoundException)
             {
                 AddOutput("Mod TextureCache folder not found. Mod won't be cooked. \n", frmOutput.Logtype.Important);
             }
@@ -1742,7 +1744,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     }
                 }
             }
-            catch (DirectoryNotFoundException ex)
+            catch (DirectoryNotFoundException)
             {
                 AddOutput("DLC TextureCache folder not found. DLC won't be cooked. \n", frmOutput.Logtype.Important);
             }
@@ -1794,7 +1796,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     }
                 }
             }
-            catch (DirectoryNotFoundException ex)
+            catch (DirectoryNotFoundException)
             {
                 AddOutput("Mod wasn't cooked. Textures won't be cached. \n", frmOutput.Logtype.Important);
             }
@@ -1836,7 +1838,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     }
                 }
             }
-            catch (DirectoryNotFoundException ex)
+            catch (DirectoryNotFoundException)
             {
                 AddOutput("DLC wasn't cooked. Textures won't be cached. \n", frmOutput.Logtype.Important);
             }
