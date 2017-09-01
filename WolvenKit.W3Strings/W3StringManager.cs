@@ -96,7 +96,7 @@ namespace WolvenKit.W3Strings
 
         public string GetString(uint id)
         {
-            if (Lines.ContainsKey(id))
+            if (Lines != null  && Lines.ContainsKey(id))
             {
                 var list = Lines[id];
                 return list[list.Count - 1].str;
