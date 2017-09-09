@@ -19,7 +19,7 @@ namespace WolvenKit.Bundles
         public long Offset { get; set; }
         public ulong TimeStamp { get; set; }
         public byte[] Zero { get; set; }
-        public uint UniqueId { get; set; }
+        public uint CRC { get; set; }
         public uint Compression { get; set; }
         public string DateString { get; set; }
 

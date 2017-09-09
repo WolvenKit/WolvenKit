@@ -133,6 +133,7 @@ namespace WolvenKit
             {
                 // ignored
             }
+            MainController.Get().ReloadStringManager();
         }
 
         public IDockContent DeserializeDockContent(string persistString)

@@ -319,7 +319,6 @@ namespace WolvenKit
         {
             Configuration = Configuration.Load();
             Window = new frmMain();
-            ReloadStringManager();
         }
 
         public frmCR2WDocument LoadDocument(string filename, bool suppressErrors = false)
