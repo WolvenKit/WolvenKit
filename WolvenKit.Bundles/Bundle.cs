@@ -129,10 +129,10 @@ namespace WolvenKit.Bundles
                 {
                     Offset += 164;
                     var name = Encoding.Default.GetBytes(Path.GetFileName(GetRelativePath(f,rootfolder))).ToArray();
-                    if (name.Length > 100)
-                        name = name.Take(100).ToArray();
-                    if(name.Length < 100)
-                        Array.Resize(ref name,100);
+                    if (name.Length > 0x100)
+                        name = name.Take(0x100).ToArray();
+                    if(name.Length < 0x100)
+                        Array.Resize(ref name, 0x100);
                     bw.Write(name); //Filename trimmed to 100 characters.
                     bw.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }); //HASH
                     bw.Write((UInt32)0x00000000); //EMPTY
