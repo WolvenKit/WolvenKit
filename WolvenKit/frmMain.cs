@@ -1308,6 +1308,15 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
 
         private async Task PackAndInstallMod()
         {
+            try
+            {
+                Bundle.Write(Path.Combine(ActiveMod.ProjectDirectory, "packed", "test.bundle"), Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName));
+            }
+            catch (Exception ex)
+            {
+                AddOutput(ex.ToString());
+            }
+            return;
             if (ActiveMod == null)
                 return;
             if (Process.GetProcessesByName("Witcher3").Length != 0)
