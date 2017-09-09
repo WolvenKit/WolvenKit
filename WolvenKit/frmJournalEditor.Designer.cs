@@ -30,10 +30,11 @@
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.indeximage_label = new System.Windows.Forms.Label();
+            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.entityImage = new System.Windows.Forms.PictureBox();
             this.vulnerable_treview = new System.Windows.Forms.TreeView();
             this.textRender = new System.Windows.Forms.RichTextBox();
+            this.entimgbox = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -42,7 +43,12 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
+            this.splitContainer3.Panel1.SuspendLayout();
+            this.splitContainer3.Panel2.SuspendLayout();
+            this.splitContainer3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.entityImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.entimgbox)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -71,25 +77,31 @@
             // 
             // splitContainer2.Panel1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.indeximage_label);
-            this.splitContainer2.Panel1.Controls.Add(this.entityImage);
+            this.splitContainer2.Panel1.Controls.Add(this.entimgbox);
             // 
             // splitContainer2.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.vulnerable_treview);
+            this.splitContainer2.Panel2.Controls.Add(this.splitContainer3);
             this.splitContainer2.Size = new System.Drawing.Size(318, 500);
             this.splitContainer2.SplitterDistance = 421;
             this.splitContainer2.TabIndex = 0;
             // 
-            // indeximage_label
+            // splitContainer3
             // 
-            this.indeximage_label.AutoSize = true;
-            this.indeximage_label.BackColor = System.Drawing.Color.LightGray;
-            this.indeximage_label.Location = new System.Drawing.Point(8, 8);
-            this.indeximage_label.Name = "indeximage_label";
-            this.indeximage_label.Size = new System.Drawing.Size(42, 17);
-            this.indeximage_label.TabIndex = 1;
-            this.indeximage_label.Text = "None";
+            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer3.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer3.Name = "splitContainer3";
+            // 
+            // splitContainer3.Panel1
+            // 
+            this.splitContainer3.Panel1.Controls.Add(this.entityImage);
+            // 
+            // splitContainer3.Panel2
+            // 
+            this.splitContainer3.Panel2.Controls.Add(this.vulnerable_treview);
+            this.splitContainer3.Size = new System.Drawing.Size(318, 75);
+            this.splitContainer3.SplitterDistance = 75;
+            this.splitContainer3.TabIndex = 0;
             // 
             // entityImage
             // 
@@ -97,7 +109,8 @@
             this.entityImage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.entityImage.Location = new System.Drawing.Point(0, 0);
             this.entityImage.Name = "entityImage";
-            this.entityImage.Size = new System.Drawing.Size(318, 421);
+            this.entityImage.Size = new System.Drawing.Size(75, 75);
+            this.entityImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.entityImage.TabIndex = 0;
             this.entityImage.TabStop = false;
             // 
@@ -107,7 +120,7 @@
             this.vulnerable_treview.Dock = System.Windows.Forms.DockStyle.Fill;
             this.vulnerable_treview.Location = new System.Drawing.Point(0, 0);
             this.vulnerable_treview.Name = "vulnerable_treview";
-            this.vulnerable_treview.Size = new System.Drawing.Size(318, 75);
+            this.vulnerable_treview.Size = new System.Drawing.Size(239, 75);
             this.vulnerable_treview.TabIndex = 0;
             // 
             // textRender
@@ -120,9 +133,19 @@
             this.textRender.TabIndex = 0;
             this.textRender.Text = "";
             // 
+            // entimgbox
+            // 
+            this.entimgbox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.entimgbox.Location = new System.Drawing.Point(0, 0);
+            this.entimgbox.Name = "entimgbox";
+            this.entimgbox.Size = new System.Drawing.Size(318, 421);
+            this.entimgbox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.entimgbox.TabIndex = 0;
+            this.entimgbox.TabStop = false;
+            // 
             // frmJournalEditor
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(955, 500);
             this.Controls.Add(this.splitContainer1);
@@ -134,11 +157,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
-            this.splitContainer2.Panel1.PerformLayout();
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            this.splitContainer3.Panel1.ResumeLayout(false);
+            this.splitContainer3.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
+            this.splitContainer3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.entityImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.entimgbox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -147,9 +174,10 @@
 
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.PictureBox entityImage;
-        private System.Windows.Forms.Label indeximage_label;
-        private System.Windows.Forms.TreeView vulnerable_treview;
         private System.Windows.Forms.RichTextBox textRender;
+        private System.Windows.Forms.SplitContainer splitContainer3;
+        private System.Windows.Forms.PictureBox entityImage;
+        private System.Windows.Forms.TreeView vulnerable_treview;
+        private System.Windows.Forms.PictureBox entimgbox;
     }
 }

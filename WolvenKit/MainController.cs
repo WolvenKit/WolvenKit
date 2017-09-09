@@ -10,6 +10,7 @@ using WolvenKit.Interfaces;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace WolvenKit
@@ -261,6 +262,26 @@ namespace WolvenKit
         public Configuration Configuration { get; private set; }
         public frmMain Window { get; private set; }
 
+        /// <summary>
+        /// Usefull function for blindly importing a file.
+        /// </summary>
+        /// <param name="name">The name of the file.</param>
+        /// <param name="archive">The manager to search for the file in.</param>
+        /// <returns></returns>
+        public List<byte[]> ImportFile(string name,IWitcherArchive archive)
+        {
+            List<byte[]> ret = new List<byte[]>();
+            archive.FileList.ToList().Where(x => x.Name.Contains(name)).ToList().ForEach(x =>
+            {
+                using (var ms = new MemoryStream())
+                {
+                    x.Extract(ms);
+                    ret.Add(ms.ToArray());
+                }
+            });
+            return ret;
+        }
+
         public string GetLocalizedString(uint val)
         {
             return W3StringManager.GetString(val);
@@ -298,6 +319,7 @@ namespace WolvenKit
         {
             Configuration = Configuration.Load();
             Window = new frmMain();
+            ReloadStringManager();
         }
 
         public frmCR2WDocument LoadDocument(string filename, bool suppressErrors = false)
