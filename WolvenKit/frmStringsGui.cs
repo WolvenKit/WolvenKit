@@ -964,7 +964,8 @@ namespace WolvenKit
 
                 if (comboBoxLanguagesMode.SelectedIndex == 1)
                 {
-                    var language = Regex.Match(rows[0][0], "language=([a-z]+)]").Groups[1].Value;
+                    var firstLine = File.ReadLines(filePath, Encoding.UTF8).First();
+                    var language = Regex.Match(firstLine, "language=([a-zAZ]+)]").Groups[1].Value;
                     var strings = new List<List<string>>();
 
                     rows.ForEach(row =>

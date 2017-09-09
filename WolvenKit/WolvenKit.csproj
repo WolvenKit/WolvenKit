@@ -175,6 +175,12 @@
   <ItemGroup>
     <Compile Include="Apex.cs" />
     <Compile Include="AssemblyExtensions.cs" />
+    <Compile Include="frmStringsGuiImporterIDDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmStringsGuiImporterIDDialog.Designer.cs">
+      <DependentUpon>frmStringsGuiImporterIDDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="WitcherListViewItem.cs" />
     <Compile Include="Commonfunctions.cs" />
     <Compile Include="frmAbout.cs">
@@ -510,6 +516,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmStringsGuiImporter.resx">
       <DependentUpon>frmStringsGuiImporter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmStringsGuiImporterIDDialog.resx">
+      <DependentUpon>frmStringsGuiImporterIDDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmStringsGuiScriptsPrefixDialog.resx">
       <DependentUpon>frmStringsGuiScriptsPrefixDialog.cs</DependentUpon>
