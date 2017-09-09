@@ -93,7 +93,7 @@ namespace WolvenKit
                     this.Text = $@"Character editor [{name}]";
                     descriptiontext += (name + "<br>");
                     vulnerable_treview.Hide();
-                    ParseCJournalCharacterChildren((CArray)typenode.GetVariableByName("children"));
+                    ParseChildDescription((CArray)typenode.GetVariableByName("children"));
                     break;
                 }
                 case "CJournalGlossary":
@@ -102,7 +102,7 @@ namespace WolvenKit
                     this.Text = $@"Glossary editor [{name}]";
                     descriptiontext += (name + "<br>");
                     vulnerable_treview.Hide();
-                    ParseCJournalGlossaryChildren((CArray)typenode.GetVariableByName("children"));
+                    ParseChildDescription((CArray)typenode.GetVariableByName("children"));
                     break;
                 }
                 case "CJournalTutorial":
@@ -110,6 +110,7 @@ namespace WolvenKit
                     var name = typenode.GetVariableByName("baseName");
                     descriptiontext += typenode.GetVariableByName("description").ToString();
                     vulnerable_treview.Hide();
+                    entityImage.Hide();
                     this.Text = $@"Tutorial editor [{name}]";
                     break;
                 }
@@ -117,8 +118,19 @@ namespace WolvenKit
                 {
                     var name = typenode.GetVariableByName("baseName");
                     vulnerable_treview.Hide();
+                    entityImage.Hide();
                     this.Text = $@"Story book editor [{name}]";
                     break;
+                }
+                case "CJournalStoryBookPage":
+                {
+                   var name = typenode.GetVariableByName("baseName");
+                   descriptiontext += "<h3>" + typenode.GetVariableByName("title") + "</h3>";
+                   ParseChildDescription((CArray)typenode.GetVariableByName("children"));
+                   vulnerable_treview.Hide();
+                   entityImage.Hide();
+                   this.Text = $@"Story book editor [{name}]";
+                   break;
                 }
                 case "CJournalQuest":
                 {
@@ -184,26 +196,9 @@ namespace WolvenKit
         }
         #endregion
 
-        #region CJournalCharacter
-        public void ParseCJournalCharacterChildren(CArray childs)
-        {
-            foreach (CPtr child in childs)
-            {
-                switch (child.PtrTarget.Type)
-                {
-                    case "CJournalCharacterDescription":
-                    {
-                        descriptiontext += child.PtrTarget.GetVariableByName("description");
-                        break;
-                    }
-                }
-            }
-        }
-        #endregion
+        #region Common
 
-        #region CJournalGlossary
-
-        public void ParseCJournalGlossaryChildren(CArray childs)
+        public void ParseChildDescription(CArray childs)
         {
             foreach (var cVariable in childs)
             {
@@ -212,7 +207,17 @@ namespace WolvenKit
                 {
                     case "CJournalGlossaryDescription":
                     {
-                        descriptiontext += child.PtrTarget.GetVariableByName("description");
+                        descriptiontext += child.PtrTarget.GetVariableByName("description") + "<br>";
+                            break;
+                    }
+                    case "CJournalCharacterDescription":
+                    {
+                        descriptiontext += child.PtrTarget.GetVariableByName("description") + "<br>";
+                            break;
+                    }
+                    case "CJournalStoryBookPageDescription":
+                    {
+                        descriptiontext += child.PtrTarget.GetVariableByName("description") + "<br>";
                         break;
                     }
                 }
