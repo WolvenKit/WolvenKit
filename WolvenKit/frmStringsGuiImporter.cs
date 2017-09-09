@@ -30,9 +30,33 @@ namespace WolvenKit
             Import();
         }
 
-        private void listViewStrings_ItemActivate(object sender, EventArgs e)
+        private void buttonShowID_Click(object sender, EventArgs e)
         {
+            ShowIDDialog();
+        }
 
+        private void ShowIDDialog()
+        {
+            frmStringsGuiImporterIDDialog idDialog = new frmStringsGuiImporterIDDialog();
+            Dictionary<int, string> stringsWithIDs = new Dictionary<int, string>();
+
+            foreach (ListViewItem item in listViewStrings.SelectedItems)
+            {
+                var stringWithID = strings.Find(x => x.Contains(item.Text));
+                stringsWithIDs.Add(Convert.ToInt32(stringWithID[0]), stringWithID[2]);
+            }
+
+            idDialog.PassStrings(stringsWithIDs);
+            idDialog.FillDataGridView();
+            idDialog.ShowDialog();
+        }
+
+        private void listViewStrings_ItemSelectionChanged(object sender, EventArgs e)
+        {
+            if (listViewStrings.SelectedItems.Count != 0)
+                buttonShowID.Enabled = true;
+            else
+                buttonShowID.Enabled = false;
         }
 
         private void checkBoxMachCaseSearch_CheckedChanged(object sender, EventArgs e)
@@ -184,7 +208,6 @@ namespace WolvenKit
             }
             stringsManager.SaveImportedStrings(stringsToImport);
         }
-
     }
 
 }

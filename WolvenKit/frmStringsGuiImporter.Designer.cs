@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.buttonShowID = new System.Windows.Forms.Button();
+            this.checkBoxMachCaseSearch = new System.Windows.Forms.CheckBox();
             this.textBoxSearch = new System.Windows.Forms.TextBox();
             this.buttonSearch = new System.Windows.Forms.Button();
             this.buttonLoadCustom = new System.Windows.Forms.Button();
@@ -38,7 +40,6 @@
             this.listViewStrings = new System.Windows.Forms.ListView();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelStringsCount = new System.Windows.Forms.ToolStripStatusLabel();
-            this.checkBoxMachCaseSearch = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -55,6 +56,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.buttonShowID);
             this.splitContainer1.Panel1.Controls.Add(this.checkBoxMachCaseSearch);
             this.splitContainer1.Panel1.Controls.Add(this.textBoxSearch);
             this.splitContainer1.Panel1.Controls.Add(this.buttonSearch);
@@ -70,6 +72,28 @@
             this.splitContainer1.Size = new System.Drawing.Size(1090, 568);
             this.splitContainer1.SplitterDistance = 63;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // buttonShowID
+            // 
+            this.buttonShowID.Enabled = false;
+            this.buttonShowID.Location = new System.Drawing.Point(894, 39);
+            this.buttonShowID.Name = "buttonShowID";
+            this.buttonShowID.Size = new System.Drawing.Size(75, 23);
+            this.buttonShowID.TabIndex = 7;
+            this.buttonShowID.Text = "Show ID";
+            this.buttonShowID.UseVisualStyleBackColor = true;
+            this.buttonShowID.Click += new System.EventHandler(this.buttonShowID_Click);
+            // 
+            // checkBoxMachCaseSearch
+            // 
+            this.checkBoxMachCaseSearch.AutoSize = true;
+            this.checkBoxMachCaseSearch.Location = new System.Drawing.Point(273, 44);
+            this.checkBoxMachCaseSearch.Name = "checkBoxMachCaseSearch";
+            this.checkBoxMachCaseSearch.Size = new System.Drawing.Size(85, 17);
+            this.checkBoxMachCaseSearch.TabIndex = 6;
+            this.checkBoxMachCaseSearch.Text = "Match case.";
+            this.checkBoxMachCaseSearch.UseVisualStyleBackColor = true;
+            this.checkBoxMachCaseSearch.CheckedChanged += new System.EventHandler(this.checkBoxMachCaseSearch_CheckedChanged);
             // 
             // textBoxSearch
             // 
@@ -158,7 +182,7 @@
             this.listViewStrings.TabIndex = 0;
             this.listViewStrings.UseCompatibleStateImageBehavior = false;
             this.listViewStrings.View = System.Windows.Forms.View.Tile;
-            this.listViewStrings.ItemActivate += new System.EventHandler(this.listViewStrings_ItemActivate);
+            this.listViewStrings.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.listViewStrings_ItemSelectionChanged);
             // 
             // statusStrip1
             // 
@@ -175,17 +199,6 @@
             this.toolStripStatusLabelStringsCount.Name = "toolStripStatusLabelStringsCount";
             this.toolStripStatusLabelStringsCount.Size = new System.Drawing.Size(97, 17);
             this.toolStripStatusLabelStringsCount.Text = "Strings Loaded: 0";
-            // 
-            // checkBoxMachCaseSearch
-            // 
-            this.checkBoxMachCaseSearch.AutoSize = true;
-            this.checkBoxMachCaseSearch.Location = new System.Drawing.Point(273, 44);
-            this.checkBoxMachCaseSearch.Name = "checkBoxMachCaseSearch";
-            this.checkBoxMachCaseSearch.Size = new System.Drawing.Size(85, 17);
-            this.checkBoxMachCaseSearch.TabIndex = 6;
-            this.checkBoxMachCaseSearch.Text = "Match case.";
-            this.checkBoxMachCaseSearch.UseVisualStyleBackColor = true;
-            this.checkBoxMachCaseSearch.CheckedChanged += new System.EventHandler(this.checkBoxMachCaseSearch_CheckedChanged);
             // 
             // frmStringsGuiImporter
             // 
@@ -220,5 +233,6 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelStringsCount;
         private System.Windows.Forms.CheckBox checkBoxMachCaseSearch;
+        private System.Windows.Forms.Button buttonShowID;
     }
 }
