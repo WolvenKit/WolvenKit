@@ -20,7 +20,7 @@ namespace WolvenKit.Bundles
         private static int HEADER_SIZE = 32;
         private static int ALIGNMENT_TARGET = 4096;
         private static string FOOTER_DATA = "AlignmentUnused"; //The bundle's final filesize should be an even multiple of 16; garbage data should be appended at the end if necessary to make this happen [appears to be unnecessary/optional, as far as the game cares]
-        private static int TOCEntrySize = 100 + 16 + 4 + 4 + 4 + 4 + 8 + 16 + 4 + 4; //Size of a TOC Entry.
+        private static int TOCEntrySize = 0x100 + 16 + 4 + 4 + 4 + 4 + 8 + 16 + 4 + 4; //Size of a TOC Entry.
 
         private uint bundlesize;
         private uint dataoffset;
@@ -29,8 +29,7 @@ namespace WolvenKit.Bundles
         public Bundle(string filename)
         {
             FileName = filename;
-
-            ReadTOC();
+            Read();
         }
 
         public Bundle()
@@ -45,7 +44,7 @@ namespace WolvenKit.Bundles
         /// <summary>
         /// Reads the Table Of Contents of the bundle.
         /// </summary>
-        private void ReadTOC()
+        private void Read()
         {
             Items = new Dictionary<string, BundleItem>();
 
@@ -128,7 +127,7 @@ namespace WolvenKit.Bundles
                 foreach (var f in Directory.EnumerateFiles(rootfolder,"*",SearchOption.AllDirectories))
                 {
                     Offset += 164;
-                    var name = Encoding.Default.GetBytes(Path.GetFileName(GetRelativePath(f,rootfolder))).ToArray();
+                    var name = Encoding.Default.GetBytes(GetRelativePath(f,rootfolder)).ToArray();
                     if (name.Length > 0x100)
                         name = name.Take(0x100).ToArray();
                     if(name.Length < 0x100)
@@ -144,12 +143,14 @@ namespace WolvenKit.Bundles
                     bw.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }); //PADDING
                     bw.Write((UInt32)Crc32C.Crc32CAlgorithm.Compute(File.ReadAllBytes(f))); //CRC32
                     bw.Write((UInt32)0x00000000); // Compression. We don't compress it so 0.
-                    Offset += (int)new FileInfo(f).Length;
+                    Offset += TOCEntrySize; //Shift the offset with the size of this TOC entry.
                     Debug.WriteLine("Pos: " + bw.BaseStream.Position);
                 }
+                bw.Write(new byte[0x1A0]);
                 foreach (var item in Directory.EnumerateFiles(rootfolder, "*", SearchOption.AllDirectories))
                 {
-                    bw.Write(File.ReadAllBytes(item));
+                    var content = File.ReadAllBytes(item);
+                    bw.Write(LZ4.LZ4Codec.EncodeHC(content,0,content.Length));
                 }
             }
             MessageBox.Show("Done writing file!");
