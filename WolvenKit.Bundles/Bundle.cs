@@ -136,17 +136,17 @@ namespace WolvenKit.Bundles
                     bw.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }); //HASH
                     bw.Write((UInt32)0x00000000); //EMPTY
                     bw.Write((UInt32)new FileInfo(f).Length); //SIZE
-                    bw.Write((UInt32)new FileInfo(f).Length); //ZSIZE
-                    bw.Write((UInt32)Offset); //OFFSET
+                    bw.Write((UInt32)GetCompressedSize(File.ReadAllBytes(f))); //ZSIZE
+                    bw.Write((UInt32)4096); //OFFSET BUG:This is wrong we need to calculate the proper offset.
                     bw.Write((UInt32)0x00000000); //DATE
                     bw.Write((UInt32)0x00000000); //TIME
                     bw.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }); //PADDING
-                    bw.Write((UInt32)Crc32C.Crc32CAlgorithm.Compute(File.ReadAllBytes(f))); //CRC32
-                    bw.Write((UInt32)0x00000000); // Compression. We don't compress it so 0.
+                    bw.Write((UInt32)0); //CRC32 TODO: Check if the game actually cares. Crc32C.Crc32CAlgorithm.Compute(File.ReadAllBytes(f))
+                    bw.Write((UInt32)5); // Compression. We don't compress it so 0. //For testing we use 5 for lz4hc
                     Offset += TOCEntrySize; //Shift the offset with the size of this TOC entry.
                     Debug.WriteLine("Pos: " + bw.BaseStream.Position);
                 }
-                bw.Write(new byte[0x1A0]);
+                bw.Write(new byte[0x1A0+0xD00]); //TODO: Figure these out.
                 foreach (var item in Directory.EnumerateFiles(rootfolder, "*", SearchOption.AllDirectories))
                 {
                     var content = File.ReadAllBytes(item);
@@ -154,6 +154,11 @@ namespace WolvenKit.Bundles
                 }
             }
             MessageBox.Show("Done writing file!");
+        }
+
+        public static int GetCompressedSize(byte[] content)
+        {
+            return LZ4.LZ4Codec.EncodeHC(content, 0, content.Length).Length;
         }
 
         /// <summary>
