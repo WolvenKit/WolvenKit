@@ -48,7 +48,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -118,16 +118,19 @@
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="ObjectListView, Version=2.9.1.1072, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
       <HintPath>..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OpenGL.Net, Version=0.5.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenGL.Net.0.5.2\lib\net461\OpenGL.Net.dll</HintPath>
+    <Reference Include="OpenGL.Net, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenGL.Net.0.6.0\lib\net461\OpenGL.Net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="OpenGL.Net.WinForms, Version=0.5.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenGL.Net.WinForms.0.5.2\lib\net461\OpenGL.Net.WinForms.dll</HintPath>
+    <Reference Include="OpenGL.Net.WinForms, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenGL.Net.WinForms.0.6.0\lib\net461\OpenGL.Net.WinForms.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -151,14 +154,17 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vlc.DotNet.Core, Version=2.1.149.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=MSIL">
-      <HintPath>..\packages\Vlc.DotNet.Core.2.1.149\lib\net45\AnyCPU\Vlc.DotNet.Core.dll</HintPath>
+    <Reference Include="Vlc.DotNet.Core, Version=2.1.154.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=MSIL">
+      <HintPath>..\packages\Vlc.DotNet.Core.2.1.154\lib\net45\AnyCPU\Vlc.DotNet.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Vlc.DotNet.Core.Interops, Version=2.1.149.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=MSIL">
-      <HintPath>..\packages\Vlc.DotNet.Core.Interops.2.1.149\lib\net45\AnyCPU\Vlc.DotNet.Core.Interops.dll</HintPath>
+    <Reference Include="Vlc.DotNet.Core.Interops, Version=2.1.154.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=MSIL">
+      <HintPath>..\packages\Vlc.DotNet.Core.Interops.2.1.154\lib\net45\AnyCPU\Vlc.DotNet.Core.Interops.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Vlc.DotNet.Forms, Version=2.1.149.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=MSIL">
-      <HintPath>..\packages\Vlc.DotNet.Forms.2.1.149\lib\net45\AnyCPU\Vlc.DotNet.Forms.dll</HintPath>
+    <Reference Include="Vlc.DotNet.Forms, Version=2.1.154.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=MSIL">
+      <HintPath>..\packages\Vlc.DotNet.Forms.2.1.154\lib\net45\AnyCPU\Vlc.DotNet.Forms.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="VSLangProj, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
