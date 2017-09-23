@@ -238,15 +238,14 @@ namespace WolvenKit
                 //TODO: Remove this once it's done
 #if DEBUG
                 case ".redfur":
-                case ".redcloth":
                     {
-                        var apexfile = new Apex(doc.File);
                         using (var sf = new SaveFileDialog())
                         {
                             sf.Filter = "XML Files | *.xml";
-                            if (sf.ShowDialog() == DialogResult.OK)
+                            //if (sf.ShowDialog() == DialogResult.OK)
                             {
-                                apexfile.Write(sf.FileName);
+                                var asd = Apex.ConvertToApex(doc.File);
+                                asd.Save("asd.xml");
                             }
                         }
                         break;

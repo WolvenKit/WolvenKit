@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
 
 namespace WolvenKit
 {
@@ -15,11 +16,11 @@ namespace WolvenKit
 
         public static XDocument ConvertToApex(CR2WFile ApexChunk)
         {
-            if (ApexChunk.chunks[0].Type == "CApexClothResource")
+            if (ApexChunk.chunks[0].Type == "CFurMeshResource")
             {
-                
+                var chunk = ApexChunk.chunks[0];
                 return Doc = new XDocument(
-                    new XElement("NvParameters",new XAttribute("numObjects","4"),new XAttribute("version","1.0"),
+                    new XElement("NvParameters",new XAttribute("numObjects","3"),new XAttribute("version","1.0"),
                         new XElement("value", new XAttribute("name", ""), new XAttribute("type", "Ref"), new XAttribute("className", "HairWorksInfo"), new XAttribute("version", 1.1), new XAttribute("checksum", "0xFFFFFFFF"),
                             new XElement("struct",new XAttribute("name", ""),
                                 new XElement("value", new XAttribute("name", "fileVersion"), new XAttribute("type", "String"), "1.1"),
@@ -44,8 +45,32 @@ namespace WolvenKit
                                 new XElement("value", new XAttribute("name", "waveFreqTexture"), new XAttribute("null", "1"), new XAttribute("type", "String"), ""),
                                 new XElement("value", new XAttribute("name", "strandTexture"), new XAttribute("null", "1"), new XAttribute("type", "String"), ""),
                                 new XElement("value", new XAttribute("name", "lengthTexture"), new XAttribute("type", "String"), ""),
-                                new XElement("value", new XAttribute("name", "specularTexture"), new XAttribute("null", "1"), new XAttribute("type", "String"), "")),
-                        new XElement("value", new XAttribute("name", ""), new XAttribute("type", "Ref"), new XAttribute("className", "HairAssetDescriptor"), new XAttribute("version", 1.1), new XAttribute("checksum", "0xFFFFFFFF")),
+                                new XElement("value", new XAttribute("name", "specularTexture"), new XAttribute("null", "1"), new XAttribute("type", "String"), ""))),
+                        new XElement("value", new XAttribute("name", ""), new XAttribute("type", "Ref"), new XAttribute("className", "HairAssetDescriptor"), new XAttribute("version", 1.1), new XAttribute("checksum", "0xFFFFFFFF"),
+                            new XElement("struct", new XAttribute("name", ""),
+                                new XElement("value", new XAttribute("name", "numGuideHairs"), new XAttribute("type", "U32"), ((CArray)chunk.GetVariableByName("boneIndices")).array.Count),
+                                new XElement("value", new XAttribute("name", "numVertices"), new XAttribute("type", "U32"), ((CArray)chunk.GetVariableByName("positions")).array.Count),
+                                new XElement("array", new XAttribute("name", "vertices"), new XAttribute("size",""), new XAttribute("type", "Vec3"), ((CArray)chunk.GetVariableByName("positions")).array.Select((item, inx) => new { item, inx }).GroupBy(x => x.inx / 3).Select(g => g.Select(x => x.item)).Aggregate("",(c,n) => c += " " + n)),
+                                new XElement("array", new XAttribute("name", "endIndices"), new XAttribute("size", ""), new XAttribute("type", "U32"), ""),
+                                new XElement("value", new XAttribute("name", "numFaces"), new XAttribute("type", "U32"), ""),
+                                new XElement("array", new XAttribute("name", "faceIndices"), new XAttribute("size", ""), new XAttribute("type", "U32"), ""),
+                                new XElement("array", new XAttribute("name", "faceUVs"), new XAttribute("size", ""), new XAttribute("type", "Vec2"), ""),
+                                new XElement("value", new XAttribute("name", "numBones"), new XAttribute("type", "U32"), ""),
+                                new XElement("array", new XAttribute("name", "boneIndices"), new XAttribute("size", ""), new XAttribute("type", "Vec4"), ""),
+                                new XElement("array", new XAttribute("name", "boneWeights"), new XAttribute("size", ""), new XAttribute("type", "Vec4"), ""),
+                                new XElement("array", new XAttribute("name", "boneNames"), new XAttribute("size", ""), new XAttribute("type", "U8"), ""),
+                                new XElement("array", new XAttribute("name", "array"), new XAttribute("size", ""), new XAttribute("type", "String"), ""),
+                                new XElement("array", new XAttribute("name", "bindPoses"), new XAttribute("size", ""), new XAttribute("type", "Mat44"), ""),
+                                new XElement("array", new XAttribute("name", "boneParents"), new XAttribute("size", ""), new XAttribute("type", "I32"), ""),
+                                new XElement("value", new XAttribute("name", "numBoneSpheres"), new XAttribute("type", "U32"), ""),
+                                new XElement("array", new XAttribute("name", "boneSpheres"), new XAttribute("size", ""), new XAttribute("type", "Struct"), ""),
+                                new XElement("value", new XAttribute("name", "numBoneCapsules"), new XAttribute("type", "U32"), ""),
+                                new XElement("array", new XAttribute("name", "boneCapsuleIndices"), new XAttribute("size", ""), new XAttribute("type", "U32"), ""),
+                                new XElement("value", new XAttribute("name", "numPinConstraints"), new XAttribute("type", "U32"), ""),
+                                new XElement("array", new XAttribute("name", "pinConstraints"), new XAttribute("size", ""), new XAttribute("type", "Struct"), ""),
+                                new XElement("value", new XAttribute("name", "sceneUnit"), new XAttribute("type", "F32"), ""),
+                                new XElement("value", new XAttribute("name", "upAxis"), new XAttribute("type", "U32"), ""),
+                                new XElement("value", new XAttribute("name", "handedness"), new XAttribute("type", "U32"), ""))),
                         new XElement("value", new XAttribute("name", ""), new XAttribute("type", "Ref"), new XAttribute("className", "HairInstanceDescriptor"), new XAttribute("version", 1.1), new XAttribute("checksum", "0xFFFFFFFF"))));
             }
             else
