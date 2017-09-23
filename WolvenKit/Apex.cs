@@ -50,8 +50,8 @@ namespace WolvenKit
                             new XElement("struct", new XAttribute("name", ""),
                                 new XElement("value", new XAttribute("name", "numGuideHairs"), new XAttribute("type", "U32"), ((CArray)chunk.GetVariableByName("boneIndices")).array.Count),
                                 new XElement("value", new XAttribute("name", "numVertices"), new XAttribute("type", "U32"), ((CArray)chunk.GetVariableByName("positions")).array.Count),
-                                new XElement("array", new XAttribute("name", "vertices"), new XAttribute("size",""), new XAttribute("type", "Vec3"), ((CArray)chunk.GetVariableByName("positions")).array.Select((item, inx) => new { item, inx }).GroupBy(x => x.inx / 3).Select(g => g.Select(x => x.item)).Aggregate("",(c,n) => c += " " + n)),
-                                new XElement("array", new XAttribute("name", "endIndices"), new XAttribute("size", ""), new XAttribute("type", "U32"), ""),
+                                new XElement("array", new XAttribute("name", "vertices"), new XAttribute("size", ((CArray)chunk.GetVariableByName("positions")).array.Count), new XAttribute("type", "Vec3"), FormatCoordinateArray(((CArray)chunk.GetVariableByName("positions")))),
+                                new XElement("array", new XAttribute("name", "endIndices"), new XAttribute("size", ((CArray)(chunk.GetVariableByName("endIndices"))).array.Count), new XAttribute("type", "U32"), (CArray)(chunk.GetVariableByName("endIndices"))),
                                 new XElement("value", new XAttribute("name", "numFaces"), new XAttribute("type", "U32"), ""),
                                 new XElement("array", new XAttribute("name", "faceIndices"), new XAttribute("size", ""), new XAttribute("type", "U32"), ""),
                                 new XElement("array", new XAttribute("name", "faceUVs"), new XAttribute("size", ""), new XAttribute("type", "Vec2"), ""),
@@ -95,6 +95,27 @@ namespace WolvenKit
         public static void BreakXmlHeader(string path)
         {
             File.WriteAllLines(path, new string[] { "<!DOCTYPE NvParameters>" }.ToList().Concat(File.ReadAllLines(path).Skip(1).ToArray()));
+        }
+
+        /// <summary>
+        /// Formats a CArray of coordinates to NvParameterized format.
+        /// Eg.: X Y Z, X Y Z, ......
+        /// </summary>
+        /// <param name="coords">Coordinates to format.</param>
+        /// <returns>The string of coordinates.</returns>
+        public static string FormatCoordinateArray(CArray coords)
+        {
+            var ret = "";
+            foreach (var coord in coords.array)
+            {
+                if (((CVector) (coord)).variables.Count > 3)
+                {
+                    ret += ((CVector)(coord)).variables[0] + " ";
+                    ret += ((CVector)(coord)).variables[1] + " ";
+                    ret += ((CVector)(coord)).variables[2] + ", ";
+                }
+            }
+            return ret.Trim(',',' ');
         }
     }
 }
