@@ -51,7 +51,7 @@ namespace WolvenKit
                                 new XElement("value", new XAttribute("name", "numGuideHairs"), new XAttribute("type", "U32"), ((CArray)chunk.GetVariableByName("boneIndices")).array.Count),
                                 new XElement("value", new XAttribute("name", "numVertices"), new XAttribute("type", "U32"), ((CArray)chunk.GetVariableByName("positions")).array.Count),
                                 new XElement("array", new XAttribute("name", "vertices"), new XAttribute("size", ((CArray)chunk.GetVariableByName("positions")).array.Count), new XAttribute("type", "Vec3"), FormatCoordinateArray(((CArray)chunk.GetVariableByName("positions")))),
-                                new XElement("array", new XAttribute("name", "endIndices"), new XAttribute("size", ((CArray)(chunk.GetVariableByName("endIndices"))).array.Count), new XAttribute("type", "U32"), (CArray)(chunk.GetVariableByName("endIndices"))),
+                                new XElement("array", new XAttribute("name", "endIndices"), new XAttribute("size", ((CArray)(chunk.GetVariableByName("endIndices"))).array.Count), new XAttribute("type", "U32"), ((CArray)(chunk.GetVariableByName("endIndices"))).array.Aggregate("",(c,n) => c += " " + n)),
                                 new XElement("value", new XAttribute("name", "numFaces"), new XAttribute("type", "U32"), ""),
                                 new XElement("array", new XAttribute("name", "faceIndices"), new XAttribute("size", ""), new XAttribute("type", "U32"), ""),
                                 new XElement("array", new XAttribute("name", "faceUVs"), new XAttribute("size", ""), new XAttribute("type", "Vec2"), ""),
