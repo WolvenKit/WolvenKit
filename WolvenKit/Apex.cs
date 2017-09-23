@@ -13,17 +13,17 @@ namespace WolvenKit
     {
         public static XDocument Doc = new XDocument();
 
-        public Apex(CR2WFile ApexChunk)
+        public static XDocument ConvertToApex(CR2WFile ApexChunk)
         {
             if (ApexChunk.chunks[0].Type == "CApexClothResource")
             {
                 
-                Doc = new XDocument(
+                return Doc = new XDocument(
                     new XElement("NvParameters",new XAttribute("numObjects","4"),new XAttribute("version","1.0"),
                         new XElement("value", new XAttribute("name", ""), new XAttribute("type", "Ref"), new XAttribute("className", "HairWorksInfo"), new XAttribute("version", 1.1), new XAttribute("checksum", "0xFFFFFFFF"),
                             new XElement("struct",new XAttribute("name", ""),
                                 new XElement("value", new XAttribute("name", "fileVersion"), new XAttribute("type", "String"), "1.1"),
-                                new XElement("value", new XAttribute("name", "toolVersion"), new XAttribute("type", "String"), "None since it's made by me"),
+                                new XElement("value", new XAttribute("name", "toolVersion"), new XAttribute("type", "String"), "WolvenKit"),
                                 new XElement("value", new XAttribute("name", "sourcePath"), new XAttribute("type", "String"), "https://github.com/Traderain/Wolven-kit"),
                                 new XElement("value", new XAttribute("name", "authorName"), new XAttribute("type", "String"), Environment.UserName),
                                 new XElement("value", new XAttribute("name", "fileVersion"), new XAttribute("type", "String"), DateTime.Now.ToString("R")))),
@@ -37,16 +37,11 @@ namespace WolvenKit
             }
         }
 
-        public void Read(string filename)
+        public static CR2WFile ConvertToCR2W(XDocument ApexFile)
         {
-            FixXmlHeader(filename);
-            var doc = XDocument.Load(filename);
-        }
-
-        public void Write(string filename)
-        {
-            Doc.Save(filename);
-            BreakXmlHeader(filename);
+            var crw = new CR2WFile();
+            //TODO: Conversion.
+            return crw;
         }
 
         public static void FixXmlHeader(string path)

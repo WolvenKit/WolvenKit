@@ -146,14 +146,61 @@ namespace WolvenKit.Bundles
                     Offset += TOCEntrySize; //Shift the offset with the size of this TOC entry.
                     Debug.WriteLine("Pos: " + bw.BaseStream.Position);
                 }
-                bw.Write(new byte[0x1A0+0xD00]); //TODO: Figure these out.
                 foreach (var item in Directory.EnumerateFiles(rootfolder, "*", SearchOption.AllDirectories))
                 {
-                    var content = File.ReadAllBytes(item);
-                    bw.Write(LZ4.LZ4Codec.EncodeHC(content,0,content.Length));
+                    WriteCompressedData(bw, File.ReadAllBytes(item), 5);
                 }
             }
             MessageBox.Show("Done writing file!");
+        }
+
+        public static int WriteCompressedData(BinaryWriter bw, byte[] Data,int ComType)
+        {
+            int writePosition = (int)bw.BaseStream.Position;
+            int numWritten = 0;
+            int paddingLength = GetOffset(writePosition) - writePosition;
+            if (paddingLength > 0)
+            {
+               // int preliminaryPaddingLength = 16;      //use of 'prelimanary padding' data appears to be optional as far as the game cares, so don't bother with it [this line disables it]
+                int preliminaryPaddingLength = 16 - (writePosition % 16);
+                if (preliminaryPaddingLength < 16)
+                {
+                    bw.Write(FOOTER_DATA.Substring(0, preliminaryPaddingLength));
+                    paddingLength -= preliminaryPaddingLength;
+                    numWritten += preliminaryPaddingLength;
+                }
+                if (paddingLength > 0)
+                {
+                    bw.Write(new byte[paddingLength]);
+                    numWritten += paddingLength;
+                }
+            }
+            switch (ComType)
+            {
+                case 4:
+                case 5:
+                {
+                    bw.Write(LZ4.LZ4Codec.EncodeHC(Data,0,Data.Length));
+                    break;
+                }
+                default:
+                {
+                    bw.Write(Data);
+                    numWritten += Data.Length;
+                    break;
+                }
+            }
+            return numWritten;
+        }
+
+        public static int GetOffset(int minPos)
+        {
+            int firstValidPos = (minPos / ALIGNMENT_TARGET) * ALIGNMENT_TARGET + ALIGNMENT_TARGET;
+            while (firstValidPos < minPos)
+            {
+                firstValidPos += ALIGNMENT_TARGET;
+            }
+            return firstValidPos;
         }
 
         public static int GetCompressedSize(byte[] content)
