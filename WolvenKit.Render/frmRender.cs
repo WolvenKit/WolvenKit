@@ -60,10 +60,19 @@ namespace WolvenKit.Render
         }
 
         /// <summary>
+        /// Witcher file containing rig data.
+        /// </summary>
+        public CR2WFile RigFile;
+
+        /// <summary>
         /// Reads mesh buffer infos.
         /// </summary>
         void ReadMeshBufferInfos()
         {
+            // IMPLEMENTED FROM jlouis' witcherconverter
+            // http://jlouisb.users.sourceforge.net/
+            // https://bitbucket.org/jlouis/witcherconverter
+
             SBufferInfos bufferInfos = new SBufferInfos();
 
             // *************** READ CHUNK INFOS ***************
@@ -129,6 +138,10 @@ namespace WolvenKit.Render
                             bufferInfos.quantizationScale.Y = float.Parse((cookedData as CVector).variables[1].ToString());
                             bufferInfos.quantizationScale.Z = float.Parse((cookedData as CVector).variables[2].ToString());
                         }
+                        else if (cookedData.Name == "bonePositions")
+                        {
+
+                        }
                     }
                     bufferInfos.verticesBuffer = vertexBufferInfos;
                     var meshChunks = chunk.GetVariableByName("chunks") as CArray;
@@ -181,10 +194,6 @@ namespace WolvenKit.Render
             // *************** READ MESH BUFFER INFOS ***************
             foreach (var meshInfo in meshInfos)
             {
-                // IMPLEMENTED FROM jlouis' witcherconverter
-                // http://jlouisb.users.sourceforge.net/
-                // https://bitbucket.org/jlouis/witcherconverter
-
                 SVertexBufferInfos vBufferInf = new SVertexBufferInfos();
                 uint nbVertices = 0;
                 uint firstVertexOffset = 0;
@@ -299,6 +308,70 @@ namespace WolvenKit.Render
                     meshBuff.Drop();            
                 }
             }
+
+            // *************** READ RIG DATA ***************
+            CSkeleton skeleton = new CSkeleton();
+            foreach (var chunk in RigFile.chunks)
+            {
+                if (chunk.Type == "CSkeleton")
+                {
+                    var bones = chunk.GetVariableByName("bones") as CArray;
+                    skeleton.nbBones = (uint)bones.array.Count;
+                    foreach (CVector bone in bones)
+                    {
+                        var boneName = bone.variables.GetVariableByName("nameAsCName") as CName;
+                        skeleton.names.Add(boneName.Value);
+                    }
+                    var parentIndices = chunk.GetVariableByName("parentIndices") as CArray;
+                    foreach (CVariable parentIndex in parentIndices)
+                    {
+                        skeleton.parentId.Add(short.Parse(parentIndex.ToString()));
+                    }
+
+                    var unknownBytes = chunk.unknownBytes.Bytes;
+                    int currPos = 0;
+                    for (uint i = 0; i < skeleton.nbBones; i++)
+                    {
+                        Vector3Df position = new Vector3Df();
+                        position.X = Convert.ToSingle(unknownBytes.SubArray(ref currPos, 4).GetUint());
+                        position.Y = Convert.ToSingle(unknownBytes.SubArray(ref currPos, 4).GetUint());
+                        position.Z = Convert.ToSingle(unknownBytes.SubArray(ref currPos, 4).GetUint());
+                        Convert.ToSingle(unknownBytes.SubArray(ref currPos, 4).GetUint()); // the w component
+
+                        Quaternion orientation = new Quaternion();
+                        orientation.X = Convert.ToSingle(unknownBytes.SubArray(ref currPos, 4).GetUint());
+                        orientation.Y = Convert.ToSingle(unknownBytes.SubArray(ref currPos, 4).GetUint());
+                        orientation.Z = Convert.ToSingle(unknownBytes.SubArray(ref currPos, 4).GetUint());
+                        orientation.W = Convert.ToSingle(unknownBytes.SubArray(ref currPos, 4).GetUint());
+
+                        Vector3Df scale;
+                        scale.X = Convert.ToSingle(unknownBytes.SubArray(ref currPos, 4).GetUint());
+                        scale.Y = Convert.ToSingle(unknownBytes.SubArray(ref currPos, 4).GetUint());
+                        scale.Z = Convert.ToSingle(unknownBytes.SubArray(ref currPos, 4).GetUint());
+                        Convert.ToSingle(unknownBytes.SubArray(ref currPos, 4).GetUint()); // the w component
+
+                        Matrix posMat = new Matrix();
+                        posMat.Translation = position;
+
+                        Matrix rotMat = new Matrix();
+                        Vector3Df euler = orientation.ToEuler();
+                        // chechNaNErrors(euler);
+
+                        rotMat.SetRotationRadians(euler);
+
+                        Matrix scaleMat = new Matrix();
+                        scaleMat.Scale = scale;
+
+                        Matrix localTransform = posMat * rotMat * scaleMat;
+                        orientation = orientation.MakeInverse();
+                        skeleton.matrix.Add(localTransform);
+                        skeleton.positions.Add(position);
+                        skeleton.rotations.Add(orientation);
+                        skeleton.scales.Add(scale);
+                    }
+                }
+            }
+
         }
 
         /// <summary>
