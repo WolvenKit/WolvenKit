@@ -22,7 +22,7 @@ namespace WolvenKit
         ///     Configuration values
         /// </summary>
         public string ExecutablePath { get; set; }
-
+        
         public string TextLanguage { get; set; }
         public string VoiceLanguage { get; set; }
         public string WccLite { get; set; }
@@ -32,6 +32,14 @@ namespace WolvenKit
         public Point MainLocation { get; set; }
         public FormWindowState MainState { get; set; }
         public string InitialExportDirectory { get; set; }
+
+        [XmlIgnore]
+        public string GameDLCDir => Path.Combine(ExecutablePath, @"..\..\DLC\");
+        [XmlIgnore]
+        public string GameModDir => Path.Combine(ExecutablePath, @"..\..\Mods\");
+        [XmlIgnore]
+        public string GameRootDir => Path.Combine(ExecutablePath, @"..\..\..\");
+
 
         ~Configuration()
         {

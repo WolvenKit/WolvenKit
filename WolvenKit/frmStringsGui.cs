@@ -55,7 +55,7 @@ namespace WolvenKit
 
             if (activeMod != null)
             {
-                var csvDir = (activeMod.Directory + "\\strings\\CSV");
+                var csvDir = (activeMod.ProjectDirectory + "\\strings\\CSV");
                 if (!Directory.Exists(csvDir))
                     return;
 
@@ -764,9 +764,9 @@ namespace WolvenKit
             var outputPath = "";
             if (activeMod != null)
             {
-                outputPath = (activeMod.Directory + "\\strings\\CSV");
+                outputPath = (activeMod.ProjectDirectory + "\\strings\\CSV");
                 if (!Directory.Exists(outputPath))
-                    Directory.CreateDirectory(activeMod.Directory + "\\strings\\CSV");
+                    Directory.CreateDirectory(activeMod.ProjectDirectory + "\\strings\\CSV");
             }
             else
                 outputPath = GetPath();
@@ -964,7 +964,8 @@ namespace WolvenKit
 
                 if (comboBoxLanguagesMode.SelectedIndex == 1)
                 {
-                    var language = Regex.Match(rows[0][0], "language=([a-z]+)]").Groups[1].Value;
+                    var firstLine = File.ReadLines(filePath, Encoding.UTF8).First();
+                    var language = Regex.Match(firstLine, "language=([a-zAZ]+)]").Groups[1].Value;
                     var strings = new List<List<string>>();
 
                     rows.ForEach(row =>
@@ -1012,9 +1013,9 @@ namespace WolvenKit
             string stringsDir = "";
             if (activeMod != null)
             {
-                stringsDir = (activeMod.Directory + "\\strings");
+                stringsDir = (activeMod.ProjectDirectory + "\\strings");
                 if (!Directory.Exists(stringsDir))
-                    Directory.CreateDirectory(activeMod.Directory + "\\strings");
+                    Directory.CreateDirectory(activeMod.ProjectDirectory + "\\strings");
             }
             else
                 stringsDir = GetPath();
@@ -1105,7 +1106,7 @@ namespace WolvenKit
 
             if (type == "encoded")
             {
-                var stringsDir = activeMod.Directory + "\\strings";
+                var stringsDir = activeMod.ProjectDirectory + "\\strings";
                 if (!Directory.Exists(stringsDir))
                     return;
 
@@ -1126,7 +1127,7 @@ namespace WolvenKit
 
             if (type == "csv")
             {
-                var csvDir = activeMod.Directory + "\\strings\\CSV";
+                var csvDir = activeMod.ProjectDirectory + "\\strings\\CSV";
                 if (!Directory.Exists(csvDir))
                     return;
 
@@ -1176,7 +1177,7 @@ namespace WolvenKit
             if (activeMod == null)
                 return false;
 
-            var stringsHashPath = activeMod.Directory + "\\strings\\hash";
+            var stringsHashPath = activeMod.ProjectDirectory + "\\strings\\hash";
             if (!File.Exists(stringsHashPath))
                 return false;
 
@@ -1191,7 +1192,7 @@ namespace WolvenKit
             foreach (var b in hash)
                 hashStringsBytesSum += b;
 
-            var csvHashPath = activeMod.Directory + "\\strings\\CSV\\hash";
+            var csvHashPath = activeMod.ProjectDirectory + "\\strings\\CSV\\hash";
             if (!File.Exists(csvHashPath))
                 return false;
 
@@ -1209,11 +1210,6 @@ namespace WolvenKit
                 return true;
 
             return false;
-        }
-
-        private void ShowWIPMessage()
-        {
-            MessageBox.Show("Work in progress.", "Coming soon(tm)", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
         private void tabControlLanguages_Selected(object sender, TabControlEventArgs e)

@@ -22,7 +22,7 @@ namespace WolvenKit.Bundles
         public Dictionary<string, Bundle> Bundles { get; set; }
         public WitcherTreeNode RootNode { get; set; }
         public List<IWitcherFile> FileList { get; set; }
-        public string TypeName { get { return "BundleManager"; } }
+        public string TypeName { get { return new Bundle().TypeName; } }
         public List<string> Extensions { get; set; }
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
 

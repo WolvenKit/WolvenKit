@@ -61,14 +61,19 @@ namespace WolvenKit
             this.rungameToolStrip = new System.Windows.Forms.ToolStripDropDownButton();
             this.launchGameForDebuggingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.launchWithCostumParametersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.packProjectAndLaunchGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.newFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.scriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.chunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.modToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.ModscriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ModchunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dLCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DLCScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DLCChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addFileFromBundleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addFileFromOtherModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -221,7 +226,8 @@ namespace WolvenKit
             this.rungameToolStrip.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.rungameToolStrip.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.launchGameForDebuggingToolStripMenuItem,
-            this.launchWithCostumParametersToolStripMenuItem});
+            this.launchWithCostumParametersToolStripMenuItem,
+            this.packProjectAndLaunchGameToolStripMenuItem});
             this.rungameToolStrip.Image = global::WolvenKit.Properties.Resources.witcher3_101;
             this.rungameToolStrip.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.rungameToolStrip.Name = "rungameToolStrip";
@@ -241,6 +247,13 @@ namespace WolvenKit
             this.launchWithCostumParametersToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
             this.launchWithCostumParametersToolStripMenuItem.Text = "Launch with costum parameters";
             this.launchWithCostumParametersToolStripMenuItem.Click += new System.EventHandler(this.launchWithCostumParametersToolStripMenuItem_Click);
+            // 
+            // packProjectAndLaunchGameToolStripMenuItem
+            // 
+            this.packProjectAndLaunchGameToolStripMenuItem.Name = "packProjectAndLaunchGameToolStripMenuItem";
+            this.packProjectAndLaunchGameToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
+            this.packProjectAndLaunchGameToolStripMenuItem.Text = "Pack project and launch game";
+            this.packProjectAndLaunchGameToolStripMenuItem.Click += new System.EventHandler(this.packProjectAndLaunchGameToolStripMenuItem_Click);
             // 
             // menuStrip1
             // 
@@ -303,29 +316,62 @@ namespace WolvenKit
             // newFileToolStripMenuItem
             // 
             this.newFileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.scriptToolStripMenuItem,
-            this.chunkToolStripMenuItem});
+            this.modToolStripMenuItem1,
+            this.dLCToolStripMenuItem});
             this.newFileToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.FileGroup_10135_16x;
             this.newFileToolStripMenuItem.Name = "newFileToolStripMenuItem";
             this.newFileToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.newFileToolStripMenuItem.Text = "New file";
             // 
-            // scriptToolStripMenuItem
+            // modToolStripMenuItem1
             // 
-            this.scriptToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.FileGroup_10135_16x;
-            this.scriptToolStripMenuItem.Name = "scriptToolStripMenuItem";
-            this.scriptToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
-            this.scriptToolStripMenuItem.Text = "Script";
-            this.scriptToolStripMenuItem.Click += new System.EventHandler(this.scriptToolStripMenuItem_Click);
+            this.modToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ModscriptToolStripMenuItem,
+            this.ModchunkToolStripMenuItem});
+            this.modToolStripMenuItem1.Name = "modToolStripMenuItem1";
+            this.modToolStripMenuItem1.Size = new System.Drawing.Size(99, 22);
+            this.modToolStripMenuItem1.Text = "Mod";
             // 
-            // chunkToolStripMenuItem
+            // ModscriptToolStripMenuItem
             // 
-            this.chunkToolStripMenuItem.Enabled = false;
-            this.chunkToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.AddNodefromFile_354;
-            this.chunkToolStripMenuItem.Name = "chunkToolStripMenuItem";
-            this.chunkToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
-            this.chunkToolStripMenuItem.Text = "Chunk file";
-            this.chunkToolStripMenuItem.Click += new System.EventHandler(this.chunkToolStripMenuItem_Click);
+            this.ModscriptToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.FileGroup_10135_16x;
+            this.ModscriptToolStripMenuItem.Name = "ModscriptToolStripMenuItem";
+            this.ModscriptToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.ModscriptToolStripMenuItem.Text = "Script";
+            this.ModscriptToolStripMenuItem.Click += new System.EventHandler(this.ModscriptToolStripMenuItem_Click);
+            // 
+            // ModchunkToolStripMenuItem
+            // 
+            this.ModchunkToolStripMenuItem.Enabled = false;
+            this.ModchunkToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.AddNodefromFile_354;
+            this.ModchunkToolStripMenuItem.Name = "ModchunkToolStripMenuItem";
+            this.ModchunkToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.ModchunkToolStripMenuItem.Text = "Chunk file";
+            // 
+            // dLCToolStripMenuItem
+            // 
+            this.dLCToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.DLCScriptToolStripMenuItem,
+            this.DLCChunkToolStripMenuItem});
+            this.dLCToolStripMenuItem.Name = "dLCToolStripMenuItem";
+            this.dLCToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.dLCToolStripMenuItem.Text = "DLC";
+            // 
+            // DLCScriptToolStripMenuItem
+            // 
+            this.DLCScriptToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.FileGroup_10135_16x;
+            this.DLCScriptToolStripMenuItem.Name = "DLCScriptToolStripMenuItem";
+            this.DLCScriptToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.DLCScriptToolStripMenuItem.Text = "Script";
+            this.DLCScriptToolStripMenuItem.Click += new System.EventHandler(this.DLCScriptToolStripMenuItem_Click);
+            // 
+            // DLCChunkToolStripMenuItem
+            // 
+            this.DLCChunkToolStripMenuItem.Enabled = false;
+            this.DLCChunkToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.AddNodefromFile_354;
+            this.DLCChunkToolStripMenuItem.Name = "DLCChunkToolStripMenuItem";
+            this.DLCChunkToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.DLCChunkToolStripMenuItem.Text = "Chunk file";
             // 
             // addFileFromBundleToolStripMenuItem
             // 
@@ -393,8 +439,8 @@ namespace WolvenKit
             this.toolStripSeparator4,
             this.settingsToolStripMenuItem});
             this.modToolStripMenuItem.Name = "modToolStripMenuItem";
-            this.modToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.modToolStripMenuItem.Text = "Mod";
+            this.modToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+            this.modToolStripMenuItem.Text = "Project";
             // 
             // createPackedInstallerToolStripMenuItem
             // 
@@ -605,7 +651,7 @@ namespace WolvenKit
             // 
             this.dockPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dockPanel.Location = new System.Drawing.Point(0, 51);
-            this.dockPanel.Margin = new System.Windows.Forms.Padding(2);
+            this.dockPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dockPanel.Name = "dockPanel";
             this.dockPanel.ShowDocumentIcon = true;
             this.dockPanel.Size = new System.Drawing.Size(824, 342);
@@ -654,13 +700,13 @@ namespace WolvenKit
             dockPaneStripToolWindowGradient1.InactiveTabGradient = tabGradient7;
             dockPaneStripSkin1.ToolWindowGradient = dockPaneStripToolWindowGradient1;
             dockPanelSkin1.DockPaneStripSkin = dockPaneStripSkin1;
-            this.dockPanel.Skin = dockPanelSkin1;
             this.dockPanel.TabIndex = 9;
             this.dockPanel.ActiveDocumentChanged += new System.EventHandler(this.dockPanel_ActiveDocumentChanged);
             // 
             // toolStrip2
             // 
             this.toolStrip2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLBL,
             this.toolStripSeparator9,
@@ -700,9 +746,10 @@ namespace WolvenKit
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
-            this.MinimumSize = new System.Drawing.Size(584, 393);
+            this.MinimumSize = new System.Drawing.Size(584, 392);
             this.Name = "frmMain";
             this.Text = "Wolven kit";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmMain_FormClosed);
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.MdiChildActivate += new System.EventHandler(this.frmMain_MdiChildActivate);
@@ -758,8 +805,6 @@ namespace WolvenKit
         private ToolStripMenuItem buildDateToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator6;
         private ToolStripMenuItem newFileToolStripMenuItem;
-        private ToolStripMenuItem scriptToolStripMenuItem;
-        private ToolStripMenuItem chunkToolStripMenuItem;
         private ToolStripMenuItem saveToolStripMenuItem;
         private ToolStripMenuItem saveAllToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator7;
@@ -780,5 +825,12 @@ namespace WolvenKit
         private ToolStripLabel statusLBL;
         private ToolStripSeparator toolStripSeparator9;
         private ToolStripProgressBar toolStripProgressBar1;
+        private ToolStripMenuItem packProjectAndLaunchGameToolStripMenuItem;
+        private ToolStripMenuItem modToolStripMenuItem1;
+        private ToolStripMenuItem ModscriptToolStripMenuItem;
+        private ToolStripMenuItem ModchunkToolStripMenuItem;
+        private ToolStripMenuItem dLCToolStripMenuItem;
+        private ToolStripMenuItem DLCScriptToolStripMenuItem;
+        private ToolStripMenuItem DLCChunkToolStripMenuItem;
     }
 }

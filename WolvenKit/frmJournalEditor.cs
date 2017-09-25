@@ -1,8 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.Cache;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
+using WolvenKit.Render;
 
 namespace WolvenKit
 {
@@ -48,6 +52,24 @@ namespace WolvenKit
 
         }
 
+        public void ParseImageAndPreview(CR2WChunk chunk)
+        {
+            var image = chunk.GetVariableByName("image").ToString();
+            if (!string.IsNullOrEmpty(image))
+            {
+                try
+                {
+                    var files = MainController.Get().ImportFile(image, MainController.Get().TextureManager);
+                    entityImage.Image = new DdsImage(files[0]).BitmapImage;
+                    entimgbox.Image = new DdsImage(files[1]).BitmapImage;
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
+
         public void ParseJournalType(CPtr pointer)
         {
             var typenode = pointer.PtrTarget;
@@ -57,48 +79,58 @@ namespace WolvenKit
                 {
                     vulnerable_treview.Show();
                     var name = typenode.GetVariableByName("baseName");
-                    indeximage_label.Text = typenode.GetVariableByName("image").ToString();
                     this.Text = $@"Creature editor [{name}]";
-                    descriptiontext += (name + "\n\n");
+                    descriptiontext += (name + "<br>");
                     ParseUsedAgainst((CArray)typenode.GetVariableByName("itemsUsedAgainstCreature"));
+                    ParseImageAndPreview(typenode);
                     ParseCJournalCreatureChildren((CArray)typenode.GetVariableByName("children"));
                     break;
                 }
                 case "CJournalCharacter":
                 {
                     var name = typenode.GetVariableByName("baseName");
-                    indeximage_label.Text = typenode.GetVariableByName("image").ToString();
+                    ParseImageAndPreview(typenode);
                     this.Text = $@"Character editor [{name}]";
-                    descriptiontext += (name + "\n\n");
+                    descriptiontext += (name + "<br>");
                     vulnerable_treview.Hide();
-                    ParseCJournalCharacterChildren((CArray)typenode.GetVariableByName("children"));
+                    ParseChildDescription((CArray)typenode.GetVariableByName("children"));
                     break;
                 }
                 case "CJournalGlossary":
                 {
                     var name = typenode.GetVariableByName("baseName");
                     this.Text = $@"Glossary editor [{name}]";
-                    descriptiontext += (name + "\n\n");
+                    descriptiontext += (name + "<br>");
                     vulnerable_treview.Hide();
-                    ParseCJournalGlossaryChildren((CArray)typenode.GetVariableByName("children"));
+                    ParseChildDescription((CArray)typenode.GetVariableByName("children"));
                     break;
                 }
                 case "CJournalTutorial":
                 {
                     var name = typenode.GetVariableByName("baseName");
-                    indeximage_label.Text = name.ToString();
                     descriptiontext += typenode.GetVariableByName("description").ToString();
                     vulnerable_treview.Hide();
+                    entityImage.Hide();
                     this.Text = $@"Tutorial editor [{name}]";
                     break;
                 }
                 case "CJournalStoryBookChapter":
                 {
                     var name = typenode.GetVariableByName("baseName");
-                    indeximage_label.Text = name.ToString();
                     vulnerable_treview.Hide();
+                    entityImage.Hide();
                     this.Text = $@"Story book editor [{name}]";
                     break;
+                }
+                case "CJournalStoryBookPage":
+                {
+                   var name = typenode.GetVariableByName("baseName");
+                   descriptiontext += "<h3>" + typenode.GetVariableByName("title") + "</h3>";
+                   ParseChildDescription((CArray)typenode.GetVariableByName("children"));
+                   vulnerable_treview.Hide();
+                   entityImage.Hide();
+                   this.Text = $@"Story book editor [{name}]";
+                   break;
                 }
                 case "CJournalQuest":
                 {
@@ -108,7 +140,6 @@ namespace WolvenKit
                     splitContainer1.Panel2.Controls.Add(QuestView);
                     QuestView.Dock = DockStyle.Fill;
                     var name = typenode.GetVariableByName("title") + " " + typenode.GetVariableByName("type");
-                    indeximage_label.Text = name;
                     this.Text = $@"Quest editor [{name}]";
                     ParseCJournalQuestChild((CArray) typenode.GetVariableByName("children"));
                     break;
@@ -117,7 +148,6 @@ namespace WolvenKit
                 {
                     vulnerable_treview.Hide();
                     var name = typenode.GetVariableByName("baseName");
-                    indeximage_label.Text = name.ToString();
                     this.Text = $@"{typenode.Type} editor [{name}]";
                     break;
                 }
@@ -129,7 +159,6 @@ namespace WolvenKit
         #region CJournalCreature
         public void ParseUsedAgainst(CArray infos)
         {
-            textRender.Text += ("Items used against:\n");
             foreach (var info in infos)
             {
                 vulnerable_treview.Nodes.Add(info.ToString());
@@ -167,26 +196,9 @@ namespace WolvenKit
         }
         #endregion
 
-        #region CJournalCharacter
-        public void ParseCJournalCharacterChildren(CArray childs)
-        {
-            foreach (CPtr child in childs)
-            {
-                switch (child.PtrTarget.Type)
-                {
-                    case "CJournalCharacterDescription":
-                    {
-                        descriptiontext += child.PtrTarget.GetVariableByName("description");
-                        break;
-                    }
-                }
-            }
-        }
-        #endregion
+        #region Common
 
-        #region CJournalGlossary
-
-        public void ParseCJournalGlossaryChildren(CArray childs)
+        public void ParseChildDescription(CArray childs)
         {
             foreach (var cVariable in childs)
             {
@@ -195,7 +207,17 @@ namespace WolvenKit
                 {
                     case "CJournalGlossaryDescription":
                     {
-                        descriptiontext += child.PtrTarget.GetVariableByName("description");
+                        descriptiontext += child.PtrTarget.GetVariableByName("description") + "<br>";
+                            break;
+                    }
+                    case "CJournalCharacterDescription":
+                    {
+                        descriptiontext += child.PtrTarget.GetVariableByName("description") + "<br>";
+                            break;
+                    }
+                    case "CJournalStoryBookPageDescription":
+                    {
+                        descriptiontext += child.PtrTarget.GetVariableByName("description") + "<br>";
                         break;
                     }
                 }

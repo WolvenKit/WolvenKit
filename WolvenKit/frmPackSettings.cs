@@ -23,7 +23,7 @@ namespace WolvenKit
                 scriptsCHB.Checked = true;
             if (MainController.Get().Window.ActiveMod.Files.Any(x => x.EndsWith(".wem") || x.EndsWith(".bnk")))
                 scriptsCHB.Checked = true;
-            if (Directory.Exists((MainController.Get().Window.ActiveMod.Directory + "\\strings")) && Directory.GetFiles((MainController.Get().Window.ActiveMod.Directory + "\\strings")).Any(x => x.EndsWith(".w3strings")))
+            if (Directory.Exists((MainController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")) && Directory.GetFiles((MainController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")).Any(x => x.EndsWith(".w3strings")))
                 stringsCHB.Checked = true;
         }
 

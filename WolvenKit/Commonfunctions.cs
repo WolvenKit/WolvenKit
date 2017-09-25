@@ -17,6 +17,10 @@ namespace WolvenKit
 {
     static class Commonfunctions
     {
+        /// <summary>
+        /// Send a popup notification.
+        /// </summary>
+        /// <param name="msg">The string to display in the notification.</param>
         public static void SendNotification(string msg)
         {
             Version win8version = new Version(6, 2, 9200, 0);
@@ -43,11 +47,86 @@ namespace WolvenKit
             }
         }
 
+        /// <summary>
+        /// Show a messagebox that the feature is work in progress.
+        /// </summary>
+        public static void ShowWIPMessage()
+        {
+            MessageBox.Show("Work in progress.", "Coming soon(tm)", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+        }
+
+        /// <summary>
+        /// Show the given path in the windows explorer.
+        /// </summary>
+        /// <param name="path">The file/folder to show.</param>
         public static void ShowFileInExplorer(string path)
         {
             Process.Start("explorer.exe", "/select, \"" + path + "\"");
         }
 
+        /// <summary>
+        /// Copies the contents of a directory.
+        /// </summary>
+        /// <param name="sourceDirName">The source directory.</param>
+        /// <param name="destDirName">The destination.</param>
+        /// <param name="copySubDirs">Whether to copy subdirectories.</param>
+        /// <returns>A log of copied files.</returns>
+        public static List<XElement> DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+        {
+            List<XElement> ret = new List<XElement>();
+            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+            DirectoryInfo[] dirs = dir.GetDirectories();
+
+            // If the source directory does not exist, throw an exception.
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException(
+                    "Source directory does not exist or could not be found: "
+                    + sourceDirName);
+            }
+
+            // If the destination directory does not exist, create it.
+            if (!Directory.Exists(destDirName))
+            {
+                Directory.CreateDirectory(destDirName);
+            }
+
+            // Get the file contents of the directory to copy.
+            FileInfo[] files = dir.GetFiles();
+
+            foreach (FileInfo file in files)
+            {
+                // Create the path to the new copy of the file.
+                string temppath = Path.Combine(destDirName, file.Name);
+
+                // Copy the file.
+                ret.Add(new XElement("file", temppath));
+                file.CopyTo(temppath, true);
+            }
+
+            // If copySubDirs is true, copy the subdirectories.
+            if (copySubDirs)
+            {
+
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    // Create the subdirectory.
+                    string temppath = Path.Combine(destDirName, subdir.Name);
+
+                    // Copy the subdirectories.
+                    if(Directory.GetFiles(subdir.FullName,"*",SearchOption.AllDirectories).Any())
+                        ret.Add(new XElement("Directory",new XAttribute("Path",temppath), DirectoryCopy(subdir.FullName, temppath, copySubDirs)));
+                }
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Compresses a file into a zipstream.
+        /// </summary>
+        /// <param name="filename">Path to the file.</param>
+        /// <param name="zipStream">The zipstream to output to.</param>
+        /// <param name="nameOverride">Rename the file to a costum name.</param>
         public static void CompressFile(string filename, ZipOutputStream zipStream, string nameOverride = "")
         {
             FileInfo fi = new FileInfo(filename);
@@ -66,6 +145,11 @@ namespace WolvenKit
             zipStream.CloseEntry();
         }
 
+        /// <summary>
+        /// Converts an XDocuments to a byte array.
+        /// </summary>
+        /// <param name="xdoc">The xdocument which we want to convert.</param>
+        /// <returns>The byte contents of the array.</returns>
         public static byte[] XDocToByteArray(XDocument xdoc)
         {
             MemoryStream ms = new MemoryStream();
@@ -80,6 +164,12 @@ namespace WolvenKit
             return ms.ToArray();
         }
 
+        /// <summary>
+        /// Compresses a byte array to a zipstream.
+        /// </summary>
+        /// <param name="file">The byte array to compress.</param>
+        /// <param name="filename">The entry name.</param>
+        /// <param name="zipStream">The zipstream which we want to output this file to.</param>
         public static void CompressStream(byte[] file, string filename, ZipOutputStream zipStream)
         {
             filename = ZipEntry.CleanName(filename);
@@ -90,6 +180,12 @@ namespace WolvenKit
             zipStream.CloseEntry();
         }
 
+        /// <summary>
+        /// Compresses a folder of files into a zipstream.
+        /// </summary>
+        /// <param name="path">The path of the folder.</param>
+        /// <param name="zipStream">The output zipstream.</param>
+        /// <param name="folderOffset">The folderoffset.</param>
         public static void CompressFolder(string path, ZipOutputStream zipStream, int folderOffset)
         {
 
@@ -97,9 +193,7 @@ namespace WolvenKit
 
             foreach (string filename in files)
             {
-
                 FileInfo fi = new FileInfo(filename);
-
                 string entryName = filename.Substring(folderOffset);
                 entryName = ZipEntry.CleanName(entryName);
                 ZipEntry newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
@@ -118,6 +212,10 @@ namespace WolvenKit
             }
         }
 
+        /// <summary>
+        /// Deletes files and folders in given folder.
+        /// </summary>
+        /// <param name="target_dir">Targed directory.</param>
         public static void DeleteFilesAndFoldersRecursively(string target_dir)
         {
             foreach (string file in Directory.EnumerateFiles(target_dir))
@@ -134,6 +232,12 @@ namespace WolvenKit
             Directory.Delete(target_dir);
         }
 
+        /// <summary>
+        /// Gets relative path from absolute path.
+        /// </summary>
+        /// <param name="filespec">A files path.</param>
+        /// <param name="folder">The folder's path.</param>
+        /// <returns></returns>
         public static string GetRelativePath(string filespec, string folder)
         {
             Uri pathUri = new Uri(filespec);
