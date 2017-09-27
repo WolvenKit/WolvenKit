@@ -54,22 +54,6 @@ namespace WolvenKit.Render
         public uint materialID = 0;
     };
 
-    // Skeleton informations
-    public class CSkeleton
-    {
-        public uint nbBones = 0;
-        public List<string> names = new List<string>();
-        public List<short> parentId = new List<short>();
-        public List<Matrix> matrix = new List<Matrix>();
-
-        public List<Vector3Df> positions = new List<Vector3Df>();
-        public List<Quaternion> rotations = new List<Quaternion>();
-        public List<Vector3Df> scales = new List<Vector3Df>();
-
-        //public bool applyToModel(scene::ISkinnedMesh* mesh);
-    };
-
-
     public static class ExtensionMethods
     {
         public static T[] SubArray<T>(this T[] data, ref int currIndex, int length)
@@ -78,6 +62,14 @@ namespace WolvenKit.Render
             Array.Copy(data, currIndex, result, 0, length);
             currIndex += length;
             return result;
+        }
+
+        public static float GetFloat(this byte[] data)
+        {
+            if (data.Length == 4)
+                return BitConverter.ToSingle(data, 0);
+            else
+                return 0;
         }
 
         public static uint GetUint(this byte[] data)
