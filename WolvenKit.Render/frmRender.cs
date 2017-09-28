@@ -447,10 +447,10 @@ namespace WolvenKit.Render
                 smgr   = device.SceneManager;
                 gui    = device.GUIEnvironment;
 
-                var mPositionText = gui.AddStaticText("", new Recti(0, this.ClientSize.Height - 70, 80, this.ClientSize.Height - 60));
-                var mRotationText = gui.AddStaticText("", new Recti(0, this.ClientSize.Height - 60, 80, this.ClientSize.Height - 50));
-                var fpsText       = gui.AddStaticText("", new Recti(0, this.ClientSize.Height - 50, 80, this.ClientSize.Height - 40));
-                var infoText      = gui.AddStaticText("[Space] - Reset\n[LMouse] - Rotate\n[MMouse] - Move\n[Wheel] - Zoom", new Recti(0, this.ClientSize.Height - 40, 80, this.ClientSize.Height));
+                var mPositionText = gui.AddStaticText("", new Recti(0, this.ClientSize.Height - 70, 100, this.ClientSize.Height - 60));
+                var mRotationText = gui.AddStaticText("", new Recti(0, this.ClientSize.Height - 60, 100, this.ClientSize.Height - 50));
+                var fpsText       = gui.AddStaticText("", new Recti(0, this.ClientSize.Height - 50, 100, this.ClientSize.Height - 40));
+                var infoText      = gui.AddStaticText("[Space] - Reset\n[LMouse] - Rotate\n[MMouse] - Move\n[Wheel] - Zoom", new Recti(0, this.ClientSize.Height - 40, 100, this.ClientSize.Height));
                 mPositionText.OverrideColor   = mRotationText.OverrideColor   = fpsText.OverrideColor   = infoText.OverrideColor   = new Color(255, 255, 255);
                 mPositionText.BackgroundColor = mRotationText.BackgroundColor = fpsText.BackgroundColor = infoText.BackgroundColor = new Color(0, 0, 0);
 
@@ -469,32 +469,34 @@ namespace WolvenKit.Render
                 node.SetMaterialFlag(MaterialFlag.Lighting, false);
                 SetMaterials(driver, node);
 
-                CameraSceneNode camera = smgr.AddCameraSceneNode(null, new Vector3Df(node.BoundingBox.Radius*6, node.BoundingBox.Radius, 0), new Vector3Df(0, node.BoundingBox.Radius, 0));
+                CameraSceneNode camera = smgr.AddCameraSceneNode(null, new Vector3Df(node.BoundingBox.Radius*8, node.BoundingBox.Radius, 0), new Vector3Df(0, node.BoundingBox.Radius, 0));
                 camera.NearValue = 0.001f;
+                camera.FOV = 45 * PI_OVER_180;
                 scaleMul = node.BoundingBox.Radius / 4;
 
                 var viewPort = driver.ViewPort;
+                var lineMat = new Material();
+                lineMat.Lighting = false;
 
                 while (device.Run())
                 {
-                    //driver.ViewPort = viewPort;
+                    driver.ViewPort = viewPort;
                     driver.BeginScene(ClearBufferFlag.All, new Color(100, 101, 140));
 
-                    node.Visible = true;
                     node.Position = modelPosition;
                     node.Rotation = modelAngle;
                     node.DebugDataVisible = DebugSceneType.Skeleton | DebugSceneType.BBox;
-                    mPositionText.Text = $"X: {modelPosition.X} Y: {modelPosition.Y} Z: {modelPosition.Z}";
-                    mRotationText.Text = $"Yaw: {modelAngle.Y} Roll: {modelAngle.Z}";
+                    mPositionText.Text = $"X: {modelPosition.X.ToString("F2")} Y: {modelPosition.Y.ToString("F2")} Z: {modelPosition.Z.ToString("F2")}";
+                    mRotationText.Text = $"Yaw: {modelAngle.Y.ToString("F2")} Roll: {modelAngle.Z.ToString("F2")}";
                     fpsText.Text = $"FPS: {driver.FPS}";
 
                     smgr.DrawAll();
-                    //gui.DrawAll();
+                    gui.DrawAll();
 
                     driver.ViewPort = new Recti(this.ClientSize.Width - 100, this.ClientSize.Height - 80, this.ClientSize.Width, this.ClientSize.Height);
-                    driver.ClearBuffers(ClearBufferFlag.All, new Color(100, 101, 140));
+                    //driver.ClearBuffers(ClearBufferFlag.None);
 
-                    node.Visible = false;
+                    driver.SetMaterial(lineMat);
                     var matrix = new Matrix(new Vector3Df(0, 0, 0), modelAngle);
                     driver.SetTransform(TransformationState.World, matrix);
                     matrix = matrix.BuildProjectionMatrixOrthoLH(100, 80, camera.NearValue, camera.FarValue);
@@ -504,10 +506,6 @@ namespace WolvenKit.Render
                     driver.Draw3DLine(0, 0, 0, 30f, 0, 0, Color.OpaqueGreen);
                     driver.Draw3DLine(0, 0, 0, 0, 30f, 0, Color.OpaqueBlue);
                     driver.Draw3DLine(0, 0, 0, 0, 0, 30f, Color.OpaqueRed);
-
-                    smgr.DrawAll();
-                    driver.ViewPort = viewPort;
-                    gui.DrawAll();
 
                     driver.EndScene();
                 }
