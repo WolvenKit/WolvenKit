@@ -473,10 +473,14 @@ namespace WolvenKit.Render
                 camera.NearValue = 0.001f;
                 scaleMul = node.BoundingBox.Radius / 4;
 
+                var viewPort = driver.ViewPort;
+
                 while (device.Run())
                 {
+                    //driver.ViewPort = viewPort;
                     driver.BeginScene(ClearBufferFlag.All, new Color(100, 101, 140));
 
+                    node.Visible = true;
                     node.Position = modelPosition;
                     node.Rotation = modelAngle;
                     node.DebugDataVisible = DebugSceneType.Skeleton | DebugSceneType.BBox;
@@ -485,21 +489,24 @@ namespace WolvenKit.Render
                     fpsText.Text = $"FPS: {driver.FPS}";
 
                     smgr.DrawAll();
+                    //gui.DrawAll();
 
-                    /*var matrix = new Matrix(new Vector3Df(0, 0.2f, 0), modelAngle);
+                    driver.ViewPort = new Recti(this.ClientSize.Width - 100, this.ClientSize.Height - 80, this.ClientSize.Width, this.ClientSize.Height);
+                    driver.ClearBuffers(ClearBufferFlag.All, new Color(100, 101, 140));
+
+                    node.Visible = false;
+                    var matrix = new Matrix(new Vector3Df(0, 0, 0), modelAngle);
                     driver.SetTransform(TransformationState.World, matrix);
-                    driver.SetTransform(TransformationState.Projection, Matrix.Identity);
-                    driver.SetTransform(TransformationState.View, Matrix.Identity);*/
-                    /*var matrix2 = new Matrix();
-                    matrix2 = matrix2.BuildProjectionMatrixOrthoLH(this.ClientSize.Width, this.ClientSize.Height, camera.NearValue, camera.FarValue);
-                    driver.SetTransform(TransformationState.Projection, matrix2);*/
-                    /*var matrix3 = new Matrix();
-                    matrix3 = matrix3.BuildCameraLookAtMatrixLH(new Vector3Df(0, 0, 0), modelPosition, new Vector3Df(0, 1f, 0));
-                    driver.SetTransform(TransformationState.View, matrix3);*/
-                    /*driver.Draw3DLine(0, 0, 0, 30f, 0, 0, Color.OpaqueGreen);
+                    matrix = matrix.BuildProjectionMatrixOrthoLH(100, 80, camera.NearValue, camera.FarValue);
+                    driver.SetTransform(TransformationState.Projection, matrix);
+                    matrix = matrix.BuildCameraLookAtMatrixLH(new Vector3Df(50, 0, 0), new Vector3Df(0, 0, 0), new Vector3Df(0, 1f, 0));
+                    driver.SetTransform(TransformationState.View, matrix);
+                    driver.Draw3DLine(0, 0, 0, 30f, 0, 0, Color.OpaqueGreen);
                     driver.Draw3DLine(0, 0, 0, 0, 30f, 0, Color.OpaqueBlue);
-                    driver.Draw3DLine(0, 0, 0, 0, 0, 30f, Color.OpaqueRed);*/
+                    driver.Draw3DLine(0, 0, 0, 0, 0, 30f, Color.OpaqueRed);
 
+                    smgr.DrawAll();
+                    driver.ViewPort = viewPort;
                     gui.DrawAll();
 
                     driver.EndScene();
