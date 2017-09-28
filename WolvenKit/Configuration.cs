@@ -56,7 +56,7 @@ namespace WolvenKit
 
         public static Configuration Load()
         {
-            if (File.Exists(ConfigurationPath))
+            if (File.Exists(ConfigurationPath) && new FileInfo(ConfigurationPath).Length != 0)
             {
                 var ser = new XmlSerializer(typeof (Configuration));
                 var stream = new FileStream(ConfigurationPath, FileMode.Open, FileAccess.Read);
