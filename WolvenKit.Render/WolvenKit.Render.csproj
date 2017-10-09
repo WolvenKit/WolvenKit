@@ -66,6 +66,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CSkeleton.cs" />
     <Compile Include="frmRender.cs">
       <SubType>Form</SubType>
     </Compile>

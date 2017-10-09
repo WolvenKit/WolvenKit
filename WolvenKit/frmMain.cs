@@ -227,8 +227,27 @@ namespace WolvenKit
                     }*/
                 case ".w2mesh":
                     {
+                        var rigDoc = new frmCR2WDocument();
+                        var basePath = doc.File.FileName.Split(new string[] { "characters" }, StringSplitOptions.None)[0];
+                        var modelName = Path.GetFileName(doc.File.FileName).Split('_', '.')[3];
+                        var rigPath = $@"{basePath}characters\base_entities\{modelName}_base\{modelName}_base.w2rig";
+                        if (File.Exists(rigPath))
+                        {
+                            rigDoc.LoadFile(rigPath);
+                        }
+                        else
+                        {
+                            if (MessageBox.Show("Automatic rig path finding failed!\nWould you like to search for the rig manually?", "Rig not found!", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                            {
+                                var ofd = new OpenFileDialog();
+                                if (ofd.ShowDialog() == DialogResult.OK)
+                                    rigDoc.LoadFile(ofd.FileName);
+                            }
+                        }
+
                         doc.RenderViewer = new Render.frmRender
                         {
+                            RigFile = rigDoc.File,
                             File = doc.File,
                             DockAreas = DockAreas.Document
                         };

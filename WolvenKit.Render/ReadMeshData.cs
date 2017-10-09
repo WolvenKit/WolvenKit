@@ -54,7 +54,6 @@ namespace WolvenKit.Render
         public uint materialID = 0;
     };
 
-
     public static class ExtensionMethods
     {
         public static T[] SubArray<T>(this T[] data, ref int currIndex, int length)
@@ -63,6 +62,14 @@ namespace WolvenKit.Render
             Array.Copy(data, currIndex, result, 0, length);
             currIndex += length;
             return result;
+        }
+
+        public static float GetFloat(this byte[] data)
+        {
+            if (data.Length == 4)
+                return BitConverter.ToSingle(data, 0);
+            else
+                return 0;
         }
 
         public static uint GetUint(this byte[] data)
