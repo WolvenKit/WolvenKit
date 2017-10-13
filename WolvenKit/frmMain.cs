@@ -245,9 +245,26 @@ namespace WolvenKit
                             }
                         }
 
+                        var animDoc = new frmCR2WDocument();
+                        var animPath = $@"{basePath}animations\animals\chicken\chicken_swarm_animation.w2anims";
+                        if (File.Exists(animPath))
+                        {
+                            animDoc.LoadFile(animPath);
+                        }
+                        /*else
+                        {
+                            if (MessageBox.Show("Automatic rig path finding failed!\nWould you like to search for the rig manually?", "Rig not found!", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                            {
+                                var ofd = new OpenFileDialog();
+                                if (ofd.ShowDialog() == DialogResult.OK)
+                                    rigDoc.LoadFile(ofd.FileName);
+                            }
+                        }*/
+
                         doc.RenderViewer = new Render.frmRender
                         {
                             RigFile = rigDoc.File,
+                            AnimFile = animDoc.File,
                             File = doc.File,
                             DockAreas = DockAreas.Document
                         };

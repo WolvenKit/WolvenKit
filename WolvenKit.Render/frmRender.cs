@@ -65,6 +65,11 @@ namespace WolvenKit.Render
         public CR2WFile RigFile;
 
         /// <summary>
+        /// Witcher file containing animation data.
+        /// </summary>
+        public CR2WFile AnimFile;
+
+        /// <summary>
         /// Reads mesh buffer infos.
         /// </summary>
         void ReadMeshBufferInfos()
@@ -169,46 +174,46 @@ namespace WolvenKit.Render
                     foreach (var meshChunk in meshChunks.array)
                     {
                         SMeshInfos meshInfo = new SMeshInfos();
-                        foreach (var mesh in (meshChunk as CVector).variables)
+                        foreach (var meshinfo in (meshChunk as CVector).variables)
                         {
-                            switch (mesh.Name)
+                            switch (meshinfo.Name)
                             {
                                 case "numVertices":
                                     {
-                                        meshInfo.numVertices = uint.Parse(mesh.ToString());
+                                        meshInfo.numVertices = uint.Parse(meshinfo.ToString());
                                         break;
                                     }
                                 case "numIndices":
                                     {
-                                        meshInfo.numIndices = uint.Parse(mesh.ToString());
+                                        meshInfo.numIndices = uint.Parse(meshinfo.ToString());
                                         break;
                                     }
                                 case "numBonesPerVertex":
                                     {
-                                        meshInfo.numBonesPerVertex = uint.Parse(mesh.ToString());
+                                        meshInfo.numBonesPerVertex = uint.Parse(meshinfo.ToString());
                                         break;
                                     }
                                 case "firstVertex":
                                     {
-                                        meshInfo.firstVertex = uint.Parse(mesh.ToString());
+                                        meshInfo.firstVertex = uint.Parse(meshinfo.ToString());
                                         break;
                                     }
                                 case "firstIndex":
                                     {
-                                        meshInfo.firstIndex = uint.Parse(mesh.ToString());
+                                        meshInfo.firstIndex = uint.Parse(meshinfo.ToString());
                                         break;
                                     }
                                 case "vertexType":
                                     {
-                                        if ((mesh as CName).Value == "MVT_StaticMesh")
+                                        if ((meshinfo as CName).Value == "MVT_StaticMesh")
                                             meshInfo.vertexType = SMeshInfos.EMeshVertexType.EMVT_STATIC;
-                                        else if ((mesh as CName).Value == "MVT_SkinnedMesh")
+                                        else if ((meshinfo as CName).Value == "MVT_SkinnedMesh")
                                             meshInfo.vertexType = SMeshInfos.EMeshVertexType.EMVT_SKINNED;
                                         break;
                                     }
                                 case "materialID":
                                     {
-                                        meshInfo.materialID = uint.Parse(mesh.ToString());
+                                        meshInfo.materialID = uint.Parse(meshinfo.ToString());
                                         break;
                                     }
                             }
@@ -403,6 +408,60 @@ namespace WolvenKit.Render
                 }
             }
 
+            // *************** READ ANIMATION DATA ***************
+            //if (AnimFile != null)
+            foreach (var chunk in AnimFile.chunks)
+            {
+                if (chunk.Type == "CAnimationBufferBitwiseCompressed")
+                {
+                    byte[] data = (chunk.GetVariableByName("data") as CByteArray).Bytes;
+                    uint numFrames = (chunk.GetVariableByName("numFrames") as CUInt32).val;
+                    float animDuration = (chunk.GetVariableByName("duration") as CFloat).val;
+                    animationSpeed = numFrames / animDuration;
+                    uint keyFrame = 0;
+                    foreach (CVector bone in (chunk.GetVariableByName("bones") as CArray).array)
+                    {
+                        List<uint> currkeyframe = new List<uint>();
+                        List<Quaternion> currorient = new List<Quaternion>();
+
+                        int dataAddr = (int)((bone.GetVariableByName("orientation") as CVector).GetVariableByName("dataAddr") as CUInt32).val;
+                        for (uint idx = 0; idx < ((bone.GetVariableByName("orientation") as CVector).GetVariableByName("numFrames") as CUInt16).val; idx++)
+                        {
+                            keyFrame = idx;
+                            keyFrame += numFrames;
+                            currkeyframe.Add(keyFrame);
+                            //bone.GetVariableByName("position");
+                            byte[] odata = data.SubArray(ref dataAddr, 6);
+                            ulong bits = (ulong)odata[0] << 40 | (ulong)odata[1] << 32 | (ulong)odata[2] << 24 | (ulong)odata[3] << 16 | (ulong)odata[4] << 8 | odata[5];
+
+                            ushort[] orients = new ushort[4];
+                            float[] quart = new float[4];
+                            orients[0] = (ushort)((bits & 0x0000FFF000000000) >> 36);
+                            orients[1] = (ushort)((bits & 0x0000000FFF000000) >> 24);
+                            orients[2] = (ushort)((bits & 0x0000000000FFF000) >> 12);
+                            orients[3] = (ushort)((bits & 0x0000000000000FFF));
+
+                            for (int i = 0; i < orients.Length; i++)
+                            {
+                                ushort value = orients[i];
+                                if ((value & 0x0800) != 0x0800)
+                                    value = (ushort)~value;
+
+                                value = (ushort)(value & 0x000007FF);
+                                float fVal = value / 2048.0f;
+                                quart[i] = fVal;
+                            }
+
+                            currorient.Add(new Quaternion(quart[0], quart[1], quart[2], quart[3]));
+                        }
+
+                        keyframes.Add(currkeyframe);
+                        orientations.Add(currorient);
+                    }
+                    break;
+                }
+            }
+
         }
 
         /// <summary>
@@ -459,6 +518,7 @@ namespace WolvenKit.Render
                     skinnedMesh.AddMeshBuffer(meshBuffer);
                 smgr.MeshManipulator.RecalculateNormals(skinnedMesh);
                 ApplySkeletonToModel(skinnedMesh);
+                ApplyAnimationToModel(skinnedMesh);
                 skinnedMesh.SetDirty(HardwareBufferType.VertexAndIndex);
                 skinnedMesh.FinalizeMeshPopulation();
                 AnimatedMeshSceneNode node = smgr.AddAnimatedMeshSceneNode(skinnedMesh);
@@ -633,6 +693,23 @@ namespace WolvenKit.Render
                 CSkeleton.ComputeGlobal(skinnedMesh, roots[i]);
             }
         }
+        
+        /// <summary>
+        /// Try to apply animation to model.
+        /// </summary>
+        private void ApplyAnimationToModel(SkinnedMesh skinnedMesh)
+        {
+            /*skinnedMesh.AnimationSpeed = animationSpeed;
+            for (int i = 0; i < orientations.Count; i++)
+            {
+                for (int j = 0; j < orientations[i].Count; j++)
+                {
+                    var key = skinnedMesh.AddRotationKey(skinnedMesh.GetAllJoints()[i]);
+                    key.Rotation = orientations[i][j];
+                    key.Frame = keyframes[i][j];
+                }
+            }*/
+        }
 
         #region Common Data
 
@@ -642,6 +719,10 @@ namespace WolvenKit.Render
         private List<SMeshInfos> meshInfos = new List<SMeshInfos>();
         private CSkeleton meshSkeleton = new CSkeleton();
         private List<Vector3Df> bonePositions = new List<Vector3Df>();
+
+        private float animationSpeed = 0;
+        private List<List<uint>> keyframes = new List<List<uint>>();
+        private List<List<Quaternion>> orientations = new List<List<Quaternion>>();
 
         //private static Quaternion modelAngle = new Quaternion(new Vertex3f(), 0);
         private Vector3Df modelPosition = new Vector3Df(0.0f);
