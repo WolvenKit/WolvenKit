@@ -425,10 +425,11 @@ namespace WolvenKit.Render
                         List<Quaternion> currorient = new List<Quaternion>();
 
                         int dataAddr = (int)((bone.GetVariableByName("orientation") as CVector).GetVariableByName("dataAddr") as CUInt32).val;
-                        for (uint idx = 0; idx < ((bone.GetVariableByName("orientation") as CVector).GetVariableByName("numFrames") as CUInt16).val; idx++)
+                        int orientNumFrames = ((bone.GetVariableByName("orientation") as CVector).GetVariableByName("numFrames") as CUInt16).val;
+                        for (uint idx = 0; idx < orientNumFrames; idx++)
                         {
                             keyFrame = idx;
-                            keyFrame += numFrames;
+                            //keyFrame += numFrames;
                             currkeyframe.Add(keyFrame);
                             //bone.GetVariableByName("position");
                             byte[] odata = data.SubArray(ref dataAddr, 6);
@@ -443,14 +444,10 @@ namespace WolvenKit.Render
 
                             for (int i = 0; i < orients.Length; i++)
                             {
-                                ushort value = orients[i];
-                                if ((value & 0x0800) != 0x0800)
-                                    value = (ushort)~value;
-
-                                value = (ushort)(value & 0x000007FF);
-                                float fVal = value / 2048.0f;
+                                float fVal = (2047.0f - orients[i]) * (1 / 2048.0f);
                                 quart[i] = fVal;
                             }
+                            quart[3] = -quart[3];
 
                             currorient.Add(new Quaternion(quart[0], quart[1], quart[2], quart[3]));
                         }
@@ -699,7 +696,7 @@ namespace WolvenKit.Render
         /// </summary>
         private void ApplyAnimationToModel(SkinnedMesh skinnedMesh)
         {
-            /*skinnedMesh.AnimationSpeed = animationSpeed;
+            skinnedMesh.AnimationSpeed = animationSpeed;
             for (int i = 0; i < orientations.Count; i++)
             {
                 for (int j = 0; j < orientations[i].Count; j++)
@@ -708,7 +705,7 @@ namespace WolvenKit.Render
                     key.Rotation = orientations[i][j];
                     key.Frame = keyframes[i][j];
                 }
-            }*/
+            }
         }
 
         #region Common Data
