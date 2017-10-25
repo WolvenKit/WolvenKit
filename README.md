@@ -7,6 +7,7 @@
 
 This repository is created to demonstrate how **REDengine 3** reads and writes file formats and experiment how the game **The Witcher 3: The Wild Hunt** works. The whole program is made fully for education purpose we are in no way responsible if your PC or game breaks. This project is completely open source and everyone is free to contribute to it and in no way it is made to generate revenue. It was originally [started by Sarcen](http://forums.cdprojektred.com/forum/en/the-witcher-series/the-witcher-3-wild-hunt/mod-discussions/58758-mod-editor) in 2015 when the game originally came out. After he abbandoned the project a few of us have picked it up to continue it. It allows reading and writing nearly every file format by REDengine 3 to some extent. It can be used to create file modifications to the assets of the game. This is far from done so please make sure to check on the project often since it is in heavy development.
 
+***Copyright Disclaimer:*** Under Section 107 of the Copyright Act 1976, allowance is made for "fair use" for purposes such as criticism, comment, news reporting, teaching, scholarship, and research. Fair use is a use permitted by copyright statute that might otherwise be infringing. Non-profit, educational or personal use tips the balance in favor of fair use.".This project is solely made for research and in no way made to generate any revenue.
 ***
 
 ### Team:
