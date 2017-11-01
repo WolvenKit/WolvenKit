@@ -337,19 +337,29 @@ namespace WolvenKit
             return caseCheckBox.Checked ? files.Where(item =>  item.Name.ToUpper().Contains(searchkeyword.ToUpper()) && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")).Select(x => new Tuple<WitcherListViewItem,IWitcherFile>(new WitcherListViewItem(x),x)).ToArray() : files.Where(item => item.Name.Contains(searchkeyword) && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")).Select(x => new Tuple<WitcherListViewItem,IWitcherFile>(new WitcherListViewItem(x),x)).ToArray();
         }
 
+        /// <summary>
+        /// Recursively collects files into an array, descending depth first from a given root node.
+        /// </summary>
+        /// <param name="root">Root node.</param>
+        /// <returns>Array of collected files.</returns>
         public WitcherListViewItem[] CollectFiles(WitcherTreeNode root)
         {
-            var res = root.Files.Select(file => file.Key).Select(x => new WitcherListViewItem()
+            var collectedFilesList = new List<WitcherListViewItem>();
+
+            foreach (var fileList in root.Files)
             {
-                ImageKey = GetImageKey(x),
-                ToolTipText = x,
-                Text = x
-            }).ToList();
+                foreach (var file in fileList.Value)
+                {
+                    collectedFilesList.Add(new WitcherListViewItem(file));
+                }
+            }
+
             foreach (var dr in root.Directories)
             {
-                res.AddRange(CollectFiles(dr.Value));
+                collectedFilesList.AddRange(CollectFiles(dr.Value));
             }
-            return res.ToArray();
+
+            return collectedFilesList.ToArray();
         }
 
         public string[] GetExtensions(params string[] filename)
@@ -589,10 +599,12 @@ namespace WolvenKit
                     if (item.IsDirectory)
                     {
                         var files = CollectFiles(item.Node);
+                        //Remove duplicates.
+                        var distinctFiles = files.GroupBy(x => x.FullPath).Select(x => x.First()).ToArray();
                         if (files.Length > 1000)
-                            pathlistview.Items.AddRange(files.Take(1000).ToArray());
+                            pathlistview.Items.AddRange(distinctFiles.Take(1000).ToArray());
                         else
-                            pathlistview.Items.AddRange(files);
+                            pathlistview.Items.AddRange(distinctFiles);
                     }
                 }
             }
