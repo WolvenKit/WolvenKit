@@ -54,7 +54,7 @@ namespace WolvenKit
             this.txName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txName.Location = new System.Drawing.Point(212, 7);
-            this.txName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txName.Margin = new System.Windows.Forms.Padding(4);
             this.txName.Name = "txName";
             this.txName.Size = new System.Drawing.Size(297, 22);
             this.txName.TabIndex = 1;
@@ -64,19 +64,20 @@ namespace WolvenKit
             this.cbInstallAsDLC.AutoEllipsis = true;
             this.cbInstallAsDLC.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.cbInstallAsDLC.Location = new System.Drawing.Point(16, 39);
-            this.cbInstallAsDLC.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbInstallAsDLC.Margin = new System.Windows.Forms.Padding(4);
             this.cbInstallAsDLC.Name = "cbInstallAsDLC";
             this.cbInstallAsDLC.Size = new System.Drawing.Size(329, 43);
             this.cbInstallAsDLC.TabIndex = 3;
             this.cbInstallAsDLC.Text = "Install as DLC\r\n(Mod modifies existing files DLC adds new files)";
             this.cbInstallAsDLC.UseVisualStyleBackColor = true;
+            this.cbInstallAsDLC.Visible = false;
             // 
             // btSave
             // 
             this.btSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btSave.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btSave.Location = new System.Drawing.Point(411, 93);
-            this.btSave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btSave.Margin = new System.Windows.Forms.Padding(4);
             this.btSave.Name = "btSave";
             this.btSave.Size = new System.Drawing.Size(100, 28);
             this.btSave.TabIndex = 4;
@@ -89,7 +90,7 @@ namespace WolvenKit
             this.btCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btCancel.Location = new System.Drawing.Point(20, 93);
-            this.btCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(100, 28);
             this.btCancel.TabIndex = 5;
@@ -109,7 +110,7 @@ namespace WolvenKit
             this.Controls.Add(this.txName);
             this.Controls.Add(this.lblName);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(394, 155);
             this.Name = "frmModSettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

@@ -28,6 +28,23 @@ namespace WolvenKit
             set { SetField(ref projectstatus, value, "ProjectStatus"); }
         }
 
+        private string Log_Message = "";
+        private bool LogPending = false;
+
+        public string LogMessage
+        {
+            get
+            {
+                LogPending = false;
+                return Log_Message;
+            }
+            set
+            {
+                LogPending = true;
+                SetField(ref projectstatus, value, "ProjectStatus");
+            }
+        }
+
         /// <summary>
         /// Shows wheteher there are unsaved changes in the project.
         /// </summary>

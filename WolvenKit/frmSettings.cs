@@ -87,7 +87,7 @@ namespace WolvenKit
             var w3 = "";
             var wcc = "";
             int count = Registry.LocalMachine.OpenSubKey(uninstallkey).GetSubKeyNames().Length;
-            int index = 0;
+            int index = 1;
             try
             {
                 Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey).GetSubKeyNames(), item =>
@@ -100,7 +100,7 @@ namespace WolvenKit
                         {
                             wcc = Directory.GetFiles(installLocation.ToString(), "wcc_lite.exe", SearchOption.AllDirectories).First();
                         }
-                        if (Equals(programName, "The Witcher 3 - Wild Hunt"))
+                        if (programName.ToString().Contains("The Witcher 3 - Wild Hunt") || programName.ToString().Contains("The Witcher 3: Wild Hunt"))
                         {
                             w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe", SearchOption.AllDirectories).First();
                         }

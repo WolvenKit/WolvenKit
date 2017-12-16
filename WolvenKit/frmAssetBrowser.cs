@@ -328,7 +328,14 @@ namespace WolvenKit
         {
             if (regexCheckbox.Checked)
             {
-                return files.Where(item => new Regex(searchkeyword).IsMatch(item.Name)).Select(x=> new Tuple<WitcherListViewItem,IWitcherFile>(new WitcherListViewItem(x),x)).ToArray();
+                try
+                {
+                    return files.Where(item => new Regex(searchkeyword).IsMatch(item.Name)).Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray();
+                }
+                catch (Exception ex)
+                {
+                    //TODO: Log
+                }
             }
             if (currentfolderCheckBox.Checked)
             {
