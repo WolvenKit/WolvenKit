@@ -147,7 +147,6 @@ namespace WolvenKit.Wwise.BNK.Sections
         public uint soundoffset; //if included
         public uint soundsourceid;
         public byte soundtype; //00 = Sound SFX, 01 = Sound Voice
-        public SoundStructure structure;
         public byte type; //2
         public uint unknownInt;
 
