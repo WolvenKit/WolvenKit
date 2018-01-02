@@ -1,5 +1,5 @@
-# Skipping commits affecting specific files (GitHub only). More details here: /docs/appveyor-yml
-kip_commits:
+# Skip commits on updating git specific stuff. No actual project changes in this case so pointless to build.
+skip_commits:
  files:
    - .gitignore
    - README.md
