@@ -37,7 +37,7 @@ namespace WolvenKit
             UpdateTitle();
             buildDateToolStripMenuItem.Text = Assembly.GetExecutingAssembly().GetLinkerTime().ToString("yyyy MMMM dd");
             MainController.Get().PropertyChanged += MainControllerUpdated;
-
+            MainController.Get().QueueLog("Enviroment loaded!");
         }
 
         public W3Mod ActiveMod
@@ -50,15 +50,7 @@ namespace WolvenKit
             }
         }
 
-        public string Version
-        {
-            get
-            {
-                var assembly = Assembly.GetExecutingAssembly();
-                var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-                return fvi.FileVersion;
-            }
-        }
+        public string Version => FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
 
         public frmModExplorer ModExplorer { get; set; }
 
