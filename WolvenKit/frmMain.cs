@@ -42,7 +42,7 @@ namespace WolvenKit
 
         public W3Mod ActiveMod
         {
-            get { return ModManager.Get().ActiveMod; }
+            get => ModManager.Get().ActiveMod;
             set
             {
                 ModManager.Get().ActiveMod = value;
@@ -66,7 +66,7 @@ namespace WolvenKit
 
         public frmCR2WDocument ActiveDocument
         {
-            get { return _activedocument; }
+            get => _activedocument;
             set
             {
                 _activedocument = value;
@@ -80,7 +80,11 @@ namespace WolvenKit
         {
             if (e.PropertyName == "ProjectStatus")
                 statusLBL.Text = ((MainController)sender).ProjectStatus;
+            if(e.PropertyName == "LogMessage")
+                AddOutput(((MainController)sender).LogMessage.Key + "\n", ((MainController)sender).LogMessage.Value);
         }
+
+
 
         private void UpdateTitle()
         {

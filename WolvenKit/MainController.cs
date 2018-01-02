@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows.Forms;
 using WolvenKit.Bundles;
 using WolvenKit.Cache;
@@ -21,28 +22,18 @@ namespace WolvenKit
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private string projectstatus = "Idle";
+        private string _projectstatus = "Idle";
         public string ProjectStatus
         {
-            get { return projectstatus; }
-            set { SetField(ref projectstatus, value, "ProjectStatus"); }
+            get => _projectstatus;
+            set => SetField(ref _projectstatus, value, "ProjectStatus");
         }
 
-        private string Log_Message = "";
-        private bool LogPending = false;
-
-        public string LogMessage
+        private KeyValuePair<string,frmOutput.Logtype> _logMessage = new KeyValuePair<string, frmOutput.Logtype>("",frmOutput.Logtype.Normal);
+        public KeyValuePair<string, frmOutput.Logtype> LogMessage
         {
-            get
-            {
-                LogPending = false;
-                return Log_Message;
-            }
-            set
-            {
-                LogPending = true;
-                SetField(ref projectstatus, value, "ProjectStatus");
-            }
+            get => _logMessage;
+            set => SetField(ref _logMessage, value, "LogMessage");
         }
 
         /// <summary>
@@ -297,6 +288,16 @@ namespace WolvenKit
                 }
             });
             return ret;
+        }
+
+        /// <summary>
+        /// Queues a string for logging in the main window.
+        /// </summary>
+        /// <param name="msg">The message to log.</param>
+        /// <param name="type">The type of the log. Not needed.</param>
+        public void QueueLog(string msg, frmOutput.Logtype type = frmOutput.Logtype.Normal)
+        {
+            LogMessage = new KeyValuePair<string, frmOutput.Logtype>(msg, type);
         }
 
         public string GetLocalizedString(uint val)
