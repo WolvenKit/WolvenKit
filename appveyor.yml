@@ -1,2 +1,7 @@
 before_build:
   - nuget restore
+  
+# Update to the most recent VS.
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
