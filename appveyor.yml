@@ -1,3 +1,9 @@
+# Skipping commits affecting specific files (GitHub only). More details here: /docs/appveyor-yml
+kip_commits:
+ files:
+   - .gitignore
+   - README.md
+
 before_build:
   - nuget restore
   
