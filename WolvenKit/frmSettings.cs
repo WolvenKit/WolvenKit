@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using IniParserLTK;
 using Microsoft.Win32;
 
 namespace WolvenKit
@@ -58,8 +59,19 @@ namespace WolvenKit
             config.TextLanguage = txTextLanguage.Text;
             config.VoiceLanguage = txVoiceLanguage.Text;
             MainController.Get().ReloadStringManager();
-
             config.Save();
+            IniParser ip = new IniParser(Path.Combine(MainController.Get().Configuration.GameRootDir, "bin\\config\\base\\general.ini"));
+            if (!ip.HasSection("General") || ip.GetSetting("General", "DBGConsoleOn", true) != "true")
+            {
+                if (MessageBox.Show(
+                        "WolvenKit has detected that your game has the debug console disabled. It is a usefull tool when testing mods. Would you like it to be enabled?",
+                        "Debug console enabling", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    ip.AddSetting("General", "DBGConsoleOn","true");
+                    ip.Save();
+                }
+            }
+
         }
 
         private void btBrowseWCC_Lite_Click(object sender, EventArgs e)
