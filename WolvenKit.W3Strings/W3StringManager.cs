@@ -23,7 +23,7 @@ namespace WolvenKit.W3Strings
 
             var exedir = path;
             var content = Path.Combine(exedir, @"..\..\content\");
-            foreach (var dir in Directory.GetDirectories(content, "content*"))
+            foreach (var dir in GetdirectoriesDebug(content, "content*"))
             {
                 var strs = Directory.GetFiles(dir, Language + ".w3strings");
                 foreach (var file in strs)
@@ -33,7 +33,7 @@ namespace WolvenKit.W3Strings
             }
 
             var patch = Path.Combine(exedir, @"..\..\content\");
-            foreach (var dir in Directory.GetDirectories(patch, "patch*"))
+            foreach (var dir in GetdirectoriesDebug(patch, "patch*"))
             {
                 var strs = Directory.GetFiles(dir, Language + ".w3strings");
                 foreach (var file in strs)
@@ -47,7 +47,7 @@ namespace WolvenKit.W3Strings
             {
                 foreach (var dir in Directory.GetDirectories(dlc))
                 {
-                    var strs = Directory.GetFiles(dir, Language + ".w3strings", SearchOption.AllDirectories);
+                    var strs = GetdirectoriesDebug(dir, Language + ".w3strings", SearchOption.AllDirectories);
                     foreach (var file in strs)
                     {
                         OpenFile(file);
@@ -124,6 +124,15 @@ namespace WolvenKit.W3Strings
         public void Test()
         {
             importedStrings.Add(new List<string>() { "0", "0", "0" });
+        }
+
+        public string[] GetdirectoriesDebug(string s, string k,SearchOption so = SearchOption.TopDirectoryOnly)
+        {
+#if DEBUG
+            return new string[0];
+#else
+            return Directory.GetDirectories(s, k,so);
+#endif
         }
     }
 }

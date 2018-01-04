@@ -66,16 +66,23 @@ namespace WolvenKit
             config.VoiceLanguage = txVoiceLanguage.Text;
             MainController.Get().ReloadStringManager();
             config.Save();
-            IniParser ip = new IniParser(Path.Combine(MainController.Get().Configuration.GameRootDir, "bin\\config\\base\\general.ini"));
-            if (!ip.HasSection("General") || ip.GetSetting("General", "DBGConsoleOn", true) != "true")
+            try
             {
-                if (MessageBox.Show(
-                        "WolvenKit has detected that your game has the debug console disabled. It is a usefull tool when testing mods. Would you like it to be enabled?",
-                        "Debug console enabling", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                IniParser ip = new IniParser(Path.Combine(MainController.Get().Configuration.GameRootDir, "bin\\config\\base\\general.ini"));
+                if (!ip.HasSection("General") || ip.GetSetting("General", "DBGConsoleOn", true) != "true")
                 {
-                    ip.AddSetting("General", "DBGConsoleOn","true");
-                    ip.Save();
+                    if (MessageBox.Show(
+                            "WolvenKit has detected that your game has the debug console disabled. It is a usefull tool when testing mods. Would you like it to be enabled?",
+                            "Debug console enabling", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        ip.AddSetting("General", "DBGConsoleOn", "true");
+                        ip.Save();
+                    }
                 }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
             }
 
         }
