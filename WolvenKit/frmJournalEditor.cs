@@ -63,9 +63,9 @@ namespace WolvenKit
                     entityImage.Image = new DdsImage(files[0]).BitmapImage;
                     entimgbox.Image = new DdsImage(files[1]).BitmapImage;
                 }
-                catch (Exception ex)
+                catch
                 {
-
+                    //TODO: Log
                 }
             }
         }

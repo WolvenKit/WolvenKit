@@ -332,7 +332,7 @@ namespace WolvenKit
                 {
                     return files.Where(item => new Regex(searchkeyword).IsMatch(item.Name)).Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray();
                 }
-                catch (Exception ex)
+                catch
                 {
                     //TODO: Log
                 }

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using IniParserLTK;
@@ -16,12 +19,15 @@ namespace WolvenKit
         public frmSettings()
         {
             InitializeComponent();
-
             var config = MainController.Get().Configuration;
             txExecutablePath.Text = config.ExecutablePath;
             txTextLanguage.Text = config.TextLanguage;
             txVoiceLanguage.Text = config.VoiceLanguage;
             txWCC_Lite.Text = config.WccLite;
+            exeSearcherSlave.RunWorkerAsync();
+            btSave.Enabled =
+                (File.Exists(txWCC_Lite.Text) && Path.GetExtension(txWCC_Lite.Text) == ".exe" && txWCC_Lite.Text.Contains("wcc_lite.exe")) &&
+                (File.Exists(txExecutablePath.Text) && Path.GetExtension(txExecutablePath.Text) == ".exe" && txExecutablePath.Text.Contains("witcher3.exe"));
         }
 
         private void btnBrowseExe_Click(object sender, EventArgs e)
@@ -74,6 +80,8 @@ namespace WolvenKit
 
         }
 
+
+
         private void btBrowseWCC_Lite_Click(object sender, EventArgs e)
         {
             var dlg = new OpenFileDialog
@@ -88,37 +96,57 @@ namespace WolvenKit
             }
         }
 
-        private void locateButton_Click(object sender, EventArgs e)
-        {
-            exeSearcherSlave.RunWorkerAsync();
-        }
-
         private void exeSearcherSlave_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             const string uninstallkey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
+            const string uninstallkey2 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
             var w3 = "";
             var wcc = "";
-            int count = Registry.LocalMachine.OpenSubKey(uninstallkey).GetSubKeyNames().Length;
-            int index = 1;
+            //Debug.WriteLine("Scanning: " + "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\:");
             try
             {
-                Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey).GetSubKeyNames(), item =>
+                Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
                 {
-                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey + item).GetValue("DisplayName");
-                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey + item).GetValue("InstallLocation");
+                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey + item)?.GetValue("DisplayName");
+                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey + item)?.GetValue("InstallLocation");
                     if (programName != null && installLocation != null)
                     {
-                        if (programName.ToString().StartsWith("Witcher 3 Mod Tools"))
+                        if (programName.ToString().Contains("Witcher 3 Mod Tools"))
                         {
                             wcc = Directory.GetFiles(installLocation.ToString(), "wcc_lite.exe", SearchOption.AllDirectories).First();
+                        }
+                        else
+                        {
+                            //Debug.WriteLine("\t" + programName + "-> Not wcc_lite!");
                         }
                         if (programName.ToString().Contains("The Witcher 3 - Wild Hunt") || programName.ToString().Contains("The Witcher 3: Wild Hunt"))
                         {
                             w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe", SearchOption.AllDirectories).First();
                         }
                     }
-                    index++;
-                    exeSearcherSlave.ReportProgress(0, new Tuple<string, string, int, int>(w3, wcc, index, count));
+                    exeSearcherSlave.ReportProgress(0, new Tuple<string, string, int, int>(w3, wcc, 0, 0));
+                });
+                //Debug.WriteLine("Scanning: " + "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\:");
+                Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
+                {
+                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)?.GetValue("DisplayName");
+                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)?.GetValue("InstallLocation");
+                    if (programName != null && installLocation != null)
+                    {
+                        if (programName.ToString().Contains("Witcher 3 Mod Tools"))
+                        {
+                            wcc = Directory.GetFiles(installLocation.ToString(), "wcc_lite.exe", SearchOption.AllDirectories).First();
+                        }
+                        else
+                        {
+                            //Debug.WriteLine("\t" + programName + "-> Not wcc_lite!");
+                        }
+                        if (programName.ToString().Contains("The Witcher 3 - Wild Hunt") || programName.ToString().Contains("The Witcher 3: Wild Hunt"))
+                        {
+                            w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe", SearchOption.AllDirectories).First();
+                        }
+                    }
+                    exeSearcherSlave.ReportProgress(0, new Tuple<string, string, int, int>(w3, wcc, 0, 0));
                 });
             }
             catch (Exception ex)
@@ -137,31 +165,50 @@ namespace WolvenKit
             {
                 txWCC_Lite.Text = wccLiteexe;
             }
-            if (witcherexe != "" && wccLiteexe != "")
-            {
-                MessageBox.Show("Found the game and wcc_lite!","Info",MessageBoxButtons.OK,MessageBoxIcon.Information);
-                return;
-            }
-            if (wccLiteexe != "")
-            {
-                MessageBox.Show("Found wcc_lite!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-            if (witcherexe != "")
-            {
-                MessageBox.Show("Found the game!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-            MessageBox.Show("Couldn!t manage to find the game nor wcc_lite!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
         }
 
         private void exeSearcherSlave_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
             var report = (e.UserState as Tuple<string, string, int, int>);
-            witcherexe = report.Item1;
-            wccLiteexe = report.Item2;
-            this.Text = "Settings | Locating Game and wcc_lite [" + report.Item3 + "/" + report.Item4 + "]";
+            witcherexe = report?.Item1;
+            wccLiteexe = report?.Item2;
+
+        }
+
+        private void txWCC_Lite_TextChanged(object sender, EventArgs e)
+        {
+            var path = txWCC_Lite.Text;
+            if (File.Exists(path) && Path.GetExtension(path) == ".exe" && path.Contains("wcc_lite.exe"))
+            {
+                WCCexeTickLBL.Text = "✓";
+                WCCexeTickLBL.ForeColor = Color.Green;
+            }
+            else
+            {
+                WCCexeTickLBL.Text = "X";
+                WCCexeTickLBL.ForeColor = Color.Red;
+            }
+            btSave.Enabled =
+                (File.Exists(txWCC_Lite.Text) && Path.GetExtension(txWCC_Lite.Text) == ".exe" && txWCC_Lite.Text.Contains("wcc_lite.exe")) &&
+                (File.Exists(txExecutablePath.Text) && Path.GetExtension(txExecutablePath.Text) == ".exe" && txExecutablePath.Text.Contains("witcher3.exe"));
+        }
+
+        private void txExecutablePath_TextChanged(object sender, EventArgs e)
+        {
+            var path = txExecutablePath.Text;
+            if (File.Exists(path) && Path.GetExtension(path) == ".exe" && path.Contains("witcher3.exe"))
+            {
+                W3exeTickLBL.Text = "✓";
+                W3exeTickLBL.ForeColor = Color.Green;
+            }
+            else
+            {
+                W3exeTickLBL.Text = "X";
+                W3exeTickLBL.ForeColor = Color.Red;
+            }
+            btSave.Enabled =
+                (File.Exists(txWCC_Lite.Text) && Path.GetExtension(txWCC_Lite.Text) == ".exe" && txWCC_Lite.Text.Contains("wcc_lite.exe")) &&
+                (File.Exists(txExecutablePath.Text) && Path.GetExtension(txExecutablePath.Text) == ".exe" && txExecutablePath.Text.Contains("witcher3.exe"));
         }
     }
 }
