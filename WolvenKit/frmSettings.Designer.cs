@@ -83,7 +83,7 @@ namespace WolvenKit
             // 
             this.btSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btSave.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSave.Location = new System.Drawing.Point(483, 119);
+            this.btSave.Location = new System.Drawing.Point(483, 108);
             this.btSave.Name = "btSave";
             this.btSave.Size = new System.Drawing.Size(75, 23);
             this.btSave.TabIndex = 3;
@@ -94,6 +94,7 @@ namespace WolvenKit
             // lblLanguage
             // 
             this.lblLanguage.AutoSize = true;
+            this.lblLanguage.Enabled = false;
             this.lblLanguage.Location = new System.Drawing.Point(12, 98);
             this.lblLanguage.Name = "lblLanguage";
             this.lblLanguage.Size = new System.Drawing.Size(124, 13);
@@ -103,6 +104,7 @@ namespace WolvenKit
             // lblVoiceLanguage
             // 
             this.lblVoiceLanguage.AutoSize = true;
+            this.lblVoiceLanguage.Enabled = false;
             this.lblVoiceLanguage.Location = new System.Drawing.Point(153, 98);
             this.lblVoiceLanguage.Name = "lblVoiceLanguage";
             this.lblVoiceLanguage.Size = new System.Drawing.Size(140, 13);
@@ -143,7 +145,7 @@ namespace WolvenKit
             // 
             this.btCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btCancel.Location = new System.Drawing.Point(402, 119);
+            this.btCancel.Location = new System.Drawing.Point(402, 108);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(75, 23);
             this.btCancel.TabIndex = 11;
@@ -152,6 +154,7 @@ namespace WolvenKit
             // 
             // txTextLanguage
             // 
+            this.txTextLanguage.Enabled = false;
             this.txTextLanguage.Location = new System.Drawing.Point(12, 117);
             this.txTextLanguage.Name = "txTextLanguage";
             this.txTextLanguage.Size = new System.Drawing.Size(135, 20);
@@ -159,6 +162,7 @@ namespace WolvenKit
             // 
             // txVoiceLanguage
             // 
+            this.txVoiceLanguage.Enabled = false;
             this.txVoiceLanguage.Location = new System.Drawing.Point(153, 117);
             this.txVoiceLanguage.Name = "txVoiceLanguage";
             this.txVoiceLanguage.Size = new System.Drawing.Size(135, 20);
@@ -200,7 +204,7 @@ namespace WolvenKit
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
-            this.ClientSize = new System.Drawing.Size(588, 154);
+            this.ClientSize = new System.Drawing.Size(588, 143);
             this.Controls.Add(this.WCCexeTickLBL);
             this.Controls.Add(this.W3exeTickLBL);
             this.Controls.Add(this.btCancel);

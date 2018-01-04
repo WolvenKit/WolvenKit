@@ -93,16 +93,15 @@ namespace WolvenKit.Mod
         [XmlIgnore]
         public string FileName { get; set; }
 
-        public bool InstallAsDLC { get; set; }
-
         public string Name { get; set; }
+        public string version { get; set; }
 
         public object Clone()
         {
             var clone = new W3Mod();
             clone.Name = Name;
-            clone.InstallAsDLC = InstallAsDLC;
             clone.FileName = FileName;
+            clone.version = version;
             return clone;
         }
     }

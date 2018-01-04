@@ -22,7 +22,7 @@ namespace WolvenKit
                 mod = value;
 
                 txName.Text = mod.Name;
-                cbInstallAsDLC.Checked = mod.InstallAsDLC;
+                txVersion.Text = mod.version;
             }
         }
 
@@ -30,10 +30,9 @@ namespace WolvenKit
         {
             if (mod == null)
                 return;
-
+            mod.version = txVersion.Text;
             mod.Name = txName.Text;
             mod.FileName = Path.Combine(Path.GetDirectoryName(Mod.FileName), mod.Name) + ".w3modproj";
-            mod.InstallAsDLC = cbInstallAsDLC.Checked;
         }
     }
 }
