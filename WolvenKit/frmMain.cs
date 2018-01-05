@@ -38,6 +38,20 @@ namespace WolvenKit
             buildDateToolStripMenuItem.Text = Assembly.GetExecutingAssembly().GetLinkerTime().ToString("yyyy MMMM dd");
             MainController.Get().PropertyChanged += MainControllerUpdated;
             MainController.Get().QueueLog("Enviroment loaded!");
+            recentFilesToolStripMenuItem.DropDownItems.Clear();
+            if (File.Exists("recent_files.xml"))
+            {
+                var doc = XDocument.Load("recent_files.xml");
+                recentFilesToolStripMenuItem.Enabled = doc.Descendants("recentfile").Any();
+                foreach (var f in doc.Descendants("recentfile"))
+                {
+                    recentFilesToolStripMenuItem.DropDownItems.Add(new ToolStripMenuItem(f.Value, null, RecentFile_click));
+                }
+            }
+            else
+            {
+                recentFilesToolStripMenuItem.Enabled = false;
+            }
         }
 
         public W3Mod ActiveMod
@@ -489,6 +503,14 @@ namespace WolvenKit
             UpdateModFileList(true);
             AddOutput("\"" + ActiveMod.Name + "\" loaded successfully!\n");
             MainController.Get().ProjectStatus = "Ready";
+            var files = new List<string>();
+            if (File.Exists("recent_files.xml"))
+            {
+                var doc =XDocument.Load("recent_files.xml");
+                files.AddRange(doc.Descendants("recentfile").Take(4).Select(x => x.Value));
+            }
+            files.Add(file);
+            new XDocument(new XElement("RecentFiles",files.Distinct().Select(x => new XElement("recentfile",x)))).Save("recent_files.xml");
         }
 
         /// <summary>
@@ -1862,6 +1884,11 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 AddOutput(ex.ToString() + "\n", frmOutput.Logtype.Error);
             }            
             #endregion
+        }
+
+        private void RecentFile_click(object sender, EventArgs e)
+        {
+           openMod(sender.ToString());
         }
     }
 }
