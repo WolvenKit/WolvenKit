@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
@@ -9,12 +10,16 @@ namespace WolvenKit.Mod
     public class W3Mod : ICloneable
     {
         [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
         public string ProjectDirectory
         {
             get { return Path.Combine(Path.GetDirectoryName(FileName), Name); }
         }
 
         [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
         public string FileDirectory
         {
             get
@@ -27,6 +32,8 @@ namespace WolvenKit.Mod
         }
 
         [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
         public string ModDirectory
         {
             get
@@ -39,6 +46,8 @@ namespace WolvenKit.Mod
         }
 
         [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
         public string DlcDirectory
         {
             get
@@ -51,6 +60,8 @@ namespace WolvenKit.Mod
         }
 
         [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
         public List<string> Files
         {
             get
@@ -64,6 +75,8 @@ namespace WolvenKit.Mod
         }
 
         [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
         public List<string> ModFiles
         {
             get
@@ -77,6 +90,8 @@ namespace WolvenKit.Mod
         }
 
         [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
         public List<string> DLCFiles
         {
             get
@@ -91,9 +106,15 @@ namespace WolvenKit.Mod
 
 
         [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
         public string FileName { get; set; }
 
+        [Category("About")]
+        [Description("The name of your mod.")]
         public string Name { get; set; }
+        [Category("About")]
+        [Description("The version of your mod. It's a string so 0.1-ALPHA and such is possible.")]
         public string version { get; set; }
 
         public object Clone()

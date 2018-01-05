@@ -20,18 +20,15 @@ namespace WolvenKit
             set
             {
                 mod = value;
-
-                txName.Text = mod.Name;
-                txVersion.Text = mod.version;
+                pgModMain.SelectedObject = mod;
             }
         }
 
         private void btSave_Click(object sender, EventArgs e)
         {
+            mod = pgModMain.SelectedObject as W3Mod;
             if (mod == null)
                 return;
-            mod.version = txVersion.Text;
-            mod.Name = txName.Text;
             mod.FileName = Path.Combine(Path.GetDirectoryName(Mod.FileName), mod.Name) + ".w3modproj";
         }
     }
