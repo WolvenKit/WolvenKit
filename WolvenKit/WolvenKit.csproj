@@ -669,6 +669,7 @@
     <None Include="Resources\exclamation-red.png" />
     <None Include="Resources\edit-letter-spacing.png" />
     <None Include="Resources\ui-menu-blue.png" />
+    <None Include="Resources\home.png" />
     <Content Include="wolven_kit_icon.ico" />
     <Content Include="Licenses\License.doboz4net.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

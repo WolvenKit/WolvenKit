@@ -641,5 +641,10 @@ namespace WolvenKit
         {
             fileListView.View = View.Tile;
         }
+
+        private void Home_Click(object sender, EventArgs e)
+        {
+            OpenPath("Root");
+        }
     }
 }

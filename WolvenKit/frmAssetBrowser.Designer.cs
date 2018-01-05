@@ -74,6 +74,7 @@ namespace WolvenKit
             this.lExtension = new System.Windows.Forms.Label();
             this.extensionCB = new System.Windows.Forms.ComboBox();
             this.addDLCFile = new System.Windows.Forms.Button();
+            this.homeBTN = new System.Windows.Forms.Button();
             this.filebrowserMenuStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -82,7 +83,7 @@ namespace WolvenKit
             // 
             this.btOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btOpen.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btOpen.Location = new System.Drawing.Point(12, 498);
+            this.btOpen.Location = new System.Drawing.Point(12, 499);
             this.btOpen.Name = "btOpen";
             this.btOpen.Size = new System.Drawing.Size(145, 23);
             this.btOpen.TabIndex = 3;
@@ -200,9 +201,9 @@ namespace WolvenKit
             this.pathPanel.BackColor = System.Drawing.SystemColors.Window;
             this.pathPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pathPanel.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.pathPanel.Location = new System.Drawing.Point(12, 41);
+            this.pathPanel.Location = new System.Drawing.Point(38, 42);
             this.pathPanel.Name = "pathPanel";
-            this.pathPanel.Size = new System.Drawing.Size(665, 20);
+            this.pathPanel.Size = new System.Drawing.Size(639, 20);
             this.pathPanel.TabIndex = 6;
             this.pathPanel.Click += new System.EventHandler(this.pathPanel_Click);
             // 
@@ -496,11 +497,23 @@ namespace WolvenKit
             this.addDLCFile.UseVisualStyleBackColor = true;
             this.addDLCFile.Click += new System.EventHandler(this.AddDLCFile_Click);
             // 
+            // homeBTN
+            // 
+            this.homeBTN.BackgroundImage = global::WolvenKit.Properties.Resources.home;
+            this.homeBTN.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.homeBTN.Location = new System.Drawing.Point(9, 40);
+            this.homeBTN.Name = "homeBTN";
+            this.homeBTN.Size = new System.Drawing.Size(28, 23);
+            this.homeBTN.TabIndex = 28;
+            this.homeBTN.UseVisualStyleBackColor = true;
+            this.homeBTN.Click += new System.EventHandler(this.Home_Click);
+            // 
             // frmAssetBrowser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(811, 525);
+            this.Controls.Add(this.homeBTN);
             this.Controls.Add(this.addDLCFile);
             this.Controls.Add(this.extensionCB);
             this.Controls.Add(this.lExtension);
@@ -579,5 +592,6 @@ namespace WolvenKit
         private Label lExtension;
         private ComboBox extensionCB;
         private Button addDLCFile;
+        private Button homeBTN;
     }
 }
