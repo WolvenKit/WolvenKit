@@ -430,8 +430,7 @@
       <DependentUpon>frmSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="MainController.cs" />
-    <Compile Include="Mod\ModManager.cs" />
-    <Compile Include="Mod\W3Mod.cs" />
+    <Compile Include="W3Mod.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestFileOpenArgs.cs" />
