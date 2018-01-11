@@ -194,6 +194,7 @@
     <Compile Include="Forms\frmStringsGuiImporterIDDialog.Designer.cs">
       <DependentUpon>frmStringsGuiImporterIDDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="ModManager.cs" />
     <Compile Include="WitcherListViewItem.cs" />
     <Compile Include="Commonfunctions.cs" />
     <Compile Include="Forms\frmAbout.cs">

@@ -273,7 +273,7 @@ namespace WolvenKit
                             sf.Filter = "XML Files | *.xml";
                             //if (sf.ShowDialog() == DialogResult.OK)
                             {
-                                var asd = Apex.ConvertToApex(doc.File);
+                                var asd = Apex.HairWorks.ConvertToApexXml(doc.File);
                                 asd.Save("asd.xml");
                             }
                         }
