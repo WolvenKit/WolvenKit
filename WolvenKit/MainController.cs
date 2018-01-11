@@ -13,12 +13,15 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using WolvenKit.Mod;
 
 namespace WolvenKit
 {
     public class MainController : IVariableEditor, ILocalizedStringSource, INotifyPropertyChanged
     {
         private static MainController mainController;
+
+        public W3Mod ActiveMod { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

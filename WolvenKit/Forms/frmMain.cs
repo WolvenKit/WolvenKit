@@ -56,10 +56,10 @@ namespace WolvenKit
 
         public W3Mod ActiveMod
         {
-            get => ModManager.Get().ActiveMod;
+            get => MainController.Get().ActiveMod;
             set
             {
-                ModManager.Get().ActiveMod = value;
+                MainController.Get().ActiveMod = value;
                 UpdateTitle();
             }
         }
@@ -1118,9 +1118,9 @@ namespace WolvenKit
                     //Save the new settings and update the title
                     UpdateTitle();
                     SaveMod();
-                    if (File.Exists(ModManager.Get().ActiveMod?.FileName))
+                    if (File.Exists(MainController.Get().ActiveMod?.FileName))
                     {
-                        openMod(ModManager.Get().ActiveMod?.FileName);
+                        openMod(MainController.Get().ActiveMod?.FileName);
                     }
                     Commonfunctions.SendNotification("Succesfully updated mod settings!");
                 }
@@ -1198,9 +1198,9 @@ namespace WolvenKit
 
         private void ReloadProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (File.Exists(ModManager.Get().ActiveMod?.FileName))
+            if (File.Exists(MainController.Get().ActiveMod?.FileName))
             {
-                openMod(ModManager.Get().ActiveMod?.FileName);
+                openMod(MainController.Get().ActiveMod?.FileName);
             }
         }
 
