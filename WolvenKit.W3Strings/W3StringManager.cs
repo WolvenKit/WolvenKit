@@ -128,11 +128,7 @@ namespace WolvenKit.W3Strings
 
         public string[] GetdirectoriesDebug(string s, string k,SearchOption so = SearchOption.TopDirectoryOnly)
         {
-#if DEBUG
-            return new string[0];
-#else
             return Directory.GetDirectories(s, k,so);
-#endif
         }
     }
 }
