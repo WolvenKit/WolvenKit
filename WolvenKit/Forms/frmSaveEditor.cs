@@ -25,22 +25,29 @@ namespace WolvenKit
 
         public void UpdateSaves()
         {
-            Savegames.Clear();
-            var gamesavesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                "The Witcher 3\\gamesaves");
-            var filesPaths = Directory.GetFiles(gamesavesPath, "*.sav");
-
-            foreach (var filePath in filesPaths)
+            try
             {
-                var thumbnailFilePath = Path.Combine(Path.GetDirectoryName(filePath) ?? "",
-                    Path.GetFileNameWithoutExtension(filePath) + ".png");
+                Savegames.Clear();
+                var gamesavesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    "The Witcher 3\\gamesaves");
+                var filesPaths = Directory.GetFiles(gamesavesPath, "*.sav");
 
-                Savegames.Add(new SavegameModel
+                foreach (var filePath in filesPaths)
                 {
-                    Name = Path.GetFileName(filePath),
-                    Path = filePath,
-                    ThumbnailPath = thumbnailFilePath
-                });
+                    var thumbnailFilePath = Path.Combine(Path.GetDirectoryName(filePath) ?? "",
+                        Path.GetFileNameWithoutExtension(filePath) + ".png");
+
+                    Savegames.Add(new SavegameModel
+                    {
+                        Name = Path.GetFileName(filePath),
+                        Path = filePath,
+                        ThumbnailPath = thumbnailFilePath
+                    });
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
         }
 

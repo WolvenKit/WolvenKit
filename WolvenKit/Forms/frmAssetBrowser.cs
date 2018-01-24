@@ -244,6 +244,11 @@ namespace WolvenKit
         {
             var currentNode = RootNode;
             var parts = browsePath.Split('\\');
+            if (parts.Length == 1 && parts[0] == "Root")
+            {
+                OpenNode(RootNode);
+                return;
+            }
             if (parts.Length > 0 && parts[0] == "Root")
                 parts = parts.Skip(1).ToArray();
             var success = false;
