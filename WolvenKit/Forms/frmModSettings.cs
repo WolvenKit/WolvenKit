@@ -16,7 +16,7 @@ namespace WolvenKit
 
         public W3Mod Mod
         {
-            get { return mod; }
+            get => mod;
             set
             {
                 mod = value;

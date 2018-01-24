@@ -12,10 +12,7 @@ namespace WolvenKit.Mod
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
-        public string ProjectDirectory
-        {
-            get { return Path.Combine(Path.GetDirectoryName(FileName), Name); }
-        }
+        public string ProjectDirectory => Path.Combine(Path.GetDirectoryName(FileName), Name);
 
         [XmlIgnore]
         [ReadOnly(true)]

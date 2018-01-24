@@ -109,50 +109,54 @@ namespace WolvenKit
             const string uninstallkey2 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
             var w3 = "";
             var wcc = "";
-            //Debug.WriteLine("Scanning: " + "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\:");
             try
             {
                 Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
                 {
-                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey + item)?.GetValue("DisplayName");
-                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey + item)?.GetValue("InstallLocation");
+                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey + item)
+                        ?.GetValue("DisplayName");
+                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey + item)
+                        ?.GetValue("InstallLocation");
                     if (programName != null && installLocation != null)
                     {
                         if (programName.ToString().Contains("Witcher 3 Mod Tools"))
                         {
-                            wcc = Directory.GetFiles(installLocation.ToString(), "wcc_lite.exe", SearchOption.AllDirectories).First();
+                            wcc = Directory.GetFiles(installLocation.ToString(), "wcc_lite.exe",
+                                SearchOption.AllDirectories).First();
                         }
-                        else
+
+                        if (programName.ToString().Contains("The Witcher 3 - Wild Hunt") ||
+                            programName.ToString().Contains("The Witcher 3: Wild Hunt"))
                         {
-                            //Debug.WriteLine("\t" + programName + "-> Not wcc_lite!");
-                        }
-                        if (programName.ToString().Contains("The Witcher 3 - Wild Hunt") || programName.ToString().Contains("The Witcher 3: Wild Hunt"))
-                        {
-                            w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe", SearchOption.AllDirectories).First();
+                            w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe",
+                                SearchOption.AllDirectories).First();
                         }
                     }
+
                     exeSearcherSlave.ReportProgress(0, new Tuple<string, string, int, int>(w3, wcc, 0, 0));
                 });
-                //Debug.WriteLine("Scanning: " + "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\:");
                 Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
                 {
-                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)?.GetValue("DisplayName");
-                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)?.GetValue("InstallLocation");
+                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
+                        ?.GetValue("DisplayName");
+                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
+                        ?.GetValue("InstallLocation");
                     if (programName != null && installLocation != null)
                     {
                         if (programName.ToString().Contains("Witcher 3 Mod Tools"))
                         {
-                            wcc = Directory.GetFiles(installLocation.ToString(), "wcc_lite.exe", SearchOption.AllDirectories).First();
+                            wcc = Directory.GetFiles(installLocation.ToString(), "wcc_lite.exe",
+                                SearchOption.AllDirectories).First();
                         }
-                        else
+
+                        if (programName.ToString().Contains("The Witcher 3 - Wild Hunt") ||
+                            programName.ToString().Contains("The Witcher 3: Wild Hunt"))
                         {
-                            //Debug.WriteLine("\t" + programName + "-> Not wcc_lite!");
-                        }
-                        if (programName.ToString().Contains("The Witcher 3 - Wild Hunt") || programName.ToString().Contains("The Witcher 3: Wild Hunt"))
-                        {
-                            w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe", SearchOption.AllDirectories).First();
+                            w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe",
+                                SearchOption.AllDirectories).First();
                         }
                     }
+
                     exeSearcherSlave.ReportProgress(0, new Tuple<string, string, int, int>(w3, wcc, 0, 0));
                 });
             }
