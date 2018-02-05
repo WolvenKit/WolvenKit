@@ -73,7 +73,7 @@
     <Compile Include="Editors\PtrEditor.Designer.cs">
       <DependentUpon>PtrEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="GameEntity\CTree.cs" />
+    <Compile Include="Types\CTree.cs" />
     <Compile Include="HslColor.cs" />
     <Compile Include="IVariableEditor.cs" />
     <Compile Include="ILocalizedStringSource.cs" />
