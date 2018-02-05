@@ -13,6 +13,7 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
+using Newtonsoft.Json;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
@@ -1184,6 +1185,13 @@ namespace WolvenKit
 
         private void creditsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            File.WriteAllText("asd.json", JsonConvert.SerializeObject(MainController.Get().Window.ActiveDocument.File, Formatting.None, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                TypeNameHandling = TypeNameHandling.Auto
+            }));
+            return;
             using (var cf = new frmAbout())
                 cf.ShowDialog();
         }

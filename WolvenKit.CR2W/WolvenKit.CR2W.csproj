@@ -73,6 +73,7 @@
     <Compile Include="Editors\PtrEditor.Designer.cs">
       <DependentUpon>PtrEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameEntity\CTree.cs" />
     <Compile Include="HslColor.cs" />
     <Compile Include="IVariableEditor.cs" />
     <Compile Include="ILocalizedStringSource.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Types\CEntity.cs" />
     <Compile Include="Types\CFlags.cs" />
     <Compile Include="Types\CFloat.cs" />
+    <Compile Include="Types\CFoliageResource.cs" />
     <Compile Include="Types\CGUID.cs" />
     <Compile Include="Types\CHandle.cs" />
     <Compile Include="Types\CLocalizedString.cs" />

@@ -16,8 +16,7 @@ namespace WolvenKit.CR2W.Types
         public bool fixedTypeArray;
         public string type;
 
-        public CArray(CR2WFile cr2w)
-            : base(cr2w)
+        public CArray(CR2WFile cr2w) : base(cr2w)
         {
         }
 
@@ -37,8 +36,7 @@ namespace WolvenKit.CR2W.Types
                 Debugger.Break();
         }
 
-        public CArray(string type, string elementtype, bool fixedTypeArray, CR2WFile cr2w)
-            : base(cr2w)
+        public CArray(string type, string elementtype, bool fixedTypeArray, CR2WFile cr2w) : base(cr2w)
         {
             this.type = type;
             this.elementtype = elementtype;

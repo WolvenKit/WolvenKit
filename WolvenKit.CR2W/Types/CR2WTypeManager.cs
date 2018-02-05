@@ -100,6 +100,8 @@ namespace WolvenKit.CR2W.Types
 
             Register("CSkeletalAnimationSetEntry", new CSkeletalAnimationSetEntry(null));
 
+            Register("CFoliageResource", new CFoliageResource(null));
+
 
             var vectors = new[]
             {
