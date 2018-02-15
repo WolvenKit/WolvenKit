@@ -48,13 +48,25 @@ namespace WolvenKit.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            throw new NotImplementedException();//TODO: Figure out a proper way to write this.
+            throw new NotImplementedException();//TODO
             base.Write(file);
             var count = new CDynamicInt(cr2w);
             count.val = Trees.Count();
-            for (int i = 0; i < count.val; i++)
+            foreach(var current in Trees.array)
             {
-                   
+                /*
+                treetype.Read(file, 4);
+                currenttreebundle.Name = treetype.Handle;
+                currentTrees.AddVariable(treetype);
+                treecount.Read(file, 1);
+                for (int i = 0; i < treecount.val; i++)
+                {
+                    CTree tree = new CTree(cr2w);
+                    tree.Read(file, 29);
+                    currentTrees.AddVariable(tree);
+                }
+                currenttreebundle.AddVariable(currentTrees);
+                Trees.AddVariable(currenttreebundle);*/
             }
             file.Write(0x80); //END
         }

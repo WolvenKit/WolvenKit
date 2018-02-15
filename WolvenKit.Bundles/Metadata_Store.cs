@@ -15,7 +15,7 @@ namespace WolvenKit.Bundles
         public Int32 StringTableSize;
         public List<string> FileStringTable;
         public Int32 FileCount;
-        //public List<FileRecord> FileRecords;
+
         TDynArray<UFileInfo> fileInfoList;
         TDynArray<UFileEntryInfo> fileEntryInfoList;
         TDynArray<UBundleInfo> bundleInfoList;
@@ -42,9 +42,9 @@ namespace WolvenKit.Bundles
                 StringTableSize = br.ReadBit6().value;
                 Console.WriteLine("String table size: " + StringTableSize);
                 FileStringTable = new string(br.ReadChars(StringTableSize)).Split('\0').ToList();
-                //Console.WriteLine("\n-----------------------------------\nFile string table:");
-                //Console.WriteLine(FileStringTable.Aggregate("", (c, n) => c += "\n" + n));
-                //Console.WriteLine("-----------------------------------");
+                Console.WriteLine("\n-----------------------------------\nFile string table:");
+                Console.WriteLine(FileStringTable.Aggregate("", (c, n) => c += "\n" + n));
+                Console.WriteLine("-----------------------------------");
 
                 fileInfoList = new TDynArray<UFileInfo>();
                 fileInfoList.Deserialize(br);
@@ -99,13 +99,35 @@ namespace WolvenKit.Bundles
     public class UFileInfo : ISerializable
     {
         public Int32 FilePathLength;
-        //4 null bytes
         public Int32 FileSIzeCompressed;
         public Int32 FileSize;
         public Int32 FileIndex;
         public Int32 CompressionType;
-        //8 null bytes
         public Int32 LastIndex;
+
+        public string Compression
+        {
+            get
+            {
+                switch (CompressionType)
+                {
+                    case 0:
+                        return "None";
+                    case 1:
+                        return "Zlib";
+                    case 2:
+                        return "Snappy";
+                    case 3:
+                        return "Doboz";
+                    case 4:
+                        return "Lz4";
+                    case 5:
+                        return "Lz4";
+                    default:
+                        return "Unknown";
+                }
+            }
+        }
 
         public void Deserialize(BinaryReader reader)
         {
@@ -127,9 +149,20 @@ namespace WolvenKit.Bundles
 
     public class UFileEntryInfo : ISerializable
     {
+        public Int32 Unk1;
+        public Int32 Unk2;
+        public Int32 Unk3;
+        public Int32 Unk4;
+        public Int32 Unk5;
+        
+
         public void Deserialize(BinaryReader reader)
         {
-            reader.ReadBytes(20);
+            Unk1 = reader.ReadInt32();
+            Unk2 = reader.ReadInt32();
+            Unk3 = reader.ReadInt32();
+            Unk4 = reader.ReadInt32();
+            Unk5 = reader.ReadInt32();
         }
 
         public void Serialize(BinaryWriter writer)
@@ -139,9 +172,21 @@ namespace WolvenKit.Bundles
     }
     public class UBundleInfo : ISerializable
     {
+        public Int32 Unk1;
+        public Int32 Unk2;
+        public Int32 Unk3;
+        public Int32 Unk4;
+        public Int32 Unk5;
+        public Int32 Unk6;
+
         public void Deserialize(BinaryReader reader)
         {
-            reader.ReadBytes(24);
+            Unk1 = reader.ReadInt32();
+            Unk2 = reader.ReadInt32();
+            Unk3 = reader.ReadInt32();
+            Unk4 = reader.ReadInt32();
+            Unk5 = reader.ReadInt32();
+            Unk6 = reader.ReadInt32();
         }
 
         public void Serialize(BinaryWriter writer)
@@ -152,9 +197,15 @@ namespace WolvenKit.Bundles
 
     public class UDirInitInfo : ISerializable
     {
+        public Int32 Unk1;
+        public Int32 Unk2;
+        public Int32 Unk3;
+
         public void Deserialize(BinaryReader reader)
         {
-            reader.ReadBytes(12);
+            Unk1 = reader.ReadInt32();
+            Unk2 = reader.ReadInt32();
+            Unk3 = reader.ReadInt32();
         }
 
         public void Serialize(BinaryWriter writer)
@@ -164,9 +215,11 @@ namespace WolvenKit.Bundles
     }
     public class UnknownType01 : ISerializable
     {
+        public Int32 Unk1;
+
         public void Deserialize(BinaryReader reader)
         {
-            reader.ReadBytes(4);
+            Unk1 = reader.ReadInt32();
         }
 
         public void Serialize(BinaryWriter writer)
@@ -177,9 +230,13 @@ namespace WolvenKit.Bundles
 
     public class UnknownType02 : ISerializable
     {
+        public Int32 Unk1;
+        public Int32 Unk2;
+
         public void Deserialize(BinaryReader reader)
         {
-            reader.ReadBytes(8);
+            Unk1 = reader.ReadInt32();
+            Unk2 = reader.ReadInt32();
         }
 
         public void Serialize(BinaryWriter writer)
@@ -190,9 +247,17 @@ namespace WolvenKit.Bundles
 
     public class UnknownType03 : ISerializable
     {
+        public Int32 Unk1;
+        public Int32 Unk2;
+        public Int32 Unk3;
+        public Int32 Unk4;
+
         public void Deserialize(BinaryReader reader)
         {
-            reader.ReadBytes(16);
+            Unk1 = reader.ReadInt32();
+            Unk2 = reader.ReadInt32();
+            Unk3 = reader.ReadInt32();
+            Unk4 = reader.ReadInt32();
         }
 
         public void Serialize(BinaryWriter writer)

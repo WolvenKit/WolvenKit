@@ -12,6 +12,7 @@ namespace WolvenKit.Bundles
     {
         public void Deserialize(BinaryReader reader)
         {
+            
             this.Clear();
             Int32 count = reader.ReadBit6().value;
             for (int i = 0; i < count; i++)
