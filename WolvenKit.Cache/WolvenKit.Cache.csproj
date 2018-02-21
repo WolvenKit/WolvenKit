@@ -72,6 +72,7 @@
     <Compile Include="ImageUtility.cs" />
     <Compile Include="Cache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextureCache\TextureCacheItem.cs" />
     <Compile Include="TextureCache\TextureManager.cs" />
     <Compile Include="TextureCache\Texture_Cache.cs" />
   </ItemGroup>
