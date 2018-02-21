@@ -12,30 +12,34 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
-    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PublishUrl>D:\Redkit2Release\</PublishUrl>
+    <PublishUrl>./Publish/</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Background</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>https://traderain.hu/Witcher/WolvenKit/</InstallUrl>
     <SupportUrl>https://traderain.hu</SupportUrl>
     <ErrorReportUrl>https://traderain.hu</ErrorReportUrl>
-    <ProductName>Redkit 2</ProductName>
+    <ProductName>WolvenKit</ProductName>
     <PublisherName>Traderain</PublisherName>
-    <SuiteName>Redkit 2</SuiteName>
+    <SuiteName>WolvenKit</SuiteName>
+    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
+    <AutorunEnabled>true</AutorunEnabled>
     <DisallowUrlActivation>true</DisallowUrlActivation>
-    <ApplicationRevision>9</ApplicationRevision>
+    <ApplicationRevision>10</ApplicationRevision>
     <ApplicationVersion>0.0.2.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -713,6 +717,20 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <FileAssociation Include=".w3modproj">
+      <Visible>False</Visible>
+      <Description>WolvenKit project file</Description>
+      <Progid>WolvenKit</Progid>
+      <DefaultIcon>wolven_kit_icon.ico</DefaultIcon>
+    </FileAssociation>
+    <FileAssociation Include=".wkp">
+      <Visible>False</Visible>
+      <Description>WolvenKit Mod Package</Description>
+      <Progid>WolvenKit</Progid>
+      <DefaultIcon>wolven_kit_icon.ico</DefaultIcon>
+    </FileAssociation>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

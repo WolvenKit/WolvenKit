@@ -19,7 +19,6 @@ namespace WolvenKit.Wwise.SoundCache
 
         public long NameOffset;
         public long Offset { get; set; }
-
         public long Size { get; set; }
         public uint ZSize { get; set; }
 
@@ -28,13 +27,7 @@ namespace WolvenKit.Wwise.SoundCache
             this.Bundle = Parent;
         }
 
-        public string CompressionType
-        {
-            get
-            {
-                return "None";
-            }
-        }
+        public string CompressionType => "None";
 
         public void Extract(Stream output)
         {

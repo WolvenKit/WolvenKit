@@ -20,8 +20,11 @@ namespace WolvenKit
     public class MainController : IVariableEditor, ILocalizedStringSource, INotifyPropertyChanged
     {
         private static MainController mainController;
-
+        public Configuration Configuration { get; private set; }
+        public frmMain Window { get; private set; }
         public W3Mod ActiveMod { get; set; }
+
+        public const string ManagerCacheDir = "ManagerCache";
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -44,9 +47,7 @@ namespace WolvenKit
         /// </summary>
         public bool ProjectUnsaved = false;
 
-        private MainController()
-        {
-        }
+        private MainController()  {  }
 
 #region Archive Managers
         private SoundManager soundManager;
@@ -65,9 +66,9 @@ namespace WolvenKit
                 {
                     try
                     {
-                        if (File.Exists("string_cache.json"))
+                        if (File.Exists(Path.Combine(ManagerCacheDir,"string_cache.json")))
                         {
-                            using (StreamReader file = File.OpenText(@"string_cache.json"))
+                            using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir,"string_cache.json")))
                             {
                                 JsonSerializer serializer = new JsonSerializer();
                                 serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -80,7 +81,7 @@ namespace WolvenKit
                         {
                             w3StringManager = new W3StringManager();
                             w3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
-                            File.WriteAllText("string_cache.json", JsonConvert.SerializeObject(W3StringManager, Formatting.None, new JsonSerializerSettings()
+                            File.WriteAllText(Path.Combine(ManagerCacheDir,"string_cache.json"), JsonConvert.SerializeObject(W3StringManager, Formatting.None, new JsonSerializerSettings()
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
@@ -90,8 +91,8 @@ namespace WolvenKit
                     }
                     catch (System.Exception)
                     {
-                        if (File.Exists("string_cache.json"))
-                            File.Delete("string_cache.json");
+                        if (File.Exists(Path.Combine(ManagerCacheDir,"string_cache.json")))
+                            File.Delete(Path.Combine(ManagerCacheDir,"string_cache.json"));
                         w3StringManager = new W3StringManager();
                         w3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
                     }
@@ -109,9 +110,9 @@ namespace WolvenKit
                 {
                     try
                     {
-                        if (File.Exists("bundle_cache.json"))
+                        if (File.Exists(Path.Combine(ManagerCacheDir,"bundle_cache.json")))
                         {
-                            using (StreamReader file = File.OpenText(@"bundle_cache.json"))
+                            using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir,"bundle_cache.json")))
                             {
                                 JsonSerializer serializer = new JsonSerializer();
                                 serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -124,7 +125,7 @@ namespace WolvenKit
                         {
                             bundleManager = new BundleManager();
                             bundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                            File.WriteAllText("bundle_cache.json", JsonConvert.SerializeObject(bundleManager, Formatting.None, new JsonSerializerSettings()
+                            File.WriteAllText(Path.Combine(ManagerCacheDir,"bundle_cache.json"), JsonConvert.SerializeObject(bundleManager, Formatting.None, new JsonSerializerSettings()
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
@@ -134,8 +135,8 @@ namespace WolvenKit
                     }
                     catch (System.Exception)
                     {
-                        if (File.Exists("bundle_cache.json"))
-                            File.Delete("bundle_cache.json");
+                        if (File.Exists(Path.Combine(ManagerCacheDir,"bundle_cache.json")))
+                            File.Delete(Path.Combine(ManagerCacheDir,"bundle_cache.json"));
                         bundleManager = new BundleManager();
                         bundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
                     }
@@ -165,9 +166,9 @@ namespace WolvenKit
                 {
                     try
                     {
-                        if (File.Exists("sound_cache.json"))
+                        if (File.Exists(Path.Combine(ManagerCacheDir,"sound_cache.json")))
                         {
-                            using (StreamReader file = File.OpenText(@"sound_cache.json"))
+                            using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir,"sound_cache.json")))
                             {
                                 JsonSerializer serializer = new JsonSerializer();
                                 serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -180,7 +181,7 @@ namespace WolvenKit
                         {
                             soundManager = new SoundManager();
                             soundManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                            File.WriteAllText("sound_cache.json", JsonConvert.SerializeObject(soundManager, Formatting.None, new JsonSerializerSettings()
+                            File.WriteAllText(Path.Combine(ManagerCacheDir,"sound_cache.json"), JsonConvert.SerializeObject(soundManager, Formatting.None, new JsonSerializerSettings()
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
@@ -190,8 +191,8 @@ namespace WolvenKit
                     }
                     catch (System.Exception)
                     {
-                        if (File.Exists("sound_cache.json"))
-                            File.Delete("sound_cache.json");
+                        if (File.Exists(Path.Combine(ManagerCacheDir,"sound_cache.json")))
+                            File.Delete(Path.Combine(ManagerCacheDir,"sound_cache.json"));
                         soundManager = new SoundManager();
                         soundManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
                     }
@@ -221,9 +222,9 @@ namespace WolvenKit
                 {
                     try
                     {
-                        if (File.Exists("texture_cache.json"))
+                        if (File.Exists(Path.Combine(ManagerCacheDir,"texture_cache.json")))
                         {
-                            using (StreamReader file = File.OpenText(@"texture_cache.json"))
+                            using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir,"texture_cache.json")))
                             {
                                 JsonSerializer serializer = new JsonSerializer();
                                 serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -236,7 +237,7 @@ namespace WolvenKit
                         {
                             textureManager = new TextureManager();
                             textureManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                            File.WriteAllText("texture_cache.json", JsonConvert.SerializeObject(textureManager, Formatting.None, new JsonSerializerSettings()
+                            File.WriteAllText(Path.Combine(ManagerCacheDir,"texture_cache.json"), JsonConvert.SerializeObject(textureManager, Formatting.None, new JsonSerializerSettings()
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
@@ -246,8 +247,8 @@ namespace WolvenKit
                     }
                     catch (System.Exception)
                     {
-                        if (File.Exists("texture_cache.json"))
-                            File.Delete("texture_cache.json");
+                        if (File.Exists(Path.Combine(ManagerCacheDir,"texture_cache.json")))
+                            File.Delete(Path.Combine(ManagerCacheDir,"texture_cache.json"));
                         textureManager = new TextureManager();
                         textureManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
                     }
@@ -269,9 +270,6 @@ namespace WolvenKit
             }
         }
 #endregion
-
-        public Configuration Configuration { get; private set; }
-        public frmMain Window { get; private set; }
 
         /// <summary>
         /// Usefull function for blindly importing a file.
