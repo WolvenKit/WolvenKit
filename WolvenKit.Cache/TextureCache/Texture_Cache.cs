@@ -15,7 +15,7 @@ namespace WolvenKit.Cache
         //The images packed into this Texture cache file
         public List<TextureCacheItem> Files;
 
-        public string TypeName { get { return "TextureCache"; } }
+        public string TypeName => "TextureCache";
         public string FileName { get; set; }
         public List<uint> Chunkoffsets;
         public uint TextureCount;
@@ -61,26 +61,28 @@ namespace WolvenKit.Cache
                 }
                 for (var i = 0; i < TextureCount; i++)
                 {
-                    var ti = new TextureCacheItem(this);
-                    ti.Name = Names[i];
-                    ti.ParentFile = FileName;
-                    ti.Id = br.ReadUInt32();                //number (unique???)
-                    ti.Filenameoffset = br.ReadUInt32();    //filename, start offset in block2
-                    ti.Offset = br.ReadUInt32();            //* 4096 = start offset, first chunk
-                    ti.PackedSize = br.ReadUInt32();        //packed size (all chunks)
-                    ti.UnpackedSize = br.ReadUInt32();      //unpacked size
-                    ti.Bpp = br.ReadUInt32();               //bpp? always 16
-                    ti.Width = br.ReadUInt16();             //width
-                    ti.Height = br.ReadUInt16();            //height
-                    ti.Mips = br.ReadUInt16();              //mips
-                    ti.Typeinfo = br.ReadUInt16();          //1/6/N, single, cubemaps, arrays
-                    ti.B1Offset = br.ReadUInt32();          //offset in block1, second packed chunk
-                    ti.Rpc = br.ReadUInt32();               //the number of remaining packed chunks
-                    ti.Unk1 = br.ReadUInt32();              //???
-                    ti.Unk2 = br.ReadUInt32();              //???
-                    ti.Dxt = br.ReadByte();                 //0-RGBA?, 7-DXT1, 8-DXT5, 10-???, 13-DXT3, 14-ATI1, 15-???, 253-???
-                    ti.Type = br.ReadByte();                //3-cubemaps, 4-texture
-                    ti.Unk3 = br.ReadUInt16();              //0/1 ???
+                    var ti = new TextureCacheItem(this)
+                    {
+                        Name = Names[i],
+                        ParentFile = FileName,
+                        Id = br.ReadUInt32(),               //number (unique???)
+                        Filenameoffset = br.ReadUInt32(),   //filename, start offset in block2
+                        Offset = br.ReadUInt32(),           //* 4096 = start offset, first chunk
+                        PackedSize = br.ReadUInt32(),       //packed size (all chunks)
+                        UnpackedSize = br.ReadUInt32(),     //unpacked size
+                        Bpp = br.ReadUInt32(),              //bpp? always 16
+                        Width = br.ReadUInt16(),            //width
+                        Height = br.ReadUInt16(),           //height
+                        Mips = br.ReadUInt16(),             //mips
+                        Typeinfo = br.ReadUInt16(),         //1/6/N, single, cubemaps, arrays
+                        B1Offset = br.ReadUInt32(),         //offset in block1, second packed chunk
+                        Rpc = br.ReadUInt32(),              //the number of remaining packed chunks
+                        Unk1 = br.ReadUInt32(),             //???
+                        Unk2 = br.ReadUInt32(),             //???
+                        Dxt = br.ReadByte(),                //0-RGBA?, 7-DXT1, 8-DXT5, 10-???, 13-DXT3, 14-ATI1, 15-???, 253-???
+                        Type = br.ReadByte(),               //3-cubemaps, 4-texture
+                        Unk3 = br.ReadUInt16()              //0/1 ???
+                    };
                     Files.Add(ti);
                 }
                 for (var i = 0; i < 3; i++)
@@ -90,9 +92,9 @@ namespace WolvenKit.Cache
                 foreach (var t in Files)
                 {
                     br.BaseStream.Seek(t.Offset * 4096, SeekOrigin.Begin);
-                    t.ZSize = br.ReadUInt32();
+                    t.ZSize = br.ReadUInt32(); //Compressed size
                     t.Size = br.ReadInt32(); //Uncompressed size
-                    t.Part = br.ReadByte();
+                    t.Part = br.ReadByte(); //maybe the 48bit part of OFFSET
                 }
             }
         }
