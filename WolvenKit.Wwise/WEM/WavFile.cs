@@ -14,9 +14,6 @@ namespace WolvenKit.Wwise.WEM
             ALaw = 6,
             MuLaw = 7
         }
-
-        private Dictionary<string, ChunkParser> _chunkParsers;
-        private Dictionary<string, ChunkUpdater> _chunkUpdaters;
         private RiffFile _riffFile;
 
         private WavFile()

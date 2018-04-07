@@ -49,7 +49,6 @@ namespace WolvenKit.Scaleform
         {
 
             CSharpCodeProvider c = new CSharpCodeProvider();
-            ICodeCompiler icc = c.CreateCompiler();
             CompilerParameters cp = new CompilerParameters();
 
             cp.ReferencedAssemblies.Add("system.dll");
@@ -76,8 +75,8 @@ namespace WolvenKit.Scaleform
             sb.Append("} \n");
             sb.Append("} \n");
             sb.Append("}\n");
-
-            CompilerResults cr = icc.CompileAssemblyFromSource(cp, sb.ToString());
+            
+            CompilerResults cr = c.CompileAssemblyFromSource(cp, sb.ToString());
             if (cr.Errors.Count > 0)
             {
                 MessageBox.Show("ERROR: " + cr.Errors[0].ErrorText,

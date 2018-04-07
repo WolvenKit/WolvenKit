@@ -31,6 +31,7 @@ namespace WolvenKit.Cache.CollisionCache
         public ulong Unk6;
         public ulong Comtype; //TODO: Investigate this.
 
+
         public void Extract(Stream output)
         {
             using (var file = MemoryMappedFile.CreateFromFile(Bundle.FileName, FileMode.Open))
@@ -45,7 +46,8 @@ namespace WolvenKit.Cache.CollisionCache
 
         public void Extract(string filename)
         {
-            using (var output = new FileStream(filename, FileMode.CreateNew, FileAccess.Write))
+            Directory.CreateDirectory(Path.GetDirectoryName(filename) ?? "");
+            using (var output = new FileStream(filename, FileMode.Create, FileAccess.Write))
             {
                 Extract(output);
                 output.Close();
