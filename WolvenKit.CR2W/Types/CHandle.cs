@@ -8,8 +8,7 @@ namespace WolvenKit.CR2W.Types
 {
     public class CHandle : CVariable
     {
-        public CHandle(CR2WFile cr2w)
-            : base(cr2w)
+        public CHandle(CR2WFile cr2w) : base(cr2w)
         {
         }
 

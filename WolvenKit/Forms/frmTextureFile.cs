@@ -17,8 +17,6 @@ namespace WolvenKit
     {
         public frmTextureFile()
         {
-            //MouseWheel += FrmTextureFile_MouseWheel;
-
             InitializeComponent();
         }
 
@@ -38,7 +36,6 @@ namespace WolvenKit
         }
 
         private Image origImg;
-        //private int zoomFactor = 100;
 
         private void ResizeImage()
         {
@@ -50,7 +47,8 @@ namespace WolvenKit
                     newSize = new Size(Width, (int)(ratio * Width));
                 else
                     newSize = new Size((int)(1 / ratio * Height), Height);
-                pictureBox1.Image = new Bitmap(origImg, newSize);
+                if(newSize.Height > 0 && newSize.Width > 0)
+                    pictureBox1.Image = new Bitmap(origImg, newSize);
             }
 
             CenterPictureBox(pictureBox1, new Bitmap(pictureBox1.Image));
@@ -63,19 +61,6 @@ namespace WolvenKit
                                         (picBox.Parent.ClientSize.Height / 2) - (picImage.Height / 2));
             picBox.Refresh();
         }
-
-        /*private void FrmTextureFile_MouseWheel(object sender, MouseEventArgs e)
-        {
-            if (e.Delta > 0)
-                zoomFactor += 20;
-            else if(zoomFactor > 20)
-                zoomFactor -= 20;
-
-            Size newSize = new Size((int)(origImg.Width * zoomFactor/100f), (int)(origImg.Height * zoomFactor/100f));
-            pictureBox1.Image = new Bitmap(origImg, newSize);
-
-            CenterPictureBox(pictureBox1, new Bitmap(pictureBox1.Image));
-        }*/
 
         private void FrmTextureFile_Resize(object sender, EventArgs e)
         {

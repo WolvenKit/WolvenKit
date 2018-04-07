@@ -16,24 +16,20 @@ namespace WolvenKit
 
         public W3Mod Mod
         {
-            get { return mod; }
+            get => mod;
             set
             {
                 mod = value;
-
-                txName.Text = mod.Name;
-                cbInstallAsDLC.Checked = mod.InstallAsDLC;
+                pgModMain.SelectedObject = mod;
             }
         }
 
         private void btSave_Click(object sender, EventArgs e)
         {
+            mod = pgModMain.SelectedObject as W3Mod;
             if (mod == null)
                 return;
-
-            mod.Name = txName.Text;
             mod.FileName = Path.Combine(Path.GetDirectoryName(Mod.FileName), mod.Name) + ".w3modproj";
-            mod.InstallAsDLC = cbInstallAsDLC.Checked;
         }
     }
 }

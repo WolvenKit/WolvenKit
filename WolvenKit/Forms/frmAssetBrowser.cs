@@ -244,6 +244,11 @@ namespace WolvenKit
         {
             var currentNode = RootNode;
             var parts = browsePath.Split('\\');
+            if (parts.Length == 1 && parts[0] == "Root")
+            {
+                OpenNode(RootNode);
+                return;
+            }
             if (parts.Length > 0 && parts[0] == "Root")
                 parts = parts.Skip(1).ToArray();
             var success = false;
@@ -328,7 +333,14 @@ namespace WolvenKit
         {
             if (regexCheckbox.Checked)
             {
-                return files.Where(item => new Regex(searchkeyword).IsMatch(item.Name)).Select(x=> new Tuple<WitcherListViewItem,IWitcherFile>(new WitcherListViewItem(x),x)).ToArray();
+                try
+                {
+                    return files.Where(item => new Regex(searchkeyword).IsMatch(item.Name)).Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray();
+                }
+                catch
+                {
+                    //TODO: Log
+                }
             }
             if (currentfolderCheckBox.Checked)
             {
@@ -633,6 +645,11 @@ namespace WolvenKit
         private void tileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             fileListView.View = View.Tile;
+        }
+
+        private void Home_Click(object sender, EventArgs e)
+        {
+            OpenPath("Root");
         }
     }
 }

@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>CS1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,8 +34,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cyotek.Windows.Forms.ColorPicker">
-      <HintPath>..\Libs\Cyotek.Windows.Forms.ColorPicker.dll</HintPath>
+    <Reference Include="Cyotek.Windows.Forms.ColorPicker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cyotek.Windows.Forms.ColorPicker.1.7.2\lib\net35\Cyotek.Windows.Forms.ColorPicker.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -72,6 +73,7 @@
     <Compile Include="Editors\PtrEditor.Designer.cs">
       <DependentUpon>PtrEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Types\CTree.cs" />
     <Compile Include="HslColor.cs" />
     <Compile Include="IVariableEditor.cs" />
     <Compile Include="ILocalizedStringSource.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="Types\CEntity.cs" />
     <Compile Include="Types\CFlags.cs" />
     <Compile Include="Types\CFloat.cs" />
+    <Compile Include="Types\CFoliageResource.cs" />
     <Compile Include="Types\CGUID.cs" />
     <Compile Include="Types\CHandle.cs" />
     <Compile Include="Types\CLocalizedString.cs" />
@@ -124,6 +127,9 @@
     <EmbeddedResource Include="Editors\PtrEditor.resx">
       <DependentUpon>PtrEditor.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

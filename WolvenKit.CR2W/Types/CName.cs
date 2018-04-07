@@ -59,7 +59,6 @@ namespace WolvenKit.CR2W.Types
         public override Control GetEditor()
         {
             var enumtypes = typeof(Enums).GetNestedTypes();
-            bool found = false;
             foreach (var item in enumtypes)
             {
                 if(item.Name == this.Type)

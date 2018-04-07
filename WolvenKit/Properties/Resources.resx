@@ -157,11 +157,17 @@
   <data name="AddNodefromFile_354" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\AddNodefromFile_354.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ui-menu-blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ui-menu-blue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Editing-Collapse-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Editing-Collapse-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="player_record" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\player_record.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wolven_kit_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\wolven_kit_icon.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ExpandIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ExpandIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -202,7 +208,7 @@
   <data name="bug" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\bug.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ui-menu-blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ui-menu-blue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="home" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\home.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

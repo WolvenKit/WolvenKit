@@ -19,8 +19,8 @@ namespace WolvenKit
 
         public W3Mod ActiveMod
         {
-            get { return ModManager.Get().ActiveMod; }
-            set { ModManager.Get().ActiveMod = value; }
+            get { return MainController.Get().ActiveMod; }
+            set { MainController.Get().ActiveMod = value; }
         }
 
         public event EventHandler<RequestFileArgs> RequestFileOpen;
@@ -167,7 +167,7 @@ namespace WolvenKit
         {
             if (modFileList.SelectedNode != null)
             {
-                Clipboard.SetText(ModManager.Get().ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath);
+                Clipboard.SetText(MainController.Get().ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath);
             }
         }
 

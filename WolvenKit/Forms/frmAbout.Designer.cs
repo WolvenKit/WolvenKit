@@ -33,12 +33,12 @@ namespace WolvenKit
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.labelCompanyName = new System.Windows.Forms.Label();
+            this.labelCopyright = new System.Windows.Forms.Label();
+            this.labelVersion = new System.Windows.Forms.Label();
             this.labelProductName = new System.Windows.Forms.Label();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
-            this.labelVersion = new System.Windows.Forms.Label();
-            this.labelCopyright = new System.Windows.Forms.Label();
-            this.labelCompanyName = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -91,7 +91,7 @@ namespace WolvenKit
             // 
             // pictureBox1
             // 
-            this.pictureBox1.BackgroundImage = global::WolvenKit.Properties.Resources.geralt;
+            this.pictureBox1.BackgroundImage = global::WolvenKit.Properties.Resources.wolven_kit_icon;
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
@@ -99,6 +99,46 @@ namespace WolvenKit
             this.pictureBox1.Size = new System.Drawing.Size(176, 142);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(13, 115);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(55, 16);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "License";
+            // 
+            // labelCompanyName
+            // 
+            this.labelCompanyName.AutoSize = true;
+            this.labelCompanyName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCompanyName.Location = new System.Drawing.Point(13, 86);
+            this.labelCompanyName.Name = "labelCompanyName";
+            this.labelCompanyName.Size = new System.Drawing.Size(66, 16);
+            this.labelCompanyName.TabIndex = 3;
+            this.labelCompanyName.Text = "Company";
+            // 
+            // labelCopyright
+            // 
+            this.labelCopyright.AutoSize = true;
+            this.labelCopyright.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCopyright.Location = new System.Drawing.Point(13, 57);
+            this.labelCopyright.Name = "labelCopyright";
+            this.labelCopyright.Size = new System.Drawing.Size(65, 16);
+            this.labelCopyright.TabIndex = 2;
+            this.labelCopyright.Text = "Copyright";
+            // 
+            // labelVersion
+            // 
+            this.labelVersion.AutoSize = true;
+            this.labelVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelVersion.Location = new System.Drawing.Point(203, 18);
+            this.labelVersion.Name = "labelVersion";
+            this.labelVersion.Size = new System.Drawing.Size(52, 16);
+            this.labelVersion.TabIndex = 1;
+            this.labelVersion.Text = "version";
             // 
             // labelProductName
             // 
@@ -118,46 +158,6 @@ namespace WolvenKit
             this.webBrowser1.Name = "webBrowser1";
             this.webBrowser1.Size = new System.Drawing.Size(530, 443);
             this.webBrowser1.TabIndex = 0;
-            // 
-            // labelVersion
-            // 
-            this.labelVersion.AutoSize = true;
-            this.labelVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelVersion.Location = new System.Drawing.Point(203, 18);
-            this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(52, 16);
-            this.labelVersion.TabIndex = 1;
-            this.labelVersion.Text = "version";
-            // 
-            // labelCopyright
-            // 
-            this.labelCopyright.AutoSize = true;
-            this.labelCopyright.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCopyright.Location = new System.Drawing.Point(13, 57);
-            this.labelCopyright.Name = "labelCopyright";
-            this.labelCopyright.Size = new System.Drawing.Size(65, 16);
-            this.labelCopyright.TabIndex = 2;
-            this.labelCopyright.Text = "Copyright";
-            // 
-            // labelCompanyName
-            // 
-            this.labelCompanyName.AutoSize = true;
-            this.labelCompanyName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCompanyName.Location = new System.Drawing.Point(13, 86);
-            this.labelCompanyName.Name = "labelCompanyName";
-            this.labelCompanyName.Size = new System.Drawing.Size(66, 16);
-            this.labelCompanyName.TabIndex = 3;
-            this.labelCompanyName.Text = "Company";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(13, 115);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(55, 16);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "License";
             // 
             // frmAbout
             // 

@@ -100,6 +100,8 @@ namespace WolvenKit.CR2W.Types
 
             Register("CSkeletalAnimationSetEntry", new CSkeletalAnimationSetEntry(null));
 
+            Register("CFoliageResource", new CFoliageResource(null));
+
 
             var vectors = new[]
             {
@@ -3187,11 +3189,18 @@ namespace WolvenKit.CR2W.Types
                 "SAnimationBufferStreamingOption",
                 "EItemLatentAction",
                 "ESkeletalAnimationType",
-                "EItemEffectAction"
+                "EItemEffectAction",
+                "ETerrainTileCollision"
             };
+
             foreach (string t in cnames)
             {
                 Register(t, new CName(null));
+            }
+
+            foreach (var enm in typeof(Enums).GetNestedTypes())
+            {
+                Register(enm.Name,new CName(null));
             }
         }
 

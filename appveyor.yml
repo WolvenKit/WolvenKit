@@ -1,2 +1,13 @@
+# Skip commits on updating git specific stuff. No actual project changes in this case so pointless to build.
+skip_commits:
+ files:
+   - .gitignore
+   - README.md
+
 before_build:
   - nuget restore
+  
+# Update to the most recent VS.
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
