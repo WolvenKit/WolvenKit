@@ -409,7 +409,7 @@ namespace WolvenKit.Render
             }
 
             // *************** READ ANIMATION DATA ***************
-            //if (AnimFile != null)
+            if (AnimFile != null)
             foreach (var chunk in AnimFile.chunks)
             {
                 if (chunk.Type == "CAnimationBufferBitwiseCompressed")
