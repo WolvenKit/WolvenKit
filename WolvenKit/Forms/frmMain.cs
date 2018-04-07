@@ -818,7 +818,7 @@ namespace WolvenKit
                     {
                         var rigDoc = new frmCR2WDocument();
                         var basePath = doc.File.FileName.Split(new string[] { "characters" }, StringSplitOptions.None)[0];
-                        var modelName = Path.GetFileName(doc.File.FileName).Split('_', '.')[3];
+                        var modelName = Path.GetFileName(doc.File.FileName).Split('_', '.');
                         var rigPath = $@"{basePath}characters\base_entities\{modelName}_base\{modelName}_base.w2rig";
                         if (File.Exists(rigPath))
                         {
