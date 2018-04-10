@@ -24,55 +24,43 @@ namespace WolvenKit.CR2W.Types
             base.Read(file, size);
             CDynamicInt count = new CDynamicInt(cr2w);
             count.Read(file,1);
+            //For each of the treetypes
             for(int j = 0;j < count.val;j++)
             {
-                CArray currenttreebundle = new CArray(cr2w);
+                //Read the handle of the trees we are currently reading
                 CHandle treetype = new CHandle(cr2w);
                 treetype.Read(file, 4);
-                currenttreebundle.Name = treetype.Handle;
-                CArray currentTrees = new CArray(cr2w);
-                currentTrees.AddVariable(treetype);
+                //Read the number of trees in this treetype
                 CDynamicInt treecount = new CDynamicInt(cr2w);
                 treecount.Read(file,1);
+                //For each of the trees in the treetype
                 for (int i = 0; i < treecount.val; i++)
                 {
                     CTree tree = new CTree(cr2w);
                     tree.Read(file, 29);
-                    currentTrees.AddVariable(tree);
+                    //Add the tree entry to its handle holder
+                    treetype.AddVariable(tree); //BUG: If we add this to a CHandle it won't be editable.
+                    tree.Name = i.ToString();
                 }
-                currenttreebundle.AddVariable(currentTrees);
-                Trees.AddVariable(currenttreebundle);
+                //Add the handle and the tree subvars into the Trees CArray
+                Trees.AddVariable(treetype);
             }
             file.BaseStream.Seek(1, SeekOrigin.Current);
         }
 
         public override void Write(BinaryWriter file)
         {
-            throw new NotImplementedException();//TODO
             base.Write(file);
-            var count = new CDynamicInt(cr2w);
-            count.val = Trees.Count();
-            foreach(var current in Trees.array)
-            {
-                /*
-                treetype.Read(file, 4);
-                currenttreebundle.Name = treetype.Handle;
-                currentTrees.AddVariable(treetype);
-                treecount.Read(file, 1);
-                for (int i = 0; i < treecount.val; i++)
-                {
-                    CTree tree = new CTree(cr2w);
-                    tree.Read(file, 29);
-                    currentTrees.AddVariable(tree);
-                }
-                currenttreebundle.AddVariable(currentTrees);
-                Trees.AddVariable(currenttreebundle);*/
-            }
-            file.Write(0x80); //END
+            
         }
 
         public override CVariable SetValue(object val)
         {
+            if (val is CArray)
+            {
+                Trees = (CArray) val;
+            }
+
             return this;
         }
 

@@ -32,6 +32,11 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            if (val is CXml)
+            {
+                Ragdolldata = (CXml) val;
+            }
+
             return this;
         }
 
