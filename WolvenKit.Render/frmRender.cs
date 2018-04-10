@@ -928,7 +928,7 @@ namespace WolvenKit.Render
                     if(mw.WriteMesh(device.FileSystem.CreateWriteFile(sf.FileName), staticMesh, MeshWriterFlag.None))
                         MessageBox.Show(this,"Sucessfully wrote file!","WolvenKit",MessageBoxButtons.OK,MessageBoxIcon.Information);
                     else
-                        MessageBox.Show(this, "Failed tos file!", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(this, "Failed to write file!", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
