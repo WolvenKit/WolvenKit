@@ -476,6 +476,22 @@ namespace WolvenKit
                         "Invalid path");
                     continue;
                 }
+                var bannednames = new[]
+                {
+                    "VGX",
+                    "E3",
+                    "RESHADE",
+                    "LIGHTING"
+                };
+                if (bannednames.Any(x => dlg.FileName.ToUpper().Contains(x)))
+                {
+                    MessageBox.Show(
+                        @"Illegal mod name!",
+                        "Invalid mod name");
+                    continue;
+                }
+
+
 
                 MainController.Get().Configuration.InitialModDirectory = Path.GetDirectoryName(dlg.FileName);
                 var modname = Path.GetFileNameWithoutExtension(dlg.FileName);
