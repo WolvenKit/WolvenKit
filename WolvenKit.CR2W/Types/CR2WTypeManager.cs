@@ -100,7 +100,7 @@ namespace WolvenKit.CR2W.Types
 
             Register("CSkeletalAnimationSetEntry", new CSkeletalAnimationSetEntry(null));
 
-            //Register("CFoliageResource", new CFoliageResource(null)); //TODO: Enable
+            Register("CFoliageResource", new CFoliageResource(null));
 
             Register("CRagdoll",new CRagdoll(null));
 
