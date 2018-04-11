@@ -102,6 +102,8 @@ namespace WolvenKit.CR2W.Types
 
             Register("CFoliageResource", new CFoliageResource(null));
 
+            Register("CRagdoll",new CRagdoll(null));
+
 
             var vectors = new[]
             {
@@ -2801,6 +2803,10 @@ namespace WolvenKit.CR2W.Types
                 "SFurVolume",
                 "SFurWaveness",
                 "SGlobalSpeedTreeParameters",
+                "SHudDescription", 
+                "SMenuDescription", 
+                "SPopupDescription", 
+                "SGuiSceneDescription",
                 "SLensFlareGroupsParameters",
                 "SLensFlareParameters",
                 "SItem",
