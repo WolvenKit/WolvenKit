@@ -102,10 +102,12 @@ namespace WolvenKit.CR2W.Types
 
             Register("CFoliageResource", new CFoliageResource(null));
 
+            Register("CRagdoll", new CRagdoll(null));
 
             var vectors = new[]
             {
-                                "CStorySceneRandomizer",
+                "SFurMaterialSet",
+                "CStorySceneRandomizer",
                 "ARDebugCameraDist",
                 "ARDebugCameraRot",
                 "ApertureDofParams",
