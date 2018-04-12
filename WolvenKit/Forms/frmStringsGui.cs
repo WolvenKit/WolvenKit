@@ -439,7 +439,11 @@ namespace WolvenKit
             string contents = "";
             if (!Directory.Exists(scriptsDir))
             {
-                FolderBrowserDialog fbw = new FolderBrowserDialog();
+                FolderBrowserDialog fbw = new FolderBrowserDialog()
+                {
+                    Description = "Please select the scripts directory!",
+                   
+                };
                 if (fbw.ShowDialog() == DialogResult.OK) scriptsDir = fbw.SelectedPath;
             }
 

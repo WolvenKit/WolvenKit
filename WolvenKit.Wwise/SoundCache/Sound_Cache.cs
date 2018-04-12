@@ -31,6 +31,7 @@ namespace WolvenKit.Cache
         public static long DataOffset = 0x30;
         public long buffsize;
         public long checksum;
+
         public string TypeName { get { return "SoundCache"; } }
         public string FileName { get; set; }
 
@@ -248,7 +249,7 @@ namespace WolvenKit.Cache
                     bw.Write((Unk3));
 
                 bw.Write((UInt64)buffersize);
-                bw.Write((CalculateChecksum(FileList))); //TODO: Check why the last byte is wrong!
+                bw.Write((CalculateChecksum(FileList)));
                 //Write the actual contents of the files.
                 for (int i = 0; i < FileList.Count; i++)
                     if (data_array[i].Offset != -1)
