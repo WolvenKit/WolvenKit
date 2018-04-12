@@ -26,8 +26,6 @@ namespace WolvenKit
 
         public const string ManagerCacheDir = "ManagerCache";
 
-        public W3Mod ActiveMod { get; set; }
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         private string _projectstatus = "Idle";

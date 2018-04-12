@@ -47,6 +47,7 @@ namespace WolvenKit.CR2W.Types
                 //Add the handle and the tree subvars into the Trees CArray
                 Trees.AddVariable(CTreeCollection);
             }
+            file.BaseStream.Seek(1, SeekOrigin.Current); //END MARK
         }
 
         public override void Write(BinaryWriter file)
@@ -64,6 +65,7 @@ namespace WolvenKit.CR2W.Types
                     currtree.Write(file);
                 }
             }
+            file.Write((byte)0x80); //END MARK
         }
 
         public override CVariable SetValue(object val)
