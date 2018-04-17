@@ -57,20 +57,24 @@ namespace WolvenKit.Cache
                 {
                     uint fmt = 0;
                     if (Type == 7) fmt = 1;
-                    else if (Type == 8) fmt = 4;
-                    else if (Type == 10) fmt = 4;
+                    else if (Type == 8 || Type == 15 || Type == 10) fmt = 4;
                     else if (Type == 13) fmt = 3;
                     else if (Type == 14) fmt = 6;
-                    else if (Type == 15) fmt = 4;
-                    else if (Type == 253) fmt = 0;
-                    else if (Type == 0) fmt = 0;
+                    else if (Type == 253 || Type == 0) fmt = 0;
                     else throw new Exception("Invalid image!");
                     var cubemap = (Type == 3 || Type == 0) && (SliceCount == 6);
                     uint depth = 0;
                     if (SliceCount > 1 && Type == 4) depth = SliceCount;
                     if (Type == 3 && Type == 253) BaseAlignment = 32;       
-                    var header = new DDSHeader().generate(BaseWidth, BaseHeight, 1, fmt, BaseAlignment, cubemap, depth)
-                        .Concat(new[] { (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00 }).ToArray();
+                    var header = new DDSHeader().generate(
+                            BaseWidth,
+                            BaseHeight,
+                            1,
+                            fmt,
+                            BaseAlignment,
+                            cubemap,
+                            depth)
+                        .Concat(BitConverter.GetBytes((Int32)0)).ToArray();
                     output.Write(header,0,header.Length);
                     if (!(SliceCount == 6 && (Type == 253 || Type == 0)))
                     {
