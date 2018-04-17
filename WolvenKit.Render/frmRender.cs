@@ -224,6 +224,7 @@ namespace WolvenKit.Render
                     }
 
                     var unknownBytes = chunk.unknownBytes.Bytes;
+                    // TODO: Fix data position
                     int currPos = 15;
                     boneData.nbBones = unknownBytes.SubArray(ref currPos, 1).GetByte();
                     for (uint i = 0; i < boneData.nbBones; i++)
@@ -454,11 +455,15 @@ namespace WolvenKit.Render
             {
                 if (chunk.Type == "CAnimationBufferBitwiseCompressed")
                 {
-                    byte[] data = (chunk.GetVariableByName("data") as CByteArray).Bytes;
                     uint numFrames = (chunk.GetVariableByName("numFrames") as CUInt32).val;
                     float animDuration = (chunk.GetVariableByName("duration") as CFloat).val;
                     animationSpeed = numFrames / animDuration;
                     uint keyFrame = 0;
+                    // var deferredData = chunk.GetVariableByName("deferredData") as CFloat;
+                    // if (deferredData != null)
+                    //byte[] data = System.IO.File.ReadAllBytes(AnimFile.FileName + "." + deferredData.val + ".buffer");
+                    // else
+                    byte[] data = (chunk.GetVariableByName("data") as CByteArray).Bytes;
                     foreach (CVector bone in (chunk.GetVariableByName("bones") as CArray).array)
                     {
                         List<uint> currkeyframe = new List<uint>();

@@ -803,6 +803,7 @@ namespace WolvenKit
                         if (MessageBox.Show("Could not find .w2rig for model!\nWould you like to search for the rig manually?", "Rig not found!", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
                             var ofd = new OpenFileDialog();
+                            ofd.Filter = "Rig file|*.w2rig";
                             if (ofd.ShowDialog() == DialogResult.OK)
                             {
                                 rigDoc.LoadFile(ofd.FileName);
@@ -822,6 +823,7 @@ namespace WolvenKit
                         if (rigSelected && MessageBox.Show("Could not find .w2anims for model!\nWould you like to search for the animation manually (highly experimental)?", "Animation not found!", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
                             var ofd = new OpenFileDialog();
+                            ofd.Filter = "Animation file|*.w2anims";
                             if (ofd.ShowDialog() == DialogResult.OK)
                                 animDoc.LoadFile(ofd.FileName);
                         }
