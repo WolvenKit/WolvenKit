@@ -786,6 +786,73 @@ namespace WolvenKit
                             MessageBox.Show(".w2mesh file not found in model folder!" + "\n" + "Have you extracted it properly?");
                         break;
                     }*/
+                case ".w2mesh":
+                    {
+                        var rigDoc = new frmCR2WDocument();
+                        // HACK: Hacky (shit) solution for automatic path finding
+                        /*var basePath = doc.File.FileName.Split(new string[] { "characters" }, StringSplitOptions.None)[0];
+                        var modelName = Path.GetFileName(doc.File.FileName).Split('_', '.')[3];
+                        var rigPath = $@"{basePath}characters\base_entities\{modelName}_base\{modelName}_base.w2rig";
+                        if (File.Exists(rigPath))
+                        {
+                            rigDoc.LoadFile(rigPath);
+                        }
+                        else
+                        {*/
+                        bool rigSelected = false;
+                        if (MessageBox.Show("Could not find .w2rig for model!\nWould you like to search for the rig manually?", "Rig not found!", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            var ofd = new OpenFileDialog();
+                            if (ofd.ShowDialog() == DialogResult.OK)
+                            {
+                                rigDoc.LoadFile(ofd.FileName);
+                                rigSelected = true;
+                            }
+                        }
+                         //}
+
+                        var animDoc = new frmCR2WDocument();
+                        /*var animPath = $@"{basePath}animations\animals\chicken\chicken_swarm_animation.w2anims";
+                        if (File.Exists(animPath))
+                        {
+                            animDoc.LoadFile(animPath);
+                        }
+                        else
+                        {*/
+                        if (rigSelected && MessageBox.Show("Could not find .w2anims for model!\nWould you like to search for the animation manually (highly experimental)?", "Animation not found!", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            var ofd = new OpenFileDialog();
+                            if (ofd.ShowDialog() == DialogResult.OK)
+                                animDoc.LoadFile(ofd.FileName);
+                        }
+                        //}
+
+                        doc.RenderViewer = new Render.frmRender
+                        {
+                            RigFile = rigDoc.File,
+                            AnimFile = animDoc.File,
+                            File = doc.File,
+                            DockAreas = DockAreas.Document
+                        };
+                        doc.RenderViewer.Show(doc.FormPanel, DockState.Document);
+                        break;
+                    }
+                //TODO: Remove this once it's done
+#if DEBUG
+                case ".redfur":
+                    {
+                        using (var sf = new SaveFileDialog())
+                        {
+                            sf.Filter = "XML Files | *.xml";
+                            //if (sf.ShowDialog() == DialogResult.OK)
+                            {
+                                var asd = Apex.HairWorks.ConvertToApexXml(doc.File);
+                                asd.Save("asd.xml");
+                            }
+                        }
+                        break;
+                    }
+#endif
                 default:
                     {
                         break;

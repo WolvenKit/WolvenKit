@@ -218,7 +218,29 @@ namespace WolvenKit.Render
                                     }
                             }
                         }
+                        // TODO: Fix read in meshtype...
+                        meshInfos.Clear();
                         meshInfos.Add(meshInfo);
+                    }
+
+                    var unknownBytes = chunk.unknownBytes.Bytes;
+                    int currPos = 15;
+                    boneData.nbBones = unknownBytes.SubArray(ref currPos, 1).GetByte();
+                    for (uint i = 0; i < boneData.nbBones; i++)
+                    {
+                        var stringIdx = unknownBytes.SubArray(ref currPos, 2).GetUshort();
+                        boneData.jointNames.Add(File.strings[stringIdx].str);
+                    }
+                    currPos++;
+                    for (uint i = 0; i < boneData.nbBones; i++)
+                    {
+                        Matrix matrix = new Matrix();
+                        for (int j = 0; j < 16; j++)
+                        {
+                            var value = unknownBytes.SubArray(ref currPos, 4).GetFloat();
+                            matrix.SetElement(j, value);
+                        }
+                        boneData.boneMatrices.Add(matrix);
                     }
                 }
                 else if (chunk.Type == "CMaterialInstance")
@@ -267,7 +289,7 @@ namespace WolvenKit.Render
 
                     List<Vertex3D> vertex3DCoords = new List<Vertex3D>();
                     Color defaultColor = new Color(255, 255, 255, 255);
-                    for (int i = 0; i < meshInfo.numVertices; i++)
+                    for (uint i = 0; i < meshInfo.numVertices; i++)
                     {
                         ushort x, y, z, w;
 
@@ -281,10 +303,28 @@ namespace WolvenKit.Render
                         sr.BaseStream.Read(buff, 0, 2);
                         w = buff.GetUshort();
 
-                        // skip skinning data
                         if (meshInfo.vertexType == SMeshInfos.EMeshVertexType.EMVT_SKINNED)
                         {
-                            sr.BaseStream.Seek(meshInfo.numBonesPerVertex * 2, SeekOrigin.Current);
+                            //sr.BaseStream.Seek(meshInfo.numBonesPerVertex * 2, SeekOrigin.Current);
+                            byte[] skinningData = new byte[meshInfo.numBonesPerVertex * 2];
+                            sr.BaseStream.Read(skinningData, 0, (int)meshInfo.numBonesPerVertex * 2);
+
+                            for (uint j = 0; j < meshInfo.numBonesPerVertex; ++j)
+                            {
+                                uint boneId = skinningData[j];
+                                uint weight = skinningData[j + meshInfo.numBonesPerVertex];
+                                float fweight = weight / 255.0f;
+
+                                if (weight != 0)
+                                {
+                                    var vertexSkinningEntry = new W3_DataCache.VertexSkinningEntry();
+                                    vertexSkinningEntry.boneId = boneId;
+                                    vertexSkinningEntry.meshBufferId = 0;
+                                    vertexSkinningEntry.vertexId = i;
+                                    vertexSkinningEntry.strength = fweight;
+                                    w3_DataCache.vertices.Add(vertexSkinningEntry);
+                                }
+                            }
                         }
 
                         Vertex3D vertex3DCoord = new Vertex3D();
@@ -452,8 +492,103 @@ namespace WolvenKit.Render
                             currorient.Add(new Quaternion(quart[0], quart[1], quart[2], quart[3]));
                         }
 
-                        keyframes.Add(currkeyframe);
+                        orientKeyframes.Add(currkeyframe);
                         orientations.Add(currorient);
+                        
+                        // TODO: Refactor
+                        List<Vector3Df> currposition = new List<Vector3Df>();
+                        currkeyframe = new List<uint>();
+                        int compression = 0;
+                        var compr = (bone.GetVariableByName("position") as CVector).GetVariableByName("compression") as CInt8;
+                        if (compr != null)
+                            compression = compr.val;
+                        var addr = (bone.GetVariableByName("position") as CVector).GetVariableByName("dataAddr") as CUInt32;
+                        if (addr != null)
+                            dataAddr = (int)addr.val;
+                        else
+                            dataAddr = 0;
+                        var posNumFrames = ((bone.GetVariableByName("position") as CVector).GetVariableByName("numFrames") as CUInt16).val;
+                        for (uint idx = 0; idx < posNumFrames; idx++)
+                        {
+                            keyFrame = idx;
+                            //keyFrame += numFrames;
+                            currkeyframe.Add(keyFrame);
+                            Vector3Df pos = new Vector3Df();
+                            if (compression == 0)
+                            {
+                                pos.X = data.SubArray(ref dataAddr, 4).GetFloat();
+                                pos.Y = data.SubArray(ref dataAddr, 4).GetFloat();
+                                pos.Z = data.SubArray(ref dataAddr, 4).GetFloat();
+                            }
+                            else if (compression == 1)
+                            {
+                                var bitsx = data.SubArray(ref dataAddr, 2).GetByte() << 16 | data.SubArray(ref dataAddr, 2).GetByte() << 8;
+                                var bitsy = data.SubArray(ref dataAddr, 2).GetByte() << 16 | data.SubArray(ref dataAddr, 2).GetByte() << 8;
+                                var bitsz = data.SubArray(ref dataAddr, 2).GetByte() << 16 | data.SubArray(ref dataAddr, 2).GetByte() << 8;
+                                pos.X = BitConverter.ToSingle(BitConverter.GetBytes(bitsx), 0);
+                                pos.Y = BitConverter.ToSingle(BitConverter.GetBytes(bitsy), 0);
+                                pos.Z = BitConverter.ToSingle(BitConverter.GetBytes(bitsz), 0);
+                            }
+                            else if (compression == 2)
+                            {
+                                var bitsx = data.SubArray(ref dataAddr, 2).GetUshort() << 16;
+                                var bitsy = data.SubArray(ref dataAddr, 2).GetUshort() << 16;
+                                var bitsz = data.SubArray(ref dataAddr, 2).GetUshort() << 16;
+                                pos.X = BitConverter.ToSingle(BitConverter.GetBytes(bitsx), 0);
+                                pos.Y = BitConverter.ToSingle(BitConverter.GetBytes(bitsy), 0);
+                                pos.Z = BitConverter.ToSingle(BitConverter.GetBytes(bitsz), 0);
+                            }
+                            currposition.Add(pos);
+                        }
+                        positionsKeyframes.Add(currkeyframe);
+                        positions.Add(currposition);
+
+                        List<Vector3Df> currscale = new List<Vector3Df>();
+                        currkeyframe = new List<uint>();
+                        compression = 0;
+                        compr = (bone.GetVariableByName("scale") as CVector).GetVariableByName("compression") as CInt8;
+                        if (compr != null)
+                            compression = compr.val;
+                        addr = (bone.GetVariableByName("scale") as CVector).GetVariableByName("dataAddr") as CUInt32;
+                        if (addr != null)
+                            dataAddr = (int)addr.val;
+                        else
+                            dataAddr = 0;
+                        var scaleNumFrames = ((bone.GetVariableByName("scale") as CVector).GetVariableByName("numFrames") as CUInt16).val;
+                        for (uint idx = 0; idx < scaleNumFrames; idx++)
+                        {
+                            keyFrame = idx;
+                            //keyFrame += numFrames;
+                            currkeyframe.Add(keyFrame);
+                            Vector3Df scale = new Vector3Df();
+                            if (compression == 0)
+                            {
+                                scale.X = data.SubArray(ref dataAddr, 4).GetFloat();
+                                scale.Y = data.SubArray(ref dataAddr, 4).GetFloat();
+                                scale.Z = data.SubArray(ref dataAddr, 4).GetFloat();
+                            }
+                            else if (compression == 1)
+                            {
+                                var bitsx = data.SubArray(ref dataAddr, 2).GetByte() << 16 | data.SubArray(ref dataAddr, 2).GetByte() << 8;
+                                var bitsy = data.SubArray(ref dataAddr, 2).GetByte() << 16 | data.SubArray(ref dataAddr, 2).GetByte() << 8;
+                                var bitsz = data.SubArray(ref dataAddr, 2).GetByte() << 16 | data.SubArray(ref dataAddr, 2).GetByte() << 8;
+                                scale.X = BitConverter.ToSingle(BitConverter.GetBytes(bitsx), 0);
+                                scale.Y = BitConverter.ToSingle(BitConverter.GetBytes(bitsy), 0);
+                                scale.Z = BitConverter.ToSingle(BitConverter.GetBytes(bitsz), 0);
+                            }
+                            else if (compression == 2)
+                            {
+                                var bitsx = data.SubArray(ref dataAddr, 2).GetUshort() << 16;
+                                var bitsy = data.SubArray(ref dataAddr, 2).GetUshort() << 16;
+                                var bitsz = data.SubArray(ref dataAddr, 2).GetUshort() << 16;
+                                scale.X = BitConverter.ToSingle(BitConverter.GetBytes(bitsx), 0);
+                                scale.Y = BitConverter.ToSingle(BitConverter.GetBytes(bitsy), 0);
+                                scale.Z = BitConverter.ToSingle(BitConverter.GetBytes(bitsz), 0);
+                            }
+                            currscale.Add(scale);
+                        }
+                        scalesKeyframes.Add(currkeyframe);
+                        scales.Add(currscale);
                     }
                     break;
                 }
@@ -514,8 +649,15 @@ namespace WolvenKit.Render
                 foreach (var meshBuffer in staticMesh.MeshBuffers)
                     skinnedMesh.AddMeshBuffer(meshBuffer);
                 smgr.MeshManipulator.RecalculateNormals(skinnedMesh);
-                ApplySkeletonToModel(skinnedMesh);
-                ApplyAnimationToModel(skinnedMesh);
+                if (RigFile != null)
+                {
+                    ApplySkeletonToModel(skinnedMesh);
+                    if (AnimFile != null)
+                    {
+                        ApplyAnimationToModel(skinnedMesh);
+                        modelAngle = new Vector3Df(startModelAngleWithAnim.X, startModelAngleWithAnim.Y, startModelAngle.Z);
+                    }
+                }
                 skinnedMesh.SetDirty(HardwareBufferType.VertexAndIndex);
                 skinnedMesh.FinalizeMeshPopulation();
                 AnimatedMeshSceneNode node = smgr.AddAnimatedMeshSceneNode(skinnedMesh);
@@ -651,8 +793,11 @@ namespace WolvenKit.Render
             for (int i = 0; i < meshSkeleton.nbBones; i++)
             {
                 string boneName = meshSkeleton.names[i];
-                var joint = skinnedMesh.AddJoint();
-                joint.Name = boneName;
+                if (skinnedMesh.GetJointIndex(boneName) == -1)
+                {
+                    var joint = skinnedMesh.AddJoint();
+                    joint.Name = boneName;
+                }
             }
 
             // Set the hierarchy
@@ -689,6 +834,95 @@ namespace WolvenKit.Render
             {
                 CSkeleton.ComputeGlobal(skinnedMesh, roots[i]);
             }
+
+            // The matrix of the bones
+            for (int i = 0; i < boneData.nbBones; i++)
+            {
+                var jointIdx = skinnedMesh.GetJointIndex(boneData.jointNames[i]);
+                SJoint joint = skinnedMesh.GetAllJoints()[jointIdx];
+
+                Matrix matrix = boneData.boneMatrices[i];
+
+                Vector3Df position = matrix.Translation;
+                Matrix invRot = matrix.GetInverse();
+                //invRot.rotateVect(position);
+
+                Vector3Df rotation = invRot.GetRotationDegrees(invRot.Scale);
+                //rotation = core::vector3df(0, 0, 0);
+                position = -position;
+                Vector3Df scale = matrix.Scale;
+
+                if (joint != null)
+                {
+                    // Build GlobalMatrix:
+                    Matrix positionMatrix = new Matrix();
+                    positionMatrix.Translation = position;
+                    Matrix scaleMatrix = new Matrix();
+                    scaleMatrix.Scale = scale;
+                    Matrix rotationMatrix = new Matrix();
+                    rotationMatrix.SetRotationRadians(rotation * PI_OVER_180);
+
+                    //joint.GlobalMatrix = scaleMatrix * rotationMatrix * positionMatrix;
+                    //joint.LocalMatrix = joint.GlobalMatrix;
+
+                    //joint.Animatedposition = joint.LocalMatrix.Translation;
+                    //joint.Animatedrotation = new Quaternion(joint.LocalMatrix.GetRotationDegrees(joint.LocalMatrix.Scale)).MakeInverse();
+                    //joint.Animatedscale = joint.LocalMatrix.Scale;
+
+                    var bone = new W3_DataCache.BoneEntry();
+                    bone.name = joint.Name;
+                    bone.offsetMatrix = matrix;
+                    w3_DataCache.bones.Add(bone);
+                }
+            }
+
+            // Apply skin
+            for (int i = 0; i < w3_DataCache.vertices.Count; i++)
+            {
+                var entry = w3_DataCache.vertices[i];
+
+                // Check if it's a valid entry
+                if (entry.boneId >= w3_DataCache.bones.Count
+                    || entry.meshBufferId >= skinnedMesh.MeshBufferCount
+                    || entry.vertexId >= skinnedMesh.GetMeshBuffer(entry.meshBufferId).VertexCount)
+                {
+                    // Console.WriteLine("Fail to skin : the vertex entry is not valid.");
+                    continue;
+                }
+
+
+                int jointID = skinnedMesh.GetJointIndex(w3_DataCache.bones[(int)entry.boneId].name);
+                if (jointID == -1)
+                {
+                    // Console.WriteLine("Fail to skin : joint not found." );
+                    continue;
+                }
+
+                SJoint joint = skinnedMesh.GetAllJoints()[jointID];
+                SWeight weight = skinnedMesh.AddWeight(joint);
+                weight.BufferId = entry.meshBufferId;
+                weight.VertexId = entry.vertexId;
+                weight.Strength = entry.strength;
+            }
+
+            // Add weights
+            /*for (int i = 0; i < w3_DataCache.vertices.Count; i++)
+            {
+                uint boneId = w3_DataCache.vertices[i].boneId;
+                ushort bufferId = w3_DataCache.vertices[i].meshBufferId;
+                uint vertexId = w3_DataCache.vertices[i].vertexId;
+                float fweight = w3_DataCache.vertices[i].strength;
+
+                if (boneId >= skinnedMesh.GetAllJoints().Count) // If bone doesnt exist
+                    continue;
+
+                SJoint joint = skinnedMesh.GetAllJoints()[(int)boneId];
+
+                SWeight w = skinnedMesh.AddWeight(joint);
+                w.BufferId = bufferId;
+                w.Strength = fweight;
+                w.VertexId = vertexId;
+            }*/
         }
         
         /// <summary>
@@ -699,11 +933,26 @@ namespace WolvenKit.Render
             skinnedMesh.AnimationSpeed = animationSpeed;
             for (int i = 0; i < orientations.Count; i++)
             {
+                SJoint joint = skinnedMesh.GetAllJoints()[i];
+                for (int j = 0; j < positions[i].Count; j++)
+                {
+                    var poskey = skinnedMesh.AddPositionKey(joint);
+                    poskey.Position = positions[i][j];
+                    poskey.Frame = positionsKeyframes[i][j];
+                }
+
                 for (int j = 0; j < orientations[i].Count; j++)
                 {
-                    var key = skinnedMesh.AddRotationKey(skinnedMesh.GetAllJoints()[i]);
-                    key.Rotation = orientations[i][j];
-                    key.Frame = keyframes[i][j];
+                    var rotkey = skinnedMesh.AddRotationKey(joint);
+                    rotkey.Rotation = orientations[i][j];
+                    rotkey.Frame = orientKeyframes[i][j];
+                }
+
+                for (int j = 0; j < scales[i].Count; j++)
+                {
+                    var scalekey = skinnedMesh.AddScaleKey(joint);
+                    scalekey.Scale = scales[i][j];
+                    scalekey.Frame = scalesKeyframes[i][j];
                 }
             }
         }
@@ -715,14 +964,22 @@ namespace WolvenKit.Render
         private List<CMaterialInstance> materialInstances = new List<CMaterialInstance>();
         private List<SMeshInfos> meshInfos = new List<SMeshInfos>();
         private CSkeleton meshSkeleton = new CSkeleton();
+        private BoneData boneData = new BoneData();
         private List<Vector3Df> bonePositions = new List<Vector3Df>();
+        private W3_DataCache w3_DataCache = new W3_DataCache();
 
         private float animationSpeed = 0;
-        private List<List<uint>> keyframes = new List<List<uint>>();
+        private List<List<uint>> positionsKeyframes = new List<List<uint>>();
+        private List<List<uint>> orientKeyframes = new List<List<uint>>();
+        private List<List<uint>> scalesKeyframes = new List<List<uint>>();
+        private List<List<Vector3Df>> positions = new List<List<Vector3Df>>();
         private List<List<Quaternion>> orientations = new List<List<Quaternion>>();
+        private List<List<Vector3Df>> scales = new List<List<Vector3Df>>();
 
         //private static Quaternion modelAngle = new Quaternion(new Vertex3f(), 0);
         private Vector3Df modelPosition = new Vector3Df(0.0f);
+        private Vector3Df startModelAngle = new Vector3Df(270.0f, 270.0f, 0.0f);
+        private Vector3Df startModelAngleWithAnim = new Vector3Df(180.0f, 270.0f, 0.0f);
         private Vector3Df modelAngle = new Vector3Df(270.0f, 270.0f, 0.0f);
         private float scaleMul = 1;
 
@@ -868,7 +1125,10 @@ namespace WolvenKit.Render
             {
                 // Restart autorotation
                 modelAutorotating = true;
-                modelAngle = new Vector3Df(270.0f, 270.0f, 0.0f);
+                if (AnimFile == null)
+                    modelAngle = new Vector3Df(startModelAngle.X, startModelAngle.Y, startModelAngle.Z);
+                else
+                    modelAngle = new Vector3Df(startModelAngleWithAnim.X, startModelAngleWithAnim.Y, startModelAngleWithAnim.Z);
                 modelPosition = new Vector3Df(0.0f);
             }
         }

@@ -16,7 +16,7 @@ namespace WolvenKit.Render
         public Vector3Df quantizationOffset = new Vector3Df(0, 0, 0);
 
         public List<SVertexBufferInfos> verticesBuffer = new List<SVertexBufferInfos>();
-    };
+    }
 
     // Informations about the .buffer file
     public class SVertexBufferInfos
@@ -31,7 +31,7 @@ namespace WolvenKit.Render
         public uint nbIndices = 0;
 
         public byte lod = 1;
-    };
+    }
 
     // Information to load a mesh from the buffer
     public class SMeshInfos
@@ -52,7 +52,35 @@ namespace WolvenKit.Render
         public EMeshVertexType vertexType = EMeshVertexType.EMVT_STATIC;
 
         public uint materialID = 0;
-    };
+    }
+
+    public class W3_DataCache
+    {
+        public class VertexSkinningEntry
+        {
+            public uint boneId = 0;
+            public ushort meshBufferId = 0;
+            public uint vertexId = 0;
+            public float strength = 0;
+        }
+
+        public class BoneEntry
+        {
+            public string name = "";
+            public Matrix offsetMatrix = new Matrix();
+        }
+
+        public List<VertexSkinningEntry> vertices = new List<VertexSkinningEntry>();
+        public List<BoneEntry> bones = new List<BoneEntry>();
+    }
+
+    public class BoneData
+    {
+        public uint nbBones = 0;
+
+        public List<string> jointNames = new List<string>();
+        public List<Matrix> boneMatrices = new List<Matrix>();
+    }
 
     public static class ExtensionMethods
     {
