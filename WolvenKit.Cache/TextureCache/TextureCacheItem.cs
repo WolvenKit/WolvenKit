@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ionic.Zlib;
 using W3Edit.Textures;
+using WolvenKit.CR2W.Types;
 using WolvenKit.Interfaces;
 
 namespace WolvenKit.Cache
@@ -21,27 +22,27 @@ namespace WolvenKit.Cache
         public string ParentFile;
 
         public string Name { get; set; }
-        public uint Id;
-        public uint Filenameoffset;
-        public long Offset { get; set; }
-        public uint PackedSize;
-        public uint UnpackedSize;
-        public uint Bpp;
-        public uint Width;
-        public uint Height;
-        public uint Mips;
-        public uint Typeinfo;
-        public uint B1Offset;
-        public uint Rpc;
-        public uint Unk1;
-        public uint Unk2;
-        public uint Type;
-        public uint Dxt;
-        public uint Unk3;
+        public Int32 Hash;
+        public Int32 PathStringIndex;
+        public long PageOFfset { get; set; }
+        public Int32 CompressedSize;
+        public Int32 UncompressedSize;
+        public UInt32 BaseAlignment;
+        public UInt16 BaseWidth;
+        public UInt16 BaseHeight;
+        public Int16 Mipcount;
+        public UInt16 SliceCount;
+        public Int32 MipOffsetIndex;
+        public Int32 NumMipOffsets;
+        public Int64 TimeStamp;
+        public byte Type;
+        public byte TypeB;
+        public Int16 ActaulType;
+        public Int16 IsCube;
 
         public long Size { get; set; }
-        public uint ZSize { get; set; }
-        public uint Part;
+        public UInt32 ZSize { get; set; }
+        public Byte Part;
 
         public TextureCacheItem(IWitcherArchiveType parent)
         {
@@ -52,26 +53,26 @@ namespace WolvenKit.Cache
         {
             using (var file = MemoryMappedFile.CreateFromFile(this.ParentFile, FileMode.Open))
             {
-                using (var viewstream = file.CreateViewStream((Offset * 4096)+9, ZSize, MemoryMappedFileAccess.Read))
+                using (var viewstream = file.CreateViewStream((PageOFfset * 4096)+9, ZSize, MemoryMappedFileAccess.Read))
                 {
                     uint fmt = 0;
-                    if (Dxt == 7) fmt = 1;
-                    else if (Dxt == 8) fmt = 4;
-                    else if (Dxt == 10) fmt = 4;
-                    else if (Dxt == 13) fmt = 3;
-                    else if (Dxt == 14) fmt = 6;
-                    else if (Dxt == 15) fmt = 4;
-                    else if (Dxt == 253) fmt = 0;
-                    else if (Dxt == 0) fmt = 0;
+                    if (Type == 7) fmt = 1;
+                    else if (Type == 8) fmt = 4;
+                    else if (Type == 10) fmt = 4;
+                    else if (Type == 13) fmt = 3;
+                    else if (Type == 14) fmt = 6;
+                    else if (Type == 15) fmt = 4;
+                    else if (Type == 253) fmt = 0;
+                    else if (Type == 0) fmt = 0;
                     else throw new Exception("Invalid image!");
-                    var cubemap = (Type == 3 || Type == 0) && (Typeinfo == 6);
+                    var cubemap = (Type == 3 || Type == 0) && (SliceCount == 6);
                     uint depth = 0;
-                    if (Typeinfo > 1 && Type == 4) depth = Typeinfo;
-                    if (Type == 3 && Dxt == 253) Bpp = 32;                  
-                    var header = new DDSHeader().generate(Width, Height, 1, fmt, Bpp, cubemap, depth)
-                            .Concat(new[] { (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00 }).ToArray();
+                    if (SliceCount > 1 && Type == 4) depth = SliceCount;
+                    if (Type == 3 && Type == 253) BaseAlignment = 32;       
+                    var header = new DDSHeader().generate(BaseWidth, BaseHeight, 1, fmt, BaseAlignment, cubemap, depth)
+                        .Concat(new[] { (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00 }).ToArray();
                     output.Write(header,0,header.Length);
-                    if (!(Typeinfo == 6 && (Dxt == 253 || Dxt == 0)))
+                    if (!(SliceCount == 6 && (Type == 253 || Type == 0)))
                     {
                         var zlib = new ZlibStream(viewstream, CompressionMode.Decompress);
                         zlib.CopyTo(output);

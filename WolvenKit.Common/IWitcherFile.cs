@@ -13,7 +13,7 @@ namespace WolvenKit.Interfaces
         string Name { get; set; }
         long Size { get; set; }
         uint ZSize { get; set; }
-        long Offset { get; set; }
+        long PageOFfset { get; set; }
         string CompressionType { get; }
 
         void Extract(Stream output);
