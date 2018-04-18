@@ -17,10 +17,18 @@ namespace WolvenKit.Render
 {
     public partial class frmRender : DockContent
     {
+        private CR2WFile meshFile;
+        private CR2WFile rigFile;
+        private CR2WFile animFile;
+
         /// <summary>
-        /// Thread variable for irrlicht thread.
+        /// The delegate to load a document.
         /// </summary>
-        private Thread irrThread;
+        public delegate CR2WFile LoadDocumentAndGetFile(string filename);
+        /// <summary>
+        /// The frmMain load document function.
+        /// </summary>
+        public LoadDocumentAndGetFile LoadDocument;
 
         /// <summary>
         /// Form constructor.
@@ -31,48 +39,71 @@ namespace WolvenKit.Render
             InitializeComponent();
         }
 
-        private CR2WFile _file;
-
         /// <summary>
         /// Witcher file containing mesh data.
         /// </summary>
-        public CR2WFile File
+        public CR2WFile MeshFile
         {
-            get { return _file; }
+            get { return meshFile; }
             set
             {
                 try
                 {
-                    _file = value;
-
-                    switch (Path.GetExtension(_file.FileName))
-                    {
-                        case ".w2mesh":
-                            ReadMeshBufferInfos();
-                            break;
-                    }
+                    meshFile = value;
+                    loadMeshData();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(this, ex.Message);
+                    MessageBox.Show(this, "MeshFile error:" + ex.Message);
+                }
+            }
+        }
+        /// <summary>
+        /// Witcher file containing rig data.
+        /// </summary>
+        public CR2WFile RigFile
+        {
+            get { return rigFile; }
+            set
+            {
+                try
+                {
+                    rigFile = value;
+                    loadRigData();
+                    RestartIrrThread();
+                    loadAnimToolStripMenuItem.Enabled = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, "RigFile error:" + ex.Message);
+                }
+            }
+        }
+        /// <summary>
+        /// Witcher file containing animation data.
+        /// </summary>
+        public CR2WFile AnimFile
+        {
+            get { return animFile; }
+            set
+            {
+                try
+                {
+                    animFile = value;
+                    loadAnimsData();
+                    RestartIrrThread();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, "AnimFile error:" + ex.Message);
                 }
             }
         }
 
         /// <summary>
-        /// Witcher file containing rig data.
+        /// Read mesh chunk and buffer infos.
         /// </summary>
-        public CR2WFile RigFile;
-
-        /// <summary>
-        /// Witcher file containing animation data.
-        /// </summary>
-        public CR2WFile AnimFile;
-
-        /// <summary>
-        /// Reads mesh buffer infos.
-        /// </summary>
-        void ReadMeshBufferInfos()
+        private void loadMeshData()
         {
             // IMPLEMENTED FROM jlouis' witcherconverter
             // http://jlouisb.users.sourceforge.net/
@@ -81,7 +112,7 @@ namespace WolvenKit.Render
             SBufferInfos bufferInfos = new SBufferInfos();
 
             // *************** READ CHUNK INFOS ***************
-            foreach (var chunk in _file.chunks)
+            foreach (var chunk in meshFile.chunks)
             {
                 if (chunk.Type == "CMesh")
                 {
@@ -230,7 +261,7 @@ namespace WolvenKit.Render
                     for (uint i = 0; i < boneData.nbBones; i++)
                     {
                         var stringIdx = unknownBytes.SubArray(ref currPos, 2).GetUshort();
-                        boneData.jointNames.Add(File.strings[stringIdx].str);
+                        boneData.jointNames.Add(MeshFile.strings[stringIdx].str);
                     }
                     currPos++;
                     for (uint i = 0; i < boneData.nbBones; i++)
@@ -280,7 +311,7 @@ namespace WolvenKit.Render
                     }
                 }
 
-                using (StreamReader sr = new StreamReader(_file.FileName + ".1.buffer"))
+                using (StreamReader sr = new StreamReader(meshFile.FileName + ".1.buffer"))
                 {
                     uint vertexSize = 8;
                     if (meshInfo.vertexType == SMeshInfos.EMeshVertexType.EMVT_SKINNED)
@@ -385,7 +416,13 @@ namespace WolvenKit.Render
                     meshBuff.Drop();
                 }
             }
+        }
 
+        /// <summary>
+        /// Read rig data.
+        /// </summary>
+        private void loadRigData()
+        {
             // *************** READ RIG DATA ***************
             if (RigFile != null)
             foreach (var chunk in RigFile.chunks)
@@ -448,7 +485,13 @@ namespace WolvenKit.Render
                     }
                 }
             }
+        }
 
+        /// <summary>
+        /// Read animations and animbuffers data.
+        /// </summary>
+        private void loadAnimsData()
+        {
             // *************** READ ANIMATION DATA ***************
             if (AnimFile != null)
             foreach (var chunk in AnimFile.chunks)
@@ -499,7 +542,7 @@ namespace WolvenKit.Render
 
                         orientKeyframes.Add(currkeyframe);
                         orientations.Add(currorient);
-                        
+
                         // TODO: Refactor
                         List<Vector3Df> currposition = new List<Vector3Df>();
                         currkeyframe = new List<uint>();
@@ -598,8 +641,12 @@ namespace WolvenKit.Render
                     break;
                 }
             }
-
         }
+
+        /// <summary>
+        /// Thread variable for irrlicht thread.
+        /// </summary>
+        private Thread irrThread;
 
         /// <summary>
         /// Starts an irrlicht thread.
@@ -630,6 +677,8 @@ namespace WolvenKit.Render
             try
             {
                 IrrlichtCreationParameters irrparam = new IrrlichtCreationParameters();
+                if (irrlichtPanel.IsDisposed)
+                    throw new Exception("Form closed!");
                 if (irrlichtPanel.InvokeRequired)
                     irrlichtPanel.Invoke(new MethodInvoker(delegate { irrparam.WindowID = irrlichtPanel.Handle; }));
                 irrparam.DriverType = DriverType.Direct3D9;
@@ -716,7 +765,6 @@ namespace WolvenKit.Render
 
                 device.Drop();
             }
-            catch (NullReferenceException) { }
             catch (ThreadAbortException) { }
             catch (Exception ex)
             {
@@ -772,7 +820,7 @@ namespace WolvenKit.Render
         /// </summary>
         private Texture GetTexture(VideoDriver driver, string handleFilename)
         {
-            string texturePath = Path.GetDirectoryName(_file.FileName) + @"\" + Path.GetFileNameWithoutExtension(handleFilename);
+            string texturePath = Path.GetDirectoryName(meshFile.FileName) + @"\" + Path.GetFileNameWithoutExtension(handleFilename);
             string[] textureFileExtensions = { ".dds", ".bmp", ".tga", ".jpg", ".jpeg", ".png", ".xbm" };
             Texture texture = null;
             foreach (var textureFileExtension in textureFileExtensions)
@@ -1015,6 +1063,9 @@ namespace WolvenKit.Render
         }
 
         #region event handlers
+        private bool firstrun = true;
+        private System.Windows.Forms.Timer resizeTimer = new System.Windows.Forms.Timer();
+
         private void Bithack3D_Load(object sender, EventArgs e)
         {
             // OpenFileDialog for importing 3D models
@@ -1051,9 +1102,22 @@ namespace WolvenKit.Render
             StartIrrThread();
         }
 
-        private void Bithack3D_FormClosing(object sender, FormClosingEventArgs e)
+        protected override void OnSizeChanged(EventArgs e)
         {
-            irrThread.Abort();
+            base.OnSizeChanged(e);
+            if (firstrun == false)
+                resizeTimer.Start();
+            else
+                firstrun = false;
+        }
+
+        private void ResizeTimer(object sender, EventArgs e)
+        {
+            resizeTimer.Stop();
+            if (irrThread != null)
+            {
+                RestartIrrThread();
+            }
         }
 
         private static bool renderStarted = true;
@@ -1137,27 +1201,6 @@ namespace WolvenKit.Render
                 modelPosition = new Vector3Df(0.0f);
             }
         }
-
-        private void Bithack3D_ResizeEnd(object sender, EventArgs e) { }
-
-        private void Bithack3D_Resize(object sender, EventArgs e) { }
-
-        private System.Windows.Forms.Timer resizeTimer = new System.Windows.Forms.Timer();
-
-        protected override void OnSizeChanged(EventArgs e)
-        {
-            base.OnSizeChanged(e);
-            resizeTimer.Start();
-        }
-
-        private void ResizeTimer(object sender, EventArgs e)
-        {
-            resizeTimer.Stop();
-            if (irrThread != null)
-            {
-                RestartIrrThread();
-            }
-        }
         #endregion
 
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1195,6 +1238,32 @@ namespace WolvenKit.Render
                     else
                         MessageBox.Show(this, "Failed to write file!", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+        }
+
+        private void loadRigToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // HACK: Hacky (shit) solution for automatic path finding
+            /*var basePath = doc.File.FileName.Split(new string[] { "characters" }, StringSplitOptions.None)[0];
+            var modelName = Path.GetFileName(doc.File.FileName).Split('_', '.')[3];
+            var rigPath = $@"{basePath}characters\base_entities\{modelName}_base\{modelName}_base.w2rig";*/
+            if (MessageBox.Show("Could not find .w2rig for model!\nWould you like to search for the rig manually?", "Rig not found!", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                var ofd = new OpenFileDialog();
+                ofd.Filter = "Rig file|*.w2rig";
+                if (ofd.ShowDialog() == DialogResult.OK)
+                    RigFile = LoadDocument(ofd.FileName);
+            }
+        }
+
+        private void loadAnimToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Could not find .w2anims for model!\nWould you like to search for the animation manually (highly experimental)?", "Animation not found!", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                var ofd = new OpenFileDialog();
+                ofd.Filter = "Animation file|*.w2anims";
+                if (ofd.ShowDialog() == DialogResult.OK)
+                    AnimFile = LoadDocument(ofd.FileName);
             }
         }
     }
