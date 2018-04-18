@@ -86,14 +86,12 @@ namespace WolvenKit.Cache
                         BaseAlignment = br.ReadUInt32(),
                         BaseWidth = br.ReadUInt16(),
                         BaseHeight = br.ReadUInt16(),
-                        Mipcount = br.ReadInt16(),
+                        Mipcount = br.ReadUInt16(),
                         SliceCount = br.ReadUInt16(),
                         MipOffsetIndex = br.ReadInt32(),
                         NumMipOffsets = br.ReadInt32(),
                         TimeStamp = br.ReadInt64(),
-                        Type = br.ReadByte(),
-                        TypeB = br.ReadByte(),
-                        //TODO:Actualtype = Type+TypeB but need to be investigated!
+                        Type = br.ReadInt16(),
                         IsCube = br.ReadInt16()            
                     };                                                                                            
                     Files.Add(ti);

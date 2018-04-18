@@ -662,6 +662,7 @@ namespace WolvenKit
                         catch { }
                         return skip;
                     }
+
                     try
                     {
                         Directory.CreateDirectory(Path.GetDirectoryName(filename));
@@ -669,9 +670,13 @@ namespace WolvenKit
                         {
                             File.Delete(filename);
                         }
+
                         archives.FirstOrDefault().Value.Extract(filename);
                     }
-                    catch { }
+                    catch (Exception ex)
+                    {
+                        AddOutput(ex.ToString(),frmOutput.Logtype.Error);
+                    }
                     return skip;
                 }
             }
