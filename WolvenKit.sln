@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit", "WolvenKit\WolvenKit.csproj", "{12FD792B-EC76-4969-8B42-9671025D5108}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -31,6 +31,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Wwise", "WolvenKit.Wwise\WolvenKit.Wwise.csproj", "{DCBBE807-CD6E-493E-8C04-DB976A1591EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Common", "WolvenKit.Common\WolvenKit.Common.csproj", "{4D1019F1-F099-450F-85B8-697E0332A94F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Nvidia", "Wolvekit.Nvidia\WolvenKit.Nvidia.csproj", "{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F3129E02-31AD-4327-A9EF-7C52D777C71F} = {F3129E02-31AD-4327-A9EF-7C52D777C71F}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -174,6 +179,18 @@ Global
 		{4D1019F1-F099-450F-85B8-697E0332A94F}.Release|x64.Build.0 = Release|Any CPU
 		{4D1019F1-F099-450F-85B8-697E0332A94F}.Release|x86.ActiveCfg = Release|Any CPU
 		{4D1019F1-F099-450F-85B8-697E0332A94F}.Release|x86.Build.0 = Release|Any CPU
+		{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}.Debug|x64.Build.0 = Debug|Any CPU
+		{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}.Debug|x86.Build.0 = Debug|Any CPU
+		{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}.Release|x64.ActiveCfg = Release|Any CPU
+		{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}.Release|x64.Build.0 = Release|Any CPU
+		{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}.Release|x86.ActiveCfg = Release|Any CPU
+		{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

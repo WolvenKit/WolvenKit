@@ -90,7 +90,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Apex.cs" />
     <Compile Include="CR2WChunk.cs" />
     <Compile Include="CR2WCopyAction.cs" />
     <Compile Include="CR2WFile.cs" />
@@ -116,7 +115,6 @@
     <Compile Include="Editors\PtrEditor.Designer.cs">
       <DependentUpon>PtrEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Types\CFurMeshResource.cs" />
     <Compile Include="Types\CRagdoll.cs" />
     <Compile Include="Types\CTree.cs" />
     <Compile Include="HslColor.cs" />
