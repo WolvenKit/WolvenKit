@@ -254,25 +254,52 @@ namespace WolvenKit.Render
                         meshInfos.Add(meshInfo);
                     }
 
+                    // TODO: Create a more reliable solution
                     var unknownBytes = chunk.unknownBytes.Bytes;
-                    // TODO: Fix data position
-                    int currPos = 15;
-                    boneData.nbBones = unknownBytes.SubArray(ref currPos, 1).GetByte();
-                    for (uint i = 0; i < boneData.nbBones; i++)
+                    int currPos = 0, prevPos = 0;
+                    bool correctPos = false;
+                    do
                     {
-                        var stringIdx = unknownBytes.SubArray(ref currPos, 2).GetUshort();
-                        boneData.jointNames.Add(MeshFile.strings[stringIdx].str);
-                    }
-                    currPos++;
-                    for (uint i = 0; i < boneData.nbBones; i++)
-                    {
-                        Matrix matrix = new Matrix();
-                        for (int j = 0; j < 16; j++)
+                        prevPos = currPos;
+                        boneData.nbBones = unknownBytes.SubArray(ref currPos, 1).GetByte();
+                        if (boneData.nbBones == bonePositions.Count)
                         {
-                            var value = unknownBytes.SubArray(ref currPos, 4).GetFloat();
-                            matrix.SetElement(j, value);
+                            int backPos = currPos;
+                            correctPos = true;
+                            for (int i = 0; i < boneData.nbBones; i++)
+                            {
+                                var stringIdx = unknownBytes.SubArray(ref currPos, 2).GetUshort();
+                                if (stringIdx == 0 || stringIdx >= MeshFile.strings.Count)
+                                {
+                                    boneData.nbBones = 0;
+                                    correctPos = false;
+                                    break;
+                                }
+                            }
+                            currPos = backPos;
                         }
-                        boneData.boneMatrices.Add(matrix);
+                    } while (boneData.nbBones != bonePositions.Count && currPos < unknownBytes.Length && !correctPos);
+
+                    if (currPos < unknownBytes.Length)
+                    {
+                        currPos = prevPos;
+                        boneData.nbBones = unknownBytes.SubArray(ref currPos, 1).GetByte();
+                        for (uint i = 0; i < boneData.nbBones; i++)
+                        {
+                            var stringIdx = unknownBytes.SubArray(ref currPos, 2).GetUshort();
+                            boneData.jointNames.Add(MeshFile.strings[stringIdx].str);
+                        }
+                        currPos++;
+                        for (uint i = 0; i < boneData.nbBones; i++)
+                        {
+                            Matrix matrix = new Matrix();
+                            for (int j = 0; j < 16; j++)
+                            {
+                                var value = unknownBytes.SubArray(ref currPos, 4).GetFloat();
+                                matrix.SetElement(j, value);
+                            }
+                            boneData.boneMatrices.Add(matrix);
+                        }
                     }
                 }
                 else if (chunk.Type == "CMaterialInstance")
@@ -766,6 +793,7 @@ namespace WolvenKit.Render
                 device.Drop();
             }
             catch (ThreadAbortException) { }
+            catch (NullReferenceException) { }
             catch (Exception ex)
             {
                 if (!this.IsDisposed)
