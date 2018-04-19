@@ -18,7 +18,7 @@ namespace WolvenKit.Wwise.SoundCache
 
 
         public long NameOffset;
-        public long Offset { get; set; }
+        public long PageOFfset { get; set; }
         public long Size { get; set; }
         public uint ZSize { get; set; }
 
@@ -33,7 +33,7 @@ namespace WolvenKit.Wwise.SoundCache
         {
             using (var file = MemoryMappedFile.CreateFromFile(this.ParentFile, FileMode.Open))
             {
-                using (var viewstream = file.CreateViewStream(Offset, Size, MemoryMappedFileAccess.Read))
+                using (var viewstream = file.CreateViewStream(PageOFfset, Size, MemoryMappedFileAccess.Read))
                 {
                     viewstream.CopyTo(output);
                 }

@@ -19,7 +19,7 @@ namespace WolvenKit.Cache.CollisionCache
         public string Name { get; set; }
         public long Size { get; set; }
         public uint ZSize { get; set; }
-        public long Offset { get; set; }
+        public long PageOFfset { get; set; }
         public string CompressionType => "Zlib";
 
         public ulong Unk1; //NULL
@@ -36,7 +36,7 @@ namespace WolvenKit.Cache.CollisionCache
         {
             using (var file = MemoryMappedFile.CreateFromFile(Bundle.FileName, FileMode.Open))
             {
-                using (var viewstream = file.CreateViewStream(Offset, ZSize, MemoryMappedFileAccess.Read))
+                using (var viewstream = file.CreateViewStream(PageOFfset, ZSize, MemoryMappedFileAccess.Read))
                 {
                     var zlib = new ZlibStream(viewstream, CompressionMode.Decompress);
                     zlib.CopyTo(output);

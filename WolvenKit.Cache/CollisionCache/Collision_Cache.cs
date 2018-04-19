@@ -157,7 +157,7 @@ namespace WolvenKit.Cache.CollisionCache
                 Bundle = this,
                 Unk1 = br.ReadUInt64(),
                 NameOffset = br.ReadUInt64(),
-                Offset = br.ReadUInt32(),
+                PageOFfset = br.ReadUInt32(),
                 ZSize = br.ReadUInt32(),
                 Unk2 = br.ReadUInt64(),
                 Unk3 = br.ReadUInt64(),
@@ -185,7 +185,7 @@ namespace WolvenKit.Cache.CollisionCache
                     Version = 2;
                     DataOffset += 0x10;
                     for (int i = 0; i < data_array.Count; i++)
-                        data_array[i].Offset = -1;
+                        data_array[i].PageOFfset = -1;
                 }
 
                 if (buffersize <= CACHE_BUFFER_SIZE)
@@ -222,7 +222,7 @@ namespace WolvenKit.Cache.CollisionCache
                 bw.Write((CalculateChecksum(FileList)));
                 //Write the actual contents of the files.
                 for (int i = 0; i < FileList.Count; i++)
-                    if (data_array[i].Offset != -1)
+                    if (data_array[i].PageOFfset != -1)
                     {
                         using (var ms = new MemoryStream())
                         {

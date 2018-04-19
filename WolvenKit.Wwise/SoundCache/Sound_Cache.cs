@@ -151,7 +151,7 @@ namespace WolvenKit.Cache
         {
             Files = new List<SoundCacheItem>();
             if (!br.ReadBytes(4).SequenceEqual(Magic))
-                throw new InvalidDataException("Wrong Magic in soundcache!");
+                throw new InvalidDataException("Wrong IDString in soundcache!");
             Version = br.ReadInt32();
             Unknown1 = br.ReadUInt32();
             Unknown2 = br.ReadUInt32();
@@ -179,13 +179,13 @@ namespace WolvenKit.Cache
                 if (Version >= 2)
                 {
                     sf.NameOffset = br.ReadInt64();
-                    sf.Offset = br.ReadInt64();
+                    sf.PageOFfset = br.ReadInt64();
                     sf.Size = br.ReadInt64();
                 }
                 else
                 {
                     sf.NameOffset = br.ReadUInt32();
-                    sf.Offset = br.ReadUInt32();
+                    sf.PageOFfset = br.ReadUInt32();
                     sf.Size = br.ReadUInt32();
                 }
                 Files.Add(sf);
@@ -215,7 +215,7 @@ namespace WolvenKit.Cache
                     Version = 2;
                     DataOffset += 0x10;
                     for (int i = 0; i < data_array.Count; i++)
-                        data_array[i].Offset = -1;
+                        data_array[i].PageOFfset = -1;
                 }
 
                 if (buffersize <= CACHE_BUFFER_SIZE)
@@ -252,7 +252,7 @@ namespace WolvenKit.Cache
                 bw.Write((CalculateChecksum(FileList)));
                 //Write the actual contents of the files.
                 for (int i = 0; i < FileList.Count; i++)
-                    if (data_array[i].Offset != -1)
+                    if (data_array[i].PageOFfset != -1)
                         bw.Write(File.ReadAllBytes(FileList[i]));
                 //Write filenames and the offsets and such for the files.
                 bw.Write(GetNames(FileList));
