@@ -107,7 +107,9 @@ namespace WolvenKit.CR2W.Types
 
             var vectors = new[]
             {
-                                "CStorySceneRandomizer",
+                "SMeshChunkPacked",
+                "SFurMaterialSet",
+                "CStorySceneRandomizer",
                 "ARDebugCameraDist",
                 "ARDebugCameraRot",
                 "ApertureDofParams",
