@@ -41,7 +41,10 @@ namespace WolvenKit
                     var hairscenedesc = new HairSceneDescriptor();
                     root.Add(hairscenedesc.serialize(chunk));
                     //NvHairAssetDescriptor    
-                    
+                    var hairassetdescriptor = new NvHairAssetDescriptor();
+                    root.Add(hairassetdescriptor.serialize(chunk));
+                    //HairInstanceDescriptor
+                    //TODO: Implement this
                     return new XDocument(root);
                 }
                 else

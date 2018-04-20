@@ -17,9 +17,7 @@ namespace Wolvekit.Nvidia.HairWorks
         private string fileVersion = "1.0";
         private string toolVersion = "WolvenKit " + 
                         FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
-        private string sourcePath = "https://github.com/Traderain/Wolven-kit";
         private string authorName = "WolvenKit";
-        private string lastModified = DateTime.Now.ToString("f");
 
         private string checksum = "0xd225a2e5, 0x1295b170, 0x7b7dfeef, 0x07230aea";
 
@@ -37,7 +35,7 @@ namespace Wolvekit.Nvidia.HairWorks
         {
             var HairWorksInfo = NvidiaXML.CreateStructHeader("", "Ref,", "HairWorksInfo", "1.0", checksum);
             var values = new XElement("struct", new XAttribute("name", ""));
-            values.AddNvValue("fileVersion", "String", "1.1");
+            values.AddNvValue("fileVersion", "String", "1.0");
             values.AddNvValue("toolVersion","String","WolvenKit");
             values.AddNvValue("sourcePath","String",apexChunk.GetVariableByName("importFile").ToString());
             values.AddNvValue("authorName","String",Environment.UserName);
