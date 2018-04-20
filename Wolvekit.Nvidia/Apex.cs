@@ -33,6 +33,9 @@ namespace WolvenKit
                     var hairassetheaderinfo = new NvHairAssetHeaderInfo();
                     NvParameters.Add(hairassetheaderinfo.serialize(chunk,4));
                     //HairSceneDescriptor
+                    var hairscenedesc = new HairSceneDescriptor();
+                    NvParameters.Add(hairscenedesc.serialize(chunk));
+                    //NvHairAssetDescriptor
                     //TODO: Others
 
                     return new XDocument(NvParameters);
@@ -48,52 +51,6 @@ namespace WolvenKit
                 var crw = new CR2WFile();
                 return crw;
             }
-        }
-
-        /// <summary>
-        /// Class to convert and operate with apex apb cloth files.
-        /// </summary>
-        public class Cloth
-        {
-            public static byte[] ConvertToApexXml(CR2WFile apexChunk)
-            {
-                return null;
-            }
-
-            public static CR2WFile ConvertToCr2W(byte[] cloth)
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Fixes PhysX xml files so .net can read them.
-        /// </summary>
-        /// <param name="path">The path to the file.</param>
-        public static void FixXmlHeader(string path)
-        {
-            File.WriteAllLines(path, new string[] { "<?xml version=\"1.0\" encoding=\"utf-8\"?>" }.ToList().Concat(File.ReadAllLines(path).Skip(1).ToArray()));
-
-        }
-
-        /// <summary>
-        /// Replaces the header of an xml with the weird PhysX style header.
-        /// </summary>
-        /// <param name="path">The path to the file.</param>
-        public static void BreakXmlHeader(string path)
-        {
-            File.WriteAllLines(path, new string[] { "<!DOCTYPE NvParameters>" }.ToList().Concat(File.ReadAllLines(path).Skip(1).ToArray()));
-        }
-
-        /// <summary>
-        /// Calculates the PhysX checksum for given object.
-        /// </summary>
-        /// <param name="obj">The object to calculate the checksum for.</param>
-        /// <returns>The checksum as an xelement.</returns>
-        public static XElement CalculateCheckSum(object obj)
-        {
-            var hexnums = "";
-            return new XElement("checksum",hexnums);
         }
 
         /// <summary>

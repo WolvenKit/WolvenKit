@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Wolvekit.Nvidia.HairWorks;
 using WolvenKit;
 using WolvenKit.CR2W;
 
@@ -19,6 +20,7 @@ namespace WolvenKit
             var br = new BinaryReader(new FileStream("C:\\Users\\bence.hambalko\\Documents\\Apex\\hw.redfur",FileMode.Open));
             var redfur = new CR2WFile(br);
             Apex.HairWorks.ConvertToApexXml(redfur).Save("C:\\Users\\bence.hambalko\\Documents\\Apex\\out.apx");
+            NvidiaXML.BreakXmlHeader("C:\\Users\\bence.hambalko\\Documents\\Apex\\out.apx");
         }
     }
 }

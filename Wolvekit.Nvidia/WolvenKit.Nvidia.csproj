@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Apex.cs" />
     <Compile Include="AssemblyExtensions.cs" />
+    <Compile Include="HairWorks\HairSceneDescriptor.cs" />
     <Compile Include="HairWorks\NvHairAssetHeaderInfo.cs" />
     <Compile Include="HairWorks\NvidiaXML.cs" />
     <Compile Include="Program.cs" />

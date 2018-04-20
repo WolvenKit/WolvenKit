@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,8 +32,7 @@ namespace Wolvekit.Nvidia.HairWorks
             }
         }
 
-        public static XElement CreateStructHeader(string name, string type, string classname, string version,
-            string checksum)
+        public static XElement CreateStructHeader(string name, string type, string classname, string version, string checksum)
         {
             XElement ret = new XElement("value");
             ret.Add(new XAttribute("name",name));
@@ -43,6 +43,25 @@ namespace Wolvekit.Nvidia.HairWorks
             return ret;
         }
 
+
+        /// <summary>
+        /// Fixes PhysX xml files so .net can read them.
+        /// </summary>
+        /// <param name="path">The path to the file.</param>
+        public static void FixXmlHeader(string path)
+        {
+            File.WriteAllLines(path, new string[] { "<?xml version=\"1.0\" encoding=\"utf-8\"?>" }.ToList().Concat(File.ReadAllLines(path).Skip(1).ToArray()));
+
+        }
+
+        /// <summary>
+        /// Replaces the header of an xml with the weird PhysX style header.
+        /// </summary>
+        /// <param name="path">The path to the file.</param>
+        public static void BreakXmlHeader(string path)
+        {
+            File.WriteAllLines(path, new string[] { "<!DOCTYPE NvParameters>" }.ToList().Concat(File.ReadAllLines(path).Skip(1).ToArray()));
+        }
 
     }
 }
