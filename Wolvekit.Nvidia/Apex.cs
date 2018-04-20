@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 using Wolvekit.Nvidia.HairWorks;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
@@ -24,21 +27,22 @@ namespace WolvenKit
             {
                 if (ApexChunk.chunks[0].Type == "CFurMeshResource")
                 {
+                    var root = new XElement("root",""); 
                     var chunk = ApexChunk.chunks[0];                    
-                    //Root node
+                    // NvParameters
                     var NvParameters = new XElement("NvParameters");
                     NvParameters.Add(new XAttribute("numObjects", "4"));
                     NvParameters.Add(new XAttribute("version", "1.0"));
+                    root.Add(NvParameters);
                     //NvHairAssetHeaderInfo
                     var hairassetheaderinfo = new NvHairAssetHeaderInfo();
-                    NvParameters.Add(hairassetheaderinfo.serialize(chunk,4));
+                    root.Add(hairassetheaderinfo.serialize(chunk,4));
                     //HairSceneDescriptor
                     var hairscenedesc = new HairSceneDescriptor();
-                    NvParameters.Add(hairscenedesc.serialize(chunk));
-                    //NvHairAssetDescriptor
-                    //TODO: Others
-
-                    return new XDocument(NvParameters);
+                    root.Add(hairscenedesc.serialize(chunk));
+                    //NvHairAssetDescriptor    
+                    
+                    return new XDocument(root);
                 }
                 else
                 {

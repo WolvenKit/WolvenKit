@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -32,6 +33,15 @@ namespace Wolvekit.Nvidia.HairWorks
             }
         }
 
+        public static void AddNvArray(this XElement elem, string name, string type,string count, string arrayvalue)
+        {
+            elem.Add(new XElement("value",
+                new XAttribute("name", name),
+                new XAttribute("size", count),
+                new XAttribute("type", type),
+                arrayvalue));
+        }
+
         public static XElement CreateStructHeader(string name, string type, string classname, string version, string checksum)
         {
             XElement ret = new XElement("value");
@@ -60,7 +70,7 @@ namespace Wolvekit.Nvidia.HairWorks
         /// <param name="path">The path to the file.</param>
         public static void BreakXmlHeader(string path)
         {
-            File.WriteAllLines(path, new string[] { "<!DOCTYPE NvParameters>" }.ToList().Concat(File.ReadAllLines(path).Skip(1).ToArray()));
+            File.WriteAllLines(path, new string[] { "<!DOCTYPE NvParameters>" }.Concat(XDocument.Load(path).Root.Elements().Select(x => x.ToString())));
         }
 
     }
