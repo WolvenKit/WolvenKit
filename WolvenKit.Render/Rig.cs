@@ -11,9 +11,13 @@ namespace WolvenKit.Render
     {
         public CommonData CData { get; set; }
 
+        private CSkeleton meshSkeleton = new CSkeleton();
+
         public Rig(CommonData cdata)
         {
             CData = cdata;
+
+            CData.w3_DataCache.bones.Clear();
         }
 
         /// <summary>
@@ -28,23 +32,23 @@ namespace WolvenKit.Render
                 if (chunk.Type == "CSkeleton")
                 {
                     var bones = chunk.GetVariableByName("bones") as CArray;
-                    CData.meshSkeleton.nbBones = (uint)bones.array.Count;
+                    meshSkeleton.nbBones = (uint)bones.array.Count;
                     foreach (CVector bone in bones)
                     {
                         var boneName = bone.variables.GetVariableByName("nameAsCName") as CName;
-                        CData.meshSkeleton.names.Add(boneName.Value);
+                        meshSkeleton.names.Add(boneName.Value);
                     }
                     var parentIndices = chunk.GetVariableByName("parentIndices") as CArray;
                     foreach (CVariable parentIndex in parentIndices)
                     {
-                        CData.meshSkeleton.parentIdx.Add(short.Parse(parentIndex.ToString()));
+                        meshSkeleton.parentIdx.Add(short.Parse(parentIndex.ToString()));
                     }
 
                     var unknownBytes = chunk.unknownBytes.Bytes;
                     using (MemoryStream ms = new MemoryStream(unknownBytes))
                     using (BinaryReader br = new BinaryReader(ms))
                     {
-                        for (uint i = 0; i < CData.meshSkeleton.nbBones; i++)
+                        for (uint i = 0; i < meshSkeleton.nbBones; i++)
                         {
                             Vector3Df position = new Vector3Df();
                             position.X = br.ReadSingle();
@@ -78,10 +82,10 @@ namespace WolvenKit.Render
 
                             Matrix localTransform = posMat * rotMat * scaleMat;
                             orientation = orientation.MakeInverse();
-                            CData.meshSkeleton.matrix.Add(localTransform);
-                            CData.meshSkeleton.positions.Add(position);
-                            CData.meshSkeleton.rotations.Add(orientation);
-                            CData.meshSkeleton.scales.Add(scale);
+                            meshSkeleton.matrix.Add(localTransform);
+                            meshSkeleton.positions.Add(position);
+                            meshSkeleton.rotations.Add(orientation);
+                            meshSkeleton.scales.Add(scale);
                         }
                     }
                 }
@@ -94,9 +98,9 @@ namespace WolvenKit.Render
         public void Apply(SkinnedMesh skinnedMesh)
         {
             // Create the bones
-            for (int i = 0; i < CData.meshSkeleton.nbBones; i++)
+            for (int i = 0; i < meshSkeleton.nbBones; i++)
             {
-                string boneName = CData.meshSkeleton.names[i];
+                string boneName = meshSkeleton.names[i];
                 if (skinnedMesh.GetJointIndex(boneName) == -1)
                 {
                     var joint = skinnedMesh.AddJoint();
@@ -105,31 +109,31 @@ namespace WolvenKit.Render
             }
 
             // Set the hierarchy
-            for (int i = 0; i < CData.meshSkeleton.nbBones; i++)
+            for (int i = 0; i < meshSkeleton.nbBones; i++)
             {
-                short parent = CData.meshSkeleton.parentIdx[i];
+                short parent = meshSkeleton.parentIdx[i];
                 if (parent != -1) // root
                 {
-                    var parentJoint = CSkeleton.GetJointByName(skinnedMesh, CData.meshSkeleton.names[parent]);
+                    var parentJoint = CSkeleton.GetJointByName(skinnedMesh, meshSkeleton.names[parent]);
                     if (parentJoint != null)
                         parentJoint.AddChildren(skinnedMesh.GetAllJoints()[i]);
                 }
             }
 
             // Set the transformations
-            for (int i = 0; i < CData.meshSkeleton.nbBones; i++)
+            for (int i = 0; i < meshSkeleton.nbBones; i++)
             {
-                string boneName = CData.meshSkeleton.names[i];
+                string boneName = meshSkeleton.names[i];
 
                 var joint = CSkeleton.GetJointByName(skinnedMesh, boneName);
                 if (joint == null)
                     continue;
 
-                joint.LocalMatrix = CData.meshSkeleton.matrix[i];
+                joint.LocalMatrix = meshSkeleton.matrix[i];
 
-                joint.Animatedposition = CData.meshSkeleton.positions[i];
-                joint.Animatedrotation = CData.meshSkeleton.rotations[i];
-                joint.Animatedscale = CData.meshSkeleton.scales[i];
+                joint.Animatedposition = meshSkeleton.positions[i];
+                joint.Animatedrotation = meshSkeleton.rotations[i];
+                joint.Animatedscale = meshSkeleton.scales[i];
             }
 
             // Compute the global matrix

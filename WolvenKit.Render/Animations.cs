@@ -9,12 +9,15 @@ namespace WolvenKit.Render
 {
     public class Animations
     {
-        public CommonData CData { get; set; }
+        private float animationSpeed = 0;
+        private List<List<uint>> positionsKeyframes = new List<List<uint>>();
+        private List<List<uint>> orientKeyframes = new List<List<uint>>();
+        private List<List<uint>> scalesKeyframes = new List<List<uint>>();
+        private List<List<Vector3Df>> positions = new List<List<Vector3Df>>();
+        private List<List<Quaternion>> orientations = new List<List<Quaternion>>();
+        private List<List<Vector3Df>> scales = new List<List<Vector3Df>>();
 
-        public Animations(CommonData cdata)
-        {
-            CData = cdata;
-        }
+        private List<string> animationNames = new List<string>();
 
         /// <summary>
         /// Read animations and animbuffers data.
@@ -25,11 +28,19 @@ namespace WolvenKit.Render
             if (animFile != null)
             foreach (var chunk in animFile.chunks)
             {
+                if (chunk.Type == "CSkeletalAnimation")
+                {
+                    // var name = chunk.GetVariableByName("name");
+                    // (.GetVariableByName("animBuffer") as CPtr).ChunkIndex
+                }
+            }
+            foreach (var chunk in animFile.chunks)
+            {
                 if (chunk.Type == "CAnimationBufferBitwiseCompressed")
                 {
                     uint numFrames = (chunk.GetVariableByName("numFrames") as CUInt32).val;
                     float animDuration = (chunk.GetVariableByName("duration") as CFloat).val;
-                    CData.animationSpeed = numFrames / animDuration;
+                    animationSpeed = numFrames / animDuration;
                     uint keyFrame = 0;
                     byte[] data;
                     var deferredData = chunk.GetVariableByName("deferredData") as CInt16;
@@ -73,8 +84,8 @@ namespace WolvenKit.Render
                                 currorient.Add(new Quaternion(quart[0], quart[1], quart[2], quart[3]));
                             }
 
-                            CData.orientKeyframes.Add(currkeyframe);
-                            CData.orientations.Add(currorient);
+                            orientKeyframes.Add(currkeyframe);
+                            orientations.Add(currorient);
 
                             // TODO: Refactor
                             List<Vector3Df> currposition = new List<Vector3Df>();
@@ -99,8 +110,8 @@ namespace WolvenKit.Render
                                 Vector3Df pos = new Vector3Df(vec.x.val, vec.y.val, vec.z.val);
                                 currposition.Add(pos);
                             }
-                            CData.positionsKeyframes.Add(currkeyframe);
-                            CData.positions.Add(currposition);
+                            positionsKeyframes.Add(currkeyframe);
+                            positions.Add(currposition);
 
                             List<Vector3Df> currscale = new List<Vector3Df>();
                             currkeyframe = new List<uint>();
@@ -124,8 +135,8 @@ namespace WolvenKit.Render
                                 Vector3Df scale = new Vector3Df(vec.x.val, vec.y.val, vec.z.val);
                                 currscale.Add(scale);
                             }
-                            CData.scalesKeyframes.Add(currkeyframe);
-                            CData.scales.Add(currscale);
+                            scalesKeyframes.Add(currkeyframe);
+                            scales.Add(currscale);
                         }
                     }
                     break;
@@ -138,29 +149,29 @@ namespace WolvenKit.Render
         /// </summary>
         public void Apply(SkinnedMesh skinnedMesh)
         {
-            skinnedMesh.AnimationSpeed = CData.animationSpeed;
-            for (int i = 0; i < CData.orientations.Count; i++)
+            skinnedMesh.AnimationSpeed = animationSpeed;
+            for (int i = 0; i < orientations.Count; i++)
             {
                 SJoint joint = skinnedMesh.GetAllJoints()[i];
-                for (int j = 0; j < CData.positions[i].Count; j++)
+                for (int j = 0; j < positions[i].Count; j++)
                 {
                     var poskey = skinnedMesh.AddPositionKey(joint);
-                    poskey.Position = CData.positions[i][j];
-                    poskey.Frame = CData.positionsKeyframes[i][j];
+                    poskey.Position = positions[i][j];
+                    poskey.Frame = positionsKeyframes[i][j];
                 }
 
-                for (int j = 0; j < CData.orientations[i].Count; j++)
+                for (int j = 0; j < orientations[i].Count; j++)
                 {
                     var rotkey = skinnedMesh.AddRotationKey(joint);
-                    rotkey.Rotation = CData.orientations[i][j];
-                    rotkey.Frame = CData.orientKeyframes[i][j];
+                    rotkey.Rotation = orientations[i][j];
+                    rotkey.Frame = orientKeyframes[i][j];
                 }
 
-                for (int j = 0; j < CData.scales[i].Count; j++)
+                for (int j = 0; j < scales[i].Count; j++)
                 {
                     var scalekey = skinnedMesh.AddScaleKey(joint);
-                    scalekey.Scale = CData.scales[i][j];
-                    scalekey.Frame = CData.scalesKeyframes[i][j];
+                    scalekey.Scale = scales[i][j];
+                    scalekey.Frame = scalesKeyframes[i][j];
                 }
             }
         }

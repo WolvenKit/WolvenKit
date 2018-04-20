@@ -12,6 +12,8 @@ namespace WolvenKit.Render
     {
         public CommonData CData { get; set; }
 
+        private List<Vector3Df> bonePositions = new List<Vector3Df>();
+
         public Mesh(CommonData cdata)
         {
             CData = cdata;
@@ -113,7 +115,7 @@ namespace WolvenKit.Render
                                             pos.X = (item.variables[0] as CFloat).val;
                                             pos.Y = (item.variables[1] as CFloat).val;
                                             pos.Z = (item.variables[2] as CFloat).val;
-                                            CData.bonePositions.Add(pos);
+                                            bonePositions.Add(pos);
                                         }
                                     }
                                     break;
@@ -186,7 +188,7 @@ namespace WolvenKit.Render
                             prevPos = br.BaseStream.Position;
                             CData.boneData.nbBones = (uint)br.ReadBit6();
 
-                            if (CData.boneData.nbBones == CData.bonePositions.Count)
+                            if (CData.boneData.nbBones == bonePositions.Count)
                             {
                                 var backPos = br.BaseStream.Position;
                                 correctPos = true;
@@ -202,7 +204,7 @@ namespace WolvenKit.Render
                                 }
                                 br.BaseStream.Position = backPos;
                             }
-                        } while (CData.boneData.nbBones != CData.bonePositions.Count && br.BaseStream.Position < unknownBytes.Length && !correctPos);
+                        } while (CData.boneData.nbBones != bonePositions.Count && br.BaseStream.Position < unknownBytes.Length && !correctPos);
 
                         if (br.BaseStream.Position < unknownBytes.Length)
                         {
