@@ -645,14 +645,14 @@
       <Project>{5bd2292a-24db-4b4a-a5b1-5d435769c289}</Project>
       <Name>WolvenKit.Bundles</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj">
+      <Project>{4d1019f1-f099-450f-85b8-697e0332a94f}</Project>
+      <Name>WolvenKit.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj">
       <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>
       <Name>WolvenKit.CR2W</Name>
       <EmbedInteropTypes>False</EmbedInteropTypes>
-    </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj">
-      <Project>{4d1019f1-f099-450f-85b8-697e0332a94f}</Project>
-      <Name>WolvenKit.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\WolvenKit.Net\WolvenKit.Net.csproj">
       <Project>{f60b8974-617d-45b5-bd33-68a9f739de4f}</Project>

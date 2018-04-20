@@ -882,22 +882,6 @@ namespace WolvenKit
                         doc.RenderViewer.Show(doc.FormPanel, DockState.Document);
                         break;
                     }
-                //TODO: Remove this once it's done
-#if DEBUG
-                case ".redfur":
-                    {
-                        using (var sf = new SaveFileDialog())
-                        {
-                            sf.Filter = "XML Files | *.xml";
-                            //if (sf.ShowDialog() == DialogResult.OK)
-                            {
-                                var asd = Apex.HairWorks.ConvertToApexXml(doc.File);
-                                asd.Save("asd.xml");
-                            }
-                        }
-                        break;
-                    }
-#endif
                 default:
                     {
                         break;

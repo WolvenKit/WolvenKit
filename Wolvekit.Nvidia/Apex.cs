@@ -31,7 +31,7 @@ namespace WolvenKit
                     NvParameters.Add(new XAttribute("version", "1.0"));
                     //NvHairAssetHeaderInfo
                     var hairassetheaderinfo = new NvHairAssetHeaderInfo();
-                    NvParameters.Add(hairassetheaderinfo.serialize(4));
+                    NvParameters.Add(hairassetheaderinfo.serialize(chunk,4));
                     //HairSceneDescriptor
                     //TODO: Others
 
