@@ -42,6 +42,15 @@ namespace Wolvekit.Nvidia.HairWorks
                 arrayvalue));
         }
 
+        public static void AddNvArray(this XElement elem, string name, string type,string count, List<XElement> elems)
+        {
+            elem.Add(new XElement("value",
+                new XAttribute("name", name),
+                new XAttribute("size", count),
+                new XAttribute("type", type),
+                elems));
+        }
+
         public static XElement CreateStructHeader(string name, string type, string classname, string version, string checksum)
         {
             XElement ret = new XElement("value");

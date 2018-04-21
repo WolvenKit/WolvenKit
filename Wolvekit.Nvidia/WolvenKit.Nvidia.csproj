@@ -48,6 +48,7 @@
     <Compile Include="HairWorks\HairSceneDescriptor.cs" />
     <Compile Include="HairWorks\NvHairAssetDescriptor.cs" />
     <Compile Include="HairWorks\NvHairAssetHeaderInfo.cs" />
+    <Compile Include="HairWorks\NvHairInstanceDescriptor.cs" />
     <Compile Include="HairWorks\NvidiaXML.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
