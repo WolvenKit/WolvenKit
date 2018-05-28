@@ -17,9 +17,11 @@ namespace WolvenKit
 {
     public partial class frmInstallPackage : Form
     {
+        public string package;
         public frmInstallPackage(string PackageFile)
         {
             InitializeComponent();
+            package = PackageFile;
             authorLBL.Parent = backgroundimagePB;
             authorLBL.BackColor = Color.Transparent;
             modnameLBL.Parent = backgroundimagePB;
@@ -34,6 +36,7 @@ namespace WolvenKit
                     {
                         continue;
                     }
+
                     String entryFileName = zipEntry.Name;
                     if (entryFileName == "Assembly.xml")
                     {
@@ -45,6 +48,7 @@ namespace WolvenKit
                             ParseAssemblyInfo(ms.ToArray());
                         }
                     }
+
                     if (Path.GetFileNameWithoutExtension(entryFileName) == "Icon")
                     {
                         byte[] buffer = new byte[4096];
@@ -76,7 +80,8 @@ namespace WolvenKit
             authorLBL.Text = metanode?.Element("author")?.Element("displayName")?.Value;
 
             var colornode = data.Root.Element("colors");
-            backgroundimagePB.BackColor = ColorTranslator.FromHtml(colornode?.Element("headerBackground")?.Value ?? "0xFFFFFFFF");
+            backgroundimagePB.BackColor =
+                ColorTranslator.FromHtml(colornode?.Element("headerBackground")?.Value ?? "0xFFFFFFFF");
             logoPB.BackColor = ColorTranslator.FromHtml(colornode?.Element("iconBackground")?.Value ?? "0xFFFFFFFF");
             if (colornode?.Element("headerBackground")?.Attribute("useBlackTextColor")?.Value == "true")
             {
@@ -89,18 +94,34 @@ namespace WolvenKit
                 modnameLBL.ForeColor = Color.White;
                 authorLBL.ForeColor = Color.White;
             }
+
             List<string> adition = new List<string>();
-            if(metanode?.Element("author")?.Element("twitter")?.Value != "")
-                adition.Add($@"<a href={"\"" + metanode?.Element("author")?.Element("twitter")?.Value + "\""} target={"\"_blank\""}>Twitter</a>");
+            if (metanode?.Element("author")?.Element("twitter")?.Value != "")
+                adition.Add(
+                    $@"<a href={"\"" + metanode?.Element("author")?.Element("twitter")?.Value + "\""} target={
+                            "\"_blank\""
+                        }>Twitter</a>");
             if (metanode?.Element("author")?.Element("web")?.Value != "")
-                adition.Add($@"<a href={"\"" + metanode?.Element("author")?.Element("web")?.Value + "\""} target={"\"_blank\""}>Website</a>");
+                adition.Add(
+                    $@"<a href={
+                            "\"" + metanode?.Element("author")?.Element("web")?.Value + "\""
+                        } target={"\"_blank\""}>Website</a>");
             if (metanode?.Element("author")?.Element("facebook")?.Value != "")
-                adition.Add($@"<a href={"\"" + metanode?.Element("author")?.Element("facebook")?.Value + "\""} target={"\"_blank\""}>Facebook</a>");
+                adition.Add(
+                    $@"<a href={"\"" + metanode?.Element("author")?.Element("facebook")?.Value + "\""} target={
+                            "\"_blank\""
+                        }>Facebook</a>");
             if (metanode?.Element("author")?.Element("youtube")?.Value != "")
-                adition.Add($@"<a href={"\"" + metanode?.Element("author")?.Element("youtube")?.Value + "\""} target={"\"_blank\""}>YouTube</a>");
+                adition.Add(
+                    $@"<a href={"\"" + metanode?.Element("author")?.Element("youtube")?.Value + "\""} target={
+                            "\"_blank\""
+                        }>YouTube</a>");
             var authorlink = metanode?.Element("author")?.Element("displayName")?.Value;
             if (metanode?.Element("author")?.Element("actionLink")?.Value != "")
-                authorlink = $@"<a href={"\"" + metanode?.Element("author")?.Element("actionLink")?.Value + "\""} target={"\"_blank\""}>{metanode?.Element("author")?.Element("displayName")?.Value}</a>";
+                authorlink =
+                    $@"<a href={"\"" + metanode?.Element("author")?.Element("actionLink")?.Value + "\""} target={
+                            "\"_blank\""
+                        }>{metanode?.Element("author")?.Element("displayName")?.Value}</a>";
             detailWB.DocumentText = $@"
 <html>
 <body>
@@ -131,7 +152,7 @@ namespace WolvenKit
             <td valign=""top"">
 
 
-                {adition.Aggregate("",(c,n) => c += "<br>" + n)}
+                {adition.Aggregate("", (c, n) => c += "<br>" + n)}
             </td>
         </tr>
     </table>
@@ -142,7 +163,38 @@ namespace WolvenKit
 
         private void installBTN_Click(object sender, EventArgs e)
         {
-            
+            //Actually install the mod
+            try
+            {
+                FileStream fs = File.OpenRead(package);
+                var zf = new ZipFile(fs);
+                foreach (ZipEntry zipEntry in zf)
+                {
+                    if (!zipEntry.IsFile)
+                    {
+                        continue;
+                    }
+
+                    String entryFileName = zipEntry.Name;
+                    if (!entryFileName.StartsWith("Icon") && entryFileName != "Assembly.xml")
+                    {
+                        byte[] buffer = new byte[4096];
+                        Stream zipStream = zf.GetInputStream(zipEntry);
+                        Directory.CreateDirectory(Path.GetDirectoryName(
+                            Path.Combine(MainController.Get().Configuration.GameRootDir, entryFileName)));
+                        using (var f = new FileStream(Path.Combine(MainController.Get().Configuration.GameRootDir,entryFileName),FileMode.Create))
+                        {
+                            StreamUtils.Copy(zipStream, f, buffer);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to load the package!\n" + ex.Message);
+                this.Close();
+            }
+            MessageBox.Show("Installed sucesfully!\n(Please always check your files after installing mods)","Info",MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
     }
 }
