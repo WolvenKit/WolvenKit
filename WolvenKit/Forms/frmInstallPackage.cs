@@ -53,6 +53,7 @@ namespace WolvenKit
                         {
                             StreamUtils.Copy(zipStream, ms, buffer);
                             logoPB.Image = Image.FromStream(ms);
+                            logoPB.SizeMode = PictureBoxSizeMode.Zoom;
                         }
                     }
                 }
@@ -69,7 +70,7 @@ namespace WolvenKit
             var data = XDocument.Load(new MemoryStream(Contents));
             this.Text = data.Root.Attribute("name").Value + " - Package Installer";
             modnameLBL.Text = data.Root.Attribute("name")?.Value;
-            Version v = Version.Parse(data.Root.Attribute("version")?.Value ?? "1.0");
+            String v = (data.Root.Attribute("version")?.Value ?? "1.0");
 
             var metanode = data.Root.Element("metadata");
             authorLBL.Text = metanode?.Element("author")?.Element("displayName")?.Value;
@@ -117,8 +118,7 @@ namespace WolvenKit
 
         private void installBTN_Click(object sender, EventArgs e)
         {
-            //TODO: Once we changed how we pack mods install the mod.
-            //Maybe displaying a donation url or something would be nice too.
+            
         }
     }
 }

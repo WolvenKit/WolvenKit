@@ -5,9 +5,9 @@ using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
 using W3Edit.Textures;
+using WolvenKit.Common;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
-using WolvenKit.Interfaces;
 
 namespace WolvenKit.Cache
 {

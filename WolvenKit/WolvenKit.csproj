@@ -202,6 +202,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="VisualPlus, Version=0.4.1.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VisualPlus.0.4.1.4-beta\lib\VisualPlus\NET4\VisualPlus.dll</HintPath>
+    </Reference>
     <Reference Include="Vlc.DotNet.Core, Version=2.2.1.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=MSIL">
       <HintPath>..\packages\Vlc.DotNet.Core.2.2.1\lib\net45\Vlc.DotNet.Core.dll</HintPath>
     </Reference>
@@ -231,11 +234,11 @@
     <Compile Include="Forms\frmStringsGuiImporterIDDialog.Designer.cs">
       <DependentUpon>frmStringsGuiImporterIDDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\fromCreateInstaller.cs">
+    <Compile Include="Forms\frmCreateInstaller.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\fromCreateInstaller.Designer.cs">
-      <DependentUpon>fromCreateInstaller.cs</DependentUpon>
+    <Compile Include="Forms\frmCreateInstaller.Designer.cs">
+      <DependentUpon>frmCreateInstaller.cs</DependentUpon>
     </Compile>
     <Compile Include="WitcherListViewItem.cs" />
     <Compile Include="Commonfunctions.cs" />
@@ -593,8 +596,8 @@
     <EmbeddedResource Include="Forms\frmWCCPatch.resx">
       <DependentUpon>frmWCCPatch.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\fromCreateInstaller.resx">
-      <DependentUpon>fromCreateInstaller.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\frmCreateInstaller.resx">
+      <DependentUpon>frmCreateInstaller.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

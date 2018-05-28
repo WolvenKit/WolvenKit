@@ -7,8 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Ionic.Zlib;
 using W3Edit.Textures;
+using WolvenKit.Common;
 using WolvenKit.CR2W.Types;
-using WolvenKit.Interfaces;
 
 namespace WolvenKit.Cache
 {

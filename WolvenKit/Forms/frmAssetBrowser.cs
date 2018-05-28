@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using WolvenKit.Bundles;
 using WolvenKit.Cache;
-using WolvenKit.Interfaces;
+using WolvenKit.Common;
 
 namespace WolvenKit
 {

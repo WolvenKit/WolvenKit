@@ -7,7 +7,7 @@ using WolvenKit.CR2W;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Types;
 using WolvenKit.W3Strings;
-using WolvenKit.Interfaces;
+using WolvenKit.Common;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Collections.Generic;

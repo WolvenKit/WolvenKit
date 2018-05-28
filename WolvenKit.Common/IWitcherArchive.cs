@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WolvenKit.Interfaces
+namespace WolvenKit.Common
 {
     public interface IWitcherArchive
     {

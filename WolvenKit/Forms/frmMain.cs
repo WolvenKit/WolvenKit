@@ -19,9 +19,10 @@ using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 using WolvenKit.Mod;
 using SearchOption = System.IO.SearchOption;
-using WolvenKit.Interfaces;
+using WolvenKit.Common;
 using WolvenKit.Cache;
 using WolvenKit.Bundles;
+using WolvenKit.Forms;
 
 namespace WolvenKit
 {
@@ -154,7 +155,7 @@ namespace WolvenKit
             }
         }
 
-        private void PackProject()
+        public void PackProject()
         {
             if (Packer != null && (Packer.Status == TaskStatus.Running || Packer.Status == TaskStatus.WaitingToRun || Packer.Status == TaskStatus.WaitingForActivation))
             {
@@ -228,59 +229,8 @@ namespace WolvenKit
 
         private void CreateInstaller()
         {
-            throw new NotImplementedException("Not implemented yet!");
-            //TODO: Once we have a GUI and such enable this.
-            // We should probably wait with this untill we have the Mod/Dlc project thing going on for us and no wcc_lite.
-            if (ActiveMod == null)
-                return;
-            ShowOutput();
-            var packeddir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\");
-            var contentdir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\content\");
-            if (!Directory.Exists(contentdir))
-            {
-                Directory.CreateDirectory(contentdir);
-            }
-            else
-            {
-                var di = new DirectoryInfo(contentdir);
-                foreach (var file in di.GetFiles())
-                {
-                    file.Delete();
-                }
-                foreach (var dir in di.GetDirectories())
-                {
-                    dir.Delete(true);
-                }
-            }
-            var taskPackMod = PackBundles();
-            while (!taskPackMod.IsCompleted)
-            {
-                Application.DoEvents();
-            }
-
-            var taskMetaData = CreateModMetaData();
-            while (!taskMetaData.IsCompleted)
-            {
-                Application.DoEvents();
-            }
-            var installdir = Path.Combine(ActiveMod.ProjectDirectory, @"Installer/");
-            if (!Directory.Exists(installdir))
-                Directory.CreateDirectory(installdir);
-            FileStream fsOut = File.Create(Path.Combine(installdir, ActiveMod.Name + ".wkp"));
-            ZipOutputStream zipStream = new ZipOutputStream(fsOut);
-            int folderOffset = packeddir.Length + (packeddir.EndsWith("\\") ? 0 : 1);
-            Commonfunctions.CompressFolder(packeddir, zipStream, folderOffset);
-            Commonfunctions.CompressFile(ActiveMod.FileName, zipStream);
-            zipStream.IsStreamOwner = true;
-            zipStream.Close();
-            AddOutput("Installer created: " + fsOut.Name + "\n", frmOutput.Logtype.Success);
-            if (!File.Exists(fsOut.Name))
-            {
-                AddOutput("Couldn't create installer. Something went wrong.", frmOutput.Logtype.Error);
-                return;
-            }
-            MainController.Get().ProjectStatus = "Ready";
-            Commonfunctions.ShowFileInExplorer(fsOut.Name);
+            var cif = new frmCreateInstaller();
+            cif.ShowDialog();
         }
 
         private async void executeGame(string args = "")
@@ -700,7 +650,19 @@ namespace WolvenKit
                 frm.WindowState = FormWindowState.Normal;
                 return;
             }
-            var explorer = new frmAssetBrowser(loadmods ? new List<IWitcherArchive> { MainController.Get().ModBundleManager, MainController.Get().ModSoundManager, MainController.Get().ModTextureManager } : new List<IWitcherArchive> { MainController.Get().BundleManager, MainController.Get().SoundManager, MainController.Get().TextureManager });
+            var explorer = new frmAssetBrowser(loadmods ? 
+                new List<IWitcherArchive>
+                {
+                    MainController.Get().ModBundleManager, 
+                    MainController.Get().ModSoundManager, 
+                    MainController.Get().ModTextureManager
+                } : 
+                new List<IWitcherArchive>
+                {
+                    MainController.Get().BundleManager, 
+                    MainController.Get().SoundManager, 
+                    MainController.Get().TextureManager
+                });
             explorer.RequestFileAdd += Assetbrowser_FileAdd;
             explorer.OpenPath(browseToPath);
             explorer.Show();
@@ -1233,9 +1195,11 @@ namespace WolvenKit
             using (var of = new OpenFileDialog())
             {
                 of.Filter = "WolvenKit Package | *.wkp";
-                if(of.ShowDialog() == DialogResult.OK)
-                    using (var pi = new frmInstallPackage(of.FileName))
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    using(var pi = new frmInstallPackage(of.FileName))
                         pi.ShowDialog();
+                }
                 else
                     Commonfunctions.SendNotification("Invalid file!");
             }
@@ -1433,7 +1397,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
         #endregion
 
         #region Mod Pack
-        private async Task PackAndInstallMod()
+        public async Task PackAndInstallMod(bool install = true)
         {
             if (ActiveMod == null)
                 return;
@@ -1531,9 +1495,9 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     files.ForEach(x => File.Copy(x, Path.Combine(DlcpackDir + Path.GetFileName(x))));
                     files.ForEach(x => File.Copy(x, Path.Combine(modpackDir, Path.GetFileName(x))));
                 }
-
-                InstallMod();
-                MainController.Get().ProjectStatus = "Mod Packed&Installed";
+                if(install)
+                    InstallMod();
+                MainController.Get().ProjectStatus = install ? "Mod Packed&Installed" : "Mod packed!"; 
                 btPack.Enabled = true;
             }           
         }

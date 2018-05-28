@@ -47,14 +47,21 @@ namespace WolvenKit
         /// <param name="OutputPath">The path to save the file to.</param>
         public void Save(string OutputPath)
         {
-            FileStream fsOut = File.Create(OutputPath);
-            ZipOutputStream zipStream = new ZipOutputStream(fsOut);
-            int folderOffset = RootFolder.Length + (RootFolder.EndsWith("\\") ? 0 : 1);
-            Commonfunctions.CompressFolder(RootFolder, zipStream, folderOffset);
-            Commonfunctions.CompressFile(Icon, zipStream, "Icon" + Path.GetExtension(Icon));
-            Commonfunctions.CompressStream(Commonfunctions.XDocToByteArray(Assembly), "Assembly.xml", zipStream);
-            zipStream.IsStreamOwner = true;
-            zipStream.Close();
+            if (Icon != null && Assembly != null)
+            {
+                FileStream fsOut = File.Create(OutputPath);
+                ZipOutputStream zipStream = new ZipOutputStream(fsOut);
+                int folderOffset = RootFolder.Length + (RootFolder.EndsWith("\\") ? 0 : 1);
+                Commonfunctions.CompressFolder(RootFolder, zipStream, folderOffset);
+                Commonfunctions.CompressFile(Icon, zipStream, "Icon" + Path.GetExtension(Icon));
+                Commonfunctions.CompressStream(Commonfunctions.XDocToByteArray(Assembly), "Assembly.xml", zipStream);
+                zipStream.IsStreamOwner = true;
+                zipStream.Close();
+            }
+            else
+            {
+                throw new Exception("Missing parameters!");
+            }
         }
 
         /// <summary>
@@ -70,7 +77,7 @@ namespace WolvenKit
         /// /// <param name="Contents">The commands to run on the games files. eg.: adding new lines to xmls and such. [OPTIONAL]</param>
         /// <returns></returns>
         public static XDocument CreateModAssembly(
-            Version version,
+            string version,
             string name,
             Tuple<string,string,string,string,string,string> Author,
             string description,
@@ -84,7 +91,7 @@ namespace WolvenKit
             {
                 throw new ArgumentException("Invalid parameters when trying to generate the assembly.xml!");
             }
-            var rootnode = new XElement("package",new XAttribute("version",version.ToString(2)), new XAttribute("name",name));
+            var rootnode = new XElement("package",new XAttribute("version",version), new XAttribute("name",name));
             var authorelement = new XElement("author",new XElement("displayName",Author.Item1));
             var metadataelement = new XElement("metadata");
             if (Author.Item2 != null || Author.Item2 != "")

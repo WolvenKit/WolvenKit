@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ionic.Zlib;
-using WolvenKit.Interfaces;
+using WolvenKit.Common;
 
 namespace WolvenKit.Cache.CollisionCache
 {

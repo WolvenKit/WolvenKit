@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WolvenKit.Interfaces
+namespace WolvenKit.Common
 {
     public interface IWitcherFile
     {
