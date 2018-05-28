@@ -31,6 +31,16 @@ namespace WolvenKit
         public bool FoldersShown = true;
 
 
+        public void PauseMonitoring()
+        {
+            modexplorerSlave.EnableRaisingEvents = false;
+        }
+
+        public void ResumeMonitoring()
+        {
+            modexplorerSlave.EnableRaisingEvents = true;
+        }
+
         public bool DeleteNode(string fullpath)
         {
             var parts = fullpath.Split('\\');

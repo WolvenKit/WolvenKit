@@ -971,6 +971,7 @@ namespace WolvenKit
 
         private void Assetbrowser_FileAdd(object sender, Tuple<List<IWitcherArchive>, List<WitcherListViewItem>,bool> Details)
         {
+            ModExplorer.PauseMonitoring();
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
                 MessageBox.Show(@"Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -984,6 +985,10 @@ namespace WolvenKit
             }
             SaveMod();
             MainController.Get().ProjectStatus = "Ready";
+            ModExplorer.FoldersShown = true;
+            ModExplorer.FilteredFiles = ActiveMod.Files;
+            ModExplorer.UpdateModFileList(true,true);
+            ModExplorer.ResumeMonitoring();
         }
 
         private void openModToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1934,5 +1939,11 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             #endregion
         }
         #endregion // Mod Pack
+
+        private void donateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Thank you! Every last bit helps and everything donated is distributed between the core developers evenly.","Thank you",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            System.Diagnostics.Process.Start("https://www.paypal.me/traderain");
+        }
     }
 }
