@@ -231,9 +231,7 @@ namespace WolvenKit
             throw new NotImplementedException("Not implemented yet!");
             //TODO: Once we have a GUI and such enable this.
             // We should probably wait with this untill we have the Mod/Dlc project thing going on for us and no wcc_lite.
-#pragma warning disable CS0162 // Unreachable code detected
             if (ActiveMod == null)
-#pragma warning restore CS0162 // Unreachable code detected
                 return;
             ShowOutput();
             var packeddir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\");
