@@ -92,7 +92,7 @@ namespace WolvenKit.Forms
             var installdir = Path.Combine(MainController.Get().ActiveMod.ProjectDirectory, @"Installer/");
             if (!Directory.Exists(installdir))
                 Directory.CreateDirectory(installdir);
-            var asm = WKPackage.CreateModAssembly(modversionTB.Text,modnameTB.Text,new Tuple<string, string, string, string, string, string>(authorTB.Text,null,null,null,null,null),descriptionRTB.Text,largedescRTB.Text,licenseTB.Text,new Tuple<Color, bool, Color>(headercolor,useblackCB.Checked,iconbg), new List<XElement>());
+            var asm = WKPackage.CreateModAssembly(modversionTB.Text,modnameTB.Text,new Tuple<string, string, string, string, string, string>(authorTB.Text,donateTF.Text,webTF.Text,facebookTF.Text,twitterTF.Text,youtubeTF.Text),descriptionRTB.Text,largedescRTB.Text,licenseTB.Text,new Tuple<Color, bool, Color>(headercolor,useblackCB.Checked,iconbg), new List<XElement>());
             var pkg = new WKPackage(asm,iconpathTB.Text,Path.Combine(MainController.Get().ActiveMod.ProjectDirectory, @"packed"));
 
             pkg.Save(outpath);

@@ -38,13 +38,23 @@
             VisualPlus.Structure.TextStyle textStyle7 = new VisualPlus.Structure.TextStyle();
             VisualPlus.Structure.TextStyle textStyle8 = new VisualPlus.Structure.TextStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCreateInstaller));
+            VisualPlus.Structure.TextStyle textStyle19 = new VisualPlus.Structure.TextStyle();
+            VisualPlus.Structure.TextStyle textStyle20 = new VisualPlus.Structure.TextStyle();
+            VisualPlus.Structure.TextStyle textStyle21 = new VisualPlus.Structure.TextStyle();
+            VisualPlus.Structure.TextStyle textStyle22 = new VisualPlus.Structure.TextStyle();
+            VisualPlus.Structure.TextStyle textStyle23 = new VisualPlus.Structure.TextStyle();
+            VisualPlus.Structure.TextStyle textStyle24 = new VisualPlus.Structure.TextStyle();
+            VisualPlus.Structure.TextStyle textStyle25 = new VisualPlus.Structure.TextStyle();
+            VisualPlus.Structure.TextStyle textStyle17 = new VisualPlus.Structure.TextStyle();
+            VisualPlus.Structure.TextStyle textStyle18 = new VisualPlus.Structure.TextStyle();
+            VisualPlus.Structure.TextStyle textStyle15 = new VisualPlus.Structure.TextStyle();
+            VisualPlus.Structure.TextStyle textStyle16 = new VisualPlus.Structure.TextStyle();
+            VisualPlus.Structure.TextStyle textStyle13 = new VisualPlus.Structure.TextStyle();
+            VisualPlus.Structure.TextStyle textStyle14 = new VisualPlus.Structure.TextStyle();
             VisualPlus.Structure.TextStyle textStyle9 = new VisualPlus.Structure.TextStyle();
             VisualPlus.Structure.TextStyle textStyle10 = new VisualPlus.Structure.TextStyle();
             VisualPlus.Structure.TextStyle textStyle11 = new VisualPlus.Structure.TextStyle();
             VisualPlus.Structure.TextStyle textStyle12 = new VisualPlus.Structure.TextStyle();
-            VisualPlus.Structure.TextStyle textStyle13 = new VisualPlus.Structure.TextStyle();
-            VisualPlus.Structure.TextStyle textStyle14 = new VisualPlus.Structure.TextStyle();
-            VisualPlus.Structure.TextStyle textStyle15 = new VisualPlus.Structure.TextStyle();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.visualTabControl1 = new VisualPlus.Toolkit.Controls.Navigation.VisualTabControl();
             this.visualTabPage1 = new VisualPlus.Toolkit.Child.VisualTabPage();
@@ -71,6 +81,16 @@
             this.label1 = new System.Windows.Forms.Label();
             this.visualButton2 = new VisualPlus.Toolkit.Controls.Interactivity.VisualButton();
             this.visualButton1 = new VisualPlus.Toolkit.Controls.Interactivity.VisualButton();
+            this.donateTF = new VisualPlus.Toolkit.Controls.Editors.VisualTextBox();
+            this.visualLabel5 = new VisualPlus.Toolkit.Controls.Interactivity.VisualLabel();
+            this.facebookTF = new VisualPlus.Toolkit.Controls.Editors.VisualTextBox();
+            this.visualLabel6 = new VisualPlus.Toolkit.Controls.Interactivity.VisualLabel();
+            this.twitterTF = new VisualPlus.Toolkit.Controls.Editors.VisualTextBox();
+            this.visualLabel9 = new VisualPlus.Toolkit.Controls.Interactivity.VisualLabel();
+            this.webTF = new VisualPlus.Toolkit.Controls.Editors.VisualTextBox();
+            this.visualLabel10 = new VisualPlus.Toolkit.Controls.Interactivity.VisualLabel();
+            this.youtubeTF = new VisualPlus.Toolkit.Controls.Editors.VisualTextBox();
+            this.visualLabel11 = new VisualPlus.Toolkit.Controls.Interactivity.VisualLabel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -110,7 +130,7 @@
             this.visualTabControl1.Location = new System.Drawing.Point(0, 0);
             this.visualTabControl1.MinimumSize = new System.Drawing.Size(144, 85);
             this.visualTabControl1.Name = "visualTabControl1";
-            this.visualTabControl1.SelectedIndex = 0;
+            this.visualTabControl1.SelectedIndex = 1;
             this.visualTabControl1.SelectorAlignment = System.Windows.Forms.TabAlignment.Bottom;
             this.visualTabControl1.SelectorSpacing = 10;
             this.visualTabControl1.SelectorThickness = 5;
@@ -121,7 +141,7 @@
             this.visualTabControl1.SeparatorThickness = 2F;
             this.visualTabControl1.Size = new System.Drawing.Size(566, 642);
             this.visualTabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
-            this.visualTabControl1.State = VisualPlus.Enumerators.MouseStates.Hover;
+            this.visualTabControl1.State = VisualPlus.Enumerators.MouseStates.Normal;
             this.visualTabControl1.TabIndex = 0;
             this.visualTabControl1.TabMenu = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(61)))), ((int)(((byte)(73)))));
             this.visualTabControl1.TabSelector = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(244)))), ((int)(((byte)(249)))));
@@ -491,6 +511,16 @@
             this.visualTabPage2.Border.Thickness = 1;
             this.visualTabPage2.Border.Type = VisualPlus.Enumerators.ShapeType.Rectangle;
             this.visualTabPage2.Border.Visible = false;
+            this.visualTabPage2.Controls.Add(this.webTF);
+            this.visualTabPage2.Controls.Add(this.visualLabel10);
+            this.visualTabPage2.Controls.Add(this.youtubeTF);
+            this.visualTabPage2.Controls.Add(this.visualLabel11);
+            this.visualTabPage2.Controls.Add(this.twitterTF);
+            this.visualTabPage2.Controls.Add(this.visualLabel9);
+            this.visualTabPage2.Controls.Add(this.facebookTF);
+            this.visualTabPage2.Controls.Add(this.visualLabel6);
+            this.visualTabPage2.Controls.Add(this.donateTF);
+            this.visualTabPage2.Controls.Add(this.visualLabel5);
             this.visualTabPage2.Controls.Add(this.iconbgBTN);
             this.visualTabPage2.Controls.Add(this.headerBTN);
             this.visualTabPage2.Controls.Add(this.useblackCB);
@@ -569,18 +599,18 @@
             this.useblackCB.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.useblackCB.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.useblackCB.IsBoxLarger = false;
-            this.useblackCB.Location = new System.Drawing.Point(425, 121);
+            this.useblackCB.Location = new System.Drawing.Point(422, 190);
             this.useblackCB.MouseState = VisualPlus.Enumerators.MouseStates.Normal;
             this.useblackCB.Name = "useblackCB";
             this.useblackCB.Size = new System.Drawing.Size(125, 23);
             this.useblackCB.TabIndex = 13;
             this.useblackCB.Text = "use black text color";
             this.useblackCB.TextSize = new System.Drawing.Size(100, 16);
-            textStyle9.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
-            textStyle9.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            textStyle9.Hover = System.Drawing.Color.Empty;
-            textStyle9.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            this.useblackCB.TextStyle = textStyle9;
+            textStyle19.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
+            textStyle19.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            textStyle19.Hover = System.Drawing.Color.Empty;
+            textStyle19.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            this.useblackCB.TextStyle = textStyle19;
             // 
             // label3
             // 
@@ -631,7 +661,7 @@
             this.licenseTB.ImageSize = new System.Drawing.Size(16, 16);
             this.licenseTB.ImageVisible = false;
             this.licenseTB.ImageWidth = 35;
-            this.licenseTB.Location = new System.Drawing.Point(94, 121);
+            this.licenseTB.Location = new System.Drawing.Point(91, 190);
             this.licenseTB.MouseState = VisualPlus.Enumerators.MouseStates.Normal;
             this.licenseTB.Name = "licenseTB";
             this.licenseTB.PasswordChar = '\0';
@@ -639,11 +669,11 @@
             this.licenseTB.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.licenseTB.Size = new System.Drawing.Size(135, 23);
             this.licenseTB.TabIndex = 9;
-            textStyle10.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
-            textStyle10.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            textStyle10.Hover = System.Drawing.Color.Empty;
-            textStyle10.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            this.licenseTB.TextStyle = textStyle10;
+            textStyle20.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
+            textStyle20.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            textStyle20.Hover = System.Drawing.Color.Empty;
+            textStyle20.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            this.licenseTB.TextStyle = textStyle20;
             this.licenseTB.Watermark.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.licenseTB.Watermark.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.licenseTB.Watermark.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(211)))), ((int)(((byte)(211)))), ((int)(((byte)(211)))));
@@ -655,7 +685,7 @@
             // 
             this.visualLabel8.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.visualLabel8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.visualLabel8.Location = new System.Drawing.Point(13, 121);
+            this.visualLabel8.Location = new System.Drawing.Point(10, 190);
             this.visualLabel8.MouseState = VisualPlus.Enumerators.MouseStates.Normal;
             this.visualLabel8.Name = "visualLabel8";
             this.visualLabel8.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -673,18 +703,18 @@
             this.visualLabel8.Text = "License:";
             this.visualLabel8.TextAlignment = System.Drawing.StringAlignment.Near;
             this.visualLabel8.TextLineAlignment = System.Drawing.StringAlignment.Center;
-            textStyle11.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
-            textStyle11.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            textStyle11.Hover = System.Drawing.Color.Empty;
-            textStyle11.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            this.visualLabel8.TextStyle = textStyle11;
+            textStyle21.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
+            textStyle21.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            textStyle21.Hover = System.Drawing.Color.Empty;
+            textStyle21.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            this.visualLabel8.TextStyle = textStyle21;
             this.visualLabel8.Click += new System.EventHandler(this.visualLabel8_Click);
             // 
             // largedescRTB
             // 
-            this.largedescRTB.Location = new System.Drawing.Point(8, 179);
+            this.largedescRTB.Location = new System.Drawing.Point(8, 248);
             this.largedescRTB.Name = "largedescRTB";
-            this.largedescRTB.Size = new System.Drawing.Size(539, 414);
+            this.largedescRTB.Size = new System.Drawing.Size(539, 329);
             this.largedescRTB.TabIndex = 7;
             this.largedescRTB.Text = "";
             // 
@@ -692,7 +722,7 @@
             // 
             this.visualLabel7.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.visualLabel7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.visualLabel7.Location = new System.Drawing.Point(12, 150);
+            this.visualLabel7.Location = new System.Drawing.Point(9, 219);
             this.visualLabel7.MouseState = VisualPlus.Enumerators.MouseStates.Normal;
             this.visualLabel7.Name = "visualLabel7";
             this.visualLabel7.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -710,11 +740,11 @@
             this.visualLabel7.Text = "Large description:";
             this.visualLabel7.TextAlignment = System.Drawing.StringAlignment.Near;
             this.visualLabel7.TextLineAlignment = System.Drawing.StringAlignment.Center;
-            textStyle12.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
-            textStyle12.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            textStyle12.Hover = System.Drawing.Color.Empty;
-            textStyle12.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            this.visualLabel7.TextStyle = textStyle12;
+            textStyle22.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
+            textStyle22.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            textStyle22.Hover = System.Drawing.Color.Empty;
+            textStyle22.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            this.visualLabel7.TextStyle = textStyle22;
             // 
             // descriptionRTB
             // 
@@ -738,11 +768,11 @@
             this.descriptionRTB.ShowSelectionMargin = false;
             this.descriptionRTB.Size = new System.Drawing.Size(286, 76);
             this.descriptionRTB.TabIndex = 5;
-            textStyle13.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
-            textStyle13.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            textStyle13.Hover = System.Drawing.Color.Empty;
-            textStyle13.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            this.descriptionRTB.TextStyle = textStyle13;
+            textStyle23.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
+            textStyle23.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            textStyle23.Hover = System.Drawing.Color.Empty;
+            textStyle23.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            this.descriptionRTB.TextStyle = textStyle23;
             // 
             // label1
             // 
@@ -778,11 +808,11 @@
             this.visualButton2.TextAlignment = System.Drawing.StringAlignment.Center;
             this.visualButton2.TextImageRelation = System.Windows.Forms.TextImageRelation.Overlay;
             this.visualButton2.TextLineAlignment = System.Drawing.StringAlignment.Center;
-            textStyle14.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
-            textStyle14.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            textStyle14.Hover = System.Drawing.Color.Empty;
-            textStyle14.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            this.visualButton2.TextStyle = textStyle14;
+            textStyle24.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
+            textStyle24.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            textStyle24.Hover = System.Drawing.Color.Empty;
+            textStyle24.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            this.visualButton2.TextStyle = textStyle24;
             this.visualButton2.Click += new System.EventHandler(this.visualButton2_Click);
             // 
             // visualButton1
@@ -810,12 +840,402 @@
             this.visualButton1.TextAlignment = System.Drawing.StringAlignment.Center;
             this.visualButton1.TextImageRelation = System.Windows.Forms.TextImageRelation.Overlay;
             this.visualButton1.TextLineAlignment = System.Drawing.StringAlignment.Center;
+            textStyle25.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
+            textStyle25.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            textStyle25.Hover = System.Drawing.Color.Empty;
+            textStyle25.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            this.visualButton1.TextStyle = textStyle25;
+            this.visualButton1.Click += new System.EventHandler(this.visualButton1_Click);
+            // 
+            // donateTF
+            // 
+            this.donateTF.BackColorState.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.donateTF.BackColorState.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(244)))), ((int)(((byte)(249)))));
+            this.donateTF.Border.Color = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.donateTF.Border.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(183)))), ((int)(((byte)(230)))));
+            this.donateTF.Border.HoverVisible = true;
+            this.donateTF.Border.Rounding = 6;
+            this.donateTF.Border.Thickness = 1;
+            this.donateTF.Border.Type = VisualPlus.Enumerators.ShapeType.Rounded;
+            this.donateTF.Border.Visible = true;
+            this.donateTF.ButtonBorder.Color = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.donateTF.ButtonBorder.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(183)))), ((int)(((byte)(230)))));
+            this.donateTF.ButtonBorder.HoverVisible = true;
+            this.donateTF.ButtonBorder.Rounding = 6;
+            this.donateTF.ButtonBorder.Thickness = 1;
+            this.donateTF.ButtonBorder.Type = VisualPlus.Enumerators.ShapeType.Rounded;
+            this.donateTF.ButtonBorder.Visible = true;
+            this.donateTF.ButtonColor.Disabled = System.Drawing.Color.Empty;
+            this.donateTF.ButtonColor.Enabled = System.Drawing.Color.Empty;
+            this.donateTF.ButtonColor.Hover = System.Drawing.Color.Empty;
+            this.donateTF.ButtonColor.Pressed = System.Drawing.Color.Empty;
+            this.donateTF.ButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.donateTF.ButtonIndent = 3;
+            this.donateTF.ButtonText = "visualButton";
+            this.donateTF.ButtonVisible = false;
+            this.donateTF.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.donateTF.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.donateTF.ImageSize = new System.Drawing.Size(16, 16);
+            this.donateTF.ImageVisible = false;
+            this.donateTF.ImageWidth = 35;
+            this.donateTF.Location = new System.Drawing.Point(107, 583);
+            this.donateTF.MouseState = VisualPlus.Enumerators.MouseStates.Normal;
+            this.donateTF.Name = "donateTF";
+            this.donateTF.PasswordChar = '\0';
+            this.donateTF.ReadOnly = false;
+            this.donateTF.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.donateTF.Size = new System.Drawing.Size(135, 23);
+            this.donateTF.TabIndex = 17;
+            textStyle17.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
+            textStyle17.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            textStyle17.Hover = System.Drawing.Color.Empty;
+            textStyle17.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            this.donateTF.TextStyle = textStyle17;
+            this.donateTF.Watermark.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.donateTF.Watermark.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.donateTF.Watermark.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(211)))), ((int)(((byte)(211)))), ((int)(((byte)(211)))));
+            this.donateTF.Watermark.Text = "Watermark text";
+            this.donateTF.Watermark.Visible = false;
+            // 
+            // visualLabel5
+            // 
+            this.visualLabel5.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.visualLabel5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.visualLabel5.Location = new System.Drawing.Point(3, 583);
+            this.visualLabel5.MouseState = VisualPlus.Enumerators.MouseStates.Normal;
+            this.visualLabel5.Name = "visualLabel5";
+            this.visualLabel5.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.visualLabel5.Outline = false;
+            this.visualLabel5.OutlineColor = System.Drawing.Color.Red;
+            this.visualLabel5.OutlineLocation = new System.Drawing.Point(0, 0);
+            this.visualLabel5.ReflectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.visualLabel5.ReflectionSpacing = 0;
+            this.visualLabel5.ShadowColor = System.Drawing.Color.Black;
+            this.visualLabel5.ShadowDirection = 315;
+            this.visualLabel5.ShadowLocation = new System.Drawing.Point(0, 0);
+            this.visualLabel5.ShadowOpacity = 100;
+            this.visualLabel5.Size = new System.Drawing.Size(75, 23);
+            this.visualLabel5.TabIndex = 16;
+            this.visualLabel5.Text = "Donation url:";
+            this.visualLabel5.TextAlignment = System.Drawing.StringAlignment.Near;
+            this.visualLabel5.TextLineAlignment = System.Drawing.StringAlignment.Center;
+            textStyle18.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
+            textStyle18.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            textStyle18.Hover = System.Drawing.Color.Empty;
+            textStyle18.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            this.visualLabel5.TextStyle = textStyle18;
+            // 
+            // facebookTF
+            // 
+            this.facebookTF.BackColorState.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.facebookTF.BackColorState.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(244)))), ((int)(((byte)(249)))));
+            this.facebookTF.Border.Color = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.facebookTF.Border.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(183)))), ((int)(((byte)(230)))));
+            this.facebookTF.Border.HoverVisible = true;
+            this.facebookTF.Border.Rounding = 6;
+            this.facebookTF.Border.Thickness = 1;
+            this.facebookTF.Border.Type = VisualPlus.Enumerators.ShapeType.Rounded;
+            this.facebookTF.Border.Visible = true;
+            this.facebookTF.ButtonBorder.Color = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.facebookTF.ButtonBorder.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(183)))), ((int)(((byte)(230)))));
+            this.facebookTF.ButtonBorder.HoverVisible = true;
+            this.facebookTF.ButtonBorder.Rounding = 6;
+            this.facebookTF.ButtonBorder.Thickness = 1;
+            this.facebookTF.ButtonBorder.Type = VisualPlus.Enumerators.ShapeType.Rounded;
+            this.facebookTF.ButtonBorder.Visible = true;
+            this.facebookTF.ButtonColor.Disabled = System.Drawing.Color.Empty;
+            this.facebookTF.ButtonColor.Enabled = System.Drawing.Color.Empty;
+            this.facebookTF.ButtonColor.Hover = System.Drawing.Color.Empty;
+            this.facebookTF.ButtonColor.Pressed = System.Drawing.Color.Empty;
+            this.facebookTF.ButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.facebookTF.ButtonIndent = 3;
+            this.facebookTF.ButtonText = "visualButton";
+            this.facebookTF.ButtonVisible = false;
+            this.facebookTF.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.facebookTF.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.facebookTF.ImageSize = new System.Drawing.Size(16, 16);
+            this.facebookTF.ImageVisible = false;
+            this.facebookTF.ImageWidth = 35;
+            this.facebookTF.Location = new System.Drawing.Point(91, 122);
+            this.facebookTF.MouseState = VisualPlus.Enumerators.MouseStates.Normal;
+            this.facebookTF.Name = "facebookTF";
+            this.facebookTF.PasswordChar = '\0';
+            this.facebookTF.ReadOnly = false;
+            this.facebookTF.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.facebookTF.Size = new System.Drawing.Size(135, 23);
+            this.facebookTF.TabIndex = 19;
             textStyle15.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
             textStyle15.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             textStyle15.Hover = System.Drawing.Color.Empty;
             textStyle15.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            this.visualButton1.TextStyle = textStyle15;
-            this.visualButton1.Click += new System.EventHandler(this.visualButton1_Click);
+            this.facebookTF.TextStyle = textStyle15;
+            this.facebookTF.Watermark.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.facebookTF.Watermark.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.facebookTF.Watermark.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(211)))), ((int)(((byte)(211)))), ((int)(((byte)(211)))));
+            this.facebookTF.Watermark.Text = "Watermark text";
+            this.facebookTF.Watermark.Visible = false;
+            // 
+            // visualLabel6
+            // 
+            this.visualLabel6.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.visualLabel6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.visualLabel6.Location = new System.Drawing.Point(10, 122);
+            this.visualLabel6.MouseState = VisualPlus.Enumerators.MouseStates.Normal;
+            this.visualLabel6.Name = "visualLabel6";
+            this.visualLabel6.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.visualLabel6.Outline = false;
+            this.visualLabel6.OutlineColor = System.Drawing.Color.Red;
+            this.visualLabel6.OutlineLocation = new System.Drawing.Point(0, 0);
+            this.visualLabel6.ReflectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.visualLabel6.ReflectionSpacing = 0;
+            this.visualLabel6.ShadowColor = System.Drawing.Color.Black;
+            this.visualLabel6.ShadowDirection = 315;
+            this.visualLabel6.ShadowLocation = new System.Drawing.Point(0, 0);
+            this.visualLabel6.ShadowOpacity = 100;
+            this.visualLabel6.Size = new System.Drawing.Size(75, 23);
+            this.visualLabel6.TabIndex = 18;
+            this.visualLabel6.Text = "Facebook:";
+            this.visualLabel6.TextAlignment = System.Drawing.StringAlignment.Near;
+            this.visualLabel6.TextLineAlignment = System.Drawing.StringAlignment.Center;
+            textStyle16.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
+            textStyle16.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            textStyle16.Hover = System.Drawing.Color.Empty;
+            textStyle16.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            this.visualLabel6.TextStyle = textStyle16;
+            // 
+            // twitterTF
+            // 
+            this.twitterTF.BackColorState.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.twitterTF.BackColorState.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(244)))), ((int)(((byte)(249)))));
+            this.twitterTF.Border.Color = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.twitterTF.Border.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(183)))), ((int)(((byte)(230)))));
+            this.twitterTF.Border.HoverVisible = true;
+            this.twitterTF.Border.Rounding = 6;
+            this.twitterTF.Border.Thickness = 1;
+            this.twitterTF.Border.Type = VisualPlus.Enumerators.ShapeType.Rounded;
+            this.twitterTF.Border.Visible = true;
+            this.twitterTF.ButtonBorder.Color = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.twitterTF.ButtonBorder.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(183)))), ((int)(((byte)(230)))));
+            this.twitterTF.ButtonBorder.HoverVisible = true;
+            this.twitterTF.ButtonBorder.Rounding = 6;
+            this.twitterTF.ButtonBorder.Thickness = 1;
+            this.twitterTF.ButtonBorder.Type = VisualPlus.Enumerators.ShapeType.Rounded;
+            this.twitterTF.ButtonBorder.Visible = true;
+            this.twitterTF.ButtonColor.Disabled = System.Drawing.Color.Empty;
+            this.twitterTF.ButtonColor.Enabled = System.Drawing.Color.Empty;
+            this.twitterTF.ButtonColor.Hover = System.Drawing.Color.Empty;
+            this.twitterTF.ButtonColor.Pressed = System.Drawing.Color.Empty;
+            this.twitterTF.ButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.twitterTF.ButtonIndent = 3;
+            this.twitterTF.ButtonText = "visualButton";
+            this.twitterTF.ButtonVisible = false;
+            this.twitterTF.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.twitterTF.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.twitterTF.ImageSize = new System.Drawing.Size(16, 16);
+            this.twitterTF.ImageVisible = false;
+            this.twitterTF.ImageWidth = 35;
+            this.twitterTF.Location = new System.Drawing.Point(91, 151);
+            this.twitterTF.MouseState = VisualPlus.Enumerators.MouseStates.Normal;
+            this.twitterTF.Name = "twitterTF";
+            this.twitterTF.PasswordChar = '\0';
+            this.twitterTF.ReadOnly = false;
+            this.twitterTF.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.twitterTF.Size = new System.Drawing.Size(135, 23);
+            this.twitterTF.TabIndex = 21;
+            textStyle13.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
+            textStyle13.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            textStyle13.Hover = System.Drawing.Color.Empty;
+            textStyle13.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            this.twitterTF.TextStyle = textStyle13;
+            this.twitterTF.Watermark.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.twitterTF.Watermark.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.twitterTF.Watermark.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(211)))), ((int)(((byte)(211)))), ((int)(((byte)(211)))));
+            this.twitterTF.Watermark.Text = "Watermark text";
+            this.twitterTF.Watermark.Visible = false;
+            // 
+            // visualLabel9
+            // 
+            this.visualLabel9.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.visualLabel9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.visualLabel9.Location = new System.Drawing.Point(12, 151);
+            this.visualLabel9.MouseState = VisualPlus.Enumerators.MouseStates.Normal;
+            this.visualLabel9.Name = "visualLabel9";
+            this.visualLabel9.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.visualLabel9.Outline = false;
+            this.visualLabel9.OutlineColor = System.Drawing.Color.Red;
+            this.visualLabel9.OutlineLocation = new System.Drawing.Point(0, 0);
+            this.visualLabel9.ReflectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.visualLabel9.ReflectionSpacing = 0;
+            this.visualLabel9.ShadowColor = System.Drawing.Color.Black;
+            this.visualLabel9.ShadowDirection = 315;
+            this.visualLabel9.ShadowLocation = new System.Drawing.Point(0, 0);
+            this.visualLabel9.ShadowOpacity = 100;
+            this.visualLabel9.Size = new System.Drawing.Size(75, 23);
+            this.visualLabel9.TabIndex = 20;
+            this.visualLabel9.Text = "Twitter:";
+            this.visualLabel9.TextAlignment = System.Drawing.StringAlignment.Near;
+            this.visualLabel9.TextLineAlignment = System.Drawing.StringAlignment.Center;
+            textStyle14.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
+            textStyle14.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            textStyle14.Hover = System.Drawing.Color.Empty;
+            textStyle14.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            this.visualLabel9.TextStyle = textStyle14;
+            // 
+            // webTF
+            // 
+            this.webTF.BackColorState.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.webTF.BackColorState.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(244)))), ((int)(((byte)(249)))));
+            this.webTF.Border.Color = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.webTF.Border.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(183)))), ((int)(((byte)(230)))));
+            this.webTF.Border.HoverVisible = true;
+            this.webTF.Border.Rounding = 6;
+            this.webTF.Border.Thickness = 1;
+            this.webTF.Border.Type = VisualPlus.Enumerators.ShapeType.Rounded;
+            this.webTF.Border.Visible = true;
+            this.webTF.ButtonBorder.Color = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.webTF.ButtonBorder.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(183)))), ((int)(((byte)(230)))));
+            this.webTF.ButtonBorder.HoverVisible = true;
+            this.webTF.ButtonBorder.Rounding = 6;
+            this.webTF.ButtonBorder.Thickness = 1;
+            this.webTF.ButtonBorder.Type = VisualPlus.Enumerators.ShapeType.Rounded;
+            this.webTF.ButtonBorder.Visible = true;
+            this.webTF.ButtonColor.Disabled = System.Drawing.Color.Empty;
+            this.webTF.ButtonColor.Enabled = System.Drawing.Color.Empty;
+            this.webTF.ButtonColor.Hover = System.Drawing.Color.Empty;
+            this.webTF.ButtonColor.Pressed = System.Drawing.Color.Empty;
+            this.webTF.ButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.webTF.ButtonIndent = 3;
+            this.webTF.ButtonText = "visualButton";
+            this.webTF.ButtonVisible = false;
+            this.webTF.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.webTF.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.webTF.ImageSize = new System.Drawing.Size(16, 16);
+            this.webTF.ImageVisible = false;
+            this.webTF.ImageWidth = 35;
+            this.webTF.Location = new System.Drawing.Point(345, 151);
+            this.webTF.MouseState = VisualPlus.Enumerators.MouseStates.Normal;
+            this.webTF.Name = "webTF";
+            this.webTF.PasswordChar = '\0';
+            this.webTF.ReadOnly = false;
+            this.webTF.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.webTF.Size = new System.Drawing.Size(135, 23);
+            this.webTF.TabIndex = 25;
+            textStyle9.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
+            textStyle9.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            textStyle9.Hover = System.Drawing.Color.Empty;
+            textStyle9.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            this.webTF.TextStyle = textStyle9;
+            this.webTF.Watermark.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.webTF.Watermark.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.webTF.Watermark.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(211)))), ((int)(((byte)(211)))), ((int)(((byte)(211)))));
+            this.webTF.Watermark.Text = "Watermark text";
+            this.webTF.Watermark.Visible = false;
+            // 
+            // visualLabel10
+            // 
+            this.visualLabel10.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.visualLabel10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.visualLabel10.Location = new System.Drawing.Point(266, 151);
+            this.visualLabel10.MouseState = VisualPlus.Enumerators.MouseStates.Normal;
+            this.visualLabel10.Name = "visualLabel10";
+            this.visualLabel10.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.visualLabel10.Outline = false;
+            this.visualLabel10.OutlineColor = System.Drawing.Color.Red;
+            this.visualLabel10.OutlineLocation = new System.Drawing.Point(0, 0);
+            this.visualLabel10.ReflectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.visualLabel10.ReflectionSpacing = 0;
+            this.visualLabel10.ShadowColor = System.Drawing.Color.Black;
+            this.visualLabel10.ShadowDirection = 315;
+            this.visualLabel10.ShadowLocation = new System.Drawing.Point(0, 0);
+            this.visualLabel10.ShadowOpacity = 100;
+            this.visualLabel10.Size = new System.Drawing.Size(75, 23);
+            this.visualLabel10.TabIndex = 24;
+            this.visualLabel10.Text = "Web:";
+            this.visualLabel10.TextAlignment = System.Drawing.StringAlignment.Near;
+            this.visualLabel10.TextLineAlignment = System.Drawing.StringAlignment.Center;
+            textStyle10.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
+            textStyle10.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            textStyle10.Hover = System.Drawing.Color.Empty;
+            textStyle10.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            this.visualLabel10.TextStyle = textStyle10;
+            // 
+            // youtubeTF
+            // 
+            this.youtubeTF.BackColorState.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.youtubeTF.BackColorState.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(244)))), ((int)(((byte)(249)))));
+            this.youtubeTF.Border.Color = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.youtubeTF.Border.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(183)))), ((int)(((byte)(230)))));
+            this.youtubeTF.Border.HoverVisible = true;
+            this.youtubeTF.Border.Rounding = 6;
+            this.youtubeTF.Border.Thickness = 1;
+            this.youtubeTF.Border.Type = VisualPlus.Enumerators.ShapeType.Rounded;
+            this.youtubeTF.Border.Visible = true;
+            this.youtubeTF.ButtonBorder.Color = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.youtubeTF.ButtonBorder.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(183)))), ((int)(((byte)(230)))));
+            this.youtubeTF.ButtonBorder.HoverVisible = true;
+            this.youtubeTF.ButtonBorder.Rounding = 6;
+            this.youtubeTF.ButtonBorder.Thickness = 1;
+            this.youtubeTF.ButtonBorder.Type = VisualPlus.Enumerators.ShapeType.Rounded;
+            this.youtubeTF.ButtonBorder.Visible = true;
+            this.youtubeTF.ButtonColor.Disabled = System.Drawing.Color.Empty;
+            this.youtubeTF.ButtonColor.Enabled = System.Drawing.Color.Empty;
+            this.youtubeTF.ButtonColor.Hover = System.Drawing.Color.Empty;
+            this.youtubeTF.ButtonColor.Pressed = System.Drawing.Color.Empty;
+            this.youtubeTF.ButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.youtubeTF.ButtonIndent = 3;
+            this.youtubeTF.ButtonText = "visualButton";
+            this.youtubeTF.ButtonVisible = false;
+            this.youtubeTF.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.youtubeTF.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.youtubeTF.ImageSize = new System.Drawing.Size(16, 16);
+            this.youtubeTF.ImageVisible = false;
+            this.youtubeTF.ImageWidth = 35;
+            this.youtubeTF.Location = new System.Drawing.Point(345, 122);
+            this.youtubeTF.MouseState = VisualPlus.Enumerators.MouseStates.Normal;
+            this.youtubeTF.Name = "youtubeTF";
+            this.youtubeTF.PasswordChar = '\0';
+            this.youtubeTF.ReadOnly = false;
+            this.youtubeTF.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.youtubeTF.Size = new System.Drawing.Size(135, 23);
+            this.youtubeTF.TabIndex = 23;
+            textStyle11.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
+            textStyle11.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            textStyle11.Hover = System.Drawing.Color.Empty;
+            textStyle11.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            this.youtubeTF.TextStyle = textStyle11;
+            this.youtubeTF.Watermark.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.youtubeTF.Watermark.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.youtubeTF.Watermark.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(211)))), ((int)(((byte)(211)))), ((int)(((byte)(211)))));
+            this.youtubeTF.Watermark.Text = "Watermark text";
+            this.youtubeTF.Watermark.Visible = false;
+            // 
+            // visualLabel11
+            // 
+            this.visualLabel11.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.visualLabel11.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.visualLabel11.Location = new System.Drawing.Point(264, 122);
+            this.visualLabel11.MouseState = VisualPlus.Enumerators.MouseStates.Normal;
+            this.visualLabel11.Name = "visualLabel11";
+            this.visualLabel11.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.visualLabel11.Outline = false;
+            this.visualLabel11.OutlineColor = System.Drawing.Color.Red;
+            this.visualLabel11.OutlineLocation = new System.Drawing.Point(0, 0);
+            this.visualLabel11.ReflectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.visualLabel11.ReflectionSpacing = 0;
+            this.visualLabel11.ShadowColor = System.Drawing.Color.Black;
+            this.visualLabel11.ShadowDirection = 315;
+            this.visualLabel11.ShadowLocation = new System.Drawing.Point(0, 0);
+            this.visualLabel11.ShadowOpacity = 100;
+            this.visualLabel11.Size = new System.Drawing.Size(75, 23);
+            this.visualLabel11.TabIndex = 22;
+            this.visualLabel11.Text = "Youtube:";
+            this.visualLabel11.TextAlignment = System.Drawing.StringAlignment.Near;
+            this.visualLabel11.TextLineAlignment = System.Drawing.StringAlignment.Center;
+            textStyle12.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(129)))), ((int)(((byte)(129)))));
+            textStyle12.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            textStyle12.Hover = System.Drawing.Color.Empty;
+            textStyle12.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            this.visualLabel11.TextStyle = textStyle12;
             // 
             // frmCreateInstaller
             // 
@@ -867,5 +1287,15 @@
         private System.Windows.Forms.Button iconbgBTN;
         private System.Windows.Forms.Button headerBTN;
         private VisualPlus.Toolkit.Controls.Interactivity.VisualCheckBox useblackCB;
+        private VisualPlus.Toolkit.Controls.Editors.VisualTextBox webTF;
+        private VisualPlus.Toolkit.Controls.Interactivity.VisualLabel visualLabel10;
+        private VisualPlus.Toolkit.Controls.Editors.VisualTextBox youtubeTF;
+        private VisualPlus.Toolkit.Controls.Interactivity.VisualLabel visualLabel11;
+        private VisualPlus.Toolkit.Controls.Editors.VisualTextBox twitterTF;
+        private VisualPlus.Toolkit.Controls.Interactivity.VisualLabel visualLabel9;
+        private VisualPlus.Toolkit.Controls.Editors.VisualTextBox facebookTF;
+        private VisualPlus.Toolkit.Controls.Interactivity.VisualLabel visualLabel6;
+        private VisualPlus.Toolkit.Controls.Editors.VisualTextBox donateTF;
+        private VisualPlus.Toolkit.Controls.Interactivity.VisualLabel visualLabel5;
     }
 }

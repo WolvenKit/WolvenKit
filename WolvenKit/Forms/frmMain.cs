@@ -1168,13 +1168,6 @@ namespace WolvenKit
 
         private void creditsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            File.WriteAllText("asd.json", JsonConvert.SerializeObject(MainController.Get().Window.ActiveDocument.File, Formatting.None, new JsonSerializerSettings()
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                TypeNameHandling = TypeNameHandling.Auto
-            }));
-            return;
             using (var cf = new frmAbout())
                 cf.ShowDialog();
         }

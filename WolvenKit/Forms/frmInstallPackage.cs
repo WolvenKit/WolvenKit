@@ -18,6 +18,8 @@ namespace WolvenKit
     public partial class frmInstallPackage : Form
     {
         public string package;
+        public string actionlink;
+
         public frmInstallPackage(string PackageFile)
         {
             InitializeComponent();
@@ -122,6 +124,7 @@ namespace WolvenKit
                     $@"<a href={"\"" + metanode?.Element("author")?.Element("actionLink")?.Value + "\""} target={
                             "\"_blank\""
                         }>{metanode?.Element("author")?.Element("displayName")?.Value}</a>";
+            actionlink = metanode?.Element("author")?.Element("actionLink")?.Value;
             detailWB.DocumentText = $@"
 <html>
 <body>
@@ -194,7 +197,14 @@ namespace WolvenKit
                 MessageBox.Show("Failed to load the package!\n" + ex.Message);
                 this.Close();
             }
-            MessageBox.Show("Installed sucesfully!\n(Please always check your files after installing mods)","Info",MessageBoxButtons.OK,MessageBoxIcon.Information);
+
+            if (MessageBox.Show($@"Installed sucesfully!
+(Please always check your files after installing mods).
+Modding requires great deal of work please consider donating to the mod's author. (Click yes to do so)", "Info",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+            {
+                System.Diagnostics.Process.Start(actionlink);
+            }
         }
     }
 }
