@@ -101,16 +101,40 @@ namespace WolvenKit
             var authorlink = metanode?.Element("author")?.Element("displayName")?.Value;
             if (metanode?.Element("author")?.Element("actionLink")?.Value != "")
                 authorlink = $@"<a href={"\"" + metanode?.Element("author")?.Element("actionLink")?.Value + "\""} target={"\"_blank\""}>{metanode?.Element("author")?.Element("displayName")?.Value}</a>";
-            detailWB.DocumentText = $@"<html>
+            detailWB.DocumentText = $@"
+<html>
 <body>
-    <h3>Mod description</h3>
-    <p>{metanode?.Element("description")}</p>
+    {metanode?.Element("description")}
     <hr>
     <h3>Aditional information</h3>
-    <p>Created by {authorlink}<br>
-    Version {v}<br>
-    License {metanode?.Element("license")?.Value}
-    {adition.Aggregate("",(c,n) => c += "<br>" + n)}</p>
+    <table>
+        <tr>
+            <td valign=""top"">
+                &nbsp;
+            </td>
+            <td>
+                &nbsp;
+            </td>
+            <td valign=""top"">
+                <b>Learn more</b><br>
+            </td>
+        </tr>
+        <tr>
+            <td valign=""top"">
+                <b>Created by</b> {authorlink}<br>
+                <b>Version</b> {v}<br>
+                <b>License</b> {metanode?.Element("license")?.Value}
+            </td>
+            <td>
+                &nbsp;
+            </td>
+            <td valign=""top"">
+
+
+                {adition.Aggregate("",(c,n) => c += "<br>" + n)}
+            </td>
+        </tr>
+    </table>
     <hr>
 </body>
 </html>";
