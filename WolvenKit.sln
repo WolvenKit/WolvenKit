@@ -37,6 +37,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Nvidia", "Wolveki
 		{F3129E02-31AD-4327-A9EF-7C52D777C71F} = {F3129E02-31AD-4327-A9EF-7C52D777C71F}
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Audio", "Audio", "{F74F18AE-C0F0-4B91-B366-C350F5D89CA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevorbStd", "revorbstd\RevorbStd.csproj", "{C3130ECE-02D9-4BE6-9883-75351822E7DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -191,9 +195,25 @@ Global
 		{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}.Release|x64.Build.0 = Release|Any CPU
 		{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}.Release|x86.ActiveCfg = Release|Any CPU
 		{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}.Release|x86.Build.0 = Release|Any CPU
+		{C3130ECE-02D9-4BE6-9883-75351822E7DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3130ECE-02D9-4BE6-9883-75351822E7DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3130ECE-02D9-4BE6-9883-75351822E7DE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C3130ECE-02D9-4BE6-9883-75351822E7DE}.Debug|x64.Build.0 = Debug|Any CPU
+		{C3130ECE-02D9-4BE6-9883-75351822E7DE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C3130ECE-02D9-4BE6-9883-75351822E7DE}.Debug|x86.Build.0 = Debug|Any CPU
+		{C3130ECE-02D9-4BE6-9883-75351822E7DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3130ECE-02D9-4BE6-9883-75351822E7DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3130ECE-02D9-4BE6-9883-75351822E7DE}.Release|x64.ActiveCfg = Release|Any CPU
+		{C3130ECE-02D9-4BE6-9883-75351822E7DE}.Release|x64.Build.0 = Release|Any CPU
+		{C3130ECE-02D9-4BE6-9883-75351822E7DE}.Release|x86.ActiveCfg = Release|Any CPU
+		{C3130ECE-02D9-4BE6-9883-75351822E7DE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DCBBE807-CD6E-493E-8C04-DB976A1591EA} = {F74F18AE-C0F0-4B91-B366-C350F5D89CA9}
+		{C3130ECE-02D9-4BE6-9883-75351822E7DE} = {F74F18AE-C0F0-4B91-B366-C350F5D89CA9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7E26A334-EB40-465D-85F1-2AEE9D65F46A}
