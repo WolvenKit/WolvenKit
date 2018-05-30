@@ -26,6 +26,7 @@ namespace WolvenKit
         public W3Mod ActiveMod { get; set; }
 
         public const string ManagerCacheDir = "ManagerCache";
+        public string VLCLibDir = "C:\\Program Files\\VideoLAN\\VLC";
 
         public event PropertyChangedEventHandler PropertyChanged;
 
