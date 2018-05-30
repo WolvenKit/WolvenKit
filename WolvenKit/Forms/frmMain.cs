@@ -28,25 +28,11 @@ namespace WolvenKit
 {
     public partial class frmMain : Form
     {
-        private readonly string BaseTitle = "Wolven kit";
+        #region Forms
         private frmCR2WDocument _activedocument;
         public List<frmCR2WDocument> OpenDocuments = new List<frmCR2WDocument>();
-        public static Task Packer;
-
-        public W3Mod ActiveMod
-        {
-            get => MainController.Get().ActiveMod;
-            set
-            {
-                MainController.Get().ActiveMod = value;
-                UpdateTitle();
-            }
-        }
-
-        public string Version => FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
-
         public frmModExplorer ModExplorer { get; set; }
-
+        public frmStringsGui stringsGui;
         public frmOutput Output { get; set; }
 
         public frmCR2WDocument ActiveDocument
@@ -58,16 +44,26 @@ namespace WolvenKit
                 UpdateTitle();
             }
         }
-
-        public frmStringsGui stringsGui;
+        #endregion
+        private readonly string BaseTitle = "Wolven kit";
+        public static Task Packer;
+        public W3Mod ActiveMod
+        {
+            get => MainController.Get().ActiveMod;
+            set
+            {
+                MainController.Get().ActiveMod = value;
+                UpdateTitle();
+            }
+        }
+        public string Version => FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
 
         public frmMain()
         {
             InitializeComponent();
             UpdateTitle();
-            buildDateToolStripMenuItem.Text = Assembly.GetExecutingAssembly().GetLinkerTime().ToString("yyyy MMMM dd");
             MainController.Get().PropertyChanged += MainControllerUpdated;
-            MainController.Get().QueueLog("Enviroment loaded!");
+            #region Load recent files into toolstrip
             recentFilesToolStripMenuItem.DropDownItems.Clear();
             if (File.Exists("recent_files.xml"))
             {
@@ -82,6 +78,14 @@ namespace WolvenKit
             {
                 recentFilesToolStripMenuItem.Enabled = false;
             }
+            #endregion
+            #region Initialize maincontroller with progressbar
+            CircularProgressBar.CircularProgressBar cb = new CircularProgressBar.CircularProgressBar();
+            cb.Text = "Loading enviroment!";
+            cb.Show();
+            Task.Factory.StartNew(() => MainController.Get().Initialize()); //Start the async task to load our stuff
+            #endregion
+            MainController.Get().QueueLog("Enviroment loaded!");
         }
 
         #region Methods
@@ -97,6 +101,7 @@ namespace WolvenKit
 
         private void UpdateTitle()
         {
+            buildDateToolStripMenuItem.Text = Assembly.GetExecutingAssembly().GetLinkerTime().ToString("yyyy MMMM dd");
             Text = BaseTitle + " v" + Version;
             if (ActiveMod != null)
             {
@@ -961,12 +966,17 @@ namespace WolvenKit
             {
                 // ignored
             }
-            MainController.Get().ReloadStringManager();
         }
 
         private void addFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AddModFile(false);
+        }
+
+        private void donateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Thank you! Every last bit helps and everything donated is distributed between the core developers evenly.","Thank you",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            System.Diagnostics.Process.Start("https://www.paypal.me/traderain");
         }
 
         private void Assetbrowser_FileAdd(object sender, Tuple<List<IWitcherArchive>, List<WitcherListViewItem>,bool> Details)
@@ -1939,11 +1949,5 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             #endregion
         }
         #endregion // Mod Pack
-
-        private void donateToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Thank you! Every last bit helps and everything donated is distributed between the core developers evenly.","Thank you",MessageBoxButtons.OK,MessageBoxIcon.Information);
-            System.Diagnostics.Process.Start("https://www.paypal.me/traderain");
-        }
     }
 }
