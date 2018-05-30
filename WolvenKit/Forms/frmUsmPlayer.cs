@@ -34,7 +34,7 @@ namespace WolvenKit
 
         private void UsmPlayer_CloseOnStart(object sender, EventArgs e)
         {
-            MessageBox.Show("You need to have VLC installed to use this feature. Please set the proper path in MainController\nCurrent path: " + MainController.Get().VLCLibDir);
+            MessageBox.Show("You need to have VLC installed to use this feature. Please set the proper path in MainController\nCurrent path: " + MainController.Get().VLCLibDir,"Error",MessageBoxButtons.OK,MessageBoxIcon.Warning);
             this.Close();
         }
 
@@ -70,9 +70,8 @@ namespace WolvenKit
         private void VideoConverter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             statusLabel.Hide();
-            string tempfile = Path.GetTempFileName();
-            File.WriteAllBytes(Path.GetTempPath() + "\\" + Demuxedfiles.First(x => x.Key.EndsWith("m2v")).Key, Demuxedfiles.First(x => x.Key.EndsWith("m2v")).Value);
-            usmPlayer.Play(new FileInfo(Path.GetTempPath() + "\\" + Demuxedfiles.First(x => x.Key.EndsWith("m2v")).Key));
+            var file = new MemoryStream(Demuxedfiles.First(x => x.Key.EndsWith("m2v")).Value);
+            usmPlayer.Play(file);
         }
     }
 }
