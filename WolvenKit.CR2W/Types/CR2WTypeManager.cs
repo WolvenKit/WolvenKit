@@ -107,6 +107,11 @@ namespace WolvenKit.CR2W.Types
 
             var vectors = new[]
             {
+                "SCutsceneActorDef", 
+                "CExtAnimCutsceneResetClothAndDangleEvent", 
+                "CExtAnimCutsceneActorEffect", 
+                "CExtAnimItemEvent", 
+                "CStorySceneEventEnterActor",
                 "SMeshChunkPacked",
                 "SFurMaterialSet",
                 "CStorySceneRandomizer",

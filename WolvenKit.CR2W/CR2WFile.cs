@@ -269,7 +269,10 @@ namespace WolvenKit.CR2W
         {
             var nameId = file.ReadUInt16();
             if (nameId == 0)
+            {
+                //TODO: Figure out a way to skip null vars
                 return null;
+            }
 
             var typepos = file.BaseStream.Position;
             var typeId = file.ReadUInt16();
