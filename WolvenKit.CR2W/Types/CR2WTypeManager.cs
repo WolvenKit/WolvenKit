@@ -91,6 +91,7 @@ namespace WolvenKit.CR2W.Types
             Register("CColorShift",new CColorShift(null));
 
             Register("CEntity", new CEntity(null));
+            Register("CItemEntity", new CItemEntity(null)); //RFtest
             Register("CMeshComponent", new CMeshComponent(null));
 
             Register("SMeshTypeResourceLODLevel", new CFloat(null));
