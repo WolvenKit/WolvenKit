@@ -21,8 +21,7 @@ namespace WolvenKit.Forms
         private enum Status
         {
             remove = 0,
-            add = 1,
-            edit = 2
+            edit = 1
         };
 
         private class SBulkEditVariable
@@ -70,6 +69,8 @@ namespace WolvenKit.Forms
             extensions.Add("(none)");
             extensions.Sort();
             ExtensionToolStripComboBox.Items.AddRange(extensions.ToArray());
+
+            FCDToolStripComboBox.SelectedItem = FCDToolStripComboBox.Items[0];
         }
 
 
@@ -78,6 +79,16 @@ namespace WolvenKit.Forms
         {
 
         }
+
+        //Button Run
+        private void btnRun_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to bulk edit the selected file(s)? \n\n NOTE: This action is irreversible and may lead to file corruption.", "Confirmation", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            {
+                BulkEditVariables();
+            }
+        }
+        
 
 
 
@@ -202,7 +213,7 @@ namespace WolvenKit.Forms
         {
             cmbBoxVarType.Enabled = true;
             txtBoxVarName.Enabled = true;
-            txtBoxVarValue.Enabled = true;
+            //txtBoxVarValue.Enabled = true; //FIXME
 
             DisplayValuesForNode(e.Node);
             
@@ -211,9 +222,6 @@ namespace WolvenKit.Forms
         {
             SBulkEditVariable var = GetVarFromNode(node);
 
-            //MainController.Get().Window.AddOutput("var.key: " + var.key + " / var.type: " + var.type + "\n"); //dbg
-            //MainController.Get().Window.AddOutput("node.name: " + node.Name + "\n"); //dbg
-
             txtBoxVarName.Text = var.name;
             cmbBoxVarType.Text = var.type;
             txtBoxVarValue.Text = var.value.ToString();
@@ -221,9 +229,6 @@ namespace WolvenKit.Forms
             {
                 case Status.remove:
                     rdbtnRemove.Checked = true;
-                    break;
-                case Status.add:
-                    rdbtnAdd.Checked = true;
                     break;
                 case Status.edit:
                     rdbtnEdit.Checked = true;
@@ -246,14 +251,9 @@ namespace WolvenKit.Forms
             var.key = GenerateKey(currentNode.Parent, var.name);
             var.type = cmbBoxVarType.Text;
             var.value = float.Parse(txtBoxVarValue.Text);
-            //FIXME
-            if (rdbtnRemove.Checked)
+           if (rdbtnRemove.Checked)
             {
                 var.status = Status.remove;
-            }
-            if (rdbtnAdd.Checked)
-            {
-                var.status = Status.add;
             }
             if (rdbtnEdit.Checked)
             {
@@ -319,8 +319,6 @@ namespace WolvenKit.Forms
                 AllVariables.RemoveAll(x => x.key.Equals(node.Name)); //removes all child vars
             }
             AllVariables.RemoveAll(x => x.key.Equals(currentNode.Name)); //removes current var
-
-
         }
         
 
@@ -390,20 +388,6 @@ namespace WolvenKit.Forms
         {
 
             FilterToolStripTextBox.Text = "";
-
-            //dbg
-            /*checkedListBoxFiles.BeginUpdate();
-            checkedListBoxFiles.Items.Clear();
-
-            foreach (SBulkEditVariable item in AllVariables)
-            {
-                checkedListBoxFiles.Items.Add(item.key);
-            }
-           
-            checkedListBoxFiles.EndUpdate();
-
-            
-            MainController.Get().Window.AddOutput(VariableListTreeView.SelectedNode.Level + "\n");*/
         }
         
 
@@ -443,25 +427,20 @@ namespace WolvenKit.Forms
 
            activeFiles =  filterList1.Intersect(filterList2).ToList();
         }
-
-
-
-
         #endregion
 
         
         public void BulkEditVariables()
         {
-            //Get all checked files in a list
+            //Get all checked files
             List<string> filesToEdit = new List<string>();
             filesToEdit.AddRange(checkedListBoxFiles.CheckedItems.OfType<string>().ToList());
 
-
+            //open cr2w file
             for (int i = 0; i < filesToEdit.Count; i++)
             {
                 //open the file
                 var fullpath = Path.Combine(MainController.Get().ActiveMod.FileDirectory, filesToEdit[i]);
-                
                 CR2WFile file;
                 using (var fs = new FileStream(fullpath, FileMode.Open, FileAccess.Read))
                 {
@@ -477,17 +456,25 @@ namespace WolvenKit.Forms
                     fs.Close();
                 }
 
-                //remove variables
+
+
+
+
+                //edit variables
                 List<TreeNode> variablesToEdit = new List<TreeNode>();
+                //get all variables to edit
                 foreach (TreeNode chunk in VariableListTreeView.Nodes)
                 {
-                    TreeNode lastNode = chunk.LastNode; //FIXME multiple nodes in one level
+                    TreeNode lastNode = chunk.LastNode;
                     if (lastNode != null)
-                        variablesToEdit.Add(lastNode);
-                    //FIXME delete chunks?
-
+                    {
+                        foreach (TreeNode endnode in lastNode.Parent.Nodes)
+                        {
+                            variablesToEdit.Add(endnode); //FIXME optimize?
+                        }
+                    }
                 }
-
+                
                 for (int j = 0; j < variablesToEdit.Count; j++)
                 {
                     //get list of parent variables for node in reverse order 
@@ -508,8 +495,18 @@ namespace WolvenKit.Forms
                         //just chunk and variable
                         if (variables.Count == 2) 
                         {
-                            chunk.data.RemoveVariable(varToEdit);
-                            MainController.Get().Window.AddOutput("Removed one variable" + "\n");
+                            switch (variables.Last().status)
+                            {
+                                case Status.remove:
+                                    chunk.data.RemoveVariable(varToEdit);
+                                    MainController.Get().Window.AddOutput("Removed one variable" + "\n");
+                                    break;
+                                case Status.edit:
+                                    //FIXME
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                         else
                         {
@@ -520,13 +517,26 @@ namespace WolvenKit.Forms
                             }
                             if (varToEdit == null)
                                 return;
-                            //remove last var from here
-                            varToEdit.RemoveVariable(varToEdit.GetEditableVariables().Find(x => (x.Name.Equals(variables[variables.Count].name) && x.Type.Equals(variables[variables.Count].type))));
 
-                            MainController.Get().Window.AddOutput("Removed one variable" + "\n");
+                            switch (variables.Last().status)
+                            {
+                                case Status.remove:
+                                    varToEdit.RemoveVariable(varToEdit.GetEditableVariables().Find(x => (x.Name.Equals(variables[variables.Count].name) && x.Type.Equals(variables[variables.Count].type))));
+                                    MainController.Get().Window.AddOutput("Removed one variable" + "\n");
+                                    break;
+                                case Status.edit:
+                                    //FIXME
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     }
                 }
+
+
+
+
 
                 //save
                 using (var mem = new MemoryStream())
@@ -570,14 +580,6 @@ namespace WolvenKit.Forms
             return results;
         }
 
-        private void btnRun_Click(object sender, EventArgs e)
-        {
-            BulkEditVariables();
-        }
-
-
-
-
-        //MainController.Get().Window.AddOutput("select\n");
+       
     }
 }

@@ -34,6 +34,7 @@
             this.treeViewContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addTopLevelNodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addChildNodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DeleteNodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.VariablesGroupBox = new System.Windows.Forms.GroupBox();
             this.VariableDetailsGroupBox = new System.Windows.Forms.GroupBox();
             this.btnVarDetailsReset = new System.Windows.Forms.Button();
@@ -60,7 +61,9 @@
             this.ExtensionToolStripLabel = new System.Windows.Forms.ToolStripLabel();
             this.ExtensionToolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.checkedListBoxFiles = new System.Windows.Forms.CheckedListBox();
-            this.DeleteNodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnOK = new System.Windows.Forms.Button();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.FCDToolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.treeViewContextMenuStrip.SuspendLayout();
             this.VariablesGroupBox.SuspendLayout();
             this.VariableDetailsGroupBox.SuspendLayout();
@@ -103,6 +106,13 @@
             this.addChildNodeToolStripMenuItem.Text = "Add Child Node";
             this.addChildNodeToolStripMenuItem.Click += new System.EventHandler(this.addChildNodeToolStripMenuItem_Click);
             // 
+            // DeleteNodeToolStripMenuItem
+            // 
+            this.DeleteNodeToolStripMenuItem.Name = "DeleteNodeToolStripMenuItem";
+            this.DeleteNodeToolStripMenuItem.Size = new System.Drawing.Size(212, 30);
+            this.DeleteNodeToolStripMenuItem.Text = "Delete Node";
+            this.DeleteNodeToolStripMenuItem.Click += new System.EventHandler(this.DeleteNodeToolStripMenuItem_Click);
+            // 
             // VariablesGroupBox
             // 
             this.VariablesGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -132,14 +142,14 @@
             this.VariableDetailsGroupBox.Controls.Add(this.lblVarName);
             this.VariableDetailsGroupBox.Location = new System.Drawing.Point(488, 22);
             this.VariableDetailsGroupBox.Name = "VariableDetailsGroupBox";
-            this.VariableDetailsGroupBox.Size = new System.Drawing.Size(502, 369);
+            this.VariableDetailsGroupBox.Size = new System.Drawing.Size(502, 208);
             this.VariableDetailsGroupBox.TabIndex = 1;
             this.VariableDetailsGroupBox.TabStop = false;
             this.VariableDetailsGroupBox.Text = "Variable Details";
             // 
             // btnVarDetailsReset
             // 
-            this.btnVarDetailsReset.Location = new System.Drawing.Point(101, 326);
+            this.btnVarDetailsReset.Location = new System.Drawing.Point(90, 159);
             this.btnVarDetailsReset.Name = "btnVarDetailsReset";
             this.btnVarDetailsReset.Size = new System.Drawing.Size(75, 37);
             this.btnVarDetailsReset.TabIndex = 10;
@@ -150,7 +160,7 @@
             // btnVarDetailsApply
             // 
             this.btnVarDetailsApply.AutoSize = true;
-            this.btnVarDetailsApply.Location = new System.Drawing.Point(4, 326);
+            this.btnVarDetailsApply.Location = new System.Drawing.Point(9, 159);
             this.btnVarDetailsApply.Name = "btnVarDetailsApply";
             this.btnVarDetailsApply.Size = new System.Drawing.Size(75, 37);
             this.btnVarDetailsApply.TabIndex = 9;
@@ -161,7 +171,8 @@
             // rdbtnEdit
             // 
             this.rdbtnEdit.AutoSize = true;
-            this.rdbtnEdit.Location = new System.Drawing.Point(251, 218);
+            this.rdbtnEdit.Enabled = false;
+            this.rdbtnEdit.Location = new System.Drawing.Point(254, 129);
             this.rdbtnEdit.Name = "rdbtnEdit";
             this.rdbtnEdit.Size = new System.Drawing.Size(62, 24);
             this.rdbtnEdit.TabIndex = 8;
@@ -171,7 +182,8 @@
             // rdbtnAdd
             // 
             this.rdbtnAdd.AutoSize = true;
-            this.rdbtnAdd.Location = new System.Drawing.Point(182, 218);
+            this.rdbtnAdd.Enabled = false;
+            this.rdbtnAdd.Location = new System.Drawing.Point(185, 129);
             this.rdbtnAdd.Name = "rdbtnAdd";
             this.rdbtnAdd.Size = new System.Drawing.Size(63, 24);
             this.rdbtnAdd.TabIndex = 7;
@@ -182,7 +194,7 @@
             // 
             this.rdbtnRemove.AutoSize = true;
             this.rdbtnRemove.Checked = true;
-            this.rdbtnRemove.Location = new System.Drawing.Point(83, 218);
+            this.rdbtnRemove.Location = new System.Drawing.Point(86, 129);
             this.rdbtnRemove.Name = "rdbtnRemove";
             this.rdbtnRemove.Size = new System.Drawing.Size(93, 24);
             this.rdbtnRemove.TabIndex = 6;
@@ -193,21 +205,22 @@
             // cmbBoxVarType
             // 
             this.cmbBoxVarType.FormattingEnabled = true;
-            this.cmbBoxVarType.Location = new System.Drawing.Point(83, 114);
+            this.cmbBoxVarType.Location = new System.Drawing.Point(86, 25);
             this.cmbBoxVarType.Name = "cmbBoxVarType";
             this.cmbBoxVarType.Size = new System.Drawing.Size(410, 28);
             this.cmbBoxVarType.TabIndex = 5;
             // 
             // txtBoxVarValue
             // 
-            this.txtBoxVarValue.Location = new System.Drawing.Point(83, 186);
+            this.txtBoxVarValue.Enabled = false;
+            this.txtBoxVarValue.Location = new System.Drawing.Point(86, 97);
             this.txtBoxVarValue.Name = "txtBoxVarValue";
             this.txtBoxVarValue.Size = new System.Drawing.Size(410, 26);
             this.txtBoxVarValue.TabIndex = 4;
             // 
             // txtBoxVarName
             // 
-            this.txtBoxVarName.Location = new System.Drawing.Point(83, 150);
+            this.txtBoxVarName.Location = new System.Drawing.Point(86, 61);
             this.txtBoxVarName.Name = "txtBoxVarName";
             this.txtBoxVarName.Size = new System.Drawing.Size(410, 26);
             this.txtBoxVarName.TabIndex = 3;
@@ -215,7 +228,7 @@
             // lblVarType
             // 
             this.lblVarType.AutoSize = true;
-            this.lblVarType.Location = new System.Drawing.Point(17, 117);
+            this.lblVarType.Location = new System.Drawing.Point(20, 28);
             this.lblVarType.Name = "lblVarType";
             this.lblVarType.Size = new System.Drawing.Size(43, 20);
             this.lblVarType.TabIndex = 2;
@@ -224,7 +237,7 @@
             // lblVarValue
             // 
             this.lblVarValue.AutoSize = true;
-            this.lblVarValue.Location = new System.Drawing.Point(17, 189);
+            this.lblVarValue.Location = new System.Drawing.Point(20, 100);
             this.lblVarValue.Name = "lblVarValue";
             this.lblVarValue.Size = new System.Drawing.Size(50, 20);
             this.lblVarValue.TabIndex = 1;
@@ -233,7 +246,7 @@
             // lblVarName
             // 
             this.lblVarName.AutoSize = true;
-            this.lblVarName.Location = new System.Drawing.Point(17, 153);
+            this.lblVarName.Location = new System.Drawing.Point(20, 64);
             this.lblVarName.Name = "lblVarName";
             this.lblVarName.Size = new System.Drawing.Size(51, 20);
             this.lblVarName.TabIndex = 0;
@@ -254,11 +267,11 @@
             // 
             this.btnRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRun.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnRun.Location = new System.Drawing.Point(862, 706);
+            this.btnRun.Location = new System.Drawing.Point(737, 706);
             this.btnRun.Name = "btnRun";
             this.btnRun.Size = new System.Drawing.Size(119, 45);
             this.btnRun.TabIndex = 4;
-            this.btnRun.Text = "Go";
+            this.btnRun.Text = "Apply";
             this.btnRun.UseVisualStyleBackColor = true;
             this.btnRun.Click += new System.EventHandler(this.btnRun_Click);
             // 
@@ -276,7 +289,9 @@
             this.toolStripButton1,
             this.toolStripSeparator2,
             this.ExtensionToolStripLabel,
-            this.ExtensionToolStripComboBox});
+            this.ExtensionToolStripComboBox,
+            this.toolStripSeparator3,
+            this.FCDToolStripComboBox});
             this.FilesToolStrip.Location = new System.Drawing.Point(9, 397);
             this.FilesToolStrip.Name = "FilesToolStrip";
             this.FilesToolStrip.Size = new System.Drawing.Size(981, 37);
@@ -358,19 +373,37 @@
             this.checkedListBoxFiles.Size = new System.Drawing.Size(987, 256);
             this.checkedListBoxFiles.TabIndex = 6;
             // 
-            // DeleteNodeToolStripMenuItem
+            // btnOK
             // 
-            this.DeleteNodeToolStripMenuItem.Name = "DeleteNodeToolStripMenuItem";
-            this.DeleteNodeToolStripMenuItem.Size = new System.Drawing.Size(212, 30);
-            this.DeleteNodeToolStripMenuItem.Text = "Delete Node";
-            this.DeleteNodeToolStripMenuItem.Click += new System.EventHandler(this.DeleteNodeToolStripMenuItem_Click);
+            this.btnOK.Location = new System.Drawing.Point(862, 707);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(119, 45);
+            this.btnOK.TabIndex = 7;
+            this.btnOK.Text = "OK";
+            this.btnOK.UseVisualStyleBackColor = true;
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 37);
+            // 
+            // FCDToolStripComboBox
+            // 
+            this.FCDToolStripComboBox.Items.AddRange(new object[] {
+            "Main File",
+            "FlatCompiledData",
+            "Both"});
+            this.FCDToolStripComboBox.Name = "FCDToolStripComboBox";
+            this.FCDToolStripComboBox.Size = new System.Drawing.Size(121, 37);
             // 
             // frmBulkEditVariables
             // 
+            this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(993, 763);
+            this.Controls.Add(this.btnOK);
             this.Controls.Add(this.checkedListBoxFiles);
             this.Controls.Add(this.FilesToolStrip);
             this.Controls.Add(this.btnRun);
@@ -423,5 +456,8 @@
         private System.Windows.Forms.ToolStripButton SelectAllToolStripButton;
         private System.Windows.Forms.ToolStripButton UnselectAllToolStripButton;
         private System.Windows.Forms.ToolStripMenuItem DeleteNodeToolStripMenuItem;
+        private System.Windows.Forms.Button btnOK;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripComboBox FCDToolStripComboBox;
     }
 }
