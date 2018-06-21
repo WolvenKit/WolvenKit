@@ -854,8 +854,13 @@ namespace WolvenKit
             var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
             try
             {
+                var importwdir = Path.Combine(Path.GetDirectoryName(MainController.Get().Configuration.WccLite), "WolvenKitWorkingDir");
+                if(Directory.Exists(importwdir))
+                    Directory.Delete(importwdir,true);
+                Directory.CreateDirectory(importwdir);
+                File.Copy(infile,Path.Combine(importwdir,Path.GetFileName(infile)));
                 MainController.Get().ProjectStatus = "Importing file";
-                proc.Arguments = $"import -depot=local -file={infile} -out={outfile}";
+                proc.Arguments = $"import -depot=\"{importwdir}\" -file={Path.Combine(importwdir,Path.GetFileName(infile))} -out={outfile}";
                 proc.UseShellExecute = false;
                 proc.RedirectStandardOutput = true;
                 proc.WindowStyle = ProcessWindowStyle.Hidden;
@@ -883,10 +888,6 @@ namespace WolvenKit
                         }
                     }
                 }
-            }
-            catch (DirectoryNotFoundException)
-            {
-                AddOutput("Failed to import. \n", frmOutput.Logtype.Important);
             }
             catch (Exception ex)
             {
@@ -922,6 +923,28 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                     using (var sf = new SaveFileDialog())
                     {
                         sf.Filter = "Witcher 3 mesh file | *.w2mesh";
+                        sf.Title = "Please specify a location to save the imported file";
+                        sf.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
+                        if (sf.ShowDialog() == DialogResult.OK)
+                        {
+                            ImportFile(of.FileName, sf.FileName);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void nvidiaClothFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var of = new OpenFileDialog())
+            {
+                of.Title = "Please select your cloth file for importing";
+                of.Filter = "APB files | *.apb";
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    using (var sf = new SaveFileDialog())
+                    {
+                        sf.Filter = "Witcher 3 cloth file | *.redcloth";
                         sf.Title = "Please specify a location to save the imported file";
                         sf.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
                         if (sf.ShowDialog() == DialogResult.OK)
@@ -1454,6 +1477,8 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
                 var DlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
 
+                //------------------------PRE COOKING-------------------------------------//
+
                 //Handle strings.
                 if (packsettings.Strings)
                 {
@@ -1473,10 +1498,22 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     await PackBundles();
                 }
 
+                //------------------------- COOKING -------------------------------------//
+
+                //Cook the mod
+                await CookMod();
+
+                //------------------------POST COOKING------------------------------------//
+
+                //Generate collision cache
+                if (packsettings.GenCollCache)
+                {
+                    await GenerateCollisionCache();
+                }
+
                 //Handle texture caching
                 if (packsettings.GenTexCache)
                 {
-                    await CookMod();
                     await PackTextures();
                 }
 
@@ -1499,7 +1536,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                             .ToList(), Path.Combine(DlcpackDir, @"soundspc.cache"));
                 }
 
-                //Handle scripts
+                //Handle mod scripts
                 if (Directory.Exists((ActiveMod.ModDirectory + "\\scripts")) && Directory.GetFiles((ActiveMod.ModDirectory + "\\scripts")).Any())
                 {
                     if (!Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")))
@@ -1512,6 +1549,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     });
                 }
 
+                //Handle the DLC scripts
                 if (Directory.Exists((ActiveMod.DlcDirectory + "\\scripts")) && Directory.GetFiles((ActiveMod.DlcDirectory + "\\scripts")).Any())
                 {
                     if (!Directory.Exists(Path.Combine(ActiveMod.DlcDirectory, "scripts")))
@@ -1524,6 +1562,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     });
                 }
 
+                //Copy the generated w3strings
                 if (packsettings.Strings)
                 {
                     var files = Directory.GetFiles((ActiveMod.ProjectDirectory + "\\strings")).Where(s => Path.GetExtension(s) == ".w3strings").ToList();
@@ -1531,8 +1570,12 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     files.ForEach(x => File.Copy(x, Path.Combine(DlcpackDir + Path.GetFileName(x))));
                     files.ForEach(x => File.Copy(x, Path.Combine(modpackDir, Path.GetFileName(x))));
                 }
+
+                //Install the mod
                 if(install)
                     InstallMod();
+
+                //Report that we are done
                 MainController.Get().ProjectStatus = install ? "Mod Packed&Installed" : "Mod packed!"; 
                 btPack.Enabled = true;
             }           
