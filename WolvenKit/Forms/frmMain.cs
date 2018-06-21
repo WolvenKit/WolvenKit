@@ -800,53 +800,6 @@ namespace WolvenKit
                             MessageBox.Show(".w2mesh file not found in model folder!" + "\n" + "Have you extracted it properly?");
                         break;
                     }*/
-                case ".w2mesh":
-                    {
-                        var rigDoc = new frmCR2WDocument();
-                        // HACK: Hacky (shit) solution for automatic path finding
-                        var basePath = doc.File.FileName.Split(new string[] { "characters" }, StringSplitOptions.None)[0];
-                        var modelName = Path.GetFileName(doc.File.FileName).Split('_', '.')[3];
-                        var rigPath = $@"{basePath}characters\base_entities\{modelName}_base\{modelName}_base.w2rig";
-                        if (File.Exists(rigPath))
-                        {
-                            rigDoc.LoadFile(rigPath);
-                        }
-                        else
-                        {
-                            if (MessageBox.Show("Could not find .w2rig for model!\nWould you like to search for the rig manually?", "Rig not found!", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                            {
-                                var ofd = new OpenFileDialog();
-                                if (ofd.ShowDialog() == DialogResult.OK)
-                                    rigDoc.LoadFile(ofd.FileName);
-                            }
-                         }
-
-                        var animDoc = new frmCR2WDocument();
-                        var animPath = $@"{basePath}animations\animals\chicken\chicken_swarm_animation.w2anims";
-                        if (File.Exists(animPath))
-                        {
-                            animDoc.LoadFile(animPath);
-                        }
-                        else
-                        {
-                            if (MessageBox.Show("Could not find .w2anims for model!\nWould you like to search for the animation manually (highly experimental)?", "Animation not found!", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                            {
-                                var ofd = new OpenFileDialog();
-                                if (ofd.ShowDialog() == DialogResult.OK)
-                                    rigDoc.LoadFile(ofd.FileName);
-                            }
-                        }
-
-                        doc.RenderViewer = new Render.frmRender
-                        {
-                            RigFile = rigDoc.File,
-                            AnimFile = animDoc.File,
-                            File = doc.File,
-                            DockAreas = DockAreas.Document
-                        };
-                        doc.RenderViewer.Show(doc.FormPanel, DockState.Document);
-                        break;
-                    }
                 default:
                     {
                         break;
@@ -894,6 +847,56 @@ namespace WolvenKit
             AddOutput(output.ToString());
             return doc;
         }
+
+        async Task ImportFile(string infile, string outfile)
+        {
+            var config = MainController.Get().Configuration;
+            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
+            try
+            {
+                MainController.Get().ProjectStatus = "Importing file";
+                proc.Arguments = $"import -depot=local -file={infile} -out={outfile}";
+                proc.UseShellExecute = false;
+                proc.RedirectStandardOutput = true;
+                proc.WindowStyle = ProcessWindowStyle.Hidden;
+                proc.CreateNoWindow = true;
+                if (!Directory.Exists(Path.GetDirectoryName(outfile)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(outfile));
+                }
+                AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
+
+                using (var process = Process.Start(proc))
+                {
+                    using (var reader = process.StandardOutput)
+                    {
+                        while (true)
+                        {
+                            var result = await reader.ReadLineAsync();
+
+                            AddOutput(result + "\n", frmOutput.Logtype.Wcc);
+
+                            Application.DoEvents();
+
+                            if (reader.EndOfStream)
+                                break;
+                        }
+                    }
+                }
+            }
+            catch (DirectoryNotFoundException)
+            {
+                AddOutput("Failed to import. \n", frmOutput.Logtype.Important);
+            }
+            catch (Exception ex)
+            {
+                AddOutput(ex.ToString() + "\n", frmOutput.Logtype.Error);
+            }
+
+            MainController.Get().ProjectStatus = "File imported succesfully!";
+
+        }
+
         #endregion //Methods
 
         #region  Control events
@@ -902,6 +905,31 @@ namespace WolvenKit
             if (sender is frmCR2WDocument)
             {
                 doc_Activated(sender, e);
+            }
+        }
+
+        private void fbxWithCollisionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(@"For this to work make sure your model has either of both of these layers:
+_tri - trimesh
+_col - for simple stuff like boxes and spheres","Information about importing models",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            using (var of = new OpenFileDialog())
+            {
+                of.Title = "Please select your fbx file with _col or _tri layers";
+                of.Filter = "FBX files | *.fbx";
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    using (var sf = new SaveFileDialog())
+                    {
+                        sf.Filter = "Witcher 3 mesh file | *.w2mesh";
+                        sf.Title = "Please specify a location to save the imported file";
+                        sf.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
+                        if (sf.ShowDialog() == DialogResult.OK)
+                        {
+                            ImportFile(of.FileName, sf.FileName);
+                        }
+                    }
+                }
             }
         }
 
@@ -1852,6 +1880,100 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             {
                 AddOutput(ex.ToString() + "\n", frmOutput.Logtype.Error);
             }
+            #endregion
+        }
+
+        private async Task GenerateCollisionCache()
+        {
+                        var config = MainController.Get().Configuration;
+            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
+            var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
+            var DlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
+            var cookedModDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\Mods\mod" + ActiveMod.Name + @"\content\");
+            var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\dlc" + ActiveMod.Name + @"\content\");
+            #region Mod texture caching
+            try
+            {
+                if (Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, new TextureCache().TypeName), "*", SearchOption.AllDirectories).Any())
+                {
+                    MainController.Get().ProjectStatus = "Generating collision cache";
+                    proc.Arguments = $"buildcache physics -basedir={Path.Combine(ActiveMod.ModDirectory, MainController.Get().TextureManager.TypeName)} -platform=pc -db={cookedModDir}\\cook.db  -out={modpackDir}\\collision.cache";
+                    proc.UseShellExecute = false;
+                    proc.RedirectStandardOutput = true;
+                    proc.WindowStyle = ProcessWindowStyle.Hidden;
+                    proc.CreateNoWindow = true;
+
+                    AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
+
+                    using (var process = Process.Start(proc))
+                    {
+                        using (var reader = process.StandardOutput)
+                        {
+                            while (true)
+                            {
+                                var result = await reader.ReadLineAsync();
+
+                                AddOutput(result + "\n", frmOutput.Logtype.Wcc);
+
+                                Application.DoEvents();
+
+                                if (reader.EndOfStream)
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (DirectoryNotFoundException)
+            {
+                AddOutput("Collision cache was not generated because mod was not cooked. \n", frmOutput.Logtype.Important);
+            }
+            catch (Exception ex)
+            {
+                AddOutput(ex.ToString() + "\n", frmOutput.Logtype.Error);
+            }
+            #endregion
+            #region DLC texture caching
+            try
+            {
+                if (Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, new TextureCache().TypeName), "*", SearchOption.AllDirectories).Any())
+                {
+                    MainController.Get().ProjectStatus = "Generating DLC collision cache";
+                    proc.Arguments = $"buildcache physics -basedir={Path.Combine(ActiveMod.DlcDirectory, MainController.Get().TextureManager.TypeName)} -platform=pc -db={cookedDLCDir}\\cook.db  -out={DlcpackDir}\\collision.cache";
+                    proc.UseShellExecute = false;
+                    proc.RedirectStandardOutput = true;
+                    proc.WindowStyle = ProcessWindowStyle.Hidden;
+                    proc.CreateNoWindow = true;
+
+                    AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
+
+                    using (var process = Process.Start(proc))
+                    {
+                        using (var reader = process.StandardOutput)
+                        {
+                            while (true)
+                            {
+                                var result = await reader.ReadLineAsync();
+
+                                AddOutput(result + "\n", frmOutput.Logtype.Wcc);
+
+                                Application.DoEvents();
+
+                                if (reader.EndOfStream)
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (DirectoryNotFoundException)
+            {
+                AddOutput("DLC wasn't cooked. Couldn't generate collision cache. \n", frmOutput.Logtype.Important);
+            }
+            catch (Exception ex)
+            {
+                AddOutput(ex.ToString() + "\n", frmOutput.Logtype.Error);
+            }            
             #endregion
         }
 

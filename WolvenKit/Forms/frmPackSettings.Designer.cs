@@ -35,7 +35,7 @@
             this.texturecachecCHB = new System.Windows.Forms.CheckBox();
             this.checkBox5 = new System.Windows.Forms.CheckBox();
             this.checkBox6 = new System.Windows.Forms.CheckBox();
-            this.checkBox7 = new System.Windows.Forms.CheckBox();
+            this.collisionCacheCHB = new System.Windows.Forms.CheckBox();
             this.stringsCHB = new System.Windows.Forms.CheckBox();
             this.bundlesCHB = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -115,17 +115,16 @@
             this.checkBox6.Text = "Generate deprecation cache";
             this.checkBox6.UseVisualStyleBackColor = true;
             // 
-            // checkBox7
+            // collisionCacheCHB
             // 
-            this.checkBox7.AutoSize = true;
-            this.checkBox7.Enabled = false;
-            this.checkBox7.Location = new System.Drawing.Point(9, 163);
-            this.checkBox7.Margin = new System.Windows.Forms.Padding(2);
-            this.checkBox7.Name = "checkBox7";
-            this.checkBox7.Size = new System.Drawing.Size(143, 17);
-            this.checkBox7.TabIndex = 6;
-            this.checkBox7.Text = "Generate collision cache";
-            this.checkBox7.UseVisualStyleBackColor = true;
+            this.collisionCacheCHB.AutoSize = true;
+            this.collisionCacheCHB.Location = new System.Drawing.Point(9, 163);
+            this.collisionCacheCHB.Margin = new System.Windows.Forms.Padding(2);
+            this.collisionCacheCHB.Name = "collisionCacheCHB";
+            this.collisionCacheCHB.Size = new System.Drawing.Size(143, 17);
+            this.collisionCacheCHB.TabIndex = 6;
+            this.collisionCacheCHB.Text = "Generate collision cache";
+            this.collisionCacheCHB.UseVisualStyleBackColor = true;
             // 
             // stringsCHB
             // 
@@ -194,7 +193,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.bundlesCHB);
             this.Controls.Add(this.stringsCHB);
-            this.Controls.Add(this.checkBox7);
+            this.Controls.Add(this.collisionCacheCHB);
             this.Controls.Add(this.checkBox6);
             this.Controls.Add(this.checkBox5);
             this.Controls.Add(this.texturecachecCHB);
@@ -218,7 +217,7 @@
         private System.Windows.Forms.CheckBox texturecachecCHB;
         private System.Windows.Forms.CheckBox checkBox5;
         private System.Windows.Forms.CheckBox checkBox6;
-        private System.Windows.Forms.CheckBox checkBox7;
+        private System.Windows.Forms.CheckBox collisionCacheCHB;
         private System.Windows.Forms.CheckBox stringsCHB;
         private System.Windows.Forms.CheckBox bundlesCHB;
         private System.Windows.Forms.Button button1;

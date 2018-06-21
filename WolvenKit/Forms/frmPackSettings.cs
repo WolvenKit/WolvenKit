@@ -10,6 +10,7 @@ namespace WolvenKit
         public bool PackBundles => bundlesCHB.Checked;
         public bool GenMetadata => metadatastoreCHB.Checked;
         public bool GenTexCache => texturecachecCHB.Checked;
+        public bool GenCollCache => collisionCacheCHB.Checked;
         public bool Scripts => scriptsCHB.Checked;
         public bool Sound => soundCHB.Checked;
         public bool Strings => stringsCHB.Checked;
