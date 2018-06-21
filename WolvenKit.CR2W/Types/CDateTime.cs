@@ -17,26 +17,30 @@ namespace WolvenKit.CR2W.Types
         public override void Read(BinaryReader file, uint size)
         {
             var date = file.ReadUInt32();
-            var y = date >> 20;
-            var m = date >> 15 & 0x1F;
-            var d = date >> 10 & 0x1F;
+            var year = date >> 20;
+            var month = date >> 15 & 0x1F;
+            var day = date >> 10 & 0x1F;
 
             var time = file.ReadUInt32();
-            var h = time >> 22;
-            var n = time >> 16 & 0x3F;
-            var s = time >> 10 & 0x3F;
-            Date = new DateTime((int)y-1900,(int)m,(int)d+1,(int)h,(int)n,(int)s);
+            var hour = time >> 22;
+            var minute = time >> 16 & 0x3F;
+            var second = time >> 10 & 0x3F;
+            var millisecond = time & 0b11_11111111;
+            Date = new DateTime(
+                (int)year-1900,(int)month,(int)day+1,
+                (int)hour,(int)minute,(int)second,(int)millisecond);
         }
 
         public override void Write(BinaryWriter file)
         {
             file.Write(((((UInt32)(Date.Year+1900)) & 0b1111_1111_1111) << 20
-                       | (((UInt32)(Date.Month) & 0b1_1111) << 15)
-                       | ((((UInt32)(Date.Day - 1)))  & 0b1_1111) << 10));
+                        | (((UInt32)(Date.Month) & 0b1_1111) << 15)
+                        | ((((UInt32)(Date.Day - 1)))  & 0b1_1111) << 10));
 
             file.Write((((UInt32)(Date.Hour)) & 0b11_1111_1111) << 22
                        | ((((UInt32)Date.Minute)) & 0b11_1111) << 16
-                       | ((((UInt32)Date.Second)) & 0b11_1111) << 10);
+                       | ((((UInt32)Date.Second)) & 0b11_1111) << 10
+                       | (((UInt32)(Date.Millisecond)) & 0b11_11111111));
         }
 
         public override CVariable SetValue(object val)
