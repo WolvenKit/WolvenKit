@@ -8,6 +8,9 @@ clone_script:
 - cmd: git clone -q --recursive --branch=%APPVEYOR_REPO_BRANCH% https://github.com/%APPVEYOR_REPO_NAME%.git %APPVEYOR_BUILD_FOLDER%
 - cmd: git checkout -qf %APPVEYOR_REPO_COMMIT%
 
+# Update to the most recent VS.
+image: Visual Studio 2017
+
 build:
   project: WolvenKit.sln
 
@@ -19,7 +22,3 @@ before_build:
 after_build:
   - 7z a WolvenKit.zip %APPVEYOR_BUILD_FOLDER%\WolvenKit\bin\Debug\
   - appveyor PushArtifact WolvenKit.zip
-# Update to the most recent VS.
-image: Visual Studio 2017
-configuration: Release
-platform: Any CPU
