@@ -22,6 +22,7 @@ assembly_info:
 image: Visual Studio 2017
 
 build:
+  parallel: true   
   project: WolvenKit.sln
 
 platform: Any CPU
@@ -32,3 +33,14 @@ before_build:
 after_build:
   - 7z a WolvenKit.zip %APPVEYOR_BUILD_FOLDER%\WolvenKit\bin\Release\*
   - appveyor PushArtifact WolvenKit.zip
+
+deploy:
+  release: WolvenKit-v$(appveyor_build_version)
+  tag: Latest
+  description: 'This is a beta release so you may encounter bugs. Please report them.'
+  provider: GitHub
+  auth_token:
+    secure: 1c41fa52015e617c2d7d8eea0d16056c7ded12a0 # your encrypted token from GitHub
+  artifact: WolvenKit.zip            # upload all NuGet packages to release assets
+  prerelease: true
+  force_update: true
