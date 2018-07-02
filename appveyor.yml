@@ -7,9 +7,6 @@ skip_commits:
 clone_script:
 - cmd: git clone -q --recursive --branch=%APPVEYOR_REPO_BRANCH% https://github.com/%APPVEYOR_REPO_NAME%.git %APPVEYOR_BUILD_FOLDER%
 - cmd: git checkout -qf %APPVEYOR_REPO_COMMIT%
-
-install:
- - echo ------------------ STARTING WOLVENKIT BUILD ------------------
  
 assembly_info:
   patch: true
@@ -40,7 +37,7 @@ deploy:
   description: 'This is a beta release so you may encounter bugs. Please report them.'
   provider: GitHub
   auth_token:
-    secure: 1c41fa52015e617c2d7d8eea0d16056c7ded12a0 # your encrypted token from GitHub
-  artifact: WolvenKit.zip            # upload all NuGet packages to release assets
+    secure: PVcjhc6iNEsA28A1clj8BTACho8kddrMQXuFtLoTnJo9wgaQ8erwBvwGd+tMFQT6
+  artifact: WolvenKit.zip
   prerelease: true
   force_update: true
