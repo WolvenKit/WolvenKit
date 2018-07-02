@@ -8,6 +8,16 @@ clone_script:
 - cmd: git clone -q --recursive --branch=%APPVEYOR_REPO_BRANCH% https://github.com/%APPVEYOR_REPO_NAME%.git %APPVEYOR_BUILD_FOLDER%
 - cmd: git checkout -qf %APPVEYOR_REPO_COMMIT%
 
+install:
+ - echo ------------------ STARTING WOLVENKIT BUILD ------------------
+ 
+assembly_info:
+  patch: true
+  file: AssemblyInfo.*
+  assembly_version: "0.2.{build}"
+  assembly_file_version: "{version}"
+  assembly_informational_version: "{version}"
+
 # Update to the most recent VS.
 image: Visual Studio 2017
 
