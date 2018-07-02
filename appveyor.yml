@@ -1,3 +1,7 @@
+clone_script:
+- cmd: git clone -q --recursive --branch=%APPVEYOR_REPO_BRANCH% https://github.com/%APPVEYOR_REPO_NAME%.git %APPVEYOR_BUILD_FOLDER%
+- cmd: git checkout -qf %APPVEYOR_REPO_COMMIT%
+
 # Skip commits on updating git specific stuff. No actual project changes in this case so pointless to build.
 skip_commits:
  files:
