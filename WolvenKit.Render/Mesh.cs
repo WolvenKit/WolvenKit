@@ -171,8 +171,6 @@ namespace WolvenKit.Render
                                     }
                             }
                         }
-                        // TODO: Fix read in meshtype...
-                        CData.meshInfos.Clear();
                         CData.meshInfos.Add(meshInfo);
                     }
 
@@ -265,90 +263,94 @@ namespace WolvenKit.Render
                     }
                 }
 
-                using (BinaryReader br = new BinaryReader(File.Open(meshFile.FileName + ".1.buffer", FileMode.Open)))
+                // Load only best LOD
+                if (vBufferInf.lod == 1)
                 {
-                    uint vertexSize = 8;
-                    if (meshInfo.vertexType == SMeshInfos.EMeshVertexType.EMVT_SKINNED)
-                        vertexSize += meshInfo.numBonesPerVertex * 2;
-
-                    br.BaseStream.Seek(vBufferInf.verticesCoordsOffset + firstVertexOffset * vertexSize, SeekOrigin.Begin);
-
-                    List<Vertex3D> vertex3DCoords = new List<Vertex3D>();
-                    Color defaultColor = new Color(255, 255, 255, 255);
-                    for (uint i = 0; i < meshInfo.numVertices; i++)
+                    using (BinaryReader br = new BinaryReader(File.Open(meshFile.FileName + ".1.buffer", FileMode.Open)))
                     {
-                        ushort x = br.ReadUInt16();
-                        ushort y = br.ReadUInt16();
-                        ushort z = br.ReadUInt16();
-                        ushort w = br.ReadUInt16();
-
+                        uint vertexSize = 8;
                         if (meshInfo.vertexType == SMeshInfos.EMeshVertexType.EMVT_SKINNED)
+                            vertexSize += meshInfo.numBonesPerVertex * 2;
+
+                        br.BaseStream.Seek(vBufferInf.verticesCoordsOffset + firstVertexOffset * vertexSize, SeekOrigin.Begin);
+
+                        List<Vertex3D> vertex3DCoords = new List<Vertex3D>();
+                        Color defaultColor = new Color(255, 255, 255, 255);
+                        for (uint i = 0; i < meshInfo.numVertices; i++)
                         {
-                            //sr.BaseStream.Seek(meshInfo.numBonesPerVertex * 2, SeekOrigin.Current);
-                            byte[] skinningData = new byte[meshInfo.numBonesPerVertex * 2];
-                            br.BaseStream.Read(skinningData, 0, (int)meshInfo.numBonesPerVertex * 2);
+                            ushort x = br.ReadUInt16();
+                            ushort y = br.ReadUInt16();
+                            ushort z = br.ReadUInt16();
+                            ushort w = br.ReadUInt16();
 
-                            for (uint j = 0; j < meshInfo.numBonesPerVertex; ++j)
+                            if (meshInfo.vertexType == SMeshInfos.EMeshVertexType.EMVT_SKINNED)
                             {
-                                uint boneId = skinningData[j];
-                                uint weight = skinningData[j + meshInfo.numBonesPerVertex];
-                                float fweight = weight / 255.0f;
+                                //sr.BaseStream.Seek(meshInfo.numBonesPerVertex * 2, SeekOrigin.Current);
+                                byte[] skinningData = new byte[meshInfo.numBonesPerVertex * 2];
+                                br.BaseStream.Read(skinningData, 0, (int)meshInfo.numBonesPerVertex * 2);
 
-                                if (weight != 0)
+                                for (uint j = 0; j < meshInfo.numBonesPerVertex; ++j)
                                 {
-                                    var vertexSkinningEntry = new W3_DataCache.VertexSkinningEntry();
-                                    vertexSkinningEntry.boneId = boneId;
-                                    vertexSkinningEntry.meshBufferId = 0;
-                                    vertexSkinningEntry.vertexId = i;
-                                    vertexSkinningEntry.strength = fweight;
-                                    CData.w3_DataCache.vertices.Add(vertexSkinningEntry);
+                                    uint boneId = skinningData[j];
+                                    uint weight = skinningData[j + meshInfo.numBonesPerVertex];
+                                    float fweight = weight / 255.0f;
+
+                                    if (weight != 0)
+                                    {
+                                        var vertexSkinningEntry = new W3_DataCache.VertexSkinningEntry();
+                                        vertexSkinningEntry.boneId = boneId;
+                                        vertexSkinningEntry.meshBufferId = 0;
+                                        vertexSkinningEntry.vertexId = i;
+                                        vertexSkinningEntry.strength = fweight;
+                                        CData.w3_DataCache.vertices.Add(vertexSkinningEntry);
+                                    }
                                 }
                             }
+
+                            Vertex3D vertex3DCoord = new Vertex3D();
+                            vertex3DCoord.Position = new Vector3Df(x, y, z) / 65535f * bufferInfos.quantizationScale + bufferInfos.quantizationOffset;
+                            vertex3DCoord.Color = defaultColor;
+                            vertex3DCoords.Add(vertex3DCoord);
                         }
 
-                        Vertex3D vertex3DCoord = new Vertex3D();
-                        vertex3DCoord.Position = new Vector3Df(x, y, z) / 65535f * bufferInfos.quantizationScale + bufferInfos.quantizationOffset;
-                        vertex3DCoord.Color = defaultColor;
-                        vertex3DCoords.Add(vertex3DCoord);
+                        br.BaseStream.Seek(vBufferInf.uvOffset + firstVertexOffset * 4, SeekOrigin.Begin);
+
+                        for (int i = 0; i < meshInfo.numVertices; i++)
+                        {
+                            float uf = br.ReadHalfFloat();
+                            float vf = br.ReadHalfFloat();
+
+                            Vertex3D vertex3DCoord = vertex3DCoords[i];
+                            vertex3DCoord.TCoords = new Vector2Df(uf, vf);
+                            vertex3DCoords[i] = vertex3DCoord;
+                        }
+
+                        // Indices -------------------------------------------------------------------
+                        br.BaseStream.Seek(bufferInfos.indexBufferOffset + vBufferInf.indicesOffset + firstIndiceOffset * 2, SeekOrigin.Begin);
+
+                        List<ushort> indices = new List<ushort>();
+                        for (int i = 0; i < meshInfo.numIndices; i++)
+                            indices.Add(0);
+
+                        for (int i = 0; i < meshInfo.numIndices; i++)
+                        {
+                            ushort index = br.ReadUInt16();
+
+                            // Indice need to be inversed for the normals
+                            if (i % 3 == 0)
+                                indices[i] = index;
+                            else if (i % 3 == 1)
+                                indices[i + 1] = index;
+                            else if (i % 3 == 2)
+                                indices[i - 1] = index;
+                        }
+
+                        MeshBuffer meshBuff = MeshBuffer.Create(VertexType.Standard, IndexType._16Bit);
+                        CData.staticMesh.AddMeshBuffer(meshBuff);
+                        meshBuff.Append(vertex3DCoords, indices);
+                        meshBuff.RecalculateBoundingBox();
+                        meshBuff.Drop();
                     }
-
-                    br.BaseStream.Seek(vBufferInf.uvOffset + firstVertexOffset * 4, SeekOrigin.Begin);
-
-                    for (int i = 0; i < meshInfo.numVertices; i++)
-                    {
-                        float uf = br.ReadHalfFloat();
-                        float vf = br.ReadHalfFloat();
-
-                        Vertex3D vertex3DCoord = vertex3DCoords[i];
-                        vertex3DCoord.TCoords = new Vector2Df(uf, vf);
-                        vertex3DCoords[i] = vertex3DCoord;
-                    }
-
-                    // Indices -------------------------------------------------------------------
-                    br.BaseStream.Seek(bufferInfos.indexBufferOffset + vBufferInf.indicesOffset + firstIndiceOffset * 2, SeekOrigin.Begin);
-
-                    List<ushort> indices = new List<ushort>();
-                    for (int i = 0; i < meshInfo.numIndices; i++)
-                        indices.Add(0);
-
-                    for (int i = 0; i < meshInfo.numIndices; i++)
-                    {
-                        ushort index = br.ReadUInt16();
-
-                        // Indice need to be inversed for the normals
-                        if (i % 3 == 0)
-                            indices[i] = index;
-                        else if (i % 3 == 1)
-                            indices[i + 1] = index;
-                        else if (i % 3 == 2)
-                            indices[i - 1] = index;
-                    }
-
-                    MeshBuffer meshBuff = MeshBuffer.Create(VertexType.Standard, IndexType._16Bit);
-                    CData.staticMesh.AddMeshBuffer(meshBuff);
-                    meshBuff.Append(vertex3DCoords, indices);
-                    meshBuff.RecalculateBoundingBox();
-                    meshBuff.Drop();
                 }
             }
         }
