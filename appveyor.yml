@@ -6,7 +6,9 @@ skip_commits:
 
 before_build:
   - nuget restore
-  
+after_build:
+  - 7z a WolvenKit.zip %APPVEYOR_BUILD_FOLDER%\WolvenKit\bin\Debug\
+  - appveyor PushArtifact WolvenKit.zip
 # Update to the most recent VS.
 image: Visual Studio 2017
 configuration: Release
