@@ -64,7 +64,6 @@ namespace WolvenKit
             config.WccLite = txWCC_Lite.Text;
             config.TextLanguage = txTextLanguage.Text;
             config.VoiceLanguage = txVoiceLanguage.Text;
-            MainController.Get().ReloadStringManager();
             config.Save();
             try
             {
