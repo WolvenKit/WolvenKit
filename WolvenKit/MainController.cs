@@ -27,6 +27,8 @@ namespace WolvenKit
 
         public const string ManagerCacheDir = "ManagerCache";
         public string VLCLibDir = "C:\\Program Files\\VideoLAN\\VLC";
+        public string InitialModProject = "";
+        public string InitialWKP = "";
 
         public event PropertyChangedEventHandler PropertyChanged;
 

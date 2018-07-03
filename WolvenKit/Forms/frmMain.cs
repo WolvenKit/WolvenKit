@@ -1017,6 +1017,13 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             {
                 // ignored
             }
+            if(!string.IsNullOrEmpty(MainController.Get().InitialModProject))
+                openMod(MainController.Get().InitialModProject);
+            if (!string.IsNullOrEmpty(MainController.Get().InitialWKP))
+            {
+                using(var pi = new frmInstallPackage(MainController.Get().InitialWKP))
+                    pi.ShowDialog();
+            }
         }
 
         private void addFileToolStripMenuItem_Click(object sender, EventArgs e)
