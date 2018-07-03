@@ -211,7 +211,6 @@ namespace WolvenKit
                                 }
                             }
                         }
-
                     }
                     //Delete the old install log. We will make a new one so this is not needed anymore.
                     File.Delete(ActiveMod.ProjectDirectory + "\\install_log.xml");

@@ -1,15 +1,22 @@
 ﻿using System.IO;
 using System.Collections.Generic;
 using System;
+using ProtoBuf;
 
 namespace WolvenKit.W3Strings
 {
+    [ProtoContract]
     public class W3StringBlock1
     {
+        [ProtoMember(1)]
         public uint offset;
+        [ProtoMember(2)]
         public string str;
+        [ProtoMember(3)]
         public uint str_id;
+        [ProtoMember(4)]
         public uint str_id_hashed;
+        [ProtoMember(5)]
         public uint strlen;
 
         public W3StringBlock1()

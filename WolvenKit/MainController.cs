@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using WolvenKit.Mod;
 
@@ -143,41 +144,41 @@ namespace WolvenKit
         {
             ProjectStatus = "Loading string manager";
             #region Load string manager
+            var sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
             if (w3StringManager == null)
             {
                 try
                 {
-                    if (File.Exists(Path.Combine(ManagerCacheDir, "string_cache.json")))
+                    if (File.Exists(Path.Combine(ManagerCacheDir, "string_cache.bin")) && new FileInfo(Path.Combine(ManagerCacheDir, "string_cache.bin")).Length > 0)
                     {
-                        using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir, "string_cache.json")))
+                        using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"),FileMode.Open))
                         {
-                            JsonSerializer serializer = new JsonSerializer();
-                            serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                            serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                            serializer.TypeNameHandling = TypeNameHandling.Auto;
-                            w3StringManager = (W3StringManager)serializer.Deserialize(file, typeof(W3StringManager));
+                            w3StringManager = ProtoBuf.Serializer.Deserialize<W3StringManager>(file);
                         }
                     }
                     else
                     {
                         w3StringManager = new W3StringManager();
                         w3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
-                        File.WriteAllText(Path.Combine(ManagerCacheDir, "string_cache.json"), JsonConvert.SerializeObject(W3StringManager, Formatting.None, new JsonSerializerSettings()
+                        Directory.CreateDirectory(ManagerCacheDir);
+                        using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"),FileMode.Create))
                         {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                            TypeNameHandling = TypeNameHandling.Auto
-                        }));
+                            ProtoBuf.Serializer.Serialize(file,w3StringManager);
+                        }
                     }
                 }
-                catch (System.Exception)
+                catch (System.Exception ex)
                 {
-                    if (File.Exists(Path.Combine(ManagerCacheDir, "string_cache.json")))
-                        File.Delete(Path.Combine(ManagerCacheDir, "string_cache.json"));
+                    if (File.Exists(Path.Combine(ManagerCacheDir, "string_cache.bin")))
+                        File.Delete(Path.Combine(ManagerCacheDir, "string_cache.bin"));
                     w3StringManager = new W3StringManager();
                     w3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
                 }
             }
+
+            var i = sw.ElapsedMilliseconds;
+            sw.Stop();
             #endregion
             QueueLog("Loaded string manager!");
             ProjectStatus = "Loading bundle manager!";
