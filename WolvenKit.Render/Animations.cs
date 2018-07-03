@@ -17,29 +17,40 @@ namespace WolvenKit.Render
         private List<List<Quaternion>> orientations = new List<List<Quaternion>>();
         private List<List<Vector3Df>> scales = new List<List<Vector3Df>>();
 
-        private List<string> animationNames = new List<string>();
+        public static List<KeyValuePair<string, int>> AnimationNames = new List<KeyValuePair<string, int>>();
 
         /// <summary>
         /// Read animations and animbuffers data.
         /// </summary>
         public void LoadData(CR2WFile animFile)
         {
-            // *************** READ ANIMATION DATA ***************
+            AnimationNames.Clear();
             if (animFile != null)
             foreach (var chunk in animFile.chunks)
             {
                 if (chunk.Type == "CSkeletalAnimation")
                 {
-                    // var name = chunk.GetVariableByName("name");
-                    // (.GetVariableByName("animBuffer") as CPtr).ChunkIndex
+                    var name = chunk.GetVariableByName("name");
+                    var chunkIdx = (chunk.GetVariableByName("animBuffer") as CPtr).ChunkIndex;
+                    AnimationNames.Add(new KeyValuePair<string, int>((name as CName).Value, chunkIdx));
                 }
             }
+            SelectAnimation(animFile, 0);
+        }
+
+        /// <summary>
+        /// Read animations and animbuffers data.
+        /// </summary>
+        public void SelectAnimation(CR2WFile animFile, int selectedAnimIdx)
+        {
+            // *************** READ ANIMATION DATA ***************
+            if (animFile != null)
             foreach (var chunk in animFile.chunks)
             {
-                if (chunk.Type == "CAnimationBufferBitwiseCompressed")
+                if (chunk.Type == "CAnimationBufferBitwiseCompressed" && chunk.ChunkIndex == AnimationNames[selectedAnimIdx].Value)
                 {
                     uint numFrames = (chunk.GetVariableByName("numFrames") as CUInt32).val;
-                    float animDuration = (chunk.GetVariableByName("duration") as CFloat).val;
+                    float animDuration = (chunk.GetVariableByName("duration") as CFloat)?.val ?? 1.0f;
                     animationSpeed = numFrames / animDuration;
                     uint keyFrame = 0;
                     byte[] data;

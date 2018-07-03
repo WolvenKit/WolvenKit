@@ -33,6 +33,7 @@
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.loadRigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadAnimToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectAnimationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.replaceTexturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,13 +60,14 @@
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadRigToolStripMenuItem,
             this.loadAnimToolStripMenuItem,
+            this.selectAnimationToolStripMenuItem,
             this.exportToolStripMenuItem,
             this.importToolStripMenuItem,
             this.replaceTexturesToolStripMenuItem,
             this.exportTexturesToolStripMenuItem,
             this.exportCurrentAnimationToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(206, 180);
+            this.contextMenuStrip.Size = new System.Drawing.Size(206, 202);
             // 
             // loadRigToolStripMenuItem
             // 
@@ -81,6 +83,14 @@
             this.loadAnimToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.loadAnimToolStripMenuItem.Text = "Load Anims (*.w2anims)";
             this.loadAnimToolStripMenuItem.Click += new System.EventHandler(this.loadAnimToolStripMenuItem_Click);
+            // 
+            // selectAnimationToolStripMenuItem
+            // 
+            this.selectAnimationToolStripMenuItem.Enabled = false;
+            this.selectAnimationToolStripMenuItem.Name = "selectAnimationToolStripMenuItem";
+            this.selectAnimationToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.selectAnimationToolStripMenuItem.Text = "Select animation";
+            this.selectAnimationToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.selectAnimationToolStripMenuItem_DropDownItemClicked);
             // 
             // exportToolStripMenuItem
             // 
@@ -153,5 +163,6 @@
         private System.Windows.Forms.ToolStripMenuItem exportCurrentAnimationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadRigToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadAnimToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectAnimationToolStripMenuItem;
     }
 }

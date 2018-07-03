@@ -96,6 +96,10 @@ namespace WolvenKit.Render
                     anims.LoadData(animFile);
                     modelAngle = new Vector3Df(startModelAngleWithAnim.X, startModelAngleWithAnim.Y, startModelAngle.Z);
                     RestartIrrThread();
+                    selectAnimationToolStripMenuItem.DropDownItems.Clear();
+                    for (int i = 0; i < Animations.AnimationNames.Count; i++)
+                        selectAnimationToolStripMenuItem.DropDownItems.Add(Animations.AnimationNames[i].Key);
+                    selectAnimationToolStripMenuItem.Enabled = true;
                 }
                 catch (Exception ex)
                 {
@@ -180,12 +184,16 @@ namespace WolvenKit.Render
                 smgr   = device.SceneManager;
                 gui    = device.GUIEnvironment;
 
+                var animText = "";
+                if (Animations.AnimationNames.Count > 0)
+                    animText = "Animation: " + Animations.AnimationNames[selectedAnimIdx].Key;
+                var mAnimText     = gui.AddStaticText(animText, new Recti(0, this.ClientSize.Height - 80, 100, this.ClientSize.Height - 70));
                 var mPositionText = gui.AddStaticText("", new Recti(0, this.ClientSize.Height - 70, 100, this.ClientSize.Height - 60));
                 var mRotationText = gui.AddStaticText("", new Recti(0, this.ClientSize.Height - 60, 100, this.ClientSize.Height - 50));
                 var fpsText       = gui.AddStaticText("", new Recti(0, this.ClientSize.Height - 50, 100, this.ClientSize.Height - 40));
                 var infoText      = gui.AddStaticText("[Space] - Reset\n[LMouse] - Rotate\n[MMouse] - Move\n[Wheel] - Zoom", new Recti(0, this.ClientSize.Height - 40, 100, this.ClientSize.Height));
-                mPositionText.OverrideColor   = mRotationText.OverrideColor   = fpsText.OverrideColor   = infoText.OverrideColor   = new Color(255, 255, 255);
-                mPositionText.BackgroundColor = mRotationText.BackgroundColor = fpsText.BackgroundColor = infoText.BackgroundColor = new Color(0, 0, 0);
+                mAnimText.OverrideColor   = mPositionText.OverrideColor   = mRotationText.OverrideColor   = fpsText.OverrideColor   = infoText.OverrideColor   = new Color(255, 255, 255);
+                mAnimText.BackgroundColor = mPositionText.BackgroundColor = mRotationText.BackgroundColor = fpsText.BackgroundColor = infoText.BackgroundColor = new Color(0, 0, 0);
 
                 SkinnedMesh skinnedMesh = smgr.CreateSkinnedMesh();
                 foreach (var meshBuffer in cdata.staticMesh.MeshBuffers)
@@ -481,10 +489,10 @@ namespace WolvenKit.Render
             using (var sf = new SaveFileDialog())
             {
                 sf.Filter = "Irrlicht mesh | *.irrm | Collada mesh | *.coll | STL Mesh | *.stl | OBJ Mesh | *.obj | PLY Mesh | *.ply | B3D Mesh | *.b3d";
-                if(sf.ShowDialog() == DialogResult.OK)
+                if (sf.ShowDialog() == DialogResult.OK)
                 {
                     MeshWriterType mwt = MeshWriterType.Obj;
-                    switch(Path.GetExtension(sf.FileName))
+                    switch (Path.GetExtension(sf.FileName))
                     {
                         case "irrm":
                             mwt = MeshWriterType.IrrMesh;
@@ -506,7 +514,7 @@ namespace WolvenKit.Render
                             break;
                     }
                     var mw = smgr.CreateMeshWriter(mwt);
-                    if(mw.WriteMesh(device.FileSystem.CreateWriteFile(sf.FileName), cdata.staticMesh, MeshWriterFlag.None))
+                    if (mw.WriteMesh(device.FileSystem.CreateWriteFile(sf.FileName), cdata.staticMesh, MeshWriterFlag.None))
                         MessageBox.Show(this,"Sucessfully wrote file!","WolvenKit",MessageBoxButtons.OK,MessageBoxIcon.Information);
                     else
                         MessageBox.Show(this, "Failed to write file!", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -537,9 +545,22 @@ namespace WolvenKit.Render
                 this.Activate();
                 var ofd = new OpenFileDialog();
                 ofd.Filter = "Animation file|*.w2anims";
+                selectedAnimIdx = 0;
                 if (ofd.ShowDialog() == DialogResult.OK)
                     AnimFile = LoadDocument(ofd.FileName);
             }
+        }
+
+        private int selectedAnimIdx = 0;
+        private void selectAnimationToolStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            selectedAnimIdx = Animations.AnimationNames.FindIndex(kv => kv.Key.Equals(e.ClickedItem.Text));
+            anims = new Animations();
+            anims.SelectAnimation(AnimFile, selectedAnimIdx);
+            modelAngle = new Vector3Df(startModelAngleWithAnim.X, startModelAngleWithAnim.Y, startModelAngle.Z);
+            modelAutorotating = true;
+            modelPosition = new Vector3Df(0.0f);
+            RestartIrrThread();
         }
     }
 }
