@@ -79,22 +79,25 @@ namespace WolvenKit
                 recentFilesToolStripMenuItem.Enabled = false;
             }
             #endregion
-            #region Initialize maincontroller with progressbar
-            CircularProgressBar.CircularProgressBar cb = new CircularProgressBar.CircularProgressBar();
-            cb.Text = "Loading enviroment!";
-            cb.Show();
-            Task.Factory.StartNew(() => MainController.Get().Initialize()); //Start the async task to load our stuff
-            #endregion
-            MainController.Get().QueueLog("Enviroment loaded!");
         }
+
+        private delegate void strDelegate(string t);
+
+        private delegate void logDelegate(string t, frmOutput.Logtype type);
 
         #region Methods
         private void MainControllerUpdated(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "ProjectStatus")
-                statusLBL.Text = ((MainController)sender).ProjectStatus;
-            if(e.PropertyName == "LogMessage")
-                AddOutput(((MainController)sender).LogMessage.Key + "\n", ((MainController)sender).LogMessage.Value);
+                Invoke(new strDelegate(SetStatusLabelText), ((MainController)sender).ProjectStatus);
+            if (e.PropertyName == "LogMessage")
+                Invoke(new logDelegate(AddOutput), ((MainController) sender).LogMessage.Key + "\n",
+                    ((MainController) sender).LogMessage.Value);
+        }
+
+        private void SetStatusLabelText(string text)
+        {
+            statusLBL.Text = text;
         }
 
 
@@ -1002,6 +1005,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
 
         private void frmMain_Shown(object sender, EventArgs e)
         {
+            Task.Factory.StartNew(() => MainController.Get().Initialize()); //Start the async task to load our stuff
             var config = MainController.Get().Configuration;
             Size = config.MainSize;
             Location = config.MainLocation;
