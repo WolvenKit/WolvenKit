@@ -793,6 +793,8 @@
     <None Include="Resources\stickman.png" />
     <None Include="Resources\t-shirt-gray.png" />
     <None Include="Resources\arrow-circle-315.png" />
+    <None Include="Resources\ui-check-box.png" />
+    <None Include="Resources\ui-check-box-uncheck.png" />
     <Content Include="wolven_kit_icon.ico" />
     <Content Include="Licenses\License.doboz4net.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

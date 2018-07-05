@@ -83,6 +83,7 @@ namespace WolvenKit
             this.stringsEncoderGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gameDebuggerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCreatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.renderW2meshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -506,6 +507,7 @@ namespace WolvenKit
             this.stringsEncoderGUIToolStripMenuItem,
             this.gameDebuggerToolStripMenuItem,
             this.menuCreatorToolStripMenuItem,
+            this.renderW2meshToolStripMenuItem,
             this.toolStripSeparator5,
             this.optionsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
@@ -559,6 +561,15 @@ namespace WolvenKit
             this.menuCreatorToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.menuCreatorToolStripMenuItem.Text = "Menu creator";
             this.menuCreatorToolStripMenuItem.Click += new System.EventHandler(this.menuCreatorToolStripMenuItem_Click);
+            // 
+            // renderW2meshToolStripMenuItem
+            // 
+            this.renderW2meshToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.ui_check_box_uncheck;
+            this.renderW2meshToolStripMenuItem.Name = "renderW2meshToolStripMenuItem";
+            this.renderW2meshToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.renderW2meshToolStripMenuItem.Tag = "false";
+            this.renderW2meshToolStripMenuItem.Text = "Render w2mesh";
+            this.renderW2meshToolStripMenuItem.Click += new System.EventHandler(this.renderW2meshToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
@@ -827,5 +838,6 @@ namespace WolvenKit
         private ToolStripMenuItem importToolStripMenuItem;
         private ToolStripMenuItem fbxWithCollisionsToolStripMenuItem;
         private ToolStripMenuItem nvidiaClothFileToolStripMenuItem;
+        private ToolStripMenuItem renderW2meshToolStripMenuItem;
     }
 }

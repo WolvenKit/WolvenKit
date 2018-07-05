@@ -788,7 +788,7 @@ namespace WolvenKit
                     }*/
                 case ".w2mesh":
                     {
-                        if (MessageBox.Show("Would you like the tool to try to open a renderer context for the w2mesh file (experimental)?", "Try to render?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        if (bool.Parse(renderW2meshToolStripMenuItem.Tag.ToString()))
                         {
                             doc.RenderViewer = new Render.frmRender
                             {
@@ -800,22 +800,6 @@ namespace WolvenKit
                         }
                         break;
                     }
-                //TODO: Remove this once it's done
-#if DEBUG
-                case ".redfur":
-                    {
-                        using (var sf = new SaveFileDialog())
-                        {
-                            sf.Filter = "XML Files | *.xml";
-                            //if (sf.ShowDialog() == DialogResult.OK)
-                            {
-                                var asd = Apex.HairWorks.ConvertToApexXml(doc.File);
-                                asd.Save("asd.xml");
-                            }
-                        }
-                        break;
-                    }
-#endif
                 default:
                     {
                         break;
@@ -1447,6 +1431,20 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             using (var fmc = new frmMenuCreator())
             {
                 fmc.ShowDialog();
+            }
+        }
+
+        private void renderW2meshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (bool.Parse(renderW2meshToolStripMenuItem.Tag.ToString()))
+            {
+                renderW2meshToolStripMenuItem.Tag = false;
+                renderW2meshToolStripMenuItem.Image = Properties.Resources.ui_check_box_uncheck;
+            }
+            else
+            {
+                renderW2meshToolStripMenuItem.Tag = true;
+                renderW2meshToolStripMenuItem.Image = Properties.Resources.ui_check_box;
             }
         }
 
