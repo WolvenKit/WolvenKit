@@ -626,7 +626,7 @@ namespace WolvenKit
         /// Opens the asset browser in the background
         /// </summary>
         /// <param name="loadmods">Load the mod files</param>
-        /// <param name="browseToPath">The path to browse tos</param>
+        /// <param name="browseToPath">The path to browse to</param>
         private void AddModFile(bool loadmods, string browseToPath = "")
         {
             if (ActiveMod == null)
