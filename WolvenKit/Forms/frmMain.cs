@@ -788,13 +788,16 @@ namespace WolvenKit
                     }*/
                 case ".w2mesh":
                     {
-                        doc.RenderViewer = new Render.frmRender
+                        if (MessageBox.Show("Would you like the tool to try to open a renderer context for the w2mesh file (experimental)?", "Try to render?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
-                            LoadDocument = LoadDocumentAndGetFile,
-                            MeshFile = doc.File,
-                            DockAreas = DockAreas.Document
-                        };
-                        doc.RenderViewer.Show(doc.FormPanel, DockState.Document);
+                            doc.RenderViewer = new Render.frmRender
+                            {
+                                LoadDocument = LoadDocumentAndGetFile,
+                                MeshFile = doc.File,
+                                DockAreas = DockAreas.Document
+                            };
+                            doc.RenderViewer.Show(doc.FormPanel, DockState.Document);
+                        }
                         break;
                     }
                 //TODO: Remove this once it's done
