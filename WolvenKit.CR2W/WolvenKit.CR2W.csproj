@@ -157,6 +157,7 @@
     <Compile Include="Types\CVariable.cs" />
     <Compile Include="Types\CVariant.cs" />
     <Compile Include="Types\CVector.cs" />
+    <Compile Include="Types\CVector3D.cs" />
     <Compile Include="Types\CXml.cs" />
     <Compile Include="Types\Enums.cs" />
     <Compile Include="Types\IntegerTypes.cs" />

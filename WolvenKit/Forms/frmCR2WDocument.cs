@@ -74,7 +74,7 @@ namespace WolvenKit
 
                 if (RenderViewer != null && !RenderViewer.IsDisposed)
                 {
-                    RenderViewer.File = file;
+                    RenderViewer.MeshFile = file;
                 }
                 
 

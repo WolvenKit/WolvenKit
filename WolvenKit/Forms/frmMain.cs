@@ -786,6 +786,20 @@ namespace WolvenKit
                             MessageBox.Show(".w2mesh file not found in model folder!" + "\n" + "Have you extracted it properly?");
                         break;
                     }*/
+                case ".w2mesh":
+                    {
+                        if (bool.Parse(renderW2meshToolStripMenuItem.Tag.ToString()))
+                        {
+                            doc.RenderViewer = new Render.frmRender
+                            {
+                                LoadDocument = LoadDocumentAndGetFile,
+                                MeshFile = doc.File,
+                                DockAreas = DockAreas.Document
+                            };
+                            doc.RenderViewer.Show(doc.FormPanel, DockState.Document);
+                        }
+                        break;
+                    }
                 default:
                     {
                         break;
@@ -832,6 +846,16 @@ namespace WolvenKit
 
             AddOutput(output.ToString());
             return doc;
+        }
+
+        public CR2WFile LoadDocumentAndGetFile(string filename)
+        {
+            foreach (var t in OpenDocuments.Where(t => t.FileName == filename))
+                return t.File;
+            var activedoc = OpenDocuments.FirstOrDefault(d => d.IsActivated);
+            var doc = LoadDocument(filename);
+            activedoc.Activate();
+            return doc != null ? doc.File : null;
         }
 
         async Task ImportFile(string infile, string outfile)
@@ -1407,6 +1431,20 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             using (var fmc = new frmMenuCreator())
             {
                 fmc.ShowDialog();
+            }
+        }
+
+        private void renderW2meshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (bool.Parse(renderW2meshToolStripMenuItem.Tag.ToString()))
+            {
+                renderW2meshToolStripMenuItem.Tag = false;
+                renderW2meshToolStripMenuItem.Image = Properties.Resources.ui_check_box_uncheck;
+            }
+            else
+            {
+                renderW2meshToolStripMenuItem.Tag = true;
+                renderW2meshToolStripMenuItem.Image = Properties.Resources.ui_check_box;
             }
         }
 
