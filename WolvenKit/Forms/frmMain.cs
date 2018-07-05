@@ -574,7 +574,7 @@ namespace WolvenKit
                 if (manager.Items.Any(x => x.Value.Any(y => y.Name == item.FullPath)))
                 {
                     var archives = manager.FileList.Where(x => x.Name == item.FullPath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
-                    var filename = Path.Combine(ActiveMod.FileDirectory, AddAsDLC ? "DLC" : "Mod", archives.First().Value.Bundle.TypeName, item.FullPath);
+                    var filename = Path.Combine(ActiveMod.FileDirectory, AddAsDLC ? Path.Combine("DLC",archives.First().Value.Bundle.TypeName,"dlc",ActiveMod.Name,item.FullPath) : Path.Combine("Mod",archives.First().Value.Bundle.TypeName,item.FullPath));
                     if (archives.Count() > 1)
                     {
 
@@ -1171,7 +1171,10 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             }
 
             if (Exit)
+            {
+                Visible = false;
                 Close();
+            }
         }
 
         private void tbtNewMod_Click(object sender, EventArgs e)
