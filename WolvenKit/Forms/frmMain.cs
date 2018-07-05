@@ -431,22 +431,6 @@ namespace WolvenKit
                         "Invalid path");
                     continue;
                 }
-                var bannednames = new[]
-                {
-                    "VGX",
-                    "E3",
-                    "RESHADE",
-                    "LIGHTING"
-                };
-                if (bannednames.Any(x => dlg.FileName.ToUpper().Contains(x)))
-                {
-                    MessageBox.Show(
-                        @"Illegal mod name!",
-                        "Invalid mod name");
-                    continue;
-                }
-
-
 
                 MainController.Get().Configuration.InitialModDirectory = Path.GetDirectoryName(dlg.FileName);
                 var modname = Path.GetFileNameWithoutExtension(dlg.FileName);
@@ -1005,6 +989,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
 
         private void frmMain_Shown(object sender, EventArgs e)
         {
+            ResetWindows();
             Task.Factory.StartNew(() => MainController.Get().Initialize()); //Start the async task to load our stuff
             var config = MainController.Get().Configuration;
             Size = config.MainSize;
