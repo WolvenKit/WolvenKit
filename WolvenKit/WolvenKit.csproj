@@ -405,12 +405,6 @@
     <Compile Include="Forms\frmWCCLicense.Designer.cs">
       <DependentUpon>frmWCCLicense.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmWCCPatch.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmWCCPatch.Designer.cs">
-      <DependentUpon>frmWCCPatch.cs</DependentUpon>
-    </Compile>
     <Compile Include="ImportExportUtility.cs" />
     <Compile Include="FlowTreeEditors\ChunkEditor.cs">
       <SubType>UserControl</SubType>
@@ -663,9 +657,6 @@
     <EmbeddedResource Include="Forms\frmWCCLicense.resx">
       <DependentUpon>frmWCCLicense.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmWCCPatch.resx">
-      <DependentUpon>frmWCCPatch.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmCreateInstaller.resx">
       <DependentUpon>frmCreateInstaller.cs</DependentUpon>
     </EmbeddedResource>
@@ -845,20 +836,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <FileAssociation Include=".w3modproj">
-      <Visible>False</Visible>
-      <Description>WolvenKit project file</Description>
-      <Progid>WolvenKit</Progid>
-      <DefaultIcon>wolven_kit_icon.ico</DefaultIcon>
-    </FileAssociation>
-    <FileAssociation Include=".wkp">
-      <Visible>False</Visible>
-      <Description>WolvenKit Mod Package</Description>
-      <Progid>WolvenKit</Progid>
-      <DefaultIcon>wolven_kit_icon.ico</DefaultIcon>
-    </FileAssociation>
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <PublishFile Include="AltoControls">
       <Visible>False</Visible>

@@ -1311,8 +1311,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
 
         private void wcclitePatcherToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var pw = new frmWCCPatch())
-                pw.ShowDialog();
+            Process.Start("https://forums.cdprojektred.com/index.php?threads/patched-wcc_lite-for-faster-startup.6883680/");
         }
 
         private void OutputToolStripMenuItem_Click(object sender, EventArgs e)
