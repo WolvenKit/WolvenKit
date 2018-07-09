@@ -44,4 +44,3 @@ deploy:
     secure: PVcjhc6iNEsA28A1clj8BTACho8kddrMQXuFtLoTnJo9wgaQ8erwBvwGd+tMFQT6
   artifact: WolvenKit-%WK_VERSION%.zip
   prerelease: true
-  force_update: true
