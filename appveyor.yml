@@ -42,5 +42,6 @@ deploy:
   provider: GitHub
   auth_token:
     secure: PVcjhc6iNEsA28A1clj8BTACho8kddrMQXuFtLoTnJo9wgaQ8erwBvwGd+tMFQT6
-  artifact: WolvenKit-%WK_VERSION%.zip
+  artifact: WolvenKit.zip
   prerelease: true
+  force_update: true
