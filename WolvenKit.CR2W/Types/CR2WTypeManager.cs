@@ -85,6 +85,8 @@ namespace WolvenKit.CR2W.Types
             Register("SharedDataBuffer", new CByteArray(null));
 
             Register("CSwfResource", new CSwfResource(null));
+            Register("CSwfTexture", new CSwfTexture(null));
+
             Register("CBitmapTexture", new CBitmapTexture(null));
 
             Register("Color", new CColor(null));
