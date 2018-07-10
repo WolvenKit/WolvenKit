@@ -23,6 +23,8 @@ using WolvenKit.Common;
 using WolvenKit.Cache;
 using WolvenKit.Bundles;
 using WolvenKit.Forms;
+using NHotkey.WindowsForms;
+using NHotkey;
 
 namespace WolvenKit
 {
@@ -79,6 +81,8 @@ namespace WolvenKit
                 recentFilesToolStripMenuItem.Enabled = false;
             }
             #endregion
+            HotkeyManager.Current.AddOrReplace("Save", Keys.Control | Keys.S, HKSave);
+            HotkeyManager.Current.AddOrReplace("SaveAll", Keys.Control | Keys.Shift | Keys.S, HKSaveAll);
         }
 
         private delegate void strDelegate(string t);
@@ -86,6 +90,12 @@ namespace WolvenKit
         private delegate void logDelegate(string t, frmOutput.Logtype type);
 
         #region Methods
+        /// <summary>
+        /// Occurs when something in the maincontroller is updated that is INotifyProeprtyChanged
+        /// Thread safe and always should be
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainControllerUpdated(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "ProjectStatus")
@@ -95,9 +105,23 @@ namespace WolvenKit
                     ((MainController) sender).LogMessage.Value);
         }
 
+
+
         private void SetStatusLabelText(string text)
         {
             statusLBL.Text = text;
+        }
+
+        private void HKSave(object sender, HotkeyEventArgs e)
+        {
+            if(ActiveDocument != null)
+                saveFile(ActiveDocument);
+        }
+
+        private void HKSaveAll(object sender, HotkeyEventArgs e)
+        {
+            if(OpenDocuments != null && OpenDocuments.Count > 0)
+                saveAllFiles();
         }
 
 
@@ -136,6 +160,8 @@ namespace WolvenKit
         private void saveFile(frmCR2WDocument d)
         {
             d.SaveFile();
+            AddOutput(d.FileName + " saved!\n");
+            MainController.Get().ProjectStatus = "Saved";
         }
 
         private void btPack_Click(object sender, EventArgs e)
