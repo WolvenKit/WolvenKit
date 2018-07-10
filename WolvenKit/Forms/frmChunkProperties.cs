@@ -155,7 +155,7 @@ namespace WolvenKit
             ptrPropertiesToolStripMenuItem.Visible = sNodes.All(x => x.Variable is CPtr) && sNodes.Count == 1;
         }
 
-        private void copyVariable()
+        public void copyVariable()
         {
             var tocopynodes = (from VariableListNode item in treeView.SelectedObjects where item?.Variable != null select item.Variable).ToList();
             if (tocopynodes.Count > 0)
@@ -164,7 +164,7 @@ namespace WolvenKit
             }
         }
 
-        private void pasteVariable()
+        public void pasteVariable()
         {
             var node = (VariableListNode) treeView.SelectedObject;
             if (CopyController.VariableTargets == null || node?.Variable == null || !node.Variable.CanAddVariable(null))

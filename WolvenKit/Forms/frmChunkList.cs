@@ -102,6 +102,11 @@ namespace WolvenKit
 
         private void copyChunkToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            CopyChunks();
+        }
+
+        public void CopyChunks()
+        {
             Clipboard.Clear();
             var chunks = listView.SelectedObjects.Cast<CR2WChunk>().ToList();
             CopyController.ChunkList = chunks;
@@ -109,6 +114,11 @@ namespace WolvenKit
         }
 
         private void pasteChunkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PasteChunks();
+        }
+
+        public void PasteChunks()
         {
             var copiedchunks = CopyController.ChunkList;
             if (copiedchunks != null && copiedchunks.Count > 0)

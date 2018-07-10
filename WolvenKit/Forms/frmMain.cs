@@ -83,6 +83,9 @@ namespace WolvenKit
             #endregion
             HotkeyManager.Current.AddOrReplace("Save", Keys.Control | Keys.S, HKSave);
             HotkeyManager.Current.AddOrReplace("SaveAll", Keys.Control | Keys.Shift | Keys.S, HKSaveAll);
+            HotkeyManager.Current.AddOrReplace("Help", Keys.F1, HKHelp);
+            HotkeyManager.Current.AddOrReplace("Copy", Keys.Control | Keys.C, HKCopy);
+            HotkeyManager.Current.AddOrReplace("Paste", Keys.Control | Keys.V, HKPaste);
         }
 
         private delegate void strDelegate(string t);
@@ -105,8 +108,6 @@ namespace WolvenKit
                     ((MainController) sender).LogMessage.Value);
         }
 
-
-
         private void SetStatusLabelText(string text)
         {
             statusLBL.Text = text;
@@ -124,6 +125,44 @@ namespace WolvenKit
                 saveAllFiles();
         }
 
+        private void HKHelp(object sender, HotkeyEventArgs e)
+        {
+            Process.Start("https://github.com/Traderain/Wolven-kit/wiki");
+        }
+
+        private void HKCopy(object sender, HotkeyEventArgs e)
+        {
+            if (ActiveDocument != null)
+            {
+                if (ActiveDocument.chunkList.IsActivated)
+                {
+                    ActiveDocument.chunkList.CopyChunks();
+                    AddOutput("Selected chunk(s) copied!\n");
+                }
+                else if(ActiveDocument.propertyWindow.IsActivated)
+                {
+                    ActiveDocument.propertyWindow.copyVariable();
+                    AddOutput("Selected propertie(s) copied!\n");
+                }
+            }
+        }
+
+        private void HKPaste(object sender, HotkeyEventArgs e)
+        {
+            if (ActiveDocument != null)
+            {
+                if (ActiveDocument.chunkList.IsActivated)
+                {
+                    ActiveDocument.chunkList.PasteChunks();
+                    AddOutput("Copied chunk(s) pasted!\n");
+                }
+                else if(ActiveDocument.propertyWindow.IsActivated)
+                {
+                    ActiveDocument.propertyWindow.pasteVariable();
+                    AddOutput("Copied propertie(s) pasted!\n");
+                }
+            }
+        }
 
 
         private void UpdateTitle()
