@@ -115,6 +115,7 @@
     <Compile Include="Editors\PtrEditor.Designer.cs">
       <DependentUpon>PtrEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Types\CCubeTexture.cs" />
     <Compile Include="Types\CRagdoll.cs" />
     <Compile Include="Types\CSwfTexture.cs" />
     <Compile Include="Types\CTree.cs" />

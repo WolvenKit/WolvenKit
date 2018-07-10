@@ -240,6 +240,8 @@ namespace WolvenKit
 
         private void searchBox_TextChanged(object sender, EventArgs e)
         {
+            if(ActiveMod == null)
+                return;
             if (searchBox.Text == "")
             {
                 FilteredFiles = ActiveMod.Files;

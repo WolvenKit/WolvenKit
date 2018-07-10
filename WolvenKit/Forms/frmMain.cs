@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using Dfust.Hotkeys;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Newtonsoft.Json;
@@ -23,8 +24,7 @@ using WolvenKit.Common;
 using WolvenKit.Cache;
 using WolvenKit.Bundles;
 using WolvenKit.Forms;
-using NHotkey.WindowsForms;
-using NHotkey;
+using Enums = Dfust.Hotkeys.Enums;
 
 namespace WolvenKit
 {
@@ -49,6 +49,8 @@ namespace WolvenKit
         #endregion
         private readonly string BaseTitle = "Wolven kit";
         public static Task Packer;
+        private HotkeyCollection hotkeys;
+
         public W3Mod ActiveMod
         {
             get => MainController.Get().ActiveMod;
@@ -81,11 +83,12 @@ namespace WolvenKit
                 recentFilesToolStripMenuItem.Enabled = false;
             }
             #endregion
-            HotkeyManager.Current.AddOrReplace("Save", Keys.Control | Keys.S, HKSave);
-            HotkeyManager.Current.AddOrReplace("SaveAll", Keys.Control | Keys.Shift | Keys.S, HKSaveAll);
-            HotkeyManager.Current.AddOrReplace("Help", Keys.F1, HKHelp);
-            HotkeyManager.Current.AddOrReplace("Copy", Keys.Control | Keys.C, HKCopy);
-            HotkeyManager.Current.AddOrReplace("Paste", Keys.Control | Keys.V, HKPaste);
+            hotkeys = new HotkeyCollection(Enums.Scope.Application);
+            hotkeys.RegisterHotkey(Keys.Control | Keys.S, HKSave, "Save");
+            hotkeys.RegisterHotkey(Keys.Control | Keys.Shift | Keys.S, HKSaveAll , "SaveAll");
+            hotkeys.RegisterHotkey(Keys.F1, HKHelp, "Help");
+            hotkeys.RegisterHotkey(Keys.Control | Keys.C, HKCopy, "Copy");
+            hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste,"Paste");
         }
 
         private delegate void strDelegate(string t);
@@ -113,24 +116,24 @@ namespace WolvenKit
             statusLBL.Text = text;
         }
 
-        private void HKSave(object sender, HotkeyEventArgs e)
+        private void HKSave(HotKeyEventArgs e)
         {
             if(ActiveDocument != null)
                 saveFile(ActiveDocument);
         }
 
-        private void HKSaveAll(object sender, HotkeyEventArgs e)
+        private void HKSaveAll(HotKeyEventArgs e)
         {
             if(OpenDocuments != null && OpenDocuments.Count > 0)
                 saveAllFiles();
         }
 
-        private void HKHelp(object sender, HotkeyEventArgs e)
+        private void HKHelp(HotKeyEventArgs e)
         {
             Process.Start("https://github.com/Traderain/Wolven-kit/wiki");
         }
 
-        private void HKCopy(object sender, HotkeyEventArgs e)
+        private void HKCopy(HotKeyEventArgs e)
         {
             if (ActiveDocument != null)
             {
@@ -147,7 +150,7 @@ namespace WolvenKit
             }
         }
 
-        private void HKPaste(object sender, HotkeyEventArgs e)
+        private void HKPaste(HotKeyEventArgs e)
         {
             if (ActiveDocument != null)
             {
