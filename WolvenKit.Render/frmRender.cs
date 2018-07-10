@@ -312,7 +312,7 @@ namespace WolvenKit.Render
         /// </summary>
         private Texture GetTexture(VideoDriver driver, string handleFilename)
         {
-            string texturePath = Path.GetDirectoryName(meshFile.FileName) + @"\" + Path.GetFileNameWithoutExtension(handleFilename);
+            string texturePath = Path.Combine(Path.GetDirectoryName(meshFile.FileName),Path.GetFileNameWithoutExtension(handleFilename)).Replace("Bundle","TextureCache");
             string[] textureFileExtensions = { ".dds", ".bmp", ".tga", ".jpg", ".jpeg", ".png", ".xbm" };
             Texture texture = null;
             foreach (var textureFileExtension in textureFileExtensions)
