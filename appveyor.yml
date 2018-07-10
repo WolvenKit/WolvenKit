@@ -32,8 +32,8 @@ configuration: Release
 before_build:
   - nuget restore
 after_build:
-  - 7z a WolvenKit-%WK_VERSION%.zip %APPVEYOR_BUILD_FOLDER%\WolvenKit\bin\Release\*
-  - appveyor PushArtifact WolvenKit-%WK_VERSION%.zip
+  - 7z a WolvenKit.zip %APPVEYOR_BUILD_FOLDER%\WolvenKit\bin\Release\*
+  - appveyor PushArtifact WolvenKit.zip
 
 deploy:
   release: WolvenKit-v$(appveyor_build_version)
