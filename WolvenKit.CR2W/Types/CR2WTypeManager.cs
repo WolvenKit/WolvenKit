@@ -106,6 +106,7 @@ namespace WolvenKit.CR2W.Types
 
             Register("CRagdoll",new CRagdoll(null));
 
+            Register("CSectorData", new CSectorData(null));
 
             var vectors = new[]
             {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using WolvenKit.CR2W.Types;
@@ -166,6 +167,52 @@ namespace WolvenKit.CR2W
                 var block = chunk.cr2w.CreateVector(blocks);
                 chunk.cr2w.CreatePtr(block, "ptr:CQuestGraphBlock", out_target, "ock");
                 ((CName) chunk.cr2w.CreateVariable(block, "CName", "putName")).Value = out_name;
+            }
+        }
+
+        public static int ReadVLQInt32(this BinaryReader br)
+        {
+            var b1 = br.ReadByte();
+            var sign = (b1 & 128) == 128;
+            var next = (b1 & 64) == 64;
+            var size = b1 % 128 % 64;
+            var offset = 6;
+            while (next)
+            {
+                var b = br.ReadByte();
+                size = (b % 128) << offset | size;
+                next = (b & 128) == 128;
+                offset += 7;
+            }
+            return sign ? size * -1 : size;
+        }
+
+        public static void WriteVLQInt32(this BinaryWriter bw, int value)
+        {
+            bool negative = value < 0;
+            value = Math.Abs(value);
+            byte b = (byte)(value & 0x3F);
+            value >>= 6;
+            if (negative)
+            {
+                b |= 0x80;
+            }
+            bool cont = value != 0;
+            if (cont)
+            {
+                b |= 0x40;
+            }
+            bw.Write(b);
+            while (cont)
+            {
+                b = (byte)(value & 0x7F);
+                value >>= 7;
+                cont = value != 0;
+                if (cont)
+                {
+                    b |= 0x80;
+                }
+                bw.Write(b);
             }
         }
     }
