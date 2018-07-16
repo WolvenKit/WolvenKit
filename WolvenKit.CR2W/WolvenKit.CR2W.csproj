@@ -117,6 +117,7 @@
     </Compile>
     <Compile Include="Types\CCubeTexture.cs" />
     <Compile Include="Types\CRagdoll.cs" />
+    <Compile Include="Types\CSectorData.cs" />
     <Compile Include="Types\CSwfTexture.cs" />
     <Compile Include="Types\CTree.cs" />
     <Compile Include="HslColor.cs" />
