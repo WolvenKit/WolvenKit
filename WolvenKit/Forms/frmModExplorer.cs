@@ -30,6 +30,9 @@ namespace WolvenKit
         public List<string> FilteredFiles; 
         public bool FoldersShown = true;
 
+        public DateTime LastChange;
+        public TimeSpan mindiff = TimeSpan.FromMilliseconds(500);
+
 
         public void PauseMonitoring()
         {
@@ -255,7 +258,9 @@ namespace WolvenKit
         private void FileChanges_Detected(object sender, FileSystemEventArgs e)
         {
             FilteredFiles = ActiveMod.Files;
-            UpdateModFileList(FoldersShown, true);
+            if(DateTime.Now.Subtract(LastChange) > mindiff)
+                UpdateModFileList(FoldersShown, true);
+            LastChange = DateTime.Now;
         }
 
 
