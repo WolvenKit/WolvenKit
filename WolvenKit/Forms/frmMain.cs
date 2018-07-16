@@ -926,6 +926,47 @@ namespace WolvenKit
             return doc != null ? doc.File : null;
         }
 
+        async Task DumpFile(string folder, string outfolder)
+        {
+            var config = MainController.Get().Configuration;
+            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
+            try
+            {
+                MainController.Get().ProjectStatus = "Dumping folder";
+                proc.Arguments = $"dumpfile -dir={folder} -out={outfolder}";
+                proc.UseShellExecute = false;
+                proc.RedirectStandardOutput = true;
+                proc.WindowStyle = ProcessWindowStyle.Hidden;
+                proc.CreateNoWindow = true;
+                AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
+
+                using (var process = Process.Start(proc))
+                {
+                    using (var reader = process.StandardOutput)
+                    {
+                        while (true)
+                        {
+                            var result = await reader.ReadLineAsync();
+
+                            AddOutput(result + "\n", frmOutput.Logtype.Wcc);
+
+                            Application.DoEvents();
+
+                            if (reader.EndOfStream)
+                                break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                AddOutput(ex.ToString() + "\n", frmOutput.Logtype.Error);
+            }
+
+            MainController.Get().ProjectStatus = "File dumped succesfully!";
+
+        }
+
         async Task ImportFile(string infile, string outfile)
         {
             var config = MainController.Get().Configuration;
@@ -1006,6 +1047,27 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                         if (sf.ShowDialog() == DialogResult.OK)
                         {
                             ImportFile(of.FileName, sf.FileName);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void dumpFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(@"This will generate a file which will show what wcc_lite sees from a file. Please keep in mind this doesn't always work","Info",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            using (var of = new FolderBrowserDialog())
+            {
+                of.Description = "Select the folder to dump";
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    using (var sf = new FolderBrowserDialog())
+                    {
+                        sf.Description = "Please specify a location to save the dumped file";
+                        if (sf.ShowDialog() == DialogResult.OK)
+                        {
+                            DumpFile(of.SelectedPath.EndsWith("\\") ? of.SelectedPath : of.SelectedPath + "\\",
+                                sf.SelectedPath.EndsWith("\\") ? sf.SelectedPath : sf.SelectedPath + "\\");
                         }
                     }
                 }

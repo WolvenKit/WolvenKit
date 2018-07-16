@@ -15,6 +15,7 @@ namespace WolvenKit
         {
             InitializeComponent();
             UpdateModFileList(true,true);
+            LastChange = DateTime.Now;
         }
 
         public W3Mod ActiveMod
@@ -30,8 +31,8 @@ namespace WolvenKit
         public List<string> FilteredFiles; 
         public bool FoldersShown = true;
 
-        public DateTime LastChange;
-        public TimeSpan mindiff = TimeSpan.FromMilliseconds(500);
+        public static DateTime LastChange;
+        public static TimeSpan mindiff = TimeSpan.FromMilliseconds(500);
 
 
         public void PauseMonitoring()
@@ -258,9 +259,7 @@ namespace WolvenKit
         private void FileChanges_Detected(object sender, FileSystemEventArgs e)
         {
             FilteredFiles = ActiveMod.Files;
-            if(DateTime.Now.Subtract(LastChange) > mindiff)
-                UpdateModFileList(FoldersShown, true);
-            LastChange = DateTime.Now;
+            UpdateModFileList(FoldersShown, true);
         }
 
 
