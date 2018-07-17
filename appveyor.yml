@@ -26,6 +26,7 @@ image: Visual Studio 2017
 build:
   parallel: true   
   project: WolvenKit.sln
+  verbosity: minimal
 
 platform: Any CPU
 configuration: Release
