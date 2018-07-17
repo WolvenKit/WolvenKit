@@ -5,7 +5,7 @@ skip_commits:
    - README.md
 
 init:
-  - ps: $env:WK_BUILD_TIME = "$(Get-Date -format g)
+  - ps: $env:WK_BUILD_TIME = "$(Get-Date -format g)"
   - ps: $env:WK_VERSION = "$(Get-Date -format yyyy.MM.dd)-$env:APPVEYOR_REPO_COMMIT"
   - ps: Update-AppveyorBuild -Version $env:WK_VERSION
 
