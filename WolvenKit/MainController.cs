@@ -142,8 +142,6 @@ namespace WolvenKit
         /// <returns></returns>
         public async Task Initialize()
         {
-            var asd = new System.Diagnostics.Stopwatch();
-            asd.Start();
             ProjectStatus = "Loading string manager";
             #region Load string manager
             var sw = new System.Diagnostics.Stopwatch();
@@ -328,9 +326,6 @@ namespace WolvenKit
             #endregion
             QueueLog("Loaded mod sound manager!");
             ProjectStatus = "Idle";
-            var kek = asd.ElapsedMilliseconds;
-            asd.Stop();
-
         }
 
         public frmCR2WDocument LoadDocument(string filename, bool suppressErrors = false)

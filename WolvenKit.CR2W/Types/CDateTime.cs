@@ -26,9 +26,16 @@ namespace WolvenKit.CR2W.Types
             var minute = time >> 16 & 0x3F;
             var second = time >> 10 & 0x3F;
             var millisecond = time & 0b11_11111111;
-            Date = new DateTime(
-                (int)year-1900,(int)month,(int)day+1,
-                (int)hour,(int)minute,(int)second,(int)millisecond);
+            try
+            {
+                Date = new DateTime(
+                    (int)year-1900,(int)month,(int)day+1,
+                    (int)hour,(int)minute,(int)second,(int)millisecond);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Date = DateTime.MinValue;
+            }
         }
 
         public override void Write(BinaryWriter file)

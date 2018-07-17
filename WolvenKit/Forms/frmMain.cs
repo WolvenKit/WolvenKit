@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using AutoUpdaterDotNET;
 using Dfust.Hotkeys;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
@@ -88,7 +89,7 @@ namespace WolvenKit
             hotkeys.RegisterHotkey(Keys.Control | Keys.Shift | Keys.S, HKSaveAll , "SaveAll");
             hotkeys.RegisterHotkey(Keys.F1, HKHelp, "Help");
             hotkeys.RegisterHotkey(Keys.Control | Keys.C, HKCopy, "Copy");
-            hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste,"Paste");
+            hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste,"Paste");            
         }
 
         private delegate void strDelegate(string t);
@@ -1159,14 +1160,16 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             {
                 // ignored
             }
-            if(!string.IsNullOrEmpty(MainController.Get().InitialModProject))
+
+            if (!string.IsNullOrEmpty(MainController.Get().InitialModProject))
                 openMod(MainController.Get().InitialModProject);
             if (!string.IsNullOrEmpty(MainController.Get().InitialWKP))
             {
-                using(var pi = new frmInstallPackage(MainController.Get().InitialWKP))
+                using (var pi = new frmInstallPackage(MainController.Get().InitialWKP))
                     pi.ShowDialog();
             }
         }
+
 
         private void addFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1329,7 +1332,9 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 Visible = false;
                 Close();
             }
+            AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
         }
+
 
         private void tbtNewMod_Click(object sender, EventArgs e)
         {

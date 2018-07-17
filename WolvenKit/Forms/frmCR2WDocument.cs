@@ -186,24 +186,31 @@ namespace WolvenKit
 
         private void saveToFileName()
         {
-            using (var mem = new MemoryStream())
+            try
             {
-                using (var writer = new BinaryWriter(mem))
+                using (var mem = new MemoryStream())
                 {
-                    File.Write(writer);
-                    mem.Seek(0, SeekOrigin.Begin);
-
-                    using (var fs = new FileStream(FileName, FileMode.Create, FileAccess.Write))
+                    using (var writer = new BinaryWriter(mem))
                     {
-                        mem.WriteTo(fs);
+                        File.Write(writer);
+                        mem.Seek(0, SeekOrigin.Begin);
 
-                        if (OnFileSaved != null)
+                        using (var fs = new FileStream(FileName, FileMode.Create, FileAccess.Write))
                         {
-                            OnFileSaved(this, new FileSavedEventArgs {FileName = FileName, Stream = fs, File = File});
+                            mem.WriteTo(fs);
+
+                            if (OnFileSaved != null)
+                            {
+                                OnFileSaved(this, new FileSavedEventArgs {FileName = FileName, Stream = fs, File = File});
+                            }
+                            fs.Close();
                         }
-                        fs.Close();
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                MainController.Get().QueueLog("Failed to save the file(s)! They are probably in use.\n" + e.ToString());
             }
         }
     }
