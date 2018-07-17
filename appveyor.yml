@@ -5,6 +5,7 @@ skip_commits:
    - README.md
 
 init:
+  - ps: $env:WK_BUILD_TIME = "$(Get-Date -format g)
   - ps: $env:WK_VERSION = "$(Get-Date -format yyyy.MM.dd)-$env:APPVEYOR_REPO_COMMIT"
   - ps: Update-AppveyorBuild -Version $env:WK_VERSION
 
@@ -38,7 +39,7 @@ after_build:
 deploy:
   release: WolvenKit-v$(appveyor_build_version)
   tag: Latest
-  description: 'This is a beta release so you may encounter bugs. Please report them.'
+  description: This is a beta release so you may encounter bugs. Please report them. This build was generatod on $(WK_BUILD_TIME)
   provider: GitHub
   auth_token:
     secure: PVcjhc6iNEsA28A1clj8BTACho8kddrMQXuFtLoTnJo9wgaQ8erwBvwGd+tMFQT6
