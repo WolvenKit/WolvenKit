@@ -1444,12 +1444,6 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 Process.Start("https://discord.gg/qBNgDEX");
         }
 
-        private void wcclitePatcherToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (var pw = new frmWCCPatch())
-                pw.ShowDialog();
-        }
-
         private void OutputToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowOutput();

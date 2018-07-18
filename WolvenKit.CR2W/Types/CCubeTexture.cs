@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System;
+using System.Diagnostics;
 using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
@@ -18,9 +19,9 @@ namespace WolvenKit.CR2W.Types
         public CubeFace top;
         public CubeFace bottom;
 
-        public CName compression;
+        public CDynamicInt compression;
         public CUInt32 targetFaceSize;
-        public CName strategy;
+        public CDynamicInt strategy;
 
 
         public CCubeTexture(CR2WFile cr2w) : base(cr2w)
@@ -60,23 +61,24 @@ namespace WolvenKit.CR2W.Types
                 Name = "bottom"
             };
 
-            compression = new CName(cr2w)
+            compression = new CDynamicInt(cr2w)
             {
-                Name = "compression"
+                Name = "compression",
+                Type = "ETextureCompression"
             };
             targetFaceSize = new CUInt32(cr2w)
             {
                 Name = "targetFaceSize"
             };
-            strategy = new CName(cr2w)
+            strategy = new CDynamicInt(cr2w)
             {
-                Name = "strategy"
+                Name = "strategy",
+                Type = "ECubeGenerationStrategy"
             };
         }
 
         public override void Read(BinaryReader file, uint size)
         {
-            
             importFileTimeStamp.Read(file,size);
             importFile.Read(file,size);
 
@@ -133,9 +135,9 @@ namespace WolvenKit.CR2W.Types
             var.top = (CubeFace) top.Copy(context);
             var.bottom = (CubeFace) bottom.Copy(context);
 
-            var.compression = (CName) compression.Copy(context);
+            var.compression = (CDynamicInt) compression.Copy(context);
             var.targetFaceSize = (CUInt32) targetFaceSize.Copy(context);
-            var.strategy = (CName) strategy.Copy(context);
+            var.strategy = (CDynamicInt) strategy.Copy(context);
             return var;
         }
 
