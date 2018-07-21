@@ -108,6 +108,12 @@
     </Compile>
     <Compile Include="Editors\EditableList.cs" />
     <Compile Include="Editors\EditableObject.cs" />
+    <Compile Include="Editors\IdTagEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editors\IdTagEditor.Designer.cs">
+      <DependentUpon>IdTagEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Editors\IEditableVariable.cs" />
     <Compile Include="Editors\PtrEditor.cs">
       <SubType>UserControl</SubType>
@@ -163,6 +169,7 @@
     <Compile Include="Types\CVector3D.cs" />
     <Compile Include="Types\CXml.cs" />
     <Compile Include="Types\Enums.cs" />
+    <Compile Include="Types\IdTag.cs" />
     <Compile Include="Types\IntegerTypes.cs" />
     <Compile Include="Types\MissingTypeException.cs" />
     <Compile Include="Types\SAppearanceAttachment.cs" />
@@ -171,6 +178,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Editors\ByteArrayEditor.resx">
       <DependentUpon>ByteArrayEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editors\IdTagEditor.resx">
+      <DependentUpon>IdTagEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editors\PtrEditor.resx">
       <DependentUpon>PtrEditor.cs</DependentUpon>
