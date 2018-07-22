@@ -53,6 +53,7 @@ namespace WolvenKit.CR2W.Types
             Register("soft", new CSoft(null));
 
             Register("TagList", new CTagList(null));
+            Register("IdTag", new IdTag(null));
 
             Register("Flags", new CFlags(null));
             Register("EDrawableFlags", new CFlags(null));
