@@ -122,6 +122,7 @@
       <DependentUpon>PtrEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Types\CCubeTexture.cs" />
+    <Compile Include="Types\CGenericGrassMask.cs" />
     <Compile Include="Types\CRagdoll.cs" />
     <Compile Include="Types\CSectorData.cs" />
     <Compile Include="Types\CSwarmCellMap.cs" />
