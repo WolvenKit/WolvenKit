@@ -111,6 +111,8 @@ namespace WolvenKit.CR2W.Types
 
             Register("CSwarmCellMap", new CSwarmCellMap(null));
 
+            Register("CGenericGrassMask", new CGenericGrassMask(null));
+
             //Register("CCubeTexture", new CCubeTexture(null));
 
             var vectors = new[]
