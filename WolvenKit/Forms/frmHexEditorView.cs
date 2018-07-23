@@ -196,7 +196,7 @@ namespace WolvenKit
                 var obj = new CVector(File);
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
-                v.EndPosition = (int) reader.BaseStream.Position;
+                v.Endpos = (int) reader.BaseStream.Position;
                 v.HexValue = bytes[bytestart].ToString("X2");
                 v.Method = "CVector";
             }
@@ -211,7 +211,7 @@ namespace WolvenKit
                 var obj = new CUInt64(File);
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
-                v.EndPosition = (int) reader.BaseStream.Position;
+                v.Endpos = (int) reader.BaseStream.Position;
                 v.HexValue = bytes[bytestart].ToString("X2");
                 v.Method = "CUInt64";
             }
@@ -226,7 +226,7 @@ namespace WolvenKit
                 var obj = new CUInt32(File);
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
-                v.EndPosition = (int) reader.BaseStream.Position;
+                v.Endpos = (int) reader.BaseStream.Position;
                 v.HexValue = bytes[bytestart].ToString("X2");
                 v.Method = "CUInt32";
             }
@@ -242,7 +242,7 @@ namespace WolvenKit
                 var obj = new CUInt16(File);
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
-                v.EndPosition = (int) reader.BaseStream.Position;
+                v.Endpos = (int) reader.BaseStream.Position;
                 v.HexValue = bytes[bytestart].ToString("X2");
                 v.Method = "CUInt16";
             }
@@ -258,7 +258,7 @@ namespace WolvenKit
 
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
-                v.EndPosition = (int) reader.BaseStream.Position;
+                v.Endpos = (int) reader.BaseStream.Position;
                 v.HexValue = bytes[bytestart].ToString("X2");
                 v.Method = "CUInt8";
             }
@@ -273,7 +273,7 @@ namespace WolvenKit
                 var obj = new CDynamicInt(File);
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
-                v.EndPosition = (int) reader.BaseStream.Position;
+                v.Endpos = (int) reader.BaseStream.Position;
                 v.HexValue = bytes[bytestart].ToString("X2");
                 v.Method = "CDynamicInt";
             }
@@ -288,7 +288,7 @@ namespace WolvenKit
                 var obj = new CFloat(File);
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
-                v.EndPosition = (int) reader.BaseStream.Position;
+                v.Endpos = (int) reader.BaseStream.Position;
                 v.HexValue = bytes[bytestart].ToString("X2");
                 v.Method = "CFloat";
             }
@@ -304,7 +304,7 @@ namespace WolvenKit
 
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
-                v.EndPosition = (int) reader.BaseStream.Position;
+                v.Endpos = (int) reader.BaseStream.Position;
                 v.HexValue = bytes[bytestart].ToString("X2");
                 v.Method = "CName";
 
@@ -322,7 +322,7 @@ namespace WolvenKit
 
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
-                v.EndPosition = (int) reader.BaseStream.Position;
+                v.Endpos = (int) reader.BaseStream.Position;
                 v.HexValue = bytes[bytestart].ToString("X2");
                 v.Method = "CHandle";
 
@@ -340,7 +340,7 @@ namespace WolvenKit
 
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
-                v.EndPosition = (int) reader.BaseStream.Position;
+                v.Endpos = (int) reader.BaseStream.Position;
                 v.HexValue = bytes[bytestart].ToString("X2");
                 v.Method = "CSoft";
 
@@ -358,7 +358,7 @@ namespace WolvenKit
 
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
-                v.EndPosition = (int) reader.BaseStream.Position;
+                v.Endpos = (int) reader.BaseStream.Position;
                 v.HexValue = bytes[bytestart].ToString("X2");
                 v.Method = "ReadVariable";
             }
@@ -593,7 +593,15 @@ namespace WolvenKit
 
             public string Type => Variable.Type;
 
-            public int EndPosition { get; set; }
+            public int Endpos { get; set; }
+
+            public string EndPosition
+            {
+                get
+                {
+                    return "0x" + Endpos.ToString("X") + " (" + Endpos + ")";
+                }
+            }
             public string HexValue { get; set; }
 
             public int ChildCount => Children.Count;

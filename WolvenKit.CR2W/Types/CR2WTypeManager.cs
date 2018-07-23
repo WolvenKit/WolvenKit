@@ -109,6 +109,10 @@ namespace WolvenKit.CR2W.Types
 
             Register("CSectorData", new CSectorData(null));
 
+            Register("CSwarmCellMap", new CSwarmCellMap(null));
+
+            //Register("CCubeTexture", new CCubeTexture(null));
+
             var vectors = new[]
             {
                 "SCutsceneActorDef", 

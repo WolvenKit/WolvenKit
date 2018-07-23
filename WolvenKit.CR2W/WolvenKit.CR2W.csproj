@@ -124,8 +124,9 @@
     <Compile Include="Types\CCubeTexture.cs" />
     <Compile Include="Types\CRagdoll.cs" />
     <Compile Include="Types\CSectorData.cs" />
+    <Compile Include="Types\CSwarmCellMap.cs" />
     <Compile Include="Types\CSwfTexture.cs" />
-    <Compile Include="Types\CTree.cs" />
+    <Compile Include="Types\SFoliageInstance.cs" />
     <Compile Include="HslColor.cs" />
     <Compile Include="IVariableEditor.cs" />
     <Compile Include="ILocalizedStringSource.cs" />
