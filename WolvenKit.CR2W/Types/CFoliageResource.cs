@@ -64,28 +64,28 @@ namespace WolvenKit.CR2W.Types
             {
                 for(int j = 0;j < count;j++)
                 {
-                    CArray CTreeCollection = new CArray(cr2w);
-                    //Read the handle of the trees we are currently reading
+                    CArray GrassCollection = new CArray(cr2w);
+                    //Read the handle of the Grasses we are currently reading
                     CHandle treetype = new CHandle(cr2w);
                     treetype.Read(file, size);
                     treetype.Name = "Type";
-                    CTreeCollection.AddVariable(treetype);
-                    //Read the number of trees in this treetype
+                    GrassCollection.AddVariable(treetype);
+                    //Read the number of Grasses in this treetype
                     var treecount = file.ReadVLQInt32();
-                    //For each of the trees in the treetype
+                    //For each of the Grasses in the treetype
                     for (int i = 0; i < treecount; i++)
                     {
-                        SFoliageInstance tree = new SFoliageInstance(cr2w)
+                        SFoliageInstance grass = new SFoliageInstance(cr2w)
                         {
                             Name = "Details"
                         };
-                        tree.Read(file, size);
-                        //Add the tree entry to its handle holder
-                        CTreeCollection.AddVariable(tree);
-                        tree.Name = i.ToString();
+                        grass.Read(file, size);
+                        //Add the grass entry to its handle holder
+                        GrassCollection.AddVariable(grass);
+                        grass.Name = i.ToString();
                     }
-                    //Add the handle and the tree subvars into the Trees CArray
-                    Grasses.AddVariable(CTreeCollection);
+                    //Add the handle and the grass subvars into the grasses CArray
+                    Grasses.AddVariable(GrassCollection);
                 }
             }
             else
