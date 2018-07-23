@@ -187,6 +187,32 @@ namespace WolvenKit.CR2W
             return sign ? size * -1 : size;
         }
 
+        public static byte[] ReadRemainingData(this BinaryReader br)
+        {
+            return br.ReadBytes((int)(br.BaseStream.Length - br.BaseStream.Position));
+        }
+
+        /// <summary>
+        /// Read a single string from the current stream, where the first bytes indicate the length.
+        /// </summary>
+        /// <returns>string value read</returns>
+        public static string ReadStringDefaultSingle(this BinaryReader br)
+        {
+            var b = br.ReadByte();
+            var nxt = (b & (1 << 6)) != 0;
+            var utf = (b & (1 << 7)) == 0;
+            int len = b & ((1 << 6) - 1);
+            if (nxt)
+            {
+                len += 64 * br.ReadByte();
+            }
+            if (utf)
+            {
+                return Encoding.Unicode.GetString(br.ReadBytes(len * 2));
+            }
+            return Encoding.ASCII.GetString(br.ReadBytes(len));
+        }
+
         public static void WriteVLQInt32(this BinaryWriter bw, int value)
         {
             bool negative = value < 0;
