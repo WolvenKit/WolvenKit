@@ -9,19 +9,17 @@ using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.CR2W.GameEntity
 {
-    public class CTree : CVariable
+    public class SFoliageInstance : CVariable
     {
-        public CFloat x, y, z;
+        public CVector3D position;
         public CFloat Yaw, Pitch, Roll;
 
-        public CTree(CR2WFile cr2w) : base(cr2w)
+        public SFoliageInstance(CR2WFile cr2w) : base(cr2w)
         {
-            x = new CFloat(cr2w);
-            x.Name = "X";
-            y = new CFloat(cr2w);
-            y.Name = "Y";
-            z = new CFloat(cr2w);
-            z.Name = "Z";
+            position = new CVector3D(cr2w)
+            {
+                Name = "Position"
+            };
             Yaw = new CFloat(cr2w);
             Yaw.Name = "Yaw";
             Pitch = new CFloat(cr2w);
@@ -32,19 +30,15 @@ namespace WolvenKit.CR2W.GameEntity
 
         public override void Read(BinaryReader file, uint size)
         {
-            x.Read(file, 4);
-            y.Read(file, 4);
-            z.Read(file, 4);
-            Yaw.Read(file, 4);
-            Pitch.Read(file, 4);
-            Roll.Read(file, 4);
+            position.Read(file,size);
+            Yaw.Read(file, size);
+            Pitch.Read(file, size);
+            Roll.Read(file, size);
         }
 
         public override void Write(BinaryWriter file)
         {
-            x.Write(file);
-            y.Write(file);
-            z.Write(file);
+            position.Write(file);
             Yaw.Write(file);
             Pitch.Write(file);
             Roll.Write(file);
@@ -52,15 +46,13 @@ namespace WolvenKit.CR2W.GameEntity
 
         public override CVariable Create(CR2WFile cr2w)
         {
-            return new CTree(cr2w);
+            return new SFoliageInstance(cr2w);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CTree)base.Copy(context);
-            var.x = (CFloat) x.Copy(context);
-            var.y = (CFloat) y.Copy(context);
-            var.z = (CFloat) z.Copy(context);
+            var var = (SFoliageInstance)base.Copy(context);
+            var.position = (CVector3D) position.Copy(context);
             var.Yaw = (CFloat) Yaw.Copy(context);
             var.Pitch = (CFloat) Pitch.Copy(context);
             var.Roll = (CFloat) Roll.Copy(context);
@@ -69,7 +61,7 @@ namespace WolvenKit.CR2W.GameEntity
 
         public override List<IEditableVariable> GetEditableVariables()
         {
-            var list = new List<IEditableVariable> {x, y, z, Yaw, Pitch, Roll};
+            var list = new List<IEditableVariable> {position, Yaw, Pitch, Roll};
             return list;
         }
     }

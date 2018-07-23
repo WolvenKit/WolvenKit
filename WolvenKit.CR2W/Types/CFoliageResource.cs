@@ -14,32 +14,43 @@ namespace WolvenKit.CR2W.Types
     {
         public CArray Trees;
 
+        public CArray Grasses;
+
         public CFoliageResource(CR2WFile cr2w) : base(cr2w)
         {
-            Trees = new CArray("array:2,0,CTree",cr2w);
-            Trees.Name = "Trees";
+            Trees = new CArray(cr2w)
+            {
+                Name = "Trees"
+            };
+            Grasses = new CArray(cr2w)
+            {
+                Name = "Grasses"
+            };
         }
 
         public override void Read(BinaryReader file, uint size)
         {
             base.Read(file, size);
-            var count = file.ReadByte();
+            var count = file.ReadVLQInt32();
             //For each of the treetypes
             for(int j = 0;j < count;j++)
             {
-                CArray CTreeCollection = new CArray("CTree",cr2w);
+                CArray CTreeCollection = new CArray(cr2w);
                 //Read the handle of the trees we are currently reading
                 CHandle treetype = new CHandle(cr2w);
-                treetype.Read(file, 4);
+                treetype.Read(file, size);
                 treetype.Name = "Type";
                 CTreeCollection.AddVariable(treetype);
                 //Read the number of trees in this treetype
-                var treecount = file.ReadByte();
+                var treecount = file.ReadVLQInt32();
                 //For each of the trees in the treetype
                 for (int i = 0; i < treecount; i++)
                 {
-                    CTree tree = new CTree(cr2w);
-                    tree.Read(file, 29);
+                    SFoliageInstance tree = new SFoliageInstance(cr2w)
+                    {
+                        Name = "Details"
+                    };
+                    tree.Read(file, size);
                     //Add the tree entry to its handle holder
                     CTreeCollection.AddVariable(tree);
                     tree.Name = i.ToString();
@@ -47,34 +58,77 @@ namespace WolvenKit.CR2W.Types
                 //Add the handle and the tree subvars into the Trees CArray
                 Trees.AddVariable(CTreeCollection);
             }
-            file.BaseStream.Seek(1, SeekOrigin.Current); //END MARK
+            //Read Grasses!
+            count = file.ReadVLQInt32();
+            if (count > 0)
+            {
+                for(int j = 0;j < count;j++)
+                {
+                    CArray CTreeCollection = new CArray(cr2w);
+                    //Read the handle of the trees we are currently reading
+                    CHandle treetype = new CHandle(cr2w);
+                    treetype.Read(file, size);
+                    treetype.Name = "Type";
+                    CTreeCollection.AddVariable(treetype);
+                    //Read the number of trees in this treetype
+                    var treecount = file.ReadVLQInt32();
+                    //For each of the trees in the treetype
+                    for (int i = 0; i < treecount; i++)
+                    {
+                        SFoliageInstance tree = new SFoliageInstance(cr2w)
+                        {
+                            Name = "Details"
+                        };
+                        tree.Read(file, size);
+                        //Add the tree entry to its handle holder
+                        CTreeCollection.AddVariable(tree);
+                        tree.Name = i.ToString();
+                    }
+                    //Add the handle and the tree subvars into the Trees CArray
+                    Grasses.AddVariable(CTreeCollection);
+                }
+            }
+            else
+            {
+                return;
+            }
         }
 
         public override void Write(BinaryWriter file)
         {
             base.Write(file);
-            file.Write((byte)(Trees.array.Count));
-            for (int j = 0; j < Trees.array.Count; j++)
+            file.WriteVLQInt32(Trees.array.Count);
+            if (Trees.Any())
             {
-                var currtreetype = (CArray)Trees.array[j]; //The current treetype CArray
-                ((CHandle)currtreetype.array[0]).Write(file);
-                file.Write((byte)(currtreetype.array.Count-1));
-                for (int i = 1; i < currtreetype.array.Count;i++)
+                foreach (var t in Trees.array)
                 {
-                    var currtree = currtreetype.array[i]; //The current tree
-                    currtree.Write(file);
+                    var currtreetype = (CArray)t;
+                    ((CHandle)currtreetype.array[0]).Write(file); //The type of the tree
+                    file.WriteVLQInt32(currtreetype.array.Count-1);
+                    for (int i = 1; i < currtreetype.array.Count;i++) //Start from 1 since the 0th elementh is the type
+                    {
+                        currtreetype.array[i].Write(file);
+                    }
                 }
             }
-            file.Write((byte)0x80); //END MARK
+            file.WriteVLQInt32(Grasses.Count());
+            if (Grasses.Any())
+            {
+                foreach (var t in Grasses.array)
+                {
+                    var currtreetype = (CArray)t;
+                    ((CHandle)currtreetype.array[0]).Write(file); //The type of the Grass
+                    file.WriteVLQInt32(currtreetype.array.Count-1);
+                    for (int i = 1; i < currtreetype.array.Count;i++) //Start from 1 since the 0th elementh is the type
+                    {
+                        currtreetype.array[i].Write(file);
+                    }
+                }
+            }
         }
 
         public override CVariable SetValue(object val)
         {
-            if (val is CArray)
-            {
-                Trees = (CArray) val;
-            }
-
             return this;
         }
 
@@ -87,12 +141,13 @@ namespace WolvenKit.CR2W.Types
         {
             var var = (CFoliageResource)base.Copy(context);
             var.Trees = (CArray)Trees.Copy(context);
+            var.Grasses = (CArray)Grasses.Copy(context);
             return var;
         }
 
         public override List<IEditableVariable> GetEditableVariables()
         {
-            var list = new List<IEditableVariable>(variables) { Trees };
+            var list = new List<IEditableVariable>(variables) { Trees, Grasses };
             return list;
         }
 
