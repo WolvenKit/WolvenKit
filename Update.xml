@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<item>
+    <version>0.3.0.2</version>
+    <url>https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml</url>
+    <changelog>https://raw.githubusercontent.com/Traderain/Wolven-kit/master/ChangeLog.txt</changelog>
+    <mandatory>false</mandatory>
+</item>
