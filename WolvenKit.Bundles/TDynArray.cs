@@ -13,7 +13,7 @@ namespace WolvenKit.Bundles
         public void Deserialize(BinaryReader reader)
         {
             this.Clear();
-            Int32 count = reader.ReadBit6().value;
+            Int32 count = reader.ReadVLQInt32();
             if (count == 0)
                 return;
             for (int i = 0; i < count; i++)
@@ -22,11 +22,70 @@ namespace WolvenKit.Bundles
                 item.Deserialize(reader);
                 this.Add(item);
             }
+
+            Console.WriteLine(this.GetType() + "s: " + count  + " elements. Position: " + reader.BaseStream.Position);
         }
 
         public void Serialize(BinaryWriter writer)
         {
-            throw new NotImplementedException();
+            writer.WriteVLQInt32(this.Count);
+            if (this.Count == 0)
+                return;
+            foreach(var item in this)
+            {
+                item.Serialize(writer);
+            }
+        }
+
+
+    }
+
+    public static class brext
+    {
+        public static int ReadVLQInt32(this BinaryReader br)
+        {
+            var b1 = br.ReadByte();
+            var sign = (b1 & 128) == 128;
+            var next = (b1 & 64) == 64;
+            var size = b1 % 128 % 64;
+            var offset = 6;
+            while (next)
+            {
+                var b = br.ReadByte();
+                size = (b % 128) << offset | size;
+                next = (b & 128) == 128;
+                offset += 7;
+            }
+            return sign ? size * -1 : size;
+        }
+
+        public static void WriteVLQInt32(this BinaryWriter bw, int value)
+        {
+            bool negative = value < 0;
+            value = Math.Abs(value);
+            byte b = (byte)(value & 0x3F);
+            value >>= 6;
+            if (negative)
+            {
+                b |= 0x80;
+            }
+            bool cont = value != 0;
+            if (cont)
+            {
+                b |= 0x40;
+            }
+            bw.Write(b);
+            while (cont)
+            {
+                b = (byte)(value & 0x7F);
+                value >>= 7;
+                cont = value != 0;
+                if (cont)
+                {
+                    b |= 0x80;
+                }
+                bw.Write(b);
+            }
         }
     }
 }

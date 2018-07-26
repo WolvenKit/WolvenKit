@@ -15,6 +15,7 @@ namespace WolvenKit.Bundles
         public Int32 MaxFileSizeInBundle;
         public Int32 MaxFileSIzeInMemory;
         #endregion
+
         public List<string> FileStringTable;
         TDynArray<UFileInfo> fileInfoList;
         TDynArray<UFileEntryInfo> fileEntryInfoList;
@@ -37,37 +38,51 @@ namespace WolvenKit.Bundles
                 Version = br.ReadInt32();
                 MaxFileSizeInBundle = br.ReadInt32();
                 MaxFileSIzeInMemory = br.ReadInt32();
-                var StringTableSize = br.ReadBit6().value;
+                var StringTableSize = br.ReadVLQInt32();
 
-
+                //Read the string table
                 FileStringTable = new string(br.ReadChars(StringTableSize)).Split('\0').ToList();
 
-                fileInfoList = new TDynArray<UFileInfo>();
-                fileInfoList.Deserialize(br);
-
-                fileEntryInfoList = new TDynArray<UFileEntryInfo>();
-                fileEntryInfoList.Deserialize(br);
-
+                //Read the Bundle Infos
                 bundleInfoList = new TDynArray<UBundleInfo>();
                 bundleInfoList.Deserialize(br);
 
-                var buffercount = br.ReadBit6();
-                for (int i = 0;i < buffercount.value;i++)
-                {
-                    Buffers.Add(br.ReadInt32());
-                }
+                //Read the file infos
+                fileInfoList = new TDynArray<UFileInfo>();
+                fileInfoList.Deserialize(br);
 
+                //Read the file entry infos
+                fileEntryInfoList = new TDynArray<UFileEntryInfo>();
+                fileEntryInfoList.Deserialize(br);
+
+                //Read the buffers
+                var buffercount = br.ReadVLQInt32();
+                if (buffercount > 0)
+                {
+                    for (int i = 0;i < buffercount;i++)
+                    {
+                        Buffers.Add(br.ReadInt32());
+                    }
+                }
+         
+                //Read dir initialization infos
                 dirInitInfoList = new TDynArray<UDirInitInfo>();
                 dirInitInfoList.Deserialize(br);
 
+                //File initialization infos
                 fileInitInfoList = new TDynArray<UFileInitInfo>();
                 fileInfoList.Deserialize(br);
 
+                //Hashes
                 hashes = new TDynArray<UHash>();
                 hashes.Deserialize(br);
 
                 if(br.BaseStream.Position == br.BaseStream.Length)
-                    MessageBox.Show("Succesfully read everything!");
+                    Console.WriteLine("Succesfully read everything!");
+                else
+                {
+                    Console.WriteLine($"Reader is at {br.BaseStream.Position}bytes. The length of the file is { br.BaseStream.Length} bytes.\n{ br.BaseStream.Length-br.BaseStream.Position} bytes wasn't read.");
+                }
             }
         }
 
@@ -77,25 +92,52 @@ namespace WolvenKit.Bundles
         }
     }
 
-    public class UFileInfo : ISerializable
+    public class UBundleInfo : ISerializable
     {
-        public Int32 Name;
-        public Int32 PathHash;
-        public Int32 SizeInBundle;
-        public Int32 SizeInMemory;
-        public byte  FirstEntry;
-        public Int32 CompressionType;
-        public Int32 NumEntries;
+        public UInt32 Name;
+        public UInt32 FirstFileEntry;
+        public UInt32 NumBundleEntries;
+        public UInt32 DataBlockSize;
+        public UInt32 DataBlockOffset;
+        public UInt32 BurstDataBlockSize;
 
         public void Deserialize(BinaryReader reader)
         {
-            Name = reader.ReadInt32();
-            PathHash = reader.ReadInt32();
-            SizeInBundle = reader.ReadInt32();
-            SizeInMemory = reader.ReadInt32();
-            FirstEntry = reader.ReadByte();
-            CompressionType = reader.ReadInt32();
-            NumEntries = reader.ReadInt32();
+            Name = reader.ReadUInt32();
+            FirstFileEntry = reader.ReadUInt32();
+            NumBundleEntries = reader.ReadUInt32();
+            DataBlockSize = reader.ReadUInt32();
+            DataBlockOffset = reader.ReadUInt32();
+            BurstDataBlockSize = reader.ReadUInt32();
+        }
+
+        public void Serialize(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class UFileInfo : ISerializable
+    {
+        public UInt32 Name;
+        public UInt32 PathHash;
+        public UInt32 SizeInBundle;
+        public UInt32 SizeInMemory;
+        public UInt32  FirstEntry;
+        public byte CompressionType;
+        public byte NumEntries;
+        public int _bf28;
+
+        public void Deserialize(BinaryReader reader)
+        {
+            Name = reader.ReadUInt32();
+            PathHash = reader.ReadUInt32();
+            SizeInBundle = reader.ReadUInt32();
+            SizeInMemory = reader.ReadUInt32();
+            FirstEntry = reader.ReadUInt32();
+            CompressionType = reader.ReadByte();
+            NumEntries = reader.ReadByte();
+            reader.BaseStream.Seek(6, SeekOrigin.Current); //GAP
         }
 
         public void Serialize(BinaryWriter writer)
@@ -126,30 +168,6 @@ namespace WolvenKit.Bundles
             throw new NotImplementedException();
         }
     }
-    public class UBundleInfo : ISerializable
-    {
-        public Int32 Name;
-        public Int32 FirstFileEntry;
-        public Int32 NumBundleEntries;
-        public Int32 DataBlockSize;
-        public Int32 DataBlockOffset;
-        public Int32 BurstDataBlockSize;
-
-        public void Deserialize(BinaryReader reader)
-        {
-            Name = reader.ReadInt32();
-            FirstFileEntry = reader.ReadInt32();
-            NumBundleEntries = reader.ReadInt32();
-            DataBlockSize = reader.ReadInt32();
-            DataBlockOffset = reader.ReadInt32();
-            BurstDataBlockSize = reader.ReadInt32();
-        }
-
-        public void Serialize(BinaryWriter writer)
-        {
-            throw new NotImplementedException();
-        }
-    }
 
     public class UDirInitInfo : ISerializable
     {
@@ -167,6 +185,7 @@ namespace WolvenKit.Bundles
             throw new NotImplementedException();
         }
     }
+
     public class UFileInitInfo : ISerializable
     {
         public Int32 FileIF;
@@ -189,13 +208,11 @@ namespace WolvenKit.Bundles
     public class UHash : ISerializable
     {
         public Int64 Hash;
-        public Int32 Unk1;
         public Int32 Unk2;
 
         public void Deserialize(BinaryReader reader)
         {
             Hash = reader.ReadInt64();
-            Unk1 = reader.ReadInt32();
             Unk2 = reader.ReadInt32();
         }
 
