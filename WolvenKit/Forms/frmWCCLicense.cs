@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using RtfPipe;
+using RtfPipe.Support;
 using WolvenKit.Properties;
 
 namespace WolvenKit
@@ -10,7 +12,7 @@ namespace WolvenKit
         public frmWCCLicense()
         {
             InitializeComponent();
-            richTextBox1.LoadFile(new MemoryStream(Encoding.UTF8.GetBytes(Resources.wcc_eula)),RichTextBoxStreamType.RichText);
+            browserwcclicense.DocumentText = Rtf.ToHtml(new RtfSource(new MemoryStream(Encoding.UTF8.GetBytes(Resources.wcc_eula))));
         }
     }
 }
