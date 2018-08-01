@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <item>
-    <version>0.3.0.2</version>
+    <version>0.3.0.3</version>
     <url>https://github.com/Traderain/Wolven-kit/releases/download/Latest/WolvenKit.zip</url>
     <changelog>https://raw.githubusercontent.com/Traderain/Wolven-kit/master/ChangeLog.txt</changelog>
     <mandatory>false</mandatory>
