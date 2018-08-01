@@ -90,6 +90,7 @@ namespace WolvenKit
             hotkeys.RegisterHotkey(Keys.F1, HKHelp, "Help");
             hotkeys.RegisterHotkey(Keys.Control | Keys.C, HKCopy, "Copy");
             hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste,"Paste");            
+            MainController.Get().InitForm(this);
         }
 
         private delegate void strDelegate(string t);

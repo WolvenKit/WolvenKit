@@ -23,8 +23,7 @@ namespace WolvenKit.Forms
         {
             this.CenterToScreen();
             MainController.Get().PropertyChanged += MainControllerUpdated;
-            Bitmap bmp = WolvenKit.Properties.Resources.Logo_wkit;
-            this.Icon = Icon.FromHandle(bmp.GetHicon());
+            MainController.Get().InitForm(this);
             this.VersionLbl.Text = "Version " + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
             this.copyrightLbl.Text = "https://github.com/Traderain/Wolven-kit";
         }

@@ -114,6 +114,16 @@ namespace WolvenKit.CR2W.Types
             Register("CGenericGrassMask", new CGenericGrassMask(null));
             Register("CIndexed2dArray", new CIndexed2dArray(null));
 
+            // *.w2p
+            //Register("CParticleEmitter", new CParticleEmitter(null));
+            Register("CDecalSpawner", new CDecalSpawner(null));
+            Register("SSeedKeyValue", new SSeedKeyValue(null));
+            Register("SDynamicDecalMaterialInfo", new SDynamicDecalMaterialInfo(null));
+            Register("SParticleEmitterLODLevel", new SParticleEmitterLODLevel(null));
+            Register("EmitterDelaySettings", new EmitterDelaySettings(null));
+            Register("EmitterDurationSettings", new EmitterDurationSettings(null));
+            Register("CParticleSystem", new CParticleSystem(null));
+
             //Register("CCubeTexture", new CCubeTexture(null));
 
             var vectors = new[]
