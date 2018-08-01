@@ -314,6 +314,12 @@
   <ItemGroup>
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="DDSUtility.cs" />
+    <Compile Include="Forms\frmLoading.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmLoading.Designer.cs">
+      <DependentUpon>frmLoading.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmStringsGuiImporterIDDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -622,6 +628,9 @@
     <EmbeddedResource Include="Forms\frmJournalEditor.resx">
       <DependentUpon>frmJournalEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmLoading.resx">
+      <DependentUpon>frmLoading.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -802,6 +811,10 @@
     <None Include="Resources\arrow-circle-315.png" />
     <None Include="Resources\ui-check-box.png" />
     <None Include="Resources\ui-check-box-uncheck.png" />
+    <None Include="Resources\wooden-box--arrow.png" />
+    <None Include="Resources\Logo.png" />
+    <None Include="Resources\loading_black.png" />
+    <None Include="Resources\Logo_wkit.png" />
     <Content Include="wolven_kit_icon.ico" />
     <Content Include="Licenses\License.doboz4net.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

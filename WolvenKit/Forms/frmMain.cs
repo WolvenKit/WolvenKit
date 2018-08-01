@@ -1029,6 +1029,19 @@ namespace WolvenKit
             }
         }
 
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var sf = new SaveFileDialog())
+            {
+                sf.Title = "Please select a location to save the json dump of the cr2w file";
+                sf.Filter = "JSON Files | *.json";
+                if (sf.ShowDialog() == DialogResult.OK)
+                {
+                    throw new NotImplementedException("TODO");
+                }
+            }
+        }
+
         private void fbxWithCollisionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show(@"For this to work make sure your model has either of both of these layers:
@@ -1145,7 +1158,6 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
         private void frmMain_Shown(object sender, EventArgs e)
         {
             ResetWindows();
-            Task.Factory.StartNew(() => MainController.Get().Initialize()); //Start the async task to load our stuff
             var config = MainController.Get().Configuration;
             Size = config.MainSize;
             Location = config.MainLocation;
@@ -1314,6 +1326,8 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
 
         private void frmMain_Load(object sender, EventArgs e)
         {
+            var frmload = new frmLoading();
+            frmload.ShowDialog();
             var Exit = false;
             while (!File.Exists(MainController.Get().Configuration.ExecutablePath))
             {
