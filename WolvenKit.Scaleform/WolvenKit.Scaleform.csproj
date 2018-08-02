@@ -86,7 +86,6 @@
     <Compile Include="Constants.cs" />
     <Compile Include="CriUsmStream.cs" />
     <Compile Include="FileUtil.cs" />
-    <Compile Include="HCAFile.cs" />
     <Compile Include="MathUtil.cs" />
     <Compile Include="Mpeg1Stream.cs" />
     <Compile Include="MpegStream.cs" />

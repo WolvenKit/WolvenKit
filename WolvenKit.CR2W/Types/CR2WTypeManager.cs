@@ -114,6 +114,8 @@ namespace WolvenKit.CR2W.Types
             Register("CGenericGrassMask", new CGenericGrassMask(null));
             Register("CIndexed2dArray", new CIndexed2dArray(null));
 
+            // Testing area. Put your CVectors which don't work fully yet here.
+#if DEBUG
             // *.w2p
             //Register("CParticleEmitter", new CParticleEmitter(null));
             Register("CDecalSpawner", new CDecalSpawner(null));
@@ -124,7 +126,13 @@ namespace WolvenKit.CR2W.Types
             Register("EmitterDurationSettings", new EmitterDurationSettings(null));
             Register("CParticleSystem", new CParticleSystem(null));
 
+            // *.w2l
+            Register("CLayerInfo", new CLayerInfo(null));
+            Register("SBoneIndiceMapping", new SBoneIndiceMapping(null));
+
+            // *.w2cube
             //Register("CCubeTexture", new CCubeTexture(null));
+#endif
 
             var vectors = new[]
             {
