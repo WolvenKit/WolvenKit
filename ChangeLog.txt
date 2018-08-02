@@ -1,4 +1,14 @@
-
+CHANGELOG 0.3.1.0 - 2018.08.02.
+ - Fix loading showing before it knows the paths needed to load
+ - Update version
+ - Fixed license window with the new rtfpipe package
+ - Update nuget packages  
+ - Fixes autoupdates not working.  
+ - Refactor some cr2w stuff.
+ - Fix form icons
+ - Implemented splash screen & Some Particle classes
+ - Create ChangeLog.txt
+ - Added proper wcc_lite patcher
 ---------------------------------- LEGACY CHANGELOG ----------------------------------
 CHANGELOG 0.3.0.1 - 2018.07.26. 
  -  Fix broken wcc_lite license formating
