@@ -1327,8 +1327,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            var frmload = new frmLoading();
-            frmload.ShowDialog();
+            //Load/Setup the config
             var Exit = false;
             while (!File.Exists(MainController.Get().Configuration.ExecutablePath))
             {
@@ -1347,6 +1346,12 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 Visible = false;
                 Close();
             }
+
+            //Start loading if everything is set up.
+            var frmload = new frmLoading();
+            frmload.ShowDialog();
+            
+            //Update check should be after we are all set up. It goes on in the background.
             AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
         }
 
