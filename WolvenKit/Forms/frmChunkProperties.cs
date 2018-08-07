@@ -335,8 +335,14 @@ namespace WolvenKit
             var node = (VariableListNode) treeView.SelectedObject;
             if (node?.Parent == null || !node.Parent.Variable.CanRemoveVariable(node.Variable))
                 return;
-            if(node.Value != null)
-                Clipboard.SetText(node.Value ?? (node.Type + ":??"));
+            if (node.Value != null)
+            {
+                if(node.Value == "")
+                    Clipboard.SetText(node.Type + ":??");
+                else
+                    Clipboard.SetText(node.Value);
+
+            }
         }
 
         internal class VariableListNode
