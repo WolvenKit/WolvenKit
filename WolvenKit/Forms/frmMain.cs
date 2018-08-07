@@ -291,6 +291,11 @@ namespace WolvenKit
                 XDocument installlog = new XDocument(new XElement("InstalLog", new XAttribute("Project", ActiveMod.Name), new XAttribute("Build_date", DateTime.Now.ToString())));
                 var fileroot = new XElement("Files");
                 //Copy and log the files.
+                if (!Directory.Exists(Path.Combine(ActiveMod.ProjectDirectory, "packed")))
+                {
+                    AddOutput("Failed to install the mod! The packed directory doesn't exist! You forgot to tick any of the packing options?",frmOutput.Logtype.Important);
+                    return;
+                }
                 fileroot.Add(Commonfunctions.DirectoryCopy(Path.Combine(ActiveMod.ProjectDirectory, "packed"), MainController.Get().Configuration.GameRootDir, true));
                 installlog.Root.Add(fileroot);
                 //Save the log.
@@ -1658,9 +1663,12 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 ShowOutput();
                 ClearOutput();
                 saveAllFiles();
-
                 var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
                 var DlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
+                
+                //Create the dirs. So script only mods don't die.
+                Directory.CreateDirectory(modpackDir);
+                Directory.CreateDirectory(DlcpackDir);
 
                 //------------------------PRE COOKING-------------------------------------//
 
@@ -1722,29 +1730,35 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 }
 
                 //Handle mod scripts
-                if (Directory.Exists((ActiveMod.ModDirectory + "\\scripts")) && Directory.GetFiles((ActiveMod.ModDirectory + "\\scripts")).Any())
+                if (Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, "scripts"),"*.*",SearchOption.AllDirectories).Any())
                 {
                     if (!Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")))
                         Directory.CreateDirectory(Path.Combine(ActiveMod.ModDirectory, "scripts"));
-                    Directory.GetFiles((ActiveMod.ModDirectory + "\\scripts")).ToList().ForEach(x =>
-                    {
-                        var dest = Path.Combine(modpackDir, "scripts", Path.GetFileName(x));
-                        Directory.CreateDirectory(Path.GetDirectoryName(dest));
-                        File.Copy(x, dest, true);
-                    });
+                    //Now Create all of the directories
+                    foreach (string dirPath in Directory.GetDirectories(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*", 
+                        SearchOption.AllDirectories))
+                        Directory.CreateDirectory(dirPath.Replace(Path.Combine(ActiveMod.ModDirectory , "scripts"), Path.Combine(modpackDir, "scripts")));
+
+                    //Copy all the files & Replaces any files with the same name
+                    foreach (string newPath in Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory , "scripts"), "*.*", 
+                        SearchOption.AllDirectories))
+                        File.Copy(newPath, newPath.Replace(Path.Combine(ActiveMod.ModDirectory, "scripts"), Path.Combine(modpackDir, "scripts")), true);
                 }
 
                 //Handle the DLC scripts
-                if (Directory.Exists((ActiveMod.DlcDirectory + "\\scripts")) && Directory.GetFiles((ActiveMod.DlcDirectory + "\\scripts")).Any())
+                if (Directory.Exists(Path.Combine(ActiveMod.DlcDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, "scripts"),"*.*",SearchOption.AllDirectories).Any())
                 {
                     if (!Directory.Exists(Path.Combine(ActiveMod.DlcDirectory, "scripts")))
                         Directory.CreateDirectory(Path.Combine(ActiveMod.DlcDirectory, "scripts"));
-                    Directory.GetFiles((ActiveMod.DlcDirectory + "\\scripts")).ToList().ForEach(x =>
-                    {
-                        var dest = Path.Combine(DlcpackDir, "scripts", Path.GetFileName(x));
-                        Directory.CreateDirectory(Path.GetDirectoryName(dest));
-                        File.Copy(x, dest, true);
-                    });
+                    //Now Create all of the directories
+                    foreach (string dirPath in Directory.GetDirectories(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*", 
+                        SearchOption.AllDirectories))
+                        Directory.CreateDirectory(dirPath.Replace(Path.Combine(ActiveMod.DlcDirectory, "scripts"), Path.Combine(DlcpackDir, "scripts")));
+
+                    //Copy all the files & Replaces any files with the same name
+                    foreach (string newPath in Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*", 
+                        SearchOption.AllDirectories))
+                        File.Copy(newPath, newPath.Replace(Path.Combine(ActiveMod.DlcDirectory, "scripts"), Path.Combine(DlcpackDir, "scripts")), true);
                 }
 
                 //Copy the generated w3strings
