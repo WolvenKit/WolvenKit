@@ -30,8 +30,26 @@ namespace WolvenKit.Forms
 
         private void frmLoading_Shown(object sender, EventArgs e)
         {
-            Application.DoEvents();
-            Task.Factory.StartNew(() => MainController.Get().Initialize()); //Start the async task to load our stuff
+            if (Process.GetProcessesByName("Witcher3").Length != 0)
+            {
+                if (MessageBox.Show(
+                        "The Game is running. Please note that running the program like this makes some stuff unusable. Wiould you like to run the program like this still?",
+                        "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
+                {
+                    Environment.Exit(0);
+
+                }
+                else
+                {
+                    this.Close();
+                }
+                    
+            }
+            else
+            {
+                Application.DoEvents();
+                Task.Factory.StartNew(() => MainController.Get().Initialize()); //Start the async task to load our stuff
+            }
         }
 
         private delegate void strDelegate(string t);
