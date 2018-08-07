@@ -1513,7 +1513,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             if (ActiveMod == null)
                 return;
 
-            var scriptsdirectory = (ActiveMod.DlcDirectory + "\\scripts");
+            var scriptsdirectory = (ActiveMod.DlcDirectory + "\\scripts\\local");
             if (!Directory.Exists(scriptsdirectory))
             {
                 Directory.CreateDirectory(scriptsdirectory);
@@ -1537,7 +1537,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             if (ActiveMod == null)
                 return;
 
-            var scriptsdirectory = (ActiveMod.ModDirectory + "\\scripts");
+            var scriptsdirectory = (ActiveMod.ModDirectory + "\\scripts\\local");
             if (!Directory.Exists(scriptsdirectory))
             {
                 Directory.CreateDirectory(scriptsdirectory);
