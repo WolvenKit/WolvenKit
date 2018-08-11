@@ -340,11 +340,8 @@ namespace WolvenKit
             // 
             this.fbxWithCollisionsToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.stickman;
             this.fbxWithCollisionsToolStripMenuItem.Name = "fbxWithCollisionsToolStripMenuItem";
-<<<<<<< Updated upstream
             this.fbxWithCollisionsToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
-=======
             this.fbxWithCollisionsToolStripMenuItem.Size = new System.Drawing.Size(204, 26);
->>>>>>> Stashed changes
             this.fbxWithCollisionsToolStripMenuItem.Text = "Fbx with collisions";
             this.fbxWithCollisionsToolStripMenuItem.Click += new System.EventHandler(this.fbxWithCollisionsToolStripMenuItem_Click);
             // 
@@ -352,11 +349,8 @@ namespace WolvenKit
             // 
             this.nvidiaClothFileToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.t_shirt_gray;
             this.nvidiaClothFileToolStripMenuItem.Name = "nvidiaClothFileToolStripMenuItem";
-<<<<<<< Updated upstream
             this.nvidiaClothFileToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
-=======
             this.nvidiaClothFileToolStripMenuItem.Size = new System.Drawing.Size(204, 26);
->>>>>>> Stashed changes
             this.nvidiaClothFileToolStripMenuItem.Text = "Nvidia cloth file";
             this.nvidiaClothFileToolStripMenuItem.Click += new System.EventHandler(this.nvidiaClothFileToolStripMenuItem_Click);
             // 
@@ -390,7 +384,7 @@ namespace WolvenKit
             // 
             // modwwise
             // 
-            this.modwwise.Image = global::WolvenKit.Properties.Resources.PlayIcon;
+            this.modwwise.Image = global::WolvenKit.Properties.Resources.bug;
             this.modwwise.Name = "modwwise";
             this.modwwise.Size = new System.Drawing.Size(216, 26);
             this.modwwise.Text = "Wwise sound(bank)";
@@ -424,7 +418,7 @@ namespace WolvenKit
             // 
             // dlcwwise
             // 
-            this.dlcwwise.Image = global::WolvenKit.Properties.Resources.PlayIcon;
+            this.dlcwwise.Image = global::WolvenKit.Properties.Resources.bug;
             this.dlcwwise.Name = "dlcwwise";
             this.dlcwwise.Size = new System.Drawing.Size(213, 26);
             this.dlcwwise.Text = "Wwise sound(bank)";
@@ -568,17 +562,6 @@ namespace WolvenKit
             this.saveExplorerToolStripMenuItem.Text = "Save explorer";
             this.saveExplorerToolStripMenuItem.Click += new System.EventHandler(this.saveExplorerToolStripMenuItem_Click);
             // 
-<<<<<<< Updated upstream
-=======
-            // wcclitePatcherToolStripMenuItem
-            // 
-            this.wcclitePatcherToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.FileGroup_10135_16x;
-            this.wcclitePatcherToolStripMenuItem.Name = "wcclitePatcherToolStripMenuItem";
-            this.wcclitePatcherToolStripMenuItem.Size = new System.Drawing.Size(215, 26);
-            this.wcclitePatcherToolStripMenuItem.Text = "wcc_lite patcher";
-            this.wcclitePatcherToolStripMenuItem.Click += new System.EventHandler(this.wcclitePatcherToolStripMenuItem_Click);
-            // 
->>>>>>> Stashed changes
             // stringsEncoderGUIToolStripMenuItem
             // 
             this.stringsEncoderGUIToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.edit_letter_spacing;
@@ -615,11 +598,8 @@ namespace WolvenKit
             // 
             this.renderW2meshToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.ui_check_box_uncheck;
             this.renderW2meshToolStripMenuItem.Name = "renderW2meshToolStripMenuItem";
-<<<<<<< Updated upstream
             this.renderW2meshToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
-=======
             this.renderW2meshToolStripMenuItem.Size = new System.Drawing.Size(215, 26);
->>>>>>> Stashed changes
             this.renderW2meshToolStripMenuItem.Tag = "false";
             this.renderW2meshToolStripMenuItem.Text = "Render w2mesh";
             this.renderW2meshToolStripMenuItem.Click += new System.EventHandler(this.renderW2meshToolStripMenuItem_Click);
@@ -892,12 +872,9 @@ namespace WolvenKit
         private ToolStripMenuItem fbxWithCollisionsToolStripMenuItem;
         private ToolStripMenuItem nvidiaClothFileToolStripMenuItem;
         private ToolStripMenuItem renderW2meshToolStripMenuItem;
-<<<<<<< Updated upstream
         private ToolStripMenuItem dumpFileToolStripMenuItem;
         private ToolStripMenuItem exportToolStripMenuItem;
-=======
         private ToolStripMenuItem modwwise;
         private ToolStripMenuItem dlcwwise;
->>>>>>> Stashed changes
     }
 }
