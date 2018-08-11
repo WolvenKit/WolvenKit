@@ -53,6 +53,7 @@ namespace WolvenKit.CR2W.Types
             Register("soft", new CSoft(null));
 
             Register("TagList", new CTagList(null));
+            Register("IdTag", new IdTag(null));
 
             Register("Flags", new CFlags(null));
             Register("EDrawableFlags", new CFlags(null));
@@ -85,6 +86,8 @@ namespace WolvenKit.CR2W.Types
             Register("SharedDataBuffer", new CByteArray(null));
 
             Register("CSwfResource", new CSwfResource(null));
+            Register("CSwfTexture", new CSwfTexture(null));
+
             Register("CBitmapTexture", new CBitmapTexture(null));
 
             Register("Color", new CColor(null));
@@ -104,6 +107,32 @@ namespace WolvenKit.CR2W.Types
 
             Register("CRagdoll",new CRagdoll(null));
 
+            Register("CSectorData", new CSectorData(null));
+
+            Register("CSwarmCellMap", new CSwarmCellMap(null));
+
+            Register("CGenericGrassMask", new CGenericGrassMask(null));
+            Register("CIndexed2dArray", new CIndexed2dArray(null));
+
+            // Testing area. Put your CVectors which don't work fully yet here.
+#if DEBUG
+            // *.w2p
+            //Register("CParticleEmitter", new CParticleEmitter(null));
+            Register("CDecalSpawner", new CDecalSpawner(null));
+            Register("SSeedKeyValue", new SSeedKeyValue(null));
+            Register("SDynamicDecalMaterialInfo", new SDynamicDecalMaterialInfo(null));
+            Register("SParticleEmitterLODLevel", new SParticleEmitterLODLevel(null));
+            Register("EmitterDelaySettings", new EmitterDelaySettings(null));
+            Register("EmitterDurationSettings", new EmitterDurationSettings(null));
+            Register("CParticleSystem", new CParticleSystem(null));
+
+            // *.w2l
+            Register("CLayerInfo", new CLayerInfo(null));
+            Register("SBoneIndiceMapping", new SBoneIndiceMapping(null));
+
+            // *.w2cube
+            //Register("CCubeTexture", new CCubeTexture(null));
+#endif
 
             var vectors = new[]
             {

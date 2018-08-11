@@ -28,24 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.browserwcclicense = new System.Windows.Forms.WebBrowser();
             this.SuspendLayout();
             // 
-            // richTextBox1
+            // browserwcclicense
             // 
-            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox1.Location = new System.Drawing.Point(0, 0);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(643, 568);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "";
+            this.browserwcclicense.AllowNavigation = false;
+            this.browserwcclicense.AllowWebBrowserDrop = false;
+            this.browserwcclicense.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.browserwcclicense.Location = new System.Drawing.Point(0, 0);
+            this.browserwcclicense.MinimumSize = new System.Drawing.Size(20, 20);
+            this.browserwcclicense.Name = "browserwcclicense";
+            this.browserwcclicense.Size = new System.Drawing.Size(643, 568);
+            this.browserwcclicense.TabIndex = 0;
+            this.browserwcclicense.WebBrowserShortcutsEnabled = false;
             // 
             // frmWCCLicense
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(643, 568);
-            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.browserwcclicense);
             this.Name = "frmWCCLicense";
             this.ShowIcon = false;
             this.Text = "Witcher III Modding Tool License";
@@ -55,6 +58,6 @@
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.WebBrowser browserwcclicense;
     }
 }

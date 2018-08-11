@@ -44,14 +44,13 @@ namespace WolvenKit.CR2W
         }
 
         public uint FileVersion { get; set; }
-        public uint unk2 { get; set; }
-        public uint date { get; set; }
-        public uint time { get; set; }
-        public uint unk5 { get; set; }
+        public uint flags { get; set; }
+        public CDateTime Datetime = new CDateTime(null);
+        public uint buildversion { get; set; }
         public uint cr2wsize { get; set; }
         public uint buffersize { get; set; }
         public uint crc32 { get; set; }
-        public uint unk7 { get; set; }
+        public uint numchunks { get; set; }
         public List<CR2WHeaderData> headers { get; set; }
         public List<CR2WHeaderString> strings { get; set; }
         public List<CR2WHeaderHandle> handles { get; set; }
@@ -59,6 +58,7 @@ namespace WolvenKit.CR2W
         public List<CR2WChunk> chunks { get; set; }
         public List<CR2WHeaderBlock6> block6 { get; set; }
         public List<CR2WHeaderBlock7> block7 { get; set; }
+
         public byte[] bufferdata { get; set; }
         public string FileName { get; set; }
 
@@ -98,17 +98,15 @@ namespace WolvenKit.CR2W
             }
 
             FileVersion = file.ReadUInt32();
-            unk2 = file.ReadUInt32();
-            date = file.ReadUInt32();
-
-            time = file.ReadUInt32();
-            unk5 = file.ReadUInt32();
+            flags = file.ReadUInt32();
+            Datetime.Read(file,0);
+            buildversion = file.ReadUInt32();
 
             cr2wsize = file.ReadUInt32();
             buffersize = file.ReadUInt32();
 
             crc32 = file.ReadUInt32();
-            unk7 = file.ReadUInt32();
+            numchunks = file.ReadUInt32();
 
             headers = new List<CR2WHeaderData>();
 
@@ -270,7 +268,6 @@ namespace WolvenKit.CR2W
             var nameId = file.ReadUInt16();
             if (nameId == 0)
             {
-                //TODO: Figure out a way to skip null vars
                 return null;
             }
 
@@ -344,17 +341,15 @@ namespace WolvenKit.CR2W
             file.Write(IDString);
 
             file.Write(FileVersion);
-            file.Write(unk2);
-            file.Write(date);
-
-            file.Write(time);
-            file.Write(unk5);
+            file.Write(flags);
+            Datetime.Write(file);
+            file.Write(buildversion);
 
             file.Write(cr2wsize);
             file.Write(buffersize);
 
             file.Write(crc32);
-            file.Write(unk7);
+            file.Write(numchunks);
 
             for (var i = 0; i < 10; i++)
             {

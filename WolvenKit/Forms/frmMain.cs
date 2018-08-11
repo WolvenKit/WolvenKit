@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using AutoUpdaterDotNET;
+using Dfust.Hotkeys;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Newtonsoft.Json;
@@ -23,6 +25,7 @@ using WolvenKit.Common;
 using WolvenKit.Cache;
 using WolvenKit.Bundles;
 using WolvenKit.Forms;
+using Enums = Dfust.Hotkeys.Enums;
 
 namespace WolvenKit
 {
@@ -47,6 +50,8 @@ namespace WolvenKit
         #endregion
         private readonly string BaseTitle = "Wolven kit";
         public static Task Packer;
+        private HotkeyCollection hotkeys;
+
         public W3Mod ActiveMod
         {
             get => MainController.Get().ActiveMod;
@@ -79,6 +84,13 @@ namespace WolvenKit
                 recentFilesToolStripMenuItem.Enabled = false;
             }
             #endregion
+            hotkeys = new HotkeyCollection(Enums.Scope.Application);
+            hotkeys.RegisterHotkey(Keys.Control | Keys.S, HKSave, "Save");
+            hotkeys.RegisterHotkey(Keys.Control | Keys.Shift | Keys.S, HKSaveAll , "SaveAll");
+            hotkeys.RegisterHotkey(Keys.F1, HKHelp, "Help");
+            hotkeys.RegisterHotkey(Keys.Control | Keys.C, HKCopy, "Copy");
+            hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste,"Paste");            
+            MainController.Get().InitForm(this);
         }
 
         private delegate void strDelegate(string t);
@@ -86,6 +98,12 @@ namespace WolvenKit
         private delegate void logDelegate(string t, frmOutput.Logtype type);
 
         #region Methods
+        /// <summary>
+        /// Occurs when something in the maincontroller is updated that is INotifyProeprtyChanged
+        /// Thread safe and always should be
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainControllerUpdated(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "ProjectStatus")
@@ -100,6 +118,56 @@ namespace WolvenKit
             statusLBL.Text = text;
         }
 
+        private void HKSave(HotKeyEventArgs e)
+        {
+            if(ActiveDocument != null)
+                saveFile(ActiveDocument);
+        }
+
+        private void HKSaveAll(HotKeyEventArgs e)
+        {
+            if(OpenDocuments != null && OpenDocuments.Count > 0)
+                saveAllFiles();
+        }
+
+        private void HKHelp(HotKeyEventArgs e)
+        {
+            Process.Start("https://github.com/Traderain/Wolven-kit/wiki");
+        }
+
+        private void HKCopy(HotKeyEventArgs e)
+        {
+            if (ActiveDocument != null)
+            {
+                if (ActiveDocument.chunkList.IsActivated)
+                {
+                    ActiveDocument.chunkList.CopyChunks();
+                    AddOutput("Selected chunk(s) copied!\n");
+                }
+                else if(ActiveDocument.propertyWindow.IsActivated)
+                {
+                    ActiveDocument.propertyWindow.copyVariable();
+                    AddOutput("Selected propertie(s) copied!\n");
+                }
+            }
+        }
+
+        private void HKPaste(HotKeyEventArgs e)
+        {
+            if (ActiveDocument != null)
+            {
+                if (ActiveDocument.chunkList.IsActivated)
+                {
+                    ActiveDocument.chunkList.PasteChunks();
+                    AddOutput("Copied chunk(s) pasted!\n");
+                }
+                else if(ActiveDocument.propertyWindow.IsActivated)
+                {
+                    ActiveDocument.propertyWindow.pasteVariable();
+                    AddOutput("Copied propertie(s) pasted!\n");
+                }
+            }
+        }
 
 
         private void UpdateTitle()
@@ -136,6 +204,8 @@ namespace WolvenKit
         private void saveFile(frmCR2WDocument d)
         {
             d.SaveFile();
+            AddOutput(d.FileName + " saved!\n");
+            MainController.Get().ProjectStatus = "Saved";
         }
 
         private void btPack_Click(object sender, EventArgs e)
@@ -221,6 +291,11 @@ namespace WolvenKit
                 XDocument installlog = new XDocument(new XElement("InstalLog", new XAttribute("Project", ActiveMod.Name), new XAttribute("Build_date", DateTime.Now.ToString())));
                 var fileroot = new XElement("Files");
                 //Copy and log the files.
+                if (!Directory.Exists(Path.Combine(ActiveMod.ProjectDirectory, "packed")))
+                {
+                    AddOutput("Failed to install the mod! The packed directory doesn't exist! You forgot to tick any of the packing options?",frmOutput.Logtype.Important);
+                    return;
+                }
                 fileroot.Add(Commonfunctions.DirectoryCopy(Path.Combine(ActiveMod.ProjectDirectory, "packed"), MainController.Get().Configuration.GameRootDir, true));
                 installlog.Root.Add(fileroot);
                 //Save the log.
@@ -858,6 +933,47 @@ namespace WolvenKit
             return doc != null ? doc.File : null;
         }
 
+        async Task DumpFile(string folder, string outfolder)
+        {
+            var config = MainController.Get().Configuration;
+            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
+            try
+            {
+                MainController.Get().ProjectStatus = "Dumping folder";
+                proc.Arguments = $"dumpfile -dir={folder} -out={outfolder}";
+                proc.UseShellExecute = false;
+                proc.RedirectStandardOutput = true;
+                proc.WindowStyle = ProcessWindowStyle.Hidden;
+                proc.CreateNoWindow = true;
+                AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
+
+                using (var process = Process.Start(proc))
+                {
+                    using (var reader = process.StandardOutput)
+                    {
+                        while (true)
+                        {
+                            var result = await reader.ReadLineAsync();
+
+                            AddOutput(result + "\n", frmOutput.Logtype.Wcc);
+
+                            Application.DoEvents();
+
+                            if (reader.EndOfStream)
+                                break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                AddOutput(ex.ToString() + "\n", frmOutput.Logtype.Error);
+            }
+
+            MainController.Get().ProjectStatus = "File dumped succesfully!";
+
+        }
+
         async Task ImportFile(string infile, string outfile)
         {
             var config = MainController.Get().Configuration;
@@ -919,6 +1035,19 @@ namespace WolvenKit
             }
         }
 
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var sf = new SaveFileDialog())
+            {
+                sf.Title = "Please select a location to save the json dump of the cr2w file";
+                sf.Filter = "JSON Files | *.json";
+                if (sf.ShowDialog() == DialogResult.OK)
+                {
+                    throw new NotImplementedException("TODO");
+                }
+            }
+        }
+
         private void fbxWithCollisionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show(@"For this to work make sure your model has either of both of these layers:
@@ -938,6 +1067,27 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                         if (sf.ShowDialog() == DialogResult.OK)
                         {
                             ImportFile(of.FileName, sf.FileName);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void dumpFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(@"This will generate a file which will show what wcc_lite sees from a file. Please keep in mind this doesn't always work","Info",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            using (var of = new FolderBrowserDialog())
+            {
+                of.Description = "Select the folder to dump";
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    using (var sf = new FolderBrowserDialog())
+                    {
+                        sf.Description = "Please specify a location to save the dumped file";
+                        if (sf.ShowDialog() == DialogResult.OK)
+                        {
+                            DumpFile(of.SelectedPath.EndsWith("\\") ? of.SelectedPath : of.SelectedPath + "\\",
+                                sf.SelectedPath.EndsWith("\\") ? sf.SelectedPath : sf.SelectedPath + "\\");
                         }
                     }
                 }
@@ -1014,7 +1164,6 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
         private void frmMain_Shown(object sender, EventArgs e)
         {
             ResetWindows();
-            Task.Factory.StartNew(() => MainController.Get().Initialize()); //Start the async task to load our stuff
             var config = MainController.Get().Configuration;
             Size = config.MainSize;
             Location = config.MainLocation;
@@ -1029,14 +1178,16 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             {
                 // ignored
             }
-            if(!string.IsNullOrEmpty(MainController.Get().InitialModProject))
+
+            if (!string.IsNullOrEmpty(MainController.Get().InitialModProject))
                 openMod(MainController.Get().InitialModProject);
             if (!string.IsNullOrEmpty(MainController.Get().InitialWKP))
             {
-                using(var pi = new frmInstallPackage(MainController.Get().InitialWKP))
+                using (var pi = new frmInstallPackage(MainController.Get().InitialWKP))
                     pi.ShowDialog();
             }
         }
+
 
         private void addFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1181,6 +1332,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
 
         private void frmMain_Load(object sender, EventArgs e)
         {
+            //Load/Setup the config
             var Exit = false;
             while (!File.Exists(MainController.Get().Configuration.ExecutablePath))
             {
@@ -1199,7 +1351,15 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 Visible = false;
                 Close();
             }
+
+            //Start loading if everything is set up.
+            var frmload = new frmLoading();
+            frmload.ShowDialog();
+            
+            //Update check should be after we are all set up. It goes on in the background.
+            AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
         }
+
 
         private void tbtNewMod_Click(object sender, EventArgs e)
         {
@@ -1309,11 +1469,6 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 Process.Start("https://discord.gg/qBNgDEX");
         }
 
-        private void wcclitePatcherToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://forums.cdprojektred.com/index.php?threads/patched-wcc_lite-for-faster-startup.6883680/");
-        }
-
         private void OutputToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowOutput();
@@ -1363,7 +1518,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             if (ActiveMod == null)
                 return;
 
-            var scriptsdirectory = (ActiveMod.DlcDirectory + "\\scripts");
+            var scriptsdirectory = (ActiveMod.DlcDirectory + "\\scripts\\local");
             if (!Directory.Exists(scriptsdirectory))
             {
                 Directory.CreateDirectory(scriptsdirectory);
@@ -1387,7 +1542,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             if (ActiveMod == null)
                 return;
 
-            var scriptsdirectory = (ActiveMod.ModDirectory + "\\scripts");
+            var scriptsdirectory = (ActiveMod.ModDirectory + "\\scripts\\local");
             if (!Directory.Exists(scriptsdirectory))
             {
                 Directory.CreateDirectory(scriptsdirectory);
@@ -1508,9 +1663,12 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 ShowOutput();
                 ClearOutput();
                 saveAllFiles();
-
                 var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
                 var DlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
+                
+                //Create the dirs. So script only mods don't die.
+                Directory.CreateDirectory(modpackDir);
+                Directory.CreateDirectory(DlcpackDir);
 
                 //------------------------PRE COOKING-------------------------------------//
 
@@ -1572,29 +1730,35 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 }
 
                 //Handle mod scripts
-                if (Directory.Exists((ActiveMod.ModDirectory + "\\scripts")) && Directory.GetFiles((ActiveMod.ModDirectory + "\\scripts")).Any())
+                if (Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, "scripts"),"*.*",SearchOption.AllDirectories).Any())
                 {
                     if (!Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")))
                         Directory.CreateDirectory(Path.Combine(ActiveMod.ModDirectory, "scripts"));
-                    Directory.GetFiles((ActiveMod.ModDirectory + "\\scripts")).ToList().ForEach(x =>
-                    {
-                        var dest = Path.Combine(modpackDir, "scripts", Path.GetFileName(x));
-                        Directory.CreateDirectory(Path.GetDirectoryName(dest));
-                        File.Copy(x, dest, true);
-                    });
+                    //Now Create all of the directories
+                    foreach (string dirPath in Directory.GetDirectories(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*", 
+                        SearchOption.AllDirectories))
+                        Directory.CreateDirectory(dirPath.Replace(Path.Combine(ActiveMod.ModDirectory , "scripts"), Path.Combine(modpackDir, "scripts")));
+
+                    //Copy all the files & Replaces any files with the same name
+                    foreach (string newPath in Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory , "scripts"), "*.*", 
+                        SearchOption.AllDirectories))
+                        File.Copy(newPath, newPath.Replace(Path.Combine(ActiveMod.ModDirectory, "scripts"), Path.Combine(modpackDir, "scripts")), true);
                 }
 
                 //Handle the DLC scripts
-                if (Directory.Exists((ActiveMod.DlcDirectory + "\\scripts")) && Directory.GetFiles((ActiveMod.DlcDirectory + "\\scripts")).Any())
+                if (Directory.Exists(Path.Combine(ActiveMod.DlcDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, "scripts"),"*.*",SearchOption.AllDirectories).Any())
                 {
                     if (!Directory.Exists(Path.Combine(ActiveMod.DlcDirectory, "scripts")))
                         Directory.CreateDirectory(Path.Combine(ActiveMod.DlcDirectory, "scripts"));
-                    Directory.GetFiles((ActiveMod.DlcDirectory + "\\scripts")).ToList().ForEach(x =>
-                    {
-                        var dest = Path.Combine(DlcpackDir, "scripts", Path.GetFileName(x));
-                        Directory.CreateDirectory(Path.GetDirectoryName(dest));
-                        File.Copy(x, dest, true);
-                    });
+                    //Now Create all of the directories
+                    foreach (string dirPath in Directory.GetDirectories(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*", 
+                        SearchOption.AllDirectories))
+                        Directory.CreateDirectory(dirPath.Replace(Path.Combine(ActiveMod.DlcDirectory, "scripts"), Path.Combine(DlcpackDir, "scripts")));
+
+                    //Copy all the files & Replaces any files with the same name
+                    foreach (string newPath in Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*", 
+                        SearchOption.AllDirectories))
+                        File.Copy(newPath, newPath.Replace(Path.Combine(ActiveMod.DlcDirectory, "scripts"), Path.Combine(DlcpackDir, "scripts")), true);
                 }
 
                 //Copy the generated w3strings

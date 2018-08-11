@@ -56,5 +56,5 @@ Please do! Fork the project and please do you changes in small incremental steps
 For any questions:
 - PM me on discord: Traderain#3279 
 - Reach me at: hambalko.bence@gmail.com.
-- Alternatively you can join our discord: https://discord.gg/qBNgDEX
+- Alternatively you can join our discord: https://discordapp.com/invite/tdSUQQe
 ***

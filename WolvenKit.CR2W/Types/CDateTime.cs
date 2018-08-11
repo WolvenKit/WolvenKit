@@ -26,9 +26,18 @@ namespace WolvenKit.CR2W.Types
             var minute = time >> 16 & 0x3F;
             var second = time >> 10 & 0x3F;
             var millisecond = time & 0b11_11111111;
-            Date = new DateTime(
-                (int)year-1900,(int)month,(int)day+1,
-                (int)hour,(int)minute,(int)second,(int)millisecond);
+            try
+            {
+                Date = new DateTime(
+                    (int)year-1900,(int)month,(int)day+1,
+                    (int)hour,(int)minute,(int)second,(int)millisecond);
+                if (Date <= DateTime.MinValue)
+                    Date = new DateTime(2015,5,19,0,0,0,0);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Date = new DateTime(2015,5,19,0,0,0,0);
+            }
         }
 
         public override void Write(BinaryWriter file)
@@ -53,12 +62,18 @@ namespace WolvenKit.CR2W.Types
         {
             var dt = new DateTimePicker();
             dt.Value = Date;
+            dt.ValueChanged += (sender, args) => { Date = ((DateTimePicker) sender).Value; };
             return dt;
         }
 
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CDateTime(cr2w);
+        }
+
+        public override string ToString()
+        {
+            return Date.ToString("F");
         }
 
         public override CVariable Copy(CR2WCopyAction context)

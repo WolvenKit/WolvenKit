@@ -53,6 +53,7 @@ namespace WolvenKit
             this.openModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.recentFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fbxWithCollisionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nvidiaClothFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,10 +80,10 @@ namespace WolvenKit
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.packageInstallerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.wcclitePatcherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stringsEncoderGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gameDebuggerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCreatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dumpFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renderW2meshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -271,6 +272,7 @@ namespace WolvenKit
             this.openModToolStripMenuItem,
             this.recentFilesToolStripMenuItem,
             this.toolStripSeparator6,
+            this.exportToolStripMenuItem,
             this.importToolStripMenuItem,
             this.newFileToolStripMenuItem,
             this.addFileFromBundleToolStripMenuItem,
@@ -314,6 +316,14 @@ namespace WolvenKit
             this.toolStripSeparator6.Name = "toolStripSeparator6";
             this.toolStripSeparator6.Size = new System.Drawing.Size(204, 6);
             // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.wooden_box__arrow;
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
+            this.exportToolStripMenuItem.Text = "Export";
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
+            // 
             // importToolStripMenuItem
             // 
             this.importToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -328,7 +338,7 @@ namespace WolvenKit
             // 
             this.fbxWithCollisionsToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.stickman;
             this.fbxWithCollisionsToolStripMenuItem.Name = "fbxWithCollisionsToolStripMenuItem";
-            this.fbxWithCollisionsToolStripMenuItem.Size = new System.Drawing.Size(174, 26);
+            this.fbxWithCollisionsToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.fbxWithCollisionsToolStripMenuItem.Text = "Fbx with collisions";
             this.fbxWithCollisionsToolStripMenuItem.Click += new System.EventHandler(this.fbxWithCollisionsToolStripMenuItem_Click);
             // 
@@ -336,7 +346,7 @@ namespace WolvenKit
             // 
             this.nvidiaClothFileToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.t_shirt_gray;
             this.nvidiaClothFileToolStripMenuItem.Name = "nvidiaClothFileToolStripMenuItem";
-            this.nvidiaClothFileToolStripMenuItem.Size = new System.Drawing.Size(174, 26);
+            this.nvidiaClothFileToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.nvidiaClothFileToolStripMenuItem.Text = "Nvidia cloth file";
             this.nvidiaClothFileToolStripMenuItem.Click += new System.EventHandler(this.nvidiaClothFileToolStripMenuItem_Click);
             // 
@@ -503,10 +513,10 @@ namespace WolvenKit
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.packageInstallerToolStripMenuItem,
             this.saveExplorerToolStripMenuItem,
-            this.wcclitePatcherToolStripMenuItem,
             this.stringsEncoderGUIToolStripMenuItem,
             this.gameDebuggerToolStripMenuItem,
             this.menuCreatorToolStripMenuItem,
+            this.dumpFileToolStripMenuItem,
             this.renderW2meshToolStripMenuItem,
             this.toolStripSeparator5,
             this.optionsToolStripMenuItem});
@@ -529,14 +539,6 @@ namespace WolvenKit
             this.saveExplorerToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.saveExplorerToolStripMenuItem.Text = "Save explorer";
             this.saveExplorerToolStripMenuItem.Click += new System.EventHandler(this.saveExplorerToolStripMenuItem_Click);
-            // 
-            // wcclitePatcherToolStripMenuItem
-            // 
-            this.wcclitePatcherToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.FileGroup_10135_16x;
-            this.wcclitePatcherToolStripMenuItem.Name = "wcclitePatcherToolStripMenuItem";
-            this.wcclitePatcherToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
-            this.wcclitePatcherToolStripMenuItem.Text = "wcc_lite patcher";
-            this.wcclitePatcherToolStripMenuItem.Click += new System.EventHandler(this.wcclitePatcherToolStripMenuItem_Click);
             // 
             // stringsEncoderGUIToolStripMenuItem
             // 
@@ -562,11 +564,19 @@ namespace WolvenKit
             this.menuCreatorToolStripMenuItem.Text = "Menu creator";
             this.menuCreatorToolStripMenuItem.Click += new System.EventHandler(this.menuCreatorToolStripMenuItem_Click);
             // 
+            // dumpFileToolStripMenuItem
+            // 
+            this.dumpFileToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.bug;
+            this.dumpFileToolStripMenuItem.Name = "dumpFileToolStripMenuItem";
+            this.dumpFileToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.dumpFileToolStripMenuItem.Text = "Dump game assets";
+            this.dumpFileToolStripMenuItem.Click += new System.EventHandler(this.dumpFileToolStripMenuItem_Click);
+            // 
             // renderW2meshToolStripMenuItem
             // 
             this.renderW2meshToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.ui_check_box_uncheck;
             this.renderW2meshToolStripMenuItem.Name = "renderW2meshToolStripMenuItem";
-            this.renderW2meshToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.renderW2meshToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.renderW2meshToolStripMenuItem.Tag = "false";
             this.renderW2meshToolStripMenuItem.Text = "Render w2mesh";
             this.renderW2meshToolStripMenuItem.Click += new System.EventHandler(this.renderW2meshToolStripMenuItem_Click);
@@ -795,7 +805,6 @@ namespace WolvenKit
         private DockPanel dockPanel;
         private ToolStripSeparator toolStripSeparator3;
         private ToolStripMenuItem exitToolStripMenuItem;
-        private ToolStripMenuItem wcclitePatcherToolStripMenuItem;
         private ToolStripMenuItem outputToolStripMenuItem;
         private ToolStripMenuItem tutorialsToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator4;
@@ -839,5 +848,7 @@ namespace WolvenKit
         private ToolStripMenuItem fbxWithCollisionsToolStripMenuItem;
         private ToolStripMenuItem nvidiaClothFileToolStripMenuItem;
         private ToolStripMenuItem renderW2meshToolStripMenuItem;
+        private ToolStripMenuItem dumpFileToolStripMenuItem;
+        private ToolStripMenuItem exportToolStripMenuItem;
     }
 }

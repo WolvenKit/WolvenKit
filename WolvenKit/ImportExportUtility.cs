@@ -16,23 +16,23 @@ namespace WolvenKit
             return !str.Where((t, i) => bytes[i] != t).Any();
         }
 
-        public static List<string> GetPossibleExtensions(byte[] bytes)
+        public static List<string> GetPossibleExtensions(byte[] bytes, string varName )
         {
             var list = new List<string>();
 
             if (bytes == null)
                 return list;
 
-            if (bytes.StartsWith("CFX")
-                || bytes.StartsWith("CWS")
-                || bytes.StartsWith("FWS")
-                || bytes.StartsWith("GFX"))
+            if (bytes.StartsWith("CFX") || bytes.StartsWith("CWS") || bytes.StartsWith("FWS") || bytes.StartsWith("GFX"))
             {
                 list.Add("Decompressed flash file|*.swf");
-
                 list.Add("Unknown file|*.*");
             }
-
+            else if (varName == "swfTexture")
+            {
+                list.Add("DirectDraw Surface image|*.dds");
+                list.Add("Unknown file|*.*");
+            }
 
             return list;
         }
@@ -47,6 +47,8 @@ namespace WolvenKit
                         return uncompressToFWS(bytes);
                     }
                     break;
+                case ".dds":
+                    return DDSUtility.ExportAsDDS(bytes);
             }
 
             return bytes;
@@ -67,6 +69,11 @@ namespace WolvenKit
                 {
                     return compressToCFX(reader);
                 }
+            }
+            else if (filetype.StartsWith("DDS"))
+            {
+                reader.BaseStream.Seek(0, SeekOrigin.Begin);
+                return DDSUtility.ImportFromDDS(reader);
             }
 
             reader.BaseStream.Seek(0, SeekOrigin.Begin);

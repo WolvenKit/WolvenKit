@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+using AutoUpdaterDotNET;
 
 namespace WolvenKit
 {
