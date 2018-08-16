@@ -22,7 +22,6 @@ using SearchOption = System.IO.SearchOption;
 using WolvenKit.Interfaces;
 using WolvenKit.Cache;
 using WolvenKit.Bundles;
-using WolvenKit.Forms;
 
 namespace WolvenKit
 {
@@ -1980,20 +1979,5 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             #endregion
         }
         #endregion // Mod Pack
-
-        private void bulkEditVarsToolstripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (ActiveMod == null)
-               return;
-
-            var dlg = new frmBulkEditVariables();
-            dlg.Show();
-                       
-        }
-
-        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
-        }
     }
 }

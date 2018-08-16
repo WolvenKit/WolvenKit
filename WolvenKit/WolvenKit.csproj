@@ -226,12 +226,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyExtensions.cs" />
-    <Compile Include="Forms\frmBulkEditVariables.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmBulkEditVariables.Designer.cs">
-      <DependentUpon>frmBulkEditVariables.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\frmStringsGuiImporterIDDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -508,9 +502,6 @@
       <DependentUpon>frmAssetBrowser.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmBulkEditVariables.resx">
-      <DependentUpon>frmBulkEditVariables.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmChunkFlowDiagram.resx">
       <DependentUpon>frmChunkFlowDiagram.cs</DependentUpon>
     </EmbeddedResource>
@@ -613,7 +604,6 @@
     </None>
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
-    <None Include="Properties\DataSources\WolvenKit.Mod.W3Mod.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -337,9 +337,105 @@ namespace WolvenKit
                 return s;
         }
 
-       
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            //Get all files in a list
+            List<CR2WFile> W2SceneFiles = new List<CR2WFile>();
+            List<string> AllFiles = new List<string>();
 
-        
+            AllFiles = ActiveMod.Files;
+            
 
+            for (int i = 0; i < AllFiles.Count; i++)
+            {
+                //open the file and perform operations
+                var fullpath = Path.Combine(ActiveMod.FileDirectory, AllFiles[i]);
+                CR2WFile file;
+
+                using (var fs = new FileStream(fullpath, FileMode.Open, FileAccess.Read))
+                {
+                    using (var reader = new BinaryReader(fs))
+                    {
+                        file = new CR2WFile(reader)
+                        {
+                            FileName = fullpath,
+                            EditorController = MainController.Get(),
+                            LocalizedStringSource = MainController.Get()
+                        };
+                    }
+                    fs.Close();
+                }
+
+                //remove scene lights variable (chunk0)
+                try
+                {
+                    IEditableVariable StoryScene = file.chunks[0].GetEditableVariables().Find(x => x.Name.Contains("CStoryScene"));
+                    StoryScene.RemoveVariable(StoryScene.GetEditableVariables().Find(x => x.Name.Contains("sceneLights")));
+                }
+                catch (Exception ex)
+                {
+                    //output ex
+                }
+
+
+                //CStorySceneCutsceneSection: sceneEventElements(array) : for each entry remove lightmod1, lightmod2 variable
+                List<CR2WChunk> ChunksToEdit = new List<CR2WChunk>();
+
+                ChunksToEdit.AddRange(file.chunks.FindAll(x => x.Type.Equals("CStorySceneCutsceneSection")));
+                ChunksToEdit.AddRange(file.chunks.FindAll(x => x.Type.Equals("CStorySceneSection")));
+
+                for (int j = 0; j < ChunksToEdit.Count; j++)
+                {
+                    List<IEditableVariable> SceneEventElements = new List<IEditableVariable>();
+                    try
+                    {
+                        SceneEventElements.AddRange(ChunksToEdit[j].data.GetEditableVariables().Find(x => x.Name.Contains("sceneEventElements")).GetEditableVariables());
+                    }
+                    catch (Exception ex)
+                    {
+                        //output ex
+                    }
+                    try
+                    {
+                        SceneEventElements.AddRange(ChunksToEdit[j].data.GetEditableVariables().Find(x => x.Name.Contains("sceneEventElements")).GetEditableVariables());
+                    }
+                    catch (Exception ex)
+                    {
+                        //output ex
+                    }
+                    for (int k = 0; k < SceneEventElements.Count; k++)
+                    {
+                        SceneEventElements[k].RemoveVariable(SceneEventElements[k].GetEditableVariables().Find(x => x.Name.Contains("lightMod1")));
+                        SceneEventElements[k].RemoveVariable(SceneEventElements[k].GetEditableVariables().Find(x => x.Name.Contains("lightMod2")));
+                    }
+                }
+
+
+                //output one file
+                MainController.Get().Window.AddOutput("Finished file: " + i + "/chunks: " + ChunksToEdit.Count + "\n");
+
+                //doc.SaveFile();
+                using (var mem = new MemoryStream())
+                {
+                    using (var writer = new BinaryWriter(mem))
+                    {
+                        file.Write(writer);
+                        mem.Seek(0, SeekOrigin.Begin);
+
+                        using (var fs = new FileStream(file.FileName, FileMode.Create, FileAccess.Write)) //FILENAME
+                        {
+                            mem.WriteTo(fs);
+                            fs.Close();
+                        }
+                    }
+                }
+            }
+            
+
+            //output done all
+            MainController.Get().Window.AddOutput("Finished until: " + AllFiles.Count + "\n");
+
+
+        }
     }
 }

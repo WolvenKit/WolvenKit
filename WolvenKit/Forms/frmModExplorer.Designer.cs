@@ -53,6 +53,7 @@ namespace WolvenKit
             this.showhideButton = new System.Windows.Forms.ToolStripButton();
             this.ExpandBTN = new System.Windows.Forms.ToolStripButton();
             this.CollapseBTN = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.modexplorerSlave = new System.IO.FileSystemWatcher();
             this.contextMenu.SuspendLayout();
             this.searchstrip.SuspendLayout();
@@ -65,11 +66,11 @@ namespace WolvenKit
             this.modFileList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.modFileList.ImageIndex = 0;
             this.modFileList.ImageList = this.treeImages;
-            this.modFileList.Location = new System.Drawing.Point(0, 31);
+            this.modFileList.Location = new System.Drawing.Point(0, 32);
             this.modFileList.Margin = new System.Windows.Forms.Padding(2);
             this.modFileList.Name = "modFileList";
             this.modFileList.SelectedImageIndex = 0;
-            this.modFileList.Size = new System.Drawing.Size(777, 414);
+            this.modFileList.Size = new System.Drawing.Size(777, 413);
             this.modFileList.TabIndex = 0;
             this.modFileList.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.modFileList_NodeMouseClick);
             this.modFileList.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.modFileList_NodeMouseDoubleClick);
@@ -181,23 +182,24 @@ namespace WolvenKit
             this.resetfilesButton,
             this.showhideButton,
             this.ExpandBTN,
-            this.CollapseBTN});
+            this.CollapseBTN,
+            this.toolStripButton1});
             this.searchstrip.Location = new System.Drawing.Point(0, 0);
             this.searchstrip.Name = "searchstrip";
-            this.searchstrip.Size = new System.Drawing.Size(777, 31);
+            this.searchstrip.Size = new System.Drawing.Size(777, 32);
             this.searchstrip.TabIndex = 1;
             this.searchstrip.Text = "toolStrip1";
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(68, 28);
+            this.toolStripLabel1.Size = new System.Drawing.Size(68, 29);
             this.toolStripLabel1.Text = "Search:";
             // 
             // searchBox
             // 
             this.searchBox.Name = "searchBox";
-            this.searchBox.Size = new System.Drawing.Size(76, 31);
+            this.searchBox.Size = new System.Drawing.Size(76, 32);
             this.searchBox.TextChanged += new System.EventHandler(this.searchBox_TextChanged);
             // 
             // resetfilesButton
@@ -206,7 +208,7 @@ namespace WolvenKit
             this.resetfilesButton.Image = global::WolvenKit.Properties.Resources.ExitIcon;
             this.resetfilesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.resetfilesButton.Name = "resetfilesButton";
-            this.resetfilesButton.Size = new System.Drawing.Size(24, 28);
+            this.resetfilesButton.Size = new System.Drawing.Size(24, 29);
             this.resetfilesButton.Text = "Reset filelist";
             this.resetfilesButton.Click += new System.EventHandler(this.UpdatefilelistButtonClick);
             // 
@@ -216,7 +218,7 @@ namespace WolvenKit
             this.showhideButton.Image = global::WolvenKit.Properties.Resources.LayerGroupVisibled;
             this.showhideButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.showhideButton.Name = "showhideButton";
-            this.showhideButton.Size = new System.Drawing.Size(24, 28);
+            this.showhideButton.Size = new System.Drawing.Size(24, 29);
             this.showhideButton.Text = "Show/Hide folders";
             this.showhideButton.ToolTipText = "Show/Hide folders";
             this.showhideButton.Click += new System.EventHandler(this.showhideButton_Click);
@@ -227,7 +229,7 @@ namespace WolvenKit
             this.ExpandBTN.Image = global::WolvenKit.Properties.Resources.Editing_Expand_icon;
             this.ExpandBTN.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ExpandBTN.Name = "ExpandBTN";
-            this.ExpandBTN.Size = new System.Drawing.Size(24, 28);
+            this.ExpandBTN.Size = new System.Drawing.Size(24, 29);
             this.ExpandBTN.Text = "Expand all";
             this.ExpandBTN.Click += new System.EventHandler(this.ExpandBTN_Click);
             // 
@@ -237,10 +239,20 @@ namespace WolvenKit
             this.CollapseBTN.Image = global::WolvenKit.Properties.Resources.Editing_Collapse_icon;
             this.CollapseBTN.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.CollapseBTN.Name = "CollapseBTN";
-            this.CollapseBTN.Size = new System.Drawing.Size(24, 28);
+            this.CollapseBTN.Size = new System.Drawing.Size(24, 29);
             this.CollapseBTN.Text = "Collapse all";
             this.CollapseBTN.ToolTipText = "Collapse all";
             this.CollapseBTN.Click += new System.EventHandler(this.CollapseBTN_Click);
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(145, 29);
+            this.toolStripButton1.Text = "MonarchXMagic";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // modexplorerSlave
             // 
@@ -300,5 +312,6 @@ namespace WolvenKit
         private ToolStripButton CollapseBTN;
         private ToolStripMenuItem copyRelativePathToolStripMenuItem;
         private ToolStripMenuItem markAsModDlcFileToolStripMenuItem;
+        private ToolStripButton toolStripButton1;
     }
 }
