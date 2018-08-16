@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using System.Collections.Generic;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.CR2W;
-using WolvenKit.CR2W.Types;
-using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit
 {
@@ -157,64 +154,6 @@ namespace WolvenKit
         private void listView_ItemsChanged(object sender, BrightIdeasSoftware.ItemsChangedEventArgs e)
         {
             MainController.Get().ProjectUnsaved = true;
-        }
-
-        private void addChunksFromFileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //TODO check if file is w2l
-           
-            var w2lLoader = new w2lChunkAdder();
-            List<w2lAdderData> ChunksList = new List<w2lAdderData>();
-
-            //See if the base class has an entities array
-            List<IEditableVariable> variablesList = new List<IEditableVariable>();
-            int idx = -1;
-            variablesList = File.chunks[0].data.GetEditableVariables();
-            for (int j = 0; j < variablesList.Count; j++)
-            {
-                if (variablesList[j].Name == "entities")
-                {
-                    idx = j;
-                }
-            }
-            if (idx == -1)
-            {
-                MessageBox.Show("Please add an entities array to the layer!", "Error adding chunks.");
-                return;
-            }
-
-            //read file and store in w2lAdderData class
-            ChunksList = w2lLoader.ReadFile(File);
-           
-
-            //adds chunks to chunks list
-            for (int i = 0; i < ChunksList.Count; i++)
-            {
-                try
-                {
-                    //Add Chunk
-                    var chunk = File.CreateChunk(ChunksList[i].chunkType, File.chunks[0]); //adds chunk and sets first chunk as parent
-                    listView.AddObject(chunk);
-
-                    //Add Variables to Chunk
-                    chunk.data.AddVariable(ChunksList[i].transform);
-                    chunk.data.AddVariable(ChunksList[i].template);
-
-                    //Add a reference to the base class (chunk 0)
-                    var newptr = new CPtr(File);
-                    newptr.ChunkIndex = chunk.ChunkIndex;
-                    File.chunks[0].data.GetEditableVariables()[idx].AddVariable(newptr);
-
-                }
-                catch (InvalidChunkTypeException ex)
-                {
-                    MessageBox.Show(ex.Message, "Error adding chunk.");
-                }
-
-                
-            }
-
-
         }
     }
 }

@@ -38,7 +38,6 @@ namespace WolvenKit
             this.deleteChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.addChunksFromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listView = new BrightIdeasSoftware.ObjectListView();
             this.colIndex = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.colName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -54,34 +53,32 @@ namespace WolvenKit
             // 
             // contextMenuStrip1
             // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addChunkToolStripMenuItem,
-            this.addChunksFromFileToolStripMenuItem,
             this.deleteChunkToolStripMenuItem,
             this.copyChunkToolStripMenuItem,
             this.pasteChunkToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(245, 187);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(146, 92);
             // 
             // addChunkToolStripMenuItem
             // 
             this.addChunkToolStripMenuItem.Name = "addChunkToolStripMenuItem";
-            this.addChunkToolStripMenuItem.Size = new System.Drawing.Size(244, 30);
+            this.addChunkToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.addChunkToolStripMenuItem.Text = "Add Chunk";
             this.addChunkToolStripMenuItem.Click += new System.EventHandler(this.addChunkToolStripMenuItem_Click);
             // 
             // deleteChunkToolStripMenuItem
             // 
             this.deleteChunkToolStripMenuItem.Name = "deleteChunkToolStripMenuItem";
-            this.deleteChunkToolStripMenuItem.Size = new System.Drawing.Size(244, 30);
+            this.deleteChunkToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.deleteChunkToolStripMenuItem.Text = "Delete Chunk";
             this.deleteChunkToolStripMenuItem.Click += new System.EventHandler(this.deleteChunkToolStripMenuItem_Click);
             // 
             // copyChunkToolStripMenuItem
             // 
             this.copyChunkToolStripMenuItem.Name = "copyChunkToolStripMenuItem";
-            this.copyChunkToolStripMenuItem.Size = new System.Drawing.Size(244, 30);
+            this.copyChunkToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.copyChunkToolStripMenuItem.Text = "Copy Chunk";
             this.copyChunkToolStripMenuItem.Click += new System.EventHandler(this.copyChunkToolStripMenuItem_Click);
             // 
@@ -89,16 +86,9 @@ namespace WolvenKit
             // 
             this.pasteChunkToolStripMenuItem.Enabled = false;
             this.pasteChunkToolStripMenuItem.Name = "pasteChunkToolStripMenuItem";
-            this.pasteChunkToolStripMenuItem.Size = new System.Drawing.Size(244, 30);
+            this.pasteChunkToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.pasteChunkToolStripMenuItem.Text = "Paste Chunk";
             this.pasteChunkToolStripMenuItem.Click += new System.EventHandler(this.pasteChunkToolStripMenuItem_Click);
-            // 
-            // addChunksFromFileToolStripMenuItem
-            // 
-            this.addChunksFromFileToolStripMenuItem.Name = "addChunksFromFileToolStripMenuItem";
-            this.addChunksFromFileToolStripMenuItem.Size = new System.Drawing.Size(244, 30);
-            this.addChunksFromFileToolStripMenuItem.Text = "AddChunksFromFile";
-            this.addChunksFromFileToolStripMenuItem.Click += new System.EventHandler(this.addChunksFromFileToolStripMenuItem_Click);
             // 
             // listView
             // 
@@ -160,7 +150,7 @@ namespace WolvenKit
             this.searchTB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.searchTB.Location = new System.Drawing.Point(404, 8);
             this.searchTB.Name = "searchTB";
-            this.searchTB.Size = new System.Drawing.Size(185, 26);
+            this.searchTB.Size = new System.Drawing.Size(185, 20);
             this.searchTB.TabIndex = 7;
             this.searchTB.KeyUp += new System.Windows.Forms.KeyEventHandler(this.searchTB_KeyUp);
             // 
@@ -180,7 +170,7 @@ namespace WolvenKit
             this.limitCB.AutoSize = true;
             this.limitCB.Location = new System.Drawing.Point(12, 10);
             this.limitCB.Name = "limitCB";
-            this.limitCB.Size = new System.Drawing.Size(128, 24);
+            this.limitCB.Size = new System.Drawing.Size(80, 17);
             this.limitCB.TabIndex = 10;
             this.limitCB.Text = "Limit results";
             this.limitCB.UseVisualStyleBackColor = true;
@@ -190,12 +180,12 @@ namespace WolvenKit
             // 
             this.limitTB.Location = new System.Drawing.Point(99, 8);
             this.limitTB.Name = "limitTB";
-            this.limitTB.Size = new System.Drawing.Size(100, 26);
+            this.limitTB.Size = new System.Drawing.Size(100, 20);
             this.limitTB.TabIndex = 11;
             // 
             // frmChunkList
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(720, 719);
             this.CloseButton = false;
@@ -234,6 +224,5 @@ namespace WolvenKit
         private Button searchBTN;
         private CheckBox limitCB;
         private MaskedTextBox limitTB;
-        private ToolStripMenuItem addChunksFromFileToolStripMenuItem;
     }
 }

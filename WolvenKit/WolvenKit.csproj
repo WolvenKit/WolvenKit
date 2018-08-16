@@ -232,7 +232,6 @@
     <Compile Include="Forms\frmStringsGuiImporterIDDialog.Designer.cs">
       <DependentUpon>frmStringsGuiImporterIDDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="w2lChunkAdder.cs" />
     <Compile Include="WitcherListViewItem.cs" />
     <Compile Include="Commonfunctions.cs" />
     <Compile Include="Forms\frmAbout.cs">
