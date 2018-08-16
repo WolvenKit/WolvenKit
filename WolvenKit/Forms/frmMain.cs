@@ -1987,7 +1987,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                return;
 
             var dlg = new frmBulkEditVariables();
-            dlg.ShowDialog();
+            dlg.Show();
                        
         }
 
