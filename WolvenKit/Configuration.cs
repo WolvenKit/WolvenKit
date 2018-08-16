@@ -62,7 +62,6 @@ namespace WolvenKit
                 var stream = new FileStream(ConfigurationPath, FileMode.Open, FileAccess.Read);
                 var config = (Configuration) ser.Deserialize(stream);
                 stream.Close();
-
                 return config;
             }
 

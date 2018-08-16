@@ -4,8 +4,8 @@ using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
+using WolvenKit.Common;
 using WolvenKit.CR2W;
-using WolvenKit.Interfaces;
 using WolvenKit.Wwise.SoundCache;
 
 namespace WolvenKit.Cache

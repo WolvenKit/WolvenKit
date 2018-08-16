@@ -4,7 +4,7 @@ using Doboz;
 using Ionic.Zlib;
 using LZ4;
 using Snappy;
-using WolvenKit.Interfaces;
+using WolvenKit.Common;
 
 namespace WolvenKit.Bundles
 {

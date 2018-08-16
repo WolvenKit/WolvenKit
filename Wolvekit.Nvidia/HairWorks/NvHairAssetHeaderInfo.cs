@@ -33,7 +33,7 @@ namespace Wolvekit.Nvidia.HairWorks
         /// <returns></returns>
         public XElement serialize(CR2WChunk apexChunk,int objectcount)
         {
-            var HairWorksInfo = NvidiaXML.CreateStructHeader("", "Ref,", "HairWorksInfo", "1.0", checksum);
+            var HairWorksInfo = NvidiaXML.CreateStructHeader("", "Ref", "HairWorksInfo", "1.0", checksum);
             var values = new XElement("struct", new XAttribute("name", ""));
             values.AddNvValue("fileVersion", "String", "1.0");
             values.AddNvValue("toolVersion","String","WolvenKit");

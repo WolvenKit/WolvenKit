@@ -10,6 +10,7 @@ namespace WolvenKit
         public bool PackBundles => bundlesCHB.Checked;
         public bool GenMetadata => metadatastoreCHB.Checked;
         public bool GenTexCache => texturecachecCHB.Checked;
+        public bool GenCollCache => collisionCacheCHB.Checked;
         public bool Scripts => scriptsCHB.Checked;
         public bool Sound => soundCHB.Checked;
         public bool Strings => stringsCHB.Checked;
@@ -22,7 +23,7 @@ namespace WolvenKit
             if (MainController.Get().Window.ActiveMod.Files.Any(x => x.EndsWith(".ws")))
                 scriptsCHB.Checked = true;
             if (MainController.Get().Window.ActiveMod.Files.Any(x => x.EndsWith(".wem") || x.EndsWith(".bnk")))
-                scriptsCHB.Checked = true;
+                soundCHB.Checked = true;
             if (Directory.Exists((MainController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")) && Directory.GetFiles((MainController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")).Any(x => x.EndsWith(".w3strings")))
                 stringsCHB.Checked = true;
         }

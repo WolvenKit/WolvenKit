@@ -8,14 +8,14 @@ namespace WolvenKit
 {
     public partial class frmCR2WDocument : DockContent
     {
-        private readonly frmChunkList chunkList;
+        public frmChunkList chunkList;
+        public frmChunkProperties propertyWindow;
         public frmEmbeddedFiles embeddedFiles;
         public frmChunkFlowDiagram flowDiagram;
         public frmJournalEditor JournalEditor;
         public frmImagePreview ImageViewer;
         public Render.frmRender RenderViewer;
         private CR2WFile file;
-        private frmChunkProperties propertyWindow;
 
 
         public DockPanel FormPanel => dockPanel;
@@ -74,7 +74,7 @@ namespace WolvenKit
 
                 if (RenderViewer != null && !RenderViewer.IsDisposed)
                 {
-                    RenderViewer.File = file;
+                    RenderViewer.MeshFile = file;
                 }
                 
 
@@ -186,24 +186,31 @@ namespace WolvenKit
 
         private void saveToFileName()
         {
-            using (var mem = new MemoryStream())
+            try
             {
-                using (var writer = new BinaryWriter(mem))
+                using (var mem = new MemoryStream())
                 {
-                    File.Write(writer);
-                    mem.Seek(0, SeekOrigin.Begin);
-
-                    using (var fs = new FileStream(FileName, FileMode.Create, FileAccess.Write))
+                    using (var writer = new BinaryWriter(mem))
                     {
-                        mem.WriteTo(fs);
+                        File.Write(writer);
+                        mem.Seek(0, SeekOrigin.Begin);
 
-                        if (OnFileSaved != null)
+                        using (var fs = new FileStream(FileName, FileMode.Create, FileAccess.Write))
                         {
-                            OnFileSaved(this, new FileSavedEventArgs {FileName = FileName, Stream = fs, File = File});
+                            mem.WriteTo(fs);
+
+                            if (OnFileSaved != null)
+                            {
+                                OnFileSaved(this, new FileSavedEventArgs {FileName = FileName, Stream = fs, File = File});
+                            }
+                            fs.Close();
                         }
-                        fs.Close();
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                MainController.Get().QueueLog("Failed to save the file(s)! They are probably in use.\n" + e.ToString());
             }
         }
     }

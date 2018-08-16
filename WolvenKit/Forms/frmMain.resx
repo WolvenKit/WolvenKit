@@ -123,10 +123,25 @@
   <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>141, 17</value>
   </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="donateToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAABl0RVh0U29m
+        dHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAIISURBVDhPnY5fSFNhGIe/VfbnIryUliBUWFQXlXdd
+        mBqm5AykP6TQIIOcTZucCMcZMS8ivBWlCKQ53YWmrtgKcqKLBra1jU1duGjhYLPWSLIQ1EB+fe+XExvG
+        CV94OOfi+T3nMPPlY9Wchi1QDYCxexeP6lYX0/j1c+6/IZ92IiDXHLm1spBA1OdCYPQplr8nxPNf7+SR
+        TzsRaL1Q2Lw0H4ffNYCF1Iwi5JFPOxG4U3XIsJiOgfiWnFYk49JOBAyVB6Qfn6OYeGlDKh5ShDzyaScC
+        +vKCu/OJCDwOK5IxvyLkkU87EWgozTemZ8Mg4tG3imRc2olAfbHa9CUWwPhwN2IRzzrBZxJCziZMjsgI
+        OIzw2xsRttdh5OFVkE87EdCezjPPffDB3a2Ft/86pl7JcPfqMNpRjtWUDUufHmP2dQuSbi2Wp+sx3lUB
+        8mknAjUnctu/fnwHT8+1vwYRey3CTgN8Q41wdmrgeqRBcLAOwSEDyKedCJzanyOVHszp0pds9/iey5gY
+        NsL15CYmHa2b/sGDKztC5NNOBPjt5OTpz6gGNw7eWGqxMThmuQHvgA4mzTYz+ZxdmQBT5zJWeZjd7mmr
+        eN93/7zX1lbyQjqrsm72B1KZqvfSSZXYrQfWbjdnH0dNnCtkpj/BKhG0ykVjFuPxKf6hlqJ8xojsQPbt
+        5YhYFns44gCw3yg9hOJLy43MAAAAAElFTkSuQmCC
+</value>
+  </data>
   <metadata name="toolStrip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>256, 17</value>
   </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAAAAAAAEAIACISAEAFgAAAIlQTkcNChoKAAAADUlIRFIAAAEAAAABAAgGAAAAXHKoZgAAgABJ

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing.Design;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -15,6 +16,8 @@ namespace WolvenKit
 
         public const string BrokenXmlHeader = "<?xml version=\"1.0\" encoding=\"UTF-16\"?>";
 
+
+
         public frmMenuCreator()
         {
             InitializeComponent();
@@ -22,10 +25,48 @@ namespace WolvenKit
             MenuEditor.SelectedObject = MenuObject;
         }
 
+        private void PaintMenuTree()
+        {
+            menutree.Nodes.Clear();
+            List<TreeNode> nodes = new List<TreeNode>();
+            foreach (var g in MenuObject.Groups)
+            {
+                TreeNode gnode = new TreeNode(g.DisplayName);
+                gnode.Tag = g;
+                if (g.Presets != null && g.Presets.Count > 0)
+                {
+                    TreeNode gpresets = new TreeNode("Presets");
+                    gpresets.Tag = g.Presets;
+                    foreach (var p in g.Presets)
+                    {
+                        TreeNode pres = new TreeNode(p.DisplayName);
+                        pres.Tag = p;
+                        gpresets.Nodes.Add(pres);
+                    }
+                    gnode.Nodes.Add(gpresets);
+                }
+
+                if (g.Variables != null && g.Variables.Count > 0)
+                {
+                    TreeNode gvars = new TreeNode("Variables");
+                    gvars.Tag = g.Variables;
+                    foreach (var p in g.Variables)
+                    {
+                        TreeNode var = new TreeNode(p.DisplayName);
+                        var.Tag = p;
+                        gvars.Nodes.Add(var);
+                    }
+                    gnode.Nodes.Add(gvars);
+                }
+                nodes.Add(gnode);
+            }
+            menutree.Nodes.AddRange(nodes.ToArray());
+        }
+
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //try
-            //{
+            try
+            {
                 var sf = new SaveFileDialog
                 {
                     Title = "Select a path to save the serialized menu.",
@@ -36,17 +77,20 @@ namespace WolvenKit
                     var menu = new XDocument(new XElement("UserConfig", MenuObject.Groups.Select(SerializeGroup)));
                     menu.Save(sf.FileName);
                 }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("Failed to save the document!\n" + ex.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
-            //}
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to save the document!\n" + ex.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
         }
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //try
-            //{
+#if !DEBUG
+            
+            try
+            {
+#endif 
                 var of = new OpenFileDialog
                 {
                     Title = @"Select the xml file to load!",
@@ -56,16 +100,48 @@ namespace WolvenKit
                 {
                     var loadedxml = XDocument.Load(of.FileName);
                     MenuObject.Groups = loadedxml.Root?.Elements("Group").Select(DeserializeGroup).ToList();
+                    PaintMenuTree();
                 }
-           // }
-           // catch (Exception ex)
-           // {
-           //     MessageBox.Show(@"Couldn't load the selected xml file.
-//Please make sure you have selected a valid one.
-//Exception: " + ex.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
-//            }
+#if !DEBUG
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(@"Couldn't load the selected xml file.
+Please make sure you have selected a valid one.
+Exception: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+#endif
+        }
+        
+        private void menutree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            MenuEditor.SelectedObject = e.Node.Tag;
         }
 
+        private void editMainToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MenuEditor.SelectedObject = MenuObject;
+        }
+
+        private void MenuEditor_SelectedObjectsChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        public class WitcherMenuElementEditor : CollectionEditor
+        {
+            public WitcherMenuElementEditor(Type type)
+                : base(type)
+            {
+            }
+
+            protected override string GetDisplayText(object value)
+            {
+                return base.GetDisplayText(string.Format(((WitcherMenuElement)value).DisplayName));
+            }
+        }
+
+        #region Classes & (De)Serialization
         public static WitcheMenuGroup DeserializeGroup(XElement element)
         {
             return new WitcheMenuGroup
@@ -99,11 +175,11 @@ namespace WolvenKit
             };
             if (element.Attribute("displayType") != null && element.Attribute("displayType").Value.StartsWith("TOGGLE"))
             {
-                ret.Variabletype = WitcherMenuVariableType.Toggle;
+                ret.Variabletype = WitcherMenuVariableType.TOGGLE;
             }
             else if (element.Attribute("displayType").Value.StartsWith("SLIDER"))
             {
-                ret.Variabletype = WitcherMenuVariableType.Slider;
+                ret.Variabletype = WitcherMenuVariableType.SLIDER;
                 var split =  element.Attribute("displayType").Value.Split(';');
                 if (split.Length > 3)
                 {
@@ -114,7 +190,7 @@ namespace WolvenKit
             }
             else if (element.Attribute("displayType").Value.StartsWith("OPTIONS"))
             {
-                ret.Variabletype = WitcherMenuVariableType.Option;
+                ret.Variabletype = WitcherMenuVariableType.OPTIONS;
                 ret.Options = DeseralizeOptions(element.Element("OptionsArray"));
             }
             else
@@ -128,21 +204,21 @@ namespace WolvenKit
         {
             switch (var.Variabletype)
             {
-                case WitcherMenuVariableType.Option:
+                case WitcherMenuVariableType.OPTIONS:
                     return new XElement("Var",
                         new XAttribute("id", var.ID),
                         new XAttribute("displayName", var.DisplayName),
                         new XAttribute("displayType",var.Variabletype),
                         new XAttribute("tags",string.Join(";", var.Tags)),
                         SerializeOptions(var.Options));
-                case WitcherMenuVariableType.Slider:
+                case WitcherMenuVariableType.SLIDER:
                     return new XElement("Var",
                         new XAttribute("id", var.ID),
                         new XAttribute("displayName", var.DisplayName),
                         new XAttribute("displayType",
                             var.Variabletype + ";" + var.MinValue + ";" + var.MaxValue + ";" + var.Step),
                         new XAttribute("tags", string.Join(";", var.Tags)));
-                case WitcherMenuVariableType.Toggle:
+                case WitcherMenuVariableType.TOGGLE:
                     return new XElement("Var",
                         new XAttribute("id", var.ID),
                         new XAttribute("displayName", var.DisplayName),
@@ -222,7 +298,7 @@ namespace WolvenKit
         }
 
         [RefreshProperties(RefreshProperties.All)]
-        public class WitcherMenu
+        public class WitcherMenu 
         {
             [Category("Sections")]
             [Description("These are the groups/menus in your menu. (Inside this you can create submenus or variables)")]
@@ -233,8 +309,8 @@ namespace WolvenKit
                 set { groups = value; }
             }
 
+            [Editor(typeof(WitcherMenuElementEditor),typeof(System.Drawing.Design.UITypeEditor))]
             private List<WitcheMenuGroup> groups = new List<WitcheMenuGroup>();
-
         }
 
         [RefreshProperties(RefreshProperties.All)]
@@ -321,7 +397,7 @@ typeof(System.Drawing.Design.UITypeEditor))]
 
             private List<WitcherVariableOption> _entries = new List<WitcherVariableOption>();
 
-            private WitcherMenuVariableType variableType = WitcherMenuVariableType.Toggle;
+            private WitcherMenuVariableType variableType = WitcherMenuVariableType.TOGGLE;
         }
 
         [RefreshProperties(RefreshProperties.All)]
@@ -409,11 +485,14 @@ typeof(System.Drawing.Design.UITypeEditor))]
             private string displayname = "";
         }
 
+        /// <summary>
+        /// Naming must be exact.
+        /// </summary>
         public enum WitcherMenuVariableType
         {
-            Option,
-            Slider,
-            Toggle
+            OPTIONS,
+            SLIDER,
+            TOGGLE
         }
 
         class DescriptiveCollectionEditor : CollectionEditor
@@ -437,6 +516,12 @@ typeof(System.Drawing.Design.UITypeEditor))]
                     ShowDescription(child);
                 }
             }
+        }
+        #endregion
+
+        private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PaintMenuTree();
         }
     }
 }

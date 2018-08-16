@@ -44,7 +44,7 @@ namespace WolvenKit.CR2W
         {
             if (c == 0)
             {
-                stream.Write((byte) 128);
+                stream.Write((byte)128);
                 return;
             }
 
@@ -94,8 +94,44 @@ namespace WolvenKit.CR2W
                     throw new Exception("No clue what to do here, still need to think about it... :p");
                 }
 
-                stream.Write((byte) bytes[i]);
+                stream.Write((byte)bytes[i]);
             }
+        }
+
+        public static float ReadHalfFloat(this BinaryReader stream)
+        {
+            ushort data = stream.ReadUInt16();
+            // half (binary16) format IEEE 754-2008
+            uint dataSign = (uint)data >> 15;
+            uint dataExp = ((uint)data >> 10) & 0x001F;
+            uint dataFrac = (uint)data & 0x03FF;
+
+            uint floatExp = 0;
+            uint floatFrac = 0;
+
+            switch (dataExp)
+            {
+                case 0: // subnormal : (-1)^sign * 2^-14 * 0.frac
+                    if (dataFrac != 0) // subnormals but non-zeros -> normals in float32
+                    {
+                        floatExp = -15 + 127;
+                        while ((dataFrac & 0x200) == 0) { dataFrac <<= 1; floatExp--; }
+                        floatFrac = (dataFrac & 0x1FF) << 14;
+                    }
+                    else { floatFrac = 0; floatExp = 0; } // ± 0 -> ± 0
+                    break;
+                case 31: // infinity or NaNs : frac ? NaN : (-1)^sign * infinity
+                    floatExp = 255;
+                    floatFrac = dataFrac != 0 ? (uint)0x200000 : 0; // signaling Nan or zero
+                    break;
+                default: // normal : (-1)^sign * 2^(exp-15) * 1.frac
+                    floatExp = dataExp - 15 + 127;
+                    floatFrac = dataFrac << 13;
+                    break;
+            }
+            // single precision floating point (binary32) format IEEE 754-2008
+            uint floatNum = dataSign << 31 | floatExp << 23 | floatFrac;
+            return BitConverter.ToSingle(BitConverter.GetBytes(floatNum), 0);
         }
     }
 }

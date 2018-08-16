@@ -1,13 +1,14 @@
 ﻿using Ionic.Zlib;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
 using W3Edit.Textures;
+using WolvenKit.Common;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
-using WolvenKit.Interfaces;
 
 namespace WolvenKit.Cache
 {
@@ -42,7 +43,9 @@ namespace WolvenKit.Cache
 
         public void Read(string filepath)
         {
-            FileName = filepath;
+            try
+            {
+                            FileName = filepath;
             Chunkoffsets = new List<uint>();
             using (var br = new BinaryReader(new FileStream(filepath, FileMode.Open)))
             {
@@ -78,7 +81,8 @@ namespace WolvenKit.Cache
                     {
                         Name = Names[i],
                         ParentFile = FileName,
-                        Hash = br.ReadInt32(),             
+                        Hash = br.ReadInt32(), 
+                        /*-------------TextureCacheEntryBase---------------*/
                         PathStringIndex = br.ReadInt32(),  
                         PageOFfset = br.ReadInt32(),       
                         CompressedSize = br.ReadInt32(),
@@ -91,11 +95,13 @@ namespace WolvenKit.Cache
                         MipOffsetIndex = br.ReadInt32(),
                         NumMipOffsets = br.ReadInt32(),
                         TimeStamp = br.ReadInt64(),
+                        /*-------------TextureCacheEntryBase---------------*/
                         Type = br.ReadInt16(),
                         IsCube = br.ReadInt16()            
                     };                                                                                            
                     Files.Add(ti);
                 }
+                //BUG: "C:\\Users\\bence.hambalko\\Documents\\The Witcher 3\\bin\\x64\\..\\..\\Mods\\modW3EE\\content\\texture.cache" dies here! Investigate!!!!!!!!!!!!!
                 foreach (var t in Files)
                 {
                     br.BaseStream.Seek(t.PageOFfset * 4096, SeekOrigin.Begin);
@@ -103,6 +109,11 @@ namespace WolvenKit.Cache
                     t.Size = br.ReadInt32(); //Uncompressed size
                     t.Part = br.ReadByte(); //maybe the 48bit part of OFFSET
                 }
+            }
+            }
+            catch (Exception e)
+            {
+                Debug.Assert(e != null);
             }
         }
 

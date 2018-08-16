@@ -17,9 +17,13 @@ namespace WolvenKit
 {
     public partial class frmInstallPackage : Form
     {
+        public string package;
+        public string actionlink;
+
         public frmInstallPackage(string PackageFile)
         {
             InitializeComponent();
+            package = PackageFile;
             authorLBL.Parent = backgroundimagePB;
             authorLBL.BackColor = Color.Transparent;
             modnameLBL.Parent = backgroundimagePB;
@@ -34,6 +38,7 @@ namespace WolvenKit
                     {
                         continue;
                     }
+
                     String entryFileName = zipEntry.Name;
                     if (entryFileName == "Assembly.xml")
                     {
@@ -45,6 +50,7 @@ namespace WolvenKit
                             ParseAssemblyInfo(ms.ToArray());
                         }
                     }
+
                     if (Path.GetFileNameWithoutExtension(entryFileName) == "Icon")
                     {
                         byte[] buffer = new byte[4096];
@@ -53,6 +59,7 @@ namespace WolvenKit
                         {
                             StreamUtils.Copy(zipStream, ms, buffer);
                             logoPB.Image = Image.FromStream(ms);
+                            logoPB.SizeMode = PictureBoxSizeMode.Zoom;
                         }
                     }
                 }
@@ -69,13 +76,14 @@ namespace WolvenKit
             var data = XDocument.Load(new MemoryStream(Contents));
             this.Text = data.Root.Attribute("name").Value + " - Package Installer";
             modnameLBL.Text = data.Root.Attribute("name")?.Value;
-            Version v = Version.Parse(data.Root.Attribute("version")?.Value ?? "1.0");
+            String v = (data.Root.Attribute("version")?.Value ?? "1.0");
 
             var metanode = data.Root.Element("metadata");
             authorLBL.Text = metanode?.Element("author")?.Element("displayName")?.Value;
 
             var colornode = data.Root.Element("colors");
-            backgroundimagePB.BackColor = ColorTranslator.FromHtml(colornode?.Element("headerBackground")?.Value ?? "0xFFFFFFFF");
+            backgroundimagePB.BackColor =
+                ColorTranslator.FromHtml(colornode?.Element("headerBackground")?.Value ?? "0xFFFFFFFF");
             logoPB.BackColor = ColorTranslator.FromHtml(colornode?.Element("iconBackground")?.Value ?? "0xFFFFFFFF");
             if (colornode?.Element("headerBackground")?.Attribute("useBlackTextColor")?.Value == "true")
             {
@@ -88,28 +96,69 @@ namespace WolvenKit
                 modnameLBL.ForeColor = Color.White;
                 authorLBL.ForeColor = Color.White;
             }
+
             List<string> adition = new List<string>();
-            if(metanode?.Element("author")?.Element("twitter")?.Value != "")
-                adition.Add($@"<a href={"\"" + metanode?.Element("author")?.Element("twitter")?.Value + "\""} target={"\"_blank\""}>Twitter</a>");
+            if (metanode?.Element("author")?.Element("twitter")?.Value != "")
+                adition.Add(
+                    $@"<a href={"\"" + metanode?.Element("author")?.Element("twitter")?.Value + "\""} target={
+                            "\"_blank\""
+                        }>Twitter</a>");
             if (metanode?.Element("author")?.Element("web")?.Value != "")
-                adition.Add($@"<a href={"\"" + metanode?.Element("author")?.Element("web")?.Value + "\""} target={"\"_blank\""}>Website</a>");
+                adition.Add(
+                    $@"<a href={
+                            "\"" + metanode?.Element("author")?.Element("web")?.Value + "\""
+                        } target={"\"_blank\""}>Website</a>");
             if (metanode?.Element("author")?.Element("facebook")?.Value != "")
-                adition.Add($@"<a href={"\"" + metanode?.Element("author")?.Element("facebook")?.Value + "\""} target={"\"_blank\""}>Facebook</a>");
+                adition.Add(
+                    $@"<a href={"\"" + metanode?.Element("author")?.Element("facebook")?.Value + "\""} target={
+                            "\"_blank\""
+                        }>Facebook</a>");
             if (metanode?.Element("author")?.Element("youtube")?.Value != "")
-                adition.Add($@"<a href={"\"" + metanode?.Element("author")?.Element("youtube")?.Value + "\""} target={"\"_blank\""}>YouTube</a>");
+                adition.Add(
+                    $@"<a href={"\"" + metanode?.Element("author")?.Element("youtube")?.Value + "\""} target={
+                            "\"_blank\""
+                        }>YouTube</a>");
             var authorlink = metanode?.Element("author")?.Element("displayName")?.Value;
             if (metanode?.Element("author")?.Element("actionLink")?.Value != "")
-                authorlink = $@"<a href={"\"" + metanode?.Element("author")?.Element("actionLink")?.Value + "\""} target={"\"_blank\""}>{metanode?.Element("author")?.Element("displayName")?.Value}</a>";
-            detailWB.DocumentText = $@"<html>
+                authorlink =
+                    $@"<a href={"\"" + metanode?.Element("author")?.Element("actionLink")?.Value + "\""} target={
+                            "\"_blank\""
+                        }>{metanode?.Element("author")?.Element("displayName")?.Value}</a>";
+            actionlink = metanode?.Element("author")?.Element("actionLink")?.Value;
+            detailWB.DocumentText = $@"
+<html>
 <body>
-    <h3>Mod description</h3>
-    <p>{metanode?.Element("description")}</p>
+    {metanode?.Element("description")}
     <hr>
     <h3>Aditional information</h3>
-    <p>Created by {authorlink}<br>
-    Version {v}<br>
-    License {metanode?.Element("license")?.Value}
-    {adition.Aggregate("",(c,n) => c += "<br>" + n)}</p>
+    <table>
+        <tr>
+            <td valign=""top"">
+                &nbsp;
+            </td>
+            <td>
+                &nbsp;
+            </td>
+            <td valign=""top"">
+                <b>Learn more</b><br>
+            </td>
+        </tr>
+        <tr>
+            <td valign=""top"">
+                <b>Created by</b> {authorlink}<br>
+                <b>Version</b> {v}<br>
+                <b>License</b> {metanode?.Element("license")?.Value}
+            </td>
+            <td>
+                &nbsp;
+            </td>
+            <td valign=""top"">
+
+
+                {adition.Aggregate("", (c, n) => c += "<br>" + n)}
+            </td>
+        </tr>
+    </table>
     <hr>
 </body>
 </html>";
@@ -117,8 +166,45 @@ namespace WolvenKit
 
         private void installBTN_Click(object sender, EventArgs e)
         {
-            //TODO: Once we changed how we pack mods install the mod.
-            //Maybe displaying a donation url or something would be nice too.
+            //Actually install the mod
+            try
+            {
+                FileStream fs = File.OpenRead(package);
+                var zf = new ZipFile(fs);
+                foreach (ZipEntry zipEntry in zf)
+                {
+                    if (!zipEntry.IsFile)
+                    {
+                        continue;
+                    }
+
+                    String entryFileName = zipEntry.Name;
+                    if (!entryFileName.StartsWith("Icon") && entryFileName != "Assembly.xml")
+                    {
+                        byte[] buffer = new byte[4096];
+                        Stream zipStream = zf.GetInputStream(zipEntry);
+                        Directory.CreateDirectory(Path.GetDirectoryName(
+                            Path.Combine(MainController.Get().Configuration.GameRootDir, entryFileName)));
+                        using (var f = new FileStream(Path.Combine(MainController.Get().Configuration.GameRootDir,entryFileName),FileMode.Create))
+                        {
+                            StreamUtils.Copy(zipStream, f, buffer);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to load the package!\n" + ex.Message);
+                this.Close();
+            }
+
+            if (MessageBox.Show($@"Installed sucesfully!
+(Please always check your files after installing mods).
+Modding requires great deal of work please consider donating to the mod's author. (Click yes to do so)", "Info",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+            {
+                System.Diagnostics.Process.Start(actionlink);
+            }
         }
     }
 }

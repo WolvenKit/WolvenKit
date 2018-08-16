@@ -7,12 +7,15 @@ using WolvenKit.CR2W;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Types;
 using WolvenKit.W3Strings;
-using WolvenKit.Interfaces;
+using WolvenKit.Common;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using WolvenKit.Mod;
 
 namespace WolvenKit
@@ -25,6 +28,9 @@ namespace WolvenKit
         public W3Mod ActiveMod { get; set; }
 
         public const string ManagerCacheDir = "ManagerCache";
+        public string VLCLibDir = "C:\\Program Files\\VideoLAN\\VLC";
+        public string InitialModProject = "";
+        public string InitialWKP = "";
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -34,6 +40,21 @@ namespace WolvenKit
             get => _projectstatus;
             set => SetField(ref _projectstatus, value, "ProjectStatus");
         }
+
+        private string _loadstatus = "Loading...";
+        public string loadStatus
+        {
+            get => _loadstatus;
+            set => SetField(ref _loadstatus, value, "loadStatus");
+        }
+
+        private bool _loaded = false;
+        public bool Loaded
+        {
+            get => _loaded;
+            set => SetField(ref _loaded, value, "Loaded");
+        }
+
 
         private KeyValuePair<string,frmOutput.Logtype> _logMessage = new KeyValuePair<string, frmOutput.Logtype>("",frmOutput.Logtype.Normal);
         public KeyValuePair<string, frmOutput.Logtype> LogMessage
@@ -49,7 +70,7 @@ namespace WolvenKit
 
         private MainController()  {  }
 
-#region Archive Managers
+        #region Archive Managers
         private SoundManager soundManager;
         private SoundManager modsoundmanager;
         private BundleManager bundleManager;
@@ -58,218 +79,16 @@ namespace WolvenKit
         private TextureManager modTextureManager;
         private W3StringManager w3StringManager;
 
-        public W3StringManager W3StringManager
-        {
-            get
-            {
-                if (w3StringManager == null)
-                {
-                    try
-                    {
-                        if (File.Exists(Path.Combine(ManagerCacheDir,"string_cache.json")))
-                        {
-                            using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir,"string_cache.json")))
-                            {
-                                JsonSerializer serializer = new JsonSerializer();
-                                serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                                serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                                serializer.TypeNameHandling = TypeNameHandling.Auto;
-                                w3StringManager = (W3StringManager)serializer.Deserialize(file, typeof(W3StringManager));
-                            }
-                        }
-                        else
-                        {
-                            w3StringManager = new W3StringManager();
-                            w3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
-                            File.WriteAllText(Path.Combine(ManagerCacheDir,"string_cache.json"), JsonConvert.SerializeObject(W3StringManager, Formatting.None, new JsonSerializerSettings()
-                            {
-                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                                TypeNameHandling = TypeNameHandling.Auto
-                            }));
-                        }
-                    }
-                    catch (System.Exception)
-                    {
-                        if (File.Exists(Path.Combine(ManagerCacheDir,"string_cache.json")))
-                            File.Delete(Path.Combine(ManagerCacheDir,"string_cache.json"));
-                        w3StringManager = new W3StringManager();
-                        w3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
-                    }
-                }
+        //Public getters
+        public W3StringManager W3StringManager => w3StringManager;
+        public BundleManager BundleManager => bundleManager;
+        public BundleManager ModBundleManager => modbundleManager;
+        public SoundManager SoundManager => soundManager;
+        public SoundManager ModSoundManager => modsoundmanager;
+        public TextureManager TextureManager => textureManager;
+        public TextureManager ModTextureManager => modTextureManager;
 
-                return w3StringManager;
-            }
-        }
-
-        public BundleManager BundleManager
-        {
-            get
-            {
-                if (bundleManager == null)
-                {
-                    try
-                    {
-                        if (File.Exists(Path.Combine(ManagerCacheDir,"bundle_cache.json")))
-                        {
-                            using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir,"bundle_cache.json")))
-                            {
-                                JsonSerializer serializer = new JsonSerializer();
-                                serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                                serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                                serializer.TypeNameHandling = TypeNameHandling.Auto;
-                                bundleManager = (BundleManager)serializer.Deserialize(file, typeof(BundleManager));
-                            }
-                        }
-                        else
-                        {
-                            bundleManager = new BundleManager();
-                            bundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                            File.WriteAllText(Path.Combine(ManagerCacheDir,"bundle_cache.json"), JsonConvert.SerializeObject(bundleManager, Formatting.None, new JsonSerializerSettings()
-                            {
-                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                                TypeNameHandling = TypeNameHandling.Auto
-                            }));
-                        }
-                    }
-                    catch (System.Exception)
-                    {
-                        if (File.Exists(Path.Combine(ManagerCacheDir,"bundle_cache.json")))
-                            File.Delete(Path.Combine(ManagerCacheDir,"bundle_cache.json"));
-                        bundleManager = new BundleManager();
-                        bundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                    }
-                }
-                return bundleManager;
-            }
-        }
-
-        public BundleManager ModBundleManager
-        {
-            get
-            {
-                if (modbundleManager == null)
-                {
-                    modbundleManager = new BundleManager();
-                    modbundleManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
-                }
-                return modbundleManager;
-            }
-        }
-
-        public SoundManager SoundManager
-        {
-            get
-            {
-                if (soundManager == null)
-                {
-                    try
-                    {
-                        if (File.Exists(Path.Combine(ManagerCacheDir,"sound_cache.json")))
-                        {
-                            using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir,"sound_cache.json")))
-                            {
-                                JsonSerializer serializer = new JsonSerializer();
-                                serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                                serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                                serializer.TypeNameHandling = TypeNameHandling.Auto;
-                                soundManager = (SoundManager)serializer.Deserialize(file, typeof(SoundManager));
-                            }
-                        }
-                        else
-                        {
-                            soundManager = new SoundManager();
-                            soundManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                            File.WriteAllText(Path.Combine(ManagerCacheDir,"sound_cache.json"), JsonConvert.SerializeObject(soundManager, Formatting.None, new JsonSerializerSettings()
-                            {
-                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                                TypeNameHandling = TypeNameHandling.Auto
-                            }));
-                        }
-                    }
-                    catch (System.Exception)
-                    {
-                        if (File.Exists(Path.Combine(ManagerCacheDir,"sound_cache.json")))
-                            File.Delete(Path.Combine(ManagerCacheDir,"sound_cache.json"));
-                        soundManager = new SoundManager();
-                        soundManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                    }
-                }
-                return soundManager;
-            }
-        }
-
-        public SoundManager ModSoundManager
-        {
-            get
-            {
-                if (modsoundmanager == null)
-                {
-                    modsoundmanager = new SoundManager();
-                    modsoundmanager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
-                }
-                return modsoundmanager;
-            }
-        }
-
-        public TextureManager TextureManager
-        {
-            get
-            {
-                if (textureManager == null)
-                {
-                    try
-                    {
-                        if (File.Exists(Path.Combine(ManagerCacheDir,"texture_cache.json")))
-                        {
-                            using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir,"texture_cache.json")))
-                            {
-                                JsonSerializer serializer = new JsonSerializer();
-                                serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                                serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                                serializer.TypeNameHandling = TypeNameHandling.Auto;
-                                textureManager = (TextureManager)serializer.Deserialize(file, typeof(TextureManager));
-                            }
-                        }
-                        else
-                        {
-                            textureManager = new TextureManager();
-                            textureManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                            File.WriteAllText(Path.Combine(ManagerCacheDir,"texture_cache.json"), JsonConvert.SerializeObject(textureManager, Formatting.None, new JsonSerializerSettings()
-                            {
-                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                                TypeNameHandling = TypeNameHandling.Auto
-                            }));
-                        }
-                    }
-                    catch (System.Exception)
-                    {
-                        if (File.Exists(Path.Combine(ManagerCacheDir,"texture_cache.json")))
-                            File.Delete(Path.Combine(ManagerCacheDir,"texture_cache.json"));
-                        textureManager = new TextureManager();
-                        textureManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                    }
-                }
-                return textureManager;
-            }
-        }
-
-        public TextureManager ModTextureManager
-        {
-            get
-            {
-                if (modTextureManager == null)
-                {
-                    modTextureManager = new TextureManager();
-                    modTextureManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
-                }
-                return modTextureManager;
-            }
-        }
-#endregion
+        #endregion
 
         /// <summary>
         /// Usefull function for blindly importing a file.
@@ -289,6 +108,16 @@ namespace WolvenKit
                 }
             });
             return ret;
+        }
+
+        /// <summary>
+        /// Here we setup stuff we need in every form. Borders etc can be done here in the future.
+        /// </summary>
+        /// <param name="form">The form to initialize.</param>
+        public void InitForm(Form form)
+        {
+            Bitmap bmp = WolvenKit.Properties.Resources.Logo_wkit;
+            form.Icon = Icon.FromHandle(bmp.GetHicon());
         }
 
         /// <summary>
@@ -324,20 +153,210 @@ namespace WolvenKit
 
         public static MainController Get()
         {
-            
             if (mainController == null)
             {
                 mainController = new MainController();
-                mainController.Initialize();
+                mainController.Configuration = Configuration.Load();
+                mainController.Window = new frmMain();
             }
-
             return mainController;
         }
 
-        public void Initialize()
+        /// <summary>
+        /// Initializes the archive managers in an async thread
+        /// </summary>
+        /// <returns></returns>
+        public async Task Initialize()
         {
-            Configuration = Configuration.Load();
-            Window = new frmMain();
+            try
+            {
+                loadStatus = "Loading string manager";
+                #region Load string manager
+                var sw = new System.Diagnostics.Stopwatch();
+                sw.Start();
+                if (w3StringManager == null)
+                {
+                    try
+                    {
+                        if (File.Exists(Path.Combine(ManagerCacheDir, "string_cache.bin")) && new FileInfo(Path.Combine(ManagerCacheDir, "string_cache.bin")).Length > 0)
+                        {
+                            using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"),FileMode.Open))
+                            {
+                                w3StringManager = ProtoBuf.Serializer.Deserialize<W3StringManager>(file);
+                            }
+                        }
+                        else
+                        {
+                            w3StringManager = new W3StringManager();
+                            w3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
+                            Directory.CreateDirectory(ManagerCacheDir);
+                            using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"),FileMode.Create))
+                            {
+                                ProtoBuf.Serializer.Serialize(file,w3StringManager);
+                            }
+                        }
+                    }
+                    catch (System.Exception ex)
+                    {
+                        if (File.Exists(Path.Combine(ManagerCacheDir, "string_cache.bin")))
+                            File.Delete(Path.Combine(ManagerCacheDir, "string_cache.bin"));
+                        w3StringManager = new W3StringManager();
+                        w3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
+                    }
+                }
+
+                var i = sw.ElapsedMilliseconds;
+                sw.Stop();
+                #endregion
+
+                loadStatus = "Loading bundle manager!";
+                #region Load bundle manager
+                if (bundleManager == null)
+                {
+                    try
+                    {
+                        if (File.Exists(Path.Combine(ManagerCacheDir, "bundle_cache.json")))
+                        {
+                            using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir, "bundle_cache.json")))
+                            {
+                                JsonSerializer serializer = new JsonSerializer();
+                                serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                                serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+                                serializer.TypeNameHandling = TypeNameHandling.Auto;
+                                bundleManager = (BundleManager)serializer.Deserialize(file, typeof(BundleManager));
+                            }
+                        }
+                        else
+                        {
+                            bundleManager = new BundleManager();
+                            bundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                            File.WriteAllText(Path.Combine(ManagerCacheDir, "bundle_cache.json"), JsonConvert.SerializeObject(bundleManager, Formatting.None, new JsonSerializerSettings()
+                            {
+                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                                TypeNameHandling = TypeNameHandling.Auto
+                            }));
+                        }
+                    }
+                    catch (System.Exception)
+                    {
+                        if (File.Exists(Path.Combine(ManagerCacheDir, "bundle_cache.json")))
+                            File.Delete(Path.Combine(ManagerCacheDir, "bundle_cache.json"));
+                        bundleManager = new BundleManager();
+                        bundleManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                    }
+                }
+                #endregion
+                loadStatus = "Loading mod bundle manager!";
+                #region Load mod bundle manager
+                if (modbundleManager == null)
+                {
+                    modbundleManager = new BundleManager();
+                    modbundleManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                }
+                #endregion
+
+                loadStatus = "Loading texture manager!";
+                #region Load texture manager
+                if (textureManager == null)
+                {
+                    try
+                    {
+                        if (File.Exists(Path.Combine(ManagerCacheDir, "texture_cache.json")))
+                        {
+                            using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir, "texture_cache.json")))
+                            {
+                                JsonSerializer serializer = new JsonSerializer();
+                                serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                                serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+                                serializer.TypeNameHandling = TypeNameHandling.Auto;
+                                textureManager = (TextureManager)serializer.Deserialize(file, typeof(TextureManager));
+                            }
+                        }
+                        else
+                        {
+                            textureManager = new TextureManager();
+                            textureManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                            File.WriteAllText(Path.Combine(ManagerCacheDir, "texture_cache.json"), JsonConvert.SerializeObject(textureManager, Formatting.None, new JsonSerializerSettings()
+                            {
+                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                                TypeNameHandling = TypeNameHandling.Auto
+                            }));
+                        }
+                    }
+                    catch (System.Exception)
+                    {
+                        if (File.Exists(Path.Combine(ManagerCacheDir, "texture_cache.json")))
+                            File.Delete(Path.Combine(ManagerCacheDir, "texture_cache.json"));
+                        textureManager = new TextureManager();
+                        textureManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                    }
+                }
+                #endregion
+                loadStatus = "Loading mod texure manager!";
+                #region Load mod texture manager
+                if (modTextureManager == null)
+                {
+                    modTextureManager = new TextureManager();
+                    modTextureManager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                }
+                #endregion
+
+                loadStatus = "Loading sound manager!";
+                #region Load sound manager
+                if (soundManager == null)
+                {
+                    try
+                    {
+                        if (File.Exists(Path.Combine(ManagerCacheDir, "sound_cache.json")))
+                        {
+                            using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir, "sound_cache.json")))
+                            {
+                                JsonSerializer serializer = new JsonSerializer();
+                                serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                                serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+                                serializer.TypeNameHandling = TypeNameHandling.Auto;
+                                soundManager = (SoundManager)serializer.Deserialize(file, typeof(SoundManager));
+                            }
+                        }
+                        else
+                        {
+                            soundManager = new SoundManager();
+                            soundManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                            File.WriteAllText(Path.Combine(ManagerCacheDir, "sound_cache.json"), JsonConvert.SerializeObject(soundManager, Formatting.None, new JsonSerializerSettings()
+                            {
+                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                                TypeNameHandling = TypeNameHandling.Auto
+                            }));
+                        }
+                    }
+                    catch (System.Exception)
+                    {
+                        if (File.Exists(Path.Combine(ManagerCacheDir, "sound_cache.json")))
+                            File.Delete(Path.Combine(ManagerCacheDir, "sound_cache.json"));
+                        soundManager = new SoundManager();
+                        soundManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                    }
+                }
+                #endregion
+                loadStatus = "Loading mod sound manager!";
+                #region Load mod sound manager
+                if (modsoundmanager == null)
+                {
+                    modsoundmanager = new SoundManager();
+                    modsoundmanager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
+                }
+                #endregion
+                loadStatus = "Loaded";
+
+                mainController.Loaded = true;
+            }
+            catch (Exception e)
+            {
+                mainController.Loaded = false;
+            }
         }
 
         public frmCR2WDocument LoadDocument(string filename, bool suppressErrors = false)
@@ -384,7 +403,7 @@ namespace WolvenKit
                 bytes = ((IByteSource) editvar).Bytes;
             }
 
-            dlg.Filter = string.Join("|", ImportExportUtility.GetPossibleExtensions(bytes));
+            dlg.Filter = string.Join("|", ImportExportUtility.GetPossibleExtensions(bytes, editvar.Name));
             dlg.InitialDirectory = Get().Configuration.InitialExportDirectory;
 
             if (dlg.ShowDialog() == DialogResult.OK)

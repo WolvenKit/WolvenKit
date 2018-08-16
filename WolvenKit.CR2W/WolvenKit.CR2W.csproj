@@ -108,6 +108,12 @@
     </Compile>
     <Compile Include="Editors\EditableList.cs" />
     <Compile Include="Editors\EditableObject.cs" />
+    <Compile Include="Editors\IdTagEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editors\IdTagEditor.Designer.cs">
+      <DependentUpon>IdTagEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Editors\IEditableVariable.cs" />
     <Compile Include="Editors\PtrEditor.cs">
       <SubType>UserControl</SubType>
@@ -115,8 +121,21 @@
     <Compile Include="Editors\PtrEditor.Designer.cs">
       <DependentUpon>PtrEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Types\CCubeTexture.cs" />
+    <Compile Include="Types\CDecalSpawne.cs" />
+    <Compile Include="Types\CGenericGrassMask.cs" />
+    <Compile Include="Types\CIndexed2dArray.cs" />
+    <Compile Include="Types\CLayerInfo.cs" />
+    <Compile Include="Types\CParticleSystem.cs" />
     <Compile Include="Types\CRagdoll.cs" />
-    <Compile Include="Types\CTree.cs" />
+    <Compile Include="Types\CSectorData.cs" />
+    <Compile Include="Types\CSwarmCellMap.cs" />
+    <Compile Include="Types\CSwfTexture.cs" />
+    <Compile Include="Types\EmitterDelaySettings.cs" />
+    <Compile Include="Types\EmitterDurationSettings.cs" />
+    <Compile Include="Types\SBoneIndiceMapping.cs" />
+    <Compile Include="Types\SDynamicDecalMaterialInfo.cs" />
+    <Compile Include="Types\SFoliageInstance.cs" />
     <Compile Include="HslColor.cs" />
     <Compile Include="IVariableEditor.cs" />
     <Compile Include="ILocalizedStringSource.cs" />
@@ -157,16 +176,23 @@
     <Compile Include="Types\CVariable.cs" />
     <Compile Include="Types\CVariant.cs" />
     <Compile Include="Types\CVector.cs" />
+    <Compile Include="Types\CVector3D.cs" />
     <Compile Include="Types\CXml.cs" />
     <Compile Include="Types\Enums.cs" />
+    <Compile Include="Types\IdTag.cs" />
     <Compile Include="Types\IntegerTypes.cs" />
     <Compile Include="Types\MissingTypeException.cs" />
     <Compile Include="Types\SAppearanceAttachment.cs" />
+    <Compile Include="Types\SParticleEmitterLODLevel.cs" />
+    <Compile Include="Types\SSeedKeyValue.cs" />
     <Compile Include="W3ReaderExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Editors\ByteArrayEditor.resx">
       <DependentUpon>ByteArrayEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editors\IdTagEditor.resx">
+      <DependentUpon>IdTagEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editors\PtrEditor.resx">
       <DependentUpon>PtrEditor.cs</DependentUpon>

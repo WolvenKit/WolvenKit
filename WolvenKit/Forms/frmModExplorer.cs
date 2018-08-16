@@ -15,6 +15,7 @@ namespace WolvenKit
         {
             InitializeComponent();
             UpdateModFileList(true,true);
+            LastChange = DateTime.Now;
         }
 
         public W3Mod ActiveMod
@@ -30,6 +31,19 @@ namespace WolvenKit
         public List<string> FilteredFiles; 
         public bool FoldersShown = true;
 
+        public static DateTime LastChange;
+        public static TimeSpan mindiff = TimeSpan.FromMilliseconds(500);
+
+
+        public void PauseMonitoring()
+        {
+            modexplorerSlave.EnableRaisingEvents = false;
+        }
+
+        public void ResumeMonitoring()
+        {
+            modexplorerSlave.EnableRaisingEvents = true;
+        }
 
         public bool DeleteNode(string fullpath)
         {
@@ -230,6 +244,8 @@ namespace WolvenKit
 
         private void searchBox_TextChanged(object sender, EventArgs e)
         {
+            if(ActiveMod == null)
+                return;
             if (searchBox.Text == "")
             {
                 FilteredFiles = ActiveMod.Files;

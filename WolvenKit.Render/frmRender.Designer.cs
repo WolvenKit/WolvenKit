@@ -30,20 +30,22 @@
         {
             this.components = new System.ComponentModel.Container();
             this.irrlichtPanel = new System.Windows.Forms.Panel();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.loadRigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadAnimToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectAnimationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.replaceTexturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportTexturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportCurrentAnimationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importAnimationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.animationTimer = new System.Windows.Forms.Timer(this.components);
-            this.contextMenuStrip1.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // irrlichtPanel
             // 
-            this.irrlichtPanel.ContextMenuStrip = this.contextMenuStrip1;
+            this.irrlichtPanel.ContextMenuStrip = this.contextMenuStrip;
             this.irrlichtPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.irrlichtPanel.Location = new System.Drawing.Point(0, 0);
             this.irrlichtPanel.Margin = new System.Windows.Forms.Padding(2);
@@ -52,18 +54,43 @@
             this.irrlichtPanel.TabIndex = 1;
             this.irrlichtPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.irrlichtPanel_MouseMove);
             // 
-            // contextMenuStrip1
+            // contextMenuStrip
             // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadRigToolStripMenuItem,
+            this.loadAnimToolStripMenuItem,
+            this.selectAnimationToolStripMenuItem,
             this.exportToolStripMenuItem,
             this.importToolStripMenuItem,
             this.replaceTexturesToolStripMenuItem,
             this.exportTexturesToolStripMenuItem,
-            this.exportCurrentAnimationToolStripMenuItem,
-            this.importAnimationToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(206, 136);
+            this.exportCurrentAnimationToolStripMenuItem});
+            this.contextMenuStrip.Name = "contextMenuStrip1";
+            this.contextMenuStrip.Size = new System.Drawing.Size(206, 202);
+            // 
+            // loadRigToolStripMenuItem
+            // 
+            this.loadRigToolStripMenuItem.Name = "loadRigToolStripMenuItem";
+            this.loadRigToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.loadRigToolStripMenuItem.Text = "Load Rig (*.w2rig)";
+            this.loadRigToolStripMenuItem.Click += new System.EventHandler(this.loadRigToolStripMenuItem_Click);
+            // 
+            // loadAnimToolStripMenuItem
+            // 
+            this.loadAnimToolStripMenuItem.Enabled = false;
+            this.loadAnimToolStripMenuItem.Name = "loadAnimToolStripMenuItem";
+            this.loadAnimToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.loadAnimToolStripMenuItem.Text = "Load Anims (*.w2anims)";
+            this.loadAnimToolStripMenuItem.Click += new System.EventHandler(this.loadAnimToolStripMenuItem_Click);
+            // 
+            // selectAnimationToolStripMenuItem
+            // 
+            this.selectAnimationToolStripMenuItem.Enabled = false;
+            this.selectAnimationToolStripMenuItem.Name = "selectAnimationToolStripMenuItem";
+            this.selectAnimationToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.selectAnimationToolStripMenuItem.Text = "Select animation";
+            this.selectAnimationToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.selectAnimationToolStripMenuItem_DropDownItemClicked);
             // 
             // exportToolStripMenuItem
             // 
@@ -100,13 +127,6 @@
             this.exportCurrentAnimationToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.exportCurrentAnimationToolStripMenuItem.Text = "Export current animation";
             // 
-            // importAnimationToolStripMenuItem
-            // 
-            this.importAnimationToolStripMenuItem.Enabled = false;
-            this.importAnimationToolStripMenuItem.Name = "importAnimationToolStripMenuItem";
-            this.importAnimationToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
-            this.importAnimationToolStripMenuItem.Text = "Import animation";
-            // 
             // animationTimer
             // 
             this.animationTimer.Enabled = true;
@@ -124,13 +144,10 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "frmRender";
             this.Text = "Renderer";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Bithack3D_FormClosing);
             this.Load += new System.EventHandler(this.Bithack3D_Load);
-            this.ResizeEnd += new System.EventHandler(this.Bithack3D_ResizeEnd);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Bithack3D_KeyDown);
             this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.Bithack3D_MouseWheel);
-            this.Resize += new System.EventHandler(this.Bithack3D_Resize);
-            this.contextMenuStrip1.ResumeLayout(false);
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -138,12 +155,14 @@
         #endregion
         private System.Windows.Forms.Panel irrlichtPanel;
         private System.Windows.Forms.Timer animationTimer;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem replaceTexturesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportTexturesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportCurrentAnimationToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem importAnimationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadRigToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadAnimToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectAnimationToolStripMenuItem;
     }
 }

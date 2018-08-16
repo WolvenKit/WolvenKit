@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using IniParserLTK;
+using Ionic.Crc;
 using Microsoft.Win32;
 
 namespace WolvenKit
@@ -15,6 +18,9 @@ namespace WolvenKit
     {
         public string witcherexe = "";
         public string wccLiteexe = "";
+
+        public const string wcc_sha256 = "fb20d7aa45b95446baac9b376533b06b86add732cbe40fd0620e4a4feffae47b";
+        public const string wcc_sha256_patched = "275faa214c6263287deea47ddbcd7afcf6c2503a76ff57f2799bc158f5af7c5d";
 
         public frmSettings()
         {
@@ -64,7 +70,6 @@ namespace WolvenKit
             config.WccLite = txWCC_Lite.Text;
             config.TextLanguage = txTextLanguage.Text;
             config.VoiceLanguage = txVoiceLanguage.Text;
-            MainController.Get().ReloadStringManager();
             config.Save();
             try
             {
@@ -82,7 +87,64 @@ namespace WolvenKit
             }
             catch (Exception exception)
             {
-                Console.WriteLine(exception);
+                MessageBox.Show(exception.ToString());
+            }
+
+            try
+            {
+                using (var fs = new FileStream(txWCC_Lite.Text, FileMode.Open))
+                using(var bw = new BinaryWriter(fs))
+                {
+                    var shawcc = SHA256.Create().ComputeHash(fs).Aggregate("", (c, n) => c += n.ToString("x2"));
+                    switch (shawcc)
+                    {
+                        case wcc_sha256:
+                        {
+                            if (MessageBox.Show(@"wcc_lite is a great tool by CD Projekt red but
+due to some internal problems they didn't really have time to properly develop it.
+Due to this the tool takes an age to start up since it is searching for a CD Projekt red mssql server.
+WolvenKit can patch this with a method figured out by blobbins on the witcher 3 forums.
+Would you like to perform this patch?", "wcc_lite faster patch", MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
+                                DialogResult.Yes)
+                            {
+                                //We perform the patch
+                                bw.BaseStream.Seek(0x00713CD0,SeekOrigin.Begin);
+                                bw.Write(new byte[0xDD].Select(x => x = 0x90).ToArray());
+                            }
+                            //Recompute hash
+                            fs.Seek(0, SeekOrigin.Begin);
+                            shawcc = SHA256.Create().ComputeHash(fs).Aggregate("", (c, n) => c += n.ToString("x2"));
+                            if (shawcc == wcc_sha256_patched)
+                            {
+                                MessageBox.Show("Succesfully patched!", "Patch completed", MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Failed to patch! Please reinstall wcc_lite and try again", "Patch completed", MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                            }
+                            break;
+                        }
+                        case wcc_sha256_patched:
+                        {
+                            //Do nothing we are cool.
+                            break;
+                        }
+                        default:
+                        {
+                            DialogResult = DialogResult.None;
+                            txExecutablePath.Focus();
+                            MessageBox.Show("Invalid wcc_lite.exe path you seem to have on older version", "failed to save.");
+                            return;
+                        }
+                    }
+
+                }
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.ToString());
             }
 
         }
