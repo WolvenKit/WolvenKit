@@ -115,7 +115,6 @@
     <Compile Include="Editors\PtrEditor.Designer.cs">
       <DependentUpon>PtrEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Types\CItemEntity.cs" />
     <Compile Include="Types\CRagdoll.cs" />
     <Compile Include="Types\CTree.cs" />
     <Compile Include="HslColor.cs" />
