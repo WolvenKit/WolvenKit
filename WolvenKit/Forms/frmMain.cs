@@ -143,7 +143,7 @@ namespace WolvenKit
             MainController.Get().ProjectStatus = "Output cleared";
         }
 
-        public void AddOutput(string text, frmOutput.Logtype type = frmOutput.Logtype.Normal)
+        private void AddOutput(string text, frmOutput.Logtype type = frmOutput.Logtype.Normal)
         {
             if (Output != null && !Output.IsDisposed)
             {
@@ -796,7 +796,7 @@ namespace WolvenKit
             }
             switch (Path.GetExtension(filename))
             {
-                /*case ".w2scene":
+                case ".w2scene":
                     {
                         doc.flowDiagram = new frmChunkFlowDiagram
                         {
@@ -806,7 +806,7 @@ namespace WolvenKit
                         doc.flowDiagram.OnSelectChunk += doc.frmCR2WDocument_OnSelectChunk;
                         doc.flowDiagram.Show(doc.FormPanel, DockState.Document);
                         break;
-                    }*/
+                    }
                 case ".journal":
                     {
                         doc.JournalEditor = new frmJournalEditor
