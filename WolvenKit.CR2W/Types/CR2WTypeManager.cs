@@ -11551,34 +11551,6 @@ namespace WolvenKit.CR2W.Types
                 "zoomDamp"
             };
             
-=======
-                "W3TraceGroundProjectile",
-                "W3Trap",
-                "W3TrapProjectileArea",
-                "W3TrapProjectileStatue",
-                "W3TrapSpawnEntity",
-                "W3TrapTrigger",
-                "W3TrapTripwire",
-                "W3TreasureHuntMappinEntity",
-                "W3UnlimitedDivingArea",
-                "W3UsableItem",
-                "W3VirtualSwitch_Sequence",
-                "W3VisualFx",
-                "W3WeatherShrine",
-                "W3Whale",
-                "W3WhaleArea",
-                "W3WhiteFrost",
-                "W3WhiteFrostWaveProjectile",
-                "W3WindEffectOnGroundComponent",
-                "W3WitchBoilingWaterObstacle",
-                "W3WitcherBed",
-                "W3WitcherHouse",
-                "W3WitcherHouseArea",
-                "W3YrdenEntity",
-                "W3treasureHuntContainer",
-                "WeaponHolster",
-                "WebLineProjectile"
-            };
 
             foreach (string t in vectors)
             {
