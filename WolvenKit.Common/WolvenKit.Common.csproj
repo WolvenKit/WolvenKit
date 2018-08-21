@@ -49,6 +49,7 @@
     <Compile Include="IWitcherArchive.cs" />
     <Compile Include="IWitcherArchiveType.cs" />
     <Compile Include="IWitcherFile.cs" />
+    <Compile Include="ObjectDumper.cs" />
     <Compile Include="WitcherTreeNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

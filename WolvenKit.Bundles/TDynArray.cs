@@ -23,7 +23,7 @@ namespace WolvenKit.Bundles
                 this.Add(item);
             }
 
-            Console.WriteLine(this.GetType() + "s: " + count  + " elements. Position: " + reader.BaseStream.Position);
+            Console.WriteLine(new T().GetType().Name + " - Reader is at: " + reader.BaseStream.Position + "[0x"+ reader.BaseStream.Position.ToString("X") + "] left: " + ((int)reader.BaseStream.Length-reader.BaseStream.Position) + "[0x" + ((int)reader.BaseStream.Length-reader.BaseStream.Position).ToString("X") + "]");
         }
 
         public void Serialize(BinaryWriter writer)
