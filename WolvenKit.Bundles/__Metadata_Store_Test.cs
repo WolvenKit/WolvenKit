@@ -12,16 +12,15 @@ namespace WolvenKit.Bundles
         [STAThread]
         static int Main(string[] args)
         {
-            using (var of = new OpenFileDialog()
-            {
-                Filter = "Metadata files | metadata.store"
-            })
+            using (var of = new OpenFileDialog() {Filter = "Metadata files | *.store"})
             {
                 if (of.ShowDialog() == DialogResult.OK)
                 {
-                    new Metadata_Store(of.FileName);
+                    var f = new Metadata_Store(of.FileName);
                 }
             }
+            Console.WriteLine("Done!");
+            Console.ReadLine();
             return 0;
         }
     }
