@@ -2370,5 +2370,22 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 }
             }
         }
+
+        private void mergeModsMetadataToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var dlg = new frmMergeMetadataStore();
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    
+                }
+                catch (InvalidChunkTypeException ex)
+                {
+                    MessageBox.Show(ex.Message, "Error adding chunk.");
+                }
+            }
+        }
     }
 }
