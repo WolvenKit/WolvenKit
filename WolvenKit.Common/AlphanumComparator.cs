@@ -37,7 +37,7 @@ using System.Text;
  * to see the most recent modifications 
  */
 
-namespace WolvenKit.Interfaces
+namespace WolvenKit.Common
 {
     public class AlphanumComparator<T> : IComparer<T>
     {

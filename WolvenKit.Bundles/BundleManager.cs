@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using WolvenKit.Interfaces;
+using WolvenKit.Common;
 
 namespace WolvenKit.Bundles
 {

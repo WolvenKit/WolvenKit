@@ -46,7 +46,7 @@ This repository is created to demonstrate how **REDengine 3** reads and writes f
 ***
 
 ## Building
-Visual Studio 2015 required. All the required files are either nuget packages which will be automatically downloaded once you press build or included in the package in the [Libs directory](/Libs/).
+Visual Studio 2017 required. All the required files are either nuget packages which will be automatically downloaded once you press build or included in the package in the [Libs directory](/Libs/).
 
 ***
 
@@ -56,5 +56,5 @@ Please do! Fork the project and please do you changes in small incremental steps
 For any questions:
 - PM me on discord: Traderain#3279 
 - Reach me at: hambalko.bence@gmail.com.
-- Alternatively you can join our discord: https://discord.gg/qBNgDEX
+- Alternatively you can join our discord: https://discordapp.com/invite/tdSUQQe
 ***

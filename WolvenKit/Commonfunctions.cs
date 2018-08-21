@@ -249,5 +249,54 @@ namespace WolvenKit
             Uri folderUri = new Uri(folder);
             return Uri.UnescapeDataString(folderUri.MakeRelativeUri(pathUri).ToString().Replace('/', Path.DirectorySeparatorChar));
         }
+
+        /// <summary>
+        /// Moves a directory's contents to anothet directory
+        /// </summary>
+        /// <param name="SourcePath">The old dir (will be deleted)</param>
+        /// <param name="DestinationPath">The new dir (will be created)</param>
+        public static void DirectoryMove(string SourcePath, string DestinationPath)
+        {
+            var oi = new DirectoryInfo(SourcePath);
+            var newdir = Path.Combine(oi.Parent.FullName, oi.Name + "_old");
+            oi.MoveTo(newdir);
+            //Now Create all of the directories
+            foreach (string dirPath in Directory.GetDirectories(newdir, "*",
+                SearchOption.AllDirectories))
+                Directory.CreateDirectory(dirPath.Replace(newdir, DestinationPath));
+
+            //Copy all the files & Replaces any files with the same name
+            foreach (string newPath in Directory.GetFiles(newdir, "*.*",
+                SearchOption.AllDirectories))
+            {
+                File.Move(newPath, newPath.Replace(newdir, DestinationPath));
+            }
+
+            //Delete the old directory
+            DeleteDirectory(newdir);
+        }
+
+        /// <summary>
+        /// Deletes a non empty directory
+        /// </summary>
+        /// <param name="targetDir">The directory to delete.</param>
+        public static void DeleteDirectory(string targetDir)
+        {
+            string[] files = Directory.GetFiles(targetDir);
+            string[] dirs = Directory.GetDirectories(targetDir);
+
+            foreach (string file in files)
+            {
+                File.SetAttributes(file, FileAttributes.Normal);
+                File.Delete(file);
+            }
+
+            foreach (var dir in dirs)
+            {
+                DeleteDirectory(dir);
+            }
+
+            Directory.Delete(targetDir, false);
+        }
     }
 }

@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using WolvenKit.Interfaces;
+using WolvenKit.Common;
 
 namespace WolvenKit.Bundles
 {
@@ -77,7 +77,7 @@ namespace WolvenKit.Bundles
                     item.Empty = reader.ReadUInt32();
                     item.Size = reader.ReadUInt32();
                     item.ZSize = reader.ReadUInt32();
-                    item.Offset = reader.ReadUInt32();
+                    item.PageOFfset = reader.ReadUInt32();
 
                     var date = reader.ReadUInt32();
                     var y = date >> 20;

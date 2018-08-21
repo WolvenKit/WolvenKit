@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.IO.MemoryMappedFiles;
-using WolvenKit.Interfaces;
+using WolvenKit.Common;
 
 namespace WolvenKit.Wwise.SoundCache
 {
@@ -18,8 +18,7 @@ namespace WolvenKit.Wwise.SoundCache
 
 
         public long NameOffset;
-        public long Offset { get; set; }
-
+        public long PageOFfset { get; set; }
         public long Size { get; set; }
         public uint ZSize { get; set; }
 
@@ -28,19 +27,13 @@ namespace WolvenKit.Wwise.SoundCache
             this.Bundle = Parent;
         }
 
-        public string CompressionType
-        {
-            get
-            {
-                return "None";
-            }
-        }
+        public string CompressionType => "None";
 
         public void Extract(Stream output)
         {
             using (var file = MemoryMappedFile.CreateFromFile(this.ParentFile, FileMode.Open))
             {
-                using (var viewstream = file.CreateViewStream(Offset, Size, MemoryMappedFileAccess.Read))
+                using (var viewstream = file.CreateViewStream(PageOFfset, Size, MemoryMappedFileAccess.Read))
                 {
                     viewstream.CopyTo(output);
                 }
