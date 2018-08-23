@@ -60,13 +60,14 @@ namespace WolvenKit
         private void VideoConverter_DoWork(object sender, DoWorkEventArgs e)
         {
             Demux(videofile);
-            foreach (var demuxedfile in Demuxedfiles)
+ /*           foreach (var demuxedfile in Demuxedfiles)
             {
 #if DEBUG
-                File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "DUMP_FOLDER\\" + demuxedfile.Key,
+                File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\DUMP_FOLDER\\" + demuxedfile.Key,
                     demuxedfile.Value);
 #endif
             }
+*/
         }
 
         private void VideoConverter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

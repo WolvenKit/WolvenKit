@@ -21,6 +21,7 @@ namespace WolvenKit
 
         public const string wcc_sha256 = "fb20d7aa45b95446baac9b376533b06b86add732cbe40fd0620e4a4feffae47b";
         public const string wcc_sha256_patched = "275faa214c6263287deea47ddbcd7afcf6c2503a76ff57f2799bc158f5af7c5d";
+        public const string wcc_sha256_patched2 = "104f50142fde883337d332d319d205701e8a302197360f5237e6bb426984212a";
 
         public frmSettings()
         {
@@ -126,6 +127,7 @@ Would you like to perform this patch?", "wcc_lite faster patch", MessageBoxButto
                             }
                             break;
                         }
+                        case wcc_sha256_patched2:
                         case wcc_sha256_patched:
                         {
                             //Do nothing we are cool.
