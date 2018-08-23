@@ -16,6 +16,7 @@ using Dfust.Hotkeys;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Newtonsoft.Json;
+using SharpPresence;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
@@ -1027,6 +1028,41 @@ namespace WolvenKit
         #endregion //Methods
 
         #region  Control events
+        private void richpresenceworker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            string project = "non";
+
+            Discord.EventHandlers handlers = new Discord.EventHandlers();
+            Discord.Initialize("482179494862651402", handlers);
+            while (!richpresenceworker.CancellationPending)
+            {
+                if (MainController.Get().ActiveMod != null)
+                {
+                    if (project != MainController.Get().ActiveMod.Name.ToString())
+                    {
+                        project = MainController.Get().ActiveMod.Name.ToString();
+                        Discord.RichPresence rp = new Discord.RichPresence();
+                        rp.state = "";
+                        rp.details = "Developing " + project;
+                        rp.largeImageKey = "logo_wkit";
+                        Discord.UpdatePresence(rp);
+                    }
+                }
+            }
+        }
+
+        public EventHandler errored;
+
+        private void richpresenceworker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+
+        }
+
+        private void richpresenceworker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+
+        }
+
         private void frmMain_MdiChildActivate(object sender, EventArgs e)
         {
             if (sender is frmCR2WDocument)
@@ -1142,10 +1178,10 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            richpresenceworker.CancelAsync();           
             if (MainController.Get().ProjectUnsaved)
                 if (MessageBox.Show("There are unsaved changes in your project. Would you like to save them?", "WolvenKit", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     saveAllFiles();
-
         }
 
         private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
@@ -1358,6 +1394,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             
             //Update check should be after we are all set up. It goes on in the background.
             AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
+            richpresenceworker.RunWorkerAsync();
         }
 
 
