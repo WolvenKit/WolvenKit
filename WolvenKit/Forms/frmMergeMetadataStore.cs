@@ -19,6 +19,10 @@ using System.Windows.Forms;
  * 
  * FIXME
  * code cleanups
+ * 
+ * BUGS
+ * merged mod count - done
+ * delete merged mod folders after unmerge - done
  */
 
 
@@ -92,9 +96,9 @@ namespace WolvenKit.Forms
             PopulateListView(listViewDLCList, false);
 
             if (Directory.Exists(mergedModsDir))
-                MergedModList.AddRange(Directory.GetFiles(mergedModsDir, "*.bundle", SearchOption.TopDirectoryOnly).ToArray());
+                MergedModList.AddRange(Directory.GetFiles(mergedModsDir, "*.bundle", SearchOption.AllDirectories).ToArray());
             if (Directory.Exists(mergedDLCDir))
-                MergedDLCList.AddRange(Directory.GetFiles(mergedDLCDir, "*.bundle", SearchOption.TopDirectoryOnly).ToArray());
+                MergedDLCList.AddRange(Directory.GetFiles(mergedDLCDir, "*.bundle", SearchOption.AllDirectories).ToArray());
         
 
             UpdateStatusLabel();
@@ -111,8 +115,8 @@ namespace WolvenKit.Forms
             gameModDir = Path.Combine(gameRootDir, @"Mods\");
             gameDLCDir = Path.Combine(gameRootDir, @"DLC\");
 
-            mergedModsDir = Path.Combine(gameModDir, MDmergedModFolder + @"\content\bundles\");
-            mergedDLCDir = Path.Combine(gameDLCDir, MDmergedDLCFolder + @"\content\");
+            mergedModsDir = Path.Combine(gameModDir, MDmergedModFolder);
+            mergedDLCDir = Path.Combine(gameDLCDir, MDmergedDLCFolder);
 
             //TODO remember load order
 
@@ -437,22 +441,6 @@ namespace WolvenKit.Forms
             return isOfficialDLC;
         }
 
-
-
-        //private Thread demoThread = null;
-        /*private void Output(string v)
-        {
-            demoThread = new Thread(new ThreadStart(this.ThreadProcSafe));
-
-            demoThread.Start();
-
-        }
-
-        private void ThreadProcSafe()
-        {
-            SetText("This text was set safely.");
-        }*/
-
         delegate void StringArgReturningVoidDelegate(string text);
         private void Output(string text)
         {
@@ -467,10 +455,6 @@ namespace WolvenKit.Forms
                 richTextBox.AppendText(text);
             }
         }
-
-
-
-
 
         private void UpdateStatusLabel()
         {
@@ -522,12 +506,12 @@ namespace WolvenKit.Forms
 
             if (isMod)
             {
-                mergedDir = mergedModsDir;
+                mergedDir = Path.Combine(mergedModsDir, @"content\");
                 list = listViewModList;
             }
             else
             {
-                mergedDir = mergedDLCDir;
+                mergedDir = Path.Combine(mergedDLCDir, @"content\"); ;
                 list = listViewDLCList;
             }
             if (!Directory.Exists(mergedDir))
@@ -587,6 +571,7 @@ namespace WolvenKit.Forms
             #region wcc_lite
             await Task.Run(() => wcc_MetadatastoreAsync(mergedDir));
             progress.Report(60);
+            //catch failed merge
             if (!Directory.GetFiles(mergedDir,"*.store",SearchOption.AllDirectories).Any())
             {
                 Output("Metdata Merge Failed." + "\n");
@@ -644,13 +629,8 @@ namespace WolvenKit.Forms
             }
 
             POST_Cleanup(isMod);
-
-            //update form
             progress.Report(100);
-            if (isMod)
-                disableModForm = true;
-            else
-                disableDLCForm = true;
+
 
             #endregion
         }
@@ -665,12 +645,14 @@ namespace WolvenKit.Forms
                 list = listViewModList;
                 modName = MDmergedModFolder;
                 modPath = mergedModsDir;
+                MergedModList.Clear();
             }
             else
             {
                 list = listViewDLCList;
                 modName = MDmergedDLCFolder;
                 modPath = mergedDLCDir;
+                MergedDLCList.Clear();
             }
 
             #region Update listView
@@ -705,7 +687,11 @@ namespace WolvenKit.Forms
                 list.EndUpdate();
             }
 
-            //TODO
+            //update form
+            if (isMod)
+                disableModForm = true;
+            else
+                disableDLCForm = true;
             ButtonsMerged(true, isMod);
             UpdateFormating(isMod);
             UpdateStatusLabel();
@@ -737,21 +723,25 @@ namespace WolvenKit.Forms
 
             if (Directory.Exists(mergedDir))
             {
-                var files = Directory.GetFiles(mergedDir, "*.*", SearchOption.AllDirectories);
-                foreach (var file in files)
-                {
-                    try
-                    {
-                        File.Delete(file);
-                    }
-                    catch (Exception ex)
-                    {
-                        Output(ex.ToString() + "\n");
-                    }
-                }
+                DeleteDirectory(mergedDir);
             }
             #endregion
 
+            //update listView //TODO cleanup
+            list.BeginUpdate();
+            if (isMod)
+            {
+                disableModForm = false;
+                if (list.Items.ContainsKey(MDmergedModFolder))
+                    list.Items.RemoveByKey(MDmergedModFolder);
+            }
+            else
+            {
+                disableDLCForm = false;
+                if (list.Items.ContainsKey(MDmergedDLCFolder))
+                    list.Items.RemoveByKey(MDmergedDLCFolder);
+            }
+            list.EndUpdate();
 
             //re-enable original mods
             #region reenable
@@ -792,28 +782,40 @@ namespace WolvenKit.Forms
                 currentModData.metadataIsMerged = false;
                 item.Tag = currentModData;
             }
-            #endregion
 
-            //update listView //TODO cleanup
-            list.BeginUpdate();
-            if (isMod)
-            {
-                disableModForm = false;
-                if (list.Items.ContainsKey(MDmergedModFolder))
-                    list.Items.RemoveByKey(MDmergedModFolder);
-            }
-            else
-            {
-                disableDLCForm = false;
-                if (list.Items.ContainsKey(MDmergedDLCFolder))
-                    list.Items.RemoveByKey(MDmergedDLCFolder);
-            }
+
             UpdateFormating(isMod);
-            list.EndUpdate();
-
             ButtonsMerged(false, isMod);
             UpdateStatusLabel();
+            #endregion
 
+
+
+        }
+
+        /// <summary>
+        /// Depth-first recursive delete, with handling for descendant 
+        /// directories open in Windows Explorer.
+        /// </summary>
+        public static void DeleteDirectory(string path)
+        {
+            foreach (string directory in Directory.GetDirectories(path))
+            {
+                DeleteDirectory(directory);
+            }
+
+            try
+            {
+                Directory.Delete(path, true);
+            }
+            catch (IOException)
+            {
+                Directory.Delete(path, true);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Directory.Delete(path, true);
+            }
         }
         #endregion
 
