@@ -538,10 +538,15 @@ namespace WolvenKit
 
         private void SaveMod()
         {
-            var ser = new XmlSerializer(typeof(W3Mod));
-            var modfile = new FileStream(ActiveMod.FileName, FileMode.Create, FileAccess.Write);
-            ser.Serialize(modfile, ActiveMod);
-            modfile.Close();
+            if (ActiveMod != null)
+            {
+                if(ActiveMod.LastOpenedFiles != null)
+                    ActiveMod.LastOpenedFiles = OpenDocuments.Select(x => x.File.FileName).ToList();
+                var ser = new XmlSerializer(typeof(W3Mod));
+                var modfile = new FileStream(ActiveMod.FileName, FileMode.Create, FileAccess.Write);
+                ser.Serialize(modfile, ActiveMod);
+                modfile.Close();
+            }
         }
 
         public IDockContent DeserializeDockContent(string persistString)
@@ -633,6 +638,17 @@ namespace WolvenKit
             catch (Exception ex)
             {
                 MessageBox.Show("Failed to upgrade the project!\n" + ex,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
+
+            if (ActiveMod?.LastOpenedFiles != null)
+            {
+                foreach (var doc in ActiveMod.LastOpenedFiles)
+                {
+                    if (File.Exists(doc))
+                    {
+                        LoadDocument(doc);
+                    }
+                }
             }
         }
 
@@ -1182,6 +1198,8 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             if (MainController.Get().ProjectUnsaved)
                 if (MessageBox.Show("There are unsaved changes in your project. Would you like to save them?", "WolvenKit", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     saveAllFiles();
+
+            SaveMod();
         }
 
         private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
