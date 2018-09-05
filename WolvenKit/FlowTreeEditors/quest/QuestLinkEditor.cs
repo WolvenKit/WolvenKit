@@ -5,6 +5,12 @@ using WolvenKit.FlowTreeEditors;
 
 namespace WolvenKit {
     public class QuestLinkEditor : ChunkEditor {
+        public override void UpdateView() {
+            base.UpdateView();
+
+            lblTitle.Text = Chunk.Name + " : " + Chunk.Preview;
+        }        
+
         public override List<CPtr> GetConnections() {
             var list = new List<CPtr>();
 

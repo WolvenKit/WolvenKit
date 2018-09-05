@@ -89,6 +89,9 @@ namespace WolvenKit
                 switch (activeRoot.Type)
                 {
                     case "CQuestPhase":
+                        getQuestPhaseRootNodes(rootNodes);
+                        break;
+                    case "CQuest":
                         getQuestRootNodes(rootNodes);
                         break;
                     default:
@@ -191,7 +194,7 @@ namespace WolvenKit
             OnSelectChunk?.Invoke(sender, e);
         }
 
-        private void getQuestRootNodes(List<CR2WChunk> rootNodes)
+        private void getQuestPhaseRootNodes(List<CR2WChunk> rootNodes)
         {
             var graphObj = File.chunks[0].GetVariableByName("graph");
             if (graphObj != null && graphObj is CPtr)
@@ -201,6 +204,22 @@ namespace WolvenKit
                 {
                     var controlParts = (CArray) graphBlocks;
                     rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null && part.PtrTargetType == "CQuestPhaseInputBlock" select part.PtrTarget);
+                }
+            }
+            
+            
+        }
+        
+        private void getQuestRootNodes(List<CR2WChunk> rootNodes)
+        {
+            var graphObj = File.chunks[0].GetVariableByName("graph");
+            if (graphObj != null && graphObj is CPtr)
+            {
+                var graphBlocks = ((CPtr)graphObj).PtrTarget.GetVariableByName("graphBlocks");
+                if (graphBlocks != null && graphBlocks is CArray)
+                {
+                    var controlParts = (CArray) graphBlocks;
+                    rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null && part.PtrTargetType == "CQuestStartBlock" select part.PtrTarget);
                 }
             }
             

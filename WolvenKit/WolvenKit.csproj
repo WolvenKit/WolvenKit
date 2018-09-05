@@ -315,7 +315,8 @@
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="DDSUtility.cs" />
     <Compile Include="discord.cs" />
-    <Compile Include="FlowTreeEditors\QuestLinkEditor.cs" />
+    <Compile Include="FlowTreeEditors\quest\QuestLinkEditor.cs" />
+    <Compile Include="FlowTreeEditors\quest\QuestPhaseInputEditor.cs" />
     <Compile Include="Forms\frmLoading.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -879,7 +880,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <PublishFile Include="AltoControls">
       <Visible>False</Visible>
