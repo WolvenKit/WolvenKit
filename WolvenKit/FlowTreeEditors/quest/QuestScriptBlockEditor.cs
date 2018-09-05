@@ -12,11 +12,10 @@ namespace WolvenKit {
 
         public QuestScriptEditor() {
             script = new Label();
-            script.Anchor = (AnchorStyles.Top | AnchorStyles.Left) 
-                          | AnchorStyles.Right;
+            script.Anchor = AnchorStyles.Left | AnchorStyles.Right| AnchorStyles.Top;
             script.AutoEllipsis = true;
             script.BackColor = Color.White;
-            script.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            script.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             script.ForeColor = SystemColors.ActiveCaptionText;
             script.Location = new Point(0, 0);
             script.Name = "script";
@@ -36,7 +35,7 @@ namespace WolvenKit {
             script.Location = Location + new Size(0, lblTitle.Height);
             Size measureText = TextRenderer.MeasureText(lblTitle.Text, lblTitle.Font);
             Size measureScript = TextRenderer.MeasureText(script.Text, script.Font);
-            Size = new Size( Math.Max(measureScript.Width, measureText.Width),measureScript.Height + measureText.Height) + Margin.Size;
+            Size = new Size( Math.Max(measureScript.Width, measureText.Width),lblTitle.Height + script.Height);
         }
 
         private string getScript() {

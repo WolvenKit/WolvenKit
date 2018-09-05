@@ -106,20 +106,25 @@ namespace WolvenKit
                 createEditor(0, c);
             }
 
-            for (var i = maxdepth; i >= 0; i--)
-            {
-                var x = i*400;
+            int x = 0;
+            
+            for (int i = 0; i <= maxdepth; i++) {
                 var y = 0;
-
-                if (EditorLayout.ContainsKey(i))
-                {
+                
+                if (EditorLayout.ContainsKey(i)) {
+                    int widestEditor = 0;
                     foreach (var ls in EditorLayout[i])
                     {
                         ls.Location = new Point(x, y);
                         y += ls.Height + 15;
+                        widestEditor = Math.Max(widestEditor, ls.Width);
                     }
+
+                    x += widestEditor + 50;
                 }
             }
+
+        
 
             var maxwidth = 0;
             var maxheight = 0;
