@@ -45,8 +45,7 @@ namespace WolvenKit
         private int maxdepth;
         private Point selectionEnd;
         private Point selectionStart;
-        public static float zoom = 100;
-        public static bool zoomchanged = false;
+        public float zoom = 100;
 
         public frmQuestFlowDiagram()
         {
@@ -349,7 +348,8 @@ namespace WolvenKit
             foreach (ChunkEditor c in Controls)
             {
                 c.Size = new Size((int)(c.OriginalSize.Width * zoom / 100), (int)(c.OriginalSize.Height * zoom / 100));
-                c.Left = (int)(c.Left * zoom / prevZoom);
+                c.Left = (int)Math.Round(c.Left * zoom / prevZoom);
+                c.Top = (int)Math.Round(c.Top* zoom / prevZoom);
             }
             Invalidate();
         }

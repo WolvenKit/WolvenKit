@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Forms;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 using WolvenKit.FlowTreeEditors;
@@ -9,6 +10,7 @@ namespace WolvenKit {
             base.UpdateView();
 
             lblTitle.Text = Chunk.Name + " : " + Chunk.Preview;
+            Size = TextRenderer.MeasureText(lblTitle.Text, lblTitle.Font) + Margin.Size;
         }        
 
         public override List<CPtr> GetConnections() {
