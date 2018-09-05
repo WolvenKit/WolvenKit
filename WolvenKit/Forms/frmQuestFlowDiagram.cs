@@ -232,8 +232,10 @@ namespace WolvenKit
 
             switch (c.Type)
             {
-                case "CQuestStoryPhaseSetterBlock":
-                    return new QuestLinkEditor();
+                case "CQuestPhaseBlock":
+                    return new QuestPhaseEditor();
+                case "CQuestScriptBlock":
+                    return new QuestScriptEditor();
                 case "CStorySceneFlowCondition":
                     return new SceneFlowConditionEditor();
                 case "CStorySceneRandomizer":

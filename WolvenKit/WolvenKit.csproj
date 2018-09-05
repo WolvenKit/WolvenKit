@@ -315,8 +315,10 @@
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="DDSUtility.cs" />
     <Compile Include="discord.cs" />
+    <Compile Include="FlowTreeEditors\quest\QuestPhaseEditor.cs" />
     <Compile Include="FlowTreeEditors\quest\QuestLinkEditor.cs" />
     <Compile Include="FlowTreeEditors\quest\QuestPhaseInputEditor.cs" />
+    <Compile Include="FlowTreeEditors\quest\QuestScriptBlockEditor.cs" />
     <Compile Include="Forms\frmLoading.cs">
       <SubType>Form</SubType>
     </Compile>
