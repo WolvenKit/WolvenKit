@@ -45,8 +45,7 @@ namespace WolvenKit
         private int maxdepth;
         private Point selectionEnd;
         private Point selectionStart;
-        public static float zoom = 100;
-        public static bool zoomchanged = false;
+        public float zoom = 100;
 
         public frmChunkFlowDiagram()
         {
@@ -88,6 +87,12 @@ namespace WolvenKit
             {
                 switch (activeRoot.Type)
                 {
+                    case "CQuestPhase":
+                        getQuestPhaseRootNodes(rootNodes);
+                        break;
+                    case "CQuest":
+                        getQuestRootNodes(rootNodes);
+                        break;
                     case "CStoryScene":
                         getStorySceneRootNodes(rootNodes);
                         break;
@@ -104,20 +109,25 @@ namespace WolvenKit
                 createEditor(0, c);
             }
 
-            for (var i = maxdepth; i >= 0; i--)
-            {
-                var x = i*400;
+            int x = 0;
+            
+            for (int i = 0; i <= maxdepth; i++) {
                 var y = 0;
-
-                if (EditorLayout.ContainsKey(i))
-                {
+                
+                if (EditorLayout.ContainsKey(i)) {
+                    int widestEditor = 0;
                     foreach (var ls in EditorLayout[i])
                     {
                         ls.Location = new Point(x, y);
                         y += ls.Height + 15;
+                        widestEditor = Math.Max(widestEditor, ls.Width);
                     }
+
+                    x += widestEditor + 50;
                 }
             }
+
+        
 
             var maxwidth = 0;
             var maxheight = 0;
@@ -131,6 +141,7 @@ namespace WolvenKit
 
             //AutoScrollMinSize = new Size(this.Width, this.Height);
         }
+
 
         private void createEditor(int depth, CR2WChunk c)
         {
@@ -200,6 +211,36 @@ namespace WolvenKit
                 rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null && part.PtrTargetType == "CStorySceneInput" select part.PtrTarget);
             }
         }
+        
+        private void getQuestPhaseRootNodes(List<CR2WChunk> rootNodes)
+        {
+            var graphObj = File.chunks[0].GetVariableByName("graph");
+            if (graphObj != null && graphObj is CPtr)
+            {
+                var graphBlocks = ((CPtr)graphObj).PtrTarget.GetVariableByName("graphBlocks");
+                if (graphBlocks != null && graphBlocks is CArray)
+                {
+                    var controlParts = (CArray) graphBlocks;
+                    rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null && part.PtrTargetType == "CQuestPhaseInputBlock" select part.PtrTarget);
+                }
+            }
+        }
+        
+        private void getQuestRootNodes(List<CR2WChunk> rootNodes)
+        {
+            var graphObj = File.chunks[0].GetVariableByName("graph");
+            if (graphObj != null && graphObj is CPtr)
+            {
+                var graphBlocks = ((CPtr)graphObj).PtrTarget.GetVariableByName("graphBlocks");
+                if (graphBlocks != null && graphBlocks is CArray)
+                {
+                    var controlParts = (CArray) graphBlocks;
+                    rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null && part.PtrTargetType == "CQuestStartBlock" select part.PtrTarget);
+                }
+            }
+            
+            
+        }
 
         public ChunkEditor GetEditor(CR2WChunk c)
         {
@@ -208,6 +249,15 @@ namespace WolvenKit
 
             switch (c.Type)
             {
+                // quest
+                
+                case "CQuestPhaseBlock":
+                    return new QuestPhaseEditor();
+                case "CQuestScriptBlock":
+                    return new QuestScriptEditor();
+                
+                // story
+                
                 case "CStorySceneChoice":
                     return new SceneChoiceEditor();
                 case "CStorySceneFlowCondition":
@@ -215,7 +265,8 @@ namespace WolvenKit
                 case "CStorySceneRandomizer":
                     return new SceneRandomizerEditor();
                 default:
-                    return new SceneLinkEditor();
+                    // should support both quests and scenes
+                    return new QuestLinkEditor();
             }
         }
 
@@ -324,7 +375,8 @@ namespace WolvenKit
             foreach (ChunkEditor c in Controls)
             {
                 c.Size = new Size((int)(c.OriginalSize.Width * zoom / 100), (int)(c.OriginalSize.Height * zoom / 100));
-                c.Left = (int)(c.Left * zoom / prevZoom);
+                c.Left = (int)Math.Round(c.Left * zoom / prevZoom);
+                c.Top = (int)Math.Round(c.Top* zoom / prevZoom);
             }
             Invalidate();
         }

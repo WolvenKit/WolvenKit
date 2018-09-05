@@ -840,8 +840,10 @@ namespace WolvenKit
             switch (Path.GetExtension(filename))
             {
                 case ".w2scene":
+                case ".w2quest":
+                case ".w2phase":
                     {
-                        doc.flowDiagram = new frmChunkFlowDiagram
+                        doc.flowDiagram = new frmChunkFlowDiagram()
                         {
                             File = doc.File,
                             DockAreas = DockAreas.Document
@@ -850,19 +852,6 @@ namespace WolvenKit
                         doc.flowDiagram.Show(doc.FormPanel, DockState.Document);
                         break;
                     }
-                
-                case ".w2quest":
-                case ".w2phase":
-                {
-                    doc.questflowDiagram = new frmQuestFlowDiagram
-                                      {
-                                          File = doc.File,
-                                          DockAreas = DockAreas.Document
-                                      };
-                    doc.questflowDiagram.OnSelectChunk += doc.frmCR2WDocument_OnSelectChunk;
-                    doc.questflowDiagram.Show(doc.FormPanel, DockState.Document);
-                    break;
-                }
                 
                 case ".journal":
                     {

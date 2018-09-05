@@ -45,6 +45,16 @@ namespace WolvenKit {
                         }
                     }
                 }
+                  
+              var nextLinkElementObj = Chunk.GetVariableByName("nextLinkElement");
+              if (nextLinkElementObj != null && nextLinkElementObj is CPtr)
+              {
+                  var nextLinkElementPtr = ((CPtr) nextLinkElementObj);
+                  if (nextLinkElementPtr.PtrTarget != null)
+                  {
+                      list.Add(nextLinkElementPtr);
+                  }
+              }
             }
 
             return list;
