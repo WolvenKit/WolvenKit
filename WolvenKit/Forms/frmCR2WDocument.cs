@@ -16,6 +16,7 @@ namespace WolvenKit
         public frmImagePreview ImageViewer;
         public Render.frmRender RenderViewer;
         private CR2WFile file;
+        public frmQuestFlowDiagram questflowDiagram;
 
 
         public DockPanel FormPanel => dockPanel;

@@ -315,11 +315,18 @@
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="DDSUtility.cs" />
     <Compile Include="discord.cs" />
+    <Compile Include="FlowTreeEditors\QuestLinkEditor.cs" />
     <Compile Include="Forms\frmLoading.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmLoading.Designer.cs">
       <DependentUpon>frmLoading.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmQuestFlowDiagram.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmQuestFlowDiagram.Designer.cs">
+      <DependentUpon>frmQuestFlowDiagram.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmStringsGuiImporterIDDialog.cs">
       <SubType>Form</SubType>
@@ -649,6 +656,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmPackSettings.resx">
       <DependentUpon>frmPackSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmQuestFlowDiagram.resx">
+      <DependentUpon>frmQuestFlowDiagram.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmRenameDialog.resx">
       <DependentUpon>frmRenameDialog.cs</DependentUpon>
