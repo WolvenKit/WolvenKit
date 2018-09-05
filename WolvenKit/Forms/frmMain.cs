@@ -1445,17 +1445,25 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 {
                     if (oldmod.Name != dlg.Mod.Name)
                     {
-                        MainController.Get()?.Window?.ModExplorer?.StopMonitoringDirectory();
-                        //Close all docs so they won't cause problems
-                        OpenDocuments.ForEach(x => x.Close());
-                        //Move the files directory
-                        Directory.Move(oldmod.ProjectDirectory, Path.Combine(Path.GetDirectoryName(oldmod.ProjectDirectory), dlg.Mod.Name));
-                        //Delete the old directory
-                        if (Directory.Exists(oldmod.ProjectDirectory))
-                            Commonfunctions.DeleteFilesAndFoldersRecursively(oldmod.ProjectDirectory);
-                        //Delete the old mod project file
-                        if (File.Exists(oldmod.FileName))
-                            File.Delete(oldmod.FileName);
+                        try
+                        {
+                            MainController.Get()?.Window?.ModExplorer?.StopMonitoringDirectory();
+                            //Close all docs so they won't cause problems
+                            OpenDocuments.ForEach(x => x.Close());
+                            //Move the files directory
+                            Directory.Move(oldmod.ProjectDirectory, Path.Combine(Path.GetDirectoryName(oldmod.ProjectDirectory), dlg.Mod.Name));
+                            //Delete the old directory
+                            if (Directory.Exists(oldmod.ProjectDirectory))
+                                Commonfunctions.DeleteFilesAndFoldersRecursively(oldmod.ProjectDirectory);
+                            //Delete the old mod project file
+                            if (File.Exists(oldmod.FileName))
+                                File.Delete(oldmod.FileName);
+                        }
+                        catch (System.IO.IOException exception)
+                        {
+                            MessageBox.Show("Sorry but there already exist a folder/mod with that name.","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                            return;
+                        }
                     }
                     //Save the new settings and update the title
                     UpdateTitle();
