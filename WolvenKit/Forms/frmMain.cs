@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -1052,6 +1053,7 @@ namespace WolvenKit
             Discord.Initialize("482179494862651402", handlers);
             while (!richpresenceworker.CancellationPending)
             {
+                Thread.Sleep(1000); 
                 if (MainController.Get().ActiveMod != null)
                 {
                     if (project != MainController.Get().ActiveMod.Name.ToString())
