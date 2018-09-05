@@ -200,7 +200,7 @@ namespace WolvenKit
                 if (graphBlocks != null && graphBlocks is CArray)
                 {
                     var controlParts = (CArray) graphBlocks;
-                    rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null /*&& part.PtrTargetType == "CStorySceneInput" */select part.PtrTarget);
+                    rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null && part.PtrTargetType == "CQuestPhaseInputBlock" select part.PtrTarget);
                 }
             }
             
