@@ -7,7 +7,7 @@ using WolvenKit.CR2W.Types;
 using WolvenKit.FlowTreeEditors;
 
 namespace WolvenKit {
-    public class QuestScriptEditor : ChunkEditor {
+    public class QuestScriptEditor : QuestLinkEditor {
         private Label script;
 
         public QuestScriptEditor() {
