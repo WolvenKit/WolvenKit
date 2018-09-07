@@ -8,7 +8,7 @@ namespace WolvenKit {
         public override List<CPtr> GetConnections() {
             List<CPtr> connections = new List<CPtr>();
             var graphObj = Chunk.GetVariableByName("embeddedGraph");
-            if (graphObj != null && graphObj is CPtr)
+            if (graphObj != null && graphObj is CPtr && ((CPtr) graphObj).PtrTarget != null)
             {
                 var graphBlocks = ((CPtr)graphObj).PtrTarget.GetVariableByName("graphBlocks");
                 if (graphBlocks != null && graphBlocks is CArray)

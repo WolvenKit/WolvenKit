@@ -233,6 +233,10 @@ namespace WolvenKit
                 Output.AddText(text, type);
             }
         }
+        
+        private void OnOutput(object sender, string output) {
+            AddOutput(output);
+        }
 
         public void PackProject()
         {
@@ -841,13 +845,13 @@ namespace WolvenKit
             {
                 case ".w2scene":
                 case ".w2quest":
-                case ".w2phase":
+                case ".w2phase": 
                     {
-                        doc.flowDiagram = new frmChunkFlowDiagram()
-                        {
-                            File = doc.File,
-                            DockAreas = DockAreas.Document
-                        };
+                        doc.flowDiagram = new frmChunkFlowDiagram();
+                        doc.flowDiagram.OnOutput += OnOutput;
+                        doc.flowDiagram.File = doc.File;
+                        doc.flowDiagram.DockAreas = DockAreas.Document;
+
                         doc.flowDiagram.OnSelectChunk += doc.frmCR2WDocument_OnSelectChunk;
                         doc.flowDiagram.Show(doc.FormPanel, DockState.Document);
                         break;
@@ -942,6 +946,8 @@ namespace WolvenKit
             AddOutput(output.ToString());
             return doc;
         }
+
+        
 
         public CR2WFile LoadDocumentAndGetFile(string filename)
         {

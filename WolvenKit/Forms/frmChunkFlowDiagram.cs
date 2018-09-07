@@ -71,6 +71,7 @@ namespace WolvenKit
 
         public Dictionary<CR2WChunk, ChunkEditor> ChunkEditors { get; set; }
         public event EventHandler<SelectChunkArgs> OnSelectChunk;
+        public event EventHandler<string> OnOutput;
 
         public void createChunkEditors()
         {
@@ -145,37 +146,38 @@ namespace WolvenKit
 
         private void createEditor(int depth, CR2WChunk c)
         {
-            if (ChunkEditors.ContainsKey(c))
-                return;
+            try {
+                if (ChunkEditors.ContainsKey(c))
+                    return;
 
-            var editor = GetEditor(c);
-            editor.Chunk = c;
-            editor.OnSelectChunk += editor_OnSelectChunk;
-            editor.OnManualMove += editor_OnMove;
-            editor.LocationChanged += editor_LocationChanged;
-            editor.OriginalSize = editor.Size;
+                var editor = GetEditor(c);
+                editor.Chunk = c;
+                editor.OnSelectChunk += editor_OnSelectChunk;
+                editor.OnManualMove += editor_OnMove;
+                editor.LocationChanged += editor_LocationChanged;
+                editor.OriginalSize = editor.Size;
+                Controls.Add(editor);
+                ChunkEditors.Add(c, editor);
 
-            Controls.Add(editor);
-            ChunkEditors.Add(c, editor);
+                if (depth > maxdepth)
+                    maxdepth = depth;
 
-            if (depth > maxdepth)
-                maxdepth = depth;
+                if (!EditorLayout.ContainsKey(depth))
+                    EditorLayout.Add(depth, new List<ChunkEditor>());
 
-            if (!EditorLayout.ContainsKey(depth))
-                EditorLayout.Add(depth, new List<ChunkEditor>());
+                EditorLayout[depth].Add(editor);
 
-            EditorLayout[depth].Add(editor);
-
-            var conns = editor.GetConnections();
-            if (conns != null)
-            {
-                foreach (var conn in conns)
-                {
-                    if (conn.PtrTarget != null)
-                    {
-                        createEditor(depth + 1, conn.PtrTarget);
+                var conns = editor.GetConnections();
+                if (conns != null) {
+                    foreach (var conn in conns) {
+                        if (conn.PtrTarget != null) {
+                            createEditor(depth + 1, conn.PtrTarget);
+                        }
                     }
                 }
+            }
+            catch (Exception e) {
+                OnOutput.Invoke(this, e.ToString());
             }
         }
 
@@ -280,7 +282,14 @@ namespace WolvenKit
                 var pen = editorSelected ? selectionItemHighlight : Pens.Black;
 
                 var i = 0;
-                var conns = c.GetConnections();
+                List<CPtr> conns = null;
+
+                try {
+                    conns = c.GetConnections();
+                }
+                catch (Exception exception) {
+                    // eat the exception, allready logging the exception when creating the node editor
+                }
 
                 if (conns != null)
                 {
