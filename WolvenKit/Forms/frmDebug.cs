@@ -237,9 +237,9 @@ namespace WolvenKit
         {
             if (e.ColumnIndex == 2)
             {
-                Send(GameSocket, Commands.SetVar(varDGV[e.ColumnIndex, 0].Value.ToString(),
-                    varDGV[e.ColumnIndex, 1].Value.ToString(),
-                    varDGV[e.ColumnIndex, 2].Value.ToString()));
+                Send(GameSocket, Commands.SetVar(varDGV[0, e.RowIndex].Value.ToString(),
+                    varDGV[1, e.RowIndex].Value.ToString(),
+                    varDGV[2, e.RowIndex].Value.ToString()));
             }
         }
 
