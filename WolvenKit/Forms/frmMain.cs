@@ -1531,7 +1531,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
         private void joinOurDiscordToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             if (MessageBox.Show(@"Are you sure you would like to join the modding discord?", @"Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                Process.Start("https://discord.gg/qBNgDEX");
+                Process.Start("https://discord.gg/KnPMmBz");
         }
 
         private void OutputToolStripMenuItem_Click(object sender, EventArgs e)
