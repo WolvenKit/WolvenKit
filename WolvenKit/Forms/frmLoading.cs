@@ -48,7 +48,7 @@ namespace WolvenKit.Forms
             else
             {
                 Application.DoEvents();
-                Task.Factory.StartNew(() => MainController.Get().Initialize()); //Start the async task to load our stuff
+                MainController.Get().Initialize();
             }
         }
 
