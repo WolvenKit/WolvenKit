@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Xml.Linq;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
@@ -14,10 +9,10 @@ namespace Wolvekit.Nvidia.HairWorks
 {
     class NvHairAssetHeaderInfo
     {
-        private string fileVersion = "1.0";
+        //private string fileVersion = "1.0";
         private string toolVersion = "WolvenKit " + 
                         FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
-        private string authorName = "WolvenKit";
+        //private string authorName = "WolvenKit";
 
         private string checksum = "0xd225a2e5, 0x1295b170, 0x7b7dfeef, 0x07230aea";
 

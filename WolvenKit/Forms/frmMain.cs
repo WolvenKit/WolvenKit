@@ -656,8 +656,10 @@ namespace WolvenKit
         /// <summary>
         /// Scans the given archivemanagers for a file. If found, extracts it to the project.
         /// </summary>
-        /// <param name="depotpath">Filename.</param>
         /// <param name="managers">The managers.</param>
+        /// <param name="item">Witcher List View Item.</param>
+        /// <param name="AddAsDLC">Type of Mod.</param>
+        /// <param name="skipping">Skippimg Flag.</param>
         private bool AddToMod(WitcherListViewItem item, bool skipping, List<IWitcherArchive> managers, bool AddAsDLC)
         {
             bool skip = skipping;
@@ -1120,7 +1122,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                         sf.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
                         if (sf.ShowDialog() == DialogResult.OK)
                         {
-                            ImportFile(of.FileName, sf.FileName);
+                            Task.Run(() => ImportFile(of.FileName, sf.FileName));
                         }
                     }
                 }
@@ -1140,8 +1142,8 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                         sf.Description = "Please specify a location to save the dumped file";
                         if (sf.ShowDialog() == DialogResult.OK)
                         {
-                            DumpFile(of.SelectedPath.EndsWith("\\") ? of.SelectedPath : of.SelectedPath + "\\",
-                                sf.SelectedPath.EndsWith("\\") ? sf.SelectedPath : sf.SelectedPath + "\\");
+                            Task.Run(() => DumpFile(of.SelectedPath.EndsWith("\\") ? of.SelectedPath : of.SelectedPath + "\\",
+                                sf.SelectedPath.EndsWith("\\") ? sf.SelectedPath : sf.SelectedPath + "\\"));
                         }
                     }
                 }
@@ -1163,7 +1165,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                         sf.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
                         if (sf.ShowDialog() == DialogResult.OK)
                         {
-                            ImportFile(of.FileName, sf.FileName);
+                            Task.Run(() => ImportFile(of.FileName, sf.FileName));
                         }
                     }
                 }
@@ -1461,7 +1463,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                             if (File.Exists(oldmod.FileName))
                                 File.Delete(oldmod.FileName);
                         }
-                        catch (System.IO.IOException exception)
+                        catch (System.IO.IOException)
                         {
                             MessageBox.Show("Sorry but there already exist a folder/mod with that name.","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
                             return;

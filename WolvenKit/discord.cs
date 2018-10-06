@@ -25,29 +25,32 @@ namespace SharpPresence
         {
             public string state;
             public string details;
-            public Int64 startTimestamp;
-            public Int64 endTimestamp;
+            //public Int64 startTimestamp;
+            //public Int64 endTimestamp;
             public string largeImageKey;
-            public string largeImageText;
-            public string smallImageKey;
-            public string smallImageText;
-            public string partyId;
-            public int partySize;
-            public int partyMax;
-            public string matchSecret;
-            public string joinSecret;
-            public string spectateSecret;
-            public sbyte instance;
+            //public string largeImageText;
+            //public string smallImageKey;
+            //public string smallImageText;
+            //public string partyId;
+            //public int partySize;
+            //public int partyMax;
+            //public string matchSecret;
+            //public string joinSecret;
+            //public string spectateSecret;
+            //public sbyte instance;
         }
 
         //--------------------------------------------------------------------------------
 
-        public struct JoinRequest
-        {
-            public string userId;
-            public string username;
-            public string avatar;
-        }
+        /// <summary>
+        /// Unused, commenting out for now
+        /// </summary>
+        //public struct JoinRequest
+        //{
+        //    ////public string userId;
+        //    ////public string username;
+        //    ////public string avatar;
+        //}
 
         //--------------------------------------------------------------------------------
 

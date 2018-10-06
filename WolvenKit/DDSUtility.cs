@@ -50,25 +50,28 @@ namespace WolvenKit
             public uint caps4;
         }
         #endregion
-        
+
         #region CSwfTexture Struct
         //The embedded image file inside the CSwfTexture var
         //has some small header which is just 7 Uint32 vars
         //After that is just the image contents.
 
-        struct CSwfTextureHeader
-        {
-            public uint Unknown1;   //No idea - Always seems to be 0. Normally where the byte length is stored in other vars.
-            public uint Unknown2;   //Could be image depth? - Will stay an unknown for now
-            public uint Width;      //Image Width
-            public uint Height;     //Image Height
-            public uint Unknown5;   //No idea
-            public uint PixelCount; //Total Pixels
-            public uint Unknown7;   //No idea
-        }
+        /// <summary>
+        /// Unsued, Commenting out for now
+        /// <summary>
+        //struct CSwfTextureHeader
+        //{
+        //    public uint Unknown1;   //No idea - Always seems to be 0. Normally where the byte length is stored in other vars.
+        //    public uint Unknown2;   //Could be image depth? - Will stay an unknown for now
+        //    public uint Width;      //Image Width
+        //    public uint Height;     //Image Height
+        //    public uint Unknown5;   //No idea
+        //    public uint PixelCount; //Total Pixels
+        //    public uint Unknown7;   //No idea
+        //}
         #endregion
-        
-        /// <ExportAsDDS>
+
+        /// <summary>
         /// This method converts a byte array from the CR2W to a dds format byte array
         /// This should only be used when exporting from a CSwfTexture var (swfTexture).
         /// </summary>
@@ -117,7 +120,7 @@ namespace WolvenKit
             return memout.ToArray();
         }
 
-        /// <ImportFromDDS>
+        /// <summary>
         /// This method takes a dds file, as a binary reader, and converts
         /// it into a compatible byte array for importing in a CSwfTexture var
         /// </summary>
@@ -151,7 +154,7 @@ namespace WolvenKit
             return memout.ToArray();
         }
 
-        /// <ConstructDDSHeader>
+        /// <summary>
         /// This takes a DDSHeader and constructs the byte
         /// array for a dds image file from it.
         /// </summary>
@@ -200,7 +203,7 @@ namespace WolvenKit
             return memout.ToArray();
         }
 
-        /// <ReadDDSHeader>
+        /// <summary>
         /// This reads the binary stream from the import file and 
         /// creates the DDSHeader object from it.
         /// </summary>

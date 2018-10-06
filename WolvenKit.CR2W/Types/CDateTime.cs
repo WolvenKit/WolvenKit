@@ -34,7 +34,7 @@ namespace WolvenKit.CR2W.Types
                 if (Date <= DateTime.MinValue)
                     Date = new DateTime(2015,5,19,0,0,0,0);
             }
-            catch (ArgumentOutOfRangeException e)
+            catch (ArgumentOutOfRangeException)
             {
                 Date = new DateTime(2015,5,19,0,0,0,0);
             }

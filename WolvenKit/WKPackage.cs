@@ -33,7 +33,7 @@ namespace WolvenKit
         /// </summary>
         /// <param name="assmebly">The details of the mod. Generate this with CreateModAssembly();</param>
         /// <param name="icon">The icon of the mod.</param>
-        /// <param name="RootFolder">The root folder of the mod.</param>
+        /// <param name="rootfolder">The root folder of the mod.</param>
         public WKPackage(XDocument assmebly, string icon, string rootfolder)
         {
             Assembly = assmebly;
