@@ -9,6 +9,9 @@ namespace WolvenKit
     /// </DDSUtility>
     class DDSUtility
     {
+        // Disable warning for never assigned to variables in structs.
+        #pragma warning disable 0649
+
         #region DDS Structs
         // Structs to define the header of a dds image file
 
@@ -50,7 +53,7 @@ namespace WolvenKit
             public uint caps4;
         }
         #endregion
-        
+
         #region CSwfTexture Struct
         //The embedded image file inside the CSwfTexture var
         //has some small header which is just 7 Uint32 vars
@@ -67,7 +70,9 @@ namespace WolvenKit
             public uint Unknown7;   //No idea
         }
         #endregion
-        
+
+        #pragma warning restore 0649
+
         /// <ExportAsDDS>
         /// This method converts a byte array from the CR2W to a dds format byte array
         /// This should only be used when exporting from a CSwfTexture var (swfTexture).

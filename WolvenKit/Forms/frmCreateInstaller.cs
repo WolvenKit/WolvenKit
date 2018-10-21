@@ -35,7 +35,7 @@ namespace WolvenKit.Forms
             {
                 if (sf.ShowDialog() == DialogResult.OK)
                 {
-                    CreatePackage(sf.FileName);
+                    Task.Run(() => CreatePackage(sf.FileName));
                 }
             }
         }

@@ -1120,7 +1120,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                         sf.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
                         if (sf.ShowDialog() == DialogResult.OK)
                         {
-                            ImportFile(of.FileName, sf.FileName);
+                            Task.Run(() => ImportFile(of.FileName, sf.FileName));
                         }
                     }
                 }
@@ -1140,8 +1140,8 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                         sf.Description = "Please specify a location to save the dumped file";
                         if (sf.ShowDialog() == DialogResult.OK)
                         {
-                            DumpFile(of.SelectedPath.EndsWith("\\") ? of.SelectedPath : of.SelectedPath + "\\",
-                                sf.SelectedPath.EndsWith("\\") ? sf.SelectedPath : sf.SelectedPath + "\\");
+                            Task.Run(() => DumpFile(of.SelectedPath.EndsWith("\\") ? of.SelectedPath : of.SelectedPath + "\\",
+                                sf.SelectedPath.EndsWith("\\") ? sf.SelectedPath : sf.SelectedPath + "\\"));
                         }
                     }
                 }
@@ -1163,7 +1163,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                         sf.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
                         if (sf.ShowDialog() == DialogResult.OK)
                         {
-                            ImportFile(of.FileName, sf.FileName);
+                            Task.Run(() => ImportFile(of.FileName, sf.FileName));
                         }
                     }
                 }
@@ -1461,7 +1461,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                             if (File.Exists(oldmod.FileName))
                                 File.Delete(oldmod.FileName);
                         }
-                        catch (System.IO.IOException exception)
+                        catch (IOException)
                         {
                             MessageBox.Show("Sorry but there already exist a folder/mod with that name.","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
                             return;

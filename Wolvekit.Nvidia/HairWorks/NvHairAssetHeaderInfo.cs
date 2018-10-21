@@ -35,11 +35,11 @@ namespace Wolvekit.Nvidia.HairWorks
         {
             var HairWorksInfo = NvidiaXML.CreateStructHeader("", "Ref", "HairWorksInfo", "1.0", checksum);
             var values = new XElement("struct", new XAttribute("name", ""));
-            values.AddNvValue("fileVersion", "String", "1.0");
-            values.AddNvValue("toolVersion","String","WolvenKit");
-            values.AddNvValue("sourcePath","String",apexChunk.GetVariableByName("importFile").ToString());
-            values.AddNvValue("authorName","String",Environment.UserName);
-            values.AddNvValue("lastModified","String",((CDateTime)apexChunk.GetVariableByName("importFileTimeStamp")).Date.ToString("f"));
+            values.AddNvValue("fileVersion", "String", fileVersion);
+            values.AddNvValue("toolVersion","String", toolVersion);
+            values.AddNvValue("sourcePath", "String", apexChunk.GetVariableByName("importFile").ToString());
+            values.AddNvValue("authorName", "String", authorName);
+            values.AddNvValue("lastModified", "String", ((CDateTime)apexChunk.GetVariableByName("importFileTimeStamp")).Date.ToString("f"));
             HairWorksInfo.Add(values);
             return HairWorksInfo;
         }

@@ -9,6 +9,9 @@ namespace SharpPresence
 {
     class Discord
     {
+        // Disable warning for never assigned to variables in structs.
+        #pragma warning disable 0649
+
         public struct EventHandlers
         {
             public IntPtr ready;
@@ -49,6 +52,7 @@ namespace SharpPresence
             public string avatar;
         }
 
+        #pragma warning restore 0649
         //--------------------------------------------------------------------------------
 
         public enum Reply : int
