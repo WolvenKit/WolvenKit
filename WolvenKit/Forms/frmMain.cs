@@ -1461,7 +1461,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                             if (File.Exists(oldmod.FileName))
                                 File.Delete(oldmod.FileName);
                         }
-                        catch (System.IO.IOException exception)
+                        catch (System.IO.IOException)
                         {
                             MessageBox.Show("Sorry but there already exist a folder/mod with that name.","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
                             return;

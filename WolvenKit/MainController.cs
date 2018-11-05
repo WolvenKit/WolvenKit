@@ -196,7 +196,7 @@ namespace WolvenKit
                             }
                         }
                     }
-                    catch (System.Exception ex)
+                    catch (System.Exception)
                     {
                         if (File.Exists(Path.Combine(ManagerCacheDir, "string_cache.bin")))
                             File.Delete(Path.Combine(ManagerCacheDir, "string_cache.bin"));
@@ -353,7 +353,7 @@ namespace WolvenKit
 
                 mainController.Loaded = true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 mainController.Loaded = false;
             }
