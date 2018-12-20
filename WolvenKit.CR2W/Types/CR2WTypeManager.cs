@@ -114,13 +114,335 @@ namespace WolvenKit.CR2W.Types
             Register("CGenericGrassMask", new CGenericGrassMask(null));
             Register("CIndexed2dArray", new CIndexed2dArray(null));
 
+            // *.w2ent decendants of CEntity in RTTI and ws to parse components array
+            Register("CAnimatedEntity", new CEntity(null));
+                Register("CBgCutsceneEntity", new CEntity(null));
+            Register("CBehaviorAnimationMultiplyEntity", new CEntity(null));
+            Register("CBgNpc", new CEntity(null));
+            Register("CCamera", new CEntity(null));
+                Register("CStaticCamera", new CEntity(null));
+            Register("CCommunityArea", new CEntity(null));
+            Register("CCookedMeshEntity", new CEntity(null));
+            Register("CCurveControlPointEntity", new CEntity(null));
+            Register("CCurveEntity", new CEntity(null));
+            Register("CCurveTangentControlPointEntity", new CEntity(null));
+            Register("CCustomCamera", new CEntity(null));
+            Register("CCutsceneInstance", new CEntity(null));
+            Register("CDaycycleGraphicsEntity", new CEntity(null));
+            Register("CEntityGroup", new CEntity(null));
+            Register("CForceFieldEntity", new CEntity(null));
+            Register("CGameplayFXMedalion", new CEntity(null));
+            Register("CItemEntity", new CEntity(null));
+                Register("CWitcherSword", new CEntity(null));
+                Register("RangedWeapon", new CEntity(null));
+                Register("W3EffectItem", new CEntity(null)); //ws
+                Register("W3UsableItem", new CEntity(null)); //ws
+                    Register("W3LightSource", new CEntity(null)); //ws
+                    Register("W3ShieldUsableItem", new CEntity(null)); //ws
+                    Register("W3QuestUsableItem", new CEntity(null)); //ws
+                        Register("W3MeteorItem", new CEntity(null)); //ws
+                        Register("W3EyeOfLoki", new CEntity(null)); //ws
+                        Register("W3MagicOilLamp", new CEntity(null)); //ws
+                        Register("W3Potestaquisitor", new CEntity(null)); //ws
+                        Register("W3HornvalHorn", new CEntity(null)); //ws
+                        Register("W3FiendLure", new CEntity(null)); //ws
+            Register("CMergedWorldGeometryEntity", new CEntity(null));
+            Register("CR4InteriorAreaEntity", new CEntity(null));
+            Register("CSkyTransformEntity", new CEntity(null));
+            Register("CSoundAmbientEmitter", new CEntity(null));
+            Register("CStoryScenePlayer", new CEntity(null));
+                Register("CStoryScenePreviewPlayer", new CEntity(null));
+            Register("CTeleporter", new CEntity(null));
+            Register("CVertexEditorEntity", new CEntity(null));
+                Register("CActionAreaBlendActor", new CEntity(null));
+            Register("CPeristentEntity", new CEntity(null));
+                Register("CEffectEntity", new CEntity(null));
+                Register("CGameplayEntity", new CEntity(null));
+                    Register("CActionPoint", new CEntity(null));
+                    Register("CActor", new CEntity(null));
+                        Register("CNewNPC", new CEntity(null));
+                            Register("CGhost", new CEntity(null)); //ws
+                            Register("CHeartMiniboss", new CEntity(null)); //ws
+                            Register("W3ArchesporBulb", new CEntity(null)); //ws
+                            Register("W3MerchantNPC", new CEntity(null)); //ws
+                            Register("W3MonsterHuntNPC", new CEntity(null)); //ws
+                            Register("CAnimal", new CEntity(null)); //ws
+                            Register("CDettlaffColumn", new CEntity(null)); //ws
+                            Register("CDettlaffConstruct", new CEntity(null)); //ws
+                            Register("CHitBasedNPC", new CEntity(null)); //ws
+                            Register("W3NightWraithIris", new CEntity(null)); //ws
+                            Register("W3Rat", new CEntity(null)); //ws
+                        Register("CPlayer", new CEntity(null)); //ws
+                            Register("W3PlayerTutorialInput", new CEntity(null)); //ws
+                            Register("CR4Player", new CEntity(null));  //ws
+                                Register("W3PlayerWitcher", new CEntity(null));  //ws
+                                Register("W3Replacer", new CEntity(null));  //ws
+                                    Register("W3ReplacerCiri", new CEntity(null));  //ws
+                                    Register("W3ReplacerCommoner", new CEntity(null));  //ws
+                        Register("W3FlyingWhale", new CEntity(null)); //ws
+                        Register("W3ProjectileShooterTest", new CEntity(null)); //ws
+                    Register("CCameraEffectTrigger", new CEntity(null));
+                    Register("CDeniedAreaSaveable", new CEntity(null));
+                    Register("CEncounter", new CEntity(null));
+                    Register("CProjectileTrajectory", new CEntity(null));
+                        Register("W3WhiteFrostWaveProjectile", new CEntity(null)); //ws
+                        Register("W3MagicalThing", new CEntity(null)); //ws
+                        Register("W3PhysicalThing", new CEntity(null)); //ws
+                        Register("CThrowable", new CEntity(null)); //ws
+                            Register("W3Petard", new CEntity(null)); //ws
+                                Register("W3Dimeritium", new CEntity(null)); //ws
+                                Register("W3DragonsDream", new CEntity(null)); //ws
+                                Register("W3Samum", new CEntity(null)); //ws
+                                Register("W3WhiteFrost", new CEntity(null)); //ws
+                            Register("W3AdvancedProjectile", new CEntity(null)); //ws
+                                Register("W3BoulderProjectile", new CEntity(null)); //ws
+                                Register("W3TraceGroundProjectile", new CEntity(null)); //ws
+                                Register("W3StoneProjectile", new CEntity(null)); //ws
+                                Register("W3EnvironmentProjectile", new CEntity(null)); //ws
+                                Register("BeamProjectile", new CEntity(null)); //ws
+                                Register("FakeProjectile", new CEntity(null)); //ws
+                                Register("PoisonProjectile", new CEntity(null)); //ws
+                                Register("DebuffProjectile", new CEntity(null)); //ws
+                                Register("W3FireballProjectile", new CEntity(null)); //ws
+                                Register("W3LightningBoltProjectile", new CEntity(null)); //ws
+                                Register("W3IceSpearProjectile", new CEntity(null)); //ws
+                                Register("W3SpawnMeteor", new CEntity(null)); //ws
+                                Register("W3AirDrainProjectile", new CEntity(null)); //ws
+                                Register("W3ArrowProjectile", new CEntity(null)); //ws
+                                Register("W3SnowballProjectile", new CEntity(null)); //ws
+                        Register("W3LeshyRootProjectile", new CEntity(null)); //ws
+                        Register("W3LeshyBirdProjectile", new CEntity(null)); //ws
+                        Register("W3SignProjectile", new CEntity(null)); //ws
+                            Register("W3AardProjectile", new CEntity(null)); //ws
+                            Register("W3AxiiProjectile", new CEntity(null)); //ws
+                            Register("W3IgniProjectile ", new CEntity(null)); //ws
+                        Register("W3ObjectProjectile", new CEntity(null)); //ws
+                    Register("CR4JournalPlaceEntity", new CEntity(null));
+                        Register("W3SettlementTrigger", new CEntity(null)); //ws
+                    Register("CR4MapPinEntity", new CEntity(null));
+                        Register("CR4FastTravelEntity", new CEntity(null));
+                        Register("W3ItemRepairObject", new CEntity(null));
+                        Register("W3NoticeBoard", new CEntity(null)); //ws
+                        Register("W3EntranceEntity", new CEntity(null)); //ws
+                        Register("W3TreasureHuntMappinEntity", new CEntity(null)); //ws
+                        Register("W3WitcherHouse", new CEntity(null)); //ws
+                        Register("W3AnimationInteractionEntity", new CEntity(null)); //ws
+                        Register("W3SmartObject", new CEntity(null)); //ws
+                        Register("CInteractiveEntity", new CEntity(null)); //ws
+                            Register("W3Stash", new CEntity(null)); //ws
+                            Register("W3CriticalStateTrap", new CEntity(null)); //ws
+                            Register("W3InteractiveQuestEntity", new CEntity(null)); //ws
+                            Register("W3MagicLampEntity", new CEntity(null)); //ws
+                            Register("CMagicMineEntity", new CEntity(null)); //ws
+                            Register("CMonsterNestEntity", new CEntity(null)); //ws
+                            Register("CMajorPlaceOfPowerEntity", new CEntity(null)); //ws
+                            Register("CPopsGasEntity", new CEntity(null)); //ws
+                            Register("CRiftEntity", new CEntity(null)); //ws
+                            Register("W3SnowMound", new CEntity(null)); //ws
+                            Register("CTeleportEntity", new CEntity(null)); //ws
+                            Register("CToadAcidPool", new CEntity(null)); //ws
+                            Register("W3AardObstacle", new CEntity(null)); //ws
+                            Register("W3CombatDamageEntity", new CEntity(null)); //ws
+                            Register("W3FlammableDamageEntity", new CEntity(null)); //ws
+                            Register("CDamageAreaEntity", new CEntity(null)); //ws
+                            Register("W3IgniObstacleEntity", new CEntity(null)); //ws
+                            Register("CUsableEntity", new CEntity(null)); //ws
+                                Register("CScheduledUsableEntity", new CEntity(null)); //ws
+                            Register("W3DestroyableTerrain", new CEntity(null)); //ws
+                        Register("W3POI_BanditCampEntity", new CEntity(null)); //ws
+                        Register("W3POI_BanditCampfireEntity", new CEntity(null)); //ws
+                        Register("W3POI_BossAndTreasureEntity", new CEntity(null)); //ws
+                        Register("W3POI_ContrabandEntity", new CEntity(null)); //ws
+                        Register("W3POI_DungeonCrawlEntity", new CEntity(null)); //ws
+                        Register("W3POI_HideoutEntity", new CEntity(null)); //ws
+                        Register("W3POI_KnightErrantEntity", new CEntity(null)); //ws
+                        Register("W3POI_PlegmundEntity", new CEntity(null)); //ws
+                        Register("W3POI_RescuingTownEntity", new CEntity(null)); //ws
+                        Register("W3POI_SignalingStakeEntity", new CEntity(null)); //ws
+                        Register("W3POI_SpoilsOfWarEntity", new CEntity(null)); //ws
+                        Register("W3POI_WineContractEntity", new CEntity(null)); //ws
+                        Register("W3PointOfInterestMappinEntity", new CEntity(null)); //ws
+                    Register("CStorySceneSpawner", new CEntity(null));
+                    Register("CVirtualContainerEntity", new CEntity(null));
+                    Register("IBoidLairEntity", new CEntity(null));
+                        Register("CSwarmLairEntity", new CEntity(null));
+                            Register("CFlyingCrittersLairEntity", new CEntity(null));
+                                Register("CFlyingCrittersLairEntityScript", new CEntity(null));
+                                    Register("CFlyingSwarmMasterLair", new CEntity(null)); //ws
+                                Register("CHumbleCrittersLairEntity", new CEntity(null));
+                    Register("W3Boat", new CEntity(null));
+                    Register("W3BoatSpawner", new CEntity(null));
+                    Register("W3LockableEntity", new CEntity(null));
+                        Register("W3NewDoor", new CEntity(null));
+                        Register("W3Door", new CEntity(null)); //ws
+                        Register("CGateEntity", new CEntity(null)); //ws
+                        Register("W3Container", new CEntity(null)); //ws
+                            Register("CBeehiveEntity", new CEntity(null));
+                            Register("W3AnimatedContainer", new CEntity(null)); //ws
+                                Register("W3ActorRemains", new CEntity(null)); //ws
+                                Register("W3BeehiveStandingEntity", new CEntity(null)); //ws
+                            Register("W3CookingPlace", new CEntity(null)); //ws
+                                Register("W3CampfirePlace", new CEntity(null)); //ws
+                            Register("W3DisplayMount", new CEntity(null)); //ws
+                            Register("W3RefillableContainer", new CEntity(null)); //ws
+                                Register("W3Herb", new CEntity(null)); //ws
+                            Register("W3treasureHuntContainer", new CEntity(null)); //ws
+                            Register("CBeehiveEntity", new CEntity(null)); //ws
+                            Register("W3HouseDecorationBase", new CEntity(null)); //ws
+                                Register("W3ArmorStand", new CEntity(null)); //ws
+                                Register("W3HouseGenericDecoration", new CEntity(null)); //ws
+                                Register("W3SwordStand", new CEntity(null)); //ws
+                    Register("W3ToxicCloud", new CEntity(null));
+                    Register("W3Campfire", new CEntity(null)); //ws
+                    Register("W3LadderInteraction", new CEntity(null)); //ws
+                    Register("CollisionTrajectory", new CEntity(null)); //ws
+                    Register("CDoorMarkingTester", new CEntity(null)); //ws
+                    Register("W3FireSource", new CEntity(null)); //ws
+                        Register("W3FireSourceLifeRegen", new CEntity(null)); //ws
+                    Register("W3Bird", new CEntity(null)); //ws
+                        Register("W3BirdQuest", new CEntity(null)); //ws
+                    Register("CBirdsManager", new CEntity(null)); //ws
+                    Register("CBirdsArea", new CEntity(null)); //ws
+                    Register("W3CurveFish", new CEntity(null)); //ws
+                    Register("W3CurveFishManager", new CEntity(null)); //ws
+                    Register("W3Whale", new CEntity(null)); //ws
+                    Register("W3Elevator", new CEntity(null)); //ws
+                        Register("W3ElevatorInteractive", new CEntity(null)); //ws
+                    Register("W3DurationObstacle", new CEntity(null)); //ws
+                        Register("W3DaoPillarObstacle", new CEntity(null)); //ws
+                        Register("W3EredinIceSpike", new CEntity(null)); //ws
+                        Register("W3IceSpike", new CEntity(null)); //ws
+                        Register("W3WitchBoilingWaterObstacle", new CEntity(null)); //ws
+                    Register("CGroupFXManager", new CEntity(null)); //ws
+                    Register("W3AirDrainArea", new CEntity(null)); //ws
+                    Register("W3GameplayTrigger", new CEntity(null)); //ws
+                        Register("W3FastTravel", new CEntity(null)); //ws
+                        Register("W3TrapTrigger", new CEntity(null)); //ws
+                        Register("W3ReplacerChanger", new CEntity(null)); //ws
+                    Register("W3BlockGameplayActionsTrigger", new CEntity(null)); //ws
+                    Register("CCenserTrigger", new CEntity(null)); //ws
+                    Register("W3EffectAreaTrigger", new CEntity(null)); //ws
+                        Register("W3FlammableAreaTrigger", new CEntity(null)); //ws
+                    Register("CFairytaleWitchTrigger", new CEntity(null)); //ws
+                    Register("W3FocusAreaTrigger", new CEntity(null)); //ws
+                    Register("W3GenericSceneArea", new CEntity(null)); //ws
+                    Register("CHorseCorrectionTrigger", new CEntity(null)); //ws
+                    Register("CHorseJumpTrigger", new CEntity(null)); //ws
+                    Register("W3LocationArea", new CEntity(null)); //ws
+                    Register("W3MinimapZoomScaleTrigger", new CEntity(null)); //ws
+                    Register("CArchesporeNoBulbArea", new CEntity(null)); //ws
+                    Register("W3SafeModeTrigger", new CEntity(null)); //ws
+                    Register("W3PlayerModeTrigger", new CEntity(null)); //ws
+                    Register("W3ShowDisplayNameTrigger", new CEntity(null)); //ws
+                    Register("CVFXTrigger", new CEntity(null)); //ws
+                    Register("W3WitcherHouseArea", new CEntity(null)); //ws
+                    Register("W3IllusionaryObstacle", new CEntity(null)); //ws
+                        Register("W3IllusionaryAppearance", new CEntity(null)); //ws
+                    Register("W3IllusionSpawner", new CEntity(null)); //ws
+                    Register("W3AirDrainEntity", new CEntity(null)); //ws
+                         Register("W3SmellyCheese", new CEntity(null)); //ws
+                    Register("W3BeeSwarm", new CEntity(null)); //ws
+                    Register("CBoatRacingGateEntity", new CEntity(null)); //ws
+                    Register("EP1Chandelier", new CEntity(null)); //ws
+                    Register("W3IceWall", new CEntity(null)); //ws
+                    Register("CMagicBombEntity", new CEntity(null)); //ws
+                    Register("CPhilippaAttractorTrigger", new CEntity(null)); //ws
+                    Register("CMeteoriteStormEntity", new CEntity(null)); //ws
+                    Register("COilBarrelEntity", new CEntity(null)); //ws
+                    Register("W3ReactToBeingHitEntity", new CEntity(null)); //ws
+                    Register("W3RootsEntrance", new CEntity(null)); //ws
+                    Register("CSkullPileEntity", new CEntity(null)); //ws
+                    Register("W3WeatherShrine", new CEntity(null)); //ws
+                    Register("W3BuffImmunityEntity", new CEntity(null)); //ws
+                        Register("W3MagicBubbleEntity", new CEntity(null)); //ws
+                    Register("W3IrisPainting", new CEntity(null)); //ws
+                    Register("W3MonsterElementalArm", new CEntity(null)); //ws
+                    Register("W3UsableEntity", new CEntity(null)); //ws
+                        Register("W3EntitySpawner", new CEntity(null)); //ws
+                    Register("W3SignEntity", new CEntity(null)); //ws
+                        Register("W3AardEntity", new CEntity(null)); //ws
+                        Register("W3AxiiEntity", new CEntity(null)); //ws
+                        Register("W3IgniEntity", new CEntity(null)); //ws
+                        Register("W3QuenEntity", new CEntity(null)); //ws
+                        Register("W3YrdenEntity", new CEntity(null)); //ws
+                    Register("W3EnvironmentThrowable", new CEntity(null)); //ws
+                    Register("W3PhysicalDamageMechanism", new CEntity(null)); //ws
+                    Register("W3RiddleNode", new CEntity(null)); //ws
+                    Register("W3RiddleServer", new CEntity(null)); //ws
+                    Register("W3Switch", new CEntity(null)); //ws
+                        Register("W3PhysicalSwitch", new CEntity(null)); //ws
+                            Register("W3InteractionSwitch", new CEntity(null)); //ws
+                                Register("W3ElevatorSwitch", new CEntity(null)); //ws
+                            Register("W3PressureSwitch", new CEntity(null)); //ws
+                            Register("W3TripwireSwitch", new CEntity(null)); //ws
+                        Register("W3VirtualSwitch", new CEntity(null)); //ws
+                            Register("W3VirtualSwitch_Combination", new CEntity(null)); //ws
+                            Register("W3VirtualSwitch_Sequence", new CEntity(null)); //ws
+                        Register("W3SE_AddBuff", new CEntity(null)); //ws
+                        Register("W3SE_CustomScript", new CEntity(null)); //ws
+                        Register("W3SE_EnableTreasureHuntMappin", new CEntity(null)); //ws
+                        Register("W3SE_Encounter", new CEntity(null)); //ws
+                        Register("W3SE_Fact", new CEntity(null)); //ws
+                        Register("W3SE_ManageClue", new CEntity(null)); //ws
+                        Register("W3SE_ManageContainer", new CEntity(null)); //ws
+                        Register("W3SE_ManageDoor", new CEntity(null)); //ws
+                        Register("W3SE_ManageFocusArea", new CEntity(null)); //ws
+                        Register("W3SE_ManageGate", new CEntity(null)); //ws
+                        Register("W3SE_ManageNewDoor", new CEntity(null)); //ws
+                        Register("W3SE_ManageOilBarrel", new CEntity(null)); //ws
+                        Register("W3SE_ManagePchysicalDamageMechanism", new CEntity(null)); //ws
+                        Register("W3SE_ManageSwitch", new CEntity(null)); //ws
+                        Register("W3SE_ManageToxicCloud", new CEntity(null)); //ws
+                        Register("W3SE_ManageTrap", new CEntity(null)); //ws
+                        Register("W3SE_PerformableAction", new CEntity(null)); //ws
+                        Register("W3SE_PlayAnimationOnEntity", new CEntity(null)); //ws
+                        Register("W3SE_PlayEffectOnActivator", new CEntity(null)); //ws
+                        Register("W3SE_PlayEffectOnEntity", new CEntity(null)); //ws
+                        Register("W3SE_PlayEffectOnSwitch", new CEntity(null)); //ws
+                        Register("W3SE_SetAppearanceOnEntity", new CEntity(null)); //ws
+                        Register("W3SE_SpawnEntity", new CEntity(null)); //ws
+                        Register("W3SE_UseRiddleNode", new CEntity(null)); //ws
+                    Register("W3CollectiblePlaces", new CEntity(null)); //ws
+                    Register("W3MicroQuestActivator", new CEntity(null)); //ws
+                    Register("W3MonsterHuntInvestigationArea", new CEntity(null)); //ws
+                    Register("W3SavedSoundClue", new CEntity(null)); //ws
+                    Register("W3SummonedFlies", new CEntity(null)); //ws
+                    Register("W3Poster", new CEntity(null)); //ws
+                        Register("W3LeaderboardCustom", new CEntity(null)); //ws
+                        Register("W3SavedPoster", new CEntity(null)); //ws
+                        Register("W3Signboard", new CEntity(null)); //ws
+                    Register("W3SavedAppearanceEntity", new CEntity(null)); //ws
+                    Register("W3FairytaleWitchFluid", new CEntity(null)); //ws
+                    Register("W3SpawnMarker", new CEntity(null)); //ws
+                    Register("W3StallEntity", new CEntity(null)); //ws
+                    Register("W3PointOfInterestEntity", new CEntity(null)); //ws
+                    Register("W3POIDispenser", new CEntity(null)); //ws
+                    Register("W3DestructSelfEntity", new CEntity(null)); //ws
+                    Register("W3NPCBackground", new CEntity(null)); //ws
+                    Register("W3NPCBackgroundPair", new CEntity(null)); //ws
+                    Register("W3NPCBackgroundWoman", new CEntity(null)); //ws
+                    Register("CBooksMinigameManager", new CEntity(null)); //ws
+                    Register("CBookMinigameSlot", new CEntity(null)); //ws
+                    Register("CBookMinigameBook", new CEntity(null)); //ws
+                    Register("CFactAdderOnCollisionWithTag", new CEntity(null)); //ws
+                    Register("W3CiriPhantom", new CEntity(null)); //ws
+                    Register("CTestTrigger", new CEntity(null)); //ws
+                    Register("W3KillTestTrigger", new CEntity(null)); //ws
+                    Register("W3BackgroundAnimatedEntity", new CEntity(null)); //ws
+                    Register("W3BackgroundAnimatedEntityTrigger", new CEntity(null)); //ws
+                    Register("W3ChangeCombatStageTrigger", new CEntity(null)); //ws
+                    Register("W3ShepherdGreetingTrigger", new CEntity(null)); //ws
+                    Register("W3DestructionTrigger", new CEntity(null)); //ws
+                    Register("W3FoodDispenser", new CEntity(null)); //ws
+            Register("W3HorseManager", new CEntity(null)); //ws
+
             // Testing area. Put your CVectors which don't work fully yet here.
 #if DEBUG
             // *.w2p
             //Register("CParticleEmitter", new CParticleEmitter(null));
             Register("CDecalSpawner", new CDecalSpawner(null));
             Register("SSeedKeyValue", new SSeedKeyValue(null));
-            Register("SDynamicDecalMaterialInfo", new SDynamicDecalMaterialInfo(null));
+            //Register("SDynamicDecalMaterialInfo", new SDynamicDecalMaterialInfo(null)); //rfuzzo: disabled because it couldn't read the stream
             Register("SParticleEmitterLODLevel", new SParticleEmitterLODLevel(null));
             Register("EmitterDelaySettings", new EmitterDelaySettings(null));
             Register("EmitterDurationSettings", new EmitterDurationSettings(null));
