@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -16,6 +17,7 @@ using Dfust.Hotkeys;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Newtonsoft.Json;
+using SharpPresence;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
@@ -537,10 +539,15 @@ namespace WolvenKit
 
         private void SaveMod()
         {
-            var ser = new XmlSerializer(typeof(W3Mod));
-            var modfile = new FileStream(ActiveMod.FileName, FileMode.Create, FileAccess.Write);
-            ser.Serialize(modfile, ActiveMod);
-            modfile.Close();
+            if (ActiveMod != null)
+            {
+                if(ActiveMod.LastOpenedFiles != null)
+                    ActiveMod.LastOpenedFiles = OpenDocuments.Select(x => x.File.FileName).ToList();
+                var ser = new XmlSerializer(typeof(W3Mod));
+                var modfile = new FileStream(ActiveMod.FileName, FileMode.Create, FileAccess.Write);
+                ser.Serialize(modfile, ActiveMod);
+                modfile.Close();
+            }
         }
 
         public IDockContent DeserializeDockContent(string persistString)
@@ -632,6 +639,17 @@ namespace WolvenKit
             catch (Exception ex)
             {
                 MessageBox.Show("Failed to upgrade the project!\n" + ex,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
+
+            if (ActiveMod?.LastOpenedFiles != null)
+            {
+                foreach (var doc in ActiveMod.LastOpenedFiles)
+                {
+                    if (File.Exists(doc))
+                    {
+                        LoadDocument(doc);
+                    }
+                }
             }
         }
 
@@ -1027,6 +1045,42 @@ namespace WolvenKit
         #endregion //Methods
 
         #region  Control events
+        private void richpresenceworker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            string project = "non";
+
+            Discord.EventHandlers handlers = new Discord.EventHandlers();
+            Discord.Initialize("482179494862651402", handlers);
+            while (!richpresenceworker.CancellationPending)
+            {
+                Thread.Sleep(1000); 
+                if (MainController.Get().ActiveMod != null)
+                {
+                    if (project != MainController.Get().ActiveMod.Name.ToString())
+                    {
+                        project = MainController.Get().ActiveMod.Name.ToString();
+                        Discord.RichPresence rp = new Discord.RichPresence();
+                        rp.state = "";
+                        rp.details = "Developing " + project;
+                        rp.largeImageKey = "logo_wkit";
+                        Discord.UpdatePresence(rp);
+                    }
+                }
+            }
+        }
+
+        public EventHandler errored;
+
+        private void richpresenceworker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+
+        }
+
+        private void richpresenceworker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+
+        }
+
         private void frmMain_MdiChildActivate(object sender, EventArgs e)
         {
             if (sender is frmCR2WDocument)
@@ -1142,10 +1196,12 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            richpresenceworker.CancelAsync();           
             if (MainController.Get().ProjectUnsaved)
                 if (MessageBox.Show("There are unsaved changes in your project. Would you like to save them?", "WolvenKit", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     saveAllFiles();
 
+            SaveMod();
         }
 
         private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
@@ -1358,6 +1414,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             
             //Update check should be after we are all set up. It goes on in the background.
             AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
+            richpresenceworker.RunWorkerAsync();
         }
 
 
@@ -1390,17 +1447,25 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 {
                     if (oldmod.Name != dlg.Mod.Name)
                     {
-                        MainController.Get()?.Window?.ModExplorer?.StopMonitoringDirectory();
-                        //Close all docs so they won't cause problems
-                        OpenDocuments.ForEach(x => x.Close());
-                        //Move the files directory
-                        Directory.Move(oldmod.ProjectDirectory, Path.Combine(Path.GetDirectoryName(oldmod.ProjectDirectory), dlg.Mod.Name));
-                        //Delete the old directory
-                        if (Directory.Exists(oldmod.ProjectDirectory))
-                            Commonfunctions.DeleteFilesAndFoldersRecursively(oldmod.ProjectDirectory);
-                        //Delete the old mod project file
-                        if (File.Exists(oldmod.FileName))
-                            File.Delete(oldmod.FileName);
+                        try
+                        {
+                            MainController.Get()?.Window?.ModExplorer?.StopMonitoringDirectory();
+                            //Close all docs so they won't cause problems
+                            OpenDocuments.ForEach(x => x.Close());
+                            //Move the files directory
+                            Directory.Move(oldmod.ProjectDirectory, Path.Combine(Path.GetDirectoryName(oldmod.ProjectDirectory), dlg.Mod.Name));
+                            //Delete the old directory
+                            if (Directory.Exists(oldmod.ProjectDirectory))
+                                Commonfunctions.DeleteFilesAndFoldersRecursively(oldmod.ProjectDirectory);
+                            //Delete the old mod project file
+                            if (File.Exists(oldmod.FileName))
+                                File.Delete(oldmod.FileName);
+                        }
+                        catch (System.IO.IOException)
+                        {
+                            MessageBox.Show("Sorry but there already exist a folder/mod with that name.","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                            return;
+                        }
                     }
                     //Save the new settings and update the title
                     UpdateTitle();
@@ -1466,7 +1531,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
         private void joinOurDiscordToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             if (MessageBox.Show(@"Are you sure you would like to join the modding discord?", @"Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                Process.Start("https://discord.gg/qBNgDEX");
+                Process.Start("https://discord.gg/KnPMmBz");
         }
 
         private void OutputToolStripMenuItem_Click(object sender, EventArgs e)

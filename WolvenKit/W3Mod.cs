@@ -101,6 +101,9 @@ namespace WolvenKit.Mod
             }
         }
 
+        [Browsable(false)] 
+        public List<string> LastOpenedFiles;
+
 
         [XmlIgnore]
         [ReadOnly(true)]
@@ -120,6 +123,7 @@ namespace WolvenKit.Mod
             clone.Name = Name;
             clone.FileName = FileName;
             clone.version = version;
+            clone.LastOpenedFiles = LastOpenedFiles;
             return clone;
         }
     }

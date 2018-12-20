@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Vlc.DotNet.Core;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Scaleform;
 
@@ -30,6 +31,7 @@ namespace WolvenKit
             videofile = path;
             videoConverter.RunWorkerAsync();
             Text = @"Video Preview [" + Path.GetFileNameWithoutExtension(path) + @"]";
+            usmPlayer.EndReached += UsmPlayerOnEndReached;
         }
 
         private void UsmPlayer_CloseOnStart(object sender, EventArgs e)
@@ -58,20 +60,27 @@ namespace WolvenKit
         private void VideoConverter_DoWork(object sender, DoWorkEventArgs e)
         {
             Demux(videofile);
-/*            foreach (var demuxedfile in Demuxedfiles)
+ /*           foreach (var demuxedfile in Demuxedfiles)
             {
 #if DEBUG
-                File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + demuxedfile.Key,
+                File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\DUMP_FOLDER\\" + demuxedfile.Key,
                     demuxedfile.Value);
 #endif
-            }*/
+            }
+*/
         }
 
         private void VideoConverter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             statusLabel.Hide();
             var file = new MemoryStream(Demuxedfiles.First(x => x.Key.EndsWith("m2v")).Value);
+
             usmPlayer.Play(file);
+        }
+
+        private void UsmPlayerOnEndReached(object sender, VlcMediaPlayerEndReachedEventArgs vlcMediaPlayerEndReachedEventArgs)
+        {
+            this.BeginInvoke(new MethodInvoker(Close));
         }
     }
 }

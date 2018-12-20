@@ -6,4 +6,4 @@ Implemented:
 Fixed:
 - <Fixes>
 
-<Aditional notes>
+<Additional notes>

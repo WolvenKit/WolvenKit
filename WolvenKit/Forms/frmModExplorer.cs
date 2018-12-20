@@ -75,7 +75,7 @@ namespace WolvenKit
         {
             if (ActiveMod == null)
                 return;
-
+            modFileList.BeginUpdate();
             if (FilteredFiles == null || FilteredFiles.Count == 0)
             {
                 FilteredFiles = ActiveMod.Files;
@@ -140,6 +140,7 @@ namespace WolvenKit
 
                 }
             }
+            modFileList.EndUpdate();
         }
 
         private void modFileList_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)

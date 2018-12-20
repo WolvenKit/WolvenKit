@@ -133,7 +133,6 @@ namespace WolvenKit.CR2W.Types
             // *.w2cube
             //Register("CCubeTexture", new CCubeTexture(null));
 #endif
-
             var vectors = new[]
             {
                 "SCutsceneActorDef", 
@@ -3234,7 +3233,6 @@ namespace WolvenKit.CR2W.Types
                 "EItemEffectAction",
                 "ETerrainTileCollision"
             };
-
             foreach (string t in cnames)
             {
                 Register(t, new CName(null));

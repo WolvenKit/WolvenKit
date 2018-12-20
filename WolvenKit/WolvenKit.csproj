@@ -314,6 +314,7 @@
   <ItemGroup>
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="DDSUtility.cs" />
+    <Compile Include="discord.cs" />
     <Compile Include="Forms\frmLoading.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -815,6 +816,9 @@
     <None Include="Resources\Logo.png" />
     <None Include="Resources\loading_black.png" />
     <None Include="Resources\Logo_wkit.png" />
+    <Content Include="discord-rpc.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="wolven_kit_icon.ico" />
     <Content Include="Licenses\License.doboz4net.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
