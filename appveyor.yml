@@ -27,9 +27,11 @@ configuration: Release
 before_build:
   - nuget restore
 after_build:
-  - rm %APPVEYOR_BUILD_FOLDER%\WolvenKit\bin\Release\*.xml
-  - rm %APPVEYOR_BUILD_FOLDER%\WolvenKit\bin\Release\*.config
-  - rm %APPVEYOR_BUILD_FOLDER%\WolvenKit\bin\Release\*.pdb
+  - cd %APPVEYOR_BUILD_FOLDER%\WolvenKit\bin\Release\
+  - rm *.xml
+  - rm *.config
+  - rm *.pdb
+  - cd /
   - 7z a WolvenKit.zip %APPVEYOR_BUILD_FOLDER%\WolvenKit\bin\Release\*
   - appveyor PushArtifact WolvenKit.zip
 
