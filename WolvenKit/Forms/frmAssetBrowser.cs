@@ -37,6 +37,8 @@ namespace WolvenKit
         public frmAssetBrowser(List<IWitcherArchive> archives)
         {
             InitializeComponent();
+            pathlistview.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            pathlistview.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
             Managers = archives;
             RootNode = new WitcherTreeNode();
             RootNode.Name = "Root";

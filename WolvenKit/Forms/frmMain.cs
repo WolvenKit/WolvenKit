@@ -1702,6 +1702,14 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             var pack = PackAndInstallMod();
             while (!pack.IsCompleted)
                 Application.DoEvents();
+            executeGame();
+        }
+
+        private void packProjectAndLaunchGameCustomToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var pack = PackAndInstallMod();
+            while (!pack.IsCompleted)
+                Application.DoEvents();
             var getparams = new Input("Please give the commands to launch the game with!");
             if (getparams.ShowDialog() == DialogResult.OK)
             {
@@ -2435,5 +2443,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 }
             }
         }
+
+       
     }
 }
