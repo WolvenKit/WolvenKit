@@ -72,6 +72,41 @@ namespace WolvenKit.CR2W.Types
             return flags.Cast<IEditableVariable>().ToList();
         }
 
+        public override bool CanRemoveVariable(IEditableVariable child)
+        {
+            //FIXME
+            if (child is CVariable v)
+            {
+                //return flags.Contains(v);
+            }
+
+            return true;
+        }
+
+        public override bool CanAddVariable(IEditableVariable newvar)
+        {
+            return newvar == null || newvar is CName;
+        }
+
+        public override void AddVariable(CVariable v)
+        {
+            if (v is CName v2)
+            {
+                flags.Add(v2);
+                v.ParentVariable = this;
+            }
+
+        }
+
+        public override void RemoveVariable(IEditableVariable child)
+        {
+            if (child is CName v)
+            {
+                flags.Remove(v);
+                v.ParentVariable = null;
+            }
+        }
+
         public override string ToString()
         {
             return "";
