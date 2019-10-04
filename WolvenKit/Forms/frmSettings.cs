@@ -78,7 +78,7 @@ namespace WolvenKit
                 if (!ip.HasSection("General") || ip.GetSetting("General", "DBGConsoleOn", true) != "true")
                 {
                     if (MessageBox.Show(
-                            "WolvenKit has detected that your game has the debug console disabled. It is a usefull tool when testing mods. Would you like it to be enabled?",
+                            "WolvenKit has detected that your game has the debug console disabled. It is a useful tool when testing mods. Would you like it to be enabled?",
                             "Debug console enabling", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         ip.AddSetting("General", "DBGConsoleOn", "true");

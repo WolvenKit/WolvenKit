@@ -6,7 +6,7 @@ Please make your issue very descriptive and describe what you are trying to achi
 Please try to avoid grammar mistakes. Try to format your text in such a way that it's easy to understand for the average human.
 
 ## Localizations
-We do not support localizations yet. Altought once we will anyone is welcome to help with it to make WolvenKit more avaliable for everyone.
+We do not support localizations yet. Although once we will anyone is welcome to help with it to make WolvenKit more avaliable for everyone.
 
 ## Bug reports
 Please use the built-in tools in WolvenKit.

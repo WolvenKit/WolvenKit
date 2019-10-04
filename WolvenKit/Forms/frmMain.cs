@@ -1463,7 +1463,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                         }
                         catch (System.IO.IOException)
                         {
-                            MessageBox.Show("Sorry but there already exist a folder/mod with that name.","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                            MessageBox.Show("Sorry but a folder/mod already exists with that name.","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
                             return;
                         }
                     }

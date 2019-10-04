@@ -33,7 +33,7 @@ namespace WolvenKit.Forms
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
                 if (MessageBox.Show(
-                        "The Game is running. Please note that running the program like this makes some stuff unusable. Wiould you like to run the program like this still?",
+                        "The Game is running. Please note that running the program like this makes some stuff unusable. Would you still like to run the program like this?",
                         "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
                 {
                     Environment.Exit(0);
