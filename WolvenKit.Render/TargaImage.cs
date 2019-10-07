@@ -635,7 +635,7 @@ namespace WolvenKit.Render
                                             break;
                                         default:
                                             this.ClearAll();
-                                            throw new Exception("TargaImage only supports ColorMap Entry Sizes of 15, 16, 24 or 32 bits.");
+                                            throw new Exception("Targa Image only supports ColorMap Entry Sizes of 15, 16, 24 or 32 bits.");
 
                                     }
 
