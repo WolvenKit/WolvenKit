@@ -324,7 +324,7 @@ namespace WolvenKit
             this.pathlistview.Location = new System.Drawing.Point(696, 65);
             this.pathlistview.Name = "pathlistview";
             this.pathlistview.ShowItemToolTips = true;
-            this.pathlistview.Size = new System.Drawing.Size(105, 427);
+            this.pathlistview.Size = new System.Drawing.Size(705, 427);
             this.pathlistview.SmallImageList = this.treeImages;
             this.pathlistview.TabIndex = 14;
             this.pathlistview.UseCompatibleStateImageBehavior = false;
@@ -364,15 +364,15 @@ namespace WolvenKit
             this.currentfolderCheckBox.AutoSize = true;
             this.currentfolderCheckBox.Location = new System.Drawing.Point(80, 98);
             this.currentfolderCheckBox.Name = "currentfolderCheckBox";
-            this.currentfolderCheckBox.Size = new System.Drawing.Size(148, 17);
+            this.currentfolderCheckBox.Size = new System.Drawing.Size(178, 17);
             this.currentfolderCheckBox.TabIndex = 22;
-            this.currentfolderCheckBox.Text = "Search from current folder";
+            this.currentfolderCheckBox.Text = "Search only in current mod folder";
             this.currentfolderCheckBox.UseVisualStyleBackColor = true;
             // 
             // caseCheckBox
             // 
             this.caseCheckBox.AutoSize = true;
-            this.caseCheckBox.Location = new System.Drawing.Point(237, 98);
+            this.caseCheckBox.Location = new System.Drawing.Point(267, 98);
             this.caseCheckBox.Name = "caseCheckBox";
             this.caseCheckBox.Size = new System.Drawing.Size(94, 17);
             this.caseCheckBox.TabIndex = 23;
@@ -512,7 +512,7 @@ namespace WolvenKit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(811, 525);
+            this.ClientSize = new System.Drawing.Size(1411, 530);
             this.Controls.Add(this.homeBTN);
             this.Controls.Add(this.addDLCFile);
             this.Controls.Add(this.extensionCB);
