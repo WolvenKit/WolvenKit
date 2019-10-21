@@ -353,9 +353,10 @@ namespace WolvenKit
 
                 mainController.Loaded = true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 mainController.Loaded = false;
+                Console.WriteLine(e.Message);
             }
         }
 
