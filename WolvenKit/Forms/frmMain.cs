@@ -1708,6 +1708,15 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 executeGame(getparams.Resulttext);
             }
         }
+
+        private void PackProjectAndRunGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var pack = PackAndInstallMod();
+            while (!pack.IsCompleted)
+                Application.DoEvents();
+
+            executeGame();
+        }
         #endregion
 
         #region Mod Pack
