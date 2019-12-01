@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
@@ -32,15 +33,15 @@ namespace WolvenKit
         private void updateList(string keyword = "")
         {
             var limit = -1;
-            if(limitCB.Checked)
+            if (limitCB.Checked)
             {
-                int.TryParse(limitTB.Text,out limit);
+                int.TryParse(limitTB.Text, out limit);
             }
             if (File == null)
                 return;
-            if(!string.IsNullOrEmpty(keyword))
+            if (!string.IsNullOrEmpty(keyword))
             {
-                if(limit != -1)
+                if (limit != -1)
                     listView.Objects = File.chunks.Where(x => x.Name.ToUpper().Contains(searchTB.Text.ToUpper())).Take(limit);
                 else
                     listView.Objects = File.chunks.Where(x => x.Name.ToUpper().Contains(searchTB.Text.ToUpper()));
@@ -51,11 +52,16 @@ namespace WolvenKit
             }
         }
 
+        private void contextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            pasteChunkToolStripMenuItem.Enabled = CopyController.ChunkList != null && CopyController.ChunkList.Count > 0;
+        }
+
         private void chunkListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            if (OnSelectChunk != null && (CR2WChunk) listView.SelectedObject != null)
+            if (OnSelectChunk != null && (CR2WChunk)listView.SelectedObject != null)
             {
-                OnSelectChunk(this, new SelectChunkArgs {Chunk = (CR2WChunk) listView.SelectedObject});
+                OnSelectChunk(this, new SelectChunkArgs { Chunk = (CR2WChunk)listView.SelectedObject });
             }
         }
 
@@ -72,7 +78,7 @@ namespace WolvenKit
 
                     if (OnSelectChunk != null && chunk != null)
                     {
-                        OnSelectChunk(this, new SelectChunkArgs {Chunk = chunk});
+                        OnSelectChunk(this, new SelectChunkArgs { Chunk = chunk });
                     }
                 }
                 catch (InvalidChunkTypeException ex)
@@ -87,12 +93,12 @@ namespace WolvenKit
             if (listView.SelectedObjects.Count == 0)
                 return;
 
-            if (MessageBox.Show("Are you sure you want to delete the selected chunk(s)? \n\n NOTE: Any pointers or handles to these chunks will NOT be deleted.","Confirmation", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (MessageBox.Show("Are you sure you want to delete the selected chunk(s)? \n\n NOTE: Any pointers or handles to these chunks will NOT be deleted.", "Confirmation", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 var selected = listView.SelectedObjects;
                 foreach (var obj in selected)
                 {
-                    File.RemoveChunk((CR2WChunk) obj);
+                    File.RemoveChunk((CR2WChunk)obj);
                 }
 
                 listView.RemoveObjects(selected);
@@ -110,7 +116,6 @@ namespace WolvenKit
             Clipboard.Clear();
             var chunks = listView.SelectedObjects.Cast<CR2WChunk>().ToList();
             CopyController.ChunkList = chunks;
-            pasteChunkToolStripMenuItem.Enabled = true;
         }
 
         private void pasteChunkToolStripMenuItem_Click(object sender, EventArgs e)
@@ -127,7 +132,7 @@ namespace WolvenKit
                 {
                     try
                     {
-                        var pastedchunk = CR2WCopyAction.CopyChunk(chunk, chunk.CR2WOwner);
+                        var pastedchunk = CR2WCopyAction.CopyChunk(chunk, file);
                         listView.AddObject(pastedchunk);
                         OnSelectChunk?.Invoke(this, new SelectChunkArgs { Chunk = pastedchunk });
                         MainController.Get().ProjectStatus = "Chunk copied";
@@ -157,7 +162,7 @@ namespace WolvenKit
 
         private void searchTB_KeyUp(object sender, KeyEventArgs e)
         {
-            if(e.KeyValue == (int)Keys.Enter)
+            if (e.KeyValue == (int)Keys.Enter)
                 updateList(searchTB.Text);
         }
 

@@ -60,6 +60,7 @@ namespace WolvenKit
             this.pasteChunkToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(146, 92);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // addChunkToolStripMenuItem
             // 
@@ -84,7 +85,6 @@ namespace WolvenKit
             // 
             // pasteChunkToolStripMenuItem
             // 
-            this.pasteChunkToolStripMenuItem.Enabled = false;
             this.pasteChunkToolStripMenuItem.Name = "pasteChunkToolStripMenuItem";
             this.pasteChunkToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.pasteChunkToolStripMenuItem.Text = "Paste Chunk";
@@ -95,8 +95,8 @@ namespace WolvenKit
             this.listView.AllColumns.Add(this.colIndex);
             this.listView.AllColumns.Add(this.colName);
             this.listView.AllColumns.Add(this.colDisplay);
-            this.listView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.listView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listView.CellEditUseWholeCell = false;
             this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
