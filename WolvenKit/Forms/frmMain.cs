@@ -490,7 +490,7 @@ namespace WolvenKit
             createNewMod();
         }
 
-        private void createNewMod()
+        public void createNewMod()
         {
             var dlg = new SaveFileDialog
             {
@@ -555,7 +555,7 @@ namespace WolvenKit
             return null;
         }
 
-        private void openMod(string file = "")
+        public void openMod(string file = "")
         {
             try
             {
@@ -1237,10 +1237,17 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
 
             if (!string.IsNullOrEmpty(MainController.Get().InitialModProject))
                 openMod(MainController.Get().InitialModProject);
-            if (!string.IsNullOrEmpty(MainController.Get().InitialWKP))
+            else if (!string.IsNullOrEmpty(MainController.Get().InitialWKP))
             {
                 using (var pi = new frmInstallPackage(MainController.Get().InitialWKP))
                     pi.ShowDialog();
+            }
+            else
+            {
+                using(var ws = new frmWelcome(this))
+                {
+                    ws.ShowDialog();
+                }
             }
         }
 

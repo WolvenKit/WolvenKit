@@ -39,7 +39,7 @@ namespace WolvenKit
 
         private void btnBrowseExe_Click(object sender, EventArgs e)
         {
-            var dlg = new OpenFileDialog();
+            var dlg = new System.Windows.Forms.OpenFileDialog();
             dlg.Title = "Select Witcher 3 Executable.";
             dlg.FileName = txExecutablePath.Text;
             dlg.Filter = "witcher3.exe|witcher3.exe";
@@ -155,7 +155,7 @@ Would you like to perform this patch?", "wcc_lite faster patch", MessageBoxButto
 
         private void btBrowseWCC_Lite_Click(object sender, EventArgs e)
         {
-            var dlg = new OpenFileDialog
+            var dlg = new System.Windows.Forms.OpenFileDialog
             {
                 Title = "Select wcc_lite.exe.",
                 FileName = txExecutablePath.Text,
