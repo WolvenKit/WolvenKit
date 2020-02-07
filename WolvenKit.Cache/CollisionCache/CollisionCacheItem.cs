@@ -39,6 +39,10 @@ namespace WolvenKit.Cache.CollisionCache
                 using (var viewstream = file.CreateViewStream(PageOFfset, ZSize, MemoryMappedFileAccess.Read))
                 {
                     var zlib = new ZlibStream(viewstream, CompressionMode.Decompress);
+
+                    byte[] buffer = new byte[97]; //all apb's start after 97 bytes?
+                    zlib.Read(buffer, 0, 97);
+
                     zlib.CopyTo(output);
                 }
             }

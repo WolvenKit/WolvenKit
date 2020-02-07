@@ -1102,6 +1102,33 @@ namespace WolvenKit
             }
         }
 
+        private void extractCollisioncacheToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var of = new OpenFileDialog())
+            {
+                of.Title = "Please select the collision.cache file to extract";
+                of.Filter = "Collision caches | collision.cache";
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    using (var sf = new FolderBrowserDialog())
+                    {
+                        sf.Description = "Please specify a location to save the extracted files";
+                        if (sf.ShowDialog() == DialogResult.OK)
+                        {
+                            var ccf = new Cache.CollisionCache.CollisionCache(of.FileName);
+                            var outdir = sf.SelectedPath.EndsWith("\\") ? sf.SelectedPath : sf.SelectedPath + "\\";
+                            foreach (var f in ccf.Files)
+                            {
+                                string extractedfilename = Path.ChangeExtension(Path.Combine(outdir, f.Name), "apb");
+                                f.Extract(extractedfilename);
+                                AddOutput($"Extracted {extractedfilename}.\n");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         private void fbxWithCollisionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show(@"For this to work make sure your model has either of both of these layers:
