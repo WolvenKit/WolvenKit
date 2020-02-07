@@ -1704,12 +1704,11 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             openMod(sender.ToString());
         }
 
-        private void packProjectAndLaunchGameToolStripMenuItem_Click(object sender, EventArgs e)
+        private void packProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var pack = PackAndInstallMod();
             while (!pack.IsCompleted)
                 Application.DoEvents();
-            executeGame();
         }
 
         private void packProjectAndLaunchGameCustomToolStripMenuItem_Click(object sender, EventArgs e)
