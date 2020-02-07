@@ -1,4 +1,6 @@
 # Wolven-kit
+![Screenshot](/assets/screenshot.png)
+
 [![Build status](https://ci.appveyor.com/api/projects/status/6kdip6nt23gprnnh/branch/master?svg=true)](https://ci.appveyor.com/project/Traderain/wolven-kit/branch/master)
 [![GitHub issues](https://img.shields.io/github/issues/Traderain/Wolven-kit.svg)](https://github.com/Traderain/Wolven-kit/issues)
 [![GitHub forks](https://img.shields.io/github/forks/Traderain/Wolven-kit.svg)](https://github.com/Traderain/Wolven-kit/network)
@@ -50,7 +52,7 @@ Visual Studio 2017 required. All the required files are either nuget packages wh
 
 ***
 
-## Contibuting:
+## Contributing:
 Please do! Fork the project and please do your changes in small incremental steps with descriptive commit messages. Code quality is not the biggest concern but please don't do stupid mistakes which may lead to the denial of the pull request. Please create an issue when implementing a feature so people don't work on the same feature/issue.
 
 For any questions:

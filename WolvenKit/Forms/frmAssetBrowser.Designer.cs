@@ -340,7 +340,7 @@ namespace WolvenKit
             this.pathlistview.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pathlistview.Name = "pathlistview";
             this.pathlistview.ShowItemToolTips = true;
-            this.pathlistview.Size = new System.Drawing.Size(397, 576);
+            this.pathlistview.Size = new System.Drawing.Size(705, 427);
             this.pathlistview.SmallImageList = this.treeImages;
             this.pathlistview.TabIndex = 14;
             this.pathlistview.UseCompatibleStateImageBehavior = false;
@@ -381,16 +381,15 @@ namespace WolvenKit
             this.currentfolderCheckBox.Location = new System.Drawing.Point(120, 151);
             this.currentfolderCheckBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.currentfolderCheckBox.Name = "currentfolderCheckBox";
-            this.currentfolderCheckBox.Size = new System.Drawing.Size(220, 24);
+            this.currentfolderCheckBox.Size = new System.Drawing.Size(178, 17);
             this.currentfolderCheckBox.TabIndex = 22;
-            this.currentfolderCheckBox.Text = "Search from current folder";
+            this.currentfolderCheckBox.Text = "Search only in current mod folder";
             this.currentfolderCheckBox.UseVisualStyleBackColor = true;
             // 
             // caseCheckBox
             // 
             this.caseCheckBox.AutoSize = true;
-            this.caseCheckBox.Location = new System.Drawing.Point(356, 151);
-            this.caseCheckBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.caseCheckBox.Location = new System.Drawing.Point(267, 98);
             this.caseCheckBox.Name = "caseCheckBox";
             this.caseCheckBox.Size = new System.Drawing.Size(137, 24);
             this.caseCheckBox.TabIndex = 23;

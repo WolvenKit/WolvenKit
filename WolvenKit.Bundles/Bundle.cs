@@ -95,7 +95,14 @@ namespace WolvenKit.Bundles
                     item.CRC = reader.ReadUInt32();    //CRC32 for the uncompressed data
                     item.Compression = reader.ReadUInt32();
 
-                    Items.Add(item.Name, item);
+                    if (!Items.ContainsKey(item.Name))
+                    {
+                        Items.Add(item.Name, item);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Warning: Bundle '" + FileName + "' could not be fully loaded as resource '" + item.Name + "' is defined more than once. Thus, only the first definition was loaded.");
+                    }
                 }
 
 

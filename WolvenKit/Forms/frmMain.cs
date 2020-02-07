@@ -490,7 +490,7 @@ namespace WolvenKit
             createNewMod();
         }
 
-        private void createNewMod()
+        public void createNewMod()
         {
             var dlg = new SaveFileDialog
             {
@@ -555,7 +555,7 @@ namespace WolvenKit
             return null;
         }
 
-        private void openMod(string file = "")
+        public void openMod(string file = "")
         {
             try
             {
@@ -1237,10 +1237,17 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
 
             if (!string.IsNullOrEmpty(MainController.Get().InitialModProject))
                 openMod(MainController.Get().InitialModProject);
-            if (!string.IsNullOrEmpty(MainController.Get().InitialWKP))
+            else if (!string.IsNullOrEmpty(MainController.Get().InitialWKP))
             {
                 using (var pi = new frmInstallPackage(MainController.Get().InitialWKP))
                     pi.ShowDialog();
+            }
+            else
+            {
+                using(var ws = new frmWelcome(this))
+                {
+                    ws.ShowDialog();
+                }
             }
         }
 
@@ -1463,7 +1470,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                         }
                         catch (System.IO.IOException)
                         {
-                            MessageBox.Show("Sorry but there already exist a folder/mod with that name.","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                            MessageBox.Show("Sorry but a folder/mod already exists with that name.","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
                             return;
                         }
                     }
@@ -1715,6 +1722,15 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             {
                 executeGame(getparams.Resulttext);
             }
+        }
+
+        private void PackProjectAndRunGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var pack = PackAndInstallMod();
+            while (!pack.IsCompleted)
+                Application.DoEvents();
+
+            executeGame();
         }
         #endregion
 

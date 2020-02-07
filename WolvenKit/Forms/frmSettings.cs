@@ -39,7 +39,7 @@ namespace WolvenKit
 
         private void btnBrowseExe_Click(object sender, EventArgs e)
         {
-            var dlg = new OpenFileDialog();
+            var dlg = new System.Windows.Forms.OpenFileDialog();
             dlg.Title = "Select Witcher 3 Executable.";
             dlg.FileName = txExecutablePath.Text;
             dlg.Filter = "witcher3.exe|witcher3.exe";
@@ -78,7 +78,7 @@ namespace WolvenKit
                 if (!ip.HasSection("General") || ip.GetSetting("General", "DBGConsoleOn", true) != "true")
                 {
                     if (MessageBox.Show(
-                            "WolvenKit has detected that your game has the debug console disabled. It is a usefull tool when testing mods. Would you like it to be enabled?",
+                            "WolvenKit has detected that your game has the debug console disabled. It is a useful tool when testing mods. Would you like it to be enabled?",
                             "Debug console enabling", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         ip.AddSetting("General", "DBGConsoleOn", "true");
@@ -155,7 +155,7 @@ Would you like to perform this patch?", "wcc_lite faster patch", MessageBoxButto
 
         private void btBrowseWCC_Lite_Click(object sender, EventArgs e)
         {
-            var dlg = new OpenFileDialog
+            var dlg = new System.Windows.Forms.OpenFileDialog
             {
                 Title = "Select wcc_lite.exe.",
                 FileName = txExecutablePath.Text,
