@@ -745,7 +745,8 @@ namespace WolvenKit
                 {
                     MainController.Get().BundleManager, 
                     MainController.Get().SoundManager, 
-                    MainController.Get().TextureManager
+                    MainController.Get().TextureManager,
+                    MainController.Get().CollisionManager
                 });
             explorer.RequestFileAdd += Assetbrowser_FileAdd;
             explorer.OpenPath(browseToPath);
@@ -1115,7 +1116,7 @@ namespace WolvenKit
                         sf.Description = "Please specify a location to save the extracted files";
                         if (sf.ShowDialog() == DialogResult.OK)
                         {
-                            var ccf = new Cache.CollisionCache.CollisionCache(of.FileName);
+                            var ccf = new Cache.CollisionCache(of.FileName);
                             var outdir = sf.SelectedPath.EndsWith("\\") ? sf.SelectedPath : sf.SelectedPath + "\\";
                             foreach (var f in ccf.Files)
                             {
