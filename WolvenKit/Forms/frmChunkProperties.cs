@@ -376,9 +376,15 @@ namespace WolvenKit
             public IEditableVariable Variable { get; set; }
         }
 
+        public event EventHandler OnItemsChanged;
         private void treeView_ItemsChanged(object sender, ItemsChangedEventArgs e)
         {
             MainController.Get().ProjectUnsaved = true;
+        }
+
+        private void treeView_CellEditFinished(object sender, CellEditEventArgs e)
+        {
+            OnItemsChanged(sender, e);
         }
     }
 }

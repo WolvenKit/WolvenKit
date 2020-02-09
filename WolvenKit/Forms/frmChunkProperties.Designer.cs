@@ -68,8 +68,10 @@ namespace WolvenKit
             this.colValue,
             this.colType});
             this.treeView.ContextMenuStrip = this.contextMenu;
+            this.treeView.Cursor = System.Windows.Forms.Cursors.Default;
             this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView.FullRowSelect = true;
+            this.treeView.HideSelection = false;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
             this.treeView.ShowGroups = false;
@@ -79,6 +81,7 @@ namespace WolvenKit
             this.treeView.UseCompatibleStateImageBehavior = false;
             this.treeView.View = System.Windows.Forms.View.Details;
             this.treeView.VirtualMode = true;
+            this.treeView.CellEditFinished += new BrightIdeasSoftware.CellEditEventHandler(this.treeView_CellEditFinished);
             this.treeView.CellEditStarting += new BrightIdeasSoftware.CellEditEventHandler(this.treeView_CellEditStarting);
             this.treeView.CellClick += new System.EventHandler<BrightIdeasSoftware.CellClickEventArgs>(this.treeView_CellClick);
             this.treeView.ItemsChanged += new System.EventHandler<BrightIdeasSoftware.ItemsChangedEventArgs>(this.treeView_ItemsChanged);

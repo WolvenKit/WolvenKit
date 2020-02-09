@@ -41,9 +41,12 @@ namespace WolvenKit
             chunkList.OnSelectChunk += frmCR2WDocument_OnSelectChunk;
             propertyWindow = new frmChunkProperties();
             propertyWindow.Show(dockPanel, DockState.DockBottom);
+            propertyWindow.OnItemsChanged += PropertyWindow_OnItemsChanged;
 
             chunkList.Activate();
         }
+
+        private void PropertyWindow_OnItemsChanged(object sender, EventArgs e) => chunkList.UpdateList();
 
         public CR2WFile File
         {
