@@ -37,6 +37,8 @@ namespace WolvenKit
         public frmAssetBrowser(List<IWitcherArchive> archives)
         {
             InitializeComponent();
+            pathlistview.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            pathlistview.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
             Managers = archives;
             RootNode = new WitcherTreeNode();
             RootNode.Name = "Root";
@@ -349,11 +351,27 @@ namespace WolvenKit
             }
             if (currentfolderCheckBox.Checked)
             {
-                return caseCheckBox.Checked 
-                    ? files.Where(item => item.Bundle.FileName.Contains(ActiveNode.Name) && item.Name.ToUpper().Contains(searchkeyword.ToUpper()) &&(item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")).Distinct().Select(x => new Tuple<WitcherListViewItem,IWitcherFile>(new WitcherListViewItem(x),x)).ToArray() 
-                    : files.Where(item => item.Bundle.FileName.Contains(ActiveNode.Name) && item.Name.Contains(searchkeyword) && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")).Distinct().Select(x => new Tuple<WitcherListViewItem,IWitcherFile>(new WitcherListViewItem(x),x)).ToArray();
+                return caseCheckBox.Checked
+                    ? files.Where(item => item.Bundle.FileName.Contains(ActiveNode.Name)
+                        && item.Name.ToUpper().Contains(searchkeyword.ToUpper())
+                        && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")
+                        && (item.Bundle.TypeName == bundletype || bundletype.ToUpper() == "ANY"))
+                    .Distinct().Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray()
+                    : files.Where(item => item.Bundle.FileName.Contains(ActiveNode.Name)
+                        && item.Name.Contains(searchkeyword)
+                        && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")
+                        && (item.Bundle.TypeName == bundletype || bundletype.ToUpper() == "ANY"))
+                    .Distinct().Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray();
             }
-            return caseCheckBox.Checked ? files.Where(item =>  item.Name.ToUpper().Contains(searchkeyword.ToUpper()) && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")).Select(x => new Tuple<WitcherListViewItem,IWitcherFile>(new WitcherListViewItem(x),x)).ToArray() : files.Where(item => item.Name.Contains(searchkeyword) && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")).Select(x => new Tuple<WitcherListViewItem,IWitcherFile>(new WitcherListViewItem(x),x)).ToArray();
+            return caseCheckBox.Checked
+                ? files.Where(item => item.Name.ToUpper().Contains(searchkeyword.ToUpper())
+                    && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")
+                    && (item.Bundle.TypeName == bundletype || bundletype.ToUpper() == "ANY"))
+                    .Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray()
+                : files.Where(item => item.Name.Contains(searchkeyword)
+                    && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")
+                    && (item.Bundle.TypeName == bundletype || bundletype.ToUpper() == "ANY"))
+                    .Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray();
         }
 
         /// <summary>

@@ -745,7 +745,8 @@ namespace WolvenKit
                 {
                     MainController.Get().BundleManager, 
                     MainController.Get().SoundManager, 
-                    MainController.Get().TextureManager
+                    MainController.Get().TextureManager,
+                    MainController.Get().CollisionManager
                 });
             explorer.RequestFileAdd += Assetbrowser_FileAdd;
             explorer.OpenPath(browseToPath);
@@ -1098,6 +1099,33 @@ namespace WolvenKit
                 if (sf.ShowDialog() == DialogResult.OK)
                 {
                     throw new NotImplementedException("TODO");
+                }
+            }
+        }
+
+        private void extractCollisioncacheToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var of = new OpenFileDialog())
+            {
+                of.Title = "Please select the collision.cache file to extract";
+                of.Filter = "Collision caches | collision.cache";
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    using (var sf = new FolderBrowserDialog())
+                    {
+                        sf.Description = "Please specify a location to save the extracted files";
+                        if (sf.ShowDialog() == DialogResult.OK)
+                        {
+                            var ccf = new Cache.CollisionCache(of.FileName);
+                            var outdir = sf.SelectedPath.EndsWith("\\") ? sf.SelectedPath : sf.SelectedPath + "\\";
+                            foreach (var f in ccf.Files)
+                            {
+                                string extractedfilename = Path.ChangeExtension(Path.Combine(outdir, f.Name), "apb");
+                                f.Extract(extractedfilename);
+                                AddOutput($"Extracted {extractedfilename}.\n");
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1704,7 +1732,14 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             openMod(sender.ToString());
         }
 
-        private void packProjectAndLaunchGameToolStripMenuItem_Click(object sender, EventArgs e)
+        private void packProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var pack = PackAndInstallMod();
+            while (!pack.IsCompleted)
+                Application.DoEvents();
+        }
+
+        private void packProjectAndLaunchGameCustomToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var pack = PackAndInstallMod();
             while (!pack.IsCompleted)
@@ -2451,5 +2486,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 }
             }
         }
+
+       
     }
 }
