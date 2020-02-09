@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using WolvenKit.Common;
 using WolvenKit.CR2W;
+using WolvenKit.Wwise;
 using WolvenKit.Wwise.SoundCache;
 
 namespace WolvenKit.Cache
@@ -35,6 +36,8 @@ namespace WolvenKit.Cache
         public string TypeName { get { return "SoundCache"; } }
         public string FileName { get; set; }
 
+        public SoundBanksInfoXML info;
+
         /// <summary>
         /// The files packed into the original soundcache.
         /// </summary>
@@ -44,9 +47,10 @@ namespace WolvenKit.Cache
         /// Normal constructor.
         /// </summary>
         /// <param name="fileName"></param>
-        public SoundCache(string fileName)
+        public SoundCache(string fileName, SoundBanksInfoXML banksinfo)
         {
             FileName = fileName;
+            info = banksinfo;
             using (var br = new BinaryReader(new FileStream(fileName, FileMode.Open)))
                 Read(br);
         }
@@ -194,6 +198,10 @@ namespace WolvenKit.Cache
             {
                 br.BaseStream.Seek(NamesOffset + f.NameOffset, SeekOrigin.Begin);
                 f.Name = br.ReadCR2WString();
+                if(f.Name.EndsWith(".wem") && info.StreamedFiles.Any(x => x.Id == (f.Name.Split('.')[0])))
+                {
+                    f.Name = info.StreamedFiles.First(x => x.Id == (f.Name.Split('.')[0])).Path;
+                }
                 f.ParentFile = this.FileName;
             }
         }

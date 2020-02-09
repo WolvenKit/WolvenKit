@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using WolvenKit.Common;
 using WolvenKit.Cache;
+using WolvenKit.Wwise;
 
 namespace WolvenKit.Cache
 {
@@ -20,6 +21,7 @@ namespace WolvenKit.Cache
             FileList = new List<IWitcherFile>();
             Extensions = new List<string>();
             AutocompleteSource = new AutoCompleteStringCollection();
+            soundBanksInfo = new SoundBanksInfoXML("SoundCache\\soundbanksinfo.xml");
         }
 
         public Dictionary<string, List<IWitcherFile>> Items { get; set; }
@@ -30,6 +32,8 @@ namespace WolvenKit.Cache
         public List<string> Extensions { get; set; }
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
 
+        public SoundBanksInfoXML soundBanksInfo;
+
         /// <summary>
         ///     Load a single mod soundcache
         /// </summary>
@@ -39,7 +43,7 @@ namespace WolvenKit.Cache
             if (Archives.ContainsKey(filename))
                 return;
 
-            var bundle = new SoundCache(filename);
+            var bundle = new SoundCache(filename, soundBanksInfo);
 
             foreach (var item in bundle.Files)
             {
@@ -61,7 +65,7 @@ namespace WolvenKit.Cache
             if (Archives.ContainsKey(filename))
                 return;
 
-            var bundle = new SoundCache(filename);
+            var bundle = new SoundCache(filename, soundBanksInfo);
 
             foreach (var item in bundle.Files)
             {
