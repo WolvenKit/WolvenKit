@@ -16,7 +16,8 @@ namespace WolvenKit.CR2W.Types
         {
             grassmask = new CByteArray(cr2w)
             {
-                Name = "Grass mask data"
+                Name = "Grass mask data",
+                Bytes = new byte[0]
             };
         }
 
