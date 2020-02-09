@@ -234,6 +234,10 @@ namespace WolvenKit
                 Output.AddText(text, type);
             }
         }
+        
+        private void OnOutput(object sender, string output) {
+            AddOutput(output);
+        }
 
         public void PackProject()
         {
@@ -745,7 +749,8 @@ namespace WolvenKit
                 {
                     MainController.Get().BundleManager, 
                     MainController.Get().SoundManager, 
-                    MainController.Get().TextureManager
+                    MainController.Get().TextureManager,
+                    MainController.Get().CollisionManager
                 });
             explorer.RequestFileAdd += Assetbrowser_FileAdd;
             explorer.OpenPath(browseToPath);
@@ -841,16 +846,19 @@ namespace WolvenKit
             switch (Path.GetExtension(filename))
             {
                 case ".w2scene":
+                case ".w2quest":
+                case ".w2phase": 
                     {
-                        doc.flowDiagram = new frmChunkFlowDiagram
-                        {
-                            File = doc.File,
-                            DockAreas = DockAreas.Document
-                        };
+                        doc.flowDiagram = new frmChunkFlowDiagram();
+                        doc.flowDiagram.OnOutput += OnOutput;
+                        doc.flowDiagram.File = doc.File;
+                        doc.flowDiagram.DockAreas = DockAreas.Document;
+
                         doc.flowDiagram.OnSelectChunk += doc.frmCR2WDocument_OnSelectChunk;
                         doc.flowDiagram.Show(doc.FormPanel, DockState.Document);
                         break;
                     }
+                
                 case ".journal":
                     {
                         doc.JournalEditor = new frmJournalEditor
@@ -940,6 +948,8 @@ namespace WolvenKit
             AddOutput(output.ToString());
             return doc;
         }
+
+        
 
         public CR2WFile LoadDocumentAndGetFile(string filename)
         {
@@ -1115,7 +1125,7 @@ namespace WolvenKit
                         sf.Description = "Please specify a location to save the extracted files";
                         if (sf.ShowDialog() == DialogResult.OK)
                         {
-                            var ccf = new Cache.CollisionCache.CollisionCache(of.FileName);
+                            var ccf = new Cache.CollisionCache(of.FileName);
                             var outdir = sf.SelectedPath.EndsWith("\\") ? sf.SelectedPath : sf.SelectedPath + "\\";
                             foreach (var f in ccf.Files)
                             {

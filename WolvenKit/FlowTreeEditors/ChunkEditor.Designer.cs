@@ -69,6 +69,6 @@ namespace WolvenKit.FlowTreeEditors
 
         #endregion
 
-        private Label lblTitle;
+        protected Label lblTitle;
     }
 }

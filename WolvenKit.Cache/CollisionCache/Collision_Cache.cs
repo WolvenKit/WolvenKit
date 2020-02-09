@@ -10,7 +10,7 @@ using LZ4;
 using WolvenKit.Common;
 using WolvenKit.CR2W;
 
-namespace WolvenKit.Cache.CollisionCache
+namespace WolvenKit.Cache
 {
     public class CollisionCache : IWitcherArchiveType
     {
@@ -155,13 +155,15 @@ namespace WolvenKit.Cache.CollisionCache
             {
                 Name = fileName,
                 Bundle = this,
-                Unk1 = br.ReadUInt64(),
                 NameOffset = br.ReadUInt64(),
+                Unk2 = br.ReadUInt64(),
                 PageOFfset = br.ReadUInt32(),
                 ZSize = br.ReadUInt32(),
-                Unk2 = br.ReadUInt64(),
-                Unk3 = br.ReadUInt64(),
-                Unk4 = br.ReadUInt64(),
+                //ExtractedSize = br.ReadUInt64(),
+                Size = (long)br.ReadUInt64(),
+                //Unk3 = br.ReadUInt64(),
+                //Unk4 = br.ReadUInt64(),
+                guid = br.ReadBytes(16),
                 Unk5 = br.ReadUInt64(),
                 Unk6 = br.ReadUInt64(),
                 Comtype = br.ReadUInt64()

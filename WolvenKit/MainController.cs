@@ -76,6 +76,7 @@ namespace WolvenKit
         private BundleManager bundleManager;
         private BundleManager modbundleManager;
         private TextureManager textureManager;
+        private CollisionManager collisionManager;
         private TextureManager modTextureManager;
         private W3StringManager w3StringManager;
 
@@ -87,6 +88,7 @@ namespace WolvenKit
         public SoundManager ModSoundManager => modsoundmanager;
         public TextureManager TextureManager => textureManager;
         public TextureManager ModTextureManager => modTextureManager;
+        public CollisionManager CollisionManager => collisionManager;
 
         #endregion
 
@@ -294,6 +296,46 @@ namespace WolvenKit
                     }
                 }
                 #endregion
+
+                loadStatus = "Loading collision manager!";
+                #region Load collision manager
+                if (collisionManager == null)
+                {
+                    try
+                    {
+                        if (File.Exists(Path.Combine(ManagerCacheDir, "collision_cache.json")))
+                        {
+                            using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir, "collision_cache.json")))
+                            {
+                                JsonSerializer serializer = new JsonSerializer();
+                                serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                                serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+                                serializer.TypeNameHandling = TypeNameHandling.Auto;
+                                collisionManager = (CollisionManager)serializer.Deserialize(file, typeof(CollisionManager));
+                            }
+                        }
+                        else
+                        {
+                            collisionManager = new CollisionManager();
+                            collisionManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                            File.WriteAllText(Path.Combine(ManagerCacheDir, "collision_cache.json"), JsonConvert.SerializeObject(collisionManager, Formatting.None, new JsonSerializerSettings()
+                            {
+                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                                TypeNameHandling = TypeNameHandling.Auto
+                            }));
+                        }
+                    }
+                    catch (System.Exception)
+                    {
+                        if (File.Exists(Path.Combine(ManagerCacheDir, "collision_cache.json")))
+                            File.Delete(Path.Combine(ManagerCacheDir, "collision_cache.json"));
+                        collisionManager = new CollisionManager();
+                        collisionManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                    }
+                }
+                #endregion
+
                 loadStatus = "Loading mod texure manager!";
                 #region Load mod texture manager
                 if (modTextureManager == null)
