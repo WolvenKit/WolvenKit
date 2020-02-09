@@ -71,7 +71,7 @@ namespace WolvenKit.FlowTreeEditors
         public virtual void UpdateView()
         {
             lblTitle.Text = chunk.Name;
-            Height = lblTitle.Height;
+            Size = TextRenderer.MeasureText(lblTitle.Text, lblTitle.Font) + Margin.Size;
         }
 
         public virtual List<CPtr> GetConnections()

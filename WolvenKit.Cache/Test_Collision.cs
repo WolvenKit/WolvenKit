@@ -19,10 +19,10 @@ namespace WolvenKit.Cache
             {
                 if (of.ShowDialog() == DialogResult.OK)
                 {
-                    var ccf = new CollisionCache.CollisionCache(of.FileName);
+                    var ccf = new CollisionCache(of.FileName);
                     var fd = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),"CCTest");
                     ccf.Files.ForEach(x=> x.Extract(Path.Combine(fd,x.Name)));
-                    CollisionCache.CollisionCache.Write(Directory.GetFiles(fd,"*",SearchOption.AllDirectories).ToList().OrderByDescending(x=> new FileInfo(x).CreationTime).ToList(),of.FileName + "_regenerated");
+                    CollisionCache.Write(Directory.GetFiles(fd,"*",SearchOption.AllDirectories).ToList().OrderByDescending(x=> new FileInfo(x).CreationTime).ToList(),of.FileName + "_regenerated");
                     //IntenseTest(of.FileNames.ToList());
                     Console.ReadLine();
                 }
@@ -55,7 +55,7 @@ namespace WolvenKit.Cache
                 catch { }
                 Console.Title = "Reading: " + old + "!";
                 Console.WriteLine("-----------------------------------");
-                var sc = new CollisionCache.CollisionCache(old);
+                var sc = new CollisionCache(old);
                 foreach (var item in sc.Files)
                 {
                     item.Extract(clonedir + "\\" + item.Name);
@@ -71,7 +71,7 @@ namespace WolvenKit.Cache
                             orderedfiles.Add(ni);
                     }
                 }
-                CollisionCache.CollisionCache.Write(orderedfiles, workingdir + "\\" + filename + "_clone.cache");
+                CollisionCache.Write(orderedfiles, workingdir + "\\" + filename + "_clone.cache");
                 Console.WriteLine("-----------------------------------");
                 Console.WriteLine("Collision cache clone created!");
                 Console.WriteLine();

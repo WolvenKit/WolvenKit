@@ -319,11 +319,51 @@
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="DDSUtility.cs" />
     <Compile Include="discord.cs" />
+    <Compile Include="FlowTreeEditors\LinkEditor.cs" />
+    <Compile Include="FlowTreeEditors\Quest\QuestPhaseEditor.cs" />
+    <Compile Include="FlowTreeEditors\Quest\QuestPhaseInputEditor.cs" />
+    <Compile Include="FlowTreeEditors\Quest\QuestScriptBlockEditor.cs" />
+    <Compile Include="FlowTreeEditors\Scene\SceneChoiceEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Scene\SceneChoiceEditor.Designer.cs">
+      <DependentUpon>SceneChoiceEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Scene\SceneFlowConditionEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Scene\SceneFlowConditionEditor.Designer.cs">
+      <DependentUpon>SceneFlowConditionEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Scene\SceneLinkEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Scene\SceneLinkEditor.Designer.cs">
+      <DependentUpon>SceneLinkEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Scene\SceneRandomizerEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Scene\SceneRandomizerEditor.Designer.cs">
+      <DependentUpon>SceneRandomizerEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Scene\SceneSectionEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Scene\SceneSectionEditor.Designer.cs">
+      <DependentUpon>SceneSectionEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmLoading.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmLoading.Designer.cs">
       <DependentUpon>frmLoading.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmChunkFlowDiagram.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmChunkFlowDiagram.Designer.cs">
+      <DependentUpon>frmChunkFlowDiagram.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmStringsGuiImporterIDDialog.cs">
       <SubType>Form</SubType>
@@ -446,36 +486,6 @@
       <DependentUpon>ChunkEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="FlowTreeEditors\MoveEditorArgs.cs" />
-    <Compile Include="FlowTreeEditors\SceneChoiceEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\SceneChoiceEditor.Designer.cs">
-      <DependentUpon>SceneChoiceEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FlowTreeEditors\SceneFlowConditionEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\SceneFlowConditionEditor.Designer.cs">
-      <DependentUpon>SceneFlowConditionEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FlowTreeEditors\SceneLinkEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\SceneLinkEditor.Designer.cs">
-      <DependentUpon>SceneLinkEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FlowTreeEditors\SceneRandomizerEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\SceneRandomizerEditor.Designer.cs">
-      <DependentUpon>SceneRandomizerEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FlowTreeEditors\SceneSectionEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\SceneSectionEditor.Designer.cs">
-      <DependentUpon>SceneSectionEditor.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\frmAddChunk.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -493,12 +503,6 @@
     </Compile>
     <Compile Include="Forms\frmAssetBrowser.Designer.cs">
       <DependentUpon>frmAssetBrowser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmChunkFlowDiagram.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmChunkFlowDiagram.Designer.cs">
-      <DependentUpon>frmChunkFlowDiagram.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmChunkList.cs">
       <SubType>Form</SubType>
@@ -581,18 +585,18 @@
     <Compile Include="SortableBindinglist.cs" />
     <Compile Include="Win32.cs" />
     <Compile Include="WKPackage.cs" />
+    <EmbeddedResource Include="FlowTreeEditors\Scene\SceneFlowConditionEditor.resx">
+      <DependentUpon>SceneFlowConditionEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FlowTreeEditors\Scene\SceneLinkEditor.resx">
+      <DependentUpon>SceneLinkEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FlowTreeEditors\ChunkEditor.resx">
       <DependentUpon>ChunkEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FlowTreeEditors\SceneFlowConditionEditor.resx">
-      <DependentUpon>SceneFlowConditionEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FlowTreeEditors\SceneLinkEditor.resx">
-      <DependentUpon>SceneLinkEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmAddChunk.resx">
       <DependentUpon>frmAddChunk.cs</DependentUpon>
@@ -605,9 +609,6 @@
     <EmbeddedResource Include="Forms\frmAssetBrowser.resx">
       <DependentUpon>frmAssetBrowser.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmChunkFlowDiagram.resx">
-      <DependentUpon>frmChunkFlowDiagram.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmChunkList.resx">
       <DependentUpon>frmChunkList.cs</DependentUpon>
@@ -659,6 +660,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmPackSettings.resx">
       <DependentUpon>frmPackSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmChunkFlowDiagram.resx">
+      <DependentUpon>frmChunkFlowDiagram.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmRenameDialog.resx">
       <DependentUpon>frmRenameDialog.cs</DependentUpon>
