@@ -89,8 +89,11 @@ namespace WolvenKit.Cache
                         } while (!Enumerable.SequenceEqual(qBuffer.ToArray(), MAGIC) && testnumberofbytes > 0);
 
                         // reposition stream
-                        var fileoffset = Math.Max(0, (int)ms.Position - MAGIC.Length);
                         ms.Seek(0, SeekOrigin.Begin);
+                        var fileoffset = 0;
+                        if (testnumberofbytes > 0)
+                            Math.Max(0, (int)ms.Position - MAGIC.Length);
+                       
 
                         // save header
                         var buffer = new byte[fileoffset];
