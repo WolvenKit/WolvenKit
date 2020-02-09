@@ -100,7 +100,7 @@ namespace WolvenKit.CR2W.Types
             return list;
         }
     }
-
+    
     public class CQuestScriptBlock : CStorySceneScript
     {
         public CQuestScriptBlock(CR2WFile cr2w) :
@@ -113,4 +113,5 @@ namespace WolvenKit.CR2W.Types
             return new CQuestScriptBlock(cr2w);
         }
     }
+
 }
