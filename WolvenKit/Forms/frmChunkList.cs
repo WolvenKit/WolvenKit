@@ -1,23 +1,28 @@
-﻿using System;
+﻿using BrightIdeasSoftware;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.CR2W;
+using WolvenKit.Services;
 
 namespace WolvenKit
 {
-    public partial class frmChunkList : DockContent
+    public partial class frmChunkList : DockContent, IThemedContent
     {
-        private CR2WFile file;
-
+        private CR2WFile file;        
+            
         public frmChunkList()
         {
             InitializeComponent();
-            limitTB.Enabled = limitCB.Checked;
+            ApplyCustomTheme();
+            //limitTB.Enabled = limitCB.Checked;
             treeListView.ItemSelectionChanged += chunkListView_ItemSelectionChanged;
 
             treeListView.CanExpandGetter = delegate (object x) {
-                return File.chunks.Where(_ => _.ParentChunkId - 1 == ((CR2WChunk)x).ChunkIndex).Any();
+                return File.chunks.Any(_ => _.ParentChunkId - 1 == ((CR2WChunk)x).ChunkIndex);
             };
             treeListView.ChildrenGetter = delegate (object x) {
                 return File.chunks.Where(_ => _.ParentChunkId - 1 == ((CR2WChunk)x).ChunkIndex);
@@ -39,25 +44,26 @@ namespace WolvenKit
         public void UpdateList(string keyword = "")
         {
             var limit = -1;
-            if(limitCB.Checked)
-            {
-                int.TryParse(limitTB.Text,out limit);
-            }
+            //if(limitCB.Checked)
+            //{
+            //    int.TryParse(limitTB.Text,out limit);
+            //}
             if (File == null)
                 return;
             if(!string.IsNullOrEmpty(keyword))
             {
                 if (limit != -1)
                 {
-                    treeListView.Objects = File.chunks.Where(x => x.Name.ToUpper().Contains(searchTB.Text.ToUpper())).Take(limit);
+                    //treeListView.Objects = File.chunks.Where(x => x.Name.ToUpper().Contains(toolStripSearchBox.Text.ToUpper())).Take(limit);
                 }
                 else
                 {
-                    treeListView.Objects = File.chunks.Where(x => x.Name.ToUpper().Contains(searchTB.Text.ToUpper()));
+                    this.treeListView.ModelFilter = TextMatchFilter.Contains(treeListView, toolStripSearchBox.Text.ToUpper());
                 }
             }
             else
             {
+                treeListView.ModelFilter = null;
                 treeListView.Roots = File.chunks.Where(_ => _.Parent == null).ToList();
             }
             treeListView.ExpandAll();
@@ -153,29 +159,62 @@ namespace WolvenKit
 
         private void searchBTN_Click(object sender, EventArgs e)
         {
-            UpdateList(searchTB.Text);
+            UpdateList(toolStripSearchBox.Text);
         }
 
         private void resetBTN_Click(object sender, EventArgs e)
         {
+            toolStripSearchBox.Clear();
             UpdateList();
         }
 
         private void limitCB_CheckStateChanged(object sender, EventArgs e)
         {
-            limitTB.Enabled = limitCB.Checked;
+            //limitTB.Enabled = limitCB.Checked;
         }
 
         private void searchTB_KeyUp(object sender, KeyEventArgs e)
         {
-            if(e.KeyValue == (int)Keys.Enter)
-                UpdateList(searchTB.Text);
+            //if(e.KeyValue == (int)Keys.Enter)
+                UpdateList(toolStripSearchBox.Text);
         }
 
         private void listView_ItemsChanged(object sender, BrightIdeasSoftware.ItemsChangedEventArgs e)
         {
             MainController.Get().ProjectUnsaved = true;
         }
+        
+        public void ApplyCustomTheme()
+        {
+            var theme = MainController.Get().GetTheme();
+            MainController.Get().ToolStripExtender.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
 
+            this.treeListView.BackColor = theme.ColorPalette.TabButtonSelectedInactivePressed.Background; 
+            toolStripSearchBox.BackColor = theme.ColorPalette.ToolWindowCaptionButtonInactiveHovered.Background; 
+
+            this.treeListView.ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text;
+            HeaderFormatStyle hfs = new HeaderFormatStyle()
+            {
+                Normal = new HeaderStateStyle()
+                {
+                    BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background,
+                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
+                },
+                Hot = new HeaderStateStyle()
+                {
+                    BackColor = theme.ColorPalette.OverflowButtonHovered.Background,
+                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
+                },
+                Pressed = new HeaderStateStyle()
+                {
+                    BackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background,
+                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
+                }
+            };
+            this.treeListView.HeaderFormatStyle = hfs;
+            treeListView.UnfocusedSelectedBackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background;
+            
+            
+        }
     }
 }

@@ -62,6 +62,7 @@ namespace WolvenKit
             this.treeView.AllColumns.Add(this.colValue);
             this.treeView.AllColumns.Add(this.colType);
             this.treeView.AlternateRowBackColor = System.Drawing.Color.LightCyan;
+            this.treeView.BackColor = System.Drawing.SystemColors.Window;
             this.treeView.CellEditUseWholeCell = false;
             this.treeView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colName,
@@ -101,6 +102,7 @@ namespace WolvenKit
             // colType
             // 
             this.colType.AspectName = "Type";
+            this.colType.FillsFreeSpace = true;
             this.colType.Text = "Type";
             this.colType.Width = 100;
             // 

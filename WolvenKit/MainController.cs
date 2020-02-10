@@ -17,9 +17,17 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using WolvenKit.Mod;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace WolvenKit
 {
+    public enum EColorThemes
+    {
+        VS2015Light = 0,
+        VS2015Dark = 1,
+        VS2015Blue = 2,
+    }
+
     public class MainController : IVariableEditor, ILocalizedStringSource, INotifyPropertyChanged
     {
         private static MainController mainController;
@@ -32,6 +40,11 @@ namespace WolvenKit
         public string InitialModProject = "";
         public string InitialWKP = "";
 
+        // Color Themes
+        public VisualStudioToolStripExtender ToolStripExtender { get; set; }
+        private readonly List<ThemeBase> _themesList = new List<ThemeBase>() { new VS2015LightTheme(), new VS2015DarkTheme(), new VS2015BlueTheme() };
+        public ThemeBase GetTheme() => _themesList[(int)Configuration.ColorTheme];
+       
         public event PropertyChangedEventHandler PropertyChanged;
 
         private string _projectstatus = "Idle";
