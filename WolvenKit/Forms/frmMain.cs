@@ -423,7 +423,7 @@ namespace WolvenKit
                 case ".txt":
                     ShellExecute(fullpath);
                     break;
-                case ".wav":
+                case ".wem":
                     {
                         using (var sp = new frmAudioPlayer(fullpath))
                         {

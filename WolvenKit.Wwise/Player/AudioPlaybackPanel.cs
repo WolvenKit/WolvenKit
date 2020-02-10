@@ -61,7 +61,7 @@ namespace NAudioDemo.AudioPlaybackDemo
             get { return (IOutputDevicePlugin)comboBoxOutputDevice.SelectedItem; }
         }
 
-        private void OnButtonPlayClick(object sender, EventArgs e)
+        public void OnButtonPlayClick(object sender, EventArgs e)
         {
             if (!SelectedOutputDevicePlugin.IsAvailable)
             {

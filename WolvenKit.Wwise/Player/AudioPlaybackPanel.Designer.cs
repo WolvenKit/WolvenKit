@@ -36,7 +36,6 @@
             this.comboBoxOutputDevice = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButtonOpenFile = new System.Windows.Forms.ToolStripButton();
             this.buttonPlay = new System.Windows.Forms.ToolStripButton();
             this.buttonPause = new System.Windows.Forms.ToolStripButton();
             this.buttonStop = new System.Windows.Forms.ToolStripButton();
@@ -48,11 +47,11 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.waveformPainter2 = new NAudio.Gui.WaveformPainter();
             this.waveformPainter1 = new NAudio.Gui.WaveformPainter();
             this.volumeMeter2 = new NAudio.Gui.VolumeMeter();
             this.volumeMeter1 = new NAudio.Gui.VolumeMeter();
             this.volumeSlider1 = new NAudio.Gui.VolumeSlider();
+            this.waveformPainter2 = new NAudio.Gui.WaveformPainter();
             this.groupBoxDriverModel.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarPosition)).BeginInit();
@@ -61,7 +60,9 @@
             // comboBoxLatency
             // 
             this.comboBoxLatency.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxLatency.BackColor = System.Drawing.SystemColors.InactiveCaptionText;
             this.comboBoxLatency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxLatency.ForeColor = System.Drawing.SystemColors.Menu;
             this.comboBoxLatency.FormattingEnabled = true;
             this.comboBoxLatency.Location = new System.Drawing.Point(442, 27);
             this.comboBoxLatency.Name = "comboBoxLatency";
@@ -72,6 +73,7 @@
             // 
             this.groupBoxDriverModel.Controls.Add(this.panelOutputDeviceSettings);
             this.groupBoxDriverModel.Controls.Add(this.comboBoxOutputDevice);
+            this.groupBoxDriverModel.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.groupBoxDriverModel.Location = new System.Drawing.Point(12, 30);
             this.groupBoxDriverModel.Name = "groupBoxDriverModel";
             this.groupBoxDriverModel.Size = new System.Drawing.Size(263, 288);
@@ -88,7 +90,9 @@
             // 
             // comboBoxOutputDevice
             // 
+            this.comboBoxOutputDevice.BackColor = System.Drawing.SystemColors.InactiveCaptionText;
             this.comboBoxOutputDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxOutputDevice.ForeColor = System.Drawing.SystemColors.Menu;
             this.comboBoxOutputDevice.FormattingEnabled = true;
             this.comboBoxOutputDevice.Location = new System.Drawing.Point(6, 24);
             this.comboBoxOutputDevice.Name = "comboBoxOutputDevice";
@@ -99,6 +103,7 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.label1.Location = new System.Drawing.Point(523, 30);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(20, 13);
@@ -108,7 +113,6 @@
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonOpenFile,
             this.buttonPlay,
             this.buttonPause,
             this.buttonStop,
@@ -121,15 +125,6 @@
             this.toolStrip1.Size = new System.Drawing.Size(591, 25);
             this.toolStrip1.TabIndex = 15;
             this.toolStrip1.Text = "toolStrip1";
-            // 
-            // toolStripButtonOpenFile
-            // 
-            this.toolStripButtonOpenFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButtonOpenFile.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonOpenFile.Name = "toolStripButtonOpenFile";
-            this.toolStripButtonOpenFile.Size = new System.Drawing.Size(61, 22);
-            this.toolStripButtonOpenFile.Text = "Open File";
-            this.toolStripButtonOpenFile.Click += new System.EventHandler(this.OnOpenFileClick);
             // 
             // buttonPlay
             // 
@@ -205,6 +200,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.label2.Location = new System.Drawing.Point(333, 30);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(103, 13);
@@ -215,30 +211,19 @@
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
+            this.label3.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.label3.Location = new System.Drawing.Point(333, 57);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(45, 13);
             this.label3.TabIndex = 17;
             this.label3.Text = "Volume:";
             // 
-            // waveformPainter2
-            // 
-            this.waveformPainter2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.waveformPainter2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.waveformPainter2.ForeColor = System.Drawing.Color.SaddleBrown;
-            this.waveformPainter2.Location = new System.Drawing.Point(281, 205);
-            this.waveformPainter2.Name = "waveformPainter2";
-            this.waveformPainter2.Size = new System.Drawing.Size(300, 60);
-            this.waveformPainter2.TabIndex = 19;
-            this.waveformPainter2.Text = "waveformPainter1";
-            // 
             // waveformPainter1
             // 
             this.waveformPainter1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.waveformPainter1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.waveformPainter1.ForeColor = System.Drawing.Color.SaddleBrown;
+            this.waveformPainter1.BackColor = System.Drawing.Color.Black;
+            this.waveformPainter1.ForeColor = System.Drawing.Color.LawnGreen;
             this.waveformPainter1.Location = new System.Drawing.Point(281, 141);
             this.waveformPainter1.Name = "waveformPainter1";
             this.waveformPainter1.Size = new System.Drawing.Size(300, 60);
@@ -249,7 +234,7 @@
             // 
             this.volumeMeter2.Amplitude = 0F;
             this.volumeMeter2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.volumeMeter2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.volumeMeter2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.volumeMeter2.Location = new System.Drawing.Point(567, 30);
             this.volumeMeter2.MaxDb = 3F;
             this.volumeMeter2.MinDb = -60F;
@@ -262,7 +247,7 @@
             // 
             this.volumeMeter1.Amplitude = 0F;
             this.volumeMeter1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.volumeMeter1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.volumeMeter1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.volumeMeter1.Location = new System.Drawing.Point(549, 30);
             this.volumeMeter1.MaxDb = 3F;
             this.volumeMeter1.MinDb = -60F;
@@ -280,10 +265,23 @@
             this.volumeSlider1.TabIndex = 11;
             this.volumeSlider1.VolumeChanged += new System.EventHandler(this.OnVolumeSliderChanged);
             // 
+            // waveformPainter2
+            // 
+            this.waveformPainter2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.waveformPainter2.BackColor = System.Drawing.Color.Black;
+            this.waveformPainter2.ForeColor = System.Drawing.Color.LawnGreen;
+            this.waveformPainter2.Location = new System.Drawing.Point(281, 205);
+            this.waveformPainter2.Name = "waveformPainter2";
+            this.waveformPainter2.Size = new System.Drawing.Size(300, 60);
+            this.waveformPainter2.TabIndex = 19;
+            this.waveformPainter2.Text = "waveformPainter1";
+            // 
             // AudioPlaybackPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Desktop;
             this.Controls.Add(this.waveformPainter2);
             this.Controls.Add(this.waveformPainter1);
             this.Controls.Add(this.volumeMeter2);
@@ -320,7 +318,6 @@
         private System.Windows.Forms.ToolStripButton buttonStop;
         private System.Windows.Forms.TrackBar trackBarPosition;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.ToolStripButton toolStripButtonOpenFile;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.ToolStripLabel labelCurrentTime;
@@ -330,8 +327,8 @@
         private NAudio.Gui.VolumeMeter volumeMeter1;
         private NAudio.Gui.VolumeMeter volumeMeter2;
         private NAudio.Gui.WaveformPainter waveformPainter1;
-        private NAudio.Gui.WaveformPainter waveformPainter2;
         private System.Windows.Forms.Panel panelOutputDeviceSettings;
         private System.Windows.Forms.ComboBox comboBoxOutputDevice;
+        private NAudio.Gui.WaveformPainter waveformPainter2;
     }
 }
