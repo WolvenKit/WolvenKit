@@ -195,6 +195,7 @@ namespace WolvenKit
             this.treeImages.Images.SetKeyName(10, "w2scene");
             this.treeImages.Images.SetKeyName(11, "w2p");
             this.treeImages.Images.SetKeyName(12, "w2rig");
+            this.treeImages.Images.SetKeyName(13, "FolderOpened");
             // 
             // pathPanel
             // 

@@ -66,7 +66,11 @@ namespace WolvenKit
                 treeListView.ModelFilter = null;
                 treeListView.Roots = File.chunks.Where(_ => _.Parent == null).ToList();
             }
-            treeListView.ExpandAll();
+            if (treeListView.Items.Count < 1000)
+            {
+                treeListView.ExpandAll();
+            }
+            
         }
 
         private void chunkListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
