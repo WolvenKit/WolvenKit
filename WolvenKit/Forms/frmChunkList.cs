@@ -12,7 +12,10 @@ namespace WolvenKit
 {
     public partial class frmChunkList : DockContent, IThemedContent
     {
-        private CR2WFile file;        
+        private CR2WFile file;
+
+
+        private List<int> _parentIds { get; set; } = new List<int>();
             
         public frmChunkList()
         {
@@ -20,12 +23,15 @@ namespace WolvenKit
             ApplyCustomTheme();
             //limitTB.Enabled = limitCB.Checked;
             treeListView.ItemSelectionChanged += chunkListView_ItemSelectionChanged;
+            
 
             treeListView.CanExpandGetter = delegate (object x) {
-                return File.chunks.Any(_ => _.ParentChunkId - 1 == ((CR2WChunk)x).ChunkIndex);
+                return _parentIds.Any(_ => _ - 1 == ((CR2WChunk)x).ChunkIndex);
             };
             treeListView.ChildrenGetter = delegate (object x) {
-                return File.chunks.Where(_ => _.ParentChunkId - 1 == ((CR2WChunk)x).ChunkIndex);
+                var childIdxList = Enumerable.Range(0, _parentIds.Count).Where(i => _parentIds[i] -1 == ((CR2WChunk)x).ChunkIndex).ToList();
+                var results = File.chunks.Where(_ => childIdxList.Contains(_.ChunkIndex)).ToList();
+                return results;
             };
         }
 
@@ -36,7 +42,14 @@ namespace WolvenKit
             {
                 file = value;
                 UpdateList();
+                UpdateHelperList();
             }
+        }
+
+        private void UpdateHelperList()
+        {
+            if (File != null)
+                _parentIds = File.chunks.Select(_ => (int)_.ParentChunkId).ToList();
         }
 
         public event EventHandler<SelectChunkArgs> OnSelectChunk;
@@ -66,7 +79,7 @@ namespace WolvenKit
                 treeListView.ModelFilter = null;
                 treeListView.Roots = File.chunks.Where(_ => _.Parent == null).ToList();
             }
-            if (treeListView.Items.Count < 1000)
+            if (File.chunks.Count < 1000)
             {
                 treeListView.ExpandAll();
             }
