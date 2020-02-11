@@ -47,6 +47,8 @@ namespace WolvenKit
             this.exeSearcherSlave = new System.ComponentModel.BackgroundWorker();
             this.W3exeTickLBL = new System.Windows.Forms.Label();
             this.WCCexeTickLBL = new System.Windows.Forms.Label();
+            this.labelTheme = new System.Windows.Forms.Label();
+            this.comboBoxTheme = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // txExecutablePath
@@ -83,7 +85,7 @@ namespace WolvenKit
             // 
             this.btSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btSave.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSave.Location = new System.Drawing.Point(483, 108);
+            this.btSave.Location = new System.Drawing.Point(483, 181);
             this.btSave.Name = "btSave";
             this.btSave.Size = new System.Drawing.Size(75, 23);
             this.btSave.TabIndex = 3;
@@ -95,7 +97,7 @@ namespace WolvenKit
             // 
             this.lblLanguage.AutoSize = true;
             this.lblLanguage.Enabled = false;
-            this.lblLanguage.Location = new System.Drawing.Point(12, 98);
+            this.lblLanguage.Location = new System.Drawing.Point(12, 102);
             this.lblLanguage.Name = "lblLanguage";
             this.lblLanguage.Size = new System.Drawing.Size(124, 13);
             this.lblLanguage.TabIndex = 5;
@@ -105,7 +107,7 @@ namespace WolvenKit
             // 
             this.lblVoiceLanguage.AutoSize = true;
             this.lblVoiceLanguage.Enabled = false;
-            this.lblVoiceLanguage.Location = new System.Drawing.Point(153, 98);
+            this.lblVoiceLanguage.Location = new System.Drawing.Point(12, 128);
             this.lblVoiceLanguage.Name = "lblVoiceLanguage";
             this.lblVoiceLanguage.Size = new System.Drawing.Size(140, 13);
             this.lblVoiceLanguage.TabIndex = 7;
@@ -145,7 +147,7 @@ namespace WolvenKit
             // 
             this.btCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btCancel.Location = new System.Drawing.Point(402, 108);
+            this.btCancel.Location = new System.Drawing.Point(402, 181);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(75, 23);
             this.btCancel.TabIndex = 11;
@@ -155,7 +157,7 @@ namespace WolvenKit
             // txTextLanguage
             // 
             this.txTextLanguage.Enabled = false;
-            this.txTextLanguage.Location = new System.Drawing.Point(12, 117);
+            this.txTextLanguage.Location = new System.Drawing.Point(163, 95);
             this.txTextLanguage.Name = "txTextLanguage";
             this.txTextLanguage.Size = new System.Drawing.Size(135, 20);
             this.txTextLanguage.TabIndex = 4;
@@ -163,7 +165,7 @@ namespace WolvenKit
             // txVoiceLanguage
             // 
             this.txVoiceLanguage.Enabled = false;
-            this.txVoiceLanguage.Location = new System.Drawing.Point(153, 117);
+            this.txVoiceLanguage.Location = new System.Drawing.Point(163, 125);
             this.txVoiceLanguage.Name = "txVoiceLanguage";
             this.txVoiceLanguage.Size = new System.Drawing.Size(135, 20);
             this.txVoiceLanguage.TabIndex = 6;
@@ -198,13 +200,34 @@ namespace WolvenKit
             this.WCCexeTickLBL.TabIndex = 14;
             this.WCCexeTickLBL.Text = "X";
             // 
+            // labelTheme
+            // 
+            this.labelTheme.AutoSize = true;
+            this.labelTheme.Enabled = false;
+            this.labelTheme.Location = new System.Drawing.Point(17, 165);
+            this.labelTheme.Name = "labelTheme";
+            this.labelTheme.Size = new System.Drawing.Size(67, 13);
+            this.labelTheme.TabIndex = 15;
+            this.labelTheme.Text = "Color Theme";
+            // 
+            // comboBoxTheme
+            // 
+            this.comboBoxTheme.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxTheme.FormattingEnabled = true;
+            this.comboBoxTheme.Location = new System.Drawing.Point(90, 162);
+            this.comboBoxTheme.Name = "comboBoxTheme";
+            this.comboBoxTheme.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxTheme.TabIndex = 16;
+            // 
             // frmSettings
             // 
             this.AcceptButton = this.btSave;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
-            this.ClientSize = new System.Drawing.Size(588, 143);
+            this.ClientSize = new System.Drawing.Size(588, 216);
+            this.Controls.Add(this.comboBoxTheme);
+            this.Controls.Add(this.labelTheme);
             this.Controls.Add(this.WCCexeTickLBL);
             this.Controls.Add(this.W3exeTickLBL);
             this.Controls.Add(this.btCancel);
@@ -245,5 +268,7 @@ namespace WolvenKit
         private BackgroundWorker exeSearcherSlave;
         private Label W3exeTickLBL;
         private Label WCCexeTickLBL;
+        private Label labelTheme;
+        private ComboBox comboBoxTheme;
     }
 }

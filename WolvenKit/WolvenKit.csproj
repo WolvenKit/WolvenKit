@@ -319,10 +319,21 @@
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="DDSUtility.cs" />
     <Compile Include="discord.cs" />
-    <Compile Include="FlowTreeEditors\LinkEditor.cs" />
-    <Compile Include="FlowTreeEditors\Quest\QuestPhaseEditor.cs" />
-    <Compile Include="FlowTreeEditors\Quest\QuestPhaseInputEditor.cs" />
-    <Compile Include="FlowTreeEditors\Quest\QuestScriptBlockEditor.cs" />
+    <Compile Include="Extensions\CustomFloatWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\LinkEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Quest\QuestPhaseEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Quest\QuestPhaseInputEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Quest\QuestScriptBlockEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="FlowTreeEditors\Scene\SceneChoiceEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -383,6 +394,12 @@
     <Compile Include="Forms\frmWelcome.Designer.cs">
       <DependentUpon>frmWelcome.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\IThemedContent.cs" />
     <Compile Include="WitcherListViewItem.cs" />
     <Compile Include="Commonfunctions.cs" />
     <Compile Include="Forms\frmAbout.cs">
@@ -705,14 +722,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
@@ -729,18 +741,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Open_6529.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\NewSolutionFolder_6289.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Save_6530.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Saveall_6518.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\gear_16xLG.png" />
@@ -809,8 +809,6 @@
     <None Include="Resources\geralt.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Editing-Collapse-icon.png" />
-    <None Include="Resources\Editing-Expand-icon.png" />
     <None Include="Resources\mail.png" />
     <None Include="Resources\player_record.png" />
     <Content Include="..\Libs\Irrlicht.dll">
@@ -836,6 +834,24 @@
     <Content Include="discord-rpc.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\Minimize_16x.png" />
+    <None Include="Resources\ExpandAll_16x.png" />
+    <None Include="Resources\CollapseAll_16x.png" />
+    <None Include="Resources\SaveStatusBar1_16x_c.png" />
+    <None Include="Resources\FolderOpened_16x.png" />
+    <None Include="Resources\BlankFile_16x.png" />
+    <None Include="Resources\OpenFolder_16x.png" />
+    <None Include="Resources\OpenFile_16x.png" />
+    <None Include="Resources\Save_16x.png" />
+    <None Include="Resources\SaveAll_16x.png" />
+    <None Include="Resources\NewSolutionFolder_16x.png" />
+    <None Include="Resources\SaveStatusBar1_16x.png" />
+    <None Include="Resources\Output_16x.png" />
+    <None Include="Resources\Property_16x.png" />
+    <None Include="Resources\RemoteServer_16x.png" />
+    <None Include="Resources\Settings_Inverse_16x.png" />
+    <Content Include="Resources\ExpandIcon.png" />
+    <None Include="Resources\Refresh_16x.png" />
     <Content Include="wolven_kit_icon.ico" />
     <Content Include="Licenses\License.doboz4net.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -858,7 +874,6 @@
     <Content Include="Licenses\License.W3SaveGameEditor.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\ExpandIcon.png" />
     <None Include="Resources\ExitIcon.png" />
     <None Include="Resources\LayerGroupVisibled.png" />
     <None Include="Resources\wcc_eula.rtf" />
@@ -1298,6 +1313,7 @@
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
