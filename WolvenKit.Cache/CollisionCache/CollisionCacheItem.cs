@@ -21,14 +21,14 @@ namespace WolvenKit.Cache
         public uint ZSize { get; set; }
         public long PageOFfset { get; set; }
         public string CompressionType => "Zlib";
-
-        public ulong NameOffset;
+        public uint NameOffset;
+        public uint Unk1; //?
         public ulong Unk2; //Null
-        //public ulong ExtractedSize; 
+        public uint Unk3; 
         public byte[] guid;
-        public ulong Unk5;
-        public ulong Unk6;
-        public ulong Comtype; //TODO: Investigate this. 2 = mesh, 3 = redcloth, 4 = redapex
+        public byte[] guid2;
+        public ulong Comtype; //TODO: Investigate this. 2 = mesh, 3 = redcloth, 4 = redapex, 5 = reddest
+        public byte[] Tail;
 
         List<byte> REDheader = new List<byte>();
         /*
@@ -40,7 +40,7 @@ namespace WolvenKit.Cache
          * ... dynamic number of items
          * 
          * Uint32 FileSize; // not always :(
-         * byte unkx ?
+         * byte unk9 ?
          */
 
         public void Extract(Stream output)
@@ -55,6 +55,7 @@ namespace WolvenKit.Cache
                 switch (Comtype)
                 {
                     case 2:     // w2mesh: NXS mesh
+                    case 5:     // reddest: NXS mesh
                         MAGIC = new byte[] { 0x4e, 0x58, 0x53 };
                         break;
                     case 3:     // redcloth: apb
@@ -89,15 +90,14 @@ namespace WolvenKit.Cache
                         } while (!Enumerable.SequenceEqual(qBuffer.ToArray(), MAGIC) && testnumberofbytes > 0);
 
                         // reposition stream
-                        ms.Seek(0, SeekOrigin.Begin);
-                        var fileoffset = 0;
+                        var fileBegin = 0;
                         if (testnumberofbytes > 0)
-                            Math.Max(0, (int)ms.Position - MAGIC.Length);
-                       
+                            fileBegin = Math.Max(0, (int)ms.Position - MAGIC.Length);
+                        ms.Seek(0, SeekOrigin.Begin);
 
                         // save header
-                        var buffer = new byte[fileoffset];
-                        ms.Read(buffer, 0, fileoffset);
+                        var buffer = new byte[fileBegin];
+                        ms.Read(buffer, 0, fileBegin);
                         REDheader.AddRange(buffer);
 
                         ms.CopyTo(output);
@@ -114,7 +114,8 @@ namespace WolvenKit.Cache
         {
             switch (Comtype)
             {
-                case 2: 
+                case 2:
+                case 5:
                     filename = Path.ChangeExtension(filename, "nxs"); 
                     break;
                 case 3: 

@@ -155,18 +155,18 @@ namespace WolvenKit.Cache
             {
                 Name = fileName,
                 Bundle = this,
-                NameOffset = br.ReadUInt64(),
-                Unk2 = br.ReadUInt64(),
+
+                NameOffset = br.ReadUInt32(),
+                Unk1 = br.ReadUInt32(),
+                Unk2 = br.ReadUInt64(), //null
                 PageOFfset = br.ReadUInt32(),
                 ZSize = br.ReadUInt32(),
-                //ExtractedSize = br.ReadUInt64(),
-                Size = (long)br.ReadUInt64(),
-                //Unk3 = br.ReadUInt64(),
-                //Unk4 = br.ReadUInt64(),
+                Size = (long)br.ReadUInt32(),
+                Unk3 = br.ReadUInt32(),
                 guid = br.ReadBytes(16),
-                Unk5 = br.ReadUInt64(),
-                Unk6 = br.ReadUInt64(),
-                Comtype = br.ReadUInt64()
+                guid2 = br.ReadBytes(16),
+                Comtype = br.ReadByte(),
+                Tail = br.ReadBytes(7)
             }))
             {
                 Console.WriteLine("Filename: " + ci.Name);
