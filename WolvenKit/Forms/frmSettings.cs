@@ -225,14 +225,16 @@ Would you like to perform this patch?", "wcc_lite faster patch", MessageBoxButto
                     {
                         if (programName.ToString().Contains("Witcher 3 Mod Tools"))
                         {
-                            wcc = Directory.GetFiles(installLocation.ToString(), "wcc_lite.exe",
-                                SearchOption.AllDirectories).First();
+                            if (Directory.Exists(installLocation.ToString()))
+                                wcc = Directory.GetFiles(installLocation.ToString(), "wcc_lite.exe",
+                                    SearchOption.AllDirectories).First();
                         }
 
                         if (programName.ToString().Contains("The Witcher 3 - Wild Hunt") ||
                             programName.ToString().Contains("The Witcher 3: Wild Hunt"))
                         {
-                            w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe",
+                            if (Directory.Exists(installLocation.ToString()))
+                                w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe",
                                 SearchOption.AllDirectories).First();
                         }
                     }

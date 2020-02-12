@@ -42,7 +42,6 @@ namespace WolvenKit
             {
                 file = value;
                 UpdateList();
-                UpdateHelperList();
             }
         }
 
@@ -56,6 +55,7 @@ namespace WolvenKit
 
         public void UpdateList(string keyword = "")
         {
+            UpdateHelperList();
             var limit = -1;
             //if(limitCB.Checked)
             //{
