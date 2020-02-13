@@ -6,6 +6,19 @@ using System.Threading.Tasks;
 
 namespace WolvenKit.Common.Wcc
 {
+    public enum EImportable
+    {
+        bmp,
+        png,
+        jpg,
+        tga,
+        dds,
+        apb,
+        fbx,
+        nxs,
+        re
+    };
+
     public enum WFR
     {
         WFR_Error = -1,

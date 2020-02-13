@@ -224,7 +224,7 @@ namespace WolvenKit.Common.Wcc
 
         /*
         Supported resource types and formats:
-            xbm(2D Texture) importable from 5 file format(s):
+            (2D Texture) importable from 5 file format(s):
                 dds: DirectDraw Surface
                 bmp: Windows Bitmap
                 jpg: Joint Photographics Experts Group
