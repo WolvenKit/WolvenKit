@@ -195,6 +195,7 @@ namespace WolvenKit
             this.treeImages.Images.SetKeyName(10, "w2scene");
             this.treeImages.Images.SetKeyName(11, "w2p");
             this.treeImages.Images.SetKeyName(12, "w2rig");
+            this.treeImages.Images.SetKeyName(13, "FolderOpened");
             // 
             // pathPanel
             // 
@@ -345,7 +346,7 @@ namespace WolvenKit
             this.clearSearch.BackgroundImage = global::WolvenKit.Properties.Resources.ExitIcon;
             this.clearSearch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.clearSearch.Location = new System.Drawing.Point(366, 70);
-            this.clearSearch.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.clearSearch.Margin = new System.Windows.Forms.Padding(2);
             this.clearSearch.Name = "clearSearch";
             this.clearSearch.Size = new System.Drawing.Size(22, 24);
             this.clearSearch.TabIndex = 18;
@@ -376,7 +377,7 @@ namespace WolvenKit
             // 
             this.caseCheckBox.AutoSize = true;
             this.caseCheckBox.Location = new System.Drawing.Point(266, 97);
-            this.caseCheckBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.caseCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.caseCheckBox.Name = "caseCheckBox";
             this.caseCheckBox.Size = new System.Drawing.Size(94, 17);
             this.caseCheckBox.TabIndex = 23;
@@ -518,7 +519,7 @@ namespace WolvenKit
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.fileSplitContainer.Location = new System.Drawing.Point(9, 120);
-            this.fileSplitContainer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.fileSplitContainer.Margin = new System.Windows.Forms.Padding(2);
             this.fileSplitContainer.Name = "fileSplitContainer";
             // 
             // fileSplitContainer.Panel1

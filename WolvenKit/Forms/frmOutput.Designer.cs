@@ -45,6 +45,7 @@ namespace WolvenKit
             // 
             this.txOutput.ContextMenuStrip = this.contextMenuStrip1;
             this.txOutput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txOutput.ForeColor = System.Drawing.SystemColors.ControlText;
             this.txOutput.Location = new System.Drawing.Point(0, 0);
             this.txOutput.Name = "txOutput";
             this.txOutput.Size = new System.Drawing.Size(930, 259);
@@ -59,26 +60,26 @@ namespace WolvenKit
             this.saveAsToolStripMenuItem,
             this.clearToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(119, 70);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.saveAsToolStripMenuItem.Text = "Save as..";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // clearToolStripMenuItem
             // 
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.clearToolStripMenuItem.Text = "Clear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 

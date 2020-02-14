@@ -5,13 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Bundles;
 using WolvenKit.Cache;
 using WolvenKit.Common;
 
 namespace WolvenKit
 {
-    public partial class frmAssetBrowser : Form
+    public partial class frmAssetBrowser : DockContent
     {
         public List<string> Autocompletelist;
         public List<IWitcherFile> FileList = new List<IWitcherFile>();
@@ -79,7 +80,7 @@ namespace WolvenKit
                         Node = node.Parent,
                         Text = "..",
                         IsDirectory = true,
-                        ImageKey = "openFolder"
+                        ImageKey = "FolderOpened"
                     });
                 }
 
@@ -88,7 +89,7 @@ namespace WolvenKit
                     Node = item.Value,
                     Text = item.Key,
                     IsDirectory = true,
-                    ImageKey = "openFolder"
+                    ImageKey = "FolderOpened"
                 }));
 
 

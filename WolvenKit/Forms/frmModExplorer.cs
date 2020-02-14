@@ -6,16 +6,18 @@ using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Mod;
+using WolvenKit.Services;
 
 namespace WolvenKit
 {
-    public partial class frmModExplorer : DockContent
+    public partial class frmModExplorer : DockContent, IThemedContent
     {
         public frmModExplorer()
         {
             InitializeComponent();
             UpdateModFileList(true,true);
             LastChange = DateTime.Now;
+            ApplyCustomTheme();
         }
 
         public W3Mod ActiveMod
@@ -126,8 +128,8 @@ namespace WolvenKit
                             }
                             else
                             {
-                                newNode.ImageKey = "openFolder";
-                                newNode.SelectedImageKey = "openFolder";
+                                newNode.ImageKey = "FolderOpened";
+                                newNode.SelectedImageKey = "FolderOpened";
                             }
                             newNode.Parent?.Expand();
                             current = newNode.Nodes;
@@ -350,6 +352,18 @@ namespace WolvenKit
             }
             else
                 return s;
+        }
+
+        public void ApplyCustomTheme()
+        {
+            var theme = MainController.Get().GetTheme();
+            MainController.Get().ToolStripExtender.SetStyle(searchstrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+
+            this.modFileList.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
+
+            this.modFileList.ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text;
+
+            this.searchBox.BackColor = theme.ColorPalette.ToolWindowCaptionButtonInactiveHovered.Background;
         }
     }
 }
