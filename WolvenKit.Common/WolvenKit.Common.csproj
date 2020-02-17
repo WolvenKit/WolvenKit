@@ -96,7 +96,16 @@
     <Compile Include="IWitcherArchiveType.cs" />
     <Compile Include="IWitcherFile.cs" />
     <Compile Include="ObjectDumper.cs" />
+    <Compile Include="ObservableObject.cs" />
     <Compile Include="ProtoList.cs" />
+    <Compile Include="Services\ILoggerService.cs" />
+    <Compile Include="Services\LoggerService.cs" />
+    <Compile Include="Services\LoggerTypes.cs" />
+    <Compile Include="Wcc\enums.cs" />
+    <Compile Include="Wcc\REDAttributes.cs" />
+    <Compile Include="Wcc\wcc_command.cs" />
+    <Compile Include="Wcc\wcc_commands.cs" />
+    <Compile Include="Wcc\wcc_task.cs" />
     <Compile Include="WitcherTreeNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -37,8 +37,8 @@ namespace WolvenKit
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.newmodButton = new System.Windows.Forms.ToolStripButton();
             this.openmodButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.openfileButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.saveButton = new System.Windows.Forms.ToolStripButton();
             this.saveallButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton7 = new System.Windows.Forms.ToolStripButton();
@@ -54,6 +54,7 @@ namespace WolvenKit
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.recentFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -126,8 +127,8 @@ namespace WolvenKit
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newmodButton,
             this.openmodButton,
-            this.toolStripSeparator1,
             this.openfileButton,
+            this.toolStripSeparator1,
             this.saveButton,
             this.saveallButton,
             this.toolStripButton7,
@@ -176,6 +177,11 @@ namespace WolvenKit
             this.openfileButton.Text = "Open file";
             this.openfileButton.Click += new System.EventHandler(this.tbtOpen_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 29);
+            // 
             // saveButton
             // 
             this.saveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -206,7 +212,7 @@ namespace WolvenKit
             this.toolStripButton7.Size = new System.Drawing.Size(34, 24);
             this.toolStripButton7.Text = "toolStripButton7";
             this.toolStripButton7.ToolTipText = "Add file from bundle";
-            this.toolStripButton7.Click += new System.EventHandler(this.addFileToolStripMenuItem_Click);
+            this.toolStripButton7.Click += new System.EventHandler(this.addFileFromBundleToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -297,6 +303,7 @@ namespace WolvenKit
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newModToolStripMenuItem,
             this.openModToolStripMenuItem,
+            this.openFileToolStripMenuItem,
             this.recentFilesToolStripMenuItem,
             this.toolStripSeparator6,
             this.exportToolStripMenuItem,
@@ -329,6 +336,14 @@ namespace WolvenKit
             this.openModToolStripMenuItem.Size = new System.Drawing.Size(310, 34);
             this.openModToolStripMenuItem.Text = "Open mod";
             this.openModToolStripMenuItem.Click += new System.EventHandler(this.tbtOpenMod_Click);
+            // 
+            // openFileToolStripMenuItem
+            // 
+            this.openFileToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.OpenFile_16x;
+            this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(310, 34);
+            this.openFileToolStripMenuItem.Text = "Open file";
+            this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
             // 
             // recentFilesToolStripMenuItem
             // 
@@ -493,7 +508,7 @@ namespace WolvenKit
             this.addFileToolStripMenuItem.Name = "addFileToolStripMenuItem";
             this.addFileToolStripMenuItem.Size = new System.Drawing.Size(310, 34);
             this.addFileToolStripMenuItem.Text = "Add file";
-            this.addFileToolStripMenuItem.Click += new System.EventHandler(this.addFileToolStripMenuItem_Click_1);
+            this.addFileToolStripMenuItem.Click += new System.EventHandler(this.addFileToolStripMenuItem_Click);
             // 
             // toolStripSeparator8
             // 
@@ -669,7 +684,7 @@ namespace WolvenKit
             // 
             this.modExplorerToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.RemoteServer_16x;
             this.modExplorerToolStripMenuItem.Name = "modExplorerToolStripMenuItem";
-            this.modExplorerToolStripMenuItem.Size = new System.Drawing.Size(221, 34);
+            this.modExplorerToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.modExplorerToolStripMenuItem.Text = "Mod explorer";
             this.modExplorerToolStripMenuItem.Click += new System.EventHandler(this.modExplorerToolStripMenuItem_Click);
             // 
@@ -677,7 +692,7 @@ namespace WolvenKit
             // 
             this.outputToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.Output_16x;
             this.outputToolStripMenuItem.Name = "outputToolStripMenuItem";
-            this.outputToolStripMenuItem.Size = new System.Drawing.Size(221, 34);
+            this.outputToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.outputToolStripMenuItem.Text = "Output";
             this.outputToolStripMenuItem.Click += new System.EventHandler(this.OutputToolStripMenuItem_Click);
             // 
@@ -904,7 +919,7 @@ namespace WolvenKit
         private ToolStripMenuItem launchGameForDebuggingToolStripMenuItem;
         private ToolStripMenuItem addFileFromBundleToolStripMenuItem;
         private ToolStripMenuItem addFileFromOtherModToolStripMenuItem;
-        private ToolStripMenuItem addFileToolStripMenuItem;
+        private ToolStripMenuItem openFileToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator8;
 		private ToolStripMenuItem stringsEncoderGUIToolStripMenuItem;
         private ToolStripMenuItem menuCreatorToolStripMenuItem;
@@ -940,5 +955,6 @@ namespace WolvenKit
         private ToolStripMenuItem extractCollisioncacheToolStripMenuItem;
         private VisualStudioToolStripExtender visualStudioToolStripExtender1;
         private ToolStripMenuItem verifyFileToolStripMenuItem;
+        private ToolStripMenuItem addFileToolStripMenuItem;
     }
 }
