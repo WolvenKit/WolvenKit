@@ -197,7 +197,7 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Create(CR2WFile cr2w)
         {
-            throw new NotImplementedException();
+            return new CDateTime(cr2w);
         }
 
         public static bool operator ==(CDateTime left, CDateTime right)
