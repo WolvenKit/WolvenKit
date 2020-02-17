@@ -60,6 +60,13 @@ namespace WolvenKit.Wwise.Player
                 lvi.Tag = f;
                 FilesListView.Items.Add(lvi);
             }
+
+            if(FilesListView.Items.Count > 0)
+            {
+                FilesListView.Items[0].Selected = true;
+                AudioPlayer.fileName = FilesListView.SelectedItems[0].Tag.ToString();
+                AudioPlayer.OnButtonPlayClick(this, null);
+            }
         }
     }
 }
