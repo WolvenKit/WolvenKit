@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit", "WolvenKit\WolvenKit.csproj", "{12FD792B-EC76-4969-8B42-9671025D5108}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Nvidia", "Wolveki
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameFormats", "GameFormats", "{B437E733-AAAD-437E-9923-FD0BA00AE6C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wolvenkit.Radish", "Wolvenkit.Radish\Wolvenkit.Radish.csproj", "{D4D390BB-C14D-423A-861A-470BED6D40A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -280,6 +282,24 @@ Global
 		{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}.Release|x64.Build.0 = Release|Any CPU
 		{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}.Release|x86.ActiveCfg = Release|Any CPU
 		{761C5A00-52E7-49D5-9F4F-7BE7FAF30AC6}.Release|x86.Build.0 = Release|Any CPU
+		{D4D390BB-C14D-423A-861A-470BED6D40A9}.Debug Unity|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4D390BB-C14D-423A-861A-470BED6D40A9}.Debug Unity|Any CPU.Build.0 = Debug|Any CPU
+		{D4D390BB-C14D-423A-861A-470BED6D40A9}.Debug Unity|x64.ActiveCfg = Debug|Any CPU
+		{D4D390BB-C14D-423A-861A-470BED6D40A9}.Debug Unity|x64.Build.0 = Debug|Any CPU
+		{D4D390BB-C14D-423A-861A-470BED6D40A9}.Debug Unity|x86.ActiveCfg = Debug|Any CPU
+		{D4D390BB-C14D-423A-861A-470BED6D40A9}.Debug Unity|x86.Build.0 = Debug|Any CPU
+		{D4D390BB-C14D-423A-861A-470BED6D40A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4D390BB-C14D-423A-861A-470BED6D40A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4D390BB-C14D-423A-861A-470BED6D40A9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D4D390BB-C14D-423A-861A-470BED6D40A9}.Debug|x64.Build.0 = Debug|Any CPU
+		{D4D390BB-C14D-423A-861A-470BED6D40A9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D4D390BB-C14D-423A-861A-470BED6D40A9}.Debug|x86.Build.0 = Debug|Any CPU
+		{D4D390BB-C14D-423A-861A-470BED6D40A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4D390BB-C14D-423A-861A-470BED6D40A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4D390BB-C14D-423A-861A-470BED6D40A9}.Release|x64.ActiveCfg = Release|Any CPU
+		{D4D390BB-C14D-423A-861A-470BED6D40A9}.Release|x64.Build.0 = Release|Any CPU
+		{D4D390BB-C14D-423A-861A-470BED6D40A9}.Release|x86.ActiveCfg = Release|Any CPU
+		{D4D390BB-C14D-423A-861A-470BED6D40A9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
