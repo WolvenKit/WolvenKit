@@ -34,12 +34,12 @@ namespace WolvenKit.CR2W.Types
                 }
                 else
                 {
-                    Handle = cr2w.handles[-value - 1].str;
+                    Handle = cr2w.imports[-value - 1].str;
 
-                    var filetype = cr2w.handles[-value - 1].filetype;
-                    FileType = cr2w.strings[filetype].str;
+                    var filetype = cr2w.imports[-value - 1].filetype;
+                    FileType = cr2w.names[filetype].str;
 
-                    Flags = cr2w.handles[-value - 1].flags;
+                    Flags = cr2w.imports[-value - 1].flags;
                 }
             }
         }

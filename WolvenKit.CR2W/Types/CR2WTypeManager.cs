@@ -64,7 +64,7 @@ namespace WolvenKit.CR2W.Types
             Register("LocalizedString", new CLocalizedString(null));
 
 
-            Register("CDateTime", new CDateTime(null));
+            Register("CDateTime", new CDateTime());
 
             Register("DeferredDataBuffer", new CInt16(null));
 

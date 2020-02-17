@@ -185,7 +185,7 @@ namespace WolvenKit
         {
             try
             {
-                loadStatus = "Loading string manager";
+                /*loadStatus = "Loading string manager";
                 #region Load string manager
                 var sw = new System.Diagnostics.Stopwatch();
                 sw.Start();
@@ -404,7 +404,7 @@ namespace WolvenKit
                     modsoundmanager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
                 }
                 #endregion
-                loadStatus = "Loaded";
+                loadStatus = "Loaded";*/
 
                 mainController.Loaded = true;
             }

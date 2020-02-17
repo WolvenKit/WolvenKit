@@ -3,7 +3,7 @@ using System.IO;
 
 namespace WolvenKit.CR2W
 {
-    public class CR2WHeaderBlock7
+    public class CR2WEmbedded
     {
         public uint handle_name_count;
         public uint handle_name_offset;
@@ -11,17 +11,16 @@ namespace WolvenKit.CR2W
         public uint offset;
         public byte[] unknowndata;
 
-        public CR2WHeaderBlock7()
+        public CR2WEmbedded()
         {
         }
 
-        public CR2WHeaderBlock7(BinaryReader file)
+        public CR2WEmbedded(BinaryReader file)
         {
             Read(file);
         }
 
-        public uint unk3 { get; set; }
-        public uint unk4 { get; set; }
+        public ulong pathHash { get; set; }
         public uint size { get; set; }
 
         public string Handles => string.Join(", ", handles);
@@ -55,8 +54,7 @@ namespace WolvenKit.CR2W
         {
             handle_name_count = file.ReadUInt32();
             handle_name_offset = file.ReadUInt32();
-            unk3 = file.ReadUInt32();
-            unk4 = file.ReadUInt32();
+            pathHash = file.ReadUInt64();
 
             offset = file.ReadUInt32();
             size = file.ReadUInt32();
@@ -66,10 +64,21 @@ namespace WolvenKit.CR2W
         {
             file.Write(handle_name_count);
             file.Write(handle_name_offset);
-            file.Write(unk3);
-            file.Write(unk4);
+            file.Write(pathHash);
             file.Write(offset);
             file.Write(size);
+        }
+
+        public CR2WEmbeddedHeader ToCR2WEmbedded()
+        {
+            return new CR2WEmbeddedHeader
+            {
+                importIndex = handle_name_count,
+                path = handle_name_offset,
+                pathHash = pathHash,
+                dataOffset = offset,
+                dataSize = size
+            };
         }
     }
 }

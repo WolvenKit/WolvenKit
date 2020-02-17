@@ -22,7 +22,7 @@ namespace WolvenKit.CR2W.Types
             {
                 var elementsize = file.ReadUInt32();
                 var typeId = file.ReadUInt16();
-                var typeName = cr2w.strings[typeId].str;
+                var typeName = cr2w.names[typeId].str;
 
                 var item = CR2WTypeManager.Get().GetByName(typeName, "", cr2w, false) ?? new CVector(cr2w);
 

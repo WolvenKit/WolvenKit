@@ -987,7 +987,7 @@ namespace WolvenKit
                         break;
                     }
             }
-            if (doc.File.block7.Count > 0)
+            if (doc.File.embedded.Count > 0)
             {
                 doc.embeddedFiles = new frmEmbeddedFiles
                 {
@@ -2572,6 +2572,23 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                         //Create the directory because it will crash if it doesn't exist.
                         Directory.CreateDirectory(Path.GetDirectoryName(newfilepath));
                         File.Copy(f, newfilepath, true);
+                    }
+                }
+            }
+        }
+
+        private void verifyFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var of = new OpenFileDialog())
+            {
+                of.Multiselect = true;
+                of.Filter = "Cr2w files | *.*";
+                of.Title = "Please select the Cr2w files for verifying.";
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (var f in of.FileNames)
+                    {
+                        CR2WVerify.VerifyFile(f);
                     }
                 }
             }

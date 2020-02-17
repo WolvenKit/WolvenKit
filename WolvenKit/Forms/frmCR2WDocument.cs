@@ -86,7 +86,7 @@ namespace WolvenKit
                 {
                     embeddedFiles.File = file;
 
-                    if (file.block7.Count > 0)
+                    if (file.embedded.Count > 0)
                     {
                         embeddedFiles.Show(dockPanel, DockState.Document);
                     }

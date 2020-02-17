@@ -24,21 +24,21 @@ namespace WolvenKit.CR2W.Types
             {
                 if (value > 0)
                 {
-                    Handle = cr2w.handles[value - 1].str;
+                    Handle = cr2w.imports[value - 1].str;
 
-                    var filetype = cr2w.handles[value - 1].filetype;
-                    FileType = cr2w.strings[filetype].str;
+                    var filetype = cr2w.imports[value - 1].filetype;
+                    FileType = cr2w.names[filetype].str;
 
-                    Flags = cr2w.handles[value - 1].flags;
+                    Flags = cr2w.imports[value - 1].flags;
                 }
                 else
                 {
-                    Handle = cr2w.handles[0].str;
+                    Handle = cr2w.imports[0].str;
 
-                    var filetype = cr2w.handles[0].filetype;
-                    FileType = cr2w.strings[filetype].str;
+                    var filetype = cr2w.imports[0].filetype;
+                    FileType = cr2w.names[filetype].str;
 
-                    Flags = cr2w.handles[0].flags;
+                    Flags = cr2w.imports[0].flags;
                     //TODO: Log this to console: The file is corrupted but we tried to load it anyway so something may not function properly!
                 }
             }

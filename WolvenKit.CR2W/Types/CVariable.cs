@@ -19,14 +19,14 @@ namespace WolvenKit.CR2W.Types
         public ushort typeId
         {
             get { return (ushort) cr2w.GetStringIndex(Type, true); }
-            set { Type = cr2w.strings[value].str; }
+            set { Type = cr2w.names[value].str; }
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ushort nameId
         {
             get { return (ushort) cr2w.GetStringIndex(Name, true); }
-            set { Name = cr2w.strings[value].str; }
+            set { Name = cr2w.names[value].str; }
         }
 
         public CVariable ParentVariable { get; set; }

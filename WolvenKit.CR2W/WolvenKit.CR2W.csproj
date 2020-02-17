@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WolvenKit.CR2W</RootNamespace>
     <AssemblyName>WolvenKit.CR2W</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -94,12 +94,19 @@
     <Compile Include="CR2WCopyAction.cs" />
     <Compile Include="CR2WFile.cs" />
     <Compile Include="CR2WHeaderBlock4.cs" />
-    <Compile Include="CR2WHeaderBlock6.cs" />
-    <Compile Include="CR2WHeaderBlock7.cs" />
+    <Compile Include="CR2WBuffer.cs" />
+    <Compile Include="CR2WEmbedded.cs" />
     <Compile Include="CR2WHeaderData.cs" />
-    <Compile Include="CR2WHeaderHandle.cs" />
-    <Compile Include="CR2WHeaderString.cs" />
+    <Compile Include="CR2WHandle.cs" />
+    <Compile Include="CR2WString.cs" />
+    <Compile Include="CR2WHeaderStructs.cs" />
     <Compile Include="CR2WReaderExtensions.cs" />
+    <Compile Include="CR2WVerify.cs" />
+    <Compile Include="CRC32\Crc32Algorithm.cs" />
+    <Compile Include="CRC32\Crc32CAlgorithm.cs" />
+    <Compile Include="CRC32\MismatchCRC32Exception.cs" />
+    <Compile Include="CRC32\SafeProxy.cs" />
+    <Compile Include="CRC32\SafeProxyC.cs" />
     <Compile Include="Editors\ByteArrayEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -121,6 +128,8 @@
     <Compile Include="Editors\PtrEditor.Designer.cs">
       <DependentUpon>PtrEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="FNV1A\FNV1A32HashAlgorithm.cs" />
+    <Compile Include="FNV1A\FNV1A64HashAlgorithm.cs" />
     <Compile Include="Types\CCubeTexture.cs" />
     <Compile Include="Types\CDecalSpawne.cs" />
     <Compile Include="Types\CGenericGrassMask.cs" />
