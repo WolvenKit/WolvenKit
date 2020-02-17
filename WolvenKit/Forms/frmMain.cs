@@ -1493,19 +1493,50 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
         {
             var filename = e.File;
             var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
-            if (!File.Exists(fullpath))
+            if (!File.Exists(fullpath) && !Directory.Exists(fullpath))
                 return;
+            string dir;
+            if (File.Exists(fullpath))
+                dir = Path.GetDirectoryName(fullpath);
+            else
+                dir = fullpath;
+            var reldir = dir.TrimStart(ActiveMod.FileDirectory.ToCharArray());
+            reldir = reldir.TrimStart("Mod".ToCharArray());
+            reldir = reldir.TrimStart(Path.DirectorySeparatorChar);
+            reldir = reldir.TrimStart("CollisionCache".ToCharArray());
+            reldir = reldir.TrimStart("TextureCache".ToCharArray());
+            reldir = reldir.TrimStart(Path.DirectorySeparatorChar);
 
-            /*try
+
+            var files = Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories)
+                .Select(_ => _.TrimStart(dir.TrimEnd(reldir.ToCharArray()).ToCharArray()))
+                .ToList();
+            var cookedModDir = Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName, reldir);
+
+            if (!Directory.Exists(cookedModDir))
             {
-                var cookedModDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\Mods\mod" + ActiveMod.Name + @"\content\");
-                var modcolcachedir = Path.Combine(ActiveMod.ModDirectory, @"CollisionCache");
+                Directory.CreateDirectory(cookedModDir);
+            }
+            var existingfiles = Directory.GetFiles(cookedModDir, "*.*", SearchOption.AllDirectories)
+                .Select(_ => _.TrimStart(Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName).ToCharArray()))
+                .ToList();
+            if (existingfiles.Intersect(files).Any())
+            {
+                if (MessageBox.Show(
+                     "Some of the files you are about to cook already exist in your mod. These files will be overwritten. Are you sure you want to permanently overwrite them?", "Confirmation", MessageBoxButtons.OKCancel
+                 ) != DialogResult.OK)
+                {
+                    return;
+                }
+            }
 
+            try
+            {
                 var cook = new cook()
                 {
                     Platform = platform.pc,
-                    mod = modcolcachedir,
-                    basedir = modcolcachedir,
+                    mod = dir,
+                    basedir = dir,
                     outdir = cookedModDir
                 };
                 WccHelper.RunCommand(cook);
@@ -1514,7 +1545,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             catch (InvalidChunkTypeException ex)
             {
                 MessageBox.Show(ex.Message, "Error adding chunk.");
-            }*/
+            }
         }
 
         private void ModExplorer_RequestFileRename(object sender, RequestFileArgs e)

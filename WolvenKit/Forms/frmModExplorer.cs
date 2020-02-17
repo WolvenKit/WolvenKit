@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.Bundles;
 using WolvenKit.Common.Wcc;
 using WolvenKit.Mod;
 using WolvenKit.Services;
@@ -259,7 +260,9 @@ namespace WolvenKit
                 var fi = new FileInfo(selectedNode.FullPath);
                 var ext = fi.Extension.TrimStart('.');
                 importToolStripMenuItem.Enabled = Enum.GetNames(typeof(EImportable)).Contains(ext);
-                cookToolStripMenuItem.Enabled = !Enum.GetNames(typeof(EImportable)).Contains(ext);
+
+                bool isbundle = Path.Combine(ActiveMod.FileDirectory, fi.ToString()).Contains(Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName));
+                cookToolStripMenuItem.Enabled = (!Enum.GetNames(typeof(EImportable)).Contains(ext) && !isbundle);
             } 
 
             pasteToolStripMenuItem.Enabled = File.Exists(Clipboard.GetText());

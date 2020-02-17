@@ -103,7 +103,7 @@ namespace WolvenKit
             this.toolStripSeparator1,
             this.showFileInExplorerToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(264, 374);
+            this.contextMenu.Size = new System.Drawing.Size(264, 407);
             this.contextMenu.Opened += new System.EventHandler(this.contextMenu_Opened);
             // 
             // importToolStripMenuItem
@@ -119,7 +119,7 @@ namespace WolvenKit
             this.cookToolStripMenuItem.Enabled = false;
             this.cookToolStripMenuItem.Name = "cookToolStripMenuItem";
             this.cookToolStripMenuItem.Size = new System.Drawing.Size(263, 32);
-            this.cookToolStripMenuItem.Text = "Cook";
+            this.cookToolStripMenuItem.Text = "Cook files in directory";
             this.cookToolStripMenuItem.Click += new System.EventHandler(this.cookToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
