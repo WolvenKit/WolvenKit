@@ -29,6 +29,8 @@ using WolvenKit.Bundles;
 using WolvenKit.Forms;
 using Enums = Dfust.Hotkeys.Enums;
 using WolvenKit.Wwise.Player;
+using WolvenKit.Extensions;
+using WolvenKit.Services;
 
 namespace WolvenKit
 {
@@ -51,9 +53,11 @@ namespace WolvenKit
             }
         }
         #endregion
+        
         private readonly string BaseTitle = "Wolven kit";
         public static Task Packer;
         private HotkeyCollection hotkeys;
+        private readonly ToolStripRenderer toolStripRenderer = new ToolStripProfessionalRenderer();
 
         public W3Mod ActiveMod
         {
@@ -69,6 +73,12 @@ namespace WolvenKit
         public frmMain()
         {
             InitializeComponent();
+
+            this.dockPanel.Theme.Extender.FloatWindowFactory = new CustomFloatWindowFactory();
+            visualStudioToolStripExtender1.DefaultRenderer = toolStripRenderer;
+            MainController.Get().ToolStripExtender = visualStudioToolStripExtender1;
+            ApplyCustomTheme();
+
             UpdateTitle();
             MainController.Get().PropertyChanged += MainControllerUpdated;
             #region Load recent files into toolstrip
@@ -89,12 +99,34 @@ namespace WolvenKit
             #endregion
             hotkeys = new HotkeyCollection(Enums.Scope.Application);
             hotkeys.RegisterHotkey(Keys.Control | Keys.S, HKSave, "Save");
-            hotkeys.RegisterHotkey(Keys.Control | Keys.Shift | Keys.S, HKSaveAll , "SaveAll");
+            hotkeys.RegisterHotkey(Keys.Control | Keys.Shift | Keys.S, HKSaveAll, "SaveAll");
             hotkeys.RegisterHotkey(Keys.F1, HKHelp, "Help");
             hotkeys.RegisterHotkey(Keys.Control | Keys.C, HKCopy, "Copy");
-            hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste,"Paste");            
+            hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste, "Paste");
             MainController.Get().InitForm(this);
         }
+
+        public void GlobalApplyTheme()
+        {
+            dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"));
+
+            CloseWindows();
+
+            this.ApplyCustomTheme();
+
+            dockPanel.LoadFromXml( Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"), DeserializeDockContent);
+
+            ReopenWindows();
+        }
+        private void ApplyCustomTheme()
+        {
+            var theme = MainController.Get().GetTheme();
+            this.dockPanel.Theme = theme;
+            visualStudioToolStripExtender1.SetStyle(menuStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+            visualStudioToolStripExtender1.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+            visualStudioToolStripExtender1.SetStyle(toolStrip2, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+        }
+
 
         private delegate void strDelegate(string t);
 
@@ -565,7 +597,14 @@ namespace WolvenKit
 
         public IDockContent DeserializeDockContent(string persistString)
         {
-            return null;
+            if (persistString == typeof(frmOutput).ToString())
+                return Output;
+            else if(persistString == typeof(frmModExplorer).ToString())
+                return ModExplorer;
+            else
+            {
+                return null;
+            }
         }
 
         public void openMod(string file = "")
@@ -747,23 +786,24 @@ namespace WolvenKit
                 frm.WindowState = FormWindowState.Normal;
                 return;
             }
-            var explorer = new frmAssetBrowser(loadmods ? 
+            var explorer = new frmAssetBrowser(loadmods ?
                 new List<IWitcherArchive>
                 {
-                    MainController.Get().ModBundleManager, 
-                    MainController.Get().ModSoundManager, 
+                    MainController.Get().ModBundleManager,
+                    MainController.Get().ModSoundManager,
                     MainController.Get().ModTextureManager
-                } : 
+                } :
                 new List<IWitcherArchive>
                 {
-                    MainController.Get().BundleManager, 
-                    MainController.Get().SoundManager, 
+                    MainController.Get().BundleManager,
+                    MainController.Get().SoundManager,
                     MainController.Get().TextureManager,
                     MainController.Get().CollisionManager
                 });
             explorer.RequestFileAdd += Assetbrowser_FileAdd;
             explorer.OpenPath(browseToPath);
-            explorer.Show();
+            Rectangle floatWindowBounds = new Rectangle() { Width = 827, Height = 564 };
+            explorer.Show(dockPanel, floatWindowBounds);
         }
 
         /// <summary>
@@ -782,7 +822,7 @@ namespace WolvenKit
         {
             if (ActiveMod != null)
             {
-                foreach (var t in OpenDocuments)
+                foreach (var t in OpenDocuments.ToList())
                 {
                     t.Close();
                     break;
@@ -795,12 +835,53 @@ namespace WolvenKit
             ClearOutput();
         }
 
+        /// <summary>
+        /// Closes and saves all the "file documents", resets modexplorer.
+        /// </summary>
+        private void CloseWindows()
+        {
+            if (ActiveMod != null)
+            {
+                foreach (var t in OpenDocuments.ToList())
+                {
+                    t.SaveFile();
+                    t.Close();
+                }
+            }
+            ModExplorer?.Close();
+            ModExplorer = null;
+            Output?.Close();
+            Output = null;
+            foreach (var window in dockPanel.FloatWindows.ToList())
+                window.Dispose();
+        }
+
+        /// <summary>
+        /// Closes and saves all the "file documents", resets modexplorer.
+        /// </summary>
+        private void ReopenWindows()
+        {
+            if (ActiveMod?.LastOpenedFiles != null)
+            {
+                foreach (var doc in ActiveMod.LastOpenedFiles)
+                {
+                    if (File.Exists(doc))
+                    {
+                        LoadDocument(doc);
+                    }
+                }
+            }
+            ShowModExplorer();
+            ShowOutput();
+        }
+
         private void ShowModExplorer()
         {
             if (ModExplorer == null || ModExplorer.IsDisposed)
             {
                 ModExplorer = new frmModExplorer();
                 ModExplorer.Show(dockPanel, DockState.DockLeft);
+                
                 ModExplorer.RequestFileOpen += ModExplorer_RequestFileOpen;
                 ModExplorer.RequestFileDelete += ModExplorer_RequestFileDelete;
                 ModExplorer.RequestFileAdd += ModExplorer_RequestAddFile;
@@ -2497,7 +2578,5 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 }
             }
         }
-
-       
     }
 }

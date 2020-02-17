@@ -31,10 +31,13 @@ namespace WolvenKit
             txTextLanguage.Text = config.TextLanguage;
             txVoiceLanguage.Text = config.VoiceLanguage;
             txWCC_Lite.Text = config.WccLite;
+            comboBoxTheme.Items.AddRange(Enum.GetValues(typeof(EColorThemes)).Cast<object>().ToArray());
+            comboBoxTheme.SelectedItem = config.ColorTheme;
             exeSearcherSlave.RunWorkerAsync();
             btSave.Enabled =
                 (File.Exists(txWCC_Lite.Text) && Path.GetExtension(txWCC_Lite.Text) == ".exe" && txWCC_Lite.Text.Contains("wcc_lite.exe")) &&
                 (File.Exists(txExecutablePath.Text) && Path.GetExtension(txExecutablePath.Text) == ".exe" && txExecutablePath.Text.Contains("witcher3.exe"));
+
         }
 
         private void btnBrowseExe_Click(object sender, EventArgs e)
@@ -67,11 +70,24 @@ namespace WolvenKit
                 return;
             }
             var config = MainController.Get().Configuration;
+
+            // Apply Theme
+            bool applyTheme = config.ColorTheme != (EColorThemes)comboBoxTheme.SelectedItem;
+            
+
             config.ExecutablePath = txExecutablePath.Text;
             config.WccLite = txWCC_Lite.Text;
             config.TextLanguage = txTextLanguage.Text;
             config.VoiceLanguage = txVoiceLanguage.Text;
+            config.ColorTheme = (EColorThemes)comboBoxTheme.SelectedItem;
             config.Save();
+
+            if (applyTheme)
+            {
+                MainController.Get().Window.GlobalApplyTheme();
+            }
+                
+
             try
             {
                 IniParser ip = new IniParser(Path.Combine(MainController.Get().Configuration.GameRootDir, "bin\\config\\base\\general.ini"));
@@ -209,14 +225,16 @@ Would you like to perform this patch?", "wcc_lite faster patch", MessageBoxButto
                     {
                         if (programName.ToString().Contains("Witcher 3 Mod Tools"))
                         {
-                            wcc = Directory.GetFiles(installLocation.ToString(), "wcc_lite.exe",
-                                SearchOption.AllDirectories).First();
+                            if (Directory.Exists(installLocation.ToString()))
+                                wcc = Directory.GetFiles(installLocation.ToString(), "wcc_lite.exe",
+                                    SearchOption.AllDirectories).First();
                         }
 
                         if (programName.ToString().Contains("The Witcher 3 - Wild Hunt") ||
                             programName.ToString().Contains("The Witcher 3: Wild Hunt"))
                         {
-                            w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe",
+                            if (Directory.Exists(installLocation.ToString()))
+                                w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe",
                                 SearchOption.AllDirectories).First();
                         }
                     }

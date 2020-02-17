@@ -3,10 +3,11 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.Services;
 
 namespace WolvenKit
 {
-    public partial class frmOutput : DockContent
+    public partial class frmOutput : DockContent, IThemedContent
     {
         public enum Logtype
         {
@@ -20,6 +21,7 @@ namespace WolvenKit
         public frmOutput()
         {
             InitializeComponent();
+            ApplyCustomTheme();
         }
 
         public void AddText(string text,Logtype type = Logtype.Normal)
@@ -71,6 +73,12 @@ namespace WolvenKit
         private void clearToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             Clear();
+        }
+        
+        public void ApplyCustomTheme()
+        {
+            this.txOutput.BackColor = MainController.Get().GetTheme().ColorPalette.ToolWindowTabSelectedInactive.Background;
+            this.txOutput.ForeColor = MainController.Get().GetTheme().ColorPalette.CommandBarMenuDefault.Text;
         }
     }
 

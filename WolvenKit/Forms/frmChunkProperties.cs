@@ -9,16 +9,18 @@ using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Types;
+using WolvenKit.Services;
 
 namespace WolvenKit
 {
-    public partial class frmChunkProperties : DockContent
+    public partial class frmChunkProperties : DockContent, IThemedContent
     {
         private CR2WChunk chunk;
 
         public frmChunkProperties()
         {
             InitializeComponent();
+            ApplyCustomTheme();
             treeView.CanExpandGetter = x => ((VariableListNode) x).ChildCount > 0;
             treeView.ChildrenGetter = x => ((VariableListNode) x).Children;
         }
@@ -376,9 +378,45 @@ namespace WolvenKit
             public IEditableVariable Variable { get; set; }
         }
 
+        public event EventHandler OnItemsChanged;
         private void treeView_ItemsChanged(object sender, ItemsChangedEventArgs e)
         {
             MainController.Get().ProjectUnsaved = true;
+        }
+
+        private void treeView_CellEditFinished(object sender, CellEditEventArgs e)
+        {
+            OnItemsChanged(sender, e);
+        }
+        
+        public void ApplyCustomTheme()
+        {
+            var theme = MainController.Get().GetTheme();
+
+            this.treeView.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
+            this.treeView.AlternateRowBackColor = theme.ColorPalette.OverflowButtonHovered.Background;
+
+            this.treeView.ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text;
+            HeaderFormatStyle hfs = new HeaderFormatStyle()
+            {
+                Normal = new HeaderStateStyle()
+                {
+                    BackColor = theme.ColorPalette.DockTarget.Background,
+                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
+                },
+                Hot = new HeaderStateStyle()
+                {
+                    BackColor = theme.ColorPalette.OverflowButtonHovered.Background,
+                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
+                },
+                Pressed = new HeaderStateStyle()
+                {
+                    BackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background,
+                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
+                }
+            };
+            this.treeView.HeaderFormatStyle = hfs;
+            treeView.UnfocusedSelectedBackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background;
         }
     }
 }

@@ -1,7 +1,9 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace WolvenKit
 {
@@ -18,6 +20,8 @@ namespace WolvenKit
             }
         }
 
+        
+
         /// <summary>
         ///     Configuration values
         /// </summary>
@@ -32,6 +36,8 @@ namespace WolvenKit
         public Point MainLocation { get; set; }
         public FormWindowState MainState { get; set; }
         public string InitialExportDirectory { get; set; }
+        public EColorThemes ColorTheme { get; set; }
+        
 
         [XmlIgnore]
         public string GameDLCDir => Path.Combine(ExecutablePath, @"..\..\DLC\");
@@ -69,7 +75,8 @@ namespace WolvenKit
             return new Configuration
             {
                 TextLanguage = "en",
-                VoiceLanguage = "en"
+                VoiceLanguage = "en",
+                ColorTheme = EColorThemes.VS2015Light,
             };
         }
     }
