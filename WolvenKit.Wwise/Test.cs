@@ -15,7 +15,7 @@ namespace WolvenKit.Wwise
         {
             using (var of = new OpenFileDialog())
             {
-                of.Filter = "Wwise files | *.wem;*.bnk";
+                of.Filter = "Wwise files | *.wem;*.bnk; *.cache";
                 if (of.ShowDialog() == DialogResult.OK)
                 {
                     switch (Path.GetExtension(of.FileName))
@@ -29,6 +29,15 @@ namespace WolvenKit.Wwise
                         {
                             var bnk = new Wwise.BNK.BNK();
                             bnk.LoadBNK(new MemoryStream(File.ReadAllBytes(of.FileName)));
+                            break;
+                        }
+                        case ".cache":
+                        {
+                            var sc = new WolvenKit.Cache.SoundCache(of.FileName, new SoundBanksInfoXML("SoundCache\\soundbanksinfo.xml"));
+                            foreach(var f in sc.Files)
+                            {
+                                    Console.WriteLine("Item => " + f.Name + " | " + sc.GetIDFromPath(f.Name));
+                            }
                             break;
                         }
                     }

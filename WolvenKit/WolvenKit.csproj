@@ -147,6 +147,9 @@
     <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
       <HintPath>..\packages\CyotekImageBox.1.3.0-Alpha1\lib\net20\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
     </Reference>
+    <Reference Include="dbutil, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\packages\VGMToolbox.1.0.0.1040\lib\dbutil.dll</HintPath>
+    </Reference>
     <Reference Include="DevZH.FlatBuffers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\DevZH.FlatBuffers.1.4.0\lib\net35\DevZH.FlatBuffers.dll</HintPath>
     </Reference>
@@ -158,6 +161,9 @@
     </Reference>
     <Reference Include="Doboz">
       <HintPath>..\packages\doboz4net.1.0.1\lib\net40-client\Doboz.dll</HintPath>
+    </Reference>
+    <Reference Include="format, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\packages\VGMToolbox.1.0.0.1040\lib\format.dll</HintPath>
     </Reference>
     <Reference Include="Gma.System.MouseKeyHook, Version=5.6.130.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MouseKeyHook.5.6.0\lib\net40\Gma.System.MouseKeyHook.dll</HintPath>
@@ -176,6 +182,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libs\IrrlichtLime.dll</HintPath>
     </Reference>
+    <Reference Include="jsutil, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VGMToolbox.1.0.0.1040\lib\jsutil.dll</HintPath>
+    </Reference>
     <Reference Include="LZ4, Version=1.0.15.93, Culture=neutral, PublicKeyToken=62e1b5ec1eec9bdd, processorArchitecture=MSIL">
       <HintPath>..\packages\lz4net.1.0.15.93\lib\net4-client\LZ4.dll</HintPath>
     </Reference>
@@ -186,6 +195,9 @@
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -287,6 +299,12 @@
     <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Xml.ReaderWriter.4.3.1\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
     </Reference>
+    <Reference Include="vgmtplugin, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\packages\VGMToolbox.1.0.0.1040\lib\vgmtplugin.dll</HintPath>
+    </Reference>
+    <Reference Include="vgmtutil, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\packages\VGMToolbox.1.0.0.1040\lib\vgmtutil.dll</HintPath>
+    </Reference>
     <Reference Include="VisualPlus, Version=0.4.1.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VisualPlus.0.4.1.4-beta\lib\VisualPlus\NET4\VisualPlus.dll</HintPath>
     </Reference>
@@ -375,6 +393,12 @@
     </Compile>
     <Compile Include="Forms\frmChunkFlowDiagram.Designer.cs">
       <DependentUpon>frmChunkFlowDiagram.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMusicPlayer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmMusicPlayer.Designer.cs">
+      <DependentUpon>frmMusicPlayer.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmStringsGuiImporterIDDialog.cs">
       <SubType>Form</SubType>
@@ -671,6 +695,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmModSettings.resx">
       <DependentUpon>frmModSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmMusicPlayer.resx">
+      <DependentUpon>frmMusicPlayer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmOutput.resx">
       <DependentUpon>frmOutput.cs</DependentUpon>

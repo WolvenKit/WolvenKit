@@ -28,6 +28,7 @@ using WolvenKit.Cache;
 using WolvenKit.Bundles;
 using WolvenKit.Forms;
 using Enums = Dfust.Hotkeys.Enums;
+using WolvenKit.Wwise.Player;
 using WolvenKit.Extensions;
 using WolvenKit.Services;
 
@@ -454,6 +455,14 @@ namespace WolvenKit
                 case ".txt":
                     ShellExecute(fullpath);
                     break;
+                case ".wem":
+                    {
+                        using (var sp = new frmAudioPlayer(fullpath))
+                        {
+                            sp.ShowDialog();
+                        }
+                        break;
+                    }
                 case ".subs":
                     PolymorphExecute(fullpath, ".txt");
                     break;
@@ -892,6 +901,7 @@ namespace WolvenKit
                 return null;
             }
 
+
             var doc = new frmCR2WDocument();
             OpenDocuments.Add(doc);
 
@@ -960,14 +970,6 @@ namespace WolvenKit
                         doc.ImageViewer.Show(doc.FormPanel, DockState.Document);
                         break;
                     }
-                /*case ".w2ent":
-                    {
-                        CHandle mesh = doc.File.chunks[2].GetVariableByName("mesh") as CHandle;
-                        var docW2Mesh = LoadDocument(Path.GetDirectoryName(filename) + @"\model\" + Path.GetFileName(mesh.Handle));
-                        if (docW2Mesh == null)
-                            MessageBox.Show(".w2mesh file not found in model folder!" + "\n" + "Have you extracted it properly?");
-                        break;
-                    }*/
                 case ".w2mesh":
                     {
                         if (bool.Parse(renderW2meshToolStripMenuItem.Tag.ToString()))
