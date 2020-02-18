@@ -29,7 +29,7 @@ namespace WolvenKit.Common.Wcc
         /// </summary>
         /// <param name="cmd"></param>
         /// <returns></returns>
-        public WFR RunCommand(WCC_Command cmd)
+        public EWccStatus RunCommand(WCC_Command cmd)
         {
             string args = cmd.Arguments;
             return RunCommand(cmd.Name, args);
@@ -40,7 +40,7 @@ namespace WolvenKit.Common.Wcc
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public WFR RunCommand(string cmdName, string args)
+        public EWccStatus RunCommand(string cmdName, string args)
         {
             //string wccPath = Config.GetConfigSetting("WCC_Path");
             string wccPath = _wccPath;
@@ -78,17 +78,17 @@ namespace WolvenKit.Common.Wcc
                 if (_logger.ExtendedLog.Any(x => x.Flag == LogFlag.WLF_Error))
                 {
                     _logger.LogString("Finished with Errors.");
-                    return WFR.WFR_Error;
+                    return EWccStatus.Error;
                 }
                 else if (_logger.ExtendedLog.Any(x => x.Flag == LogFlag.WLF_Error))
                 {
                     _logger.LogString("Finished with Warnings.");
-                    return WFR.WFR_Finished;
+                    return EWccStatus.Finished;
                 }
                 else
                 {
                     _logger.LogString("Finished without Errors or Warnings.");
-                    return WFR.WFR_Finished;
+                    return EWccStatus.Finished;
                 }
             }
             catch (Exception ex)

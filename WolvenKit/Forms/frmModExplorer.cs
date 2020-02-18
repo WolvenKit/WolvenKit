@@ -20,6 +20,8 @@ namespace WolvenKit
             UpdateModFileList(true,true);
             LastChange = DateTime.Now;
             ApplyCustomTheme();
+
+            importAsToolStripMenuItem.DropDown.MouseClick += DropDown_Click;
         }
 
         public W3Mod ActiveMod
@@ -32,7 +34,7 @@ namespace WolvenKit
         public event EventHandler<RequestFileArgs> RequestFileDelete;
         public event EventHandler<RequestFileArgs> RequestAssetBrowser;
         public event EventHandler<RequestFileArgs> RequestFileRename;
-        public event EventHandler<RequestFileArgs> RequestFileImport;
+        public event EventHandler<RequestImportArgs> RequestFileImport;
         public event EventHandler<RequestFileArgs> RequestFileCook;
         public List<string> FilteredFiles; 
         public bool FoldersShown = true;
@@ -154,15 +156,6 @@ namespace WolvenKit
             RequestFileOpen?.Invoke(this, new RequestFileArgs {File = e.Node.FullPath});
         }
 
-
-        private void importToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (modFileList.SelectedNode != null)
-            {
-                RequestFileImport?.Invoke(this, new RequestFileArgs { File = modFileList.SelectedNode.FullPath });
-            }
-        }
-
         private void cookToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (modFileList.SelectedNode != null)
@@ -259,11 +252,19 @@ namespace WolvenKit
             {
                 var fi = new FileInfo(selectedNode.FullPath);
                 var ext = fi.Extension.TrimStart('.');
-                importToolStripMenuItem.Enabled = Enum.GetNames(typeof(EImportable)).Contains(ext);
 
                 bool isbundle = Path.Combine(ActiveMod.FileDirectory, fi.ToString()).Contains(Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName));
                 cookToolStripMenuItem.Enabled = (!Enum.GetNames(typeof(EImportable)).Contains(ext) && !isbundle);
                 markAsModDlcFileToolStripMenuItem.Enabled = isbundle;
+
+                importAsToolStripMenuItem.Enabled = Enum.GetNames(typeof(EImportable)).Contains(ext) && !isbundle;
+                importAsToolStripMenuItem.DropDown.Items.Clear();
+                var types = REDTypes.RawExtensionToRedImport(ext);
+                foreach (var t in types)
+                {
+                    importAsToolStripMenuItem.DropDown.Items.Add(t);
+                }
+                
             } 
 
             pasteToolStripMenuItem.Enabled = File.Exists(Clipboard.GetText());
@@ -274,6 +275,19 @@ namespace WolvenKit
             copyToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
             
             showFileInExplorerToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
+        }
+
+        private void DropDown_Click(object sender, EventArgs e)
+        {
+            ToolStripDropDownMenu menuitem = sender as ToolStripDropDownMenu;
+            var items = menuitem.Items.Cast<ToolStripMenuItem>().ToList();
+            var selectedItem = items.FirstOrDefault(_ => _.Selected);
+
+            if (menuitem != null && selectedItem != null)
+            {
+                var ext = selectedItem.Text;
+                RequestFileImport?.Invoke(this, new RequestImportArgs { File = modFileList.SelectedNode.FullPath, Extension = ext });
+            }
         }
 
         public static IEnumerable<string> FallbackPaths(string path)

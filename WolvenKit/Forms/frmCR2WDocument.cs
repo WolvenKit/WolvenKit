@@ -203,10 +203,7 @@ namespace WolvenKit
                         {
                             mem.WriteTo(fs);
 
-                            if (OnFileSaved != null)
-                            {
-                                OnFileSaved(this, new FileSavedEventArgs {FileName = FileName, Stream = fs, File = File});
-                            }
+                            OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = fs, File = File });
                             fs.Close();
                         }
                     }

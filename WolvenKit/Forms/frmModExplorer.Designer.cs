@@ -36,8 +36,8 @@ namespace WolvenKit
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmModExplorer));
             this.modFileList = new System.Windows.Forms.TreeView();
             this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cookToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.removeFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -88,8 +88,8 @@ namespace WolvenKit
             // 
             this.contextMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.importToolStripMenuItem,
             this.cookToolStripMenuItem,
+            this.importAsToolStripMenuItem,
             this.toolStripSeparator3,
             this.removeFileToolStripMenuItem,
             this.renameToolStripMenuItem,
@@ -106,14 +106,6 @@ namespace WolvenKit
             this.contextMenu.Size = new System.Drawing.Size(264, 407);
             this.contextMenu.Opened += new System.EventHandler(this.contextMenu_Opened);
             // 
-            // importToolStripMenuItem
-            // 
-            this.importToolStripMenuItem.Enabled = false;
-            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(263, 32);
-            this.importToolStripMenuItem.Text = "Import";
-            this.importToolStripMenuItem.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
-            // 
             // cookToolStripMenuItem
             // 
             this.cookToolStripMenuItem.Enabled = false;
@@ -121,6 +113,12 @@ namespace WolvenKit
             this.cookToolStripMenuItem.Size = new System.Drawing.Size(263, 32);
             this.cookToolStripMenuItem.Text = "Cook files in directory";
             this.cookToolStripMenuItem.Click += new System.EventHandler(this.cookToolStripMenuItem_Click);
+            // 
+            // typeToolStripMenuItem
+            // 
+            this.importAsToolStripMenuItem.Name = "typeToolStripMenuItem";
+            this.importAsToolStripMenuItem.Size = new System.Drawing.Size(263, 32);
+            this.importAsToolStripMenuItem.Text = "Import as ...";
             // 
             // toolStripSeparator3
             // 
@@ -357,8 +355,8 @@ namespace WolvenKit
         private ToolStripLabel toolStripLabel1;
         private ToolStripMenuItem addFileToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator2;
-        private ToolStripMenuItem importToolStripMenuItem;
         private ToolStripMenuItem cookToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator3;
+        private ToolStripMenuItem importAsToolStripMenuItem;
     }
 }

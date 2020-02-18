@@ -51,21 +51,21 @@ namespace WolvenKit
         public string ProjectStatus
         {
             get => _projectstatus;
-            set => SetField(ref _projectstatus, value, "ProjectStatus");
+            set => SetField(ref _projectstatus, value, nameof(ProjectStatus));
         }
 
         private string _loadstatus = "Loading...";
         public string loadStatus
         {
             get => _loadstatus;
-            set => SetField(ref _loadstatus, value, "loadStatus");
+            set => SetField(ref _loadstatus, value, nameof(loadStatus));
         }
 
         private bool _loaded = false;
         public bool Loaded
         {
             get => _loaded;
-            set => SetField(ref _loaded, value, "Loaded");
+            set => SetField(ref _loaded, value, nameof(Loaded));
         }
 
 
@@ -73,7 +73,7 @@ namespace WolvenKit
         public KeyValuePair<string, frmOutput.Logtype> LogMessage
         {
             get => _logMessage;
-            set => SetField(ref _logMessage, value, "LogMessage");
+            set => SetField(ref _logMessage, value, nameof(LogMessage));
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace WolvenKit
         /// <param name="name">The name of the file.</param>
         /// <param name="archive">The manager to search for the file in.</param>
         /// <returns></returns>
-        public List<byte[]> ImportFile(string name,IWitcherArchive archive)
+        public static List<byte[]> ImportFile(string name,IWitcherArchive archive)
         {
             List<byte[]> ret = new List<byte[]>();
             archive.FileList.ToList().Where(x => x.Name.Contains(name)).ToList().ForEach(x =>
@@ -129,7 +129,7 @@ namespace WolvenKit
         /// Here we setup stuff we need in every form. Borders etc can be done here in the future.
         /// </summary>
         /// <param name="form">The form to initialize.</param>
-        public void InitForm(Form form)
+        public static void InitForm(Form form)
         {
             Bitmap bmp = WolvenKit.Properties.Resources.Logo_wkit;
             form.Icon = Icon.FromHandle(bmp.GetHicon());

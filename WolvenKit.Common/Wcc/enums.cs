@@ -6,6 +6,32 @@ using System.Threading.Tasks;
 
 namespace WolvenKit.Common.Wcc
 {
+    public static class REDTypes
+    {
+        public static List<string> RawExtensionToRedImport(string ext)
+        {
+            switch (ext)
+            {
+                case "apb": return Enum.GetNames(typeof(EApbImports)).Select(_ => $".{_}").ToList();
+                case "nxs": return Enum.GetNames(typeof(ENxsImports)).Select(_ => $".{_}").ToList();
+                default: return new List<string>();
+            }
+        }
+    }
+    
+
+    public enum ENxsImports
+    {
+        w2mesh,
+        reddest
+    }
+
+    public enum EApbImports
+    {
+        redcloth,
+        redapex
+    }
+
     public enum EImportable
     {
         bmp,
@@ -19,11 +45,11 @@ namespace WolvenKit.Common.Wcc
         re
     };
 
-    public enum WFR
+    public enum EWccStatus
     {
-        WFR_Error = -1,
-        WFR_NotRun = 0,
-        WFR_Finished = 1
+        Error = -1,
+        NotRun = 0,
+        Finished = 1
     }
 
     /// <summary>

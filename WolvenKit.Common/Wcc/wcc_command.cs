@@ -32,7 +32,7 @@ namespace WolvenKit.Common.Wcc
         /// Runs the wcc lite command
         /// </summary>
         /// <returns></returns>
-        public WFR Run() => WFR.WFR_Finished;
+        public EWccStatus Run() => EWccStatus.Finished;
         /// <summary>
         /// returns a string constructed from the variables of the wcc_lite command class
         /// </summary>

@@ -38,7 +38,7 @@ namespace WolvenKit.Common.Services
         {
 
             Log = value;// + "\r\n";
-            OnPropertyChanged("Log");
+            OnPropertyChanged(nameof(Log));
         }
         /// <summary>
         /// Log an Interpretable LogMessage

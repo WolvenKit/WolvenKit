@@ -8,7 +8,6 @@ using System.Text.RegularExpressions;
 using WolvenKit.CR2W.Types;
 using RED.CRC32;
 using System.Runtime.InteropServices;
-using RED.FNV1A;
 
 namespace WolvenKit.CR2W
 {
@@ -58,6 +57,7 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Properties
+
         public List<CLocalizedString> LocalizedStrings = new List<CLocalizedString>();
         public List<string> UnknownTypes = new List<string>();
         public byte[] bufferdata { get; set; }
@@ -237,7 +237,7 @@ namespace WolvenKit.CR2W
             return parsedvar;
         }
         
-        public void WriteVariable(BinaryWriter file, CVariable var)
+        public static void WriteVariable(BinaryWriter file, CVariable var)
         {
             file.Write(var.nameId);
             file.Write(var.typeId);
@@ -354,8 +354,10 @@ namespace WolvenKit.CR2W
                 FixBufferCRC32(ref m_buffers[i]);
 
             // Write headers again with fixed offsets
-            m_fileheader.crc32 = CalculateHeaderCRC32();
+            //m_fileheader.crc32 = CalculateHeaderCRC32();
             WriteHeader(file);
+            m_fileheader.crc32 = CalculateHeaderCRC32();
+            WriteFileHeader(file);
 
             m_stream = null;
 
@@ -456,16 +458,32 @@ namespace WolvenKit.CR2W
                     buffer.crc32 = Crc32Algorithm.Compute(m_temp);*/
                 }
             }
+
+            uint CalculateHeaderCRC32()
+            {
+                var hash = new Crc32Algorithm(false);
+                hash.Append(BitConverter.GetBytes(MAGIC));
+                hash.Append(BitConverter.GetBytes(m_fileheader.version));
+                hash.Append(BitConverter.GetBytes(m_fileheader.flags));
+                hash.Append(BitConverter.GetBytes(m_fileheader.timeStamp));
+                hash.Append(BitConverter.GetBytes(m_fileheader.buildVersion));
+                hash.Append(BitConverter.GetBytes(m_fileheader.fileSize));
+                hash.Append(BitConverter.GetBytes(m_fileheader.bufferSize));
+                hash.Append(BitConverter.GetBytes(DEADBEEF));
+                hash.Append(BitConverter.GetBytes(m_fileheader.numChunks));
+                foreach (var h in m_tableheaders)
+                {
+                    hash.Append(BitConverter.GetBytes(h.offset));
+                    hash.Append(BitConverter.GetBytes(h.size));
+                    hash.Append(BitConverter.GetBytes(h.crc32));
+                }
+                return hash.HashUInt32;
+            }
         }
 
         private void WriteHeader(BinaryWriter file)
         {
-            file.BaseStream.Seek(0, SeekOrigin.Begin);
-
-            WriteStruct<uint>(MAGIC);
-            WriteStruct<CR2WFileHeader>(m_fileheader);
-            WriteStructs<CR2WTableHeader>(m_tableheaders); // offsets change if stringtable changes
-            WriteStringBuffer();
+            WriteFileHeader(file);
 
             #region Write Tables
             m_tableheaders[1].size = (uint)m_names.Length;
@@ -500,28 +518,164 @@ namespace WolvenKit.CR2W
             #endregion
         }
 
-        private void WriteBuffers(BinaryWriter file)
+        private void WriteFileHeader(BinaryWriter file)
         {
-            var chunkbuffer_offset = file.BaseStream.Position;
+            file.BaseStream.Seek(0, SeekOrigin.Begin);
+
+            WriteStruct<uint>(MAGIC);
+            WriteStruct<CR2WFileHeader>(m_fileheader);
+            WriteStructs<CR2WTableHeader>(m_tableheaders); // offsets change if stringtable changes
+            WriteStringBuffer();
+        }
+
+        private void WriteBuffers(BinaryWriter bw)
+        {
             // Write chunk buffers
             for (var i = 0; i < chunks.Count; i++)
             {
-                chunks[i].WriteData(file);
+                chunks[i].WriteData(bw);
             }
 
             // Write block7
             for (var i = 0; i < embedded.Count; i++)
             {
-                embedded[i].WriteData(file);
+                embedded[i].WriteData(bw);
             }
 
-            m_fileheader.fileSize = (uint) file.BaseStream.Position;
+            m_fileheader.fileSize = (uint) bw.BaseStream.Position;
 
             if (bufferdata != null)
             {
-                file.Write(bufferdata);
+                bw.Write(bufferdata);
             }
-            m_fileheader.bufferSize = (uint) file.BaseStream.Position;
+            m_fileheader.bufferSize = (uint) bw.BaseStream.Position;
+        }
+        #endregion
+
+        #region Table Reading
+        private byte[] ReadStringsBuffer()
+        {
+            var start = m_tableheaders[0].offset;
+            var size = m_tableheaders[0].size;
+            var crc = m_tableheaders[0].crc32;
+
+            var m_temp = new byte[size];
+            m_stream.Read(m_temp, 0, m_temp.Length);
+
+            m_dictionary = new Dictionary<uint, string>();
+            StringBuilder sb = new StringBuilder();
+            uint offset = 0;
+            for (uint i = 0; i < size; i++)
+            {
+                var b = m_temp[i];
+                if (b == 0)
+                {
+                    m_dictionary.Add(offset, sb.ToString());
+                    sb.Clear();
+                    offset = i + 1;
+                }
+                else
+                {
+                    sb.Append((char)b);
+                }
+            }
+
+            return m_temp;
+        }
+        private void WriteStringBuffer()
+        {
+            m_tableheaders[0].crc32 = Crc32Algorithm.Compute(m_strings);
+            m_stream.Write(m_strings, 0, m_strings.Length);
+        }
+
+        private T[] ReadTable<T>(int index) where T : struct
+        {
+            m_stream.Seek(m_tableheaders[index].offset, SeekOrigin.Begin);
+
+            var hash = new Crc32Algorithm(false);
+            var table = ReadStructs<T>(m_tableheaders[index].size, hash);
+
+            return table;
+        }
+        private void WriteTable<T>(T[] array, int index) where T : struct
+        {
+            if (array.Length == 0)
+                return;
+
+            var crc = new Crc32Algorithm(false);
+            WriteStructs<T>(array, crc);
+            m_tableheaders[index].crc32 = crc.HashUInt32;
+        }
+        #endregion
+
+        #region Supporting Functions
+        private T ReadStruct<T>(Crc32Algorithm crc32 = null) where T : struct
+        {
+            var size = Marshal.SizeOf<T>();
+
+            var m_temp = new byte[size];
+            m_stream.Read(m_temp, 0, size);
+
+            var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
+            var item = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
+
+            if (crc32 != null)
+                crc32.Append(m_temp);
+
+            handle.Free();
+
+            return item;
+        }
+        private T[] ReadStructs<T>(uint count, Crc32Algorithm crc32 = null) where T : struct
+        {
+            var size = Marshal.SizeOf<T>();
+            var items = new T[count];
+
+            var m_temp = new byte[size];
+            for (uint i = 0; i < count; i++)
+            {
+                m_stream.Read(m_temp, 0, size);
+
+                var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
+                items[i] = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
+
+                if (crc32 != null)
+                    crc32.Append(m_temp);
+
+                handle.Free();
+            }
+
+            return items;
+        }
+        private void WriteStruct<T>(T value, Crc32Algorithm crc32 = null) where T : struct
+        {
+            var m_temp = new byte[Marshal.SizeOf<T>()];
+            var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
+
+            Marshal.StructureToPtr(value, handle.AddrOfPinnedObject(), true);
+            m_stream.Write(m_temp, 0, m_temp.Length);
+
+            if (crc32 != null)
+                crc32.Append(m_temp);
+
+            handle.Free();
+        }
+        private void WriteStructs<T>(T[] array, Crc32Algorithm crc32 = null) where T : struct
+        {
+            var size = Marshal.SizeOf<T>();
+            var m_temp = new byte[size];
+            for (int i = 0; i < array.Length; i++)
+            {
+                var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
+
+                Marshal.StructureToPtr(array[i], handle.AddrOfPinnedObject(), true);
+                m_stream.Write(m_temp, 0, m_temp.Length);
+
+                if (crc32 != null)
+                    crc32.Append(m_temp);
+
+                handle.Free();
+            }
         }
         #endregion
 
@@ -533,7 +687,7 @@ namespace WolvenKit.CR2W
             chunk.CreateDefaultData();
             if (parent != null)
             {
-                chunk.ParentChunkId = (uint) chunks.IndexOf(parent) + 1;
+                chunk.ParentChunkId = (uint)chunks.IndexOf(parent) + 1;
             }
 
             chunks.Add(chunk);
@@ -547,7 +701,7 @@ namespace WolvenKit.CR2W
             chunk.data = data;
             if (parent != null)
             {
-                chunk.ParentChunkId = (uint) chunks.IndexOf(parent) + 1;
+                chunk.ParentChunkId = (uint)chunks.IndexOf(parent) + 1;
             }
 
             chunks.Add(chunk);
@@ -787,156 +941,5 @@ namespace WolvenKit.CR2W
             return chunks.Remove(chunk);
         }
         #endregion
-
-        #region Table Reading
-        private byte[] ReadStringsBuffer()
-        {
-            var start = m_tableheaders[0].offset;
-            var size = m_tableheaders[0].size;
-            var crc = m_tableheaders[0].crc32;
-
-            var m_temp = new byte[size];
-            m_stream.Read(m_temp, 0, m_temp.Length);
-
-            m_dictionary = new Dictionary<uint, string>();
-            StringBuilder sb = new StringBuilder();
-            uint offset = 0;
-            for (uint i = 0; i < size; i++)
-            {
-                var b = m_temp[i];
-                if (b == 0)
-                {
-                    m_dictionary.Add(offset, sb.ToString());
-                    sb.Clear();
-                    offset = i + 1;
-                }
-                else
-                {
-                    sb.Append((char)b);
-                }
-            }
-
-            return m_temp;
-        }
-        private void WriteStringBuffer()
-        {
-            m_tableheaders[0].crc32 = Crc32Algorithm.Compute(m_strings);
-            m_stream.Write(m_strings, 0, m_strings.Length);
-        }
-
-        private T[] ReadTable<T>(int index) where T : struct
-        {
-            m_stream.Seek(m_tableheaders[index].offset, SeekOrigin.Begin);
-
-            var hash = new Crc32Algorithm(false);
-            var table = ReadStructs<T>(m_tableheaders[index].size, hash);
-
-            return table;
-        }
-        private void WriteTable<T>(T[] array, int index) where T : struct
-        {
-            if (array.Length == 0)
-                return;
-
-            var crc = new Crc32Algorithm(false);
-            WriteStructs<T>(array, crc);
-            m_tableheaders[index].crc32 = crc.HashUInt32;
-        }
-        #endregion
-
-        #region Hashing
-        private uint CalculateHeaderCRC32()
-        {
-            var hash = new Crc32Algorithm(false);
-            hash.Append(BitConverter.GetBytes(MAGIC));
-            hash.Append(BitConverter.GetBytes(m_fileheader.version));
-            hash.Append(BitConverter.GetBytes(m_fileheader.flags));
-            hash.Append(BitConverter.GetBytes(m_fileheader.timeStamp));
-            hash.Append(BitConverter.GetBytes(m_fileheader.buildVersion));
-            hash.Append(BitConverter.GetBytes(m_fileheader.fileSize));
-            hash.Append(BitConverter.GetBytes(m_fileheader.bufferSize));
-            hash.Append(BitConverter.GetBytes(DEADBEEF));
-            hash.Append(BitConverter.GetBytes(m_fileheader.numChunks));
-            foreach (var h in m_tableheaders)
-            {
-                hash.Append(BitConverter.GetBytes(h.offset));
-                hash.Append(BitConverter.GetBytes(h.size));
-                hash.Append(BitConverter.GetBytes(h.crc32));
-            }
-            return hash.HashUInt32;
-        }
-        #endregion
-
-        #region Supporting Functions
-        private T ReadStruct<T>(Crc32Algorithm crc32 = null) where T : struct
-        {
-            var size = Marshal.SizeOf<T>();
-
-            var m_temp = new byte[size];
-            m_stream.Read(m_temp, 0, size);
-
-            var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
-            var item = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
-
-            if (crc32 != null)
-                crc32.Append(m_temp);
-
-            handle.Free();
-
-            return item;
-        }
-        private T[] ReadStructs<T>(uint count, Crc32Algorithm crc32 = null) where T : struct
-        {
-            var size = Marshal.SizeOf<T>();
-            var items = new T[count];
-
-            var m_temp = new byte[size];
-            for (uint i = 0; i < count; i++)
-            {
-                m_stream.Read(m_temp, 0, size);
-
-                var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
-                items[i] = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
-
-                if (crc32 != null)
-                    crc32.Append(m_temp);
-
-                handle.Free();
-            }
-
-            return items;
-        }
-        private void WriteStruct<T>(T value, Crc32Algorithm crc32 = null) where T : struct
-        {
-            var m_temp = new byte[Marshal.SizeOf<T>()];
-            var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
-
-            Marshal.StructureToPtr(value, handle.AddrOfPinnedObject(), true);
-            m_stream.Write(m_temp, 0, m_temp.Length);
-
-            if (crc32 != null)
-                crc32.Append(m_temp);
-
-            handle.Free();
-        }
-        private void WriteStructs<T>(T[] array, Crc32Algorithm crc32 = null) where T : struct
-        {
-            var size = Marshal.SizeOf<T>();
-            var m_temp = new byte[size];
-            for (int i = 0; i < array.Length; i++)
-            {
-                var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
-
-                Marshal.StructureToPtr(array[i], handle.AddrOfPinnedObject(), true);
-                m_stream.Write(m_temp, 0, m_temp.Length);
-
-                if (crc32 != null)
-                    crc32.Append(m_temp);
-
-                handle.Free();
-            }
-        }
-        #endregion
-
     }
 }

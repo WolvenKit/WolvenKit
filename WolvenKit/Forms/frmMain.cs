@@ -107,7 +107,7 @@ namespace WolvenKit
             hotkeys.RegisterHotkey(Keys.F1, HKHelp, "Help");
             hotkeys.RegisterHotkey(Keys.Control | Keys.C, HKCopy, "Copy");
             hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste, "Paste");
-            MainController.Get().InitForm(this);
+            MainController.InitForm(this);
 
             ExtendedLogger = new LoggerService();
             ExtendedLogger.PropertyChanged += LoggerUpdated;
@@ -1453,60 +1453,62 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             openMod();
         }
 
-        private void ModExplorer_RequestFileImport(object sender, RequestFileArgs e)
+        private void ModExplorer_RequestFileImport(object sender, RequestImportArgs e)
         {
             var filename = e.File;
+            filename = filename.TrimStart("Raw".ToCharArray());
+            filename = filename.TrimStart(Path.DirectorySeparatorChar);
+
+            var importedExtension = e.Extension;
+
             var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
             if (!File.Exists(fullpath))
                 return;
-            #region Get cooked types
+
+            #region Get import types
             var ext = Path.GetExtension(fullpath);
-            List<string> cookedexts = new List<string>();
+            List<string> importedexts = new List<string>();
             switch (ext)
             {
-                case ".apb": 
-                    cookedexts.AddRange(new string[] { ".redcloth", ".redapex"}); 
+                /*case ".apb":
+                    importedexts = REDTypes.RawExtensionToRedImport("apb");
                     break;
                 case ".nxs": 
-                    cookedexts.AddRange(new string[] { ".w2mesh", ".reddest"}); 
-                    break;
+                    importedexts = REDTypes.RawExtensionToRedImport("nxs");
+                    break;*/
                 case ".re":
                 case ".fbx":
-                    cookedexts.AddRange(new string[] { ".w2mesh" });
+                    importedexts.AddRange(new string[] { ".w2mesh" });
                     break;
                 case ".jpg":
                 case ".pga":
                 case ".tga":
                 case ".dds":
                 case ".bmp":
-                    cookedexts.AddRange(new string[] { ".xbm" });
+                    importedexts.AddRange(new string[] { ".xbm" });
                     break;
                 default:
-                    return;
+                    importedexts.Add(importedExtension);
+                    break;
             }
             #endregion
 
-            var dlg = new frmAddChunk(cookedexts);
-            if (dlg.ShowDialog() == DialogResult.OK)
+            StartImport(importedexts.FirstOrDefault());
+            
+            void StartImport(string type)
             {
-                try
-                {
-                    var modcolcachedir = Path.Combine(ActiveMod.ModDirectory, @"CollisionCache");
-                    var newpath = Path.Combine(modcolcachedir, $"{filename.TrimEnd(ext.ToCharArray())}{dlg.ChunkType}");
+                var modcolcachedir = Path.Combine(ActiveMod.ModDirectory, @"CollisionCache");
+                var newpath = Path.Combine(modcolcachedir, $"{filename.TrimEnd(ext.ToCharArray())}{type}");
 
-                    var import = new import()
-                    {
-                        File = fullpath,
-                        Out = newpath,
-                        Depot = Path.GetDirectoryName(fullpath)
-                    };
-                    WccHelper.RunCommand(import);
-                }
-                catch (InvalidChunkTypeException ex)
+                var import = new import()
                 {
-                    MessageBox.Show(ex.Message, "Error adding chunk.");
-                }
+                    File = fullpath,
+                    Out = newpath,
+                    Depot = Path.GetDirectoryName(fullpath)
+                };
+                WccHelper.RunCommand(import);
             }
+
         }
 
         private void ModExplorer_RequestFileCook(object sender, RequestFileArgs e)
@@ -2554,6 +2556,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     MainController.Get().ProjectStatus = "Generating DLC collision cache";
                     var cmd = new buildcache()
                     {
+                        Platform = platform.pc,
                         builder = cachebuilder.physics,
                         basedir = dlccollcachedir,
                         DataBase = $"{ cookedDLCDir }\\cook.db",
