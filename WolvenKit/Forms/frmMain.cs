@@ -32,6 +32,7 @@ using WolvenKit.Extensions;
 using WolvenKit.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.Common.Services;
+using System.ComponentModel;
 
 namespace WolvenKit
 {
@@ -109,8 +110,11 @@ namespace WolvenKit
             MainController.Get().InitForm(this);
 
             ExtendedLogger = new LoggerService();
+            ExtendedLogger.PropertyChanged += LoggerUpdated;
             WccHelper = new WCC_Task(MainController.Get().Configuration.WccLite, ExtendedLogger);
         }
+
+        
 
         public void GlobalApplyTheme()
         {
@@ -139,13 +143,20 @@ namespace WolvenKit
         private delegate void logDelegate(string t, frmOutput.Logtype type);
 
         #region Methods
+        private void LoggerUpdated(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Log")
+            {
+                Invoke(new logDelegate(AddOutput), ((LoggerService)sender).Log + "\n", frmOutput.Logtype.Wcc);
+            }
+        }
         /// <summary>
         /// Occurs when something in the maincontroller is updated that is INotifyProeprtyChanged
         /// Thread safe and always should be
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void MainControllerUpdated(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void MainControllerUpdated(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "ProjectStatus")
                 Invoke(new strDelegate(SetStatusLabelText), ((MainController)sender).ProjectStatus);
@@ -717,7 +728,17 @@ namespace WolvenKit
                 if (manager.Items.Any(x => x.Value.Any(y => y.Name == item.FullPath)))
                 {
                     var archives = manager.FileList.Where(x => x.Name == item.FullPath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
-                    var filename = Path.Combine(ActiveMod.FileDirectory, AddAsDLC ? Path.Combine("DLC",archives.First().Value.Bundle.TypeName,"dlc",ActiveMod.Name,item.FullPath) : Path.Combine("Mod",archives.First().Value.Bundle.TypeName,item.FullPath));
+                    string filename;
+                    if (archives.First().Value.Bundle.TypeName == MainController.Get().CollisionManager.TypeName ||
+                        archives.First().Value.Bundle.TypeName == MainController.Get().TextureManager.TypeName)
+                    {
+                        filename = Path.Combine("Mod", "Raw", archives.First().Value.Bundle.TypeName, item.FullPath);
+
+                    }
+                    else
+                    {
+                        filename = Path.Combine(ActiveMod.FileDirectory, AddAsDLC ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName, "dlc", ActiveMod.Name, item.FullPath) : Path.Combine("Mod", archives.First().Value.Bundle.TypeName, item.FullPath));
+                    }
                     if (archives.Count() > 1)
                     {
 
@@ -1480,7 +1501,6 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                         Depot = Path.GetDirectoryName(fullpath)
                     };
                     WccHelper.RunCommand(import);
-                    AddOutput(ExtendedLogger.Log +  "\n", frmOutput.Logtype.Wcc);
                 }
                 catch (InvalidChunkTypeException ex)
                 {
@@ -1523,8 +1543,9 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             if (existingfiles.Intersect(files).Any())
             {
                 if (MessageBox.Show(
-                     "Some of the files you are about to cook already exist in your mod. These files will be overwritten. Are you sure you want to permanently overwrite them?", "Confirmation", MessageBoxButtons.OKCancel
-                 ) != DialogResult.OK)
+                     "Some of the files you are about to cook already exist in your mod. These files will be overwritten. Are you sure you want to permanently overwrite them?"
+                     , "Confirmation", MessageBoxButtons.YesNo
+                 ) != DialogResult.Yes)
                 {
                     return;
                 }
@@ -1540,7 +1561,6 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                     outdir = cookedModDir
                 };
                 WccHelper.RunCommand(cook);
-                AddOutput(ExtendedLogger.Log + "\n", frmOutput.Logtype.Wcc);
             }
             catch (InvalidChunkTypeException ex)
             {

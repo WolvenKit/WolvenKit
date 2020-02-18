@@ -11,12 +11,14 @@ namespace WolvenKit.Common.Services
    
 
     [TypeConverter(typeof(ExpandableObjectConverter))]
-    public class LoggerService : ObservableObject, ILoggerService
+    public class LoggerService : ObservableObject, ILoggerService, INotifyPropertyChanged
     {
         public LoggerService()
         {
             ExtendedLog = new ObservableCollection<InterpretedLogMessage>();
         }
+
+        
 
         #region Properties
         public ObservableCollection<InterpretedLogMessage> ExtendedLog { get; set; }
@@ -35,7 +37,7 @@ namespace WolvenKit.Common.Services
         public void LogString(string value)
         {
 
-            Log += value + "\r\n";
+            Log = value;// + "\r\n";
             OnPropertyChanged("Log");
         }
         /// <summary>

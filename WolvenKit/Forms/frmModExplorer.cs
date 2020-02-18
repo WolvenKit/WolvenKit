@@ -263,6 +263,7 @@ namespace WolvenKit
 
                 bool isbundle = Path.Combine(ActiveMod.FileDirectory, fi.ToString()).Contains(Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName));
                 cookToolStripMenuItem.Enabled = (!Enum.GetNames(typeof(EImportable)).Contains(ext) && !isbundle);
+                markAsModDlcFileToolStripMenuItem.Enabled = isbundle;
             } 
 
             pasteToolStripMenuItem.Enabled = File.Exists(Clipboard.GetText());
@@ -271,7 +272,7 @@ namespace WolvenKit
             renameToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
             copyRelativePathToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
             copyToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
-            markAsModDlcFileToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
+            
             showFileInExplorerToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
         }
 

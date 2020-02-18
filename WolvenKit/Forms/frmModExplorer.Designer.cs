@@ -164,6 +164,7 @@ namespace WolvenKit
             // 
             // markAsModDlcFileToolStripMenuItem
             // 
+            this.markAsModDlcFileToolStripMenuItem.Enabled = false;
             this.markAsModDlcFileToolStripMenuItem.Name = "markAsModDlcFileToolStripMenuItem";
             this.markAsModDlcFileToolStripMenuItem.Size = new System.Drawing.Size(263, 32);
             this.markAsModDlcFileToolStripMenuItem.Text = "Mark as [Mod/Dlc] file";
