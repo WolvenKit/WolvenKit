@@ -1456,8 +1456,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
         private void ModExplorer_RequestFileImport(object sender, RequestImportArgs e)
         {
             var filename = e.File;
-            filename = filename.TrimStart("Raw".ToCharArray());
-            filename = filename.TrimStart(Path.DirectorySeparatorChar);
+            
 
             var importedExtension = e.Extension;
 
@@ -1498,6 +1497,8 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             void StartImport(string type)
             {
                 var modcolcachedir = Path.Combine(ActiveMod.ModDirectory, @"CollisionCache");
+                filename = filename.TrimStart("Raw".ToCharArray());
+                filename = filename.TrimStart(Path.DirectorySeparatorChar);
                 var newpath = Path.Combine(modcolcachedir, $"{filename.TrimEnd(ext.ToCharArray())}{type}");
 
                 var import = new import()
