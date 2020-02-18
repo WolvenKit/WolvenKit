@@ -14,8 +14,8 @@ namespace WolvenKit
     {
         private CR2WFile file;
 
-
-        private List<int> _parentIds { get; set; } = new List<int>();
+        //Item1 = parentidx, Item2 = list of childrenidx
+        private List<Tuple<int,List<CR2WChunk>>> chunkHelperList { get; set; } = new List<Tuple<int, List<CR2WChunk>>>();
             
         public frmChunkList()
         {
@@ -23,15 +23,14 @@ namespace WolvenKit
             ApplyCustomTheme();
             //limitTB.Enabled = limitCB.Checked;
             treeListView.ItemSelectionChanged += chunkListView_ItemSelectionChanged;
-            
 
             treeListView.CanExpandGetter = delegate (object x) {
-                return _parentIds.Any(_ => _ - 1 == ((CR2WChunk)x).ChunkIndex);
+                var idx = ((CR2WChunk)x).ChunkIndex;
+                return chunkHelperList[idx].Item2.Any();
             };
             treeListView.ChildrenGetter = delegate (object x) {
-                var childIdxList = Enumerable.Range(0, _parentIds.Count).Where(i => _parentIds[i] -1 == ((CR2WChunk)x).ChunkIndex).ToList();
-                var results = File.chunks.Where(_ => childIdxList.Contains(_.ChunkIndex)).ToList();
-                return results;
+                var idx = ((CR2WChunk)x).ChunkIndex;
+                return  chunkHelperList[idx].Item2;
             };
         }
 
@@ -47,10 +46,22 @@ namespace WolvenKit
 
         private void UpdateHelperList()
         {
-            if (File != null)
-                _parentIds = File.chunks.Select(_ => (int)_.ParentChunkId).ToList();
-        }
+            chunkHelperList.Clear();
 
+            if (File != null)
+            {
+                var parentIds = File.chunks.Select(_ => new Tuple<int,int>((int)_.ParentChunkId - 1,(int)_.ChunkIndex)).ToList();
+
+                for (int i = 0; i < File.chunks.Count; i++)
+                {
+                    var chunk = File.chunks[i];
+                    var childIdxList = parentIds.Where(_ => _.Item1.Equals(chunk.ChunkIndex)).Select(_ => _.Item2).ToList();
+                    var children = File.chunks.Where(_ => childIdxList.Contains(_.ChunkIndex)).ToList();
+                    chunkHelperList.Add(new Tuple<int, List<CR2WChunk>>((int)chunk.ParentChunkId, children));
+                }
+            }
+        }
+        
         public event EventHandler<SelectChunkArgs> OnSelectChunk;
 
         public void UpdateList(string keyword = "")
@@ -235,3 +246,4 @@ namespace WolvenKit
         }
     }
 }
+ 

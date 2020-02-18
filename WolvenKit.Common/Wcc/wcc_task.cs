@@ -9,6 +9,8 @@ using System.Linq;
 namespace WolvenKit.Common.Wcc
 {
     using Services;
+    using System.Text;
+    using System.Threading;
 
     /// <summary>
     /// 
@@ -29,10 +31,10 @@ namespace WolvenKit.Common.Wcc
         /// </summary>
         /// <param name="cmd"></param>
         /// <returns></returns>
-        public EWccStatus RunCommand(WCC_Command cmd)
+        public async Task RunCommand(WCC_Command cmd)
         {
             string args = cmd.Arguments;
-            return RunCommand(cmd.Name, args);
+            await RunCommand(cmd.Name, args);
         }
 
         /// <summary>
@@ -40,62 +42,65 @@ namespace WolvenKit.Common.Wcc
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public EWccStatus RunCommand(string cmdName, string args)
+        public async Task RunCommand(string cmdName, string args)
         {
-            //string wccPath = Config.GetConfigSetting("WCC_Path");
             string wccPath = _wccPath;
-            var proc = new ProcessStartInfo(wccPath) { WorkingDirectory = Path.GetDirectoryName(wccPath) };
-
-            try
+            using (Process process = new Process())
             {
-                _logger.LogString($"-----------------------------------------------------");
-                _logger.LogString($"WCC_TASK: {args}");
-
-                proc.Arguments = args;
-                proc.UseShellExecute = false;
-                proc.RedirectStandardOutput = true;
-                proc.WindowStyle = ProcessWindowStyle.Hidden;
-                proc.CreateNoWindow = true;
-
-                using (var process = Process.Start(proc))
+                try
                 {
-                    using (var reader = process.StandardOutput)
+                    _logger.LogString($"-----------------------------------------------------");
+                    _logger.LogString($"WCC_TASK: {args}");
+
+                    process.StartInfo.FileName = wccPath;
+                    process.StartInfo.WorkingDirectory = Path.GetDirectoryName(wccPath);
+                    process.StartInfo.Arguments = args;
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.CreateNoWindow = true;
+
+                    using (AutoResetEvent outputWaitHandle = new AutoResetEvent(false))
                     {
-                        while (true)
+                        process.OutputDataReceived += (sender, e) =>
                         {
-                            string result = reader.ReadLine();
+                            if (e.Data == null)
+                            {
+                                outputWaitHandle.Close();
+                                //Handle Errors
+                                if (_logger.ExtendedLog.Any(x => x.Flag == LogFlag.WLF_Error))
+                                {
+                                    _logger.LogString("Finished with Errors.");
+                                    //return EWccStatus.Error;
+                                }
+                                else if (_logger.ExtendedLog.Any(x => x.Flag == LogFlag.WLF_Error))
+                                {
+                                    _logger.LogString("Finished with Warnings.");
+                                    //return EWccStatus.Finished;
+                                }
+                                else
+                                {
+                                    _logger.LogString("Finished succesfully.");
+                                    //return EWccStatus.Finished;
+                                }
+                            }
+                            else
+                            {
+                                _logger.LogString(e.Data);
+                            }
+                        };
 
-                            _logger.LogString(result);
-                            _logger.LogExtended(SystemLogFlag.SLF_Interpretable, ToolFlag.TLF_Wcc, cmdName, $"{result}");
-
-                            if (reader.EndOfStream)
-                                break;
-                        }
+                        process.Start();
+                        process.BeginOutputReadLine();
                     }
-                }
 
-                //Handle Errors
-                if (_logger.ExtendedLog.Any(x => x.Flag == LogFlag.WLF_Error))
-                {
-                    _logger.LogString("Finished with Errors.");
-                    return EWccStatus.Error;
+                    
                 }
-                else if (_logger.ExtendedLog.Any(x => x.Flag == LogFlag.WLF_Error))
+                catch (Exception ex)
                 {
-                    _logger.LogString("Finished with Warnings.");
-                    return EWccStatus.Finished;
+                    _logger.LogString(ex.ToString());
+                    throw ex;
+
                 }
-                else
-                {
-                    _logger.LogString("Finished without Errors or Warnings.");
-                    return EWccStatus.Finished;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogString(ex.ToString());
-                throw ex;
-                
             }
         }
     }

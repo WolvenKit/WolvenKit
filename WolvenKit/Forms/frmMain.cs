@@ -1453,13 +1453,10 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             openMod();
         }
 
-        private void ModExplorer_RequestFileImport(object sender, RequestImportArgs e)
+        private async void ModExplorer_RequestFileImport(object sender, RequestImportArgs e)
         {
             var filename = e.File;
-            
-
             var importedExtension = e.Extension;
-
             var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
             if (!File.Exists(fullpath))
                 return;
@@ -1492,9 +1489,10 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             }
             #endregion
 
-            StartImport(importedexts.FirstOrDefault());
+
+            await StartImport(importedexts.FirstOrDefault());
             
-            void StartImport(string type)
+            async Task StartImport(string type)
             {
                 var modcolcachedir = Path.Combine(ActiveMod.ModDirectory, @"CollisionCache");
                 filename = filename.TrimStart("Raw".ToCharArray());
@@ -1507,7 +1505,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                     Out = newpath,
                     Depot = Path.GetDirectoryName(fullpath)
                 };
-                WccHelper.RunCommand(import);
+                await WccHelper.RunCommand(import);
             }
 
         }
@@ -1529,7 +1527,6 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             reldir = reldir.TrimStart("CollisionCache".ToCharArray());
             reldir = reldir.TrimStart("TextureCache".ToCharArray());
             reldir = reldir.TrimStart(Path.DirectorySeparatorChar);
-
 
             var files = Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories)
                 .Select(_ => _.TrimStart(dir.TrimEnd(reldir.ToCharArray()).ToCharArray()))

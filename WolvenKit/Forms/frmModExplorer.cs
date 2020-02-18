@@ -254,10 +254,13 @@ namespace WolvenKit
                 var ext = fi.Extension.TrimStart('.');
 
                 bool isbundle = Path.Combine(ActiveMod.FileDirectory, fi.ToString()).Contains(Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName));
-                cookToolStripMenuItem.Enabled = (!Enum.GetNames(typeof(EImportable)).Contains(ext) && !isbundle);
+                bool israw = Path.Combine(ActiveMod.FileDirectory, fi.ToString()).Contains(Path.Combine(ActiveMod.FileDirectory, "Raw"));
+
+
+                cookToolStripMenuItem.Enabled = (!Enum.GetNames(typeof(EImportable)).Contains(ext) && !isbundle && !israw);
                 markAsModDlcFileToolStripMenuItem.Enabled = isbundle;
 
-                importAsToolStripMenuItem.Enabled = Enum.GetNames(typeof(EImportable)).Contains(ext) && !isbundle;
+                importAsToolStripMenuItem.Enabled = Enum.GetNames(typeof(EImportable)).Contains(ext) && !isbundle && israw;
                 importAsToolStripMenuItem.DropDown.Items.Clear();
                 var types = REDTypes.RawExtensionToRedImport(ext);
                 foreach (var t in types)
@@ -277,7 +280,7 @@ namespace WolvenKit
             showFileInExplorerToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
         }
 
-        private void DropDown_Click(object sender, EventArgs e)
+        private async void DropDown_Click(object sender, EventArgs e)
         {
             ToolStripDropDownMenu menuitem = sender as ToolStripDropDownMenu;
             var items = menuitem.Items.Cast<ToolStripMenuItem>().ToList();
