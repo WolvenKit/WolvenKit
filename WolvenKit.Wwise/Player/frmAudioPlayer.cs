@@ -51,7 +51,7 @@ namespace WolvenKit.Wwise.Player
             si.WindowStyle = ProcessWindowStyle.Hidden;
             si.UseShellExecute = false;
             var proc = Process.Start(si);
-            proc.WaitForExit(1000);
+            proc.WaitForExit();
             this.Text = "Sound preview - " + audiofile + "[DONE]";
             FilesListView.Items.Clear();
             foreach (var f in Directory.GetFiles(wdir))
