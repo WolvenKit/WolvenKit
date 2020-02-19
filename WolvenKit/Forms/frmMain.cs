@@ -1127,35 +1127,14 @@ namespace WolvenKit
 
         async Task DumpFile(string folder, string outfolder)
         {
-            var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
             try
             {
-                MainController.Get().ProjectStatus = "Dumping folder";
-                proc.Arguments = $"dumpfile -dir={folder} -out={outfolder}";
-                proc.UseShellExecute = false;
-                proc.RedirectStandardOutput = true;
-                proc.WindowStyle = ProcessWindowStyle.Hidden;
-                proc.CreateNoWindow = true;
-                AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
-
-                using (var process = Process.Start(proc))
+                var cmd = new Wcc_lite.dumpfile()
                 {
-                    using (var reader = process.StandardOutput)
-                    {
-                        while (true)
-                        {
-                            var result = await reader.ReadLineAsync();
-
-                            AddOutput(result + "\n", frmOutput.Logtype.Wcc);
-
-                            Application.DoEvents();
-
-                            if (reader.EndOfStream)
-                                break;
-                        }
-                    }
-                }
+                    Dir = folder,
+                    Out = outfolder
+                };
+                await WccHelper.RunCommand(cmd);
             }
             catch (Exception ex)
             {
@@ -1168,8 +1147,6 @@ namespace WolvenKit
 
         async Task ImportFile(string infile, string outfile)
         {
-            var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
             try
             {
                 var importwdir = Path.Combine(Path.GetDirectoryName(MainController.Get().Configuration.WccLite), "WolvenKitWorkingDir");
@@ -1178,34 +1155,17 @@ namespace WolvenKit
                 Directory.CreateDirectory(importwdir);
                 File.Copy(infile,Path.Combine(importwdir,Path.GetFileName(infile)));
                 MainController.Get().ProjectStatus = "Importing file";
-                proc.Arguments = $"import -depot=\"{importwdir}\" -file={Path.Combine(importwdir,Path.GetFileName(infile))} -out={outfile}";
-                proc.UseShellExecute = false;
-                proc.RedirectStandardOutput = true;
-                proc.WindowStyle = ProcessWindowStyle.Hidden;
-                proc.CreateNoWindow = true;
                 if (!Directory.Exists(Path.GetDirectoryName(outfile)))
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(outfile));
                 }
-                AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
-
-                using (var process = Process.Start(proc))
+                var cmd = new Wcc_lite.import()
                 {
-                    using (var reader = process.StandardOutput)
-                    {
-                        while (true)
-                        {
-                            var result = await reader.ReadLineAsync();
-
-                            AddOutput(result + "\n", frmOutput.Logtype.Wcc);
-
-                            Application.DoEvents();
-
-                            if (reader.EndOfStream)
-                                break;
-                        }
-                    }
-                }
+                    Depot = importwdir,
+                    File = Path.Combine(importwdir, Path.GetFileName(infile)),
+                    Out = outfile
+                };
+                await WccHelper.RunCommand(cmd);
             }
             catch (Exception ex)
             {
@@ -1552,7 +1512,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 filename = filename.TrimStart(Path.DirectorySeparatorChar);
                 var newpath = Path.Combine(modcolcachedir, $"{filename.TrimEnd(ext.ToCharArray())}{type}");
 
-                var import = new import()
+                var import = new Wcc_lite.import()
                 {
                     File = fullpath,
                     Out = newpath,
@@ -1606,7 +1566,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
 
             try
             {
-                var cook = new cook()
+                var cook = new Wcc_lite.cook()
                 {
                     Platform = platform.pc,
                     mod = dir,
@@ -2279,7 +2239,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 {
                     MainController.Get().ProjectStatus = "Packing mod bundles";
 
-                    var packmod = new pack()
+                    var packmod = new Wcc_lite.pack()
                     {
                         Directory = modDir,
                         Outdir = modpackDir
@@ -2304,7 +2264,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 {
                     MainController.Get().ProjectStatus = "Packing mod bundles";
 
-                    var packdlc = new pack()
+                    var packdlc = new Wcc_lite.pack()
                     {
                         Directory = dlcDir,
                         Outdir = dlcpackDir
@@ -2335,7 +2295,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 if (Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName), "*", SearchOption.AllDirectories).Any())
                 {
                     MainController.Get().ProjectStatus = "Packing mod metadata";
-                    var metadata = new metadatastore()
+                    var metadata = new Wcc_lite.metadatastore()
                     {
                         Directory = modpackDir
                     };
@@ -2360,7 +2320,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 if (Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, new Bundle().TypeName), "*", SearchOption.AllDirectories).Any())
                 {
                     MainController.Get().ProjectStatus = "Packing DLC metadata";
-                    var metadata = new metadatastore()
+                    var metadata = new Wcc_lite.metadatastore()
                     {
                         Directory = dlcpackDir
                     };
@@ -2407,7 +2367,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                             dir.Delete(true);
                         }
                     }
-                    var cook = new cook()
+                    var cook = new Wcc_lite.cook()
                     {
                         Platform = platform.pc,
                         mod = modtexcachedir,
@@ -2450,7 +2410,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                             dir.Delete(true);
                         }
                     }
-                    var cook = new cook()
+                    var cook = new Wcc_lite.cook()
                     {
                         Platform = platform.pc,
                         mod = dlctxcachedir,
@@ -2499,7 +2459,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                             dir.Delete(true);
                         }
                     }
-                    var cook = new cook()
+                    var cook = new Wcc_lite.cook()
                     {
                         Platform = platform.pc,
                         mod = modcolcachedir,
@@ -2542,7 +2502,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                             dir.Delete(true);
                         }
                     }
-                    var cook = new cook()
+                    var cook = new Wcc_lite.cook()
                     {
                         Platform = platform.pc,
                         mod = dlccolcachedir,
@@ -2577,7 +2537,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 if (Directory.Exists(modcolcachedir) && Directory.GetFiles(modcolcachedir, "*", SearchOption.AllDirectories).Any())
                 {
                     MainController.Get().ProjectStatus = "Generating collision cache";
-                    var cmd = new buildcache()
+                    var cmd = new Wcc_lite.buildcache()
                     {
                         Platform = platform.pc,
                         builder = cachebuilder.physics,
@@ -2605,7 +2565,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 if (Directory.Exists(dlccollcachedir) && Directory.GetFiles(dlccollcachedir, "*", SearchOption.AllDirectories).Any())
                 {
                     MainController.Get().ProjectStatus = "Generating DLC collision cache";
-                    var cmd = new buildcache()
+                    var cmd = new Wcc_lite.buildcache()
                     {
                         Platform = platform.pc,
                         builder = cachebuilder.physics,
@@ -2641,7 +2601,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 if (Directory.Exists(modtexcachedir) && Directory.GetFiles(modtexcachedir, "*", SearchOption.AllDirectories).Any())
                 {
                     MainController.Get().ProjectStatus = "Caching mod textures";
-                    var cmd = new buildcache()
+                    var cmd = new Wcc_lite.buildcache()
                     {
                         Platform = platform.pc,
                         builder = cachebuilder.textures,
@@ -2669,7 +2629,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 if (Directory.Exists(dlctexcachedir) && Directory.GetFiles(dlctexcachedir, "*", SearchOption.AllDirectories).Any())
                 {
                     MainController.Get().ProjectStatus = "Caching DLC textures";
-                    var cmd = new buildcache()
+                    var cmd = new Wcc_lite.buildcache()
                     {
                         Platform = platform.pc,
                         builder = cachebuilder.textures,

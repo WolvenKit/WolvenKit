@@ -6,6 +6,16 @@ using System;
 
 namespace WolvenKit.Common.Wcc
 {
+    /// <summary>
+    /// All wcc_lite commands.
+    /// </summary>
+    public static class Wcc_lite
+    {
+
+    
+
+
+
     #region Common Commands
 
     [Serializable]
@@ -606,9 +616,6 @@ namespace WolvenKit.Common.Wcc
 
     #endregion
 
-    /// <summary>
-    /// All wcc_lite commands.
-    /// </summary>
     #region Uncommon Commands
 
     [Serializable]
@@ -2005,9 +2012,6 @@ namespace WolvenKit.Common.Wcc
 
     #endregion
 
-
-
-
     #region Unknown Commands
     [Serializable]
     [DescriptionAttribute("Simply tests wcc.")]
@@ -2065,5 +2069,6 @@ namespace WolvenKit.Common.Wcc
 
 
 
-    #endregion
+        #endregion
+    }
 }

@@ -146,7 +146,7 @@ namespace WolvenKit
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.toolStrip1.Size = new System.Drawing.Size(41, 547);
+            this.toolStrip1.Size = new System.Drawing.Size(41, 553);
             this.toolStrip1.Stretch = true;
             this.toolStrip1.TabIndex = 6;
             this.toolStrip1.Text = "topTS";
@@ -843,7 +843,7 @@ namespace WolvenKit
             this.dockPanel.Location = new System.Drawing.Point(0, 0);
             this.dockPanel.Name = "dockPanel";
             this.dockPanel.ShowDocumentIcon = true;
-            this.dockPanel.Size = new System.Drawing.Size(1195, 547);
+            this.dockPanel.Size = new System.Drawing.Size(1195, 553);
             this.dockPanel.TabIndex = 9;
             this.dockPanel.ActiveDocumentChanged += new System.EventHandler(this.dockPanel_ActiveDocumentChanged);
             // 
@@ -857,10 +857,10 @@ namespace WolvenKit
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLBL,
             this.toolStripProgressBar1});
-            this.toolStrip2.Location = new System.Drawing.Point(0, 607);
+            this.toolStrip2.Location = new System.Drawing.Point(0, 613);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.toolStrip2.Size = new System.Drawing.Size(1236, 36);
+            this.toolStrip2.Size = new System.Drawing.Size(1236, 30);
             this.toolStrip2.TabIndex = 12;
             this.toolStrip2.Text = "bottomTS";
             // 
@@ -893,7 +893,7 @@ namespace WolvenKit
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.dockPanel);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1195, 547);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1195, 553);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             // 
             // toolStripContainer1.LeftToolStripPanel
@@ -901,7 +901,7 @@ namespace WolvenKit
             this.toolStripContainer1.LeftToolStripPanel.Controls.Add(this.toolStrip1);
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 35);
             this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(1236, 572);
+            this.toolStripContainer1.Size = new System.Drawing.Size(1236, 578);
             this.toolStripContainer1.TabIndex = 14;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
