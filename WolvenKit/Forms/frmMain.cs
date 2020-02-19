@@ -55,7 +55,8 @@ namespace WolvenKit
             }
         }
         #endregion
-        
+
+        #region Fields
         private readonly string BaseTitle = "Wolven kit";
         public static Task Packer;
         private HotkeyCollection hotkeys;
@@ -63,6 +64,18 @@ namespace WolvenKit
         private readonly WCC_Task WccHelper;
         private LoggerService ExtendedLogger;
 
+        private delegate void strDelegate(string t);
+        private delegate void logDelegate(string t, frmOutput.Logtype type);
+
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HTCAPTION = 0x2;
+        [System.Runtime.InteropServices.DllImport("USer32.dll")]
+        public static extern bool ReleaseCapture();
+        [System.Runtime.InteropServices.DllImport("USer32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        #endregion
+
+        #region Properties
         public W3Mod ActiveMod
         {
             get => MainController.Get().ActiveMod;
@@ -73,7 +86,9 @@ namespace WolvenKit
             }
         }
         public string Version => FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
+        #endregion
 
+        #region Constructor
         public frmMain()
         {
             InitializeComponent();
@@ -113,9 +128,9 @@ namespace WolvenKit
             ExtendedLogger.PropertyChanged += LoggerUpdated;
             WccHelper = new WCC_Task(MainController.Get().Configuration.WccLite, ExtendedLogger);
         }
+        #endregion
 
-        
-
+        #region Methods
         public void GlobalApplyTheme()
         {
             dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"));
@@ -124,7 +139,7 @@ namespace WolvenKit
 
             this.ApplyCustomTheme();
 
-            dockPanel.LoadFromXml( Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"), DeserializeDockContent);
+            dockPanel.LoadFromXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"), DeserializeDockContent);
 
             ReopenWindows();
         }
@@ -134,15 +149,44 @@ namespace WolvenKit
             this.dockPanel.Theme = theme;
             visualStudioToolStripExtender1.SetStyle(menuStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
             visualStudioToolStripExtender1.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
-            visualStudioToolStripExtender1.SetStyle(toolStrip2, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+            //visualStudioToolStripExtender1.SetStyle(toolStrip2, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+        }
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == 0x84)
+            {
+                const int resizeArea = 10;
+                Point cursorPosition = PointToClient(new Point(m.LParam.ToInt32() & 0xffff, m.LParam.ToInt32() >> 16));
+                if (cursorPosition.X >= ClientSize.Width - resizeArea && cursorPosition.Y >= ClientSize.Height - resizeArea)
+                {
+                    m.Result = (IntPtr)17; //HTBOTTOMRIGHT
+                    return;
+                }
+                else if (cursorPosition.X <= resizeArea && cursorPosition.Y >= ClientSize.Height - resizeArea)
+                {
+                    m.Result = (IntPtr)16; //HTBOTTOMLEFT
+                    return;
+                }
+                else if (cursorPosition.X <= resizeArea)
+                {
+                    m.Result = (IntPtr)10; //HTLEFT
+                    return;
+                }
+                else if (cursorPosition.X >= ClientSize.Width - resizeArea)
+                {
+                    m.Result = (IntPtr)11; //HTRIGHT
+                    return;
+                }
+                else if (cursorPosition.Y >= ClientSize.Height - resizeArea)
+                {
+                    m.Result = (IntPtr)15; //HTBOTTOM
+                    return;
+                }
+            }
+
+            base.WndProc(ref m);
         }
 
-
-        private delegate void strDelegate(string t);
-
-        private delegate void logDelegate(string t, frmOutput.Logtype type);
-
-        #region Methods
         private void LoggerUpdated(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Log")
@@ -946,6 +990,15 @@ namespace WolvenKit
                 return null;
             }
             catch (MissingTypeException ex)
+            {
+                if (!suppressErrors)
+                    MessageBox.Show(this, ex.Message, @"Error opening file.");
+
+                OpenDocuments.Remove(doc);
+                doc.Dispose();
+                return null;
+            }
+            catch (FormatException ex)
             {
                 if (!suppressErrors)
                     MessageBox.Show(this, ex.Message, @"Error opening file.");
@@ -2699,6 +2752,42 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                         CR2WVerify.VerifyFile(f);
                     }
                 }
+            }
+        }
+
+        private void MinimizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowState = FormWindowState.Minimized;
+        }
+
+        private void RestoreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.WindowState != FormWindowState.Maximized)
+                WindowState = FormWindowState.Maximized;
+            else
+                WindowState = FormWindowState.Normal;
+        }
+
+        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void menuStrip1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
+            }
+        }
+
+        private void menuStrip1_MouseDown_1(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
             }
         }
     }

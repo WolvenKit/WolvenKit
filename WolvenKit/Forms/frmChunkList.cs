@@ -12,8 +12,8 @@ namespace WolvenKit
 {
     public partial class frmChunkList : DockContent, IThemedContent
     {
+        private bool listview = false;
         private CR2WFile file;
-
         //Item1 = parentidx, Item2 = list of childrenidx
         private List<Tuple<int,List<CR2WChunk>>> chunkHelperList { get; set; } = new List<Tuple<int, List<CR2WChunk>>>();
             
@@ -26,11 +26,11 @@ namespace WolvenKit
 
             treeListView.CanExpandGetter = delegate (object x) {
                 var idx = ((CR2WChunk)x).ChunkIndex;
-                return chunkHelperList[idx].Item2.Any();
+                return chunkHelperList[idx].Item2.Any() && !listview;
             };
             treeListView.ChildrenGetter = delegate (object x) {
                 var idx = ((CR2WChunk)x).ChunkIndex;
-                return  chunkHelperList[idx].Item2;
+                return !listview ? chunkHelperList[idx].Item2 : new List<CR2WChunk>();
             };
         }
 
@@ -72,9 +72,16 @@ namespace WolvenKit
             //{
             //    int.TryParse(limitTB.Text,out limit);
             //}
+
             if (File == null)
                 return;
-            if(!string.IsNullOrEmpty(keyword))
+
+            if (listview)
+                treeListView.Roots = File.chunks;
+            else
+                treeListView.Roots = File.chunks.Where(_ => _.Parent == null).ToList();
+
+            if (!string.IsNullOrEmpty(keyword))
             {
                 if (limit != -1)
                 {
@@ -88,8 +95,8 @@ namespace WolvenKit
             else
             {
                 treeListView.ModelFilter = null;
-                treeListView.Roots = File.chunks.Where(_ => _.Parent == null).ToList();
             }
+
             if (File.chunks.Count < 1000)
             {
                 treeListView.ExpandAll();
@@ -243,6 +250,12 @@ namespace WolvenKit
             treeListView.UnfocusedSelectedBackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background;
             
             
+        }
+
+        private void showTreetoolStripButton_Click(object sender, EventArgs e)
+        {
+            listview = !listview;
+            UpdateList(toolStripSearchBox.Text);
         }
     }
 }

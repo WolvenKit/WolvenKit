@@ -836,7 +836,6 @@
     <Content Include="discord-rpc.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\Minimize_16x.png" />
     <None Include="Resources\ExpandAll_16x.png" />
     <None Include="Resources\CollapseAll_16x.png" />
     <None Include="Resources\SaveStatusBar1_16x_c.png" />
@@ -852,8 +851,12 @@
     <None Include="Resources\Property_16x.png" />
     <None Include="Resources\RemoteServer_16x.png" />
     <None Include="Resources\Settings_Inverse_16x.png" />
+    <Content Include="Resources\close.png" />
     <Content Include="Resources\ExpandIcon.png" />
     <None Include="Resources\Refresh_16x.png" />
+    <Content Include="Resources\maximize.jpg" />
+    <Content Include="Resources\maximize.png" />
+    <Content Include="Resources\minimize.png" />
     <Content Include="wolven_kit_icon.ico" />
     <Content Include="Licenses\License.doboz4net.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

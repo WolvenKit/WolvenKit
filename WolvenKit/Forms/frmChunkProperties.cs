@@ -121,6 +121,7 @@ namespace WolvenKit
                 {
                     e.Control.Location = new Point(e.CellBounds.Location.X, e.CellBounds.Location.Y - 1);
                     e.Control.Width = e.CellBounds.Width;
+                    //e.Control.ForeColor = Control.Tex
                 }                
                 e.Cancel = e.Control == null;
             }
