@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.Bundles;
+using WolvenKit.Common.Wcc;
 using WolvenKit.Mod;
 using WolvenKit.Services;
 
@@ -18,6 +20,8 @@ namespace WolvenKit
             UpdateModFileList(true,true);
             LastChange = DateTime.Now;
             ApplyCustomTheme();
+
+            importAsToolStripMenuItem.DropDown.MouseClick += DropDown_Click;
         }
 
         public W3Mod ActiveMod
@@ -28,8 +32,10 @@ namespace WolvenKit
 
         public event EventHandler<RequestFileArgs> RequestFileOpen;
         public event EventHandler<RequestFileArgs> RequestFileDelete;
-        public event EventHandler<RequestFileArgs> RequestFileAdd;
+        public event EventHandler<RequestFileArgs> RequestAssetBrowser;
         public event EventHandler<RequestFileArgs> RequestFileRename;
+        public event EventHandler<RequestImportArgs> RequestFileImport;
+        public event EventHandler<RequestFileArgs> RequestFileCook;
         public List<string> FilteredFiles; 
         public bool FoldersShown = true;
 
@@ -150,6 +156,14 @@ namespace WolvenKit
             RequestFileOpen?.Invoke(this, new RequestFileArgs {File = e.Node.FullPath});
         }
 
+        private void cookToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                RequestFileCook?.Invoke(this, new RequestFileArgs { File = modFileList.SelectedNode.FullPath });
+            }
+        }
+
         private void removeFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (modFileList.SelectedNode != null)
@@ -157,10 +171,37 @@ namespace WolvenKit
                 RequestFileDelete?.Invoke(this, new RequestFileArgs {File = modFileList.SelectedNode.FullPath});
             }
         }
-
         private void addFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RequestFileAdd?.Invoke(this,new RequestFileArgs {File = GetExplorerString(modFileList.SelectedNode?.FullPath ?? "")});
+            var dlg = new OpenFileDialog() { Title = "Add File to Project" };
+            dlg.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                MainController.Get().Configuration.InitialFileDirectory = Path.GetDirectoryName(dlg.FileName);
+                try
+                {
+                    FileInfo fi = new FileInfo(dlg.FileName);
+                    var newfilepath = Path.Combine(ActiveMod.FileDirectory, fi.Name);
+                    if (modFileList.SelectedNode != null)
+                    {
+                        newfilepath = Path.Combine(ActiveMod.FileDirectory, modFileList.SelectedNode.FullPath);
+                        if (File.Exists(newfilepath))
+                            newfilepath = Path.GetDirectoryName(newfilepath);
+                        newfilepath = Path.Combine(newfilepath, fi.Name);
+                    }
+                    if (File.Exists(newfilepath))
+                        newfilepath = $"{newfilepath.TrimEnd(fi.Extension.ToCharArray())} - copy{fi.Extension}";
+                    fi.CopyTo(newfilepath, false);
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
+
+        private void openAssetBrowserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RequestAssetBrowser?.Invoke(this,new RequestFileArgs {File = GetExplorerString(modFileList.SelectedNode?.FullPath ?? "")});
         }
 
         private void modFileList_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -206,7 +247,50 @@ namespace WolvenKit
 
         private void contextMenu_Opened(object sender, EventArgs e)
         {
+            var selectedNode = modFileList.SelectedNode;
+            if (selectedNode != null)
+            {
+                var fi = new FileInfo(selectedNode.FullPath);
+                var ext = fi.Extension.TrimStart('.');
+
+                bool isbundle = Path.Combine(ActiveMod.FileDirectory, fi.ToString()).Contains(Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName));
+                bool israw = Path.Combine(ActiveMod.FileDirectory, fi.ToString()).Contains(Path.Combine(ActiveMod.FileDirectory, "Raw"));
+
+
+                cookToolStripMenuItem.Enabled = (!Enum.GetNames(typeof(EImportable)).Contains(ext) && !isbundle && !israw);
+                markAsModDlcFileToolStripMenuItem.Enabled = isbundle;
+
+                importAsToolStripMenuItem.Enabled = Enum.GetNames(typeof(EImportable)).Contains(ext) && !isbundle && israw;
+                importAsToolStripMenuItem.DropDown.Items.Clear();
+                var types = REDTypes.RawExtensionToRedImport(ext);
+                foreach (var t in types)
+                {
+                    importAsToolStripMenuItem.DropDown.Items.Add(t);
+                }
+                
+            } 
+
             pasteToolStripMenuItem.Enabled = File.Exists(Clipboard.GetText());
+
+            removeFileToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
+            renameToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
+            copyRelativePathToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
+            copyToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
+            
+            showFileInExplorerToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
+        }
+
+        private async void DropDown_Click(object sender, EventArgs e)
+        {
+            ToolStripDropDownMenu menuitem = sender as ToolStripDropDownMenu;
+            var items = menuitem.Items.Cast<ToolStripMenuItem>().ToList();
+            var selectedItem = items.FirstOrDefault(_ => _.Selected);
+
+            if (menuitem != null && selectedItem != null)
+            {
+                var ext = selectedItem.Text;
+                RequestFileImport?.Invoke(this, new RequestImportArgs { File = modFileList.SelectedNode.FullPath, Extension = ext });
+            }
         }
 
         public static IEnumerable<string> FallbackPaths(string path)
@@ -365,5 +449,6 @@ namespace WolvenKit
 
             this.searchBox.BackColor = theme.ColorPalette.ToolWindowCaptionButtonInactiveHovered.Background;
         }
+
     }
 }

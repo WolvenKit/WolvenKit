@@ -2,17 +2,18 @@
 
 namespace WolvenKit.CR2W
 {
-    public class CR2WHeaderString
+    public class CR2WHandle
     {
-        public uint crc;
+        public ushort filetype;
+        public ushort flags;
         public uint offset;
         public string str;
 
-        public CR2WHeaderString()
+        public CR2WHandle()
         {
         }
 
-        public CR2WHeaderString(BinaryReader file)
+        public CR2WHandle(BinaryReader file)
         {
             Read(file);
         }
@@ -20,7 +21,8 @@ namespace WolvenKit.CR2W
         public void Read(BinaryReader file)
         {
             offset = file.ReadUInt32();
-            crc = file.ReadUInt32();
+            filetype = file.ReadUInt16();
+            flags = file.ReadUInt16();
         }
 
         public void ReadString(BinaryReader file, long baseoffset)
@@ -35,7 +37,18 @@ namespace WolvenKit.CR2W
         public void Write(BinaryWriter file)
         {
             file.Write(offset);
-            file.Write(crc);
+            file.Write(filetype);
+            file.Write(flags);
+        }
+
+        public CR2WImportHeader ToCR2WImport()
+        {
+            return new CR2WImportHeader
+            {
+                className = filetype,
+                depotPath = offset,
+                flags = flags
+            };
         }
     }
 }

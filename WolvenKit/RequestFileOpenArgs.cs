@@ -6,4 +6,10 @@ namespace WolvenKit
     {
         public string File { get; set; }
     }
+
+    public class RequestImportArgs : EventArgs
+    {
+        public string File { get; set; }
+        public string Extension { get; set; }
+    }
 }

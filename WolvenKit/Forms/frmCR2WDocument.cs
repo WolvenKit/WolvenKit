@@ -86,7 +86,7 @@ namespace WolvenKit
                 {
                     embeddedFiles.File = file;
 
-                    if (file.block7.Count > 0)
+                    if (file.embedded.Count > 0)
                     {
                         embeddedFiles.Show(dockPanel, DockState.Document);
                     }
@@ -203,10 +203,7 @@ namespace WolvenKit
                         {
                             mem.WriteTo(fs);
 
-                            if (OnFileSaved != null)
-                            {
-                                OnFileSaved(this, new FileSavedEventArgs {FileName = FileName, Stream = fs, File = File});
-                            }
+                            OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = fs, File = File });
                             fs.Close();
                         }
                     }

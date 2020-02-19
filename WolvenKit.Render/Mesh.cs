@@ -193,7 +193,7 @@ namespace WolvenKit.Render
                                 for (int i = 0; i < CData.boneData.nbBones; i++)
                                 {
                                     var stringIdx = br.ReadUInt16();
-                                    if (stringIdx == 0 || stringIdx >= meshFile.strings.Count)
+                                    if (stringIdx == 0 || stringIdx >= meshFile.names.Count)
                                     {
                                         CData.boneData.nbBones = 0;
                                         correctPos = false;
@@ -211,7 +211,7 @@ namespace WolvenKit.Render
                             for (uint i = 0; i < CData.boneData.nbBones; i++)
                             {
                                 var stringIdx = br.ReadUInt16();
-                                CData.boneData.jointNames.Add(meshFile.strings[stringIdx].str);
+                                CData.boneData.jointNames.Add(meshFile.names[stringIdx].str);
                             }
                             br.ReadBit6();
                             for (uint i = 0; i < CData.boneData.nbBones; i++)

@@ -9,7 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using IniParserLTK;
-using Ionic.Crc;
 using Microsoft.Win32;
 
 namespace WolvenKit

@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
         public ushort val
         {
             get { return (ushort) cr2w.GetStringIndex(Value, true); }
-            set { Value = cr2w.strings[value].str; }
+            set { Value = cr2w.names[value].str; }
         }
 
         public string Value { get; set; }

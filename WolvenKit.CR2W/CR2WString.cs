@@ -1,19 +1,19 @@
-﻿using System.IO;
+﻿using RED.FNV1A;
+using System.IO;
 
 namespace WolvenKit.CR2W
 {
-    public class CR2WHeaderHandle
+    public class CR2WString
     {
-        public ushort filetype;
-        public ushort flags;
+        public uint hash;
         public uint offset;
         public string str;
 
-        public CR2WHeaderHandle()
+        public CR2WString()
         {
         }
 
-        public CR2WHeaderHandle(BinaryReader file)
+        public CR2WString(BinaryReader file)
         {
             Read(file);
         }
@@ -21,8 +21,7 @@ namespace WolvenKit.CR2W
         public void Read(BinaryReader file)
         {
             offset = file.ReadUInt32();
-            filetype = file.ReadUInt16();
-            flags = file.ReadUInt16();
+            hash = file.ReadUInt32();
         }
 
         public void ReadString(BinaryReader file, long baseoffset)
@@ -37,8 +36,16 @@ namespace WolvenKit.CR2W
         public void Write(BinaryWriter file)
         {
             file.Write(offset);
-            file.Write(filetype);
-            file.Write(flags);
+            file.Write(FNV1A32HashAlgorithm.HashString(str));
+        }
+
+        public CR2WName ToCR2WName()
+        {
+            return new CR2WName
+            {
+                hash = FNV1A32HashAlgorithm.HashString(str),
+                value = offset
+            };
         }
     }
 }

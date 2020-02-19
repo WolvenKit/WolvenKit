@@ -31,6 +31,9 @@ using Enums = Dfust.Hotkeys.Enums;
 using WolvenKit.Wwise.Player;
 using WolvenKit.Extensions;
 using WolvenKit.Services;
+using WolvenKit.Common.Wcc;
+using WolvenKit.Common.Services;
+using System.ComponentModel;
 
 namespace WolvenKit
 {
@@ -53,12 +56,27 @@ namespace WolvenKit
             }
         }
         #endregion
-        
+
+        #region Fields
         private readonly string BaseTitle = "Wolven kit";
         public static Task Packer;
         private HotkeyCollection hotkeys;
         private readonly ToolStripRenderer toolStripRenderer = new ToolStripProfessionalRenderer();
+        private readonly WCC_Task WccHelper;
+        private LoggerService ExtendedLogger;
 
+        private delegate void strDelegate(string t);
+        private delegate void logDelegate(string t, frmOutput.Logtype type);
+
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HTCAPTION = 0x2;
+        [System.Runtime.InteropServices.DllImport("USer32.dll")]
+        public static extern bool ReleaseCapture();
+        [System.Runtime.InteropServices.DllImport("USer32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        #endregion
+
+        #region Properties
         public W3Mod ActiveMod
         {
             get => MainController.Get().ActiveMod;
@@ -69,7 +87,9 @@ namespace WolvenKit
             }
         }
         public string Version => FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
+        #endregion
 
+        #region Constructor
         public frmMain()
         {
             InitializeComponent();
@@ -103,9 +123,15 @@ namespace WolvenKit
             hotkeys.RegisterHotkey(Keys.F1, HKHelp, "Help");
             hotkeys.RegisterHotkey(Keys.Control | Keys.C, HKCopy, "Copy");
             hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste, "Paste");
-            MainController.Get().InitForm(this);
-        }
+            MainController.InitForm(this);
 
+            ExtendedLogger = new LoggerService();
+            ExtendedLogger.PropertyChanged += LoggerUpdated;
+            WccHelper = new WCC_Task(MainController.Get().Configuration.WccLite, ExtendedLogger);
+        }
+        #endregion
+
+        #region Methods
         public void GlobalApplyTheme()
         {
             dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"));
@@ -114,7 +140,7 @@ namespace WolvenKit
 
             this.ApplyCustomTheme();
 
-            dockPanel.LoadFromXml( Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"), DeserializeDockContent);
+            dockPanel.LoadFromXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"), DeserializeDockContent);
 
             ReopenWindows();
         }
@@ -124,22 +150,58 @@ namespace WolvenKit
             this.dockPanel.Theme = theme;
             visualStudioToolStripExtender1.SetStyle(menuStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
             visualStudioToolStripExtender1.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
-            visualStudioToolStripExtender1.SetStyle(toolStrip2, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+            //visualStudioToolStripExtender1.SetStyle(toolStrip2, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+        }
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == 0x84)
+            {
+                const int resizeArea = 10;
+                Point cursorPosition = PointToClient(new Point(m.LParam.ToInt32() & 0xffff, m.LParam.ToInt32() >> 16));
+                if (cursorPosition.X >= ClientSize.Width - resizeArea && cursorPosition.Y >= ClientSize.Height - resizeArea)
+                {
+                    m.Result = (IntPtr)17; //HTBOTTOMRIGHT
+                    return;
+                }
+                else if (cursorPosition.X <= resizeArea && cursorPosition.Y >= ClientSize.Height - resizeArea)
+                {
+                    m.Result = (IntPtr)16; //HTBOTTOMLEFT
+                    return;
+                }
+                else if (cursorPosition.X <= resizeArea)
+                {
+                    m.Result = (IntPtr)10; //HTLEFT
+                    return;
+                }
+                else if (cursorPosition.X >= ClientSize.Width - resizeArea)
+                {
+                    m.Result = (IntPtr)11; //HTRIGHT
+                    return;
+                }
+                else if (cursorPosition.Y >= ClientSize.Height - resizeArea)
+                {
+                    m.Result = (IntPtr)15; //HTBOTTOM
+                    return;
+                }
+            }
+
+            base.WndProc(ref m);
         }
 
-
-        private delegate void strDelegate(string t);
-
-        private delegate void logDelegate(string t, frmOutput.Logtype type);
-
-        #region Methods
+        private void LoggerUpdated(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Log")
+            {
+                Invoke(new logDelegate(AddOutput), ((LoggerService)sender).Log + "\n", frmOutput.Logtype.Wcc);
+            }
+        }
         /// <summary>
         /// Occurs when something in the maincontroller is updated that is INotifyProeprtyChanged
         /// Thread safe and always should be
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void MainControllerUpdated(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void MainControllerUpdated(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "ProjectStatus")
                 Invoke(new strDelegate(SetStatusLabelText), ((MainController)sender).ProjectStatus);
@@ -719,7 +781,17 @@ namespace WolvenKit
                 if (manager.Items.Any(x => x.Value.Any(y => y.Name == item.FullPath)))
                 {
                     var archives = manager.FileList.Where(x => x.Name == item.FullPath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
-                    var filename = Path.Combine(ActiveMod.FileDirectory, AddAsDLC ? Path.Combine("DLC",archives.First().Value.Bundle.TypeName,"dlc",ActiveMod.Name,item.FullPath) : Path.Combine("Mod",archives.First().Value.Bundle.TypeName,item.FullPath));
+                    string filename;
+                    if (archives.First().Value.Bundle.TypeName == MainController.Get().CollisionManager.TypeName ||
+                        archives.First().Value.Bundle.TypeName == MainController.Get().TextureManager.TypeName)
+                    {
+                        filename = Path.Combine("Mod", "Raw", archives.First().Value.Bundle.TypeName, item.FullPath);
+
+                    }
+                    else
+                    {
+                        filename = Path.Combine(ActiveMod.FileDirectory, AddAsDLC ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName, "dlc", ActiveMod.Name, item.FullPath) : Path.Combine("Mod", archives.First().Value.Bundle.TypeName, item.FullPath));
+                    }
                     if (archives.Count() > 1)
                     {
 
@@ -884,8 +956,10 @@ namespace WolvenKit
                 
                 ModExplorer.RequestFileOpen += ModExplorer_RequestFileOpen;
                 ModExplorer.RequestFileDelete += ModExplorer_RequestFileDelete;
-                ModExplorer.RequestFileAdd += ModExplorer_RequestAddFile;
+                ModExplorer.RequestAssetBrowser += ModExplorer_RequestAssetBrowser;
                 ModExplorer.RequestFileRename += ModExplorer_RequestFileRename;
+                ModExplorer.RequestFileImport += ModExplorer_RequestFileImport;
+                ModExplorer.RequestFileCook += ModExplorer_RequestFileCook;
             }
             ModExplorer.Activate();
         }
@@ -926,6 +1000,15 @@ namespace WolvenKit
                 return null;
             }
             catch (MissingTypeException ex)
+            {
+                if (!suppressErrors)
+                    MessageBox.Show(this, ex.Message, @"Error opening file.");
+
+                OpenDocuments.Remove(doc);
+                doc.Dispose();
+                return null;
+            }
+            catch (FormatException ex)
             {
                 if (!suppressErrors)
                     MessageBox.Show(this, ex.Message, @"Error opening file.");
@@ -989,7 +1072,7 @@ namespace WolvenKit
                         break;
                     }
             }
-            if (doc.File.block7.Count > 0)
+            if (doc.File.embedded.Count > 0)
             {
                 doc.embeddedFiles = new frmEmbeddedFiles
                 {
@@ -1046,35 +1129,14 @@ namespace WolvenKit
 
         async Task DumpFile(string folder, string outfolder)
         {
-            var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
             try
             {
-                MainController.Get().ProjectStatus = "Dumping folder";
-                proc.Arguments = $"dumpfile -dir={folder} -out={outfolder}";
-                proc.UseShellExecute = false;
-                proc.RedirectStandardOutput = true;
-                proc.WindowStyle = ProcessWindowStyle.Hidden;
-                proc.CreateNoWindow = true;
-                AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
-
-                using (var process = Process.Start(proc))
+                var cmd = new Wcc_lite.dumpfile()
                 {
-                    using (var reader = process.StandardOutput)
-                    {
-                        while (true)
-                        {
-                            var result = await reader.ReadLineAsync();
-
-                            AddOutput(result + "\n", frmOutput.Logtype.Wcc);
-
-                            Application.DoEvents();
-
-                            if (reader.EndOfStream)
-                                break;
-                        }
-                    }
-                }
+                    Dir = folder,
+                    Out = outfolder
+                };
+                await WccHelper.RunCommand(cmd);
             }
             catch (Exception ex)
             {
@@ -1087,8 +1149,6 @@ namespace WolvenKit
 
         async Task ImportFile(string infile, string outfile)
         {
-            var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
             try
             {
                 var importwdir = Path.Combine(Path.GetDirectoryName(MainController.Get().Configuration.WccLite), "WolvenKitWorkingDir");
@@ -1097,34 +1157,17 @@ namespace WolvenKit
                 Directory.CreateDirectory(importwdir);
                 File.Copy(infile,Path.Combine(importwdir,Path.GetFileName(infile)));
                 MainController.Get().ProjectStatus = "Importing file";
-                proc.Arguments = $"import -depot=\"{importwdir}\" -file={Path.Combine(importwdir,Path.GetFileName(infile))} -out={outfile}";
-                proc.UseShellExecute = false;
-                proc.RedirectStandardOutput = true;
-                proc.WindowStyle = ProcessWindowStyle.Hidden;
-                proc.CreateNoWindow = true;
                 if (!Directory.Exists(Path.GetDirectoryName(outfile)))
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(outfile));
                 }
-                AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
-
-                using (var process = Process.Start(proc))
+                var cmd = new Wcc_lite.import()
                 {
-                    using (var reader = process.StandardOutput)
-                    {
-                        while (true)
-                        {
-                            var result = await reader.ReadLineAsync();
-
-                            AddOutput(result + "\n", frmOutput.Logtype.Wcc);
-
-                            Application.DoEvents();
-
-                            if (reader.EndOfStream)
-                                break;
-                        }
-                    }
-                }
+                    Depot = importwdir,
+                    File = Path.Combine(importwdir, Path.GetFileName(infile)),
+                    Out = outfile
+                };
+                await WccHelper.RunCommand(cmd);
             }
             catch (Exception ex)
             {
@@ -1371,10 +1414,25 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             }
         }
 
-
         private void addFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddModFile(false);
+            var dlg = new OpenFileDialog() { Title = "Add File to Project" };
+            dlg.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                MainController.Get().Configuration.InitialFileDirectory = Path.GetDirectoryName(dlg.FileName);
+                try
+                {
+                    FileInfo fi = new FileInfo(dlg.FileName);
+                    var newfilepath = Path.Combine(ActiveMod.FileDirectory, fi.Name);
+                    if (File.Exists(newfilepath))
+                        newfilepath = $"{newfilepath.TrimEnd(fi.Extension.ToCharArray())} - copy{fi.Extension}";
+                    fi.CopyTo(newfilepath, false);
+                }
+                catch (Exception)
+                {
+                }
+            }
         }
 
         private void donateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1408,6 +1466,121 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
         private void openModToolStripMenuItem_Click(object sender, EventArgs e)
         {
             openMod();
+        }
+
+        private async void ModExplorer_RequestFileImport(object sender, RequestImportArgs e)
+        {
+            var filename = e.File;
+            var importedExtension = e.Extension;
+            var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
+            if (!File.Exists(fullpath))
+                return;
+
+            #region Get import types
+            var ext = Path.GetExtension(fullpath);
+            List<string> importedexts = new List<string>();
+            switch (ext)
+            {
+                /*case ".apb":
+                    importedexts = REDTypes.RawExtensionToRedImport("apb");
+                    break;
+                case ".nxs": 
+                    importedexts = REDTypes.RawExtensionToRedImport("nxs");
+                    break;*/
+                case ".re":
+                case ".fbx":
+                    importedexts.AddRange(new string[] { ".w2mesh" });
+                    break;
+                case ".jpg":
+                case ".pga":
+                case ".tga":
+                case ".dds":
+                case ".bmp":
+                    importedexts.AddRange(new string[] { ".xbm" });
+                    break;
+                default:
+                    importedexts.Add(importedExtension);
+                    break;
+            }
+            #endregion
+
+
+            await StartImport(importedexts.FirstOrDefault());
+            
+            async Task StartImport(string type)
+            {
+                var modcolcachedir = Path.Combine(ActiveMod.ModDirectory, @"CollisionCache");
+                filename = filename.TrimStart("Raw".ToCharArray());
+                filename = filename.TrimStart(Path.DirectorySeparatorChar);
+                var newpath = Path.Combine(modcolcachedir, $"{filename.TrimEnd(ext.ToCharArray())}{type}");
+
+                var import = new Wcc_lite.import()
+                {
+                    File = fullpath,
+                    Out = newpath,
+                    Depot = Path.GetDirectoryName(fullpath)
+                };
+                await WccHelper.RunCommand(import);
+            }
+
+        }
+
+        private void ModExplorer_RequestFileCook(object sender, RequestFileArgs e)
+        {
+            var filename = e.File;
+            var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
+            if (!File.Exists(fullpath) && !Directory.Exists(fullpath))
+                return;
+            string dir;
+            if (File.Exists(fullpath))
+                dir = Path.GetDirectoryName(fullpath);
+            else
+                dir = fullpath;
+            var reldir = dir.TrimStart(ActiveMod.FileDirectory.ToCharArray());
+            reldir = reldir.TrimStart("Mod".ToCharArray());
+            reldir = reldir.TrimStart(Path.DirectorySeparatorChar);
+            reldir = reldir.TrimStart("CollisionCache".ToCharArray());
+            reldir = reldir.TrimStart("TextureCache".ToCharArray());
+            reldir = reldir.TrimStart(Path.DirectorySeparatorChar);
+
+            var files = Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories)
+                .Select(_ => _.TrimStart(dir.TrimEnd(reldir.ToCharArray()).ToCharArray()))
+                .ToList();
+            var cookedModDir = Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName, reldir);
+
+            if (!Directory.Exists(cookedModDir))
+            {
+                Directory.CreateDirectory(cookedModDir);
+            }
+            var existingfiles = Directory.GetFiles(cookedModDir, "*.*", SearchOption.AllDirectories)
+                .Select(_ => _.TrimStart(Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName).ToCharArray()))
+                .ToList();
+            if (existingfiles.Intersect(files).Any())
+            {
+                if (MessageBox.Show(
+                     "Some of the files you are about to cook already exist in your mod. These files will be overwritten. Are you sure you want to permanently overwrite them?"
+                     , "Confirmation", MessageBoxButtons.YesNo
+                 ) != DialogResult.Yes)
+                {
+                    return;
+                }
+            }
+
+            try
+            {
+                var cook = new Wcc_lite.cook()
+                {
+                    Platform = platform.pc,
+                    mod = dir,
+                    basedir = dir,
+                    outdir = cookedModDir
+                };
+                WccHelper.RunCommand(cook);
+            }
+            catch (InvalidChunkTypeException ex)
+            {
+                MessageBox.Show(ex.Message, "Error adding chunk.");
+            }
         }
 
         private void ModExplorer_RequestFileRename(object sender, RequestFileArgs e)
@@ -1447,7 +1620,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             MainController.Get().ProjectStatus = "File renamed";
         }
 
-        private void ModExplorer_RequestAddFile(object sender, RequestFileArgs e)
+        private void ModExplorer_RequestAssetBrowser(object sender, RequestFileArgs e)
         {
             AddModFile(false, e.File);
         }
@@ -1612,7 +1785,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 cf.ShowDialog();
         }
 
-        private void addFileToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var dlg = new OpenFileDialog() { Title = "Open CR2W File" };
             dlg.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
@@ -1893,16 +2066,30 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     }
                 }
 
+                //------------------------ PRE ------------------------------------//
+
+                //Cleanup Directories
+                CleanupDirectories();
+
+                //------------------------- PACKING -------------------------------------//
+
                 //Handle bundle packing.
                 if (packsettings.PackBundles)
                 {
+                    await CookCollision(); // cook uncooked (but imported) collisions and .redapex assets in /CollisionCache
+
+                    await CookTextures(); // cook uncooked (but imported) textures in /TextureCache
+
                     await PackBundles();
                 }
 
-                //------------------------- COOKING -------------------------------------//
+                //------------------------ METADATA ------------------------------------//
 
-                //Cook the mod
-                await CookMod();
+                //Handle metadata generation.
+                if (packsettings.GenMetadata)
+                {
+                    await CreateModMetaData();
+                }
 
                 //------------------------POST COOKING------------------------------------//
 
@@ -1915,14 +2102,10 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 //Handle texture caching
                 if (packsettings.GenTexCache)
                 {
-                    await PackTextures();
+                    await GenerateTextureCache();
                 }
 
-                //Handle metadata generation.
-                if (packsettings.GenMetadata)
-                {
-                    await CreateModMetaData();
-                }
+                
 
                 //Handle sound caching
                 if (packsettings.Sound)
@@ -1999,14 +2182,13 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
         }
 
         /// <summary>
-        /// Packs the bundles for the DLC and the Mod. Always call this first since this cleans the direactories.
+        /// Always call this first to clean the directories.
         /// </summary>
-        private async Task PackBundles()
+        private void CleanupDirectories()
         {
-            var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
             var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
             var DlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
+
             #region Directory cleanup
             if (!Directory.Exists(modpackDir))
             {
@@ -2041,37 +2223,31 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 }
             }
             #endregion
+        }
+
+        /// <summary>
+        /// Packs the bundles for the DLC and the Mod. IN: \Bundles, OUT: packed\Mods\mod
+        /// </summary>
+        private async Task PackBundles()
+        {
+            var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
+            var dlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
+            var modDir = Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName);
+            var dlcDir = Path.Combine(ActiveMod.DlcDirectory, new Bundle().TypeName);
             #region Mod Bundle Packing
             try
             {
-                if (Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName), "*", SearchOption.AllDirectories).Any())
+                if (Directory.Exists(modDir) && Directory.GetFiles(modDir, "*", SearchOption.AllDirectories).Any())
                 {
                     MainController.Get().ProjectStatus = "Packing mod bundles";
-                    proc.Arguments = $"pack -dir={Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName)} -outdir={modpackDir}";
-                    proc.UseShellExecute = false;
-                    proc.RedirectStandardOutput = true;
-                    proc.WindowStyle = ProcessWindowStyle.Hidden;
-                    proc.CreateNoWindow = true;
 
-                    AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
-
-                    using (var process = Process.Start(proc))
+                    var packmod = new Wcc_lite.pack()
                     {
-                        using (var reader = process.StandardOutput)
-                        {
-                            while (true)
-                            {
-                                var result = await reader.ReadLineAsync();
-
-                                AddOutput(result + "\n", frmOutput.Logtype.Wcc);
-
-                                Application.DoEvents();
-
-                                if (reader.EndOfStream)
-                                    break;
-                            }
-                        }
-                    }
+                        Directory = modDir,
+                        Outdir = modpackDir
+                    };
+                    AddOutput("Executing " + packmod.ToString() + " " + packmod.Arguments + "\n", frmOutput.Logtype.Important);
+                    WccHelper.RunCommand(packmod);
                 }
             }
             catch (DirectoryNotFoundException)
@@ -2086,53 +2262,34 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             #region DLC Bundle Packing
             try
             {
-                if (Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, new Bundle().TypeName),"*",SearchOption.AllDirectories).Any())
+                if (Directory.Exists(dlcDir) && Directory.GetFiles(dlcDir, "*", SearchOption.AllDirectories).Any())
                 {
-                    MainController.Get().ProjectStatus = "Packing dlc bundles";
-                    proc.Arguments = $"pack -dir={Path.Combine(ActiveMod.DlcDirectory, new Bundle().TypeName)} -outdir={DlcpackDir}";
-                    proc.UseShellExecute = false;
-                    proc.RedirectStandardOutput = true;
-                    proc.WindowStyle = ProcessWindowStyle.Hidden;
-                    proc.CreateNoWindow = true;
+                    MainController.Get().ProjectStatus = "Packing mod bundles";
 
-                    AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
-
-                    using (var process = Process.Start(proc))
+                    var packdlc = new Wcc_lite.pack()
                     {
-                        using (var reader = process.StandardOutput)
-                        {
-                            while (true)
-                            {
-                                var result = await reader.ReadLineAsync();
-
-                                AddOutput(result + "\n", frmOutput.Logtype.Wcc);
-
-                                Application.DoEvents();
-
-                                if (reader.EndOfStream)
-                                    break;
-                            }
-                        }
-                    }
+                        Directory = dlcDir,
+                        Outdir = dlcpackDir
+                    };
+                    AddOutput("Executing " + packdlc.ToString() + " " + packdlc.Arguments + "\n", frmOutput.Logtype.Important);
+                    WccHelper.RunCommand(packdlc);
                 }
             }
             catch (DirectoryNotFoundException)
             {
-                AddOutput("DLC Bundle directory not found. Bundles will not packed for DLC. \n", frmOutput.Logtype.Important);
+                AddOutput("Dlc Bundle directory not found. Bundles will not be packed for mod. \n", frmOutput.Logtype.Important);
             }
             catch (Exception ex)
             {
                 AddOutput(ex.ToString() + "\n", frmOutput.Logtype.Error);
-            }            
+            }
             #endregion
         }
 
-        private async Task CreateModMetaData()
+        private async Task CreateModMetaData()  //IN: packed\Mods\mod, OUT: same dir
         {
-            var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
             var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
-            var DlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
+            var dlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
             #region Mod metadata Packing
             try
             {
@@ -2140,31 +2297,13 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 if (Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName), "*", SearchOption.AllDirectories).Any())
                 {
                     MainController.Get().ProjectStatus = "Packing mod metadata";
-                    proc.Arguments = $"metadatastore -path={modpackDir}";
-                    proc.UseShellExecute = false;
-                    proc.RedirectStandardOutput = true;
-                    proc.WindowStyle = ProcessWindowStyle.Hidden;
-                    proc.CreateNoWindow = true;
-
-                    AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
-
-                    using (var process = Process.Start(proc))
+                    var metadata = new Wcc_lite.metadatastore()
                     {
-                        using (var reader = process.StandardOutput)
-                        {
-                            while (true)
-                            {
-                                var result = await reader.ReadLineAsync();
+                        Directory = modpackDir
+                    };
 
-                                AddOutput(result + "\n", frmOutput.Logtype.Wcc);
-
-                                Application.DoEvents();
-
-                                if (reader.EndOfStream)
-                                    break;
-                            }
-                        }
-                    }
+                    AddOutput("Executing " + metadata.Name + " " + metadata.Arguments + "\n", frmOutput.Logtype.Important);
+                    WccHelper.RunCommand(metadata);
                 }
             }
             catch (DirectoryNotFoundException)
@@ -2183,31 +2322,13 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 if (Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, new Bundle().TypeName), "*", SearchOption.AllDirectories).Any())
                 {
                     MainController.Get().ProjectStatus = "Packing DLC metadata";
-                    proc.Arguments = $"metadatastore -path={DlcpackDir}";
-                    proc.UseShellExecute = false;
-                    proc.RedirectStandardOutput = true;
-                    proc.WindowStyle = ProcessWindowStyle.Hidden;
-                    proc.CreateNoWindow = true;
-
-                    AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
-
-                    using (var process = Process.Start(proc))
+                    var metadata = new Wcc_lite.metadatastore()
                     {
-                        using (var reader = process.StandardOutput)
-                        {
-                            while (true)
-                            {
-                                var result = await reader.ReadLineAsync();
+                        Directory = dlcpackDir
+                    };
 
-                                AddOutput(result + "\n", frmOutput.Logtype.Wcc);
-
-                                Application.DoEvents();
-
-                                if (reader.EndOfStream)
-                                    break;
-                            }
-                        }
-                    }
+                    AddOutput("Executing " + metadata.Name + " " + metadata.Arguments + "\n", frmOutput.Logtype.Important);
+                    WccHelper.RunCommand(metadata);
                 }
             }
             catch(DirectoryNotFoundException)
@@ -2221,10 +2342,8 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             #endregion
         }
 
-        private async Task CookMod()
+        private async Task CookTextures()    //IN: \TextureCache, OUT: cooked\Mods\mod
         {
-            var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
             var cookedModDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\Mods\mod" + ActiveMod.Name + @"\content\");
             var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\dlc" + ActiveMod.Name + @"\content\");
             #region Cook Mod
@@ -2233,12 +2352,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 var modtexcachedir = Path.Combine(ActiveMod.ModDirectory, MainController.Get().TextureManager.TypeName);
                 if (Directory.Exists(modtexcachedir) && Directory.GetFiles(modtexcachedir, "*", SearchOption.AllDirectories).Any())
                 {
-                    MainController.Get().ProjectStatus = "Cooking mod";
-                    proc.Arguments = $"cook -platform=pc -mod={Path.Combine(ActiveMod.ModDirectory, MainController.Get().TextureManager.TypeName)} -basedir={Path.Combine(ActiveMod.ModDirectory, MainController.Get().TextureManager.TypeName)}  -outdir={cookedModDir}";
-                    proc.UseShellExecute = false;
-                    proc.RedirectStandardOutput = true;
-                    proc.WindowStyle = ProcessWindowStyle.Hidden;
-                    proc.CreateNoWindow = true;
+                    MainController.Get().ProjectStatus = "Cooking mod textures";
                     if (!Directory.Exists(cookedModDir))
                     {
                         Directory.CreateDirectory(cookedModDir);
@@ -2255,25 +2369,15 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                             dir.Delete(true);
                         }
                     }
-                    AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
-
-                    using (var process = Process.Start(proc))
+                    var cook = new Wcc_lite.cook()
                     {
-                        using (var reader = process.StandardOutput)
-                        {
-                            while (true)
-                            {
-                                var result = await reader.ReadLineAsync();
-
-                                AddOutput(result + "\n", frmOutput.Logtype.Wcc);
-
-                                Application.DoEvents();
-
-                                if (reader.EndOfStream)
-                                    break;
-                            }
-                        }
-                    }
+                        Platform = platform.pc,
+                        mod = modtexcachedir,
+                        basedir = modtexcachedir,
+                        outdir = cookedModDir
+                    };
+                    WccHelper.RunCommand(cook);
+                    AddOutput("Executing " + cook.Name + " " + cook.Arguments + "\n", frmOutput.Logtype.Important);
                 }
             }
             catch (DirectoryNotFoundException)
@@ -2291,12 +2395,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 var dlctxcachedir = Path.Combine(ActiveMod.DlcDirectory, MainController.Get().TextureManager.TypeName);
                 if (Directory.Exists(dlctxcachedir) && Directory.GetFiles(dlctxcachedir, "*", SearchOption.AllDirectories).Any())
                 {
-                    MainController.Get().ProjectStatus = "Cooking DLC";
-                    proc.Arguments = $"cook -platform=pc -mod={Path.Combine(ActiveMod.DlcDirectory, MainController.Get().TextureManager.TypeName)} -basedir={Path.Combine(ActiveMod.DlcDirectory, MainController.Get().TextureManager.TypeName)}  -outdir={cookedDLCDir}";
-                    proc.UseShellExecute = false;
-                    proc.RedirectStandardOutput = true;
-                    proc.WindowStyle = ProcessWindowStyle.Hidden;
-                    proc.CreateNoWindow = true;
+                    MainController.Get().ProjectStatus = "Cooking DLC textures";
                     if (!Directory.Exists(cookedDLCDir))
                     {
                         Directory.CreateDirectory(cookedDLCDir);
@@ -2313,25 +2412,15 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                             dir.Delete(true);
                         }
                     }
-                    AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
-
-                    using (var process = Process.Start(proc))
+                    var cook = new Wcc_lite.cook()
                     {
-                        using (var reader = process.StandardOutput)
-                        {
-                            while (true)
-                            {
-                                var result = await reader.ReadLineAsync();
-
-                                AddOutput(result + "\n", frmOutput.Logtype.Wcc);
-
-                                Application.DoEvents();
-
-                                if (reader.EndOfStream)
-                                    break;
-                            }
-                        }
-                    }
+                        Platform = platform.pc,
+                        mod = dlctxcachedir,
+                        basedir = dlctxcachedir,
+                        outdir = cookedDLCDir
+                    };
+                    WccHelper.RunCommand(cook);
+                    AddOutput("Executing " + cook.Name + " " + cook.Arguments + "\n", frmOutput.Logtype.Important);
                 }
             }
             catch (DirectoryNotFoundException)
@@ -2345,45 +2434,121 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             #endregion
         }
 
-        private async Task GenerateCollisionCache()
+        private async Task CookCollision()    //IN: \CollisionCache, OUT: cooked\Mods\mod
         {
-                        var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
-            var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
-            var DlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
-            var cookedModDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\Mods\mod" + ActiveMod.Name + @"\content\");
-            var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\dlc" + ActiveMod.Name + @"\content\");
-            #region Mod texture caching
+            var cookedModDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\Mods\mod", ActiveMod.Name, @"\content\");
+            var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\dlc", ActiveMod.Name, @"\content\");
+            #region Cook Mod
             try
             {
-                if (Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, new TextureCache().TypeName), "*", SearchOption.AllDirectories).Any())
+                var modcolcachedir = Path.Combine(ActiveMod.ModDirectory, MainController.Get().CollisionManager.TypeName);
+                if (Directory.Exists(modcolcachedir) && Directory.GetFiles(modcolcachedir, "*", SearchOption.AllDirectories).Any())
                 {
-                    MainController.Get().ProjectStatus = "Generating collision cache";
-                    proc.Arguments = $"buildcache physics -basedir={Path.Combine(ActiveMod.ModDirectory, MainController.Get().TextureManager.TypeName)} -platform=pc -db={cookedModDir}\\cook.db  -out={modpackDir}\\collision.cache";
-                    proc.UseShellExecute = false;
-                    proc.RedirectStandardOutput = true;
-                    proc.WindowStyle = ProcessWindowStyle.Hidden;
-                    proc.CreateNoWindow = true;
-
-                    AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
-
-                    using (var process = Process.Start(proc))
+                    MainController.Get().ProjectStatus = "Cooking mod collisions";
+                    if (!Directory.Exists(cookedModDir))
                     {
-                        using (var reader = process.StandardOutput)
+                        Directory.CreateDirectory(cookedModDir);
+                    }
+                    else
+                    {
+                        var di = new DirectoryInfo(cookedModDir);
+                        foreach (var file in di.GetFiles())
                         {
-                            while (true)
-                            {
-                                var result = await reader.ReadLineAsync();
-
-                                AddOutput(result + "\n", frmOutput.Logtype.Wcc);
-
-                                Application.DoEvents();
-
-                                if (reader.EndOfStream)
-                                    break;
-                            }
+                            file.Delete();
+                        }
+                        foreach (var dir in di.GetDirectories())
+                        {
+                            dir.Delete(true);
                         }
                     }
+                    var cook = new Wcc_lite.cook()
+                    {
+                        Platform = platform.pc,
+                        mod = modcolcachedir,
+                        basedir = modcolcachedir,
+                        outdir = cookedModDir
+                    };
+                    WccHelper.RunCommand(cook);
+                    AddOutput("Executing " + cook.Name + " " + cook.Arguments + "\n", frmOutput.Logtype.Important);
+                }
+            }
+            catch (DirectoryNotFoundException)
+            {
+                AddOutput("Mod CollisionCache folder not found. Mod won't be cooked. \n", frmOutput.Logtype.Important);
+            }
+            catch (Exception ex)
+            {
+                AddOutput(ex.ToString() + "\n", frmOutput.Logtype.Error);
+            }
+            #endregion
+            #region Cook DLC
+            try
+            {
+                var dlccolcachedir = Path.Combine(ActiveMod.DlcDirectory, MainController.Get().CollisionManager.TypeName);
+                if (Directory.Exists(dlccolcachedir) && Directory.GetFiles(dlccolcachedir, "*", SearchOption.AllDirectories).Any())
+                {
+                    MainController.Get().ProjectStatus = "Cooking DLC";
+                    if (!Directory.Exists(cookedDLCDir))
+                    {
+                        Directory.CreateDirectory(cookedDLCDir);
+                    }
+                    else
+                    {
+                        var di = new DirectoryInfo(cookedDLCDir);
+                        foreach (var file in di.GetFiles())
+                        {
+                            file.Delete();
+                        }
+                        foreach (var dir in di.GetDirectories())
+                        {
+                            dir.Delete(true);
+                        }
+                    }
+                    var cook = new Wcc_lite.cook()
+                    {
+                        Platform = platform.pc,
+                        mod = dlccolcachedir,
+                        basedir = dlccolcachedir,
+                        outdir = cookedDLCDir
+                    };
+                    WccHelper.RunCommand(cook);
+                    AddOutput("Executing " + cook.Name + " " + cook.Arguments + "\n", frmOutput.Logtype.Important);
+                }
+            }
+            catch (DirectoryNotFoundException)
+            {
+                AddOutput("DLC CollisionCache folder not found. DLC won't be cooked. \n", frmOutput.Logtype.Important);
+            }
+            catch (Exception ex)
+            {
+                AddOutput(ex.ToString() + "\n", frmOutput.Logtype.Error);
+            }
+            #endregion
+        }
+
+        private async Task GenerateCollisionCache() //IN: \CollisionCache, cooked\Mods\mod\cook.db, OUT: packed\Mods\mod
+        {
+            var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
+            var dlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
+            var cookedModDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\Mods\mod" + ActiveMod.Name + @"\content\");
+            var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\dlc" + ActiveMod.Name + @"\content\");
+            #region Mod collision caching
+            try
+            {
+                var modcolcachedir = Path.Combine(ActiveMod.ModDirectory, MainController.Get().CollisionManager.TypeName);
+                if (Directory.Exists(modcolcachedir) && Directory.GetFiles(modcolcachedir, "*", SearchOption.AllDirectories).Any())
+                {
+                    MainController.Get().ProjectStatus = "Generating collision cache";
+                    var cmd = new Wcc_lite.buildcache()
+                    {
+                        Platform = platform.pc,
+                        builder = cachebuilder.physics,
+                        basedir = modcolcachedir,
+                        DataBase = $"{ cookedModDir }\\cook.db",
+                        Out = $"{modpackDir}\\collision.cache"
+                    };
+                    WccHelper.RunCommand(cmd);
+                    AddOutput("Executing " + cmd.Name + " " + cmd.Arguments + "\n", frmOutput.Logtype.Important);
                 }
             }
             catch (DirectoryNotFoundException)
@@ -2395,37 +2560,23 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 AddOutput(ex.ToString() + "\n", frmOutput.Logtype.Error);
             }
             #endregion
-            #region DLC texture caching
+            #region DLC collision caching
             try
             {
-                if (Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, new TextureCache().TypeName), "*", SearchOption.AllDirectories).Any())
+                var dlccollcachedir = Path.Combine(ActiveMod.DlcDirectory, MainController.Get().CollisionManager.TypeName);
+                if (Directory.Exists(dlccollcachedir) && Directory.GetFiles(dlccollcachedir, "*", SearchOption.AllDirectories).Any())
                 {
                     MainController.Get().ProjectStatus = "Generating DLC collision cache";
-                    proc.Arguments = $"buildcache physics -basedir={Path.Combine(ActiveMod.DlcDirectory, MainController.Get().TextureManager.TypeName)} -platform=pc -db={cookedDLCDir}\\cook.db  -out={DlcpackDir}\\collision.cache";
-                    proc.UseShellExecute = false;
-                    proc.RedirectStandardOutput = true;
-                    proc.WindowStyle = ProcessWindowStyle.Hidden;
-                    proc.CreateNoWindow = true;
-
-                    AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
-
-                    using (var process = Process.Start(proc))
+                    var cmd = new Wcc_lite.buildcache()
                     {
-                        using (var reader = process.StandardOutput)
-                        {
-                            while (true)
-                            {
-                                var result = await reader.ReadLineAsync();
-
-                                AddOutput(result + "\n", frmOutput.Logtype.Wcc);
-
-                                Application.DoEvents();
-
-                                if (reader.EndOfStream)
-                                    break;
-                            }
-                        }
-                    }
+                        Platform = platform.pc,
+                        builder = cachebuilder.physics,
+                        basedir = dlccollcachedir,
+                        DataBase = $"{ cookedDLCDir }\\cook.db",
+                        Out = $"{dlcpackDir}\\collision.cache"
+                    };
+                    WccHelper.RunCommand(cmd);
+                    AddOutput("Executing " + cmd.Name + " " + cmd.Arguments + "\n", frmOutput.Logtype.Important);
                 }
             }
             catch (DirectoryNotFoundException)
@@ -2439,45 +2590,29 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             #endregion
         }
 
-        private async Task PackTextures()
+        private async Task GenerateTextureCache()   //IN: \CollisionCache, cooked\Mods\mod, OUT: packed\Mods\mod
         {
-            var config = MainController.Get().Configuration;
-            var proc = new ProcessStartInfo(config.WccLite) { WorkingDirectory = Path.GetDirectoryName(config.WccLite) };
             var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
-            var DlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
+            var dlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
             var cookedModDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\Mods\mod" + ActiveMod.Name + @"\content\");
             var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\dlc" + ActiveMod.Name + @"\content\");
             #region Mod texture caching
             try
             {
-                if (Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, new TextureCache().TypeName), "*", SearchOption.AllDirectories).Any())
+                var modtexcachedir = Path.Combine(ActiveMod.ModDirectory, MainController.Get().TextureManager.TypeName);
+                if (Directory.Exists(modtexcachedir) && Directory.GetFiles(modtexcachedir, "*", SearchOption.AllDirectories).Any())
                 {
                     MainController.Get().ProjectStatus = "Caching mod textures";
-                    proc.Arguments = $"buildcache textures -basedir={Path.Combine(ActiveMod.ModDirectory, MainController.Get().TextureManager.TypeName)} -platform=pc -db={cookedModDir}\\cook.db  -out={modpackDir}\\texture.cache";
-                    proc.UseShellExecute = false;
-                    proc.RedirectStandardOutput = true;
-                    proc.WindowStyle = ProcessWindowStyle.Hidden;
-                    proc.CreateNoWindow = true;
-
-                    AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
-
-                    using (var process = Process.Start(proc))
+                    var cmd = new Wcc_lite.buildcache()
                     {
-                        using (var reader = process.StandardOutput)
-                        {
-                            while (true)
-                            {
-                                var result = await reader.ReadLineAsync();
-
-                                AddOutput(result + "\n", frmOutput.Logtype.Wcc);
-
-                                Application.DoEvents();
-
-                                if (reader.EndOfStream)
-                                    break;
-                            }
-                        }
-                    }
+                        Platform = platform.pc,
+                        builder = cachebuilder.textures,
+                        basedir = modtexcachedir,
+                        DataBase = $"{ cookedModDir }\\cook.db",
+                        Out = $"{modpackDir}\\texture.cache"
+                    };
+                    WccHelper.RunCommand(cmd);
+                    AddOutput("Executing " + cmd.Name + " " + cmd.Arguments + "\n", frmOutput.Logtype.Important);
                 }
             }
             catch (DirectoryNotFoundException)
@@ -2492,34 +2627,20 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             #region DLC texture caching
             try
             {
-                if (Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, new TextureCache().TypeName), "*", SearchOption.AllDirectories).Any())
+                var dlctexcachedir = Path.Combine(ActiveMod.DlcDirectory, MainController.Get().TextureManager.TypeName);
+                if (Directory.Exists(dlctexcachedir) && Directory.GetFiles(dlctexcachedir, "*", SearchOption.AllDirectories).Any())
                 {
                     MainController.Get().ProjectStatus = "Caching DLC textures";
-                    proc.Arguments = $"buildcache textures -basedir={Path.Combine(ActiveMod.DlcDirectory, MainController.Get().TextureManager.TypeName)} -platform=pc -db={cookedDLCDir}\\cook.db  -out={DlcpackDir}\\texture.cache";
-                    proc.UseShellExecute = false;
-                    proc.RedirectStandardOutput = true;
-                    proc.WindowStyle = ProcessWindowStyle.Hidden;
-                    proc.CreateNoWindow = true;
-
-                    AddOutput("Executing " + proc.FileName + " " + proc.Arguments + "\n", frmOutput.Logtype.Important);
-
-                    using (var process = Process.Start(proc))
+                    var cmd = new Wcc_lite.buildcache()
                     {
-                        using (var reader = process.StandardOutput)
-                        {
-                            while (true)
-                            {
-                                var result = await reader.ReadLineAsync();
-
-                                AddOutput(result + "\n", frmOutput.Logtype.Wcc);
-
-                                Application.DoEvents();
-
-                                if (reader.EndOfStream)
-                                    break;
-                            }
-                        }
-                    }
+                        Platform = platform.pc,
+                        builder = cachebuilder.textures,
+                        basedir = dlctexcachedir,
+                        DataBase = $"{ cookedDLCDir }\\cook.db",
+                        Out = $"{dlcpackDir}\\texture.cache"
+                    };
+                    WccHelper.RunCommand(cmd);
+                    AddOutput("Executing " + cmd.Name + " " + cmd.Arguments + "\n", frmOutput.Logtype.Important);
                 }
             }
             catch (DirectoryNotFoundException)
@@ -2576,6 +2697,59 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                         File.Copy(f, newfilepath, true);
                     }
                 }
+            }
+        }
+
+        private void verifyFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var of = new OpenFileDialog())
+            {
+                of.Multiselect = true;
+                of.Filter = "Cr2w files | *.*";
+                of.Title = "Please select the Cr2w files for verifying.";
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (var f in of.FileNames)
+                    {
+                        CR2WVerify.VerifyFile(f);
+                    }
+                }
+            }
+        }
+
+        private void MinimizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowState = FormWindowState.Minimized;
+        }
+
+        private void RestoreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.WindowState != FormWindowState.Maximized)
+                WindowState = FormWindowState.Maximized;
+            else
+                WindowState = FormWindowState.Normal;
+        }
+
+        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void menuStrip1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
+            }
+        }
+
+        private void menuStrip1_MouseDown_1(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
             }
         }
     }
