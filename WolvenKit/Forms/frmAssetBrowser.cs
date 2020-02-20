@@ -45,6 +45,8 @@ namespace WolvenKit
             RootNode.Name = "Root";
             foreach (var arch in archives)
             {
+                if (arch == null)
+                    continue;
                 FileList.AddRange(arch.FileList);
                 RootNode.Directories[arch.RootNode.Name] = arch.RootNode;
                 arch.RootNode.Parent = RootNode;

@@ -342,7 +342,7 @@ namespace WolvenKit.Common.Wcc
         [CategoryAttribute("Is Required"),
         DescriptionAttribute("Available Cache builders: physics, shaders, texture. ")]
         [Editor(typeof(EnumConverter), typeof(EnumConverter))]
-        [REDName("")]
+        [REDName("builder")]
         public cachebuilder builder { get; set; }
 
         [CategoryAttribute("Is Required"),
@@ -650,7 +650,7 @@ namespace WolvenKit.Common.Wcc
         /// </summary>
         [CategoryAttribute("Is Required"),
         DescriptionAttribute("Choose file to analyze.")]
-        [REDName("")]
+        [REDName("Object")]
         public string Object { get; set; }/// 
 
         [CategoryAttribute("Optional"),
@@ -1851,7 +1851,7 @@ namespace WolvenKit.Common.Wcc
 
         [CategoryAttribute("Is Required"),
         DescriptionAttribute("NO INFO")]
-        [REDName("")]
+        [REDName("FilePattern")]
         public string FilePattern { get; set; }
     }
 

@@ -8,21 +8,29 @@ using System.Threading.Tasks;
 
 namespace WolvenKit.Common.Services
 {
-   
+    public enum Logtype
+    {
+        Normal,
+        Error,
+        Important,
+        Success,
+        Wcc
+    }
 
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public class LoggerService : ObservableObject, ILoggerService, INotifyPropertyChanged
     {
         public LoggerService()
         {
-            ExtendedLog = new ObservableCollection<InterpretedLogMessage>();
+            ErrorLog = new ObservableCollection<InterpretedLogMessage>();
         }
 
         
 
         #region Properties
-        public ObservableCollection<InterpretedLogMessage> ExtendedLog { get; set; }
+        public ObservableCollection<InterpretedLogMessage> ErrorLog { get; set; }
         public string Log { get; set; } = "Log initialized.\n\r";
+        public Logtype Logtype { get; set; } = Logtype.Normal;
         #endregion
 
         #region Overrides
@@ -34,16 +42,16 @@ namespace WolvenKit.Common.Services
         /// Log an string
         /// </summary>
         /// <param name="value"></param>
-        public void LogString(string value)
+        public void LogString(string value, Logtype type = Logtype.Normal)
         {
-
+            Logtype = type;
             Log = value;// + "\r\n";
             OnPropertyChanged(nameof(Log));
         }
         /// <summary>
         /// Log an Interpretable LogMessage
         /// </summary>
-        public void LogExtended(SystemLogFlag sflag, ToolFlag tool, string cmdName, string value)
+        public void LogExtended(SystemLogFlag sflag, ToolLogFlag tool, string cmdName, string value)
         {
             if (sflag == SystemLogFlag.SLF_Interpretable)
             {
@@ -57,9 +65,9 @@ namespace WolvenKit.Common.Services
         /// <param name="sflag"></param>
         /// <param name="cmdName"></param>
         /// <param name="value"></param>
-        private void InterpretLogMessage(SystemLogFlag sflag, ToolFlag tool ,string cmdName, string value)
+        private void InterpretLogMessage(SystemLogFlag sflag, ToolLogFlag tool ,string cmdName, string value)
         {
-            if (tool == ToolFlag.TLF_Radish)
+            if (tool == ToolLogFlag.TLF_Radish)
             {
                 var data = new RADLogMessage
                 {
@@ -68,8 +76,8 @@ namespace WolvenKit.Common.Services
                     Tool = tool
                 };
                 InterpretRADMessage(ref data, value);
-                if (data.Flag != LogFlag.WLF_Info)
-                    ExtendedLog.Add(data);
+                if (data.Flag != WccLogFlag.WLF_Info)
+                    ErrorLog.Add(data);
             }
             else
             {
@@ -80,8 +88,8 @@ namespace WolvenKit.Common.Services
                     Tool = tool
                 };
                 InterpretWCCMessage(ref data, value);
-                if (data.Flag != LogFlag.WLF_Info)
-                    ExtendedLog.Add(data);
+                //if (data.Flag != WccLogFlag.WLF_Info)
+                    ErrorLog.Add(data);
             }
         }
 
@@ -102,7 +110,7 @@ namespace WolvenKit.Common.Services
             }
             catch (Exception)
             {
-                data.Flag = LogFlag.WLF_Info;
+                data.Flag = WccLogFlag.WLF_Info;
                 data.Value = value;
                 //ExtendedLog.Add(data);
             }
@@ -137,7 +145,7 @@ namespace WolvenKit.Common.Services
             }
             catch (Exception)
             {
-                data.Flag = LogFlag.WLF_Info;
+                data.Flag = WccLogFlag.WLF_Info;
                 data.WccModule = "Verbose";
                 data.Value = value;
                 //ExtendedLog.Add(data);
@@ -145,31 +153,31 @@ namespace WolvenKit.Common.Services
         }
 
 
-        private LogFlag GetWFlagFromString(string wflag)
+        private WccLogFlag GetWFlagFromString(string wflag)
         {
             switch (wflag)
             {
-                case "Warning": return LogFlag.WLF_Warning;
-                case "Error": return LogFlag.WLF_Error;
-                case "Info": return LogFlag.WLF_Info;
-                default: return LogFlag.WLF_Info;
+                case "Warning": return WccLogFlag.WLF_Warning;
+                case "Error": return WccLogFlag.WLF_Error;
+                case "Info": return WccLogFlag.WLF_Info;
+                default: return WccLogFlag.WLF_Info;
             }
         }
-        private LogFlag GetRFlagFromString(string rflag)
+        private WccLogFlag GetRFlagFromString(string rflag)
         {
             switch (rflag)
             {
-                case "WARNING": return LogFlag.WLF_Warning;
-                case "ERROR": return LogFlag.WLF_Error;
-                case "INFO": return LogFlag.WLF_Info;
-                default: return LogFlag.WLF_Info;
+                case "WARNING": return WccLogFlag.WLF_Warning;
+                case "ERROR": return WccLogFlag.WLF_Error;
+                case "INFO": return WccLogFlag.WLF_Info;
+                default: return WccLogFlag.WLF_Info;
             }
         }
 
         public void Clear()
         {
             Log = "";
-            ExtendedLog.Clear();
+            ErrorLog.Clear();
         }
         #endregion
 

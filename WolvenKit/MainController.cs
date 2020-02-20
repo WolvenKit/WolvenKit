@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using WolvenKit.Mod;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit
 {
@@ -69,8 +70,8 @@ namespace WolvenKit
         }
 
 
-        private KeyValuePair<string,frmOutput.Logtype> _logMessage = new KeyValuePair<string, frmOutput.Logtype>("",frmOutput.Logtype.Normal);
-        public KeyValuePair<string, frmOutput.Logtype> LogMessage
+        private KeyValuePair<string,Logtype> _logMessage = new KeyValuePair<string, Logtype>("",Logtype.Normal);
+        public KeyValuePair<string, Logtype> LogMessage
         {
             get => _logMessage;
             set => SetField(ref _logMessage, value, nameof(LogMessage));
@@ -140,9 +141,9 @@ namespace WolvenKit
         /// </summary>
         /// <param name="msg">The message to log.</param>
         /// <param name="type">The type of the log. Not needed.</param>
-        public void QueueLog(string msg, frmOutput.Logtype type = frmOutput.Logtype.Normal)
+        public void QueueLog(string msg, Logtype type = Logtype.Normal)
         {
-            LogMessage = new KeyValuePair<string, frmOutput.Logtype>(msg, type);
+            LogMessage = new KeyValuePair<string, Logtype>(msg, type);
         }
 
         public string GetLocalizedString(uint val)
