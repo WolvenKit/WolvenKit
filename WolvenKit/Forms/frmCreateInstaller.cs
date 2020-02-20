@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using ICSharpCode.SharpZipLib.Zip;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.Forms
 {
@@ -96,10 +97,10 @@ namespace WolvenKit.Forms
             var pkg = new WKPackage(asm,iconpathTB.Text,Path.Combine(MainController.Get().ActiveMod.ProjectDirectory, @"packed"));
 
             pkg.Save(outpath);
-            MainController.Get().LogMessage = new KeyValuePair<string, frmOutput.Logtype>("Installer created: " + outpath + "\n", frmOutput.Logtype.Success);
+            MainController.Get().LogMessage = new KeyValuePair<string, Logtype>("Installer created: " + outpath + "\n", Logtype.Success);
             if (!File.Exists(outpath))
             {
-                MainController.Get().LogMessage = new KeyValuePair<string, frmOutput.Logtype>("Couldn't create installer. Something went wrong.", frmOutput.Logtype.Error);
+                MainController.Get().LogMessage = new KeyValuePair<string, Logtype>("Couldn't create installer. Something went wrong.", Logtype.Error);
                 return;
             }
             MainController.Get().ProjectStatus = "Ready";

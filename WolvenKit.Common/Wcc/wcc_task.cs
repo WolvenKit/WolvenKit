@@ -31,10 +31,11 @@ namespace WolvenKit.Common.Wcc
         /// </summary>
         /// <param name="cmd"></param>
         /// <returns></returns>
-        public async Task RunCommand(WCC_Command cmd)
+        public async Task<int> RunCommand(WCC_Command cmd)
         {
+            _logger.Clear();
             string args = cmd.Arguments;
-            await RunCommand(cmd.Name, args);
+            return await Task.Run(() => RunCommand(cmd.Name, args));
         }
 
         /// <summary>
@@ -42,15 +43,16 @@ namespace WolvenKit.Common.Wcc
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public async Task RunCommand(string cmdName, string args)
+        public async Task<int> RunCommand(string cmdName, string args)
         {
             string wccPath = _wccPath;
+            EWccStatus status = EWccStatus.NotRun;
             using (Process process = new Process())
             {
                 try
                 {
-                    _logger.LogString($"-----------------------------------------------------");
-                    _logger.LogString($"WCC_TASK: {args}");
+                    _logger.LogString($"-----------------------------------------------------", Logtype.Wcc);
+                    _logger.LogString($"WCC_TASK: {args}", Logtype.Wcc);
 
                     process.StartInfo.FileName = wccPath;
                     process.StartInfo.WorkingDirectory = Path.GetDirectoryName(wccPath);
@@ -67,37 +69,60 @@ namespace WolvenKit.Common.Wcc
                             {
                                 outputWaitHandle.Close();
                                 //Handle Errors
-                                if (_logger.ExtendedLog.Any(x => x.Flag == LogFlag.WLF_Error))
+                                if (_logger.ErrorLog.Any(x => x.Flag == WccLogFlag.WLF_Error))
                                 {
-                                    _logger.LogString("Finished with Errors.");
-                                    //return EWccStatus.Error;
+                                    _logger.LogString("Finished with Errors.\r\n", Logtype.Error);
+                                    status = EWccStatus.Error;
                                 }
-                                else if (_logger.ExtendedLog.Any(x => x.Flag == LogFlag.WLF_Error))
+                                else if (_logger.ErrorLog.Any(x => x.Flag == WccLogFlag.WLF_Warning))
                                 {
-                                    _logger.LogString("Finished with Warnings.");
-                                    //return EWccStatus.Finished;
+                                    _logger.LogString("Finished with Warnings.\r\n", Logtype.Important);
+                                    status = EWccStatus.Finished;
                                 }
                                 else
                                 {
-                                    _logger.LogString("Finished succesfully.");
-                                    //return EWccStatus.Finished;
+                                    _logger.LogString("Finished succesfully.\r\n", Logtype.Success);
+                                    status = EWccStatus.Finished;
                                 }
                             }
                             else
                             {
-                                _logger.LogString(e.Data);
+                                _logger.LogExtended(SystemLogFlag.SLF_Interpretable, ToolLogFlag.TLF_Wcc, cmdName, $"{e.Data}");
+                                
+                                Logtype wkitflag = Logtype.Wcc;
+                                if (_logger.ErrorLog.Count > 0)
+                                {
+                                    var flag = _logger.ErrorLog.Last().Flag;
+                                    switch (flag)
+                                    {
+                                        case WccLogFlag.WLF_Error: wkitflag = Logtype.Error;
+                                            break;
+                                        case WccLogFlag.WLF_Warning: wkitflag = Logtype.Important;
+                                            break;
+                                        case WccLogFlag.WLF_Default: 
+                                        case WccLogFlag.WLF_Info:
+                                        default:
+                                            break;
+                                    }
+                                }
+                                
+                                _logger.LogString(e.Data, wkitflag);
                             }
                         };
 
                         process.Start();
                         process.BeginOutputReadLine();
+                        process.WaitForExit();
                     }
-
+                    if (status == EWccStatus.Finished)
+                        return 1;
+                    else
+                        return 0;
                     
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogString(ex.ToString());
+                    _logger.LogString(ex.ToString(), Logtype.Error);
                     throw ex;
 
                 }

@@ -14,11 +14,11 @@ namespace WolvenKit.Common.Services
        
 
         string Log { get; }
-        ObservableCollection<InterpretedLogMessage> ExtendedLog { get; }
+        ObservableCollection<InterpretedLogMessage> ErrorLog { get; }
 
         void Clear();
-        void LogString(string value);
-        void LogExtended(SystemLogFlag sflag, ToolFlag lflag, string cmdName, string value);
+        void LogString(string value, Logtype type);
+        void LogExtended(SystemLogFlag sflag, ToolLogFlag lflag, string cmdName, string value);
 
     }
 }

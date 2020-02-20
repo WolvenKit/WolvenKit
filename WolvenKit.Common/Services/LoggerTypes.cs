@@ -14,14 +14,14 @@ namespace WolvenKit.Common.Services
         SLF_Info,
         SLF_Interpretable
     }
-    public enum LogFlag
+    public enum WccLogFlag
     {
         WLF_Default,
         WLF_Error,
         WLF_Warning,
         WLF_Info
     }
-    public enum ToolFlag
+    public enum ToolLogFlag
     {
         TLF_Wcc,
         TLF_Radish,
@@ -34,8 +34,8 @@ namespace WolvenKit.Common.Services
         // global flags
         public SystemLogFlag SystemFlag { get; set; }
         public string CommandName { get; set; }
-        public ToolFlag Tool { get; set; }
-        public LogFlag Flag { get; set; }
+        public ToolLogFlag Tool { get; set; }
+        public WccLogFlag Flag { get; set; }
 
 
         // Message
