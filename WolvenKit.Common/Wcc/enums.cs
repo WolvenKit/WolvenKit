@@ -17,6 +17,25 @@ namespace WolvenKit.Common.Wcc
                 default: return new List<string>();
             }
         }
+
+        public static string RawExtensionToCacheType(string ext)
+        {
+            switch (ext)
+            {
+                case ".apb": 
+                case ".nxs": 
+                    return "CollisionCache";
+                case ".png": 
+                case ".bmp": 
+                case ".jpg": 
+                case ".tga": 
+                case ".dds": 
+                case ".re": 
+                case ".fbx": 
+                    return "TextureCache";
+                default: return "";
+            }
+        }
     }
     
 

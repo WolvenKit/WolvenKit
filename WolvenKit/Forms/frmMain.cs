@@ -61,6 +61,7 @@ namespace WolvenKit
 
         #region Fields
         private readonly string BaseTitle = "Wolven kit";
+        private readonly bool COOKINPLACE = true;
         public static Task Packer;
         private HotkeyCollection hotkeys;
         private readonly ToolStripRenderer toolStripRenderer = new ToolStripProfessionalRenderer();
@@ -96,6 +97,7 @@ namespace WolvenKit
         {
             InitializeComponent();
 
+
             this.dockPanel.Theme.Extender.FloatWindowFactory = new CustomFloatWindowFactory();
             visualStudioToolStripExtender1.DefaultRenderer = toolStripRenderer;
             MainController.Get().ToolStripExtender = visualStudioToolStripExtender1;
@@ -130,6 +132,8 @@ namespace WolvenKit
             Logger = new LoggerService();
             Logger.PropertyChanged += LoggerUpdated;
             WccHelper = new WCC_Task(MainController.Get().Configuration.WccLite, Logger);
+
+            
         }
         #endregion
 
@@ -154,6 +158,9 @@ namespace WolvenKit
             visualStudioToolStripExtender1.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
             visualStudioToolStripExtender1.SetStyle(toolStrip2, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
         }
+        /// <summary>
+        /// https://stackoverflow.com/questions/29024910/how-to-design-a-custom-close-minimize-and-maximize-button-in-windows-form-appli/29025094
+        /// </summary>
         protected override void WndProc(ref Message m)
         {
             if (m.Msg == 0x84)
@@ -188,6 +195,20 @@ namespace WolvenKit
             }
 
             base.WndProc(ref m);
+        }
+        /// <summary>
+        /// https://www.codeproject.com/Questions/570233/AeroplusSnappluseffectplusforplusformpluspluswithp
+        /// </summary>
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                {
+                    cp.Style |= 0x20000 | 0x80000 | 0x40000; //WS_MINIMIZEBOX | WS_SYSMENU | WS_SIZEBOX;
+                }
+                return cp;
+            }
         }
 
         private void LoggerUpdated(object sender, PropertyChangedEventArgs e)
@@ -1481,12 +1502,6 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             List<string> importedexts = new List<string>();
             switch (ext)
             {
-                /*case ".apb":
-                    importedexts = REDTypes.RawExtensionToRedImport("apb");
-                    break;
-                case ".nxs": 
-                    importedexts = REDTypes.RawExtensionToRedImport("nxs");
-                    break;*/
                 case ".re":
                 case ".fbx":
                     importedexts.AddRange(new string[] { ".w2mesh" });
@@ -1504,17 +1519,22 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             }
             #endregion
 
-            await StartImport(importedexts.FirstOrDefault());
+            await StartImport(ext, importedexts.FirstOrDefault());
             
-            async Task StartImport(string type)
+            async Task StartImport(string rawext, string fileext)
             {
+                string type = REDTypes.RawExtensionToCacheType(rawext);
+
                 if (filename.Substring(0,3) == "Raw") filename = filename.TrimStart("Raw".ToCharArray());
                 filename = filename.TrimStart(Path.DirectorySeparatorChar);
                 if (filename.Substring(0, 3) == "Mod") filename = filename.TrimStart("Mod".ToCharArray());
                 filename = filename.TrimStart(Path.DirectorySeparatorChar);
                 if (filename.Substring(0, 3) == "DLC") filename = filename.TrimStart("DLC".ToCharArray());
                 filename = filename.TrimStart(Path.DirectorySeparatorChar);
-                var newpath = Path.Combine(ActiveMod.ModDirectory, $"{filename.TrimEnd(ext.ToCharArray())}{type}");
+                var newpath = Path.Combine(ActiveMod.ModDirectory, $"{filename.TrimEnd(ext.ToCharArray())}{fileext}");
+                var split = filename.Split(Path.DirectorySeparatorChar).First();
+                if (split != type)
+                    newpath = Path.Combine(ActiveMod.ModDirectory, type, $"{filename.TrimEnd(ext.ToCharArray())}{fileext}");
 
                 var import = new Wcc_lite.import()
                 {
@@ -2028,6 +2048,120 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
 
             executeGame();
         }
+
+        private void wwiseSoundbankToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ModWwiseNew_Click(object sender, EventArgs e)
+        {
+            using (var of = new OpenFileDialog())
+            {
+                of.Multiselect = true;
+                of.Filter = "Wwise files | *.wem;*.bnk";
+                of.Title = "Please select the wwise bank and sound files for importing them into your mod";
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (var f in of.FileNames)
+                    {
+                        var newfilepath = Path.Combine(ActiveMod.ModDirectory, new SoundManager().TypeName, Path.GetFileName(f));
+                        //Create the directory because it will crash if it doesn't exist.
+                        Directory.CreateDirectory(Path.GetDirectoryName(newfilepath));
+                        File.Copy(f, newfilepath, true);
+                    }
+                }
+            }
+        }
+
+        private void DLCWwise_Click(object sender, EventArgs e)
+        {
+            using (var of = new OpenFileDialog())
+            {
+                of.Multiselect = true;
+                of.Filter = "Wwise files | *.wem;*.bnk";
+                of.Title = "Please select the wwise bank and sound files for importing them into your DLC";
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (var f in of.FileNames)
+                    {
+                        var newfilepath = Path.Combine(ActiveMod.DlcDirectory, new SoundManager().TypeName, "dlc", ActiveMod.Name, Path.GetFileName(f));
+                        //Create the directory because it will crash if it doesn't exist.
+                        Directory.CreateDirectory(Path.GetDirectoryName(newfilepath));
+                        File.Copy(f, newfilepath, true);
+                    }
+                }
+            }
+        }
+
+        private void verifyFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var of = new OpenFileDialog())
+            {
+                of.Multiselect = true;
+                of.Filter = "Cr2w files | *.*";
+                of.Title = "Please select the Cr2w files for verifying.";
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (var f in of.FileNames)
+                    {
+                        CR2WVerify.VerifyFile(f);
+                    }
+                }
+            }
+        }
+
+        private void MinimizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowState = FormWindowState.Minimized;
+        }
+
+        private void RestoreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Screen screen = Screen.FromControl(this);
+            int x = screen.WorkingArea.X - screen.Bounds.X;
+            int y = screen.WorkingArea.Y - screen.Bounds.Y;
+            this.MaximizedBounds = new Rectangle(x, y,
+                screen.WorkingArea.Width, screen.WorkingArea.Height);
+            this.MaximumSize = screen.WorkingArea.Size;
+
+            if (this.WindowState != FormWindowState.Maximized)
+            {
+                WindowState = FormWindowState.Maximized;
+            }
+            else
+            {
+                WindowState = FormWindowState.Normal;
+            }
+        }
+
+        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void menuStrip1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
+            }
+        }
+
+        private void menuStrip1_MouseDown_1(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
+            }
+        }
+
+        private void iconToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //new frmLoading().Show();
+        }
         #endregion
 
         #region Mod Pack
@@ -2093,13 +2227,17 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                         //Logger.LogString($"Cooking Collision ended with status: {antecedent.Result}", Logtype.Important);
                         statusCookCol = antecedent.Result; 
                     });
-                    
+                    if (statusCookCol == 0)
+                        Logger.LogString("Cooking collision failed. \n", Logtype.Error);
+
                     var taskCookTex = Task.Run(() => Cook(MainController.Get().TextureManager.TypeName));
                     await taskCookTex.ContinueWith(antecedent =>
                     {
                         //Logger.LogString($"Cooking Textures ended with status: {antecedent.Result}", Logtype.Important);
                         statusCookTex = antecedent.Result;
                     });
+                    if (statusCookTex == 0)
+                        Logger.LogString("Cooking textures failed. \n", Logtype.Error);
 
                     // packing
                     if (statusCookCol * statusCookTex != 0)
@@ -2120,7 +2258,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 //------------------------ METADATA ------------------------------------//
 
                 //Handle metadata generation.
-                if (!packsettings.PackBundles || (packsettings.PackBundles && packsettings.GenMetadata))
+                if (packsettings.GenMetadata)
                 {
                     if (statusPack == 1)
                     {
@@ -2384,12 +2522,13 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
         
         private async Task<int> Cook(string cachetype)    //IN: \TextureCache, OUT: \Bundle
         {
-            // cook to \cooked
-            //var cookedModDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\Mods\mod" + ActiveMod.Name + @"\content\");
-            //var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\dlc" + ActiveMod.Name + @"\content\");
-            // cook to \Bundle
-            var cookedModDir = Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName);
-            var cookedDLCDir = Path.Combine(ActiveMod.DlcDirectory, new Bundle().TypeName);
+            var cookedModDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\Mods\mod" + ActiveMod.Name + @"\content\");
+            var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\dlc" + ActiveMod.Name + @"\content\");
+            if (COOKINPLACE)
+            {
+                cookedModDir = Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName);
+                cookedDLCDir = Path.Combine(ActiveMod.DlcDirectory, new Bundle().TypeName);
+            }
             var modcachedir = Path.Combine(ActiveMod.ModDirectory, cachetype);
             var dlccachedir = Path.Combine(ActiveMod.DlcDirectory, cachetype);
 
@@ -2415,14 +2554,17 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                         }
                         else
                         {
-                            var di = new DirectoryInfo(outdir);
-                            foreach (var file in di.GetFiles())
+                            if (!COOKINPLACE)
                             {
-                                file.Delete();
-                            }
-                            foreach (var dir in di.GetDirectories())
-                            {
-                                dir.Delete(true);
+                                var di = new DirectoryInfo(outdir);
+                                foreach (var file in di.GetFiles())
+                                {
+                                    file.Delete();
+                                }
+                                foreach (var dir in di.GetDirectories())
+                                {
+                                    dir.Delete(true);
+                                }
                             }
                         }
                         var cook = new Wcc_lite.cook()
@@ -2452,11 +2594,13 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
         private async Task<int> GenerateCache(string cachetype) //IN: \CollisionCache, cooked\Mods\mod\cook.db, OUT: packed\Mods\mod
         {
             // cooked to \cooked
-            //var cookedModDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\Mods\mod" + ActiveMod.Name + @"\content\");
-            //var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\dlc" + ActiveMod.Name + @"\content\");
-            // cooked to \Bundle
-            var moddbfileDir = Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName);
-            var dlcdbfileDir = Path.Combine(ActiveMod.DlcDirectory, new Bundle().TypeName);
+            var moddbfileDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\Mods\mod" + ActiveMod.Name + @"\content\");
+            var dlcdbfileDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\dlc" + ActiveMod.Name + @"\content\");
+            if (COOKINPLACE)
+            {
+                moddbfileDir = Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName);
+                dlcdbfileDir = Path.Combine(ActiveMod.DlcDirectory, new Bundle().TypeName);
+            }
 
             var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
             var dlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
@@ -2524,104 +2668,10 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 }
             }
         }
+
+
         #endregion // Mod Pack
 
-        private void wwiseSoundbankToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ModWwiseNew_Click(object sender, EventArgs e)
-        {
-            using (var of = new OpenFileDialog())
-            {
-                of.Multiselect = true;
-                of.Filter = "Wwise files | *.wem;*.bnk";
-                of.Title = "Please select the wwise bank and sound files for importing them into your mod";
-                if(of.ShowDialog() == DialogResult.OK)
-                {
-                    foreach (var f in of.FileNames)
-                    {
-                        var newfilepath = Path.Combine(ActiveMod.ModDirectory, new SoundManager().TypeName, Path.GetFileName(f));
-                        //Create the directory because it will crash if it doesn't exist.
-                        Directory.CreateDirectory(Path.GetDirectoryName(newfilepath));
-                        File.Copy(f, newfilepath, true);
-                    }
-                }
-            }
-        }
-
-        private void DLCWwise_Click(object sender, EventArgs e)
-        {
-            using (var of = new OpenFileDialog())
-            {
-                of.Multiselect = true;
-                of.Filter = "Wwise files | *.wem;*.bnk";
-                of.Title = "Please select the wwise bank and sound files for importing them into your DLC";
-                if (of.ShowDialog() == DialogResult.OK)
-                {
-                    foreach (var f in of.FileNames)
-                    {
-                        var newfilepath = Path.Combine(ActiveMod.DlcDirectory, new SoundManager().TypeName,"dlc", ActiveMod.Name, Path.GetFileName(f));
-                        //Create the directory because it will crash if it doesn't exist.
-                        Directory.CreateDirectory(Path.GetDirectoryName(newfilepath));
-                        File.Copy(f, newfilepath, true);
-                    }
-                }
-            }
-        }
-
-        private void verifyFileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (var of = new OpenFileDialog())
-            {
-                of.Multiselect = true;
-                of.Filter = "Cr2w files | *.*";
-                of.Title = "Please select the Cr2w files for verifying.";
-                if (of.ShowDialog() == DialogResult.OK)
-                {
-                    foreach (var f in of.FileNames)
-                    {
-                        CR2WVerify.VerifyFile(f);
-                    }
-                }
-            }
-        }
-
-        private void MinimizeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            WindowState = FormWindowState.Minimized;
-        }
-
-        private void RestoreToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (this.WindowState != FormWindowState.Maximized)
-                WindowState = FormWindowState.Maximized;
-            else
-                WindowState = FormWindowState.Normal;
-        }
-
-        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void menuStrip1_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                ReleaseCapture();
-                SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
-            }
-        }
-
-        private void menuStrip1_MouseDown_1(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                ReleaseCapture();
-                SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
-            }
-        }
+        
     }
 }
