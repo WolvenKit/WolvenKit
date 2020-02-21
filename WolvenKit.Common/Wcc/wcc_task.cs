@@ -51,8 +51,8 @@ namespace WolvenKit.Common.Wcc
             {
                 try
                 {
-                    _logger.LogString($"-----------------------------------------------------", Logtype.Wcc);
-                    _logger.LogString($"WCC_TASK: {args}", Logtype.Wcc);
+                    _logger.LogString($"-----------------------------------------------------", Logtype.Important);
+                    _logger.LogString($"WCC_TASK: {args}", Logtype.Important);
 
                     process.StartInfo.FileName = wccPath;
                     process.StartInfo.WorkingDirectory = Path.GetDirectoryName(wccPath);
@@ -69,7 +69,13 @@ namespace WolvenKit.Common.Wcc
                             {
                                 outputWaitHandle.Close();
                                 //Handle Errors
-                                if (_logger.ErrorLog.Any(x => x.Flag == WccLogFlag.WLF_Error))
+                                if (_logger.ErrorLog.Any(x => x.Flag == WccLogFlag.WLF_Error) && 
+                                    _logger.ErrorLog.Any(x => x.Value.Contains("Wcc operation failed")))
+                                {
+                                    _logger.LogString("Did not complete.\r\n", Logtype.Error);
+                                    status = EWccStatus.NotRun;
+                                }
+                                else if (_logger.ErrorLog.Any(x => x.Flag == WccLogFlag.WLF_Error))
                                 {
                                     _logger.LogString("Finished with Errors.\r\n", Logtype.Error);
                                     status = EWccStatus.Error;
@@ -114,7 +120,7 @@ namespace WolvenKit.Common.Wcc
                         process.BeginOutputReadLine();
                         process.WaitForExit();
                     }
-                    if (status == EWccStatus.Finished)
+                    if (status != EWccStatus.NotRun)
                         return 1;
                     else
                         return 0;

@@ -280,6 +280,10 @@ namespace WolvenKit
             {
                 OpenNode(currentNode);
             }
+            else
+            {
+                OpenNode(RootNode);
+            }
         }
 
         private void textbox_LostFocus(object sender, EventArgs e)
