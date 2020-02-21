@@ -160,52 +160,142 @@ namespace WolvenKit
         }
         /// <summary>
         /// https://stackoverflow.com/questions/29024910/how-to-design-a-custom-close-minimize-and-maximize-button-in-windows-form-appli/29025094
+        /// https://social.msdn.microsoft.com/Forums/windows/en-US/5e288892-784a-4636-a63d-c2aad58ec097/aerosnap-when-form-border-style-is-set-to-none?forum=winforms
+        /// 
         /// </summary>
+        private struct RECT
+        {
+            public int left, top, right, bottom;
+
+            public RECT(Rectangle rc)
+            {
+                this.left = rc.Left;
+                this.top = rc.Top;
+                this.right = rc.Right;
+                this.bottom = rc.Bottom;
+            }
+
+            public Rectangle ToRectangle()
+            {
+                return Rectangle.FromLTRB(left, top, right, bottom);
+            }
+
+        }
+        private struct NCCALCSIZE_PARAMS
+        {
+            public RECT rgrc0, rgrc1, rgrc2;
+            public WINDOWPOS lppos;
+        }
+        private struct WINDOWPOS
+        {
+            public IntPtr hWnd, hWndInsertAfter;
+            public int x, y, cx, cy, flags;
+        }
+        const uint WM_NCHITTEST = 0x0084, WM_MOUSEMOVE = 0x0200,
+                 HTLEFT = 10, HTRIGHT = 11, HTBOTTOMRIGHT = 17,
+                 HTBOTTOM = 15, HTBOTTOMLEFT = 16, HTTOP = 12,
+                 HTTOPLEFT = 13, HTTOPRIGHT = 14;
+        
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == 0x84)
+            /*const int WM_NCCALCSIZE = 0x83;
+            if (m.Msg == WM_NCCALCSIZE)
             {
-                const int resizeArea = 10;
-                Point cursorPosition = PointToClient(new Point(m.LParam.ToInt32() & 0xffff, m.LParam.ToInt32() >> 16));
-                if (cursorPosition.X >= ClientSize.Width - resizeArea && cursorPosition.Y >= ClientSize.Height - resizeArea)
+                if (m.WParam.Equals(IntPtr.Zero))
                 {
-                    m.Result = (IntPtr)17; //HTBOTTOMRIGHT
+                    RECT rc = (RECT)m.GetLParam(typeof(RECT));
+                    Rectangle r = rc.ToRectangle();
+                    r.Inflate(8, 8);
+                    System.Runtime.InteropServices.Marshal.StructureToPtr(new RECT(r), m.LParam, true);
+                }
+                else
+                {
+                    NCCALCSIZE_PARAMS csp = (NCCALCSIZE_PARAMS)m.GetLParam(typeof(NCCALCSIZE_PARAMS));
+                    Rectangle r = csp.rgrc0.ToRectangle();
+                    r.Inflate(8, 8);
+                    csp.rgrc0 = new RECT(r);
+                    System.Runtime.InteropServices.Marshal.StructureToPtr(csp, m.LParam, true);
+                }
+                m.Result = IntPtr.Zero;
+            }*/
+
+            if (m.Msg == WM_NCHITTEST)
+            {
+                Point screenPoint = new Point(m.LParam.ToInt32());
+                Point clientPoint = this.PointToClient(screenPoint);
+                bool bTop = (clientPoint.Y < 4);
+                bool bLeft = (clientPoint.X < 4);
+                bool bRight = (clientPoint.X > this.ClientSize.Width - 4);
+                bool bBottom = (clientPoint.Y > this.ClientSize.Height - 4);
+
+
+                bool bCaption = (clientPoint.Y > 3
+                    && clientPoint.Y < SystemInformation.CaptionHeight
+                    && clientPoint.X < this.ClientSize.Width - 3
+                    && clientPoint.X > 3);
+
+                if (bCaption)
+                {
+                    m.Result = (IntPtr)HTCAPTION;
                     return;
                 }
-                else if (cursorPosition.X <= resizeArea && cursorPosition.Y >= ClientSize.Height - resizeArea)
+                else if (bBottom && bLeft)
                 {
-                    m.Result = (IntPtr)16; //HTBOTTOMLEFT
+                    m.Result = (IntPtr)HTBOTTOMLEFT;
                     return;
                 }
-                else if (cursorPosition.X <= resizeArea)
+                else if (bBottom && bRight)
                 {
-                    m.Result = (IntPtr)10; //HTLEFT
+                    m.Result = (IntPtr)HTBOTTOMRIGHT;
                     return;
                 }
-                else if (cursorPosition.X >= ClientSize.Width - resizeArea)
+                else if (bTop && bLeft)
                 {
-                    m.Result = (IntPtr)11; //HTRIGHT
+                    m.Result = (IntPtr)HTTOPLEFT;
                     return;
                 }
-                else if (cursorPosition.Y >= ClientSize.Height - resizeArea)
+                else if (bTop && bRight)
                 {
-                    m.Result = (IntPtr)15; //HTBOTTOM
+                    m.Result = (IntPtr)HTTOPRIGHT;
+                    return;
+                }
+                else if (bLeft)
+                {
+                    m.Result = (IntPtr)HTLEFT;
+                    return;
+                }
+                else if (bTop)
+                {
+                    m.Result = (IntPtr)HTTOP;
+                    return;
+                }
+                else if (bRight)
+                {
+                    m.Result = (IntPtr)HTRIGHT;
+                    return;
+                }
+                else if (bBottom)
+                {
+                    m.Result = (IntPtr)HTBOTTOM;
                     return;
                 }
             }
-
             base.WndProc(ref m);
         }
-        /// <summary>
-        /// https://www.codeproject.com/Questions/570233/AeroplusSnappluseffectplusforplusformpluspluswithp
-        /// </summary>
+
         protected override CreateParams CreateParams
         {
             get
             {
                 CreateParams cp = base.CreateParams;
                 {
-                    cp.Style |= 0x20000 | 0x80000 | 0x40000; //WS_MINIMIZEBOX | WS_SYSMENU | WS_SIZEBOX;
+                    //cp.Style = (int)0x00040000L; //WS_SIZEBOX
+                    //cp.Style |= (int)0x00080000L; //WS_SYSMENU
+                    //cp.Style &= ~(int)0x00040000L;
+
+                    cp.Style = (int)0x00800000L; //WS_BORDER
+                    //cp.Style |= (int)0x00080000L | (int)0x00800000L | (int)0x00040000L; //aerosnap
+                    
                 }
                 return cp;
             }

@@ -188,9 +188,15 @@ namespace WolvenKit.CR2W
                             offset = e.dataOffset,
                             size = e.dataSize
                         };
+                var offset = e.path;
                 for (int i = 0; i < e.importIndex; i++)
                 {
-                    emb.handles.Add(m_dictionary[(uint)i]);
+                    if (offset > m_dictionary.Last().Key)
+                    {
+                        continue;
+                    }
+                    emb.handles.Add(m_dictionary[offset]);
+                    offset += (uint)m_dictionary[offset].Length + 1;
                 }
                 embedded.Add(emb);
                 emb.ReadData(file);
