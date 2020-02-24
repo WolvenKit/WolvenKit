@@ -69,7 +69,7 @@ namespace WolvenKit
             }
         }
 
-        public Dictionary<CR2WChunk, ChunkEditor> ChunkEditors { get; set; }
+        public Dictionary<CR2WExportWrapper, ChunkEditor> ChunkEditors { get; set; }
         public event EventHandler<SelectChunkArgs> OnSelectChunk;
         public event EventHandler<string> OnOutput;
 
@@ -78,9 +78,9 @@ namespace WolvenKit
             if (File == null)
                 return;
 
-            ChunkEditors = new Dictionary<CR2WChunk, ChunkEditor>();
+            ChunkEditors = new Dictionary<CR2WExportWrapper, ChunkEditor>();
 
-            var rootNodes = new List<CR2WChunk>();
+            var rootNodes = new List<CR2WExportWrapper>();
 
             var activeRoot = File.chunks[0];
 
@@ -144,7 +144,7 @@ namespace WolvenKit
         }
 
 
-        private void createEditor(int depth, CR2WChunk c)
+        private void createEditor(int depth, CR2WExportWrapper c)
         {
             try {
                 if (ChunkEditors.ContainsKey(c))
@@ -204,7 +204,7 @@ namespace WolvenKit
             OnSelectChunk?.Invoke(sender, e);
         }
 
-        private void getStorySceneRootNodes(List<CR2WChunk> rootNodes)
+        private void getStorySceneRootNodes(List<CR2WExportWrapper> rootNodes)
         {
             var controlPartsObj = File.chunks[0].GetVariableByName("controlParts");
             if (controlPartsObj != null && controlPartsObj is CArray)
@@ -214,7 +214,7 @@ namespace WolvenKit
             }
         }
         
-        private void getQuestPhaseRootNodes(List<CR2WChunk> rootNodes)
+        private void getQuestPhaseRootNodes(List<CR2WExportWrapper> rootNodes)
         {
             var graphObj = File.chunks[0].GetVariableByName("graph");
             if (graphObj != null && graphObj is CPtr)
@@ -228,7 +228,7 @@ namespace WolvenKit
             }
         }
         
-        private void getQuestRootNodes(List<CR2WChunk> rootNodes)
+        private void getQuestRootNodes(List<CR2WExportWrapper> rootNodes)
         {
             var graphObj = File.chunks[0].GetVariableByName("graph");
             if (graphObj != null && graphObj is CPtr)
@@ -244,7 +244,7 @@ namespace WolvenKit
             
         }
 
-        public ChunkEditor GetEditor(CR2WChunk c)
+        public ChunkEditor GetEditor(CR2WExportWrapper c)
         {
             if (c.data is CStorySceneSection)
                 return new SceneSectionEditor();

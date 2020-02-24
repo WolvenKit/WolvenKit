@@ -15,7 +15,7 @@ namespace WolvenKit
 {
     public partial class frmChunkProperties : DockContent, IThemedContent
     {
-        private CR2WChunk chunk;
+        private CR2WExportWrapper chunk;
 
         public frmChunkProperties()
         {
@@ -25,7 +25,7 @@ namespace WolvenKit
             treeView.ChildrenGetter = x => ((VariableListNode) x).Children;
         }
 
-        public CR2WChunk Chunk
+        public CR2WExportWrapper Chunk
         {
             get { return chunk; }
             set

@@ -40,13 +40,13 @@ namespace WolvenKit
 
             if (e.ClickCount == 2)
             {
-                var mem = new MemoryStream(((CR2WEmbedded) e.Model).unknowndata);
+                var mem = new MemoryStream(((CR2WEmbeddedWrapper) e.Model).Data);
 
                 var doc = MainController.Get().LoadDocument("Embedded file", mem);
                 if (doc != null)
                 {
                     doc.OnFileSaved += OnFileSaved;
-                    doc.SaveTarget = (CR2WEmbedded) e.Model;
+                    doc.SaveTarget = (CR2WEmbeddedWrapper) e.Model;
                 }
             }
         }
@@ -54,8 +54,8 @@ namespace WolvenKit
         private void OnFileSaved(object sender, FileSavedEventArgs e)
         {
             var doc = (frmCR2WDocument) sender;
-            var editvar = (CR2WEmbedded) doc.SaveTarget;
-            editvar.unknowndata = ((MemoryStream) e.Stream).ToArray();
+            var editvar = (CR2WEmbeddedWrapper) doc.SaveTarget;
+            editvar.Data = ((MemoryStream) e.Stream).ToArray();
         }
     }
 }

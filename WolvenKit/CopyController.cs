@@ -7,6 +7,6 @@ namespace WolvenKit
     public class CopyController
     {
         public static List<IEditableVariable> VariableTargets { get; set; }
-        public static List<CR2WChunk> ChunkList { get; set; }
+        public static List<CR2WExportWrapper> ChunkList { get; set; }
     }
 }

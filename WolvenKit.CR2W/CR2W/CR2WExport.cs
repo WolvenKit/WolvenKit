@@ -5,59 +5,100 @@ using System.IO;
 using System.Windows.Forms;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Types;
+using System.Runtime.InteropServices;
 
 namespace WolvenKit.CR2W
 {
-    [Serializable]
-    public class CR2WChunk : IEditableVariable
+
+    [StructLayout(LayoutKind.Explicit, Size = 24)]
+    public struct CR2WExport
     {
-        private readonly CUInt16 flags;
-        private readonly CPtr parentPtr;
-        public CR2WFile cr2w;
-        public uint crc;
-        public CVariable data;
-        public uint offset;
-        public uint size;
-        public CName typeName;
+        [FieldOffset(0)]
+        public ushort className;
+
+        [FieldOffset(2)]
+        public ushort objectFlags;
+
+        [FieldOffset(4)]
+        public uint parentID;
+
+        [FieldOffset(8)]
+        public uint dataSize;
+
+        [FieldOffset(12)]
+        public uint dataOffset;
+
+        [FieldOffset(16)]
         public uint template;
-        public CBytes unknownBytes;
 
-        public CR2WChunk(CR2WFile cr2w)
+        [FieldOffset(20)]
+        public uint crc32;
+    }
+
+    [Serializable]
+    public class CR2WExportWrapper : IEditableVariable
+    {
+
+        #region  Constructors
+        public CR2WExportWrapper(CR2WFile file)
         {
-            this.cr2w = cr2w;
+            this.cr2w = file;
 
-
-            parentPtr = new CPtr(cr2w);
+            parentPtr = new CPtr(file);
             parentPtr.Name = "Parent";
 
-            flags = new CUInt16(cr2w);
-            flags.Name = "Flags";
+            //flags = new CUInt16(file);
+            //flags.Name = "Flags";
 
-            typeName = new CName(cr2w);
+            typeName = new CName(file);
             typeName.Name = "Type";
 
-            Flags = 8192;
+            //Flags = 8192;
+            _export.objectFlags = 8192;
         }
+        public CR2WExportWrapper(CR2WFile file, CR2WExport export)
+        {
+            this.cr2w = file;
+            _export = export;
 
-        public ushort typeId
+            parentPtr = new CPtr(file);
+            parentPtr.Name = "Parent";
+
+            typeName = new CName(file);
+            typeName.Name = "Type";
+            
+        }
+        #endregion
+
+        #region Properties
+        private CR2WExport _export ;
+        public CR2WExport Export {
+            get => _export;
+            set => _export = value;
+        }
+        public CR2WFile cr2w;
+        public CVariable data;
+        public CName typeName;
+        public CBytes unknownBytes;
+        /*public ushort typeId
         {
             get { return typeName.val; }
             set { typeName.val = value; }
-        }
-
+        }*/
+        /*private readonly CUInt16 flags;
         public ushort Flags
         {
             get { return flags.val; }
             set { flags.val = value; }
-        }
-
+        }*/
+        private readonly CPtr parentPtr;
         public uint ParentChunkId
         {
             get { return (uint) parentPtr.val; }
             set { parentPtr.val = (int) value; }
         }
 
-        public CR2WChunk Parent
+        public CR2WExportWrapper Parent
         {
             get
             {
@@ -105,7 +146,10 @@ namespace WolvenKit.CR2W
         }
 
         public CR2WFile CR2WOwner => cr2w;
+        #endregion
 
+        #region Methods
+        public void SetOffset(uint offset) => _export.dataOffset = offset;
         public virtual Control GetEditor()
         {
             return null;
@@ -141,24 +185,14 @@ namespace WolvenKit.CR2W
         {
         }
 
-        public void Read(BinaryReader file)
-        {
-            Flags = file.ReadUInt16();
-            ParentChunkId = file.ReadUInt32();
-            size = file.ReadUInt32();
-            offset = file.ReadUInt32();
-            template = file.ReadUInt32();
-            crc = file.ReadUInt32();
-        }
-
         public void ReadData(BinaryReader file)
         {
-            file.BaseStream.Seek(offset, SeekOrigin.Begin);
+            file.BaseStream.Seek(_export.dataOffset, SeekOrigin.Begin);
 
             CreateDefaultData();
-            data.Read(file, size);
+            data.Read(file, _export.dataSize);
 
-            var bytesLeft = size - (file.BaseStream.Position - offset);
+            var bytesLeft = _export.dataSize - (file.BaseStream.Position - _export.dataOffset);
 
 
             unknownBytes = new CBytes(cr2w)
@@ -179,7 +213,7 @@ namespace WolvenKit.CR2W
 
         public void WriteData(BinaryWriter file)
         {
-            offset = (uint) file.BaseStream.Position;
+            _export.dataOffset = (uint) file.BaseStream.Position;
 
             var posstart = file.BaseStream.Position;
 
@@ -195,21 +229,10 @@ namespace WolvenKit.CR2W
             }
 
             var newsize = (uint) (file.BaseStream.Position - posstart);
-            if (size != newsize)
+            if (_export.dataSize != newsize)
             {
-                size = newsize;
+                _export.dataSize = newsize;
             }
-        }
-
-        public void Write(BinaryWriter file)
-        {
-            file.Write(typeId);
-            file.Write(Flags);
-            file.Write(ParentChunkId);
-            file.Write(size);
-            file.Write(offset);
-            file.Write(template);
-            file.Write(crc);
         }
 
         public void CreateDefaultData()
@@ -223,7 +246,7 @@ namespace WolvenKit.CR2W
             data.Name = Name;
         }
 
-        public CR2WChunk Copy(CR2WCopyAction context)
+        public CR2WExportWrapper Copy(CR2WCopyAction context)
         {
             // this one was already copied
             if (context.chunkTranslation.ContainsKey(ChunkIndex))
@@ -237,8 +260,8 @@ namespace WolvenKit.CR2W
 
             chunk.Type = Type;
             chunk.Flags = Flags;
-            chunk.template = template;
-            chunk.crc = crc;
+            chunk._export.template = _export.template;
+            chunk._export.crc32 = _export.crc32;
 
             // requires updating from context.chunkTranslation once all chunks are copied.
             chunk.ParentChunkId = ParentChunkId;
@@ -254,19 +277,6 @@ namespace WolvenKit.CR2W
 
             return chunk;
         }
-
-        internal CR2WExportHeader ToCR2WExport()
-        {
-            return new CR2WExportHeader()
-            {
-                className = typeId,
-                objectFlags = Flags,
-                parentID = ParentChunkId,
-                dataSize = size,
-                dataOffset = offset,
-                template = template,
-                crc32 = crc
-            };
-        }
+        #endregion
     }
 }

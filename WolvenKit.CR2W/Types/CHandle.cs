@@ -36,10 +36,10 @@ namespace WolvenKit.CR2W.Types
                 {
                     Handle = cr2w.imports[-value - 1].str;
 
-                    var filetype = cr2w.imports[-value - 1].filetype;
+                    var filetype = cr2w.imports[-value - 1].Import.className; 
                     FileType = cr2w.names[filetype].str;
 
-                    Flags = cr2w.imports[-value - 1].flags;
+                    Flags = cr2w.imports[-value - 1].Import.flags;
                 }
             }
         }

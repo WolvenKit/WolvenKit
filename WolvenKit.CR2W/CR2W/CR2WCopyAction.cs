@@ -7,14 +7,14 @@ namespace WolvenKit.CR2W
 {
     public class CR2WCopyAction
     {
-        internal List<CR2WChunk> chunks;
+        internal List<CR2WExportWrapper> chunks;
         internal Dictionary<int, int> chunkTranslation;
         internal List<CPtr> ptrs;
 
         public CR2WCopyAction()
         {
             ptrs = new List<CPtr>();
-            chunks = new List<CR2WChunk>();
+            chunks = new List<CR2WExportWrapper>();
             chunkTranslation = new Dictionary<int, int>();
         }
 
@@ -72,7 +72,7 @@ namespace WolvenKit.CR2W
         /// <param name="storySceneCopyDialogsets"></param>
         /// <param name="storySceneCopyCameras"></param>
         /// <returns></returns>
-        public static CR2WChunk CopyChunk(CR2WChunk chunkSource, CR2WFile destinationFile,
+        public static CR2WExportWrapper CopyChunk(CR2WExportWrapper chunkSource, CR2WFile destinationFile,
             int maxDepth = -1,
             IEnumerable<string> excludeProperties = null,
             IEnumerable<string> excludeChunks = null,
@@ -173,7 +173,7 @@ namespace WolvenKit.CR2W
             return true;
         }
 
-        private CR2WChunk CopyChunk(CR2WChunk chunk)
+        private CR2WExportWrapper CopyChunk(CR2WExportWrapper chunk)
         {
             if (ExcludeChunks != null
                 && ExcludeChunks.Contains(chunk.Type))
@@ -240,7 +240,7 @@ namespace WolvenKit.CR2W
             return chunkcopy;
         }
 
-        private void OnCopyStorySceneSection(CR2WChunk chunkcopy)
+        private void OnCopyStorySceneSection(CR2WExportWrapper chunkcopy)
         {
             var storysection = (CStorySceneSection) chunkcopy.data;
 
@@ -327,9 +327,9 @@ namespace WolvenKit.CR2W
             return camera;
         }
 
-        private CR2WChunk findDialogset(CR2WFile infile, string dialogsetName)
+        private CR2WExportWrapper findDialogset(CR2WFile infile, string dialogsetName)
         {
-            var camera = infile.chunks.Find(delegate(CR2WChunk c)
+            var camera = infile.chunks.Find(delegate(CR2WExportWrapper c)
             {
                 if (c != null && c.data != null && c.data is CVector)
                 {

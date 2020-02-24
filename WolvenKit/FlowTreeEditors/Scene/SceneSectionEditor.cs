@@ -77,7 +77,7 @@ namespace WolvenKit.FlowTreeEditors
             Height = y;
         }
 
-        private string GetDisplayString(CR2WChunk c)
+        private string GetDisplayString(CR2WExportWrapper c)
         {
             var str = "";
             if (c != null)

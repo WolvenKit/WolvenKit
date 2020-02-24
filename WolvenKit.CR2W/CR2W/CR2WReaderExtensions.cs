@@ -83,7 +83,7 @@ namespace WolvenKit.CR2W
             return null;
         }
 
-        public static CVariable GetVariableByName(this CR2WChunk arr, string name)
+        public static CVariable GetVariableByName(this CR2WExportWrapper arr, string name)
         {
             if (arr.data is CVector)
             {
@@ -99,7 +99,7 @@ namespace WolvenKit.CR2W
             return null;
         }
 
-        public static CVariable GetVariableByName(this CR2WChunk arr, CR2WFile file, string name)
+        public static CVariable GetVariableByName(this CR2WExportWrapper arr, CR2WFile file, string name)
         {
             if (arr.data is CVector)
             {
@@ -127,7 +127,7 @@ namespace WolvenKit.CR2W
             return null;
         }
 
-        public static void CreateConnection(this CR2WChunk chunk, string in_name, string out_name, CR2WChunk out_target)
+        public static void CreateConnection(this CR2WExportWrapper chunk, string in_name, string out_name, CR2WExportWrapper out_target)
         {
             var cachedConnections = (CArray) chunk.GetVariableByName("cachedConnections");
 
