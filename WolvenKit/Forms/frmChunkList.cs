@@ -104,6 +104,11 @@ namespace WolvenKit
             
         }
 
+        private void contextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            pasteChunkToolStripMenuItem.Enabled = CopyController.ChunkList != null && CopyController.ChunkList.Count > 0;
+        }
+
         private void chunkListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             if (OnSelectChunk != null && (CR2WChunk)treeListView.SelectedObject != null)
@@ -162,7 +167,6 @@ namespace WolvenKit
             Clipboard.Clear();
             var chunks = treeListView.SelectedObjects.Cast<CR2WChunk>().ToList();
             CopyController.ChunkList = chunks;
-            pasteChunkToolStripMenuItem.Enabled = true;
         }
 
         private void pasteChunkToolStripMenuItem_Click(object sender, EventArgs e)
@@ -179,7 +183,7 @@ namespace WolvenKit
                 {
                     try
                     {
-                        var pastedchunk = CR2WCopyAction.CopyChunk(chunk, chunk.CR2WOwner);
+                        var pastedchunk = CR2WCopyAction.CopyChunk(chunk, file);
                         OnSelectChunk?.Invoke(this, new SelectChunkArgs { Chunk = pastedchunk });
                         MainController.Get().ProjectStatus = "Chunk copied";
                         UpdateList();
