@@ -1,16 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
-    public class CMeshComponent : CVector
+    public class CComponent : CVector
     {
         public CArray attachments;
+        public CUInt32 tail;
 
-        public CMeshComponent(CR2WFile cr2w) :
+        public CComponent(CR2WFile cr2w) :
             base(cr2w)
         {
+            tail = new CUInt32(cr2w)
+            {
+                Name = "tail",
+            };
+
             attachments = new CArray("[]handle:attachment", "handle:attachment", true, cr2w);
             attachments.Name = "attachments";
         }
@@ -20,6 +27,8 @@ namespace WolvenKit.CR2W.Types
             base.Read(file, size);
 
             attachments.Read(file, size);
+
+            tail.val = file.ReadUInt32();
         }
 
         public override void Write(BinaryWriter file)
@@ -27,6 +36,8 @@ namespace WolvenKit.CR2W.Types
             base.Write(file);
 
             attachments.Write(file);
+
+            file.Write(tail.val);
         }
 
         public override CVariable SetValue(object val)
@@ -36,13 +47,14 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Create(CR2WFile cr2w)
         {
-            return new CMeshComponent(cr2w);
+            return new CComponent(cr2w);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CMeshComponent) base.Copy(context);
+            var var = (CComponent) base.Copy(context);
             var.attachments = (CArray) attachments.Copy(context);
+            var.tail = tail;
             return var;
         }
 
@@ -50,6 +62,7 @@ namespace WolvenKit.CR2W.Types
         {
             var list = new List<IEditableVariable>(variables);
             list.Add(attachments);
+            list.Add(tail);
             return list;
         }
     }

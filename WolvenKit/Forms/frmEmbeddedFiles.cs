@@ -2,16 +2,18 @@
 using BrightIdeasSoftware;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.CR2W;
+using WolvenKit.Services;
 
 namespace WolvenKit
 {
-    public partial class frmEmbeddedFiles : DockContent
+    public partial class frmEmbeddedFiles : DockContent, IThemedContent
     {
         private CR2WFile file;
 
         public frmEmbeddedFiles()
         {
             InitializeComponent();
+            ApplyCustomTheme();
             UpdateList();
         }
 
@@ -56,6 +58,36 @@ namespace WolvenKit
             var doc = (frmCR2WDocument) sender;
             var editvar = (CR2WEmbeddedWrapper) doc.SaveTarget;
             editvar.Data = ((MemoryStream) e.Stream).ToArray();
+        }
+
+        public void ApplyCustomTheme()
+        {
+            var theme = MainController.Get().GetTheme();
+
+            this.listView.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
+            this.listView.AlternateRowBackColor = theme.ColorPalette.OverflowButtonHovered.Background;
+
+            this.listView.ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text;
+            HeaderFormatStyle hfs = new HeaderFormatStyle()
+            {
+                Normal = new HeaderStateStyle()
+                {
+                    BackColor = theme.ColorPalette.DockTarget.Background,
+                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
+                },
+                Hot = new HeaderStateStyle()
+                {
+                    BackColor = theme.ColorPalette.OverflowButtonHovered.Background,
+                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
+                },
+                Pressed = new HeaderStateStyle()
+                {
+                    BackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background,
+                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
+                }
+            };
+            this.listView.HeaderFormatStyle = hfs;
+            listView.UnfocusedSelectedBackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background;
         }
     }
 }

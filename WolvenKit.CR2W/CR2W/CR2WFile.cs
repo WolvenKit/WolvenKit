@@ -34,6 +34,14 @@ namespace WolvenKit.CR2W
             Read(file);
             //m_filePath = 
         }
+        public CR2WFile(byte[] data)
+        {
+            using (var ms = new MemoryStream(data))
+            using (var br = new BinaryReader(ms))
+            {
+                Read(br);
+            }
+        }
         #endregion
 
         #region Fields
@@ -128,16 +136,18 @@ namespace WolvenKit.CR2W
             }).ToList();
             imports = ReadTable<CR2WImport>(2).Select(_ => new CR2WImportWrapper(_)
             {
-                str = m_dictionary[_.depotPath],
+                depotPathStr = m_dictionary[_.depotPath],
+                classNameStr = names[_.className].str,
             }).ToList();
             properties = ReadTable<CR2WProperty>(3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
             chunks = ReadTable<CR2WExport>(4).Select(_ => new CR2WExportWrapper(this, _)
             {
-                ParentChunkId = _.parentID
+                //ParentChunkId = _.parentID
             }).ToList();
             buffers = ReadTable<CR2WBuffer>(5).Select(_ => new CR2WBufferWrapper(_)).ToList();
             embedded = ReadTable<CR2WEmbedded>(6).Select(_ => new CR2WEmbeddedWrapper(_)
             {
+                ParentImports = imports,
                 Handle = m_dictionary[_.path],
             }).ToList();
             #endregion
@@ -159,17 +169,6 @@ namespace WolvenKit.CR2W
                 emb.ReadData(file);
             }
             #endregion
-
-
-            //old
-            /*file.BaseStream.Seek(m_fileheader.fileSize, SeekOrigin.Begin);
-
-            var actualbuffersize = (int) (m_fileheader.bufferSize - m_fileheader.fileSize);
-            if (actualbuffersize > 0)
-            {
-                bufferdata = new byte[actualbuffersize];
-                file.BaseStream.Read(bufferdata, 0, actualbuffersize);
-            }*/
 
             m_stream = null;
         }
@@ -250,7 +249,7 @@ namespace WolvenKit.CR2W
             }
             for (var i = 0; i < imports.Count; i++)
             {
-                var newoffset = inverseDictionary[imports[i].str];
+                var newoffset = inverseDictionary[imports[i].depotPathStr];
                 if (newoffset != imports[i].Import.depotPath)
                 {
                     imports[i].SetOffset(newoffset);
@@ -351,8 +350,8 @@ namespace WolvenKit.CR2W
                 }
                 foreach (CR2WImportWrapper import in imports)
                 {
-                    if (!newnames.Contains(import.str))
-                        newnames.Add(import.str);
+                    if (!newnames.Contains(import.depotPathStr))
+                        newnames.Add(import.depotPathStr);
                 }
                 foreach (CR2WEmbeddedWrapper emb in embedded)
                 {
@@ -686,24 +685,27 @@ namespace WolvenKit.CR2W
         {
             for (var i = 0; i < imports.Count; i++)
             {
-                if (imports[i].Import.className == filetype && imports[i].Import.flags == flags &&
-                    (imports[i].str == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(imports[i].str))))
+                if (imports[i].Import.className == filetype 
+                    && imports[i].Import.flags == flags 
+                    && (imports[i].depotPathStr == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(imports[i].depotPathStr))))
                     return i;
             }
 
             if (addnew)
             {
+                // we can leave the depotpath 0 here, it will get updated on file write
+                // value is the offset in the stringtable, which gets re-written on file write
+                // a better solution might be to dynamically update the string table 
                 var import = new CR2WImport()
                 {
                     flags = flags,
-                    depotPath = depotpath,
+                    depotPath = 0, 
                     className = filetype
                 };
-                var newstring = new CR2WImportWrapper(import)
+                imports.Add(new CR2WImportWrapper(import)
                 {
-                    str = name,
-                };
-                imports.Add(newstring);
+                    depotPathStr = name,
+                });
 
                 return imports.Count - 1;
             }

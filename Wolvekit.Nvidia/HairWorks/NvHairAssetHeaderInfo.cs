@@ -31,7 +31,7 @@ namespace Wolvekit.Nvidia.HairWorks
         /// </summary>
         /// <param name="objectcount"></param>
         /// <returns></returns>
-        public XElement serialize(CR2WChunk apexChunk,int objectcount)
+        public XElement serialize(CR2WExportWrapper apexChunk,int objectcount)
         {
             var HairWorksInfo = NvidiaXML.CreateStructHeader("", "Ref", "HairWorksInfo", "1.0", checksum);
             var values = new XElement("struct", new XAttribute("name", ""));

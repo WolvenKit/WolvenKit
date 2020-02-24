@@ -54,7 +54,7 @@ namespace WolvenKit.CR2W
         public void ReadData(BinaryReader file)
         {
             file.BaseStream.Seek(_buffer.offset, SeekOrigin.Begin);
-            Data = file.ReadBytes((int) _buffer.memSize);throw
+            Data = file.ReadBytes((int) _buffer.memSize);
         }
 
         public void WriteData(BinaryWriter file)
@@ -64,7 +64,7 @@ namespace WolvenKit.CR2W
             {
                 file.Write(Data);
             }
-            _buffer.memSize = (uint) Data.Length; throw //is it memsize or diskzize?
+            _buffer.memSize = (uint) Data.Length;
         }
 
     }

@@ -93,9 +93,6 @@ namespace WolvenKit.CR2W.Types
             Register("Color", new CColor(null));
             Register("CColorShift",new CColorShift(null));
 
-            Register("CEntity", new CEntity(null));
-            Register("CMeshComponent", new CMeshComponent(null));
-
             Register("SMeshTypeResourceLODLevel", new CFloat(null));
 
             Register("CMaterialGraph", new CMaterialGraph(null));
@@ -105,7 +102,7 @@ namespace WolvenKit.CR2W.Types
 
             Register("CFoliageResource", new CFoliageResource(null));
 
-            Register("CRagdoll",new CRagdoll(null));
+            Register("CRagdoll", new CRagdoll(null));
 
             Register("CSectorData", new CSectorData(null));
 
@@ -113,6 +110,134 @@ namespace WolvenKit.CR2W.Types
 
             Register("CGenericGrassMask", new CGenericGrassMask(null));
             Register("CIndexed2dArray", new CIndexed2dArray(null));
+
+            // components
+            // all CCOmponents have an array of (parent) attachment handles
+            // although some seem to have 4 null bytes before the array
+            Register("CMovingPhysicalAgentComponent", new CComponent(null));
+
+            // most other have 4 null bytes after the array
+            // following list is untested:
+            Register("CAnimDangleBufferComponent", new CComponent(null));
+            Register("CAnimDangleComponent", new CComponent(null));
+            Register("CAnimatedComponent", new CComponent(null));
+            Register("CAnimatedComponentPhysicsRepresentation", new CComponent(null));
+            Register("CAppearanceComponent", new CComponent(null));
+            Register("CAreaComponent", new CComponent(null));
+            Register("CAreaEnvironmentComponent", new CComponent(null));
+            Register("CBehaviorGraphScriptComponentStateNode", new CComponent(null));
+            Register("CBgMeshComponent", new CComponent(null));
+            Register("CBgRootComponent", new CComponent(null));
+            Register("CBoatBodyComponent", new CComponent(null));
+            Register("CBoatComponent", new CComponent(null));
+            Register("CBoidActivationTriggerComponent", new CComponent(null));
+            Register("CBoatDestructionComponent", new CComponent(null));
+            Register("CBoidAreaComponent", new CComponent(null));
+            Register("CBoidPointOfInterestComponent", new CComponent(null));
+            Register("CCameraComponent", new CComponent(null));
+            Register("CCameraOrientedComponent", new CComponent(null));
+            Register("CCarryableItemStorePointComponent", new CComponent(null));
+            Register("CClothComponent", new CComponent(null));
+            Register("CCreatureDataComponent", new CComponent(null));
+            Register("CDecalComponent", new CComponent(null));
+            Register("CDeniedAreaComponent", new CComponent(null));
+            Register("CDestructionComponent", new CComponent(null));
+            Register("CDestructionSystemComponent", new CComponent(null));
+            Register("CDimmerComponent", new CComponent(null));
+            Register("CDismembermentComponent", new CComponent(null));
+            Register("CDoorComponent", new CComponent(null));
+            Register("CDropPhysicsComponent", new CComponent(null));
+            Register("CDynamicColliderComponent", new CComponent(null));
+            Register("CDynamicFoliageComponent", new CComponent(null));
+            Register("CEffectDummyComponent", new CComponent(null));
+            Register("CEnvProbeComponent", new CComponent(null));
+            Register("CExplorationComponent", new CComponent(null));
+            Register("CFXSpawnerComponent", new CComponent(null));
+            Register("CFlareComponent", new CComponent(null));
+            Register("CFocusActionComponent", new CComponent(null));
+            Register("CFoundExplorationComponent", new CComponent(null));
+            Register("CFurComponent", new CComponent(null));
+            Register("CGameplayEffectsComponent", new CComponent(null));
+            Register("CGameplayLightComponent", new CComponent(null));
+            Register("CGameplayWindComponent", new CComponent(null));
+            Register("CGhostComponent", new CComponent(null));
+            Register("CHeadManagerComponent", new CComponent(null));
+            Register("CHelpTextComponent", new CComponent(null));
+            Register("CInteractionAreaComponent", new CComponent(null));
+            Register("CInteractionComponent", new CComponent(null));
+            Register("CInteractionToComponentComponent", new CComponent(null));
+            Register("CInteractionTooltipComponent", new CComponent(null));
+            Register("CInventoryComponent", new CComponent(null));
+            Register("CMaterialOverrideComponent", new CComponent(null));
+            Register("CMeshComponent", new CComponent(null));
+            Register("CMetalinkWithAIQueueComponent", new CComponent(null));
+            Register("CMimicComponent", new CComponent(null));
+            Register("CMorphedMeshComponent", new CComponent(null));
+            Register("CMorphedMeshManagerComponent", new CComponent(null));
+            Register("CMovingAgentComponent", new CComponent(null));
+            Register("CNavmeshBorderAreaComponent", new CComponent(null));
+            Register("CNavmeshGenerationRootComponent", new CComponent(null));
+            Register("CNegativeAreaComponent", new CComponent(null));
+            Register("CNormalBlendComponent", new CComponent(null));
+            Register("CParticleComponent", new CComponent(null));
+            Register("CPartySpawnPointComponent", new CComponent(null));
+            Register("CPathComponent", new CComponent(null));
+            Register("CPathLibRoughtTerrainComponent", new CComponent(null));
+            Register("CPatrolPointComponent", new CComponent(null));
+            Register("CPersistentLightComponent", new CComponent(null));
+            Register("CPhantomComponent", new CComponent(null));
+            Register("CPointLightComponent", new CComponent(null));
+            Register("CR4EffectComponent", new CComponent(null));
+            Register("CR4HumanoidCombatComponent", new CComponent(null));
+            Register("CR4InteriorAreaComponent", new CComponent(null));
+            Register("CReactionSceneActorComponent", new CComponent(null));
+            Register("CRigidMeshComponent", new CComponent(null));
+            Register("CSceneAreaComponent", new CComponent(null));
+            Register("CScriptedAnimEventsListenerComponent", new CComponent(null));
+            Register("CSimpleBuoyancyComponent", new CComponent(null));
+            Register("CSlotComponent", new CComponent(null));
+            Register("CSoundAmbientAreaComponent", new CComponent(null));
+            Register("CSoundEmitterComponent", new CComponent(null));
+            Register("CSpawnPointComponent", new CComponent(null));
+            Register("CSpotLightComponent", new CComponent(null));
+            Register("CSpriteComponent", new CComponent(null));
+            Register("CStandPhysicalMaterialAreaComponent", new CComponent(null));
+            Register("CStaticMeshComponent", new CComponent(null));
+            Register("CStickerComponent", new CComponent(null));
+            Register("CStorySceneComponent", new CComponent(null));
+            Register("CStorySceneWaypointComponent", new CComponent(null));
+            Register("CStreamingAreaComponent", new CComponent(null));
+            Register("CStripeComponent", new CComponent(null));
+            Register("CSwarmRenderComponent", new CComponent(null));
+            Register("CSwarmSoundEmitterComponent", new CComponent(null));
+            Register("CSwitchableFoliageComponent", new CComponent(null));
+            Register("CTriggerActivatorComponent", new CComponent(null));
+            Register("CTriggerAreaComponent", new CComponent(null));
+            Register("CTriggerAreaEnvironmentVisibilityComponent", new CComponent(null));
+            Register("CWanderPointComponent", new CComponent(null));
+            Register("CWaterComponent", new CComponent(null));
+            Register("CWayPointComponent", new CComponent(null));
+            Register("CWetnessComponent", new CComponent(null));
+            Register("W3AerondightFXComponent", new CComponent(null));
+            Register("W3ApplyEffectPhantomComponent", new CComponent(null));
+            Register("W3CraftsmanComponent", new CComponent(null));
+            Register("W3FireAuraManagerComponent", new CComponent(null));
+            Register("W3FoodComponent", new CComponent(null));
+            Register("W3HorseComponent", new CComponent(null));
+            Register("W3MerchantComponent", new CComponent(null));
+            Register("W3PostFXOnGroundComponent", new CComponent(null));
+            Register("W3QuestCond_EntityComponentEnabled", new CComponent(null));
+            Register("W3QuestCond_EntityComponentExists", new CComponent(null));
+            Register("W3ScentComponent", new CComponent(null));
+            Register("W3SlideToTargetComponent", new CComponent(null));
+            Register("W3SummonedEntityComponent", new CComponent(null));
+            Register("W3SummonerComponent", new CComponent(null));
+            Register("W3TargetingManagementComponent", new CComponent(null));
+            Register("W3WindEffectOnGroundComponent", new CComponent(null));
+
+
+
+            Register("CEntity", new CEntity(null));
 
             // *.w2ent decendants of CEntity in RTTI and ws to parse components array
             Register("CAnimatedEntity", new CEntity(null));

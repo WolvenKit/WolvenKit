@@ -30,16 +30,20 @@ namespace WolvenKit.CR2W.Types
 
                 if (ChunkHandle)
                 {
-                    ChunkIndex = value;
+                    if (value <= cr2w.chunks.Count)
+                        ChunkIndex = value;
                 }
                 else
                 {
-                    Handle = cr2w.imports[-value - 1].str;
+                    if (-value - 1 <= cr2w.imports.Count)
+                    {
+                        Handle = cr2w.imports[-value - 1].depotPathStr;
 
-                    var filetype = cr2w.imports[-value - 1].Import.className; 
-                    FileType = cr2w.names[filetype].str;
+                        var filetype = cr2w.imports[-value - 1].Import.className;
+                        FileType = cr2w.names[filetype].str;
 
-                    Flags = cr2w.imports[-value - 1].Import.flags;
+                        Flags = cr2w.imports[-value - 1].Import.flags;
+                    }
                 }
             }
         }

@@ -9,6 +9,9 @@ namespace WolvenKit.CR2W.Types
         public CArray components;
         public CUInt32 unk1;
         public CUInt32 unk2;
+        public byte[] tail;
+
+        public bool hasComponents { get; set; } = false;
 
         public CEntity(CR2WFile cr2w) :
             base(cr2w)
@@ -18,25 +21,34 @@ namespace WolvenKit.CR2W.Types
             unk2 = new CUInt32(cr2w);
             unk2.Name = "unk2";
 
+
+
             components = new CArray("[]handle:Component", "handle:Component", true, cr2w);
             components.Name = "components";
         }
 
-        public override void Read(BinaryReader file, uint size)
+        public override void Read(BinaryReader br, uint size)
         {
-            base.Read(file, size);
+            base.Read(br, size);
 
-            unk1.Read(file, 0);
-            unk2.Read(file, 0);
+            unk1.Read(br, 0);
+            unk2.Read(br, 0);
 
-            var elementcount = file.ReadBit6();
-
-            for (var i = 0; i < elementcount; i++)
+            if (hasComponents)
             {
-                var handle = new CHandle(cr2w);
-                handle.Read(file, 0);
-                components.AddVariable(handle);
+                var elementcount = br.ReadBit6();
+
+                for (var i = 0; i < elementcount; i++)
+                {
+                    var handle = new CHandle(cr2w);
+                    handle.Read(br, 0);
+                    components.AddVariable(handle);
+                }
+
+                tail = br.ReadBytes(2);
             }
+
+
         }
 
         public override void Write(BinaryWriter file)
@@ -45,10 +57,15 @@ namespace WolvenKit.CR2W.Types
 
             unk1.Write(file);
             unk2.Write(file);
-            file.WriteBit6(components.array.Count);
-            for (var i = 0; i < components.array.Count; i++)
+
+            if (hasComponents)
             {
-                components.array[i].Write(file);
+                file.WriteBit6(components.array.Count);
+                for (var i = 0; i < components.array.Count; i++)
+                {
+                    components.array[i].Write(file);
+                }
+                file.Write(tail);
             }
         }
 

@@ -24,7 +24,7 @@ namespace WolvenKit.CR2W.Types
             {
                 if (value > 0)
                 {
-                    Handle = cr2w.imports[value - 1].str;
+                    Handle = cr2w.imports[value - 1].depotPathStr;
 
                     var filetype = cr2w.imports[value - 1].Import.className;
                     FileType = cr2w.names[filetype].str;
@@ -33,7 +33,7 @@ namespace WolvenKit.CR2W.Types
                 }
                 else
                 {
-                    Handle = cr2w.imports[0].str;
+                    Handle = cr2w.imports[0].depotPathStr;
 
                     var filetype = cr2w.imports[0].Import.className;
                     FileType = cr2w.names[filetype].str;

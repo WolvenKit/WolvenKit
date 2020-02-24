@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Linq;
 
 namespace WolvenKit.CR2W
 {
@@ -14,7 +15,7 @@ namespace WolvenKit.CR2W
         public uint path;
 
         [FieldOffset(8)]
-        public ulong pathHash;
+        public ulong pathHash; //FIXME dynamically update this
 
         [FieldOffset(16)]
         public uint dataOffset;
@@ -31,9 +32,19 @@ namespace WolvenKit.CR2W
             set => _embedded = value;
         }
 
-        //public List<string> handles = new List<string>();
-        public string Handle {get;set;}
-        public byte[] Data;
+
+        private CR2WFile parsedFile;
+        
+        public List<CR2WImportWrapper> ParentImports { get; set; }
+
+        public string ClassName { get; set; } = "<failed to get class name>";
+        public string ImportPath { get; set; } = "<failed to get import path>";
+        public string ImportClass { get; set; } = "<failed to get import class>";
+
+        public string Handle { get; set; }
+        public byte[] Data { get; set; }
+
+        
 
         public CR2WEmbeddedWrapper()
         {
@@ -43,25 +54,39 @@ namespace WolvenKit.CR2W
         public CR2WEmbeddedWrapper(CR2WEmbedded embedded)
         {
             _embedded = embedded;
+
         }
 
         public void SetOffset(uint offset) => _embedded.dataOffset = offset;
-        
-        //public string Handles => string.Join(", ", handles);
-
-        /*public void ReadString(BinaryReader file, uint string_buffer_start)
-        {
-            file.BaseStream.Seek(handle_name_offset + string_buffer_start, SeekOrigin.Begin);
-            for (var i = 0; i < handle_name_count; i++)
-            {
-                handles.Add(file.ReadCR2WString());
-            }
-        }*/
 
         public void ReadData(BinaryReader file)
         {
             file.BaseStream.Seek(_embedded.dataOffset, SeekOrigin.Begin);
             Data = file.ReadBytes((int) _embedded.dataSize);
+
+            try
+            {
+                parsedFile = new CR2WFile(Data);
+                if (parsedFile != null)
+                {
+                    if (parsedFile.chunks != null && parsedFile.chunks.Any())
+                        ClassName = parsedFile.chunks.FirstOrDefault().Type;
+                }
+
+                if (ParentImports != null && ParentImports.Any())
+                {
+                    if (ParentImports.Count > (int)Embedded.importIndex - 1)
+                    {
+                        var import = ParentImports[(int)Embedded.importIndex - 1];
+                        ImportClass = import.classNameStr;
+                        ImportPath = import.depotPathStr;
+                    }
+                }
+            }
+            catch (System.Exception)
+            {
+                // FIXME handle exceptions
+            }
         }
 
         public void WriteData(BinaryWriter file)

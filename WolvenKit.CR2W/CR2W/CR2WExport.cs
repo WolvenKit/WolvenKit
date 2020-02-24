@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Types;
 using System.Runtime.InteropServices;
+using System.Linq;
 
 namespace WolvenKit.CR2W
 {
@@ -44,16 +45,22 @@ namespace WolvenKit.CR2W
         {
             this.cr2w = file;
 
-            parentPtr = new CPtr(file);
-            parentPtr.Name = "Parent";
+            parentPtr = new CPtr(file)
+            {
+                Name = "Parent"
+            };
 
-            //flags = new CUInt16(file);
-            //flags.Name = "Flags";
+            flags = new CUInt16(file)
+            {
+                Name = "Flags"
+            };
 
-            typeName = new CName(file);
-            typeName.Name = "Type";
+            typeName = new CName(file)
+            {
+                Name = "Type"
+            };
 
-            //Flags = 8192;
+            Flags = 8192;
             _export.objectFlags = 8192;
         }
         public CR2WExportWrapper(CR2WFile file, CR2WExport export)
@@ -61,12 +68,24 @@ namespace WolvenKit.CR2W
             this.cr2w = file;
             _export = export;
 
-            parentPtr = new CPtr(file);
-            parentPtr.Name = "Parent";
+            parentPtr = new CPtr(file)
+            {
+                Name = "Parent"
+            };
+            ParentChunkId = export.parentID;
 
-            typeName = new CName(file);
-            typeName.Name = "Type";
-            
+            flags = new CUInt16(file)
+            {
+                Name = "Flags",
+                val = export.objectFlags
+            };
+
+            typeName = new CName(file)
+            {
+                Name = "Type",
+                val = export.className
+            };
+
         }
         #endregion
 
@@ -85,12 +104,12 @@ namespace WolvenKit.CR2W
             get { return typeName.val; }
             set { typeName.val = value; }
         }*/
-        /*private readonly CUInt16 flags;
+        private readonly CUInt16 flags;
         public ushort Flags
         {
             get { return flags.val; }
             set { flags.val = value; }
-        }*/
+        }
         private readonly CPtr parentPtr;
         public uint ParentChunkId
         {
@@ -190,10 +209,14 @@ namespace WolvenKit.CR2W
             file.BaseStream.Seek(_export.dataOffset, SeekOrigin.Begin);
 
             CreateDefaultData();
+
+            var centity = data as CEntity;
+            if (centity != null)
+                centity.hasComponents = cr2w.chunks.Any(_ => _.Parent == this);
+
             data.Read(file, _export.dataSize);
 
             var bytesLeft = _export.dataSize - (file.BaseStream.Position - _export.dataOffset);
-
 
             unknownBytes = new CBytes(cr2w)
             {

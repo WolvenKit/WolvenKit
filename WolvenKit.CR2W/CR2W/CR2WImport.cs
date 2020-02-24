@@ -24,7 +24,8 @@ namespace WolvenKit.CR2W
             set => _import = value;
         }
 
-        public string str { get; set; }
+        public string depotPathStr { get; set; }
+        public string classNameStr { get; set; }
 
 
         public CR2WImportWrapper()
