@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Vlc.DotNet.Core;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Scaleform;
+using static VGMToolbox.format.MpegStream;
 
 namespace WolvenKit
 {
@@ -14,9 +15,11 @@ namespace WolvenKit
     {
         public static Dictionary<string, byte[]> Demuxedfiles;
         public string videofile;
+        string infile;
 
         public frmUsmPlayer(string path)
         {
+            infile = path;
             InitializeComponent();
             if (Directory.Exists(MainController.Get().VLCLibDir))
             {
@@ -74,7 +77,6 @@ namespace WolvenKit
         {
             statusLabel.Hide();
             var file = new MemoryStream(Demuxedfiles.First(x => x.Key.EndsWith("m2v")).Value);
-
             usmPlayer.Play(file);
         }
 

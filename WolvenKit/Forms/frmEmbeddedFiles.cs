@@ -30,7 +30,7 @@ namespace WolvenKit
             if (File == null)
                 return;
 
-            listView.Objects = File.block7;
+            listView.Objects = File.embedded;
         }
 
         private void listView_CellClick(object sender, CellClickEventArgs e)
@@ -40,13 +40,13 @@ namespace WolvenKit
 
             if (e.ClickCount == 2)
             {
-                var mem = new MemoryStream(((CR2WHeaderBlock7) e.Model).unknowndata);
+                var mem = new MemoryStream(((CR2WEmbedded) e.Model).unknowndata);
 
                 var doc = MainController.Get().LoadDocument("Embedded file", mem);
                 if (doc != null)
                 {
                     doc.OnFileSaved += OnFileSaved;
-                    doc.SaveTarget = (CR2WHeaderBlock7) e.Model;
+                    doc.SaveTarget = (CR2WEmbedded) e.Model;
                 }
             }
         }
@@ -54,7 +54,7 @@ namespace WolvenKit
         private void OnFileSaved(object sender, FileSavedEventArgs e)
         {
             var doc = (frmCR2WDocument) sender;
-            var editvar = (CR2WHeaderBlock7) doc.SaveTarget;
+            var editvar = (CR2WEmbedded) doc.SaveTarget;
             editvar.unknowndata = ((MemoryStream) e.Stream).ToArray();
         }
     }

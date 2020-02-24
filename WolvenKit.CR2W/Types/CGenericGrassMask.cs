@@ -16,16 +16,19 @@ namespace WolvenKit.CR2W.Types
         {
             grassmask = new CByteArray(cr2w)
             {
-                Name = "Grass mask data"
+                Name = "Grass mask data",
+                Bytes = new byte[0]
             };
         }
 
         public override void Read(BinaryReader file, uint size)
         {
             base.Read(file, size);
-            var res = ((CUInt32)cr2w.GetChunkByType("CGenericGrassMask").GetVariableByName("maskRes")).val;
-            grassmask.Bytes = file.ReadBytes((int) (res * res >> 3));
-
+            if (cr2w.GetChunkByType("CGenericGrassMask").GetVariableByName("maskRes") != null)
+            {
+                var res = ((CUInt32)cr2w.GetChunkByType("CGenericGrassMask").GetVariableByName("maskRes")).val;
+                grassmask.Bytes = file.ReadBytes((int)(res * res >> 3));
+            }
         }
 
         public override void Write(BinaryWriter file)

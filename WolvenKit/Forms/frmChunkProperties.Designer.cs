@@ -62,14 +62,17 @@ namespace WolvenKit
             this.treeView.AllColumns.Add(this.colValue);
             this.treeView.AllColumns.Add(this.colType);
             this.treeView.AlternateRowBackColor = System.Drawing.Color.LightCyan;
+            this.treeView.BackColor = System.Drawing.SystemColors.Window;
             this.treeView.CellEditUseWholeCell = false;
             this.treeView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colName,
             this.colValue,
             this.colType});
             this.treeView.ContextMenuStrip = this.contextMenu;
+            this.treeView.Cursor = System.Windows.Forms.Cursors.Default;
             this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView.FullRowSelect = true;
+            this.treeView.HideSelection = false;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
             this.treeView.ShowGroups = false;
@@ -79,6 +82,7 @@ namespace WolvenKit
             this.treeView.UseCompatibleStateImageBehavior = false;
             this.treeView.View = System.Windows.Forms.View.Details;
             this.treeView.VirtualMode = true;
+            this.treeView.CellEditFinished += new BrightIdeasSoftware.CellEditEventHandler(this.treeView_CellEditFinished);
             this.treeView.CellEditStarting += new BrightIdeasSoftware.CellEditEventHandler(this.treeView_CellEditStarting);
             this.treeView.CellClick += new System.EventHandler<BrightIdeasSoftware.CellClickEventArgs>(this.treeView_CellClick);
             this.treeView.ItemsChanged += new System.EventHandler<BrightIdeasSoftware.ItemsChangedEventArgs>(this.treeView_ItemsChanged);
@@ -98,6 +102,7 @@ namespace WolvenKit
             // colType
             // 
             this.colType.AspectName = "Type";
+            this.colType.FillsFreeSpace = true;
             this.colType.Text = "Type";
             this.colType.Width = 100;
             // 

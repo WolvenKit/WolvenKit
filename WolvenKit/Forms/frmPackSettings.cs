@@ -26,6 +26,8 @@ namespace WolvenKit
                 soundCHB.Checked = true;
             if (Directory.Exists((MainController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")) && Directory.GetFiles((MainController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")).Any(x => x.EndsWith(".w3strings")))
                 stringsCHB.Checked = true;
+            if (MainController.Get().Window.ActiveMod.Files.Any(x => x.EndsWith(".apx") || x.EndsWith(".apb")))
+                collisionCacheCHB.Checked = true;
         }
 
         private void button1_Click(object sender, EventArgs e)

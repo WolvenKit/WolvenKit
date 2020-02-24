@@ -33,7 +33,7 @@ namespace WolvenKit.CR2W.Types
             file.Write((byte) 0);
             for (var i = 0; i < variables.Count; i++)
             {
-                cr2w.WriteVariable(file, variables[i]);
+                CR2WFile.WriteVariable(file, variables[i]);
             }
             file.Write((ushort) 0);
         }

@@ -11,6 +11,8 @@ using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 using System.Collections.Generic;
+using IrrlichtLime.IO;
+using System.Linq;
 
 namespace WolvenKit.Render
 {
@@ -312,7 +314,7 @@ namespace WolvenKit.Render
         /// </summary>
         private Texture GetTexture(VideoDriver driver, string handleFilename)
         {
-            string texturePath = Path.Combine(Path.GetDirectoryName(meshFile.FileName),Path.GetFileNameWithoutExtension(handleFilename)).Replace("Bundle","TextureCache");
+            string texturePath = Path.Combine(Path.GetDirectoryName(meshFile.FileName),Path.GetFileNameWithoutExtension(handleFilename)).Replace("Bundle","TextureCache").Replace("Mod", "Raw\\Mod").Replace("DLC", "Raw\\DLC");
             string[] textureFileExtensions = { ".dds", ".bmp", ".tga", ".jpg", ".jpeg", ".png", ".xbm" };
             Texture texture = null;
             foreach (var textureFileExtension in textureFileExtensions)

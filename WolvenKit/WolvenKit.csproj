@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WolvenKit</RootNamespace>
     <AssemblyName>WolvenKit</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -134,6 +134,9 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AltoControls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AltoControls.1.0.1\lib\AltoControls.dll</HintPath>
@@ -147,6 +150,9 @@
     <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
       <HintPath>..\packages\CyotekImageBox.1.3.0-Alpha1\lib\net20\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
     </Reference>
+    <Reference Include="dbutil, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\packages\VGMToolbox.1.0.0.1040\lib\dbutil.dll</HintPath>
+    </Reference>
     <Reference Include="DevZH.FlatBuffers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\DevZH.FlatBuffers.1.4.0\lib\net35\DevZH.FlatBuffers.dll</HintPath>
     </Reference>
@@ -158,6 +164,9 @@
     </Reference>
     <Reference Include="Doboz">
       <HintPath>..\packages\doboz4net.1.0.1\lib\net40-client\Doboz.dll</HintPath>
+    </Reference>
+    <Reference Include="format, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\packages\VGMToolbox.1.0.0.1040\lib\format.dll</HintPath>
     </Reference>
     <Reference Include="Gma.System.MouseKeyHook, Version=5.6.130.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MouseKeyHook.5.6.0\lib\net40\Gma.System.MouseKeyHook.dll</HintPath>
@@ -176,6 +185,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libs\IrrlichtLime.dll</HintPath>
     </Reference>
+    <Reference Include="jsutil, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VGMToolbox.1.0.0.1040\lib\jsutil.dll</HintPath>
+    </Reference>
     <Reference Include="LZ4, Version=1.0.15.93, Culture=neutral, PublicKeyToken=62e1b5ec1eec9bdd, processorArchitecture=MSIL">
       <HintPath>..\packages\lz4net.1.0.15.93\lib\net4-client\LZ4.dll</HintPath>
     </Reference>
@@ -186,6 +198,9 @@
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -199,6 +214,8 @@
     <Reference Include="OpenGL.Net.WinForms, Version=0.7.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenGL.Net.WinForms.0.7.1\lib\net461\OpenGL.Net.WinForms.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="PropertyGridEx, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\PropertyGridEx.1.0.0\lib\net20\PropertyGridEx.dll</HintPath>
     </Reference>
@@ -273,6 +290,7 @@
       <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.2\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
     </Reference>
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -283,6 +301,12 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Xml.ReaderWriter.4.3.1\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
+    </Reference>
+    <Reference Include="vgmtplugin, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\packages\VGMToolbox.1.0.0.1040\lib\vgmtplugin.dll</HintPath>
+    </Reference>
+    <Reference Include="vgmtutil, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\packages\VGMToolbox.1.0.0.1040\lib\vgmtutil.dll</HintPath>
     </Reference>
     <Reference Include="VisualPlus, Version=0.4.1.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VisualPlus.0.4.1.4-beta\lib\VisualPlus\NET4\VisualPlus.dll</HintPath>
@@ -307,6 +331,7 @@
     <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2015, Version=3.0.4.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
       <HintPath>..\packages\DockPanelSuite.ThemeVS2015.3.0.4\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
     <Reference Include="WinFormAnimation, Version=1.5.6298.3372, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WinFormAnimation.1.5.6298.3372\lib\net35-client\WinFormAnimation.dll</HintPath>
     </Reference>
@@ -315,11 +340,68 @@
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="DDSUtility.cs" />
     <Compile Include="discord.cs" />
+    <Compile Include="Extensions\CustomFloatWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\LinkEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Quest\QuestPhaseEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Quest\QuestPhaseInputEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Quest\QuestScriptBlockEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Scene\SceneChoiceEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Scene\SceneChoiceEditor.Designer.cs">
+      <DependentUpon>SceneChoiceEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Scene\SceneFlowConditionEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Scene\SceneFlowConditionEditor.Designer.cs">
+      <DependentUpon>SceneFlowConditionEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Scene\SceneLinkEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Scene\SceneLinkEditor.Designer.cs">
+      <DependentUpon>SceneLinkEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Scene\SceneRandomizerEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Scene\SceneRandomizerEditor.Designer.cs">
+      <DependentUpon>SceneRandomizerEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Scene\SceneSectionEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlowTreeEditors\Scene\SceneSectionEditor.Designer.cs">
+      <DependentUpon>SceneSectionEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmLoading.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmLoading.Designer.cs">
       <DependentUpon>frmLoading.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmChunkFlowDiagram.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmChunkFlowDiagram.Designer.cs">
+      <DependentUpon>frmChunkFlowDiagram.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMusicPlayer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmMusicPlayer.Designer.cs">
+      <DependentUpon>frmMusicPlayer.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmStringsGuiImporterIDDialog.cs">
       <SubType>Form</SubType>
@@ -333,6 +415,18 @@
     <Compile Include="Forms\frmCreateInstaller.Designer.cs">
       <DependentUpon>frmCreateInstaller.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmWelcome.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmWelcome.Designer.cs">
+      <DependentUpon>frmWelcome.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\IThemedContent.cs" />
     <Compile Include="WitcherListViewItem.cs" />
     <Compile Include="Commonfunctions.cs" />
     <Compile Include="Forms\frmAbout.cs">
@@ -436,36 +530,6 @@
       <DependentUpon>ChunkEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="FlowTreeEditors\MoveEditorArgs.cs" />
-    <Compile Include="FlowTreeEditors\SceneChoiceEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\SceneChoiceEditor.Designer.cs">
-      <DependentUpon>SceneChoiceEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FlowTreeEditors\SceneFlowConditionEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\SceneFlowConditionEditor.Designer.cs">
-      <DependentUpon>SceneFlowConditionEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FlowTreeEditors\SceneLinkEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\SceneLinkEditor.Designer.cs">
-      <DependentUpon>SceneLinkEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FlowTreeEditors\SceneRandomizerEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\SceneRandomizerEditor.Designer.cs">
-      <DependentUpon>SceneRandomizerEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FlowTreeEditors\SceneSectionEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FlowTreeEditors\SceneSectionEditor.Designer.cs">
-      <DependentUpon>SceneSectionEditor.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\frmAddChunk.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -483,12 +547,6 @@
     </Compile>
     <Compile Include="Forms\frmAssetBrowser.Designer.cs">
       <DependentUpon>frmAssetBrowser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmChunkFlowDiagram.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmChunkFlowDiagram.Designer.cs">
-      <DependentUpon>frmChunkFlowDiagram.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmChunkList.cs">
       <SubType>Form</SubType>
@@ -571,18 +629,18 @@
     <Compile Include="SortableBindinglist.cs" />
     <Compile Include="Win32.cs" />
     <Compile Include="WKPackage.cs" />
+    <EmbeddedResource Include="FlowTreeEditors\Scene\SceneFlowConditionEditor.resx">
+      <DependentUpon>SceneFlowConditionEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FlowTreeEditors\Scene\SceneLinkEditor.resx">
+      <DependentUpon>SceneLinkEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FlowTreeEditors\ChunkEditor.resx">
       <DependentUpon>ChunkEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FlowTreeEditors\SceneFlowConditionEditor.resx">
-      <DependentUpon>SceneFlowConditionEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FlowTreeEditors\SceneLinkEditor.resx">
-      <DependentUpon>SceneLinkEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmAddChunk.resx">
       <DependentUpon>frmAddChunk.cs</DependentUpon>
@@ -595,9 +653,6 @@
     <EmbeddedResource Include="Forms\frmAssetBrowser.resx">
       <DependentUpon>frmAssetBrowser.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmChunkFlowDiagram.resx">
-      <DependentUpon>frmChunkFlowDiagram.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmChunkList.resx">
       <DependentUpon>frmChunkList.cs</DependentUpon>
@@ -644,11 +699,17 @@
     <EmbeddedResource Include="Forms\frmModSettings.resx">
       <DependentUpon>frmModSettings.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmMusicPlayer.resx">
+      <DependentUpon>frmMusicPlayer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmOutput.resx">
       <DependentUpon>frmOutput.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmPackSettings.resx">
       <DependentUpon>frmPackSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmChunkFlowDiagram.resx">
+      <DependentUpon>frmChunkFlowDiagram.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmRenameDialog.resx">
       <DependentUpon>frmRenameDialog.cs</DependentUpon>
@@ -686,16 +747,14 @@
     <EmbeddedResource Include="Forms\frmCreateInstaller.resx">
       <DependentUpon>frmCreateInstaller.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmWelcome.resx">
+      <DependentUpon>frmWelcome.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
@@ -712,18 +771,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Open_6529.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\NewSolutionFolder_6289.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Save_6530.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Saveall_6518.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\gear_16xLG.png" />
@@ -752,7 +799,6 @@
     <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj">
       <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>
       <Name>WolvenKit.CR2W</Name>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
     <ProjectReference Include="..\WolvenKit.Net\WolvenKit.Net.csproj">
       <Project>{f60b8974-617d-45b5-bd33-68a9f739de4f}</Project>
@@ -792,8 +838,6 @@
     <None Include="Resources\geralt.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Editing-Collapse-icon.png" />
-    <None Include="Resources\Editing-Expand-icon.png" />
     <None Include="Resources\mail.png" />
     <None Include="Resources\player_record.png" />
     <Content Include="..\Libs\Irrlicht.dll">
@@ -819,6 +863,27 @@
     <Content Include="discord-rpc.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\ExpandAll_16x.png" />
+    <None Include="Resources\CollapseAll_16x.png" />
+    <None Include="Resources\SaveStatusBar1_16x_c.png" />
+    <None Include="Resources\FolderOpened_16x.png" />
+    <None Include="Resources\BlankFile_16x.png" />
+    <None Include="Resources\OpenFolder_16x.png" />
+    <None Include="Resources\OpenFile_16x.png" />
+    <None Include="Resources\Save_16x.png" />
+    <None Include="Resources\SaveAll_16x.png" />
+    <None Include="Resources\NewSolutionFolder_16x.png" />
+    <None Include="Resources\SaveStatusBar1_16x.png" />
+    <None Include="Resources\Output_16x.png" />
+    <None Include="Resources\Property_16x.png" />
+    <None Include="Resources\RemoteServer_16x.png" />
+    <None Include="Resources\Settings_Inverse_16x.png" />
+    <Content Include="Resources\close.png" />
+    <Content Include="Resources\ExpandIcon.png" />
+    <None Include="Resources\Refresh_16x.png" />
+    <Content Include="Resources\maximize.jpg" />
+    <Content Include="Resources\maximize.png" />
+    <Content Include="Resources\minimize.png" />
     <Content Include="wolven_kit_icon.ico" />
     <Content Include="Licenses\License.doboz4net.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -841,7 +906,6 @@
     <Content Include="Licenses\License.W3SaveGameEditor.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\ExpandIcon.png" />
     <None Include="Resources\ExitIcon.png" />
     <None Include="Resources\LayerGroupVisibled.png" />
     <None Include="Resources\wcc_eula.rtf" />
@@ -869,7 +933,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <PublishFile Include="AltoControls">
       <Visible>False</Visible>
@@ -1191,16 +1254,6 @@
       <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
-    <PublishFile Include="WolvenKit.CR2W">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
     <PublishFile Include="WolvenKit.Interfaces">
       <Visible>False</Visible>
       <Group>
@@ -1282,6 +1335,7 @@
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

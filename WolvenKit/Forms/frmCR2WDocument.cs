@@ -3,10 +3,11 @@ using System.IO;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.CR2W;
+using WolvenKit.Services;
 
 namespace WolvenKit
 {
-    public partial class frmCR2WDocument : DockContent
+    public partial class frmCR2WDocument : DockContent, IThemedContent
     {
         public frmChunkList chunkList;
         public frmChunkProperties propertyWindow;
@@ -17,13 +18,12 @@ namespace WolvenKit
         public Render.frmRender RenderViewer;
         private CR2WFile file;
 
-
         public DockPanel FormPanel => dockPanel;
 
         public frmCR2WDocument()
         {
             InitializeComponent();
-
+            
             try
             {
                 dockPanel.LoadFromXml(
@@ -31,6 +31,7 @@ namespace WolvenKit
                     DeserializeDockContent);
             }
             catch { }
+            ApplyCustomTheme();
 
             chunkList = new frmChunkList
             {
@@ -41,9 +42,12 @@ namespace WolvenKit
             chunkList.OnSelectChunk += frmCR2WDocument_OnSelectChunk;
             propertyWindow = new frmChunkProperties();
             propertyWindow.Show(dockPanel, DockState.DockBottom);
+            propertyWindow.OnItemsChanged += PropertyWindow_OnItemsChanged;
 
             chunkList.Activate();
         }
+
+        private void PropertyWindow_OnItemsChanged(object sender, EventArgs e) => chunkList.UpdateList();
 
         public CR2WFile File
         {
@@ -82,7 +86,7 @@ namespace WolvenKit
                 {
                     embeddedFiles.File = file;
 
-                    if (file.block7.Count > 0)
+                    if (file.embedded.Count > 0)
                     {
                         embeddedFiles.Show(dockPanel, DockState.Document);
                     }
@@ -199,10 +203,7 @@ namespace WolvenKit
                         {
                             mem.WriteTo(fs);
 
-                            if (OnFileSaved != null)
-                            {
-                                OnFileSaved(this, new FileSavedEventArgs {FileName = FileName, Stream = fs, File = File});
-                            }
+                            OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = fs, File = File });
                             fs.Close();
                         }
                     }
@@ -212,6 +213,14 @@ namespace WolvenKit
             {
                 MainController.Get().QueueLog("Failed to save the file(s)! They are probably in use.\n" + e.ToString());
             }
+        }
+
+        public void ApplyCustomTheme()
+        {
+            var theme = MainController.Get().GetTheme();
+            this.dockPanel.Theme = theme;
+            dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath),
+                "cr2wdocument_layout.xml"));
         }
     }
 }

@@ -1,67 +1,73 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System;
 using System.IO;
+using System.Text;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using WolvenKit.CR2W.Types;
+using RED.CRC32;
+using System.Runtime.InteropServices;
 
 namespace WolvenKit.CR2W
 {
     public class CR2WFile
     {
-        /// <summary>
-        ///     File structure variables
-        /// </summary>
-        public static readonly byte[] IDString = {(byte) 'C', (byte) 'R', (byte) '2', (byte) 'W'};
-
-        /// <summary>
-        /// </summary>
-        private uint headerOffset;
-
-        public List<CLocalizedString> LocalizedStrings = new List<CLocalizedString>();
-        public List<string> UnknownTypes = new List<string>();
-
+        #region Constructor
         public CR2WFile()
         {
-            headers = new List<CR2WHeaderData>();
-            for (var i = 0; i < 10; i ++)
-            {
-                headers.Add(new CR2WHeaderData());
-            }
-            strings = new List<CR2WHeaderString> {new CR2WHeaderString()};
-            handles = new List<CR2WHeaderHandle>();
+            names = new List<CR2WString> {new CR2WString()};
+            imports = new List<CR2WHandle>();
             chunks = new List<CR2WChunk>();
-            block4 = new List<CR2WHeaderBlock4>();
-            block6 = new List<CR2WHeaderBlock6>();
-            block7 = new List<CR2WHeaderBlock7>();
+            //table4 = new List<CR2WHeaderBlock4>();
+            buffers = new List<CR2WBuffer>();
+            embedded = new List<CR2WEmbedded>();
 
-            FileVersion = 162;
+            m_fileheader = new CR2WFileHeader();
+            m_fileheader.version = 162;
         }
 
         public CR2WFile(BinaryReader file)
         {
             Read(file);
         }
+        #endregion
 
-        public uint FileVersion { get; set; }
-        public uint flags { get; set; }
-        public CDateTime Datetime = new CDateTime(null);
-        public uint buildversion { get; set; }
-        public uint cr2wsize { get; set; }
-        public uint buffersize { get; set; }
-        public uint crc32 { get; set; }
-        public uint numchunks { get; set; }
-        public List<CR2WHeaderData> headers { get; set; }
-        public List<CR2WHeaderString> strings { get; set; }
-        public List<CR2WHeaderHandle> handles { get; set; }
-        public List<CR2WHeaderBlock4> block4 { get; set; }
-        public List<CR2WChunk> chunks { get; set; }
-        public List<CR2WHeaderBlock6> block6 { get; set; }
-        public List<CR2WHeaderBlock7> block7 { get; set; }
+        #region Fields
+        private const uint MAGIC = 0x57325243;
+        private const uint DEADBEEF = 0xDEADBEEF;
 
+        private bool m_hasInternalBuffer;
+        private Stream m_stream; //handle this better?
+        private string m_filePath;
+
+        private CR2WFileHeader m_fileheader;
+        private CR2WTableHeader[] m_tableheaders;
+        private Byte[] m_strings;
+        private CR2WName[] m_names;
+        private CR2WImportHeader[] m_imports;
+        private CR2WTable4Item[] m_table4;
+        private CR2WExportHeader[] m_exports;
+        private CR2WBufferHeader[] m_buffers;
+        private CR2WEmbeddedHeader[] m_embedded;
+
+        private Dictionary<uint, string> m_dictionary;
+
+        private uint headerOffset;
+        #endregion
+
+        #region Properties
+
+        public List<CLocalizedString> LocalizedStrings = new List<CLocalizedString>();
+        public List<string> UnknownTypes = new List<string>();
         public byte[] bufferdata { get; set; }
         public string FileName { get; set; }
 
+        public List<CR2WString> names { get; set; }
+        public List<CR2WHandle> imports { get; set; }
+        public List<CR2WChunk> chunks { get; set; }
+        public List<CR2WBuffer> buffers { get; set; }
+        public List<CR2WEmbedded> embedded { get; set; }
         /// <summary>
         ///     LocalizedStringSource
         /// </summary>
@@ -71,6 +77,7 @@ namespace WolvenKit.CR2W
         ///     EditorController
         /// </summary>
         public IVariableEditor EditorController { get; set; }
+        #endregion
 
         public string GetLocalizedString(uint val)
         {
@@ -88,180 +95,129 @@ namespace WolvenKit.CR2W
             }
         }
 
+        #region Read
         public void Read(BinaryReader file)
         {
-            var mw = file.ReadBytes(4);
+            m_stream = file.BaseStream;
 
-            if (!IDString.SequenceEqual(mw))
+            #region Read Headers
+            var id = ReadStruct<uint>();
+            if (id != MAGIC)
+                throw new FormatException($"Not a CR2W file, Magic read as 0x{id:X8}");
+
+            m_fileheader = ReadStruct<CR2WFileHeader>();
+            if (m_fileheader.version > 163 || m_fileheader.version < 159)
+                throw new FormatException($"Unknown Version {m_fileheader.version}. Supported versions: 159 - 163.");
+
+            var dt = new CDateTime(m_fileheader.timeStamp);
+
+            m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
+            m_tableheaders = ReadStructs<CR2WTableHeader>(10);
+
+            m_strings = ReadStringsBuffer();
+            m_names = ReadTable<CR2WName>(1);
+            m_imports = ReadTable<CR2WImportHeader>(2);
+            m_table4 = ReadTable<CR2WTable4Item>(3);
+            m_exports = ReadTable<CR2WExportHeader>(4);
+            m_buffers = ReadTable<CR2WBufferHeader>(5);
+            m_embedded = ReadTable<CR2WEmbeddedHeader>(6);
+            #endregion
+
+            #region Read Data
+            // read Name data
+            names = (from n in m_names
+                        let str = new CR2WString()
+                        {
+                            hash = n.hash,
+                            offset = n.value,
+                            str = m_dictionary[n.value]
+                        }
+                        select str).ToList();
+            // Read Handle data (imports)
+            imports = (from i in m_imports
+                       let handle = new CR2WHandle()
+                       {
+                           offset = i.depotPath,
+                           filetype = i.className,
+                           flags = i.flags,
+                           str = m_dictionary[i.depotPath]
+                       }
+                       select handle).ToList();
+            // Read Chunk data (exports)
+            chunks = new List<CR2WChunk>();
+            foreach (var c in m_exports)
             {
-                throw new InvalidFileTypeException("Invalid file type");
+                var chunk = new CR2WChunk(this)
+                      {
+                          typeId = c.className,
+                          Flags = c.objectFlags,
+                          ParentChunkId = c.parentID,
+                          size = c.dataSize,
+                          offset = c.dataOffset,
+                          template = c.template,
+                          crc = c.crc32
+                      };
+                chunks.Add(chunk);
+                chunk.ReadData(file);
             }
 
-            FileVersion = file.ReadUInt32();
-            flags = file.ReadUInt32();
-            Datetime.Read(file,0);
-            buildversion = file.ReadUInt32();
-
-            cr2wsize = file.ReadUInt32();
-            buffersize = file.ReadUInt32();
-
-            crc32 = file.ReadUInt32();
-            numchunks = file.ReadUInt32();
-
-            headers = new List<CR2WHeaderData>();
-
-            for (var i = 0; i < 10; i++)
+            // Read Buffer Data (block 6)
+            buffers = new List<CR2WBuffer>();
+            foreach (var b in m_buffers)
             {
-                var head = new CR2WHeaderData(file);
-                headers.Add(head);
-
-                if (head.size > 0 && i > 6)
+                var buffer = new CR2WBuffer()
+                       {
+                           flags = b.flags,
+                           index = b.index,
+                           offset = b.offset,
+                           size = b.diskSize,
+                           memsize = b.memSize,
+                           crc = b.crc32
+                       };
+                buffers.Add(buffer);
+            }
+            // Read Embedded Data (Block 7)
+            embedded = new List<CR2WEmbedded>();
+            foreach (var e in m_embedded)
+            {
+                var emb = new CR2WEmbedded()
+                        {
+                            handle_name_count = e.importIndex,
+                            handle_name_offset = e.path,
+                            pathHash = e.pathHash,
+                            offset = e.dataOffset,
+                            size = e.dataSize
+                        };
+                var offset = e.path;
+                for (int i = 0; i < e.importIndex; i++)
                 {
-                    // Unhandled blocks
-                    Debugger.Break();
+                    if (offset > m_dictionary.Last().Key)
+                    {
+                        continue;
+                    }
+                    emb.handles.Add(m_dictionary[offset]);
+                    offset += (uint)m_dictionary[offset].Length + 1;
                 }
+                embedded.Add(emb);
+                emb.ReadData(file);
             }
+            #endregion
 
-            var string_buffer_start = headers[0].offset;
+            #region Read Buffer
 
-            // Read Strings
-            {
-                strings = new List<CR2WHeaderString>();
+            file.BaseStream.Seek(m_fileheader.fileSize, SeekOrigin.Begin);
 
-                var string_start = headers[1].offset;
-                var string_count = headers[1].size;
-
-                file.BaseStream.Seek(string_start, SeekOrigin.Begin);
-
-                for (var i = 0; i < string_count; i++)
-                {
-                    var str = new CR2WHeaderString(file);
-                    str.ReadString(file, string_buffer_start);
-                    strings.Add(str);
-                }
-            }
-
-            // Read Handles
-            {
-                handles = new List<CR2WHeaderHandle>();
-
-                var handles_start = headers[2].offset;
-                var handles_count = headers[2].size;
-
-                file.BaseStream.Seek(handles_start, SeekOrigin.Begin);
-
-                for (var i = 0; i < handles_count; i++)
-                {
-                    var handle = new CR2WHeaderHandle(file);
-                    handle.ReadString(file, string_buffer_start);
-                    handles.Add(handle);
-                }
-            }
-
-            // TODO: Figure out where these things belong, possibly block 4 or 7?
-            //file.BaseStream.Seek(handles[handles.Count - 1].offset + string_buffer_start, SeekOrigin.Begin);
-            //file.ReadCR2WString();
-            //unknownstrings = new List<string>();
-            //while (file.BaseStream.Position < headers[1].offset)
-            //{
-            //   unknownstrings.Add(file.ReadCR2WString());
-            //}
-
-            // Read Unknown Block 4
-            {
-                block4 = new List<CR2WHeaderBlock4>();
-
-                var block4_start = headers[3].offset;
-                var block4_count = headers[3].size;
-
-                file.BaseStream.Seek(block4_start, SeekOrigin.Begin);
-
-                for (var i = 0; i < block4_count; i++)
-                {
-                    var block = new CR2WHeaderBlock4(file);
-                    block4.Add(block);
-                }
-            }
-
-            // Read Chunks
-            {
-                chunks = new List<CR2WChunk>();
-
-                var chunk_start = headers[4].offset;
-                var chunk_count = headers[4].size;
-
-                file.BaseStream.Seek(chunk_start, SeekOrigin.Begin);
-
-                for (var i = 0; i < chunk_count; i++)
-                {
-                    var chunktypeId = file.ReadUInt16();
-
-                    var chunk = new CR2WChunk(this);
-                    chunk.typeId = chunktypeId;
-                    chunk.Read(file);
-                    chunks.Add(chunk);
-                }
-            }
-
-            // Read Unknown Block 6
-            {
-                block6 = new List<CR2WHeaderBlock6>();
-
-                var block6_start = headers[5].offset;
-                var block6_count = headers[5].size;
-
-                file.BaseStream.Seek(block6_start, SeekOrigin.Begin);
-
-                for (var i = 0; i < block6_count; i++)
-                {
-                    var block = new CR2WHeaderBlock6(file);
-                    block6.Add(block);
-                }
-            }
-
-
-            // Read Unknown Block 7
-            {
-                block7 = new List<CR2WHeaderBlock7>();
-
-                var block7_start = headers[6].offset;
-                var block7_count = headers[6].size;
-
-                file.BaseStream.Seek(block7_start, SeekOrigin.Begin);
-
-                for (var i = 0; i < block7_count; i++)
-                {
-                    var block = new CR2WHeaderBlock7(file);
-                    block7.Add(block);
-                }
-            }
-
-            // Read Chunk buffers
-            {
-                for (var i = 0; i < chunks.Count; i++)
-                {
-                    chunks[i].ReadData(file);
-                }
-            }
-
-            // Read Block7 buffers
-            {
-                for (var i = 0; i < block7.Count; i++)
-                {
-                    block7[i].ReadString(file, string_buffer_start);
-                    block7[i].ReadData(file);
-                }
-            }
-
-            file.BaseStream.Seek(cr2wsize, SeekOrigin.Begin);
-
-            var actualbuffersize = (int) (buffersize - cr2wsize);
+            var actualbuffersize = (int) (m_fileheader.bufferSize - m_fileheader.fileSize);
             if (actualbuffersize > 0)
             {
                 bufferdata = new byte[actualbuffersize];
                 file.BaseStream.Read(bufferdata, 0, actualbuffersize);
             }
+            #endregion
+
+            m_stream = null;
         }
+        #endregion
 
         public CVariable ReadVariable(BinaryReader file)
         {
@@ -275,8 +231,8 @@ namespace WolvenKit.CR2W
             var typeId = file.ReadUInt16();
 
             var size = file.ReadUInt32() - 4;
-            var typename = strings[typeId].str;
-            var varname = strings[nameId].str;
+            var typename = names[typeId].str;
+            var varname = names[nameId].str;
 
             var parsedvar = CR2WTypeManager.Get().GetByName(typename, varname, this);
             parsedvar.Read(file, size);
@@ -286,8 +242,8 @@ namespace WolvenKit.CR2W
 
             return parsedvar;
         }
-
-        public void WriteVariable(BinaryWriter file, CVariable var)
+        
+        public static void WriteVariable(BinaryWriter file, CVariable var)
         {
             file.Write(var.nameId);
             file.Write(var.typeId);
@@ -305,190 +261,431 @@ namespace WolvenKit.CR2W
             file.Seek((int) endpos, SeekOrigin.Begin);
         }
 
+        #region Write
         public void Write(BinaryWriter file)
         {
-            // HACK: Create missing chunk type
+            m_stream = file.BaseStream;
+
+            // update data
+            #region Update Data
+            m_fileheader.timeStamp = CDateTime.Now.ToUInt64(); //this will change any vanilla assets simply by opening and saving in wkit
+            m_fileheader.numChunks = (uint)chunks.Count;
+
             foreach (var c in chunks)
             {
                 GetStringIndex(c.Type, true);
             }
 
+            // Update strings
+            uint stringbuffer_offset = 160; // always 160
+            m_tableheaders[0].offset = stringbuffer_offset;
+            m_strings = GetNewStrings();
+            UpdateDictionary();
+            
+            // Update Offsets
+            var inverseDictionary = m_dictionary.ToDictionary(x => x.Value, x => x.Key);
+            for (var i = 0; i < names.Count; i++)
+            {
+                var newoffset = inverseDictionary[names[i].str];
+                if (names[i].offset != newoffset)
+                {
+                    names[i].offset = newoffset;
+                }
+            }
+            for (var i = 0; i < imports.Count; i++)
+            {
+                var newoffset = inverseDictionary[imports[i].str];
+                if (newoffset != imports[i].offset)
+                {
+                    imports[i].offset = newoffset;
+                }
+            }
+            for (var i = 0; i < embedded.Count; i++)
+            {
+                for (var j = 0; j < embedded[i].handles.Count; j++)
+                {
+                    var newoffset = inverseDictionary[embedded[i].handles[j]];
+                    if (newoffset != embedded[i].handle_name_offset)
+                    {
+                        embedded[i].handle_name_offset = newoffset;
+                    }
+                }
+            }
+            
+            m_names = names.Select(_ => _.ToCR2WName()).ToArray();
+            m_imports = imports.Select(_ => _.ToCR2WImport()).ToArray();
+            //m_table4 = table4.Select(_ => _.ToCR2WTable4Item()).ToArray();
+            m_exports = chunks.Select(_ => _.ToCR2WExport()).ToArray();
+            m_buffers = buffers.Select(_ => _.ToCR2WBuffer()).ToArray();
+            m_embedded = embedded.Select(_ => _.ToCR2WEmbedded()).ToArray();
+            #endregion
+
             headerOffset = 0;
-            var buffersMem = new MemoryStream();
-            var buffersWriter = new BinaryWriter(buffersMem);
-            // first write the file to memory
-            WriteBuffers(buffersWriter);
+            using (var ms = new MemoryStream())
+            using (var bw = new BinaryWriter(ms))
+            {
+                // first write the file to memory
+                // this also sets m_fileheader.fileSize and m_fileheader.bufferSize, offsets
+                WriteBuffers(bw);
 
-            // Write headers once to allocate the space for it
-            WriteHeader(file);
+                // Write headers once to allocate the space for it
+                WriteHeader(file);
 
-            headerOffset = (uint) file.BaseStream.Position;
+                headerOffset = (uint)file.BaseStream.Position;
 
-            // Write buffers
-            buffersMem.Seek(0, SeekOrigin.Begin);
-            buffersMem.WriteTo(file.BaseStream);
+                // Write buffers
+                ms.Seek(0, SeekOrigin.Begin);
+                ms.WriteTo(file.BaseStream);
+            }
 
-            cr2wsize += headerOffset;
-            buffersize += headerOffset;
+            #region Update Offsets
+            m_exports = chunks.Select(_ => _.ToCR2WExport()).ToArray();
+            m_embedded = embedded.Select(_ => _.ToCR2WEmbedded()).ToArray();
+
+            for (var i = 0; i < m_exports.Length; i++)
+            {
+                m_exports[i].dataOffset += headerOffset;
+            }
+            for (var i = 0; i < m_embedded.Length; i++)
+            {
+                m_embedded[i].dataOffset += headerOffset;
+            }
+            m_fileheader.fileSize += headerOffset;
+            m_fileheader.bufferSize += headerOffset;
+            #endregion
+
+            for (int i = 0; i < m_exports.Length; i++)
+                FixExportCRC32(ref m_exports[i]);
+            for (int i = 0; i < m_buffers.Length; i++)
+                FixBufferCRC32(ref m_buffers[i]);
 
             // Write headers again with fixed offsets
+            //m_fileheader.crc32 = CalculateHeaderCRC32();
             WriteHeader(file);
-        }
+            m_fileheader.crc32 = CalculateHeaderCRC32();
+            WriteFileHeader(file);
 
-        private void WriteHeader(BinaryWriter file)
-        {
-            file.BaseStream.Seek(0, SeekOrigin.Begin);
-            file.Write(IDString);
+            m_stream = null;
 
-            file.Write(FileVersion);
-            file.Write(flags);
-            Datetime.Write(file);
-            file.Write(buildversion);
-
-            file.Write(cr2wsize);
-            file.Write(buffersize);
-
-            file.Write(crc32);
-            file.Write(numchunks);
-
-            for (var i = 0; i < 10; i++)
+            // LOCAL METHODS
+            void UpdateDictionary()
             {
-                headers[i].Write(file);
-            }
+                var size = m_strings.Length;
+                m_tableheaders[0].size = (uint)size;
+                m_tableheaders[0].crc32 = Crc32Algorithm.Compute(m_strings);
 
-            var stringbuffer_offset = (uint) file.BaseStream.Position;
-            headers[0].offset = stringbuffer_offset;
-
-            // Write string buffers
-            var string_offsets = new Dictionary<string, uint>();
-            var new_string_offsets = new Dictionary<string, uint>();
-
-            // Add all strings to dictionary
-            for (var i = 0; i < strings.Count; i++)
-            {
-                string_offsets.AddUnique(strings[i].str, strings[i].offset);
-            }
-            for (var i = 0; i < handles.Count; i++)
-            {
-                string_offsets.AddUnique(handles[i].str, handles[i].offset);
-            }
-            for (var i = 0; i < block7.Count; i++)
-            {
-                foreach (var str in block7[i].handles)
+                m_dictionary = new Dictionary<uint, string>();
+                StringBuilder sb = new StringBuilder();
+                uint offset = 0;
+                for (uint i = 0; i < size; i++)
                 {
-                    string_offsets.AddUnique(str, block7[i].handle_name_offset);
-                }
-            }
-
-            // Write all strings
-            foreach (var str in string_offsets)
-            {
-                var newoffset = ((uint) file.BaseStream.Position) - stringbuffer_offset;
-                new_string_offsets.Add(str.Key, newoffset);
-                file.WriteCR2WString(str.Key);
-            }
-
-            headers[0].size = ((uint) file.BaseStream.Position - stringbuffer_offset);
-
-            // Update all offsets
-            for (var i = 0; i < strings.Count; i++)
-            {
-                var newoffset = new_string_offsets.Get(strings[i].str);
-                if (strings[i].offset != newoffset)
-                {
-                    strings[i].offset = newoffset;
-                }
-            }
-            for (var i = 0; i < handles.Count; i++)
-            {
-                var newoffset = new_string_offsets.Get(handles[i].str);
-                if (newoffset != handles[i].offset)
-                {
-                    handles[i].offset = newoffset;
-                }
-            }
-            for (var i = 0; i < block7.Count; i++)
-            {
-                for (var j = 0; j < block7[i].handles.Count; j++)
-                {
-                    var newoffset = new_string_offsets.Get(block7[i].handles[j]);
-                    if (newoffset != block7[i].handle_name_offset)
+                    var b = m_strings[i];
+                    if (b == 0)
                     {
-                        block7[i].handle_name_offset = newoffset;
+                        m_dictionary.Add(offset, sb.ToString());
+                        sb.Clear();
+                        offset = i + 1;
+                    }
+                    else
+                    {
+                        sb.Append((char)b);
                     }
                 }
             }
 
-
-            headers[1].size = (uint) strings.Count;
-            headers[1].offset = (uint) file.BaseStream.Position;
-            for (var i = 0; i < strings.Count; i++)
+            byte[] GetNewStrings()
             {
-                strings[i].Write(file);
+                var newnames = new List<string>();
+                var newstrings = new List<byte>();
+                foreach (CR2WString name in names)
+                {
+                    if (!newnames.Contains(name.str))
+                        newnames.Add(name.str);
+                }
+                foreach (CR2WHandle import in imports)
+                {
+                    if (!newnames.Contains(import.str))
+                        newnames.Add(import.str);
+                }
+                for (var i = 0; i < embedded.Count; i++)
+                {
+                    foreach (var str in embedded[i].handles)
+                    {
+                        if (!newnames.Contains(str))
+                            newnames.Add(str);
+                    }
+                }
+
+                foreach (var str in newnames)
+                {
+                    if (str != null)
+                    {
+                        var bytes = Encoding.Default.GetBytes(str);
+                        foreach (var b in bytes)
+                        {
+                            newstrings.Add(b);
+                        }
+                    }
+                    newstrings.Add((byte)0);
+                }
+
+                return newstrings.ToArray();
             }
 
-            headers[2].size = (uint) handles.Count;
-            headers[2].offset = (uint) file.BaseStream.Position;
-            for (var i = 0; i < handles.Count; i++)
+            void FixExportCRC32(ref CR2WExportHeader export)
             {
-                handles[i].Write(file);
+                m_stream.Seek(export.dataOffset, SeekOrigin.Begin);
+                var m_temp = new byte[export.dataSize];
+                m_stream.Read(m_temp, 0, m_temp.Length);
+                export.crc32 = Crc32Algorithm.Compute(m_temp);
             }
 
-            headers[3].size = (uint) block4.Count;
-            headers[3].offset = (uint) file.BaseStream.Position;
-            for (var i = 0; i < block4.Count; i++)
+            void FixBufferCRC32(ref CR2WBufferHeader buffer)
             {
-                block4[i].Write(file);
+                //This might throw errors, the way it should be checked for is by reading
+                //the object tree to find the deferred data buffers that will point to a buffer.
+                //The flag of the parent object indicates where to read the data from.
+                //For now this is a crude workaround.
+                if (m_hasInternalBuffer)
+                {
+                    m_stream.Seek(buffer.offset, SeekOrigin.Begin);
+                    var m_temp = new byte[buffer.diskSize];
+                    m_stream.Read(m_temp, 0, m_temp.Length);
+                    buffer.crc32 = Crc32Algorithm.Compute(m_temp);
+                }
+                else
+                {
+                    /*var path = String.Format("{0}.{1}.buffer", m_filePath, buffer.index);
+                    if (!File.Exists(path))
+                    {
+                        return;
+                    }
+                    m_temp = File.ReadAllBytes(path);
+                    buffer.crc32 = Crc32Algorithm.Compute(m_temp);*/
+                }
             }
 
-            headers[4].size = (uint) chunks.Count;
-            headers[4].offset = (uint) file.BaseStream.Position;
-            for (var i = 0; i < chunks.Count; i++)
+            uint CalculateHeaderCRC32()
             {
-                chunks[i].offset += headerOffset;
-                chunks[i].Write(file);
-            }
-
-            headers[5].size = (uint) block6.Count;
-            headers[5].offset = (uint) file.BaseStream.Position;
-            for (var i = 0; i < block6.Count; i++)
-            {
-                block6[i].Write(file);
-            }
-
-            headers[6].size = (uint) block7.Count;
-            headers[6].offset = (uint) file.BaseStream.Position;
-            for (var i = 0; i < block7.Count; i++)
-            {
-                block7[i].offset += headerOffset;
-                block7[i].Write(file);
+                var hash = new Crc32Algorithm(false);
+                hash.Append(BitConverter.GetBytes(MAGIC));
+                hash.Append(BitConverter.GetBytes(m_fileheader.version));
+                hash.Append(BitConverter.GetBytes(m_fileheader.flags));
+                hash.Append(BitConverter.GetBytes(m_fileheader.timeStamp));
+                hash.Append(BitConverter.GetBytes(m_fileheader.buildVersion));
+                hash.Append(BitConverter.GetBytes(m_fileheader.fileSize));
+                hash.Append(BitConverter.GetBytes(m_fileheader.bufferSize));
+                hash.Append(BitConverter.GetBytes(DEADBEEF));
+                hash.Append(BitConverter.GetBytes(m_fileheader.numChunks));
+                foreach (var h in m_tableheaders)
+                {
+                    hash.Append(BitConverter.GetBytes(h.offset));
+                    hash.Append(BitConverter.GetBytes(h.size));
+                    hash.Append(BitConverter.GetBytes(h.crc32));
+                }
+                return hash.HashUInt32;
             }
         }
 
-        private void WriteBuffers(BinaryWriter file)
+        private void WriteHeader(BinaryWriter file)
         {
-            var chunkbuffer_offset = file.BaseStream.Position;
+            WriteFileHeader(file);
+
+            #region Write Tables
+            m_tableheaders[1].size = (uint)m_names.Length;
+            m_tableheaders[1].offset = (uint) file.BaseStream.Position;
+            WriteTable<CR2WName>(m_names, 1);
+
+            m_tableheaders[2].size = (uint)m_imports.Length;
+            m_tableheaders[2].offset = (uint) file.BaseStream.Position;
+            WriteTable<CR2WImportHeader>(m_imports, 2);
+
+            m_tableheaders[3].size = (uint)m_table4.Length;
+            m_tableheaders[3].offset = (uint) file.BaseStream.Position;
+            WriteTable<CR2WTable4Item>(m_table4, 3);
+
+            m_tableheaders[4].size = (uint)m_exports.Length;
+            m_tableheaders[4].offset = (uint) file.BaseStream.Position;
+            WriteTable<CR2WExportHeader>(m_exports, 4);
+
+            if (m_buffers.Length > 0)
+            {
+                m_tableheaders[5].size = (uint)m_buffers.Length;
+                m_tableheaders[5].offset = (uint)file.BaseStream.Position;
+                WriteTable<CR2WBufferHeader>(m_buffers, 5);
+            }
+
+            if (m_embedded.Length > 0)
+            {
+                m_tableheaders[6].size = (uint)m_embedded.Length;
+                m_tableheaders[6].offset = (uint)file.BaseStream.Position;
+                WriteTable<CR2WEmbeddedHeader>(m_embedded, 6);
+            }
+            #endregion
+        }
+
+        private void WriteFileHeader(BinaryWriter file)
+        {
+            file.BaseStream.Seek(0, SeekOrigin.Begin);
+
+            WriteStruct<uint>(MAGIC);
+            WriteStruct<CR2WFileHeader>(m_fileheader);
+            WriteStructs<CR2WTableHeader>(m_tableheaders); // offsets change if stringtable changes
+            WriteStringBuffer();
+        }
+
+        private void WriteBuffers(BinaryWriter bw)
+        {
             // Write chunk buffers
             for (var i = 0; i < chunks.Count; i++)
             {
-                chunks[i].WriteData(file);
+                chunks[i].WriteData(bw);
             }
 
             // Write block7
-            for (var i = 0; i < block7.Count; i++)
+            for (var i = 0; i < embedded.Count; i++)
             {
-                block7[i].WriteData(file);
+                embedded[i].WriteData(bw);
             }
 
-            cr2wsize = (uint) file.BaseStream.Position;
+            m_fileheader.fileSize = (uint) bw.BaseStream.Position;
 
             if (bufferdata != null)
             {
-                file.Write(bufferdata);
+                bw.Write(bufferdata);
             }
-            buffersize = (uint) file.BaseStream.Position;
+            m_fileheader.bufferSize = (uint) bw.BaseStream.Position;
+        }
+        #endregion
+
+        #region Table Reading
+        private byte[] ReadStringsBuffer()
+        {
+            var start = m_tableheaders[0].offset;
+            var size = m_tableheaders[0].size;
+            var crc = m_tableheaders[0].crc32;
+
+            var m_temp = new byte[size];
+            m_stream.Read(m_temp, 0, m_temp.Length);
+
+            m_dictionary = new Dictionary<uint, string>();
+            StringBuilder sb = new StringBuilder();
+            uint offset = 0;
+            for (uint i = 0; i < size; i++)
+            {
+                var b = m_temp[i];
+                if (b == 0)
+                {
+                    m_dictionary.Add(offset, sb.ToString());
+                    sb.Clear();
+                    offset = i + 1;
+                }
+                else
+                {
+                    sb.Append((char)b);
+                }
+            }
+
+            return m_temp;
+        }
+        private void WriteStringBuffer()
+        {
+            m_tableheaders[0].crc32 = Crc32Algorithm.Compute(m_strings);
+            m_stream.Write(m_strings, 0, m_strings.Length);
         }
 
+        private T[] ReadTable<T>(int index) where T : struct
+        {
+            m_stream.Seek(m_tableheaders[index].offset, SeekOrigin.Begin);
+
+            var hash = new Crc32Algorithm(false);
+            var table = ReadStructs<T>(m_tableheaders[index].size, hash);
+
+            return table;
+        }
+        private void WriteTable<T>(T[] array, int index) where T : struct
+        {
+            if (array.Length == 0)
+                return;
+
+            var crc = new Crc32Algorithm(false);
+            WriteStructs<T>(array, crc);
+            m_tableheaders[index].crc32 = crc.HashUInt32;
+        }
+        #endregion
+
+        #region Supporting Functions
+        private T ReadStruct<T>(Crc32Algorithm crc32 = null) where T : struct
+        {
+            var size = Marshal.SizeOf<T>();
+
+            var m_temp = new byte[size];
+            m_stream.Read(m_temp, 0, size);
+
+            var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
+            var item = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
+
+            if (crc32 != null)
+                crc32.Append(m_temp);
+
+            handle.Free();
+
+            return item;
+        }
+        private T[] ReadStructs<T>(uint count, Crc32Algorithm crc32 = null) where T : struct
+        {
+            var size = Marshal.SizeOf<T>();
+            var items = new T[count];
+
+            var m_temp = new byte[size];
+            for (uint i = 0; i < count; i++)
+            {
+                m_stream.Read(m_temp, 0, size);
+
+                var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
+                items[i] = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
+
+                if (crc32 != null)
+                    crc32.Append(m_temp);
+
+                handle.Free();
+            }
+
+            return items;
+        }
+        private void WriteStruct<T>(T value, Crc32Algorithm crc32 = null) where T : struct
+        {
+            var m_temp = new byte[Marshal.SizeOf<T>()];
+            var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
+
+            Marshal.StructureToPtr(value, handle.AddrOfPinnedObject(), true);
+            m_stream.Write(m_temp, 0, m_temp.Length);
+
+            if (crc32 != null)
+                crc32.Append(m_temp);
+
+            handle.Free();
+        }
+        private void WriteStructs<T>(T[] array, Crc32Algorithm crc32 = null) where T : struct
+        {
+            var size = Marshal.SizeOf<T>();
+            var m_temp = new byte[size];
+            for (int i = 0; i < array.Length; i++)
+            {
+                var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
+
+                Marshal.StructureToPtr(array[i], handle.AddrOfPinnedObject(), true);
+                m_stream.Write(m_temp, 0, m_temp.Length);
+
+                if (crc32 != null)
+                    crc32.Append(m_temp);
+
+                handle.Free();
+            }
+        }
+        #endregion
+
+        #region Create
         public CR2WChunk CreateChunk(string type, CR2WChunk parent = null)
         {
             var chunk = new CR2WChunk(this);
@@ -496,7 +693,7 @@ namespace WolvenKit.CR2W
             chunk.CreateDefaultData();
             if (parent != null)
             {
-                chunk.ParentChunkId = (uint) chunks.IndexOf(parent) + 1;
+                chunk.ParentChunkId = (uint)chunks.IndexOf(parent) + 1;
             }
 
             chunks.Add(chunk);
@@ -510,7 +707,7 @@ namespace WolvenKit.CR2W
             chunk.data = data;
             if (parent != null)
             {
-                chunk.ParentChunkId = (uint) chunks.IndexOf(parent) + 1;
+                chunk.ParentChunkId = (uint)chunks.IndexOf(parent) + 1;
             }
 
             chunks.Add(chunk);
@@ -519,19 +716,19 @@ namespace WolvenKit.CR2W
 
         public int GetStringIndex(string name, bool addnew = false)
         {
-            for (var i = 0; i < strings.Count; i++)
+            for (var i = 0; i < names.Count; i++)
             {
-                if (strings[i].str == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(strings[i].str)))
+                if (names[i].str == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(names[i].str)))
                     return i;
             }
 
             if (addnew)
             {
-                var newstring = new CR2WHeaderString();
+                var newstring = new CR2WString();
                 newstring.str = name;
-                strings.Add(newstring);
+                names.Add(newstring);
 
-                return strings.Count - 1;
+                return names.Count - 1;
             }
 
             return -1;
@@ -539,22 +736,22 @@ namespace WolvenKit.CR2W
 
         public int GetHandleIndex(string name, ushort filetype, ushort flags, bool addnew = false)
         {
-            for (var i = 0; i < handles.Count; i++)
+            for (var i = 0; i < imports.Count; i++)
             {
-                if (handles[i].filetype == filetype && handles[i].flags == flags &&
-                    (handles[i].str == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(handles[i].str))))
+                if (imports[i].filetype == filetype && imports[i].flags == flags &&
+                    (imports[i].str == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(imports[i].str))))
                     return i;
             }
 
             if (addnew)
             {
-                var newstring = new CR2WHeaderHandle();
+                var newstring = new CR2WHandle();
                 newstring.str = name;
                 newstring.filetype = filetype;
                 newstring.flags = flags;
-                handles.Add(newstring);
+                imports.Add(newstring);
 
-                return handles.Count - 1;
+                return imports.Count - 1;
             }
 
             return -1;
@@ -749,5 +946,6 @@ namespace WolvenKit.CR2W
         {
             return chunks.Remove(chunk);
         }
+        #endregion
     }
 }

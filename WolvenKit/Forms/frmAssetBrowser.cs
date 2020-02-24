@@ -5,13 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Bundles;
 using WolvenKit.Cache;
 using WolvenKit.Common;
 
 namespace WolvenKit
 {
-    public partial class frmAssetBrowser : Form
+    public partial class frmAssetBrowser : DockContent
     {
         public List<string> Autocompletelist;
         public List<IWitcherFile> FileList = new List<IWitcherFile>();
@@ -37,11 +38,15 @@ namespace WolvenKit
         public frmAssetBrowser(List<IWitcherArchive> archives)
         {
             InitializeComponent();
+            pathlistview.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            pathlistview.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
             Managers = archives;
             RootNode = new WitcherTreeNode();
             RootNode.Name = "Root";
             foreach (var arch in archives)
             {
+                if (arch == null)
+                    continue;
                 FileList.AddRange(arch.FileList);
                 RootNode.Directories[arch.RootNode.Name] = arch.RootNode;
                 arch.RootNode.Parent = RootNode;
@@ -77,7 +82,7 @@ namespace WolvenKit
                         Node = node.Parent,
                         Text = "..",
                         IsDirectory = true,
-                        ImageKey = "openFolder"
+                        ImageKey = "FolderOpened"
                     });
                 }
 
@@ -86,7 +91,7 @@ namespace WolvenKit
                     Node = item.Value,
                     Text = item.Key,
                     IsDirectory = true,
-                    ImageKey = "openFolder"
+                    ImageKey = "FolderOpened"
                 }));
 
 
@@ -275,6 +280,10 @@ namespace WolvenKit
             {
                 OpenNode(currentNode);
             }
+            else
+            {
+                OpenNode(RootNode);
+            }
         }
 
         private void textbox_LostFocus(object sender, EventArgs e)
@@ -349,11 +358,27 @@ namespace WolvenKit
             }
             if (currentfolderCheckBox.Checked)
             {
-                return caseCheckBox.Checked 
-                    ? files.Where(item => item.Bundle.FileName.Contains(ActiveNode.Name) && item.Name.ToUpper().Contains(searchkeyword.ToUpper()) &&(item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")).Distinct().Select(x => new Tuple<WitcherListViewItem,IWitcherFile>(new WitcherListViewItem(x),x)).ToArray() 
-                    : files.Where(item => item.Bundle.FileName.Contains(ActiveNode.Name) && item.Name.Contains(searchkeyword) && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")).Distinct().Select(x => new Tuple<WitcherListViewItem,IWitcherFile>(new WitcherListViewItem(x),x)).ToArray();
+                return caseCheckBox.Checked
+                    ? files.Where(item => item.Bundle.FileName.Contains(ActiveNode.Name)
+                        && item.Name.ToUpper().Contains(searchkeyword.ToUpper())
+                        && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")
+                        && (item.Bundle.TypeName == bundletype || bundletype.ToUpper() == "ANY"))
+                    .Distinct().Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray()
+                    : files.Where(item => item.Bundle.FileName.Contains(ActiveNode.Name)
+                        && item.Name.Contains(searchkeyword)
+                        && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")
+                        && (item.Bundle.TypeName == bundletype || bundletype.ToUpper() == "ANY"))
+                    .Distinct().Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray();
             }
-            return caseCheckBox.Checked ? files.Where(item =>  item.Name.ToUpper().Contains(searchkeyword.ToUpper()) && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")).Select(x => new Tuple<WitcherListViewItem,IWitcherFile>(new WitcherListViewItem(x),x)).ToArray() : files.Where(item => item.Name.Contains(searchkeyword) && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")).Select(x => new Tuple<WitcherListViewItem,IWitcherFile>(new WitcherListViewItem(x),x)).ToArray();
+            return caseCheckBox.Checked
+                ? files.Where(item => item.Name.ToUpper().Contains(searchkeyword.ToUpper())
+                    && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")
+                    && (item.Bundle.TypeName == bundletype || bundletype.ToUpper() == "ANY"))
+                    .Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray()
+                : files.Where(item => item.Name.Contains(searchkeyword)
+                    && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")
+                    && (item.Bundle.TypeName == bundletype || bundletype.ToUpper() == "ANY"))
+                    .Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray();
         }
 
         /// <summary>
@@ -658,5 +683,8 @@ namespace WolvenKit
         {
             OpenPath("Root");
         }
+
+
+
     }
 }

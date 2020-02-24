@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RED.CRC32;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
@@ -18,7 +19,7 @@ namespace WolvenKit.CR2W
         public uint offset;
         public uint size;
         public CName typeName;
-        public uint unk4;
+        public uint template;
         public CBytes unknownBytes;
 
         public CR2WChunk(CR2WFile cr2w)
@@ -146,7 +147,7 @@ namespace WolvenKit.CR2W
             ParentChunkId = file.ReadUInt32();
             size = file.ReadUInt32();
             offset = file.ReadUInt32();
-            unk4 = file.ReadUInt32();
+            template = file.ReadUInt32();
             crc = file.ReadUInt32();
         }
 
@@ -207,7 +208,7 @@ namespace WolvenKit.CR2W
             file.Write(ParentChunkId);
             file.Write(size);
             file.Write(offset);
-            file.Write(unk4);
+            file.Write(template);
             file.Write(crc);
         }
 
@@ -236,7 +237,7 @@ namespace WolvenKit.CR2W
 
             chunk.Type = Type;
             chunk.Flags = Flags;
-            chunk.unk4 = unk4;
+            chunk.template = template;
             chunk.crc = crc;
 
             // requires updating from context.chunkTranslation once all chunks are copied.
@@ -252,6 +253,20 @@ namespace WolvenKit.CR2W
             }
 
             return chunk;
+        }
+
+        internal CR2WExportHeader ToCR2WExport()
+        {
+            return new CR2WExportHeader()
+            {
+                className = typeId,
+                objectFlags = Flags,
+                parentID = ParentChunkId,
+                dataSize = size,
+                dataOffset = offset,
+                template = template,
+                crc32 = crc
+            };
         }
     }
 }

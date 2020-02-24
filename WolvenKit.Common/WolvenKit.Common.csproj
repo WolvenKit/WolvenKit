@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WolvenKit.Interfaces</RootNamespace>
     <AssemblyName>WolvenKit.Interfaces</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -96,7 +96,16 @@
     <Compile Include="IWitcherArchiveType.cs" />
     <Compile Include="IWitcherFile.cs" />
     <Compile Include="ObjectDumper.cs" />
+    <Compile Include="ObservableObject.cs" />
     <Compile Include="ProtoList.cs" />
+    <Compile Include="Services\ILoggerService.cs" />
+    <Compile Include="Services\LoggerService.cs" />
+    <Compile Include="Services\LoggerTypes.cs" />
+    <Compile Include="Wcc\enums.cs" />
+    <Compile Include="Wcc\REDAttributes.cs" />
+    <Compile Include="Wcc\wcc_command.cs" />
+    <Compile Include="Wcc\wcc_commands.cs" />
+    <Compile Include="Wcc\wcc_task.cs" />
     <Compile Include="WitcherTreeNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

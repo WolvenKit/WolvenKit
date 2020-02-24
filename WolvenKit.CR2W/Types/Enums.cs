@@ -8,6 +8,189 @@ namespace WolvenKit.CR2W.Types
 {
     public class Enums
     {
+        //Testing Area
+        #region Enums Incomplete
+        //enums without entries
+        public enum ETopLevelAIPriorities { }
+        public enum EModLogLevel { }
+        public enum EStoryBoardActorType { }
+        public enum ESoundAmbientDynamicParameter { }
+        public enum ESkeletonBoneFlags { }
+        public enum ESceneItemEventMode { }
+        public enum EQuestManageFastTravelOperation { }
+        public enum EMovementFlags { }
+        public enum EMeshChunkRenderMask { }
+        public enum ELightCubeSides { }
+        public enum EJournalContentType { }
+        public enum EImmunityFlags { }
+        public enum EHardAttachmentFlags { }
+        public enum EFixBonesHierarchyType { }
+        public enum ECameraLightBitfield { }
+        public enum EBehaviorVarContext { }
+        public enum EArbitratorPriorities { }
+        public enum EAllowedActorGroups { }
+
+        //enums with knowably missing entries
+        public enum ELightUsageMask
+        {
+            LUM_RenderToEnvProbe,
+        }
+        public enum EApertureValue
+        {
+            /*
+             f/1.0 0
+             f/1.4 1
+             f/2.0 2
+             f/2.8 3
+             f/4.0 4
+             f/5.6 5
+             f/8.0 6
+             f/11.0 7
+             f/16.0 8
+             f/22.0 9
+             f/32.0 10
+             */
+        }
+        #endregion
+
+
+        public enum EQuestConditionDLCType
+        {
+            QCDT_Undefined,
+            QCDT_EP1,
+            QCDT_EP2,
+            QCDT_NGP,
+        }
+        public enum EPlayerMutationType
+        {
+            EPMT_None,
+            EPMT_Mutation1,
+            EPMT_Mutation2,
+            EPMT_Mutation3,
+            EPMT_Mutation4,
+            EPMT_Mutation5,
+            EPMT_Mutation6,
+            EPMT_Mutation7,
+            EPMT_Mutation8,
+            EPMT_Mutation9,
+            EPMT_Mutation10,
+            EPMT_Mutation11,
+            EPMT_Mutation12,
+            EPMT_MutationMaster
+        }
+        public enum EMonsterNestType
+        {
+            EMNT_Regular,
+            EMNT_InfestedWineyard
+        }
+        public enum EEP2PoiType
+        {
+            EPT_Default,
+            EPT_Belgard,
+            EPT_Coronata,
+            EPT_Vermentino,
+        }
+        public enum ELanguageCheckType
+        {
+            LCT_Text,
+            LCT_Speech,
+            LCT_TextAndSpeech,
+        }
+        public enum ECheckedLanguage
+        {
+            TL_None,
+            TL_English,
+            TL_Polish,
+            TL_German,
+            TL_Italian,
+            TL_French,
+            TL_Czech,
+            TL_Spanish,
+            TL_Chinese,
+            TL_Russian,
+            TL_Hungarian,
+            TL_Japanese,
+            TL_Turkish,
+            TL_Korean,
+            TL_Brazilian_Portuguese,
+            TL_Latin_American_Spanish,
+            TL_Arabic,
+            TL_Debug,
+        }
+        public enum EItemSelectionPopupMode
+        {
+            EISPM_Default,
+            EISPM_ArmorStand,
+            EISPM_SwordStand,
+            EISPM_Painting,
+        }
+        public enum EInputDeviceType
+        {
+            IDT_Xbox1 = 0,
+            IDT_PS4 = 1,
+            IDT_Steam = 2,
+            IDT_KeyboardMouse = 3,
+            IDT_Tablet = 4,
+            IDT_Unknown = 5
+        }
+        public enum EHudTimeOutAction
+        {
+            EHTOA_Start,
+            EHTOA_Stop,
+            EHTOA_Add,
+        }
+        public enum EHorseMode
+        {
+            EHM_NotSet,
+            EHM_Normal,
+            EHM_Devil,
+            EHM_Unicorn
+        }
+        public enum EGuiSceneControllerRenderFocus
+        {
+            GSCRF_Body,
+            GSCRF_Head,
+            GSCRF_Torso,
+            GSCRF_Legs,
+
+            GSCRF_Max
+        }
+        public enum EFairytaleWitchAction
+        {
+            EFWA_GoBackToFlight
+        }
+        public enum EDismembermentEffectTypeFlag
+        {
+            DETF_Base = 1,
+            DETF_Igni = 2,
+            DETF_Aaard = 4,
+            DETF_Yrden = 8,
+            DETF_Quen = 16,
+            DETF_Mutation6 = 32,
+        }
+        public enum ECursorType
+        {
+            CT_None,
+            CT_Default,
+            CT_Rotate
+        }
+        public enum ECriticalEffectCounterType
+        {
+            CECT_Human,
+            CECT_NonHuman,
+            CECT_Undefined
+        }
+        public enum EAnimalType
+        {
+            EAT_NotSet,
+            EAT_Peacock,
+            EAT_Pheasant
+        }
+        public enum W3TableState
+        {
+            TS_Clue,
+            TS_Table,
+        }
         public enum EPlayerEvadeType
         {
             PET_Roll,

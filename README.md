@@ -1,4 +1,6 @@
 # Wolven-kit
+![Screenshot](/assets/screenshot.png)
+
 [![Build status](https://ci.appveyor.com/api/projects/status/6kdip6nt23gprnnh/branch/master?svg=true)](https://ci.appveyor.com/project/Traderain/wolven-kit/branch/master)
 [![GitHub issues](https://img.shields.io/github/issues/Traderain/Wolven-kit.svg)](https://github.com/Traderain/Wolven-kit/issues)
 [![GitHub forks](https://img.shields.io/github/forks/Traderain/Wolven-kit.svg)](https://github.com/Traderain/Wolven-kit/network)

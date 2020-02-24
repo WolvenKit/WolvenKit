@@ -17,7 +17,8 @@ namespace WolvenKit
             labelCompanyName.Text = AssemblyTrademark;
             
             webBrowser1.DocumentText = $@"
-<html>
+<
+>
     <body bgcolor={ColorTranslator.ToHtml(SystemColors.Control)}>
         <center>
         <h3>Credits</h3> <br>   

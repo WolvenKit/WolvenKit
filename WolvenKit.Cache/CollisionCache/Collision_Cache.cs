@@ -9,8 +9,9 @@ using Ionic.Zlib;
 using LZ4;
 using WolvenKit.Common;
 using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
 
-namespace WolvenKit.Cache.CollisionCache
+namespace WolvenKit.Cache
 {
     public class CollisionCache : IWitcherArchiveType
     {
@@ -20,8 +21,7 @@ namespace WolvenKit.Cache.CollisionCache
 
         public static byte[] Magic = { (byte)'C', (byte)'C', (byte)'3', (byte)'W' };
         public static long Version = 1;
-        public static UInt32 Unknown1 = 0x00000000;
-        public static UInt32 Unknown2 = 0x00000000;
+        public static CDateTime date = new CDateTime(null);
         public uint InfoOffset;
         public uint NumberOfFiles;
         public uint NameTableOffset;
@@ -137,8 +137,7 @@ namespace WolvenKit.Cache.CollisionCache
             if (!br.ReadBytes(4).SequenceEqual(Magic))
                 throw new Exception("Invalid file!");
             Version = br.ReadUInt32();
-            Unknown1 = br.ReadUInt32();
-            Unknown2 = br.ReadUInt32();
+            date.Read(br, 8);
             this.InfoOffset = br.ReadUInt32();
             this.NumberOfFiles = br.ReadUInt32();
             this.NameTableOffset = br.ReadUInt32();
@@ -155,16 +154,18 @@ namespace WolvenKit.Cache.CollisionCache
             {
                 Name = fileName,
                 Bundle = this,
-                Unk1 = br.ReadUInt64(),
-                NameOffset = br.ReadUInt64(),
+
+                NameOffset = br.ReadUInt32(),
+                Unk1 = br.ReadUInt32(),
+                Unk2 = br.ReadUInt64(), //null
                 PageOFfset = br.ReadUInt32(),
                 ZSize = br.ReadUInt32(),
-                Unk2 = br.ReadUInt64(),
-                Unk3 = br.ReadUInt64(),
-                Unk4 = br.ReadUInt64(),
-                Unk5 = br.ReadUInt64(),
-                Unk6 = br.ReadUInt64(),
-                Comtype = br.ReadUInt64()
+                Size = (long)br.ReadUInt32(),
+                Unk3 = br.ReadUInt32(),
+                guid = br.ReadBytes(16),
+                guid2 = br.ReadBytes(16),
+                Comtype = br.ReadByte(),
+                Tail = br.ReadBytes(7)
             }))
             {
                 Console.WriteLine("Filename: " + ci.Name);
@@ -198,8 +199,7 @@ namespace WolvenKit.Cache.CollisionCache
 
                 bw.Write(Magic);
                 bw.Write((UInt32)Version);
-                bw.Write(Unknown1);
-                bw.Write(Unknown2);
+                date.Write(bw);
 
                 if (Version >= 2)
                 {

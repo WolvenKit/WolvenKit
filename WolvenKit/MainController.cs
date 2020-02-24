@@ -17,9 +17,18 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using WolvenKit.Mod;
+using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit
 {
+    public enum EColorThemes
+    {
+        VS2015Light = 0,
+        VS2015Dark = 1,
+        VS2015Blue = 2,
+    }
+
     public class MainController : IVariableEditor, ILocalizedStringSource, INotifyPropertyChanged
     {
         private static MainController mainController;
@@ -32,35 +41,40 @@ namespace WolvenKit
         public string InitialModProject = "";
         public string InitialWKP = "";
 
+        // Color Themes
+        public VisualStudioToolStripExtender ToolStripExtender { get; set; }
+        private readonly List<ThemeBase> _themesList = new List<ThemeBase>() { new VS2015LightTheme(), new VS2015DarkTheme(), new VS2015BlueTheme() };
+        public ThemeBase GetTheme() => _themesList[(int)Configuration.ColorTheme];
+       
         public event PropertyChangedEventHandler PropertyChanged;
 
         private string _projectstatus = "Idle";
         public string ProjectStatus
         {
             get => _projectstatus;
-            set => SetField(ref _projectstatus, value, "ProjectStatus");
+            set => SetField(ref _projectstatus, value, nameof(ProjectStatus));
         }
 
         private string _loadstatus = "Loading...";
         public string loadStatus
         {
             get => _loadstatus;
-            set => SetField(ref _loadstatus, value, "loadStatus");
+            set => SetField(ref _loadstatus, value, nameof(loadStatus));
         }
 
         private bool _loaded = false;
         public bool Loaded
         {
             get => _loaded;
-            set => SetField(ref _loaded, value, "Loaded");
+            set => SetField(ref _loaded, value, nameof(Loaded));
         }
 
 
-        private KeyValuePair<string,frmOutput.Logtype> _logMessage = new KeyValuePair<string, frmOutput.Logtype>("",frmOutput.Logtype.Normal);
-        public KeyValuePair<string, frmOutput.Logtype> LogMessage
+        private KeyValuePair<string,Logtype> _logMessage = new KeyValuePair<string, Logtype>("",Logtype.Normal);
+        public KeyValuePair<string, Logtype> LogMessage
         {
             get => _logMessage;
-            set => SetField(ref _logMessage, value, "LogMessage");
+            set => SetField(ref _logMessage, value, nameof(LogMessage));
         }
 
         /// <summary>
@@ -76,6 +90,7 @@ namespace WolvenKit
         private BundleManager bundleManager;
         private BundleManager modbundleManager;
         private TextureManager textureManager;
+        private CollisionManager collisionManager;
         private TextureManager modTextureManager;
         private W3StringManager w3StringManager;
 
@@ -87,6 +102,7 @@ namespace WolvenKit
         public SoundManager ModSoundManager => modsoundmanager;
         public TextureManager TextureManager => textureManager;
         public TextureManager ModTextureManager => modTextureManager;
+        public CollisionManager CollisionManager => collisionManager;
 
         #endregion
 
@@ -96,7 +112,7 @@ namespace WolvenKit
         /// <param name="name">The name of the file.</param>
         /// <param name="archive">The manager to search for the file in.</param>
         /// <returns></returns>
-        public List<byte[]> ImportFile(string name,IWitcherArchive archive)
+        public static List<byte[]> ImportFile(string name,IWitcherArchive archive)
         {
             List<byte[]> ret = new List<byte[]>();
             archive.FileList.ToList().Where(x => x.Name.Contains(name)).ToList().ForEach(x =>
@@ -114,7 +130,7 @@ namespace WolvenKit
         /// Here we setup stuff we need in every form. Borders etc can be done here in the future.
         /// </summary>
         /// <param name="form">The form to initialize.</param>
-        public void InitForm(Form form)
+        public static void InitForm(Form form)
         {
             Bitmap bmp = WolvenKit.Properties.Resources.Logo_wkit;
             form.Icon = Icon.FromHandle(bmp.GetHicon());
@@ -125,9 +141,9 @@ namespace WolvenKit
         /// </summary>
         /// <param name="msg">The message to log.</param>
         /// <param name="type">The type of the log. Not needed.</param>
-        public void QueueLog(string msg, frmOutput.Logtype type = frmOutput.Logtype.Normal)
+        public void QueueLog(string msg, Logtype type = Logtype.Normal)
         {
-            LogMessage = new KeyValuePair<string, frmOutput.Logtype>(msg, type);
+            LogMessage = new KeyValuePair<string, Logtype>(msg, type);
         }
 
         public string GetLocalizedString(uint val)
@@ -294,6 +310,46 @@ namespace WolvenKit
                     }
                 }
                 #endregion
+
+                loadStatus = "Loading collision manager!";
+                #region Load collision manager
+                if (collisionManager == null)
+                {
+                    try
+                    {
+                        if (File.Exists(Path.Combine(ManagerCacheDir, "collision_cache.json")))
+                        {
+                            using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir, "collision_cache.json")))
+                            {
+                                JsonSerializer serializer = new JsonSerializer();
+                                serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                                serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+                                serializer.TypeNameHandling = TypeNameHandling.Auto;
+                                collisionManager = (CollisionManager)serializer.Deserialize(file, typeof(CollisionManager));
+                            }
+                        }
+                        else
+                        {
+                            collisionManager = new CollisionManager();
+                            collisionManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                            File.WriteAllText(Path.Combine(ManagerCacheDir, "collision_cache.json"), JsonConvert.SerializeObject(collisionManager, Formatting.None, new JsonSerializerSettings()
+                            {
+                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                                TypeNameHandling = TypeNameHandling.Auto
+                            }));
+                        }
+                    }
+                    catch (System.Exception)
+                    {
+                        if (File.Exists(Path.Combine(ManagerCacheDir, "collision_cache.json")))
+                            File.Delete(Path.Combine(ManagerCacheDir, "collision_cache.json"));
+                        collisionManager = new CollisionManager();
+                        collisionManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                    }
+                }
+                #endregion
+
                 loadStatus = "Loading mod texure manager!";
                 #region Load mod texture manager
                 if (modTextureManager == null)
