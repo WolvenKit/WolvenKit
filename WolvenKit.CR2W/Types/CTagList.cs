@@ -16,7 +16,8 @@ namespace WolvenKit.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
-            var count = file.ReadByte();
+            var pos = file.BaseStream.Position;
+            var count = file.ReadBit6();
 
             for (var i = 0; i < count; i++)
             {

@@ -34,6 +34,8 @@ namespace WolvenKit.CR2W.Types
         public enum ELightUsageMask
         {
             LUM_RenderToEnvProbe,
+            LUM_IsInteriorOnly,
+
         }
         public enum EApertureValue
         {

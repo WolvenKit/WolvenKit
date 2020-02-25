@@ -8,12 +8,12 @@ namespace WolvenKit.CR2W.Types
     public class CComponent : CVector
     {
         public CArray attachments;
-        public CUInt32 tail;
+        public CBytes tail;
 
         public CComponent(CR2WFile cr2w) :
             base(cr2w)
         {
-            tail = new CUInt32(cr2w)
+            tail = new CBytes(cr2w)
             {
                 Name = "tail",
             };
@@ -24,20 +24,30 @@ namespace WolvenKit.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
+            var startPos = file.BaseStream.Position;
+
             base.Read(file, size);
 
-            attachments.Read(file, size);
+            var endPos = file.BaseStream.Position;
+            var bytesleft = size - (endPos - startPos);
 
-            tail.val = file.ReadUInt32();
+
+            if (bytesleft > 0)
+            {
+                attachments.Read(file, size);
+                tail.Bytes = file.ReadBytes(4);
+            }
         }
 
         public override void Write(BinaryWriter file)
         {
             base.Write(file);
 
-            attachments.Write(file);
+            //if (attachments.array.Count > 0)
+                attachments.Write(file);
 
-            file.Write(tail.val);
+            if (tail.Bytes.Length > 0)
+                tail.Write(file);
         }
 
         public override CVariable SetValue(object val)
@@ -62,7 +72,8 @@ namespace WolvenKit.CR2W.Types
         {
             var list = new List<IEditableVariable>(variables);
             list.Add(attachments);
-            list.Add(tail);
+            if (tail.Bytes != null)
+                list.Add(tail);
             return list;
         }
     }
