@@ -32,63 +32,82 @@ namespace WolvenKit
         private void InitializeComponent()
         {
             this.listView = new BrightIdeasSoftware.ObjectListView();
-            this.colSize = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.colName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.colUnk3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.colUnk4 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.ImportIndex = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.ImportPath = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.ImportClass = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.Size = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.ClassName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.Handle = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.listView)).BeginInit();
             this.SuspendLayout();
             // 
             // listView
             // 
-            this.listView.AllColumns.Add(this.colSize);
-            this.listView.AllColumns.Add(this.colUnk3);
-            this.listView.AllColumns.Add(this.colUnk4);
-            this.listView.AllColumns.Add(this.colName);
+            this.listView.AllColumns.Add(this.ImportIndex);
+            this.listView.AllColumns.Add(this.ImportPath);
+            this.listView.AllColumns.Add(this.ImportClass);
+            this.listView.AllColumns.Add(this.Size);
+            this.listView.AllColumns.Add(this.ClassName);
+            this.listView.AllColumns.Add(this.Handle);
+            this.listView.AlternateRowBackColor = System.Drawing.Color.LightCyan;
             this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.colSize,
-            this.colUnk3,
-            this.colUnk4,
-            this.colName});
+            this.ImportIndex,
+            this.ImportPath,
+            this.ImportClass,
+            this.Size,
+            this.ClassName,
+            this.Handle});
+            this.listView.Cursor = System.Windows.Forms.Cursors.Default;
             this.listView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView.FullRowSelect = true;
-            this.listView.GridLines = true;
+            this.listView.HideSelection = false;
             this.listView.Location = new System.Drawing.Point(0, 0);
             this.listView.Name = "listView";
             this.listView.ShowGroups = false;
-            this.listView.Size = new System.Drawing.Size(284, 262);
+            this.listView.Size = new System.Drawing.Size(710, 447);
             this.listView.TabIndex = 5;
+            this.listView.UseAlternatingBackColors = true;
             this.listView.UseCompatibleStateImageBehavior = false;
             this.listView.View = System.Windows.Forms.View.Details;
             this.listView.CellClick += new System.EventHandler<BrightIdeasSoftware.CellClickEventArgs>(this.listView_CellClick);
             // 
-            // colSize
+            // ImportIndex
             // 
-            this.colSize.AspectName = "size";
-            this.colSize.Text = "Size";
-            this.colSize.Width = 100;
+            this.ImportIndex.AspectName = "Embedded.importIndex";
+            this.ImportIndex.Text = "ImportIndex";
             // 
-            // colName
+            // ImportPath
             // 
-            this.colName.AspectName = "Handles";
-            this.colName.Text = "Handles";
-            this.colName.Width = 400;
+            this.ImportPath.AspectName = "ImportPath";
+            this.ImportPath.Text = "ImportPath";
             // 
-            // colUnk3
+            // ImportClass
             // 
-            this.colUnk3.AspectName = "unk3";
-            this.colUnk3.Text = "unk3";
+            this.ImportClass.AspectName = "ImportClass";
+            this.ImportClass.Text = "ImportClass";
             // 
-            // colUnk4
+            // Size
             // 
-            this.colUnk4.AspectName = "unk4";
-            this.colUnk4.Text = "unk4";
+            this.Size.AspectName = "Embedded.dataSize";
+            this.Size.Text = "Size";
+            // 
+            // ClassName
+            // 
+            this.ClassName.AspectName = "ClassName";
+            this.ClassName.Text = "ClassName";
+            this.ClassName.Width = 120;
+            // 
+            // Handle
+            // 
+            this.Handle.AspectName = "Handle";
+            this.Handle.FillsFreeSpace = true;
+            this.Handle.Text = "Handle";
             // 
             // frmEmbeddedFiles
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(710, 447);
             this.CloseButton = false;
             this.CloseButtonVisible = false;
             this.Controls.Add(this.listView);
@@ -103,9 +122,11 @@ namespace WolvenKit
         #endregion
 
         private ObjectListView listView;
-        private OLVColumn colSize;
-        private OLVColumn colName;
-        private OLVColumn colUnk3;
-        private OLVColumn colUnk4;
+        private OLVColumn ImportIndex;
+        private OLVColumn Handle;
+        private OLVColumn Size;
+        private OLVColumn ClassName;
+        private OLVColumn ImportPath;
+        private OLVColumn ImportClass;
     }
 }

@@ -21,14 +21,14 @@ namespace WolvenKit.CR2W
         private string m_filePath;
 
         private CR2WFileHeader      m_fileheader;
-        private CR2WTableHeader[]   m_tableheaders;
+        private CR2WTable[]   m_tableheaders;
         private Byte[]              m_strings;
         private CR2WName[]          m_names;
-        private CR2WImportHeader[]        m_imports;
-        private CR2WTable4Item[]    m_table4;
-        private CR2WExportHeader[]        m_exports;
-        private CR2WBufferHeader[]        m_buffers;
-        private CR2WEmbeddedHeader[]      m_embedded;
+        private CR2WImport[]        m_imports;
+        private CR2WProperty[]    m_table4;
+        private CR2WExport[]        m_exports;
+        private CR2WBuffer[]        m_buffers;
+        private CR2WEmbedded[]      m_embedded;
 
         private Dictionary<uint, string> m_dictionary;
         #endregion
@@ -64,15 +64,15 @@ namespace WolvenKit.CR2W
             var dt = new CDateTime(m_fileheader.timeStamp);
 
             m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
-            m_tableheaders = ReadStructs<CR2WTableHeader>(10);
+            m_tableheaders = ReadStructs<CR2WTable>(10);
 
             m_strings   = ReadStringsBuffer();
             m_names     = ReadTable<CR2WName>(1);
-            m_imports   = ReadTable<CR2WImportHeader>(2);
-            m_table4    = ReadTable<CR2WTable4Item>(3);
-            m_exports   = ReadTable<CR2WExportHeader>(4);
-            m_buffers   = ReadTable<CR2WBufferHeader>(5);
-            m_embedded  = ReadTable<CR2WEmbeddedHeader>(6);
+            m_imports   = ReadTable<CR2WImport>(2);
+            m_table4    = ReadTable<CR2WProperty>(3);
+            m_exports   = ReadTable<CR2WExport>(4);
+            m_buffers   = ReadTable<CR2WBuffer>(5);
+            m_embedded  = ReadTable<CR2WEmbedded>(6);
 
             // Fixing
             for (int i = 0; i < m_names.Length; i++)
@@ -89,11 +89,11 @@ namespace WolvenKit.CR2W
 
             WriteStringBuffer();
             WriteTable<CR2WName>(m_names, 1);
-            WriteTable<CR2WImportHeader>(m_imports, 2);
-            WriteTable<CR2WTable4Item>(m_table4, 3);
-            WriteTable<CR2WExportHeader>(m_exports, 4);
-            WriteTable<CR2WBufferHeader>(m_buffers, 5);
-            WriteTable<CR2WEmbeddedHeader>(m_embedded, 6);
+            WriteTable<CR2WImport>(m_imports, 2);
+            WriteTable<CR2WProperty>(m_table4, 3);
+            WriteTable<CR2WExport>(m_exports, 4);
+            WriteTable<CR2WBuffer>(m_buffers, 5);
+            WriteTable<CR2WEmbedded>(m_embedded, 6);
 
             // Write Header again
             m_stream.Seek(0, SeekOrigin.Begin);
@@ -103,7 +103,7 @@ namespace WolvenKit.CR2W
 
             WriteStruct<uint>(MAGIC);
             WriteStruct<CR2WFileHeader>(m_fileheader);
-            WriteStructs<CR2WTableHeader>(m_tableheaders);
+            WriteStructs<CR2WTable>(m_tableheaders);
         }
         #endregion
 
@@ -170,14 +170,14 @@ namespace WolvenKit.CR2W
             var hash = FNV1A32HashAlgorithm.HashString(str);
             name.hash = hash;
         }
-        private void FixExportCRC32(ref CR2WExportHeader export)
+        private void FixExportCRC32(ref CR2WExport export)
         {
             m_stream.Seek(export.dataOffset, SeekOrigin.Begin);
             m_temp = new byte[export.dataSize];
             m_stream.Read(m_temp, 0, m_temp.Length);
             export.crc32 = Crc32Algorithm.Compute(m_temp);
         }
-        private void FixBufferCRC32(ref CR2WBufferHeader buffer)
+        private void FixBufferCRC32(ref CR2WBuffer buffer)
         {
             //This might throw errors, the way it should be checked for is by reading
             //the object tree to find the deferred data buffers that will point to a buffer.

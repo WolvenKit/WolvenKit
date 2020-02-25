@@ -133,7 +133,12 @@ namespace WolvenKit
             Logger.PropertyChanged += LoggerUpdated;
             WccHelper = new WCC_Task(MainController.Get().Configuration.WccLite, Logger);
 
-            
+            Screen screen = Screen.FromControl(this);
+            int x = screen.WorkingArea.X - screen.Bounds.X;
+            int y = screen.WorkingArea.Y - screen.Bounds.Y;
+            this.MaximizedBounds = new Rectangle(x, y,
+                screen.WorkingArea.Width, screen.WorkingArea.Height);
+            this.MaximumSize = screen.WorkingArea.Size;
         }
         #endregion
 
@@ -406,7 +411,7 @@ namespace WolvenKit
             {
                 saveFile(d);
             }
-            AddOutput("All files saved!\n");
+            AddOutput("All files saved!\n", Logtype.Success);
             MainController.Get().ProjectStatus = "Item(s) Saved";
             MainController.Get().ProjectUnsaved = false;
         }
@@ -414,7 +419,7 @@ namespace WolvenKit
         private void saveFile(frmCR2WDocument d)
         {
             d.SaveFile();
-            AddOutput(d.FileName + " saved!\n");
+            AddOutput(d.FileName + " saved!\n", Logtype.Success);
             MainController.Get().ProjectStatus = "Saved";
         }
 
@@ -752,7 +757,7 @@ namespace WolvenKit
                 ResetWindows();
                 UpdateModFileList(true);
                 SaveMod();
-                AddOutput("\"" + ActiveMod.Name + "\" sucesfully created and loaded!\n");
+                AddOutput("\"" + ActiveMod.Name + "\" sucesfully created and loaded!\n", Logtype.Success);
                 break;
             }
         }
@@ -850,7 +855,7 @@ namespace WolvenKit
                 modfile.Close();
                 ResetWindows();
                 UpdateModFileList(true);
-                AddOutput("\"" + ActiveMod.Name + "\" loaded successfully!\n");
+                AddOutput("\"" + ActiveMod.Name + "\" loaded successfully!\n", Logtype.Success);
                 MainController.Get().ProjectStatus = "Ready";
 
                 //Update the recent files.
@@ -1222,7 +1227,7 @@ namespace WolvenKit
             if (hasUnknownBytes)
                 output.Append("-------\n\n");
 
-            AddOutput(output.ToString());
+            AddOutput(output.ToString(), Logtype.Important);
             return doc;
         }
 
@@ -1788,7 +1793,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             if (ActiveDocument != null && !ActiveDocument.IsDisposed)
             {
                 saveFile(ActiveDocument);
-                AddOutput("Saved!\n");
+                AddOutput("Saved!\n", Logtype.Success);
             }
 
         }
@@ -1797,7 +1802,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
         {
             saveAllFiles();
             MainController.Get().ProjectStatus = "Item saved";
-            AddOutput("Saved!\n");
+            AddOutput("Saved!\n", Logtype.Success);
         }
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -2208,13 +2213,6 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
 
         private void RestoreToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Screen screen = Screen.FromControl(this);
-            int x = screen.WorkingArea.X - screen.Bounds.X;
-            int y = screen.WorkingArea.Y - screen.Bounds.Y;
-            this.MaximizedBounds = new Rectangle(x, y,
-                screen.WorkingArea.Width, screen.WorkingArea.Height);
-            this.MaximumSize = screen.WorkingArea.Size;
-
             if (this.WindowState != FormWindowState.Maximized)
             {
                 WindowState = FormWindowState.Maximized;

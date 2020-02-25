@@ -19,7 +19,7 @@ namespace CR2WTests
         public static void Setup(TestContext context)
         {
             mc = new BundleManager();            
-            mc.LoadAll("C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
+            mc.LoadAll("C:\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
         }
 
         // Methods to test for the different file types
@@ -450,10 +450,10 @@ namespace CR2WTests
                                     }
                                     var already = chunkstate[c.Name];
                                     chunkstate[c.Name] = new Tuple<long, long>(
-                                            already.Item1 + c.size,
+                                            already.Item1 + c.Export.dataSize,
                                             already.Item2 + c.unknownBytes.Bytes.Length
                                         );
-                                    totalbytes += c.size;
+                                    totalbytes += c.Export.dataSize;
                                     unknownbytes += c.unknownBytes.Bytes.Length;
                                 }
                             }

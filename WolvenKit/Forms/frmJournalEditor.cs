@@ -52,7 +52,7 @@ namespace WolvenKit
 
         }
 
-        public void ParseImageAndPreview(CR2WChunk chunk)
+        public void ParseImageAndPreview(CR2WExportWrapper chunk)
         {
             var image = chunk.GetVariableByName("image").ToString();
             if (!string.IsNullOrEmpty(image))

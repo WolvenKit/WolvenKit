@@ -356,11 +356,14 @@ namespace WolvenKit
             {
                 var obj = File.ReadVariable(reader);
 
-                obj.Read(reader, (uint) (bytes.Length - bytestart));
-                var v = CreatePropertyLayout(obj);
-                v.Endpos = (int) reader.BaseStream.Position;
-                v.HexValue = bytes[bytestart].ToString("X2");
-                v.Method = "ReadVariable";
+                if (obj != null)
+                {
+                    obj.Read(reader, (uint)(bytes.Length - bytestart));
+                    var v = CreatePropertyLayout(obj);
+                    v.Endpos = (int)reader.BaseStream.Position;
+                    v.HexValue = bytes[bytestart].ToString("X2");
+                    v.Method = "ReadVariable";
+                }
             }
             catch
             {

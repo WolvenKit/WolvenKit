@@ -33,7 +33,7 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
-        public CR2WChunk PtrTarget
+        public CR2WExportWrapper PtrTarget
         {
             get
             {

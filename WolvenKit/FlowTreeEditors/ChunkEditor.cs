@@ -9,7 +9,7 @@ namespace WolvenKit.FlowTreeEditors
 {
     public partial class ChunkEditor : UserControl
     {
-        private CR2WChunk chunk;
+        private CR2WExportWrapper chunk;
         private bool mouseMoving;
         private Point mouseStart;
 
@@ -18,7 +18,7 @@ namespace WolvenKit.FlowTreeEditors
             InitializeComponent();
         }
 
-        public CR2WChunk Chunk
+        public CR2WExportWrapper Chunk
         {
             get { return chunk; }
             set
@@ -89,7 +89,7 @@ namespace WolvenKit.FlowTreeEditors
             FireSelectEvent(Chunk);
         }
 
-        public void FireSelectEvent(CR2WChunk c)
+        public void FireSelectEvent(CR2WExportWrapper c)
         {
             OnSelectChunk?.Invoke(this, new SelectChunkArgs {Chunk = c});
         }

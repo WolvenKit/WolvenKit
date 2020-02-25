@@ -15,7 +15,7 @@ namespace WolvenKit
         private bool listview = false;
         private CR2WFile file;
         //Item1 = parentidx, Item2 = list of childrenidx
-        private List<Tuple<int,List<CR2WChunk>>> chunkHelperList { get; set; } = new List<Tuple<int, List<CR2WChunk>>>();
+        private List<Tuple<int,List<CR2WExportWrapper>>> chunkHelperList { get; set; } = new List<Tuple<int, List<CR2WExportWrapper>>>();
             
         public frmChunkList()
         {
@@ -25,12 +25,12 @@ namespace WolvenKit
             treeListView.ItemSelectionChanged += chunkListView_ItemSelectionChanged;
 
             treeListView.CanExpandGetter = delegate (object x) {
-                var idx = ((CR2WChunk)x).ChunkIndex;
+                var idx = ((CR2WExportWrapper)x).ChunkIndex;
                 return chunkHelperList[idx].Item2.Any() && !listview;
             };
             treeListView.ChildrenGetter = delegate (object x) {
-                var idx = ((CR2WChunk)x).ChunkIndex;
-                return !listview ? chunkHelperList[idx].Item2 : new List<CR2WChunk>();
+                var idx = ((CR2WExportWrapper)x).ChunkIndex;
+                return !listview ? chunkHelperList[idx].Item2 : new List<CR2WExportWrapper>();
             };
         }
 
@@ -57,7 +57,7 @@ namespace WolvenKit
                     var chunk = File.chunks[i];
                     var childIdxList = parentIds.Where(_ => _.Item1.Equals(chunk.ChunkIndex)).Select(_ => _.Item2).ToList();
                     var children = File.chunks.Where(_ => childIdxList.Contains(_.ChunkIndex)).ToList();
-                    chunkHelperList.Add(new Tuple<int, List<CR2WChunk>>((int)chunk.ParentChunkId, children));
+                    chunkHelperList.Add(new Tuple<int, List<CR2WExportWrapper>>((int)chunk.ParentChunkId, children));
                 }
             }
         }
@@ -111,9 +111,9 @@ namespace WolvenKit
 
         private void chunkListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            if (OnSelectChunk != null && (CR2WChunk)treeListView.SelectedObject != null)
+            if (OnSelectChunk != null && (CR2WExportWrapper)treeListView.SelectedObject != null)
             {
-                OnSelectChunk(this, new SelectChunkArgs { Chunk = (CR2WChunk)treeListView.SelectedObject });
+                OnSelectChunk(this, new SelectChunkArgs { Chunk = (CR2WExportWrapper)treeListView.SelectedObject });
             }
         }
 
@@ -150,7 +150,7 @@ namespace WolvenKit
                 var selected = treeListView.SelectedObjects;
                 foreach (var obj in selected)
                 {
-                    File.RemoveChunk((CR2WChunk) obj);
+                    File.RemoveChunk((CR2WExportWrapper) obj);
                 }
 
                 UpdateList();
@@ -165,8 +165,9 @@ namespace WolvenKit
         public void CopyChunks()
         {
             Clipboard.Clear();
-            var chunks = treeListView.SelectedObjects.Cast<CR2WChunk>().ToList();
+            var chunks = treeListView.SelectedObjects.Cast<CR2WExportWrapper>().ToList();
             CopyController.ChunkList = chunks;
+            pasteChunkToolStripMenuItem.Enabled = true;
         }
 
         private void pasteChunkToolStripMenuItem_Click(object sender, EventArgs e)
@@ -183,7 +184,7 @@ namespace WolvenKit
                 {
                     try
                     {
-                        var pastedchunk = CR2WCopyAction.CopyChunk(chunk, file);
+                        var pastedchunk = CR2WCopyAction.CopyChunk(chunk, chunk.CR2WOwner);
                         OnSelectChunk?.Invoke(this, new SelectChunkArgs { Chunk = pastedchunk });
                         MainController.Get().ProjectStatus = "Chunk copied";
                         UpdateList();

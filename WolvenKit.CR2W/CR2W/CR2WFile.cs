@@ -16,58 +16,68 @@ namespace WolvenKit.CR2W
         #region Constructor
         public CR2WFile()
         {
-            names = new List<CR2WString> {new CR2WString()};
-            imports = new List<CR2WHandle>();
-            chunks = new List<CR2WChunk>();
-            //table4 = new List<CR2WHeaderBlock4>();
-            buffers = new List<CR2WBuffer>();
-            embedded = new List<CR2WEmbedded>();
+            names = new List<CR2WNameWrapper>();            //block 1
+            imports = new List<CR2WImportWrapper>();        //block 2
+            chunks = new List<CR2WExportWrapper>();         //block 3
+            properties = new List<CR2WPropertyWrapper>();   //block 4
+            properties = new List<CR2WPropertyWrapper>();   //block 5
+            buffers = new List<CR2WBufferWrapper>();        //block 6
+            embedded = new List<CR2WEmbeddedWrapper>();     //block 7
 
-            m_fileheader = new CR2WFileHeader();
-            m_fileheader.version = 162;
+            m_fileheader = new CR2WFileHeader(){
+                version = 162,
+            };
         }
 
         public CR2WFile(BinaryReader file)
         {
             Read(file);
+            //m_filePath = 
+        }
+        public CR2WFile(byte[] data)
+        {
+            using (var ms = new MemoryStream(data))
+            using (var br = new BinaryReader(ms))
+            {
+                Read(br);
+            }
         }
         #endregion
 
         #region Fields
+        // constants
         private const uint MAGIC = 0x57325243;
         private const uint DEADBEEF = 0xDEADBEEF;
 
+        // IO
+        private CR2WFileHeader m_fileheader;
+        private CR2WTable[] m_tableheaders;
+        private Byte[] m_strings;
+        private Dictionary<uint, string> m_dictionary;
+
+        // misc
+        private uint headerOffset = 0;
         private bool m_hasInternalBuffer;
         private Stream m_stream; //handle this better?
         private string m_filePath;
-
-        private CR2WFileHeader m_fileheader;
-        private CR2WTableHeader[] m_tableheaders;
-        private Byte[] m_strings;
-        private CR2WName[] m_names;
-        private CR2WImportHeader[] m_imports;
-        private CR2WTable4Item[] m_table4;
-        private CR2WExportHeader[] m_exports;
-        private CR2WBufferHeader[] m_buffers;
-        private CR2WEmbeddedHeader[] m_embedded;
-
-        private Dictionary<uint, string> m_dictionary;
-
-        private uint headerOffset;
         #endregion
 
         #region Properties
+        // Tables
+        public List<CR2WNameWrapper> names { get; set; }
+        public List<CR2WImportWrapper> imports { get; set; }
+        public List<CR2WPropertyWrapper> properties { get; set; }
+        public List<CR2WExportWrapper> chunks { get; set; }
+        public List<CR2WBufferWrapper> buffers { get; set; }
+        public List<CR2WEmbeddedWrapper> embedded { get; set; }
+
 
         public List<CLocalizedString> LocalizedStrings = new List<CLocalizedString>();
         public List<string> UnknownTypes = new List<string>();
-        public byte[] bufferdata { get; set; }
+        //public byte[] bufferdata { get; set; }
         public string FileName { get; set; }
 
-        public List<CR2WString> names { get; set; }
-        public List<CR2WHandle> imports { get; set; }
-        public List<CR2WChunk> chunks { get; set; }
-        public List<CR2WBuffer> buffers { get; set; }
-        public List<CR2WEmbedded> embedded { get; set; }
+       
         /// <summary>
         ///     LocalizedStringSource
         /// </summary>
@@ -78,6 +88,7 @@ namespace WolvenKit.CR2W
         /// </summary>
         public IVariableEditor EditorController { get; set; }
         #endregion
+
 
         public string GetLocalizedString(uint val)
         {
@@ -101,6 +112,7 @@ namespace WolvenKit.CR2W
             m_stream = file.BaseStream;
 
             #region Read Headers
+            // read file header
             var id = ReadStruct<uint>();
             if (id != MAGIC)
                 throw new FormatException($"Not a CR2W file, Magic read as 0x{id:X8}");
@@ -112,106 +124,49 @@ namespace WolvenKit.CR2W
             var dt = new CDateTime(m_fileheader.timeStamp);
 
             m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
-            m_tableheaders = ReadStructs<CR2WTableHeader>(10);
-
+            m_tableheaders = ReadStructs<CR2WTable>(10);
+            
+            // read strings
             m_strings = ReadStringsBuffer();
-            m_names = ReadTable<CR2WName>(1);
-            m_imports = ReadTable<CR2WImportHeader>(2);
-            m_table4 = ReadTable<CR2WTable4Item>(3);
-            m_exports = ReadTable<CR2WExportHeader>(4);
-            m_buffers = ReadTable<CR2WBufferHeader>(5);
-            m_embedded = ReadTable<CR2WEmbeddedHeader>(6);
+            
+            // read tables
+            names = ReadTable<CR2WName>(1).Select(_ => new CR2WNameWrapper(_)
+            {
+                str = m_dictionary[_.value],
+            }).ToList();
+            imports = ReadTable<CR2WImport>(2).Select(_ => new CR2WImportWrapper(_)
+            {
+                depotPathStr = m_dictionary[_.depotPath],
+                classNameStr = names[_.className].str,
+            }).ToList();
+            properties = ReadTable<CR2WProperty>(3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
+            chunks = ReadTable<CR2WExport>(4).Select(_ => new CR2WExportWrapper(this, _)
+            {
+                //ParentChunkId = _.parentID
+            }).ToList();
+            buffers = ReadTable<CR2WBuffer>(5).Select(_ => new CR2WBufferWrapper(_)).ToList();
+            embedded = ReadTable<CR2WEmbedded>(6).Select(_ => new CR2WEmbeddedWrapper(_)
+            {
+                ParentImports = imports,
+                Handle = m_dictionary[_.path],
+            }).ToList();
             #endregion
 
             #region Read Data
-            // read Name data
-            names = (from n in m_names
-                        let str = new CR2WString()
-                        {
-                            hash = n.hash,
-                            offset = n.value,
-                            str = m_dictionary[n.value]
-                        }
-                        select str).ToList();
-            // Read Handle data (imports)
-            imports = (from i in m_imports
-                       let handle = new CR2WHandle()
-                       {
-                           offset = i.depotPath,
-                           filetype = i.className,
-                           flags = i.flags,
-                           str = m_dictionary[i.depotPath]
-                       }
-                       select handle).ToList();
-            // Read Chunk data (exports)
-            chunks = new List<CR2WChunk>();
-            foreach (var c in m_exports)
+            // Read object data //block 5
+            foreach (var chunk in chunks)
             {
-                var chunk = new CR2WChunk(this)
-                      {
-                          typeId = c.className,
-                          Flags = c.objectFlags,
-                          ParentChunkId = c.parentID,
-                          size = c.dataSize,
-                          offset = c.dataOffset,
-                          template = c.template,
-                          crc = c.crc32
-                      };
-                chunks.Add(chunk);
                 chunk.ReadData(file);
             }
-
-            // Read Buffer Data (block 6)
-            buffers = new List<CR2WBuffer>();
-            foreach (var b in m_buffers)
+            // Read buffer data //block 6
+            foreach (var buffer in buffers)
             {
-                var buffer = new CR2WBuffer()
-                       {
-                           flags = b.flags,
-                           index = b.index,
-                           offset = b.offset,
-                           size = b.diskSize,
-                           memsize = b.memSize,
-                           crc = b.crc32
-                       };
-                buffers.Add(buffer);
+                buffer.ReadData(file);
             }
-            // Read Embedded Data (Block 7)
-            embedded = new List<CR2WEmbedded>();
-            foreach (var e in m_embedded)
+            // Read embedded files //block 7
+            foreach (var emb in embedded)
             {
-                var emb = new CR2WEmbedded()
-                        {
-                            handle_name_count = e.importIndex,
-                            handle_name_offset = e.path,
-                            pathHash = e.pathHash,
-                            offset = e.dataOffset,
-                            size = e.dataSize
-                        };
-                var offset = e.path;
-                for (int i = 0; i < e.importIndex; i++)
-                {
-                    if (offset > m_dictionary.Last().Key)
-                    {
-                        continue;
-                    }
-                    emb.handles.Add(m_dictionary[offset]);
-                    offset += (uint)m_dictionary[offset].Length + 1;
-                }
-                embedded.Add(emb);
                 emb.ReadData(file);
-            }
-            #endregion
-
-            #region Read Buffer
-
-            file.BaseStream.Seek(m_fileheader.fileSize, SeekOrigin.Begin);
-
-            var actualbuffersize = (int) (m_fileheader.bufferSize - m_fileheader.fileSize);
-            if (actualbuffersize > 0)
-            {
-                bufferdata = new byte[actualbuffersize];
-                file.BaseStream.Read(bufferdata, 0, actualbuffersize);
             }
             #endregion
 
@@ -287,37 +242,28 @@ namespace WolvenKit.CR2W
             for (var i = 0; i < names.Count; i++)
             {
                 var newoffset = inverseDictionary[names[i].str];
-                if (names[i].offset != newoffset)
+                if (names[i].Name.value != newoffset)
                 {
-                    names[i].offset = newoffset;
+                    names[i].SetOffset(newoffset);
                 }
             }
             for (var i = 0; i < imports.Count; i++)
             {
-                var newoffset = inverseDictionary[imports[i].str];
-                if (newoffset != imports[i].offset)
+                var newoffset = inverseDictionary[imports[i].depotPathStr];
+                if (newoffset != imports[i].Import.depotPath)
                 {
-                    imports[i].offset = newoffset;
+                    imports[i].SetOffset(newoffset);
                 }
             }
             for (var i = 0; i < embedded.Count; i++)
             {
-                for (var j = 0; j < embedded[i].handles.Count; j++)
+                var newoffset = inverseDictionary[embedded[i].Handle];
+                if (newoffset != embedded[i].Embedded.path)
                 {
-                    var newoffset = inverseDictionary[embedded[i].handles[j]];
-                    if (newoffset != embedded[i].handle_name_offset)
-                    {
-                        embedded[i].handle_name_offset = newoffset;
-                    }
+                    embedded[i].SetOffset(newoffset);
                 }
             }
             
-            m_names = names.Select(_ => _.ToCR2WName()).ToArray();
-            m_imports = imports.Select(_ => _.ToCR2WImport()).ToArray();
-            //m_table4 = table4.Select(_ => _.ToCR2WTable4Item()).ToArray();
-            m_exports = chunks.Select(_ => _.ToCR2WExport()).ToArray();
-            m_buffers = buffers.Select(_ => _.ToCR2WBuffer()).ToArray();
-            m_embedded = embedded.Select(_ => _.ToCR2WEmbedded()).ToArray();
             #endregion
 
             headerOffset = 0;
@@ -339,25 +285,25 @@ namespace WolvenKit.CR2W
             }
 
             #region Update Offsets
-            m_exports = chunks.Select(_ => _.ToCR2WExport()).ToArray();
-            m_embedded = embedded.Select(_ => _.ToCR2WEmbedded()).ToArray();
 
-            for (var i = 0; i < m_exports.Length; i++)
+            for (var i = 0; i < chunks.Count; i++)
             {
-                m_exports[i].dataOffset += headerOffset;
+                var newoffset = chunks[i].Export.dataOffset + headerOffset;
+                chunks[i].SetOffset(newoffset);
             }
-            for (var i = 0; i < m_embedded.Length; i++)
+            for (var i = 0; i < embedded.Count; i++)
             {
-                m_embedded[i].dataOffset += headerOffset;
+                var newoffset = embedded[i].Embedded.dataOffset + headerOffset;
+                embedded[i].SetOffset(newoffset);
             }
             m_fileheader.fileSize += headerOffset;
             m_fileheader.bufferSize += headerOffset;
             #endregion
 
-            for (int i = 0; i < m_exports.Length; i++)
-                FixExportCRC32(ref m_exports[i]);
-            for (int i = 0; i < m_buffers.Length; i++)
-                FixBufferCRC32(ref m_buffers[i]);
+            for (int i = 0; i < chunks.Count; i++)
+                FixExportCRC32(chunks[i].Export);
+            for (int i = 0; i < buffers.Count; i++)
+                FixBufferCRC32(buffers[i].Buffer);
 
             // Write headers again with fixed offsets
             //m_fileheader.crc32 = CalculateHeaderCRC32();
@@ -397,23 +343,20 @@ namespace WolvenKit.CR2W
             {
                 var newnames = new List<string>();
                 var newstrings = new List<byte>();
-                foreach (CR2WString name in names)
+                foreach (CR2WNameWrapper name in names)
                 {
                     if (!newnames.Contains(name.str))
                         newnames.Add(name.str);
                 }
-                foreach (CR2WHandle import in imports)
+                foreach (CR2WImportWrapper import in imports)
                 {
-                    if (!newnames.Contains(import.str))
-                        newnames.Add(import.str);
+                    if (!newnames.Contains(import.depotPathStr))
+                        newnames.Add(import.depotPathStr);
                 }
-                for (var i = 0; i < embedded.Count; i++)
+                foreach (CR2WEmbeddedWrapper emb in embedded)
                 {
-                    foreach (var str in embedded[i].handles)
-                    {
-                        if (!newnames.Contains(str))
-                            newnames.Add(str);
-                    }
+                    if (!newnames.Contains(emb.Handle))
+                            newnames.Add(emb.Handle);
                 }
 
                 foreach (var str in newnames)
@@ -432,7 +375,7 @@ namespace WolvenKit.CR2W
                 return newstrings.ToArray();
             }
 
-            void FixExportCRC32(ref CR2WExportHeader export)
+            void FixExportCRC32(CR2WExport export) //FIXME do I wann keep the ref?
             {
                 m_stream.Seek(export.dataOffset, SeekOrigin.Begin);
                 var m_temp = new byte[export.dataSize];
@@ -440,7 +383,7 @@ namespace WolvenKit.CR2W
                 export.crc32 = Crc32Algorithm.Compute(m_temp);
             }
 
-            void FixBufferCRC32(ref CR2WBufferHeader buffer)
+            void FixBufferCRC32(CR2WBuffer buffer) //FIXME do I wann keep the ref?
             {
                 //This might throw errors, the way it should be checked for is by reading
                 //the object tree to find the deferred data buffers that will point to a buffer.
@@ -492,34 +435,34 @@ namespace WolvenKit.CR2W
             WriteFileHeader(file);
 
             #region Write Tables
-            m_tableheaders[1].size = (uint)m_names.Length;
+            m_tableheaders[1].size = (uint)names.Count;
             m_tableheaders[1].offset = (uint) file.BaseStream.Position;
-            WriteTable<CR2WName>(m_names, 1);
+            WriteTable<CR2WName>(names.Select(_ => _.Name).ToArray(), 1);
 
-            m_tableheaders[2].size = (uint)m_imports.Length;
+            m_tableheaders[2].size = (uint)imports.Count;
             m_tableheaders[2].offset = (uint) file.BaseStream.Position;
-            WriteTable<CR2WImportHeader>(m_imports, 2);
+            WriteTable<CR2WImport>(imports.Select(_ => _.Import).ToArray(), 2);
 
-            m_tableheaders[3].size = (uint)m_table4.Length;
+            m_tableheaders[3].size = (uint)properties.Count;
             m_tableheaders[3].offset = (uint) file.BaseStream.Position;
-            WriteTable<CR2WTable4Item>(m_table4, 3);
+            WriteTable<CR2WProperty>(properties.Select(_ => _.Property).ToArray(), 3);
 
-            m_tableheaders[4].size = (uint)m_exports.Length;
+            m_tableheaders[4].size = (uint)chunks.Count;
             m_tableheaders[4].offset = (uint) file.BaseStream.Position;
-            WriteTable<CR2WExportHeader>(m_exports, 4);
+            WriteTable<CR2WExport>(chunks.Select(_ => _.Export).ToArray(), 4);
 
-            if (m_buffers.Length > 0)
+            if (buffers.Count > 0)
             {
-                m_tableheaders[5].size = (uint)m_buffers.Length;
+                m_tableheaders[5].size = (uint)buffers.Count;
                 m_tableheaders[5].offset = (uint)file.BaseStream.Position;
-                WriteTable<CR2WBufferHeader>(m_buffers, 5);
+                WriteTable<CR2WBuffer>(buffers.Select(_ => _.Buffer).ToArray(), 5);
             }
 
-            if (m_embedded.Length > 0)
+            if (embedded.Count > 0)
             {
-                m_tableheaders[6].size = (uint)m_embedded.Length;
+                m_tableheaders[6].size = (uint)embedded.Count;
                 m_tableheaders[6].offset = (uint)file.BaseStream.Position;
-                WriteTable<CR2WEmbeddedHeader>(m_embedded, 6);
+                WriteTable<CR2WEmbedded>(embedded.Select(_ => _.Embedded).ToArray(), 6);
             }
             #endregion
         }
@@ -530,19 +473,18 @@ namespace WolvenKit.CR2W
 
             WriteStruct<uint>(MAGIC);
             WriteStruct<CR2WFileHeader>(m_fileheader);
-            WriteStructs<CR2WTableHeader>(m_tableheaders); // offsets change if stringtable changes
+            WriteStructs<CR2WTable>(m_tableheaders); // offsets change if stringtable changes
             WriteStringBuffer();
         }
 
         private void WriteBuffers(BinaryWriter bw)
         {
-            // Write chunk buffers
+            // Write chunk data
             for (var i = 0; i < chunks.Count; i++)
             {
                 chunks[i].WriteData(bw);
             }
-
-            // Write block7
+            // Write embedded data
             for (var i = 0; i < embedded.Count; i++)
             {
                 embedded[i].WriteData(bw);
@@ -550,10 +492,15 @@ namespace WolvenKit.CR2W
 
             m_fileheader.fileSize = (uint) bw.BaseStream.Position;
 
-            if (bufferdata != null)
+            //Write Buffer data
+            for (var i = 0; i < buffers.Count; i++)
+            {
+                buffers[i].WriteData(bw);
+            }
+            /*if (bufferdata != null)
             {
                 bw.Write(bufferdata);
-            }
+            }*/
             m_fileheader.bufferSize = (uint) bw.BaseStream.Position;
         }
         #endregion
@@ -686,9 +633,9 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Create
-        public CR2WChunk CreateChunk(string type, CR2WChunk parent = null)
+        public CR2WExportWrapper CreateChunk(string type, CR2WExportWrapper parent = null)
         {
-            var chunk = new CR2WChunk(this);
+            var chunk = new CR2WExportWrapper(this);
             chunk.Type = type;
             chunk.CreateDefaultData();
             if (parent != null)
@@ -700,9 +647,9 @@ namespace WolvenKit.CR2W
             return chunk;
         }
 
-        public CR2WChunk CreateChunk(string type, CVariable data, CR2WChunk parent = null)
+        public CR2WExportWrapper CreateChunk(string type, CVariable data, CR2WExportWrapper parent = null)
         {
-            var chunk = new CR2WChunk(this);
+            var chunk = new CR2WExportWrapper(this);
             chunk.Type = type;
             chunk.data = data;
             if (parent != null)
@@ -724,7 +671,7 @@ namespace WolvenKit.CR2W
 
             if (addnew)
             {
-                var newstring = new CR2WString();
+                var newstring = new CR2WNameWrapper();
                 newstring.str = name;
                 names.Add(newstring);
 
@@ -738,18 +685,27 @@ namespace WolvenKit.CR2W
         {
             for (var i = 0; i < imports.Count; i++)
             {
-                if (imports[i].filetype == filetype && imports[i].flags == flags &&
-                    (imports[i].str == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(imports[i].str))))
+                if (imports[i].Import.className == filetype 
+                    && imports[i].Import.flags == flags 
+                    && (imports[i].depotPathStr == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(imports[i].depotPathStr))))
                     return i;
             }
 
             if (addnew)
             {
-                var newstring = new CR2WHandle();
-                newstring.str = name;
-                newstring.filetype = filetype;
-                newstring.flags = flags;
-                imports.Add(newstring);
+                // we can leave the depotpath 0 here, it will get updated on file write
+                // value is the offset in the stringtable, which gets re-written on file write
+                // a better solution might be to dynamically update the string table 
+                var import = new CR2WImport()
+                {
+                    flags = flags,
+                    depotPath = 0, 
+                    className = filetype
+                };
+                imports.Add(new CR2WImportWrapper(import)
+                {
+                    depotPathStr = name,
+                });
 
                 return imports.Count - 1;
             }
@@ -757,7 +713,7 @@ namespace WolvenKit.CR2W
             return -1;
         }
 
-        public CR2WChunk GetChunkByType(string type)
+        public CR2WExportWrapper GetChunkByType(string type)
         {
             for (var i = 0; i < chunks.Count; i++)
             {
@@ -768,7 +724,7 @@ namespace WolvenKit.CR2W
             return null;
         }
 
-        public CVector CreateVector(CR2WChunk in_chunk, string type, string varname = "")
+        public CVector CreateVector(CR2WExportWrapper in_chunk, string type, string varname = "")
         {
             var var = CreateVector(type, varname);
             in_chunk.data.AddVariable(var);
@@ -797,7 +753,7 @@ namespace WolvenKit.CR2W
             return var;
         }
 
-        public CVariable CreateVariable(CR2WChunk in_chunk, string type, string varname = "")
+        public CVariable CreateVariable(CR2WExportWrapper in_chunk, string type, string varname = "")
         {
             var var = CreateVariable(type, varname);
             in_chunk.data.AddVariable(var);
@@ -833,7 +789,7 @@ namespace WolvenKit.CR2W
             return var;
         }
 
-        public CHandle CreateHandle(CR2WChunk in_chunk, string type, string handle, string varname = "")
+        public CHandle CreateHandle(CR2WExportWrapper in_chunk, string type, string handle, string varname = "")
         {
             var var = CreateHandle(type, handle, varname);
             in_chunk.data.AddVariable(var);
@@ -879,7 +835,7 @@ namespace WolvenKit.CR2W
             return var;
         }
 
-        public CSoft CreateSoft(CR2WChunk in_chunk, string type, string handle, string varname = "")
+        public CSoft CreateSoft(CR2WExportWrapper in_chunk, string type, string handle, string varname = "")
         {
             var var = CreateSoft(type, handle, varname);
             in_chunk.data.AddVariable(var);
@@ -908,28 +864,28 @@ namespace WolvenKit.CR2W
             return ptr;
         }
 
-        public CPtr CreatePtr(CArray in_array, CR2WChunk to_chunk, string varname = "")
+        public CPtr CreatePtr(CArray in_array, CR2WExportWrapper to_chunk, string varname = "")
         {
             var var = CreatePtr("", to_chunk, varname);
             in_array.AddVariable(var);
             return var;
         }
 
-        public CPtr CreatePtr(CVector in_vector, string type, CR2WChunk to_chunk, string varname = "")
+        public CPtr CreatePtr(CVector in_vector, string type, CR2WExportWrapper to_chunk, string varname = "")
         {
             var var = CreatePtr(type, to_chunk, varname);
             in_vector.AddVariable(var);
             return var;
         }
 
-        public CPtr CreatePtr(CR2WChunk in_chunk, string type, CR2WChunk to_chunk, string varname = "")
+        public CPtr CreatePtr(CR2WExportWrapper in_chunk, string type, CR2WExportWrapper to_chunk, string varname = "")
         {
             var var = CreatePtr(type, to_chunk, varname);
             in_chunk.data.AddVariable(var);
             return var;
         }
 
-        public CPtr CreatePtr(string type, CR2WChunk tochunk, string varname = "")
+        public CPtr CreatePtr(string type, CR2WExportWrapper tochunk, string varname = "")
         {
             var ptr = new CPtr(this);
             ptr.Name = varname;
@@ -942,7 +898,7 @@ namespace WolvenKit.CR2W
             return ptr;
         }
 
-        public bool RemoveChunk(CR2WChunk chunk)
+        public bool RemoveChunk(CR2WExportWrapper chunk)
         {
             return chunks.Remove(chunk);
         }

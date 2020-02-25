@@ -90,18 +90,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CR2WChunk.cs" />
-    <Compile Include="CR2WCopyAction.cs" />
-    <Compile Include="CR2WFile.cs" />
-    <Compile Include="CR2WHeaderBlock4.cs" />
-    <Compile Include="CR2WBuffer.cs" />
-    <Compile Include="CR2WEmbedded.cs" />
-    <Compile Include="CR2WHeaderData.cs" />
-    <Compile Include="CR2WHandle.cs" />
-    <Compile Include="CR2WString.cs" />
-    <Compile Include="CR2WHeaderStructs.cs" />
-    <Compile Include="CR2WReaderExtensions.cs" />
-    <Compile Include="CR2WVerify.cs" />
+    <Compile Include="CR2W\CR2WBuffer.cs" />
+    <Compile Include="CR2W\CR2WCopyAction.cs" />
+    <Compile Include="CR2W\CR2WEmbedded.cs" />
+    <Compile Include="CR2W\CR2WExport.cs" />
+    <Compile Include="CR2W\CR2WFile.cs" />
+    <Compile Include="CR2W\CR2WHeaderData.cs" />
+    <Compile Include="CR2W\CR2WHeaderStructs.cs" />
+    <Compile Include="CR2W\CR2WImport.cs" />
+    <Compile Include="CR2W\CR2WName.cs" />
+    <Compile Include="CR2W\CR2WProperty.cs" />
+    <Compile Include="CR2W\CR2WReaderExtensions.cs" />
+    <Compile Include="CR2W\CR2WVerify.cs" />
     <Compile Include="CRC32\Crc32Algorithm.cs" />
     <Compile Include="CRC32\Crc32CAlgorithm.cs" />
     <Compile Include="CRC32\MismatchCRC32Exception.cs" />
@@ -169,7 +169,7 @@
     <Compile Include="Types\CLocalizedString.cs" />
     <Compile Include="Types\CMaterialGraph.cs" />
     <Compile Include="Types\CMaterialInstance.cs" />
-    <Compile Include="Types\CMeshComponent.cs" />
+    <Compile Include="Types\CComponent.cs" />
     <Compile Include="Types\CName.cs" />
     <Compile Include="Types\CParticleEmitter.cs" />
     <Compile Include="Types\CPtr.cs" />

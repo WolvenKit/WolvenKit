@@ -15,7 +15,7 @@ namespace WolvenKit.Cache
         /// Convert a CBitmapTexture's image to a DDS image
         /// </summary>
         /// <returns>A proper dds file</returns>
-        public static Bitmap Xbm2Dds(CR2WChunk imagechunk)
+        public static Bitmap Xbm2Dds(CR2WExportWrapper imagechunk)
         {
             try
             {

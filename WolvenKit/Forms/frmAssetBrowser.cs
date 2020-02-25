@@ -315,7 +315,7 @@ namespace WolvenKit
             foreach (var file in found)
             {
                 var listItem = new WitcherListViewItem(file.Item2);
-                listItem.SubItems.Add(file.Item2.ToString());
+                listItem.SubItems.Add(file.Item2.Size.ToString());
                 listItem.SubItems.Add($"{(100 - (int) (file.Item2.ZSize/(float)file.Item2.Size*100.0f))}%");
                 listItem.SubItems.Add(file.Item2.CompressionType);
                 listItem.SubItems.Add(file.Item2.Bundle.TypeName);
