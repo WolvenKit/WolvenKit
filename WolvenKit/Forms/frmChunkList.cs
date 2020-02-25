@@ -104,6 +104,11 @@ namespace WolvenKit
             
         }
 
+        private void contextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            pasteChunkToolStripMenuItem.Enabled = CopyController.ChunkList != null && CopyController.ChunkList.Count > 0;
+        }
+
         private void chunkListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             if (OnSelectChunk != null && (CR2WExportWrapper)treeListView.SelectedObject != null)

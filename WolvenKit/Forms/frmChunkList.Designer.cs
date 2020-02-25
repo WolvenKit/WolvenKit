@@ -61,6 +61,7 @@ namespace WolvenKit
             this.pasteChunkToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(190, 132);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // addChunkToolStripMenuItem
             // 
@@ -85,7 +86,6 @@ namespace WolvenKit
             // 
             // pasteChunkToolStripMenuItem
             // 
-            this.pasteChunkToolStripMenuItem.Enabled = false;
             this.pasteChunkToolStripMenuItem.Name = "pasteChunkToolStripMenuItem";
             this.pasteChunkToolStripMenuItem.Size = new System.Drawing.Size(189, 32);
             this.pasteChunkToolStripMenuItem.Text = "Paste Chunk";
