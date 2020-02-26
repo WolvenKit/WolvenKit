@@ -87,6 +87,11 @@ namespace WolvenKit.CR2W
             };
 
         }
+
+        public CVariable CreateDefaultVariable()
+        {
+            return null;
+        }
         #endregion
 
         #region Properties

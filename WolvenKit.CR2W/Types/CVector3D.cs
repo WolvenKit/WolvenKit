@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using WolvenKit.CR2W.Editors;
 
@@ -91,7 +92,7 @@ namespace WolvenKit.CR2W.Types
 
         public override string ToString()
         {
-            return "CVector3D";
+            return String.Format(CultureInfo.InvariantCulture, "V3[{0:0.00}, {1:0.00}, {2:0.00}]", x.val, y.val, z.val);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace CR2WTests
         public static void Setup(TestContext context)
         {
             mc = new BundleManager();            
-            mc.LoadAll("C:\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
+            mc.LoadAll("D:\\SteamLibrary\\steamapps\\common\\The Witcher 3\\bin\\x64");
         }
 
         // Methods to test for the different file types
@@ -444,12 +444,12 @@ namespace CR2WTests
                                 unknownclasses.AddRange(crw.UnknownTypes);
                                 foreach (var c in crw.chunks)
                                 {
-                                    if (!chunkstate.ContainsKey(c.Name))
+                                    if (!chunkstate.ContainsKey(c.Type))
                                     {
-                                        chunkstate.Add(c.Name, new Tuple<long, long>(0, 0));
+                                        chunkstate.Add(c.Type, new Tuple<long, long>(0, 0));
                                     }
-                                    var already = chunkstate[c.Name];
-                                    chunkstate[c.Name] = new Tuple<long, long>(
+                                    var already = chunkstate[c.Type];
+                                    chunkstate[c.Type] = new Tuple<long, long>(
                                             already.Item1 + c.Export.dataSize,
                                             already.Item2 + c.unknownBytes.Bytes.Length
                                         );
@@ -473,9 +473,15 @@ namespace CR2WTests
             Console.WriteLine($"Classes: ");
             foreach (var c in chunkstate)
             {
-                Console.WriteLine($"\t- {c.Key} - {(((double)c.Value.Item2 - (double)c.Value.Item1) / (double)c.Value.Item1).ToString("0.00%")}");
+                Console.WriteLine($"\t- {c.Key} {(((double)c.Value.Item2 - (double)c.Value.Item1) / (double)c.Value.Item1).ToString("0.00%")}");
             }
-            Assert.AreEqual(0, unknownbytes);
+            Console.WriteLine("Files unparsed:");
+            foreach(var f in unparsedfiles)
+            {
+                Console.WriteLine($"\t-{f}");
+            }
+            Assert.AreEqual(0, unknownbytes, $"Unknown bytes remained -> {unknownbytes}bytes");
+            Assert.AreEqual(0, unparsedfiles.Count, $"Unparsed files -> {unparsedfiles}");
         }
     }
 }

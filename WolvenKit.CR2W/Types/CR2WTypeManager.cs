@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -564,15 +564,9 @@ namespace WolvenKit.CR2W.Types
             // Testing area. Put your CVectors which don't work fully yet here.
 #if DEBUG
             // *.w2p
-            //Register("CParticleEmitter", new CParticleEmitter(null));
+            Register("CParticleEmitter", new CParticleEmitter(null));
             Register("CDecalSpawner", new CDecalSpawner(null));
-            //Register("SSeedKeyValue", new SSeedKeyValue(null)); //sw3dg1n: disabled as this causes an exception when reading w2p files
-            //Register("SDynamicDecalMaterialInfo", new SDynamicDecalMaterialInfo(null)); //rfuzzo: disabled because it couldn't read the stream
-            Register("SParticleEmitterLODLevel", new SParticleEmitterLODLevel(null));
-            Register("EmitterDelaySettings", new EmitterDelaySettings(null));
-            Register("EmitterDurationSettings", new EmitterDurationSettings(null));
-            //Register("CParticleSystem", new CParticleSystem(null)); //sw3dg1n: disabled as this causes an exception when reading w2p files
-
+            
             // *.w2l
             Register("CLayerInfo", new CLayerInfo(null));
             Register("SBoneIndiceMapping", new SBoneIndiceMapping(null));
@@ -3248,6 +3242,7 @@ namespace WolvenKit.CR2W.Types
                 "CxplorationTransitionTurnToJump",
                 "DebuffProjectile",
                 "EP1Chandelier",
+                "EmitterDelaySettings",
                 "EmitterDurationSettings",
                 "EntitySlot",
                 "EntitySlot",
@@ -3264,6 +3259,8 @@ namespace WolvenKit.CR2W.Types
                 "ISpawnTreeSetLootInitializer",
                 "ISpawnTreeSpawnAroundNodeInitializer",
                 "Matrix",
+                "ParticleBurst",
+                "ParticleBurst",
                 "PoisonProjectile",
                 "QuestScriptParam",
                 "StorySceneCameraDefinition",
@@ -3311,6 +3308,7 @@ namespace WolvenKit.CR2W.Types
                 "SMapPinType",
                 "SMeshSoundInfo",
                 "SParticleEmitterLODLevel",
+                "SSeedKeyValue",
                 "SSSBoneTransform",
                 "SStorySceneAttachmentInfo",
                 "SStorySceneCameraLightMod",

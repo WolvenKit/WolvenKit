@@ -130,16 +130,20 @@
     </Compile>
     <Compile Include="FNV1A\FNV1A32HashAlgorithm.cs" />
     <Compile Include="FNV1A\FNV1A64HashAlgorithm.cs" />
+    <Compile Include="Types\CBuffer.cs" />
     <Compile Include="Types\CCubeTexture.cs" />
     <Compile Include="Types\CDecalSpawne.cs" />
+    <Compile Include="Types\CEvaluatorFloatCurve.cs" />
     <Compile Include="Types\CGenericGrassMask.cs" />
     <Compile Include="Types\CIndexed2dArray.cs" />
     <Compile Include="Types\CLayerInfo.cs" />
+    <Compile Include="Types\CMatrix4x4.cs" />
     <Compile Include="Types\CParticleSystem.cs" />
     <Compile Include="Types\CRagdoll.cs" />
     <Compile Include="Types\CSectorData.cs" />
     <Compile Include="Types\CSwarmCellMap.cs" />
     <Compile Include="Types\CSwfTexture.cs" />
+    <Compile Include="Types\CVector2D.cs" />
     <Compile Include="Types\EmitterDelaySettings.cs" />
     <Compile Include="Types\EmitterDurationSettings.cs" />
     <Compile Include="Types\SBoneIndiceMapping.cs" />
@@ -193,6 +197,7 @@
     <Compile Include="Types\MissingTypeException.cs" />
     <Compile Include="Types\SAppearanceAttachment.cs" />
     <Compile Include="Types\SParticleEmitterLODLevel.cs" />
+    <Compile Include="Types\SParticleEmitterModuleData.cs" />
     <Compile Include="Types\SSeedKeyValue.cs" />
     <Compile Include="W3ReaderExtensions.cs" />
   </ItemGroup>

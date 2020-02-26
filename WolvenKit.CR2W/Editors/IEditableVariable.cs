@@ -12,6 +12,7 @@ namespace WolvenKit.CR2W.Editors
         Control GetEditor();
         List<IEditableVariable> GetEditableVariables();
         bool CanRemoveVariable(IEditableVariable child);
+        CVariable CreateDefaultVariable();
         bool CanAddVariable(IEditableVariable newvar);
         void AddVariable(CVariable var);
         void RemoveVariable(IEditableVariable child);
