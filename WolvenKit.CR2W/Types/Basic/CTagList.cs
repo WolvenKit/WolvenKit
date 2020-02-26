@@ -29,7 +29,7 @@ namespace WolvenKit.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            file.Write((byte) tags.Count);
+            file.WriteBit6(tags.Count);
             for (var i = 0; i < tags.Count; i++)
             {
                 tags[i].Write(file);

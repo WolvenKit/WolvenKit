@@ -216,6 +216,8 @@ namespace WolvenKit.CR2W
                 centity.hasComponents = cr2w.chunks.Any(_ => _.Parent == this);
             }
 
+            
+
             data.Read(file, _export.dataSize);
 
             var bytesLeft = _export.dataSize - (file.BaseStream.Position - _export.dataOffset);

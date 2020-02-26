@@ -16,11 +16,10 @@ namespace WolvenKit.CR2W
         #region Constructor
         public CR2WFile()
         {
-            names = new List<CR2WNameWrapper>();            //block 1
-            imports = new List<CR2WImportWrapper>();        //block 2
-            chunks = new List<CR2WExportWrapper>();         //block 3
+            names = new List<CR2WNameWrapper>();            //block 2
+            imports = new List<CR2WImportWrapper>();        //block 3
             properties = new List<CR2WPropertyWrapper>();   //block 4
-            properties = new List<CR2WPropertyWrapper>();   //block 5
+            chunks = new List<CR2WExportWrapper>();         //block 5
             buffers = new List<CR2WBufferWrapper>();        //block 6
             embedded = new List<CR2WEmbeddedWrapper>();     //block 7
 

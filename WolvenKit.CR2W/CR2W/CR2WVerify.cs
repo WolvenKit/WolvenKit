@@ -167,7 +167,7 @@ namespace WolvenKit.CR2W
         private void FixNameFNV1A(ref CR2WName name)
         {
             var str = m_dictionary[name.value];
-            var hash = FNV1A32HashAlgorithm.HashString(str);
+            var hash = FNV1A32HashAlgorithm.HashString(str, Encoding.ASCII, true);
             name.hash = hash;
         }
         private void FixExportCRC32(ref CR2WExport export)

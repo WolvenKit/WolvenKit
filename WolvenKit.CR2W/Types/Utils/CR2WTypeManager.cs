@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using WolvenKit.CR2W.Types.Utils;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -23,6 +24,9 @@ namespace WolvenKit.CR2W.Types
 
         public CR2WTypeManager()
         {
+            Register("CBufferType2", new CBufferType2(null));
+            Register("CBufferType2Item", new CBufferType2Item(null));
+
             Register("CName", new CName(null));
 
             Register("String", new CString(null));
@@ -566,15 +570,16 @@ namespace WolvenKit.CR2W.Types
             // *.w2p
             //Register("CParticleEmitter", new CParticleEmitter(null));
             Register("CDecalSpawner", new CDecalSpawner(null));
-            //Register("SSeedKeyValue", new SSeedKeyValue(null)); //sw3dg1n: disabled as this causes an exception when reading w2p files
-            //Register("SDynamicDecalMaterialInfo", new SDynamicDecalMaterialInfo(null)); //rfuzzo: disabled because it couldn't read the stream
-            Register("SParticleEmitterLODLevel", new SParticleEmitterLODLevel(null));
-            Register("EmitterDelaySettings", new EmitterDelaySettings(null));
-            Register("EmitterDurationSettings", new EmitterDurationSettings(null));
-            //Register("CParticleSystem", new CParticleSystem(null)); //sw3dg1n: disabled as this causes an exception when reading w2p files
+            //Register("SSeedKeyValue", new SSeedKeyValue(null));
+            //Register("SDynamicDecalMaterialInfo", new SDynamicDecalMaterialInfo(null)); 
+            //Register("SParticleEmitterLODLevel", new SParticleEmitterLODLevel(null));
+            //Register("EmitterDelaySettings", new EmitterDelaySettings(null));
+            //Register("EmitterDurationSettings", new EmitterDurationSettings(null));
+            //Register("CParticleSystem", new CParticleSystem(null)); 
 
             // *.w2l
             Register("CLayerInfo", new CLayerInfo(null));
+
             Register("SBoneIndiceMapping", new SBoneIndiceMapping(null));
 
             // *.w2cube
