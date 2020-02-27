@@ -67,5 +67,9 @@ namespace WolvenKit.CR2W
             _buffer.memSize = (uint) Data.Length;
         }
 
+        public override string ToString()
+        {
+            return Buffer.index.ToString();
+        }
     }
 }

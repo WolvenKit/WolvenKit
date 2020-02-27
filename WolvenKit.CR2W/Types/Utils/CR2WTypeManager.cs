@@ -66,6 +66,7 @@ namespace WolvenKit.CR2W.Types
             Register("ELightChannel", new CFlags(null));
             Register("EEntityStaticFlags", new CFlags(null));
             Register("ELightUsageMask", new CFlags(null));
+            Register("EDismembermentEffectTypeFlag", new CFlags(null));
 
             Register("LocalizedString", new CLocalizedString(null));
 
@@ -127,11 +128,9 @@ namespace WolvenKit.CR2W.Types
             Register("CAnimDangleBufferComponent", new CComponent(null));
             Register("CAnimDangleComponent", new CComponent(null));
             Register("CAnimatedComponent", new CComponent(null));
-            Register("CAnimatedComponentPhysicsRepresentation", new CComponent(null));
             Register("CAppearanceComponent", new CComponent(null));
             Register("CAreaComponent", new CComponent(null));
             Register("CAreaEnvironmentComponent", new CComponent(null));
-            Register("CBehaviorGraphScriptComponentStateNode", new CComponent(null));
             Register("CBgMeshComponent", new CComponent(null));
             Register("CBgRootComponent", new CComponent(null));
             Register("CBoatBodyComponent", new CComponent(null));
@@ -3281,6 +3280,7 @@ namespace WolvenKit.CR2W.Types
                 "SAnimationBufferBitwiseCompressedBoneTrack",
                 "SAnimationBufferBitwiseCompressionSettings",
                 "SAttachmentReplacements",
+                "SDismembermentEffect",
                 "SDismembermentWoundDecal",
                 "SDynamicDecalMaterialInfo",
                 "SFoliageLODSetting",

@@ -24,8 +24,8 @@ namespace WolvenKit.CR2W
             set => _import = value;
         }
 
-        public string depotPathStr { get; set; }
-        public string classNameStr { get; set; }
+        public string DepotPathStr { get; set; }
+        public string ClassNameStr { get; set; }
 
 
         public CR2WImportWrapper()
@@ -39,5 +39,10 @@ namespace WolvenKit.CR2W
         }
 
         public void SetOffset(uint offset) => _import.depotPath = offset;
+
+        public override string ToString()
+        {
+            return DepotPathStr;
+        }
     }
 }

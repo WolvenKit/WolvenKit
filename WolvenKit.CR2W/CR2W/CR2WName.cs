@@ -18,28 +18,28 @@ namespace WolvenKit.CR2W
     public class CR2WNameWrapper
     {
         private CR2WName _name;
-        private string str1;
+        private string str;
 
         public CR2WName Name
         {
             get
             {
-                _name.hash = FNV1A32HashAlgorithm.HashString(str, Encoding.ASCII, true);
+                _name.hash = FNV1A32HashAlgorithm.HashString(Str, Encoding.ASCII, true);
                 return _name;
             }
             set => _name = value;
         }
 
-        public string str
+        public string Str
         {
             get
             {
-                return str1;
+                return str;
             }
             set
             {
-                str1 = value;
-                _name.hash = FNV1A32HashAlgorithm.HashString(str1, Encoding.ASCII, true);
+                str = value;
+                _name.hash = FNV1A32HashAlgorithm.HashString(str, Encoding.ASCII, true);
             }
         }
 
@@ -54,5 +54,10 @@ namespace WolvenKit.CR2W
         }
 
         public void SetOffset(uint offset) => _name.value = offset;
+
+        public override string ToString()
+        {
+            return Str;
+        }
     }
 }

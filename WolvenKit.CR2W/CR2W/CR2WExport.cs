@@ -301,6 +301,11 @@ namespace WolvenKit.CR2W
 
             return chunk;
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
         #endregion
     }
 }

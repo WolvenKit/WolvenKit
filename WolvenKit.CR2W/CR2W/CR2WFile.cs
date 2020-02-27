@@ -132,12 +132,12 @@ namespace WolvenKit.CR2W
             // read tables
             names = ReadTable<CR2WName>(1).Select(_ => new CR2WNameWrapper(_)
             {
-                str = m_dictionary[_.value],
+                Str = m_dictionary[_.value],
             }).ToList();
             imports = ReadTable<CR2WImport>(2).Select(_ => new CR2WImportWrapper(_)
             {
-                depotPathStr = m_dictionary[_.depotPath],
-                classNameStr = names[_.className].str,
+                DepotPathStr = m_dictionary[_.depotPath],
+                ClassNameStr = names[_.className].Str,
             }).ToList();
             properties = ReadTable<CR2WProperty>(3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
             chunks = ReadTable<CR2WExport>(4).Select(_ => new CR2WExportWrapper(this, _)
@@ -182,15 +182,24 @@ namespace WolvenKit.CR2W
                 return null;
             }
 
-            var typepos = file.BaseStream.Position;
             var typeId = file.ReadUInt16();
 
-            var size = file.ReadUInt32() - 4;
-            var typename = names[typeId].str;
-            var varname = names[nameId].str;
+            var sizepos = file.BaseStream.Position;
+
+            var size = file.ReadUInt32();
+            var typename = names[typeId].Str;
+            var varname = names[nameId].Str;
 
             var parsedvar = CR2WTypeManager.Get().GetByName(typename, varname, this);
-            parsedvar.Read(file, size);
+            parsedvar.Read(file, size - 4);
+
+            var afterVarPos = file.BaseStream.Position;
+            var bytesleft = size - (afterVarPos - sizepos);
+            if (bytesleft > 0)
+            {
+                var unreadBytes = file.ReadBytes((int)bytesleft);
+                Debugger.Break();
+            }
 
             parsedvar.nameId = nameId;
             parsedvar.typeId = typeId;
@@ -241,7 +250,7 @@ namespace WolvenKit.CR2W
             var inverseDictionary = m_dictionary.ToDictionary(x => x.Value, x => x.Key);
             for (var i = 0; i < names.Count; i++)
             {
-                var newoffset = inverseDictionary[names[i].str];
+                var newoffset = inverseDictionary[names[i].Str];
                 if (names[i].Name.value != newoffset)
                 {
                     names[i].SetOffset(newoffset);
@@ -249,7 +258,7 @@ namespace WolvenKit.CR2W
             }
             for (var i = 0; i < imports.Count; i++)
             {
-                var newoffset = inverseDictionary[imports[i].depotPathStr];
+                var newoffset = inverseDictionary[imports[i].DepotPathStr];
                 if (newoffset != imports[i].Import.depotPath)
                 {
                     imports[i].SetOffset(newoffset);
@@ -345,13 +354,13 @@ namespace WolvenKit.CR2W
                 var newstrings = new List<byte>();
                 foreach (CR2WNameWrapper name in names)
                 {
-                    if (!newnames.Contains(name.str))
-                        newnames.Add(name.str);
+                    if (!newnames.Contains(name.Str))
+                        newnames.Add(name.Str);
                 }
                 foreach (CR2WImportWrapper import in imports)
                 {
-                    if (!newnames.Contains(import.depotPathStr))
-                        newnames.Add(import.depotPathStr);
+                    if (!newnames.Contains(import.DepotPathStr))
+                        newnames.Add(import.DepotPathStr);
                 }
                 foreach (CR2WEmbeddedWrapper emb in embedded)
                 {
@@ -689,14 +698,14 @@ namespace WolvenKit.CR2W
         {
             for (var i = 0; i < names.Count; i++)
             {
-                if (names[i].str == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(names[i].str)))
+                if (names[i].Str == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(names[i].Str)))
                     return i;
             }
 
             if (addnew)
             {
                 var newstring = new CR2WNameWrapper();
-                newstring.str = name;
+                newstring.Str = name;
                 names.Add(newstring);
 
                 return names.Count - 1;
@@ -711,7 +720,7 @@ namespace WolvenKit.CR2W
             {
                 if (imports[i].Import.className == filetype 
                     && imports[i].Import.flags == flags 
-                    && (imports[i].depotPathStr == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(imports[i].depotPathStr))))
+                    && (imports[i].DepotPathStr == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(imports[i].DepotPathStr))))
                     return i;
             }
 
@@ -728,7 +737,7 @@ namespace WolvenKit.CR2W
                 };
                 imports.Add(new CR2WImportWrapper(import)
                 {
-                    depotPathStr = name,
+                    DepotPathStr = name,
                 });
 
                 return imports.Count - 1;

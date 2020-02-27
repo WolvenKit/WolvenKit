@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace WolvenKit.CR2W.Types
@@ -520,6 +521,13 @@ namespace WolvenKit.CR2W.Types
         public override string ToString()
         {
             return val.ToString();
+        }
+
+        internal byte ToByte()
+        {
+            byte result;
+            byte.TryParse(val.ToString(), out result);
+            return result;
         }
     }
 

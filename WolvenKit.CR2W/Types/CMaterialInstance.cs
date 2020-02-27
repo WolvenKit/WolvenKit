@@ -23,8 +23,8 @@ namespace WolvenKit.CR2W.Types
                 var elementsize = file.ReadUInt32();
                 var nameId = file.ReadUInt16();
                 var typeId = file.ReadUInt16();
-                var typeName = cr2w.names[typeId].str;
-                var varname = cr2w.names[nameId].str;
+                var typeName = cr2w.names[typeId].Str;
+                var varname = cr2w.names[nameId].Str;
 
                 var item = CR2WTypeManager.Get().GetByName(typeName, varname, cr2w, false);
                 if (item == null)

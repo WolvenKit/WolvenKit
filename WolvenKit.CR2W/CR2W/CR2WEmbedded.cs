@@ -78,8 +78,8 @@ namespace WolvenKit.CR2W
                     if (ParentImports.Count > (int)Embedded.importIndex - 1)
                     {
                         var import = ParentImports[(int)Embedded.importIndex - 1];
-                        ImportClass = import.classNameStr;
-                        ImportPath = import.depotPathStr;
+                        ImportClass = import.ClassNameStr;
+                        ImportPath = import.DepotPathStr;
                     }
                 }
             }
@@ -97,6 +97,11 @@ namespace WolvenKit.CR2W
                 file.Write(Data);
             }
             _embedded.dataSize = (uint) Data.Length;
+        }
+
+        public override string ToString()
+        {
+            return Handle;
         }
     }
 }

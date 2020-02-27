@@ -37,10 +37,10 @@ namespace WolvenKit.CR2W.Types
                 {
                     if (-value - 1 <= cr2w.imports.Count)
                     {
-                        Handle = cr2w.imports[-value - 1].depotPathStr;
+                        Handle = cr2w.imports[-value - 1].DepotPathStr;
 
                         var filetype = cr2w.imports[-value - 1].Import.className;
-                        FileType = cr2w.names[filetype].str;
+                        FileType = cr2w.names[filetype].Str;
 
                         Flags = cr2w.imports[-value - 1].Import.flags;
                     }

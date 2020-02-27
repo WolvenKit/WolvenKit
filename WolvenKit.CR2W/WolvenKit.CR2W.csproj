@@ -137,6 +137,7 @@
     <Compile Include="Types\CEvaluatorFloatCurve.cs" />
     <Compile Include="Types\CGenericGrassMask.cs" />
     <Compile Include="Types\CIndexed2dArray.cs" />
+    <Compile Include="Types\CLayerGroup.cs" />
     <Compile Include="Types\CLayerInfo.cs" />
     <Compile Include="Types\CMatrix4x4.cs" />
     <Compile Include="Types\CParticleSystem.cs" />
