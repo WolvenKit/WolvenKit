@@ -176,29 +176,37 @@ namespace WolvenKit.CR2W
 
         public CVariable ReadVariable(BinaryReader file)
         {
+            // Read Name
             var nameId = file.ReadUInt16();
             if (nameId == 0)
             {
                 return null;
             }
-
-            var typeId = file.ReadUInt16();
-
-            var sizepos = file.BaseStream.Position;
-
-            var size = file.ReadUInt32();
-            var typename = names[typeId].Str;
             var varname = names[nameId].Str;
 
+            // Read Type
+            var typeId = file.ReadUInt16();
+            var typename = names[typeId].Str;
+
+            // Read Size
+            var sizepos = file.BaseStream.Position;
+            var size = file.ReadUInt32();
+            
+            // Read Value
             var parsedvar = CR2WTypeManager.Get().GetByName(typename, varname, this);
             parsedvar.Read(file, size - 4);
 
             var afterVarPos = file.BaseStream.Position;
+
             var bytesleft = size - (afterVarPos - sizepos);
             if (bytesleft > 0)
             {
                 var unreadBytes = file.ReadBytes((int)bytesleft);
                 Debugger.Break();
+            }
+            else if (bytesleft < 0)
+            {
+                throw new InvalidParsingException("Parsing Variable read too far.");
             }
 
             parsedvar.nameId = nameId;
