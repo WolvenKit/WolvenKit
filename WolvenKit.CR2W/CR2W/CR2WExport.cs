@@ -210,14 +210,6 @@ namespace WolvenKit.CR2W
 
             CreateDefaultData();
 
-            var centity = data as CEntity;
-            if (centity != null)
-            {
-                centity.hasComponents = cr2w.chunks.Any(_ => _.Parent == this);
-            }
-
-            
-
             data.Read(file, _export.dataSize);
 
             var bytesLeft = _export.dataSize - (file.BaseStream.Position - _export.dataOffset);

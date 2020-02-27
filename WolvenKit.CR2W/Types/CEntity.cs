@@ -13,16 +13,12 @@ namespace WolvenKit.CR2W.Types
         public CUInt32 unk1;
         public CUInt32 unk2;
 
-        public CArray components;
+        public CArray components { get; set; }
         public CVector buffer_v1 { get; set; }
         public CArray buffer_v2 { get; set; }
 
-
-        public bool hasComponents { get; set; } = false;
-        private bool isW2l 
+        private bool isCreatedFromTemplate;
             
-            = false;
-
         public CEntity(CR2WFile cr2w) :
             base(cr2w)
         {
@@ -54,26 +50,19 @@ namespace WolvenKit.CR2W.Types
 
             base.Read(file, size);
 
-            // check for w2l
-            isW2l = cr2w.chunks.FirstOrDefault().typeName.Value == "CLayer";
+            // check if created from template
+            isCreatedFromTemplate = variables.FirstOrDefault(_ => _.Name == "template") != null;
 
             unk1.Read(file, 0);
             unk2.Read(file, 0);
 
-            // CEntities with components have a component-handle array
-            // which is prefixed with a DynamicInt that stores the component count
-            // this component array has a size of: 1 + (elementcount * 4) bytes
-            // sometimes this dynamicInt is not present
-            // HACk workaround, check if no components and if bytes left are exactly 3, 
-            // then chances are, the it reads dynamicInt == 128, so no componentsarray
-
+            // Read Component Array (should only be present if NOT created from template)
+            #region Componentsarray
             var endPos = file.BaseStream.Position;
             var bytesleft = size - (endPos - startPos);
-            if (bytesleft > 0)
+            if (!isCreatedFromTemplate)
             {
-                if (hasComponents || 
-                    !isW2l || 
-                    (isW2l && !hasComponents && bytesleft == 3) )
+                if (bytesleft > 0)
                 {
                     var elementcount = file.ReadBit6();
                     for (var i = 0; i < elementcount; i++)
@@ -83,13 +72,16 @@ namespace WolvenKit.CR2W.Types
                         components.AddVariable(handle);
                     }
                 }
+                else
+                {
+                    throw new EndOfStreamException("unknown CEntity Fileformat.");
+                }
             }
-            else
-            {
-                throw new EndOfStreamException("unknown CEntity Fileformat.");
-            }
+            #endregion
 
-            // Read Buffer 1
+
+            // Read Buffer 1 (always)
+            #region Buffer 1
             endPos = file.BaseStream.Position;
             bytesleft = size - (endPos - startPos);
             if (bytesleft > 0)
@@ -113,27 +105,39 @@ namespace WolvenKit.CR2W.Types
             {
                 throw new EndOfStreamException("unknown CEntity Fileformat.");
             }
+            #endregion
 
-
-            // Read Buffer 2
+            // Read Buffer 2 (should only be present if created from template)
+            #region Buffer 2
             endPos = file.BaseStream.Position;
             bytesleft = size - (endPos - startPos);
-            if (bytesleft > 0)
+            if (isCreatedFromTemplate)
             {
-                buffer_v2.Read(file, 0);
+                if (bytesleft > 0)
+                {
+                    buffer_v2.Read(file, 0);
+                }
+                else
+                {
+                    throw new EndOfStreamException("unknown CEntity Fileformat.");
+                }
             }
+            #endregion
+
         }
 
         public override void Write(BinaryWriter file)
         {
-
             base.Write(file);
+
+            // check if created from template
+            isCreatedFromTemplate = variables.FirstOrDefault(_ => _.Name == "template") != null;
 
             unk1.Write(file);
             unk2.Write(file);
 
-
-            if (hasComponents || !isW2l)
+            // Write componentsarray (if not created from template)
+            if (!isCreatedFromTemplate)
             {
                 file.WriteBit6(components.array.Count);
                 for (var i = 0; i < components.array.Count; i++)
@@ -142,14 +146,15 @@ namespace WolvenKit.CR2W.Types
                 }
             }
 
-            // Write Buffer 1
+            // Write Buffer 1 (always)
             foreach (var n in buffer_v1.variables)
             {
                 n.Write(file);
             }
 
-            // Write Buffer 2
-            buffer_v2.Write(file);
+            // Write Buffer 2 (if created from template)
+            if (isCreatedFromTemplate)
+                buffer_v2.Write(file);
 
         }
 

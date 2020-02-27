@@ -1067,7 +1067,7 @@ namespace WolvenKit
         {
             if (ModExplorer == null || ModExplorer.IsDisposed)
             {
-                ModExplorer = new frmModExplorer();
+                ModExplorer = new frmModExplorer(Logger);
                 ModExplorer.Show(dockPanel, DockState.DockLeft);
                 
                 ModExplorer.RequestFileOpen += ModExplorer_RequestFileOpen;

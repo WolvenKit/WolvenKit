@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using WolvenKit.CR2W.Types;
 using RED.CRC32;
 using System.Runtime.InteropServices;
+using WolvenKit.Utils;
 
 namespace WolvenKit.CR2W
 {
@@ -561,6 +562,30 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Supporting Functions
+        public void SerializeToXml(Stream writer)
+        {
+            using (System.Xml.XmlWriter xw = System.Xml.XmlWriter.Create(writer))
+            {
+                XmlSerializer.SerializeStartObject<CR2WFile>(xw, this);
+
+                XmlSerializer.SerializeObject<CR2WFileHeader>(xw, m_fileheader);
+                XmlSerializer.SerializeObject<List<CR2WTable>>(xw, m_tableheaders.ToList());
+
+                XmlSerializer.SerializeObject<CR2WName[]>(xw, names.Select(_ => _.Name).ToArray());
+                XmlSerializer.SerializeObject<CR2WImport[]>(xw, imports.Select(_ => _.Import).ToArray());
+                XmlSerializer.SerializeObject<CR2WProperty[]>(xw, properties.Select(_ => _.Property).ToArray());
+                XmlSerializer.SerializeObject<CR2WExport[]>(xw, chunks.Select(_ => _.Export).ToArray());
+                XmlSerializer.SerializeObject<CR2WBuffer[]>(xw, buffers.Select(_ => _.Buffer).ToArray());
+                XmlSerializer.SerializeObject<CR2WEmbedded[]>(xw, embedded.Select(_ => _.Embedded).ToArray());
+
+                XmlSerializer.SerializeEndObject<CR2WFile>(xw);
+
+
+                xw.Flush();
+                xw.Close();
+            }
+        }
+
         private T ReadStruct<T>(Crc32Algorithm crc32 = null) where T : struct
         {
             var size = Marshal.SizeOf<T>();
