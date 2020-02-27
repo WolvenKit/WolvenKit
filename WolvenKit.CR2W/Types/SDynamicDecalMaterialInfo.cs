@@ -36,32 +36,33 @@ namespace WolvenKit.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
-                diffuseTexture.Read(file,size);
-				normalTexture.Read(file,size);
-				specularColor.Read(file,size);
-				specularScale.Read(file,size);
-				specularBase.Read(file,size);
-				specularity.Read(file,size);
-				additiveNormals.Read(file,size);
-				diffuseRandomColor0.Read(file,size);
-				diffuseRandomColor1.Read(file,size);
-				subUVType.Read(file,size);
+            diffuseTexture.Read(file,size);
+			normalTexture.Read(file,size);
+            specularColor.Read(file,size); //BUG: fx\monsters\endriaga\spawn_ground\endriaga_spawn_ground.w2p
+            //file.BaseStream.Seek(4, SeekOrigin.Current);
+            specularScale.Read(file,size);
+			specularBase.Read(file,size);
+			specularity.Read(file,size);
+			additiveNormals.Read(file,size);
+			diffuseRandomColor0.Read(file,size);
+			diffuseRandomColor1.Read(file,size);
+			subUVType.Read(file,size);
 				
         }
 
         public override void Write(BinaryWriter file)
         {
-                diffuseTexture.Write(file);
-				normalTexture.Write(file);
-				specularColor.Write(file);
-				specularScale.Write(file);
-				specularBase.Write(file);
-				specularity.Write(file);
-				additiveNormals.Write(file);
-				diffuseRandomColor0.Write(file);
-				diffuseRandomColor1.Write(file);
-				subUVType.Write(file);
-				
+            diffuseTexture.Write(file);
+			normalTexture.Write(file);
+            specularColor.Write(file);
+            //file.Write(new byte[] { 0, 0, 0, 0 });
+            specularScale.Write(file);
+			specularBase.Write(file);
+			specularity.Write(file);
+			additiveNormals.Write(file);
+			diffuseRandomColor0.Write(file);
+			diffuseRandomColor1.Write(file);
+			subUVType.Write(file);				
         }
 
         public override CVariable SetValue(object val)

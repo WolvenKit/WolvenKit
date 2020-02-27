@@ -50,6 +50,11 @@ namespace WolvenKit.CR2W.Editors
             throw new NotImplementedException();
         }
 
+        public CVariable CreateDefaultVariable()
+        {
+            return null;
+        }
+
         public override string ToString()
         {
             return Object.ToString();

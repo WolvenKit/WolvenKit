@@ -63,6 +63,10 @@ namespace WolvenKit.CR2W.Editors
             }
         }
 
+        public CVariable CreateDefaultVariable()
+        {
+            return null;
+        }
         public override string ToString()
         {
             return "";

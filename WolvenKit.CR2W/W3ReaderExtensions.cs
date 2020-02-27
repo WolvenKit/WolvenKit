@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.CR2W
 {
@@ -38,6 +39,26 @@ namespace WolvenKit.CR2W
             } while (!(b < 64 || (i >= 3 && b < 128)));
 
             return result;
+        }
+
+        public static CVariable CopyViaBuffer(CVariable source, CVariable destination)
+        {
+            using (MemoryStream temporaryBuffer = new MemoryStream())
+            {
+                using (BinaryWriter writer = new BinaryWriter(temporaryBuffer))
+                {
+                    source.Write(writer);
+                }
+
+                temporaryBuffer.Position = 0;
+
+                using (BinaryReader reader = new BinaryReader(temporaryBuffer))
+                {
+                    destination.Read(reader, (uint)temporaryBuffer.Length);
+                }
+            }
+
+            return destination;
         }
 
         public static void WriteBit6(this BinaryWriter stream, int c)

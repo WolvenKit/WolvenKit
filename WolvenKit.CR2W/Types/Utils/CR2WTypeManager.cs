@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using WolvenKit.CR2W.Types.Utils;
@@ -570,7 +570,7 @@ namespace WolvenKit.CR2W.Types
             // Testing area. Put your CVectors which don't work fully yet here.
 #if DEBUG
             // *.w2p
-            //Register("CParticleEmitter", new CParticleEmitter(null));
+            Register("CParticleEmitter", new CParticleEmitter(null));
             Register("CDecalSpawner", new CDecalSpawner(null));
             //Register("SSeedKeyValue", new SSeedKeyValue(null));
             //Register("SDynamicDecalMaterialInfo", new SDynamicDecalMaterialInfo(null)); 
@@ -3255,6 +3255,7 @@ namespace WolvenKit.CR2W.Types
                 "CxplorationTransitionTurnToJump",
                 "DebuffProjectile",
                 "EP1Chandelier",
+                "EmitterDelaySettings",
                 "EmitterDurationSettings",
                 "EntitySlot",
                 "EntitySlot",
@@ -3271,6 +3272,8 @@ namespace WolvenKit.CR2W.Types
                 "ISpawnTreeSetLootInitializer",
                 "ISpawnTreeSpawnAroundNodeInitializer",
                 "Matrix",
+                "ParticleBurst",
+                "ParticleBurst",
                 "PoisonProjectile",
                 "QuestScriptParam",
                 "StorySceneCameraDefinition",
@@ -3318,6 +3321,7 @@ namespace WolvenKit.CR2W.Types
                 "SMapPinType",
                 "SMeshSoundInfo",
                 "SParticleEmitterLODLevel",
+                "SSeedKeyValue",
                 "SSSBoneTransform",
                 "SStorySceneAttachmentInfo",
                 "SStorySceneCameraLightMod",
