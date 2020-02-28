@@ -54,7 +54,7 @@ namespace WolvenKit.CR2W.Types
 
             Register("ptr", new CPtr(null));
             Register("handle", new CHandle(null));
-            Register("EntityHandle", new EntityHandle(null));
+            //Register("EntityHandle", new EntityHandle(null));
             Register("soft", new CSoft(null));
 
             Register("TagList", new CTagList(null));
@@ -124,6 +124,16 @@ namespace WolvenKit.CR2W.Types
             Register("CExtAnimEventsFile", new CExtAnimEventsFile(null));
             Register("CSkeletalAnimationSet", new CExtAnimEventsFile(null));
             Register("CSkeletalAnimation", new CExtAnimEventsFile(null)); //is actually it's own class
+
+            // WaypointSets
+            Register("CWayPointsCollection", new CWayPointsCollection(null));
+            Register("CWayPointsCollectionsSet", new CWayPointsCollectionsSet(null));
+            Register("CWayPointsCollectionsSetData", new CWayPointsCollectionsSetData(null));
+
+            Register("CCompressedArray", new CCompressedArray(null));
+            Register("SBufferWaypoints", new SBufferWaypoints(null));
+            Register("SBufferComponentsMappings", new SBufferComponentsMappings(null));
+            Register("SBufferwaypointsGroup", new SBufferwaypointsGroup(null));
 
             
 
