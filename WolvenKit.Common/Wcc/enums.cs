@@ -14,6 +14,15 @@ namespace WolvenKit.Common.Wcc
             {
                 case "apb": return Enum.GetNames(typeof(EApbImports)).Select(_ => $".{_}").ToList();
                 case "nxs": return Enum.GetNames(typeof(ENxsImports)).Select(_ => $".{_}").ToList();
+                case ".re":
+                case ".fbx":
+                    return Enum.GetNames(typeof(EMeshImports)).Select(_ => $".{_}").ToList();
+                case ".jpg":
+                case ".pga":
+                case ".tga":
+                case ".bmp":
+                case "dds": 
+                    return Enum.GetNames(typeof(ETextureImports)).Select(_ => $".{_}").ToList();
                 default: return new List<string>();
             }
         }
@@ -37,7 +46,17 @@ namespace WolvenKit.Common.Wcc
             }
         }
     }
-    
+
+    public enum ETextureImports
+    {
+        w2cube,
+        xbm
+    }
+
+    public enum EMeshImports
+    {
+        w2mesh,
+    }
 
     public enum ENxsImports
     {

@@ -1587,36 +1587,15 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
         private async void ModExplorer_RequestFileImport(object sender, RequestImportArgs e)
         {
             var filename = e.File;
-            var importedExtension = e.Extension;
+            var importExtension = e.Extension;
             var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
             if (!File.Exists(fullpath))
                 return;
+            var rawExtension = Path.GetExtension(fullpath);
 
-            #region Get import types
-            var ext = Path.GetExtension(fullpath);
-            List<string> importedexts = new List<string>();
-            switch (ext)
-            {
-                case ".re":
-                case ".fbx":
-                    importedexts.AddRange(new string[] { ".w2mesh" });
-                    break;
-                case ".jpg":
-                case ".pga":
-                case ".tga":
-                case ".dds":
-                case ".bmp":
-                    importedexts.AddRange(new string[] { ".xbm" });
-                    break;
-                default:
-                    importedexts.Add(importedExtension);
-                    break;
-            }
-            #endregion
-
-            await StartImport(ext, importedexts.FirstOrDefault());
+            await StartImport(rawExtension, importExtension);
             
-            async Task StartImport(string rawext, string fileext)
+            async Task StartImport(string rawext, string importext)
             {
                 string type = REDTypes.RawExtensionToCacheType(rawext);
 
@@ -1626,10 +1605,10 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 filename = filename.TrimStart(Path.DirectorySeparatorChar);
                 if (filename.Substring(0, 3) == "DLC") filename = filename.TrimStart("DLC".ToCharArray());
                 filename = filename.TrimStart(Path.DirectorySeparatorChar);
-                var newpath = Path.Combine(ActiveMod.ModDirectory, $"{filename.TrimEnd(ext.ToCharArray())}{fileext}");
+                var newpath = Path.Combine(ActiveMod.ModDirectory, $"{filename.TrimEnd(rawExtension.ToCharArray())}{importext}");
                 var split = filename.Split(Path.DirectorySeparatorChar).First();
                 if (split != type)
-                    newpath = Path.Combine(ActiveMod.ModDirectory, type, $"{filename.TrimEnd(ext.ToCharArray())}{fileext}");
+                    newpath = Path.Combine(ActiveMod.ModDirectory, type, $"{filename.TrimEnd(rawExtension.ToCharArray())}{importext}");
 
                 var import = new Wcc_lite.import()
                 {
