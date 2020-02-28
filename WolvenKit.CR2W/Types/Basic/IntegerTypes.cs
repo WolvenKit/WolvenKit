@@ -1,16 +1,21 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace WolvenKit.CR2W.Types
 {
     public class CUInt64 : CVariable
     {
+        
+
         public CUInt64(CR2WFile cr2w)
-            : base(cr2w)
+: base(cr2w)
         {
         }
 
-        public ulong val { get; set; }
+        private ulong _val;
+        public ulong val { get => _val; set => _val = value; }
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -26,7 +31,7 @@ namespace WolvenKit.CR2W.Types
         {
             if (val is ulong)
             {
-                this.val = (ulong) val;
+                this.val = (ulong)val;
             }
 
             return this;
@@ -39,7 +44,7 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CUInt64) base.Copy(context);
+            var var = (CUInt64)base.Copy(context);
             var.val = val;
             return var;
         }
@@ -113,12 +118,15 @@ namespace WolvenKit.CR2W.Types
 
     public class CUInt16 : CVariable
     {
+       
+
         public CUInt16(CR2WFile cr2w)
-            : base(cr2w)
+: base(cr2w)
         {
         }
 
-        public ushort val { get; set; }
+        private ushort _val;
+        public ushort val { get => _val; set => _val = value; }
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -134,7 +142,7 @@ namespace WolvenKit.CR2W.Types
         {
             if (val is ushort)
             {
-                this.val = (ushort) val;
+                this.val = (ushort)val;
             }
 
             return this;
@@ -147,7 +155,7 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CUInt16) base.Copy(context);
+            var var = (CUInt16)base.Copy(context);
             var.val = val;
             return var;
         }
@@ -520,6 +528,13 @@ namespace WolvenKit.CR2W.Types
         public override string ToString()
         {
             return val.ToString();
+        }
+
+        internal byte ToByte()
+        {
+            byte result;
+            byte.TryParse(val.ToString(), out result);
+            return result;
         }
     }
 

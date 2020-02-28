@@ -56,7 +56,7 @@ namespace WolvenKit.CR2W.Types
                 Unknown2,
                 Resources,
                 Objects,
-                BlockData
+                //BlockData
             };
         }
 
@@ -84,9 +84,33 @@ namespace WolvenKit.CR2W.Types
                 Objects.AddVariable(temp);
             }
 
-            //Read the data block.
+            // Read the data block.
             var datasize = file.ReadVLQInt32();
             BlockData.Bytes = file.ReadBytes(datasize);
+
+            // add blockdata per object instead of in the end of the file
+            // we do it after we read the array for easier writing
+            for (int i = 0; i < numobjects; i++)
+            {
+                CSectorDataObject curobj = (CSectorDataObject)Objects.GetEditableVariables()[i];
+                int curoffset = int.Parse(curobj.offset.ToString());
+                int nextoffset = datasize;
+                if (i != numobjects - 1)
+                {
+                    CSectorDataObject nextobj = (CSectorDataObject)Objects.GetEditableVariables()[i + 1];
+                    nextoffset = int.Parse(nextobj.offset.ToString());
+                }
+                int length = nextoffset - curoffset;
+
+                byte[] cutoutdata = new byte[length];
+                Array.Copy(BlockData.Bytes, curoffset, cutoutdata, 0, length);
+
+                curobj.blockdata.Bytes = cutoutdata;
+            }
+
+
+
+
         }
 
         public override void Write(BinaryWriter file)
@@ -110,6 +134,15 @@ namespace WolvenKit.CR2W.Types
             }
 
             //Write the block data.
+            //first assemble from bytearrays from the individual objects
+            List<byte> newbyte = new List<byte>();
+            foreach (CSectorDataObject obj in Objects.GetEditableVariables())
+            {
+                newbyte.AddRange(obj.blockdata.Bytes);
+            }
+            BlockData.Bytes = newbyte.ToArray();
+
+            //write the data back into one block
             file.WriteVLQInt32(BlockData.Bytes.Length);
             file.Write(BlockData.Bytes);
         }
@@ -204,6 +237,9 @@ namespace WolvenKit.CR2W.Types
         public CFloat positionY;
         public CFloat positionZ;
 
+        //blockdata
+        public CByteArray blockdata { get; set; }
+
         public CSectorDataObject(CR2WFile cr2w)
             : base(cr2w)
         {
@@ -214,6 +250,7 @@ namespace WolvenKit.CR2W.Types
             positionX = new CFloat(cr2w) { Name = "positionX", Type = "Float" };
             positionY = new CFloat(cr2w) { Name = "positionY", Type = "Float" };
             positionZ = new CFloat(cr2w) { Name = "positionZ", Type = "Float" };
+            blockdata = new CByteArray(cr2w) { Name = "blockdata", Type = "byte[]" };
         }
 
         public override CVariable Create(CR2WFile cr2w)
@@ -254,6 +291,7 @@ namespace WolvenKit.CR2W.Types
                 positionX,
                 positionY,
                 positionZ,
+                blockdata
             };
         }
 

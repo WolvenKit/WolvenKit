@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
                 var val = file.ReadUInt16();
                 if (val == 0)
                     break;
-                flags.Add(new CName(cr2w) {Value = cr2w.names[val].str});
+                flags.Add(new CName(cr2w) {Value = cr2w.names[val].Str});
             }
         }
 

@@ -20,6 +20,8 @@ namespace WolvenKit.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
+            //base.Read(file, size);
+
             distance.Read(file, size);
         }
 

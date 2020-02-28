@@ -231,20 +231,6 @@ namespace WolvenKit.Common.Wcc
         [REDName("texturegroup")]
         public textureGroupNames texturegroup { get; set; }
 
-
-        /*
-        Supported resource types and formats:
-            (2D Texture) importable from 5 file format(s):
-                dds: DirectDraw Surface
-                bmp: Windows Bitmap
-                jpg: Joint Photographics Experts Group
-                tga: Truevision Targa
-                png: Portable Network Graphics
-            w2mesh(Mesh) importable from 2 file format(s):
-                re: Red Engine File
-                fbx: Autodesk FBX
-         */
-
     }
 
     [Serializable]

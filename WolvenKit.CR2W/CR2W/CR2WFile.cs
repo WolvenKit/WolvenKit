@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using WolvenKit.CR2W.Types;
 using RED.CRC32;
 using System.Runtime.InteropServices;
+using WolvenKit.Utils;
 
 namespace WolvenKit.CR2W
 {
@@ -16,11 +17,10 @@ namespace WolvenKit.CR2W
         #region Constructor
         public CR2WFile()
         {
-            names = new List<CR2WNameWrapper>();            //block 1
-            imports = new List<CR2WImportWrapper>();        //block 2
-            chunks = new List<CR2WExportWrapper>();         //block 3
+            names = new List<CR2WNameWrapper>();            //block 2
+            imports = new List<CR2WImportWrapper>();        //block 3
             properties = new List<CR2WPropertyWrapper>();   //block 4
-            properties = new List<CR2WPropertyWrapper>();   //block 5
+            chunks = new List<CR2WExportWrapper>();         //block 5
             buffers = new List<CR2WBufferWrapper>();        //block 6
             embedded = new List<CR2WEmbeddedWrapper>();     //block 7
 
@@ -132,12 +132,12 @@ namespace WolvenKit.CR2W
             // read tables
             names = ReadTable<CR2WName>(1).Select(_ => new CR2WNameWrapper(_)
             {
-                str = m_dictionary[_.value],
+                Str = m_dictionary[_.value],
             }).ToList();
             imports = ReadTable<CR2WImport>(2).Select(_ => new CR2WImportWrapper(_)
             {
-                depotPathStr = m_dictionary[_.depotPath],
-                classNameStr = names[_.className].str,
+                DepotPathStr = m_dictionary[_.depotPath],
+                ClassNameStr = names[_.className].Str,
             }).ToList();
             properties = ReadTable<CR2WProperty>(3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
             chunks = ReadTable<CR2WExport>(4).Select(_ => new CR2WExportWrapper(this, _)
@@ -176,21 +176,38 @@ namespace WolvenKit.CR2W
 
         public CVariable ReadVariable(BinaryReader file)
         {
+            // Read Name
             var nameId = file.ReadUInt16();
             if (nameId == 0)
             {
                 return null;
             }
+            var varname = names[nameId].Str;
 
-            var typepos = file.BaseStream.Position;
+            // Read Type
             var typeId = file.ReadUInt16();
+            var typename = names[typeId].Str;
 
-            var size = file.ReadUInt32() - 4;
-            var typename = names[typeId].str;
-            var varname = names[nameId].str;
-
+            // Read Size
+            var sizepos = file.BaseStream.Position;
+            var size = file.ReadUInt32();
+            
+            // Read Value
             var parsedvar = CR2WTypeManager.Get().GetByName(typename, varname, this);
-            parsedvar.Read(file, size);
+            parsedvar.Read(file, size - 4);
+
+            var afterVarPos = file.BaseStream.Position;
+
+            var bytesleft = size - (afterVarPos - sizepos);
+            if (bytesleft > 0)
+            {
+                var unreadBytes = file.ReadBytes((int)bytesleft);
+                Debugger.Break();
+            }
+            else if (bytesleft < 0)
+            {
+                throw new InvalidParsingException("Parsing Variable read too far.");
+            }
 
             parsedvar.nameId = nameId;
             parsedvar.typeId = typeId;
@@ -241,7 +258,7 @@ namespace WolvenKit.CR2W
             var inverseDictionary = m_dictionary.ToDictionary(x => x.Value, x => x.Key);
             for (var i = 0; i < names.Count; i++)
             {
-                var newoffset = inverseDictionary[names[i].str];
+                var newoffset = inverseDictionary[names[i].Str];
                 if (names[i].Name.value != newoffset)
                 {
                     names[i].SetOffset(newoffset);
@@ -249,7 +266,7 @@ namespace WolvenKit.CR2W
             }
             for (var i = 0; i < imports.Count; i++)
             {
-                var newoffset = inverseDictionary[imports[i].depotPathStr];
+                var newoffset = inverseDictionary[imports[i].DepotPathStr];
                 if (newoffset != imports[i].Import.depotPath)
                 {
                     imports[i].SetOffset(newoffset);
@@ -345,13 +362,13 @@ namespace WolvenKit.CR2W
                 var newstrings = new List<byte>();
                 foreach (CR2WNameWrapper name in names)
                 {
-                    if (!newnames.Contains(name.str))
-                        newnames.Add(name.str);
+                    if (!newnames.Contains(name.Str))
+                        newnames.Add(name.Str);
                 }
                 foreach (CR2WImportWrapper import in imports)
                 {
-                    if (!newnames.Contains(import.depotPathStr))
-                        newnames.Add(import.depotPathStr);
+                    if (!newnames.Contains(import.DepotPathStr))
+                        newnames.Add(import.DepotPathStr);
                 }
                 foreach (CR2WEmbeddedWrapper emb in embedded)
                 {
@@ -562,6 +579,30 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Supporting Functions
+        public void SerializeToXml(Stream writer)
+        {
+            using (System.Xml.XmlWriter xw = System.Xml.XmlWriter.Create(writer))
+            {
+                XmlSerializer.SerializeStartObject<CR2WFile>(xw, this);
+
+                XmlSerializer.SerializeObject<CR2WFileHeader>(xw, m_fileheader);
+                XmlSerializer.SerializeObject<List<CR2WTable>>(xw, m_tableheaders.ToList());
+
+                XmlSerializer.SerializeObject<CR2WName[]>(xw, names.Select(_ => _.Name).ToArray());
+                XmlSerializer.SerializeObject<CR2WImport[]>(xw, imports.Select(_ => _.Import).ToArray());
+                XmlSerializer.SerializeObject<CR2WProperty[]>(xw, properties.Select(_ => _.Property).ToArray());
+                XmlSerializer.SerializeObject<CR2WExport[]>(xw, chunks.Select(_ => _.Export).ToArray());
+                XmlSerializer.SerializeObject<CR2WBuffer[]>(xw, buffers.Select(_ => _.Buffer).ToArray());
+                XmlSerializer.SerializeObject<CR2WEmbedded[]>(xw, embedded.Select(_ => _.Embedded).ToArray());
+
+                XmlSerializer.SerializeEndObject<CR2WFile>(xw);
+
+
+                xw.Flush();
+                xw.Close();
+            }
+        }
+
         private T ReadStruct<T>(Crc32Algorithm crc32 = null) where T : struct
         {
             var size = Marshal.SizeOf<T>();
@@ -665,14 +706,14 @@ namespace WolvenKit.CR2W
         {
             for (var i = 0; i < names.Count; i++)
             {
-                if (names[i].str == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(names[i].str)))
+                if (names[i].Str == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(names[i].Str)))
                     return i;
             }
 
             if (addnew)
             {
                 var newstring = new CR2WNameWrapper();
-                newstring.str = name;
+                newstring.Str = name;
                 names.Add(newstring);
 
                 return names.Count - 1;
@@ -687,7 +728,7 @@ namespace WolvenKit.CR2W
             {
                 if (imports[i].Import.className == filetype 
                     && imports[i].Import.flags == flags 
-                    && (imports[i].depotPathStr == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(imports[i].depotPathStr))))
+                    && (imports[i].DepotPathStr == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(imports[i].DepotPathStr))))
                     return i;
             }
 
@@ -704,7 +745,7 @@ namespace WolvenKit.CR2W
                 };
                 imports.Add(new CR2WImportWrapper(import)
                 {
-                    depotPathStr = name,
+                    DepotPathStr = name,
                 });
 
                 return imports.Count - 1;

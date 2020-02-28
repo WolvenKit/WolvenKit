@@ -1,6 +1,7 @@
 ﻿ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using WolvenKit.CR2W.Types.Utils;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -23,6 +24,9 @@ namespace WolvenKit.CR2W.Types
 
         public CR2WTypeManager()
         {
+            Register("CBufferType2", new CBufferType2(null));
+            Register("CBufferType2Item", new CBufferType2Item(null));
+
             Register("CName", new CName(null));
 
             Register("String", new CString(null));
@@ -50,21 +54,26 @@ namespace WolvenKit.CR2W.Types
 
             Register("ptr", new CPtr(null));
             Register("handle", new CHandle(null));
+            //Register("EntityHandle", new EntityHandle(null));
             Register("soft", new CSoft(null));
 
             Register("TagList", new CTagList(null));
             Register("IdTag", new IdTag(null));
 
+            // Flags
             Register("Flags", new CFlags(null));
             Register("EDrawableFlags", new CFlags(null));
             Register("ETriggerChannel", new CFlags(null));
             Register("ELightChannel", new CFlags(null));
             Register("EEntityStaticFlags", new CFlags(null));
+            Register("ELightUsageMask", new CFlags(null));
+            Register("EDismembermentEffectTypeFlag", new CFlags(null));
 
             Register("LocalizedString", new CLocalizedString(null));
 
 
             Register("CDateTime", new CDateTime());
+            Register("CCurve", new CCurve(null));
 
             Register("DeferredDataBuffer", new CInt16(null));
 
@@ -91,7 +100,7 @@ namespace WolvenKit.CR2W.Types
             Register("CBitmapTexture", new CBitmapTexture(null));
 
             Register("Color", new CColor(null));
-            Register("CColorShift",new CColorShift(null));
+            Register("CColorShift", new CColorShift(null));
 
             Register("SMeshTypeResourceLODLevel", new CFloat(null));
 
@@ -111,464 +120,560 @@ namespace WolvenKit.CR2W.Types
             Register("CGenericGrassMask", new CGenericGrassMask(null));
             Register("CIndexed2dArray", new CIndexed2dArray(null));
 
+            // CResources?
+            Register("CExtAnimEventsFile", new CExtAnimEventsFile(null));
+            Register("CSkeletalAnimationSet", new CExtAnimEventsFile(null));
+            Register("CSkeletalAnimation", new CExtAnimEventsFile(null)); //is actually it's own class
+
+            // WaypointSets
+            Register("CWayPointsCollection", new CWayPointsCollection(null));
+            Register("CWayPointsCollectionsSet", new CWayPointsCollectionsSet(null));
+            Register("CWayPointsCollectionsSetData", new CWayPointsCollectionsSetData(null));
+
+            Register("CCompressedArray", new CCompressedArray(null));
+            Register("SBufferWaypoints", new SBufferWaypoints(null));
+            Register("SBufferComponentsMappings", new SBufferComponentsMappings(null));
+            Register("SBufferwaypointsGroup", new SBufferwaypointsGroup(null));
+
+            
+
             // components
-            // all CCOmponents have an array of (parent) attachment handles
-            // although some seem to have 4 null bytes before the array
-            Register("CMovingPhysicalAgentComponent", new CComponent(null));
+            var components = new[]
+            {
+                "CMovingPhysicalAgentComponent",
+                "CAreaEnvironmentComponent",
+                "CStandPhysicalMaterialAreaComponent",
+                "CR4InteriorAreaComponent",
+                "CBoidAreaComponent",
+                "CBoidActivationTriggerComponent",
+                "CSoundAmbientAreaComponent",
+                "CSceneAreaComponent",
+                "CStreamingAreaComponent",
+                "CAreaComponent",
+                "CDeniedAreaComponent",
+                "CNegativeAreaComponent",
+                "CNavmeshBorderAreaComponent",
+                "CPathLibRoughtTerrainComponent",
+                "CTriggerAreaEnvironmentVisibilityComponent",
+                "CFoodBoidPointOfInterest",
+                "W3SpawnEntityOnAnimEvent",
+                "W3NPCBackgroundNew",
+                "CTriggerAreaComponent",
+                "CSoundAmbientAreaComponent",
+                "CLightEntitySimple",
+                "CDeniedAreaComponent",
+                "W3DestroyableClue",
+                "CDoorMarking",
+                "W3VisualFx",
+                "W3MeteorProjectile",
+                "CActionPointComponent",
+                "CExplorationStateManager",
+                "CExplorationStateJump",
+                "CExplorationStateLand",
+                "CExplorationStateIdle",
+                "CExplorationStateStartFalling",
+                "CExplorationStateInteraction",
+                "CExplorationStateSlide",
+                "CExplorationStateAirCollision",
+                "CExplorationStateCombat",
+                "CExplorationStateClimb",
+                "CExplorationStateRagdoll",
+                "CExplorationStateRoll",
+                "CExplorationStateSwim",
+                "CxplorationTransitionTurnToJump",
+                "CExplorationStatePushed",
+                "CAnimDangleBufferComponent",
+                "CAnimDangleComponent",
+                "CAnimatedComponent",
+                "CAppearanceComponent",
+                "CAreaComponent",
+                "CBgMeshComponent",
+                "CBgRootComponent",
+                "CBoatBodyComponent",
+                "CBoatComponent",
+                "CBoatDestructionComponent",
+                "CBoidAreaComponent",
+                "CBoidPointOfInterestComponent",
+                "CCameraComponent",
+                "CCameraOrientedComponent",
+                "CCarryableItemStorePointComponent",
+                "CClothComponent",
+                "CCreatureDataComponent",
+                "CDecalComponent",
+                "CDeniedAreaComponent",
+                "CDestructionComponent",
+                "CDestructionSystemComponent",
+                "CDimmerComponent",
+                "CDismembermentComponent",
+                "CDoorComponent",
+                "CDropPhysicsComponent",
+                "CDynamicColliderComponent",
+                "CDynamicFoliageComponent",
+                "CEffectDummyComponent",
+                "CEnvProbeComponent",
+                "CExplorationComponent",
+                "CFXSpawnerComponent",
+                "CFlareComponent",
+                "CFocusActionComponent",
+                "CFoundExplorationComponent",
+                "CFurComponent",
+                "CGameplayEffectsComponent",
+                "CGameplayLightComponent",
+                "CGameplayWindComponent",
+                "CGhostComponent",
+                "CHeadManagerComponent",
+                "CHelpTextComponent",
+                "CInteractionAreaComponent",
+                "CInteractionComponent",
+                "CInteractionToComponentComponent",
+                "CInteractionTooltipComponent",
+                "CInventoryComponent",
+                "CMaterialOverrideComponent",
+                "CMeshComponent",
+                "CMetalinkWithAIQueueComponent",
+                "CMimicComponent",
+                "CMorphedMeshComponent",
+                "CMorphedMeshManagerComponent",
+                "CMovingAgentComponent",
+                "CNavmeshBorderAreaComponent",
+                "CNavmeshGenerationRootComponent",
+                "CNegativeAreaComponent",
+                "CNormalBlendComponent",
+                "CParticleComponent",
+                "CPartySpawnPointComponent",
+                "CPathComponent",
+                "CPathLibRoughtTerrainComponent",
+                "CPatrolPointComponent",
+                "CPersistentLightComponent",
+                "CPhantomComponent",
+                "CPointLightComponent",
+                "CR4EffectComponent",
+                "CR4HumanoidCombatComponent",
+                "CR4InteriorAreaComponent",
+                "CRigidMeshComponent",
+                "CScriptedAnimEventsListenerComponent",
+                "CSimpleBuoyancyComponent",
+                "CSlotComponent",
+                "CSoundAmbientAreaComponent",
+                "CSoundEmitterComponent",
+                "CSpawnPointComponent",
+                "CSpotLightComponent",
+                "CSpriteComponent",
+                "CStaticMeshComponent",
+                "CStickerComponent",
+                "CStorySceneComponent",
+                "CStorySceneWaypointComponent",
+                "CStripeComponent",
+                "CSwarmRenderComponent",
+                "CSwarmSoundEmitterComponent",
+                "CSwitchableFoliageComponent",
+                "CTriggerActivatorComponent",
+                "CTriggerAreaComponent",
+                "CTriggerAreaEnvironmentVisibilityComponent",
+                "CWanderPointComponent",
+                "CWaterComponent",
+                "CWayPointComponent",
+                "CWetnessComponent",
+                "W3AerondightFXComponent",
+                "W3ApplyEffectPhantomComponent",
+                "W3CraftsmanComponent",
+                "W3FireAuraManagerComponent",
+                "W3FoodComponent",
+                "W3HorseComponent",
+                "W3MerchantComponent",
+                "W3PostFXOnGroundComponent",
+                "W3ScentComponent",
+                "W3SlideToTargetComponent",
+                "W3SummonedEntityComponent",
+                "W3SummonerComponent",
+                "W3TargetingManagementComponent",
+                "W3WindEffectOnGroundComponent",
+                "CReactionSceneActorComponent"
+             };
+            foreach (string s in components)
+            {
+                Register(s, new CComponent(null));
+            }
 
-            // most other have 4 null bytes after the array
-            // following list is untested:
-            Register("CAnimDangleBufferComponent", new CComponent(null));
-            Register("CAnimDangleComponent", new CComponent(null));
-            Register("CAnimatedComponent", new CComponent(null));
-            Register("CAnimatedComponentPhysicsRepresentation", new CComponent(null));
-            Register("CAppearanceComponent", new CComponent(null));
-            Register("CAreaComponent", new CComponent(null));
-            Register("CAreaEnvironmentComponent", new CComponent(null));
-            Register("CBehaviorGraphScriptComponentStateNode", new CComponent(null));
-            Register("CBgMeshComponent", new CComponent(null));
-            Register("CBgRootComponent", new CComponent(null));
-            Register("CBoatBodyComponent", new CComponent(null));
-            Register("CBoatComponent", new CComponent(null));
-            Register("CBoidActivationTriggerComponent", new CComponent(null));
-            Register("CBoatDestructionComponent", new CComponent(null));
-            Register("CBoidAreaComponent", new CComponent(null));
-            Register("CBoidPointOfInterestComponent", new CComponent(null));
-            Register("CCameraComponent", new CComponent(null));
-            Register("CCameraOrientedComponent", new CComponent(null));
-            Register("CCarryableItemStorePointComponent", new CComponent(null));
-            Register("CClothComponent", new CComponent(null));
-            Register("CCreatureDataComponent", new CComponent(null));
-            Register("CDecalComponent", new CComponent(null));
-            Register("CDeniedAreaComponent", new CComponent(null));
-            Register("CDestructionComponent", new CComponent(null));
-            Register("CDestructionSystemComponent", new CComponent(null));
-            Register("CDimmerComponent", new CComponent(null));
-            Register("CDismembermentComponent", new CComponent(null));
-            Register("CDoorComponent", new CComponent(null));
-            Register("CDropPhysicsComponent", new CComponent(null));
-            Register("CDynamicColliderComponent", new CComponent(null));
-            Register("CDynamicFoliageComponent", new CComponent(null));
-            Register("CEffectDummyComponent", new CComponent(null));
-            Register("CEnvProbeComponent", new CComponent(null));
-            Register("CExplorationComponent", new CComponent(null));
-            Register("CFXSpawnerComponent", new CComponent(null));
-            Register("CFlareComponent", new CComponent(null));
-            Register("CFocusActionComponent", new CComponent(null));
-            Register("CFoundExplorationComponent", new CComponent(null));
-            Register("CFurComponent", new CComponent(null));
-            Register("CGameplayEffectsComponent", new CComponent(null));
-            Register("CGameplayLightComponent", new CComponent(null));
-            Register("CGameplayWindComponent", new CComponent(null));
-            Register("CGhostComponent", new CComponent(null));
-            Register("CHeadManagerComponent", new CComponent(null));
-            Register("CHelpTextComponent", new CComponent(null));
-            Register("CInteractionAreaComponent", new CComponent(null));
-            Register("CInteractionComponent", new CComponent(null));
-            Register("CInteractionToComponentComponent", new CComponent(null));
-            Register("CInteractionTooltipComponent", new CComponent(null));
-            Register("CInventoryComponent", new CComponent(null));
-            Register("CMaterialOverrideComponent", new CComponent(null));
-            Register("CMeshComponent", new CComponent(null));
-            Register("CMetalinkWithAIQueueComponent", new CComponent(null));
-            Register("CMimicComponent", new CComponent(null));
-            Register("CMorphedMeshComponent", new CComponent(null));
-            Register("CMorphedMeshManagerComponent", new CComponent(null));
-            Register("CMovingAgentComponent", new CComponent(null));
-            Register("CNavmeshBorderAreaComponent", new CComponent(null));
-            Register("CNavmeshGenerationRootComponent", new CComponent(null));
-            Register("CNegativeAreaComponent", new CComponent(null));
-            Register("CNormalBlendComponent", new CComponent(null));
-            Register("CParticleComponent", new CComponent(null));
-            Register("CPartySpawnPointComponent", new CComponent(null));
-            Register("CPathComponent", new CComponent(null));
-            Register("CPathLibRoughtTerrainComponent", new CComponent(null));
-            Register("CPatrolPointComponent", new CComponent(null));
-            Register("CPersistentLightComponent", new CComponent(null));
-            Register("CPhantomComponent", new CComponent(null));
-            Register("CPointLightComponent", new CComponent(null));
-            Register("CR4EffectComponent", new CComponent(null));
-            Register("CR4HumanoidCombatComponent", new CComponent(null));
-            Register("CR4InteriorAreaComponent", new CComponent(null));
-            Register("CReactionSceneActorComponent", new CComponent(null));
-            Register("CRigidMeshComponent", new CComponent(null));
-            Register("CSceneAreaComponent", new CComponent(null));
-            Register("CScriptedAnimEventsListenerComponent", new CComponent(null));
-            Register("CSimpleBuoyancyComponent", new CComponent(null));
-            Register("CSlotComponent", new CComponent(null));
-            Register("CSoundAmbientAreaComponent", new CComponent(null));
-            Register("CSoundEmitterComponent", new CComponent(null));
-            Register("CSpawnPointComponent", new CComponent(null));
-            Register("CSpotLightComponent", new CComponent(null));
-            Register("CSpriteComponent", new CComponent(null));
-            Register("CStandPhysicalMaterialAreaComponent", new CComponent(null));
-            Register("CStaticMeshComponent", new CComponent(null));
-            Register("CStickerComponent", new CComponent(null));
-            Register("CStorySceneComponent", new CComponent(null));
-            Register("CStorySceneWaypointComponent", new CComponent(null));
-            Register("CStreamingAreaComponent", new CComponent(null));
-            Register("CStripeComponent", new CComponent(null));
-            Register("CSwarmRenderComponent", new CComponent(null));
-            Register("CSwarmSoundEmitterComponent", new CComponent(null));
-            Register("CSwitchableFoliageComponent", new CComponent(null));
-            Register("CTriggerActivatorComponent", new CComponent(null));
-            Register("CTriggerAreaComponent", new CComponent(null));
-            Register("CTriggerAreaEnvironmentVisibilityComponent", new CComponent(null));
-            Register("CWanderPointComponent", new CComponent(null));
-            Register("CWaterComponent", new CComponent(null));
-            Register("CWayPointComponent", new CComponent(null));
-            Register("CWetnessComponent", new CComponent(null));
-            Register("W3AerondightFXComponent", new CComponent(null));
-            Register("W3ApplyEffectPhantomComponent", new CComponent(null));
-            Register("W3CraftsmanComponent", new CComponent(null));
-            Register("W3FireAuraManagerComponent", new CComponent(null));
-            Register("W3FoodComponent", new CComponent(null));
-            Register("W3HorseComponent", new CComponent(null));
-            Register("W3MerchantComponent", new CComponent(null));
-            Register("W3PostFXOnGroundComponent", new CComponent(null));
-            Register("W3QuestCond_EntityComponentEnabled", new CComponent(null));
-            Register("W3QuestCond_EntityComponentExists", new CComponent(null));
-            Register("W3ScentComponent", new CComponent(null));
-            Register("W3SlideToTargetComponent", new CComponent(null));
-            Register("W3SummonedEntityComponent", new CComponent(null));
-            Register("W3SummonerComponent", new CComponent(null));
-            Register("W3TargetingManagementComponent", new CComponent(null));
-            Register("W3WindEffectOnGroundComponent", new CComponent(null));
-
-
-
+            Register("CEntityTemplate", new CEntityTemplate(null));
+            Register("CCharacterEntityTemplate", new CEntityTemplate(null));
             Register("CEntity", new CEntity(null));
 
             // *.w2ent decendants of CEntity in RTTI and ws to parse components array
-            Register("CAnimatedEntity", new CEntity(null));
-                Register("CBgCutsceneEntity", new CEntity(null));
-            Register("CBehaviorAnimationMultiplyEntity", new CEntity(null));
-            Register("CBgNpc", new CEntity(null));
-            Register("CCamera", new CEntity(null));
-                Register("CStaticCamera", new CEntity(null));
-            Register("CCommunityArea", new CEntity(null));
-            Register("CCookedMeshEntity", new CEntity(null));
-            Register("CCurveControlPointEntity", new CEntity(null));
-            Register("CCurveEntity", new CEntity(null));
-            Register("CCurveTangentControlPointEntity", new CEntity(null));
-            Register("CCustomCamera", new CEntity(null));
-            Register("CCutsceneInstance", new CEntity(null));
-            Register("CDaycycleGraphicsEntity", new CEntity(null));
-            Register("CEntityGroup", new CEntity(null));
-            Register("CForceFieldEntity", new CEntity(null));
-            Register("CGameplayFXMedalion", new CEntity(null));
-            Register("CItemEntity", new CEntity(null));
-                Register("CWitcherSword", new CEntity(null));
-                Register("RangedWeapon", new CEntity(null));
-                Register("W3EffectItem", new CEntity(null)); //ws
-                Register("W3UsableItem", new CEntity(null)); //ws
-                    Register("W3LightSource", new CEntity(null)); //ws
-                    Register("W3ShieldUsableItem", new CEntity(null)); //ws
-                    Register("W3QuestUsableItem", new CEntity(null)); //ws
-                        Register("W3MeteorItem", new CEntity(null)); //ws
-                        Register("W3EyeOfLoki", new CEntity(null)); //ws
-                        Register("W3MagicOilLamp", new CEntity(null)); //ws
-                        Register("W3Potestaquisitor", new CEntity(null)); //ws
-                        Register("W3HornvalHorn", new CEntity(null)); //ws
-                        Register("W3FiendLure", new CEntity(null)); //ws
-            Register("CMergedWorldGeometryEntity", new CEntity(null));
-            Register("CR4InteriorAreaEntity", new CEntity(null));
-            Register("CSkyTransformEntity", new CEntity(null));
-            Register("CSoundAmbientEmitter", new CEntity(null));
-            Register("CStoryScenePlayer", new CEntity(null));
-                Register("CStoryScenePreviewPlayer", new CEntity(null));
-            Register("CTeleporter", new CEntity(null));
-            Register("CVertexEditorEntity", new CEntity(null));
-                Register("CActionAreaBlendActor", new CEntity(null));
-            Register("CPeristentEntity", new CEntity(null));
-                Register("CEffectEntity", new CEntity(null));
-                Register("CGameplayEntity", new CEntity(null));
-                    Register("CActionPoint", new CEntity(null));
-                    Register("CActor", new CEntity(null));
-                        Register("CNewNPC", new CEntity(null));
-                            Register("CGhost", new CEntity(null)); //ws
-                            Register("CHeartMiniboss", new CEntity(null)); //ws
-                            Register("W3ArchesporBulb", new CEntity(null)); //ws
-                            Register("W3MerchantNPC", new CEntity(null)); //ws
-                            Register("W3MonsterHuntNPC", new CEntity(null)); //ws
-                            Register("CAnimal", new CEntity(null)); //ws
-                            Register("CDettlaffColumn", new CEntity(null)); //ws
-                            Register("CDettlaffConstruct", new CEntity(null)); //ws
-                            Register("CHitBasedNPC", new CEntity(null)); //ws
-                            Register("W3NightWraithIris", new CEntity(null)); //ws
-                            Register("W3Rat", new CEntity(null)); //ws
-                        Register("CPlayer", new CEntity(null)); //ws
-                            Register("W3PlayerTutorialInput", new CEntity(null)); //ws
-                            Register("CR4Player", new CEntity(null));  //ws
-                                Register("W3PlayerWitcher", new CEntity(null));  //ws
-                                Register("W3Replacer", new CEntity(null));  //ws
-                                    Register("W3ReplacerCiri", new CEntity(null));  //ws
-                                    Register("W3ReplacerCommoner", new CEntity(null));  //ws
-                        Register("W3FlyingWhale", new CEntity(null)); //ws
-                        Register("W3ProjectileShooterTest", new CEntity(null)); //ws
-                    Register("CCameraEffectTrigger", new CEntity(null));
-                    Register("CDeniedAreaSaveable", new CEntity(null));
-                    Register("CEncounter", new CEntity(null));
-                    Register("CProjectileTrajectory", new CEntity(null));
-                        Register("W3WhiteFrostWaveProjectile", new CEntity(null)); //ws
-                        Register("W3MagicalThing", new CEntity(null)); //ws
-                        Register("W3PhysicalThing", new CEntity(null)); //ws
-                        Register("CThrowable", new CEntity(null)); //ws
-                            Register("W3Petard", new CEntity(null)); //ws
-                                Register("W3Dimeritium", new CEntity(null)); //ws
-                                Register("W3DragonsDream", new CEntity(null)); //ws
-                                Register("W3Samum", new CEntity(null)); //ws
-                                Register("W3WhiteFrost", new CEntity(null)); //ws
-                            Register("W3AdvancedProjectile", new CEntity(null)); //ws
-                                Register("W3BoulderProjectile", new CEntity(null)); //ws
-                                Register("W3TraceGroundProjectile", new CEntity(null)); //ws
-                                Register("W3StoneProjectile", new CEntity(null)); //ws
-                                Register("W3EnvironmentProjectile", new CEntity(null)); //ws
-                                Register("BeamProjectile", new CEntity(null)); //ws
-                                Register("FakeProjectile", new CEntity(null)); //ws
-                                Register("PoisonProjectile", new CEntity(null)); //ws
-                                Register("DebuffProjectile", new CEntity(null)); //ws
-                                Register("W3FireballProjectile", new CEntity(null)); //ws
-                                Register("W3LightningBoltProjectile", new CEntity(null)); //ws
-                                Register("W3IceSpearProjectile", new CEntity(null)); //ws
-                                Register("W3SpawnMeteor", new CEntity(null)); //ws
-                                Register("W3AirDrainProjectile", new CEntity(null)); //ws
-                                Register("W3ArrowProjectile", new CEntity(null)); //ws
-                                Register("W3SnowballProjectile", new CEntity(null)); //ws
-                        Register("W3LeshyRootProjectile", new CEntity(null)); //ws
-                        Register("W3LeshyBirdProjectile", new CEntity(null)); //ws
-                        Register("W3SignProjectile", new CEntity(null)); //ws
-                            Register("W3AardProjectile", new CEntity(null)); //ws
-                            Register("W3AxiiProjectile", new CEntity(null)); //ws
-                            Register("W3IgniProjectile ", new CEntity(null)); //ws
-                        Register("W3ObjectProjectile", new CEntity(null)); //ws
-                    Register("CR4JournalPlaceEntity", new CEntity(null));
-                        Register("W3SettlementTrigger", new CEntity(null)); //ws
-                    Register("CR4MapPinEntity", new CEntity(null));
-                        Register("CR4FastTravelEntity", new CEntity(null));
-                        Register("W3ItemRepairObject", new CEntity(null));
-                        Register("W3NoticeBoard", new CEntity(null)); //ws
-                        Register("W3EntranceEntity", new CEntity(null)); //ws
-                        Register("W3TreasureHuntMappinEntity", new CEntity(null)); //ws
-                        Register("W3WitcherHouse", new CEntity(null)); //ws
-                        Register("W3AnimationInteractionEntity", new CEntity(null)); //ws
-                        Register("W3SmartObject", new CEntity(null)); //ws
-                        Register("CInteractiveEntity", new CEntity(null)); //ws
-                            Register("W3Stash", new CEntity(null)); //ws
-                            Register("W3CriticalStateTrap", new CEntity(null)); //ws
-                            Register("W3InteractiveQuestEntity", new CEntity(null)); //ws
-                            Register("W3MagicLampEntity", new CEntity(null)); //ws
-                            Register("CMagicMineEntity", new CEntity(null)); //ws
-                            Register("CMonsterNestEntity", new CEntity(null)); //ws
-                            Register("CMajorPlaceOfPowerEntity", new CEntity(null)); //ws
-                            Register("CPopsGasEntity", new CEntity(null)); //ws
-                            Register("CRiftEntity", new CEntity(null)); //ws
-                            Register("W3SnowMound", new CEntity(null)); //ws
-                            Register("CTeleportEntity", new CEntity(null)); //ws
-                            Register("CToadAcidPool", new CEntity(null)); //ws
-                            Register("W3AardObstacle", new CEntity(null)); //ws
-                            Register("W3CombatDamageEntity", new CEntity(null)); //ws
-                            Register("W3FlammableDamageEntity", new CEntity(null)); //ws
-                            Register("CDamageAreaEntity", new CEntity(null)); //ws
-                            Register("W3IgniObstacleEntity", new CEntity(null)); //ws
-                            Register("CUsableEntity", new CEntity(null)); //ws
-                                Register("CScheduledUsableEntity", new CEntity(null)); //ws
-                            Register("W3DestroyableTerrain", new CEntity(null)); //ws
-                        Register("W3POI_BanditCampEntity", new CEntity(null)); //ws
-                        Register("W3POI_BanditCampfireEntity", new CEntity(null)); //ws
-                        Register("W3POI_BossAndTreasureEntity", new CEntity(null)); //ws
-                        Register("W3POI_ContrabandEntity", new CEntity(null)); //ws
-                        Register("W3POI_DungeonCrawlEntity", new CEntity(null)); //ws
-                        Register("W3POI_HideoutEntity", new CEntity(null)); //ws
-                        Register("W3POI_KnightErrantEntity", new CEntity(null)); //ws
-                        Register("W3POI_PlegmundEntity", new CEntity(null)); //ws
-                        Register("W3POI_RescuingTownEntity", new CEntity(null)); //ws
-                        Register("W3POI_SignalingStakeEntity", new CEntity(null)); //ws
-                        Register("W3POI_SpoilsOfWarEntity", new CEntity(null)); //ws
-                        Register("W3POI_WineContractEntity", new CEntity(null)); //ws
-                        Register("W3PointOfInterestMappinEntity", new CEntity(null)); //ws
-                    Register("CStorySceneSpawner", new CEntity(null));
-                    Register("CVirtualContainerEntity", new CEntity(null));
-                    Register("IBoidLairEntity", new CEntity(null));
-                        Register("CSwarmLairEntity", new CEntity(null));
-                            Register("CFlyingCrittersLairEntity", new CEntity(null));
-                                Register("CFlyingCrittersLairEntityScript", new CEntity(null));
-                                    Register("CFlyingSwarmMasterLair", new CEntity(null)); //ws
-                                Register("CHumbleCrittersLairEntity", new CEntity(null));
-                    Register("W3Boat", new CEntity(null));
-                    Register("W3BoatSpawner", new CEntity(null));
-                    Register("W3LockableEntity", new CEntity(null));
-                        Register("W3NewDoor", new CEntity(null));
-                        Register("W3Door", new CEntity(null)); //ws
-                        Register("CGateEntity", new CEntity(null)); //ws
-                        Register("W3Container", new CEntity(null)); //ws
-                            Register("CBeehiveEntity", new CEntity(null));
-                            Register("W3AnimatedContainer", new CEntity(null)); //ws
-                                Register("W3ActorRemains", new CEntity(null)); //ws
-                                Register("W3BeehiveStandingEntity", new CEntity(null)); //ws
-                            Register("W3CookingPlace", new CEntity(null)); //ws
-                                Register("W3CampfirePlace", new CEntity(null)); //ws
-                            Register("W3DisplayMount", new CEntity(null)); //ws
-                            Register("W3RefillableContainer", new CEntity(null)); //ws
-                                Register("W3Herb", new CEntity(null)); //ws
-                            Register("W3treasureHuntContainer", new CEntity(null)); //ws
-                            Register("CBeehiveEntity", new CEntity(null)); //ws
-                            Register("W3HouseDecorationBase", new CEntity(null)); //ws
-                                Register("W3ArmorStand", new CEntity(null)); //ws
-                                Register("W3HouseGenericDecoration", new CEntity(null)); //ws
-                                Register("W3SwordStand", new CEntity(null)); //ws
-                    Register("W3ToxicCloud", new CEntity(null));
-                    Register("W3Campfire", new CEntity(null)); //ws
-                    Register("W3LadderInteraction", new CEntity(null)); //ws
-                    Register("CollisionTrajectory", new CEntity(null)); //ws
-                    Register("CDoorMarkingTester", new CEntity(null)); //ws
-                    Register("W3FireSource", new CEntity(null)); //ws
-                        Register("W3FireSourceLifeRegen", new CEntity(null)); //ws
-                    Register("W3Bird", new CEntity(null)); //ws
-                        Register("W3BirdQuest", new CEntity(null)); //ws
-                    Register("CBirdsManager", new CEntity(null)); //ws
-                    Register("CBirdsArea", new CEntity(null)); //ws
-                    Register("W3CurveFish", new CEntity(null)); //ws
-                    Register("W3CurveFishManager", new CEntity(null)); //ws
-                    Register("W3Whale", new CEntity(null)); //ws
-                    Register("W3Elevator", new CEntity(null)); //ws
-                        Register("W3ElevatorInteractive", new CEntity(null)); //ws
-                    Register("W3DurationObstacle", new CEntity(null)); //ws
-                        Register("W3DaoPillarObstacle", new CEntity(null)); //ws
-                        Register("W3EredinIceSpike", new CEntity(null)); //ws
-                        Register("W3IceSpike", new CEntity(null)); //ws
-                        Register("W3WitchBoilingWaterObstacle", new CEntity(null)); //ws
-                    Register("CGroupFXManager", new CEntity(null)); //ws
-                    Register("W3AirDrainArea", new CEntity(null)); //ws
-                    Register("W3GameplayTrigger", new CEntity(null)); //ws
-                        Register("W3FastTravel", new CEntity(null)); //ws
-                        Register("W3TrapTrigger", new CEntity(null)); //ws
-                        Register("W3ReplacerChanger", new CEntity(null)); //ws
-                    Register("W3BlockGameplayActionsTrigger", new CEntity(null)); //ws
-                    Register("CCenserTrigger", new CEntity(null)); //ws
-                    Register("W3EffectAreaTrigger", new CEntity(null)); //ws
-                        Register("W3FlammableAreaTrigger", new CEntity(null)); //ws
-                    Register("CFairytaleWitchTrigger", new CEntity(null)); //ws
-                    Register("W3FocusAreaTrigger", new CEntity(null)); //ws
-                    Register("W3GenericSceneArea", new CEntity(null)); //ws
-                    Register("CHorseCorrectionTrigger", new CEntity(null)); //ws
-                    Register("CHorseJumpTrigger", new CEntity(null)); //ws
-                    Register("W3LocationArea", new CEntity(null)); //ws
-                    Register("W3MinimapZoomScaleTrigger", new CEntity(null)); //ws
-                    Register("CArchesporeNoBulbArea", new CEntity(null)); //ws
-                    Register("W3SafeModeTrigger", new CEntity(null)); //ws
-                    Register("W3PlayerModeTrigger", new CEntity(null)); //ws
-                    Register("W3ShowDisplayNameTrigger", new CEntity(null)); //ws
-                    Register("CVFXTrigger", new CEntity(null)); //ws
-                    Register("W3WitcherHouseArea", new CEntity(null)); //ws
-                    Register("W3IllusionaryObstacle", new CEntity(null)); //ws
-                        Register("W3IllusionaryAppearance", new CEntity(null)); //ws
-                    Register("W3IllusionSpawner", new CEntity(null)); //ws
-                    Register("W3AirDrainEntity", new CEntity(null)); //ws
-                         Register("W3SmellyCheese", new CEntity(null)); //ws
-                    Register("W3BeeSwarm", new CEntity(null)); //ws
-                    Register("CBoatRacingGateEntity", new CEntity(null)); //ws
-                    Register("EP1Chandelier", new CEntity(null)); //ws
-                    Register("W3IceWall", new CEntity(null)); //ws
-                    Register("CMagicBombEntity", new CEntity(null)); //ws
-                    Register("CPhilippaAttractorTrigger", new CEntity(null)); //ws
-                    Register("CMeteoriteStormEntity", new CEntity(null)); //ws
-                    Register("COilBarrelEntity", new CEntity(null)); //ws
-                    Register("W3ReactToBeingHitEntity", new CEntity(null)); //ws
-                    Register("W3RootsEntrance", new CEntity(null)); //ws
-                    Register("CSkullPileEntity", new CEntity(null)); //ws
-                    Register("W3WeatherShrine", new CEntity(null)); //ws
-                    Register("W3BuffImmunityEntity", new CEntity(null)); //ws
-                        Register("W3MagicBubbleEntity", new CEntity(null)); //ws
-                    Register("W3IrisPainting", new CEntity(null)); //ws
-                    Register("W3MonsterElementalArm", new CEntity(null)); //ws
-                    Register("W3UsableEntity", new CEntity(null)); //ws
-                        Register("W3EntitySpawner", new CEntity(null)); //ws
-                    Register("W3SignEntity", new CEntity(null)); //ws
-                        Register("W3AardEntity", new CEntity(null)); //ws
-                        Register("W3AxiiEntity", new CEntity(null)); //ws
-                        Register("W3IgniEntity", new CEntity(null)); //ws
-                        Register("W3QuenEntity", new CEntity(null)); //ws
-                        Register("W3YrdenEntity", new CEntity(null)); //ws
-                    Register("W3EnvironmentThrowable", new CEntity(null)); //ws
-                    Register("W3PhysicalDamageMechanism", new CEntity(null)); //ws
-                    Register("W3RiddleNode", new CEntity(null)); //ws
-                    Register("W3RiddleServer", new CEntity(null)); //ws
-                    Register("W3Switch", new CEntity(null)); //ws
-                        Register("W3PhysicalSwitch", new CEntity(null)); //ws
-                            Register("W3InteractionSwitch", new CEntity(null)); //ws
-                                Register("W3ElevatorSwitch", new CEntity(null)); //ws
-                            Register("W3PressureSwitch", new CEntity(null)); //ws
-                            Register("W3TripwireSwitch", new CEntity(null)); //ws
-                        Register("W3VirtualSwitch", new CEntity(null)); //ws
-                            Register("W3VirtualSwitch_Combination", new CEntity(null)); //ws
-                            Register("W3VirtualSwitch_Sequence", new CEntity(null)); //ws
-                        Register("W3SE_AddBuff", new CEntity(null)); //ws
-                        Register("W3SE_CustomScript", new CEntity(null)); //ws
-                        Register("W3SE_EnableTreasureHuntMappin", new CEntity(null)); //ws
-                        Register("W3SE_Encounter", new CEntity(null)); //ws
-                        Register("W3SE_Fact", new CEntity(null)); //ws
-                        Register("W3SE_ManageClue", new CEntity(null)); //ws
-                        Register("W3SE_ManageContainer", new CEntity(null)); //ws
-                        Register("W3SE_ManageDoor", new CEntity(null)); //ws
-                        Register("W3SE_ManageFocusArea", new CEntity(null)); //ws
-                        Register("W3SE_ManageGate", new CEntity(null)); //ws
-                        Register("W3SE_ManageNewDoor", new CEntity(null)); //ws
-                        Register("W3SE_ManageOilBarrel", new CEntity(null)); //ws
-                        Register("W3SE_ManagePchysicalDamageMechanism", new CEntity(null)); //ws
-                        Register("W3SE_ManageSwitch", new CEntity(null)); //ws
-                        Register("W3SE_ManageToxicCloud", new CEntity(null)); //ws
-                        Register("W3SE_ManageTrap", new CEntity(null)); //ws
-                        Register("W3SE_PerformableAction", new CEntity(null)); //ws
-                        Register("W3SE_PlayAnimationOnEntity", new CEntity(null)); //ws
-                        Register("W3SE_PlayEffectOnActivator", new CEntity(null)); //ws
-                        Register("W3SE_PlayEffectOnEntity", new CEntity(null)); //ws
-                        Register("W3SE_PlayEffectOnSwitch", new CEntity(null)); //ws
-                        Register("W3SE_SetAppearanceOnEntity", new CEntity(null)); //ws
-                        Register("W3SE_SpawnEntity", new CEntity(null)); //ws
-                        Register("W3SE_UseRiddleNode", new CEntity(null)); //ws
-                    Register("W3CollectiblePlaces", new CEntity(null)); //ws
-                    Register("W3MicroQuestActivator", new CEntity(null)); //ws
-                    Register("W3MonsterHuntInvestigationArea", new CEntity(null)); //ws
-                    Register("W3SavedSoundClue", new CEntity(null)); //ws
-                    Register("W3SummonedFlies", new CEntity(null)); //ws
-                    Register("W3Poster", new CEntity(null)); //ws
-                        Register("W3LeaderboardCustom", new CEntity(null)); //ws
-                        Register("W3SavedPoster", new CEntity(null)); //ws
-                        Register("W3Signboard", new CEntity(null)); //ws
-                    Register("W3SavedAppearanceEntity", new CEntity(null)); //ws
-                    Register("W3FairytaleWitchFluid", new CEntity(null)); //ws
-                    Register("W3SpawnMarker", new CEntity(null)); //ws
-                    Register("W3StallEntity", new CEntity(null)); //ws
-                    Register("W3PointOfInterestEntity", new CEntity(null)); //ws
-                    Register("W3POIDispenser", new CEntity(null)); //ws
-                    Register("W3DestructSelfEntity", new CEntity(null)); //ws
-                    Register("W3NPCBackground", new CEntity(null)); //ws
-                    Register("W3NPCBackgroundPair", new CEntity(null)); //ws
-                    Register("W3NPCBackgroundWoman", new CEntity(null)); //ws
-                    Register("CBooksMinigameManager", new CEntity(null)); //ws
-                    Register("CBookMinigameSlot", new CEntity(null)); //ws
-                    Register("CBookMinigameBook", new CEntity(null)); //ws
-                    Register("CFactAdderOnCollisionWithTag", new CEntity(null)); //ws
-                    Register("W3CiriPhantom", new CEntity(null)); //ws
-                    Register("CTestTrigger", new CEntity(null)); //ws
-                    Register("W3KillTestTrigger", new CEntity(null)); //ws
-                    Register("W3BackgroundAnimatedEntity", new CEntity(null)); //ws
-                    Register("W3BackgroundAnimatedEntityTrigger", new CEntity(null)); //ws
-                    Register("W3ChangeCombatStageTrigger", new CEntity(null)); //ws
-                    Register("W3ShepherdGreetingTrigger", new CEntity(null)); //ws
-                    Register("W3DestructionTrigger", new CEntity(null)); //ws
-                    Register("W3FoodDispenser", new CEntity(null)); //ws
-            Register("W3HorseManager", new CEntity(null)); //ws
+            var entities = new[]
+            {
+                "W3MusicBandActivatorArea",
+                "CBirdSpawnpoint",
+                "W3NPCBackgroundNew",
+                "CLightEntitySimple",
+                "W3DestroyableClue",
+                "W3VisualFx",
+                "W3MeteorProjectile",
+                "W3ClueStash",
+                "W3OnSpawnPortal",
+                "W3ClueCorpse",
+                "W3TrapSpawnEntity",
+                "W3ArachasEggCustom",
+                "W3MonsterClueAnimated",
+                "CSignReactiveEntity",
+                "W3MonsterClueScent",
+                "W3TrapTripwire",
+                "W3TrapProjectileStatue",
+                "W3ForceAttackArea",
+                "W3DamageAreaTrigger",
+                "CAnimatedEntity",
+                "CBgCutsceneEntity",
+                "CBehaviorAnimationMultiplyEntity",
+                "CBgNpc",
+                "CCamera",
+                "CStaticCamera",
+                "CCommunityArea",
+                "CCookedMeshEntity",
+                "CCurveControlPointEntity",
+                "CCurveEntity",
+                "CCurveTangentControlPointEntity",
+                "CCustomCamera",
+                "CCutsceneInstance",
+                "CDaycycleGraphicsEntity",
+                "CEntityGroup",
+                "CForceFieldEntity",
+                "CGameplayFXMedalion",
+                "CItemEntity",
+                "CWitcherSword",
+                "RangedWeapon",
+                "W3IgniProjectile",
+                "W3EredinFrostProjectile",
+                "W3IceMeteorProjectile",
+                "W3ElementalDaoProjectile",
+                "W3ElementalIfrytProjectile",
+                "W3LightEntityDamaging",
+                "W3SonarEnttity",
+                "W3LessunClue",
+                "W3MedallionFX",
+                "W3FastTravelEntity",
+                "W3BaitProjectile",
+                "W3BoltProjectile",
+                "W3ExplosiveBolt",
+                "W3DynamicBlood",
+                "Crossbow",
+                "W3DracolizardFireball",
+                "W3Blood",
+                "W3Bookshelf",
+                "W3WitcherBed",
+                "W3AlchemyTable",
+                "W3MutagenDismantlingTable",
+                "W3Stables",
+                "W3Trap",
+                "SpawnMultipleEntitiesPoisonProjectile",
+                "WebLineProjectile",
+                "W3MonsterClue",
+                "W3EffectItem",
+                "W3UsableItem",
+                "W3LightSource",
+                "W3ShieldUsableItem",
+                "W3QuestUsableItem",
+                "W3MeteorItem",
+                "W3EyeOfLoki",
+                "W3MagicOilLamp",
+                "W3Potestaquisitor",
+                "W3HornvalHorn",
+                "W3FiendLure",
+                "CMergedWorldGeometryEntity",
+                "CR4InteriorAreaEntity",
+                "CSkyTransformEntity",
+                "CSoundAmbientEmitter",
+                "CStoryScenePlayer",
+                "CStoryScenePreviewPlayer",
+                "CTeleporter",
+                "CVertexEditorEntity",
+                "CActionAreaBlendActor",
+                "CPeristentEntity",
+                "CEffectEntity",
+                "CGameplayEntity",
+                "CActionPoint",
+                "CActor",
+                "CNewNPC",
+                "CGhost",
+                "CHeartMiniboss",
+                "W3ArchesporBulb",
+                "W3MerchantNPC",
+                "W3MonsterHuntNPC",
+                "CAnimal",
+                "CDettlaffColumn",
+                "CDettlaffConstruct",
+                "CHitBasedNPC",
+                "W3NightWraithIris",
+                "W3Rat",
+                "CPlayer",
+                "W3PlayerTutorialInput",
+                "CR4Player",
+                "W3PlayerWitcher",
+                "W3Replacer",
+                "W3ReplacerCiri",
+                "W3ReplacerCommoner",
+                "W3FlyingWhale",
+                "W3ProjectileShooterTest",
+                "CCameraEffectTrigger",
+                "CDeniedAreaSaveable",
+                "CEncounter",
+                "CProjectileTrajectory",
+                "W3WhiteFrostWaveProjectile",
+                "W3MagicalThing",
+                "W3PhysicalThing",
+                "CThrowable",
+                "W3Petard",
+                "W3Dimeritium",
+                "W3DragonsDream",
+                "W3Samum",
+                "W3WhiteFrost",
+                "W3AdvancedProjectile",
+                "W3BoulderProjectile",
+                "W3TraceGroundProjectile",
+                "W3StoneProjectile",
+                "W3EnvironmentProjectile",
+                "BeamProjectile",
+                "FakeProjectile",
+                "PoisonProjectile",
+                "DebuffProjectile",
+                "W3FireballProjectile",
+                "W3LightningBoltProjectile",
+                "W3IceSpearProjectile",
+                "W3SpawnMeteor",
+                "W3AirDrainProjectile",
+                "W3ArrowProjectile",
+                "W3SnowballProjectile",
+                "W3LeshyRootProjectile",
+                "W3LeshyBirdProjectile",
+                "W3SignProjectile",
+                "W3AardProjectile",
+                "W3AxiiProjectile",
+                "W3IgniProjectile",
+                "W3ObjectProjectile",
+                "CR4JournalPlaceEntity",
+                "W3SettlementTrigger",
+                "CR4MapPinEntity",
+                "CR4FastTravelEntity",
+                "W3ItemRepairObject",
+                "W3NoticeBoard",
+                "W3EntranceEntity",
+                "W3TreasureHuntMappinEntity",
+                "W3WitcherHouse",
+                "W3AnimationInteractionEntity",
+                "W3SmartObject",
+                "CInteractiveEntity",
+                "W3Stash",
+                "W3CriticalStateTrap",
+                "W3InteractiveQuestEntity",
+                "W3MagicLampEntity",
+                "CMagicMineEntity",
+                "CMonsterNestEntity",
+                "CMajorPlaceOfPowerEntity",
+                "CPopsGasEntity",
+                "CRiftEntity",
+                "W3SnowMound",
+                "CTeleportEntity",
+                "CToadAcidPool",
+                "W3AardObstacle",
+                "W3CombatDamageEntity",
+                "W3FlammableDamageEntity",
+                "CDamageAreaEntity",
+                "W3IgniObstacleEntity",
+                "CUsableEntity",
+                "CScheduledUsableEntity",
+                "W3DestroyableTerrain",
+                "W3POI_BanditCampEntity",
+                "W3POI_BanditCampfireEntity",
+                "W3POI_BossAndTreasureEntity",
+                "W3POI_ContrabandEntity",
+                "W3POI_DungeonCrawlEntity",
+                "W3POI_HideoutEntity",
+                "W3POI_KnightErrantEntity",
+                "W3POI_PlegmundEntity",
+                "W3POI_RescuingTownEntity",
+                "W3POI_SignalingStakeEntity",
+                "W3POI_SpoilsOfWarEntity",
+                "W3POI_WineContractEntity",
+                "W3PointOfInterestMappinEntity",
+                "CStorySceneSpawner",
+                "CVirtualContainerEntity",
+                "IBoidLairEntity",
+                "CSwarmLairEntity",
+                "CFlyingCrittersLairEntity",
+                "CFlyingCrittersLairEntityScript",
+                "CFlyingSwarmMasterLair",
+                "CHumbleCrittersLairEntity",
+                "W3Boat",
+                "W3BoatSpawner",
+                "W3LockableEntity",
+                "W3NewDoor",
+                "W3Door",
+                "CGateEntity",
+                "W3Container",
+                "CBeehiveEntity",
+                "W3AnimatedContainer",
+                "W3ActorRemains",
+                "W3BeehiveStandingEntity",
+                "W3CookingPlace",
+                "W3CampfirePlace",
+                "W3DisplayMount",
+                "W3RefillableContainer",
+                "W3Herb",
+                "W3treasureHuntContainer",
+                "CBeehiveEntity",
+                "W3HouseDecorationBase",
+                "W3ArmorStand",
+                "W3HouseGenericDecoration",
+                "W3SwordStand",
+                "W3ToxicCloud",
+                "W3Campfire",
+                "W3LadderInteraction",
+                "CollisionTrajectory",
+                "CDoorMarkingTester",
+                "W3FireSource",
+                "W3FireSourceLifeRegen",
+                "W3Bird",
+                "W3BirdQuest",
+                "CBirdsManager",
+                "CBirdsArea",
+                "W3CurveFish",
+                "W3CurveFishManager",
+                "W3Whale",
+                "W3Elevator",
+                "W3ElevatorInteractive",
+                "W3DurationObstacle",
+                "W3DaoPillarObstacle",
+                "W3EredinIceSpike",
+                "W3IceSpike",
+                "W3WitchBoilingWaterObstacle",
+                "CGroupFXManager",
+                "W3AirDrainArea",
+                "W3GameplayTrigger",
+                "W3FastTravel",
+                "W3TrapTrigger",
+                "W3ReplacerChanger",
+                "W3BlockGameplayActionsTrigger",
+                "CCenserTrigger",
+                "W3EffectAreaTrigger",
+                "W3FlammableAreaTrigger",
+                "CFairytaleWitchTrigger",
+                "W3FocusAreaTrigger",
+                "W3GenericSceneArea",
+                "CHorseCorrectionTrigger",
+                "CHorseJumpTrigger",
+                "W3LocationArea",
+                "W3MinimapZoomScaleTrigger",
+                "CArchesporeNoBulbArea",
+                "W3SafeModeTrigger",
+                "W3PlayerModeTrigger",
+                "W3ShowDisplayNameTrigger",
+                "CVFXTrigger",
+                "W3WitcherHouseArea",
+                "W3IllusionaryObstacle",
+                "W3IllusionaryAppearance",
+                "W3IllusionSpawner",
+                "W3AirDrainEntity",
+                "W3SmellyCheese",
+                "W3BeeSwarm",
+                "CBoatRacingGateEntity",
+                "EP1Chandelier",
+                "W3IceWall",
+                "CMagicBombEntity",
+                "CPhilippaAttractorTrigger",
+                "CMeteoriteStormEntity",
+                "COilBarrelEntity",
+                "W3ReactToBeingHitEntity",
+                "W3RootsEntrance",
+                "CSkullPileEntity",
+                "W3WeatherShrine",
+                "W3BuffImmunityEntity",
+                "W3MagicBubbleEntity",
+                "W3IrisPainting",
+                "W3MonsterElementalArm",
+                "W3UsableEntity",
+                "W3EntitySpawner",
+                "W3SignEntity",
+                "W3AardEntity",
+                "W3AxiiEntity",
+                "W3IgniEntity",
+                "W3QuenEntity",
+                "W3YrdenEntity",
+                "W3EnvironmentThrowable",
+                "W3PhysicalDamageMechanism",
+                "W3RiddleNode",
+                "W3RiddleServer",
+                "W3Switch",
+                "W3PhysicalSwitch",
+                "W3InteractionSwitch",
+                "W3ElevatorSwitch",
+                "W3PressureSwitch",
+                "W3TripwireSwitch",
+                "W3VirtualSwitch",
+                "W3VirtualSwitch_Combination",
+                "W3VirtualSwitch_Sequence",
+                "W3CollectiblePlaces",
+                "W3MicroQuestActivator",
+                "W3MonsterHuntInvestigationArea",
+                "W3SavedSoundClue",
+                "W3SummonedFlies",
+                "W3Poster",
+                "W3LeaderboardCustom",
+                "W3SavedPoster",
+                "W3Signboard",
+                "W3SavedAppearanceEntity",
+                "W3FairytaleWitchFluid",
+                "W3SpawnMarker",
+                "W3StallEntity",
+                "W3PointOfInterestEntity",
+                "W3POIDispenser",
+                "W3DestructSelfEntity",
+                "W3NPCBackground",
+                "W3NPCBackgroundPair",
+                "W3NPCBackgroundWoman",
+                "CBooksMinigameManager",
+                "CBookMinigameSlot",
+                "CBookMinigameBook",
+                "CFactAdderOnCollisionWithTag",
+                "W3CiriPhantom",
+                "CTestTrigger",
+                "W3KillTestTrigger",
+                "W3BackgroundAnimatedEntity",
+                "W3BackgroundAnimatedEntityTrigger",
+                "W3ChangeCombatStageTrigger",
+                "W3ShepherdGreetingTrigger",
+                "W3DestructionTrigger",
+                "W3FoodDispenser",
+                "W3HorseManager",
+                "W3TrapProjectileArea",
+                "CEncounterActivator",
+                "W3GameZoneTrigger",
+                "W3DestroyableClue",
+                "W3ReplacerWarningArea",
+                "W3ElevatorMechanism",
+                "W3WhaleArea",
+                "W3EffectImmunityAreaTrigger",
+                "W3CurveFishSpawnpoint",
+                "W3UnlimitedDivingArea",
+            };
+            foreach (string s in entities)
+            {
+                Register(s, new CEntity(null));
+            }
 
             // Testing area. Put your CVectors which don't work fully yet here.
 #if DEBUG
             // *.w2p
             Register("CParticleEmitter", new CParticleEmitter(null));
             Register("CDecalSpawner", new CDecalSpawner(null));
-            
+            //Register("SSeedKeyValue", new SSeedKeyValue(null));
+            //Register("SDynamicDecalMaterialInfo", new SDynamicDecalMaterialInfo(null)); 
+            //Register("SParticleEmitterLODLevel", new SParticleEmitterLODLevel(null));
+            //Register("EmitterDelaySettings", new EmitterDelaySettings(null));
+            //Register("EmitterDurationSettings", new EmitterDurationSettings(null));
+            //Register("CParticleSystem", new CParticleSystem(null)); 
+
             // *.w2l
             Register("CLayerInfo", new CLayerInfo(null));
+
             Register("SBoneIndiceMapping", new SBoneIndiceMapping(null));
 
             // *.w2cube
@@ -2326,7 +2431,6 @@ namespace WolvenKit.CR2W.Types
                 "CBoatComponent",
                 "CBoatDestructionComponent",
                 "CBoidActivationTriggerComponent",
-                "CBoidAreaComponent",
                 "CBoidPointOfInterestComponent",
                 "CBoxAttackRange",
                 "CBuffEffectExecutor",
@@ -3268,6 +3372,7 @@ namespace WolvenKit.CR2W.Types
                 "SAnimationBufferBitwiseCompressedBoneTrack",
                 "SAnimationBufferBitwiseCompressionSettings",
                 "SAttachmentReplacements",
+                "SDismembermentEffect",
                 "SDismembermentWoundDecal",
                 "SDynamicDecalMaterialInfo",
                 "SFoliageLODSetting",
@@ -3645,7 +3750,6 @@ namespace WolvenKit.CR2W.Types
                 "WeaponHolster",
                 "WebLineProjectile"
             };
-
             foreach (string t in vectors)
             {
                 Register(t, new CVector(null));

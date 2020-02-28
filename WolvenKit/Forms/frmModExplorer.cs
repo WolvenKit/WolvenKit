@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Bundles;
+using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.Mod;
 using WolvenKit.Services;
@@ -14,7 +15,7 @@ namespace WolvenKit
 {
     public partial class frmModExplorer : DockContent, IThemedContent
     {
-        public frmModExplorer()
+        public frmModExplorer(ILoggerService logger)
         {
             InitializeComponent();
             UpdateModFileList(true,true);
@@ -22,6 +23,7 @@ namespace WolvenKit
             ApplyCustomTheme();
 
             importAsToolStripMenuItem.DropDown.MouseClick += DropDown_Click;
+            Logger = logger;
         }
 
         public W3Mod ActiveMod
@@ -41,7 +43,7 @@ namespace WolvenKit
 
         public static DateTime LastChange;
         public static TimeSpan mindiff = TimeSpan.FromMilliseconds(500);
-
+        private ILoggerService Logger;
 
         public void PauseMonitoring()
         {
@@ -278,6 +280,8 @@ namespace WolvenKit
             copyToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
             
             showFileInExplorerToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
+            dumpXMLToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
+
         }
 
         private async void DropDown_Click(object sender, EventArgs e)
@@ -372,6 +376,34 @@ namespace WolvenKit
             }
         }
 
+        private void dumpXMLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                DumpXML(ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath);
+            }
+
+            void DumpXML(string filepath)
+            {
+                try
+                {
+                    string fileName = filepath + ".xml";
+                    using (var writer = new FileStream(fileName, FileMode.Create))
+                    using (var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read))
+                    using (var reader = new BinaryReader(fs))
+                    {
+                        var File = new CR2W.CR2WFile(reader);
+                        File.SerializeToXml(writer);
+                    }
+                    Logger.LogString("Dumping XML successful.", Logtype.Success);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogString("Dumping XML failed.", Logtype.Error);
+                }
+            }
+        }
+
         private void ExpandBTN_Click(object sender, EventArgs e)
         {
             modFileList.ExpandAll();
@@ -450,5 +482,6 @@ namespace WolvenKit
             this.searchBox.BackColor = theme.ColorPalette.ToolWindowCaptionButtonInactiveHovered.Background;
         }
 
+        
     }
 }

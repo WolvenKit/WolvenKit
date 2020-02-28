@@ -18,16 +18,13 @@ namespace CR2WTests
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            mc = new BundleManager();            
-            mc.LoadAll("D:\\SteamLibrary\\steamapps\\common\\The Witcher 3\\bin\\x64");
+            mc = new BundleManager();
+            //mc.LoadAll("D:\\SteamLibrary\\steamapps\\common\\The Witcher 3\\bin\\x64");
+            mc.LoadAll("C:\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
         }
-
+        
         // Methods to test for the different file types
-        [TestMethod]
-        public void buffer()
-        {
-            StressTestExt("buffer");
-        }
+        
 
         [TestMethod]
         public void cellmap()
@@ -83,35 +80,7 @@ namespace CR2WTests
             StressTestExt("menu");
         }
 
-        [TestMethod]
-        public void navconfig()
-        {
-            StressTestExt("navconfig");
-        }
-
-        [TestMethod]
-        public void navgraph()
-        {
-            StressTestExt("navgraph");
-        }
-
-        [TestMethod]
-        public void naviobstacles()
-        {
-            StressTestExt("naviobstacles");
-        }
-
-        [TestMethod]
-        public void navmesh()
-        {
-            StressTestExt("navmesh");
-        }
-
-        [TestMethod]
-        public void navtile()
-        {
-            StressTestExt("navtile");
-        }
+        
 
         [TestMethod]
         public void popup()
@@ -262,13 +231,13 @@ namespace CR2WTests
         {
             StressTestExt("w2em");
         }
-
+        
         [TestMethod]
         public void w2ent()
         {
             StressTestExt("w2ent");
         }
-
+        
         [TestMethod]
         public void w2fnt()
         {
@@ -415,6 +384,44 @@ namespace CR2WTests
 
 
 
+        //Not Cr2w files
+        /*
+        [TestMethod]
+        public void buffer()
+        {
+            StressTestExt("buffer");
+        }
+        [TestMethod]
+        public void navconfig()
+        {
+            StressTestExt("navconfig");
+        }
+
+        [TestMethod]
+        public void navgraph()
+        {
+            StressTestExt("navgraph");
+        }
+
+        [TestMethod]
+        public void naviobstacles()
+        {
+            StressTestExt("naviobstacles");
+        }
+
+        [TestMethod]
+        public void navmesh()
+        {
+            StressTestExt("navmesh");
+        }
+
+        [TestMethod]
+        public void navtile()
+        {
+            StressTestExt("navtile");
+        }
+        */
+
         // Actually do the test
         public void StressTestExt(string ext)
         {
@@ -469,11 +476,14 @@ namespace CR2WTests
             Console.WriteLine($"{ext} test completed...");
             Console.WriteLine("Results:");
             Console.WriteLine($"\t- Parsed {rigcount} {ext} files");
-            Console.WriteLine($"\t- Parsing percentage => {(((double)totalbytes - (double)unknownbytes) / (double)totalbytes).ToString("0.00%")} | Couldn't parse: {unparsedfiles.Count}files!");
+            Console.WriteLine($"\t- Parsing percentage => {(((double)totalbytes - (double)unknownbytes) / (double)totalbytes).ToString("0.00%")}" +
+                $" | Couldn't parse: {unparsedfiles.Count} files!");
             Console.WriteLine($"Classes: ");
             foreach (var c in chunkstate)
             {
-                Console.WriteLine($"\t- {c.Key} {(((double)c.Value.Item2 - (double)c.Value.Item1) / (double)c.Value.Item1).ToString("0.00%")}");
+                var percentage = (((double)c.Value.Item2 - (double)c.Value.Item1) / (double)c.Value.Item1);
+                if (percentage != (double)-1)
+                   Console.WriteLine($"\t- {c.Key} {percentage.ToString("0.000000%")}");
             }
             Console.WriteLine("Files unparsed:");
             foreach(var f in unparsedfiles)

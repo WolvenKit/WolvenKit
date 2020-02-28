@@ -1,6 +1,7 @@
 ﻿using RED.FNV1A;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace WolvenKit.CR2W
 {
@@ -17,16 +18,30 @@ namespace WolvenKit.CR2W
     public class CR2WNameWrapper
     {
         private CR2WName _name;
-        public CR2WName Name {
+        private string str;
+
+        public CR2WName Name
+        {
             get
             {
-                _name.hash = FNV1A32HashAlgorithm.HashString(str);
+                _name.hash = FNV1A32HashAlgorithm.HashString(Str, Encoding.ASCII, true);
                 return _name;
             }
             set => _name = value;
         }
 
-        public string str { get; set; }
+        public string Str
+        {
+            get
+            {
+                return str;
+            }
+            set
+            {
+                str = value;
+                _name.hash = FNV1A32HashAlgorithm.HashString(str, Encoding.ASCII, true);
+            }
+        }
 
         public CR2WNameWrapper()
         {
@@ -39,5 +54,10 @@ namespace WolvenKit.CR2W
         }
 
         public void SetOffset(uint offset) => _name.value = offset;
+
+        public override string ToString()
+        {
+            return Str;
+        }
     }
 }

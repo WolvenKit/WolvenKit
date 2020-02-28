@@ -211,7 +211,7 @@ namespace WolvenKit.Render
                             for (uint i = 0; i < CData.boneData.nbBones; i++)
                             {
                                 var stringIdx = br.ReadUInt16();
-                                CData.boneData.jointNames.Add(meshFile.names[stringIdx].str);
+                                CData.boneData.jointNames.Add(meshFile.names[stringIdx].Str);
                             }
                             br.ReadBit6();
                             for (uint i = 0; i < CData.boneData.nbBones; i++)
