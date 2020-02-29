@@ -135,7 +135,6 @@ namespace WolvenKit.CR2W.Types
             Register("CGenericGrassMask", new CGenericGrassMask(null));
             
 
-
             Register("CMesh", new CMesh(null));
             Register("CPhysicsDestructionResource", new CPhysicsDestructionResource(null));
             Register("SMeshBlock5", new SMeshBlock5(null));
@@ -157,7 +156,6 @@ namespace WolvenKit.CR2W.Types
             Register("SBufferwaypointsGroup", new SBufferwaypointsGroup(null));
 
             
-
             // components
             var components = new[]
             {

@@ -220,6 +220,7 @@ namespace WolvenKit.CR2W.Types
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (SBufferWaypoints)base.Copy(context);
+
             var.guid = (CGUID)guid.Copy(context);
             var.componentsMapping = (CInt32)componentsMapping.Copy(context);
 

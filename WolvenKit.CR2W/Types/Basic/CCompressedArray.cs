@@ -23,6 +23,24 @@ namespace WolvenKit.CR2W.Types
         {
         }
 
+        /*public CCompressedArray(int count, string type, CR2WFile cr2w)
+            : base(cr2w)
+        {
+            this.type = type;
+
+            m_count = count;
+
+            var reg = new Regex(@"(\d+),(\d+),(.+)");
+            var match = reg.Match(type);
+            if (match.Success)
+            {
+                elementtype = match.Groups[3].Value;
+            }
+
+            if (elementtype == "")
+                Debugger.Break();
+        }*/
+
         public CCompressedArray(string type, string elementtype, bool fixedTypeArray, CR2WFile cr2w) : base(cr2w)
         {
             this.type = type;
