@@ -28,6 +28,8 @@ namespace WolvenKit.Render
 
         public ushort nbVertices = 0;
         public uint nbIndices = 0;
+        
+        public byte materialID = 0;
 
         public byte lod = 1;
     }

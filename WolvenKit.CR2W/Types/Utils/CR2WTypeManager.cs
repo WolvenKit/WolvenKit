@@ -24,9 +24,7 @@ namespace WolvenKit.CR2W.Types
 
         public CR2WTypeManager()
         {
-            Register("CBufferType2", new CBufferType2(null));
-            Register("CBufferType2Item", new CBufferType2Item(null));
-
+            #region Basic Types
             Register("CName", new CName(null));
 
             Register("String", new CString(null));
@@ -45,7 +43,9 @@ namespace WolvenKit.CR2W.Types
             Register("Uint64", new CUInt64(null));
 
             Register("Float", new CFloat(null));
+            #endregion
 
+            #region Basic W3 Types
             Register("EngineTransform", new CEngineTransform(null));
             Register("EngineQsTransform", new CEngineQsTransform(null));
 
@@ -60,6 +60,17 @@ namespace WolvenKit.CR2W.Types
             Register("TagList", new CTagList(null));
             Register("IdTag", new IdTag(null));
 
+            Register("LocalizedString", new CLocalizedString(null));
+
+
+            Register("CDateTime", new CDateTime());
+            Register("CCurve", new CCurve(null));
+
+
+            Register("CVariant", new CVariant(null));
+            #endregion
+
+            #region Flags
             // Flags
             Register("Flags", new CFlags(null));
             Register("EDrawableFlags", new CFlags(null));
@@ -68,16 +79,21 @@ namespace WolvenKit.CR2W.Types
             Register("EEntityStaticFlags", new CFlags(null));
             Register("ELightUsageMask", new CFlags(null));
             Register("EDismembermentEffectTypeFlag", new CFlags(null));
+            #endregion
 
-            Register("LocalizedString", new CLocalizedString(null));
+            #region Utility
 
+            Register("CBufferType2", new CBufferType2(null));
+            Register("CBufferType2Item", new CBufferType2Item(null));
 
-            Register("CDateTime", new CDateTime());
-            Register("CCurve", new CCurve(null));
+            Register("CIndexed2dArray", new CIndexed2dArray(null));
 
+            Register("SharedDataBuffer", new CByteArray(null));
             Register("DeferredDataBuffer", new CInt16(null));
 
-            Register("CVariant", new CVariant(null));
+            #endregion
+
+
 
             Register("SAppearanceAttachment", new SAppearanceAttachment(null));
 
@@ -92,7 +108,6 @@ namespace WolvenKit.CR2W.Types
             Register("CMaterialInstance", new CMaterialInstance(null));
 
             Register("CClipMapCookedData", new CBytes(null));
-            Register("SharedDataBuffer", new CByteArray(null));
 
             Register("CSwfResource", new CSwfResource(null));
             Register("CSwfTexture", new CSwfTexture(null));
@@ -118,9 +133,15 @@ namespace WolvenKit.CR2W.Types
             Register("CSwarmCellMap", new CSwarmCellMap(null));
 
             Register("CGenericGrassMask", new CGenericGrassMask(null));
-            Register("CIndexed2dArray", new CIndexed2dArray(null));
+            
+
+
+            Register("CMesh", new CMesh(null));
+            Register("CPhysicsDestructionResource", new CPhysicsDestructionResource(null));
+            Register("SMeshBlock5", new SMeshBlock5(null));
 
             // CResources?
+            // these all have 4 bytes unknown probably buffers
             Register("CExtAnimEventsFile", new CExtAnimEventsFile(null));
             Register("CSkeletalAnimationSet", new CExtAnimEventsFile(null));
             Register("CSkeletalAnimation", new CExtAnimEventsFile(null)); //is actually it's own class
@@ -674,13 +695,14 @@ namespace WolvenKit.CR2W.Types
             // *.w2l
             Register("CLayerInfo", new CLayerInfo(null));
 
-            Register("SBoneIndiceMapping", new SBoneIndiceMapping(null));
+            //Register("SBoneIndiceMapping", new SBoneIndiceMapping(null)); // this is a CVector with variable length, cannot be statically parsed like this
 
             // *.w2cube
             //Register("CCubeTexture", new CCubeTexture(null));
 #endif
             var vectors = new[]
             {
+                "SBoneIndiceMapping",
                 "CSpawnTreeActionPointSpawner",
                 "CSpawnTreeWaypointSpawner",
                 "SSpawnTreeDespawnConfiguration",

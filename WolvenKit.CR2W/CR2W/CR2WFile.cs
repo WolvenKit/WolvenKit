@@ -202,7 +202,7 @@ namespace WolvenKit.CR2W
             if (bytesleft > 0)
             {
                 var unreadBytes = file.ReadBytes((int)bytesleft);
-                Debugger.Break();
+                //Debugger.Break();
             }
             else if (bytesleft < 0)
             {

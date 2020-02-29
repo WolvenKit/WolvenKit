@@ -10,20 +10,34 @@ using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
-    public class CCompressedArray : CVariable, IEnumerable<CVariable>
+    public class CVLQArray : CVariable, IEnumerable<CVariable>
     {
         public List<CVariable> array = new List<CVariable>();
         public string elementtype;
         public bool fixedTypeArray;
         public string type;
 
-        private int m_count;
-
-        public CCompressedArray(CR2WFile cr2w) : base(cr2w)
+        public CVLQArray(CR2WFile cr2w) : base(cr2w)
         {
         }
 
-        public CCompressedArray(string type, string elementtype, bool fixedTypeArray, CR2WFile cr2w) : base(cr2w)
+        public CVLQArray(string type, CR2WFile cr2w)
+            : base(cr2w)
+        {
+            this.type = type;
+
+            var reg = new Regex(@"(\d+),(\d+),(.+)");
+            var match = reg.Match(type);
+            if (match.Success)
+            {
+                elementtype = match.Groups[3].Value;
+            }
+
+            if (elementtype == "")
+                Debugger.Break();
+        }
+
+        public CVLQArray(string type, string elementtype, bool fixedTypeArray, CR2WFile cr2w) : base(cr2w)
         {
             this.type = type;
             this.elementtype = elementtype;
@@ -42,20 +56,16 @@ namespace WolvenKit.CR2W.Types
             return GetEnumerator();
         }
 
-        public void Read(BinaryReader file, uint size, int count)
-        {
-            m_count = count;
-            Read(file, size);
-        }
-
         public override void Read(BinaryReader file, uint size)
         {
-            for (var i = 0; i < m_count; i++)
+            var count = file.ReadBit6();
+
+            for (var i = 0; i < count; i++)
             {
                 var var = CR2WTypeManager.Get().GetByName(elementtype, i.ToString(), cr2w, false);
                 if (var == null)
                     throw new NotImplementedException();
-                var.Read(file, 0);
+                var.Read(file, size);
 
                 AddVariable(var);
             }
@@ -63,6 +73,7 @@ namespace WolvenKit.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
+            file.WriteBit6((int) array.Count);
             for (var i = 0; i < array.Count; i++)
             {
                 array[i].Write(file);
@@ -87,12 +98,12 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Create(CR2WFile cr2w)
         {
-            return new CCompressedArray(cr2w);
+            return new CVLQArray(cr2w);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CCompressedArray) base.Copy(context);
+            var var = (CVLQArray) base.Copy(context);
             var.type = type;
             var.elementtype = elementtype;
 
@@ -133,11 +144,6 @@ namespace WolvenKit.CR2W.Types
         {
             array.Add(v);
             v.ParentVariable = this;
-
-            if (fixedTypeArray)
-            {
-                Type = "[" + array.Count + "]" + elementtype;
-            }
         }
 
         public override void RemoveVariable(IEditableVariable child)
@@ -147,11 +153,6 @@ namespace WolvenKit.CR2W.Types
                 var v = (CVariable) child;
                 array.Remove(v);
                 v.ParentVariable = null;
-
-                if (fixedTypeArray)
-                {
-                    Type = "[" + array.Count + "]" + elementtype;
-                }
             }
         }
 

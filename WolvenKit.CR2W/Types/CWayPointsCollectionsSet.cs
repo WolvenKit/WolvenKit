@@ -108,7 +108,7 @@ namespace WolvenKit.CR2W.Types
         {
             var var = (CWayPointsCollectionsSet) base.Copy(context);
 
-            var.waypointcollections = waypointcollections;
+            var.waypointcollections = (CArray)waypointcollections.Copy(context);
 
             return var;
         }

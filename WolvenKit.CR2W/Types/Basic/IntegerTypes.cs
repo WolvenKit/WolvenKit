@@ -455,45 +455,12 @@ namespace WolvenKit.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
-            var result = 0;
-            var shift = 0;
-            byte b = 0;
-            var i = 1;
-
-            do
-            {
-                b = file.ReadByte();
-                if (b == 128)
-                {
-                    result = 0;
-                    break;
-                }
-
-                byte s = 6;
-                byte mask = 255;
-                if (b > 127)
-                {
-                    mask = 127;
-                    s = 7;
-                }
-                else if (b > 63)
-                {
-                    if (i == 1)
-                    {
-                        mask = 63;
-                    }
-                }
-                result = result | ((b & mask) << shift);
-                shift = shift + s;
-                i = i + 1;
-            } while (!(b < 64 || (i >= 3 && b < 128)));
-
-            val = result;
+            val = file.ReadBit6();
         }
 
         public override void Write(BinaryWriter file)
         {
-            file.Write(val);
+            file.WriteBit6(val);
         }
 
         public override CVariable SetValue(object val)

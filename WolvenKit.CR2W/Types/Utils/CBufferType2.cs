@@ -84,6 +84,20 @@ namespace WolvenKit.CR2W.Types.Utils
             file.Write(variable.nameId);
             file.Write(varvalue);
         }
+
+        public override CVariable Copy(CR2WCopyAction context)
+        {
+            var var = (CBufferType2Item)base.Copy(context);
+
+            var.variable = variable.Copy(context);
+
+            return var;
+        }
+
+        public override string ToString()
+        {
+            return Variable.ToString();
+        }
     }
 
 
@@ -170,6 +184,21 @@ namespace WolvenKit.CR2W.Types.Utils
         public override string ToString()
         {
             return componentName.Value;
+        }
+
+        public override CVariable Copy(CR2WCopyAction context)
+        {
+            var var = (CBufferType2)base.Copy(context);
+
+            var.componentName = (CName)componentName.Copy(context);
+            var.sizeofdata = (CUInt32)sizeofdata.Copy(context);
+
+            foreach (var item in variables)
+            {
+                var.variables.Add((CBufferType2Item)item.Copy(context));
+            }
+
+            return var;
         }
 
         public override List<IEditableVariable> GetEditableVariables()

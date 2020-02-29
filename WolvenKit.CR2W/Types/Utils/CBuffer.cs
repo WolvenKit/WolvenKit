@@ -8,7 +8,7 @@ using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
-    class CBuffer<T> : CVariable where T : CVariable
+    public class CBuffer<T> : CVariable where T : CVariable
     {
         public List<T> elements = new List<T>();
         public Func<CR2WFile, T> elementFactory;
@@ -133,16 +133,26 @@ namespace WolvenKit.CR2W.Types
 
     class CBuffers
     {
+        public static CBuffer<CName> CreateCNameBuffer(CR2WFile cr2w, string name)
+        {
+            return new CBuffer<CName>(cr2w, file => new CName(file) { Type = "CName" }) { Name = name, Type = "CBuffer<CName>" };
+        }
         public static CBuffer<CFloat> CreateFloatBuffer(CR2WFile cr2w, string name)
         {
             return new CBuffer<CFloat>(cr2w, file => new CFloat(file) { Type = "CFloat" }) { Name = name, Type = "CBuffer<CFloat>" };
         }
-
+        public static CBuffer<CUInt16> CreateUInt16Buffer(CR2WFile cr2w, string name)
+        {
+            return new CBuffer<CUInt16>(cr2w, file => new CUInt16(file) { Type = "CUInt16" }) { Name = name, Type = "CBuffer<CUInt16>" };
+        }
+        public static CBuffer<CUInt32> CreateUInt32Buffer(CR2WFile cr2w, string name)
+        {
+            return new CBuffer<CUInt32>(cr2w, file => new CUInt32(file) { Type = "CUInt32" }) { Name = name, Type = "CBuffer<CUInt32>" };
+        }
         public static CBuffer<CVector2D> CreateVector2DBuffer(CR2WFile cr2w, string name)
         {
             return new CBuffer<CVector2D>(cr2w, file => new CVector2D(file) { Type = "CVector2D" }) { Name = name, Type = "CBuffer<CVector2D>" };
         }
-
         public static CBuffer<CVector3D> CreateVector3DBuffer(CR2WFile cr2w, string name)
         {
             return new CBuffer<CVector3D>(cr2w, file => new CVector3D(file) { Type = "CVector3D" }) { Name = name, Type = "CBuffer<CVector3D>" };

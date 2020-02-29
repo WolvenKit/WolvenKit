@@ -135,9 +135,13 @@
     <Compile Include="Types\Basic\CCompressedArray.cs" />
     <Compile Include="Types\Basic\CCurve.cs" />
     <Compile Include="Types\Basic\EntityHandle.cs" />
-    <Compile Include="Types\CBuffer.cs" />
+    <Compile Include="Types\CPhysicsDestructionResource.cs" />
+    <Compile Include="Types\Utils\CPaddedBuffer.cs" />
+    <Compile Include="Types\Utils\CBuffer.cs" />
     <Compile Include="Types\CCubeTexture.cs" />
     <Compile Include="Types\CDecalSpawne.cs" />
+    <Compile Include="Types\SMeshBlock5.cs" />
+    <Compile Include="Types\CMesh.cs" />
     <Compile Include="Types\CWayPointsCollection.cs" />
     <Compile Include="Types\CWayPointsCollectionsSet.cs" />
     <Compile Include="Types\CExtAnimEventsFile.cs" />

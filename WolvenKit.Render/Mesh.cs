@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
+using System.Linq;
 
 namespace WolvenKit.Render
 {
@@ -63,7 +64,8 @@ namespace WolvenKit.Render
 
                                             buffInfo.nbVertices = br.ReadUInt16();
                                             buffInfo.nbIndices = br.ReadUInt32();
-                                            br.BaseStream.Position += 3; // Unknown
+                                            buffInfo.materialID = br.ReadByte();
+                                            br.BaseStream.Position += 2; // Unknown
                                             buffInfo.lod = br.ReadByte(); // lod ?
 
                                             vertexBufferInfos.Add(buffInfo);
@@ -174,59 +176,26 @@ namespace WolvenKit.Render
                         CData.meshInfos.Add(meshInfo);
                     }
 
-                    // TODO: Create a more reliable solution
-                    var unknownBytes = chunk.unknownBytes.Bytes;
-                    using (var ms = new MemoryStream(unknownBytes))
-                    using (var br = new BinaryReader(ms))
+                    // bone names and matrices
+                    CBuffer<CName> boneNames = chunk.GetVariableByName("boneNames") as CBuffer<CName>;
+                    CBuffer<CMatrix4x4> bonematrices = chunk.GetVariableByName("bonematrices") as CBuffer<CMatrix4x4>;
+                    CData.boneData.nbBones = (uint)boneNames.elements.Count;
+                    for (int i = 0; i < CData.boneData.nbBones; i++)
                     {
-                        long prevPos = 0;
-                        bool correctPos = false;
-                        do
-                        {
-                            prevPos = br.BaseStream.Position;
-                            CData.boneData.nbBones = (uint)br.ReadBit6();
+                        CName name = boneNames.elements[i];
+                        CData.boneData.jointNames.Add(name.Value);
 
-                            if (CData.boneData.nbBones == bonePositions.Count)
-                            {
-                                var backPos = br.BaseStream.Position;
-                                correctPos = true;
-                                for (int i = 0; i < CData.boneData.nbBones; i++)
-                                {
-                                    var stringIdx = br.ReadUInt16();
-                                    if (stringIdx == 0 || stringIdx >= meshFile.names.Count)
-                                    {
-                                        CData.boneData.nbBones = 0;
-                                        correctPos = false;
-                                        break;
-                                    }
-                                }
-                                br.BaseStream.Position = backPos;
-                            }
-                        } while (CData.boneData.nbBones != bonePositions.Count && br.BaseStream.Position < unknownBytes.Length && !correctPos);
-
-                        if (br.BaseStream.Position < unknownBytes.Length)
+                        CMatrix4x4 cmatrix = bonematrices.elements[i];
+                        Matrix matrix = new Matrix();
+                        for (int j = 0; j < 16; j++)
                         {
-                            br.BaseStream.Position = prevPos;
-                            CData.boneData.nbBones = (uint)br.ReadBit6();
-                            for (uint i = 0; i < CData.boneData.nbBones; i++)
-                            {
-                                var stringIdx = br.ReadUInt16();
-                                CData.boneData.jointNames.Add(meshFile.names[stringIdx].Str);
-                            }
-                            br.ReadBit6();
-                            for (uint i = 0; i < CData.boneData.nbBones; i++)
-                            {
-                                Matrix matrix = new Matrix();
-                                for (int j = 0; j < 16; j++)
-                                {
-                                    var value = br.ReadSingle();
-                                    matrix.SetElement(j, value);
-                                }
-                                CData.boneData.boneMatrices.Add(matrix);
-                            }
+                            float value = (cmatrix.fields[j] as CFloat).val;
+                            matrix.SetElement(j, value);
                         }
+                        CData.boneData.boneMatrices.Add(matrix);
                     }
                 }
+
                 else if (chunk.Type == "CMaterialInstance")
                 {
                     CData.materialInstances.Add(chunk.data as CMaterialInstance);

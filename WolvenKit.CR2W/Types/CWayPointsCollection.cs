@@ -158,10 +158,10 @@ namespace WolvenKit.CR2W.Types
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (CWayPointsCollection) base.Copy(context);
-            var.waypoints = waypoints;
-            var.componentsMappings = componentsMappings;
-            var.waypointsGroups = waypointsGroups;
-            var.indexes = indexes;
+            var.waypoints = (CCompressedArray) waypoints.Copy(context);
+            var.componentsMappings = (CCompressedArray)componentsMappings.Copy(context);
+            var.waypointsGroups = (CCompressedArray)waypointsGroups.Copy(context);
+            var.indexes = (CCompressedArray)indexes.Copy(context);
 
             return var;
         }
@@ -220,8 +220,8 @@ namespace WolvenKit.CR2W.Types
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (SBufferWaypoints)base.Copy(context);
-            var.guid = guid;
-            var.componentsMapping = componentsMapping;
+            var.guid = (CGUID)guid.Copy(context);
+            var.componentsMapping = (CInt32)componentsMapping.Copy(context);
 
             return var;
         }
@@ -284,8 +284,8 @@ namespace WolvenKit.CR2W.Types
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (SBufferComponentsMappings)base.Copy(context);
-            var.guid = guid;
-            var.guid2 = guid2;
+            var.guid = (CGUID)guid.Copy(context);
+            var.guid2 = (CGUID)guid2.Copy(context);
 
             return var;
         }
@@ -364,10 +364,10 @@ namespace WolvenKit.CR2W.Types
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (SBufferwaypointsGroup)base.Copy(context);
-            var.offset = offset;
-            var.count = count;
-            var.nullbytes = nullbytes;
-            var.groupIdx = groupIdx;
+            var.offset = (CUInt32)offset.Copy(context);
+            var.count = (CUInt32)count.Copy(context);
+            var.nullbytes = (CUInt16)nullbytes.Copy(context);
+            var.groupIdx = (CUInt16)groupIdx.Copy(context);
 
             return var;
         }

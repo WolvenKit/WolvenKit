@@ -8,7 +8,7 @@ using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
-    class SParticleEmitterModuleData : CVariable
+    public class SParticleEmitterModuleData : CVariable
     {
         public CVariable[] fields;
         public CBuffer<CFloat> alpha, lifeTime, rotation, rotationRate, spawnInnerRadius, spawnOuterRadius, p118, p124, p134,

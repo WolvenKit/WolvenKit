@@ -175,8 +175,8 @@ namespace WolvenKit.CR2W.Types
             var.unk1 = (CUInt32) unk1.Copy(context);
             var.unk2 = (CUInt32) unk2.Copy(context);
             var.components = (CArray) components.Copy(context);
-            var.buffer_v1 = buffer_v1;
-            var.buffer_v2 = buffer_v2;
+            var.buffer_v1 = (CVector) buffer_v1.Copy(context);
+            var.buffer_v2 = (CArray) buffer_v2.Copy(context);
 
             return var;
         }

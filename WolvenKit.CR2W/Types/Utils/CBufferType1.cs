@@ -85,10 +85,10 @@ namespace WolvenKit.CR2W.Types.Utils
         {
             var var = (CBufferType1)base.Copy(context);
 
-            var.componentName = componentName;
-            var.guid = guid;
-            var.sizeofdata = sizeofdata;
-            var.buffer = buffer;
+            var.componentName = (CName)componentName.Copy(context);
+            var.guid = (CGUID)guid.Copy(context);
+            var.sizeofdata = (CUInt32)sizeofdata.Copy(context);
+            var.buffer = (CBytes)buffer.Copy(context);
 
             return var;
         }
