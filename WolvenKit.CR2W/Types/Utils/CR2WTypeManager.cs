@@ -71,7 +71,6 @@ namespace WolvenKit.CR2W.Types
             #endregion
 
             #region Flags
-            // Flags
             Register("Flags", new CFlags(null));
             Register("EDrawableFlags", new CFlags(null));
             Register("ETriggerChannel", new CFlags(null));
@@ -122,6 +121,7 @@ namespace WolvenKit.CR2W.Types
             Register("CMaterialGraph", new CMaterialGraph(null));
             Register("CMaterialGraphParameter", new CMaterialGraphParameter(null));
 
+            Register("CSkeleton", new CSkeleton(null));
             Register("CSkeletalAnimationSetEntry", new CSkeletalAnimationSetEntry(null));
 
             Register("CFoliageResource", new CFoliageResource(null));
@@ -150,7 +150,6 @@ namespace WolvenKit.CR2W.Types
             Register("CWayPointsCollectionsSet", new CWayPointsCollectionsSet(null));
             Register("CWayPointsCollectionsSetData", new CWayPointsCollectionsSetData(null));
 
-            Register("CCompressedArray", new CCompressedArray(null));
             Register("SBufferWaypoints", new SBufferWaypoints(null));
             Register("SBufferComponentsMappings", new SBufferComponentsMappings(null));
             Register("SBufferwaypointsGroup", new SBufferwaypointsGroup(null));
@@ -700,6 +699,8 @@ namespace WolvenKit.CR2W.Types
 #endif
             var vectors = new[]
             {
+                "SSkeletonTrack",
+                "SSkeletonBone",
                 "SBoneIndiceMapping",
                 "CSpawnTreeActionPointSpawner",
                 "CSpawnTreeWaypointSpawner",

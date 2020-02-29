@@ -10,10 +10,10 @@ namespace WolvenKit.CR2W.Types
 {
     public class CWayPointsCollection : CVector
     {
-        public CCompressedArray waypoints;
-        public CCompressedArray componentsMappings;
-        public CCompressedArray waypointsGroups;
-        public CCompressedArray indexes;
+        public CCompressedBuffer<SBufferWaypoints> waypoints;
+        public CCompressedBuffer<SBufferComponentsMappings> componentsMappings;
+        public CCompressedBuffer<SBufferwaypointsGroup> waypointsGroups;
+        public CCompressedBuffer<CUInt16> indexes;
 
         private UInt16 waypointsCount;
         private UInt16 componentsMappingsCount;
@@ -24,23 +24,10 @@ namespace WolvenKit.CR2W.Types
         public CWayPointsCollection(CR2WFile cr2w) :
             base(cr2w)
         {
-            waypoints = new CCompressedArray("[]SBufferWaypoints", "SBufferWaypoints", true, cr2w)
-            {
-                Name = "waypoints"
-            };
-            componentsMappings = new CCompressedArray("[]SBufferComponentsMappings", "SBufferComponentsMappings", true, cr2w)
-            {
-                Name = "componentsMappings"
-            };
-            waypointsGroups = new CCompressedArray("[]SBufferwaypointsGroup", "SBufferwaypointsGroup", true, cr2w)
-            {
-                Name = "waypointsGroups"
-            };
-            indexes = new CCompressedArray("[]Uint16", "Uint16", true, cr2w)
-            {
-                Name = "indexes"
-            };
-
+            waypoints = new CCompressedBuffer<SBufferWaypoints>(cr2w, _ => new SBufferWaypoints(_)) { Name = "waypoints" };
+            componentsMappings = new CCompressedBuffer<SBufferComponentsMappings>(cr2w, _ => new SBufferComponentsMappings(_)) { Name = "componentsMappings" };
+            waypointsGroups = new CCompressedBuffer<SBufferwaypointsGroup>(cr2w, _ => new SBufferwaypointsGroup(_)) { Name = "waypointsGroups" };
+            indexes = new CCompressedBuffer<CUInt16>(cr2w, _ => new CUInt16(_)) { Name = "indexes" };
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -69,10 +56,10 @@ namespace WolvenKit.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            SetUInt16byName("waypointsCount", (UInt16)waypoints.Count());
-            SetUInt16byName("componentsMappingsCount", (UInt16)componentsMappings.Count());
-            SetUInt16byName("waypointsGroupsCount", (UInt16)waypointsGroups.Count());
-            SetUInt32byName("indexesCount", (UInt32)indexes.Count());
+            SetUInt16byName("waypointsCount", (UInt16)waypoints.elements.Count);
+            SetUInt16byName("componentsMappingsCount", (UInt16)componentsMappings.elements.Count);
+            SetUInt16byName("waypointsGroupsCount", (UInt16)waypointsGroups.elements.Count);
+            SetUInt32byName("indexesCount", (UInt32)indexes.elements.Count);
 
             base.Write(file);
 
@@ -158,10 +145,10 @@ namespace WolvenKit.CR2W.Types
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (CWayPointsCollection) base.Copy(context);
-            var.waypoints = (CCompressedArray) waypoints.Copy(context);
-            var.componentsMappings = (CCompressedArray)componentsMappings.Copy(context);
-            var.waypointsGroups = (CCompressedArray)waypointsGroups.Copy(context);
-            var.indexes = (CCompressedArray)indexes.Copy(context);
+            var.waypoints = (CCompressedBuffer<SBufferWaypoints>) waypoints.Copy(context);
+            var.componentsMappings = (CCompressedBuffer<SBufferComponentsMappings>)componentsMappings.Copy(context);
+            var.waypointsGroups = (CCompressedBuffer<SBufferwaypointsGroup>)waypointsGroups.Copy(context);
+            var.indexes = (CCompressedBuffer<CUInt16>)indexes.Copy(context);
 
             return var;
         }
