@@ -16,6 +16,8 @@ clone_script:
 # Update to the most recent VS.
 image: Visual Studio 2017
 
+test: off
+
 build:
   parallel: true   
   project: WolvenKit.sln
