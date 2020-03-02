@@ -97,7 +97,7 @@ namespace WolvenKit.Cache
                             /*-------------TextureCacheEntryBase---------------*/
                             Type = br.ReadInt16(),
                             IsCube = br.ReadByte(),
-                            unk1 = br.ReadByte()
+                            Unk1 = br.ReadByte()
                         };
                         Files.Add(ti);
                     }
@@ -107,7 +107,7 @@ namespace WolvenKit.Cache
                         br.BaseStream.Seek(t.PageOFfset * 4096, SeekOrigin.Begin);
                         t.ZSize = br.ReadUInt32(); //Compressed size
                         t.Size = br.ReadInt32(); //Uncompressed size
-                        t.Part = br.ReadByte(); //maybe the 48bit part of OFFSET
+                        t.SliceIdx = br.ReadByte(); //maybe the 48bit part of OFFSET
 
                         var lastpos = br.BaseStream.Position + t.ZSize;
                         

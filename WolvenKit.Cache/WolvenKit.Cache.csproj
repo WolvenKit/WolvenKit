@@ -115,6 +115,7 @@
     <Compile Include="DDS\DDSUtils.cs" />
     <Compile Include="DDS\DDS_HEADER.cs" />
     <Compile Include="DDS\DDS_HEADER_DXT10.cs" />
+    <Compile Include="DDS\DDS_Metadata.cs" />
     <Compile Include="DDS\DDS_PIXELFORMAT.cs" />
     <Compile Include="DDS\DDS_ENUMS.cs" />
     <Compile Include="Test_Collision.cs" />

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace WolvenKit.Cache.DDS
 {
+   
+
     public enum ETextureFormat
     {
         /*TEXFMT_A8 = 0x0,
@@ -59,15 +61,7 @@ namespace WolvenKit.Cache.DDS
 
 
     /*
-    static uint Format_RGB = 0;
-    static uint Format_RGBA = Format_RGB;
-    // DX9 formats.
-    public const uint Format_DXT1 = 1;
-    public const uint Format_DXT1a = 2; // DXT1 with binary alpha.
-    public const uint Format_DXT3 = 3;
-    public const uint Format_DXT5 = 4;
-    public const uint Format_DXT5n = 5; // Compressed HILO: R= 1, G= y, B= 0, A= x
-                                        // DX10 formats.
+    //DX10 formats.
     public uint Format_BC1 = Format_DXT1;
     public uint Format_BC1a = Format_DXT1a;
     public uint Format_BC2 = Format_DXT3;

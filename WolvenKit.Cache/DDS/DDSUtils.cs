@@ -30,24 +30,10 @@ namespace WolvenKit.Cache.DDS
 
         const uint DDS_HEADER_FLAGS_TEXTURE = 0x00001007;  // DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT 
 
-
-        // dwHeight
-        // dwhWidth
-        // dwPitchOrLinearSize
-        // dwDepth
-        // dwMipMapCount
-        // dwReserved1[11]
-        // ddspf
-
         // dwCaps
         const uint DDSCAPS_COMPLEX = 0x00000008;
         const uint DDSCAPS_MIPMAP = 0x00400000;
         const uint DDSCAPS_TEXTURE = 0x00001000;
-        /*
-         * The DDS_SURFACE_FLAGS_MIPMAP flag, which is defined in Dds.h, is a bitwise-OR combination of the DDSCAPS_COMPLEX and DDSCAPS_MIPMAP flags.
-         * The DDS_SURFACE_FLAGS_TEXTURE flag, which is defined in Dds.h, is equal to the DDSCAPS_TEXTURE flag.
-         * The DDS_SURFACE_FLAGS_CUBEMAP flag, which is defined in Dds.h, is equal to the DDSCAPS_COMPLEX flag.
-         */
 
         // dwCaps2
         const uint DDSCAPS2_CUBEMAP = 0x00000200;
@@ -61,36 +47,17 @@ namespace WolvenKit.Cache.DDS
                                                 DDS_CUBEMAP_POSITIVEY | DDS_CUBEMAP_NEGATIVEY | 
                                                 DDS_CUBEMAP_POSITIVEZ | DDS_CUBEMAP_NEGATIVEZ;
         const uint DDSCAPS2_VOLUME = 0x00200000;
-
-        // dwCaps3
-        // dwCaps4
-        // dwReserved2
-
-
         #endregion
 
         #region DDS_HEADER_DXT10
-        //
-        // This header is present if the dwFourCC member of the DDS_PIXELFORMAT structure is set to 'DX10'.
-        //
-
-        // dxgiFormat
-        // resourceDimension
-        // miscFlag
         const uint D3D10_RESOURCE_MISC_GENERATE_MIPS = 0x00000001;
         const uint DDS_RESOURCE_MISC_TEXTURECUBE = 0x00000004;
 
-        // arraySize
-        // miscFlags2
         const uint DDS_ALPHA_MODE_UNKNOWN = 0x00000000;
 
         #endregion
 
         #region DDS_PIXELFORMAT 
-        //
-        // This header is present if the dwFourCC member of the DDS_PIXELFORMAT structure is set to 'DX10'.
-        //
-
         // dwSize
         const uint PIXELFORMAT_SIZE = 32;
         // dwFlags
@@ -99,35 +66,20 @@ namespace WolvenKit.Cache.DDS
         const uint DDPF_FOURCC = 0x00000004;
         const uint DDPF_RGB = 0x00000040;
         const uint DDPF_NORMAL = 0x80000000; // Custom nv flag
-
-        // dwFourCC
-        enum EFourCC
-        {
-            DXT1,
-            DXT2,
-            DXT3,
-            DXT4,
-            DXT5,
-            DX10,
-        }
-
-        // dwRGBBitCount
-        // dwRBitMask
-        // dwGBitMask
-        // dwBBitMask
-        // dwABitMask
-
         #endregion
 
 
         private static uint MAKEFOURCC(char ch0, char ch1, char ch2, char ch3) => (uint)(ch0 | ch1 << 8 | ch2 << 16 | ch3 << 24);
 
 
-        public static (DDS_HEADER, DDS_HEADER_DXT10) GenerateHeader(uint width = 0, uint height = 0, uint mipscount = 0 ,
-            ETextureFormat format = ETextureFormat.TEXFMT_R8G8B8A8, uint bpp = 16, bool iscubemap = false, uint slicecount = 0, bool normal = false)
+        public static (DDS_HEADER, DDS_HEADER_DXT10) GenerateHeader(DDSMetadata metadata)
         {
-            bool DXT10 = false;
-            
+            var height = metadata.Height;
+            var width = metadata.Height;
+            var mipscount = metadata.Mipscount;
+            var iscubemap = metadata.Iscubemap;
+            var format = metadata.Format;
+
             var ddspf = new DDS_PIXELFORMAT()
             {
                 dwSize = PIXELFORMAT_SIZE,
@@ -173,11 +125,11 @@ namespace WolvenKit.Cache.DDS
                 dxgiFormat = 0,
                 resourceDimension = D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE2D,
                 miscFlag = 0,
-                arraySize = slicecount,
+                arraySize = metadata.Slicecount,
                 miscFlags2 = 0
             };
 
-            if (mipscount > 0 && !iscubemap)
+            if (mipscount > 0)
                 header.dwMipMapCount = mipscount;
 
             // dwPitchOrLinearSize
@@ -211,7 +163,7 @@ namespace WolvenKit.Cache.DDS
                 case ETextureFormat.TEXFMT_R8G8B8A8:
                 default:
                     {
-                        header.dwPitchOrLinearSize = (width * bpp + 7) / 8;
+                        header.dwPitchOrLinearSize = (width * metadata.Bpp + 7) / 8;
                         header.dwFlags |= DDSD_PITCH;
                         break;
                     }
@@ -277,7 +229,7 @@ namespace WolvenKit.Cache.DDS
                             break;
                         }
                 }
-                if (DXT10)
+                if (metadata.DXT10)
                     ddspf.dwFourCC = MAKEFOURCC('D', 'X', '1', '0');
 
                 // dwflags
@@ -289,7 +241,7 @@ namespace WolvenKit.Cache.DDS
                     ddspf.dwFlags |= DDPF_FOURCC;
                 if (ddspf.dwRGBBitCount != 0 && ddspf.dwRBitMask != 0 && ddspf.dwGBitMask != 0 && ddspf.dwBBitMask != 0)
                     ddspf.dwFlags |= DDPF_RGB;
-                if (normal)
+                if (metadata.Normal)
                     ddspf.dwFlags |= DDPF_NORMAL; //custom nv flag
 
                 header.ddspf = ddspf;
@@ -298,8 +250,8 @@ namespace WolvenKit.Cache.DDS
             // caps
             if (iscubemap || mipscount > 0)
                 header.dwCaps |= DDSCAPS_COMPLEX;
-            if (mipscount > 0 && !iscubemap)
-                header.dwCaps |= DDSCAPS_MIPMAP; // check this
+            if (mipscount > 0)
+                header.dwCaps |= DDSCAPS_MIPMAP;
 
             // caps2
             if (iscubemap)
@@ -310,11 +262,11 @@ namespace WolvenKit.Cache.DDS
             // flags
             //if (slicecount > 0)
             //    header.dwFlags |= DDSD_DEPTH;
-            if (mipscount > 0 && !iscubemap)
+            if (mipscount > 0 )
                 header.dwFlags |= DDSD_MIPMAPCOUNT;
 
             // DXT10
-            if (DXT10)
+            if (metadata.DXT10)
             {
                 // dxgiFormat
                 switch (format)
@@ -352,16 +304,22 @@ namespace WolvenKit.Cache.DDS
                 //misc flag
                 if (iscubemap)
                     dxt10header.miscFlag |= DDS_RESOURCE_MISC_TEXTURECUBE;
-                if (mipscount > 0 && !iscubemap)
+                if (mipscount > 0)
                     dxt10header.miscFlag |= D3D10_RESOURCE_MISC_GENERATE_MIPS;
                 // array size
                 if (iscubemap)
-                    dxt10header.arraySize = slicecount;
+                    dxt10header.arraySize = metadata.Slicecount;
                 // miscFlags2
 
             }
 
             return (header, dxt10header);
+        }
+
+        public static void GenerateAndWriteHeader(Stream stream, DDSMetadata metadata)
+        {
+            (var header, var dxt10header) = GenerateHeader(metadata);
+            WriteHeader(stream, header, dxt10header);
         }
 
         public static void WriteHeader(Stream stream, DDS_HEADER header, DDS_HEADER_DXT10 dxt10header)

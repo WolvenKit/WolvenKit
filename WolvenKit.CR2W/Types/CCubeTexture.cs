@@ -24,12 +24,7 @@ namespace WolvenKit.CR2W.Types
         public CUInt32 filesize;
         public CInt32 ffffffff;
 
-        public CBytes left;
-        public CBytes right;
-        public CBytes front;
-        public CBytes back;
-        public CBytes top;
-        public CBytes bottom;
+        public CBytes rawfile;
 
 
         public CCubeTexture(CR2WFile cr2w) : base(cr2w)
@@ -58,12 +53,8 @@ namespace WolvenKit.CR2W.Types
             filesize = new CUInt32(cr2w) { Name = "filesize" };
             ffffffff = new CInt32(cr2w) { Name = "ffffffff" };
 
-            left = new CBytes(cr2w) { Name = "left" };
-            right = new CBytes(cr2w) { Name = "right" };
-            front = new CBytes(cr2w) { Name = "front" };
-            back = new CBytes(cr2w) { Name = "back" };
-            top = new CBytes(cr2w) { Name = "top" };
-            bottom = new CBytes(cr2w) { Name = "bottom" };
+            rawfile = new CBytes(cr2w) { Name = "rawfile" };
+            
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -79,12 +70,7 @@ namespace WolvenKit.CR2W.Types
             filesize.Read(file, 4);
             ffffffff.Read(file, 4);
 
-            left.Bytes = file.ReadBytes((int)(filesize.val / 6));
-            right.Bytes = file.ReadBytes((int)(filesize.val / 6));
-            front.Bytes = file.ReadBytes((int)(filesize.val / 6));
-            back.Bytes = file.ReadBytes((int)(filesize.val / 6));
-            top.Bytes = file.ReadBytes((int)(filesize.val / 6));
-            bottom.Bytes = file.ReadBytes((int)(filesize.val / 6));
+            rawfile.Read(file, filesize.val);
         }
 
         public override void Write(BinaryWriter file)
@@ -100,12 +86,7 @@ namespace WolvenKit.CR2W.Types
             filesize.Write(file);
             ffffffff.Write(file);
 
-            left.Write(file);
-            right.Write(file);
-            front.Write(file);
-            back.Write(file);
-            top.Write(file);
-            bottom.Write(file);
+            rawfile.Write(file);
         }
 
         public override CVariable SetValue(object val)
@@ -131,12 +112,7 @@ namespace WolvenKit.CR2W.Types
             var.filesize = (CUInt32)filesize.Copy(context);
             var.ffffffff = (CInt32)ffffffff.Copy(context);
 
-            var.left = (CBytes) left.Copy(context);
-            var.right = (CBytes) right.Copy(context);
-            var.front = (CBytes) front.Copy(context);
-            var.back = (CBytes) back.Copy(context);
-            var.top = (CBytes) top.Copy(context);
-            var.bottom = (CBytes) bottom.Copy(context);
+            var.rawfile = (CBytes)rawfile.Copy(context);
             return var;
         }
 
@@ -151,12 +127,7 @@ namespace WolvenKit.CR2W.Types
                 mipmapscount,
                 filesize,
                 ffffffff,
-                left,
-                right,
-                front,
-                back,
-                top,
-                bottom
+                rawfile
             };
         }
     }
