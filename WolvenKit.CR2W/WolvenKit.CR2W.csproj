@@ -132,6 +132,9 @@
     <Compile Include="Exceptions\InvalidParsingException.cs" />
     <Compile Include="FNV1A\FNV1A32HashAlgorithm.cs" />
     <Compile Include="FNV1A\FNV1A64HashAlgorithm.cs" />
+    <Compile Include="Types\CCookedExploration.cs" />
+    <Compile Include="Types\CAnimPointCloudLookAtParam.cs" />
+    <Compile Include="Types\Structs\SAnimPointCloudLookAtParamData.cs" />
     <Compile Include="Types\Structs\SSkeletonRigData.cs" />
     <Compile Include="Types\Utils\CCompressedBuffer.cs" />
     <Compile Include="Types\Basic\CCurve.cs" />
@@ -179,8 +182,8 @@
     <Compile Include="Types\Basic\CColor.cs" />
     <Compile Include="Types\CColorShift.cs" />
     <Compile Include="Types\Basic\CDateTime.cs" />
-    <Compile Include="Types\CEngineQsTranform.cs" />
-    <Compile Include="Types\CEngineTransform.cs" />
+    <Compile Include="Types\Basic\CEngineQsTranform.cs" />
+    <Compile Include="Types\Basic\CEngineTransform.cs" />
     <Compile Include="Types\CEntity.cs" />
     <Compile Include="Types\Basic\CFlags.cs" />
     <Compile Include="Types\Basic\CFloat.cs" />

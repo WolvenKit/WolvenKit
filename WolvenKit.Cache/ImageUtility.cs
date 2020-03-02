@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
-using W3Edit.Textures;
+//using W3Edit.Textures;
 
 namespace WolvenKit.Cache
 {
@@ -26,7 +26,7 @@ namespace WolvenKit.Cache
                 var mips = imagechunk.GetVariableByName("residentMipIndex")!=null ? uint.Parse(imagechunk.GetVariableByName("residentMipIndex").ToString()) : 0;
                 var tempfile = new MemoryStream();
 
-                var dxt = DDSHeader.Format_DXT1;
+                /*var dxt = DDSHeader.Format_DXT1;
                 switch (compression)
                 {
                     case "TCM_DXTNoAlpha":
@@ -58,7 +58,7 @@ namespace WolvenKit.Cache
                     //bw.Write(image.Bytes);  // First 20 bytes is garbage
                     bw.Write( (new ArraySegment<byte>(image.Bytes, 20, image.Bytes.Length - 20)).ToArray() );
                 }
-                tempfile.Flush();
+                tempfile.Flush();*/
 #if DEBUG
                 //File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\asd.dds",tempfile.ToArray());
 #endif

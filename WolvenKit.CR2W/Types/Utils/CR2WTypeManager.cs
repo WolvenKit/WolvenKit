@@ -126,6 +126,8 @@ namespace WolvenKit.CR2W.Types
 
             Register("CFoliageResource", new CFoliageResource(null));
 
+            Register("CCookedExplorations", new CCookedExplorations(null));
+
             Register("CRagdoll", new CRagdoll(null));
 
             Register("CSectorData", new CSectorData(null));
@@ -133,14 +135,16 @@ namespace WolvenKit.CR2W.Types
             Register("CSwarmCellMap", new CSwarmCellMap(null));
 
             Register("CGenericGrassMask", new CGenericGrassMask(null));
-            
+
+            Register("CAnimPointCloudLookAtParam", new CAnimPointCloudLookAtParam(null));
 
             Register("CMesh", new CMesh(null));
             Register("CPhysicsDestructionResource", new CPhysicsDestructionResource(null));
             Register("SMeshBlock5", new SMeshBlock5(null));
 
             // CResources?
-            // these all have 4 bytes unknown probably buffers
+            // all these have 4 bytes at the end (most likely a an array's count set to 0)
+            // and probabaly derived from some parent
             Register("CExtAnimEventsFile", new CExtAnimEventsFile(null));
             Register("CSkeletalAnimationSet", new CExtAnimEventsFile(null));
             Register("CSkeletalAnimation", new CExtAnimEventsFile(null)); //is actually it's own class
@@ -695,10 +699,15 @@ namespace WolvenKit.CR2W.Types
             //Register("SBoneIndiceMapping", new SBoneIndiceMapping(null)); // this is a CVector with variable length, cannot be statically parsed like this
 
             // *.w2cube
-            //Register("CCubeTexture", new CCubeTexture(null));
+            Register("CCubeTexture", new CCubeTexture(null));
+
+           
+
+
 #endif
             var vectors = new[]
             {
+                "CAnimPointCloudLookAtParam",
                 "SSkeletonTrack",
                 "SSkeletonBone",
                 "SBoneIndiceMapping",
@@ -1636,7 +1645,6 @@ namespace WolvenKit.CR2W.Types
                 "CAnimEventTransitionCondition",
                 "CAnimGlobalParam",
                 "CAnimMimicParam",
-                "CAnimPointCloudLookAtParam",
                 "CAnimal",
                 "CAnimatedAttachment",
                 "CAnimatedComponent",
@@ -3839,6 +3847,19 @@ namespace WolvenKit.CR2W.Types
 
         public CVariable GetByName(string name, string varname, CR2WFile cr2w, bool readUnknownAsBytes = true)
         {
+            // debug
+            var debug = new[]
+            {
+                "NONE",
+                //"CAnimPointCloudLookAtParam",
+                //"CCameraCompressedPose",
+            };
+            if (debug.Contains(name))
+            {
+                throw new System.NotImplementedException();
+            }
+
+
             var fullname = name;
             var reg = new Regex(@"^(\w+):(.+)$");
             var match = reg.Match(name);

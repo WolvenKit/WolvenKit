@@ -6,12 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ionic.Zlib;
-using W3Edit.Textures;
+//using W3Edit.Textures;
 using WolvenKit.Common;
 using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.Cache
 {
+    using DDS;
+
     public class TextureCacheItem : IWitcherFile
     {
         public IWitcherArchiveType Bundle { get; set; }
@@ -36,61 +38,29 @@ namespace WolvenKit.Cache
         public Int32 NumMipOffsets;
         public Int64 TimeStamp;
         public Int16 Type;
-        public Int16 IsCube;
+        public Byte IsCube;
+        public Byte unk1;
 
         public long Size { get; set; }
         public UInt32 ZSize { get; set; }
         public Byte Part;
 
-        public enum ETextureFormat
-        {
-            TEXFMT_A8 = 0x0,
-            TEXFMT_A8_Scaleform = 0x1,
-            TEXFMT_L8 = 0x2,
-            TEXFMT_R8G8B8X8 = 0x3,
-            TEXFMT_R8G8B8A8 = 0x4,
-            TEXFMT_A8L8 = 0x5,
-            TEXFMT_Uint_16_norm = 0x6,
-            TEXFMT_Uint_16 = 0x7,
-            TEXFMT_Uint_32 = 0x8,
-            TEXFMT_R32G32_Uint = 0x9,
-            TEXFMT_R16G16_Uint = 0xA,
-            TEXFMT_Float_R10G10B10A2 = 0xB,
-            TEXFMT_Float_R16G16B16A16 = 0xC,
-            TEXFMT_Float_R11G11B10 = 0xD,
-            TEXFMT_Float_R16G16 = 0xE,
-            TEXFMT_Float_R32G32 = 0xF,
-            TEXFMT_Float_R32G32B32A32 = 0x10,
-            TEXFMT_Float_R32 = 0x11,
-            TEXFMT_Float_R16 = 0x12,
-            TEXFMT_D24S8 = 0x13,
-            TEXFMT_D24FS8 = 0x14,
-            TEXFMT_D32F = 0x15,
-            TEXFMT_D16U = 0x16,
-            TEXFMT_BC1 = 0x17,
-            TEXFMT_BC2 = 0x18,
-            TEXFMT_BC3 = 0x19,
-            TEXFMT_BC4 = 0x1A,
-            TEXFMT_BC5 = 0x1B,
-            TEXFMT_BC6H = 0x1C,
-            TEXFMT_BC7 = 0x1D,
-            TEXFMT_R8_Uint = 0x1E,
-            TEXFMT_NULL = 0x1F,
-            TEXFMT_Max = 0x20,
-        };
+        public List<Tuple<uint, uint>> MipMapInfo = new List<Tuple<uint, uint>>();
 
         public Dictionary<Int16,ETextureFormat> formats = new Dictionary<Int16,ETextureFormat>()
         {
-            {0x3FD,ETextureFormat.TEXFMT_R8G8B8A8},
-            {0x407,ETextureFormat.TEXFMT_BC1},
-            {0x408,ETextureFormat.TEXFMT_BC3},
-            {0x409, ETextureFormat.TEXFMT_BC6H},
-            {0x40A, ETextureFormat.TEXFMT_BC7},
-            {0x40B,ETextureFormat.TEXFMT_Float_R16G16B16A16},
-            {0x40C,ETextureFormat.TEXFMT_Float_R32G32B32A32},
-            {0x40D, ETextureFormat.TEXFMT_BC2},
-            {0x40E, ETextureFormat.TEXFMT_BC4},
-            {0x40F, ETextureFormat.TEXFMT_BC5}
+            //Resource Format     dwFlags     dwRGBBitCount   dwRBitMask  dwGBitMask  dwBBitMask  dwABitMask
+            {0x0,ETextureFormat.TEXFMT_R8G8B8A8}, 
+            {0x3FD,ETextureFormat.TEXFMT_R8G8B8A8}, //DDS_RGBA    32  0xff0000 	0xff00 	0xff 	0xff000000
+            {0x407,ETextureFormat.TEXFMT_BC1},  //DDS_FOURCC 	"DXT1"
+            {0x408,ETextureFormat.TEXFMT_BC3},  //DDS_FOURCC  "DXT5"
+            {0x409, ETextureFormat.TEXFMT_BC6H},    
+            {0x40A, ETextureFormat.TEXFMT_BC7}, 
+            {0x40B,ETextureFormat.TEXFMT_Float_R16G16B16A16},   //DDS_FOURCC 	113
+            {0x40C,ETextureFormat.TEXFMT_Float_R32G32B32A32},   //DDS_FOURCC 	116
+            {0x40D, ETextureFormat.TEXFMT_BC2}, //DDS_FOURCC  "DXT3"
+            {0x40E, ETextureFormat.TEXFMT_BC4}, //DDS_FOURCC  "BC4U"
+            {0x40F, ETextureFormat.TEXFMT_BC5}  //DDS_FOURCC  "ATI2"
         };
 
         public TextureCacheItem(IWitcherArchiveType parent)
@@ -102,43 +72,55 @@ namespace WolvenKit.Cache
         {
             using (var file = MemoryMappedFile.CreateFromFile(this.ParentFile, FileMode.Open))
             {
-                using (var viewstream = file.CreateViewStream((PageOFfset * 4096)+9, ZSize, MemoryMappedFileAccess.Read))
+                using (var viewstream = file.CreateViewStream((PageOFfset * 4096) + 9, ZSize, MemoryMappedFileAccess.Read))
                 {
-                    //TODO: Finish this once we have a proper dds reader/writer
-                    byte Dxt = BitConverter.GetBytes(Type)[0];
-                    uint fmt = 0;
-                    if (Dxt == 7) fmt = 1;
-                    else if (Dxt == 8) fmt = 4;
-                    else if (Dxt == 10) fmt = 4;
-                    else if (Dxt == 13) fmt = 3;
-                    else if (Dxt == 14) fmt = 6;
-                    else if (Dxt == 15) fmt = 4;
-                    else if (Dxt == 253) fmt = 0;
-                    else if (Dxt == 0) fmt = 0;
-                    else throw new Exception("Invalid image!");
-                    var cubemap = (Type == 3 || Type == 0) && (SliceCount == 6);
-                    uint depth = 0;
-                    if (SliceCount > 1 && Type == 4) depth = SliceCount;
-                    if (Type == 3 && Dxt == 253) BaseAlignment = 32;   
-                    var header = new DDSHeader().generate(
-                            BaseWidth,
-                            BaseHeight,
-                            Mipcount,
-                            fmt,
-                            BaseAlignment,
-                            IsCube == 1,
-                            depth)
-                        .Concat(BitConverter.GetBytes((Int32)0)).ToArray();
-                    output.Write(header,0,header.Length);
-                    if (!(SliceCount == 6 && (Type == 253 || Type == 0)))
+                    ETextureFormat format = formats[Type];
+
+                    bool iscubemap = IsCube == 1;
+
+                    var (header, dxt10header) = DDSUtils.GenerateHeader(
+                        BaseWidth,
+                        BaseHeight,
+                        (uint)Mipcount,
+                        format,
+                        BaseAlignment,
+                        iscubemap,
+                        SliceCount
+                        );
+
+
+                    DDSUtils.WriteHeader(output, header, dxt10header);
+                    //if ( format != ETextureFormat.TEXFMT_R8G8B8A8)
+                    new ZlibStream(viewstream, CompressionMode.Decompress).CopyTo(output);
+
+                }
+
+                for (int i = 0; i < NumMipOffsets; i++)
+                {
+                    
+                    var mippageoffset = MipMapInfo[i].Item1;
+                    var mipzsize = MipMapInfo[i].Item2;
+
+                    //extract mipmaps
+                    using (var viewstream = file.CreateViewStream((mippageoffset), mipzsize, MemoryMappedFileAccess.Read))
+                    {
                         new ZlibStream(viewstream, CompressionMode.Decompress).CopyTo(output);
+                    }
                 }
             }
         }
 
-        public void Extract(string filename)
+        public void Extract(string fullpath)
         {
-            using (var output = new FileStream(filename, FileMode.CreateNew, FileAccess.Write))
+            fullpath = Path.ChangeExtension(fullpath, "dds");
+
+            Directory.CreateDirectory(Path.GetDirectoryName(fullpath) ?? "");
+            if (File.Exists(fullpath))
+            {
+                File.Delete(fullpath);
+            }
+
+            using (var output = new FileStream(fullpath, FileMode.CreateNew, FileAccess.Write))
             {
                 Extract(output);
             }

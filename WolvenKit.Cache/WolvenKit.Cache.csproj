@@ -112,11 +112,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CollisionCache\CollisionManager.cs" />
+    <Compile Include="DDS\DDSUtils.cs" />
+    <Compile Include="DDS\DDS_HEADER.cs" />
+    <Compile Include="DDS\DDS_HEADER_DXT10.cs" />
+    <Compile Include="DDS\DDS_PIXELFORMAT.cs" />
+    <Compile Include="DDS\DDS_ENUMS.cs" />
     <Compile Include="Test_Collision.cs" />
     <Compile Include="CollisionCache\CollisionCacheItem.cs" />
     <Compile Include="CollisionCache\Collision_Cache.cs" />
-    <Compile Include="DDSHeader.cs" />
-    <Compile Include="DDSImageParser.cs" />
+    <Compile Include="DDS\DDSImageParser.cs" />
     <Compile Include="ImageUtility.cs" />
     <Compile Include="Cache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -130,7 +130,6 @@ namespace WolvenKit.Cache
             using (var output = new FileStream(filename, FileMode.Create, FileAccess.Write))
             {
                 Extract(output);
-                output.Close();
             }
         }
     }

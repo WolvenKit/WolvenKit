@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Crc32C;
 
 namespace WolvenKit.Cache
 {
@@ -15,6 +17,85 @@ namespace WolvenKit.Cache
         [STAThread]
         public static void Main()
         {
+            // Texture
+            using (var of = new OpenFileDialog() { Filter = "Texture caches | texture.cache" })
+            {
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    var dt = DateTime.Now;
+                    string idx = Crc32C.Crc32CAlgorithm.Compute(Encoding.ASCII.GetBytes($"{dt.Year}{dt.Month}{dt.Day}{dt.Hour}{dt.Minute}{dt.Second}")).ToString();
+
+
+                    var txc = new TextureCache(of.FileName);
+                    var outDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "TXTTest", $"ExtractedFiles_{idx}");
+                    if (!Directory.Exists(outDir))
+                        Directory.CreateDirectory(outDir);
+
+                    var whitelistExt = new[]
+                    {
+                        "w2cube",
+                    };
+
+                    // Dump
+                    using (StreamWriter writer = File.CreateText(Path.Combine(outDir,$"__txtdump_{idx}.txt")))
+                    {
+                        string head = "Format\t" +
+                            "BPP\t" +
+                            "Width\t" +
+                            "Height\t" +
+                            "Mips\t" +
+                            "Slices\t" +
+                            "Cube\t" +
+                            "Unk1\t" +
+                            //"Hash\t" +
+                            "Name";
+                        Console.WriteLine(head);
+                        writer.WriteLine(head);
+
+                        foreach (var x in txc.Files)
+                        {
+                            string ext = x.Name.Split('.').Last();
+                            if (!whitelistExt.Contains(ext))
+                            {
+                                continue;
+                            }
+
+                            string info = $"{x.Type.ToString("X4")}\t" +
+                                $"{x.BaseAlignment}\t" + 
+                                $"{x.BaseWidth}\t" + 
+                                $"{x.BaseHeight}\t" + 
+                                $"{x.Mipcount}\t" + 
+                                $"{x.SliceCount}\t" + 
+                                $"{x.IsCube.ToString("X2")}\t" +
+                                $"{x.unk1.ToString()}/{x.unk1.ToString("X2")}\t" +
+                                $"{x.Hash}\t" +
+                                $"{x.Name}\t"
+                                ;
+
+                            Console.WriteLine(info);
+                            writer.WriteLine(info);
+
+                        
+
+                            string fullpath = Path.Combine(outDir, x.Name);
+                            string filename = Path.GetFileName(fullpath);
+                            string newpath = Path.Combine(outDir, filename);
+                            x.Extract(newpath);
+                            Console.WriteLine($"Finished extracting {x.Name}");
+                        }
+
+                        Console.WriteLine($"Finished dumping texture cache. {of.FileName}");
+                        
+                    }
+                    //Console.WriteLine($"Finished extracting {txc.Files.Count} files from {of.FileName}");
+                    Console.WriteLine($"Finished extracting.");
+                    Console.ReadLine();
+                }
+            }
+
+
+            // Collision
+            /*
             using (var of = new OpenFileDialog(){Filter = "Collision caches | collision.cache"})
             {
                 if (of.ShowDialog() == DialogResult.OK)
@@ -27,6 +108,7 @@ namespace WolvenKit.Cache
                     Console.ReadLine();
                 }
             }
+            */
         }
 
         public static void IntenseTest(List<string> Files2Test)
