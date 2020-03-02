@@ -211,7 +211,7 @@ namespace WolvenKit
             if (e.Button == MouseButtons.Right)
             {
                 modFileList.SelectedNode = e.Node;
-                contextMenu.Show(modFileList, e.Location);
+                //contextMenu.Show(modFileList, e.Location);
             }
         }
 
@@ -290,7 +290,7 @@ namespace WolvenKit
             var items = menuitem.Items.Cast<ToolStripMenuItem>().ToList();
             var selectedItem = items.FirstOrDefault(_ => _.Selected);
 
-            if (menuitem != null && selectedItem != null)
+            if (menuitem != null && selectedItem != null && modFileList.SelectedNode != null)
             {
                 var ext = selectedItem.Text;
                 RequestFileImport?.Invoke(this, new RequestImportArgs { File = modFileList.SelectedNode.FullPath, Extension = ext });

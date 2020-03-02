@@ -138,7 +138,6 @@ namespace WolvenKit
             int y = screen.WorkingArea.Y - screen.Bounds.Y;
             this.MaximizedBounds = new Rectangle(x, y,
                 screen.WorkingArea.Width, screen.WorkingArea.Height);
-            this.MaximumSize = screen.WorkingArea.Size;
         }
         #endregion
 
@@ -2192,6 +2191,13 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
 
         private void RestoreToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Screen screen = Screen.FromControl(this);
+            int x = screen.WorkingArea.X - screen.Bounds.X;
+            int y = screen.WorkingArea.Y - screen.Bounds.Y;
+            this.MaximizedBounds = new Rectangle(x, y,
+                screen.WorkingArea.Width, screen.WorkingArea.Height);
+            this.MaximumSize = screen.WorkingArea.Size;
+
             if (this.WindowState != FormWindowState.Maximized)
             {
                 WindowState = FormWindowState.Maximized;
