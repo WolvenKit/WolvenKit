@@ -7,11 +7,8 @@ using WolvenKit.CR2W.Types.Utils;
 
 namespace WolvenKit.CR2W.Types
 {
-    public class CEntity : CVector
+    public class CEntity : CNode
     {
-        
-        public CUInt32 unk1;
-        public CUInt32 unk2;
 
         public CArray components { get; set; }
         public CVector buffer_v1 { get; set; }
@@ -22,14 +19,6 @@ namespace WolvenKit.CR2W.Types
         public CEntity(CR2WFile cr2w) :
             base(cr2w)
         {
-            unk1 = new CUInt32(cr2w)
-            {
-                Name = "unk1"
-            };
-            unk2 = new CUInt32(cr2w)
-            {
-                Name = "unk2"
-            };
 
             buffer_v1 = new CVector(cr2w)
             {
@@ -52,9 +41,6 @@ namespace WolvenKit.CR2W.Types
 
             // check if created from template
             isCreatedFromTemplate = variables.FirstOrDefault(_ => _.Name == "template") != null;
-
-            unk1.Read(file, 0);
-            unk2.Read(file, 0);
 
             // Read Component Array (should only be present if NOT created from template)
             #region Componentsarray
@@ -89,7 +75,7 @@ namespace WolvenKit.CR2W.Types
                 bool canRead;
                 do
                 {
-                    var t_buffer = new CBufferType1(cr2w)
+                    var t_buffer = new CEntityBufferType1(cr2w)
                     {
                         Name = "",
                     };
@@ -133,9 +119,6 @@ namespace WolvenKit.CR2W.Types
             // check if created from template
             isCreatedFromTemplate = variables.FirstOrDefault(_ => _.Name == "template") != null;
 
-            unk1.Write(file);
-            unk2.Write(file);
-
             // Write componentsarray (if not created from template)
             if (!isCreatedFromTemplate)
             {
@@ -172,25 +155,21 @@ namespace WolvenKit.CR2W.Types
         {
             var var = (CEntity) base.Copy(context);
 
-            var.unk1 = (CUInt32) unk1.Copy(context);
-            var.unk2 = (CUInt32) unk2.Copy(context);
-            var.components = (CArray) components.Copy(context);
-            var.buffer_v1 = (CVector) buffer_v1.Copy(context);
-            var.buffer_v2 = (CArray) buffer_v2.Copy(context);
+            var.components = (CArray)components.Copy(context);
+            var.buffer_v1 = (CVector)buffer_v1.Copy(context);
+            var.buffer_v2 = (CArray)buffer_v2.Copy(context);
 
             return var;
         }
 
         public override List<IEditableVariable> GetEditableVariables()
         {
-            var list = new List<IEditableVariable>(variables);
-
-            list.Add(unk1);
-            list.Add(unk2);
-
-            list.Add(components);
-            list.Add(buffer_v1);
-            list.Add(buffer_v2);
+            var list = new List<IEditableVariable>(base.GetEditableVariables())
+            {
+                components,
+                buffer_v1,
+                buffer_v2
+            };
 
             return list;
         }

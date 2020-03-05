@@ -2,32 +2,44 @@
 using System.IO;
 using WolvenKit.CR2W.Editors;
 using System.Diagnostics;
-using System;
+using WolvenKit.CR2W.Types.Utils;
 
 namespace WolvenKit.CR2W.Types
 {
-    public class CAnimPointCloudLookAtParam : CVector
+    public class CCutsceneTemplate : CVector
     {
-        public CBuffer<SAnimPointCloudLookAtParamData> buffer;
+        public CUInt32 unk1;
+        public CBufferUInt32<CVectorWrapper> animevents;
             
-        public CAnimPointCloudLookAtParam(CR2WFile cr2w) :
+        public CCutsceneTemplate(CR2WFile cr2w) :
             base(cr2w)
         {
-            buffer = new CBuffer<SAnimPointCloudLookAtParamData>(cr2w, _ => new SAnimPointCloudLookAtParamData(_)) { Name = "buffer" };
+            unk1 = new CUInt32(cr2w)
+            {
+                Name = "unk1"
+            };
+            animevents = new CBufferUInt32<CVectorWrapper>(cr2w, _ => new CVectorWrapper(_))
+            {
+                Name = "buffer"
+            };
+
         }
 
         public override void Read(BinaryReader file, uint size)
         {
             base.Read(file, size);
 
-            buffer.Read(file, size);
+            unk1.Read(file, 0);
+            animevents.Read(file, 0);
+
         }
 
         public override void Write(BinaryWriter file)
         {
             base.Write(file);
 
-            buffer.Write(file);
+            unk1.Write(file);
+            animevents.Write(file);
         }
 
         public override CVariable SetValue(object val)
@@ -37,14 +49,15 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Create(CR2WFile cr2w)
         {
-            return new CAnimPointCloudLookAtParam(cr2w);
+            return new CCutsceneTemplate(cr2w);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CAnimPointCloudLookAtParam) base.Copy(context);
+            var var = (CCutsceneTemplate) base.Copy(context);
 
-            var.buffer = (CBuffer<SAnimPointCloudLookAtParamData>)buffer.Copy(context);
+            var.unk1 = (CUInt32) unk1.Copy(context);
+            var.animevents = (CBufferUInt32<CVectorWrapper>)animevents.Copy(context);
 
             return var;
         }
@@ -53,7 +66,8 @@ namespace WolvenKit.CR2W.Types
         {
             return new List<IEditableVariable>(variables)
             {
-                buffer
+                unk1,
+                animevents
             };
         }
     }

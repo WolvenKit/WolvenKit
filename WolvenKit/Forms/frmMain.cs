@@ -159,8 +159,8 @@ namespace WolvenKit
             var theme = MainController.Get().GetTheme();
             this.dockPanel.Theme = theme;
             visualStudioToolStripExtender1.SetStyle(menuStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
-            visualStudioToolStripExtender1.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
-            visualStudioToolStripExtender1.SetStyle(toolStrip2, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+            visualStudioToolStripExtender1.SetStyle(toolbarToolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+            //visualStudioToolStripExtender1.SetStyle(statusToolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
         }
         /// <summary>
         /// https://stackoverflow.com/questions/29024910/how-to-design-a-custom-close-minimize-and-maximize-button-in-windows-form-appli/29025094
@@ -1592,7 +1592,15 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 return;
             var rawExtension = Path.GetExtension(fullpath);
 
-            await StartImport(rawExtension, importExtension);
+            try
+            {
+                await StartImport(rawExtension, importExtension);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            
             
             async Task StartImport(string rawext, string importext)
             {
@@ -1604,6 +1612,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 filename = filename.TrimStart(Path.DirectorySeparatorChar);
                 if (filename.Substring(0, 3) == "DLC") filename = filename.TrimStart("DLC".ToCharArray());
                 filename = filename.TrimStart(Path.DirectorySeparatorChar);
+                
                 var newpath = Path.Combine(ActiveMod.ModDirectory, $"{filename.TrimEnd(rawExtension.ToCharArray())}{importext}");
                 var split = filename.Split(Path.DirectorySeparatorChar).First();
                 if (split != type)
@@ -2086,7 +2095,8 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
         private void GameDebuggerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var gdb = new frmDebug();
-            gdb.Show();
+            Rectangle floatWindowBounds = new Rectangle() { Width = 827, Height = 564 };
+            gdb.Show(dockPanel, floatWindowBounds);
         }
 
         private void RecentFile_click(object sender, EventArgs e)
@@ -2271,7 +2281,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                         stringsGui = new frmStringsGui();
                     if (stringsGui.AreHashesDifferent())
                     {
-                        var result = MessageBox.Show("There are not encoded CSV files in your mod, do you want to open Strings Encoder GUI?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                        var result = MessageBox.Show("There are no encoded CSV files in your mod, do you want to open Strings Encoder GUI?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                         if (result == DialogResult.Yes)
                             stringsGui.ShowDialog();
                     }

@@ -1,19 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using WolvenKit.CR2W.Editors;
-using System.Diagnostics;
-using System;
 
 namespace WolvenKit.CR2W.Types
 {
-    public class CCurve : CVector
+    public class CComponent : CNode
     {
-            
-        public CCurve(CR2WFile cr2w) :
+        public CComponent(CR2WFile cr2w) :
             base(cr2w)
         {
 
-            
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -24,7 +21,6 @@ namespace WolvenKit.CR2W.Types
         public override void Write(BinaryWriter file)
         {
             base.Write(file);
-
         }
 
         public override CVariable SetValue(object val)
@@ -34,23 +30,21 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Create(CR2WFile cr2w)
         {
-            return new CCurve(cr2w);
+            return new CComponent(cr2w);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CCurve) base.Copy(context);
-
+            var var = (CComponent) base.Copy(context);
 
             return var;
         }
 
         public override List<IEditableVariable> GetEditableVariables()
         {
-            return new List<IEditableVariable>(variables)
-            {
-                
-            };
+            var list = new List<IEditableVariable>(base.GetEditableVariables());
+
+            return list;
         }
     }
 }

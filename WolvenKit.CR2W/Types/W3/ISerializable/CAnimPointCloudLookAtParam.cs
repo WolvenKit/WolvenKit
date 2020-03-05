@@ -6,25 +6,28 @@ using System;
 
 namespace WolvenKit.CR2W.Types
 {
-    public class CCurve : CVector
+    public class CAnimPointCloudLookAtParam : CVector
     {
+        public CBufferVLQ<SAnimPointCloudLookAtParamData> buffer;
             
-        public CCurve(CR2WFile cr2w) :
+        public CAnimPointCloudLookAtParam(CR2WFile cr2w) :
             base(cr2w)
         {
-
-            
+            buffer = new CBufferVLQ<SAnimPointCloudLookAtParamData>(cr2w, _ => new SAnimPointCloudLookAtParamData(_)) { Name = "buffer" };
         }
 
         public override void Read(BinaryReader file, uint size)
         {
             base.Read(file, size);
+
+            buffer.Read(file, size);
         }
 
         public override void Write(BinaryWriter file)
         {
             base.Write(file);
 
+            buffer.Write(file);
         }
 
         public override CVariable SetValue(object val)
@@ -34,13 +37,14 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Create(CR2WFile cr2w)
         {
-            return new CCurve(cr2w);
+            return new CAnimPointCloudLookAtParam(cr2w);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CCurve) base.Copy(context);
+            var var = (CAnimPointCloudLookAtParam) base.Copy(context);
 
+            var.buffer = (CBufferVLQ<SAnimPointCloudLookAtParamData>)buffer.Copy(context);
 
             return var;
         }
@@ -49,7 +53,7 @@ namespace WolvenKit.CR2W.Types
         {
             return new List<IEditableVariable>(variables)
             {
-                
+                buffer
             };
         }
     }

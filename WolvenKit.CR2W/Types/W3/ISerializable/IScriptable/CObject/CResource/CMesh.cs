@@ -10,18 +10,18 @@ namespace WolvenKit.CR2W.Types
     {
         // ATTENTION: don't read and write like a normal VLQ array
         // this one is padded by 4 bytes after each inner list
-        public CBuffer<CPaddedBuffer<CUInt16>> chunkgroupIndeces; 
+        public CBufferVLQ<CPaddedBuffer<CUInt16>> chunkgroupIndeces; 
 
-        public CBuffer<CName> boneNames;
-        public CBuffer<CMatrix4x4> bonematrices;
-        public CBuffer<CFloat> block3;
-        public CBuffer<CUInt32> boneIndecesMappingBoneIndex;
+        public CBufferVLQ<CName> boneNames;
+        public CBufferVLQ<CMatrix4x4> bonematrices;
+        public CBufferVLQ<CFloat> block3;
+        public CBufferVLQ<CUInt32> boneIndecesMappingBoneIndex;
         
             
         public CMesh(CR2WFile cr2w) :
             base(cr2w)
         {
-            chunkgroupIndeces = new CBuffer<CPaddedBuffer<CUInt16>>(cr2w, x => new CPaddedBuffer<CUInt16>(x, _ => new CUInt16(_) { Type = "Uint16" })
+            chunkgroupIndeces = new CBufferVLQ<CPaddedBuffer<CUInt16>>(cr2w, x => new CPaddedBuffer<CUInt16>(x, _ => new CUInt16(_) { Type = "Uint16" })
             {
                 Type = "CPaddedBuffer<Uint16>"
             })
@@ -31,7 +31,7 @@ namespace WolvenKit.CR2W.Types
             };
 
             boneNames = CBuffers.CreateCNameBuffer(cr2w, "boneNames");
-            bonematrices = new CBuffer<CMatrix4x4>(cr2w, _ => new CMatrix4x4(_) { Type = "CMatrix4x4" })
+            bonematrices = new CBufferVLQ<CMatrix4x4>(cr2w, _ => new CMatrix4x4(_) { Type = "CMatrix4x4" })
             {
                 Name = "bonematrices",
                 Type = "CBuffer<CMatrix4x4>"
@@ -76,11 +76,11 @@ namespace WolvenKit.CR2W.Types
         {
             var var = (CMesh)base.Copy(context);
 
-            var.chunkgroupIndeces = (CBuffer<CPaddedBuffer<CUInt16>>)chunkgroupIndeces.Copy(context);
-            var.boneNames = (CBuffer<CName>)boneNames.Copy(context);
-            var.bonematrices = (CBuffer<CMatrix4x4>)bonematrices.Copy(context);
-            var.block3 = (CBuffer<CFloat>)block3.Copy(context);
-            var.boneIndecesMappingBoneIndex = (CBuffer<CUInt32>)boneIndecesMappingBoneIndex.Copy(context);
+            var.chunkgroupIndeces = (CBufferVLQ<CPaddedBuffer<CUInt16>>)chunkgroupIndeces.Copy(context);
+            var.boneNames = (CBufferVLQ<CName>)boneNames.Copy(context);
+            var.bonematrices = (CBufferVLQ<CMatrix4x4>)bonematrices.Copy(context);
+            var.block3 = (CBufferVLQ<CFloat>)block3.Copy(context);
+            var.boneIndecesMappingBoneIndex = (CBufferVLQ<CUInt32>)boneIndecesMappingBoneIndex.Copy(context);
 
             return var;
         }

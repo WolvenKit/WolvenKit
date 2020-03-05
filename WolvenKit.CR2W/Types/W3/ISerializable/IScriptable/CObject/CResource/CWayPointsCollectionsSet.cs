@@ -7,13 +7,13 @@ namespace WolvenKit.CR2W.Types
 {
 
 
-    public class CWayPointsCollectionsSetData : CVariable
+    public class SWayPointsCollectionsSetData : CVariable
     {
         public CGUID guid;
         public CHandle handle;
 
 
-        public CWayPointsCollectionsSetData(CR2WFile cr2w) :
+        public SWayPointsCollectionsSetData(CR2WFile cr2w) :
             base(cr2w)
         {
             guid = new CGUID(cr2w)
@@ -40,11 +40,11 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val) => this;
 
-        public override CVariable Create(CR2WFile cr2w) => new CWayPointsCollectionsSetData(cr2w);
+        public override CVariable Create(CR2WFile cr2w) => new SWayPointsCollectionsSetData(cr2w);
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CWayPointsCollectionsSetData)base.Copy(context);
+            var var = (SWayPointsCollectionsSetData)base.Copy(context);
             var.guid = guid;
             var.handle = handle;
 
@@ -69,12 +69,12 @@ namespace WolvenKit.CR2W.Types
 
     public class CWayPointsCollectionsSet : CVector
     {
-        public CArray waypointcollections;
+        public CBufferUInt32<SWayPointsCollectionsSetData> waypointcollections;
         
         public CWayPointsCollectionsSet(CR2WFile cr2w) :
             base(cr2w)
         {
-            waypointcollections = new CArray("[]CWayPointsCollectionsSetData", "CWayPointsCollectionsSetData", true, cr2w)
+            waypointcollections = new CBufferUInt32<SWayPointsCollectionsSetData>(cr2w, _ => new SWayPointsCollectionsSetData(_))
             {
                 Name = "waypointcollections",
             };
@@ -108,7 +108,7 @@ namespace WolvenKit.CR2W.Types
         {
             var var = (CWayPointsCollectionsSet) base.Copy(context);
 
-            var.waypointcollections = (CArray)waypointcollections.Copy(context);
+            var.waypointcollections = (CBufferUInt32<SWayPointsCollectionsSetData>)waypointcollections.Copy(context);
 
             return var;
         }

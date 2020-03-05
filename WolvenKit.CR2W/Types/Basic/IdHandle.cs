@@ -8,27 +8,27 @@ using System.Globalization;
 
 namespace WolvenKit.CR2W.Types
 {
-    public class EntityHandle : CVariable
+    public class IdHandle : CVariable
     {
         public CUInt16 id;
-        public CGUID guid;
+        public CHandle handle;
 
-        public EntityHandle(CR2WFile cr2w) : base(cr2w)
+        public IdHandle(CR2WFile cr2w) : base(cr2w)
         {
             id = new CUInt16(cr2w) { Name = "id" };
-            guid = new CGUID(cr2w) { Name = "guid" };
+            handle = new CHandle(cr2w) { Name = "handle" };
         }
 
         public override void Read(BinaryReader file, uint size)
         {
             id.Read(file, 2);
-            guid.Read(file, 2);
+            handle.Read(file, 2);
         }
 
         public override void Write(BinaryWriter file)
         {
             id.Write(file);
-            guid.Write(file);
+            handle.Write(file);
         }
 
         public override CVariable SetValue(object val)
@@ -38,15 +38,15 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Create(CR2WFile cr2w)
         {
-            return new EntityHandle(cr2w);
+            return new IdHandle(cr2w);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (EntityHandle)base.Copy(context);
+            var var = (IdHandle)base.Copy(context);
 
             var.id = (CUInt16)id.Copy(context);
-            var.guid = (CGUID)guid.Copy(context);
+            var.handle = (CHandle)handle.Copy(context);
             
 
             return var;
@@ -57,13 +57,13 @@ namespace WolvenKit.CR2W.Types
             return new List<IEditableVariable>()
             {
                 id,
-                guid,
+                handle,
             };
         }
 
         public override string ToString()
         {
-            return $"[{id.ToString()}]:{guid.ToString()}";
+            return $"[{id.ToString()}]:{handle.ToString()}";
         }
     }
 }

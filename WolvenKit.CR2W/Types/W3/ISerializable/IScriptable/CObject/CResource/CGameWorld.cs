@@ -2,29 +2,36 @@
 using System.IO;
 using WolvenKit.CR2W.Editors;
 using System.Diagnostics;
-using System;
 
 namespace WolvenKit.CR2W.Types
 {
-    public class CCurve : CVector
+    public class CGameWorld : CVector
     {
+        public CHandle firstlayer;
             
-        public CCurve(CR2WFile cr2w) :
+        public CGameWorld(CR2WFile cr2w) :
             base(cr2w)
         {
-
+            firstlayer = new CHandle(cr2w)
+            {
+                Name = "firstlayer"
+            };
             
         }
 
         public override void Read(BinaryReader file, uint size)
         {
             base.Read(file, size);
+
+            firstlayer.Read(file, 0);
+           
         }
 
         public override void Write(BinaryWriter file)
         {
             base.Write(file);
 
+            firstlayer.Write(file);
         }
 
         public override CVariable SetValue(object val)
@@ -34,13 +41,14 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Create(CR2WFile cr2w)
         {
-            return new CCurve(cr2w);
+            return new CGameWorld(cr2w);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CCurve) base.Copy(context);
+            var var = (CGameWorld) base.Copy(context);
 
+            var.firstlayer = (CHandle)firstlayer.Copy(context);
 
             return var;
         }
@@ -49,7 +57,7 @@ namespace WolvenKit.CR2W.Types
         {
             return new List<IEditableVariable>(variables)
             {
-                
+                firstlayer
             };
         }
     }

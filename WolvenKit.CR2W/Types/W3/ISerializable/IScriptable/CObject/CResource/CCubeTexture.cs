@@ -13,12 +13,13 @@ namespace WolvenKit.CR2W.Types
 
     public class CCubeTexture : CVector
     {
+        // 20 bytes header
         public CUInt32 texturecachekey;
 
         public CUInt16 residentmip;
         public CUInt16 encodedformat;
 
-        public CUInt16 dimensions;
+        public CUInt16 edge;
         public CUInt16 mipmapscount;
 
         public CUInt32 filesize;
@@ -41,9 +42,9 @@ namespace WolvenKit.CR2W.Types
             {
                 Name = "encodedformat"
             };
-            dimensions = new CUInt16(cr2w)
+            edge = new CUInt16(cr2w)
             {
-                Name = "dimensions"
+                Name = "edge"
             };
             mipmapscount = new CUInt16(cr2w)
             {
@@ -64,7 +65,7 @@ namespace WolvenKit.CR2W.Types
             texturecachekey.Read(file, 4);
             residentmip.Read(file, 2);
             encodedformat.Read(file, 2);
-            dimensions.Read(file, 2);
+            edge.Read(file, 2);
             mipmapscount.Read(file, 2);
 
             filesize.Read(file, 4);
@@ -80,7 +81,7 @@ namespace WolvenKit.CR2W.Types
             texturecachekey.Write(file);
             residentmip.Write(file);
             encodedformat.Write(file);
-            dimensions.Write(file);
+            edge.Write(file);
             mipmapscount.Write(file);
 
             filesize.Write(file);
@@ -106,7 +107,7 @@ namespace WolvenKit.CR2W.Types
             var.texturecachekey = (CUInt32)texturecachekey.Copy(context);
             var.residentmip = (CUInt16)residentmip.Copy(context);
             var.encodedformat = (CUInt16)encodedformat.Copy(context);
-            var.dimensions = (CUInt16)dimensions.Copy(context);
+            var.edge = (CUInt16)edge.Copy(context);
             var.mipmapscount = (CUInt16)mipmapscount.Copy(context);
 
             var.filesize = (CUInt32)filesize.Copy(context);
@@ -123,7 +124,7 @@ namespace WolvenKit.CR2W.Types
                 texturecachekey,
                 residentmip,
                 encodedformat,
-                dimensions,
+                edge,
                 mipmapscount,
                 filesize,
                 ffffffff,

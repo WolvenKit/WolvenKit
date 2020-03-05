@@ -490,6 +490,12 @@ namespace CR2WTests
             {
                 Console.WriteLine($"\t-{f}");
             }
+            Console.WriteLine("Types unparsed:");
+            unknownclasses = unknownclasses.Distinct().ToList();
+            foreach (var f in unknownclasses)
+            {
+                Console.WriteLine($"\t-{f}");
+            }
             Assert.AreEqual(0, unknownbytes, $"Unknown bytes remained -> {unknownbytes}bytes");
             Assert.AreEqual(0, unparsedfiles.Count, $"Unparsed files -> {unparsedfiles}");
         }

@@ -5,7 +5,7 @@ using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
-    class SBoneIndiceMapping : CVector
+    class SBoneIndiceMapping : CVariable
     {
         public CUInt32 startingIndex;
 		public CUInt32 endingIndex;
@@ -65,7 +65,7 @@ namespace WolvenKit.CR2W.Types
 
         public override List<IEditableVariable> GetEditableVariables()
         {
-            var list = new List<IEditableVariable>(variables)
+            var list = new List<IEditableVariable>()
             {
                 startingIndex,
 				endingIndex,

@@ -177,8 +177,8 @@ namespace WolvenKit.Render
                     }
 
                     // bone names and matrices
-                    CBuffer<CName> boneNames = chunk.GetVariableByName("boneNames") as CBuffer<CName>;
-                    CBuffer<CMatrix4x4> bonematrices = chunk.GetVariableByName("bonematrices") as CBuffer<CMatrix4x4>;
+                    CBufferVLQ<CName> boneNames = chunk.GetVariableByName("boneNames") as CBufferVLQ<CName>;
+                    CBufferVLQ<CMatrix4x4> bonematrices = chunk.GetVariableByName("bonematrices") as CBufferVLQ<CMatrix4x4>;
                     CData.boneData.nbBones = (uint)boneNames.elements.Count;
                     for (int i = 0; i < CData.boneData.nbBones; i++)
                     {

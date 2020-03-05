@@ -126,9 +126,15 @@ namespace WolvenKit.CR2W
         {
             get
             {
-                if (ParentChunkId <= 0)
+                try
+                {
+                    return cr2w.chunks[(int)ParentChunkId - 1];
+                }
+                catch (Exception)
+                {
                     return null;
-                return cr2w.chunks[(int) ParentChunkId - 1];
+                }
+                
             }
         }
 
@@ -225,9 +231,13 @@ namespace WolvenKit.CR2W
                 Type = "byte[]"
             };
 
-            if (bytesLeft != 0)
+            if (bytesLeft > 0)
             {
                 unknownBytes.Read(file, (uint) bytesLeft);
+            }
+            else if (bytesLeft < 0)
+            {
+                throw new InvalidParsingException("File read too far.");
             }
             else
             {

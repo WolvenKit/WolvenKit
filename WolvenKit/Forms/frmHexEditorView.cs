@@ -270,6 +270,21 @@ namespace WolvenKit
 
             try
             {
+                var obj = new CVLQInt32(File);
+                obj.Read(reader, (uint)(bytes.Length - bytestart));
+                var v = CreatePropertyLayout(obj);
+                v.Endpos = (int)reader.BaseStream.Position;
+                v.HexValue = bytes[bytestart].ToString("X2");
+                v.Method = "CVLQInt32";
+            }
+            catch
+            {
+            }
+
+            reader.BaseStream.Seek(bytestart, SeekOrigin.Begin);
+
+            try
+            {
                 var obj = new CDynamicInt(File);
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);

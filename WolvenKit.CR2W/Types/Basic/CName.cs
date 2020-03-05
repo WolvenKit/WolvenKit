@@ -9,6 +9,7 @@ namespace WolvenKit.CR2W.Types
         public CName(CR2WFile cr2w)
             : base(cr2w)
         {
+            Type = typeof(CName).Name;
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

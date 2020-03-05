@@ -8,24 +8,25 @@ using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
-    public class CBuffer<T> : CVariable where T : CVariable
+    public class CBufferUInt16<T> : CVariable where T : CVariable
     {
         public List<T> elements = new List<T>();
         public Func<CR2WFile, T> elementFactory;
+        public new string Type { get => $"CCompressedBuffer<{typeof(T)}>"; }
 
-        public CBuffer(CR2WFile cr2w, Func<CR2WFile, T> elementFactory) : base(cr2w)
+        public CBufferUInt16(CR2WFile cr2w, Func<CR2WFile, T> elementFactory) : base(cr2w)
         {
             this.elementFactory = elementFactory;
         }
 
         public override CVariable Create(CR2WFile cr2w)
         {
-            return new CBuffer<T>(cr2w, elementFactory);
+            return new CCompressedBuffer<T>(cr2w, elementFactory);
         }
 
         public override void Read(BinaryReader file, uint size)
         {
-            CDynamicInt count = new CDynamicInt(cr2w);
+            CUInt16 count = new CUInt16(cr2w);
             count.Read(file, size);
 
             for (int i = 0; i < count.val; i++)
@@ -44,8 +45,8 @@ namespace WolvenKit.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            CDynamicInt count = new CDynamicInt(cr2w);
-            count.val = elements.Count;
+            CUInt16 count = new CUInt16(cr2w);
+            count.val = (ushort)elements.Count;
             count.Write(file);
 
             foreach (var element in elements)
@@ -56,7 +57,7 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var copy = base.Copy(context) as CBuffer<T>;
+            var copy = base.Copy(context) as CBufferUInt16<T>;
 
             foreach (var element in elements)
             {
@@ -128,34 +129,6 @@ namespace WolvenKit.CR2W.Types
             {
                 elements[i].Name = i.ToString();
             }
-        }
-    }
-
-    class CBuffers
-    {
-        public static CBuffer<CName> CreateCNameBuffer(CR2WFile cr2w, string name)
-        {
-            return new CBuffer<CName>(cr2w, file => new CName(file) { Type = "CName" }) { Name = name, Type = "CBuffer<CName>" };
-        }
-        public static CBuffer<CFloat> CreateFloatBuffer(CR2WFile cr2w, string name)
-        {
-            return new CBuffer<CFloat>(cr2w, file => new CFloat(file) { Type = "CFloat" }) { Name = name, Type = "CBuffer<CFloat>" };
-        }
-        public static CBuffer<CUInt16> CreateUInt16Buffer(CR2WFile cr2w, string name)
-        {
-            return new CBuffer<CUInt16>(cr2w, file => new CUInt16(file) { Type = "CUInt16" }) { Name = name, Type = "CBuffer<CUInt16>" };
-        }
-        public static CBuffer<CUInt32> CreateUInt32Buffer(CR2WFile cr2w, string name)
-        {
-            return new CBuffer<CUInt32>(cr2w, file => new CUInt32(file) { Type = "CUInt32" }) { Name = name, Type = "CBuffer<CUInt32>" };
-        }
-        public static CBuffer<CVector2D> CreateVector2DBuffer(CR2WFile cr2w, string name)
-        {
-            return new CBuffer<CVector2D>(cr2w, file => new CVector2D(file) { Type = "CVector2D" }) { Name = name, Type = "CBuffer<CVector2D>" };
-        }
-        public static CBuffer<CVector3D> CreateVector3DBuffer(CR2WFile cr2w, string name)
-        {
-            return new CBuffer<CVector3D>(cr2w, file => new CVector3D(file) { Type = "CVector3D" }) { Name = name, Type = "CBuffer<CVector3D>" };
         }
     }
 }

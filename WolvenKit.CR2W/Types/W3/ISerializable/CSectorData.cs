@@ -9,9 +9,12 @@ namespace WolvenKit.CR2W.Types
     {
         public CUInt32 Unknown1;
         public CUInt32 Unknown2;
-        public CVector Resources;
-        public CVector Objects;
-        public CByteArray BlockData;
+
+        public CBufferVLQ<CSectorDataResource> Resources;
+        public CBufferVLQ<CSectorDataObject> Objects;
+
+        public CVLQInt32 blocksize;
+        public CCompressedBuffer<CBytes> BlockData;
 
         public CSectorData(CR2WFile cr2w)
             : base(cr2w)
@@ -19,27 +22,22 @@ namespace WolvenKit.CR2W.Types
             Unknown1 = new CUInt32(cr2w)
             {
                 Name = "unknown1",
-                Type = "UInt32"
             };
             Unknown2 = new CUInt32(cr2w)
             {
                 Name = "unknown2",
-                Type = "UInt32"
             };
-            Resources = new CVector(cr2w)
+            blocksize = new CVLQInt32(cr2w)
             {
-                Name = "resources",
-                Type = "CSectorDataResource[]"
+                Name = "blocksize",
             };
-            Objects = new CVector(cr2w)
-            {
-                Name = "objects",
-                Type = "CSectorDataObject[]"
-            };
-            BlockData = new CByteArray(cr2w)
+
+            Resources = new CBufferVLQ<CSectorDataResource>(cr2w, _ => new CSectorDataResource(_)) { Name = "resources", };
+            Objects = new CBufferVLQ<CSectorDataObject>(cr2w, _ => new CSectorDataObject(_)) { Name = "objects", };
+
+            BlockData = new CCompressedBuffer<CBytes>(cr2w, _ => new CBytes(_))
             {
                 Name = "blockData",
-                Type = "byte[]"
             };
         }
 
@@ -56,7 +54,7 @@ namespace WolvenKit.CR2W.Types
                 Unknown2,
                 Resources,
                 Objects,
-                //BlockData
+                BlockData
             };
         }
 
@@ -66,51 +64,39 @@ namespace WolvenKit.CR2W.Types
             Unknown1.Read(file, 4);
             Unknown2.Read(file, 4);
 
-            //Read the resources list.
-            var numresources = file.ReadVLQInt32();
-            for (int i = 0; i < numresources; i++)
-            {
-                var temp = new CSectorDataResource(cr2w);
-                temp.Read(file, 24);
-                Resources.AddVariable(temp);
-            }
-
-            //Read the Objects list.
-            var numobjects = file.ReadVLQInt32();
-            for (int i = 0; i < numobjects; i++)
-            {
-                var temp = new CSectorDataObject(cr2w);
-                temp.Read(file, 32);
-                Objects.AddVariable(temp);
-            }
+            Resources.Read(file, 0);
+            Objects.Read(file, 0);
 
             // Read the data block.
-            var datasize = file.ReadVLQInt32();
-            BlockData.Bytes = file.ReadBytes(datasize);
+            blocksize.Read(file, 0);
 
-            // add blockdata per object instead of in the end of the file
-            // we do it after we read the array for easier writing
-            for (int i = 0; i < numobjects; i++)
+            for (int i = 0; i < Objects.elements.Count; i++)
             {
+                var b = new CBytes(cr2w);
                 CSectorDataObject curobj = (CSectorDataObject)Objects.GetEditableVariables()[i];
-                int curoffset = int.Parse(curobj.offset.ToString());
-                int nextoffset = datasize;
-                if (i != numobjects - 1)
+
+                ulong curoffset = curobj.offset.val;
+                byte type = curobj.type.val;
+                if (!(type == 0x1 || type == 0x2))
+                {
+                    System.Diagnostics.Debugger.Break();
+                    //throw new NotImplementedException();
+                }
+
+                ulong len;
+                if (i < Objects.elements.Count - 1)
                 {
                     CSectorDataObject nextobj = (CSectorDataObject)Objects.GetEditableVariables()[i + 1];
-                    nextoffset = int.Parse(nextobj.offset.ToString());
+                    ulong nextoffset = nextobj.offset.val;
+                    len = nextoffset - curoffset;
                 }
-                int length = nextoffset - curoffset;
-
-                byte[] cutoutdata = new byte[length];
-                Array.Copy(BlockData.Bytes, curoffset, cutoutdata, 0, length);
-
-                curobj.blockdata.Bytes = cutoutdata;
+                else
+                {
+                    len = (ulong)blocksize.val - curoffset;
+                }
+                b.Read(file, (uint)len);
+                BlockData.AddVariable(b);
             }
-
-
-
-
         }
 
         public override void Write(BinaryWriter file)
@@ -119,32 +105,20 @@ namespace WolvenKit.CR2W.Types
             Unknown1.Write(file);
             Unknown2.Write(file);
 
-            //Write the resources
-            file.WriteVLQInt32(Resources.variables.Count);
-            foreach (var cvar in Resources.variables)
+            Resources.Write(file);
+            Objects.Write(file);
+
+            byte[] buffer;
+            using (var ms = new MemoryStream())
+            using (var bw = new BinaryWriter(ms))
             {
-                cvar.Write(file);
+                BlockData.Write(bw);
+                blocksize.val = (int)ms.Length;
+                buffer = ms.ToArray();
             }
 
-            //Write the objects
-            file.WriteVLQInt32(Objects.variables.Count);
-            foreach (var cvar in Objects.variables)
-            {
-                cvar.Write(file);
-            }
-
-            //Write the block data.
-            //first assemble from bytearrays from the individual objects
-            List<byte> newbyte = new List<byte>();
-            foreach (CSectorDataObject obj in Objects.GetEditableVariables())
-            {
-                newbyte.AddRange(obj.blockdata.Bytes);
-            }
-            BlockData.Bytes = newbyte.ToArray();
-
-            //write the data back into one block
-            file.WriteVLQInt32(BlockData.Bytes.Length);
-            file.Write(BlockData.Bytes);
+            blocksize.Write(file);
+            file.Write(buffer);
         }
 
         public override string ToString()
@@ -237,9 +211,6 @@ namespace WolvenKit.CR2W.Types
         public CFloat positionY;
         public CFloat positionZ;
 
-        //blockdata
-        public CByteArray blockdata { get; set; }
-
         public CSectorDataObject(CR2WFile cr2w)
             : base(cr2w)
         {
@@ -250,7 +221,6 @@ namespace WolvenKit.CR2W.Types
             positionX = new CFloat(cr2w) { Name = "positionX", Type = "Float" };
             positionY = new CFloat(cr2w) { Name = "positionY", Type = "Float" };
             positionZ = new CFloat(cr2w) { Name = "positionZ", Type = "Float" };
-            blockdata = new CByteArray(cr2w) { Name = "blockdata", Type = "byte[]" };
         }
 
         public override CVariable Create(CR2WFile cr2w)
@@ -291,7 +261,6 @@ namespace WolvenKit.CR2W.Types
                 positionX,
                 positionY,
                 positionZ,
-                blockdata
             };
         }
 

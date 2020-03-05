@@ -8,7 +8,7 @@ using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types.Utils
 {
-    public class CBufferType1 : CVariable
+    public class CEntityBufferType1 : CVariable
     {
 
         private CName componentName;
@@ -17,13 +17,10 @@ namespace WolvenKit.CR2W.Types.Utils
         private CGUID guid;
         public CGUID Guid { get => guid; set => guid = value; }
 
-        private CUInt32 sizeofdata;
-        public CUInt32 Sizeofdata { get => sizeofdata; set => sizeofdata = value; }
+        private CByteArray2 buffer;
+        public CByteArray2 Buffer { get => buffer; set => buffer = value; }
 
-        private CBytes buffer;
-        public CBytes Buffer { get => buffer; set => buffer = value; }
-
-        public CBufferType1(CR2WFile cr2w) : base(cr2w)
+        public CEntityBufferType1(CR2WFile cr2w) : base(cr2w)
         {
             componentName = new CName(cr2w)
             {
@@ -33,11 +30,7 @@ namespace WolvenKit.CR2W.Types.Utils
             {
                 Name = "GUID"
             };
-            sizeofdata = new CUInt32(cr2w)
-            {
-                Name = "Size",
-            };
-            buffer = new CBytes(cr2w)
+            buffer = new CByteArray2(cr2w)
             {
                 Name = "Data",
             };
@@ -59,8 +52,7 @@ namespace WolvenKit.CR2W.Types.Utils
             if (!string.IsNullOrEmpty(componentName.Value))
             {
                 guid.Read(file, 16);
-                sizeofdata.Read(file, 4);
-                buffer.Read(file, sizeofdata.val - 4);
+                buffer.Read(file, size);
             }
         }
 
@@ -70,25 +62,22 @@ namespace WolvenKit.CR2W.Types.Utils
             if (!string.IsNullOrEmpty(componentName.Value))
             {
                 guid.Write(file);
-                sizeofdata.val = (uint)buffer.Bytes.Length + 4;
-                sizeofdata.Write(file);
                 buffer.Write(file);
             }
         }
 
         public override CVariable Create(CR2WFile cr2w)
         {
-            return new CBufferType1(cr2w);
+            return new CEntityBufferType1(cr2w);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CBufferType1)base.Copy(context);
+            var var = (CEntityBufferType1)base.Copy(context);
 
             var.componentName = (CName)componentName.Copy(context);
             var.guid = (CGUID)guid.Copy(context);
-            var.sizeofdata = (CUInt32)sizeofdata.Copy(context);
-            var.buffer = (CBytes)buffer.Copy(context);
+            var.buffer = (CByteArray2)buffer.Copy(context);
 
             return var;
         }
@@ -107,7 +96,6 @@ namespace WolvenKit.CR2W.Types.Utils
             if (!string.IsNullOrEmpty(componentName.Value))
             {
                 editableVars.Add(guid);
-                editableVars.Add(sizeofdata);
                 editableVars.Add(buffer);
             }
 

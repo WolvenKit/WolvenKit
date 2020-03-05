@@ -15,6 +15,8 @@ namespace WolvenKit.CR2W.Types
 
         public CMatrix4x4(CR2WFile cr2w) : base(cr2w)
         {
+            Type = typeof(CMatrix4x4).Name;
+
             fields = new CVariable[] {
                 ax = new CFloat(cr2w) { Name = "ax", Type = "Float" },
                 ay = new CFloat(cr2w) { Name = "ay", Type = "Float" },
