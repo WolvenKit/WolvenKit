@@ -44,49 +44,46 @@ namespace WolvenKit.Render
                         meshSkeleton.parentIdx.Add(short.Parse(parentIndex.ToString()));
                     }
 
-                    var unknownBytes = chunk.unknownBytes.Bytes;
-                    using (MemoryStream ms = new MemoryStream(unknownBytes))
-                    using (BinaryReader br = new BinaryReader(ms))
+                    var rigdata = (chunk.GetVariableByName("rigdata") as CCompressedBuffer<SSkeletonRigData>).elements;
+
+
+                    for (int i = 0; i < meshSkeleton.nbBones; i++)
                     {
-                        for (uint i = 0; i < meshSkeleton.nbBones; i++)
-                        {
-                            Vector3Df position = new Vector3Df();
-                            position.X = br.ReadSingle();
-                            position.Y = br.ReadSingle();
-                            position.Z = br.ReadSingle();
-                            br.ReadSingle(); // the w component
 
-                            Quaternion orientation = new Quaternion();
-                            orientation.X = br.ReadSingle();
-                            orientation.Y = br.ReadSingle();
-                            orientation.Z = br.ReadSingle();
-                            orientation.W = br.ReadSingle();
+                        Vector3Df position = new Vector3Df(
+                            rigdata[i].position.x.val,
+                            rigdata[i].position.y.val,
+                            rigdata[i].position.z.val);
 
-                            Vector3Df scale;
-                            scale.X = br.ReadSingle();
-                            scale.Y = br.ReadSingle();
-                            scale.Z = br.ReadSingle();
-                            br.ReadSingle(); // the w component
+                        Quaternion orientation = new Quaternion(
+                            rigdata[i].rotation.x.val,
+                            rigdata[i].rotation.y.val,
+                            rigdata[i].rotation.z.val,
+                            rigdata[i].rotation.w.val);
 
-                            Matrix posMat = new Matrix();
-                            posMat.Translation = position;
+                        Vector3Df scale = new Vector3Df(
+                            rigdata[i].scale.x.val,
+                            rigdata[i].scale.y.val,
+                            rigdata[i].scale.z.val);
 
-                            Matrix rotMat = new Matrix();
-                            Vector3Df euler = orientation.ToEuler();
-                            // chechNaNErrors(euler);
+                        Matrix posMat = new Matrix();
+                        posMat.Translation = position;
 
-                            rotMat.SetRotationRadians(euler);
+                        Matrix rotMat = new Matrix();
+                        Vector3Df euler = orientation.ToEuler();
+                        // chechNaNErrors(euler);
 
-                            Matrix scaleMat = new Matrix();
-                            scaleMat.Scale = scale;
+                        rotMat.SetRotationRadians(euler);
 
-                            Matrix localTransform = posMat * rotMat * scaleMat;
-                            orientation = orientation.MakeInverse();
-                            meshSkeleton.matrix.Add(localTransform);
-                            meshSkeleton.positions.Add(position);
-                            meshSkeleton.rotations.Add(orientation);
-                            meshSkeleton.scales.Add(scale);
-                        }
+                        Matrix scaleMat = new Matrix();
+                        scaleMat.Scale = scale;
+
+                        Matrix localTransform = posMat * rotMat * scaleMat;
+                        orientation = orientation.MakeInverse();
+                        meshSkeleton.matrix.Add(localTransform);
+                        meshSkeleton.positions.Add(position);
+                        meshSkeleton.rotations.Add(orientation);
+                        meshSkeleton.scales.Add(scale);
                     }
                 }
             }

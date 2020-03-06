@@ -1,159 +1,69 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
 using WolvenKit.CR2W.Editors;
+using System.Diagnostics;
+using System;
+using System.Linq;
+using System.Globalization;
 
 namespace WolvenKit.CR2W.Types
 {
     public class EntityHandle : CVariable
     {
+        public CUInt16 id;
+        public CGUID guid;
+
         public EntityHandle(CR2WFile cr2w) : base(cr2w)
         {
+            id = new CUInt16(cr2w) { Name = "id" };
+            guid = new CGUID(cr2w) { Name = "guid" };
         }
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public int val
-        {
-            get
-            {
-                if (ChunkHandle)
-                {
-                    return ChunkIndex;
-                }
-                var newfiletype = (ushort) cr2w.GetStringIndex(FileType, true);
-                return (-cr2w.GetHandleIndex(Handle, newfiletype, Flags, true) - 1);
-            }
-            set
-            {
-                ChunkHandle = value >= 0;
-
-                if (ChunkHandle)
-                {
-                    if (value <= cr2w.chunks.Count)
-                        ChunkIndex = value;
-                }
-                else
-                {
-                    if (-value - 1 <= cr2w.imports.Count)
-                    {
-                        Handle = cr2w.imports[-value - 1].DepotPathStr;
-
-                        var filetype = cr2w.imports[-value - 1].Import.className;
-                        FileType = cr2w.names[filetype].Str;
-
-                        Flags = cr2w.imports[-value - 1].Import.flags;
-                    }
-                }
-            }
-        }
-
-        public string Handle { get; set; }
-        public string FileType { get; set; }
-        public ushort Flags { get; set; }
-        public bool ChunkHandle { get; set; }
-        public int ChunkIndex { get; set; }
 
         public override void Read(BinaryReader file, uint size)
         {
-            val = file.ReadInt32();
+            id.Read(file, 2);
+            guid.Read(file, 2);
         }
 
         public override void Write(BinaryWriter file)
         {
-            file.Write(val);
+            id.Write(file);
+            guid.Write(file);
         }
 
         public override CVariable SetValue(object val)
         {
-            if (val is int)
-            {
-                this.val = (int) val;
-            }
-
             return this;
         }
 
         public override CVariable Create(CR2WFile cr2w)
         {
-            return new CHandle(cr2w);
+            return new EntityHandle(cr2w);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CHandle) base.Copy(context);
+            var var = (EntityHandle)base.Copy(context);
 
-            var.Handle = Handle;
-            var.FileType = FileType;
-            var.Flags = Flags;
-            var.ChunkHandle = ChunkHandle;
-            var.ChunkIndex = ChunkIndex;
+            var.id = (CUInt16)id.Copy(context);
+            var.guid = (CGUID)guid.Copy(context);
+            
+
             return var;
+        }
+
+        public override List<IEditableVariable> GetEditableVariables()
+        {
+            return new List<IEditableVariable>()
+            {
+                id,
+                guid,
+            };
         }
 
         public override string ToString()
         {
-            if (ChunkHandle)
-            {
-                if (ChunkIndex == 0)
-                    return "0";
-
-                if (ChunkIndex - 1 < 0 || ChunkIndex - 1 >= cr2w.chunks.Count)
-                    return "Invalid Chunk handle";
-
-                return "Chunk handle: " + cr2w.chunks[ChunkIndex - 1].Type + " #" + (ChunkIndex);
-            }
-
-            return FileType + ": " + Handle;
-        }
-
-        public override Control GetEditor()
-        {
-            if (ChunkHandle)
-            {
-                var editor = new ComboBox();
-                editor.Items.Add(new HandleComboItem {Text = "", Value = 0});
-
-                for (var i = 0; i < cr2w.chunks.Count; i++)
-                {
-                    editor.Items.Add(new HandleComboItem {Text = cr2w.chunks[i].Type + " #" + (i + 1), Value = i + 1});
-                }
-
-                editor.SelectedIndexChanged += delegate(object sender, EventArgs e)
-                {
-                    var item = (HandleComboItem) ((ComboBox) sender).SelectedItem;
-                    if (item != null)
-                    {
-                        ChunkIndex = item.Value;
-                    }
-                };
-
-                var selIndex = ChunkIndex;
-                if (selIndex < editor.Items.Count && selIndex >= 0)
-                {
-                    editor.SelectedIndex = selIndex;
-                }
-                return editor;
-            }
-            else
-            {
-                var editor = new PtrEditor();
-                editor.HandlePath.DataBindings.Add("Text", this, "Handle", true, DataSourceUpdateMode.OnPropertyChanged);
-                editor.FileType.DataBindings.Add("Text", this, "FileType", true, DataSourceUpdateMode.OnPropertyChanged);
-                editor.Flags.DataBindings.Add("Text", this, "Flags", true, DataSourceUpdateMode.OnPropertyChanged);
-                return editor;
-            }
-        }
-
-        internal class HandleComboItem
-        {
-            public int Value { get; set; }
-            public string Text { get; set; }
-
-            public override string ToString()
-            {
-                return Text;
-            }
+            return $"[{id.ToString()}]:{guid.ToString()}";
         }
     }
 }

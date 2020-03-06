@@ -8,13 +8,15 @@ using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
-    class CMatrix4x4 : CVariable
+    public class CMatrix4x4 : CVariable
     {
         public CVariable[] fields;
         public CFloat ax, ay, az, aw, bx, by, bz, bw, cx, cy, cz, cw, dx, dy, dz, dw;
 
         public CMatrix4x4(CR2WFile cr2w) : base(cr2w)
         {
+            Type = typeof(CMatrix4x4).Name;
+
             fields = new CVariable[] {
                 ax = new CFloat(cr2w) { Name = "ax", Type = "Float" },
                 ay = new CFloat(cr2w) { Name = "ay", Type = "Float" },
@@ -71,6 +73,29 @@ namespace WolvenKit.CR2W.Types
             }
 
             return copy;
+        }
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder().Append(fields.Length);
+
+            if (fields.Length > 0)
+            {
+                builder.Append(":");
+
+                foreach (var element in fields)
+                {
+                    builder.Append(" <").Append(element.ToString()).Append(">");
+
+                    if (builder.Length > 100)
+                    {
+                        builder.Remove(100, builder.Length - 100);
+                        break;
+                    }
+                }
+            }
+
+            return builder.ToString();
         }
     }
 }

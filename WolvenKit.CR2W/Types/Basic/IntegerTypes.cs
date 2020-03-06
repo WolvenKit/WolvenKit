@@ -12,6 +12,7 @@ namespace WolvenKit.CR2W.Types
         public CUInt64(CR2WFile cr2w)
 : base(cr2w)
         {
+            Type = typeof(CUInt64).Name;
         }
 
         private ulong _val;
@@ -67,6 +68,7 @@ namespace WolvenKit.CR2W.Types
         public CUInt32(CR2WFile cr2w)
             : base(cr2w)
         {
+            Type = typeof(CUInt32).Name;
         }
 
         public uint val { get; set; }
@@ -123,6 +125,7 @@ namespace WolvenKit.CR2W.Types
         public CUInt16(CR2WFile cr2w)
 : base(cr2w)
         {
+            Type = typeof(CUInt16).Name;
         }
 
         private ushort _val;
@@ -178,6 +181,7 @@ namespace WolvenKit.CR2W.Types
         public CUInt8(CR2WFile cr2w)
             : base(cr2w)
         {
+            Type = typeof(CUInt8).Name;
         }
 
         public byte val { get; set; }
@@ -233,6 +237,7 @@ namespace WolvenKit.CR2W.Types
         public CInt64(CR2WFile cr2w)
             : base(cr2w)
         {
+            Type = typeof(CInt64).Name;
         }
 
         public long val { get; set; }
@@ -287,6 +292,7 @@ namespace WolvenKit.CR2W.Types
         public CInt32(CR2WFile cr2w)
             : base(cr2w)
         {
+            Type = typeof(CInt32).Name;
         }
 
         public int val { get; set; }
@@ -341,6 +347,7 @@ namespace WolvenKit.CR2W.Types
         public CInt16(CR2WFile cr2w)
             : base(cr2w)
         {
+            Type = typeof(CInt16).Name;
         }
 
         public short val { get; set; }
@@ -395,6 +402,7 @@ namespace WolvenKit.CR2W.Types
         public CInt8(CR2WFile cr2w)
             : base(cr2w)
         {
+            Type = typeof(CInt8).Name;
         }
 
         public sbyte val { get; set; }
@@ -449,51 +457,19 @@ namespace WolvenKit.CR2W.Types
         public CDynamicInt(CR2WFile cr2w)
             : base(cr2w)
         {
+            Type = typeof(CDynamicInt).Name;
         }
 
         public int val { get; set; }
 
         public override void Read(BinaryReader file, uint size)
         {
-            var result = 0;
-            var shift = 0;
-            byte b = 0;
-            var i = 1;
-
-            do
-            {
-                b = file.ReadByte();
-                if (b == 128)
-                {
-                    result = 0;
-                    break;
-                }
-
-                byte s = 6;
-                byte mask = 255;
-                if (b > 127)
-                {
-                    mask = 127;
-                    s = 7;
-                }
-                else if (b > 63)
-                {
-                    if (i == 1)
-                    {
-                        mask = 63;
-                    }
-                }
-                result = result | ((b & mask) << shift);
-                shift = shift + s;
-                i = i + 1;
-            } while (!(b < 64 || (i >= 3 && b < 128)));
-
-            val = result;
+            val = file.ReadBit6();
         }
 
         public override void Write(BinaryWriter file)
         {
-            file.Write(val);
+            file.WriteBit6(val);
         }
 
         public override CVariable SetValue(object val)
@@ -538,11 +514,74 @@ namespace WolvenKit.CR2W.Types
         }
     }
 
+    public class CVLQInt32 : CVariable
+    {
+        public CVLQInt32(CR2WFile cr2w)
+            : base(cr2w)
+        {
+            Type = typeof(CVLQInt32).Name;
+        }
+
+        public int val { get; set; }
+
+        public override void Read(BinaryReader file, uint size)
+        {
+            val = file.ReadVLQInt32();
+        }
+
+        public override void Write(BinaryWriter file)
+        {
+            file.WriteVLQInt32(val);
+        }
+
+        public override CVariable SetValue(object val)
+        {
+            if (val is sbyte)
+            {
+                this.val = (sbyte)val;
+            }
+
+            return this;
+        }
+
+        public override CVariable Create(CR2WFile cr2w)
+        {
+            return new CInt8(cr2w);
+        }
+
+        public override CVariable Copy(CR2WCopyAction context)
+        {
+            var var = (CVLQInt32)base.Copy(context);
+            var.val = val;
+            return var;
+        }
+
+        public override Control GetEditor()
+        {
+            var editor = new TextBox();
+            editor.DataBindings.Add("Text", this, "val");
+            return editor;
+        }
+
+        public override string ToString()
+        {
+            return val.ToString();
+        }
+
+        internal byte ToByte()
+        {
+            byte result;
+            byte.TryParse(val.ToString(), out result);
+            return result;
+        }
+    }
+
     public class CBool : CVariable
     {
         public CBool(CR2WFile cr2w)
             : base(cr2w)
         {
+            Type = typeof(CBool).Name;
         }
 
         public bool val { get; set; }

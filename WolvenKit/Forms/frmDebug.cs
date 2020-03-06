@@ -13,11 +13,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VanWassenhove.Util;
+using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Net;
 
 namespace WolvenKit
 {
-    public partial class frmDebug : Form
+    public partial class frmDebug : DockContent
     {
         public static Socket GameSocket;
         public static IPEndPoint DebugProtoclAdress = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 37001);

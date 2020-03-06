@@ -52,7 +52,9 @@ namespace WolvenKit
                 arch.RootNode.Parent = RootNode;
                 extensionCB.Items.Add(arch.TypeName);
                 extensionCB.SelectedIndex = 0;
-                filetypeCB.Items.AddRange(arch.Extensions.ToArray());
+                var extensions = arch.Extensions;
+                extensions.Sort();
+                filetypeCB.Items.AddRange(extensions.ToArray());
                 filetypeCB.SelectedIndex = 0;
                 for (int i = 0; i < arch.AutocompleteSource.Count; i++)
                 {

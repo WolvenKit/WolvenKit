@@ -47,7 +47,15 @@ namespace WolvenKit
             chunkList.Activate();
         }
 
-        private void PropertyWindow_OnItemsChanged(object sender, EventArgs e) => chunkList.UpdateList();
+        private void PropertyWindow_OnItemsChanged(object sender, EventArgs e)
+        {
+            var args = (e as BrightIdeasSoftware.CellEditEventArgs);
+            if (args != null)
+            {
+                if (args.ListViewItem.Text == "Parent")
+                    chunkList.UpdateList();
+            }
+        }
 
         public CR2WFile File
         {

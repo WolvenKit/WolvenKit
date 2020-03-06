@@ -5,10 +5,10 @@ using System.Linq;
 using System.Windows.Forms;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
-using W3Edit.Textures;
 
 namespace WolvenKit.Cache
 {
+    using DDS;
     public class ImageUtility
     {
         /// <summary>
@@ -26,35 +26,37 @@ namespace WolvenKit.Cache
                 var mips = imagechunk.GetVariableByName("residentMipIndex")!=null ? uint.Parse(imagechunk.GetVariableByName("residentMipIndex").ToString()) : 0;
                 var tempfile = new MemoryStream();
 
-                var dxt = DDSHeader.Format_DXT1;
+                var format = ETextureFormat.TEXFMT_R8G8B8A8;
                 switch (compression)
                 {
                     case "TCM_DXTNoAlpha":
-                        dxt = DDSHeader.Format_DXT1;
+                        format = ETextureFormat.TEXFMT_BC1;
                         break;
                     case "TCM_DXTAlpha":
-                        dxt = DDSHeader.Format_DXT5;
+                        format = ETextureFormat.TEXFMT_BC3;
                         break;
                     case "TCM_NormalsHigh":
-                        dxt = DDSHeader.Format_DXT5;
+                        format = ETextureFormat.TEXFMT_BC3;
                         break;
                     case "TCM_Normals":
-                        dxt = DDSHeader.Format_DXT1;
+                        format = ETextureFormat.TEXFMT_BC1;
                         break;
                     case "TCM_NormalsGloss":
-                        dxt = DDSHeader.Format_DXT5;
+                        format = ETextureFormat.TEXFMT_BC3;
                         break;
                     case "TCM_QualityControl":
-                        dxt = DDSHeader.Format_DXT5;
+                        format = ETextureFormat.TEXFMT_BC3;
                         break;
                     default:
                         throw new Exception("Invalid compression type! [" + compression + "]");
                 }
 
-                DDSHeader ddsheader = new DDSHeader();
+                
                 using (var bw = new BinaryWriter(tempfile))
                 {
-                    bw.Write(ddsheader.generate(width, height, mips, dxt).ToArray());
+                    var metadata = new DDSMetadata(width, height, mips, format);
+                    DDSUtils.GenerateAndWriteHeader(bw.BaseStream, metadata);
+
                     //bw.Write(image.Bytes);  // First 20 bytes is garbage
                     bw.Write( (new ArraySegment<byte>(image.Bytes, 20, image.Bytes.Length - 20)).ToArray() );
                 }
