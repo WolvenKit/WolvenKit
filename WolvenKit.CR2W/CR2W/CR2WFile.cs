@@ -243,9 +243,10 @@ namespace WolvenKit.CR2W
             m_fileheader.timeStamp = CDateTime.Now.ToUInt64(); //this will change any vanilla assets simply by opening and saving in wkit
             m_fileheader.numChunks = (uint)chunks.Count;
 
+            // add new names // TODO 
             foreach (var c in chunks)
             {
-                GetStringIndex(c.Type, true);
+                c.SetExportType((ushort)GetStringIndex(c.Type, true));
             }
 
             // Update strings
@@ -676,8 +677,12 @@ namespace WolvenKit.CR2W
         #region Create
         public CR2WExportWrapper CreateChunk(string type, CR2WExportWrapper parent = null)
         {
-            var chunk = new CR2WExportWrapper(this);
-            chunk.Type = type;
+            
+            var chunk = new CR2WExportWrapper(this)
+            {
+                Type = type
+            };
+
             chunk.CreateDefaultData();
             if (parent != null)
             {

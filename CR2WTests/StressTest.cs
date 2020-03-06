@@ -432,10 +432,11 @@ namespace CR2WTests
             Dictionary<string, Tuple<long, long>> chunkstate = new Dictionary<string, Tuple<long, long>>();
             List<string> unparsedfiles = new List<string>();
 
-            var files = mc.FileList.Where(x => x.Name.EndsWith(ext));
+            var files = mc.FileList.Where(x => x.Name.EndsWith(ext)).ToList();
             rigcount = files.Count();
-            foreach (var f in files)
+            for (int i = 0; i < files.Count; i++)
             {
+                var f = files[i];
                 try
                 {
                     var buff = new byte[f.Size];

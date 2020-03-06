@@ -79,7 +79,7 @@ namespace WolvenKit.CR2W.Types
                 byte type = curobj.type.val;
                 if (!(type == 0x1 || type == 0x2))
                 {
-                    System.Diagnostics.Debugger.Break();
+                    //System.Diagnostics.Debugger.Break();
                     //throw new NotImplementedException();
                 }
 

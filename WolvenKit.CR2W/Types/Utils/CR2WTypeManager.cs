@@ -28,7 +28,7 @@ namespace WolvenKit.CR2W.Types
             // Testing area. Put your CVectors which don't work fully yet here.
 #if DEBUG
             // *.w2p
-            //Register("CParticleEmitter", new CParticleEmitter(null));
+            Register("CParticleEmitter", new CParticleEmitter(null));
             //Register("CDecalSpawner", new CDecalSpawner(null));
             //Register("SSeedKeyValue", new SSeedKeyValue(null));
             //Register("SDynamicDecalMaterialInfo", new SDynamicDecalMaterialInfo(null)); 
@@ -4026,7 +4026,9 @@ namespace WolvenKit.CR2W.Types
                 "W3WitcherHouseArea",
                 "W3YrdenEntity",
                 "WeaponHolster",
-                "WebLineProjectile"
+                "WebLineProjectile",
+                "SQuestMapPinInfo",
+                "SPlaneMovementParameters"
             };
             foreach (string t in vectors)
             {

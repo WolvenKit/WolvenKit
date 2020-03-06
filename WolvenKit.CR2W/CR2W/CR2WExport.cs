@@ -15,25 +15,25 @@ namespace WolvenKit.CR2W
     public struct CR2WExport
     {
         [FieldOffset(0)]
-        public ushort className;
+        public ushort className; //needs to be registered upon new creation!
 
         [FieldOffset(2)]
-        public ushort objectFlags;
+        public ushort objectFlags;  // can be 0
 
         [FieldOffset(4)]
-        public uint parentID;
+        public uint parentID;   //needs to be registered upon new creation!
 
         [FieldOffset(8)]
-        public uint dataSize;
+        public uint dataSize;   // created upon data write
 
         [FieldOffset(12)]
-        public uint dataOffset;
+        public uint dataOffset; //created upon data write
 
         [FieldOffset(16)]
-        public uint template;
+        public uint template;   // can be 0
 
         [FieldOffset(20)]
-        public uint crc32;
+        public uint crc32;  // created upon write
     }
 
     [Serializable]
@@ -119,7 +119,11 @@ namespace WolvenKit.CR2W
         public uint ParentChunkId
         {
             get { return (uint) parentPtr.val; }
-            set { parentPtr.val = (int) value; }
+            set
+            {
+                parentPtr.val = (int) value;
+                _export.parentID = value;
+            }
         }
 
         public CR2WExportWrapper Parent
@@ -165,8 +169,23 @@ namespace WolvenKit.CR2W
 
         public string Type
         {
-            get { return typeName.Value; }
-            set { typeName.Value = value; }
+            get {return typeName.Value; }
+            set
+            {
+                typeName.Value = value;
+                _export.className = (ushort)cr2w.GetStringIndex(typeName.Value);
+            }
+        }
+
+        // hack can be deleted 
+        public void SetExportType(ushort val)
+        {
+            _export.className = val;
+        }
+        // hack can be deleted 
+        public void SetParentChunk(uint val)
+        {
+            _export.parentID = val;
         }
 
         public string Name
