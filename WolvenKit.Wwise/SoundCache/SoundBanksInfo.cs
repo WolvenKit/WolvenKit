@@ -60,6 +60,11 @@ namespace WolvenKit.Wwise
         public string Path;
         public string PrefetchMilliseconds;
 
+        public SoundBankFile()
+        {
+
+        }
+
         public SoundBankFile(XElement elem)
         {
             Id = elem.Attribute("Id")?.Value;
@@ -101,6 +106,11 @@ namespace WolvenKit.Wwise
         public List<SoundBankFile> IncludedFullFiles = new List<SoundBankFile>();
         public List<SoundBankFile> IncludedPrefetchFiles = new List<SoundBankFile>();
         public List<Tuple<string, string>> ExternalSources = new List<Tuple<string, string>>();
+
+        public SoundBank()
+        {
+
+        }
 
         public SoundBank(XElement elem)
         {

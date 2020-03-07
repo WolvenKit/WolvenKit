@@ -649,8 +649,11 @@ namespace WolvenKit
                     LoadUsmFile(fullpath);
                     break;
                 case ".ws":
-                    PolymorphExecute(fullpath, ".txt");
-                    break;
+                    {
+                        var se = new frmScriptEditor(fullpath);
+                        se.Show(dockPanel, DockState.Document);
+                        break;
+                    }
                 case ".dds":
                     LoadDDSFile(fullpath);
                     break;
