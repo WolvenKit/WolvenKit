@@ -177,12 +177,10 @@ namespace WolvenKit.CR2W
             }
         }
 
-        // hack can be deleted 
         public void SetExportType(ushort val)
         {
             _export.className = val;
         }
-        // hack can be deleted 
         public void SetParentChunk(uint val)
         {
             _export.parentID = val;
