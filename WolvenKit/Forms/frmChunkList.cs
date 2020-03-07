@@ -13,8 +13,8 @@ namespace WolvenKit
     public partial class frmChunkList : DockContent, IThemedContent
     {
         private bool listview = false;
+        private bool isLargefile = false;
         private CR2WFile file;
-        //Item1 = parentidx, Item2 = list of childrenidx
         private List<Tuple<int,List<CR2WExportWrapper>>> chunkHelperList { get; set; } = new List<Tuple<int, List<CR2WExportWrapper>>>();
             
         public frmChunkList()
@@ -26,7 +26,7 @@ namespace WolvenKit
 
             treeListView.CanExpandGetter = delegate (object x) {
                 var idx = ((CR2WExportWrapper)x).ChunkIndex;
-                return chunkHelperList[idx].Item2.Any() && !listview;
+                return !listview && chunkHelperList[idx].Item2.Any();
             };
             treeListView.ChildrenGetter = delegate (object x) {
                 var idx = ((CR2WExportWrapper)x).ChunkIndex;
@@ -66,15 +66,19 @@ namespace WolvenKit
 
         public void UpdateList(string keyword = "")
         {
-            UpdateHelperList();
+            if (File == null)
+                return;
+
+            isLargefile = File.chunks.Count > 500;
+            listview = isLargefile;
+
+            if (!isLargefile)
+                UpdateHelperList();
             var limit = -1;
             //if(limitCB.Checked)
             //{
             //    int.TryParse(limitTB.Text,out limit);
             //}
-
-            if (File == null)
-                return;
 
             if (listview)
                 treeListView.Roots = File.chunks;
@@ -96,12 +100,6 @@ namespace WolvenKit
             {
                 treeListView.ModelFilter = null;
             }
-
-            if (File.chunks.Count < 1000)
-            {
-                treeListView.ExpandAll();
-            }
-            
         }
 
         private void contextMenu_Opening(object sender, CancelEventArgs e)
@@ -261,6 +259,42 @@ namespace WolvenKit
         {
             listview = !listview;
             UpdateList(toolStripSearchBox.Text);
+        }
+
+        private void expandAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            treeListView.ExpandAll();
+        }
+
+        private void expandAllChildrenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var node = treeListView.SelectedObject;
+            if (node != null)
+            {
+                var children = treeListView.GetChildren(node);
+                foreach (var c in children)
+                {
+                    treeListView.Expand(c);
+                }
+            }
+        }
+
+        private void collapseAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            treeListView.CollapseAll();
+        }
+
+        private void collapseAllChildrenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var node = treeListView.SelectedObject;
+            if (node != null)
+            {
+                var children = treeListView.GetChildren(node);
+                foreach (var c in children)
+                {
+                    treeListView.Collapse(c);
+                }
+            }
         }
     }
 }
