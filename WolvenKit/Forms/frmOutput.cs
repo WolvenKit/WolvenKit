@@ -74,6 +74,14 @@ namespace WolvenKit
             this.txOutput.BackColor = MainController.Get().GetTheme().ColorPalette.ToolWindowTabSelectedInactive.Background;
             this.txOutput.ForeColor = MainController.Get().GetTheme().ColorPalette.CommandBarMenuDefault.Text;
         }
+
+        private void txOutput_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+
+            }
+        }
     }
 
     public static class RichTextBoxExtensions

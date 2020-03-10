@@ -243,7 +243,7 @@ Would you like to perform this patch?", "wcc_lite faster patch", MessageBoxButto
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine(ex.ToString());
+                System.Console.Error.WriteLine(ex.ToString());
             }
         }
 

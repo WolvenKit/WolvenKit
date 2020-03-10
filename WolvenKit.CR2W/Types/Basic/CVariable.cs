@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
@@ -6,8 +7,10 @@ using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
+    [Serializable]
     public abstract class CVariable : IEditableVariable
     {
+        [NonSerialized]
         public CR2WFile cr2w;
 
         public CVariable(CR2WFile cr2w)
@@ -50,6 +53,8 @@ namespace WolvenKit.CR2W.Types
 
         public string Name { get; set; }
         public string Type { get; set; }
+
+
 
         public virtual Control GetEditor()
         {

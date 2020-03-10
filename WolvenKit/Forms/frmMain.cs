@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -14,30 +13,24 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using AutoUpdaterDotNET;
 using Dfust.Hotkeys;
-using ICSharpCode.SharpZipLib.Core;
-using ICSharpCode.SharpZipLib.Zip;
-using Newtonsoft.Json;
 using SharpPresence;
 using WeifenLuo.WinFormsUI.Docking;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Types;
-using WolvenKit.Mod;
 using SearchOption = System.IO.SearchOption;
-using WolvenKit.Common;
-using WolvenKit.Cache;
-using WolvenKit.Bundles;
-using WolvenKit.Forms;
-using Enums = Dfust.Hotkeys.Enums;
-using WolvenKit.Wwise.Player;
-using WolvenKit.Extensions;
-using WolvenKit.Services;
-using WolvenKit.Common.Wcc;
-using WolvenKit.Common.Services;
 using System.ComponentModel;
 
 namespace WolvenKit
 {
-    
+    using CR2W;
+    using CR2W.Types;
+    using Common;
+    using Cache;
+    using Bundles;
+    using Forms;
+    using Wwise.Player;
+    using Extensions;
+    using Common.Wcc;
+    using Common.Services;
+    using Enums = Dfust.Hotkeys.Enums;
 
     public partial class frmMain : Form
     {
@@ -105,6 +98,7 @@ namespace WolvenKit
 
             UpdateTitle();
             MainController.Get().PropertyChanged += MainControllerUpdated;
+
             #region Load recent files into toolstrip
             recentFilesToolStripMenuItem.DropDownItems.Clear();
             if (File.Exists("recent_files.xml"))
@@ -2224,6 +2218,20 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void consoleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "WolvenKit.Console.exe");
+            if (File.Exists(path))
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo(path);
+                Process.Start(startInfo);
+            }
+            else
+            {
+                AddOutput($"Wolvenkit.Console.exe couldn't be found at path: {path}", Logtype.Error);
+            }
         }
 
         private void menuStrip1_MouseDown(object sender, MouseEventArgs e)

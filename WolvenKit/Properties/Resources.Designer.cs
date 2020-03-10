@@ -163,6 +163,16 @@ namespace WolvenKit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Console_16x {
+            get {
+                object obj = ResourceManager.GetObject("Console_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap edit_letter_spacing {
             get {
                 object obj = ResourceManager.GetObject("edit-letter-spacing", resourceCulture);
@@ -396,6 +406,16 @@ namespace WolvenKit.Properties {
         internal static System.Drawing.Bitmap player_record {
             get {
                 object obj = ResourceManager.GetObject("player_record", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PlayStep_16x {
+            get {
+                object obj = ResourceManager.GetObject("PlayStep_16x", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

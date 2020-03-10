@@ -8,11 +8,12 @@ using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Bundles;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
-using WolvenKit.Mod;
 using WolvenKit.Services;
 
 namespace WolvenKit
 {
+    using Common;
+
     public partial class frmModExplorer : DockContent, IThemedContent
     {
         public frmModExplorer(ILoggerService logger)

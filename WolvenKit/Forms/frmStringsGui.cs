@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
 using System.Xml.Linq;
 using System.IO;
 using System.Diagnostics;
@@ -15,6 +14,8 @@ using System.Text.RegularExpressions;
 
 namespace WolvenKit
 {
+    using Common;
+
     enum EDisplayNameType
     {
         VAR,
@@ -44,7 +45,7 @@ namespace WolvenKit
 
         DataTable dataTableGridViewSource;
 
-        Mod.W3Mod activeMod = MainController.Get().Window.ActiveMod;
+        W3Mod activeMod = MainController.Get().Window.ActiveMod;
 
         public frmStringsGui()
         {

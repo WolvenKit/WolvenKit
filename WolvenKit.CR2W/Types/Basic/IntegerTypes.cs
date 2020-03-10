@@ -34,6 +34,10 @@ namespace WolvenKit.CR2W.Types
             {
                 this.val = (ulong)val;
             }
+            if (val is string)
+            {
+                this.val = ulong.Parse(val as string);
+            }
 
             return this;
         }
@@ -88,6 +92,10 @@ namespace WolvenKit.CR2W.Types
             if (val is uint)
             {
                 this.val = (uint) val;
+            }
+            if (val is uint)
+            {
+                this.val = ushort.Parse(val as string);
             }
 
             return this;
@@ -147,6 +155,10 @@ namespace WolvenKit.CR2W.Types
             {
                 this.val = (ushort)val;
             }
+            if (val is string)
+            {
+                this.val = ushort.Parse(val as string);
+            }
 
             return this;
         }
@@ -201,6 +213,10 @@ namespace WolvenKit.CR2W.Types
             if (val is byte)
             {
                 this.val = (byte) val;
+            }
+            if (val is string)
+            {
+                this.val = byte.Parse(val as string);
             }
 
             return this;
@@ -258,6 +274,10 @@ namespace WolvenKit.CR2W.Types
             {
                 this.val = (long) val;
             }
+            if (val is string)
+            {
+                this.val = long.Parse(val as string);
+            }
 
             return this;
         }
@@ -312,6 +332,10 @@ namespace WolvenKit.CR2W.Types
             if (val is int)
             {
                 this.val = (int) val;
+            }
+            if (val is string)
+            {
+                this.val = int.Parse(val as string);
             }
 
             return this;
@@ -368,6 +392,10 @@ namespace WolvenKit.CR2W.Types
             {
                 this.val = (short) val;
             }
+            if (val is string)
+            {
+                this.val = short.Parse(val as string);
+            }
 
             return this;
         }
@@ -423,6 +451,10 @@ namespace WolvenKit.CR2W.Types
             {
                 this.val = (sbyte) val;
             }
+            if (val is string)
+            {
+                this.val = sbyte.Parse(val as string);
+            }
 
             return this;
         }
@@ -477,6 +509,10 @@ namespace WolvenKit.CR2W.Types
             if (val is sbyte)
             {
                 this.val = (sbyte) val;
+            }
+            if (val is string)
+            {
+                this.val = sbyte.Parse(val as string);
             }
 
             return this;
@@ -540,6 +576,10 @@ namespace WolvenKit.CR2W.Types
             {
                 this.val = (sbyte)val;
             }
+            if (val is string)
+            {
+                this.val = sbyte.Parse(val as string);
+            }
 
             return this;
         }
@@ -601,6 +641,10 @@ namespace WolvenKit.CR2W.Types
             if (val is bool)
             {
                 this.val = (bool) val;
+            }
+            if (val is string)
+            {
+                this.val = bool.Parse(val as string);
             }
 
             return this;

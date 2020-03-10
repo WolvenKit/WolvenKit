@@ -1,13 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
-using WolvenKit.Bundles;
-using WolvenKit.Cache;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Editors;
-using WolvenKit.CR2W.Types;
-using WolvenKit.W3Strings;
-using WolvenKit.Common;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Collections.Generic;
@@ -16,12 +9,20 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using WolvenKit.Mod;
 using WeifenLuo.WinFormsUI.Docking;
-using WolvenKit.Common.Services;
 
 namespace WolvenKit
 {
+    using Bundles;
+    using Cache;
+    using CR2W;
+    using CR2W.Editors;
+    using CR2W.Types;
+    using W3Strings;
+    using Common;
+    using Common.Services;
+
+
     public enum EColorThemes
     {
         VS2015Light = 0,
@@ -412,7 +413,7 @@ namespace WolvenKit
             catch (Exception e)
             {
                 mainController.Loaded = false;
-                Console.WriteLine(e.Message);
+                System.Console.WriteLine(e.Message);
             }
         }
 
