@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
+// using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -14,9 +14,9 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using AutoUpdaterDotNET;
 using Dfust.Hotkeys;
-using ICSharpCode.SharpZipLib.Core;
-using ICSharpCode.SharpZipLib.Zip;
-using Newtonsoft.Json;
+// using ICSharpCode.SharpZipLib.Core;
+// using ICSharpCode.SharpZipLib.Zip;
+// using Newtonsoft.Json;
 using SharpPresence;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.CR2W;
@@ -30,7 +30,7 @@ using WolvenKit.Forms;
 using Enums = Dfust.Hotkeys.Enums;
 using WolvenKit.Wwise.Player;
 using WolvenKit.Extensions;
-using WolvenKit.Services;
+// using WolvenKit.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.Common.Services;
 using System.ComponentModel;
@@ -978,18 +978,36 @@ namespace WolvenKit
                 return;
             }
             var managers = new List<IWitcherArchive>();
-            if (MainController.Get().BundleManager != null) managers.Add(MainController.Get().BundleManager);
-            if (MainController.Get().SoundManager != null) managers.Add(MainController.Get().SoundManager);
-            if (MainController.Get().TextureManager != null) managers.Add(MainController.Get().TextureManager);
-            if (MainController.Get().CollisionManager != null) managers.Add(MainController.Get().CollisionManager);
-            var modmanagers = new List<IWitcherArchive>();
-            if (MainController.Get().ModBundleManager != null) modmanagers.Add(MainController.Get().ModBundleManager);
-            if (MainController.Get().ModSoundManager != null) modmanagers.Add(MainController.Get().ModSoundManager);
-            if (MainController.Get().ModTextureManager != null) modmanagers.Add(MainController.Get().ModTextureManager);
+            var exeDir = Path.GetDirectoryName(MainController.Get().Configuration.ExecutablePath);
+            if (loadmods)
+            {
+                if (MainController.Get().ModBundleManager != null)
+                {
+                    MainController.Get().ModBundleManager.LoadModsBundles(exeDir); // load mods added after WK was started
+                    managers.Add(MainController.Get().ModBundleManager);
+                }
+                if (MainController.Get().ModSoundManager != null)
+                {
+                    MainController.Get().ModSoundManager.LoadModsBundles(exeDir);
+                    managers.Add(MainController.Get().ModSoundManager);
+                }
+                if (MainController.Get().ModTextureManager != null)
+                {
+                    MainController.Get().ModTextureManager.LoadModsBundles(exeDir);
+                    managers.Add(MainController.Get().ModTextureManager);
+                }
+            }
+            else
+            {
+                if (MainController.Get().BundleManager != null) managers.Add(MainController.Get().BundleManager);
+                if (MainController.Get().SoundManager != null) managers.Add(MainController.Get().SoundManager);
+                if (MainController.Get().TextureManager != null) managers.Add(MainController.Get().TextureManager);
+                if (MainController.Get().CollisionManager != null) managers.Add(MainController.Get().CollisionManager);
+            }
+            
             //if (MainController.Get().ModCollisionManager != null) managers.Add(MainController.Get().ModCollisionManager);
 
-            var explorer = new frmAssetBrowser(loadmods ?
-                modmanagers : managers);
+            var explorer = new frmAssetBrowser(managers);
             explorer.RequestFileAdd += Assetbrowser_FileAdd;
             explorer.OpenPath(browseToPath);
             Rectangle floatWindowBounds = new Rectangle() { Width = 827, Height = 564 };
