@@ -250,10 +250,12 @@ namespace WolvenKit
         private void contextMenu_Opened(object sender, EventArgs e)
         {
             var selectedNode = modFileList.SelectedNode;
+            string ext = "";
+
             if (selectedNode != null)
             {
                 var fi = new FileInfo(selectedNode.FullPath);
-                var ext = fi.Extension.TrimStart('.');
+                ext = fi.Extension.TrimStart('.');
 
                 bool isbundle = Path.Combine(ActiveMod.FileDirectory, fi.ToString()).Contains(Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName));
                 bool israw = Path.Combine(ActiveMod.FileDirectory, fi.ToString()).Contains(Path.Combine(ActiveMod.FileDirectory, "Raw"));
@@ -280,7 +282,7 @@ namespace WolvenKit
             copyToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
             
             showFileInExplorerToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
-            dumpXMLToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
+            dumpXMLToolStripMenuItem.Enabled = modFileList.SelectedNode != null && ext != "xml" && ext != "csv" && ext != "ws" && ext != "";
 
         }
 
