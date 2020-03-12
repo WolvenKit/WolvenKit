@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
+using System.Xml;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -582,7 +583,13 @@ namespace WolvenKit.CR2W
         #region Supporting Functions
         public void SerializeToXml(Stream writer)
         {
-            using (System.Xml.XmlWriter xw = System.Xml.XmlWriter.Create(writer))
+            var settings = new XmlWriterSettings()
+            {
+                Indent = true,
+                IndentChars = "\t",
+                NewLineOnAttributes = true
+            };
+            using (XmlWriter xw = XmlWriter.Create(writer, settings))
             {
                 XmlSerializer.SerializeStartObject<CR2WFile>(xw, this);
 
