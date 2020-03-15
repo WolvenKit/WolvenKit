@@ -1,8 +1,11 @@
 ﻿using System.IO;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CLocalizedString : CVariable
     {
         public CLocalizedString(CR2WFile cr2w)
@@ -16,6 +19,8 @@ namespace WolvenKit.CR2W.Types
 
         public uint val { get; set; }
 
+
+        [DataMember]
         public string Text
         {
             get
@@ -25,6 +30,7 @@ namespace WolvenKit.CR2W.Types
                     return text;
                 return val.ToString();
             }
+            private set { }     //vl: dummy setter for serialization; in xml it's always number bc LocalizedSource is not avail
         }
 
         public override void Read(BinaryReader file, uint size)

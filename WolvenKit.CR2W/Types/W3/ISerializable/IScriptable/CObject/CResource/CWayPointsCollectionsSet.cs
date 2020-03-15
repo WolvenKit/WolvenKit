@@ -2,11 +2,12 @@
 using System.IO;
 using WolvenKit.CR2W.Editors;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 
 namespace WolvenKit.CR2W.Types
 {
 
-
+    [DataContract(Namespace = "")]
     public class SWayPointsCollectionsSetData : CVariable
     {
         public CGUID guid;
@@ -67,6 +68,7 @@ namespace WolvenKit.CR2W.Types
     }
 
 
+    [DataContract(Namespace = "")]
     public class CWayPointsCollectionsSet : CVector
     {
         public CBufferUInt32<SWayPointsCollectionsSetData> waypointcollections;

@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 using System.Xml.Linq;
 using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     class CXml : CVariable
     {
         public CXml(CR2WFile cr2w)
@@ -99,6 +102,21 @@ namespace WolvenKit.CR2W.Types
         public override string ToString()
         {
             return Data.ToString().Length + " chars";
+        }
+
+        public override void SerializeToXml(XmlWriter xw)
+        {
+            DataContractSerializer ser = new DataContractSerializer(this.GetType());
+            using (var ms = new MemoryStream())
+            {
+                ser.WriteStartObject(xw, this);
+                ser.WriteObjectContent(xw, this);
+                xw.WriteStartElement("XMLData");
+                Data.Save(xw);
+                xw.WriteEndElement();
+                ser.WriteEndObject(xw);
+            }
+
         }
     }
 }

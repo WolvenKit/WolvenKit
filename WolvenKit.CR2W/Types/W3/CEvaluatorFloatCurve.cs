@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     class CEvaluatorFloatCurve : CVector
     {
         public CurveInfo curveInfo;
@@ -50,6 +52,7 @@ namespace WolvenKit.CR2W.Types
             curveInfo.Write(file);
         }
 
+        [DataContract(Namespace = "")]
         public class CurveInfo : CVariable
         {
             public CName someName;
@@ -137,6 +140,7 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
+        [DataContract(Namespace = "")]
         public class CurvePiece : CVariable
         {
             public CUInt16 valueCount;

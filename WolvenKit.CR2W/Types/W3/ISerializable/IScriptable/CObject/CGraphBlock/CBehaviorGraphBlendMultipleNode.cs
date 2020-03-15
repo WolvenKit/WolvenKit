@@ -2,9 +2,11 @@
 using System.IO;
 using WolvenKit.CR2W.Editors;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class ShBlendMultipleNodeData : CVariable
     {
         public CUInt32 index;
@@ -66,6 +68,7 @@ namespace WolvenKit.CR2W.Types
 
 
 
+    [DataContract(Namespace = "")]
     public class CBehaviorGraphBlendMultipleNode : CVector
     {
         public CBufferVLQ<ShBlendMultipleNodeData> bufferinputvalues;

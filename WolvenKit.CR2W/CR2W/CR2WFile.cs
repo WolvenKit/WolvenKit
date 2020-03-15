@@ -10,9 +10,12 @@ using WolvenKit.CR2W.Types;
 using RED.CRC32;
 using System.Runtime.InteropServices;
 using WolvenKit.Utils;
+using System.Runtime.Serialization;
+
 
 namespace WolvenKit.CR2W
 {
+    [ DataContract(Namespace = "") ]
     public class CR2WFile
     {
         #region Constructor
@@ -51,7 +54,9 @@ namespace WolvenKit.CR2W
         private const uint DEADBEEF = 0xDEADBEEF;
 
         // IO
+        [DataMember(Order = 1, Name = "Header")]
         private CR2WFileHeader m_fileheader;
+
         private CR2WTable[] m_tableheaders;
         private Byte[] m_strings;
         private Dictionary<uint, string> m_dictionary;
@@ -60,7 +65,7 @@ namespace WolvenKit.CR2W
         private uint headerOffset = 0;
         private bool m_hasInternalBuffer;
         private Stream m_stream; //handle this better?
-        private string m_filePath;
+        // private string m_filePath;
         #endregion
 
         #region Properties
@@ -68,6 +73,8 @@ namespace WolvenKit.CR2W
         public List<CR2WNameWrapper> names { get; set; }
         public List<CR2WImportWrapper> imports { get; set; }
         public List<CR2WPropertyWrapper> properties { get; set; }
+
+        //[DataMember(Order = 2)]
         public List<CR2WExportWrapper> chunks { get; set; }
         public List<CR2WBufferWrapper> buffers { get; set; }
         public List<CR2WEmbeddedWrapper> embedded { get; set; }
@@ -76,6 +83,7 @@ namespace WolvenKit.CR2W
         public List<CLocalizedString> LocalizedStrings = new List<CLocalizedString>();
         public List<string> UnknownTypes = new List<string>();
         //public byte[] bufferdata { get; set; }
+        [DataMember(Order = 0)]
         public string FileName { get; set; }
 
        
@@ -594,7 +602,7 @@ namespace WolvenKit.CR2W
                 XmlSerializer.SerializeStartObject<CR2WFile>(xw, this);
 
                 XmlSerializer.SerializeObject<CR2WFileHeader>(xw, m_fileheader);
-                XmlSerializer.SerializeObject<List<CR2WTable>>(xw, m_tableheaders.ToList());
+                XmlSerializer.SerializeObject<CR2WTable[]>(xw, m_tableheaders);
 
                 XmlSerializer.SerializeObject<CR2WName[]>(xw, names.Select(_ => _.Name).ToArray());
                 XmlSerializer.SerializeObject<CR2WImport[]>(xw, imports.Select(_ => _.Import).ToArray());
@@ -605,6 +613,32 @@ namespace WolvenKit.CR2W
 
                 XmlSerializer.SerializeEndObject<CR2WFile>(xw);
 
+
+                xw.Flush();
+                xw.Close();
+            }
+        }
+
+        public void SerializeChunksToXml(Stream writer)
+        {
+            var settings = new XmlWriterSettings()
+            {
+                Indent = true,
+                IndentChars = "\t",
+                NewLineOnAttributes = true
+            };
+            using (XmlWriter xw = XmlWriter.Create(writer, settings))
+            {
+                XmlSerializer.SerializeStartObject<CR2WFile>(xw, this);
+                XmlSerializer.SerializeObjectContent<CR2WFile>(xw, this);
+                xw.WriteStartElement("chunks");
+                foreach(var ew in chunks)
+                {
+                    ew.SerializeToXml(xw);
+                }
+                xw.WriteEndElement();
+                XmlSerializer.SerializeEndObject<CR2WFile>(xw);
+                
 
                 xw.Flush();
                 xw.Close();

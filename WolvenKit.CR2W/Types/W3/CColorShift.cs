@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Drawing;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     class CColorShift : CVector
     {
         public HslColor Color = new HslColor(0,0,0);

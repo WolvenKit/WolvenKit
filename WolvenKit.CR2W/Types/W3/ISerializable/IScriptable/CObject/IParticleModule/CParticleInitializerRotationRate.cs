@@ -5,9 +5,11 @@ using System.Diagnostics;
 using System;
 using System.Linq;
 using System.Globalization;
+using System.Runtime.Serialization;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CParticleInitializerRotationRate : CVariable
     {
         public CBufferVLQ<CUInt16> alpha;

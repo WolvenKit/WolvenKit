@@ -1,11 +1,13 @@
 ﻿
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
-    class CParticleSystem : CVector
+    [DataContract(Namespace = "")]
+	class CParticleSystem : CVector
     {
         public CArray lods;
 		public CArray emitters;

@@ -1,11 +1,13 @@
 ﻿
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
-    class SDynamicDecalMaterialInfo : CVector
+    [DataContract(Namespace = "")]
+	class SDynamicDecalMaterialInfo : CVector
     {
         public CHandle diffuseTexture;
 		public CHandle normalTexture;

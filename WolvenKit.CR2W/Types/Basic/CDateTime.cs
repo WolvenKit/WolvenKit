@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
+using System.Xml;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -29,6 +31,7 @@ namespace WolvenKit.CR2W.Types
     /// <summary>
     /// Represents a REDEngine compatible datetime value.
     /// </summary>
+    [DataContract(Namespace = "")]
     public sealed class CDateTime : CVariable, IEquatable<CDateTime>
     {
         /// <summary>
@@ -220,6 +223,18 @@ namespace WolvenKit.CR2W.Types
                 return true;
 
             return !left.Equals(right);
+        }
+
+        public override void SerializeToXml(XmlWriter xw)
+        {
+            DataContractSerializer ser = new DataContractSerializer(this.GetType());
+            using (var ms = new MemoryStream())
+            {
+                ser.WriteStartObject(xw, this);
+                ser.WriteObjectContent(xw, this);
+                xw.WriteElementString("DateTimeString", this.ToString());
+                ser.WriteEndObject(xw);
+            }
         }
     }
 }

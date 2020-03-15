@@ -4,9 +4,11 @@ using WolvenKit.CR2W.Editors;
 using System.Diagnostics;
 using System;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class SMeshBlock5 : CVariable
     {
         private const int fixedbuffersize = 46;
