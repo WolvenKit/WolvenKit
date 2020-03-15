@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CGUID : CVariable
     {
         public byte[] guid;
@@ -13,6 +15,7 @@ namespace WolvenKit.CR2W.Types
         {
         }
 
+        [DataMember]
         public string GuidString
         {
             get { return new Guid(guid).ToString(); }

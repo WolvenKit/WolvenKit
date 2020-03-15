@@ -1,10 +1,12 @@
 ﻿
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     class SBlockData1 : CVariable
     {
         public CMatrix4x4 unk1;

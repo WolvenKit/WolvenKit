@@ -1,10 +1,12 @@
 ﻿
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     class SBoneIndiceMapping : CVariable
     {
         public CUInt32 startingIndex;

@@ -1,9 +1,11 @@
 ﻿using System.IO;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Windows.Forms;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CString : CVariable
     {
         public bool isUTF;
@@ -13,6 +15,7 @@ namespace WolvenKit.CR2W.Types
         {
         }
 
+        [DataMember]
         public string val { get; set; }
 
         public override void Read(BinaryReader file, uint size)

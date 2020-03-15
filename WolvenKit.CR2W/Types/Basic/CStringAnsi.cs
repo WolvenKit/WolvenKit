@@ -1,9 +1,12 @@
 ﻿using System.IO;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CStringAnsi : CVariable
     {
         public bool isUTF;
@@ -101,6 +104,17 @@ namespace WolvenKit.CR2W.Types
         public override string ToString()
         {
             return val;
+        }
+        public override void SerializeToXml(XmlWriter xw)
+        {
+            DataContractSerializer ser = new DataContractSerializer(this.GetType());
+            using (var ms = new MemoryStream())
+            {
+                ser.WriteStartObject(xw, this);
+                ser.WriteObjectContent(xw, this);
+                xw.WriteElementString("val", this.val.Replace("\x00", ""));
+                ser.WriteEndObject(xw);
+            }
         }
     }
 }

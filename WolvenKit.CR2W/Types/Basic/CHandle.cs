@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace ="")]
     public class CHandle : CVariable
     {
         public CHandle(CR2WFile cr2w) : base(cr2w)
@@ -47,11 +49,15 @@ namespace WolvenKit.CR2W.Types
                 }
             }
         }
-
+        [DataMember(EmitDefaultValue = false)]
         public string Handle { get; set; }
+        [DataMember(EmitDefaultValue = false)]
         public string FileType { get; set; }
+        [DataMember(EmitDefaultValue = false)]
         public ushort Flags { get; set; }
+        [DataMember(EmitDefaultValue = false)]
         public bool ChunkHandle { get; set; }
+        [DataMember(EmitDefaultValue = false)]
         public int ChunkIndex { get; set; }
 
         public override void Read(BinaryReader file, uint size)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -9,11 +10,13 @@ using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     class IdTag : CVariable
     {
         public byte _type { get; set; }
         public byte[] _guid { get; set; }
 
+        [DataMember(EmitDefaultValue = false)]
         public string GuidString
         {
             get { return new Guid(_guid).ToString(); }
@@ -26,6 +29,7 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
+        [DataMember(EmitDefaultValue = false)]
         public string TypeString
         {
             get { return Convert.ToString(_type); }

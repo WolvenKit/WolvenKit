@@ -1,9 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CPtr : CVariable
     {
         public int val;
@@ -13,6 +16,7 @@ namespace WolvenKit.CR2W.Types
         {
         }
 
+        [DataMember(EmitDefaultValue = false)]
         public int ChunkIndex
         {
             get { return val - 1; }
@@ -131,6 +135,19 @@ namespace WolvenKit.CR2W.Types
             public override string ToString()
             {
                 return Text;
+            }
+        }
+
+        public override void SerializeToXml(XmlWriter xw)
+        {
+            DataContractSerializer ser = new DataContractSerializer(this.GetType());
+            using (var ms = new MemoryStream())
+            {
+                ser.WriteStartObject(xw, this);
+                ser.WriteObjectContent(xw, this);
+                xw.WriteElementString("PtrTargetType", this.PtrTargetType);
+                xw.WriteElementString("Target", this.ToString());
+                ser.WriteEndObject(xw);
             }
         }
     }

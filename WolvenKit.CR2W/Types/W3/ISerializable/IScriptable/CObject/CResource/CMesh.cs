@@ -3,9 +3,11 @@ using System.IO;
 using WolvenKit.CR2W.Editors;
 using System.Diagnostics;
 using System;
+using System.Runtime.Serialization;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CMesh : CVector
     {
         // ATTENTION: don't read and write like a normal VLQ array

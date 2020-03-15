@@ -2,9 +2,11 @@
 using System.IO;
 using WolvenKit.CR2W.Editors;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CBehaviorGraphStateMachineNode : CVector
     {
         public CBufferVLQ<CHandle> inputnodes;

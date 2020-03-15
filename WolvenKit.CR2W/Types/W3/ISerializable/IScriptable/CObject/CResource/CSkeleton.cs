@@ -3,9 +3,11 @@ using System.IO;
 using WolvenKit.CR2W.Editors;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CSkeleton : CVector
     {
         public CCompressedBuffer<SSkeletonRigData> rigdata;

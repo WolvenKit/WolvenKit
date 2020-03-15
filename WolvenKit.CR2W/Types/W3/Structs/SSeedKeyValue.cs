@@ -1,10 +1,12 @@
 ﻿
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     class SSeedKeyValue : CVector
     {
         public CUInt32 key;

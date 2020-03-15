@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Drawing;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CColor : CVector
     {
         public CColor(CR2WFile cr2w) : base(cr2w)  { }
@@ -20,6 +22,7 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
+        [DataMember]
         public byte Red
         {
             get
@@ -45,6 +48,7 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
+        [DataMember]
         public byte Green
         {
             get
@@ -70,6 +74,7 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
+        [DataMember]
         public byte Blue
         {
             get
@@ -95,6 +100,7 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
+        [DataMember]
         public byte Alpha
         {
             get
