@@ -19,7 +19,7 @@ namespace WolvenKit.Render
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmRender());
+            Application.Run(new frmTerrain());
         }
     }
 }
