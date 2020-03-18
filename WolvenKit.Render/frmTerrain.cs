@@ -29,6 +29,11 @@ namespace WolvenKit.Render
         private SceneManager smgr;
         private GUIEnvironment gui;
 
+
+        private IrrlichtLime.Scene.TerrainSceneNode terrain;
+        private IrrlichtLime.Video.Image heightmap;
+        private TriangleSelector selector;
+
         private Vector3Df modelPosition = new Vector3Df(0.0f);
         private Vector3Df modelAngle = new Vector3Df(270.0f, 270.0f, 0.0f);
 
@@ -85,63 +90,43 @@ namespace WolvenKit.Render
                 smgr = device.SceneManager;
                 gui = device.GUIEnvironment;
 
-                var mPositionText = gui.AddStaticText("", new Recti(0, this.ClientSize.Height - 70, 100, this.ClientSize.Height - 60));
-                var mRotationText = gui.AddStaticText("", new Recti(0, this.ClientSize.Height - 60, 100, this.ClientSize.Height - 50));
-                var fpsText = gui.AddStaticText("", new Recti(0, this.ClientSize.Height - 50, 100, this.ClientSize.Height - 40));
-                var infoText = gui.AddStaticText("[Space] - Reset\n[LMouse] - Rotate\n[MMouse] - Move\n[Wheel] - Zoom", new Recti(0, this.ClientSize.Height - 40, 100, this.ClientSize.Height));
+                heightmap = driver.CreateImage("Terrain\\basemap.bmp");
+
+                terrain = smgr.AddTerrainSceneNode(
+                        "Terrain\\basemap.bmp",
+                        null,
+                        -1,
+                        new Vector3Df(0.0f)
+                    );
+                terrain.Scale = new Vector3Df(32, 5, 32);
+                terrain.SetMaterialFlag(MaterialFlag.Lighting, false);
+
+                terrain.SetMaterialTexture(0, driver.GetTexture("Terrain\\rockwall.jpg"));
+                selector = smgr.CreateTerrainTriangleSelector(terrain, 0);
+
+                var arrow = smgr.AddAnimatedMeshSceneNode(smgr.AddArrowMesh("arrow", new IrrlichtLime.Video.Color(255, 255, 0, 0), new IrrlichtLime.Video.Color(255, 0, 255, 0)), null);
+                arrow.SetMaterialFlag(MaterialFlag.Lighting, false);
+                arrow.Scale = new Vector3Df(100.0f);
+                arrow.Rotation = new Vector3Df(0.0f, 0.0f, 180.0f);
+
+                var cam = smgr.AddCameraSceneNodeFPS(null, 100.0f, 3.0f);
+                cam.Position = new Vector3Df(-100.0f, 500.0f, 100.0f);
+                cam.Target = new Vector3Df(0.0f);
+                cam.FarValue = 10000;
+
+                var irrTimer = device.Timer;
+                var then = 0;
+                var then30 = 0;
 
 
-                //TODO: Add terrain here
-                Terrain.Terrain terr = new Terrain.Terrain();
-                var node = terr.LoadTerrain(device, "D:\\Repos\\Irrlicht-Terrain-Editor\\basemap.bmp", "D:\\Repos\\Irrlicht-Terrain-Editor\\rockwall.jpg");
-
-
-                if (node == null) throw new Exception("Could not load file!");
-
-                node.Scale = new Vector3Df(3.0f);
-                node.SetMaterialFlag(MaterialFlag.Lighting, false);
-
-                CameraSceneNode camera = smgr.AddCameraSceneNode(null, new Vector3Df(node.BoundingBox.Radius * 8, node.BoundingBox.Radius, 0), new Vector3Df(0, node.BoundingBox.Radius, 0));
-                camera.NearValue = 0.001f;
-                camera.FOV = 45 * CommonData.PI_OVER_180;
-                scaleMul = node.BoundingBox.Radius / 4;
-
-                var viewPort = driver.ViewPort;
-                var lineMat = new Material();
-                lineMat.Lighting = false;
-
-                renderStarted = true;
 
                 while (device.Run())
                 {
-                    driver.ViewPort = viewPort;
-                    driver.BeginScene(ClearBufferFlag.All, new IrrlichtLime.Video.Color(100, 101, 140));
-
-                    node.Position = modelPosition;
-                    node.Rotation = modelAngle;
-                    node.DebugDataVisible = DebugSceneType.Skeleton | DebugSceneType.BBox;
-                    mPositionText.Text = $"X: {modelPosition.X.ToString("F2")} Y: {modelPosition.Y.ToString("F2")} Z: {modelPosition.Z.ToString("F2")}";
-                    mRotationText.Text = $"Yaw: {modelAngle.Y.ToString("F2")} Roll: {modelAngle.Z.ToString("F2")}";
-                    fpsText.Text = $"FPS: {driver.FPS}";
-
+                    driver.BeginScene(true, true, new IrrlichtLime.Video.Color(255, 255, 255));
                     smgr.DrawAll();
                     gui.DrawAll();
-
-                    driver.ViewPort = new Recti(this.ClientSize.Width - 100, this.ClientSize.Height - 80, this.ClientSize.Width, this.ClientSize.Height);
-                    //driver.ClearBuffers(ClearBufferFlag.None);
-
-                    driver.SetMaterial(lineMat);
-                    var matrix = new Matrix(new Vector3Df(0, 0, 0), modelAngle);
-                    driver.SetTransform(TransformationState.World, matrix);
-                    matrix = matrix.BuildProjectionMatrixOrthoLH(100, 80, camera.NearValue, camera.FarValue);
-                    driver.SetTransform(TransformationState.Projection, matrix);
-                    matrix = matrix.BuildCameraLookAtMatrixLH(new Vector3Df(50, 0, 0), new Vector3Df(0, 0, 0), new Vector3Df(0, 1f, 0));
-                    driver.SetTransform(TransformationState.View, matrix);
-                    driver.Draw3DLine(0, 0, 0, 30f, 0, 0, IrrlichtLime.Video.Color.OpaqueGreen);
-                    driver.Draw3DLine(0, 0, 0, 0, 30f, 0, IrrlichtLime.Video.Color.OpaqueBlue);
-                    driver.Draw3DLine(0, 0, 0, 0, 0, 30f, IrrlichtLime.Video.Color.OpaqueRed);
-
                     driver.EndScene();
+
                 }
 
                 device.Drop();
@@ -176,9 +161,14 @@ namespace WolvenKit.Render
 
         private void frmTerrain_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Space)
+            switch(e.KeyCode)
             {
-                modelPosition = new Vector3Df(0.0f);
+                case Keys.Escape:
+                {
+                    irrThread.Abort();
+                    this.Close();
+                    break;
+                }
             }
         }
     }

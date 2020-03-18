@@ -125,7 +125,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MeshData.cs" />
     <Compile Include="Rig.cs" />
-    <Compile Include="Terrain\Terrain.cs" />
     <EmbeddedResource Include="frmRender.resx">
       <DependentUpon>frmRender.cs</DependentUpon>
     </EmbeddedResource>
@@ -176,6 +175,24 @@
   <ItemGroup>
     <Content Include="..\Libs\Irrlicht.dll">
       <Link>Irrlicht.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Terrain\basemap.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Terrain\brush.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Terrain\fontcourier.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Terrain\Noise_Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Terrain\Radial_Gradient_Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Terrain\rockwall.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

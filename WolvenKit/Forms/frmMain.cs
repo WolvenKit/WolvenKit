@@ -2244,6 +2244,17 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             Close();
         }
 
+        private void terrainViewerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void terrainViewerToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            Render.frmTerrain ter = new Render.frmTerrain();
+            ter.Show(this.dockPanel, DockState.Document);
+        }
+
         private void menuStrip1_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
