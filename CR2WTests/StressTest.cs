@@ -19,8 +19,8 @@ namespace CR2WTests
         public static void Setup(TestContext context)
         {
             mc = new BundleManager();
-            //mc.LoadAll("D:\\SteamLibrary\\steamapps\\common\\The Witcher 3\\bin\\x64");
-            mc.LoadAll("C:\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
+            mc.LoadAll("D:\\SteamLibrary\\steamapps\\common\\TW3\\bin\\x64");
+            //mc.LoadAll("C:\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
         }
         
         // Methods to test for the different file types

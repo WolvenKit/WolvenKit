@@ -123,10 +123,11 @@ namespace WolvenKit.Render
                 while (device.Run())
                 {
                     driver.BeginScene(true, true, new IrrlichtLime.Video.Color(255, 255, 255));
+
                     smgr.DrawAll();
                     gui.DrawAll();
-                    driver.EndScene();
 
+                    driver.EndScene();
                 }
 
                 device.Drop();
