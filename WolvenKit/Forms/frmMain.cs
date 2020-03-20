@@ -40,6 +40,7 @@ namespace WolvenKit
         public frmModExplorer ModExplorer { get; set; }
         public frmStringsGui stringsGui;
         public frmOutput Output { get; set; }
+        public frmConsole Console { get; set; }
 
         public frmCR2WDocument ActiveDocument
         {
@@ -705,6 +706,16 @@ namespace WolvenKit
 
             Output.Focus();
         }
+        private void ShowConsole()
+        {
+            if (Console == null || Console.IsDisposed)
+            {
+                Console = new frmConsole();
+                Console.Show(dockPanel, DockState.DockBottom);
+            }
+
+            Console.Focus();
+        }
 
         private void newModToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1016,6 +1027,7 @@ namespace WolvenKit
             ModExplorer = null;
             ShowModExplorer();
             ShowOutput();
+            ShowConsole();
             ClearOutput();
         }
 
@@ -1036,6 +1048,8 @@ namespace WolvenKit
             ModExplorer = null;
             Output?.Close();
             Output = null;
+            Console?.Close();
+            Console = null;
             foreach (var window in dockPanel.FloatWindows.ToList())
                 window.Dispose();
         }
@@ -1057,6 +1071,7 @@ namespace WolvenKit
             }
             ShowModExplorer();
             ShowOutput();
+            ShowConsole();
         }
 
         private void ShowModExplorer()
@@ -1202,6 +1217,7 @@ namespace WolvenKit
             if (doc.File.UnknownTypes.Any())
             {
                 ShowOutput();
+                ShowConsole();
 
                 output.Append(doc.FileName + ": contains " + doc.File.UnknownTypes.Count + " unknown type(s):\n");
                 foreach (var unk in doc.File.UnknownTypes)
@@ -2222,16 +2238,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
 
         private void consoleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "WolvenKit.Console.exe");
-            if (File.Exists(path))
-            {
-                ProcessStartInfo startInfo = new ProcessStartInfo(path);
-                Process.Start(startInfo);
-            }
-            else
-            {
-                AddOutput($"Wolvenkit.Console.exe couldn't be found at path: {path}", Logtype.Error);
-            }
+            ShowConsole();
         }
 
         private void menuStrip1_MouseDown(object sender, MouseEventArgs e)
@@ -2274,6 +2281,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             {
                 btPack.Enabled = false;
                 ShowOutput();
+                ShowConsole();
                 ClearOutput();
                 saveAllFiles();
                 var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");

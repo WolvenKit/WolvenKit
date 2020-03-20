@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Common.Services;
 using WolvenKit.Services;
+using WolvenKit.Extensions;
 
 namespace WolvenKit
 {
@@ -84,16 +85,5 @@ namespace WolvenKit
         }
     }
 
-    public static class RichTextBoxExtensions
-    {
-        public static void AppendText(this RichTextBox box, string text, Color color)
-        {
-            box.SelectionStart = box.TextLength;
-            box.SelectionLength = 0;
-
-            box.SelectionColor = color;
-            box.AppendText("["+ DateTime.Now.ToString("G") + "]: " + text);
-            box.SelectionColor = box.ForeColor;
-        }
-    }
+    
 }

@@ -355,6 +355,7 @@
     <Compile Include="Extensions\CustomFloatWindow.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="FlowTreeEditors\LinkEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -415,6 +416,12 @@
     <Compile Include="Forms\frmMusicPlayer.Designer.cs">
       <DependentUpon>frmMusicPlayer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmConsole.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmConsole.Designer.cs">
+      <DependentUpon>frmConsole.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmScriptEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -439,7 +446,6 @@
     <Compile Include="Forms\frmWelcome.Designer.cs">
       <DependentUpon>frmWelcome.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\BulkEditor.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -719,6 +725,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmMusicPlayer.resx">
       <DependentUpon>frmMusicPlayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmConsole.resx">
+      <DependentUpon>frmConsole.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmOutput.resx">
       <DependentUpon>frmOutput.cs</DependentUpon>
@@ -1364,7 +1373,9 @@
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

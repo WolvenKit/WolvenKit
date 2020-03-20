@@ -41,20 +41,12 @@ namespace WolvenKit.Console
 
         internal static async Task Parse(string[] _args)
         {
-            var result = Parser.Default.ParseArguments<BulkEditOptions, CacheOptions, BundleOptions>(_args)
+            var result = Parser.Default.ParseArguments<CacheOptions, BundleOptions>(_args)
                         .MapResult(
-                          async (BulkEditOptions opts) => await RunBulkEdit(opts),
                           async (CacheOptions opts) => await RunCache(opts),
                           async (BundleOptions opts) => await RunBundle(opts),
                           //errs => 1,
                           _ => Task.FromResult(1));
-        }
-
-
-        private async static Task<int> RunBulkEdit(BulkEditOptions opts)
-        {
-
-            return 0;
         }
 
 
