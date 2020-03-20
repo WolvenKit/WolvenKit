@@ -59,8 +59,9 @@ namespace WolvenKit
         public static Task Packer;
         private HotkeyCollection hotkeys;
         private readonly ToolStripRenderer toolStripRenderer = new ToolStripProfessionalRenderer();
-        private readonly WCC_Task WccHelper;
+
         private LoggerService Logger;
+        private WccHelper WccHelper;
 
         private delegate void strDelegate(string t);
         private delegate void logDelegate(string t, Logtype type);
@@ -124,9 +125,8 @@ namespace WolvenKit
             hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste, "Paste");
             MainController.InitForm(this);
 
-            Logger = new LoggerService();
-            Logger.PropertyChanged += LoggerUpdated;
-            WccHelper = new WCC_Task(MainController.Get().Configuration.WccLite, Logger);
+            
+            
 
             Screen screen = Screen.FromControl(this);
             int x = screen.WorkingArea.X - screen.Bounds.X;
@@ -852,6 +852,10 @@ namespace WolvenKit
                     xs.Serialize(mf, nw);
                     mf.Close();
                 }
+
+                //Close all docs
+                OpenDocuments.ToList().ForEach(x => x.Close());
+
                 MainController.Get().Configuration.InitialModDirectory = Path.GetDirectoryName(file);
 
                 //Loading the project
@@ -997,8 +1001,12 @@ namespace WolvenKit
                 modmanagers : managers);
             explorer.RequestFileAdd += Assetbrowser_FileAdd;
             explorer.OpenPath(browseToPath);
-            Rectangle floatWindowBounds = new Rectangle() { Width = 827, Height = 564 };
+            Point location = dockPanel.Location;
+            location.X += (dockPanel.Size.Width / 2 - explorer.Size.Width / 2);
+            location.Y += (dockPanel.Size.Height / 2 - explorer.Size.Height / 2);
+            Rectangle floatWindowBounds = new Rectangle() { Location=location, Width = 827, Height = 564 };
             explorer.Show(dockPanel, floatWindowBounds);
+            
         }
 
         /// <summary>
@@ -1026,8 +1034,8 @@ namespace WolvenKit
             ModExplorer?.Close();
             ModExplorer = null;
             ShowModExplorer();
-            ShowOutput();
             ShowConsole();
+            ShowOutput();
             ClearOutput();
         }
 
@@ -1070,8 +1078,8 @@ namespace WolvenKit
                 }
             }
             ShowModExplorer();
-            ShowOutput();
             ShowConsole();
+            ShowOutput();
         }
 
         private void ShowModExplorer()
@@ -1216,8 +1224,8 @@ namespace WolvenKit
 
             if (doc.File.UnknownTypes.Any())
             {
-                ShowOutput();
                 ShowConsole();
+                ShowOutput();
 
                 output.Append(doc.FileName + ": contains " + doc.File.UnknownTypes.Count + " unknown type(s):\n");
                 foreach (var unk in doc.File.UnknownTypes)
@@ -1830,7 +1838,11 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             //Start loading if everything is set up.
             var frmload = new frmLoading();
             frmload.ShowDialog();
-            
+
+            WccHelper = MainController.Get().WccHelper;
+            Logger = MainController.Get().Logger;
+            Logger.PropertyChanged += LoggerUpdated;
+
             //Update check should be after we are all set up. It goes on in the background.
             AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
             richpresenceworker.RunWorkerAsync();
@@ -1870,7 +1882,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                         {
                             MainController.Get()?.Window?.ModExplorer?.StopMonitoringDirectory();
                             //Close all docs so they won't cause problems
-                            OpenDocuments.ForEach(x => x.Close());
+                            OpenDocuments.ToList().ForEach(x => x.Close());
                             //Move the files directory
                             Directory.Move(oldmod.ProjectDirectory, Path.Combine(Path.GetDirectoryName(oldmod.ProjectDirectory), dlg.Mod.Name));
                             //Delete the old directory
@@ -1880,9 +1892,9 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                             if (File.Exists(oldmod.FileName))
                                 File.Delete(oldmod.FileName);
                         }
-                        catch (System.IO.IOException)
+                        catch (System.IO.IOException ex)
                         {
-                            MessageBox.Show("Sorry but a folder/mod already exists with that name.","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                            MessageBox.Show("Please check that you don't have Windows Explorer open at the old mod's path and that no folder/mod with that name already exists.", "Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
                             return;
                         }
                     }
@@ -2280,8 +2292,8 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             if (packsettings.ShowDialog() == DialogResult.OK)
             {
                 btPack.Enabled = false;
-                ShowOutput();
                 ShowConsole();
+                ShowOutput();
                 ClearOutput();
                 saveAllFiles();
                 var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");

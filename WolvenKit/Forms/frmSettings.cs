@@ -81,6 +81,9 @@ namespace WolvenKit
             config.ColorTheme = (EColorThemes)comboBoxTheme.SelectedItem;
             config.Save();
 
+            MainController.Get().UpdateWccHelper(config.WccLite);
+
+
             if (applyTheme)
             {
                 MainController.Get().Window.GlobalApplyTheme();

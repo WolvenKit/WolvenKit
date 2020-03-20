@@ -15,12 +15,12 @@ namespace WolvenKit.Common.Wcc
     /// <summary>
     /// 
     /// </summary>
-    public class WCC_Task
+    public class WccHelper
     {
         private ILoggerService _logger { get; set; }
-        private readonly string _wccPath;
+        private string _wccPath;
 
-        public WCC_Task(string path, ILoggerService loggerService)
+        public WccHelper(string path, ILoggerService loggerService)
         {
             _wccPath = path;
             _logger = loggerService;
@@ -130,9 +130,10 @@ namespace WolvenKit.Common.Wcc
                 {
                     _logger.LogString(ex.ToString(), Logtype.Error);
                     throw ex;
-
                 }
             }
         }
+
+        public void UpdatePath(string wccLite) => _wccPath = wccLite;
     }
 }

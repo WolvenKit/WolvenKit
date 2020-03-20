@@ -21,7 +21,7 @@ namespace WolvenKit
     using W3Strings;
     using Common;
     using Common.Services;
-
+    using WolvenKit.Common.Wcc;
 
     public enum EColorThemes
     {
@@ -36,6 +36,9 @@ namespace WolvenKit
         public Configuration Configuration { get; private set; }
         public frmMain Window { get; private set; }
         public W3Mod ActiveMod { get; set; }
+
+        public WccHelper WccHelper { get; set; }
+        public LoggerService Logger { get; set; }
 
         public const string ManagerCacheDir = "ManagerCache";
         public string VLCLibDir = "C:\\Program Files\\VideoLAN\\VLC";
@@ -97,6 +100,9 @@ namespace WolvenKit
 
         //Public getters
         public W3StringManager W3StringManager => w3StringManager;
+
+      
+
         public BundleManager BundleManager => bundleManager;
         public BundleManager ModBundleManager => modbundleManager;
         public SoundManager SoundManager => soundManager;
@@ -150,6 +156,11 @@ namespace WolvenKit
         public string GetLocalizedString(uint val)
         {
             return W3StringManager.GetString(val);
+        }
+
+        internal void UpdateWccHelper(string wccLite)
+        {
+            WccHelper.UpdatePath(wccLite);
         }
 
         public void CreateVariableEditor(CVariable editvar, EVariableEditorAction action)
@@ -407,6 +418,9 @@ namespace WolvenKit
                 }
                 #endregion
                 loadStatus = "Loaded";
+
+                Logger = new LoggerService();
+                WccHelper = new WccHelper(MainController.Get().Configuration.WccLite, Logger);
 
                 mainController.Loaded = true;
             }
