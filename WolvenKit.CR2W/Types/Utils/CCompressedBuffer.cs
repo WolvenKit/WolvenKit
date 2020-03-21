@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CCompressedBuffer<T> : CVariable where T : CVariable
     {
         public List<T> elements = new List<T>();

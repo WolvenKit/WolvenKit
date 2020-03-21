@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.CR2W.Editors;
@@ -10,6 +11,7 @@ using WolvenKit.CR2W.GameEntity;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     class CFoliageResource : CVector
     {
         public CArray Trees;

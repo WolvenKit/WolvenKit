@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CComponent : CNode
     {
         public CComponent(CR2WFile cr2w) :

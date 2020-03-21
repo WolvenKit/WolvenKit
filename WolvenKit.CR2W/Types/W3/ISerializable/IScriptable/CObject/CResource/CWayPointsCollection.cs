@@ -5,9 +5,11 @@ using System.Diagnostics;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CWayPointsCollection : CVector
     {
         public CCompressedBuffer<SBufferWaypoints> waypoints;
@@ -167,6 +169,7 @@ namespace WolvenKit.CR2W.Types
 
     #region SBufferWaypoints
     //[StructLayout(LayoutKind.Explicit, Size = 20)]
+    [DataContract(Namespace = "")]
     public class SBufferWaypoints : CVariable
     {
         //[FieldOffset(0)]
@@ -232,6 +235,7 @@ namespace WolvenKit.CR2W.Types
 
     #region SBufferComponentsMappings
     //[StructLayout(LayoutKind.Explicit, Size = 32)]
+    [DataContract(Namespace = "")]
     public class SBufferComponentsMappings : CVariable
     {
         //[FieldOffset(0)]
@@ -296,6 +300,7 @@ namespace WolvenKit.CR2W.Types
 
     #region SBufferwaypointsGroup
     //[StructLayout(LayoutKind.Explicit, Size = 12)]
+    [DataContract(Namespace = "")]
     public class SBufferwaypointsGroup : CVariable
     {
         //[FieldOffset(0)]

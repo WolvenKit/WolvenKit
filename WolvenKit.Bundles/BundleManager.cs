@@ -27,10 +27,11 @@ namespace WolvenKit.Bundles
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
 
         /// <summary>
-        ///     Load a single bundle
+        ///     Load a single mod bundle
         /// </summary>
-        /// <param name="filename"></param>
-        /// <param name="keepfoldername"></param>
+        /// <param name="filename">
+        ///     file to process
+        /// </param>
         public void LoadModBundle(string filename)
         {
             if (Bundles.ContainsKey(filename))

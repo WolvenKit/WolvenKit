@@ -3,9 +3,11 @@ using System.IO;
 using WolvenKit.CR2W.Editors;
 using System.Diagnostics;
 using System;
+using System.Runtime.Serialization;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CAnimPointCloudLookAtParam : CVector
     {
         public CBufferVLQ<SAnimPointCloudLookAtParamData> buffer;

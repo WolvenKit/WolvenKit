@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     class CSectorData : CVariable
     {
         public CUInt32 Unknown1;
@@ -132,6 +134,7 @@ namespace WolvenKit.CR2W.Types
         }
     }
 
+    [DataContract(Namespace = "")]
     public class CSectorDataResource : CVariable
     {
         public CFloat box0;
@@ -201,6 +204,7 @@ namespace WolvenKit.CR2W.Types
         }
     }
 
+    [DataContract(Namespace = "")]
     public class CSectorDataObject : CVariable
     {
         public CUInt8 type;

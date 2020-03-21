@@ -1,4 +1,4 @@
-﻿using RED.CRC32;
+﻿//using RED.CRC32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,37 +6,50 @@ using System.Windows.Forms;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Types;
 using System.Runtime.InteropServices;
-using System.Linq;
+//using System.Linq;
+using System.Runtime.Serialization;
+using System.Xml;
+using WolvenKit.Utils;
+
+[assembly: ContractNamespaceAttribute("",    ClrNamespace = "WolvenKit.CR2W")]
 
 namespace WolvenKit.CR2W
 {
 
+    [DataContract(Namespace ="")]
     [StructLayout(LayoutKind.Explicit, Size = 24)]
     public struct CR2WExport
     {
+        [DataMember]
         [FieldOffset(0)]
         public ushort className; //needs to be registered upon new creation!
 
+        [DataMember]
         [FieldOffset(2)]
         public ushort objectFlags;  // can be 0
 
+        [DataMember]
         [FieldOffset(4)]
         public uint parentID;   //needs to be registered upon new creation!
 
+        [DataMember]
         [FieldOffset(8)]
         public uint dataSize;   // created upon data write
 
+        [DataMember]
         [FieldOffset(12)]
         public uint dataOffset; //created upon data write
 
+        [DataMember]
         [FieldOffset(16)]
         public uint template;   // can be 0
 
+        [DataMember]
         [FieldOffset(20)]
         public uint crc32;  // created upon write
     }
 
-    [Serializable]
+    [DataContract(Namespace = "")]
     public class CR2WExportWrapper : IEditableVariable
     {
 
@@ -96,6 +109,7 @@ namespace WolvenKit.CR2W
 
         #region Properties
         private CR2WExport _export ;
+        [DataMember()]
         public CR2WExport Export {
             get => _export;
             set => _export = value;
@@ -114,12 +128,14 @@ namespace WolvenKit.CR2W
             set { typeName.val = value; }
         }*/
         private readonly CUInt16 flags;
+        [DataMember]
         public ushort Flags
         {
             get { return flags.val; }
             set { flags.val = value; }
         }
         private readonly CPtr parentPtr;
+        [DataMember]
         public uint ParentChunkId
         {
             get { return (uint) parentPtr.val; }
@@ -171,6 +187,7 @@ namespace WolvenKit.CR2W
             }
         }
 
+        [DataMember]
         public string Type
         {
             get {return typeName.Value; }
@@ -190,6 +207,7 @@ namespace WolvenKit.CR2W
             _export.parentID = val;
         }
 
+        [DataMember]
         public string Name
         {
             get { return Type + " #" + (ChunkIndex + 1); }
@@ -331,6 +349,15 @@ namespace WolvenKit.CR2W
             }
 
             return chunk;
+        }
+
+        public void SerializeToXml(XmlWriter xw)
+        {
+            XmlSerializer.SerializeStartObject<CR2WExportWrapper>(xw, this);
+            XmlSerializer.SerializeObjectContent<CR2WExportWrapper>(xw, this);
+            data.SerializeToXml(xw);
+            unknownBytes.SerializeToXml(xw);
+            XmlSerializer.SerializeEndObject<CR2WExportWrapper>(xw);
         }
 
         public override string ToString()

@@ -2,9 +2,11 @@
 using System.IO;
 using System;
 using WolvenKit.CR2W.Editors;
+using System.Runtime.Serialization;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CSwfTexture : CVector
     {
         public CByteArray swfTexture;

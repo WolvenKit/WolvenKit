@@ -60,6 +60,8 @@ namespace WolvenKit
             this.CollapseBTN = new System.Windows.Forms.ToolStripButton();
             this.resetfilesButton = new System.Windows.Forms.ToolStripButton();
             this.modexplorerSlave = new System.IO.FileSystemWatcher();
+            this.dumpChunksToXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.contextMenu.SuspendLayout();
             this.searchstrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.modexplorerSlave)).BeginInit();
@@ -103,9 +105,11 @@ namespace WolvenKit
             this.addFileToolStripMenuItem,
             this.toolStripSeparator1,
             this.dumpXMLToolStripMenuItem,
+            this.dumpChunksToXMLToolStripMenuItem,
+            this.toolStripSeparator4,
             this.showFileInExplorerToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(197, 356);
+            this.contextMenu.Size = new System.Drawing.Size(197, 388);
             this.contextMenu.Opened += new System.EventHandler(this.contextMenu_Opened);
             // 
             // cookToolStripMenuItem
@@ -313,6 +317,18 @@ namespace WolvenKit
             this.modexplorerSlave.Deleted += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
             this.modexplorerSlave.Renamed += new System.IO.RenamedEventHandler(this.FileChanges_Detected);
             // 
+            // dumpChunksToXMLToolStripMenuItem
+            // 
+            this.dumpChunksToXMLToolStripMenuItem.Name = "dumpChunksToXMLToolStripMenuItem";
+            this.dumpChunksToXMLToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.dumpChunksToXMLToolStripMenuItem.Text = "Dump Chunks to XML";
+            this.dumpChunksToXMLToolStripMenuItem.Click += new System.EventHandler(this.dumpChunksToXMLToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(193, 6);
+            // 
             // frmModExplorer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -368,5 +384,7 @@ namespace WolvenKit
         private ToolStripSeparator toolStripSeparator3;
         private ToolStripMenuItem importAsToolStripMenuItem;
         private ToolStripMenuItem dumpXMLToolStripMenuItem;
+        private ToolStripMenuItem dumpChunksToXMLToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator4;
     }
 }

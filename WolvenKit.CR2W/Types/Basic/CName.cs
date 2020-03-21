@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CName : CVariable
     {
         public CName(CR2WFile cr2w)
@@ -19,6 +21,7 @@ namespace WolvenKit.CR2W.Types
             set { Value = cr2w.names[value].Str; }
         }
 
+        [DataMember]
         public string Value { get; set; }
 
         public override void Read(BinaryReader file, uint size)

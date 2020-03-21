@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CUInt64 : CVariable
     {
         
@@ -16,6 +18,8 @@ namespace WolvenKit.CR2W.Types
         }
 
         private ulong _val;
+
+        [DataMember]
         public ulong val { get => _val; set => _val = value; }
 
         public override void Read(BinaryReader file, uint size)
@@ -67,6 +71,7 @@ namespace WolvenKit.CR2W.Types
         }
     }
 
+    [DataContract(Namespace = "")]
     public class CUInt32 : CVariable
     {
         public CUInt32(CR2WFile cr2w)
@@ -75,6 +80,7 @@ namespace WolvenKit.CR2W.Types
             Type = typeof(CUInt32).Name;
         }
 
+        [DataMember]
         public uint val { get; set; }
 
         public override void Read(BinaryReader file, uint size)
@@ -126,6 +132,7 @@ namespace WolvenKit.CR2W.Types
         }
     }
 
+    [DataContract(Namespace = "")]
     public class CUInt16 : CVariable
     {
        
@@ -137,6 +144,8 @@ namespace WolvenKit.CR2W.Types
         }
 
         private ushort _val;
+
+        [DataMember]
         public ushort val { get => _val; set => _val = value; }
 
         public override void Read(BinaryReader file, uint size)
@@ -188,6 +197,7 @@ namespace WolvenKit.CR2W.Types
         }
     }
 
+    [DataContract(Namespace = "")]
     public class CUInt8 : CVariable
     {
         public CUInt8(CR2WFile cr2w)
@@ -196,6 +206,7 @@ namespace WolvenKit.CR2W.Types
             Type = typeof(CUInt8).Name;
         }
 
+        [DataMember]
         public byte val { get; set; }
 
         public override void Read(BinaryReader file, uint size)
@@ -248,6 +259,7 @@ namespace WolvenKit.CR2W.Types
     }
 
 
+    [DataContract(Namespace = "")]
     public class CInt64 : CVariable
     {
         public CInt64(CR2WFile cr2w)
@@ -256,6 +268,7 @@ namespace WolvenKit.CR2W.Types
             Type = typeof(CInt64).Name;
         }
 
+        [DataMember]
         public long val { get; set; }
 
         public override void Read(BinaryReader file, uint size)
@@ -307,6 +320,7 @@ namespace WolvenKit.CR2W.Types
         }
     }
 
+    [DataContract(Namespace = "")]
     public class CInt32 : CVariable
     {
         public CInt32(CR2WFile cr2w)
@@ -315,6 +329,7 @@ namespace WolvenKit.CR2W.Types
             Type = typeof(CInt32).Name;
         }
 
+        [DataMember]
         public int val { get; set; }
 
         public override void Read(BinaryReader file, uint size)
@@ -366,6 +381,7 @@ namespace WolvenKit.CR2W.Types
         }
     }
 
+    [DataContract(Namespace = "")]
     public class CInt16 : CVariable
     {
         public CInt16(CR2WFile cr2w)
@@ -374,6 +390,7 @@ namespace WolvenKit.CR2W.Types
             Type = typeof(CInt16).Name;
         }
 
+        [DataMember]
         public short val { get; set; }
 
         public override void Read(BinaryReader file, uint size)
@@ -425,6 +442,7 @@ namespace WolvenKit.CR2W.Types
         }
     }
 
+    [DataContract(Namespace = "")]
     public class CInt8 : CVariable
     {
         public CInt8(CR2WFile cr2w)
@@ -433,6 +451,7 @@ namespace WolvenKit.CR2W.Types
             Type = typeof(CInt8).Name;
         }
 
+        [DataMember]
         public sbyte val { get; set; }
 
         public override void Read(BinaryReader file, uint size)
@@ -484,6 +503,7 @@ namespace WolvenKit.CR2W.Types
         }
     }
 
+    [DataContract(Namespace = "")]
     public class CDynamicInt : CVariable
     {
         public CDynamicInt(CR2WFile cr2w)
@@ -492,6 +512,7 @@ namespace WolvenKit.CR2W.Types
             Type = typeof(CDynamicInt).Name;
         }
 
+        [DataMember]
         public int val { get; set; }
 
         public override void Read(BinaryReader file, uint size)
@@ -550,6 +571,7 @@ namespace WolvenKit.CR2W.Types
         }
     }
 
+    [DataContract(Namespace = "")]
     public class CVLQInt32 : CVariable
     {
         public CVLQInt32(CR2WFile cr2w)
@@ -558,6 +580,7 @@ namespace WolvenKit.CR2W.Types
             Type = typeof(CVLQInt32).Name;
         }
 
+        [DataMember]
         public int val { get; set; }
 
         public override void Read(BinaryReader file, uint size)
@@ -616,6 +639,7 @@ namespace WolvenKit.CR2W.Types
         }
     }
 
+    [DataContract(Namespace = "")]
     public class CBool : CVariable
     {
         public CBool(CR2WFile cr2w)
@@ -624,6 +648,7 @@ namespace WolvenKit.CR2W.Types
             Type = typeof(CBool).Name;
         }
 
+        [DataMember]
         public bool val { get; set; }
 
         public override void Read(BinaryReader file, uint size)

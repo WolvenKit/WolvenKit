@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using WolvenKit.CR2W.Editors;
+using System.Runtime.Serialization;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -11,6 +12,7 @@ namespace WolvenKit.CR2W.Types
 
 
 
+    [DataContract(Namespace = "")]
     public class CCubeTexture : CVector
     {
         // 20 bytes header

@@ -1,8 +1,10 @@
 ﻿using System.IO;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CFloat : CVariable
     {
         public CFloat(CR2WFile cr2w)
@@ -10,6 +12,7 @@ namespace WolvenKit.CR2W.Types
         {
         }
 
+        [DataMember]
         public float val { get; set; }
 
         public override void Read(BinaryReader file, uint size)

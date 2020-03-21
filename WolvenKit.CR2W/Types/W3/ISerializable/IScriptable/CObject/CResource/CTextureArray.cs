@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
@@ -8,6 +9,7 @@ namespace WolvenKit.CR2W.Types
 
 
 
+    [DataContract(Namespace = "")]
     public class CTextureArray : CVector
     {
         // 24 bytes header
