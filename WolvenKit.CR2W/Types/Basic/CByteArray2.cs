@@ -1,9 +1,12 @@
 ﻿using System.IO;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
+using System.Xml;
 using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CByteArray2 : CVariable, IByteSource
     {
         public CByteArray2(CR2WFile cr2w)
@@ -61,5 +64,21 @@ namespace WolvenKit.CR2W.Types
         {
             return Bytes.Length + " bytes";
         }
+        public override void SerializeToXml(XmlWriter xw)
+        {
+            DataContractSerializer ser = new DataContractSerializer(this.GetType());
+            using (var ms = new MemoryStream())
+            {
+                ser.WriteStartObject(xw, this);
+                ser.WriteObjectContent(xw, this);
+                xw.WriteElementString("Length", Bytes.Length.ToString());
+                if (Bytes.Length > 0)
+                {
+                    xw.WriteElementString("Bytes", HexStr(Bytes));
+                }
+                ser.WriteEndObject(xw);
+            }
+        }
+
     }
 }

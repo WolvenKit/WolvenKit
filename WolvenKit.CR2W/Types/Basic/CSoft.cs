@@ -1,10 +1,12 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CSoft : CVariable
     {
         public CSoft(CR2WFile cr2w)
@@ -12,6 +14,7 @@ namespace WolvenKit.CR2W.Types
         {
         }
 
+        [DataMember(EmitDefaultValue = false)]
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ushort val
         {
@@ -54,8 +57,13 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
+        [DataMember(EmitDefaultValue = false)]
         public string Handle { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
         public string FileType { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
         public ushort Flags { get; set; }
 
         public override void Read(BinaryReader file, uint size)

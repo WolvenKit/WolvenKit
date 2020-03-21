@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     class CIndexed2dArray : CVector
     {
+        [DataMember]
         public CByteArray arrays;
 
         public CIndexed2dArray(CR2WFile cr2w) : base(cr2w)
@@ -44,6 +48,18 @@ namespace WolvenKit.CR2W.Types
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CIndexed2dArray(cr2w);
+        }
+
+        public override void SerializeToXml(XmlWriter xw)
+        {
+            DataContractSerializer ser = new DataContractSerializer(this.GetType());
+            using (var ms = new MemoryStream())
+            {
+                ser.WriteStartObject(xw, this);
+                ser.WriteObjectContent(xw, this);
+                arrays.SerializeToXml(xw);
+                ser.WriteEndObject(xw);
+            }
         }
     }
 }

@@ -3,18 +3,27 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Xml;
 using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CArray : CVariable, IEnumerable<CVariable>
     {
         public List<CVariable> array = new List<CVariable>();
+
+        [DataMember(EmitDefaultValue = false)]
         public string elementtype;
+
+        [DataMember(EmitDefaultValue = false)]
         public bool fixedTypeArray;
-        public string type;
+
+        [DataMember(EmitDefaultValue = false)]
+        public string type;     //vl: mimics CVariable type??
 
         public CArray(CR2WFile cr2w) : base(cr2w)
         {
@@ -168,6 +177,27 @@ namespace WolvenKit.CR2W.Types
         public override string ToString()
         {
             return "";
+        }
+
+        public override void SerializeToXml(XmlWriter xw)
+        {
+            DataContractSerializer ser = new DataContractSerializer(this.GetType());
+            using (var ms = new MemoryStream())
+            {
+                ser.WriteStartObject(xw, this);
+                ser.WriteObjectContent(xw, this);
+            }
+
+            if (GetEditableVariables() != null)
+            {
+                xw.WriteStartElement("array");
+                foreach (CVariable v in GetEditableVariables())
+                {
+                    v.SerializeToXml(xw);
+                }
+                xw.WriteEndElement();
+            }
+            ser.WriteEndObject(xw);
         }
     }
 }

@@ -4,9 +4,11 @@ using System.IO;
 using WolvenKit.CR2W.Editors;
 using System.Linq;
 using WolvenKit.CR2W.Types.Utils;
+using System.Runtime.Serialization;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CEntity : CNode
     {
 

@@ -3,9 +3,11 @@ using System.IO;
 using WolvenKit.CR2W.Editors;
 using System.Diagnostics;
 using WolvenKit.CR2W.Types.Utils;
+using System.Runtime.Serialization;
 
 namespace WolvenKit.CR2W.Types
 {
+    [DataContract(Namespace = "")]
     public class CCutsceneTemplate : CVector
     {
         public CUInt32 unk1;

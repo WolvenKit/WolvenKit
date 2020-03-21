@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
+using System.Xml;
 using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.CR2W.Editors
 {
+    [DataContract(Namespace = "")]
     public class EditableList<T> : IEditableVariable
         where T : CVariable
     {
@@ -17,6 +21,7 @@ namespace WolvenKit.CR2W.Editors
         }
 
         public List<T> List { get; set; }
+        [DataMember]
         public string Name { get; set; }
         public string Type { get; set; }
         public CR2WFile CR2WOwner { get; }
@@ -70,6 +75,25 @@ namespace WolvenKit.CR2W.Editors
         public override string ToString()
         {
             return "";
+        }
+
+        public virtual void SerializeToXml(XmlWriter xw)
+        {
+            DataContractSerializer ser = new DataContractSerializer(this.GetType());
+            using (var ms = new MemoryStream())
+            {
+                ser.WriteStartObject(xw, this);
+                ser.WriteObjectContent(xw, this);
+
+                if (GetEditableVariables() != null)
+                {
+                    foreach (var v in GetEditableVariables())
+                    {
+                        v.SerializeToXml(xw);
+                    }
+                }
+                ser.WriteEndObject(xw);
+            }
         }
     }
 }

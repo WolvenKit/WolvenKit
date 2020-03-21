@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Bundles;
@@ -250,10 +251,12 @@ namespace WolvenKit
         private void contextMenu_Opened(object sender, EventArgs e)
         {
             var selectedNode = modFileList.SelectedNode;
+            string ext = "";
+
             if (selectedNode != null)
             {
                 var fi = new FileInfo(selectedNode.FullPath);
-                var ext = fi.Extension.TrimStart('.');
+                ext = fi.Extension.TrimStart('.');
 
                 bool isbundle = Path.Combine(ActiveMod.FileDirectory, fi.ToString()).Contains(Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName));
                 bool israw = Path.Combine(ActiveMod.FileDirectory, fi.ToString()).Contains(Path.Combine(ActiveMod.FileDirectory, "Raw"));
@@ -280,7 +283,8 @@ namespace WolvenKit
             copyToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
             
             showFileInExplorerToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
-            dumpXMLToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
+            dumpXMLToolStripMenuItem.Enabled = modFileList.SelectedNode != null && ext != "xml" && ext != "csv" && ext != "ws" && ext != "";
+            dumpChunksToXMLToolStripMenuItem.Enabled = modFileList.SelectedNode != null && ext != "xml" && ext != "csv" && ext != "ws" && ext != "";
 
         }
 
@@ -404,6 +408,65 @@ namespace WolvenKit
             }
         }
 
+        private void dumpChunksToXMLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                SaveFileDialog sFileDialog = new SaveFileDialog
+                {
+                    Filter = "XML File|*.xml",
+                    Title = "Save XML File",
+                    InitialDirectory = MainController.Get().Configuration.InitialFileDirectory + "\\" + modFileList.SelectedNode.FullPath,
+                    OverwritePrompt = true,
+                    FileName = ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath + ".chunk.xml"
+                };
+                
+                DialogResult result = sFileDialog.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    FileStream writer = new FileStream(sFileDialog.FileName, FileMode.Create);
+                    DumpChunkXML(writer);
+                }
+            }
+
+            void DumpChunkXML(FileStream writer)
+            {
+                try
+                {
+                    string filePath = ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath;
+                    string fileName = writer.Name;
+                    
+                    using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                    using (var reader = new BinaryReader(fs))
+                    {
+                        var File = new CR2W.CR2WFile(reader);
+                        File.FileName = modFileList.SelectedNode.FullPath;
+                        File.SerializeChunksToXml(writer);
+
+                        writer.Flush();
+                        writer.Close();
+                    }
+
+                    //vl: ugly way to suppress ugly xmlns
+                    string text = "";
+                    using (StreamReader streamReader = File.OpenText(fileName)) //vl: TODO: what about encoding??
+                    {
+                        text = streamReader.ReadToEnd();
+                        text = text.Replace(" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+                    }
+                    File.WriteAllText(fileName, text);
+                    
+                    Logger.LogString("Dumping chunks XML successful.", Logtype.Success);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogString(ex.Message, Logtype.Error);
+                    Logger.LogString(ex.StackTrace, Logtype.Error);
+                    Logger.LogString("Dumping chunks XML failed.", Logtype.Error);
+                }
+            }
+        }
+
         private void ExpandBTN_Click(object sender, EventArgs e)
         {
             modFileList.ExpandAll();
@@ -482,6 +545,6 @@ namespace WolvenKit
             this.searchBox.BackColor = theme.ColorPalette.ToolWindowCaptionButtonInactiveHovered.Background;
         }
 
-        
+
     }
 }
