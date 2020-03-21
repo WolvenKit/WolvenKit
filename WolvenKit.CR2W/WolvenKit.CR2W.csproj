@@ -135,6 +135,7 @@
     <Compile Include="Types\Basic\CByteArray2.cs" />
     <Compile Include="Types\Basic\IdHandle.cs" />
     <Compile Include="Types\Basic\EntityHandle.cs" />
+    <Compile Include="Types\Basic\SCurveData.cs" />
     <Compile Include="Types\Utils\CBufferUInt16.cs" />
     <Compile Include="Types\Utils\CVectorWrapper.cs" />
     <Compile Include="Types\Utils\CVariableWrapper.cs" />
