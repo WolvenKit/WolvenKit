@@ -106,10 +106,6 @@ namespace WolvenKit.CR2W.Types
             #endregion
 
             #region Utility
-
-            Register("CBufferType2", new CEntityBufferType2(null));
-            Register("CBufferType2Item", new CVariableWrapper(null));
-
             Register("CIndexed2dArray", new CIndexed2dArray(null));
 
             Register("SharedDataBuffer", new CByteArray(null));
@@ -155,6 +151,7 @@ namespace WolvenKit.CR2W.Types
             Register("CRagdoll", new CRagdoll(null));
 
             Register("CSectorData", new CSectorData(null));
+            Register("SBlockData", new SBlockData(null));
             Register("CClipMap", new CClipMap(null));
             Register("CGameWorld", new CGameWorld(null));
 
@@ -445,6 +442,7 @@ namespace WolvenKit.CR2W.Types
             Register("CEntityTemplate", new CEntityTemplate(null));
             Register("CCharacterEntityTemplate", new CEntityTemplate(null));
             Register("CEntity", new CEntity(null));
+            Register("CEntityBufferType2", new CEntityBufferType2(null));
 
             // *.w2ent decendants of CEntity in RTTI and ws to parse components array
             var CEntities = new[]
@@ -4110,8 +4108,7 @@ namespace WolvenKit.CR2W.Types
             {
                 "",
                 //"CFont",
-                //"CCameraCompressedPose",
-                "CCurve",
+                "CCameraCompressedPose",
                 //"CUmbraScene",
                 //"CUmbraTile",
             };

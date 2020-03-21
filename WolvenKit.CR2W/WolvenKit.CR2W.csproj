@@ -133,6 +133,7 @@
     <Compile Include="FNV1A\FNV1A32HashAlgorithm.cs" />
     <Compile Include="FNV1A\FNV1A64HashAlgorithm.cs" />
     <Compile Include="Types\Basic\CByteArray2.cs" />
+    <Compile Include="Types\Basic\CMatrix3x3.cs" />
     <Compile Include="Types\Basic\IdHandle.cs" />
     <Compile Include="Types\Basic\EntityHandle.cs" />
     <Compile Include="Types\Basic\SCurveData.cs" />
@@ -161,8 +162,9 @@
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\IParticleModule\CParticleInitializerColor.cs" />
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\IParticleModule\CParticleInitializerAlpha.cs" />
     <Compile Include="Types\W3\Structs\SAnimPointCloudLookAtParamData.cs" />
-    <Compile Include="Types\W3\Structs\SBlockData2.cs" />
-    <Compile Include="Types\W3\Structs\SBlockData1.cs" />
+    <Compile Include="Types\W3\Structs\SSectorDataResource.cs" />
+    <Compile Include="Types\W3\Structs\SSectorDataObject.cs" />
+    <Compile Include="Types\W3\Structs\SBlockData.cs" />
     <Compile Include="Types\W3\Structs\SSkeletonRigData.cs" />
     <Compile Include="Types\Utils\CBufferUInt32.cs" />
     <Compile Include="Types\Utils\CCompressedBuffer.cs" />
