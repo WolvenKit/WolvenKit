@@ -59,12 +59,14 @@ namespace WolvenKit.CR2W
 
         public void WriteData(BinaryWriter file)
         {
-            _buffer.offset = (uint) file.BaseStream.Position;
+            // there is no Data to write
+            /*_buffer.offset = (uint) file.BaseStream.Position;
             if (Data != null)
             {
                 file.Write(Data);
-            }
-            _buffer.memSize = (uint) Data.Length;
+                _buffer.memSize = (uint)Data.Length;
+            }*/
+            
         }
 
         public override string ToString()

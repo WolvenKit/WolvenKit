@@ -57,7 +57,7 @@ namespace WolvenKit.CR2W.Types.Utils
             using (var bw = new BinaryWriter(ms))
             {
                 componentName.Write(bw);
-                variables.Write(file);
+                variables.Write(bw);
 
                 sizeofdata.val += (UInt32)ms.Length;
                 buffer = ms.ToArray();
