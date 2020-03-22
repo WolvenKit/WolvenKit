@@ -14,25 +14,16 @@ namespace WolvenKit.CR2W.Types
 
         public CArray components { get; set; }
         public CVector buffer_v1 { get; set; }
-        public CArray buffer_v2 { get; set; }
+        public CBufferUInt32<CEntityBufferType2> buffer_v2 { get; set; }
 
         private bool isCreatedFromTemplate;
             
-        public CEntity(CR2WFile cr2w) :
-            base(cr2w)
+        public CEntity(CR2WFile cr2w) : base(cr2w)
         {
+            components = new CArray("[]handle:Component", "handle:Component", true, cr2w) { Name = "components" };
 
-            buffer_v1 = new CVector(cr2w)
-            {
-                Name = "Buffer_v1"
-            };
-            buffer_v2 = new CArray("", "CBufferType2", true, cr2w)
-            {
-                Name = "Buffer_v2"
-            };
-
-            components = new CArray("[]handle:Component", "handle:Component", true, cr2w);
-            components.Name = "components";
+            buffer_v1 = new CVector(cr2w) { Name = "Buffer_v1" };
+            buffer_v2 = new CBufferUInt32<CEntityBufferType2>(cr2w, _ => new CEntityBufferType2(_)) { Name = "Buffer_v2" };
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -159,7 +150,7 @@ namespace WolvenKit.CR2W.Types
 
             var.components = (CArray)components.Copy(context);
             var.buffer_v1 = (CVector)buffer_v1.Copy(context);
-            var.buffer_v2 = (CArray)buffer_v2.Copy(context);
+            var.buffer_v2 = (CBufferUInt32<CEntityBufferType2>)buffer_v2.Copy(context);
 
             return var;
         }
