@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-// using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -14,14 +13,8 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using AutoUpdaterDotNET;
 using Dfust.Hotkeys;
-// using ICSharpCode.SharpZipLib.Core;
-// using ICSharpCode.SharpZipLib.Zip;
-// using Newtonsoft.Json;
 using SharpPresence;
 using WeifenLuo.WinFormsUI.Docking;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Types;
-using WolvenKit.Mod;
 using SearchOption = System.IO.SearchOption;
 using WolvenKit.Common;
 using WolvenKit.Cache;
@@ -30,14 +23,23 @@ using WolvenKit.Forms;
 using Enums = Dfust.Hotkeys.Enums;
 using WolvenKit.Wwise.Player;
 using WolvenKit.Extensions;
-// using WolvenKit.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.Common.Services;
 using System.ComponentModel;
 
 namespace WolvenKit
 {
-    
+    using CR2W;
+    using CR2W.Types;
+    using Common;
+    using Cache;
+    using Bundles;
+    using Forms;
+    using Wwise.Player;
+    using Extensions;
+    using Common.Wcc;
+    using Common.Services;
+    using Enums = Dfust.Hotkeys.Enums;
 
     public partial class frmMain : Form
     {
@@ -47,6 +49,7 @@ namespace WolvenKit
         public frmModExplorer ModExplorer { get; set; }
         public frmStringsGui stringsGui;
         public frmOutput Output { get; set; }
+        public frmConsole Console { get; set; }
 
         public frmCR2WDocument ActiveDocument
         {
@@ -65,8 +68,9 @@ namespace WolvenKit
         public static Task Packer;
         private HotkeyCollection hotkeys;
         private readonly ToolStripRenderer toolStripRenderer = new ToolStripProfessionalRenderer();
-        private readonly WCC_Task WccHelper;
+
         private LoggerService Logger;
+        private WccHelper WccHelper;
 
         private delegate void strDelegate(string t);
         private delegate void logDelegate(string t, Logtype type);
@@ -105,6 +109,7 @@ namespace WolvenKit
 
             UpdateTitle();
             MainController.Get().PropertyChanged += MainControllerUpdated;
+
             #region Load recent files into toolstrip
             recentFilesToolStripMenuItem.DropDownItems.Clear();
             if (File.Exists("recent_files.xml"))
@@ -129,9 +134,8 @@ namespace WolvenKit
             hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste, "Paste");
             MainController.InitForm(this);
 
-            Logger = new LoggerService();
-            Logger.PropertyChanged += LoggerUpdated;
-            WccHelper = new WCC_Task(MainController.Get().Configuration.WccLite, Logger);
+            
+            
 
             Screen screen = Screen.FromControl(this);
             int x = screen.WorkingArea.X - screen.Bounds.X;
@@ -711,6 +715,16 @@ namespace WolvenKit
 
             Output.Focus();
         }
+        private void ShowConsole()
+        {
+            if (Console == null || Console.IsDisposed)
+            {
+                Console = new frmConsole();
+                Console.Show(dockPanel, DockState.DockBottom);
+            }
+
+            Console.Focus();
+        }
 
         private void newModToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -847,6 +861,10 @@ namespace WolvenKit
                     xs.Serialize(mf, nw);
                     mf.Close();
                 }
+
+                //Close all docs
+                OpenDocuments.ToList().ForEach(x => x.Close());
+
                 MainController.Get().Configuration.InitialModDirectory = Path.GetDirectoryName(file);
 
                 //Loading the project
@@ -1010,8 +1028,12 @@ namespace WolvenKit
             var explorer = new frmAssetBrowser(managers);
             explorer.RequestFileAdd += Assetbrowser_FileAdd;
             explorer.OpenPath(browseToPath);
-            Rectangle floatWindowBounds = new Rectangle() { Width = 827, Height = 564 };
+            Point location = dockPanel.Location;
+            location.X += (dockPanel.Size.Width / 2 - explorer.Size.Width / 2);
+            location.Y += (dockPanel.Size.Height / 2 - explorer.Size.Height / 2);
+            Rectangle floatWindowBounds = new Rectangle() { Location=location, Width = 827, Height = 564 };
             explorer.Show(dockPanel, floatWindowBounds);
+            
         }
 
         /// <summary>
@@ -1039,6 +1061,7 @@ namespace WolvenKit
             ModExplorer?.Close();
             ModExplorer = null;
             ShowModExplorer();
+            ShowConsole();
             ShowOutput();
             ClearOutput();
         }
@@ -1060,6 +1083,8 @@ namespace WolvenKit
             ModExplorer = null;
             Output?.Close();
             Output = null;
+            Console?.Close();
+            Console = null;
             foreach (var window in dockPanel.FloatWindows.ToList())
                 window.Dispose();
         }
@@ -1080,6 +1105,7 @@ namespace WolvenKit
                 }
             }
             ShowModExplorer();
+            ShowConsole();
             ShowOutput();
         }
 
@@ -1225,6 +1251,7 @@ namespace WolvenKit
 
             if (doc.File.UnknownTypes.Any())
             {
+                ShowConsole();
                 ShowOutput();
 
                 output.Append(doc.FileName + ": contains " + doc.File.UnknownTypes.Count + " unknown type(s):\n");
@@ -1838,7 +1865,11 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             //Start loading if everything is set up.
             var frmload = new frmLoading();
             frmload.ShowDialog();
-            
+
+            WccHelper = MainController.Get().WccHelper;
+            Logger = MainController.Get().Logger;
+            Logger.PropertyChanged += LoggerUpdated;
+
             //Update check should be after we are all set up. It goes on in the background.
             AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
             richpresenceworker.RunWorkerAsync();
@@ -1878,7 +1909,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                         {
                             MainController.Get()?.Window?.ModExplorer?.StopMonitoringDirectory();
                             //Close all docs so they won't cause problems
-                            OpenDocuments.ForEach(x => x.Close());
+                            OpenDocuments.ToList().ForEach(x => x.Close());
                             //Move the files directory
                             Directory.Move(oldmod.ProjectDirectory, Path.Combine(Path.GetDirectoryName(oldmod.ProjectDirectory), dlg.Mod.Name));
                             //Delete the old directory
@@ -1888,9 +1919,9 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                             if (File.Exists(oldmod.FileName))
                                 File.Delete(oldmod.FileName);
                         }
-                        catch (System.IO.IOException)
+                        catch (System.IO.IOException ex)
                         {
-                            MessageBox.Show("Sorry but a folder/mod already exists with that name.","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                            MessageBox.Show("Please check that you don't have Windows Explorer open at the old mod's path and that no folder/mod with that name already exists.", "Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
                             return;
                         }
                     }
@@ -2244,6 +2275,11 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             Close();
         }
 
+        private void consoleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowConsole();
+        }
+
         private void menuStrip1_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -2283,6 +2319,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             if (packsettings.ShowDialog() == DialogResult.OK)
             {
                 btPack.Enabled = false;
+                ShowConsole();
                 ShowOutput();
                 ClearOutput();
                 saveAllFiles();

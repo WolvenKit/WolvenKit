@@ -101,6 +101,7 @@
     <Compile Include="Services\ILoggerService.cs" />
     <Compile Include="Services\LoggerService.cs" />
     <Compile Include="Services\LoggerTypes.cs" />
+    <Compile Include="W3Mod.cs" />
     <Compile Include="Wcc\enums.cs" />
     <Compile Include="Wcc\REDAttributes.cs" />
     <Compile Include="Wcc\wcc_command.cs" />

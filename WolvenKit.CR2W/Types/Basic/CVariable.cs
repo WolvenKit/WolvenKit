@@ -17,6 +17,7 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public abstract class CVariable : IEditableVariable
     {
+        [NonSerialized]
         public CR2WFile cr2w;
 
         public CVariable(CR2WFile cr2w)
@@ -63,6 +64,8 @@ namespace WolvenKit.CR2W.Types
 
         //[DataMember(EmitDefaultValue = false)]
         public string Type { get; set; }
+
+
 
         public virtual Control GetEditor()
         {

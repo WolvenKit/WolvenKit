@@ -150,6 +150,9 @@
     <Reference Include="CircularProgressBar, Version=2.5.6403.13419, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CircularProgressBar.2.5.6403.13419\lib\net35-client\CircularProgressBar.dll</HintPath>
     </Reference>
+    <Reference Include="CommandLine, Version=2.7.82.0, Culture=neutral, PublicKeyToken=5a870481e358d379, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommandLineParser.2.7.82\lib\net461\CommandLine.dll</HintPath>
+    </Reference>
     <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
       <HintPath>..\packages\CyotekImageBox.1.3.0-Alpha1\lib\net20\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
     </Reference>
@@ -352,6 +355,7 @@
     <Compile Include="Extensions\CustomFloatWindow.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="FlowTreeEditors\LinkEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -411,6 +415,12 @@
     </Compile>
     <Compile Include="Forms\frmMusicPlayer.Designer.cs">
       <DependentUpon>frmMusicPlayer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmConsole.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmConsole.Designer.cs">
+      <DependentUpon>frmConsole.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmScriptEditor.cs">
       <SubType>Form</SubType>
@@ -636,7 +646,6 @@
       <DependentUpon>frmSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="MainController.cs" />
-    <Compile Include="W3Mod.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestFileOpenArgs.cs" />
@@ -716,6 +725,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmMusicPlayer.resx">
       <DependentUpon>frmMusicPlayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmConsole.resx">
+      <DependentUpon>frmConsole.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmOutput.resx">
       <DependentUpon>frmOutput.cs</DependentUpon>
@@ -899,6 +911,7 @@
     <Content Include="Resources\Clock.ico" />
     <Content Include="Resources\Clock.png" />
     <Content Include="Resources\close.png" />
+    <Content Include="Resources\Console_16x.png" />
     <Content Include="Resources\DownButton.png" />
     <Content Include="Resources\ExpandIcon.png" />
     <None Include="Resources\Refresh_16x.png" />
@@ -906,6 +919,7 @@
     <Content Include="Resources\maximize.jpg" />
     <Content Include="Resources\maximize.png" />
     <Content Include="Resources\minimize.png" />
+    <Content Include="Resources\PlayStep_16x.png" />
     <Content Include="Resources\UpButton.png" />
     <Content Include="Resources\XToCloseButton.png" />
     <Content Include="wolven_kit_icon.ico" />
@@ -1360,7 +1374,7 @@
     </PublishFile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Utils\" />
+    <Folder Include="Model\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
@@ -1381,4 +1395,9 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Target Name="AfterBuild">
+    <ItemGroup>
+      <MoveToLibFolder Include="$(OutputPath)*.dll ; $(OutputPath)*.pdb ; $(OutputPath)*.xml" />
+    </ItemGroup>
+  </Target>
 </Project>

@@ -47,7 +47,7 @@ namespace WolvenKit
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                System.Console.WriteLine(e);
             }
         }
 

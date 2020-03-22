@@ -1,13 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
-using WolvenKit.Bundles;
-using WolvenKit.Cache;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Editors;
-using WolvenKit.CR2W.Types;
-using WolvenKit.W3Strings;
-using WolvenKit.Common;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Collections.Generic;
@@ -16,12 +9,20 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using WolvenKit.Mod;
 using WeifenLuo.WinFormsUI.Docking;
-using WolvenKit.Common.Services;
 
 namespace WolvenKit
 {
+    using Bundles;
+    using Cache;
+    using CR2W;
+    using CR2W.Editors;
+    using CR2W.Types;
+    using W3Strings;
+    using Common;
+    using Common.Services;
+    using WolvenKit.Common.Wcc;
+
     public enum EColorThemes
     {
         VS2015Light = 0,
@@ -35,6 +36,9 @@ namespace WolvenKit
         public Configuration Configuration { get; private set; }
         public frmMain Window { get; private set; }
         public W3Mod ActiveMod { get; set; }
+
+        public WccHelper WccHelper { get; set; }
+        public LoggerService Logger { get; set; }
 
         public const string ManagerCacheDir = "ManagerCache";
         public string VLCLibDir = "C:\\Program Files\\VideoLAN\\VLC";
@@ -96,6 +100,9 @@ namespace WolvenKit
 
         //Public getters
         public W3StringManager W3StringManager => w3StringManager;
+
+      
+
         public BundleManager BundleManager => bundleManager;
         public BundleManager ModBundleManager => modbundleManager;
         public SoundManager SoundManager => soundManager;
@@ -149,6 +156,11 @@ namespace WolvenKit
         public string GetLocalizedString(uint val)
         {
             return W3StringManager.GetString(val);
+        }
+
+        internal void UpdateWccHelper(string wccLite)
+        {
+            WccHelper.UpdatePath(wccLite);
         }
 
         public void CreateVariableEditor(CVariable editvar, EVariableEditorAction action)
@@ -407,12 +419,15 @@ namespace WolvenKit
                 #endregion
                 loadStatus = "Loaded";
 
+                Logger = new LoggerService();
+                WccHelper = new WccHelper(MainController.Get().Configuration.WccLite, Logger);
+
                 mainController.Loaded = true;
             }
             catch (Exception e)
             {
                 mainController.Loaded = false;
-                Console.WriteLine(e.Message);
+                System.Console.WriteLine(e.Message);
             }
         }
 

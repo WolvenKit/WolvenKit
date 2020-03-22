@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace WolvenKit
 {
-    partial class frmOutput
+    partial class frmConsole
     {
         /// <summary>
         /// Required designer variable.
@@ -32,7 +32,7 @@ namespace WolvenKit
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmOutput));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmConsole));
             this.txOutput = new System.Windows.Forms.RichTextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -84,7 +84,7 @@ namespace WolvenKit
             this.clearToolStripMenuItem.Text = "Clear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
-            // frmOutput
+            // frmConsole
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -92,8 +92,8 @@ namespace WolvenKit
             this.Controls.Add(this.txOutput);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "frmOutput";
-            this.Text = "Output";
+            this.Name = "frmConsole";
+            this.Text = "Console";
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
