@@ -28,14 +28,7 @@ namespace WolvenKit.CR2W.Types
 
             // Testing area. Put your CVectors which don't work fully yet here.
 #if DEBUG
-            // *.w2p
-            //Register("CDecalSpawner", new CDecalSpawner(null));
-            //Register("SSeedKeyValue", new SSeedKeyValue(null));
-            //Register("SDynamicDecalMaterialInfo", new SDynamicDecalMaterialInfo(null)); 
-            //Register("SParticleEmitterLODLevel", new SParticleEmitterLODLevel(null));
-            //Register("EmitterDelaySettings", new EmitterDelaySettings(null));
-            //Register("EmitterDurationSettings", new EmitterDurationSettings(null));
-            //Register("CParticleSystem", new CParticleSystem(null)); 
+            Register("CFont", new CFont(null));
 #endif
 
             #region Basic Types
