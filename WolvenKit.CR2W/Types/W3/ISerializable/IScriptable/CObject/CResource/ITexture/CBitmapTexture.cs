@@ -1,31 +1,52 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization;
 using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
 
-    [DataContract(Namespace = "")]
     public class CBitmapTexture : CVector
     {
-        public CByteArray Image;
+        public CBytes Image;
+        public CUInt32 unk;
+        public CBufferUInt32<CVector3<CUInt32>> mips;
+        public CUInt32 filesize;
+        public CUInt32 unk2;
 
         public CBitmapTexture(CR2WFile cr2w) : base(cr2w)
         {
-            Image = new CByteArray(cr2w) {Name = "Image"};
+
+            unk = new CUInt32(cr2w) { Name = "unk" };
+            mips = new CBufferUInt32<CVector3<CUInt32>>(cr2w, _ => new CVector3<CUInt32>(_, x => new CUInt32(x))) { Name = "mips" };
+            filesize = new CUInt32(cr2w) { Name = "filesize" };
+            unk2 = new CUInt32(cr2w) { Name = "unk2" };
+
+            Image = new CBytes(cr2w) { Name = "Image" };
         }
 
         public override void Read(BinaryReader file, uint size)
         {
             base.Read(file, size);
-            Image.Bytes = file.ReadBytes((int)(file.BaseStream.Length - file.BaseStream.Position));
+
+            unk.Read(file, 4);
+            mips.Read(file, size);
+            filesize.Read(file, 4);
+            unk2.Read(file, 4);
+
+
+            Image.Bytes = file.ReadBytes((int)filesize.val);
         }
 
         public override void Write(BinaryWriter file)
         {
             base.Write(file);
-            file.Write(Image.Bytes);
+
+            unk.Write(file);
+            mips.Write(file);
+            filesize.Write(file);
+            unk2.Write(file);
+
+            Image.Write(file);
         }
 
         public override CVariable SetValue(object val)
@@ -40,14 +61,25 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CBitmapTexture) base.Copy(context);
-            var.Image = (CByteArray) Image.Copy(context);
+            var var = (CBitmapTexture)base.Copy(context);
+            var.unk = (CUInt32)unk.Copy(context);
+            var.mips = (CBufferUInt32<CVector3<CUInt32>>)mips.Copy(context);
+            var.filesize = (CUInt32)filesize.Copy(context);
+            var.unk2 = (CUInt32)unk2.Copy(context);
+            var.Image = (CBytes)Image.Copy(context);
             return var;
         }
 
         public override List<IEditableVariable> GetEditableVariables()
         {
-            var list = new List<IEditableVariable>(variables) {Image};
+            var list = new List<IEditableVariable>(variables)
+            {
+                unk,
+                mips,
+                filesize,
+                unk2,
+                Image
+            };
             return list;
         }
     }

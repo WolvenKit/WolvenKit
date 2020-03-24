@@ -15,6 +15,7 @@ namespace WolvenKit
         public frmChunkFlowDiagram flowDiagram;
         public frmJournalEditor JournalEditor;
         public frmImagePreview ImageViewer;
+        public frmTextureFile TextureFile;
         public Render.frmRender RenderViewer;
         private CR2WFile file;
 
@@ -82,6 +83,11 @@ namespace WolvenKit
                 if (ImageViewer != null && !ImageViewer.IsDisposed)
                 {
                     ImageViewer.File = file;
+                }
+
+                if (TextureFile != null && !TextureFile.IsDisposed)
+                {
+                    TextureFile.File = file;
                 }
 
                 if (RenderViewer != null && !RenderViewer.IsDisposed)
