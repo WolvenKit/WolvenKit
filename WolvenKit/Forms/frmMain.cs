@@ -701,7 +701,7 @@ namespace WolvenKit
         {
             var dockedImage = new frmTextureFile();
             dockedImage.Show(dockPanel, DockState.Document);
-            dockedImage.Text = "";// Path.GetFileName(path);
+            dockedImage.Text = Path.GetFileName(path);
             dockedImage.LoadImage(path);
         }
 
