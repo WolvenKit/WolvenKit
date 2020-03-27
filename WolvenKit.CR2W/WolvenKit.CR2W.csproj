@@ -134,6 +134,7 @@
     <Compile Include="FNV1A\FNV1A64HashAlgorithm.cs" />
     <Compile Include="Types\Basic\CByteArray2.cs" />
     <Compile Include="Types\Basic\CMatrix3x3.cs" />
+    <Compile Include="Types\Basic\CVector3.cs" />
     <Compile Include="Types\Basic\IdHandle.cs" />
     <Compile Include="Types\Basic\EntityHandle.cs" />
     <Compile Include="Types\Basic\SCurveData.cs" />

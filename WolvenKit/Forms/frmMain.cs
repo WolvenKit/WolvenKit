@@ -1219,13 +1219,20 @@ namespace WolvenKit
                     {
                         if (bool.Parse(renderW2meshToolStripMenuItem.Tag.ToString()))
                         {
-                            doc.RenderViewer = new Render.frmRender
+                            try
                             {
-                                LoadDocument = LoadDocumentAndGetFile,
-                                MeshFile = doc.File,
-                                DockAreas = DockAreas.Document
-                            };
-                            doc.RenderViewer.Show(doc.FormPanel, DockState.Document);
+                                doc.RenderViewer = new Render.frmRender
+                                {
+                                    LoadDocument = LoadDocumentAndGetFile,
+                                    MeshFile = doc.File,
+                                    DockAreas = DockAreas.Document
+                                };
+                                doc.RenderViewer.Show(doc.FormPanel, DockState.Document);
+                            }
+                            catch (Exception ex)
+                            {
+                                AddOutput(ex.ToString());
+                            }
                         }
                         break;
                     }

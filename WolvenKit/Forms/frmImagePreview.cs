@@ -27,7 +27,7 @@ namespace WolvenKit
 
         private static Bitmap GetImage(CR2WFile file)
         {
-            return file.chunks[0].Type == "CBitmapTexture" ? ImageUtility.Xbm2Dds(file.chunks[0]) : null;
+            return file.chunks[0].Type == "CBitmapTexture" ? ImageUtility.Xbm2Bitmap(file.chunks[0]) : null;
         }
 
         private void copyImageToolStripMenuItem_Click(object sender, EventArgs e)
