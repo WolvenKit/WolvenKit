@@ -75,7 +75,12 @@ namespace SharpPresence
 
         public static void Initialize(string appID, EventHandlers handlers)
         {
-            Discord_Initialize(appID, ref handlers, 1, String.Empty);
+            try
+            {
+                Discord_Initialize(appID, ref handlers, 1, String.Empty);
+            }
+            catch
+            { }
         }
 
         //--------------------------------------------------------------------------------
@@ -85,9 +90,14 @@ namespace SharpPresence
 
         public static void UpdatePresence(RichPresence presence)
         {
-            IntPtr ptrPresence = Marshal.AllocHGlobal(Marshal.SizeOf(presence));
-            Marshal.StructureToPtr(presence, ptrPresence, false);
-            Discord_UpdatePresence(ptrPresence);
+            try
+            {
+                IntPtr ptrPresence = Marshal.AllocHGlobal(Marshal.SizeOf(presence));
+                Marshal.StructureToPtr(presence, ptrPresence, false);
+                Discord_UpdatePresence(ptrPresence);
+            }
+            catch 
+            { }
         }
 
         //--------------------------------------------------------------------------------

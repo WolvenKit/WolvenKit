@@ -22,6 +22,8 @@ namespace WolvenKit
     using Common;
     using Common.Services;
     using WolvenKit.Common.Wcc;
+    using Render;
+    using System.Security.RightsManagement;
 
     public enum EColorThemes
     {
@@ -38,6 +40,7 @@ namespace WolvenKit
         public W3Mod ActiveMod { get; set; }
 
         public WccHelper WccHelper { get; set; }
+        public RenderHelper renderHelper { get; set; }
         public LoggerService Logger { get; set; }
 
         public const string ManagerCacheDir = "ManagerCache";

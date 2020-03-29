@@ -9,13 +9,13 @@ using System.Linq;
 
 namespace WolvenKit.Render
 {
-    public class Mesh
+    public class WKMesh // renamed to not mess with Irrlicht Mesh
     {
         public CommonData CData { get; set; }
 
         private List<Vector3Df> bonePositions = new List<Vector3Df>();
 
-        public Mesh(CommonData cdata)
+        public WKMesh(CommonData cdata)
         {
             CData = cdata;
         }
@@ -315,9 +315,9 @@ namespace WolvenKit.Render
                         }
 
                         MeshBuffer meshBuff = MeshBuffer.Create(VertexType.Standard, IndexType._16Bit);
-                        CData.staticMesh.AddMeshBuffer(meshBuff);
-                        meshBuff.Append(vertex3DCoords, indices);
+                        meshBuff.Append(vertex3DCoords.ToArray(), indices.ToArray());
                         meshBuff.RecalculateBoundingBox();
+                        CData.staticMesh.AddMeshBuffer(meshBuff);
                         meshBuff.Drop();
                     }
                 }

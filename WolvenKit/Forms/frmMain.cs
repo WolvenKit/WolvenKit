@@ -1225,7 +1225,8 @@ namespace WolvenKit
                                 {
                                     LoadDocument = LoadDocumentAndGetFile,
                                     MeshFile = doc.File,
-                                    DockAreas = DockAreas.Document
+                                    DockAreas = DockAreas.Document,
+                                    renderHelper = new Render.RenderHelper(MainController.Get().ActiveMod, MainController.Get().Logger)
                                 };
                                 doc.RenderViewer.Show(doc.FormPanel, DockState.Document);
                             }
