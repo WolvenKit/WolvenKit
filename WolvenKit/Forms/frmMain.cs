@@ -1225,7 +1225,8 @@ namespace WolvenKit
                                 {
                                     LoadDocument = LoadDocumentAndGetFile,
                                     MeshFile = doc.File,
-                                    DockAreas = DockAreas.Document
+                                    DockAreas = DockAreas.Document,
+                                    renderHelper = new Render.RenderHelper(MainController.Get().ActiveMod, MainController.Get().Logger)
                                 };
                                 doc.RenderViewer.Show(doc.FormPanel, DockState.Document);
                             }
@@ -2002,6 +2003,11 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
         private void OutputToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowOutput();
+        }
+
+        private void consoleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowConsole();
         }
 
         private void WitcherScriptToolStripMenuItem_Click(object sender, EventArgs e)

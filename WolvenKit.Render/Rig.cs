@@ -71,7 +71,7 @@ namespace WolvenKit.Render
 
                         Matrix rotMat = new Matrix();
                         Vector3Df euler = orientation.ToEuler();
-                        // chechNaNErrors(euler);
+                        checkNaNErrors(euler);
 
                         rotMat.SetRotationRadians(euler);
 
@@ -87,6 +87,20 @@ namespace WolvenKit.Render
                     }
                 }
             }
+        }
+
+        // sometimes toEuler give NaN numbers
+        private void checkNaNErrors(Vector3Df vector3)
+        {
+            if (float.IsNaN(vector3.X) || float.IsNaN(vector3.X))
+                vector3.X = 0.0f;
+
+            if (float.IsNaN(vector3.Y) || float.IsNaN(vector3.Y))
+                vector3.Y = 0.0f;
+
+            if (float.IsNaN(vector3.Z) || float.IsNaN(vector3.Z))
+                vector3.Z = 0.0f;
+
         }
 
         /// <summary>

@@ -145,8 +145,8 @@ namespace WolvenKit.Render
                     new Recti(0, this.ClientSize.Height - 20, 100, this.ClientSize.Height), true, true, null, 1, true);
                 middletext = gui.AddStaticText("Click to enable mouselook and move with WASD", 
                     new Recti(ClientSize.Width / 2 - 100, this.ClientSize.Height /2, ClientSize.Width / 2 + 100, this.ClientSize.Height / 2 + 30), true, true, null, 1, true);
-                middletext.OverrideColor = IrrlichtLime.Video.Color.OpaqueWhite;
-                middletext.BackgroundColor = IrrlichtLime.Video.Color.OpaqueBlack;
+                middletext.OverrideColor = IrrlichtLime.Video.Color.SolidWhite;
+                middletext.BackgroundColor = IrrlichtLime.Video.Color.SolidBlack;
                 var irrTimer = device.Timer;
                 var then = 0;
                 var then30 = 0;
@@ -283,8 +283,8 @@ namespace WolvenKit.Render
                     catchmouse = false;
                     middletext = gui.AddStaticText("Click to enable mouselook and move with WASD",
                     new Recti(ClientSize.Width / 2 - 100, this.ClientSize.Height / 2, ClientSize.Width / 2 + 100, this.ClientSize.Height / 2 + 30), true, true, null, 1, true);
-                    middletext.OverrideColor = IrrlichtLime.Video.Color.OpaqueWhite;
-                    middletext.BackgroundColor = IrrlichtLime.Video.Color.OpaqueBlack;
+                    middletext.OverrideColor = IrrlichtLime.Video.Color.SolidWhite;
+                    middletext.BackgroundColor = IrrlichtLime.Video.Color.SolidBlack;
                     break;
                 }
             }
