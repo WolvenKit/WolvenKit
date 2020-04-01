@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Common.Services;
 using WolvenKit.Services;
+using WolvenKit.Extensions;
 
 namespace WolvenKit
 {
@@ -74,18 +75,15 @@ namespace WolvenKit
             this.txOutput.BackColor = MainController.Get().GetTheme().ColorPalette.ToolWindowTabSelectedInactive.Background;
             this.txOutput.ForeColor = MainController.Get().GetTheme().ColorPalette.CommandBarMenuDefault.Text;
         }
-    }
 
-    public static class RichTextBoxExtensions
-    {
-        public static void AppendText(this RichTextBox box, string text, Color color)
+        private void txOutput_KeyDown(object sender, KeyEventArgs e)
         {
-            box.SelectionStart = box.TextLength;
-            box.SelectionLength = 0;
+            if (e.KeyCode == Keys.Enter)
+            {
 
-            box.SelectionColor = color;
-            box.AppendText("["+ DateTime.Now.ToString("G") + "]: " + text);
-            box.SelectionColor = box.ForeColor;
+            }
         }
     }
+
+    
 }

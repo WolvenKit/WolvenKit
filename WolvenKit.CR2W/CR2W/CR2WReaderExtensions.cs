@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using WolvenKit.CR2W.Types;
 
@@ -26,7 +27,7 @@ namespace WolvenKit.CR2W
                 var sb = new StringBuilder();
                 while (true)
                 {
-                    var c = (char) file.ReadByte();
+                    var c = (char)file.ReadByte();
                     if (c == 0)
                         break;
                     sb.Append(c);
@@ -42,7 +43,7 @@ namespace WolvenKit.CR2W
             {
                 file.Write(Encoding.Default.GetBytes(str));
             }
-            file.Write((byte) 0);
+            file.Write((byte)0);
         }
 
         public static void AddUnique(this Dictionary<string, uint> dic, string str, uint val)
@@ -87,12 +88,13 @@ namespace WolvenKit.CR2W
         {
             if (arr.data is CVector)
             {
-                var vdata = (CVector) arr.data;
+                var vdata = (CVector)arr.data;
+                var variables = vdata.GetEditableVariables().ToList();
 
-                for (var i = 0; i < vdata.variables.Count; i++)
+                for (var i = 0; i < variables.Count; i++)
                 {
-                    if (vdata.variables[i].Name == name)
-                        return vdata.variables[i];
+                    if (variables[i].Name == name)
+                        return (CVariable)variables[i];
                 }
             }
 
@@ -103,7 +105,7 @@ namespace WolvenKit.CR2W
         {
             if (arr.data is CVector)
             {
-                var vdata = (CVector) arr.data;
+                var vdata = (CVector)arr.data;
 
                 for (var i = 0; i < vdata.variables.Count; i++)
                 {
@@ -129,44 +131,44 @@ namespace WolvenKit.CR2W
 
         public static void CreateConnection(this CR2WExportWrapper chunk, string in_name, string out_name, CR2WExportWrapper out_target)
         {
-            var cachedConnections = (CArray) chunk.GetVariableByName("cachedConnections");
+            var cachedConnections = (CArray)chunk.GetVariableByName("cachedConnections");
 
             if (cachedConnections == null)
             {
                 cachedConnections =
-                    (CArray) chunk.cr2w.CreateVariable(chunk, "array:2,0,SCachedConnections", "cachedConnections");
+                    (CArray)chunk.cr2w.CreateVariable(chunk, "array:2,0,SCachedConnections", "cachedConnections");
             }
 
             {
                 // connection 1
 
-                var connection = (CVector) cachedConnections.array.Find(delegate(CVariable item)
+                var connection = (CVector)cachedConnections.array.Find(delegate (CVariable item)
                 {
-                    var vec = (CVector) item;
+                    var vec = (CVector)item;
                     if (vec == null)
                         return false;
 
-                    var socketId = (CName) vec.GetVariableByName("socketId");
+                    var socketId = (CName)vec.GetVariableByName("socketId");
                     return socketId != null && socketId.Value == in_name;
                 });
 
                 if (connection == null)
                 {
                     connection = chunk.cr2w.CreateVector(cachedConnections);
-                    ((CName) chunk.cr2w.CreateVariable(connection, "CName", "socketId")).Value = in_name;
+                    ((CName)chunk.cr2w.CreateVariable(connection, "CName", "socketId")).Value = in_name;
                 }
 
 
-                var blocks = (CArray) connection.GetVariableByName("blocks");
+                var blocks = (CArray)connection.GetVariableByName("blocks");
 
                 if (blocks == null)
                 {
-                    blocks = (CArray) chunk.cr2w.CreateVariable(connection, "array:2,0,SBlockDesc", "blocks");
+                    blocks = (CArray)chunk.cr2w.CreateVariable(connection, "array:2,0,SBlockDesc", "blocks");
                 }
 
                 var block = chunk.cr2w.CreateVector(blocks);
                 chunk.cr2w.CreatePtr(block, "ptr:CQuestGraphBlock", out_target, "ock");
-                ((CName) chunk.cr2w.CreateVariable(block, "CName", "putName")).Value = out_name;
+                ((CName)chunk.cr2w.CreateVariable(block, "CName", "putName")).Value = out_name;
             }
         }
 

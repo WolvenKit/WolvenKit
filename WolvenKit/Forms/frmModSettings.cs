@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
-using WolvenKit.Mod;
+using WolvenKit.Common;
 
 namespace WolvenKit
 {

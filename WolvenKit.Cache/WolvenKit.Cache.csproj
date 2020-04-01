@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WolvenKit.Cache</RootNamespace>
     <AssemblyName>WolvenKit.Cache</AssemblyName>
@@ -118,7 +118,6 @@
     <Compile Include="DDS\DDS_Metadata.cs" />
     <Compile Include="DDS\DDS_PIXELFORMAT.cs" />
     <Compile Include="DDS\DDS_ENUMS.cs" />
-    <Compile Include="Test_Collision.cs" />
     <Compile Include="CollisionCache\CollisionCacheItem.cs" />
     <Compile Include="CollisionCache\Collision_Cache.cs" />
     <Compile Include="DDS\DDSImageParser.cs" />

@@ -31,6 +31,8 @@ namespace WolvenKit.CR2W.Types
             Register("CFont", new CFont(null));
 #endif
 
+            Register("CParticleEmitter", new CParticleEmitter(null));
+
             #region Basic Types
             Register("CName", new CName(null));
 
@@ -89,10 +91,6 @@ namespace WolvenKit.CR2W.Types
             #endregion
 
             #region Utility
-
-            Register("CBufferType2", new CEntityBufferType2(null));
-            Register("CBufferType2Item", new CVariableWrapper(null));
-
             Register("CIndexed2dArray", new CIndexed2dArray(null));
 
             Register("SharedDataBuffer", new CByteArray(null));
@@ -138,6 +136,7 @@ namespace WolvenKit.CR2W.Types
             Register("CRagdoll", new CRagdoll(null));
 
             Register("CSectorData", new CSectorData(null));
+            Register("SBlockData", new SBlockData(null));
             Register("CClipMap", new CClipMap(null));
             Register("CGameWorld", new CGameWorld(null));
 
@@ -176,6 +175,9 @@ namespace WolvenKit.CR2W.Types
 
             Register("CParticleEmitter", new CParticleEmitter(null));
 
+
+
+            
 
             // Behavior
             Register("CBehaviorGraph", new CBehaviorGraph(null));
@@ -429,6 +431,7 @@ namespace WolvenKit.CR2W.Types
             Register("CEntityTemplate", new CEntityTemplate(null));
             Register("CCharacterEntityTemplate", new CEntityTemplate(null));
             Register("CEntity", new CEntity(null));
+            Register("CEntityBufferType2", new CEntityBufferType2(null));
 
             // *.w2ent decendants of CEntity in RTTI and ws to parse components array
             var CEntities = new[]
@@ -793,17 +796,6 @@ namespace WolvenKit.CR2W.Types
 
             var vectors = new[]
             {
-                "SGameplayAdditiveAnimation",
-                "SBehaviorComboAnimation",
-                "SBehaviorComboDistance",
-                "CBehaviorConstraintNodeFloorIK",
-                "CBehaviorConstraintNodeFloorIKBipedLong",
-                "CBehaviorConstraintNodeFloorIKHandsOnly",
-                "CBehaviorConstraintNodeFloorIKQuadruped",
-                "CBehaviorConstraintNodeFloorIKSixLegs",
-                "STwoBonesIKSolverBoneData",
-                "#CEnvironmentDefinition",
-                "@SItem",
                 "ApertureDofParams",
                 "ARDebugCameraDist",
                 "ARDebugCameraRot",
@@ -1745,7 +1737,11 @@ namespace WolvenKit.CR2W.Types
                 "CBehaviorConstraintApplyOffset",
                 "CBehaviorConstraintCalcAdSetOffsetForPelvis",
                 "CBehaviorConstraintMoveHandsByOffset",
-                
+                "CBehaviorConstraintNodeFloorIK",
+                "CBehaviorConstraintNodeFloorIKBipedLong",
+                "CBehaviorConstraintNodeFloorIKHandsOnly",
+                "CBehaviorConstraintNodeFloorIKQuadruped",
+                "CBehaviorConstraintNodeFloorIKSixLegs",
                 "CBehaviorConstraintPullReinsToHands",
                 "CBehaviorConstraintPullStirrupsToLegs",
                 "CBehaviorConstraintPutLegsIntoStirrups",
@@ -3454,12 +3450,10 @@ namespace WolvenKit.CR2W.Types
                 "CxplorationTransitionTurnToJump",
                 "DataBuffer",
                 "DebuffProjectile",
-                "EFactValueChangeMethod",
                 "EmitterDelaySettings",
                 "EmitterDurationSettings",
                 "EntitySlot",
                 "EP1Chandelier",
-                "EQuestPadVibrationStrength",
                 "ErrandDetailsList",
                 "EulerAngles",
                 "FakeProjectile",
@@ -3497,7 +3491,9 @@ namespace WolvenKit.CR2W.Types
                 "SAttachmentReplacements",
                 "SAxiiEffects",
                 "SBaseStat",
+                "SBehaviorComboAnimation",
                 "SBehaviorComboDirection",
+                "SBehaviorComboDistance",
                 "SBehaviorComboLevel",
                 "SBehaviorComboWay",
                 "SBehaviorConstraintNodeFloorIKCommonData",
@@ -3577,6 +3573,7 @@ namespace WolvenKit.CR2W.Types
                 "SFurWaveness",
                 "SFxOnAnimEvent",
                 "SFXSurfacePostParams",
+                "SGameplayAdditiveAnimation",
                 "SGameplayAdditiveLevel",
                 "SGlobalSpeedTreeParameters",
                 "SGuardAreaEntryGeneratorNodeParam",
@@ -3621,6 +3618,7 @@ namespace WolvenKit.CR2W.Types
                 "SpawnMultipleEntitiesPoisonProjectile",
                 "SpawnOnHorseEffector",
                 "SPetardParams",
+                "SPlaneMovementParameters",
                 "SPopupDescription",
                 "SPoseLookAtSegmentData",
                 "SPositioningFilter",
@@ -3628,6 +3626,7 @@ namespace WolvenKit.CR2W.Types
                 "SPropertyAnimation",
                 "SQuenEffects",
                 "SQuestCameraRequest",
+                "SQuestMapPinInfo",
                 "SQuestMapPinInfo",
                 "SR4LootNameProperty",
                 "SRadialDesaturation",
@@ -3674,6 +3673,7 @@ namespace WolvenKit.CR2W.Types
                 "StorySceneCameraDefinition",
                 "StorySceneDefinition",
                 "STutorialMessage",
+                "STwoBonesIKSolverBoneData",
                 "STwoBonesIKSolverData",
                 "SUITutorial",
                 "SVerticalMovementParams",
@@ -4022,8 +4022,6 @@ namespace WolvenKit.CR2W.Types
                 "W3YrdenEntity",
                 "WeaponHolster",
                 "WebLineProjectile",
-                "SQuestMapPinInfo",
-                "SPlaneMovementParameters"
             };
             foreach (string t in vectors)
             {
@@ -4032,6 +4030,7 @@ namespace WolvenKit.CR2W.Types
 
             var cnames = new[]
             {
+                "EQuestPadVibrationStrength", "EFactValueChangeMethod",
                 "EActorImmortalityMode", "EAIAttitude", "EAreaName", "ECameraPlane", "ECompareFunc",
                 "ECompareOp", "ECurveBaseType", "ECurveRelativeMode", "ECurveType", "ECurveValueType",
                 "EDoorQuestState", "EFocusModeVisibility",
@@ -4098,9 +4097,7 @@ namespace WolvenKit.CR2W.Types
             {
                 "",
                 //"CFont",
-                //"CTerrainTile",
-                //"CCameraCompressedPose",
-                "CCurve",
+                "CCameraCompressedPose",
                 //"CUmbraScene",
                 //"CUmbraTile",
             };

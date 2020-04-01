@@ -69,8 +69,9 @@ namespace WolvenKit
             if (File == null)
                 return;
 
-            isLargefile = File.chunks.Count > 500;
-            listview = isLargefile;
+            isLargefile = File.chunks.Count > 1000;
+            if (isLargefile)
+                listview = true;
 
             if (!isLargefile)
                 UpdateHelperList();

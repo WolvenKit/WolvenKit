@@ -114,9 +114,13 @@ namespace WolvenKit.CR2W
             get => _export;
             set => _export = value;
         }
+
+        [NonSerialized]
         public CR2WFile cr2w;
         public CVariable data;
+        [NonSerialized]
         public CName typeName;
+        [NonSerialized]
         public CBytes unknownBytes;
         /*public ushort typeId
         {

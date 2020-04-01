@@ -14,7 +14,7 @@ namespace WolvenKit.CR2W.Types
     {
         public List<T> elements = new List<T>();
         public Func<CR2WFile, T> elementFactory;
-        public new string Type { get => $"CCompressedBuffer<{typeof(T)}>"; }
+        public new string Type { get => $"CBufferUInt32<{typeof(T)}>"; }
 
         public CBufferUInt32(CR2WFile cr2w, Func<CR2WFile, T> elementFactory) : base(cr2w)
         {
@@ -23,15 +23,14 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Create(CR2WFile cr2w)
         {
-            return new CCompressedBuffer<T>(cr2w, elementFactory);
+            return new CBufferUInt32<T>(cr2w, elementFactory);
         }
 
         public override void Read(BinaryReader file, uint size)
         {
-            CUInt32 count = new CUInt32(cr2w);
-            count.Read(file, size);
+            var c = file.ReadUInt32();
 
-            for (int i = 0; i < count.val; i++)
+            for (int i = 0; i < c; i++)
             {
                 T element = elementFactory.Invoke(cr2w);
                 element.Name = i.ToString();

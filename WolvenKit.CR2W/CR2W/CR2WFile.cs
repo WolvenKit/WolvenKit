@@ -132,7 +132,6 @@ namespace WolvenKit.CR2W
 
             var dt = new CDateTime(m_fileheader.timeStamp);
 
-            m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
             m_tableheaders = ReadStructs<CR2WTable>(10);
             
             // read strings
@@ -170,7 +169,7 @@ namespace WolvenKit.CR2W
             // Read buffer data //block 6
             foreach (var buffer in buffers)
             {
-                buffer.ReadData(file);
+                //buffer.ReadData(file);
             }
             // Read embedded files //block 7
             foreach (var emb in embedded)
@@ -178,6 +177,22 @@ namespace WolvenKit.CR2W
                 emb.ReadData(file);
             }
             #endregion
+
+
+
+
+            //this never actually triggers
+            /*#region Read Buffer
+            file.BaseStream.Seek(m_fileheader.fileSize, SeekOrigin.Begin);
+            m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
+            byte[] bufferdata;
+            var actualbuffersize = (int)(m_fileheader.bufferSize - m_fileheader.fileSize);
+            if (actualbuffersize > 0)
+            {
+                bufferdata = new byte[actualbuffersize];
+                file.BaseStream.Read(bufferdata, 0, actualbuffersize);
+            }
+            #endregion*/
 
             m_stream = null;
         }
@@ -524,10 +539,7 @@ namespace WolvenKit.CR2W
             {
                 buffers[i].WriteData(bw);
             }
-            /*if (bufferdata != null)
-            {
-                bw.Write(bufferdata);
-            }*/
+
             m_fileheader.bufferSize = (uint) bw.BaseStream.Position;
         }
         #endregion

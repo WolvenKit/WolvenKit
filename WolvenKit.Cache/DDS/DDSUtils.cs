@@ -75,7 +75,7 @@ namespace WolvenKit.Cache.DDS
         public static (DDS_HEADER, DDS_HEADER_DXT10) GenerateHeader(DDSMetadata metadata)
         {
             var height = metadata.Height;
-            var width = metadata.Height;
+            var width = metadata.Width;
             var mipscount = metadata.Mipscount;
             var iscubemap = metadata.Iscubemap;
             var format = metadata.Format;

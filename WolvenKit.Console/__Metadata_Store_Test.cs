@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace WolvenKit.Bundles
 {
     class __Metadata_Store_Test
     {
-        [STAThread]
-        static int Main(string[] args)
+        /*static int Main(string[] args)
         {
             using (var of = new OpenFileDialog() {Filter = "Metadata files | *.store"})
             {
@@ -22,6 +20,6 @@ namespace WolvenKit.Bundles
             Console.WriteLine("Done!");
             Console.ReadLine();
             return 0;
-        }
+        }*/
     }
 }
