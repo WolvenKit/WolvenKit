@@ -40,7 +40,6 @@ namespace WolvenKit
         public W3Mod ActiveMod { get; set; }
 
         public WccHelper WccHelper { get; set; }
-        public RenderHelper renderHelper { get; set; }
         public LoggerService Logger { get; set; }
 
         public const string ManagerCacheDir = "ManagerCache";
