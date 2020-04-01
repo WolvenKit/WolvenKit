@@ -76,12 +76,14 @@ namespace WolvenKit.Render
         {
             try
             {
+                //Setup
                 IrrlichtCreationParameters irrparam = new IrrlichtCreationParameters();
                 if (irrlichtPanel.IsDisposed)
                     throw new Exception("Form closed!");
                 if (irrlichtPanel.InvokeRequired)
                     irrlichtPanel.Invoke(new MethodInvoker(delegate { irrparam.WindowID = irrlichtPanel.Handle; }));
                 irrparam.DriverType = DriverType.Direct3D9;
+                irrparam.DriverType = DriverType.OpenGL;
                 irrparam.BitsPerPixel = 16;
 
                 device = IrrlichtDevice.CreateDevice(irrparam);
@@ -92,8 +94,15 @@ namespace WolvenKit.Render
                 smgr = device.SceneManager;
                 gui = device.GUIEnvironment;
 
+                var cam = smgr.AddCameraSceneNode(null);
+                cam.TargetAndRotationBinding = true;
+                cam.Position = new Vector3Df(-100.0f, 500.0f, 100.0f);
+                cam.Target = new Vector3Df(0.0f);
+                cam.FarValue = 42000.0f;
+
                 device.CursorControl.Visible = false;
 
+                //Terrain
                 heightmap = driver.CreateImage("Terrain\\basemap.bmp");
 
                 terrain = smgr.AddTerrainSceneNode(
@@ -113,12 +122,22 @@ namespace WolvenKit.Render
                 arrow.Scale = new Vector3Df(100.0f);
                 arrow.Rotation = new Vector3Df(0.0f, 0.0f, 180.0f);
 
-                var cam = smgr.AddCameraSceneNode();
-                cam.TargetAndRotationBinding = true;
-                cam.Position = new Vector3Df(-100.0f, 500.0f, 100.0f);
-                cam.Target = new Vector3Df(0.0f);
-                cam.FarValue = 10000;
-                
+                //Skybox and skydome
+                driver.SetTextureCreationFlag(TextureCreationFlag.CreateMipMaps, false);
+                /*var box = smgr.AddSkyBoxSceneNode(
+                    ("Terrain\\irrlicht2_up.jpg"),
+                    ("Terrain\\irrlicht2_dn.jpg"),
+                    ("Terrain\\irrlicht2_lf.jpg"),
+                    ("Terrain\\irrlicht2_rt.jpg"),
+                    ("Terrain\\irrlicht2_ft.jpg"),
+                    ("Terrain\\irrlicht2_bk.jpg"));
+                box.Visible = true;*/
+                var dome = smgr.AddSkyDomeSceneNode(driver.GetTexture("Terrain\\skydome.jpg"), 16, 8, 0.95f, 2.0f);
+                dome.Visible = true;
+                driver.SetTextureCreationFlag(TextureCreationFlag.CreateMipMaps, true);
+
+
+
                 var irrTimer = device.Timer;
                 var then = 0;
                 var then30 = 0;
@@ -129,7 +148,7 @@ namespace WolvenKit.Render
                 uint dt = 0;
                 while (device.Run())
                 {
-                    driver.BeginScene(true, true, new IrrlichtLime.Video.Color(255, 255, 255));
+                    driver.BeginScene(ClearBufferFlag.All);
 
 
                     // move the arrow to the nearest vertex ...
@@ -139,6 +158,7 @@ namespace WolvenKit.Render
                     Triangle3Df Tri;
                     var curr = device.CursorControl.RelativePosition;
 
+                    // Threshold and periodical check so we don't spin around due to float conversions
                     if (device.Timer.Time > dt && curr.GetDistanceFrom(lastcurr) > 0.01f)
                     {
                         Line3Df cursor_ray = smgr.SceneCollisionManager
@@ -201,37 +221,7 @@ namespace WolvenKit.Render
 
         private void irrlichtPanel_MouseMove(object sender, MouseEventArgs e)
         {
-            var smooth = 10f;
-            if(smgr != null && device != null)
-            {
-                if(smgr.ActiveCamera != null)
-                {
-                    /*var rot = cam.Target.HorizontalAngle;
-
-                    var diff = device.CursorControl.RelativePosition - lastpos;
-
-                    if(diff.X > 0.1f || diff.Y > 0.1f)
-                    {
-                        Matrix mat = new Matrix(Matrix.Identity);
-                        mat.Rotation = new Vector3Df(rot.X * diff.X * smooth, rot.Y * diff.Y * smooth, 0.0f);
-                        var odir = cam.Target.Normalize();
-                        mat.TransformVector(ref odir);
-
-                        cam.Target += odir;
-
-                        lastpos = device.CursorControl.RelativePosition;
-
-                    }
-                    device.CursorControl.Position = new Vector2Di(irrlichtPanel.Location.X + irrlichtPanel.Width / 2, irrlichtPanel.Location.Y + irrlichtPanel.Height / 2);
-                    */
-                }
-
-                double ToRad(double degrees)
-                {
-                    double radians = (Math.PI / 180) * degrees;
-                    return (radians);
-                }
-            }
+            
         }
 
         private void Bithack3D_MouseWheel(object sender, MouseEventArgs e)
@@ -243,11 +233,12 @@ namespace WolvenKit.Render
         private void frmTerrain_KeyDown(object sender, KeyEventArgs e)
         {
             var cam = smgr.ActiveCamera;
-            float cameraspeed = 40f;
+            float cameraspeed = 100f;
             switch (e.KeyCode)
             {
                 case Keys.Escape:
                 {
+                    device.Close();
                     irrThread.Abort();
                     this.Close();
                     break;
