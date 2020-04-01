@@ -37,15 +37,18 @@ namespace WolvenKit.Render
 
         private Vector3Df modelPosition = new Vector3Df(0.0f);
         private Vector3Df modelAngle = new Vector3Df(270.0f, 270.0f, 0.0f);
+        GUIStaticText middletext;
 
         private bool renderStarted = false;
 
         private float scaleMul = 1;
 
+        bool catchmouse = false;
+
         public frmTerrain()
         {
             InitializeComponent();
-            Cursor.Hide();
+            //Cursor.Hide();
         }
 
         /// <summary>
@@ -136,8 +139,14 @@ namespace WolvenKit.Render
                 dome.Visible = true;
                 driver.SetTextureCreationFlag(TextureCreationFlag.CreateMipMaps, true);
 
-
-
+                var helpq = gui.AddStaticText("Press Q to disable focus!",
+                    new Recti(0, this.ClientSize.Height - 40, 100, this.ClientSize.Height), true, true, null, 1, true);
+                var helpesc = gui.AddStaticText("Press ESC to quit",
+                    new Recti(0, this.ClientSize.Height - 20, 100, this.ClientSize.Height), true, true, null, 1, true);
+                middletext = gui.AddStaticText("Click to enable mouselook and move with WASD", 
+                    new Recti(ClientSize.Width / 2 - 100, this.ClientSize.Height /2, ClientSize.Width / 2 + 100, this.ClientSize.Height / 2 + 30), true, true, null, 1, true);
+                middletext.OverrideColor = IrrlichtLime.Video.Color.OpaqueWhite;
+                middletext.BackgroundColor = IrrlichtLime.Video.Color.OpaqueBlack;
                 var irrTimer = device.Timer;
                 var then = 0;
                 var then30 = 0;
@@ -150,39 +159,41 @@ namespace WolvenKit.Render
                 {
                     driver.BeginScene(ClearBufferFlag.All);
 
-
-                    // move the arrow to the nearest vertex ...
-                    IrrlichtLime.Core.Vector2Di center = new IrrlichtLime.Core.Vector2Di(irrlichtPanel.Width/2, irrlichtPanel.Height/2);
-                    Line3Df ray = smgr.SceneCollisionManager.GetRayFromScreenCoordinates(center, cam);
-                    Vector3Df pos;
-                    Triangle3Df Tri;
-                    var curr = device.CursorControl.RelativePosition;
-
-                    // Threshold and periodical check so we don't spin around due to float conversions
-                    if (device.Timer.Time > dt && curr.GetDistanceFrom(lastcurr) > 0.01f)
+                    if (catchmouse)
                     {
-                        Line3Df cursor_ray = smgr.SceneCollisionManager
-                            .GetRayFromScreenCoordinates(new Vector2Di((int)(curr.X * irrlichtPanel.Width),(int)(curr.Y * irrlichtPanel.Height)), cam);
+                        // move the arrow to the nearest vertex ...
+                        IrrlichtLime.Core.Vector2Di center = new IrrlichtLime.Core.Vector2Di(irrlichtPanel.Width / 2, irrlichtPanel.Height / 2);
+                        Line3Df ray = smgr.SceneCollisionManager.GetRayFromScreenCoordinates(center, cam);
+                        Vector3Df pos;
+                        Triangle3Df Tri;
+                        var curr = device.CursorControl.RelativePosition;
 
-                        smgr.ActiveCamera.Target = cursor_ray.Middle;
-                        dt = device.Timer.Time + 30;
-                        lastcurr = curr;
-                        device.CursorControl.Position = center;
-                    }
+                        // Threshold and periodical check so we don't spin around due to float conversions
+                        if (device.Timer.Time > dt && curr.GetDistanceFrom(lastcurr) > 0.01f)
+                        {
+                            Line3Df cursor_ray = smgr.SceneCollisionManager
+                                .GetRayFromScreenCoordinates(new Vector2Di((int)(curr.X * irrlichtPanel.Width), (int)(curr.Y * irrlichtPanel.Height)), cam);
 
-                    if (smgr.SceneCollisionManager.GetCollisionPoint(ray, selector, out pos, out Tri, out outnode))
-                    {
-                        var scale = 32; // terrain is scaled 32X
-                        var size = 512; // heightmap is 512x512 pixels
-                        var x = (pos.X / scale);
-                        var z = (pos.Z / scale);
-                        var index = x * size + z;
+                            smgr.ActiveCamera.Target = cursor_ray.Middle;
+                            dt = device.Timer.Time + 30;
+                            lastcurr = curr;
+                            device.CursorControl.Position = center;
+                        }
 
-                        x *= scale;
-                        z *= scale;
+                        if (smgr.SceneCollisionManager.GetCollisionPoint(ray, selector, out pos, out Tri, out outnode))
+                        {
+                            var scale = 32; // terrain is scaled 32X
+                            var size = 512; // heightmap is 512x512 pixels
+                            var x = (pos.X / scale);
+                            var z = (pos.Z / scale);
+                            var index = x * size + z;
 
-                        arrow.Position = new Vector3Df(x, terrain.GetHeight(x, z) + 100, z);                        
-                    }
+                            x *= scale;
+                            z *= scale;
+
+                            arrow.Position = new Vector3Df(x, terrain.GetHeight(x, z) + 100, z);
+                        }
+                    }                   
 
                     smgr.DrawAll();
                     gui.DrawAll();
@@ -211,23 +222,9 @@ namespace WolvenKit.Render
             StartIrrThread();
         }
 
-
-
-        bool firstMouse = true;
-        float lastX;
-        float lastY;
-        double yaw;
-        double pitch;
-
         private void irrlichtPanel_MouseMove(object sender, MouseEventArgs e)
         {
             
-        }
-
-        private void Bithack3D_MouseWheel(object sender, MouseEventArgs e)
-        {
-            if (renderStarted)
-                modelPosition.X = modelPosition.X + (float)e.Delta / 1000.0f;
         }
 
         private void frmTerrain_KeyDown(object sender, KeyEventArgs e)
@@ -278,7 +275,27 @@ namespace WolvenKit.Render
                     Console.WriteLine("--------- DEBUG ---------");
                     break;
                 }
+                case Keys.Q:
+                {
+                    Console.WriteLine("[INFO] Mouse released!");
+                    device.CursorControl.Visible = true;
+                    Cursor.Show();
+                    catchmouse = false;
+                    middletext = gui.AddStaticText("Click to enable mouselook and move with WASD",
+                    new Recti(ClientSize.Width / 2 - 100, this.ClientSize.Height / 2, ClientSize.Width / 2 + 100, this.ClientSize.Height / 2 + 30), true, true, null, 1, true);
+                    middletext.OverrideColor = IrrlichtLime.Video.Color.OpaqueWhite;
+                    middletext.BackgroundColor = IrrlichtLime.Video.Color.OpaqueBlack;
+                    break;
+                }
             }
+        }
+
+        private void irrlichtPanel_Click(object sender, EventArgs e)
+        {
+            catchmouse = true;
+            Cursor.Hide();
+            middletext.Remove();
+            device.CursorControl.Visible = false;
         }
     }
 }

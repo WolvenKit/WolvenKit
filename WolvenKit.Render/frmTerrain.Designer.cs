@@ -39,6 +39,7 @@
             this.irrlichtPanel.Name = "irrlichtPanel";
             this.irrlichtPanel.Size = new System.Drawing.Size(583, 527);
             this.irrlichtPanel.TabIndex = 2;
+            this.irrlichtPanel.Click += new System.EventHandler(this.irrlichtPanel_Click);
             this.irrlichtPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.irrlichtPanel_MouseMove);
             // 
             // frmTerrain
