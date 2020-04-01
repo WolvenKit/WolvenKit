@@ -22,6 +22,8 @@ namespace WolvenKit
     using Common;
     using Common.Services;
     using WolvenKit.Common.Wcc;
+    using Render;
+    using System.Security.RightsManagement;
 
     public enum EColorThemes
     {
