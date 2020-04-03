@@ -1,0 +1,23 @@
+name: WolvenKit
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+ 
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup Nuget.exe
+      uses: warrenbuckley/Setup-Nuget@v1
+    - name: Restore packages
+      run: nuget restore WolvenKit.sln
+    - name: Setup MSBuild.exe
+      uses: warrenbuckley/Setup-MSBuild@v1
+    - name: Build with MSBuild
+      run: msbuild  WolvenKit.sln -p:Configuration=Release
