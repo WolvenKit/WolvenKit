@@ -135,6 +135,7 @@ namespace WolvenKit.Render
                     ("Terrain\\irrlicht2_ft.jpg"),
                     ("Terrain\\irrlicht2_bk.jpg"));
                 box.Visible = true;*/
+               
                 var dome = smgr.AddSkyDomeSceneNode(driver.GetTexture("Terrain\\skydome.jpg"), 16, 8, 0.95f, 2.0f);
                 dome.Visible = true;
                 driver.SetTextureCreationFlag(TextureCreationFlag.CreateMipMaps, true);
@@ -292,10 +293,13 @@ namespace WolvenKit.Render
 
         private void irrlichtPanel_Click(object sender, EventArgs e)
         {
-            catchmouse = true;
-            Cursor.Hide();
-            middletext.Remove();
-            device.CursorControl.Visible = false;
+            if(!catchmouse)
+            {
+                catchmouse = true;
+                Cursor.Hide();
+                middletext.Remove();
+                device.CursorControl.Visible = false;
+            }
         }
     }
 }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.IO.MemoryMappedFiles;
+using WolvenKit.Common;
 using WolvenKit.W3Strings;
 
 namespace WolvenKit.W3Speech
@@ -9,7 +11,7 @@ namespace WolvenKit.W3Speech
     /// <summary>
     /// Describes the items found within the w3speech format.
     /// </summary>
-    public class ItemInfo
+    public class SpeechEntry : IWitcherFile
     {
         /// <summary>
         /// ID as found in the w3speech format.
@@ -37,8 +39,9 @@ namespace WolvenKit.W3Speech
         /// </summary>
         public readonly Single duration;
 
-        public ItemInfo(LanguageSpecificID id, UInt32 id_high, UInt32 wem_offs, UInt32 wem_size, UInt32 cr2w_offs, UInt32 cr2w_size, Single duration)
+        public SpeechEntry(IWitcherArchiveType bundle, LanguageSpecificID id, UInt32 id_high, UInt32 wem_offs, UInt32 wem_size, UInt32 cr2w_offs, UInt32 cr2w_size, Single duration)
         {
+            this.Bundle = bundle;
             this.id = id;
             this.id_high = id_high;
             this.wem_offs = wem_offs;
@@ -46,6 +49,40 @@ namespace WolvenKit.W3Speech
             this.cr2w_offs = cr2w_offs;
             this.cr2w_size = cr2w_size;
             this.duration = duration;
+            this.Size = wem_size + cr2w_size;
+            this.ZSize = wem_size + cr2w_size;
+            this.Name = id.ToString() + ".cr2w_wem_pair";
+            this.PageOFfset = cr2w_offs;
+        }
+
+        public IWitcherArchiveType Bundle { get; set; }
+        public string Name { get; set; }
+        public long Size { get; set; }
+        public uint ZSize { get; set; }
+
+        public long PageOFfset { get; set; }
+
+        public string CompressionType => "None";
+
+        public void Extract(Stream output)
+        {
+            using (var file = MemoryMappedFile.CreateFromFile(Bundle.FileName, FileMode.Open))
+            {
+                using (var viewstream = file.CreateViewStream(PageOFfset, ZSize, MemoryMappedFileAccess.Read))
+                {
+                    viewstream.CopyTo(output);
+                }
+            }
+        }
+
+        public void Extract(string filename)
+        {
+            PageOFfset = cr2w_offs;
+            ZSize = cr2w_size;
+            Extract(new FileStream(Path.ChangeExtension(filename, ".cr2w"), FileMode.Create));
+            PageOFfset = wem_offs;
+            ZSize = wem_size;
+            Extract(new FileStream(Path.ChangeExtension(filename, ".wem"), FileMode.Create));
         }
 
         public override string ToString()
@@ -57,7 +94,7 @@ namespace WolvenKit.W3Speech
     /// <summary>
     /// Describes the w3speech format.
     /// </summary>
-    public class Info
+    public class W3Speech : IWitcherArchiveType
     {
         /// <summary>
         /// Usually CPSW.
@@ -74,15 +111,30 @@ namespace WolvenKit.W3Speech
         /// <summary>
         /// Information about the items.
         /// </summary>
-        public readonly IEnumerable<ItemInfo> item_infos;
+        public readonly IEnumerable<SpeechEntry> item_infos;
 
-        public Info(String id, UInt32 version, W3LanguageKey language_key, IEnumerable<ItemInfo> item_infos)
+        public W3Speech()
         {
+
+        }
+
+        public W3Speech(string name)
+        {
+            FileName = name;
+        }
+
+        public W3Speech(String filename, String id, UInt32 version, W3LanguageKey language_key, IEnumerable<SpeechEntry> item_infos)
+        {
+            this.FileName = filename;
             this.id = id;
             this.version = version;
             this.language_key = language_key;
             this.item_infos = item_infos;
         }
+
+        public string TypeName => "Speech";
+
+        public string FileName { get; set; }
 
         public override string ToString()
         {

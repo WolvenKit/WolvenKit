@@ -24,6 +24,7 @@ namespace WolvenKit
     using WolvenKit.Common.Wcc;
     using Render;
     using System.Security.RightsManagement;
+    using WolvenKit.W3Speech;
 
     public enum EColorThemes
     {
@@ -99,6 +100,7 @@ namespace WolvenKit
         private CollisionManager collisionManager;
         private TextureManager modTextureManager;
         private W3StringManager w3StringManager;
+        private SpeechManager speechManager;
 
         //Public getters
         public W3StringManager W3StringManager => w3StringManager;
@@ -112,6 +114,7 @@ namespace WolvenKit
         public TextureManager TextureManager => textureManager;
         public TextureManager ModTextureManager => modTextureManager;
         public CollisionManager CollisionManager => collisionManager;
+        public SpeechManager SpeechManager => speechManager;
 
         #endregion
 
@@ -162,6 +165,10 @@ namespace WolvenKit
 
         internal void UpdateWccHelper(string wccLite)
         {
+            if(WccHelper == null)
+            {
+                mainController.WccHelper = new WccHelper(wccLite, mainController.Logger);
+            }
             WccHelper.UpdatePath(wccLite);
         }
 
@@ -360,6 +367,45 @@ namespace WolvenKit
                             File.Delete(Path.Combine(ManagerCacheDir, "collision_cache.json"));
                         collisionManager = new CollisionManager();
                         collisionManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                    }
+                }
+                #endregion
+
+                loadStatus = "Loading speech manager!";
+                #region Load speech manager
+                if (speechManager == null)
+                {
+                    try
+                    {
+                        if (File.Exists(Path.Combine(ManagerCacheDir, "speechManager_cache.json")))
+                        {
+                            using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir, "speechManager_cache.json")))
+                            {
+                                JsonSerializer serializer = new JsonSerializer();
+                                serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                                serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+                                serializer.TypeNameHandling = TypeNameHandling.Auto;
+                                speechManager = (SpeechManager)serializer.Deserialize(file, typeof(SpeechManager));
+                            }
+                        }
+                        else
+                        {
+                            speechManager = new SpeechManager();
+                            speechManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                            File.WriteAllText(Path.Combine(ManagerCacheDir, "speechManager_cache.json"), JsonConvert.SerializeObject(collisionManager, Formatting.None, new JsonSerializerSettings()
+                            {
+                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                                TypeNameHandling = TypeNameHandling.Auto
+                            }));
+                        }
+                    }
+                    catch (System.Exception)
+                    {
+                        if (File.Exists(Path.Combine(ManagerCacheDir, "speechManager_cache.json")))
+                            File.Delete(Path.Combine(ManagerCacheDir, "speechManager_cache.json"));
+                        speechManager = new SpeechManager();
+                        speechManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
                     }
                 }
                 #endregion
