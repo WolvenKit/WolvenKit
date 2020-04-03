@@ -370,13 +370,26 @@ namespace WolvenKit.Render
             foreach (var textureFileExtension in textureFileExtensions)
             {
                 texture = driver.GetTexture(texturePath + textureFileExtension);
+                if (texture != null)
+                    return texture; ;
+
+            }
+            string dlcPath = renderHelper.getW3Mod().DlcDirectory;
+            string texturePath1 = Path.ChangeExtension(Path.GetFullPath(dlcPath + "\\Bundle\\" + handleFilename)
+                .Replace("Mod\\Bundle", "Raw\\Mod\\TextureCache")
+                .Replace("DLC\\Bundle", "Raw\\DLC\\TextureCache"), null);
+                        
+            texture = null;
+            foreach (var textureFileExtension in textureFileExtensions)
+            {
+                texture = driver.GetTexture(texturePath + textureFileExtension);
                 if (texture != null) break;
             }
             //ImageUtility.Xbm2Dds();
             if (texture == null && !suppressTextureWarning)
             {
                 suppressTextureWarning = true;
-                MessageBox.Show("Have you extracted texture files properly?" + "\n\n" + "Could not parse texture: " + texturePath, "Missing texture!");
+                MessageBox.Show("Have you extracted texture files properly?" + "\n\n" + "Could not parse texture: " + texturePath + " or " + texturePath1, "Missing texture!");
             }
             return texture;
         }
