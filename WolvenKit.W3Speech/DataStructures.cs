@@ -16,28 +16,33 @@ namespace WolvenKit.W3Speech
         /// <summary>
         /// ID as found in the w3speech format.
         /// </summary>
-        public readonly LanguageSpecificID id;
-        public readonly UInt32 id_high;
+        public LanguageSpecificID id { get; set; }
+        public UInt32 id_high { get; set; }
         /// <summary>
         /// Offset of the start of the raw wem data, not including the leading 4 bytes of size information.
         /// </summary>
-        public readonly UInt32 wem_offs;
+        public UInt32 wem_offs { get; set; }
         /// <summary>
         /// Size of the raw data, not including the leading 4 bytes and the trailing 8 bytes.
         /// </summary>
-        public readonly UInt32 wem_size;
+        public UInt32 wem_size { get; set; }
         /// <summary>
         /// Offset of the start of the raw cr2w data.
         /// </summary>
-        public readonly UInt32 cr2w_offs;
+        public UInt32 cr2w_offs { get; set; }
         /// <summary>
         /// Size of the raw data.
         /// </summary>
-        public readonly UInt32 cr2w_size;
+        public UInt32 cr2w_size { get; set; }
         /// <summary>
         /// Duration in seconds.
         /// </summary>
-        public readonly Single duration;
+        public Single duration { get; set; }
+
+        public SpeechEntry()
+        {
+
+        }
 
         public SpeechEntry(IWitcherArchiveType bundle, LanguageSpecificID id, UInt32 id_high, UInt32 wem_offs, UInt32 wem_size, UInt32 cr2w_offs, UInt32 cr2w_size, Single duration)
         {
@@ -99,19 +104,19 @@ namespace WolvenKit.W3Speech
         /// <summary>
         /// Usually CPSW.
         /// </summary>
-        public readonly String id;
+        public String id { get; set; }
         /// <summary>
         /// Usually 163 or 162.
         /// </summary>
-        public readonly UInt32 version;
+        public UInt32 version { get; set; }
         /// <summary>
         /// Language key.
         /// </summary>
-        public readonly W3LanguageKey language_key;
+        public W3LanguageKey language_key { get; set; }
         /// <summary>
         /// Information about the items.
         /// </summary>
-        public readonly IEnumerable<SpeechEntry> item_infos;
+        public IEnumerable<SpeechEntry> item_infos { get; set; }
 
         public W3Speech()
         {

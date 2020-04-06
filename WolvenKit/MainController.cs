@@ -375,38 +375,8 @@ namespace WolvenKit
                 #region Load speech manager
                 if (speechManager == null)
                 {
-                    try
-                    {
-                        if (File.Exists(Path.Combine(ManagerCacheDir, "speechManager_cache.json")))
-                        {
-                            using (StreamReader file = File.OpenText(Path.Combine(ManagerCacheDir, "speechManager_cache.json")))
-                            {
-                                JsonSerializer serializer = new JsonSerializer();
-                                serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                                serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                                serializer.TypeNameHandling = TypeNameHandling.Auto;
-                                speechManager = (SpeechManager)serializer.Deserialize(file, typeof(SpeechManager));
-                            }
-                        }
-                        else
-                        {
-                            speechManager = new SpeechManager();
-                            speechManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                            File.WriteAllText(Path.Combine(ManagerCacheDir, "speechManager_cache.json"), JsonConvert.SerializeObject(collisionManager, Formatting.None, new JsonSerializerSettings()
-                            {
-                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                                TypeNameHandling = TypeNameHandling.Auto
-                            }));
-                        }
-                    }
-                    catch (System.Exception)
-                    {
-                        if (File.Exists(Path.Combine(ManagerCacheDir, "speechManager_cache.json")))
-                            File.Delete(Path.Combine(ManagerCacheDir, "speechManager_cache.json"));
-                        speechManager = new SpeechManager();
-                        speechManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
-                    }
+                    speechManager = new SpeechManager();
+                    speechManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
                 }
                 #endregion
 
@@ -457,6 +427,7 @@ namespace WolvenKit
                     }
                 }
                 #endregion
+
                 loadStatus = "Loading mod sound manager!";
                 #region Load mod sound manager
                 if (modsoundmanager == null)
@@ -465,6 +436,7 @@ namespace WolvenKit
                     modsoundmanager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
                 }
                 #endregion
+
                 loadStatus = "Loaded";
 
                 Logger = new LoggerService();

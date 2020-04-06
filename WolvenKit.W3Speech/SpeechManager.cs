@@ -12,6 +12,7 @@ namespace WolvenKit.W3Speech
 {
     public class SpeechManager : IWitcherArchive
     {
+
         public SpeechManager()
         {
             Items = new Dictionary<string, List<IWitcherFile>>();
