@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using WolvenKit.Common;
 using WolvenKit.W3Strings;
 
 namespace WolvenKit.W3Speech
@@ -39,7 +40,7 @@ namespace WolvenKit.W3Speech
         /// <param name="br">The stream containing the w3speech format to read from.</param>
         /// <returns>All information found inside the stream.</returns>
         /// <exception cref="Exception">Something happened.</exception>
-        public static Info Decode(BinaryReader br)
+        public static W3Speech Decode(IWitcherArchiveType parent, BinaryReader br)
         {
             var str = System.Text.Encoding.Default.GetString(br.ReadBytes(4));
             var version = br.ReadUInt32();
@@ -72,11 +73,11 @@ namespace WolvenKit.W3Speech
                         position += duration_offset;
                         var duration = br.ReadSingle();
                         position += 4;
-                        return new ItemInfo(new LanguageSpecificID(t.Item1), t.Item2, t.Item3, t.Item4, t.Item5, t.Item6, duration);
+                        return new SpeechEntry(parent, new LanguageSpecificID(t.Item1), t.Item2, t.Item3, t.Item4, t.Item5, t.Item6, duration);
                     })
                     .ToList()
                     .AsReadOnly();
-            return new Info(str, version, key, item_infos);
+            return new W3Speech(parent.FileName, str, version, key, item_infos);
         }
 
         /// <summary>
@@ -113,7 +114,7 @@ namespace WolvenKit.W3Speech
                 var wave_offset = (UInt32)pos + 4;
                 UInt32 cr2w_offset = wave_offset + pair.wem_size + 8;
                 pos = cr2w_offset + pair.cr2w_size;
-                return new ItemInfo(pair.id, pair.id_high, wave_offset, pair.wem_size, cr2w_offset, pair.cr2w_size, pair.duration);
+                return new SpeechEntry(null, pair.id, pair.id_high, wave_offset, pair.wem_size, cr2w_offset, pair.cr2w_size, pair.duration);
             }).ToList();
             byte[] zeros = new byte[] { 0, 0, 0, 0 };
             itemInfos.ForEach(info =>

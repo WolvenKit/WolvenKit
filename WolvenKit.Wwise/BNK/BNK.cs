@@ -10,6 +10,12 @@ namespace WolvenKit.Wwise.BNK
     {
         public static Dictionary<byte, HashSet<object>> parameters = new Dictionary<byte, HashSet<object>>();
         public static Dictionary<uint, SoundFile> soundfiles = new Dictionary<uint, SoundFile>();
+
+        public static void Clear()
+        {
+            parameters.Clear();
+            soundfiles.Clear();
+        }
     }
 
     public class BNK

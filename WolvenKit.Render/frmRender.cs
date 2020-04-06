@@ -138,10 +138,10 @@ namespace WolvenKit.Render
 
         //private static Quaternion modelAngle = new Quaternion(new Vertex3f(), 0);
         private Vector3Df modelPosition = new Vector3Df(0.0f);
+        private Vector3Df modelAngle = new Vector3Df(270.0f, 270.0f, 0.0f);
         private Vector3Df startModelAngle = new Vector3Df(270.0f, 270.0f, 0.0f);
         //private Vector3Df startModelAngleWithAnim = new Vector3Df(180.0f, 270.0f, 0.0f);
         private Vector3Df startModelAngleWithAnim = new Vector3Df(0.0f, 0.0f, 0.0f);
-        private Vector3Df modelAngle = new Vector3Df(270.0f, 270.0f, 0.0f);
         private float scaleMul = 1;
 
         private bool modelAutorotating = true;
