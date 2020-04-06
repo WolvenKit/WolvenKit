@@ -26,7 +26,7 @@ jobs:
         choco install 7zip --y
         cd $Env:GITHUB_WORKSPACE\\WolvenKit
         cd bin
-        7z a WolvenKit ./Release/
+        7z a WolvenKit.zip ./Release/
         cd
         dir
     - name: Deploy Nightly
