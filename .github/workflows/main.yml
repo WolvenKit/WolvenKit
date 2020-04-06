@@ -29,10 +29,10 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         tag: "Latest"
-        name: "Latest - ${{ WK_VERSION }}"
-        files: ${{ GITHUB_WORKSPACE }}\\WolvenKit\\bin\\Release\\
+        name: "Latest - ${{ env.WK_VERSION }}"
+        files: ${{ env.GITHUB_WORKSPACE }}\\WolvenKit\\bin\\Release\\
         gzip: folders
         body: >
-          This is a beta release so you may encounter bugs. Please report them. This build was generated on ${{ WK_BUILD_TIME }}
+          This is a beta release so you may encounter bugs. Please report them. This build was generated on ${{ env.WK_BUILD_TIME }}
           
         
