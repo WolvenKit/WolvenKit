@@ -29,6 +29,8 @@ jobs:
         7z a WolvenKit ./Release/
     - name: Deploy Nightly
       uses: WebFreak001/deploy-nightly@v1.0.3
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/Traderain/Wolven-kit/releases/11743470/assets{?name,label}
         release_id: 11743470
