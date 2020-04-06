@@ -22,10 +22,11 @@ jobs:
     - name: Build with MSBuild
       run: msbuild  WolvenKit.sln -p:Configuration=Release
     - name: Zip Release
-      uses: TheDoctor0/zip-release@v0.3.0
-      with:
-        filename: WolvenKit.zip
-        path: .\\WolvenKit\\bin\\Release\\
+      run: |
+        choco install 7zip --y
+        cd $Env:GITHUB_WORKSPACE\\WolvenKit
+        cd bin
+        7z a WolvenKit ./Release/
     - name: Deploy Nightly
       uses: WebFreak001/deploy-nightly@v1.0.3
       with:
