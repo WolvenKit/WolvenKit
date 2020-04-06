@@ -21,18 +21,11 @@ jobs:
       uses: warrenbuckley/Setup-MSBuild@v1
     - name: Build with MSBuild
       run: msbuild  WolvenKit.sln -p:Configuration=Release
-    - name: Set enviroment for github-release
-      run: |
-        echo ::set-env name=WK_BUILD_TIME::""[UTC+2]: " + $(Get-Date).ToLongDateString() + " " + $((Get-Date).ToUniversalTime().AddHours(+2).ToLongTimeString())"
-        echo ::set-env name=WK_VERSION::"$(Get-Date -format yyyy.MM.dd)-$env:GITHUB_SHA"
-    - uses: meeDamian/github-release@2.0
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        tag: "Latest"
-        name: "Latest - ${{ env.WK_VERSION }}"
-        files: ${{ env.GITHUB_WORKSPACE }}\\WolvenKit\\bin\\Release\\
-        gzip: folders
-        body: >
-          This is a beta release so you may encounter bugs. Please report them. This build was generated on ${{ env.WK_BUILD_TIME }}
+    - name: Release
+      uses: fnkr/github-action-ghr@v1
+      env:
+        GHR_COMPRESS: zip
+        GHR_PATH: ${{ env.GITHUB_WORKSPACE }}\\WolvenKit\\bin\\Release\\
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
         
