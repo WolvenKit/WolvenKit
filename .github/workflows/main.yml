@@ -21,9 +21,11 @@ jobs:
       uses: warrenbuckley/Setup-MSBuild@v1
     - name: Build with MSBuild
       run: msbuild  WolvenKit.sln -p:Configuration=Release
-    - name: Set enviroment for github-release
-      run: |
-        7zip a WolvenKit.zip .\\WolvenKit\\bin\\Debug
+    - name: Zip Release
+      uses: TheDoctor0/zip-release@v0.3.0
+      with:
+        filename: WolvenKit.zip
+        path: .\\WolvenKit\\bin\\Release\\
     - name: Deploy Nightly
       uses: WebFreak001/deploy-nightly@v1.0.3
       with:
