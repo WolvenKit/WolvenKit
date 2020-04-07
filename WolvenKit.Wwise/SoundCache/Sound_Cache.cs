@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 using WolvenKit.Common;
 using WolvenKit.CR2W;
 using WolvenKit.Wwise;
@@ -36,7 +37,7 @@ namespace WolvenKit.Cache
         public string TypeName { get { return "SoundCache"; } }
         public string FileName { get; set; }
 
-        public static SoundBanksInfoXML info;
+        public static SoundBanksInfoXML info => new SoundBanksInfoXML("SoundCache\\soundbanksinfo.xml");
 
         /// <summary>
         /// The files packed into the original soundcache.
@@ -47,10 +48,9 @@ namespace WolvenKit.Cache
         /// Normal constructor.
         /// </summary>
         /// <param name="fileName"></param>
-        public SoundCache(string fileName, SoundBanksInfoXML banksinfo)
+        public SoundCache(string fileName)
         {
             FileName = fileName;
-            info = banksinfo;
             using (var br = new BinaryReader(new FileStream(fileName, FileMode.Open)))
                 Read(br);
         }

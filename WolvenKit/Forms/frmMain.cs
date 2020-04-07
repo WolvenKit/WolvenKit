@@ -2478,18 +2478,34 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 //Handle sound caching
                 if (packsettings.Sound)
                 {
-                    if (new DirectoryInfo(Path.Combine(ActiveMod.ModDirectory, MainController.Get().SoundManager.TypeName)).GetFiles("*.*",SearchOption.AllDirectories).Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).Any())
+                    var soundmoddir = Path.Combine(ActiveMod.ModDirectory, MainController.Get().SoundManager.TypeName);
+                    if(Directory.Exists(soundmoddir) && 
+                        new DirectoryInfo(soundmoddir)
+                        .GetFiles("*.*", SearchOption.AllDirectories)
+                        .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).Any())
                     {
-                        SoundCache.Write(new DirectoryInfo(Path.Combine(ActiveMod.ModDirectory, MainController.Get().SoundManager.TypeName)).GetFiles("*.*", SearchOption.AllDirectories).Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).ToList().Select(x => x.FullName).ToList(), Path.Combine(modpackDir, @"soundspc.cache"));
+                        SoundCache.Write(
+                            new DirectoryInfo(soundmoddir)
+                                .GetFiles("*.*", SearchOption.AllDirectories)
+                                .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk"))
+                                .ToList().Select(x => x.FullName).ToList(),
+                                Path.Combine(modpackDir, @"soundspc.cache"));
                         AddOutput("Mod soundcache generated!\n", Logtype.Important);
                     }
                     else
                     {
                         AddOutput("Mod soundcache wasn't generated!\n", Logtype.Important);
                     }
-                    if (new DirectoryInfo(Path.Combine(ActiveMod.DlcDirectory, MainController.Get().SoundManager.TypeName)).GetFiles("*.*", SearchOption.AllDirectories).Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).Any())
+                    var sounddlcdir = Path.Combine(ActiveMod.DlcDirectory, MainController.Get().SoundManager.TypeName);
+                    if (Directory.Exists(sounddlcdir) && new DirectoryInfo(sounddlcdir)
+                        .GetFiles("*.*", SearchOption.AllDirectories)
+                        .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).Any())
                     {
-                        SoundCache.Write(new DirectoryInfo(Path.Combine(ActiveMod.DlcDirectory, MainController.Get().SoundManager.TypeName)).GetFiles("*.*", SearchOption.AllDirectories).Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).ToList().Select(x => x.FullName).ToList(), Path.Combine(DlcpackDir, @"soundspc.cache"));
+                        SoundCache.Write(
+                            new DirectoryInfo(sounddlcdir)
+                                .GetFiles("*.*", SearchOption.AllDirectories)
+                                .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).ToList().Select(x => x.FullName).ToList(),
+                            Path.Combine(DlcpackDir, @"soundspc.cache"));
                         AddOutput("DLC soundcache generated!\n", Logtype.Important);
                     }
                     else

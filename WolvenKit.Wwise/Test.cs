@@ -33,7 +33,7 @@ namespace WolvenKit.Wwise
                         }
                         case ".cache":
                         {
-                            var sc = new WolvenKit.Cache.SoundCache(of.FileName, new SoundBanksInfoXML("SoundCache\\soundbanksinfo.xml"));
+                            var sc = new WolvenKit.Cache.SoundCache(of.FileName);
                             foreach(var f in sc.Files)
                             {
                                     Console.WriteLine("Item => " + f.Name + " | " + WolvenKit.Cache.SoundCache.GetIDFromPath(f.Name));

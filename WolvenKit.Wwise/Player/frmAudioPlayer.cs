@@ -118,7 +118,7 @@ namespace WolvenKit.Wwise.Player
 
         private void btnReplace_Click(object sender, EventArgs e)
         {
-
+            MessageBox.Show("This feature is sadly not avaliable yet :(", ":(", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnExport_Click(object sender, EventArgs e)
