@@ -16,11 +16,22 @@ This repository is created to demonstrate how **REDengine 3** reads and writes f
 **Project lead: Traderain**
 
 - George Tziotis
-- erxv
-- Nightingale
-- rmemr
 - kote2ster
 - Murzinio
+- rfuzzo
+- vonLeebpl
+- ali-alidoust
+- Lim3zer0
+- sw3dg1n
+- robymontyz
+- philippTheCat
+- mattstates
+- dnandha
+- carlosproiete
+- Strahlemann83
+- Jicksaw
+- Anras573
+- rmemr
 
 ### Other people who helped the project:
 - CAPA
@@ -44,6 +55,8 @@ This repository is created to demonstrate how **REDengine 3** reads and writes f
 - https://bitbucket.org/zabb65/payday-2-modding-information
 - https://modworkshop.net/showthread.php?tid=101
 - https://github.com/Atvaark/W3SavegameEditor
+- https://www.ffmpeg.org/
+- http://irrlicht.sourceforge.net/
 
 ***
 

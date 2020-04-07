@@ -138,10 +138,10 @@ namespace WolvenKit.Render
 
         //private static Quaternion modelAngle = new Quaternion(new Vertex3f(), 0);
         private Vector3Df modelPosition = new Vector3Df(0.0f);
+        private Vector3Df modelAngle = new Vector3Df(270.0f, 270.0f, 0.0f);
         private Vector3Df startModelAngle = new Vector3Df(270.0f, 270.0f, 0.0f);
         //private Vector3Df startModelAngleWithAnim = new Vector3Df(180.0f, 270.0f, 0.0f);
         private Vector3Df startModelAngleWithAnim = new Vector3Df(0.0f, 0.0f, 0.0f);
-        private Vector3Df modelAngle = new Vector3Df(270.0f, 270.0f, 0.0f);
         private float scaleMul = 1;
 
         private bool modelAutorotating = true;
@@ -370,13 +370,26 @@ namespace WolvenKit.Render
             foreach (var textureFileExtension in textureFileExtensions)
             {
                 texture = driver.GetTexture(texturePath + textureFileExtension);
+                if (texture != null)
+                    return texture; ;
+
+            }
+            string dlcPath = renderHelper.getW3Mod().DlcDirectory;
+            string texturePath1 = Path.ChangeExtension(Path.GetFullPath(dlcPath + "\\Bundle\\" + handleFilename)
+                .Replace("Mod\\Bundle", "Raw\\Mod\\TextureCache")
+                .Replace("DLC\\Bundle", "Raw\\DLC\\TextureCache"), null);
+                        
+            texture = null;
+            foreach (var textureFileExtension in textureFileExtensions)
+            {
+                texture = driver.GetTexture(texturePath + textureFileExtension);
                 if (texture != null) break;
             }
             //ImageUtility.Xbm2Dds();
             if (texture == null && !suppressTextureWarning)
             {
                 suppressTextureWarning = true;
-                MessageBox.Show("Have you extracted texture files properly?" + "\n\n" + "Could not parse texture: " + texturePath, "Missing texture!");
+                MessageBox.Show("Have you extracted texture files properly?" + "\n\n" + "Could not parse texture: " + texturePath + " or " + texturePath1, "Missing texture!");
             }
             return texture;
         }

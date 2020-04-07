@@ -652,6 +652,27 @@ namespace WolvenKit
                 case ".usm":
                     LoadUsmFile(fullpath);
                     break;
+                case ".bnk":
+                    {
+                        var bnk = new Wwise.BNK.BNK();
+                        Wwise.BNK.StaticStorage.Clear();
+                        bnk.LoadBNK(new FileStream(fullpath, FileMode.Open));
+                        var fb = new FolderBrowserDialog();
+                        fb.Description = "Select a folder to save the extracted wem files";
+                        if(fb.ShowDialog() == DialogResult.OK)
+                        {
+                           foreach(var f in Wwise.BNK.StaticStorage.soundfiles)
+                            {
+                                using(var br = new BinaryReader(new FileStream(fullpath, FileMode.Open)))
+                                {
+                                    br.BaseStream.Seek(f.Value.data_offset, SeekOrigin.Begin);
+                                    //var bytes = br.ReadBytes(f.Value.GetLength());
+                                    File.WriteAllBytes(Path.Combine(fb.SelectedPath, f.Value.name), new byte[0]);
+                                }                                
+                            }
+                        }
+                        break;
+                    }
                 case ".ws":
                     {
                         var se = new frmScriptEditor(fullpath);
@@ -1021,6 +1042,7 @@ namespace WolvenKit
                 if (MainController.Get().SoundManager != null) managers.Add(MainController.Get().SoundManager);
                 if (MainController.Get().TextureManager != null) managers.Add(MainController.Get().TextureManager);
                 if (MainController.Get().CollisionManager != null) managers.Add(MainController.Get().CollisionManager);
+                if (MainController.Get().SpeechManager != null) managers.Add(MainController.Get().SpeechManager);
             }
             
             //if (MainController.Get().ModCollisionManager != null) managers.Add(MainController.Get().ModCollisionManager);
@@ -2005,6 +2027,11 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             ShowOutput();
         }
 
+        private void consoleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowConsole();
+        }
+
         private void WitcherScriptToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("https://witcherscript.readthedocs.io");
@@ -2283,9 +2310,15 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             Close();
         }
 
-        private void consoleToolStripMenuItem_Click(object sender, EventArgs e)
+        private void terrainViewerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowConsole();
+
+        }
+
+        private void terrainViewerToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            Render.frmTerrain ter = new Render.frmTerrain();
+            ter.Show(this.dockPanel, DockState.Document);
         }
 
         private void menuStrip1_MouseDown(object sender, MouseEventArgs e)

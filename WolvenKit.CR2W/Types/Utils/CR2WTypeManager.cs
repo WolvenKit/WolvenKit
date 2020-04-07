@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using WolvenKit.CR2W.Types.Utils;
+using WolvenKit.CR2W.Types.W3.ISerializable.IScriptable.CObject.CResource.ITexture;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -27,25 +28,7 @@ namespace WolvenKit.CR2W.Types
 
             // Testing area. Put your CVectors which don't work fully yet here.
 #if DEBUG
-            // *.w2p
-            
-            //Register("CDecalSpawner", new CDecalSpawner(null));
-            //Register("SSeedKeyValue", new SSeedKeyValue(null));
-            //Register("SDynamicDecalMaterialInfo", new SDynamicDecalMaterialInfo(null)); 
-            //Register("SParticleEmitterLODLevel", new SParticleEmitterLODLevel(null));
-            //Register("EmitterDelaySettings", new EmitterDelaySettings(null));
-            //Register("EmitterDurationSettings", new EmitterDurationSettings(null));
-            //Register("CParticleSystem", new CParticleSystem(null)); 
-
-
-
-
-            //Register("#CEnvironmentDefinition", new CBytes(null));
-            //Register("@SItem", new CBytes(null));
-            
-
-
-
+            Register("CFont", new CFont(null));
 #endif
 
             Register("CParticleEmitter", new CParticleEmitter(null));
@@ -187,6 +170,10 @@ namespace WolvenKit.CR2W.Types
 
             Register("CLayerGroup", new CLayerGroup(null));
             Register("CLayerInfo", new CLayerInfo(null));
+
+            Register("CTerrainTile", new CTerrainTile(null));
+
+            Register("CParticleEmitter", new CParticleEmitter(null));
 
 
 
