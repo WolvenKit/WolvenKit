@@ -22,7 +22,7 @@ namespace WolvenKit.Wwise
                     {
                         case ".wem":
                         {
-                            var wem = new Wwise.WEM.RiffFile(of.FileName);
+                            //var wem = new Wwise.WEM.RiffFile(of.FileName);
                             break;
                         }
                         case ".bnk":
@@ -36,7 +36,7 @@ namespace WolvenKit.Wwise
                             var sc = new WolvenKit.Cache.SoundCache(of.FileName, new SoundBanksInfoXML("SoundCache\\soundbanksinfo.xml"));
                             foreach(var f in sc.Files)
                             {
-                                    Console.WriteLine("Item => " + f.Name + " | " + sc.GetIDFromPath(f.Name));
+                                    Console.WriteLine("Item => " + f.Name + " | " + WolvenKit.Cache.SoundCache.GetIDFromPath(f.Name));
                             }
                             break;
                         }

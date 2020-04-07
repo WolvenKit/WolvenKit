@@ -654,22 +654,9 @@ namespace WolvenKit
                     break;
                 case ".bnk":
                     {
-                        var bnk = new Wwise.BNK.BNK();
-                        Wwise.BNK.StaticStorage.Clear();
-                        bnk.LoadBNK(new FileStream(fullpath, FileMode.Open));
-                        var fb = new FolderBrowserDialog();
-                        fb.Description = "Select a folder to save the extracted wem files";
-                        if(fb.ShowDialog() == DialogResult.OK)
+                        using (var sp = new frmAudioPlayer(fullpath))
                         {
-                           foreach(var f in Wwise.BNK.StaticStorage.soundfiles)
-                            {
-                                using(var br = new BinaryReader(new FileStream(fullpath, FileMode.Open)))
-                                {
-                                    br.BaseStream.Seek(f.Value.data_offset, SeekOrigin.Begin);
-                                    //var bytes = br.ReadBytes(f.Value.GetLength());
-                                    File.WriteAllBytes(Path.Combine(fb.SelectedPath, f.Value.name), new byte[0]);
-                                }                                
-                            }
+                            sp.ShowDialog();
                         }
                         break;
                     }

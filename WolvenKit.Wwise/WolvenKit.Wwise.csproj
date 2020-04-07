@@ -173,12 +173,7 @@
     <Compile Include="SoundCache\SoundManager.cs" />
     <Compile Include="SoundCache\Sound_Cache.cs" />
     <Compile Include="Test.cs" />
-    <Compile Include="WEM\ImaAdpcmCodec.cs" />
-    <Compile Include="WEM\RiffChunk.cs" />
-    <Compile Include="WEM\RiffFile.cs" />
-    <Compile Include="WEM\WavFile.cs" />
-    <Compile Include="WEM\WavProcessor.cs" />
-    <Compile Include="WEM\WwiseSound.cs" />
+    <Compile Include="WEM\HeaderMerge.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -205,6 +200,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bnkext\bnkextr.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="vgmstream\avcodec-vgmstream-58.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -288,6 +286,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Player\AudioWorkingDir\" />
+    <Folder Include="Player\BnkWorkingDir\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

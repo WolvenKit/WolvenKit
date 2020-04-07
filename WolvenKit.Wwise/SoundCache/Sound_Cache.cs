@@ -36,7 +36,7 @@ namespace WolvenKit.Cache
         public string TypeName { get { return "SoundCache"; } }
         public string FileName { get; set; }
 
-        public SoundBanksInfoXML info;
+        public static SoundBanksInfoXML info;
 
         /// <summary>
         /// The files packed into the original soundcache.
@@ -64,13 +64,13 @@ namespace WolvenKit.Cache
         }
 
         /// <summary>
-        /// Returns to concated null terminated names string.
+        /// Returns the concated null terminated names string.
         /// </summary>
         /// <param name="FileList">The list of files to concat.</param>
         /// <returns>The concatenated string.</returns>
         public static byte[] GetNames(List<string> FileList)
         {
-            return Encoding.UTF8.GetBytes(string.Join("\0",FileList.Select(x=> Path.GetFileName(x).Trim())) + "\0");
+            return Encoding.UTF8.GetBytes(string.Join("\0",FileList.Select(x=> Path.GetFileName(GetIDFromPath(x)).Trim())) + "\0");
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace WolvenKit.Cache
         /// <param name="FileList">The list of files to build the info for.</param>
         /// <returns></returns>
         public static byte[] GetInfo(List<string> FileList)
-        {
+        {            
             using (var ms = new MemoryStream())
             using (var bw = new BinaryWriter(ms))
             {
@@ -110,7 +110,7 @@ namespace WolvenKit.Cache
                     if (Version >= 2)
                     {
                         bw.Write((UInt64)name_offset);
-                        name_offset += Path.GetFileName(item).Length + 1;
+                        name_offset += Path.GetFileName(GetIDFromPath(item)).Length + 1;
                         bw.Write((UInt64)base_offset);
                         base_offset += new FileInfo(item).Length;
                         bw.Write((UInt64)(new FileInfo(item).Length));
@@ -118,7 +118,7 @@ namespace WolvenKit.Cache
                     else
                     {
                         bw.Write((UInt32)name_offset);
-                        name_offset += Path.GetFileName(item).Length + 1;
+                        name_offset += Path.GetFileName(GetIDFromPath(item)).Length + 1;
                         bw.Write((UInt32)base_offset);
                         base_offset += new FileInfo(item).Length;
                         bw.Write((UInt32)(new FileInfo(item).Length));
@@ -206,7 +206,7 @@ namespace WolvenKit.Cache
             }
         }
 
-        public string GetIDFromPath(string path)
+        public static string GetIDFromPath(string path)
         {
             var split = path.Split(Path.DirectorySeparatorChar);
             var actualpath = split.SkipWhile(x => x != "SoundCache").Skip(2).Aggregate("", (c, n) => c += Path.DirectorySeparatorChar + n).Trim().Trim(Path.DirectorySeparatorChar);
@@ -215,6 +215,13 @@ namespace WolvenKit.Cache
                 if (info.StreamedFiles.Any(x => x.Path == actualpath))
                 {
                     return info.StreamedFiles.First(x => x.Path == actualpath).Id + ".wem";
+                }
+            }
+            if (actualpath.EndsWith(".bnk"))
+            {
+                if (info.StreamedFiles.Any(x => x.Path == actualpath))
+                {
+                    return info.StreamedFiles.First(x => x.Path == actualpath).Id + ".bnk";
                 }
             }
             return Path.GetFileName(path);
@@ -227,6 +234,8 @@ namespace WolvenKit.Cache
         /// <param name="OutPath">The path to write the completed soundcache to.</param>
         public static void Write(List<string> FileList, string OutPath)
         {
+
+
             using (var bw = new BinaryWriter(new FileStream(OutPath, FileMode.Create)))
             {
                 var data_array = BuildInfo(FileList);
