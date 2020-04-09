@@ -85,7 +85,7 @@ namespace WolvenKit.Wwise.WEM
         public byte[] data_setup = new byte[0];
         public byte[] data = new byte[0];
 
-        public MemoryStream buffer;
+        public byte[] buffer;
 
         public Packet packet;
 
@@ -96,23 +96,83 @@ namespace WolvenKit.Wwise.WEM
 
         public void merge_headers(WemFile original)
         {
+            using (var bw = new BinaryWriter(new MemoryStream(buffer)))
+            {
+                if (!fake_vorb)
+                    throw new Exception("Not supported");
 
+                riff_size = 0;
+                subtype = original.subtype;
+
+                bw.Write(riff_head);
+                bw.Write(riff_size);
+                bw.Write(wave_head);
+
+                bw.Write("fmt ");
+                bw.Write(fmt_size);
+                bw.Write(codecid);
+                bw.Write(channels);
+                bw.Write(sample_rate);
+                bw.Write(avg_bytes_per_second);
+                bw.Write(block_alignment);
+                bw.Write(bps);
+                bw.Write(extra_fmt_length);
+                bw.Write(ext_unk);
+                bw.Write(subtype);
+                bw.Write(sample_count);
+                bw.Write(mod_signal);
+                bw.Write(fmt_unk_field32_1);
+                bw.Write(fmt_unk_field32_2);
+                bw.Write(pre_data.Length);
+                bw.Write(pre_data.Length + (first_audio_packet_offset - setup_packet_offset));
+                bw.Write(fmt_unk_field32_3);
+                bw.Write(fmt_unk_field32_4);
+                bw.Write(fmt_unk_field32_5);
+                bw.Write(uid);
+                bw.Write(blocksize_0_pow);
+                bw.Write(blocksize_1_pow);
+
+                if (cue_offset != 0)
+                {
+                    bw.Write("cue ");
+                    bw.Write(cue_size);
+                    bw.Write(cue_count);
+                    bw.Write(cue_id);
+                    bw.Write(cue_position);
+                    bw.Write(cue_datachunkid);
+                    bw.Write(cue_chunkstart);
+                    bw.Write(cue_blockstart);
+                    bw.Write(cue_sampleoffset);
+                }
+
+            }
         }
 
         public void Merge_Datas(WemFile original)
         {
+            using(var bw = new BinaryWriter(new MemoryStream(buffer)))
+            {
 
+            }
         }
 
-        public void Calculate_Riff_Size(BinaryWriter bw)
+        /// <summary>
+        /// Writes the RIFF size to the buffer
+        /// </summary>
+        public void Calculate_Riff_Size()
         {
-            using (var br = new BinaryWriter(buffer))
+            using (var bw = new BinaryWriter(new MemoryStream(buffer)))
             {
                 bw.BaseStream.Seek(4, SeekOrigin.Begin);
                 bw.Write((UInt32)(bw.BaseStream.Length - 8));
             }
         }
 
+        /// <summary>
+        /// Load the file's data
+        /// Initializes the buffer as well
+        /// </summary>
+        /// <param name="path">The file to load</param>
         public void LoadFromFile(string path)
         {
             using (var br = new BinaryReader(new FileStream(path, FileMode.Open)))
@@ -351,19 +411,27 @@ namespace WolvenKit.Wwise.WEM
                 if (pre_data.Length + data_setup.Length + data.Length != br.BaseStream.Length)
                     throw new Exception("Bad data!");
             }
-            buffer = new MemoryStream((int)new FileInfo(path).Length);
+            buffer = File.ReadAllBytes(path);
         }
 
+        /// <summary>
+        /// Setup the packet of the wem file
+        /// </summary>
+        /// <param name="br">The file's binaryreader</param>
         public void setup_packet(BinaryReader br)
         {
             packet = new Packet(br, data_offset + setup_packet_offset, no_granule);
         }
 
+        /// <summary>
+        /// Write the file to specified path
+        /// </summary>
+        /// <param name="path">Path to write to</param>
         public void WriteToFile(string path)
         {
-            using(var br = new BinaryWriter(new FileStream(path, FileMode.Create)))
+            using(var bw = new BinaryWriter(new FileStream(path, FileMode.Create)))
             {
-
+                bw.Write(buffer.ToArray());
             }
         }
     }
