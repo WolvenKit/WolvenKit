@@ -28,9 +28,9 @@ namespace WolvenKit.Wwise.WEM
             wwinput.LoadFromFile(original_wem);
             var wwoutput = new WemFile();
 
-            wwoutput.merge_headers(wwinput)
-            wwoutput.Merge_Datas(wwinput)
-            wwoutput.Calculate_Riff_Size()
+            wwoutput.merge_headers(wwinput);
+            wwoutput.Merge_Datas(wwinput);
+            wwoutput.Calculate_Riff_Size();
             
             wwoutput.WriteToFile(modified_wem);
         }
