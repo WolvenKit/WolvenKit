@@ -424,6 +424,50 @@ namespace WolvenKit.Wwise.WEM
         }
 
         /// <summary>
+        /// Generate CUE section for wav files
+        /// </summary>
+        public void Generate()
+        {
+            using (var bw = new BinaryWriter(new MemoryStream(buffer)))
+            {
+                riff_size = 0;
+
+                bw.Write(riff_head);
+                bw.Write(riff_size);
+                bw.Write(wave_head);
+
+                bw.Write("fmt ");
+                bw.Write(fmt_size);
+                bw.Write(codecid);
+                bw.Write(channels);
+                bw.Write(sample_rate);
+                bw.Write(avg_bytes_per_second);
+                bw.Write(block_alignment);
+                bw.Write(bps);
+
+                if (extra_fmt_length != 0)
+                    bw.Write(extra_fmt_length);
+
+                //if(extra_fmt != 0)
+                   // bw.Write(extra_fmt)
+
+                bw.Write("cue ");
+                bw.Write(28); // cue chunk size
+                bw.Write(1); // cue count
+                bw.Write(1); // cue id 
+                bw.Write(0); // cue position
+                bw.Write("data"); // chunk id
+                bw.Write(0); // chunk start
+                bw.Write(0); // block start
+                bw.Write(0); // sample offset
+
+                bw.Write("data");
+                bw.Write(data_size + (data_size * 0));
+                bw.Write(data);
+            }
+        }
+
+        /// <summary>
         /// Write the file to specified path
         /// </summary>
         /// <param name="path">Path to write to</param>
