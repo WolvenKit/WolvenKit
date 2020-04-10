@@ -1618,7 +1618,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
         private void donateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Thank you! Every last bit helps and everything donated is distributed between the core developers evenly.","Thank you",MessageBoxButtons.OK,MessageBoxIcon.Information);
-            System.Diagnostics.Process.Start("https://www.paypal.me/traderain");
+            System.Diagnostics.Process.Start("https://www.patreon.com/bePatron?u=5458437");
         }
 
         private void Assetbrowser_FileAdd(object sender, Tuple<List<IWitcherArchive>, List<WitcherListViewItem>,bool> Details)
