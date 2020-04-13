@@ -99,9 +99,9 @@ namespace WolvenKit.CR2W.Types
             {
                 this.val = (uint) val;
             }
-            if (val is uint)
+            if (val is string)
             {
-                this.val = ushort.Parse(val as string);
+                this.val = uint.Parse(val as string);
             }
 
             return this;
