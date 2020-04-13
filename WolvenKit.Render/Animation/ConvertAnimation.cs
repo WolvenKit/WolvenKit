@@ -142,10 +142,8 @@ namespace WolvenKit.Render
                 for (int i = 0; i < files.Count(); i++)
                 {
                     string filename = files[i];
-                    int startIndex = (i * 4);
+                    int startIndex = (i * 3); // each aniamtion in the set has 3 chunks (for now)
                     int bufferNumber = i + 1;
-                    if (startIndex > 0)
-                        startIndex--;
                     createChunks(startIndex, bufferNumber);
                     ReadAnims loadedAnim;
                     List<Bone> bonelist;
