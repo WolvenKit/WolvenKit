@@ -90,6 +90,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libs\IrrlichtLime.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
     </Reference>
@@ -119,6 +123,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Animations.cs" />
+    <Compile Include="Animation\ConvertAnimation.cs" />
+    <Compile Include="Animation\ConvertCutscene.cs" />
+    <Compile Include="Animation\ConvertRig.cs" />
+    <Compile Include="Animation\ExportAnimation.cs" />
+    <Compile Include="Animation\ExportFace.cs" />
+    <Compile Include="Animation\IgnorableSerializerContractResolver.cs" />
     <Compile Include="CommonData.cs" />
     <Compile Include="CSkeleton.cs" />
     <Compile Include="frmRender.cs">

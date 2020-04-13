@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
+using Newtonsoft.Json;
+using WolvenKit.Render.Animation;
 
 namespace WolvenKit.Render
 {
@@ -11,7 +13,7 @@ namespace WolvenKit.Render
     {
         public CommonData CData { get; set; }
 
-        private CSkeleton meshSkeleton = new CSkeleton();
+        public CSkeleton meshSkeleton = new CSkeleton();
 
         public Rig(CommonData cdata)
         {
@@ -158,6 +160,7 @@ namespace WolvenKit.Render
             for (int i = 0; i < CData.boneData.nbBones; i++)
             {
                 var jointIdx = skinnedMesh.GetJointIndex(CData.boneData.jointNames[i]);
+                if (jointIdx == -1) continue; //if the mesh bone is not in the animation rig (ie. dynamic)
                 SJoint joint = skinnedMesh.GetAllJoints()[jointIdx];
 
                 Matrix matrix = CData.boneData.boneMatrices[i];
@@ -242,6 +245,32 @@ namespace WolvenKit.Render
                 w.Strength = fweight;
                 w.VertexId = vertexId;
             }*/
+        }
+
+        public void SaveRig(string filename)
+        {
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.Error = (serializer, err) =>
+            {
+                err.ErrorContext.Handled = true;
+            };
+
+            var jsonResolver = new IgnorableSerializerContractResolver();
+            // ignore single property
+            jsonResolver.Ignore(typeof(IrrlichtLime.Core.Matrix));
+            jsonResolver.Ignore(typeof(Vector3Df), "SphericalCoordinateAngles");
+            jsonResolver.Ignore(typeof(Vector3Df), "HorizontalAngle");
+            jsonResolver.Ignore(typeof(Vector3Df), "LengthSQ");
+            jsonResolver.Ignore(typeof(Vector3Df), "Length");
+
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            settings.ContractResolver = jsonResolver;
+            //open file stream
+            using (StreamWriter file = File.CreateText(filename))
+            {
+                string meshSkeletonJson = JsonConvert.SerializeObject(meshSkeleton, Formatting.Indented, settings);
+                file.Write(meshSkeletonJson);
+            }
         }
     }
 }
