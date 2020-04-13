@@ -29,11 +29,11 @@ namespace WolvenKit.CR2W.Types
                 y.val = file.ReadSingle();
                 z.val = file.ReadSingle();
             }
-            else if (compression == 1)
+            else if (compression == 1) //24 bit single
             {
-                var bitsx = file.ReadUInt16() << 16 | file.ReadUInt16() << 8;
-                var bitsy = file.ReadUInt16() << 16 | file.ReadUInt16() << 8;
-                var bitsz = file.ReadUInt16() << 16 | file.ReadUInt16() << 8;
+                var bitsx = ReadFloat24(file);
+                var bitsy = ReadFloat24(file);
+                var bitsz = ReadFloat24(file);
                 x.val = BitConverter.ToSingle(BitConverter.GetBytes(bitsx), 0);
                 y.val = BitConverter.ToSingle(BitConverter.GetBytes(bitsy), 0);
                 z.val = BitConverter.ToSingle(BitConverter.GetBytes(bitsz), 0);
@@ -47,6 +47,16 @@ namespace WolvenKit.CR2W.Types
                 y.val = BitConverter.ToSingle(BitConverter.GetBytes(bitsy), 0);
                 z.val = BitConverter.ToSingle(BitConverter.GetBytes(bitsz), 0);
             }
+        }
+
+        private uint ReadFloat24(BinaryReader file)
+        {
+            var pad = 0;
+            var b1 = file.ReadByte();
+            var b2 = file.ReadByte();
+            var b3 = file.ReadByte();
+            return
+                ((uint)b3 << 24) |((uint)b2 << 16) | ((uint)b1 << 8) |((uint)pad);
         }
 
         public override void Read(BinaryReader file, uint size)

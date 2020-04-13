@@ -36,6 +36,11 @@ namespace WolvenKit
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmModExplorer));
             this.modFileList = new System.Windows.Forms.TreeView();
             this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.exportW2cutscenejsonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportW2animsjsonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportw2rigjsonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportW3facjsonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportW3facposejsonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cookToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -50,6 +55,8 @@ namespace WolvenKit
             this.addFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.dumpXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dumpChunksToXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.showFileInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.treeImages = new System.Windows.Forms.ImageList(this.components);
             this.searchstrip = new System.Windows.Forms.ToolStrip();
@@ -60,8 +67,7 @@ namespace WolvenKit
             this.CollapseBTN = new System.Windows.Forms.ToolStripButton();
             this.resetfilesButton = new System.Windows.Forms.ToolStripButton();
             this.modexplorerSlave = new System.IO.FileSystemWatcher();
-            this.dumpChunksToXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.createW2animsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenu.SuspendLayout();
             this.searchstrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.modexplorerSlave)).BeginInit();
@@ -81,7 +87,7 @@ namespace WolvenKit
             this.modFileList.Margin = new System.Windows.Forms.Padding(1);
             this.modFileList.Name = "modFileList";
             this.modFileList.SelectedImageIndex = 0;
-            this.modFileList.Size = new System.Drawing.Size(218, 262);
+            this.modFileList.Size = new System.Drawing.Size(164, 194);
             this.modFileList.TabIndex = 0;
             this.modFileList.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.modFileList_NodeMouseClick);
             this.modFileList.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.modFileList_NodeMouseDoubleClick);
@@ -91,6 +97,12 @@ namespace WolvenKit
             // 
             this.contextMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createW2animsToolStripMenuItem,
+            this.exportW2cutscenejsonToolStripMenuItem,
+            this.exportW2animsjsonToolStripMenuItem,
+            this.exportw2rigjsonToolStripMenuItem,
+            this.exportW3facjsonToolStripMenuItem,
+            this.exportW3facposejsonToolStripMenuItem,
             this.cookToolStripMenuItem,
             this.importAsToolStripMenuItem,
             this.toolStripSeparator3,
@@ -109,60 +121,98 @@ namespace WolvenKit
             this.toolStripSeparator4,
             this.showFileInExplorerToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(197, 388);
+            this.contextMenu.Size = new System.Drawing.Size(203, 544);
+            this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             this.contextMenu.Opened += new System.EventHandler(this.contextMenu_Opened);
+            // 
+            // exportW2cutscenejsonToolStripMenuItem
+            // 
+            this.exportW2cutscenejsonToolStripMenuItem.Name = "exportW2cutscenejsonToolStripMenuItem";
+            this.exportW2cutscenejsonToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
+            this.exportW2cutscenejsonToolStripMenuItem.Text = "Export w2cutscene.json";
+            this.exportW2cutscenejsonToolStripMenuItem.Click += new System.EventHandler(this.exportW2cutscenejsonToolStripMenuItem_Click);
+            // 
+            // exportW2animsjsonToolStripMenuItem
+            // 
+            this.exportW2animsjsonToolStripMenuItem.Name = "exportW2animsjsonToolStripMenuItem";
+            this.exportW2animsjsonToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
+            this.exportW2animsjsonToolStripMenuItem.Text = "Export w2anims.json";
+            this.exportW2animsjsonToolStripMenuItem.Visible = false;
+            this.exportW2animsjsonToolStripMenuItem.Click += new System.EventHandler(this.exportW2animsjsonToolStripMenuItem_Click);
+            // 
+            // exportw2rigjsonToolStripMenuItem
+            // 
+            this.exportw2rigjsonToolStripMenuItem.Name = "exportw2rigjsonToolStripMenuItem";
+            this.exportw2rigjsonToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
+            this.exportw2rigjsonToolStripMenuItem.Text = "Export w2rig.json";
+            this.exportw2rigjsonToolStripMenuItem.Visible = false;
+            this.exportw2rigjsonToolStripMenuItem.Click += new System.EventHandler(this.exportw2rigjsonToolStripMenuItem_Click);
+            // 
+            // exportW3facjsonToolStripMenuItem
+            // 
+            this.exportW3facjsonToolStripMenuItem.Name = "exportW3facjsonToolStripMenuItem";
+            this.exportW3facjsonToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
+            this.exportW3facjsonToolStripMenuItem.Text = "Export w3fac.json";
+            this.exportW3facjsonToolStripMenuItem.Click += new System.EventHandler(this.exportW3facjsonToolStripMenuItem_Click);
+            // 
+            // exportW3facposejsonToolStripMenuItem
+            // 
+            this.exportW3facposejsonToolStripMenuItem.Name = "exportW3facposejsonToolStripMenuItem";
+            this.exportW3facposejsonToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
+            this.exportW3facposejsonToolStripMenuItem.Text = "Export w3fac.pose.json";
+            this.exportW3facposejsonToolStripMenuItem.Click += new System.EventHandler(this.exportW3facposejsonToolStripMenuItem_Click);
             // 
             // cookToolStripMenuItem
             // 
             this.cookToolStripMenuItem.Enabled = false;
             this.cookToolStripMenuItem.Name = "cookToolStripMenuItem";
-            this.cookToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.cookToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
             this.cookToolStripMenuItem.Text = "Cook files in directory";
             this.cookToolStripMenuItem.Click += new System.EventHandler(this.cookToolStripMenuItem_Click);
             // 
             // importAsToolStripMenuItem
             // 
             this.importAsToolStripMenuItem.Name = "importAsToolStripMenuItem";
-            this.importAsToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.importAsToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
             this.importAsToolStripMenuItem.Text = "Import as ...";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(193, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(199, 6);
             // 
             // removeFileToolStripMenuItem
             // 
             this.removeFileToolStripMenuItem.Name = "removeFileToolStripMenuItem";
-            this.removeFileToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.removeFileToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
             this.removeFileToolStripMenuItem.Text = "Delete";
             this.removeFileToolStripMenuItem.Click += new System.EventHandler(this.removeFileToolStripMenuItem_Click);
             // 
             // renameToolStripMenuItem
             // 
             this.renameToolStripMenuItem.Name = "renameToolStripMenuItem";
-            this.renameToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.renameToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
             this.renameToolStripMenuItem.Text = "Rename";
             this.renameToolStripMenuItem.Click += new System.EventHandler(this.renameToolStripMenuItem_Click);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
             // pasteToolStripMenuItem
             // 
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
             this.pasteToolStripMenuItem.Text = "Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
             // copyRelativePathToolStripMenuItem
             // 
             this.copyRelativePathToolStripMenuItem.Name = "copyRelativePathToolStripMenuItem";
-            this.copyRelativePathToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.copyRelativePathToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
             this.copyRelativePathToolStripMenuItem.Text = "Copy relative path";
             this.copyRelativePathToolStripMenuItem.Click += new System.EventHandler(this.copyRelativePathToolStripMenuItem_Click);
             // 
@@ -170,20 +220,20 @@ namespace WolvenKit
             // 
             this.markAsModDlcFileToolStripMenuItem.Enabled = false;
             this.markAsModDlcFileToolStripMenuItem.Name = "markAsModDlcFileToolStripMenuItem";
-            this.markAsModDlcFileToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.markAsModDlcFileToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
             this.markAsModDlcFileToolStripMenuItem.Text = "Mark as [Mod/Dlc] file";
             this.markAsModDlcFileToolStripMenuItem.Click += new System.EventHandler(this.markAsModDlcFileToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(193, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(199, 6);
             // 
             // assetBrowserToolStripMenuItem
             // 
             this.assetBrowserToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.AddNodefromFile_354;
             this.assetBrowserToolStripMenuItem.Name = "assetBrowserToolStripMenuItem";
-            this.assetBrowserToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.assetBrowserToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
             this.assetBrowserToolStripMenuItem.Text = "Asset Browser here";
             this.assetBrowserToolStripMenuItem.Click += new System.EventHandler(this.openAssetBrowserToolStripMenuItem_Click);
             // 
@@ -191,26 +241,38 @@ namespace WolvenKit
             // 
             this.addFileToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.AddNodefromFile_354;
             this.addFileToolStripMenuItem.Name = "addFileToolStripMenuItem";
-            this.addFileToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.addFileToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
             this.addFileToolStripMenuItem.Text = "Add File";
             this.addFileToolStripMenuItem.Click += new System.EventHandler(this.addFileToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(193, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(199, 6);
             // 
             // dumpXMLToolStripMenuItem
             // 
             this.dumpXMLToolStripMenuItem.Name = "dumpXMLToolStripMenuItem";
-            this.dumpXMLToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.dumpXMLToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
             this.dumpXMLToolStripMenuItem.Text = "Dump XML";
             this.dumpXMLToolStripMenuItem.Click += new System.EventHandler(this.dumpXMLToolStripMenuItem_Click);
+            // 
+            // dumpChunksToXMLToolStripMenuItem
+            // 
+            this.dumpChunksToXMLToolStripMenuItem.Name = "dumpChunksToXMLToolStripMenuItem";
+            this.dumpChunksToXMLToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
+            this.dumpChunksToXMLToolStripMenuItem.Text = "Dump Chunks to XML";
+            this.dumpChunksToXMLToolStripMenuItem.Click += new System.EventHandler(this.dumpChunksToXMLToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(199, 6);
             // 
             // showFileInExplorerToolStripMenuItem
             // 
             this.showFileInExplorerToolStripMenuItem.Name = "showFileInExplorerToolStripMenuItem";
-            this.showFileInExplorerToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.showFileInExplorerToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
             this.showFileInExplorerToolStripMenuItem.Text = "Show file in explorer";
             this.showFileInExplorerToolStripMenuItem.Click += new System.EventHandler(this.showFileInExplorerToolStripMenuItem_Click);
             // 
@@ -245,7 +307,7 @@ namespace WolvenKit
             this.resetfilesButton});
             this.searchstrip.Location = new System.Drawing.Point(0, 0);
             this.searchstrip.Name = "searchstrip";
-            this.searchstrip.Size = new System.Drawing.Size(218, 27);
+            this.searchstrip.Size = new System.Drawing.Size(164, 27);
             this.searchstrip.TabIndex = 1;
             this.searchstrip.Text = "toolStrip1";
             // 
@@ -260,7 +322,7 @@ namespace WolvenKit
             this.searchBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.searchBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.searchBox.Name = "searchBox";
-            this.searchBox.Size = new System.Drawing.Size(72, 27);
+            this.searchBox.Size = new System.Drawing.Size(54, 27);
             this.searchBox.TextChanged += new System.EventHandler(this.searchBox_TextChanged);
             // 
             // showhideButton
@@ -317,23 +379,18 @@ namespace WolvenKit
             this.modexplorerSlave.Deleted += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
             this.modexplorerSlave.Renamed += new System.IO.RenamedEventHandler(this.FileChanges_Detected);
             // 
-            // dumpChunksToXMLToolStripMenuItem
+            // createW2animsToolStripMenuItem
             // 
-            this.dumpChunksToXMLToolStripMenuItem.Name = "dumpChunksToXMLToolStripMenuItem";
-            this.dumpChunksToXMLToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
-            this.dumpChunksToXMLToolStripMenuItem.Text = "Dump Chunks to XML";
-            this.dumpChunksToXMLToolStripMenuItem.Click += new System.EventHandler(this.dumpChunksToXMLToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(193, 6);
+            this.createW2animsToolStripMenuItem.Name = "createW2animsToolStripMenuItem";
+            this.createW2animsToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
+            this.createW2animsToolStripMenuItem.Text = "Create w2anims";
+            this.createW2animsToolStripMenuItem.Click += new System.EventHandler(this.createW2animsToolStripMenuItem_Click);
             // 
             // frmModExplorer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(218, 289);
+            this.ClientSize = new System.Drawing.Size(164, 221);
             this.Controls.Add(this.modFileList);
             this.Controls.Add(this.searchstrip);
             this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 
@@ -386,5 +443,11 @@ namespace WolvenKit
         private ToolStripMenuItem dumpXMLToolStripMenuItem;
         private ToolStripMenuItem dumpChunksToXMLToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator4;
+        private ToolStripMenuItem exportw2rigjsonToolStripMenuItem;
+        private ToolStripMenuItem exportW2animsjsonToolStripMenuItem;
+        private ToolStripMenuItem exportW2cutscenejsonToolStripMenuItem;
+        private ToolStripMenuItem exportW3facjsonToolStripMenuItem;
+        private ToolStripMenuItem exportW3facposejsonToolStripMenuItem;
+        private ToolStripMenuItem createW2animsToolStripMenuItem;
     }
 }
