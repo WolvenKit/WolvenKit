@@ -1,7 +1,7 @@
 # Wolven-kit
 ![Screenshot](/assets/screenshot.png)
 
-[![Build status](https://ci.appveyor.com/api/projects/status/6kdip6nt23gprnnh/branch/master?svg=true)](https://ci.appveyor.com/project/Traderain/wolven-kit/branch/master)
+![WolvenKit-Nightly](https://github.com/Traderain/Wolven-kit/workflows/WolvenKit-Nightly/badge.svg)
 [![GitHub issues](https://img.shields.io/github/issues/Traderain/Wolven-kit.svg)](https://github.com/Traderain/Wolven-kit/issues)
 [![GitHub forks](https://img.shields.io/github/forks/Traderain/Wolven-kit.svg)](https://github.com/Traderain/Wolven-kit/network)
 [![GitHub stars](https://img.shields.io/github/stars/Traderain/Wolven-kit.svg)](https://github.com/Traderain/Wolven-kit/stargazers)

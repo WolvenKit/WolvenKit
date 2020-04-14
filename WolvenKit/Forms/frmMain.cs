@@ -40,6 +40,7 @@ namespace WolvenKit
     using Common.Wcc;
     using Common.Services;
     using Enums = Dfust.Hotkeys.Enums;
+    using WolvenKit.Render;
 
     public partial class frmMain : Form
     {
@@ -2306,6 +2307,75 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
         {
             Render.frmTerrain ter = new Render.frmTerrain();
             ter.Show(this.dockPanel, DockState.Document);
+        }
+
+        private void w2rigjsonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //MessageBox.Show(@"Select w2rig JSON.", "Information about importing rigs", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            using (var of = new OpenFileDialog())
+            {
+                of.Title = "Please select your w2rig.json file";
+                of.Filter = "w2rig JSON files | *w2rig.json";
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    using (var sf = new SaveFileDialog())
+                    {
+                        sf.Filter = "Witcher 3 rig file | *.w2rig";
+                        sf.Title = "Please specify a location to save the imported file";
+                        sf.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
+                        sf.FileName = of.FileName;
+                        if (sf.ShowDialog() == DialogResult.OK)
+                        {
+                            try
+                            {
+                                ConvertRig rig = new ConvertRig();
+                                rig.Load(of.FileName);
+                                rig.SaveToFile(sf.FileName);
+                            }
+                            catch (Exception ex)
+                            {
+                                AddOutput(ex.ToString() + "\n", Logtype.Error);
+                            }
+
+                            MainController.Get().ProjectStatus = "File imported succesfully!";
+                        }
+                    }
+                }
+            }
+        }
+
+        private void w2animsjsonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //MessageBox.Show(@"Select w2anims JSON.", "Information about importing rigs", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            using (var of = new OpenFileDialog())
+            {
+                of.Title = "Please select your w2anims.json file";
+                of.Filter = "anims JSON files | *w2anims.json";
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    using (var sf = new SaveFileDialog())
+                    {
+                        sf.Filter = "Witcher 3 w2anims file | *.w2anims";
+                        sf.Title = "Please specify a location to save the imported file";
+                        sf.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
+                        sf.FileName = of.FileName;
+                        if (sf.ShowDialog() == DialogResult.OK)
+                        {
+                            try
+                            {
+                                ConvertAnimation anim = new ConvertAnimation();
+                                anim.Load(new List<string>(){of.FileName}, sf.FileName);
+                            }
+                            catch (Exception ex)
+                            {
+                                AddOutput(ex.ToString() + "\n", Logtype.Error);
+                            }
+
+                            MainController.Get().ProjectStatus = "File imported succesfully!";
+                        }
+                    }
+                }
+            }
         }
 
         private void menuStrip1_MouseDown(object sender, MouseEventArgs e)

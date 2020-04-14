@@ -63,8 +63,13 @@ namespace WolvenKit.Render
                         uint keyFrame = 0;
                         byte[] data;
                         var deferredData = chunk.GetVariableByName("deferredData") as CInt16;
+                        var streamingOption = (chunk.GetVariableByName("streamingOption") as CVariable);
                         if (deferredData != null && deferredData.val != 0)
-                            data = File.ReadAllBytes(animFile.FileName + "." + deferredData.val + ".buffer");
+                            if (streamingOption != null && streamingOption.ToString() == "ABSO_PartiallyStreamable")
+                                data = ConvertAnimation.Combine((chunk.GetVariableByName("data") as CByteArray).Bytes,
+                                File.ReadAllBytes(animFile.FileName + "." + deferredData.val + ".buffer"));
+                            else
+                                data = File.ReadAllBytes(animFile.FileName + "." + deferredData.val + ".buffer");
                         else
                             data = (chunk.GetVariableByName("data") as CByteArray).Bytes;
                         using (MemoryStream ms = new MemoryStream(data))
