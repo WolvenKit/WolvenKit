@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Convert
+namespace WolvenKit.Wwise.Wwise
 {
     class Program
     {

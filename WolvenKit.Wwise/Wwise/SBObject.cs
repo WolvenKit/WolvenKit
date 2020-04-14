@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using IniParser;
 using IniParser.Model;
-namespace Convert
+
+namespace WolvenKit.Wwise.Wwise
 {
     // completed
     public class SBObjectType

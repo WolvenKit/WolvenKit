@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
-namespace Convert
+namespace WolvenKit.Wwise.Wwise
 {
 
     public class PacketWebFile

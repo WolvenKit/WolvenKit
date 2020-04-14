@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Convert
+namespace WolvenKit.Wwise.Wwise
 {
     public class RandomGen
     {

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
-namespace Convert
+namespace WolvenKit.Wwise.Wwise
 {
     class FileManage
     {
