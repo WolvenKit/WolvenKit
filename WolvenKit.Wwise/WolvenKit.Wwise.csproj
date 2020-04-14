@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{DCBBE807-CD6E-493E-8C04-DB976A1591EA}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WolvenKit.Wwise</RootNamespace>
     <AssemblyName>WolvenKit.Wwise</AssemblyName>
@@ -169,7 +169,6 @@
     <Compile Include="Test.cs" />
     <Compile Include="Wwise\FileManage.cs" />
     <Compile Include="Wwise\ManagerObject.cs" />
-    <Compile Include="Wwise\Program.cs" />
     <Compile Include="Wwise\RandomGen.cs" />
     <Compile Include="Wwise\SBObject.cs" />
     <Compile Include="Wwise\Soundbank.cs" />
