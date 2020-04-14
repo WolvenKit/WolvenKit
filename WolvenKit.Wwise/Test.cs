@@ -1,4 +1,5 @@
 ﻿using System;
+using WolvenKit.Wwise.Wwise;
 
 namespace WolvenKit.Wwise
 {
