@@ -20,17 +20,6 @@ namespace WolvenKit.Wwise
                 {
                     switch (Path.GetExtension(of.FileName))
                     {
-                        case ".wem":
-                        {
-                            //var wem = new Wwise.WEM.RiffFile(of.FileName);
-                            break;
-                        }
-                        case ".bnk":
-                        {
-                            var bnk = new Wwise.BNK.BNK();
-                            bnk.LoadBNK(new MemoryStream(File.ReadAllBytes(of.FileName)));
-                            break;
-                        }
                         case ".cache":
                         {
                             var sc = new WolvenKit.Cache.SoundCache(of.FileName);
