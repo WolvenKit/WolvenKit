@@ -14,6 +14,9 @@ using WolvenKit.Services;
 namespace WolvenKit
 {
     using Common;
+    using Newtonsoft.Json;
+    using WolvenKit.CR2W;
+    using WolvenKit.Render;
 
     public partial class frmModExplorer : DockContent, IThemedContent
     {
@@ -547,5 +550,103 @@ namespace WolvenKit
         }
 
 
+        private void exportw2rigjsonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+                Console.WriteLine(ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath);
+            string w2rigFilePath = ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath;
+            using (var sf = new SaveFileDialog())
+            {
+                sf.Filter = "W3 json | *.json";
+                sf.FileName = Path.GetFileName(ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath + ".json");
+                if (sf.ShowDialog() == DialogResult.OK)
+                {
+                    CommonData cdata = new CommonData();
+                    Rig exportRig = new Rig(cdata);
+                    byte[] data;
+                    data = File.ReadAllBytes(w2rigFilePath);
+                    using (MemoryStream ms = new MemoryStream(data))
+                    using (BinaryReader br = new BinaryReader(ms))
+                    {
+                        CR2WFile rigFile = new CR2WFile(br);
+                        exportRig.LoadData(rigFile);
+                        exportRig.SaveRig(sf.FileName);
+                    }
+                    MessageBox.Show(this, "Sucessfully wrote file!", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+        private void exportW2animsjsonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var settings = new frmAnims(ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath,
+                                        ActiveMod.FileDirectory + "\\" + "Mod\\Bundle\\characters\\base_entities\\woman_base\\woman_base.w2rig");
+            settings.ShowDialog();
+        }
+
+        private void exportW2cutscenejsonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var settings = new frmAnims(ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath,
+                                        ActiveMod.FileDirectory + "\\" + "Mod\\Bundle\\characters\\base_entities\\woman_base\\woman_base.w2rig");
+            settings.ShowDialog();
+        }
+
+        private void exportW3facjsonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            exportw2rigjsonToolStripMenuItem_Click(sender, e);
+        }
+        private void exportW3facposejsonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void contextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                exportw2rigjsonToolStripMenuItem.Visible = Path.GetExtension(modFileList.SelectedNode.Name) == ".w2rig";
+                exportW2animsjsonToolStripMenuItem.Visible = Path.GetExtension(modFileList.SelectedNode.Name) == ".w2anims";
+                exportW2cutscenejsonToolStripMenuItem.Visible = Path.GetExtension(modFileList.SelectedNode.Name) == ".w2cutscene";
+                exportW3facjsonToolStripMenuItem.Visible = Path.GetExtension(modFileList.SelectedNode.Name) == ".w3fac";
+                exportW3facposejsonToolStripMenuItem.Visible = Path.GetExtension(modFileList.SelectedNode.Name) == ".w3fac";
+            }
+        }
+
+        private void createW2animsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                var filename = modFileList.SelectedNode.FullPath;
+                var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
+                if (!File.Exists(fullpath) && !Directory.Exists(fullpath))
+                    return;
+                string dir;
+                if (File.Exists(fullpath))
+                    dir = Path.GetDirectoryName(fullpath);
+                else
+                    dir = fullpath;
+                var files = Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories).ToList();
+                var folderName = Path.GetFileName(fullpath);
+                ConvertAnimation anim = new ConvertAnimation();
+                if (File.Exists(fullpath+".w2anims"))
+                {
+                    if (MessageBox.Show(
+                         folderName + ".w2anims already exists. This file will be overwritten. Are you sure you want to permanently overwrite "+ folderName +" w2anims?"
+                         , "Confirmation", MessageBoxButtons.YesNo
+                     ) != DialogResult.Yes)
+                    {
+                        return;
+                    }
+                }
+
+                try
+                {
+                    anim.Load(files, fullpath + ".w2anims");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error cooking files.");
+                }
+            }
+        }
     }
 }

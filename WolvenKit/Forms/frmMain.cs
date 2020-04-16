@@ -40,6 +40,7 @@ namespace WolvenKit
     using Common.Wcc;
     using Common.Services;
     using Enums = Dfust.Hotkeys.Enums;
+    using WolvenKit.Render;
 
     public partial class frmMain : Form
     {
@@ -652,6 +653,27 @@ namespace WolvenKit
                 case ".usm":
                     LoadUsmFile(fullpath);
                     break;
+                case ".bnk":
+                    {
+                        var bnk = new Wwise.BNK.BNK();
+                        Wwise.BNK.StaticStorage.Clear();
+                        bnk.LoadBNK(new FileStream(fullpath, FileMode.Open));
+                        var fb = new FolderBrowserDialog();
+                        fb.Description = "Select a folder to save the extracted wem files";
+                        if(fb.ShowDialog() == DialogResult.OK)
+                        {
+                           foreach(var f in Wwise.BNK.StaticStorage.soundfiles)
+                            {
+                                using(var br = new BinaryReader(new FileStream(fullpath, FileMode.Open)))
+                                {
+                                    br.BaseStream.Seek(f.Value.data_offset, SeekOrigin.Begin);
+                                    //var bytes = br.ReadBytes(f.Value.GetLength());
+                                    File.WriteAllBytes(Path.Combine(fb.SelectedPath, f.Value.name), new byte[0]);
+                                }                                
+                            }
+                        }
+                        break;
+                    }
                 case ".ws":
                     {
                         var se = new frmScriptEditor(fullpath);
@@ -1021,6 +1043,7 @@ namespace WolvenKit
                 if (MainController.Get().SoundManager != null) managers.Add(MainController.Get().SoundManager);
                 if (MainController.Get().TextureManager != null) managers.Add(MainController.Get().TextureManager);
                 if (MainController.Get().CollisionManager != null) managers.Add(MainController.Get().CollisionManager);
+                if (MainController.Get().SpeechManager != null) managers.Add(MainController.Get().SpeechManager);
             }
             
             //if (MainController.Get().ModCollisionManager != null) managers.Add(MainController.Get().ModCollisionManager);
@@ -1227,7 +1250,8 @@ namespace WolvenKit
                                 {
                                     LoadDocument = LoadDocumentAndGetFile,
                                     MeshFile = doc.File,
-                                    DockAreas = DockAreas.Document
+                                    DockAreas = DockAreas.Document,
+                                    renderHelper = new Render.RenderHelper(MainController.Get().ActiveMod, MainController.Get().Logger)
                                 };
                                 doc.RenderViewer.Show(doc.FormPanel, DockState.Document);
                             }
@@ -2009,6 +2033,11 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             ShowOutput();
         }
 
+        private void consoleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowConsole();
+        }
+
         private void WitcherScriptToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("https://witcherscript.readthedocs.io");
@@ -2287,9 +2316,84 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             Close();
         }
 
-        private void consoleToolStripMenuItem_Click(object sender, EventArgs e)
+        private void terrainViewerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowConsole();
+
+        }
+
+        private void terrainViewerToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            Render.frmTerrain ter = new Render.frmTerrain();
+            ter.Show(this.dockPanel, DockState.Document);
+        }
+
+        private void w2rigjsonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //MessageBox.Show(@"Select w2rig JSON.", "Information about importing rigs", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            using (var of = new OpenFileDialog())
+            {
+                of.Title = "Please select your w2rig.json file";
+                of.Filter = "w2rig JSON files | *w2rig.json";
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    using (var sf = new SaveFileDialog())
+                    {
+                        sf.Filter = "Witcher 3 rig file | *.w2rig";
+                        sf.Title = "Please specify a location to save the imported file";
+                        sf.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
+                        sf.FileName = of.FileName;
+                        if (sf.ShowDialog() == DialogResult.OK)
+                        {
+                            try
+                            {
+                                ConvertRig rig = new ConvertRig();
+                                rig.Load(of.FileName);
+                                rig.SaveToFile(sf.FileName);
+                            }
+                            catch (Exception ex)
+                            {
+                                AddOutput(ex.ToString() + "\n", Logtype.Error);
+                            }
+
+                            MainController.Get().ProjectStatus = "File imported succesfully!";
+                        }
+                    }
+                }
+            }
+        }
+
+        private void w2animsjsonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //MessageBox.Show(@"Select w2anims JSON.", "Information about importing rigs", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            using (var of = new OpenFileDialog())
+            {
+                of.Title = "Please select your w2anims.json file";
+                of.Filter = "anims JSON files | *w2anims.json";
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    using (var sf = new SaveFileDialog())
+                    {
+                        sf.Filter = "Witcher 3 w2anims file | *.w2anims";
+                        sf.Title = "Please specify a location to save the imported file";
+                        sf.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
+                        sf.FileName = of.FileName;
+                        if (sf.ShowDialog() == DialogResult.OK)
+                        {
+                            try
+                            {
+                                ConvertAnimation anim = new ConvertAnimation();
+                                anim.Load(new List<string>(){of.FileName}, sf.FileName);
+                            }
+                            catch (Exception ex)
+                            {
+                                AddOutput(ex.ToString() + "\n", Logtype.Error);
+                            }
+
+                            MainController.Get().ProjectStatus = "File imported succesfully!";
+                        }
+                    }
+                }
+            }
         }
 
         private void menuStrip1_MouseDown(object sender, MouseEventArgs e)

@@ -7,6 +7,7 @@ using System.IO.MemoryMappedFiles;
 using System.IO;
 using WolvenKit.CR2W;
 using WolvenKit.Bundles;
+using System.Threading.Tasks;
 
 namespace CR2WTests
 {
@@ -19,13 +20,13 @@ namespace CR2WTests
         public static void Setup(TestContext context)
         {
             mc = new BundleManager();
-            //mc.LoadAll("D:\\SteamLibrary\\steamapps\\common\\The Witcher 3\\bin\\x64");
-            mc.LoadAll("C:\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
+            mc.LoadAll("D:\\SteamLibrary\\steamapps\\common\\TW3\\bin\\x64");
+            //mc.LoadAll("C:\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
         }
-        
-        // Methods to test for the different file types
-        
 
+        // Methods to test for the different file types
+
+        #region Tests
         [TestMethod]
         public void cellmap()
         {
@@ -421,22 +422,21 @@ namespace CR2WTests
             StressTestExt("navtile");
         }
         */
-
+        #endregion
         // Actually do the test
         public void StressTestExt(string ext)
         {
             long unknownbytes = 0;
             long totalbytes = 0;
             List<string> unknownclasses = new List<string>();
-            long rigcount = 0;
+            long filecount = 0;
             Dictionary<string, Tuple<long, long>> chunkstate = new Dictionary<string, Tuple<long, long>>();
             List<string> unparsedfiles = new List<string>();
 
             var files = mc.FileList.Where(x => x.Name.EndsWith(ext)).ToList();
-            rigcount = files.Count();
-            for (int i = 0; i < files.Count; i++)
+            filecount = files.Count();
+            Parallel.ForEach(files, f =>
             {
-                var f = files[i];
                 try
                 {
                     var buff = new byte[f.Size];
@@ -444,7 +444,7 @@ namespace CR2WTests
                     {
                         f.Extract(s);
                         totalbytes += f.Size;
-                        using(var ms = new MemoryStream(s.ToArray()))
+                        using (var ms = new MemoryStream(s.ToArray()))
                         {
                             using (var br = new BinaryReader(ms))
                             {
@@ -465,18 +465,18 @@ namespace CR2WTests
                                     unknownbytes += c.unknownBytes.Bytes.Length;
                                 }
                             }
-                        }                   
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
                     unparsedfiles.Add(f.Name);
                 }
-            }
+            });
 
             Console.WriteLine($"{ext} test completed...");
             Console.WriteLine("Results:");
-            Console.WriteLine($"\t- Parsed {rigcount} {ext} files");
+            Console.WriteLine($"\t- Parsed {filecount} {ext} files");
             Console.WriteLine($"\t- Parsing percentage => {(((double)totalbytes - (double)unknownbytes) / (double)totalbytes).ToString("0.00%")}" +
                 $" | Couldn't parse: {unparsedfiles.Count} files!");
             Console.WriteLine($"Classes: ");

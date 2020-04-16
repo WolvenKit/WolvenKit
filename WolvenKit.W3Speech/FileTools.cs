@@ -94,7 +94,7 @@ namespace WolvenKit.W3Speech
         public static void UnpackW3SpeechFile(String directory, String w3speech_file, IEnumerable<W3Language> languages)
         {
             var input = new BinaryReader(new FileStream(w3speech_file, FileMode.Open));
-            var info = Coder.Decode(input);
+            var info = Coder.Decode(new W3Speech(w3speech_file), input);
             var language = languages.First(lang => lang.Key.value == info.language_key.value);
             var dir = directory.EndsWith("\\") ? directory : directory + "\\";
             info.item_infos.ToList().ForEach(item =>
@@ -124,7 +124,7 @@ namespace WolvenKit.W3Speech
         public static IEnumerable<WemCr2wInputPair> CollectW3SpeechFile(String w3speech_file_path)
         {
             var w3speech_stream = new BinaryReader(new FileStream(w3speech_file_path, FileMode.Open));
-            var info = Coder.Decode(w3speech_stream);
+            var info = Coder.Decode(new W3Speech(w3speech_file_path), w3speech_stream);
             w3speech_stream.Close();
             return info.item_infos.Select(item_info =>
                 new WemCr2wInputPair(item_info.id, item_info.id_high, () =>

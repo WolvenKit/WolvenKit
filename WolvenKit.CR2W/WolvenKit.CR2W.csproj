@@ -153,8 +153,10 @@
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CNode\CComponent\CAreaComponent.cs" />
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CNode\CComponent\CEnvProbeComponent.cs" />
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CCutsceneTemplate.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CFont.cs" />
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CGameWorld.cs" />
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CTextureArray.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CTerrainTile.cs" />
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\IParticleModule\CParticleInitializerLifeTime.cs" />
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\IParticleModule\CParticleInitializerPosition.cs" />
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\IParticleModule\CParticleInitializerRotation.cs" />

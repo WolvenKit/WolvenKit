@@ -22,6 +22,9 @@ namespace WolvenKit
     using Common;
     using Common.Services;
     using WolvenKit.Common.Wcc;
+    using Render;
+    using System.Security.RightsManagement;
+    using WolvenKit.W3Speech;
 
     public enum EColorThemes
     {
@@ -97,6 +100,7 @@ namespace WolvenKit
         private CollisionManager collisionManager;
         private TextureManager modTextureManager;
         private W3StringManager w3StringManager;
+        private SpeechManager speechManager;
 
         //Public getters
         public W3StringManager W3StringManager => w3StringManager;
@@ -110,6 +114,7 @@ namespace WolvenKit
         public TextureManager TextureManager => textureManager;
         public TextureManager ModTextureManager => modTextureManager;
         public CollisionManager CollisionManager => collisionManager;
+        public SpeechManager SpeechManager => speechManager;
 
         #endregion
 
@@ -160,6 +165,10 @@ namespace WolvenKit
 
         internal void UpdateWccHelper(string wccLite)
         {
+            if(WccHelper == null)
+            {
+                mainController.WccHelper = new WccHelper(wccLite, mainController.Logger);
+            }
             WccHelper.UpdatePath(wccLite);
         }
 
@@ -362,6 +371,15 @@ namespace WolvenKit
                 }
                 #endregion
 
+                loadStatus = "Loading speech manager!";
+                #region Load speech manager
+                if (speechManager == null)
+                {
+                    speechManager = new SpeechManager();
+                    speechManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                }
+                #endregion
+
                 loadStatus = "Loading mod texure manager!";
                 #region Load mod texture manager
                 if (modTextureManager == null)
@@ -409,6 +427,7 @@ namespace WolvenKit
                     }
                 }
                 #endregion
+
                 loadStatus = "Loading mod sound manager!";
                 #region Load mod sound manager
                 if (modsoundmanager == null)
@@ -417,6 +436,7 @@ namespace WolvenKit
                     modsoundmanager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
                 }
                 #endregion
+
                 loadStatus = "Loaded";
 
                 Logger = new LoggerService();
