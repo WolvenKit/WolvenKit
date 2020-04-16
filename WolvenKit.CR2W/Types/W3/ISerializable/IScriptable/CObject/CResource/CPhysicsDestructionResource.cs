@@ -25,7 +25,7 @@ namespace WolvenKit.CR2W.Types
         {
             base.Read(file, size);
 
-            block5.Read(file, 46);
+            //block5.Read(file, 46);
         }
 
         public override void Write(BinaryWriter file)

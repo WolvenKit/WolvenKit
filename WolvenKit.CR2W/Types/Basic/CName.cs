@@ -8,41 +8,64 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public class CName : CVariable
     {
-        public CName(CR2WFile cr2w)
-            : base(cr2w)
+       
+
+        public CName(CR2WFile cr2w) : base(cr2w)
         {
             Type = typeof(CName).Name;
         }
 
+        private ushort _val;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ushort val
+        public ushort Val
         {
-            get { return (ushort) cr2w.GetStringIndex(Value, true); }
-            set { Value = cr2w.names[value].Str; }
+            get
+            {
+                //return (ushort)cr2w.GetStringIndex(Value, true);
+                return _val;
+            }
+            set
+            {
+                if (value > cr2w.names.Count)
+                    value = 0;
+                _val = value;
+                //Value = cr2w.names[value].Str;
+            }
         }
 
         [DataMember]
-        public string Value { get; set; }
+        public string Value
+        {
+            get
+            {
+                return cr2w.names[Val].Str;
+            }
+            set
+            {
+                Val = (ushort)cr2w.GetStringIndex(value, true);
+            }
+        }
+
 
         public override void Read(BinaryReader file, uint size)
         {
-            val = file.ReadUInt16();
+            Val = file.ReadUInt16();
         }
 
         public override void Write(BinaryWriter file)
         {
-            file.Write(val);
+            file.Write(Val);
         }
 
         public override CVariable SetValue(object val)
         {
             if (val is string)
             {
-                Value = (string) val;
+                Value = (string)val;
             }
             else if (val is ushort)
             {
-                this.val = (ushort) val;
+                this.Val = (ushort)val;
             }
 
             return this;
@@ -55,7 +78,7 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CName) base.Copy(context);
+            var var = (CName)base.Copy(context);
             var.Value = Value;
             return var;
         }
@@ -65,7 +88,7 @@ namespace WolvenKit.CR2W.Types
             var enumtypes = typeof(Enums).GetNestedTypes();
             foreach (var item in enumtypes)
             {
-                if(item.Name == this.Type)
+                if (item.Name == this.Type)
                 {
                     ComboBox cb = new ComboBox();
                     cb.Items.AddRange(item.GetEnumNames());

@@ -264,14 +264,20 @@ namespace WolvenKit.CR2W
 
             // update data
             #region Update Data
-            m_fileheader.timeStamp = CDateTime.Now.ToUInt64(); //this will change any vanilla assets simply by opening and saving in wkit
-            m_fileheader.numChunks = (uint)chunks.Count;
+            //m_fileheader.timeStamp = CDateTime.Now.ToUInt64(); //this will change any vanilla assets simply by opening and saving in wkit
+            //m_fileheader.numChunks = (uint)chunks.Count;
 
             // add new names // TODO 
             foreach (var c in chunks)
             {
+
                 c.SetExportType((ushort)GetStringIndex(c.Type, true));
+
+
+
             }
+
+
 
             // Update strings
             uint stringbuffer_offset = 160; // always 160
@@ -770,8 +776,10 @@ namespace WolvenKit.CR2W
 
             if (addnew)
             {
-                var newstring = new CR2WNameWrapper();
-                newstring.Str = name;
+                var newstring = new CR2WNameWrapper
+                {
+                    Str = name
+                };
                 names.Add(newstring);
 
                 return names.Count - 1;
@@ -794,7 +802,7 @@ namespace WolvenKit.CR2W
             {
                 // we can leave the depotpath 0 here, it will get updated on file write
                 // value is the offset in the stringtable, which gets re-written on file write
-                // a better solution might be to dynamically update the string table 
+                // a better solution might be to dynamically update the import table 
                 var import = new CR2WImport()
                 {
                     flags = flags,

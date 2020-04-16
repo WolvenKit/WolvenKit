@@ -96,7 +96,7 @@ namespace WolvenKit.CR2W
             typeName = new CName(file)
             {
                 Name = "Type",
-                val = export.className
+                Val = export.className
             };
 
         }
@@ -276,7 +276,7 @@ namespace WolvenKit.CR2W
             }
             else if (bytesLeft < 0)
             {
-                throw new InvalidParsingException("File read too far.");
+                //throw new InvalidParsingException("File read too far.");
             }
             else
             {

@@ -46,9 +46,9 @@ namespace WolvenKit.CR2W.Types
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (CMaterialGraphParameter) base.Copy(context);
-            var.unk1.val = unk1.val;
-            var.unk2.val = unk2.val;
-            var.name.val = name.val;
+            var.unk1 = unk1;
+            var.unk2 = unk2;
+            var.name = name;
             return var;
         }
 

@@ -1137,6 +1137,8 @@ namespace WolvenKit
                 return null;
             }
 
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
 
             var doc = new frmCR2WDocument();
             OpenDocuments.Add(doc);
@@ -1280,6 +1282,9 @@ namespace WolvenKit
 
             if (hasUnknownBytes)
                 output.Append("-------\n\n");
+
+            output.Append($"File {filename} loaded in: {stopwatch.Elapsed}\n\n");
+            stopwatch.Stop();
 
             AddOutput(output.ToString(), Logtype.Important);
             return doc;

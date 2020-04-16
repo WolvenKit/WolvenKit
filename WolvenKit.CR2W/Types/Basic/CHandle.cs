@@ -7,62 +7,156 @@ using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace ="")]
+    [DataContract(Namespace = "")]
     public class CHandle : CVariable
     {
+        
+
         public CHandle(CR2WFile cr2w) : base(cr2w)
         {
         }
 
+        private int _val;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public int val
         {
             get
             {
-                if (ChunkHandle)
-                {
-                    return ChunkIndex;
-                }
-                var newfiletype = (ushort) cr2w.GetStringIndex(FileType, true);
-                return (-cr2w.GetHandleIndex(Handle, newfiletype, Flags, true) - 1);
+                return _val;
+                //if (ChunkHandle)
+                //{
+                //    return ChunkIndex;
+                //}
+                //else
+                //{
+                //    var newfiletype = (ushort)cr2w.GetStringIndex(FileType, true);
+                //    return (-cr2w.GetHandleIndex(Handle, newfiletype, Flags, true) - 1);
+                //}
             }
             set
             {
-                ChunkHandle = value >= 0;
+                _val = value;
+                //ChunkHandle = value >= 0;
 
+                //if (ChunkHandle)
+                //{
+                //    if (value <= cr2w.chunks.Count)
+                //        ChunkIndex = value;
+                //}
+                //else
+                //{
+                //    if (-value - 1 <= cr2w.imports.Count)
+                //    {
+                //        Handle = cr2w.imports[-value - 1].DepotPathStr;
+
+                //        var filetype = cr2w.imports[-value - 1].Import.className;
+                //        FileType = cr2w.names[filetype].Str;
+
+                //        Flags = cr2w.imports[-value - 1].Import.flags;
+                //    }
+                //}
+            }
+        }
+
+        #region Handle
+        private void UpdateValue(string handle, string filetype, ushort flags)
+        {
+            if (ChunkHandle)
+                throw new NotImplementedException();
+            else
+            {
+                var filetypeid = (ushort)cr2w.GetStringIndex(filetype, true);
+                val = (-cr2w.GetHandleIndex(handle, filetypeid, flags, true) - 1);
+            }
+        }
+
+        [DataMember(EmitDefaultValue = false)]
+        public string Handle
+        {
+            get {
                 if (ChunkHandle)
-                {
-                    if (value <= cr2w.chunks.Count)
-                        ChunkIndex = value;
-                }
+                    throw new NotImplementedException();
                 else
-                {
-                    if (-value - 1 <= cr2w.imports.Count)
-                    {
-                        Handle = cr2w.imports[-value - 1].DepotPathStr;
-
-                        var filetype = cr2w.imports[-value - 1].Import.className;
-                        FileType = cr2w.names[filetype].Str;
-
-                        Flags = cr2w.imports[-value - 1].Import.flags;
-                    }
-                }
+                    return cr2w.imports[-val - 1].DepotPathStr;
+            }
+            set
+            {
+                if (ChunkHandle)
+                    throw new NotImplementedException();
+                else
+                    UpdateValue(value, FileType, Flags);
             }
         }
         [DataMember(EmitDefaultValue = false)]
-        public string Handle { get; set; }
+        public string FileType
+        {
+            get
+            {
+                if (ChunkHandle)
+                    throw new NotImplementedException();
+                else
+                {
+                    var filetype = cr2w.imports[-val - 1].Import.className;
+                    return cr2w.names[filetype].Str;
+                } 
+            }
+            set
+            {
+                if (ChunkHandle)
+                    throw new NotImplementedException();
+                else
+                    UpdateValue(Handle, value, Flags);
+            }
+        }
         [DataMember(EmitDefaultValue = false)]
-        public string FileType { get; set; }
-        [DataMember(EmitDefaultValue = false)]
-        public ushort Flags { get; set; }
+        public ushort Flags
+        {
+            get
+            {
+                if (ChunkHandle)
+                    throw new NotImplementedException();
+                else
+                    return cr2w.imports[-val - 1].Import.flags;
+            }
+            set
+            {
+                if (ChunkHandle)
+                    throw new NotImplementedException();
+                else
+                    UpdateValue(Handle, FileType, value);
+            }
+        }
+        #endregion
+
+        #region Chunk Handle
         [DataMember(EmitDefaultValue = false)]
         public bool ChunkHandle { get; set; }
         [DataMember(EmitDefaultValue = false)]
-        public int ChunkIndex { get; set; }
+        public int ChunkIndex
+        {
+            get
+            {
+                if (ChunkHandle)
+                    return val;
+                else
+                    throw new NotImplementedException();
+            }
+            set
+            {
+                if (ChunkHandle)
+                    val = value;
+                else
+                    throw new NotImplementedException();
+            }
+        }
+        #endregion
+
 
         public override void Read(BinaryReader file, uint size)
         {
             val = file.ReadInt32();
+            if (val > 0)
+                this.ChunkHandle = true;
         }
 
         public override void Write(BinaryWriter file)
@@ -74,7 +168,7 @@ namespace WolvenKit.CR2W.Types
         {
             if (val is int)
             {
-                this.val = (int) val;
+                this.val = (int)val;
             }
 
             return this;
@@ -87,7 +181,7 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CHandle) base.Copy(context);
+            var var = (CHandle)base.Copy(context);
 
             var.Handle = Handle;
             var.FileType = FileType;
@@ -118,16 +212,16 @@ namespace WolvenKit.CR2W.Types
             if (ChunkHandle)
             {
                 var editor = new ComboBox();
-                editor.Items.Add(new HandleComboItem {Text = "", Value = 0});
+                editor.Items.Add(new HandleComboItem { Text = "", Value = 0 });
 
                 for (var i = 0; i < cr2w.chunks.Count; i++)
                 {
-                    editor.Items.Add(new HandleComboItem {Text = cr2w.chunks[i].Type + " #" + (i + 1), Value = i + 1});
+                    editor.Items.Add(new HandleComboItem { Text = cr2w.chunks[i].Type + " #" + (i + 1), Value = i + 1 });
                 }
 
-                editor.SelectedIndexChanged += delegate(object sender, EventArgs e)
+                editor.SelectedIndexChanged += delegate (object sender, EventArgs e)
                 {
-                    var item = (HandleComboItem) ((ComboBox) sender).SelectedItem;
+                    var item = (HandleComboItem)((ComboBox)sender).SelectedItem;
                     if (item != null)
                     {
                         ChunkIndex = item.Value;
