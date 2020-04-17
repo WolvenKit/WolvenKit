@@ -209,7 +209,7 @@ namespace WolvenKit.Cache
         public static string GetIDFromPath(string path)
         {
             var split = path.Split(Path.DirectorySeparatorChar);
-            var actualpath = split.SkipWhile(x => x != "SoundCache").Skip(2).Aggregate("", (c, n) => c += Path.DirectorySeparatorChar + n).Trim().Trim(Path.DirectorySeparatorChar);
+            var actualpath = split.SkipWhile(x => x != "SoundCache").Skip(1).Aggregate("", (c, n) => c += Path.DirectorySeparatorChar + n).Trim().Trim(Path.DirectorySeparatorChar);
             if (actualpath.EndsWith(".wem"))
             {
                 if (info.StreamedFiles.Any(x => x.Path == actualpath))
