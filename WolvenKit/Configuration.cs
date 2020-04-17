@@ -26,6 +26,8 @@ namespace WolvenKit
         ///     Configuration values
         /// </summary>
         public string ExecutablePath { get; set; }
+
+        public string DepotHash { get; set; }
         
         public string TextLanguage { get; set; }
         public string VoiceLanguage { get; set; }

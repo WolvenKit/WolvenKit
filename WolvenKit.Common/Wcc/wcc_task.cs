@@ -15,12 +15,12 @@ namespace WolvenKit.Common.Wcc
     /// <summary>
     /// 
     /// </summary>
-    public class WccHelper
+    public class WccLite
     {
         private ILoggerService _logger { get; set; }
         private string _wccPath;
 
-        public WccHelper(string path, ILoggerService loggerService)
+        public WccLite(string path, ILoggerService loggerService)
         {
             _wccPath = path;
             _logger = loggerService;

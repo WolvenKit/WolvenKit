@@ -10,6 +10,8 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using WeifenLuo.WinFormsUI.Docking;
+using System.IO.Compression;
+using System.Security.Cryptography;
 
 namespace WolvenKit
 {
@@ -23,7 +25,6 @@ namespace WolvenKit
     using Common.Services;
     using WolvenKit.Common.Wcc;
     using Render;
-    using System.Security.RightsManagement;
     using WolvenKit.W3Speech;
 
     public enum EColorThemes
@@ -40,10 +41,12 @@ namespace WolvenKit
         public frmMain Window { get; private set; }
         public W3Mod ActiveMod { get; set; }
 
-        public WccHelper WccHelper { get; set; }
+        public WccLite WccHelper { get; set; }
         public LoggerService Logger { get; set; }
 
         public const string ManagerCacheDir = "ManagerCache";
+        public const string DepotDir = "Depot";
+        private const string DepotZipPath = "Resources\\W3Data\\Depot.zip";
         public string VLCLibDir = "C:\\Program Files\\VideoLAN\\VLC";
         public string InitialModProject = "";
         public string InitialWKP = "";
@@ -167,7 +170,7 @@ namespace WolvenKit
         {
             if(WccHelper == null)
             {
-                mainController.WccHelper = new WccHelper(wccLite, mainController.Logger);
+                mainController.WccHelper = new WccLite(wccLite, mainController.Logger);
             }
             WccHelper.UpdatePath(wccLite);
         }
@@ -437,10 +440,34 @@ namespace WolvenKit
                 }
                 #endregion
 
+                loadStatus = "Loading depot manager!";
+                #region Load depot manager
+                var fi = new FileInfo(DepotZipPath);
+                if (!fi.Exists)
+                    throw new Exception("Shipped Depot not found: Depot.zip");
+
+                using (MD5 md5 = MD5.Create())
+                using (var stream = File.OpenRead(fi.FullName))
+                {
+                    var shash = BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLower();
+                    // check if not same as in config
+                    if (Configuration.DepotHash != shash)
+                    {
+                        Configuration.DepotHash = shash;
+
+                        if (Directory.Exists(DepotDir))
+                            Directory.Delete(DepotDir, true);
+                        Directory.CreateDirectory(DepotDir);
+                        ZipFile.ExtractToDirectory(DepotZipPath, DepotDir);
+                    }
+                }
+                
+                #endregion
+
                 loadStatus = "Loaded";
 
                 Logger = new LoggerService();
-                WccHelper = new WccHelper(MainController.Get().Configuration.WccLite, Logger);
+                WccHelper = new WccLite(MainController.Get().Configuration.WccLite, Logger);
 
                 mainController.Loaded = true;
             }

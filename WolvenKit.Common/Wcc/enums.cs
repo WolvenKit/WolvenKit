@@ -45,12 +45,33 @@ namespace WolvenKit.Common.Wcc
                 default: return "";
             }
         }
+
+        public static Enum RawExtensionToEnum(string ext)
+        {
+            switch (ext)
+            {
+                case ".apb": return new EApbImports();
+                case ".nxs": return new ENxsImports();
+                case ".png":
+                case ".bmp":
+                case ".jpg":
+                case ".tga":
+                case ".dds":
+                    return new ETextureImports();
+                case ".re":
+                case ".fbx":
+                    return new EMeshImports();
+                default:
+                    throw new NotImplementedException();
+            }
+        }
     }
 
     public enum ETextureImports
     {
+        xbm,
         w2cube,
-        xbm
+        
     }
 
     public enum EMeshImports
@@ -77,10 +98,11 @@ namespace WolvenKit.Common.Wcc
         jpg,
         tga,
         dds,
+
         apb,
         fbx,
         nxs,
-        re
+        //re
     };
 
     public enum EWccStatus
@@ -94,7 +116,7 @@ namespace WolvenKit.Common.Wcc
     /// wcc_lite command enums
     /// </summary>
     #region enums
-    public enum textureGroupNames
+    public enum ETextureGroup
     {
         None,
         BillboardAtlas,
