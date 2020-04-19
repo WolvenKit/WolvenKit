@@ -44,6 +44,12 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
+    public enum WwAudioFileType
+    {
+        Wav,
+        Wem
+    }
+
     public class WemFile
     {
         //Header data
@@ -76,6 +82,7 @@ namespace WolvenKit.Wwise.Wwise
         public ushort extra_fmt_length = 0;
         public ushort ext_unk = 0;
         public uint subtype = 0;
+        public byte[] extra_fmt = new byte[0];
 
         //CUE - TODO: Move to separate file
         public uint cue_count = 0;
@@ -121,7 +128,7 @@ namespace WolvenKit.Wwise.Wwise
         public byte[] data_setup = new byte[0];
         public byte[] data = new byte[0];
 
-        public byte[] buffer;
+        public byte[] buffer = new byte[0];
 
         public PacketWebFile packet;
 
@@ -197,11 +204,17 @@ namespace WolvenKit.Wwise.Wwise
         /// </summary>
         public void Calculate_Riff_Size()
         {
-            using (var bw = new BinaryWriter(new MemoryStream(buffer)))
+            var buff = buffer.Skip(8).ToArray();
+            var ms = new MemoryStream();
+            ms.Write(buffer, 0, buffer.Length);
+            using (var bw = new BinaryWriter(ms))
             {
                 bw.BaseStream.Seek(4, SeekOrigin.Begin);
-                bw.Write((uint)(bw.BaseStream.Length - 8));
+                bw.Write((UInt32)(bw.BaseStream.Length - 8));
+                bw.Write(buff);
             }
+            buffer = ms.ToArray();
+            ms.Flush();
         }
 
         /// <summary>
@@ -209,7 +222,7 @@ namespace WolvenKit.Wwise.Wwise
         /// Initializes the buffer as well
         /// </summary>
         /// <param name="path">The file to load</param>
-        public void LoadFromFile(string path)
+        public void LoadFromFile(string path, WwAudioFileType filetype)
         {
             using (var br = new BinaryReader(new FileStream(path, FileMode.Open)))
             {
@@ -245,6 +258,8 @@ namespace WolvenKit.Wwise.Wwise
                             }
                         case "cue":
                             {
+                                if(filetype == WwAudioFileType.Wav)
+                                    throw new Exception("Already contains cue!");
                                 cue_offset = chunk_offset + 8;
                                 cue_size = size;
                                 break;
@@ -285,28 +300,32 @@ namespace WolvenKit.Wwise.Wwise
                 if (fmt_offset == 0 || data_offset == 0)
                     throw new Exception("No fmt and data chunks found!");
 
-                if (Array.IndexOf(new uint[] { 0, 0x28, 0x2A, 0x2C, 0x32, 0x34 }, vorb_size) == -1)
-                    throw new Exception("Bad vorb size!");
-
-                if (vorb_offset == 0)
+                if (filetype == WwAudioFileType.Wem)
                 {
-                    if (fmt_size != 0x42)
+
+                    if (Array.IndexOf(new uint[] {0, 0x28, 0x2A, 0x2C, 0x32, 0x34}, vorb_size) == -1)
+                        throw new Exception("Bad vorb size!");
+
+                    if (vorb_offset == 0)
                     {
-                        throw new Exception("fmt size must be 0x42 if no vorb");
+                        if (fmt_size != 0x42)
+                        {
+                            throw new Exception("fmt size must be 0x42 if no vorb");
+                        }
+                        else
+                        {
+                            vorb_offset = fmt_offset + 0x18; //FAKE
+                            fake_vorb = true;
+                        }
                     }
                     else
                     {
-                        vorb_offset = fmt_offset + 0x18; //FAKE
-                        fake_vorb = true;
-                    }
-                }
-                else
-                {
-                    throw new Exception("Not supported!");
+                        throw new Exception("Not supported!");
 
-                    if (Array.IndexOf(new uint[] { 0x28, 0x18, 0x12 }, fmt_size) > -1)
-                    {
-                        throw new Exception("Bad fmt size!");
+                        if (Array.IndexOf(new uint[] {0x28, 0x18, 0x12}, fmt_size) > -1)
+                        {
+                            throw new Exception("Bad fmt size!");
+                        }
                     }
                 }
 
@@ -314,13 +333,44 @@ namespace WolvenKit.Wwise.Wwise
 
                 codecid = br.ReadUInt16();
 
-                if (codecid != 0xFFFF)
-                    throw new Exception("Bad codec  id!");
+                switch (filetype)
+                {
+                    case WwAudioFileType.Wav:
+                    {
+                        if (codecid != 1)
+                            throw new Exception("Compressed WAVE not supported!");
+                        break;
+                    }
+                    case WwAudioFileType.Wem:
+                    {
+                        if (codecid != 0xFFFF)
+                            throw new Exception("Bad codec  id!");
+                        break;
+                    }
+                }
 
                 channels = br.ReadUInt16();
                 sample_rate = br.ReadUInt32();
                 avg_bytes_per_second = br.ReadUInt32();
                 block_alignment = br.ReadUInt16();
+
+                if (filetype == WwAudioFileType.Wav)
+                {
+                    bps = br.ReadUInt16();
+
+                    if(fmt_size > 0x10)
+                    {
+                        extra_fmt_length = br.ReadUInt16();
+
+                        if (extra_fmt_length > 0)
+                        {
+                            extra_fmt = br.ReadBytes(extra_fmt_length);
+                        }
+                    }
+                    br.BaseStream.Seek(data_offset, SeekOrigin.Begin);
+                    data = br.ReadBytes((int) (br.BaseStream.Length - br.BaseStream.Position));
+                    return;
+                }
 
                 if (block_alignment != 0)
                     throw new Exception("Bad block alignment!");
@@ -447,7 +497,6 @@ namespace WolvenKit.Wwise.Wwise
                 if (pre_data.Length + data_setup.Length + data.Length != br.BaseStream.Length)
                     throw new Exception("Bad data!");
             }
-            buffer = File.ReadAllBytes(path);
         }
 
         /// <summary>
@@ -464,15 +513,18 @@ namespace WolvenKit.Wwise.Wwise
         /// </summary>
         public void Generate()
         {
-            using (var bw = new BinaryWriter(new MemoryStream(buffer)))
+            var ms = new MemoryStream();
+            ms.Write(buffer, 0, buffer.Length);
+            using (var bw = new BinaryWriter(ms))
             {
+                
                 riff_size = 0;
 
-                bw.Write(riff_head);
+                bw.Write("RIFF".ToCharArray());
                 bw.Write(riff_size);
-                bw.Write(wave_head);
+                bw.Write("WAVE".ToCharArray());
 
-                bw.Write("fmt ");
+                bw.Write("fmt ".ToCharArray());
                 bw.Write(fmt_size);
                 bw.Write(codecid);
                 bw.Write(channels);
@@ -487,20 +539,22 @@ namespace WolvenKit.Wwise.Wwise
                 //if(extra_fmt != 0)
                 // bw.Write(extra_fmt)
 
-                bw.Write("cue ");
+                bw.Write("cue ".ToCharArray());
                 bw.Write(28); // cue chunk size
                 bw.Write(1); // cue count
                 bw.Write(1); // cue id 
                 bw.Write(0); // cue position
-                bw.Write("data"); // chunk id
+                bw.Write("data".ToCharArray()); // chunk id
                 bw.Write(0); // chunk start
                 bw.Write(0); // block start
                 bw.Write(0); // sample offset
 
-                bw.Write("data");
+                bw.Write("data".ToCharArray());
                 bw.Write(data_size + (data_size * 0));
                 bw.Write(data);
             }
+            buffer = ms.ToArray();
+            ms.Flush();
         }
 
         /// <summary>
@@ -511,7 +565,7 @@ namespace WolvenKit.Wwise.Wwise
         {
             using (var bw = new BinaryWriter(new FileStream(path, FileMode.Create)))
             {
-                bw.Write(buffer.ToArray());
+                bw.Write(buffer);
             }
         }
     }

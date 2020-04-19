@@ -574,7 +574,7 @@ namespace WolvenKit.Wwise.Wwise
             }
 
             WemFile wem = new WemFile();
-            wem.LoadFromFile(file);
+            wem.LoadFromFile(file, WwAudioFileType.Wem);
 
             double new_time = (wem.sample_count / (float)wem.sample_rate) * 1000;
 
@@ -667,7 +667,7 @@ namespace WolvenKit.Wwise.Wwise
             }
 
             WemFile wem = new WemFile();
-            wem.LoadFromFile(file);
+            wem.LoadFromFile(file, WwAudioFileType.Wem);
 
             double new_time = (wem.sample_count / wem.sample_rate) * 1000;
             SBObject segment = null;

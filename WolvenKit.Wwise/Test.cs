@@ -42,7 +42,28 @@ namespace WolvenKit.Wwise
             }
             else
             {
-                if (argc != 2)
+                if (args[0] == "--cue")
+                {
+                    Console.WriteLine("Entering mode: cue given wav");
+                    var wav = args[1];
+                    if (string.IsNullOrEmpty(wav))
+                    {
+                        Console.WriteLine("Invalid wem file");
+                        Environment.Exit(0);
+                    }
+
+                    Console.WriteLine("Reading WAVE...");
+                    var wavinput = new WemFile();
+                    wavinput.LoadFromFile(wav, WwAudioFileType.Wav);
+                    Console.WriteLine("Done!\n");
+                    Console.WriteLine("Preparing WAVE...");
+                    wavinput.Generate();
+                    wavinput.Calculate_Riff_Size();
+                    wavinput.WriteToFile(wav + ".cued");
+                    Console.WriteLine("Done!");
+
+                }
+                else if (argc != 2)
                 {
                     show_usage();
                 }
