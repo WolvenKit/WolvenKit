@@ -11,9 +11,11 @@ namespace WolvenKit.Wwise
             Console.WriteLine("Usage: " + s + " <BNK> <FOLDER>");
             Console.WriteLine("Usage: " + s + " --music <BNK> <WEM>");
             Console.WriteLine("Usage: " + s + " --playlist-id-from-track <BNK> <TRACK ID>");
-            Console.WriteLine("Usage: " + s + " --export-playlist <BNK> <PLYALIST ID>");
+            Console.WriteLine("Usage: " + s + " --export-playlist <BNK> <PLAYLIST ID>");
             Console.WriteLine("Usage: " + s + " --reimport-playlist <BNK> <PLAYLIST ID>");
             Console.WriteLine("Usage: " + s + " --debug <BNK>");
+            Console.WriteLine("Usage: " + s + " --cue <WAV>");
+            Console.WriteLine("Usage: " + s + " --merge-headers <ORIGINAL WEM> <MODIFIED WEM>");
             Environment.Exit(0);
         }
         [STAThread]
@@ -33,7 +35,7 @@ namespace WolvenKit.Wwise
             bnk = args[1];
 
             // preparing
-            if (args[0] == "--music" || args[0] == "add-new-music" || args[0] == "--playlist-id-from-track" || args[0] == "--export-playlist" || args[0] == "reimport-playlist")
+            if (args[0] == "--merge-headers" || args[0] == "--music" || args[0] == "add-new-music" || args[0] == "--playlist-id-from-track" || args[0] == "--export-playlist" || args[0] == "reimport-playlist")
             {
                 if (argc != 3)
                 {
@@ -69,7 +71,28 @@ namespace WolvenKit.Wwise
                 }
             }
 
-            if (args[0] == "--music")
+            if (args[0] == "--merge-headers")
+            {
+                if (argc != 3)
+                    show_usage();
+                var of = args[1];
+                var mf = args[2];
+                Console.WriteLine("Original file: " + of);
+                Console.WriteLine("Modified file: " + mf);
+
+                var input = new WemFile();
+                input.LoadFromFile(of, WwAudioFileType.Wem);
+                var output = new WemFile();
+                output.LoadFromFile(mf, WwAudioFileType.Wem);
+                Console.WriteLine("Files loaded!");
+
+                output.merge_headers(input);
+                output.Merge_Datas(input);
+                output.Calculate_Riff_Size();
+                output.WriteToFile(mf + ".wkitmerge");
+                Console.WriteLine("Merging completed!");
+            } 
+            else if (args[0] == "--music")
             {
                 mode = Soundbank.MODE_BUILD_MUSIC;
                 Console.WriteLine("Entering mode : Build music");

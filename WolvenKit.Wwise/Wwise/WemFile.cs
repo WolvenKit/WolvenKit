@@ -115,9 +115,9 @@ namespace WolvenKit.Wwise.Wwise
         public uint sample_count = 0;
         public uint setup_packet_offset = 0;
         public uint first_audio_packet_offset = 0;
-        public uint fmt_unk_field32_3 = 0;
-        public uint fmt_unk_field32_4 = 0;
-        public uint fmt_unk_field32_5 = 0;
+        public UInt32 fmt_unk_field32_3 = 0;
+        public UInt32 fmt_unk_field32_4 = 0;
+        public UInt32 fmt_unk_field32_5 = 0;
         public bool header_triad_present = false;
         public bool old_packet_headers = false;
         public uint uid = 0;
@@ -139,7 +139,9 @@ namespace WolvenKit.Wwise.Wwise
 
         public void merge_headers(WemFile original)
         {
-            using (var bw = new BinaryWriter(new MemoryStream(buffer)))
+            var ms = new MemoryStream();
+            ms.Write(buffer, 0, buffer.Length);
+            using (var bw = new BinaryWriter(ms))
             {
                 if (!fake_vorb)
                     throw new Exception("Not supported");
@@ -147,11 +149,11 @@ namespace WolvenKit.Wwise.Wwise
                 riff_size = 0;
                 subtype = original.subtype;
 
-                bw.Write(riff_head);
+                bw.Write(riff_head.ToCharArray());
                 bw.Write(riff_size);
-                bw.Write(wave_head);
+                bw.Write(wave_head.ToCharArray());
 
-                bw.Write("fmt ");
+                bw.Write("fmt ".ToCharArray());
                 bw.Write(fmt_size);
                 bw.Write(codecid);
                 bw.Write(channels);
@@ -167,7 +169,7 @@ namespace WolvenKit.Wwise.Wwise
                 bw.Write(fmt_unk_field32_1);
                 bw.Write(fmt_unk_field32_2);
                 bw.Write(pre_data.Length);
-                bw.Write(pre_data.Length + (first_audio_packet_offset - setup_packet_offset));
+                bw.Write((UInt32)(pre_data.Length + (first_audio_packet_offset - setup_packet_offset)));
                 bw.Write(fmt_unk_field32_3);
                 bw.Write(fmt_unk_field32_4);
                 bw.Write(fmt_unk_field32_5);
@@ -177,7 +179,7 @@ namespace WolvenKit.Wwise.Wwise
 
                 if (cue_offset != 0)
                 {
-                    bw.Write("cue ");
+                    bw.Write("cue ".ToCharArray());
                     bw.Write(cue_size);
                     bw.Write(cue_count);
                     bw.Write(cue_id);
@@ -187,16 +189,25 @@ namespace WolvenKit.Wwise.Wwise
                     bw.Write(cue_blockstart);
                     bw.Write(cue_sampleoffset);
                 }
-
             }
+            buffer = ms.ToArray();
+            ms.Flush();
         }
 
         public void Merge_Datas(WemFile original)
         {
-            using (var bw = new BinaryWriter(new MemoryStream(buffer)))
+            var ms = new MemoryStream();
+            ms.Write(buffer, 0, buffer.Length);
+            using (var bw = new BinaryWriter(ms))
             {
-
+                bw.Write("data".ToCharArray());
+                bw.Write((UInt32)(pre_data.Length + data_setup.Length + data.Length));
+                bw.Write(pre_data);
+                bw.Write(data_setup);
+                bw.Write(data);
             }
+            buffer = ms.ToArray();
+            ms.Flush();
         }
 
         /// <summary>
@@ -256,7 +267,7 @@ namespace WolvenKit.Wwise.Wwise
                                 fmt_size = size;
                                 break;
                             }
-                        case "cue":
+                        case "cue ":
                             {
                                 if(filetype == WwAudioFileType.Wav)
                                     throw new Exception("Already contains cue!");
@@ -485,7 +496,7 @@ namespace WolvenKit.Wwise.Wwise
                 }
 
                 if (Array.Exists(new uint[] { 4, 3, 0x33, 0x37, 0x3b, 0x3f }, e => e == subtype))
-                    return;
+                    Console.WriteLine("");
 
                 setup_packet(br);
 
@@ -494,7 +505,7 @@ namespace WolvenKit.Wwise.Wwise
                 data_setup = br.ReadBytes((int)first_audio_packet_offset);
                 data = br.ReadBytes((int)(br.BaseStream.Length - br.BaseStream.Position));
 
-                if (pre_data.Length + data_setup.Length + data.Length != br.BaseStream.Length)
+                if ((pre_data.Length + data_setup.Length + data.Length) != data_size)
                     throw new Exception("Bad data!");
             }
         }
