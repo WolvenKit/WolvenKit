@@ -164,6 +164,13 @@ namespace WolvenKit.Wwise.Wwise
                 _path = "";
             }
         }
+
+        public FileWrite(Stream s)
+        {
+            _file = new BinaryWriter(s);
+            _path = "";
+        }
+
         ~FileWrite()
         {
             if (_file != null)

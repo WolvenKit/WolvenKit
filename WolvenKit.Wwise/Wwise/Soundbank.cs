@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace WolvenKit.Wwise.Wwise
 {
@@ -447,51 +448,51 @@ namespace WolvenKit.Wwise.Wwise
 
             FileWrite fw = new FileWrite(_fileName + ".wkrebuilt");
             fw._file.Write(_header._head.ToCharArray());
-            fw._file.Write(_header._length);
-            fw._file.Write(_header._version);
-            fw._file.Write(_header._id);
-            fw._file.Write(_header._unk_field32_1);
-            fw._file.Write(_header._unk_field32_2);
+            fw._file.Write((UInt32)_header._length);
+            fw._file.Write((UInt32)_header._version);
+            fw._file.Write((UInt32)_header._id);
+            fw._file.Write((UInt32)_header._unk_field32_1);
+            fw._file.Write((UInt32)_header._unk_field32_2);
 
             if(_header._unk_data != "")
             {
-                fw._file.Write(_header._unk_data);
+                fw._file.Write(_header._unk_data.ToCharArray());
             }
 
             if(_dataIndex != null && _dataIndex._isSet)
             {
                 _dataIndex.calculate_offset();
-                fw._file.Write(_dataIndex._head);
-                fw._file.Write(_dataIndex._length);
+                fw._file.Write(_dataIndex._head.ToCharArray());
+                fw._file.Write((UInt32)_dataIndex._length);
 
                 foreach(var info in _dataIndex._data_info)
                 {
-                    fw._file.Write(info._id);
-                    fw._file.Write(info._offset);
-                    fw._file.Write(info._size);
+                    fw._file.Write((UInt32)info._id);
+                    fw._file.Write((UInt32)info._offset);
+                    fw._file.Write((UInt32)info._size);
                 }
             }
             if(_data != null && _data._isSet)
             {
-                fw._file.Write(_data._head);
-                fw._file.Write(_dataIndex.get_total_size());
+                fw._file.Write(_data._head.ToCharArray());
+                fw._file.Write((UInt32)_dataIndex.get_total_size());
 
                 _data._offset = (uint)fw.getPosition();
                 foreach(var info in _dataIndex._data_info)
                 {
-                    fw._file.Write(info._data);
+                    fw._file.Write(info._data.ToCharArray());
                 }
             }
 
             fw._file.Write(_objects._head.ToCharArray());
-            fw._file.Write(_objects._length);
-            fw._file.Write(_objects._quantity);
+            fw._file.Write((UInt32)_objects._length);
+            fw._file.Write((UInt32)_objects._quantity);
 
             foreach(var obj in _objects._objects)
             {
-                fw._file.Write(obj._type);
-                fw._file.Write(obj._length);
-                fw._file.Write(obj._id);
+                fw._file.Write((UInt32)obj._type);
+                fw._file.Write((UInt32)obj._length);
+                fw._file.Write((UInt32)obj._id);
 
                 if(obj._type == SBObject.TYPE_SOUND)
                 {
@@ -518,15 +519,15 @@ namespace WolvenKit.Wwise.Wwise
                     }
                 }
 
-                fw._file.Write(obj.getData());
+                fw._file.Write(obj.getData().ToCharArray());
             }
 
             if(_stid != null && _stid._isSet)
             {
                 fw._file.Write(_stid._head.ToCharArray());
-                fw._file.Write(_stid._length);
-                fw._file.Write(_stid._unk_field32_1);
-                fw._file.Write(_stid._quantity);
+                fw._file.Write((UInt32)_stid._length);
+                fw._file.Write((UInt32)_stid._unk_field32_1);
+                fw._file.Write((UInt32)_stid._quantity);
                 fw._file.Write(_stid._remaining.ToCharArray());
             }
 
@@ -536,19 +537,20 @@ namespace WolvenKit.Wwise.Wwise
         
         public void read_wems(string folder)
         {
-            string[] files = Directory.GetFiles(folder, "*.wem");
+            string[] files = Directory.GetFiles(folder, "*.wem", SearchOption.AllDirectories);
             foreach(string f in files)
             {
                 try
                 {
                     FileInfo fi = new FileInfo(f);
                     WEM w = new WEM();
-                    if (uint.TryParse(fi.Name.Substring(0, 4), out w._id))
-                        continue;
-                    w._size = (uint)fi.Length;
+                    //TODO: Add soundbanksinfo reversing here
+                    uint.TryParse(Path.GetFileNameWithoutExtension(f), out w._id);
+                    w._size = (UInt32)fi.Length;
                     BinaryReader br = new BinaryReader(fi.OpenRead());
-                    w._data = br.ReadString();
+                    w._data = new String(br.ReadChars((int)br.BaseStream.Length));
                     _to_add.Add(w);
+                    Console.WriteLine("\tFile ->" + f);
                 }
                 catch
                 {

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using IniParser;
 using IniParser.Model;
 
@@ -76,22 +78,23 @@ namespace WolvenKit.Wwise.Wwise
 
         public string getData()
         {
-            FileWrite fr = new FileWrite("tmp_soundobject.tmp");
+            var ms = new MemoryStream();
+            FileWrite fr = new FileWrite(ms);
 
             fr._file.Write(_unk_field32_1);
-            fr._file.Write(_include_type);
-            fr._file.Write(_audio_id);
-            fr._file.Write(_source_id);
+            fr._file.Write((UInt32)_include_type);
+            fr._file.Write((UInt32)_audio_id);
+            fr._file.Write((UInt32)_source_id);
 
             if (_include_type == SOUND_EMBEDED)
             {
-                fr._file.Write(_offset);
-                fr._file.Write(_size);
+                fr._file.Write((UInt32)_offset);
+                fr._file.Write((UInt32)_size);
             }
             fr._file.Write(_sound_type);
-            fr._file.Write(_sound_structure);
+            fr._file.Write(_sound_structure.ToCharArray());
 
-            string result = fr.ToString();
+            string result = new String(ms.ToArray().ToList().Select(x => (char)x).ToArray());
             fr._file.Close();
 
             return result;
@@ -284,9 +287,10 @@ namespace WolvenKit.Wwise.Wwise
 
         public string getData()
         {
-            FileWrite fr = new FileWrite("tmp_music_segment_object.tmp");
+            var ms = new MemoryStream();
+            FileWrite fr = new FileWrite(ms);
 
-            fr._file.Write(_sound_structure.getData());
+            fr._file.Write(_sound_structure.getData().ToCharArray());
             fr._file.Write(_children);
             foreach (uint id in _child_ids)
             {
@@ -310,12 +314,13 @@ namespace WolvenKit.Wwise.Wwise
             fr._file.Write(_unk_field32_6);
 
             if (_unk_data != "")
-                fr._file.Write(_unk_data);
+                fr._file.Write(_unk_data.ToCharArray());
 
-            string res = fr.ToString();
+            string result = new String(ms.ToArray().ToList().Select(x => (char)x).ToArray());
             fr._file.Close();
 
-            return res;
+            return result;
+
         }
     }
 
@@ -367,7 +372,8 @@ namespace WolvenKit.Wwise.Wwise
 
         public string getData()
         {
-            FileWrite fr = new FileWrite("tmp_music_track_object.tmp");
+            var ms = new MemoryStream();
+            FileWrite fr = new FileWrite(ms);
 
             fr._file.Write(_unk_field32_1);
             fr._file.Write(_unk_field32_2);
@@ -389,10 +395,10 @@ namespace WolvenKit.Wwise.Wwise
             if (_unk_data != "")
                 fr._file.Write(_unk_data);
 
-            string res = fr.ToString();
+            string result = new String(ms.ToArray().ToList().Select(x => (char)x).ToArray());
             fr._file.Close();
 
-            return res;
+            return result;
         }
     }
 
@@ -436,7 +442,9 @@ namespace WolvenKit.Wwise.Wwise
 
         public string getData()
         {
-            FileWrite fr = new FileWrite("tmp_music_track_custom_object.tmp");
+            var ms = new MemoryStream();
+            FileWrite fr = new FileWrite(ms);
+
             fr._file.Write(_unk_field32_1);
             fr._file.Write(_unk_field32_2);
             fr._file.Write(_unk_field32_3);
@@ -463,10 +471,10 @@ namespace WolvenKit.Wwise.Wwise
             fr._file.Write(_unk_field8_3);
             fr._file.Write(_unk_field32_8);
 
-            string res = fr.ToString();
+            string result = new String(ms.ToArray().ToList().Select(x => (char)x).ToArray());
             fr._file.Close();
 
-            return res;
+            return result;
         }
     }
 
@@ -893,7 +901,9 @@ namespace WolvenKit.Wwise.Wwise
 
         public string getData()
         {
-            FileWrite fr = new FileWrite("tmp_music_playlist_object.tmp");
+            var ms = new MemoryStream();
+            FileWrite fr = new FileWrite(ms);
+
             fr._file.Write(_sound_structure.getData());
             fr._file.Write(_segments);
             foreach (uint id in _segment_ids)
@@ -954,7 +964,10 @@ namespace WolvenKit.Wwise.Wwise
                 fr._file.Write(mp._random_type);
             }
 
-            return fr.ToString();
+            string result = new String(ms.ToArray().ToList().Select(x => (char)x).ToArray());
+            fr._file.Close();
+
+            return result;
         }
 
         public uint getNewElementId()

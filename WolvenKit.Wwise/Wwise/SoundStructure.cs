@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace WolvenKit.Wwise.Wwise
 {
@@ -291,7 +294,8 @@ namespace WolvenKit.Wwise.Wwise
 
         public string getData()
         {
-            FileWrite fr = new FileWrite("tep_soundstructure.tmp");
+            var ms = new MemoryStream();
+            FileWrite fr = new FileWrite(ms);
 
             fr._file.Write(_effects_override);
             fr._file.Write(_effects_count);
@@ -432,8 +436,7 @@ namespace WolvenKit.Wwise.Wwise
             if (_unk_data != "")
                 fr._file.Write(_unk_data);
 
-            string result = fr.ToString();
-
+            string result = new String(ms.ToArray().ToList().Select(x => (char)x).ToArray());
             fr._file.Close();
 
             return result;
