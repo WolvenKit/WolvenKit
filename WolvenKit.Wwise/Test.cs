@@ -223,6 +223,10 @@ namespace WolvenKit.Wwise
                     Console.WriteLine("Soundbank does not contains embedded files");
                 }
                 Console.WriteLine("Rebuilding sounds...");
+                bank.read_wems(folder);
+                bank.rebuild_data();
+                bank.build_bnk();
+                Console.WriteLine("Done!");
             }
         }
     }

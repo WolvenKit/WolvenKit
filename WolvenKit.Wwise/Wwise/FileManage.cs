@@ -6,7 +6,7 @@ namespace WolvenKit.Wwise.Wwise
     class FileManage
     {
     }
-    // completed
+    
     public class FileRead
     {
         public string _path;
@@ -146,7 +146,7 @@ namespace WolvenKit.Wwise.Wwise
         }
 
     }
-    // completed
+    
     public class FileWrite
     {
         public BinaryWriter _file;

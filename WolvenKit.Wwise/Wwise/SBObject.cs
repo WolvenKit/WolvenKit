@@ -5,7 +5,7 @@ using IniParser.Model;
 
 namespace WolvenKit.Wwise.Wwise
 {
-    // completed
+    
     public class SBObjectType
     {
         public string getData()
@@ -19,7 +19,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // completed
+    
     public class SBSoundObject
     {
         public const uint SOUND_EMBEDED = 0x00;
@@ -98,7 +98,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // completed
+    
     public class EventAction_Additional
     {
         public byte _type = 0;
@@ -114,7 +114,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // completed
+    
     public class SBEventActionObject
     {
         public const uint ACTION_TYPE_SET_STATE = 0x12;
@@ -197,7 +197,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // completed
+    
     public class SBEventObject
     {
         public uint _event_actions = 0;
@@ -217,7 +217,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // completed
+    
     public class SBMusicSegmentObject
     {
         public SoundStructure _sound_structure = null;
@@ -319,7 +319,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // completed
+    
     public class SBMusicTrackObject
     {
         public byte _unk_field8_1 = 0;
@@ -396,7 +396,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // completed
+    
     public class SBMusicTrackCustomObject
     {
         public uint _unk_field32_1 = 1;
@@ -470,7 +470,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // Completed
+    
     public class SBHeader
     {
         public const string HEAD = "BKHD";
@@ -524,7 +524,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // completed
+    
     public class SBDataIndex
     {
         public const string HEAD = "DIDX";
@@ -605,7 +605,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // completed
+    
     public class SBData
     {
         public const string HEAD = "DATA";
@@ -728,7 +728,6 @@ namespace WolvenKit.Wwise.Wwise
 
     }
 
-    // Completed, same level with SBData, SBDataIndex
     public class SBManager
     {
         public const string HEAD = "STMG";
@@ -783,7 +782,6 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // Completed, same level with SBSoundTypeID
     public class SBEnvironments
     {
         public const string HEAD = "ENVS";
@@ -809,7 +807,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // Completed
+    
     public class SBSoundTypeID
     {
         public const string HEAD = "STID";
@@ -839,7 +837,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // Completed
+    
     public class SBMusicPlaylistObject
     {
         public SoundStructure _sound_structure = null;
@@ -1170,7 +1168,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // Completed
+    
     public class SBObject
     {
         public const byte TYPE_SOUND = 0x02;
@@ -1297,7 +1295,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // completed
+    
     public class MusicPlaylistObject_PlaylistElement
     {
         public const uint SIZE = 0x1A;
@@ -1329,7 +1327,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // completed
+    
     public class MusicPlaylistObject_Transition
     {
         public uint _source_id = 0;

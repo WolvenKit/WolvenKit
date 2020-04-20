@@ -27,7 +27,7 @@ namespace WolvenKit.Wwise.Wwise
         public List<WEM> _to_add = new List<WEM>();
         public bool _isInit;
 
-        // completed
+        
         public Soundbank(string fileName)
         {
             try
@@ -55,7 +55,7 @@ namespace WolvenKit.Wwise.Wwise
             }
         }
 
-        // completed
+        
         public void readFile()
         {
             _header = new SBHeader(_file);
@@ -95,7 +95,7 @@ namespace WolvenKit.Wwise.Wwise
             _file.closeFile();
         }
 
-        // completed
+        
         public void debugSound()
         {
             Console.WriteLine("--- Header Start ---");
@@ -209,7 +209,7 @@ namespace WolvenKit.Wwise.Wwise
             }
         }
 
-        // completed
+        
         public void rebuild_data()
         {
             foreach (WEM w in _dataIndex._data_info)
@@ -226,7 +226,7 @@ namespace WolvenKit.Wwise.Wwise
             }
         }
 
-        // completed
+        
         public void get_playlist_ids(uint wid)
         {
             if (wid < 1 || wid > 0xFFFFFFFF)
@@ -301,7 +301,7 @@ namespace WolvenKit.Wwise.Wwise
 
         }
 
-        // completed
+        
         public void export_playlist(uint playlist_id)
         {
             if (playlist_id < 1 || playlist_id > 0xFFFFFFFF)
@@ -436,7 +436,7 @@ namespace WolvenKit.Wwise.Wwise
             */
         }
 
-        // completed
+        
         public void build_bnk()
         {
             if (_isInit)
@@ -445,8 +445,8 @@ namespace WolvenKit.Wwise.Wwise
                 return;
             }
 
-            FileWrite fw = new FileWrite(_fileName + ".rebuilt");
-            fw._file.Write(_header._head);
+            FileWrite fw = new FileWrite(_fileName + ".wkrebuilt");
+            fw._file.Write(_header._head.ToCharArray());
             fw._file.Write(_header._length);
             fw._file.Write(_header._version);
             fw._file.Write(_header._id);
@@ -483,7 +483,7 @@ namespace WolvenKit.Wwise.Wwise
                 }
             }
 
-            fw._file.Write(_objects._head);
+            fw._file.Write(_objects._head.ToCharArray());
             fw._file.Write(_objects._length);
             fw._file.Write(_objects._quantity);
 
@@ -523,17 +523,17 @@ namespace WolvenKit.Wwise.Wwise
 
             if(_stid != null && _stid._isSet)
             {
-                fw._file.Write(_stid._head);
+                fw._file.Write(_stid._head.ToCharArray());
                 fw._file.Write(_stid._length);
                 fw._file.Write(_stid._unk_field32_1);
                 fw._file.Write(_stid._quantity);
-                fw._file.Write(_stid._remaining);
+                fw._file.Write(_stid._remaining.ToCharArray());
             }
 
             fw._file.Close();
         }
 
-        // completed
+        
         public void read_wems(string folder)
         {
             string[] files = Directory.GetFiles(folder, "*.wem");
@@ -557,7 +557,7 @@ namespace WolvenKit.Wwise.Wwise
             }
         }
 
-        // completed
+        
         public void rebuild_music(string file)
         {
             

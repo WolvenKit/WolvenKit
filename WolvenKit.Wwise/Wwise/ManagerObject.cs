@@ -6,7 +6,7 @@ namespace WolvenKit.Wwise.Wwise
     {
     }
 
-    // completed
+    
     public class ManagerObject_StateGroup_CustomTransition
     {
         public uint _from_id = 0;
@@ -24,7 +24,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // completed
+    
     public class ManagerObject_StateGroup
     {
         public uint _id = 0;
@@ -49,7 +49,7 @@ namespace WolvenKit.Wwise.Wwise
 
     }
 
-    // completed
+    
     public class ManagerObject_SwitchGroup
     {
         public uint _id = 0;
@@ -74,7 +74,7 @@ namespace WolvenKit.Wwise.Wwise
 
     }
 
-    // completed
+    
     public class ManagerObject_SwitchGroup_Point
     {
         public float _value = 0;
@@ -92,7 +92,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // completed
+    
     public class ManagerObject_GameParameter
     {
         public uint _id = 0;

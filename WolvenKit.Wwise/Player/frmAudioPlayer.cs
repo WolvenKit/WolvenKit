@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using WolvenKit.Wwise.Wwise;
 
 namespace WolvenKit.Wwise.Player
 {
@@ -118,19 +119,95 @@ namespace WolvenKit.Wwise.Player
 
         private void btnReplace_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("This feature is sadly not avaliable yet :(", ":(", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (!audiofile.EndsWith(".wem"))
+            {
+                MessageBox.Show("Only wem file replacement supported currently!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            using (var of = new OpenFileDialog())
+            {
+                of.Filter = "Wwise wem files | *.wem";
+                of.Multiselect = false;
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    var mf = of.FileName;
+                    Console.WriteLine("Original file: " + audiofile);
+                    Console.WriteLine("Modified file: " + mf);
+
+                    var input = new WemFile();
+                    input.LoadFromFile(audiofile, WwAudioFileType.Wem);
+                    var output = new WemFile();
+                    output.LoadFromFile(mf, WwAudioFileType.Wem);
+                    Console.WriteLine("Files loaded!");
+
+                    output.merge_headers(input);
+                    output.Merge_Datas(input);
+                    output.Calculate_Riff_Size();
+
+                    // Backup
+                    File.Move(audiofile, audiofile + ".bak");
+
+                    File.Delete(audiofile);
+
+                    output.WriteToFile(audiofile);
+
+                    MessageBox.Show("Completed!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
         }
 
-        private void btnExport_Click(object sender, EventArgs e)
+        private void btnPrepare_Click(object sender, EventArgs e)
+        {
+            if (!audiofile.EndsWith(".wem"))
+            {
+                MessageBox.Show("Only wem file replacement supported currently!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            try
+            {
+                using (var of = new OpenFileDialog())
+                {
+
+                    of.Filter = "Wav audio files | *.wav";
+                    of.Multiselect = false;
+                    if (of.ShowDialog() == DialogResult.OK)
+                    {
+                        var wav = of.FileName;
+                        var wavinput = new WemFile();
+                        wavinput.LoadFromFile(wav, WwAudioFileType.Wav);
+                        wavinput.Generate();
+                        wavinput.Calculate_Riff_Size();
+                        var op = Path.Combine(Path.GetDirectoryName(wav),
+                            Path.GetFileNameWithoutExtension(wav) + "_PREPARED.wav");
+                        wavinput.WriteToFile(op);
+
+                        //Reveal the file in windows explorer
+                        string args = string.Format("/e, /select, \"{0}\"", op);
+
+                        ProcessStartInfo info = new ProcessStartInfo();
+                        info.FileName = "explorer";
+                        info.Arguments = args;
+                        Process.Start(info);
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show("Bad file! Please only select files converted from the supplied url!", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Export()
         {
             if (FilesListView.Items.Count > 0)
             {
                 using (var fb = new FolderBrowserDialog())
                 {
                     fb.Description = "Please select a folder to save the .wav files";
-                    if(fb.ShowDialog() == DialogResult.OK)
+                    if (fb.ShowDialog() == DialogResult.OK)
                     {
-                        foreach(var f in Directory.GetFiles(wdir, "*.wav", SearchOption.AllDirectories))
+                        foreach (var f in Directory.GetFiles(wdir, "*.wav", SearchOption.AllDirectories))
                         {
                             File.Copy(f, Path.Combine(fb.SelectedPath, Path.GetFileName(f)));
                         }
@@ -146,8 +223,13 @@ namespace WolvenKit.Wwise.Player
             }
             else
             {
-                MessageBox.Show("No files to export!","Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("No files to export!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void btnOpenConverter_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://audio.online-convert.com/convert-to-wav");
         }
     }
 }

@@ -3,7 +3,7 @@
 namespace WolvenKit.Wwise.Wwise
 {
 
-    // completed
+    
     public class SoundStructure_Effect
     {
         public byte _index = 0;
@@ -38,7 +38,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // completed
+    
     public class SoundStructure_StateGroup
     {
         public uint _id = 0;
@@ -63,7 +63,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    // completed
+    
     public class SoundStructure_RTPC
     {
         public uint _x_axis_id = 0;
@@ -98,7 +98,7 @@ namespace WolvenKit.Wwise.Wwise
 
     }
 
-    // completed
+    
     public class SoundStructure
     {
         public bool _effects_override = false;
