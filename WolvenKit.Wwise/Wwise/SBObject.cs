@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using IniParser;
 using IniParser.Model;
 
@@ -37,7 +38,7 @@ namespace WolvenKit.Wwise.Wwise
         public uint _offset = 0;
         public uint _size = 0;
         public byte _sound_type = 0;
-        public string _sound_structure = "";
+        public byte[] _sound_structure = null;
         public bool _isSet = true;
 
         public SBSoundObject(FileRead fr = null, long curPos = 0, uint length = 0)
@@ -72,11 +73,11 @@ namespace WolvenKit.Wwise.Wwise
                     _isSet = false;
                     return;
                 }
-                _sound_structure = fr.read_uchar(length - (uint)(fr.getPosition() - curPos));
+                _sound_structure = fr._file.ReadBytes((int)(length - (uint)(fr.getPosition() - curPos)));
             }
         }
 
-        public string getData()
+        public byte[] getData()
         {
             var ms = new MemoryStream();
             FileWrite fr = new FileWrite(ms);
@@ -92,9 +93,9 @@ namespace WolvenKit.Wwise.Wwise
                 fr._file.Write((UInt32)_size);
             }
             fr._file.Write(_sound_type);
-            fr._file.Write(_sound_structure.ToCharArray());
+            fr._file.Write(_sound_structure);
 
-            string result = new String(ms.ToArray().ToList().Select(x => (char)x).ToArray());
+            byte[] result = ms.ToArray();
             fr._file.Close();
 
             return result;
@@ -244,7 +245,7 @@ namespace WolvenKit.Wwise.Wwise
         public double _time_length = 0;
         public double _time_length_next = 0;
 
-        public string _unk_data = "";
+        public byte[] _unk_data = null;
 
         public SBMusicSegmentObject(FileRead fr = null, long curPos = 0, uint length = 0)
         {
@@ -275,17 +276,17 @@ namespace WolvenKit.Wwise.Wwise
                 uint remaining = (length - (uint)(fr.getPosition() - curPos));
                 if (remaining > 0)
                 {
-                    _unk_data = fr.read_uchar(remaining);
+                    _unk_data = fr._file.ReadBytes((int)remaining);
                 }
                 else
                 {
-                    _unk_data = "";
+                    _unk_data = null;
                 }
             }
 
         }
 
-        public string getData()
+        public byte[] getData()
         {
             var ms = new MemoryStream();
             FileWrite fr = new FileWrite(ms);
@@ -313,10 +314,10 @@ namespace WolvenKit.Wwise.Wwise
             fr._file.Write(_time_length_next);
             fr._file.Write(_unk_field32_6);
 
-            if (_unk_data != "")
-                fr._file.Write(_unk_data.ToCharArray());
+            if (_unk_data != null)
+                fr._file.Write(_unk_data);
 
-            string result = new String(ms.ToArray().ToList().Select(x => (char)x).ToArray());
+            byte[] result = ms.ToArray();
             fr._file.Close();
 
             return result;
@@ -340,7 +341,7 @@ namespace WolvenKit.Wwise.Wwise
         public uint _id2 = 0;
         public uint _id3 = 0;
         public double _time_length = 0;
-        public string _unk_data = "";
+        public byte[] _unk_data = null;
 
         public SBMusicTrackObject(FileRead fr = null, long curPos = 0, uint length = 0)
         {
@@ -366,11 +367,11 @@ namespace WolvenKit.Wwise.Wwise
 
                 uint remaining = (length - (uint)(fr.getPosition() - curPos));
                 if (remaining > 0)
-                    _unk_data = fr.read_uchar(remaining);
+                    _unk_data = fr._file.ReadBytes((int)remaining);
             }
         }
 
-        public string getData()
+        public byte[] getData()
         {
             var ms = new MemoryStream();
             FileWrite fr = new FileWrite(ms);
@@ -392,10 +393,10 @@ namespace WolvenKit.Wwise.Wwise
                 fr._file.Write(_unk_field64_3);
                 fr._file.Write(_time_length);
             }
-            if (_unk_data != "")
+            if (_unk_data != null)
                 fr._file.Write(_unk_data);
 
-            string result = new String(ms.ToArray().ToList().Select(x => (char)x).ToArray());
+            byte[] result = ms.ToArray();
             fr._file.Close();
 
             return result;
@@ -440,7 +441,7 @@ namespace WolvenKit.Wwise.Wwise
             _parent = parent;
         }
 
-        public string getData()
+        public byte[] getData()
         {
             var ms = new MemoryStream();
             FileWrite fr = new FileWrite(ms);
@@ -471,7 +472,7 @@ namespace WolvenKit.Wwise.Wwise
             fr._file.Write(_unk_field8_3);
             fr._file.Write(_unk_field32_8);
 
-            string result = new String(ms.ToArray().ToList().Select(x => (char)x).ToArray());
+            byte[] result = ms.ToArray();
             fr._file.Close();
 
             return result;
@@ -649,7 +650,7 @@ namespace WolvenKit.Wwise.Wwise
             foreach (WEM w in dataIndex._data_info)
             {
                 fr.seekPosition(_offset + w._offset);
-                w._data = fr.read_uchar(w._size);
+                w._data = fr._file.ReadBytes((int)w._size);
             }
 
             fr.seekPosition(_offset + _length);
@@ -823,7 +824,7 @@ namespace WolvenKit.Wwise.Wwise
         public uint _length = 0;
         public uint _unk_field32_1 = 1;
         public uint _quantity = 0;
-        public string _remaining = "";
+        public byte[] _remaining = null;
         public bool _isSet = true;
 
         public SBSoundTypeID(FileRead fr = null)
@@ -840,7 +841,7 @@ namespace WolvenKit.Wwise.Wwise
                 _length = fr.read_uint32();
                 _unk_field32_1 = fr.read_uint32();
                 _quantity = fr.read_uint32();
-                _remaining = fr.read_uchar(_length - 8);
+                _remaining = fr._file.ReadBytes((int)(_length - 8));
             }
         }
     }
@@ -899,7 +900,7 @@ namespace WolvenKit.Wwise.Wwise
             }
         }
 
-        public string getData()
+        public byte[] getData()
         {
             var ms = new MemoryStream();
             FileWrite fr = new FileWrite(ms);
@@ -964,7 +965,7 @@ namespace WolvenKit.Wwise.Wwise
                 fr._file.Write(mp._random_type);
             }
 
-            string result = new String(ms.ToArray().ToList().Select(x => (char)x).ToArray());
+            byte[] result = ms.ToArray();
             fr._file.Close();
 
             return result;
@@ -1195,7 +1196,7 @@ namespace WolvenKit.Wwise.Wwise
         public byte _type = 0;
         public uint _length = 0;
         public uint _id = 0;
-        public string _obj_str = "";
+        public byte[] _obj_bytes = new byte[0];
         public bool _isSet = true;
         public SBSoundObject _obj_so;
         public SBMusicSegmentObject _obj_mso;
@@ -1237,7 +1238,7 @@ namespace WolvenKit.Wwise.Wwise
                 }
                 else
                 {
-                    _obj_str = fr.read_uchar(_length - 4);
+                    _obj_bytes = fr._file.ReadBytes((int)(_length - 4));
                     _current_obj = "String";
                 }
 
@@ -1274,11 +1275,11 @@ namespace WolvenKit.Wwise.Wwise
             }
             else if (_current_obj == "String")
             {
-                _length = 4 + (uint)_obj_str.Length;
+                _length = 4 + (uint)_obj_bytes.Length;
             }
         }
 
-        public string getData()
+        public byte[] getData()
         {
             if(_current_obj == "SoundObject")
             {
@@ -1302,9 +1303,9 @@ namespace WolvenKit.Wwise.Wwise
             }
             else if(_current_obj == "String")
             {
-                return _obj_str;
+                return _obj_bytes;
             }
-            return "";
+            return null;
         }
     }
 

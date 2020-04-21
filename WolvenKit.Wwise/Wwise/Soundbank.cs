@@ -480,7 +480,7 @@ namespace WolvenKit.Wwise.Wwise
                 _data._offset = (uint)fw.getPosition();
                 foreach(var info in _dataIndex._data_info)
                 {
-                    fw._file.Write(info._data.ToCharArray());
+                    fw._file.Write(info._data);
                 }
             }
 
@@ -490,7 +490,7 @@ namespace WolvenKit.Wwise.Wwise
 
             foreach(var obj in _objects._objects)
             {
-                fw._file.Write((UInt32)obj._type);
+                fw._file.Write((byte)obj._type);
                 fw._file.Write((UInt32)obj._length);
                 fw._file.Write((UInt32)obj._id);
 
@@ -519,7 +519,7 @@ namespace WolvenKit.Wwise.Wwise
                     }
                 }
 
-                fw._file.Write(obj.getData().ToCharArray());
+                fw._file.Write(obj.getData());
             }
 
             if(_stid != null && _stid._isSet)
@@ -528,7 +528,7 @@ namespace WolvenKit.Wwise.Wwise
                 fw._file.Write((UInt32)_stid._length);
                 fw._file.Write((UInt32)_stid._unk_field32_1);
                 fw._file.Write((UInt32)_stid._quantity);
-                fw._file.Write(_stid._remaining.ToCharArray());
+                fw._file.Write(_stid._remaining);
             }
 
             fw._file.Close();
@@ -548,7 +548,7 @@ namespace WolvenKit.Wwise.Wwise
                     uint.TryParse(Path.GetFileNameWithoutExtension(f), out w._id);
                     w._size = (UInt32)fi.Length;
                     BinaryReader br = new BinaryReader(fi.OpenRead());
-                    w._data = new String(br.ReadChars((int)br.BaseStream.Length));
+                    w._data = br.ReadBytes((int)br.BaseStream.Length);
                     _to_add.Add(w);
                     Console.WriteLine("\tFile ->" + f);
                 }

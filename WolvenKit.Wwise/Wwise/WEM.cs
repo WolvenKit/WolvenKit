@@ -6,7 +6,7 @@
         public uint _id = 0;
         public uint _offset = 0;
         public uint _size = 0;
-        public string _data = "";
+        public byte[] _data;
 
         public WEM(FileRead fr = null)
         {
