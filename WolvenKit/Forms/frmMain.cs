@@ -2552,7 +2552,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
 
                     var soundmoddir = Path.Combine(ActiveMod.ModDirectory, MainController.Get().SoundManager.TypeName);
 
-                    foreach (var bnk in Directory.GetFiles(soundmoddir, "Wwise sound banks | *.bnk", SearchOption.AllDirectories))
+                    foreach (var bnk in Directory.GetFiles(soundmoddir, "*.bnk", SearchOption.AllDirectories))
                     {
                         Soundbank bank = new Soundbank(bnk);
                         bank.readFile();

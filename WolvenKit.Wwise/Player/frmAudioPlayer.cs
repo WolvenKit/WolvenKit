@@ -145,7 +145,7 @@ namespace WolvenKit.Wwise.Player
                     output.Calculate_Riff_Size();
 
                     // Backup
-                    File.Move(audiofile, audiofile + ".bak");
+                    //File.Move(audiofile, audiofile + ".bak");
 
                     File.Delete(audiofile);
 

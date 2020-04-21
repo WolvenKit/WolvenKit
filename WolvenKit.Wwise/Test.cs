@@ -179,7 +179,7 @@ namespace WolvenKit.Wwise
             {
                 Console.WriteLine("Rebuilding new music...");
                 bank.rebuild_music(wem);
-                bank.build_bnk();
+                bank.build_bnk(bnk + ".rebuilt");
             }
             else if (mode == Soundbank.MODE_ADD_NEW_MUSIC)
             {
@@ -212,7 +212,7 @@ namespace WolvenKit.Wwise
                 {
                     Console.WriteLine("Reimporting playlist...");
                     bank.reimport_playlist((uint)playlist_id);
-                    bank.build_bnk();
+                    bank.build_bnk(bnk + ".rebuilt");
                     Console.WriteLine("Done!");
                 }
             }
@@ -225,7 +225,7 @@ namespace WolvenKit.Wwise
                 Console.WriteLine("Rebuilding sounds...");
                 bank.read_wems(folder);
                 bank.rebuild_data();
-                bank.build_bnk();
+                bank.build_bnk(bnk + ".rebuilt");
                 Console.WriteLine("Done!");
             }
         }
