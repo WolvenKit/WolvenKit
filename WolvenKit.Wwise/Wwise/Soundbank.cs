@@ -438,7 +438,7 @@ namespace WolvenKit.Wwise.Wwise
         }
 
         
-        public void build_bnk()
+        public void build_bnk(string outpath)
         {
             if (_isInit)
             {
@@ -446,7 +446,7 @@ namespace WolvenKit.Wwise.Wwise
                 return;
             }
 
-            FileWrite fw = new FileWrite(_fileName + ".wkrebuilt");
+            FileWrite fw = new FileWrite(outpath ?? _fileName + ".wkrebuilt");
             fw._file.Write(_header._head.ToCharArray());
             fw._file.Write((UInt32)_header._length);
             fw._file.Write((UInt32)_header._version);
@@ -544,8 +544,7 @@ namespace WolvenKit.Wwise.Wwise
                 {
                     FileInfo fi = new FileInfo(f);
                     WEM w = new WEM();
-                    //TODO: Add soundbanksinfo reversing here
-                    uint.TryParse(Path.GetFileNameWithoutExtension(f), out w._id);
+                    uint.TryParse(WolvenKit.Cache.SoundCache.GetIDFromPath(f), out w._id);
                     w._size = (UInt32)fi.Length;
                     BinaryReader br = new BinaryReader(fi.OpenRead());
                     w._data = br.ReadBytes((int)br.BaseStream.Length);

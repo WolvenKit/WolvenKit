@@ -26,6 +26,7 @@ using WolvenKit.Extensions;
 using WolvenKit.Common.Wcc;
 using WolvenKit.Common.Services;
 using System.ComponentModel;
+using WolvenKit.Wwise.Wwise;
 
 namespace WolvenKit
 {
@@ -2548,7 +2549,21 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 //Handle sound caching
                 if (packsettings.Sound)
                 {
+
                     var soundmoddir = Path.Combine(ActiveMod.ModDirectory, MainController.Get().SoundManager.TypeName);
+
+                    foreach (var bnk in Directory.GetFiles(soundmoddir, "Wwise sound banks | *.bnk", SearchOption.AllDirectories))
+                    {
+                        Soundbank bank = new Soundbank(bnk);
+                        bank.readFile();
+                        bank.read_wems(soundmoddir);
+                        bank.rebuild_data();
+                        File.Delete(bnk);
+                        bank.build_bnk(bnk);
+                        Logger.LogString("Rebuilt modded bnk " + bnk, Logtype.Success);
+                    }
+
+                    //Create mod soundspc.cache
                     if(Directory.Exists(soundmoddir) && 
                         new DirectoryInfo(soundmoddir)
                         .GetFiles("*.*", SearchOption.AllDirectories)
@@ -2566,7 +2581,10 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     {
                         AddOutput("Mod soundcache wasn't generated!\n", Logtype.Important);
                     }
+
                     var sounddlcdir = Path.Combine(ActiveMod.DlcDirectory, MainController.Get().SoundManager.TypeName);
+
+                    //Create dlc soundspc.cache
                     if (Directory.Exists(sounddlcdir) && new DirectoryInfo(sounddlcdir)
                         .GetFiles("*.*", SearchOption.AllDirectories)
                         .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).Any())
