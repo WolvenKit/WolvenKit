@@ -43,7 +43,7 @@ namespace WolvenKit.Cache
             if (Archives.ContainsKey(filename))
                 return;
 
-            var bundle = new SoundCache(filename, soundBanksInfo);
+            var bundle = new SoundCache(filename);
 
             foreach (var item in bundle.Files)
             {
@@ -65,7 +65,7 @@ namespace WolvenKit.Cache
             if (Archives.ContainsKey(filename))
                 return;
 
-            var bundle = new SoundCache(filename, soundBanksInfo);
+            var bundle = new SoundCache(filename);
 
             foreach (var item in bundle.Files)
             {

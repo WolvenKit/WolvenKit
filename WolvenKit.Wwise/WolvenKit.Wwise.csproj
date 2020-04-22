@@ -82,6 +82,9 @@
     <Reference Include="format, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <HintPath>..\packages\VGMToolbox.1.0.0.1040\lib\format.dll</HintPath>
     </Reference>
+    <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
+      <HintPath>..\packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
+    </Reference>
     <Reference Include="jsutil, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VGMToolbox.1.0.0.1040\lib\jsutil.dll</HintPath>
     </Reference>
@@ -111,7 +114,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BNK\BNK.cs" />
     <Compile Include="Player\AsioOutPlugin.cs" />
     <Compile Include="Player\AsioOutSettingsPanel.cs">
       <SubType>UserControl</SubType>
@@ -155,14 +157,6 @@
       <DependentUpon>WaveOutSettingsPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BNK\Sections\BKHD.cs" />
-    <Compile Include="BNK\Sections\DATA.cs" />
-    <Compile Include="BNK\Sections\DIDX.cs" />
-    <Compile Include="BNK\Sections\HIRC.cs" />
-    <Compile Include="BNK\Sections\SoundStructure.cs" />
-    <Compile Include="BNK\Sections\STID.cs" />
-    <Compile Include="BNK\Sections\Unknown.cs" />
-    <Compile Include="BNK\SoundFile.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -173,12 +167,14 @@
     <Compile Include="SoundCache\SoundManager.cs" />
     <Compile Include="SoundCache\Sound_Cache.cs" />
     <Compile Include="Test.cs" />
-    <Compile Include="WEM\ImaAdpcmCodec.cs" />
-    <Compile Include="WEM\RiffChunk.cs" />
-    <Compile Include="WEM\RiffFile.cs" />
-    <Compile Include="WEM\WavFile.cs" />
-    <Compile Include="WEM\WavProcessor.cs" />
-    <Compile Include="WEM\WwiseSound.cs" />
+    <Compile Include="Wwise\FileManage.cs" />
+    <Compile Include="Wwise\ManagerObject.cs" />
+    <Compile Include="Wwise\RandomGen.cs" />
+    <Compile Include="Wwise\SBObject.cs" />
+    <Compile Include="Wwise\Soundbank.cs" />
+    <Compile Include="Wwise\SoundStructure.cs" />
+    <Compile Include="Wwise\WEM.cs" />
+    <Compile Include="Wwise\WemFile.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -205,6 +201,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bnkext\bnkextr.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="vgmstream\avcodec-vgmstream-58.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -288,6 +287,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Player\AudioWorkingDir\" />
+    <Folder Include="Player\BnkWorkingDir\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
