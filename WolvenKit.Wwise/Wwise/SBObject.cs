@@ -493,7 +493,7 @@ namespace WolvenKit.Wwise.Wwise
         public uint _id = 0;
         public uint _unk_field32_1 = 0;
         public uint _unk_field32_2 = 0;
-        public string _unk_data = "";
+        public byte[] _unk_data = null;
         public SBHeader(FileRead fr = null)
         {
             if (fr != null)
@@ -523,11 +523,11 @@ namespace WolvenKit.Wwise.Wwise
 
                 if (remaining > 0)
                 {
-                    _unk_data = fr.read_uchar(remaining);
+                    _unk_data = fr._file.ReadBytes((int)remaining);
                 }
                 else
                 {
-                    _unk_data = "";
+                    _unk_data = null;
                 }
             }
         }
@@ -797,7 +797,7 @@ namespace WolvenKit.Wwise.Wwise
 
         public string _head = HEAD;
         public uint _length = 0;
-        public string _unk_data = "";
+        public byte[] _unk_data = null;
         public bool _isSet = true;
         public SBEnvironments(FileRead fr = null)
         {
@@ -811,7 +811,7 @@ namespace WolvenKit.Wwise.Wwise
                     return;
                 }
                 _length = fr.read_uint32();
-                _unk_data = fr.read_uchar(_length);
+                _unk_data = fr._file.ReadBytes((int)_length);
             }
         }
     }
@@ -1196,7 +1196,7 @@ namespace WolvenKit.Wwise.Wwise
         public byte _type = 0;
         public uint _length = 0;
         public uint _id = 0;
-        public byte[] _obj_bytes = new byte[0];
+        public byte[] _obj_bytes = null;
         public bool _isSet = true;
         public SBSoundObject _obj_so;
         public SBMusicSegmentObject _obj_mso;

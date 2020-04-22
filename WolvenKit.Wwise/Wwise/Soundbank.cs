@@ -107,7 +107,7 @@ namespace WolvenKit.Wwise.Wwise
             Console.WriteLine("UNK Field32 1 : " + _header._unk_field32_1);
             Console.WriteLine("UNK Field32 2 : " + _header._unk_field32_2);
 
-            if (_header._unk_data != "")
+            if (_header._unk_data != null)
             {
                 Console.WriteLine("UNK Data Length : " + _header._unk_data.Length);
             }
@@ -454,9 +454,9 @@ namespace WolvenKit.Wwise.Wwise
             fw._file.Write((UInt32)_header._unk_field32_1);
             fw._file.Write((UInt32)_header._unk_field32_2);
 
-            if(_header._unk_data != "")
+            if(_header._unk_data != null)
             {
-                fw._file.Write(_header._unk_data.ToCharArray());
+                fw._file.Write(_header._unk_data);
             }
 
             if(_dataIndex != null && _dataIndex._isSet)
@@ -544,12 +544,13 @@ namespace WolvenKit.Wwise.Wwise
                 {
                     FileInfo fi = new FileInfo(f);
                     WEM w = new WEM();
-                    uint.TryParse(WolvenKit.Cache.SoundCache.GetIDFromPath(f), out w._id);
+                    var sbi_name = WolvenKit.Cache.SoundCache.GetIDFromPath(f);
+                    uint.TryParse(Path.GetFileNameWithoutExtension(sbi_name), out w._id);
                     w._size = (UInt32)fi.Length;
                     BinaryReader br = new BinaryReader(fi.OpenRead());
                     w._data = br.ReadBytes((int)br.BaseStream.Length);
                     _to_add.Add(w);
-                    Console.WriteLine("\tFile ->" + f);
+                    Console.WriteLine("\tFile ->" + f + " | " + sbi_name);
                 }
                 catch
                 {

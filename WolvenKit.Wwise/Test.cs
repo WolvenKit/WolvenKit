@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using WolvenKit.Wwise.Wwise;
 
 namespace WolvenKit.Wwise
@@ -225,6 +226,8 @@ namespace WolvenKit.Wwise
                 Console.WriteLine("Rebuilding sounds...");
                 bank.read_wems(folder);
                 bank.rebuild_data();
+                if(File.Exists(bnk + ".rebuilt"))
+                    File.Delete(bnk + ".rebuilt");
                 bank.build_bnk(bnk + ".rebuilt");
                 Console.WriteLine("Done!");
             }
