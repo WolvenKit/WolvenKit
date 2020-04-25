@@ -43,6 +43,7 @@ namespace WolvenKit
         public event EventHandler<RequestFileArgs> RequestFileRename;
         public event EventHandler<RequestImportArgs> RequestFileImport;
         public event EventHandler<RequestFileArgs> RequestFileCook;
+        public event EventHandler<RequestFileArgs> RequestFastRender;
         public List<string> FilteredFiles; 
         public bool FoldersShown = true;
 
@@ -608,6 +609,7 @@ namespace WolvenKit
                 exportW2cutscenejsonToolStripMenuItem.Visible = Path.GetExtension(modFileList.SelectedNode.Name) == ".w2cutscene";
                 exportW3facjsonToolStripMenuItem.Visible = Path.GetExtension(modFileList.SelectedNode.Name) == ".w3fac";
                 exportW3facposejsonToolStripMenuItem.Visible = Path.GetExtension(modFileList.SelectedNode.Name) == ".w3fac";
+                fastRenderToolStripMenuItem.Enabled = Path.GetExtension(modFileList.SelectedNode.Name) == ".w2mesh";
             }
         }
 
@@ -646,6 +648,14 @@ namespace WolvenKit
                 {
                     MessageBox.Show(ex.Message, "Error cooking files.");
                 }
+            }
+        }
+
+        private void fastRenderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                RequestFastRender?.Invoke(this, new RequestFileArgs { File = modFileList.SelectedNode.FullPath });
             }
         }
     }

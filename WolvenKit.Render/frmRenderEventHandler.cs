@@ -7,6 +7,7 @@ using IrrlichtLime.GUI;
 using System.Windows.Forms;
 using System.IO;
 using System.Collections.Generic;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.Render
 {
@@ -20,7 +21,7 @@ namespace WolvenKit.Render
         private static float currCursorPosY = 0;
 
         /// <summary>
-        /// setup visibility of rendere context menu
+        /// setup visibility of render context menu
         /// </summary>
         private void setupRenderContextMenu()
         {
@@ -76,6 +77,10 @@ namespace WolvenKit.Render
                 deltaDirection = currCursorPosY - e.Y;
                 modelPosition.Y = modelPosition.Y + deltaDirection * scaleMul / 100;
             }
+            else if (renderStarted && e.Delta > 0)
+		    {
+			    modelPosition.X = modelPosition.X + (float)e.Delta / 10.0f;
+		    }
             currCursorPosX = e.X;
             currCursorPosY = e.Y;
 
@@ -117,20 +122,23 @@ namespace WolvenKit.Render
         }
         private bool device_OnEvent(Event e) // vl: not working, why????
         {
-            // Escape swaps Camera Input
-            //if (e.Type == EventType.Key && !e.Key.PressedDown && OnKeyUp(e.Key.Key))
-            //    return true;
-
             if (e.Type == EventType.Log)
-                switch (e.Log.GetType())
+            {
+                switch (e.Log.Level)
                 {
-
+                    case LogLevel.Error:
+                        Logger.LogString(e.Log.Text, Logtype.Error);
+                        break;
+                    case LogLevel.Warning:
+                        Logger.LogString(e.Log.Text, Logtype.Important);
+                        break;
                     default:
-                        Console.Write(e.ToString());
+                        Logger.LogString(e.Log.Text, Logtype.Normal);
                         break;
                 }
-            Console.Write("Event");
-            return true;
+                return true;
+            }
+            return false;
         }
 
         private void Bithack3D_KeyDown(object sender, KeyEventArgs e)
@@ -146,8 +154,7 @@ namespace WolvenKit.Render
 
                 modelPosition = new Vector3Df(0.0f);
                 currAnimIdx = -1;
-                //replacerTextures[0] = null;
-                //replacerTextures[1] = null;
+
             }
         }
 
@@ -259,33 +266,41 @@ namespace WolvenKit.Render
         {
             using (var sf = new SaveFileDialog())
             {
-                sf.Filter = "Irrlicht mesh | *.irrm | Collada mesh | *.coll | STL Mesh | *.stl | OBJ Mesh | *.obj | PLY Mesh | *.ply | B3D Mesh | *.b3d";
+                sf.Filter = "Irrlicht mesh | *.irrm | Collada mesh | *.coll | STL Mesh | *.stl | OBJ Mesh | *.obj | PLY Mesh | *.ply | B3D Mesh | *.b3d | FBX Mesh | *.fbx";
                 if (sf.ShowDialog() == DialogResult.OK)
                 {
-                    MeshWriterType mwt = MeshWriterType.Obj;
-                    switch (Path.GetExtension(sf.FileName))
+                    MeshWriterType mwt = 0;
+                    switch (Path.GetExtension(sf.FileName).Trim())
                     {
-                        case "irrm":
+                        case ".irrm":
                             mwt = MeshWriterType.IrrMesh;
                             break;
-                        case "coll":
+                        case ".coll":
                             mwt = MeshWriterType.Collada;
                             break;
-                        case "obj":
+                        case ".obj":
                             mwt = MeshWriterType.Obj;
                             break;
-                        case "stl":
+                        case ".stl":
                             mwt = MeshWriterType.Stl;
                             break;
-                        case "ply":
+                        case ".ply":
                             mwt = MeshWriterType.Ply;
                             break;
-                        case "b3d":
+                        case ".b3d":
                             mwt = MeshWriterType.B3d;
                             break;
+                        case ".fbx":
+                            mwt = MeshWriterType.Fbx;
+                            break;
+                        default:
+                            MessageBox.Show(this, "Wrong file format selected, choose correct file format!", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+
                     }
                     var mw = smgr.CreateMeshWriter(mwt);
-                    if (mw.WriteMesh(device.FileSystem.CreateWriteFile(sf.FileName), cdata.staticMesh, MeshWriterFlag.None))
+                    //if (mw.WriteMesh(device.FileSystem.CreateWriteFile(sf.FileName), cdata.staticMesh, MeshWriterFlag.None))
+                    if (mw.WriteMesh(device.FileSystem.CreateWriteFile(sf.FileName), skinnedMesh, MeshWriterFlag.None))
                         MessageBox.Show(this, "Sucessfully wrote file!", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     else
                         MessageBox.Show(this, "Failed to write file!", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Error);
