@@ -62,6 +62,7 @@ namespace WolvenKit
                 UpdateTitle();
             }
         }
+
         #endregion
 
         #region Fields
@@ -1133,9 +1134,12 @@ namespace WolvenKit
                 ModExplorer.RequestFileRename += ModExplorer_RequestFileRename;
                 ModExplorer.RequestFileImport += ModExplorer_RequestFileImport;
                 ModExplorer.RequestFileCook += ModExplorer_RequestFileCook;
+                ModExplorer.RequestFastRender += ModExplorer_RequestFastRender;
             }
             ModExplorer.Activate();
         }
+
+
 
         public frmCR2WDocument LoadDocument(string filename, MemoryStream memoryStream = null, bool suppressErrors = false)
         {
@@ -2379,6 +2383,11 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             }
         }
 
+        private void ModExplorer_RequestFastRender(object sender, RequestFileArgs e)
+        {
+            Render.FastRender.frmFastRender ren = new Render.FastRender.frmFastRender(e.File, Logger, ActiveMod);
+            ren.Show(this.dockPanel, DockState.Document);
+        }
         private void menuStrip1_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)

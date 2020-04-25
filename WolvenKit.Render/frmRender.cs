@@ -134,7 +134,7 @@ namespace WolvenKit.Render
         private Rig rig;
         private Animations anims;
         private int currAnimIdx = -1;
-        static LoggerService Logger;
+        private ILoggerService Logger;
 
         //private static Quaternion modelAngle = new Quaternion(new Vertex3f(), 0);
         private Vector3Df modelPosition = new Vector3Df(0.0f);
@@ -156,8 +156,8 @@ namespace WolvenKit.Render
         /// <param name="e"></param>
         private void frmRender_Load(object sender, EventArgs e)
         {
-            Logger = new LoggerService(); // not working??
-            Logger.LogString("Render Init");
+            Logger = renderHelper.getLogger();
+            Logger.LogString("Render Init", Logtype.Normal);
 
             resizeTimer.Tick += ResizeTimer;
             resizeTimer.Interval = 1000;
@@ -183,6 +183,7 @@ namespace WolvenKit.Render
         {
             irrThread.Abort();
             // restart an irrlicht thread
+            skinnedMesh.Drop();
             StartIrrThread();
         }
 

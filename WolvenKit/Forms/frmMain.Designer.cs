@@ -955,15 +955,15 @@ namespace WolvenKit
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.dockPanel);
-            this.toolStripContainer1.ContentPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(788, 345);
+            this.toolStripContainer1.ContentPanel.Margin = new System.Windows.Forms.Padding(2);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(788, 340);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             // 
             // toolStripContainer1.LeftToolStripPanel
             // 
             this.toolStripContainer1.LeftToolStripPanel.Controls.Add(this.toolbarToolStrip);
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 28);
-            this.toolStripContainer1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.toolStripContainer1.Margin = new System.Windows.Forms.Padding(2);
             this.toolStripContainer1.Name = "toolStripContainer1";
             this.toolStripContainer1.Size = new System.Drawing.Size(824, 365);
             this.toolStripContainer1.TabIndex = 14;
@@ -1031,7 +1031,6 @@ namespace WolvenKit
         private ToolStripButton toolStripButton7;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripButton btPack;
-        private DockPanel dockPanel;
         private ToolStripSeparator toolStripSeparator3;
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripMenuItem outputToolStripMenuItem;
@@ -1100,5 +1099,6 @@ namespace WolvenKit
         private ToolStripMenuItem scriptToolStripMenuItem;
         private ToolStripMenuItem w2rigjsonToolStripMenuItem;
         private ToolStripMenuItem w2animsjsonToolStripMenuItem;
+        private DockPanel dockPanel;
     }
 }

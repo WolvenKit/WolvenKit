@@ -55,9 +55,9 @@
             this.replaceTexturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.diffuseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.normalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.exportTexturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.animationTimer = new System.Windows.Forms.Timer(this.components);
-            this.resetToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -90,7 +90,7 @@
             this.replaceTexturesToolStripMenuItem,
             this.exportTexturesToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(207, 242);
+            this.contextMenuStrip.Size = new System.Drawing.Size(207, 264);
             // 
             // loadRigToolStripMenuItem
             // 
@@ -229,6 +229,7 @@
             // 
             // exportToolStripMenuItem
             // 
+            this.exportToolStripMenuItem.Enabled = false;
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             this.exportToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.exportToolStripMenuItem.Text = "Export";
@@ -259,16 +260,23 @@
             // diffuseToolStripMenuItem
             // 
             this.diffuseToolStripMenuItem.Name = "diffuseToolStripMenuItem";
-            this.diffuseToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.diffuseToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.diffuseToolStripMenuItem.Text = "Diffuse";
             this.diffuseToolStripMenuItem.Click += new System.EventHandler(this.diffuseToolStripMenuItem_Click);
             // 
             // normalToolStripMenuItem
             // 
             this.normalToolStripMenuItem.Name = "normalToolStripMenuItem";
-            this.normalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.normalToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.normalToolStripMenuItem.Text = "Normal";
             this.normalToolStripMenuItem.Click += new System.EventHandler(this.normalToolStripMenuItem_Click);
+            // 
+            // resetToolStripMenuItem1
+            // 
+            this.resetToolStripMenuItem1.Name = "resetToolStripMenuItem1";
+            this.resetToolStripMenuItem1.Size = new System.Drawing.Size(114, 22);
+            this.resetToolStripMenuItem1.Text = "Reset";
+            this.resetToolStripMenuItem1.Click += new System.EventHandler(this.resetToolStripMenuItem1_Click);
             // 
             // exportTexturesToolStripMenuItem
             // 
@@ -282,13 +290,6 @@
             this.animationTimer.Enabled = true;
             this.animationTimer.Interval = 16;
             this.animationTimer.Tick += new System.EventHandler(this.AnimationTimer_Tick);
-            // 
-            // resetToolStripMenuItem1
-            // 
-            this.resetToolStripMenuItem1.Name = "resetToolStripMenuItem1";
-            this.resetToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
-            this.resetToolStripMenuItem1.Text = "Reset";
-            this.resetToolStripMenuItem1.Click += new System.EventHandler(this.resetToolStripMenuItem1_Click);
             // 
             // frmRender
             // 
