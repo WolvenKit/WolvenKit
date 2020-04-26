@@ -41,8 +41,8 @@ namespace WolvenKit.CR2W.Types
                 elementtype = match.Groups[3].Value;
             }
 
-            if (elementtype == "")
-                Debugger.Break();
+            //if (elementtype == "")
+            //    Debugger.Break();
         }
 
         public CArray(string type, string elementtype, bool fixedTypeArray, CR2WFile cr2w) : base(cr2w)
@@ -50,8 +50,8 @@ namespace WolvenKit.CR2W.Types
             this.type = type;
             this.elementtype = elementtype;
             this.fixedTypeArray = fixedTypeArray;
-            if (elementtype == "")
-                Debugger.Break();
+            //if (elementtype == "")
+            //    Debugger.Break();
         }
 
         public virtual IEnumerator<CVariable> GetEnumerator()
@@ -74,6 +74,9 @@ namespace WolvenKit.CR2W.Types
                 if (var == null)
                     var = new CVector(cr2w);
                 var.Read(file, size);
+
+                //var.Name = i.ToString();
+                //var.Type = elementtype;
 
                 AddVariable(var);
             }

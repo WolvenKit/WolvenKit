@@ -1,37 +1,39 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization;
 using WolvenKit.CR2W.Editors;
+using System.Diagnostics;
+using System.Runtime.Serialization;
 
 namespace WolvenKit.CR2W.Types
 {
     [DataContract(Namespace = "")]
-    class CLayerInfo : CVector
+    public class CUmbraTile : CVector
     {
-        public CHandle ParentGroup;
-
-        public CLayerInfo(CR2WFile cr2w) : base(cr2w)
+        public CBufferUInt32<CHandle> tiles;
+            
+        public CUmbraTile(CR2WFile cr2w) :
+            base(cr2w)
         {
-            ParentGroup = new CHandle(cr2w) { Name = "ParentGroup" };
-
+            tiles = new CBufferUInt32<CHandle>(cr2w, _ => new CHandle(_))
+            {
+                Name = "tiles"
+            };
+            
         }
 
         public override void Read(BinaryReader file, uint size)
         {
             base.Read(file, size);
 
-            ParentGroup.ChunkHandle = true;
-            ParentGroup.Read(file, 4);
-
-            //base.AddVariable(ParentGroup);
+            tiles.Read(file, 0);
+           
         }
 
         public override void Write(BinaryWriter file)
         {
             base.Write(file);
 
-            ParentGroup.Write(file);
+            tiles.Write(file);
         }
 
         public override CVariable SetValue(object val)
@@ -41,25 +43,24 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Create(CR2WFile cr2w)
         {
-            return new CLayerInfo(cr2w);
+            return new CUmbraTile(cr2w);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CLayerInfo)base.Copy(context);
+            var var = (CUmbraTile) base.Copy(context);
 
-            var.ParentGroup = (CHandle)ParentGroup.Copy(context);
+            var.tiles = (CBufferUInt32<CHandle>)tiles.Copy(context);
 
             return var;
         }
 
         public override List<IEditableVariable> GetEditableVariables()
         {
-            var list = new List<IEditableVariable>(variables)
+            return new List<IEditableVariable>(variables)
             {
-                ParentGroup
+                tiles
             };
-            return list;
         }
     }
 }

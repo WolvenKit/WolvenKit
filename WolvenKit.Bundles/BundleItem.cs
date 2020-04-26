@@ -5,6 +5,7 @@ using Ionic.Zlib;
 using LZ4;
 using Snappy;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 
 namespace WolvenKit.Bundles
 {
@@ -49,9 +50,10 @@ namespace WolvenKit.Bundles
 
         public void Extract(Stream output)
         {
-            using (var file = MemoryMappedFile.CreateFromFile(Bundle.FileName, FileMode.Open))
+            var hash = Bundle.FileName.GetHashMD5();
+            using (MemoryMappedFile mmf = MemoryMappedFile.OpenExisting(hash, MemoryMappedFileRights.Read))
             {
-                using (var viewstream = file.CreateViewStream(PageOFfset, ZSize, MemoryMappedFileAccess.Read))
+                using (var viewstream = mmf.CreateViewStream(PageOFfset, ZSize, MemoryMappedFileAccess.Read))
                 {
                     switch (CompressionType)
                     {

@@ -14,13 +14,13 @@ namespace WolvenKit.CR2W.Types
         private const int fixedbuffersize = 46;
 
         CUInt16 bytesize;
-        CBytes unknownbytes;
+        CBytes unk1;
 
         public SMeshBlock5(CR2WFile cr2w) :
             base(cr2w)
         {
             bytesize = new CUInt16(cr2w) { Name = "size" };
-            unknownbytes = new CBytes(cr2w) { Name = "unknownbytes" };
+            unk1 = new CBytes(cr2w) { Name = "unk1" };
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -30,13 +30,13 @@ namespace WolvenKit.CR2W.Types
             if ((int)bytesize.val != fixedbuffersize)
                 throw new NotImplementedException();
 
-            unknownbytes.Read(file, (uint)bytesize.val - 2);
+            unk1.Read(file, (uint)bytesize.val - 2);
         }
 
         public override void Write(BinaryWriter file)
         {
             bytesize.Write(file);
-            unknownbytes.Write(file);
+            unk1.Write(file);
         }
 
         public override CVariable SetValue(object val)
@@ -54,7 +54,7 @@ namespace WolvenKit.CR2W.Types
             var var = (SMeshBlock5)base.Copy(context);
 
             var.bytesize = (CUInt16)bytesize.Copy(context);
-            var.unknownbytes = (CBytes)unknownbytes.Copy(context);
+            var.unk1 = (CBytes)unk1.Copy(context);
             
 
             return var;
@@ -65,7 +65,7 @@ namespace WolvenKit.CR2W.Types
             return new List<IEditableVariable>()
             {
                 bytesize,
-                unknownbytes
+                unk1
             };
         }
 

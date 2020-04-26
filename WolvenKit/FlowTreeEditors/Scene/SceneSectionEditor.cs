@@ -42,7 +42,7 @@ namespace WolvenKit.FlowTreeEditors
                     if (element != null && element is CPtr)
                     {
                         var ptr = (CPtr) element;
-                        switch (ptr.PtrTargetType)
+                        switch (ptr.GetPtrTargetType())
                         {
                             case "CStorySceneLine":
                                 line++;
@@ -52,7 +52,7 @@ namespace WolvenKit.FlowTreeEditors
                                     Height = 20,
                                     Location = new Point(0, y),
                                     AutoSize = false,
-                                    Text = GetDisplayString(ptr.PtrTarget)
+                                    Text = GetDisplayString(ptr.Reference)
                                 };
                                 lines.Add(label);
                                 Controls.Add(label);
@@ -62,7 +62,7 @@ namespace WolvenKit.FlowTreeEditors
                                 label.Height = texts.Height + 5;
                                 label.BackColor = (line%2) == 0 ? Color.LightBlue : Color.Transparent;
 
-                                label.Click += delegate { FireSelectEvent(ptr.PtrTarget); };
+                                label.Click += delegate { FireSelectEvent(ptr.Reference); };
 
                                 y += label.Height;
 
@@ -106,7 +106,7 @@ namespace WolvenKit.FlowTreeEditors
             if (choiceObj != null && choiceObj is CPtr)
             {
                 var choicePtr = ((CPtr) choiceObj);
-                if (choicePtr.PtrTarget != null)
+                if (choicePtr.Reference != null)
                 {
                     list.Add(choicePtr);
                 }
@@ -117,7 +117,7 @@ namespace WolvenKit.FlowTreeEditors
             if (nextLinkElementObj != null && nextLinkElementObj is CPtr)
             {
                 var nextLinkElementPtr = ((CPtr) nextLinkElementObj);
-                if (nextLinkElementPtr.PtrTarget != null)
+                if (nextLinkElementPtr.Reference != null)
                 {
                     list.Add(nextLinkElementPtr);
                 }

@@ -19,10 +19,12 @@ namespace WolvenKit.CR2W.Types
     {
         [NonSerialized]
         public CR2WFile cr2w;
+        public Guid InternalGuid;
 
         public CVariable(CR2WFile cr2w)
         {
             this.cr2w = cr2w;
+            InternalGuid = Guid.NewGuid();
         }
 
 
@@ -118,6 +120,26 @@ namespace WolvenKit.CR2W.Types
             return null;
         }
 
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = Type == null ? hash : hash * 29 + Type.GetHashCode();
+                hash = Name == null ? hash : hash * 29 + Name.GetHashCode();
+                hash = FullName == null ? hash : hash * 29 + FullName.GetHashCode();
+                hash = hash * 29 + ToString().GetHashCode();
+                var evars = GetEditableVariables();
+                if (evars != null)
+                {
+                    foreach (var item in evars)
+                    {
+                        hash = hash * 29 + item.GetHashCode();
+                    }
+                }
+                return hash;
+            }
+        }
 
         #region serialization
         //vl: I leave it commented here for it's rareness

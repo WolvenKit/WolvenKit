@@ -10,165 +10,74 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public class CHandle : CVariable
     {
-        
-
         public CHandle(CR2WFile cr2w) : base(cr2w)
         {
         }
 
-        private int _val;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public int val
-        {
-            get
-            {
-                return _val;
-                //if (ChunkHandle)
-                //{
-                //    return ChunkIndex;
-                //}
-                //else
-                //{
-                //    var newfiletype = (ushort)cr2w.GetStringIndex(FileType, true);
-                //    return (-cr2w.GetHandleIndex(Handle, newfiletype, Flags, true) - 1);
-                //}
-            }
-            set
-            {
-                _val = value;
-                //ChunkHandle = value >= 0;
-
-                //if (ChunkHandle)
-                //{
-                //    if (value <= cr2w.chunks.Count)
-                //        ChunkIndex = value;
-                //}
-                //else
-                //{
-                //    if (-value - 1 <= cr2w.imports.Count)
-                //    {
-                //        Handle = cr2w.imports[-value - 1].DepotPathStr;
-
-                //        var filetype = cr2w.imports[-value - 1].Import.className;
-                //        FileType = cr2w.names[filetype].Str;
-
-                //        Flags = cr2w.imports[-value - 1].Import.flags;
-                //    }
-                //}
-            }
-        }
-
-        #region Handle
-        private void UpdateValue(string handle, string filetype, ushort flags)
-        {
-            if (ChunkHandle)
-                throw new NotImplementedException();
-            else
-            {
-                var filetypeid = (ushort)cr2w.GetStringIndex(filetype, true);
-                val = (-cr2w.GetHandleIndex(handle, filetypeid, flags, true) - 1);
-            }
-        }
-
-        [DataMember(EmitDefaultValue = false)]
-        public string Handle
-        {
-            get {
-                if (ChunkHandle)
-                    throw new NotImplementedException();
-                else
-                    return cr2w.imports[-val - 1].DepotPathStr;
-            }
-            set
-            {
-                if (ChunkHandle)
-                    throw new NotImplementedException();
-                else
-                    UpdateValue(value, FileType, Flags);
-            }
-        }
-        [DataMember(EmitDefaultValue = false)]
-        public string FileType
-        {
-            get
-            {
-                if (ChunkHandle)
-                    throw new NotImplementedException();
-                else
-                {
-                    var filetype = cr2w.imports[-val - 1].Import.className;
-                    return cr2w.names[filetype].Str;
-                } 
-            }
-            set
-            {
-                if (ChunkHandle)
-                    throw new NotImplementedException();
-                else
-                    UpdateValue(Handle, value, Flags);
-            }
-        }
-        [DataMember(EmitDefaultValue = false)]
-        public ushort Flags
-        {
-            get
-            {
-                if (ChunkHandle)
-                    throw new NotImplementedException();
-                else
-                    return cr2w.imports[-val - 1].Import.flags;
-            }
-            set
-            {
-                if (ChunkHandle)
-                    throw new NotImplementedException();
-                else
-                    UpdateValue(Handle, FileType, value);
-            }
-        }
-        #endregion
-
-        #region Chunk Handle
+        #region Properties
         [DataMember(EmitDefaultValue = false)]
         public bool ChunkHandle { get; set; }
+
+        // Resource
         [DataMember(EmitDefaultValue = false)]
-        public int ChunkIndex
-        {
-            get
-            {
-                if (ChunkHandle)
-                    return val;
-                else
-                    throw new NotImplementedException();
-            }
-            set
-            {
-                if (ChunkHandle)
-                    val = value;
-                else
-                    throw new NotImplementedException();
-            }
-        }
+        public string DepotPath { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public string ClassName { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public ushort Flags { get; set; }
+
+        // Reference
+        [DataMember(EmitDefaultValue = false)]
+        public CR2WExportWrapper Reference { get; set; }
         #endregion
 
-
+        #region Methods
         public override void Read(BinaryReader file, uint size)
         {
-            val = file.ReadInt32();
-            if (val > 0)
-                this.ChunkHandle = true;
+            SetValueInternal(file.ReadInt32());
         }
 
+        private void SetValueInternal(int val)
+        {
+            if (val >= 0)
+                this.ChunkHandle = true;
+
+
+            if (ChunkHandle)
+            {
+                if (val == 0)
+                    Reference = null;
+                else
+                    Reference = cr2w.chunks[val - 1];
+            }
+            else
+            {
+                DepotPath = cr2w.imports[-val - 1].DepotPathStr;
+
+                var filetype = cr2w.imports[-val - 1].Import.className;
+                ClassName = cr2w.names[filetype].Str;
+
+                Flags = cr2w.imports[-val - 1].Import.flags;
+            }
+        }
+
+        /// <summary>
+        /// Call after the stringtable was generated!
+        /// </summary>
+        /// <param name="file"></param>
         public override void Write(BinaryWriter file)
         {
-            file.Write(val);
+            throw new NotImplementedException();
+            //file.Write(_value);
         }
 
         public override CVariable SetValue(object val)
         {
             if (val is int)
             {
-                this.val = (int)val;
+                SetValueInternal((int)val);
             }
 
             return this;
@@ -183,11 +92,11 @@ namespace WolvenKit.CR2W.Types
         {
             var var = (CHandle)base.Copy(context);
 
-            var.Handle = Handle;
-            var.FileType = FileType;
+            var.DepotPath = DepotPath;
+            var.ClassName = ClassName;
             var.Flags = Flags;
             var.ChunkHandle = ChunkHandle;
-            var.ChunkIndex = ChunkIndex;
+            var.Reference = Reference;
             return var;
         }
 
@@ -195,16 +104,13 @@ namespace WolvenKit.CR2W.Types
         {
             if (ChunkHandle)
             {
-                if (ChunkIndex == 0)
-                    return "0";
-
-                if (ChunkIndex - 1 < 0 || ChunkIndex - 1 >= cr2w.chunks.Count)
-                    return "Invalid Chunk handle";
-
-                return "Chunk handle: " + cr2w.chunks[ChunkIndex - 1].Type + " #" + (ChunkIndex);
+                if (Reference == null)
+                    return "NULL";
+                else
+                    return Reference.Type + " #" + (Reference.ChunkIndex);
             }
 
-            return FileType + ": " + Handle;
+            return ClassName + ": " + DepotPath;
         }
 
         public override Control GetEditor()
@@ -212,23 +118,28 @@ namespace WolvenKit.CR2W.Types
             if (ChunkHandle)
             {
                 var editor = new ComboBox();
-                editor.Items.Add(new HandleComboItem { Text = "", Value = 0 });
+                editor.Items.Add(new PtrComboItem { Text = "", Value = null });
 
-                for (var i = 0; i < cr2w.chunks.Count; i++)
+                foreach (var chunk in cr2w.chunks)
                 {
-                    editor.Items.Add(new HandleComboItem { Text = cr2w.chunks[i].Type + " #" + (i + 1), Value = i + 1 });
+                    editor.Items.Add(new PtrComboItem
+                    {
+                        Text = $"{chunk.Type} #{chunk.ChunkIndex}", //real index
+                        Value = chunk
+                    }
+                    );
                 }
 
                 editor.SelectedIndexChanged += delegate (object sender, EventArgs e)
                 {
-                    var item = (HandleComboItem)((ComboBox)sender).SelectedItem;
-                    if (item != null)
+                    var ptrcomboitem = (PtrComboItem)((ComboBox)sender).SelectedItem;
+                    if (ptrcomboitem != null)
                     {
-                        ChunkIndex = item.Value;
+                        Reference = ptrcomboitem.Value;
                     }
                 };
 
-                var selIndex = ChunkIndex;
+                var selIndex = Reference == null ? 0 : Reference.ChunkIndex + 1;
                 if (selIndex < editor.Items.Count && selIndex >= 0)
                 {
                     editor.SelectedIndex = selIndex;
@@ -238,12 +149,13 @@ namespace WolvenKit.CR2W.Types
             else
             {
                 var editor = new PtrEditor();
-                editor.HandlePath.DataBindings.Add("Text", this, "Handle", true, DataSourceUpdateMode.OnPropertyChanged);
-                editor.FileType.DataBindings.Add("Text", this, "FileType", true, DataSourceUpdateMode.OnPropertyChanged);
-                editor.Flags.DataBindings.Add("Text", this, "Flags", true, DataSourceUpdateMode.OnPropertyChanged);
+                editor.HandlePath.DataBindings.Add("Text", this, nameof(DepotPath), true, DataSourceUpdateMode.OnPropertyChanged);
+                editor.FileType.DataBindings.Add("Text", this, nameof(ClassName), true, DataSourceUpdateMode.OnPropertyChanged);
+                editor.Flags.DataBindings.Add("Text", this, nameof(Flags), true, DataSourceUpdateMode.OnPropertyChanged);
                 return editor;
             }
         }
+        #endregion
 
         internal class HandleComboItem
         {

@@ -7,7 +7,6 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.CR2W.Editors;
-using WolvenKit.CR2W.GameEntity;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -41,7 +40,7 @@ namespace WolvenKit.CR2W.Types
                 //Read the handle of the trees we are currently reading
                 CHandle treetype = new CHandle(cr2w);
                 treetype.Read(file, size);
-                treetype.Name = "Type";
+                treetype.Name = "";
                 CTreeCollection.AddVariable(treetype);
                 //Read the number of trees in this treetype
                 var treecount = file.ReadVLQInt32();
@@ -70,7 +69,7 @@ namespace WolvenKit.CR2W.Types
                     //Read the handle of the Grasses we are currently reading
                     CHandle treetype = new CHandle(cr2w);
                     treetype.Read(file, size);
-                    treetype.Name = "Type";
+                    treetype.Name = "";
                     GrassCollection.AddVariable(treetype);
                     //Read the number of Grasses in this treetype
                     var treecount = file.ReadVLQInt32();

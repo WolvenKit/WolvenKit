@@ -15,6 +15,7 @@ namespace WolvenKit
 {
     using Common;
     using Newtonsoft.Json;
+    using System.Threading.Tasks;
     using WolvenKit.CR2W;
     using WolvenKit.Render;
 
@@ -43,6 +44,7 @@ namespace WolvenKit
         public event EventHandler<RequestFileArgs> RequestFileRename;
         public event EventHandler<RequestImportArgs> RequestFileImport;
         public event EventHandler<RequestFileArgs> RequestFileCook;
+        public event EventHandler<RequestFileArgs> RequestFileDumpfile;
         public List<string> FilteredFiles; 
         public bool FoldersShown = true;
 
@@ -646,6 +648,14 @@ namespace WolvenKit
                 {
                     MessageBox.Show(ex.Message, "Error cooking files.");
                 }
+            }
+        }
+
+        private async void dumpWccliteXMLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                RequestFileDumpfile?.Invoke(this, new RequestFileArgs { File = modFileList.SelectedNode.FullPath });
             }
         }
     }

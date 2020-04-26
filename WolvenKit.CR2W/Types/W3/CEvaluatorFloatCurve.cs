@@ -155,7 +155,7 @@ namespace WolvenKit.CR2W.Types
 
                 for (var i = 0; i < values.Length; i++)
                 {
-                    values[i] = new CFloat(cr2w) { Name = i.ToString(), Type = "CFloat" };
+                    values[i] = new CFloat(cr2w) { Name = i.ToString(), Type = "Float" };
                 }
             }
 

@@ -141,7 +141,7 @@ namespace WolvenKit.CR2W.Types
         }
         public static CBufferVLQ<CFloat> CreateFloatBuffer(CR2WFile cr2w, string name)
         {
-            return new CBufferVLQ<CFloat>(cr2w, file => new CFloat(file) { Type = "CFloat" }) { Name = name, Type = "CBuffer<CFloat>" };
+            return new CBufferVLQ<CFloat>(cr2w, file => new CFloat(file) { Type = "Float" }) { Name = name, Type = "CBuffer<CFloat>" };
         }
         public static CBufferVLQ<CUInt16> CreateUInt16Buffer(CR2WFile cr2w, string name)
         {

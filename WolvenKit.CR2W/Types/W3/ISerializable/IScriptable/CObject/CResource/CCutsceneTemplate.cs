@@ -22,7 +22,7 @@ namespace WolvenKit.CR2W.Types
             };
             animevents = new CBufferUInt32<CVectorWrapper>(cr2w, _ => new CVectorWrapper(_))
             {
-                Name = "buffer"
+                Name = "animevents"
             };
 
         }

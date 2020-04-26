@@ -16,9 +16,9 @@ namespace WolvenKit.CR2W.Types
 
         public EmitterDurationSettings(CR2WFile cr2w) : base(cr2w)
         {
-            emitterDuration = new CFloat(cr2w){ Name = "emitterDuration", Type = "CFloat"};
-			emitterDurationLow = new CFloat(cr2w){ Name = "emitterDurationLow", Type = "CFloat"};
-			useEmitterDurationRange = new CBool(cr2w){ Name = "useEmitterDurationRange", Type = "CBool"};
+            emitterDuration = new CFloat(cr2w){ Name = "emitterDuration", Type = "Float"};
+			emitterDurationLow = new CFloat(cr2w){ Name = "emitterDurationLow", Type = "Float"};
+			useEmitterDurationRange = new CBool(cr2w){ Name = "useEmitterDurationRange", Type = "Bool"};
 				
         }
 

@@ -24,12 +24,12 @@ namespace WolvenKit.CR2W.Types
         {
                 lods = new CArray("array:0,0,SParticleSystemLODLevel","SParticleSystemLODLevel", true, cr2w){ Name = "lods", Type = "CArray"};
 				emitters = new CArray("array:0,0,ptr:CParticleEmitter","CParticleEmitter", true, cr2w){ Name = "emitters", Type = "CArray"};
-				autoHideDistance = new CFloat(cr2w){ Name = "autoHideDistance", Type = "CFloat"};
-				autoHideRange = new CFloat(cr2w){ Name = "autoHideRange", Type = "CFloat"};
+				autoHideDistance = new CFloat(cr2w){ Name = "autoHideDistance", Type = "Float"};
+				autoHideRange = new CFloat(cr2w){ Name = "autoHideRange", Type = "Float"};
 				previewBackgroundColor = new CColor(cr2w){ Name = "previewBackgroundColor", Type = "Color"};
-				previewShowGrid = new CBool(cr2w){ Name = "previewShowGrid", Type = "CBool"};
-				visibleThroughWalls = new CBool(cr2w){ Name = "visibleThroughWalls", Type = "CBool"};
-				prewarmingTime = new CFloat(cr2w){ Name = "prewarmingTime", Type = "CFloat"};
+				previewShowGrid = new CBool(cr2w){ Name = "previewShowGrid", Type = "Bool"};
+				visibleThroughWalls = new CBool(cr2w){ Name = "visibleThroughWalls", Type = "Bool"};
+				prewarmingTime = new CFloat(cr2w){ Name = "prewarmingTime", Type = "Float"};
 				renderingPlane = new CName(cr2w){ Name = "renderingPlane", Type = "CName"};
 				
         }

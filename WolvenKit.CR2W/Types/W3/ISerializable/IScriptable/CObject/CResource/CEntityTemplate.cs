@@ -30,7 +30,7 @@ namespace WolvenKit.CR2W.Types
             //dbg
             if (unk1.val > 0)
             {
-                Debugger.Break();
+                //Debugger.Break();
             }
         }
 

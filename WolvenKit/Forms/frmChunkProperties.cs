@@ -327,10 +327,10 @@ namespace WolvenKit
         private void ptrPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var node = (VariableListNode) treeView.SelectedObject;
-            if ((node?.Variable as CPtr)?.PtrTarget == null)
+            if ((node?.Variable as CPtr)?.Reference == null)
                 return;
 
-            Chunk = ((CPtr) node.Variable).PtrTarget;
+            Chunk = ((CPtr) node.Variable).Reference;
         }
 
         private void copyTextToolStripMenuItem_Click(object sender, EventArgs e)
@@ -388,7 +388,7 @@ namespace WolvenKit
         private void treeView_CellEditFinished(object sender, CellEditEventArgs e)
         {
             OnItemsChanged(sender, e);
-            chunk.SetParentChunk(chunk.ParentChunkId);
+            chunk.SetParentChunkId(chunk.ParentChunkId);
         }
         
         public void ApplyCustomTheme()

@@ -22,6 +22,14 @@ namespace WolvenKit.CR2W.Types
         {
             var zero = file.ReadByte();
 
+            // quests\minor_quests\skellige\mq2008_lured_into_drowners.w2phase
+            // in a CVariant for class "@SItem"
+            // ... okay CDPR, is that a joke or what?
+            if (zero == 1)
+            {
+                int joke = file.ReadInt32();
+            }
+
             while (true)
             {
                 var var = cr2w.ReadVariable(file);

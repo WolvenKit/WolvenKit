@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public class CVariant : CVariable
     {
-        public CVariable var;
+        public CVariable Variant;
 
         public CVariant(CR2WFile cr2w)
             : base(cr2w)
@@ -23,24 +23,25 @@ namespace WolvenKit.CR2W.Types
 
             var varsize = file.ReadUInt32() - 4;
             var typename = cr2w.names[typeId].Str;
-            var varname = cr2w.names[nameId].Str;
+            //var varname = cr2w.names[nameId].Str;
 
-            var = CR2WTypeManager.Get().GetByName(typename, varname, cr2w);
-            var.Read(file, varsize);
+            Variant = CR2WTypeManager.Get().GetByName(typename, "", cr2w);
+            //Variant.Name = "Variant";
+            Variant.Read(file, varsize);
 
-            var.nameId = nameId;
-            var.typeId = typeId;
+            //Variant.nameId = nameId;
+            Variant.typeId = typeId;
         }
 
         public override void Write(BinaryWriter file)
         {
-            file.Write(var.typeId);
+            file.Write(Variant.typeId);
 
             var pos = file.BaseStream.Position;
             file.Write((uint) 0); // size placeholder
 
 
-            var.Write(file);
+            Variant.Write(file);
             var endpos = file.BaseStream.Position;
 
             file.Seek((int) pos, SeekOrigin.Begin);
@@ -53,7 +54,7 @@ namespace WolvenKit.CR2W.Types
         {
             if (val is CVariable)
             {
-                var = (CVariable) val;
+                Variant = (CVariable) val;
             }
 
             return this;
@@ -67,28 +68,30 @@ namespace WolvenKit.CR2W.Types
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (CVariant) base.Copy(context);
-            var.var = var.Copy(context);
+            var.Variant = var.Copy(context);
             return var;
         }
 
         public override List<IEditableVariable> GetEditableVariables()
         {
-            var list = new List<IEditableVariable>();
-            list.Add(var);
+            var list = new List<IEditableVariable>
+            {
+                Variant
+            };
             return list;
         }
 
         public override Control GetEditor()
         {
-            if (var != null)
-                return var.GetEditor();
+            if (Variant != null)
+                return Variant.GetEditor();
             return null;
         }
 
         public override string ToString()
         {
-            if (var != null)
-                return var.ToString();
+            if (Variant != null)
+                return Variant.ToString();
             return "";
         }
 
@@ -99,7 +102,7 @@ namespace WolvenKit.CR2W.Types
 
         public override void AddVariable(CVariable var)
         {
-            this.var = var;
+            this.Variant = var;
         }
     }
 }
