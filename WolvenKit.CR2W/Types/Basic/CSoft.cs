@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using WolvenKit.CR2W.Editors;
+using System.Linq;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -46,6 +47,7 @@ namespace WolvenKit.CR2W.Types
             }
             else
             {
+                // ???
                 if (cr2w.imports.Count > 0)
                 {
                     DepotPath = cr2w.imports[0].DepotPathStr;
@@ -72,8 +74,19 @@ namespace WolvenKit.CR2W.Types
         /// <param name="file"></param>
         public override void Write(BinaryWriter file)
         {
-            throw new NotImplementedException();
-            //file.Write(_val);
+            int val = 0;
+
+            try
+            {
+                var import = cr2w.imports.FirstOrDefault(_ => _.DepotPathStr == DepotPath && _.ClassNameStr == ClassName);
+                val = cr2w.imports.IndexOf(import) + 1;
+            }
+            catch (Exception)
+            {
+            }
+            
+
+            file.Write(val);
         }
 
         public override CVariable SetValue(object val)
@@ -108,9 +121,9 @@ namespace WolvenKit.CR2W.Types
         public override Control GetEditor()
         {
             var editor = new PtrEditor();
-            editor.HandlePath.DataBindings.Add("Text", this, "Handle", true, DataSourceUpdateMode.OnPropertyChanged);
-            editor.FileType.DataBindings.Add("Text", this, "FileType", true, DataSourceUpdateMode.OnPropertyChanged);
-            editor.Flags.DataBindings.Add("Text", this, "Flags", true, DataSourceUpdateMode.OnPropertyChanged);
+            editor.HandlePath.DataBindings.Add("Text", this, nameof(DepotPath), true, DataSourceUpdateMode.OnPropertyChanged);
+            editor.FileType.DataBindings.Add("Text", this, nameof(ClassName), true, DataSourceUpdateMode.OnPropertyChanged);
+            editor.Flags.DataBindings.Add("Text", this, nameof(Flags), true, DataSourceUpdateMode.OnPropertyChanged);
             return editor;
         }
         #endregion

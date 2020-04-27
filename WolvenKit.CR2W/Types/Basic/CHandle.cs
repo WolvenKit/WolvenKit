@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using WolvenKit.CR2W.Editors;
+using System.Linq;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -69,8 +70,24 @@ namespace WolvenKit.CR2W.Types
         /// <param name="file"></param>
         public override void Write(BinaryWriter file)
         {
-            throw new NotImplementedException();
-            //file.Write(_value);
+            int val = 0;
+            if (ChunkHandle)
+            {
+                if (Reference != null)
+                    val = Reference.ChunkIndex + 1;
+            }
+            else
+            {
+                try
+                {
+                    var import = cr2w.imports.FirstOrDefault(_ => _.DepotPathStr == DepotPath && _.ClassNameStr == ClassName);
+                    val = - cr2w.imports.IndexOf(import) - 1;
+                }
+                catch (Exception)
+                {
+                }
+            }
+            file.Write(val);
         }
 
         public override CVariable SetValue(object val)

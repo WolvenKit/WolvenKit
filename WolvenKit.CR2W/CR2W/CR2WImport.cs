@@ -18,31 +18,20 @@ namespace WolvenKit.CR2W
 
     public class CR2WImportWrapper
     {
-        private CR2WImport _import;
-        public CR2WImport Import {
-            get => _import;
-            set => _import = value;
-        }
+        public CR2WImport Import { get; set; }
 
-        public string DepotPathStr { get; set; }
-        public string ClassNameStr { get; set; }
+        private readonly CR2WFile _cr2w;
 
+        public string DepotPathStr => _cr2w.StringDictionary[Import.depotPath];
+        public string ClassNameStr => _cr2w.names[Import.className].Str;
+        public ushort Flags => Import.flags;
 
-        public CR2WImportWrapper()
+        public CR2WImportWrapper(CR2WImport import, CR2WFile cr2w)
         {
-            _import = new CR2WImport();
+            Import = import;
+            _cr2w = cr2w;
         }
 
-        public CR2WImportWrapper(CR2WImport import)
-        {
-            _import = import;
-        }
-
-        public void SetOffset(uint offset) => _import.depotPath = offset;
-
-        public override string ToString()
-        {
-            return DepotPathStr;
-        }
+        public override string ToString() => DepotPathStr;
     }
 }

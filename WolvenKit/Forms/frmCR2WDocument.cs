@@ -204,8 +204,8 @@ namespace WolvenKit
 
         private void saveToFileName()
         {
-            try
-            {
+            //try
+            //{
                 using (var mem = new MemoryStream())
                 {
                     using (var writer = new BinaryWriter(mem))
@@ -222,11 +222,11 @@ namespace WolvenKit
                         }
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                MainController.Get().QueueLog("Failed to save the file(s)! They are probably in use.\n" + e.ToString());
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    MainController.Get().QueueLog("Failed to save the file(s)! They are probably in use.\n" + e.ToString());
+            //}
         }
 
         public void ApplyCustomTheme()

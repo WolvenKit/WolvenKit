@@ -70,7 +70,7 @@ namespace WolvenKit.CR2W
             //};
 
         }
-        public CR2WExportWrapper(CR2WFile file, CR2WExport export)
+        public CR2WExportWrapper(CR2WExport export, CR2WFile file)
         {
             this.cr2w = file;
             _export = export;

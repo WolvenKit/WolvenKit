@@ -1,4 +1,5 @@
 ﻿using RED.CRC32;
+using RED.FNV1A;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -58,7 +59,7 @@ namespace WolvenKit.CR2W
 
         private CR2WTable[] m_tableheaders;
         private Byte[] m_strings;
-        private Dictionary<uint, string> m_dictionary;
+        public Dictionary<uint, string> StringDictionary { get; private set; }
 
         // misc
         private uint headerOffset = 0;
@@ -137,25 +138,15 @@ namespace WolvenKit.CR2W
             m_strings = ReadStringsBuffer();
             
             // read tables
-            names = ReadTable<CR2WName>(1).Select(_ => new CR2WNameWrapper(_)
-            {
-                Str = m_dictionary[_.value],
-            }).ToList();
-            imports = ReadTable<CR2WImport>(2).Select(_ => new CR2WImportWrapper(_)
-            {
-                DepotPathStr = m_dictionary[_.depotPath],
-                ClassNameStr = names[_.className].Str,
-            }).ToList();
+            names = ReadTable<CR2WName>(1).Select(_ => new CR2WNameWrapper(_, this)).ToList();
+            imports = ReadTable<CR2WImport>(2).Select(_ => new CR2WImportWrapper(_, this)).ToList();
             properties = ReadTable<CR2WProperty>(3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
-            chunks = ReadTable<CR2WExport>(4).Select(_ => new CR2WExportWrapper(this, _)
-            {
-                //ParentChunkId = _.parentID
-            }).ToList();
+            chunks = ReadTable<CR2WExport>(4).Select(_ => new CR2WExportWrapper(_, this)).ToList();
             buffers = ReadTable<CR2WBuffer>(5).Select(_ => new CR2WBufferWrapper(_)).ToList();
             embedded = ReadTable<CR2WEmbedded>(6).Select(_ => new CR2WEmbeddedWrapper(_)
             {
                 ParentImports = imports,
-                Handle = m_dictionary[_.path],
+                Handle = StringDictionary[_.path],
             }).ToList();
             #endregion
 
@@ -190,7 +181,32 @@ namespace WolvenKit.CR2W
             }
             #endregion*/
 
-            GenerateStringtable();
+            //dbg++
+            //(var nameslist, var importslist) = GenerateStringtable();
+            //var stringlist = new List<string>(nameslist);
+            //foreach (var import in importslist)
+            //{
+            //    if (!nameslist.Contains(import.Item1))
+            //        nameslist.Add(import.Item1);
+            //    if (!stringlist.Contains(import.Item1))
+            //        stringlist.Add(import.Item1);
+            //    if (!stringlist.Contains(import.Item2))
+            //        stringlist.Add(import.Item2);
+            //}
+            ////TODO add new embedded
+            //foreach (var emb in embedded)
+            //{
+            //    if (!stringlist.Contains(emb.Handle))
+            //        stringlist.Add(emb.Handle);
+            //}
+            //var oldstringslist = StringDictionary.Values.ToList();
+            //string strold = string.Join(",", oldstringslist);
+            //string strnew = string.Join(",", stringlist);
+            //if (strold != strnew)
+            //{
+            //}
+            //dbg--
+
 
             m_stream = null;
         }
@@ -265,40 +281,106 @@ namespace WolvenKit.CR2W
             m_stream = file.BaseStream;
 
             // update data
-            #region Update Data
             //m_fileheader.timeStamp = CDateTime.Now.ToUInt64(); //this will change any vanilla assets simply by opening and saving in wkit
             //m_fileheader.numChunks = (uint)chunks.Count;
+            var nn = new List<CR2WNameWrapper>(names);
 
-            var stringlist = GenerateStringtable();
+            #region Update Tables
+            (var nameslist, var importslist) = GenerateStringtable();
+            var stringlist = new List<string>(nameslist);
+            foreach (var import in importslist)
+            {
+                if (!nameslist.Contains(import.Item1))
+                    nameslist.Add(import.Item1);
+                if (!stringlist.Contains(import.Item1))
+                    stringlist.Add(import.Item1);
+                if (!stringlist.Contains(import.Item2))
+                    stringlist.Add(import.Item2);
+            }
+            //TODO add new embedded
+            foreach (var emb in embedded)
+            {
+                if (!stringlist.Contains(emb.Handle))
+                    stringlist.Add(emb.Handle);
+            }
 
-
-
-
-            // Update strings
+            #region Stringtable
             uint stringbuffer_offset = 160; // always 160
             m_tableheaders[0].offset = stringbuffer_offset;
-            m_strings = GetNewStrings(stringlist);
-            UpdateDictionary();
+
+            var newstrings = new List<byte>();
+            foreach (var str in stringlist)
+            {
+                if (str != null)
+                {
+                    var bytes = Encoding.Default.GetBytes(str);
+                    foreach (var b in bytes)
+                    {
+                        newstrings.Add(b);
+                    }
+                }
+                newstrings.Add((byte)0);
+            }
+            m_strings = newstrings.ToArray();
+
+            var stringscount = m_strings.Length;
+            m_tableheaders[0].size = (uint)stringscount;
+            m_tableheaders[0].crc32 = Crc32Algorithm.Compute(m_strings);
+
+            StringDictionary.Clear();
+            StringDictionary = new Dictionary<uint, string>();
+
+            StringBuilder sb = new StringBuilder();
+            uint offset = 0;
+            for (uint i = 0; i < stringscount; i++)
+            {
+                byte b = m_strings[i];
+                if (b == 0)
+                {
+                    StringDictionary.Add(offset, sb.ToString());
+                    sb.Clear();
+                    offset = i + 1;
+                }
+                else
+                {
+                    sb.Append((char)b);
+                }
+            }
+            #endregion
             
-            // Update Offsets
-            var inverseDictionary = m_dictionary.ToDictionary(x => x.Value, x => x.Key);
-            for (var i = 0; i < names.Count; i++)
+            var inverseDictionary = StringDictionary.ToDictionary(x => x.Value, x => x.Key);
+
+            #region Names
+            names.Clear();
+            foreach (var name in nameslist)
             {
-                var newoffset = inverseDictionary[names[i].Str];
-                if (names[i].Name.value != newoffset)
+                var newoffset = inverseDictionary[name];
+                var hash = FNV1A32HashAlgorithm.HashString(name, Encoding.ASCII, true);
+                names.Add(new CR2WNameWrapper(new CR2WName()
                 {
-                    names[i].SetOffset(newoffset);
-                }
+                    hash = hash,
+                    value = newoffset
+                }, this));
             }
-            for (var i = 0; i < imports.Count; i++)
+            #endregion
+
+            #region Imports
+            imports.Clear();
+            foreach (var import in importslist)
             {
-                var newoffset = inverseDictionary[imports[i].DepotPathStr];
-                if (newoffset != imports[i].Import.depotPath)
-                {
-                    imports[i].SetOffset(newoffset);
-                }
+                var nw = names.First(_ => _.Str == import.Item1);
+                imports.Add(new CR2WImportWrapper(
+                    new CR2WImport()
+                    {
+                        className = (ushort)names.IndexOf(nw), // this is an index
+                        depotPath = inverseDictionary[import.Item2],
+                        flags = 0   //TODO
+                    }, this));
             }
-            for (var i = 0; i < embedded.Count; i++)
+            #endregion
+
+            #region Embedded 
+            for (var i = 0; i < embedded.Count; i++)    //TODO
             {
                 var newoffset = inverseDictionary[embedded[i].Handle];
                 if (newoffset != embedded[i].Embedded.path)
@@ -306,8 +388,9 @@ namespace WolvenKit.CR2W
                     embedded[i].SetOffset(newoffset);
                 }
             }
-            
             #endregion
+            #endregion
+
 
             headerOffset = 0;
             using (var ms = new MemoryStream())
@@ -315,7 +398,7 @@ namespace WolvenKit.CR2W
             {
                 // first write the file to memory
                 // this also sets m_fileheader.fileSize and m_fileheader.bufferSize, offsets
-                WriteBuffers(bw);
+                WriteData(bw);
 
                 // Write headers once to allocate the space for it
                 WriteHeader(file);
@@ -328,7 +411,6 @@ namespace WolvenKit.CR2W
             }
 
             #region Update Offsets
-
             for (var i = 0; i < chunks.Count; i++)
             {
                 var newoffset = chunks[i].Export.dataOffset + headerOffset;
@@ -355,71 +437,6 @@ namespace WolvenKit.CR2W
             WriteFileHeader(file);
 
             m_stream = null;
-
-            // LOCAL METHODS
-            void UpdateDictionary()
-            {
-                var stringscount = m_strings.Length;
-                m_tableheaders[0].size = (uint)stringscount;
-                m_tableheaders[0].crc32 = Crc32Algorithm.Compute(m_strings);
-
-                m_dictionary.Clear();
-                m_dictionary = new Dictionary<uint, string>();
-
-                StringBuilder sb = new StringBuilder();
-                uint offset = 0;
-                for (uint i = 0; i < stringscount; i++)
-                {
-                    byte b = m_strings[i];
-                    if (b == 0)
-                    {
-                        m_dictionary.Add(offset, sb.ToString());
-                        sb.Clear();
-                        offset = i + 1;
-                    }
-                    else
-                    {
-                        sb.Append((char)b);
-                    }
-                }
-            }
-
-            byte[] GetNewStrings(List<string> newnames)
-            {
-                //var newnames = new List<string>();
-                var newstrings = new List<byte>();
-
-                //    foreach (CR2WNameWrapper name in names)
-                //    {
-                //        if (!newnames.Contains(name.Str))
-                //            newnames.Add(name.Str);
-                //    }
-                //    foreach (CR2WImportWrapper import in imports)
-                //    {
-                //        if (!newnames.Contains(import.DepotPathStr))
-                //            newnames.Add(import.DepotPathStr);
-                //    }
-                //    foreach (CR2WEmbeddedWrapper emb in embedded)
-                //    {
-                //        if (!newnames.Contains(emb.Handle))
-                //                newnames.Add(emb.Handle);
-                //    }
-
-                foreach (var str in newnames)
-                {
-                    if (str != null)
-                    {
-                        var bytes = Encoding.Default.GetBytes(str);
-                        foreach (var b in bytes)
-                        {
-                            newstrings.Add(b);
-                        }
-                    }
-                    newstrings.Add((byte)0);
-                }
-
-                return newstrings.ToArray();
-            }
 
             void FixExportCRC32(CR2WExport export) //FIXME do I wann keep the ref?
             {
@@ -476,67 +493,33 @@ namespace WolvenKit.CR2W
             }
         }
 
-        //debug
-        bool crash = false;
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        private List<string> GenerateStringtable()
+        private (List<string>, List<Tuple<string, string>>) GenerateStringtable()
         {
-            //var hashlist = new List<Tuple<CVariable,int>>();
-            var guidlist = new List<Guid>();
-            // stringtable
-            var newstringslist = new List<string>
+            var newnameslist = new List<string>
             {
                 ""
             };
-            // importstable
-            var newimportslist = new List<string>();
-            var newsoftlist = new List<string>();
+            var newimportslist = new List<Tuple<string,string>>();
 
-            //dbg++
-            var oldstringslist = m_dictionary.Values.ToList();
-            //dbg--
-
+            var guidlist = new List<Guid>();
+            var chunkguidlist = new List<Guid>();
             var collection = new List<Tuple<string, CVariable>>();
             foreach (var c in chunks)
             {
-                LoopWrapper(new Tuple<string, CVariable>("", c.data));
+                chunkguidlist.Add(c.data.InternalGuid);
+                LoopWrapper(new Tuple<string, CVariable>("skipName", c.data));
             }
             foreach (var storedvar in collection)
             {
-                GetStrings(storedvar);
-            }
-            // add new imports
-            foreach (var import in newimportslist)
-            {
-                AddUniqueToTable(import);
-            }
-            foreach (var soft in newsoftlist)
-            {
-                AddUniqueToTable(soft);
-            }
-            // TODO add new embedded
-            foreach (var emb in embedded)
-            {
-                AddUniqueToTable(emb.Handle);
+                AddStrings(storedvar);
             }
 
-            //dbg++
-            string strold = string.Join(",", oldstringslist);
-            string strnew = string.Join(",", newstringslist);
-            if (strold != strnew)
-            {
-                if (crash) throw new NotImplementedException();
-            }
-            //dbg--
+            return (newnameslist, newimportslist);
 
-            return newstringslist;
-
-            /// <summary>
-            /// 
-            /// </summary>
             void LoopWrapper(Tuple<string, CVariable> var)
             {
                 collection.Add(var);
@@ -550,9 +533,6 @@ namespace WolvenKit.CR2W
                 }
             }
 
-            /// <summary>
-            /// 
-            /// </summary>
             List<Tuple<string,CVariable>> GetVariables(CVariable var)
             {
                 //check for looping references
@@ -755,15 +735,12 @@ namespace WolvenKit.CR2W
                 }
                 else if (var is CSoft)
                 {
-                    var s = var as CSoft;
-                    if (!newsoftlist.Contains(s.ClassName))
-                    {
-                        newsoftlist.Add(s.ClassName);
-                    }
-                    if (!newsoftlist.Contains(s.DepotPath))
-                    {
-                        newsoftlist.Add(s.DepotPath);
-                    }
+                    //var s = var as CSoft;
+                    //var stuple = new Tuple<string, string>(s.ClassName, s.DepotPath);
+                    //if (!newimportslist.Contains(stuple))
+                    //{
+                    //    newimportslist.Add(stuple);
+                    //}
                 }
                 else if (var is IdHandle)
                 {
@@ -779,10 +756,7 @@ namespace WolvenKit.CR2W
                 return returnedVariables;
             }
 
-            /// <summary>
-            /// 
-            /// </summary>
-            void GetStrings(Tuple<string, CVariable> tvar)
+            void AddStrings(Tuple<string, CVariable> tvar)
             {
                 var var = tvar.Item2;
                 if (var is SFoliageInstance)
@@ -799,6 +773,11 @@ namespace WolvenKit.CR2W
                         AddUniqueToTable(var.Type);
                         AddUniqueToTable(var.Name);
                     }
+                    // I'm sorry
+                    else if (tvar.Item1 == "skipName" || chunkguidlist.Contains(tvar.Item2.InternalGuid))
+                    {
+                        AddUniqueToTable(var.Type);
+                    }
                     else if (!tvar.Item1.Contains("skipName,skipType"))
                     {
                         AddUniqueToTable(var.Name);
@@ -808,8 +787,8 @@ namespace WolvenKit.CR2W
 
                 if (var is CVector)
                 {
-                    AddUniqueToTable(var.Name);
-                    AddUniqueToTable(var.Type);
+                    //AddUniqueToTable(var.Name);
+                    //AddUniqueToTable(var.Type);
                 }
                 if (var is SUmbraSceneData)
                 {
@@ -817,14 +796,10 @@ namespace WolvenKit.CR2W
                     if (!h.ChunkHandle)
                     {
                         AddUniqueToTable(h.ClassName);
-                        // amend importstable
-                        if (!newimportslist.Contains(h.ClassName))
+                        var importtuple = new Tuple<string, string>(h.ClassName, h.DepotPath);
+                        if (!newimportslist.Contains(importtuple))
                         {
-                            newimportslist.Add(h.ClassName);
-                        }
-                        if (!newimportslist.Contains(h.DepotPath))
-                        {
-                            newimportslist.Add(h.DepotPath);
+                            newimportslist.Add(importtuple);
                         }
                     }
                 }
@@ -848,14 +823,10 @@ namespace WolvenKit.CR2W
                     if (!h.ChunkHandle)
                     {
                         AddUniqueToTable(h.ClassName);
-                        // amend importstable
-                        if (!newimportslist.Contains(h.ClassName))
+                        var importtuple = new Tuple<string, string>(h.ClassName, h.DepotPath);
+                        if (!newimportslist.Contains(importtuple))
                         {
-                            newimportslist.Add(h.ClassName);
-                        }
-                        if (!newimportslist.Contains(h.DepotPath))
-                        {
-                            newimportslist.Add(h.DepotPath);
+                            newimportslist.Add(importtuple);
                         }
                     }
                 }
@@ -863,14 +834,10 @@ namespace WolvenKit.CR2W
                 {
                     var s = var as CSoft;
                     AddUniqueToTable(s.Type);
-                    // amend importstable
-                    if (!newsoftlist.Contains(s.ClassName))
+                    var stuple = new Tuple<string, string>(s.ClassName, s.DepotPath);
+                    if (!newimportslist.Contains(stuple))
                     {
-                        newsoftlist.Add(s.ClassName);
-                    }
-                    if (!newsoftlist.Contains(s.DepotPath))
-                    {
-                        newsoftlist.Add(s.DepotPath);
+                        newimportslist.Add(stuple);
                     }
                 }
                 else if (var is CName)
@@ -907,14 +874,10 @@ namespace WolvenKit.CR2W
                         if (!h.ChunkHandle)
                         {
                             AddUniqueToTable(h.ClassName);
-                            // amend importstable
-                            if (!newimportslist.Contains(h.ClassName))
+                            var importtuple = new Tuple<string, string>(h.ClassName, h.DepotPath);
+                            if (!newimportslist.Contains(importtuple))
                             {
-                                newimportslist.Add(h.ClassName);
-                            }
-                            if (!newimportslist.Contains(h.DepotPath))
-                            {
-                                newimportslist.Add(h.DepotPath);
+                                newimportslist.Add(importtuple);
                             }
                         }
                     }
@@ -949,16 +912,16 @@ namespace WolvenKit.CR2W
                 }
                 else
                 {
-                    if (!newstringslist.Contains(str))
+                    if (!newnameslist.Contains(str))
                     {
                         // hack for CApexClothResource *sigh*
                         if (str == "apexMaterialNames")
                         {
-                            newstringslist.Add("apexBinaryAsset");
-                            newstringslist.Add("array:95,0,Uint8");
+                            newnameslist.Add("apexBinaryAsset");
+                            newnameslist.Add("array:95,0,Uint8");
                         }
 
-                        newstringslist.Add(str);
+                        newnameslist.Add(str);
                     }
                 }
             }
@@ -1011,7 +974,7 @@ namespace WolvenKit.CR2W
             WriteStringBuffer();
         }
 
-        private void WriteBuffers(BinaryWriter bw)
+        private void WriteData(BinaryWriter bw)
         {
             // Write chunk data
             for (var i = 0; i < chunks.Count; i++)
@@ -1046,7 +1009,7 @@ namespace WolvenKit.CR2W
             var m_temp = new byte[size];
             m_stream.Read(m_temp, 0, m_temp.Length);
 
-            m_dictionary = new Dictionary<uint, string>();
+            StringDictionary = new Dictionary<uint, string>();
             StringBuilder sb = new StringBuilder();
             uint offset = 0;
             for (uint i = 0; i < size; i++)
@@ -1054,7 +1017,7 @@ namespace WolvenKit.CR2W
                 var b = m_temp[i];
                 if (b == 0)
                 {
-                    m_dictionary.Add(offset, sb.ToString());
+                    StringDictionary.Add(offset, sb.ToString());
                     sb.Clear();
                     offset = i + 1;
                 }
@@ -1262,16 +1225,16 @@ namespace WolvenKit.CR2W
                     return i;
             }
 
-            if (addnew)
-            {
-                var newstring = new CR2WNameWrapper
-                {
-                    Str = name
-                };
-                names.Add(newstring);
+            //if (addnew)
+            //{
+            //    var newstring = new CR2WNameWrapper
+            //    {
+            //        Str = name
+            //    };
+            //    names.Add(newstring);
 
-                return names.Count - 1;
-            }
+            //    return names.Count - 1;
+            //}
 
             return -1;
         }

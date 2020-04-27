@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -34,8 +35,18 @@ namespace WolvenKit.CR2W.Types
         /// <param name="file"></param>
         public override void Write(BinaryWriter file)
         {
-            //file.Write(_val);
-            throw new NotImplementedException();
+            ushort val = 0;
+
+            try
+            {
+                var nw = cr2w.names.First(_ => _.Str == Value);
+                val = (ushort)cr2w.names.IndexOf(nw);
+            }
+            catch (Exception)
+            {
+            }
+
+            file.Write(val);
         }
 
         public override CVariable SetValue(object val)
