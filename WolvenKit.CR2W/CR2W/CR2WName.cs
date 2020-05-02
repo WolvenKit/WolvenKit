@@ -1,7 +1,10 @@
 ﻿using RED.FNV1A;
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace WolvenKit.CR2W
 {
@@ -15,10 +18,12 @@ namespace WolvenKit.CR2W
         public uint hash;
     }
 
+    [DataContract(Namespace = "")]
     public class CR2WNameWrapper
     {
         public CR2WName Name { get; set; }
-
+        [XmlIgnore]
+        [NonSerialized()]
         private readonly CR2WFile _cr2w;
 
         public string Str => _cr2w.StringDictionary[Name.value];

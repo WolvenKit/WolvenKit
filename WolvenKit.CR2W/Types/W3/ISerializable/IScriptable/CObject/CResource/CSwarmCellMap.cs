@@ -12,7 +12,7 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     class CSwarmCellMap : CVector
     {
-        public CByteArray data;
+        public CBytes data;
         public CVector3D cornerPosition; 
         public CInt32 dataSizeX;
         public CInt32 dataSizeY;
@@ -23,7 +23,7 @@ namespace WolvenKit.CR2W.Types
 
         public CSwarmCellMap(CR2WFile cr2w) : base(cr2w)
         {
-            data = new CByteArray(cr2w)
+            data = new CBytes(cr2w)
             {
                 Name = "Data"
             };
@@ -91,7 +91,7 @@ namespace WolvenKit.CR2W.Types
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (CSwarmCellMap)base.Copy(context);
-            var.data = (CByteArray)data.Copy(context);
+            var.data = (CBytes)data.Copy(context);
             var.cornerPosition = (CVector3D) cornerPosition.Copy(context);
             var.dataSizeX = (CInt32) dataSizeX.Copy(context);
             var.dataSizeY = (CInt32)dataSizeY.Copy(context);

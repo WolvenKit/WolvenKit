@@ -69,7 +69,7 @@ namespace WolvenKit.CR2W.Types
                     };
                     ClassName.Write(bw);
 
-                    cvar.Write(file);
+                    cvar.Write(bw);
                 }
                 buffer = ms.ToArray();
             }

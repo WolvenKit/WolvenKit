@@ -397,7 +397,7 @@ namespace WolvenKit
             {
                 try
                 {
-                    string fileName = filepath + ".xml";
+                    string fileName = $"{filepath}.h.xml";
                     using (var writer = new FileStream(fileName, FileMode.Create))
                     using (var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read))
                     using (var reader = new BinaryReader(fs))

@@ -25,7 +25,8 @@ namespace WolvenKit.CR2W.Types
         public override void Read(BinaryReader file, uint size)
         {
             var len = file.ReadInt32();
-            using (var ms = new MemoryStream(file.ReadBytes(len)))
+            var byteso = file.ReadBytes(len);
+            using (var ms = new MemoryStream(byteso))
             {
                 Data = new XDocument(XDocument.Load(ms));
             }

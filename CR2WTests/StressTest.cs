@@ -501,6 +501,7 @@ namespace CR2WTests
             Dictionary<string, Tuple<long, long>> chunkstate = new Dictionary<string, Tuple<long, long>>();
             List<Dictionary<string, Tuple<long, long>>> chunkstateList = new List<Dictionary<string, Tuple<long, long>>>();
             List<string> unparsedfiles = new List<string>();
+            
 
             var files = mc.FileList.Where(x => x.Name.EndsWith(ext)).ToList();
             var processedfiles = new List<string>();
@@ -619,35 +620,74 @@ namespace CR2WTests
 
             var crw = new CR2WFile();
 
+
+            byte[] originalFile;
+            byte[] reconstructedFile;
             using (var ms = new MemoryStream())
             using (var br = new BinaryReader(ms))
+            using (var bw = new BinaryWriter(ms))
             {
                 f.Extract(ms);
+                originalFile = ms.ToArray();
+                
                 ms.Seek(0, SeekOrigin.Begin);
-
                 crw.Read(br);
+                crw.Write(bw);
+                reconstructedFile = ms.ToArray();
             }
 
-            unknownclasses.AddRange(crw.UnknownTypes);
-            foreach (var c in crw.chunks)
+            //unknownclasses.AddRange(crw.UnknownTypes);
+            //foreach (var c in crw.chunks)
+            //{
+            //    var ubsl = c.unknownBytes?.Bytes != null ? c.unknownBytes.Bytes.Length : 0;
+
+            //    if (!chunkstate.ContainsKey(c.Type))
+            //    {
+            //        chunkstate.Add(c.Type, new Tuple<long, long>(0, 0));
+            //    }
+            //    var already = chunkstate[c.Type];
+            //    chunkstate[c.Type] = new Tuple<long, long>(
+            //            already.Item1 + c.Export.dataSize,
+            //            already.Item2 + ubsl
+            //        );
+
+            //    totalbytes += c.Export.dataSize;
+            //    unknownbytes += ubsl;
+
+            //}
+
+            if (!originalFile.SequenceEqual(reconstructedFile))
             {
-                var ubsl = c.unknownBytes?.Bytes != null ? c.unknownBytes.Bytes.Length : 0;
+                throw new NotImplementedException();
 
-                if (!chunkstate.ContainsKey(c.Type))
-                {
-                    chunkstate.Add(c.Type, new Tuple<long, long>(0, 0));
-                }
-                var already = chunkstate[c.Type];
-                chunkstate[c.Type] = new Tuple<long, long>(
-                        already.Item1 + c.Export.dataSize,
-                        already.Item2 + ubsl
-                    );
+                //var originalFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "CR2WTest", Path.GetFileName(f.Name));
+                //var newFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "CR2WTest", $"{Path.GetFileName(f.Name)}_new");
+                //var originalFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "CR2WTest", "vanilla.bin");
+                //var newFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "CR2WTest", "new.bin");
 
-                totalbytes += c.Export.dataSize;
-                unknownbytes += ubsl;
+                //try
+                //{
+                //    using (var mem = new MemoryStream(reconstructedFile))
+                //    using (var writer = new BinaryWriter(mem))
+                //    using (var fs = new FileStream(newFilePath, FileMode.Create, FileAccess.Write))
+                //    {
+                //        mem.WriteTo(fs);
+                //    }
 
+                //    using (var mem = new MemoryStream(originalFile))
+                //    using (var writer = new BinaryWriter(mem))
+                //    using (var fs = new FileStream(originalFilePath, FileMode.Create, FileAccess.Write))
+                //    {
+                //        mem.WriteTo(fs);
+                //    }
+                //}
+                //catch (Exception ex)
+                //{
+
+                //    //throw new NotImplementedException();
+                //}
+                
             }
-
 
             return new Tuple<long, long, Dictionary<string, Tuple<long, long>>>(totalbytes, unknownbytes, chunkstate);
 

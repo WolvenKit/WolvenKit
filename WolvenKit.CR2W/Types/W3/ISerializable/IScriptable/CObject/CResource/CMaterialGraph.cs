@@ -70,39 +70,46 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public class CMaterialGraph : CVector
     {
-        public CArray pixelParameters;
-        public CArray vertexParameters;
+        public CBufferVLQ<CMaterialGraphParameter> pixelParameters;
+        public CBufferVLQ<CMaterialGraphParameter> vertexParameters;
 
         public CMaterialGraph(CR2WFile cr2w) :
             base(cr2w)
         {
-            pixelParameters = new CArray("array:0,0,CMaterialGraphParameter", "CMaterialGraphParameter", true, cr2w);
-            pixelParameters.Name = "pixelParameters";
-            vertexParameters = new CArray("array:0,0,CMaterialGraphParameter", "CMaterialGraphParameter", true, cr2w);
-            vertexParameters.Name = "vertexParameters";
+            pixelParameters = new CBufferVLQ<CMaterialGraphParameter>(cr2w, _ => new CMaterialGraphParameter(_))
+            {
+                Name = "pixelParameters"
+            };
+            vertexParameters = new CBufferVLQ<CMaterialGraphParameter>(cr2w, _ => new CMaterialGraphParameter(_))
+            {
+                Name = "vertexParameters"
+            };
         }
 
         public override void Read(BinaryReader file, uint size)
         {
             base.Read(file, size);
 
-            var count = file.ReadSByte();
 
-            for (var i = 0; i < count; i++)
-            {
-                var item = new CMaterialGraphParameter(cr2w);
-                item.Read(file, 0);
-                pixelParameters.AddVariable(item);
-            }
+            pixelParameters.Read(file, 0);
+            vertexParameters.Read(file, 0);
+            //var count = file.ReadSByte();
 
-            var vertexCount = file.ReadSByte();
+            //for (var i = 0; i < count; i++)
+            //{
+            //    var item = new CMaterialGraphParameter(cr2w);
+            //    item.Read(file, 0);
+            //    pixelParameters.AddVariable(item);
+            //}
 
-            for (var i = 0; i < vertexCount; i++)
-            {
-                var item = new CMaterialGraphParameter(cr2w);
-                item.Read(file, 0);
-                vertexParameters.AddVariable(item);
-            }
+            //var vertexCount = file.ReadSByte();
+
+            //for (var i = 0; i < vertexCount; i++)
+            //{
+            //    var item = new CMaterialGraphParameter(cr2w);
+            //    item.Read(file, 0);
+            //    vertexParameters.AddVariable(item);
+            //}
 
             var unk1 = file.ReadInt32();
 
@@ -116,19 +123,22 @@ namespace WolvenKit.CR2W.Types
         {
             base.Write(file);
 
-            file.Write((sbyte) pixelParameters.array.Count);
-            foreach (var item in pixelParameters)
-            {
-                var startpos = file.BaseStream.Position;
-                item.Write(file);
-            }
+            pixelParameters.Write(file);
+            vertexParameters.Write(file);
 
-            file.Write((sbyte) vertexParameters.array.Count);
-            foreach (var item in vertexParameters)
-            {
-                var startpos = file.BaseStream.Position;
-                item.Write(file);
-            }
+            //file.Write((sbyte) pixelParameters.array.Count);
+            //foreach (var item in pixelParameters)
+            //{
+            //    var startpos = file.BaseStream.Position;
+            //    item.Write(file);
+            //}
+
+            //file.Write((sbyte) vertexParameters.array.Count);
+            //foreach (var item in vertexParameters)
+            //{
+            //    var startpos = file.BaseStream.Position;
+            //    item.Write(file);
+            //}
 
             file.Write(0);
         }
@@ -146,8 +156,8 @@ namespace WolvenKit.CR2W.Types
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (CMaterialGraph) base.Copy(context);
-            var.pixelParameters = (CArray) pixelParameters.Copy(context);
-            var.vertexParameters = (CArray) vertexParameters.Copy(context);
+            var.pixelParameters = (CBufferVLQ<CMaterialGraphParameter>) pixelParameters.Copy(context);
+            var.vertexParameters = (CBufferVLQ<CMaterialGraphParameter>) vertexParameters.Copy(context);
 
             return var;
         }

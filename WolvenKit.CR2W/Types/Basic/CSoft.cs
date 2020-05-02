@@ -47,24 +47,9 @@ namespace WolvenKit.CR2W.Types
             }
             else
             {
-                // ???
-                if (cr2w.imports.Count > 0)
-                {
-                    DepotPath = cr2w.imports[0].DepotPathStr;
-
-                    var filetype = cr2w.imports[0].Import.className;
-                    ClassName = cr2w.names[filetype].Str;
-
-                    Flags = cr2w.imports[0].Import.flags;
-                }
-                else
-                {
-                    DepotPath = "";
-                    ClassName = "";
-                    Flags = 0;
-                }
-
-                //TODO: Log this to console: The file is corrupted but we tried to load it anyway so something may not function properly!
+                DepotPath = "";
+                ClassName = "";
+                Flags = 4;
             }
         }
 
@@ -74,12 +59,12 @@ namespace WolvenKit.CR2W.Types
         /// <param name="file"></param>
         public override void Write(BinaryWriter file)
         {
-            int val = 0;
+            ushort val = 0;
 
             try
             {
-                var import = cr2w.imports.FirstOrDefault(_ => _.DepotPathStr == DepotPath && _.ClassNameStr == ClassName);
-                val = cr2w.imports.IndexOf(import) + 1;
+                var import = cr2w.imports.FirstOrDefault(_ => _.DepotPathStr == DepotPath && _.ClassNameStr == ClassName && _.Flags == Flags);
+                val = (ushort)(cr2w.imports.IndexOf(import) + 1);
             }
             catch (Exception)
             {

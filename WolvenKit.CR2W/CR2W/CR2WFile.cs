@@ -313,13 +313,14 @@ namespace WolvenKit.CR2W
             {
                 if (str != null)
                 {
-                    var bytes = Encoding.Default.GetBytes(str);
+                    var bytes = Encoding.GetEncoding("iso-8859-1").GetBytes(str);
                     foreach (var b in bytes)
                     {
                         newstrings.Add(b);
                     }
                 }
                 newstrings.Add((byte)0);
+                
             }
             m_strings = newstrings.ToArray();
 
@@ -329,33 +330,38 @@ namespace WolvenKit.CR2W
 
             StringDictionary.Clear();
             StringDictionary = new Dictionary<uint, string>();
-
             StringBuilder sb = new StringBuilder();
+            var tempstring = new List<byte>();
             uint offset = 0;
             for (uint i = 0; i < stringscount; i++)
             {
                 byte b = m_strings[i];
                 if (b == 0)
                 {
-                    StringDictionary.Add(offset, sb.ToString());
+                    var text = Encoding.GetEncoding("iso-8859-1").GetString(tempstring.ToArray());
+                    StringDictionary.Add(offset, text);
+                    //StringDictionary.Add(offset, sb.ToString());
                     sb.Clear();
+                    tempstring.Clear();
                     offset = i + 1;
                 }
                 else
                 {
                     sb.Append((char)b);
+                    tempstring.Add(b);
                 }
             }
             #endregion
-            
+
             var inverseDictionary = StringDictionary.ToDictionary(x => x.Value, x => x.Key);
 
             #region Names
             names.Clear();
             foreach (var name in nameslist)
             {
+                //var encodedstring = Encoding.GetEncoding("iso-8859-1")
                 var newoffset = inverseDictionary[name];
-                var hash = FNV1A32HashAlgorithm.HashString(name, Encoding.ASCII, true);
+                var hash = FNV1A32HashAlgorithm.HashString(name, Encoding.GetEncoding("iso-8859-1"), true);
                 names.Add(new CR2WNameWrapper(new CR2WName()
                 {
                     hash = hash,
@@ -369,12 +375,13 @@ namespace WolvenKit.CR2W
             foreach (var import in importslist)
             {
                 var nw = names.First(_ => _.Str == import.Item1);
+                ushort flag = (ushort)import.Item3;
                 imports.Add(new CR2WImportWrapper(
                     new CR2WImport()
                     {
-                        className = (ushort)names.IndexOf(nw), // this is an index
+                        className = (ushort)names.IndexOf(nw),
                         depotPath = inverseDictionary[import.Item2],
-                        flags = 0   //TODO
+                        flags = (ushort)import.Item3    //TODO finish all flags
                     }, this));
             }
             #endregion
@@ -497,13 +504,14 @@ namespace WolvenKit.CR2W
         /// 
         /// </summary>
         /// <returns></returns>
-        private (List<string>, List<Tuple<string, string>>) GenerateStringtable()
+        private (List<string>, List<Tuple<string, string, EImportFlags>>) GenerateStringtable()
         {
             var newnameslist = new List<string>
             {
                 ""
             };
-            var newimportslist = new List<Tuple<string,string>>();
+            var newimportslist = new List<Tuple<string,string, EImportFlags>>();
+            var newsoftlist = new List<Tuple<string,string, EImportFlags>>();
 
             var guidlist = new List<Guid>();
             var chunkguidlist = new List<Guid>();
@@ -517,6 +525,7 @@ namespace WolvenKit.CR2W
             {
                 AddStrings(storedvar);
             }
+            newimportslist.AddRange(newsoftlist);
 
             return (newnameslist, newimportslist);
 
@@ -536,7 +545,6 @@ namespace WolvenKit.CR2W
             List<Tuple<string,CVariable>> GetVariables(CVariable var)
             {
                 //check for looping references
-                //var hash = new Tuple<CVariable,int>(var, var.GetHashCode());
                 if (guidlist.Contains(var.InternalGuid))
                     return null;
                 else
@@ -546,8 +554,6 @@ namespace WolvenKit.CR2W
 
                 if (var is CVector)
                 {
-                    //AddUniqueToTable(var.Type);
-
                     #region Buffer Hacks Before Variables
                     if (var is CEntity)
                     {
@@ -736,10 +742,13 @@ namespace WolvenKit.CR2W
                 else if (var is CSoft)
                 {
                     //var s = var as CSoft;
-                    //var stuple = new Tuple<string, string>(s.ClassName, s.DepotPath);
-                    //if (!newimportslist.Contains(stuple))
+                    //if (!(string.IsNullOrEmpty(s.ClassName) && string.IsNullOrEmpty(s.DepotPath)))
                     //{
-                    //    newimportslist.Add(stuple);
+                    //    var stuple = new Tuple<string, string, EImportFlags>(s.ClassName, s.DepotPath, EImportFlags.Soft);
+                    //    if (!newimportslist.Contains(stuple))
+                    //    {
+                    //        newimportslist.Add(stuple);
+                    //    }
                     //}
                 }
                 else if (var is IdHandle)
@@ -796,7 +805,7 @@ namespace WolvenKit.CR2W
                     if (!h.ChunkHandle)
                     {
                         AddUniqueToTable(h.ClassName);
-                        var importtuple = new Tuple<string, string>(h.ClassName, h.DepotPath);
+                        var importtuple = new Tuple<string, string, EImportFlags>(h.ClassName, h.DepotPath, EImportFlags.Default);
                         if (!newimportslist.Contains(importtuple))
                         {
                             newimportslist.Add(importtuple);
@@ -823,7 +832,7 @@ namespace WolvenKit.CR2W
                     if (!h.ChunkHandle)
                     {
                         AddUniqueToTable(h.ClassName);
-                        var importtuple = new Tuple<string, string>(h.ClassName, h.DepotPath);
+                        var importtuple = new Tuple<string, string, EImportFlags>(h.ClassName, h.DepotPath, EImportFlags.Default);
                         if (!newimportslist.Contains(importtuple))
                         {
                             newimportslist.Add(importtuple);
@@ -833,11 +842,14 @@ namespace WolvenKit.CR2W
                 else if (var is CSoft)
                 {
                     var s = var as CSoft;
-                    AddUniqueToTable(s.Type);
-                    var stuple = new Tuple<string, string>(s.ClassName, s.DepotPath);
-                    if (!newimportslist.Contains(stuple))
+                    if (!(string.IsNullOrEmpty(s.ClassName) && string.IsNullOrEmpty(s.DepotPath)))
                     {
-                        newimportslist.Add(stuple);
+                        AddUniqueToTable(s.Type);
+                        var stuple = new Tuple<string, string, EImportFlags>(s.ClassName, s.DepotPath, EImportFlags.Soft);
+                        if (!newsoftlist.Contains(stuple))
+                        {
+                            newsoftlist.Add(stuple);
+                        }
                     }
                 }
                 else if (var is CName)
@@ -874,7 +886,7 @@ namespace WolvenKit.CR2W
                         if (!h.ChunkHandle)
                         {
                             AddUniqueToTable(h.ClassName);
-                            var importtuple = new Tuple<string, string>(h.ClassName, h.DepotPath);
+                            var importtuple = new Tuple<string, string, EImportFlags>(h.ClassName, h.DepotPath, EImportFlags.Default);
                             if (!newimportslist.Contains(importtuple))
                             {
                                 newimportslist.Add(importtuple);
@@ -908,7 +920,7 @@ namespace WolvenKit.CR2W
             {
                 if (string.IsNullOrEmpty(str))
                 {
-
+                    // todo
                 }
                 else
                 {
@@ -917,8 +929,10 @@ namespace WolvenKit.CR2W
                         // hack for CApexClothResource *sigh*
                         if (str == "apexMaterialNames")
                         {
-                            newnameslist.Add("apexBinaryAsset");
-                            newnameslist.Add("array:95,0,Uint8");
+                            if (!newnameslist.Contains("apexBinaryAsset"))
+                                newnameslist.Add("apexBinaryAsset");
+                            if (!newnameslist.Contains("array: 95, 0, Uint8"))
+                                newnameslist.Add("array:95,0,Uint8");
                         }
 
                         newnameslist.Add(str);
@@ -935,9 +949,9 @@ namespace WolvenKit.CR2W
             m_tableheaders[1].size = (uint)names.Count;
             m_tableheaders[1].offset = (uint) file.BaseStream.Position;
             WriteTable<CR2WName>(names.Select(_ => _.Name).ToArray(), 1);
-
+            
             m_tableheaders[2].size = (uint)imports.Count;
-            m_tableheaders[2].offset = (uint) file.BaseStream.Position;
+            m_tableheaders[2].offset = imports.Count > 0 ? (uint) file.BaseStream.Position : 0;
             WriteTable<CR2WImport>(imports.Select(_ => _.Import).ToArray(), 2);
 
             m_tableheaders[3].size = (uint)properties.Count;
@@ -1012,18 +1026,23 @@ namespace WolvenKit.CR2W
             StringDictionary = new Dictionary<uint, string>();
             StringBuilder sb = new StringBuilder();
             uint offset = 0;
+            var tempstring = new List<byte>();
             for (uint i = 0; i < size; i++)
             {
-                var b = m_temp[i];
+                byte b = m_temp[i];
                 if (b == 0)
                 {
-                    StringDictionary.Add(offset, sb.ToString());
+                    var text = Encoding.GetEncoding("iso-8859-1").GetString(tempstring.ToArray());
+                    StringDictionary.Add(offset, text);
+                    //StringDictionary.Add(offset, sb.ToString());
                     sb.Clear();
+                    tempstring.Clear();
                     offset = i + 1;
                 }
                 else
                 {
                     sb.Append((char)b);
+                    tempstring.Add(b);
                 }
             }
 
@@ -1071,6 +1090,7 @@ namespace WolvenKit.CR2W
                 XmlSerializer.SerializeObject<CR2WFileHeader>(xw, m_fileheader);
                 XmlSerializer.SerializeObject<CR2WTable[]>(xw, m_tableheaders);
 
+                XmlSerializer.SerializeObject(xw, names.Select(_ => new Tuple<int, string>(names.IndexOf(_), _.Str)).ToArray());
                 XmlSerializer.SerializeObject<CR2WName[]>(xw, names.Select(_ => _.Name).ToArray());
                 XmlSerializer.SerializeObject<CR2WImport[]>(xw, imports.Select(_ => _.Import).ToArray());
                 XmlSerializer.SerializeObject<CR2WProperty[]>(xw, properties.Select(_ => _.Property).ToArray());
