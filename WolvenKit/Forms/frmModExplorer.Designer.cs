@@ -45,6 +45,8 @@ namespace WolvenKit
             this.exportW3facposejsonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cookToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.fastRenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.removeFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -70,8 +72,6 @@ namespace WolvenKit
             this.CollapseBTN = new System.Windows.Forms.ToolStripButton();
             this.resetfilesButton = new System.Windows.Forms.ToolStripButton();
             this.modexplorerSlave = new System.IO.FileSystemWatcher();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.fastRenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenu.SuspendLayout();
             this.searchstrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.modexplorerSlave)).BeginInit();
@@ -121,7 +121,7 @@ namespace WolvenKit
             this.toolStripSeparator4,
             this.showFileInExplorerToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(203, 518);
+            this.contextMenu.Size = new System.Drawing.Size(197, 420);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             this.contextMenu.Opened += new System.EventHandler(this.contextMenu_Opened);
             // 
@@ -193,6 +193,18 @@ namespace WolvenKit
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(193, 6);
+            // 
+            // fastRenderToolStripMenuItem
+            // 
+            this.fastRenderToolStripMenuItem.Name = "fastRenderToolStripMenuItem";
+            this.fastRenderToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+            this.fastRenderToolStripMenuItem.Text = "Fast Render";
+            this.fastRenderToolStripMenuItem.Click += new System.EventHandler(this.fastRenderToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(193, 6);
             // 
             // removeFileToolStripMenuItem
             // 
@@ -409,18 +421,6 @@ namespace WolvenKit
             this.modexplorerSlave.Deleted += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
             this.modexplorerSlave.Renamed += new System.IO.RenamedEventHandler(this.FileChanges_Detected);
             // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(199, 6);
-            // 
-            // fastRenderToolStripMenuItem
-            // 
-            this.fastRenderToolStripMenuItem.Name = "fastRenderToolStripMenuItem";
-            this.fastRenderToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
-            this.fastRenderToolStripMenuItem.Text = "Fast Render";
-            this.fastRenderToolStripMenuItem.Click += new System.EventHandler(this.fastRenderToolStripMenuItem_Click);
-            // 
             // frmModExplorer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -485,8 +485,6 @@ namespace WolvenKit
         private ToolStripMenuItem exportW3facjsonToolStripMenuItem;
         private ToolStripMenuItem exportW3facposejsonToolStripMenuItem;
         private ToolStripMenuItem dumpFileToolStripMenuItem;
-        private ToolStripMenuItem dumpXMLToolStripMenuItem;
-        private ToolStripMenuItem dumpChunksToXMLToolStripMenuItem;
         private ToolStripMenuItem dumpWccliteXMLToolStripMenuItem;
         private ToolStripMenuItem fastRenderToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator5;

@@ -73,6 +73,7 @@ namespace WolvenKit
             this.modwwise = new System.Windows.Forms.ToolStripMenuItem();
             this.ModchunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dLCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DLCScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dlcwwise = new System.Windows.Forms.ToolStripMenuItem();
             this.DLCChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addFileFromBundleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1119,5 +1120,6 @@ namespace WolvenKit
         private ToolStripMenuItem w2animsjsonToolStripMenuItem;
         private ToolStripMenuItem importUtilityToolStripMenuItem;
         private DockPanel dockPanel;
+        private ToolStripMenuItem DLCScriptToolStripMenuItem;
     }
 }
