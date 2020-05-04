@@ -229,7 +229,7 @@ namespace WolvenKit.Common.Wcc
         DescriptionAttribute("nameofgroup - (Optional) Name of texture group when importing texture.")]
         [TypeConverter(typeof(EnumConverter))]
         [REDName("texturegroup")]
-        public textureGroupNames texturegroup { get; set; }
+        public ETextureGroup texturegroup { get; set; }
 
     }
 

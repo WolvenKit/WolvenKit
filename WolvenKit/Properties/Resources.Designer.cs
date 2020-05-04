@@ -61,6 +61,19 @@ namespace WolvenKit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to RedName,Width,Height,Format,Compression,TextureGroup
+        ///characters\models\common\woman_average\body\model\woman_old__body_a01.xbm,1024,1024,TRF_TrueColor,TCM_DXTNoAlpha,CharacterDiffuse
+        ///characters\models\common\woman_average\body\model\woman_old__body_d01.xbm,2048,2048,TRF_TrueColor,TCM_DXTNoAlpha,CharacterDiffuse
+        ///characters\models\common\woman_average\body\model\woman_old__body_n01.xbm,2048,2048,TRF_TrueColor,TCM_Normals,CharacterNormal
+        ///characters\models\common\woman_average\body\model\woman_old__body_d02 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string @__xbmdump_3768555366 {
+            get {
+                return ResourceManager.GetString("__xbmdump_3768555366", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap _2c21aeda16de354ba5334551a883b481 {
@@ -266,6 +279,16 @@ namespace WolvenKit.Properties {
         internal static System.Drawing.Bitmap home {
             get {
                 object obj = ResourceManager.GetObject("home", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ImportPackage_16x {
+            get {
+                object obj = ResourceManager.GetObject("ImportPackage_16x", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

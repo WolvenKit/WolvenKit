@@ -42,6 +42,7 @@ namespace WolvenKit
     using Common.Services;
     using Enums = Dfust.Hotkeys.Enums;
     using WolvenKit.Render;
+    using System.Text.RegularExpressions;
 
     public partial class frmMain : Form
     {
@@ -52,6 +53,7 @@ namespace WolvenKit
         public frmStringsGui stringsGui;
         public frmOutput Output { get; set; }
         public frmConsole Console { get; set; }
+        public frmImportUtility ImportUtility { get; set; }
 
         public frmCR2WDocument ActiveDocument
         {
@@ -73,7 +75,7 @@ namespace WolvenKit
         private readonly ToolStripRenderer toolStripRenderer = new ToolStripProfessionalRenderer();
 
         private LoggerService Logger;
-        private WccHelper WccHelper;
+        private WccLite WccHelper;
 
         private delegate void strDelegate(string t);
         private delegate void logDelegate(string t, Logtype type);
@@ -737,6 +739,17 @@ namespace WolvenKit
             Console.Focus();
         }
 
+        private void ShowImportUtility()
+        {
+            if (ImportUtility == null || ImportUtility.IsDisposed)
+            {
+                ImportUtility = new frmImportUtility();
+                ImportUtility.Show(dockPanel, DockState.Document);
+            }
+
+            ImportUtility.Focus();
+        }
+
         private void newModToolStripMenuItem_Click(object sender, EventArgs e)
         {
             createNewMod();
@@ -1132,7 +1145,6 @@ namespace WolvenKit
                 ModExplorer.RequestFileDelete += ModExplorer_RequestFileDelete;
                 ModExplorer.RequestAssetBrowser += ModExplorer_RequestAssetBrowser;
                 ModExplorer.RequestFileRename += ModExplorer_RequestFileRename;
-                ModExplorer.RequestFileImport += ModExplorer_RequestFileImport;
                 ModExplorer.RequestFileCook += ModExplorer_RequestFileCook;
                 ModExplorer.RequestFileDumpfile += ModExplorer_RequestFileDumpfile;
                 ModExplorer.RequestFastRender += ModExplorer_RequestFastRender;
@@ -1355,7 +1367,7 @@ namespace WolvenKit
                 }
                 var import = new Wcc_lite.import()
                 {
-                    Depot = importwdir,
+                    Depot = MainController.DepotDir,
                     File = Path.Combine(importwdir, Path.GetFileName(infile)),
                     Out = outfile
                 };
@@ -1660,52 +1672,6 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             openMod();
         }
 
-        private async void ModExplorer_RequestFileImport(object sender, RequestImportArgs e)
-        {
-            var filename = e.File;
-            var importExtension = e.Extension;
-            var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
-            if (!File.Exists(fullpath))
-                return;
-            var rawExtension = Path.GetExtension(fullpath);
-
-            try
-            {
-                await StartImport(rawExtension, importExtension);
-            }
-            catch (Exception ex)
-            {
-
-            }
-            
-            
-            async Task StartImport(string rawext, string importext)
-            {
-                string type = REDTypes.RawExtensionToCacheType(rawext);
-
-                if (filename.Substring(0,3) == "Raw") filename = filename.TrimStart("Raw".ToCharArray());
-                filename = filename.TrimStart(Path.DirectorySeparatorChar);
-                if (filename.Substring(0, 3) == "Mod") filename = filename.TrimStart("Mod".ToCharArray());
-                filename = filename.TrimStart(Path.DirectorySeparatorChar);
-                if (filename.Substring(0, 3) == "DLC") filename = filename.TrimStart("DLC".ToCharArray());
-                filename = filename.TrimStart(Path.DirectorySeparatorChar);
-                
-                var newpath = Path.Combine(ActiveMod.ModDirectory, $"{filename.TrimEnd(rawExtension.ToCharArray())}{importext}");
-                var split = filename.Split(Path.DirectorySeparatorChar).First();
-                if (split != type)
-                    newpath = Path.Combine(ActiveMod.ModDirectory, type, $"{filename.TrimEnd(rawExtension.ToCharArray())}{importext}");
-
-                var import = new Wcc_lite.import()
-                {
-                    File = fullpath,
-                    Out = newpath,
-                    Depot = Path.GetDirectoryName(fullpath)
-                };
-                await Task.Run(() => WccHelper.RunCommand(import));
-            }
-
-        }
-
         private async void ModExplorer_RequestFileCook(object sender, RequestFileArgs e)
         {
             var filename = e.File;
@@ -1717,29 +1683,36 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 dir = Path.GetDirectoryName(fullpath);
             else
                 dir = fullpath;
+            string reldir = dir.TrimStart(ActiveMod.FileDirectory);
 
-            var reldir = dir.TrimStart(ActiveMod.FileDirectory.ToCharArray());
-            if (reldir.Substring(0, 3) == "Raw") reldir = reldir.TrimStart("Raw".ToCharArray());
-            reldir = reldir.TrimStart(Path.DirectorySeparatorChar);
-            if (reldir.Substring(0, 3) == "Mod") reldir = reldir.TrimStart("Mod".ToCharArray());
-            reldir = reldir.TrimStart(Path.DirectorySeparatorChar);
-            if (reldir.Substring(0, 14) == "CollisionCache") reldir = reldir.TrimStart("CollisionCache".ToCharArray());
-            if (reldir.Substring(0, 12) == "TextureCache") reldir = reldir.TrimStart("TextureCache".ToCharArray());
-            reldir = reldir.TrimStart(Path.DirectorySeparatorChar);
+            // Trim working directories in path
+            var reg = new Regex(@"^(Raw|Mod)\\(.*)");
+            var match = reg.Match(reldir);
+            if (match.Success)
+                reldir = match.Groups[2].Value;
+            reg = new Regex(@"^(CollisionCache)\\(.*)");
+            match = reg.Match(reldir);
+            if (match.Success)
+                reldir = match.Groups[2].Value;
+            reg = new Regex(@"^(TextureCache)\\(.*)");
+            match = reg.Match(reldir);
+            if (match.Success)
+                reldir = match.Groups[2].Value;
 
-            var files = Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories)
-                .Select(_ => _.TrimStart(dir.TrimEnd(reldir.ToCharArray()).ToCharArray()))
-                .ToList();
+            // create cooked mod Dir
             var cookedModDir = Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName, reldir);
-
             if (!Directory.Exists(cookedModDir))
             {
                 Directory.CreateDirectory(cookedModDir);
             }
+
+            // lazy check for existing files in Active Mod
+            var filenames = Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories)
+                .Select(_ => Path.GetFileName(_));
             var existingfiles = Directory.GetFiles(cookedModDir, "*.*", SearchOption.AllDirectories)
-                .Select(_ => _.TrimStart(Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName).ToCharArray()))
-                .ToList();
-            if (existingfiles.Intersect(files).Any())
+                .Select(_ => Path.GetFileName(_));
+
+            if (existingfiles.Intersect(filenames).Any())
             {
                 if (MessageBox.Show(
                      "Some of the files you are about to cook already exist in your mod. These files will be overwritten. Are you sure you want to permanently overwrite them?"
@@ -2405,6 +2378,11 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     }
                 }
             }
+        }
+
+        private void importUtilityToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowImportUtility();
         }
 
         private void ModExplorer_RequestFastRender(object sender, RequestFileArgs e)

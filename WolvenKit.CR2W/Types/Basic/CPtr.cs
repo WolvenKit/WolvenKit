@@ -118,7 +118,7 @@ namespace WolvenKit.CR2W.Types
                 }
             };
 
-            var selIndex = Reference.ChunkIndex + 1;
+            var selIndex = Reference == null ? 0 : Reference.ChunkIndex + 1;
             if (selIndex < editor.Items.Count && selIndex >= 0)
             {
                 editor.SelectedIndex = selIndex;

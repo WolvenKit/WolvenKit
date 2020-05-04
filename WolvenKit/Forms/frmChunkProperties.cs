@@ -387,7 +387,8 @@ namespace WolvenKit
 
         private void treeView_CellEditFinished(object sender, CellEditEventArgs e)
         {
-            chunk.SetParentChunkId((uint)chunk.ParentPtr.Reference.ChunkIndex + 1);
+            if (chunk.ParentPtr.Reference != null)
+                chunk.SetParentChunkId((uint)chunk.ParentPtr.Reference.ChunkIndex + 1);
             OnItemsChanged(sender, e);
             
         }
