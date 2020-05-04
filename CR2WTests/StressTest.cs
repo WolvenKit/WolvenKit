@@ -621,45 +621,45 @@ namespace CR2WTests
             var crw = new CR2WFile();
 
 
-            byte[] originalFile;
-            byte[] reconstructedFile;
+            //byte[] originalFile;
+            //byte[] reconstructedFile;
             using (var ms = new MemoryStream())
             using (var br = new BinaryReader(ms))
-            using (var bw = new BinaryWriter(ms))
+            //using (var bw = new BinaryWriter(ms))
             {
                 f.Extract(ms);
-                originalFile = ms.ToArray();
+                //originalFile = ms.ToArray();
                 
                 ms.Seek(0, SeekOrigin.Begin);
                 crw.Read(br);
-                crw.Write(bw);
-                reconstructedFile = ms.ToArray();
+                //crw.Write(bw);
+                //reconstructedFile = ms.ToArray();
             }
 
-            //unknownclasses.AddRange(crw.UnknownTypes);
-            //foreach (var c in crw.chunks)
-            //{
-            //    var ubsl = c.unknownBytes?.Bytes != null ? c.unknownBytes.Bytes.Length : 0;
-
-            //    if (!chunkstate.ContainsKey(c.Type))
-            //    {
-            //        chunkstate.Add(c.Type, new Tuple<long, long>(0, 0));
-            //    }
-            //    var already = chunkstate[c.Type];
-            //    chunkstate[c.Type] = new Tuple<long, long>(
-            //            already.Item1 + c.Export.dataSize,
-            //            already.Item2 + ubsl
-            //        );
-
-            //    totalbytes += c.Export.dataSize;
-            //    unknownbytes += ubsl;
-
-            //}
-
-            if (!originalFile.SequenceEqual(reconstructedFile))
+            unknownclasses.AddRange(crw.UnknownTypes);
+            foreach (var c in crw.chunks)
             {
-                throw new NotImplementedException();
+                var ubsl = c.unknownBytes?.Bytes != null ? c.unknownBytes.Bytes.Length : 0;
+
+                if (!chunkstate.ContainsKey(c.Type))
+                {
+                    chunkstate.Add(c.Type, new Tuple<long, long>(0, 0));
+                }
+                var already = chunkstate[c.Type];
+                chunkstate[c.Type] = new Tuple<long, long>(
+                        already.Item1 + c.Export.dataSize,
+                        already.Item2 + ubsl
+                    );
+
+                totalbytes += c.Export.dataSize;
+                unknownbytes += ubsl;
+
             }
+
+            //if (!originalFile.SequenceEqual(reconstructedFile))
+            //{
+            //    throw new NotImplementedException();
+            //}
 
             return new Tuple<long, long, Dictionary<string, Tuple<long, long>>>(totalbytes, unknownbytes, chunkstate);
 
