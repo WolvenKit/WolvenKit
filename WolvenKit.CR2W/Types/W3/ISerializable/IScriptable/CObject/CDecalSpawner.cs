@@ -33,24 +33,24 @@ namespace WolvenKit.CR2W.Types
         public CDecalSpawner(CR2WFile cr2w) : base(cr2w)
         {
                 material = new SDynamicDecalMaterialInfo(cr2w){ Name = "material", Type = "SDynamicDecalMaterialInfo"};
-				farZ = new CFloat(cr2w){ Name = "farZ", Type = "CFloat"};
-				nearZ = new CFloat(cr2w){ Name = "nearZ", Type = "CFloat"};
+				farZ = new CFloat(cr2w){ Name = "farZ", Type = "Float"};
+				nearZ = new CFloat(cr2w){ Name = "nearZ", Type = "Float"};
                 ssize = new CPtr(cr2w){ Name = "size", Type = "IEvaluatorFloat"};
-				depthFadePower = new CFloat(cr2w){ Name = "depthFadePower", Type = "CFloat"};
-				normalFadeBias = new CFloat(cr2w){ Name = "normalFadeBias", Type = "CFloat"};
-				normalFadeScale = new CFloat(cr2w){ Name = "normalFadeScale", Type = "CFloat"};
-				doubleSided = new CBool(cr2w){ Name = "doubleSided", Type = "CBool"};
+				depthFadePower = new CFloat(cr2w){ Name = "depthFadePower", Type = "Float"};
+				normalFadeBias = new CFloat(cr2w){ Name = "normalFadeBias", Type = "Float"};
+				normalFadeScale = new CFloat(cr2w){ Name = "normalFadeScale", Type = "Float"};
+				doubleSided = new CBool(cr2w){ Name = "doubleSided", Type = "Bool"};
 				projectionMode = new CName(cr2w){ Name = "projectionMode", Type = "CName"};
 				decalLifetime = new CPtr(cr2w){ Name = "decalLifetime", Type = "IEvaluatorFloat"};
-				decalFadeTime = new CFloat(cr2w){ Name = "decalFadeTime", Type = "CFloat"};
-				decalFadeInTime = new CFloat(cr2w){ Name = "decalFadeInTime", Type = "CFloat"};
-				projectOnlyOnStatic = new CBool(cr2w){ Name = "projectOnlyOnStatic", Type = "CBool"};
-				startScale = new CFloat(cr2w){ Name = "startScale", Type = "CFloat"};
-				scaleTime = new CFloat(cr2w){ Name = "scaleTime", Type = "CFloat"};
-				useVerticalProjection = new CBool(cr2w){ Name = "useVerticalProjection", Type = "CBool"};
+				decalFadeTime = new CFloat(cr2w){ Name = "decalFadeTime", Type = "Float"};
+				decalFadeInTime = new CFloat(cr2w){ Name = "decalFadeInTime", Type = "Float"};
+				projectOnlyOnStatic = new CBool(cr2w){ Name = "projectOnlyOnStatic", Type = "Bool"};
+				startScale = new CFloat(cr2w){ Name = "startScale", Type = "Float"};
+				scaleTime = new CFloat(cr2w){ Name = "scaleTime", Type = "Float"};
+				useVerticalProjection = new CBool(cr2w){ Name = "useVerticalProjection", Type = "Bool"};
 				spawnPriority = new CName(cr2w){ Name = "spawnPriority", Type = "CName"};
-				autoHideDistance = new CFloat(cr2w){ Name = "autoHideDistance", Type = "CFloat"};
-				spawnFrequency = new CFloat(cr2w){ Name = "spawnFrequency", Type = "CFloat"};
+				autoHideDistance = new CFloat(cr2w){ Name = "autoHideDistance", Type = "Float"};
+				spawnFrequency = new CFloat(cr2w){ Name = "spawnFrequency", Type = "Float"};
 				
         }
 

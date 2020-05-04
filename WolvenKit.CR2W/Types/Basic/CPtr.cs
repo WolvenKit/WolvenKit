@@ -6,78 +6,75 @@ using System.Xml;
 
 namespace WolvenKit.CR2W.Types
 {
+    /// <summary>
+    /// A pointer to a chunk within the same cr2w file.
+    /// </summary>
     [DataContract(Namespace = "")]
     public class CPtr : CVariable
     {
-        public int val;
 
         public CPtr(CR2WFile cr2w)
             : base(cr2w)
         {
         }
 
-        [DataMember(EmitDefaultValue = false)]
-        public int ChunkIndex
+        #region Properties
+        public CR2WExportWrapper Reference { get; set; }
+        #endregion
+
+        #region Methods
+        public string GetPtrTargetType()
         {
-            get { return val - 1; }
-            set { val = value + 1; }
-        }
-
-        public string PtrTargetType
-        {
-            get
+            try
             {
-                if (val == 0)
-                    return "";
-
-                if (ChunkIndex < 0 || ChunkIndex >= cr2w.chunks.Count)
-                    return "Invalid Ptr";
-
-                return cr2w.chunks[ChunkIndex].Type;
-            }
-        }
-
-        public CR2WExportWrapper PtrTarget
-        {
-            get
-            {
-                if (val == 0)
-                    return null;
-
-                if (ChunkIndex < 0 || ChunkIndex >= cr2w.chunks.Count)
-                    return null;
-
-                return cr2w.chunks[ChunkIndex];
-            }
-
-            set
-            {
-                if (value != null)
-                {
-                    val = value.ChunkIndex + 1;
-                }
+                if (Reference == null)
+                    return "NULL";
                 else
-                {
-                    val = 0;
-                }
+                    return Reference.Type;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidPtrException(ex.Message);
             }
         }
 
+        /// <summary>
+        /// Reads an int from the stream and stores a reference to a chunk.
+        /// A value of 0 means a null reference, all other chunk indeces are shifted by 1.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="size"></param>
         public override void Read(BinaryReader file, uint size)
         {
-            val = file.ReadInt32();
+            var val = file.ReadInt32();
+
+            try
+            {
+                if (val == 0)
+                    Reference = null;
+                else
+                    Reference = cr2w.chunks[val - 1];
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidPtrException(ex.Message);
+            }
         }
 
         public override void Write(BinaryWriter file)
         {
+            int val = 0;
+            if (Reference != null)
+                val = Reference.ChunkIndex + 1;
+
             file.Write(val);
         }
 
         public override CVariable SetValue(object val)
         {
-            if (val is int)
+            if (val is CR2WExportWrapper)
             {
-                this.val = (int) val;
+                this.Reference = (CR2WExportWrapper) val;
             }
             return this;
         }
@@ -89,32 +86,39 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CPtr) base.Copy(context);
-            context.ptrs.Add(var);
-            var.val = val;
-            return var;
+            var copy = (CPtr) base.Copy(context);
+            context.ptrs.Add(copy);
+
+            copy.Reference = this.Reference.Copy(context);
+
+            return copy;
         }
 
         public override Control GetEditor()
         {
             var editor = new ComboBox();
-            editor.Items.Add(new PtrComboItem {Text = "", Value = 0});
+            editor.Items.Add(new PtrComboItem {Text = "", Value = null});
 
-            for (var i = 0; i < cr2w.chunks.Count; i++)
+            foreach (var chunk in cr2w.chunks)
             {
-                editor.Items.Add(new PtrComboItem {Text = cr2w.chunks[i].Type + " #" + (i + 1), Value = i + 1});
+                editor.Items.Add(new PtrComboItem
+                {
+                    Text = $"{chunk.Type} #{chunk.ChunkIndex}", //real index
+                    Value = chunk
+                }
+                );
             }
 
             editor.SelectedIndexChanged += delegate(object sender, EventArgs e)
             {
-                var item = (PtrComboItem) ((ComboBox) sender).SelectedItem;
-                if (item != null)
+                var ptrcomboitem = (PtrComboItem) ((ComboBox) sender).SelectedItem;
+                if (ptrcomboitem != null)
                 {
-                    ChunkIndex = item.Value - 1;
+                    Reference = ptrcomboitem.Value;
                 }
             };
 
-            var selIndex = ChunkIndex + 1;
+            var selIndex = Reference.ChunkIndex + 1;
             if (selIndex < editor.Items.Count && selIndex >= 0)
             {
                 editor.SelectedIndex = selIndex;
@@ -124,18 +128,10 @@ namespace WolvenKit.CR2W.Types
 
         public override string ToString()
         {
-            return PtrTargetType + " #" + (ChunkIndex + 1);
-        }
-
-        internal class PtrComboItem
-        {
-            public int Value { get; set; }
-            public string Text { get; set; }
-
-            public override string ToString()
-            {
-                return Text;
-            }
+            if (Reference == null)
+                return "NULL";
+            else
+                return Reference.Type + " #" + (Reference.ChunkIndex);
         }
 
         public override void SerializeToXml(XmlWriter xw)
@@ -145,10 +141,19 @@ namespace WolvenKit.CR2W.Types
             {
                 ser.WriteStartObject(xw, this);
                 ser.WriteObjectContent(xw, this);
-                xw.WriteElementString("PtrTargetType", this.PtrTargetType);
+                xw.WriteElementString("PtrTargetType", this.GetPtrTargetType());
                 xw.WriteElementString("Target", this.ToString());
                 ser.WriteEndObject(xw);
             }
         }
+        #endregion
+    }
+
+    public class PtrComboItem
+    {
+        public CR2WExportWrapper Value { get; set; }
+        public string Text { get; set; }
+
+        public override string ToString() => Text;
     }
 }

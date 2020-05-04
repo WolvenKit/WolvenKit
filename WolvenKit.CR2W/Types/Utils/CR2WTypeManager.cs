@@ -62,6 +62,9 @@ namespace WolvenKit.CR2W.Types
             Register("Vector", new CVector(null));
 
             Register("ptr", new CPtr(null));
+
+            // some meme class in one w2phase
+            Register("#CEnvironmentDefinition", new CHandle(null));
             Register("handle", new CHandle(null));
             Register("EntityHandle", new EntityHandle(null));
             Register("soft", new CSoft(null));
@@ -88,6 +91,8 @@ namespace WolvenKit.CR2W.Types
             Register("EEntityStaticFlags", new CFlags(null));
             Register("ELightUsageMask", new CFlags(null));
             Register("EDismembermentEffectTypeFlag", new CFlags(null));
+            Register("EMeshChunkRenderMask", new CFlags(null));
+            Register("EImmunityFlags", new CFlags(null));
             #endregion
 
             #region Utility
@@ -174,6 +179,10 @@ namespace WolvenKit.CR2W.Types
             Register("CTerrainTile", new CTerrainTile(null));
 
             Register("CParticleEmitter", new CParticleEmitter(null));
+
+            //Register("CUmbraTile", new CUmbraTile(null));
+            Register("CUmbraScene", new CUmbraScene(null));
+            Register("CPhysicalCollision", new CPhysicalCollision(null));
 
 
 
@@ -796,6 +805,7 @@ namespace WolvenKit.CR2W.Types
 
             var vectors = new[]
             {
+                "CBehTreeValAreaSelectionMode",
                 "ApertureDofParams",
                 "ARDebugCameraDist",
                 "ARDebugCameraRot",
@@ -3049,7 +3059,6 @@ namespace WolvenKit.CR2W.Types
                 "CPhantomAttachment",
                 "CPhantomComponent",
                 "CPhilippaAttractorTrigger",
-                "CPhysicalCollision",
                 "CPhysicsDestructionResource",
                 "CPlayerInput",
                 "CPointLightComponent",
@@ -4022,53 +4031,12 @@ namespace WolvenKit.CR2W.Types
                 "W3YrdenEntity",
                 "WeaponHolster",
                 "WebLineProjectile",
+                "@SItem",
+                "STutorialHighlight"
             };
             foreach (string t in vectors)
             {
                 Register(t, new CVector(null));
-            }
-
-            var cnames = new[]
-            {
-                "EQuestPadVibrationStrength", "EFactValueChangeMethod",
-                "EActorImmortalityMode", "EAIAttitude", "EAreaName", "ECameraPlane", "ECompareFunc",
-                "ECompareOp", "ECurveBaseType", "ECurveRelativeMode", "ECurveType", "ECurveValueType",
-                "EDoorQuestState", "EFocusModeVisibility",
-                "EEnvColorGroup",
-                "EInteractionPriority", "EPhantomShape", "EFocusClueAttributeAction",
-                "ELayerBuildTag", "ELayerMergedContent", "ELayerType",
-                "ELogicOperation", "EMeshVertexType",
-                "EShowFlags", "eQuestType", "EQueryFact",
-                "ERenderDynamicDecalProjection",
-                "EStorySceneOutputAction", "ETextureCompression",
-                "SAnimationBufferBitwiseCompressionPreset",
-                "SAnimationBufferOrientationCompressionMethod",
-                "EEffectType", "EMoveType", "ESkeletonType", "EBreastPreset",
-                "EInterpolationEasingStyle", "EDialogLookAtType", "EDialogResetClothAndDanglesType", "ELookAtLevel",
-                "EGwintDifficultyMode", "EGwintAggressionMode", "EStorySceneAnimationType", "EGeraltPath",
-                "EDrawWeaponQuestType",
-                "EQueryFightMode", "ETopLevelAIPriorities", "ESoundEventSaveBehavior", "ECharacterDefenseStats",
-                "ESimpleCurveType",
-                "EBehaviorGraph", "EQuestNPCStates", "EDismountType", "ERenderingSortGroup", "ERenderingBlendMode",
-                "ESceneEventLightColorSource",
-                "ELightType",
-                "ELightShadowCastingMode",
-                "EFarPlaneDistance",
-                "ECheckedLanguage",
-                "ELanguageCheckType",
-                "EInterpolationMethod",
-                "EDimmerType",
-                "EInputActionBlock",
-                "EUsableItemType",
-                "SAnimationBufferStreamingOption",
-                "EItemLatentAction",
-                "ESkeletalAnimationType",
-                "EItemEffectAction",
-                "ETerrainTileCollision"
-            };
-            foreach (string t in cnames)
-            {
-                Register(t, new CName(null));
             }
 
             foreach (var enm in typeof(Enums).GetNestedTypes())
@@ -4092,11 +4060,11 @@ namespace WolvenKit.CR2W.Types
 
         public CVariable GetByName(string name, string varname, CR2WFile cr2w, bool readUnknownAsBytes = true)
         {
-            // debug
+#if DEBUG
+
             var debug = new[]
             {
                 "",
-                //"CFont",
                 "CCameraCompressedPose",
                 //"CUmbraScene",
                 //"CUmbraTile",
@@ -4105,6 +4073,10 @@ namespace WolvenKit.CR2W.Types
             {
                 //throw new System.NotImplementedException();
             }
+
+
+
+#endif
 
 
             var fullname = name;
@@ -4156,7 +4128,8 @@ namespace WolvenKit.CR2W.Types
             }
             if (types.ContainsKey(name))
             {
-                return types[name].var.Create(cr2w);
+                var v = types[name].var.Create(cr2w);
+                return v;
             }
             if (!cr2w.UnknownTypes.Contains(fullname))
                 cr2w.UnknownTypes.Add(fullname);

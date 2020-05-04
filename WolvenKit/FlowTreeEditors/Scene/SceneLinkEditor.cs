@@ -21,7 +21,7 @@ namespace WolvenKit.FlowTreeEditors
                 if (nextLinkElementObj != null && nextLinkElementObj is CPtr)
                 {
                     var nextLinkElementPtr = ((CPtr) nextLinkElementObj);
-                    if (nextLinkElementPtr.PtrTarget != null)
+                    if (nextLinkElementPtr.Reference != null)
                     {
                         list.Add(nextLinkElementPtr);
                     }

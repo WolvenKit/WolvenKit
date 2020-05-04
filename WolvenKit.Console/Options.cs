@@ -20,4 +20,5 @@ namespace WolvenKit.Console
         [Option(HelpText = "Specify the bundle path.", Required = true)]
         public string path { get; set; }
     }
+    
 }

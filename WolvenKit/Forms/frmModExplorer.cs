@@ -15,6 +15,7 @@ namespace WolvenKit
 {
     using Common;
     using Newtonsoft.Json;
+    using System.Threading.Tasks;
     using WolvenKit.CR2W;
     using WolvenKit.Render;
 
@@ -41,6 +42,8 @@ namespace WolvenKit
         public event EventHandler<RequestFileArgs> RequestAssetBrowser;
         public event EventHandler<RequestFileArgs> RequestFileRename;
         public event EventHandler<RequestFileArgs> RequestFileCook;
+        public event EventHandler<RequestFileArgs> RequestFileDumpfile;
+        public event EventHandler<RequestFileArgs> RequestFastRender;
         public List<string> FilteredFiles; 
         public bool FoldersShown = true;
 
@@ -371,7 +374,7 @@ namespace WolvenKit
             {
                 try
                 {
-                    string fileName = filepath + ".xml";
+                    string fileName = $"{filepath}.h.xml";
                     using (var writer = new FileStream(fileName, FileMode.Create))
                     using (var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read))
                     using (var reader = new BinaryReader(fs))
@@ -584,6 +587,7 @@ namespace WolvenKit
                 exportW2cutscenejsonToolStripMenuItem.Visible = Path.GetExtension(modFileList.SelectedNode.Name) == ".w2cutscene";
                 exportW3facjsonToolStripMenuItem.Visible = Path.GetExtension(modFileList.SelectedNode.Name) == ".w3fac";
                 exportW3facposejsonToolStripMenuItem.Visible = Path.GetExtension(modFileList.SelectedNode.Name) == ".w3fac";
+                fastRenderToolStripMenuItem.Enabled = Path.GetExtension(modFileList.SelectedNode.Name) == ".w2mesh";
             }
         }
 
@@ -622,6 +626,21 @@ namespace WolvenKit
                 {
                     MessageBox.Show(ex.Message, "Error cooking files.");
                 }
+            }
+        }
+
+        private async void dumpWccliteXMLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                RequestFileDumpfile?.Invoke(this, new RequestFileArgs { File = modFileList.SelectedNode.FullPath });
+            }
+        }
+        private void fastRenderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                RequestFastRender?.Invoke(this, new RequestFileArgs { File = modFileList.SelectedNode.FullPath });
             }
         }
     }

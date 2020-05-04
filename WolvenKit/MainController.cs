@@ -26,6 +26,8 @@ namespace WolvenKit
     using WolvenKit.Common.Wcc;
     using Render;
     using WolvenKit.W3Speech;
+    using WolvenKit.Common.Extensions;
+    using System.IO.MemoryMappedFiles;
 
     public enum EColorThemes
     {
@@ -119,6 +121,7 @@ namespace WolvenKit
         public CollisionManager CollisionManager => collisionManager;
         public SpeechManager SpeechManager => speechManager;
 
+        public Dictionary<string, MemoryMappedFile> mmfs = new Dictionary<string, MemoryMappedFile>();
         #endregion
 
         /// <summary>
@@ -461,7 +464,16 @@ namespace WolvenKit
                         ZipFile.ExtractToDirectory(DepotZipPath, DepotDir);
                     }
                 }
-                
+                #endregion
+
+                #region MMFUtil
+                foreach (var b in BundleManager.Bundles.Values)
+                {
+                    var hash = b.FileName.GetHashMD5();
+
+                    mmfs.Add(hash, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, hash, 0, MemoryMappedFileAccess.Read));
+
+                }
                 #endregion
 
                 loadStatus = "Loaded";

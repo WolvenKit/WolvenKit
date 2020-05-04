@@ -7,10 +7,6 @@ using System.Data;
 using System.Threading;
 
 using IrrlichtLime;
-using SharpDX;
-using SharpDX.Direct3D;
-using SharpDX.Direct3D11;
-using SharpDX.DXGI;
 using System.IO;
 
 namespace WolvenKit.Render
@@ -34,7 +30,8 @@ namespace WolvenKit.Render
             //    }
             //}
             Application.Run(new frmTerrain());
-            
+            //Application.Run(new FastRender.frmFastRender(null));
+
         }
     }
 }

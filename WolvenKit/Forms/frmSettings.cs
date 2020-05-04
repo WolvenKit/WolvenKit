@@ -112,7 +112,7 @@ namespace WolvenKit
             try
             {
                 using (var fs = new FileStream(txWCC_Lite.Text, FileMode.Open))
-                using(var bw = new BinaryWriter(fs))
+                using (var bw = new BinaryWriter(fs))
                 {
                     var shawcc = SHA256.Create().ComputeHash(fs).Aggregate("", (c, n) => c += n.ToString("x2"));
                     switch (shawcc)
@@ -127,9 +127,10 @@ Would you like to perform this patch?", "wcc_lite faster patch", MessageBoxButto
                                 DialogResult.Yes)
                             {
                                 //We perform the patch
-                                bw.BaseStream.Seek(0x00713CD0,SeekOrigin.Begin);
+                                bw.BaseStream.Seek(0x00713CD0, SeekOrigin.Begin);
                                 bw.Write(new byte[0xDD].Select(x => x = 0x90).ToArray());
                             }
+
                             //Recompute hash
                             fs.Seek(0, SeekOrigin.Begin);
                             shawcc = SHA256.Create().ComputeHash(fs).Aggregate("", (c, n) => c += n.ToString("x2"));
@@ -140,9 +141,11 @@ Would you like to perform this patch?", "wcc_lite faster patch", MessageBoxButto
                             }
                             else
                             {
-                                MessageBox.Show("Failed to patch! Please reinstall wcc_lite and try again", "Patch completed", MessageBoxButtons.OK,
+                                MessageBox.Show("Failed to patch! Please reinstall wcc_lite and try again",
+                                    "Patch completed", MessageBoxButtons.OK,
                                     MessageBoxIcon.Error);
                             }
+
                             break;
                         }
                         case wcc_sha256_patched2:
@@ -155,12 +158,19 @@ Would you like to perform this patch?", "wcc_lite faster patch", MessageBoxButto
                         {
                             DialogResult = DialogResult.None;
                             txExecutablePath.Focus();
-                            MessageBox.Show("Invalid wcc_lite.exe path you seem to have on older version", "failed to save.");
+                            MessageBox.Show("Invalid wcc_lite.exe path you seem to have on older version",
+                                "failed to save.");
                             return;
                         }
                     }
 
                 }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                //wcc_lite is installed to C:\\Program files
+                MessageBox.Show("Please restart WolvenKit as administrator. Couldn't access " + txWCC_Lite.Text,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception exception)
             {

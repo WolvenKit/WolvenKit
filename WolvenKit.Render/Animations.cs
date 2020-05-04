@@ -32,7 +32,7 @@ namespace WolvenKit.Render
                 if (chunk.Type == "CSkeletalAnimation")
                 {
                     var name = chunk.GetVariableByName("name");
-                    var chunkIdx = (chunk.GetVariableByName("animBuffer") as CPtr).ChunkIndex;
+                    var chunkIdx = (chunk.GetVariableByName("animBuffer") as CPtr).Reference.ChunkIndex;
                     AnimationNames.Add(new KeyValuePair<string, int>((name as CName).Value, chunkIdx));
                 }
             }
@@ -117,10 +117,10 @@ namespace WolvenKit.Render
                                         ushort[] plain = new ushort[4];
                                         float[] quart = new float[4];
                                        
-                                        plain[0] = (ushort)BitConverter.ToInt16(odata, 0);
-                                        plain[1] = (ushort)BitConverter.ToInt16(odata, 2);
-                                        plain[2] = (ushort)BitConverter.ToInt16(odata, 4);
-                                        plain[3] = (ushort)BitConverter.ToInt16(odata, 6);
+                                        plain[0] = BitConverter.ToUInt16(odata, 0);
+                                        plain[1] = BitConverter.ToUInt16(odata, 2);
+                                        plain[2] = BitConverter.ToUInt16(odata, 4);
+                                        plain[3] = BitConverter.ToUInt16(odata, 6);
 
                                         for (int i = 0; i < plain.Length; i++)
                                         {

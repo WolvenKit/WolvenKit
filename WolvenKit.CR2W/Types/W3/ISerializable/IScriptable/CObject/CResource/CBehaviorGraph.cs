@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public class CBehaviorGraph : CVector
     {
-        public CUInt32 unk1;
+        public CHandle Toplevelnode;
 
         public CUInt32 unk2;
         public CBufferUInt32<IdHandle> variables1;
@@ -29,7 +29,7 @@ namespace WolvenKit.CR2W.Types
         public CBehaviorGraph(CR2WFile cr2w) :
             base(cr2w)
         {
-            unk1 = new CUInt32(cr2w) { Name = "unk1" };
+            Toplevelnode = new CHandle(cr2w) { Name = "Toplevelnode" };
             unk2 = new CUInt32(cr2w) { Name = "unk2" };
             variables1 = new CBufferUInt32<IdHandle>(cr2w, _ => new IdHandle(_)) { Name = "variables1" };
 
@@ -50,7 +50,7 @@ namespace WolvenKit.CR2W.Types
         {
             base.Read(file, size);
 
-            unk1.Read(file, 0);
+            Toplevelnode.Read(file, 0);
 
             unk2.Read(file, 0);
             variables1.Read(file, 0);
@@ -72,7 +72,7 @@ namespace WolvenKit.CR2W.Types
         {
             base.Write(file);
 
-            unk1.Write(file);
+            Toplevelnode.Write(file);
 
             unk2.Write(file);
             variables1.Write(file);
@@ -104,7 +104,7 @@ namespace WolvenKit.CR2W.Types
         {
             var var = (CBehaviorGraph) base.Copy(context);
 
-            var.unk1 = (CUInt32) unk1.Copy(context);
+            var.Toplevelnode = (CHandle) Toplevelnode.Copy(context);
             var.unk2 = (CUInt32) unk2.Copy(context);
             var.variables1 = (CBufferUInt32<IdHandle>)variables1.Copy(context);
 
@@ -127,7 +127,7 @@ namespace WolvenKit.CR2W.Types
         {
             return new List<IEditableVariable>(variables)
             {
-                unk1,
+                Toplevelnode,
                 unk2,
                 variables1,
                 unk3,

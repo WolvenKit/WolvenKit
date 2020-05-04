@@ -22,7 +22,7 @@ namespace WolvenKit.CR2W
     {
         [DataMember]
         [FieldOffset(0)]
-        public ushort className; //needs to be registered upon new creation!
+        public ushort className;    //needs to be registered upon new creation!
 
         [DataMember]
         [FieldOffset(2)]
@@ -30,7 +30,7 @@ namespace WolvenKit.CR2W
 
         [DataMember]
         [FieldOffset(4)]
-        public uint parentID;   //needs to be registered upon new creation!
+        public uint parentID;   //0 means no parent, 1 is chunkID 0
 
         [DataMember]
         [FieldOffset(8)]
@@ -57,168 +57,134 @@ namespace WolvenKit.CR2W
         public CR2WExportWrapper(CR2WFile file)
         {
             this.cr2w = file;
-
-            parentPtr = new CPtr(file)
+            _export = new CR2WExport
             {
-                Name = "Parent"
+                objectFlags = 8192,
             };
-
-            flags = new CUInt16(file)
-            {
-                Name = "Flags"
-            };
-
-            typeName = new CName(file)
-            {
-                Name = "Type"
-            };
-
-            Flags = 8192;
-            _export.objectFlags = 8192;
         }
-        public CR2WExportWrapper(CR2WFile file, CR2WExport export)
+        public CR2WExportWrapper(CR2WExport export, CR2WFile file)
         {
             this.cr2w = file;
             _export = export;
 
-            parentPtr = new CPtr(file)
-            {
-                Name = "Parent"
-            };
-            ParentChunkId = export.parentID;
-
-            flags = new CUInt16(file)
-            {
-                Name = "Flags",
-                val = export.objectFlags
-            };
-
-            typeName = new CName(file)
-            {
-                Name = "Type",
-                val = export.className
-            };
-
-        }
-
-        public CVariable CreateDefaultVariable()
-        {
-            return null;
+            Type = cr2w.names[export.className].Str;
         }
         #endregion
 
-        #region Properties
-        private CR2WExport _export ;
+        private CR2WExport _export;
         [DataMember()]
-        public CR2WExport Export {
+        public CR2WExport Export
+        {
             get => _export;
-            set => _export = value;
         }
 
+        #region Fields
         [NonSerialized]
         public CR2WFile cr2w;
-        public CVariable data;
-        [NonSerialized]
-        public CName typeName;
+
         [NonSerialized]
         public CBytes unknownBytes;
-        /*public ushort typeId
-        {
-            get { return typeName.val; }
-            set { typeName.val = value; }
-        }*/
-        private readonly CUInt16 flags;
-        [DataMember]
-        public ushort Flags
-        {
-            get { return flags.val; }
-            set { flags.val = value; }
-        }
-        private readonly CPtr parentPtr;
-        [DataMember]
-        public uint ParentChunkId
-        {
-            get { return (uint) parentPtr.val; }
-            set
-            {
-                parentPtr.val = (int) value;
-                _export.parentID = value;
-            }
-        }
+        #endregion
 
-        public CR2WExportWrapper Parent
+        #region Properties
+        public CVariable data { get; set; }
+
+        // editable variables
+        private CPtr _parentPtr;
+        public CPtr ParentPtr
         {
             get
             {
-                try
+                return _parentPtr;
+            }
+            set
+            {
+                _parentPtr = value;
+
+                // this is unneccessary, handled in frmChunkProperties:treeView_CellEditFinished
+                if (_parentPtr.Reference == null)
                 {
-                    return cr2w.chunks[(int)ParentChunkId - 1];
+                    _export.parentID = (uint)0;
                 }
-                catch (Exception)
-                {
-                    return null;
-                }
-                
+                else
+                    _export.parentID = (uint)_parentPtr.Reference.ChunkIndex + 1;
+            }
+        }
+        public uint ParentChunkId => this.Export.parentID;
+
+        private string _type;
+        public string Type
+        {
+            get { return _type; }
+            set
+            {
+                _type = value;
+
+                _export.className = (ushort)cr2w.GetStringIndex(_type);
             }
         }
 
-        public int ChunkIndex => cr2w.chunks.IndexOf(this);
 
+        [DataMember]
+        public string Name
+        {
+            get { return Type + " #" + (ChunkIndex); }
+            set { }
+        }
+
+        /// <summary>
+        /// Deprecated
+        /// </summary>
+        public CR2WFile CR2WOwner => cr2w;
+        public int ChunkIndex => cr2w.chunks.IndexOf(this);
         public string Preview
         {
             get
             {
                 if (data is CVector)
                 {
-                    var firstString = ((CVector) data).GetVariableByType("String");
+                    var firstString = ((CVector)data).GetVariableByType("String");
                     if (firstString != null)
                     {
-                        return ((CString) firstString).val;
+                        return ((CString)firstString).val;
                     }
 
-                    var firstName = ((CVector) data).GetVariableByType("CName");
+                    var firstName = ((CVector)data).GetVariableByType("CName");
                     if (firstName != null)
                     {
-                        return ((CName) firstName).Value;
+                        return ((CName)firstName).Value;
                     }
                 }
 
                 return "";
             }
         }
-
-        [DataMember]
-        public string Type
-        {
-            get {return typeName.Value; }
-            set
-            {
-                typeName.Value = value;
-                _export.className = (ushort)cr2w.GetStringIndex(typeName.Value);
-            }
-        }
-
-        public void SetExportType(ushort val)
-        {
-            _export.className = val;
-        }
-        public void SetParentChunk(uint val)
-        {
-            _export.parentID = val;
-        }
-
-        [DataMember]
-        public string Name
-        {
-            get { return Type + " #" + (ChunkIndex + 1); }
-            set { }
-        }
-
-        public CR2WFile CR2WOwner => cr2w;
         #endregion
 
         #region Methods
+        public void SetType(ushort val) => _export.className = val;
+        public void SetParentChunkId(uint val) => _export.parentID = val;
         public void SetOffset(uint offset) => _export.dataOffset = offset;
+
+
+        public CVariable CreateDefaultVariable()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CR2WExportWrapper GetParent()
+        {
+            try
+            {
+                return cr2w.chunks[(int)ParentChunkId - 1];
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+        }
+        
         public virtual Control GetEditor()
         {
             return null;
@@ -228,7 +194,11 @@ namespace WolvenKit.CR2W
         {
             data.Name = Name;
 
-            var vars = new List<IEditableVariable> {flags, parentPtr, typeName, data};
+            var vars = new List<IEditableVariable>
+            {
+                ParentPtr,
+                data
+            };
             if (unknownBytes != null)
             {
                 vars.Add(unknownBytes);
@@ -261,7 +231,6 @@ namespace WolvenKit.CR2W
             CreateDefaultData();
 
             data.Read(file, _export.dataSize);
-
             var bytesLeft = _export.dataSize - (file.BaseStream.Position - _export.dataOffset);
 
             unknownBytes = new CBytes(cr2w)
@@ -276,7 +245,7 @@ namespace WolvenKit.CR2W
             }
             else if (bytesLeft < 0)
             {
-                throw new InvalidParsingException("File read too far.");
+                //throw new InvalidParsingException("File read too far.");
             }
             else
             {
@@ -316,7 +285,16 @@ namespace WolvenKit.CR2W
                 // default chunks to vector type
                 data = new CVector(cr2w);
             }
-            data.Name = Name;
+            //data.Name = Name;
+            data.Type = Type;
+            if (ParentChunkId != 0)
+                data.ParentVariable = GetParent().data;
+
+            ParentPtr = new CPtr(cr2w)
+            {
+                Name = "Parent",
+                Reference = GetParent()
+            };
         }
 
         public CR2WExportWrapper Copy(CR2WCopyAction context)
@@ -326,29 +304,29 @@ namespace WolvenKit.CR2W
                 return null;
 
 
-            var chunk = context.DestinationFile.CreateChunk(Type);
+            var copy = context.DestinationFile.CreateChunk(Type);
 
-            context.chunks.Add(chunk);
-            context.chunkTranslation.Add(ChunkIndex, chunk.ChunkIndex);
+            context.chunks.Add(copy);
+            context.chunkTranslation.Add(ChunkIndex, copy.ChunkIndex);
 
-            chunk.Type = Type;
-            chunk.Flags = Flags;
-            chunk._export.template = _export.template;
-            chunk._export.crc32 = _export.crc32;
+            copy.Type = Type;
+            copy._export.template = _export.template;
+            copy._export.crc32 = _export.crc32;
 
             // requires updating from context.chunkTranslation once all chunks are copied.
-            chunk.ParentChunkId = ParentChunkId;
+            //copy.ParentChunkId = ParentChunkId;
+            copy._export.parentID = _export.parentID;
 
             if (data != null)
             {
-                chunk.data = (CVector) data.Copy(context);
+                copy.data = (CVector) data.Copy(context);
             }
             if (unknownBytes != null)
             {
-                chunk.unknownBytes = (CBytes) unknownBytes.Copy(context);
+                copy.unknownBytes = (CBytes) unknownBytes.Copy(context);
             }
 
-            return chunk;
+            return copy;
         }
 
         public void SerializeToXml(XmlWriter xw)

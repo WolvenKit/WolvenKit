@@ -84,7 +84,7 @@ namespace WolvenKit
             if (listview)
                 treeListView.Roots = File.chunks;
             else
-                treeListView.Roots = File.chunks.Where(_ => _.Parent == null).ToList();
+                treeListView.Roots = File.chunks.Where(_ => _.GetParent() == null).ToList();
 
             if (!string.IsNullOrEmpty(keyword))
             {

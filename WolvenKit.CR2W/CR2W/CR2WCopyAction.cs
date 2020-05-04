@@ -120,7 +120,7 @@ namespace WolvenKit.CR2W
                 {
                     var ptr = ptrs[ptrIndex];
 
-                    CopyChunk(SourceFile.chunks[ptr.ChunkIndex]);
+                    CopyChunk(SourceFile.chunks[ptr.Reference.ChunkIndex]);
                 }
 
 
@@ -132,7 +132,7 @@ namespace WolvenKit.CR2W
             {
                 if (chunkTranslation.ContainsKey((int) chunk.ParentChunkId - 1))
                 {
-                    chunk.ParentChunkId = (uint) chunkTranslation[(int) chunk.ParentChunkId - 1] + 1;
+                    chunk.SetParentChunkId((uint) chunkTranslation[(int) chunk.ParentChunkId - 1] + 1);
                 }
                 else if (SourceFile == DestinationFile)
                 {
@@ -140,17 +140,19 @@ namespace WolvenKit.CR2W
                 }
                 else
                 {
-// this chunk's parent was not copied, use the first chunk as parent
-                    chunk.ParentChunkId = 1;
+                    // this chunk's parent was not copied, use the first chunk as parent
+                    chunk.SetParentChunkId(1);
                 }
             }
 
             // fix all pointers
             foreach (var ptr in ptrs)
             {
-                if (chunkTranslation.ContainsKey(ptr.ChunkIndex))
+                if (chunkTranslation.ContainsKey(ptr.Reference.ChunkIndex))
                 {
-                    ptr.ChunkIndex = chunkTranslation[ptr.ChunkIndex];
+                    //ptr.ChunkIndex = chunkTranslation[ptr.PtrTarget.ChunkIndex];
+                    int translatedidx = chunkTranslation[ptr.Reference.ChunkIndex];
+                    ptr.Reference = DestinationFile.chunks[translatedidx];
                 }
                 else if (SourceFile == DestinationFile)
                 {
@@ -159,7 +161,7 @@ namespace WolvenKit.CR2W
                 else
                 {
 // this ptr's target was not copied, point to 0
-                    ptr.val = 0;
+                    ptr.Reference = null;
                 }
             }
         }

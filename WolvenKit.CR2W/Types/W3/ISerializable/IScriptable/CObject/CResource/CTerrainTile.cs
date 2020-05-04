@@ -77,7 +77,14 @@ namespace WolvenKit.CR2W.Types.W3.ISerializable.IScriptable.CObject.CResource.IT
                 file.Write((group[2] as CInt16).val);
                 file.Write((group[3] as CInt32).val);
             }
-            file.Write(((CInt32)groups.array.Max(x => (((CArray)x).array[3] as CInt32))).val);
+            int maxres = 0;
+            foreach (var g in groups.array)
+            {
+                var g3 = (((CArray)g).array[3] as CInt32).val;
+                if (g3 > maxres) maxres = g3;
+            }
+            file.Write(maxres);
+            //file.Write(((CInt32)groups.array.Max(x => (((CArray)x).array[3] as CInt32))).val);
         }
 
         public override CVariable Copy(CR2WCopyAction context)

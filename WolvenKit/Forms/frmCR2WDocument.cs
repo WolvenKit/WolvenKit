@@ -204,29 +204,27 @@ namespace WolvenKit
 
         private void saveToFileName()
         {
-            try
-            {
+            //try
+            //{
                 using (var mem = new MemoryStream())
+                using (var writer = new BinaryWriter(mem))
                 {
-                    using (var writer = new BinaryWriter(mem))
+                    File.Write(writer);
+                    mem.Seek(0, SeekOrigin.Begin);
+
+                    using (var fs = new FileStream(FileName, FileMode.Create, FileAccess.Write))
                     {
-                        File.Write(writer);
-                        mem.Seek(0, SeekOrigin.Begin);
+                        mem.WriteTo(fs);
 
-                        using (var fs = new FileStream(FileName, FileMode.Create, FileAccess.Write))
-                        {
-                            mem.WriteTo(fs);
-
-                            OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = fs, File = File });
-                            fs.Close();
-                        }
+                        OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = fs, File = File });
+                        fs.Close();
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                MainController.Get().QueueLog("Failed to save the file(s)! They are probably in use.\n" + e.ToString());
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    MainController.Get().QueueLog("Failed to save the file(s)! They are probably in use.\n" + e.ToString());
+            //}
         }
 
         public void ApplyCustomTheme()

@@ -55,7 +55,7 @@ namespace WolvenKit.CR2W.Types
 
             var len = val.Length;
 
-            if (isUTF)
+            if (isUTF || string.IsNullOrEmpty(val))
             {
                 len = len + 128;
             }

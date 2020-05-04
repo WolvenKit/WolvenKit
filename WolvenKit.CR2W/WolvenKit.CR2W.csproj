@@ -23,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS1591</NoWarn>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -137,10 +138,14 @@
     <Compile Include="Types\Basic\CVector3.cs" />
     <Compile Include="Types\Basic\IdHandle.cs" />
     <Compile Include="Types\Basic\EntityHandle.cs" />
+    <Compile Include="Exceptions\InvalidPtrException.cs" />
     <Compile Include="Types\Basic\SCurveData.cs" />
     <Compile Include="Types\Utils\CBufferUInt16.cs" />
     <Compile Include="Types\Utils\CVectorWrapper.cs" />
     <Compile Include="Types\Utils\CVariableWrapper.cs" />
+    <Compile Include="Types\W3\CPhysicalCollision.cs" />
+    <Compile Include="Types\W3\CUmbraTile.cs" />
+    <Compile Include="Types\W3\CUmbraScene.cs" />
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CClipMap.cs" />
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CGraphBlock\CBehaviorGraphBlendMultipleNode.cs" />
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CGraphBlock\CBehaviorGraphStateMachineNode.cs" />
@@ -171,7 +176,7 @@
     <Compile Include="Types\W3\Structs\SSkeletonRigData.cs" />
     <Compile Include="Types\Utils\CBufferUInt32.cs" />
     <Compile Include="Types\Utils\CCompressedBuffer.cs" />
-    <Compile Include="Types\Basic\CCurve.cs" />
+    <Compile Include="Types\CVectors\CCurve.cs" />
     <Compile Include="Types\Basic\CQuaternion.cs" />
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CSkeleton.cs" />
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CPhysicsDestructionResource.cs" />
@@ -187,7 +192,7 @@
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CEntityTemplate.cs" />
     <Compile Include="Types\W3\CEvaluatorFloatCurve.cs" />
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CGenericGrassMask.cs" />
-    <Compile Include="Types\Basic\CIndexed2dArray.cs" />
+    <Compile Include="Types\CVectors\CIndexed2dArray.cs" />
     <Compile Include="Types\W3\ISerializable\CLayerGroup.cs" />
     <Compile Include="Types\W3\ISerializable\CLayerInfo.cs" />
     <Compile Include="Types\Basic\CMatrix4x4.cs" />
@@ -212,7 +217,7 @@
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\ITexture\CBitmapTexture.cs" />
     <Compile Include="Types\Basic\CByteArray.cs" />
     <Compile Include="Types\Basic\CBytes.cs" />
-    <Compile Include="Types\Basic\CColor.cs" />
+    <Compile Include="Types\CVectors\CColor.cs" />
     <Compile Include="Types\W3\CColorShift.cs" />
     <Compile Include="Types\Basic\CDateTime.cs" />
     <Compile Include="Types\Basic\CEngineQsTranform.cs" />

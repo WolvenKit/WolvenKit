@@ -8,35 +8,62 @@ namespace WolvenKit.CR2W.Types
 {
     public class Enums
     {
-        //Testing Area
-        #region Enums Incomplete
-        //enums without entries
-        public enum ETopLevelAIPriorities { }
-        public enum EModLogLevel { }
-        public enum EStoryBoardActorType { }
-        public enum ESoundAmbientDynamicParameter { }
-        public enum ESkeletonBoneFlags { }
-        public enum ESceneItemEventMode { }
-        public enum EQuestManageFastTravelOperation { }
-        public enum EMovementFlags { }
-        public enum EMeshChunkRenderMask { }
-        public enum ELightCubeSides { }
-        public enum EJournalContentType { }
-        public enum EImmunityFlags { }
-        public enum EHardAttachmentFlags { }
-        public enum EFixBonesHierarchyType { }
-        public enum ECameraLightBitfield { }
-        public enum EBehaviorVarContext { }
-        public enum EArbitratorPriorities { }
-        public enum EAllowedActorGroups { }
-
-        //enums with knowably missing entries
-        public enum ELightUsageMask
+        public enum EFactValueChangeMethod
         {
-            LUM_RenderToEnvProbe,
-            LUM_IsInteriorOnly,
-
+            FVCM_Add,
+            FVCM_Substract,
+            FVCM_Multiply,
+            FVCM_Divide,
         }
+
+        public enum EQuestPadVibrationStrength
+        {
+            EQPVS_VeryLight,
+            EQPVS_Light,
+            EQPVS_Hard,
+            EQPVS_VeryHard
+        }
+
+        public enum ETextureFormat
+        {
+            // x = 1 or param1
+            TEXFMT_A8 = 0x0,  // ret 0
+            TEXFMT_A8_Scaleform = 0x1, //ret 0
+            TEXFMT_L8 = 0x2,    // ret 0
+            TEXFMT_R8G8B8X8 = 0x3,  //ret x4
+            TEXFMT_R8G8B8A8 = 0x4,  //ret x4
+            TEXFMT_A8L8 = 0x5,  //ret x2
+            TEXFMT_Uint_16_norm = 0x6,  //ret x2
+            TEXFMT_Uint_16 = 0x7,  //ret x2
+            TEXFMT_Uint_32 = 0x8,
+            TEXFMT_R32G32_Uint = 0x9,  //ret x8
+            TEXFMT_R16G16_Uint = 0xA,    //ret << 4
+            TEXFMT_Float_R10G10B10A2 = 0xB,  //ret x4
+            TEXFMT_Float_R16G16B16A16 = 0xC,  //ret x8
+            TEXFMT_Float_R11G11B10 = 0xD,  //ret x4
+            TEXFMT_Float_R16G16 = 0xE,  //ret x4
+            TEXFMT_Float_R32G32 = 0xF,  //ret x8
+            TEXFMT_Float_R32G32B32A32 = 0x10,  //ret x4
+            TEXFMT_Float_R32 = 0x11,  //ret x4
+            TEXFMT_Float_R16 = 0x12,  //ret x2
+            TEXFMT_D24S8 = 0x13,  //ret x4
+            TEXFMT_D24FS8 = 0x14,
+            TEXFMT_D32F = 0x15,
+            TEXFMT_D16U = 0x16,
+            TEXFMT_BC1 = 0x17,  //ret (7 < x*2) ? x*2 : 8
+            TEXFMT_BC2 = 0x18,  //ret (0xf < x*4) ? x*4 : 0x10
+            TEXFMT_BC3 = 0x19,  //ret (0xf < x*4) ? x*4 : 0x10
+            TEXFMT_BC4 = 0x1A,  //ret (7 < x*2) ? x2 : 8
+            TEXFMT_BC5 = 0x1B,  //ret (0xf < x*4) ? x*4 : 0x10
+            TEXFMT_BC6H = 0x1C,  //ret (0xf < x*4) ? x*4 : 0x10
+            TEXFMT_BC7 = 0x1D,  //ret (0xf < x*4) ? x*4 : 0x10
+            TEXFMT_R8_Uint = 0x1E,  // ret 0
+            TEXFMT_NULL = 0x1F,
+            //TEXFMT_Max = 0x20,
+        };
+
+        //Testing Area
+        #region Testing Area
         public enum EApertureValue
         {
             /*
@@ -53,8 +80,249 @@ namespace WolvenKit.CR2W.Types
              f/32.0 10
              */
         }
+        public enum EStorySceneForcingMode
+        {
+            Dontforceanything, //Don't force anything
+            Forceposition, //Force position
+            Forcepositionwithcamerablending, //Force position with camera blending
+            Spawnandforceposition, //Spawn and force position
+            Spawnactorswhenneeded   //Spawn actors when needed
+        }
+
+        #region Flags
+        [Flags]
+        public enum EDismembermentEffectTypeFlag
+        {
+            DETF_Base = 1,
+            DETF_Igni = 2,
+            DETF_Aaard = 4,
+            DETF_Yrden = 8,
+            DETF_Quen = 16,
+            DETF_Mutation6 = 32,
+        }
+        [Flags]
+        public enum ELightUsageMask
+        {
+            LUM_Custom0,
+            LUM_Custom1,
+            LUM_Custom2,
+            LUM_Custom3,
+            LUM_Custom4,
+            LUM_Custom5,
+            LUM_Custom6,
+            LUM_Custom7,
+            LUM_RenderToEnvProbe,
+            LUM_ExcludeFromSceneRender,
+            LUM_IsInteriorOnly,
+            LUM_IsExteriorOnly,
+        }
+        public enum EMovementFlags
+        {
+            MM_CombatMode,
+            MM_MoveSliding
+        }
+        public enum EImmunityFlags
+        {
+            IF_Potion,
+            IF_Positive,
+            IF_Negative,
+            IF_Neutral,
+            IF_Immobilize,
+            IF_Confuse,
+            IF_Damage,
+        }
+        public enum EHardAttachmentFlags
+        {
+            HAF_FreePositionAxisX,
+            HAF_FreePositionAxisY,
+            HAF_FreePositionAxisZ,
+            HAF_FreeRotation
+        }
+        public enum ESkeletonBoneFlags
+        {
+            SBF_LockTranslation
+        }
         #endregion
 
+
+
+        #region Not in Ghidra
+
+        public enum EModLogLevel
+        {
+
+        }
+        public enum EStoryBoardActorType
+        {
+
+        }
+        public enum WmkAreaPositionType
+        {
+
+        }
+        public enum EDM_MappinType
+        {
+            EDM_QuestAvailable,
+            EDM_MonsterNest,
+            EDM_Prostitute,
+            EDM_HorseRacingNPC,
+            EDM_NonQuestHorseRace,
+            EDM_QuestAvailableFromNonActor,
+            EDM_EP1QuestAvailable,
+            EDM_EP2QuestAvailable,
+            EDM_Torch,
+            EDM_EP2QuestAvailableFromNonActor,
+            EDM_HorseRaceDummy,
+            EDM_HorseRaceTarget,
+        }
+
+        #endregion
+
+
+
+        public enum ESoundAmbientDynamicParameter
+        {
+            ESADP_None
+        }
+        public enum EJournalContentType
+        {
+            EJCT_Vanilla,
+            EJCT_EP1,
+            EJCT_EP2,
+        }
+        public enum ETopLevelAIPriorities
+        {
+            AIP_Unavailable,
+            AIP_BelowIdle,
+            AIP_AboveIdle,
+            AIP_AboveIdle2,
+            AIP_AboveEmergency,
+            AIP_AboveEmergency2,
+            AIP_AboveCombat,
+            AIP_AboveCombat2,
+        }
+        public enum ESceneItemEventMode
+        {
+            SIEM_Default,
+            SIEM_Mount,
+            SIEM_Unmount
+        }
+        public enum EQuestManageFastTravelOperation
+        {
+            QMFT_EnableAndShow,
+            QMFT_EnableOnly,
+            QMFT_ShowOnly
+        }
+
+        public enum EMeshChunkRenderMask
+        {
+            MCR_Scene,
+            MCR_Cascade1,
+            MCR_Cascade2,
+            MCR_Cascade3,
+            MCR_Cascade4,
+            MCR_LocalShadows
+        }
+        public enum ELightCubeSides
+        {
+            LCS_NegativeX,
+            LCS_PositiveX,
+            LCS_NegativeY,
+            LCS_PositiveY,
+            LCS_NegativeZ,
+            LCS_PositiveZ
+        }
+        public enum EFixBonesHierarchyType
+        {
+            FBHTAddMissingBones,
+            FBHTRemoveDisconnectedBones
+        }
+        public enum ECameraLightBitfield
+        {
+            Unknown,
+            ECLB_AbsoluteBrightness,
+            ECLB_AbsoluteRadius,
+            ECLB_AbsoluteOffset
+        }
+        public enum EBehaviorVarContext
+        {
+            BVC_Speed,
+            BVC_RotationAngle,
+            BVC_Extra
+        }
+        public enum EArbitratorPriorities
+        {
+            BTAP_Unavailable,
+            BTAP_Idle,
+            BTAP_Emergency,
+            BTAP_Combat,
+            BTAP_FullCutscene,
+            BTAP_BelowIdle,
+            BTAP_AboveIdle,
+            BTAP_AboveIdle2,
+            BTAP_AboveEmergency,
+            BTAP_AboveEmergency2,
+            BTAP_AboveCombat,
+            BTAP_AboveCombat2
+        }
+        public enum EAllowedActorGroups
+        {
+            AAG_Player,
+            AAG_PlayerInCombat,
+            AAG_TallNPCs,
+            AAG_ShortNPCs,
+            AAG_Monsters,
+            AAG_Ghost
+        }
+
+        #endregion
+
+        public enum ESwitchOperation
+        {
+            SO_TurnOn,
+            SO_TurnOff,
+            SO_Toggle,
+            SO_Reset,
+            SO_Enable,
+            SO_Disable,
+            SO_Lock,
+            SO_Unlock
+        }
+        public enum ETCrEffectorId
+        {
+            TCrEffector_HandL,
+            TCrEffector_HandR
+        }
+
+        public enum eGwintEffect
+        {
+            GwintEffect_None,
+            GwintEffect_Bin2,
+            GwintEffect_MeleeScorch,
+            GwintEffect_11thCard,
+            GwintEffect_ClearWeather,
+            GwintEffect_PickWeatherCard,
+            GwintEffect_PickRainCard,
+            GwintEffect_PickFogCard,
+            GwintEffect_PickFrostCard,
+            GwintEffect_View3EnemyCard,
+            GwintEffect_ResurectCard,
+            GwintEffect_ResurectFromEnemy,
+            GwintEffect_Bin2Pick1,
+            GwintEffect_MeleeHorn,
+            GwintEffect_RangedHorn,
+            GwintEffect_SiegeHorn,
+            GwintEffect_SiegeScorch,
+            GwintEffect_CounterKingAbility,
+            GwintEffect_Melee,
+            GwintEffect_Ranged,
+            GwintEffect_Siege,
+            GwintEffect_UnsummonDummy,
+            GwintEffect_Horn,
+            GwintEffect_Draw,
+            GwintEffect_Scorch,
+            GwintEffect_ClearSky
+        }
 
         public enum EQuestConditionDLCType
         {
@@ -161,15 +429,6 @@ namespace WolvenKit.CR2W.Types
         {
             EFWA_GoBackToFlight
         }
-        public enum EDismembermentEffectTypeFlag
-        {
-            DETF_Base = 1,
-            DETF_Igni = 2,
-            DETF_Aaard = 4,
-            DETF_Yrden = 8,
-            DETF_Quen = 16,
-            DETF_Mutation6 = 32,
-        }
         public enum ECursorType
         {
             CT_None,
@@ -199,42 +458,7 @@ namespace WolvenKit.CR2W.Types
             PET_Dodge,
             PET_Pirouette
         }
-        public enum ETextureFormat
-        {
-            TEXFMT_A8 = 0x0,
-            TEXFMT_A8_Scaleform = 0x1,
-            TEXFMT_L8 = 0x2,
-            TEXFMT_R8G8B8X8 = 0x3,
-            TEXFMT_R8G8B8A8 = 0x4,
-            TEXFMT_A8L8 = 0x5,
-            TEXFMT_Uint_16_norm = 0x6,
-            TEXFMT_Uint_16 = 0x7,
-            TEXFMT_Uint_32 = 0x8,
-            TEXFMT_R32G32_Uint = 0x9,
-            TEXFMT_R16G16_Uint = 0xA,
-            TEXFMT_Float_R10G10B10A2 = 0xB,
-            TEXFMT_Float_R16G16B16A16 = 0xC,
-            TEXFMT_Float_R11G11B10 = 0xD,
-            TEXFMT_Float_R16G16 = 0xE,
-            TEXFMT_Float_R32G32 = 0xF,
-            TEXFMT_Float_R32G32B32A32 = 0x10,
-            TEXFMT_Float_R32 = 0x11,
-            TEXFMT_Float_R16 = 0x12,
-            TEXFMT_D24S8 = 0x13,
-            TEXFMT_D24FS8 = 0x14,
-            TEXFMT_D32F = 0x15,
-            TEXFMT_D16U = 0x16,
-            TEXFMT_BC1 = 0x17,
-            TEXFMT_BC2 = 0x18,
-            TEXFMT_BC3 = 0x19,
-            TEXFMT_BC4 = 0x1A,
-            TEXFMT_BC5 = 0x1B,
-            TEXFMT_BC6H = 0x1C,
-            TEXFMT_BC7 = 0x1D,
-            TEXFMT_R8_Uint = 0x1E,
-            TEXFMT_NULL = 0x1F,
-            TEXFMT_Max = 0x20,
-        };
+
         public enum EPlayerEvadeDirection
         {
             PED_Forward,
@@ -471,15 +695,7 @@ namespace WolvenKit.CR2W.Types
             EGP_SIGNS,
             EGP_ALCHEMY
         }
-        public enum EDM_MappinType
-        {
-            EDM_QuestAvailable,
-            EDM_MonsterNest,
-            EDM_Prostitute,
-            EDM_HorseRacingNPC,
-            EDM_NonQuestHorseRace,
-            EDM_QuestAvailableFromNonActor
-        }
+
         public enum EGwentCardFaction
         {
             EGCF_Neutral,
@@ -1416,13 +1632,14 @@ namespace WolvenKit.CR2W.Types
             TCM_None,
             TCM_DXTNoAlpha,
             TCM_DXTAlpha,
-            TCM_RGBE,
+            TCM_RGBE,   //unused
             TCM_Normals,
             TCM_NormalsHigh,
             TCM_NormalsGloss,
-            TCM_DXTAlphaLinear,
+            TCM_DXTAlphaLinear, //unused
             TCM_QualityR,
-            TCM_QualityRG
+            TCM_QualityRG,
+            TCM_QualityColor
         }
         public enum ETextureCategory
         {
@@ -1432,13 +1649,14 @@ namespace WolvenKit.CR2W.Types
             Characters,
             Heads
         }
+        // srcFormat == TRF_TrueColor && srcCompression == TCM_None
         public enum ETextureRawFormat
         {
             TRF_TrueColor,
             TRF_Grayscale,
-            TRF_HDR,
-            TRF_AlphaGrayscale,
-            TRF_HDRGrayscale
+            TRF_HDR,    //unused
+            TRF_AlphaGrayscale, //unused
+            TRF_HDRGrayscale    //unused
         }
         public enum EEnvColorGroup
         {
@@ -1460,6 +1678,14 @@ namespace WolvenKit.CR2W.Types
             ECG_FX_SkyNoon,
             ECG_FX_SkySunset,
             ECG_FX_SkyRain,
+            ECG_FX_MainCloudsMiddle,
+            ECG_FX_MainCloudsFront,
+            ECG_FX_MainCloudsBack,
+            ECG_FX_MainCloudsRim,
+            ECG_FX_BackgroundCloudsFront,
+            ECG_FX_BackgroundCloudsBack,
+            ECG_FX_BackgroundHazeFront,
+            ECG_FX_BackgroundHazeBack,
             ECG_FX_Blood,
             ECG_FX_Water,
             ECG_FX_Fog,
@@ -1893,11 +2119,7 @@ namespace WolvenKit.CR2W.Types
             TCrB_ToeR,
             TCrB_Last
         }
-        public enum ETCrEffectorId
-        {
-            TCrEffector_HandL,
-            TCrEffector_HandR
-        }
+
         public enum ETriggerShape
         {
             TS_None,
@@ -2362,7 +2584,8 @@ namespace WolvenKit.CR2W.Types
         public enum EMeshVertexType
         {
             MVT_StaticMesh,
-            MVT_SkinnedMesh
+            MVT_SkinnedMesh,
+            MVT_DestructionMesh
         }
         public enum EDispatcherSelection
         {
@@ -2720,7 +2943,34 @@ namespace WolvenKit.CR2W.Types
             DialogAction_NONE,
             DialogAction_AXII,
             DialogAction_CONTENT_MISSING,
-            DialogAction_BRIBE
+            DialogAction_BRIBE,
+            DialogAction_PERSUASION,
+            DialogAction_GETBACK,
+            DialogAction_GAME_DICES,
+            DialogAction_GAME_FIGHT,
+            DialogAction_GAME_WRESTLE,
+            DialogAction_CRAFTING,
+            DialogAction_SHOPPING,
+            DialogAction_EXIT,
+            DialogAction_HAIRCUT,
+            DialogAction_MONSTERCONTRACT,
+            DialogAction_BET,
+            DialogAction_STORAGE,
+            DialogAction_GIFT,
+            DialogAction_GAME_DRINK,
+            DialogAction_GAME_DAGGER,
+            DialogAction_SMITH,
+            DialogAction_ARMORER,
+            DialogAction_RUNESMITH,
+            DialogAction_TEACHER,
+            DialogAction_FAST_TRAVEL,
+            DialogAction_GAME_CARDS,
+            DialogAction_SHAVING,
+            DialogAction_TimedChoice,
+            DialogAction_AUCTION,
+            DialogAction_LEVELUP1,
+            DialogAction_LEVELUP2,
+            DialogAction_LEVELUP3,
         }
         public enum ECameraPlane
         {
@@ -2736,14 +2986,7 @@ namespace WolvenKit.CR2W.Types
             LT_PointLight,
             LT_Dimmer
         }
-        public enum EStorySceneForcingMode
-        {
-            Dontforceanything,
-            Forceposition,
-            Forcepositionwithcamerablending,
-            Spawnandforceposition,
-            Spawnactorswhenneeded
-        }
+
         public enum ESoundStateDuringScene
         {
             SOUND_DEFAULT,
@@ -3181,17 +3424,7 @@ namespace WolvenKit.CR2W.Types
             PAO_Pause,
             PAO_Unpause
         }
-        public enum ESwitchOperation
-        {
-            SO_TurnOn,
-            SO_TurnOff,
-            SO_Toggle,
-            SO_Reset,
-            SO_Enable,
-            SO_Disable,
-            SO_Lock,
-            SO_Unlock
-        }
+
         public enum EFastTravelConditionType
         {
             FTCT_StartedFastTravel,
@@ -3343,7 +3576,21 @@ namespace WolvenKit.CR2W.Types
             GwintFaction_NoMansLand,
             GwintFaction_Nilfgaard,
             GwintFaction_NothernKingdom,
-            GwintFaction_Scoiatael
+            GwintFaction_Scoiatael,
+            GwintFaction_Skellige,
+            GwintType_None,
+            GwintType_Melee,
+            GwintType_Ranged,
+            GwintType_Siege,
+            GwintType_Creature,
+            GwintType_Weather,
+            GwintType_Spell,
+            GwintType_RowModifier,
+            GwintType_Hero,
+            GwintType_Spy,
+            GwintType_FriendlyEffect,
+            GwintType_OffensiveEffect,
+            GwintType_GlobalEffect,
         }
         public enum eGwintType
         {
@@ -3353,35 +3600,7 @@ namespace WolvenKit.CR2W.Types
             GwintType_Siege,
             GwintType_Creature
         }
-        public enum eGwintEffect
-        {
-            GwintEffect_None,
-            GwintEffect_Bin2,
-            GwintEffect_MeleeScorch,
-            GwintEffect_11thCard,
-            GwintEffect_ClearWeather,
-            GwintEffect_PickWeatherCard,
-            GwintEffect_PickRainCard,
-            GwintEffect_PickFogCard,
-            GwintEffect_PickFrostCard,
-            GwintEffect_View3EnemyCard,
-            GwintEffect_ResurectCard,
-            GwintEffect_ResurectFromEnemy,
-            GwintEffect_Bin2Pick1,
-            GwintEffect_MeleeHorn,
-            GwintEffect_RangedHorn,
-            GwintEffect_SiegeHorn,
-            GwintEffect_SiegeScorch,
-            GwintEffect_CounterKingAbility,
-            GwintEffect_Melee,
-            GwintEffect_Ranged,
-            GwintEffect_Siege,
-            GwintEffect_UnsummonDummy,
-            GwintEffect_Horn,
-            GwintEffect_Draw,
-            GwintEffect_Scorch,
-            GwintEffect_ClearSky
-        }
+
         public enum ECombatTargetSelectionSkipTarget
         {
             CTSST_SKIP_ALWAYS,
@@ -3755,7 +3974,8 @@ namespace WolvenKit.CR2W.Types
             AN_Spiral,
             AN_Prologue_Village_Winter,
             AN_Velen,
-            AN_CombatTestLevel
+            AN_CombatTestLevel,
+            AN_Bob  //not in ghidra
         }
         public enum EDayPart
         {
@@ -4306,7 +4526,8 @@ namespace WolvenKit.CR2W.Types
             EET_SlowdownAxii,
             EET_PheromoneNekker,
             EET_PheromoneDrowner,
-            EET_PheromoneBear
+            EET_PheromoneBear,
+            EET_POIGorA10
         }
         public enum ECharacterPowerStats
         {

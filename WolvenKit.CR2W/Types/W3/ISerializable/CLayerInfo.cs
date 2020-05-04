@@ -24,14 +24,14 @@ namespace WolvenKit.CR2W.Types
             ParentGroup.ChunkHandle = true;
             ParentGroup.Read(file, 4);
 
-            base.AddVariable(ParentGroup);
+            //base.AddVariable(ParentGroup);
         }
 
         public override void Write(BinaryWriter file)
         {
             base.Write(file);
 
-            file.Write(ParentGroup.val);
+            ParentGroup.Write(file);
         }
 
         public override CVariable SetValue(object val)

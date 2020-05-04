@@ -26,6 +26,7 @@ using WolvenKit.Extensions;
 using WolvenKit.Common.Wcc;
 using WolvenKit.Common.Services;
 using System.ComponentModel;
+using WolvenKit.Wwise.Wwise;
 
 namespace WolvenKit
 {
@@ -63,6 +64,7 @@ namespace WolvenKit
                 UpdateTitle();
             }
         }
+
         #endregion
 
         #region Fields
@@ -657,22 +659,9 @@ namespace WolvenKit
                     break;
                 case ".bnk":
                     {
-                        var bnk = new Wwise.BNK.BNK();
-                        Wwise.BNK.StaticStorage.Clear();
-                        bnk.LoadBNK(new FileStream(fullpath, FileMode.Open));
-                        var fb = new FolderBrowserDialog();
-                        fb.Description = "Select a folder to save the extracted wem files";
-                        if(fb.ShowDialog() == DialogResult.OK)
+                        using (var sp = new frmAudioPlayer(fullpath))
                         {
-                           foreach(var f in Wwise.BNK.StaticStorage.soundfiles)
-                            {
-                                using(var br = new BinaryReader(new FileStream(fullpath, FileMode.Open)))
-                                {
-                                    br.BaseStream.Seek(f.Value.data_offset, SeekOrigin.Begin);
-                                    //var bytes = br.ReadBytes(f.Value.GetLength());
-                                    File.WriteAllBytes(Path.Combine(fb.SelectedPath, f.Value.name), new byte[0]);
-                                }                                
-                            }
+                            sp.ShowDialog();
                         }
                         break;
                     }
@@ -1157,9 +1146,13 @@ namespace WolvenKit
                 ModExplorer.RequestAssetBrowser += ModExplorer_RequestAssetBrowser;
                 ModExplorer.RequestFileRename += ModExplorer_RequestFileRename;
                 ModExplorer.RequestFileCook += ModExplorer_RequestFileCook;
+                ModExplorer.RequestFileDumpfile += ModExplorer_RequestFileDumpfile;
+                ModExplorer.RequestFastRender += ModExplorer_RequestFastRender;
             }
             ModExplorer.Activate();
         }
+
+
 
         public frmCR2WDocument LoadDocument(string filename, MemoryStream memoryStream = null, bool suppressErrors = false)
         {
@@ -1172,6 +1165,8 @@ namespace WolvenKit
                 return null;
             }
 
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
 
             var doc = new frmCR2WDocument();
             OpenDocuments.Add(doc);
@@ -1316,6 +1311,9 @@ namespace WolvenKit
 
             if (hasUnknownBytes)
                 output.Append("-------\n\n");
+
+            output.Append($"File {filename} loaded in: {stopwatch.Elapsed}\n\n");
+            stopwatch.Stop();
 
             AddOutput(output.ToString(), Logtype.Important);
             return doc;
@@ -1644,7 +1642,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
         private void donateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Thank you! Every last bit helps and everything donated is distributed between the core developers evenly.","Thank you",MessageBoxButtons.OK,MessageBoxIcon.Information);
-            System.Diagnostics.Process.Start("https://www.paypal.me/traderain");
+            System.Diagnostics.Process.Start("https://www.patreon.com/bePatron?u=5458437");
         }
 
         private void Assetbrowser_FileAdd(object sender, Tuple<List<IWitcherArchive>, List<WitcherListViewItem>,bool> Details)
@@ -1740,6 +1738,23 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             {
                 MessageBox.Show(ex.Message, "Error cooking files.");
             }
+        }
+
+        private async void ModExplorer_RequestFileDumpfile(object sender, RequestFileArgs e)
+        {
+            var filename = e.File;
+            var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
+            if (!File.Exists(fullpath) && !Directory.Exists(fullpath))
+                return;
+            string dir;
+            if (File.Exists(fullpath))
+                dir = Path.GetDirectoryName(fullpath);
+            else
+                dir = fullpath;
+
+
+            await DumpFile(dir, dir);
+
         }
 
         private void ModExplorer_RequestFileRename(object sender, RequestFileArgs e)
@@ -2370,6 +2385,11 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             ShowImportUtility();
         }
 
+        private void ModExplorer_RequestFastRender(object sender, RequestFileArgs e)
+        {
+            Render.FastRender.frmFastRender ren = new Render.FastRender.frmFastRender(e.File, Logger, ActiveMod);
+            ren.Show(this.dockPanel, DockState.Document);
+        }
         private void menuStrip1_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -2540,18 +2560,51 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 //Handle sound caching
                 if (packsettings.Sound)
                 {
-                    if (new DirectoryInfo(Path.Combine(ActiveMod.ModDirectory, MainController.Get().SoundManager.TypeName)).GetFiles("*.*",SearchOption.AllDirectories).Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).Any())
+
+                    var soundmoddir = Path.Combine(ActiveMod.ModDirectory, MainController.Get().SoundManager.TypeName);
+
+                    foreach (var bnk in Directory.GetFiles(soundmoddir, "*.bnk", SearchOption.AllDirectories))
                     {
-                        SoundCache.Write(new DirectoryInfo(Path.Combine(ActiveMod.ModDirectory, MainController.Get().SoundManager.TypeName)).GetFiles("*.*", SearchOption.AllDirectories).Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).ToList().Select(x => x.FullName).ToList(), Path.Combine(modpackDir, @"soundspc.cache"));
+                        Soundbank bank = new Soundbank(bnk);
+                        bank.readFile();
+                        bank.read_wems(soundmoddir);
+                        bank.rebuild_data();
+                        File.Delete(bnk);
+                        bank.build_bnk(bnk);
+                        Logger.LogString("Rebuilt modded bnk " + bnk, Logtype.Success);
+                    }
+
+                    //Create mod soundspc.cache
+                    if(Directory.Exists(soundmoddir) && 
+                        new DirectoryInfo(soundmoddir)
+                        .GetFiles("*.*", SearchOption.AllDirectories)
+                        .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).Any())
+                    {
+                        SoundCache.Write(
+                            new DirectoryInfo(soundmoddir)
+                                .GetFiles("*.*", SearchOption.AllDirectories)
+                                .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk"))
+                                .ToList().Select(x => x.FullName).ToList(),
+                                Path.Combine(modpackDir, @"soundspc.cache"));
                         AddOutput("Mod soundcache generated!\n", Logtype.Important);
                     }
                     else
                     {
                         AddOutput("Mod soundcache wasn't generated!\n", Logtype.Important);
                     }
-                    if (new DirectoryInfo(Path.Combine(ActiveMod.DlcDirectory, MainController.Get().SoundManager.TypeName)).GetFiles("*.*", SearchOption.AllDirectories).Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).Any())
+
+                    var sounddlcdir = Path.Combine(ActiveMod.DlcDirectory, MainController.Get().SoundManager.TypeName);
+
+                    //Create dlc soundspc.cache
+                    if (Directory.Exists(sounddlcdir) && new DirectoryInfo(sounddlcdir)
+                        .GetFiles("*.*", SearchOption.AllDirectories)
+                        .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).Any())
                     {
-                        SoundCache.Write(new DirectoryInfo(Path.Combine(ActiveMod.DlcDirectory, MainController.Get().SoundManager.TypeName)).GetFiles("*.*", SearchOption.AllDirectories).Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).ToList().Select(x => x.FullName).ToList(), Path.Combine(DlcpackDir, @"soundspc.cache"));
+                        SoundCache.Write(
+                            new DirectoryInfo(sounddlcdir)
+                                .GetFiles("*.*", SearchOption.AllDirectories)
+                                .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).ToList().Select(x => x.FullName).ToList(),
+                            Path.Combine(DlcpackDir, @"soundspc.cache"));
                         AddOutput("DLC soundcache generated!\n", Logtype.Important);
                     }
                     else

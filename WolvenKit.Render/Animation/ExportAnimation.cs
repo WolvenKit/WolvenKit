@@ -55,7 +55,7 @@ namespace WolvenKit.Render
                     if (chunk.Type == "CSkeletalAnimation")
                     {
                         var name = chunk.GetVariableByName("name");
-                        var chunkIdx = (chunk.GetVariableByName("animBuffer") as CPtr).ChunkIndex;
+                        var chunkIdx = (chunk.GetVariableByName("animBuffer") as CPtr).Reference.ChunkIndex;
                         AnimationNames.Add(new KeyValuePair<string, int>((name as CName).Value, chunkIdx));
                     }
                 }
@@ -83,7 +83,7 @@ namespace WolvenKit.Render
                     {
                         foreach (CPtr Buffer in (chunk.GetVariableByName("parts") as CArray).array)
                         {
-                            var a_buffer = Buffer.PtrTarget;
+                            var a_buffer = Buffer.Reference;
                             readBuffer(a_buffer, selectedAnimIdx, animFile);
                             break;
                         }

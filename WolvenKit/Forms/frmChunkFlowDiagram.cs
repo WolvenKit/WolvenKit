@@ -170,8 +170,8 @@ namespace WolvenKit
                 var conns = editor.GetConnections();
                 if (conns != null) {
                     foreach (var conn in conns) {
-                        if (conn.PtrTarget != null) {
-                            createEditor(depth + 1, conn.PtrTarget);
+                        if (conn.Reference != null) {
+                            createEditor(depth + 1, conn.Reference);
                         }
                     }
                 }
@@ -210,7 +210,7 @@ namespace WolvenKit
             if (controlPartsObj != null && controlPartsObj is CArray)
             {
                 var controlParts = (CArray) controlPartsObj;
-                rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null && part.PtrTargetType == "CStorySceneInput" select part.PtrTarget);
+                rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null && part.GetPtrTargetType() == "CStorySceneInput" select part.Reference);
             }
         }
         
@@ -219,11 +219,11 @@ namespace WolvenKit
             var graphObj = File.chunks[0].GetVariableByName("graph");
             if (graphObj != null && graphObj is CPtr)
             {
-                var graphBlocks = ((CPtr)graphObj).PtrTarget.GetVariableByName("graphBlocks");
+                var graphBlocks = ((CPtr)graphObj).Reference.GetVariableByName("graphBlocks");
                 if (graphBlocks != null && graphBlocks is CArray)
                 {
                     var controlParts = (CArray) graphBlocks;
-                    rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null && part.PtrTargetType == "CQuestPhaseInputBlock" select part.PtrTarget);
+                    rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null && part.GetPtrTargetType() == "CQuestPhaseInputBlock" select part.Reference);
                 }
             }
         }
@@ -233,11 +233,11 @@ namespace WolvenKit
             var graphObj = File.chunks[0].GetVariableByName("graph");
             if (graphObj != null && graphObj is CPtr)
             {
-                var graphBlocks = ((CPtr)graphObj).PtrTarget.GetVariableByName("graphBlocks");
+                var graphBlocks = ((CPtr)graphObj).Reference.GetVariableByName("graphBlocks");
                 if (graphBlocks != null && graphBlocks is CArray)
                 {
                     var controlParts = (CArray) graphBlocks;
-                    rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null && part.PtrTargetType == "CQuestStartBlock" select part.PtrTarget);
+                    rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null && part.GetPtrTargetType() == "CQuestStartBlock" select part.Reference);
                 }
             }
             
@@ -295,9 +295,9 @@ namespace WolvenKit
                 {
                     foreach (var conn in conns)
                     {
-                        if (ChunkEditors.ContainsKey(conn.PtrTarget))
+                        if (ChunkEditors.ContainsKey(conn.Reference))
                         {
-                            var c2 = ChunkEditors[conn.PtrTarget];
+                            var c2 = ChunkEditors[conn.Reference];
                             var sp = c.GetConnectionLocation(i);
                             e.Graphics.FillRectangle(brush, c.Location.X + c.Width,
                                 c.Location.Y + sp.Y - connectionPointSize/2, connectionPointSize, connectionPointSize);
@@ -515,7 +515,7 @@ namespace WolvenKit
         {
             if (connectingTarget != null)
             {
-                connectingSource.PtrTarget = connectingTarget.Chunk;
+                connectingSource.Reference = connectingTarget.Chunk;
             }
         }
 

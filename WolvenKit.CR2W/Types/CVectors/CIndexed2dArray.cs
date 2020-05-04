@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -13,11 +14,11 @@ namespace WolvenKit.CR2W.Types
     class CIndexed2dArray : CVector
     {
         [DataMember]
-        public CByteArray arrays;
+        public CBytes arrays;
 
         public CIndexed2dArray(CR2WFile cr2w) : base(cr2w)
         {
-            arrays = new CByteArray(cr2w)
+            arrays = new CBytes(cr2w)
             {
                 Name = "Serialized data"
             };
@@ -41,13 +42,22 @@ namespace WolvenKit.CR2W.Types
         public override void Write(BinaryWriter file)
         {
             base.Write(file);
-            //file.WriteVLQInt32(arrays.array.Count);
             arrays.Write(file);
         }
 
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CIndexed2dArray(cr2w);
+        }
+
+        public override List<IEditableVariable> GetEditableVariables()
+        {
+            var list = new List<IEditableVariable>(base.GetEditableVariables())
+            {
+                arrays
+            };
+
+            return list;
         }
 
         public override void SerializeToXml(XmlWriter xw)
