@@ -73,7 +73,7 @@ namespace WolvenKit.CR2W.Types
                 var var = CR2WTypeManager.Get().GetByName(elementtype, i.ToString(), cr2w, false);
                 if (var == null)
                     var = new CVector(cr2w);
-                var.Read(file, size);
+                var.Read(file, (size - 4)/count);
 
                 //var.Name = i.ToString();
                 //var.Type = elementtype;

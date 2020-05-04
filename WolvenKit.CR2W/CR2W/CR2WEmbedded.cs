@@ -9,10 +9,10 @@ namespace WolvenKit.CR2W
     public struct CR2WEmbedded
     {
         [FieldOffset(0)]
-        public uint importIndex;
+        public uint importIndex;    //FIXME dynamically update this
 
         [FieldOffset(4)]
-        public uint path;
+        public uint path;   //FIXME dynamically update this
 
         [FieldOffset(8)]
         public ulong pathHash; //FIXME dynamically update this

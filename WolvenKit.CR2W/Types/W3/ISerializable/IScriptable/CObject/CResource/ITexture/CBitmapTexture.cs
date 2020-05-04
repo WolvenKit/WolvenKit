@@ -41,7 +41,6 @@ namespace WolvenKit.CR2W.Types
             filesize.Read(file, 4);
             unk2.Read(file, 4);
 
-
             Image.Bytes = file.ReadBytes((int)filesize.val);
         }
 
@@ -50,7 +49,10 @@ namespace WolvenKit.CR2W.Types
             base.Write(file);
 
             unk.Write(file);
+            MipsCount.Write(file);
+
             mips.Write(file);
+
             filesize.Write(file);
             unk2.Write(file);
 

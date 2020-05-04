@@ -23,13 +23,10 @@ namespace WolvenKit.CR2W.Types
 
             var varsize = file.ReadUInt32() - 4;
             var typename = cr2w.names[typeId].Str;
-            //var varname = cr2w.names[nameId].Str;
 
             Variant = CR2WTypeManager.Get().GetByName(typename, "", cr2w);
-            //Variant.Name = "Variant";
             Variant.Read(file, varsize);
 
-            //Variant.nameId = nameId;
             Variant.typeId = typeId;
         }
 
@@ -37,17 +34,26 @@ namespace WolvenKit.CR2W.Types
         {
             file.Write(Variant.typeId);
 
-            var pos = file.BaseStream.Position;
-            file.Write((uint) 0); // size placeholder
+            byte[] buffer = System.Array.Empty<byte>();
+            using (var ms = new MemoryStream())
+            using (var bw = new BinaryWriter(ms))
+            {
+                Variant.Write(bw);
+                buffer = ms.ToArray();
+            }
+            file.Write(buffer.Length + 4);
+            file.Write(buffer);
 
+            //var pos = file.BaseStream.Position;
+            //file.Write((uint) 0); // size placeholder
 
-            Variant.Write(file);
-            var endpos = file.BaseStream.Position;
+            //Variant.Write(file);
+            //var endpos = file.BaseStream.Position;
 
-            file.Seek((int) pos, SeekOrigin.Begin);
-            var actualsize = (uint) (endpos - pos);
-            file.Write(actualsize); // Write size
-            file.Seek((int) endpos, SeekOrigin.Begin);
+            //file.Seek((int) pos, SeekOrigin.Begin);
+            //var actualsize = (uint) (endpos - pos);
+            //file.Write(actualsize); // Write size
+            //file.Seek((int) endpos, SeekOrigin.Begin);
         }
 
         public override CVariable SetValue(object val)

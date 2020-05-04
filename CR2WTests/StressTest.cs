@@ -659,34 +659,6 @@ namespace CR2WTests
             if (!originalFile.SequenceEqual(reconstructedFile))
             {
                 throw new NotImplementedException();
-
-                //var originalFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "CR2WTest", Path.GetFileName(f.Name));
-                //var newFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "CR2WTest", $"{Path.GetFileName(f.Name)}_new");
-                //var originalFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "CR2WTest", "vanilla.bin");
-                //var newFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "CR2WTest", "new.bin");
-
-                //try
-                //{
-                //    using (var mem = new MemoryStream(reconstructedFile))
-                //    using (var writer = new BinaryWriter(mem))
-                //    using (var fs = new FileStream(newFilePath, FileMode.Create, FileAccess.Write))
-                //    {
-                //        mem.WriteTo(fs);
-                //    }
-
-                //    using (var mem = new MemoryStream(originalFile))
-                //    using (var writer = new BinaryWriter(mem))
-                //    using (var fs = new FileStream(originalFilePath, FileMode.Create, FileAccess.Write))
-                //    {
-                //        mem.WriteTo(fs);
-                //    }
-                //}
-                //catch (Exception ex)
-                //{
-
-                //    //throw new NotImplementedException();
-                //}
-                
             }
 
             return new Tuple<long, long, Dictionary<string, Tuple<long, long>>>(totalbytes, unknownbytes, chunkstate);

@@ -35,7 +35,8 @@ namespace WolvenKit.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-
+            Unk1.Write(file);
+            Collisiontypes.Write(file);
             Data.Write(file);
         }
 

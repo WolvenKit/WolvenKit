@@ -302,6 +302,7 @@ namespace WolvenKit.CR2W
             {
                 if (!stringlist.Contains(emb.Handle))
                     stringlist.Add(emb.Handle);
+                int realidx = (int)emb.Embedded.importIndex + 1;
             }
 
             #region Stringtable
@@ -376,6 +377,9 @@ namespace WolvenKit.CR2W
             {
                 var nw = names.First(_ => _.Str == import.Item1);
                 ushort flag = (ushort)import.Item3;
+                // check if import is present in embedded files
+
+
                 imports.Add(new CR2WImportWrapper(
                     new CR2WImport()
                     {
@@ -525,6 +529,7 @@ namespace WolvenKit.CR2W
             {
                 AddStrings(storedvar);
             }
+            
             newimportslist.AddRange(newsoftlist);
 
             return (newnameslist, newimportslist);
@@ -552,6 +557,11 @@ namespace WolvenKit.CR2W
 
                 var returnedVariables = new List<Tuple<string, CVariable>>();
 
+                if (!string.IsNullOrEmpty(var.Name) && var.Name.Contains("CStorySceneLinkElement"))
+                {
+
+                }
+
                 if (var is CVector)
                 {
                     #region Buffer Hacks Before Variables
@@ -561,28 +571,32 @@ namespace WolvenKit.CR2W
                         if (t != null)
                             returnedVariables.Add(new Tuple<string, CVariable>("skipName,skipType", t as CHandle));
                     }
-                    // maybe it always checks for the variable parent first
-                    else if (var is CBehaviorGraphStateMachineNode)
-                        returnedVariables.Add(new Tuple<string, CVariable>("", (var.cr2w.chunks.First().data as CBehaviorGraph).Toplevelnode.Reference.data));
-                    else if (var.Type != null && (
-                        var.Type.Contains("CBehaviorGraphMimicSlotNode") ||
-                        var.Type.Contains("CBehaviorGraphPoseSlotNode") ||
-                        var.Type.Contains("CBehaviorGraphAnimationSlotNode") ||
-                        var.Type.Contains("CBehaviorGraphAnimationBaseSlotNode")
-                        ))
-                        returnedVariables.Add(new Tuple<string, CVariable>("", (var.cr2w.chunks.First().data as CBehaviorGraph).Toplevelnode.Reference.data));
+                    // always checks for the variable parent first
+                    //else if (var is CBehaviorGraphStateMachineNode)
+                    //    returnedVariables.Add(new Tuple<string, CVariable>("", (var.cr2w.chunks.First().data as CBehaviorGraph).Toplevelnode.Reference.data));
+                    //else if (var.Type != null && (
+                    //    var.Type.Contains("CBehaviorGraphMimicSlotNode") ||
+                    //    var.Type.Contains("CBehaviorGraphPoseSlotNode") ||
+                    //    var.Type.Contains("CBehaviorGraphAnimationSlotNode") ||
+                    //    var.Type.Contains("CBehaviorGraphAnimationBaseSlotNode")
+                    //    ))
+                    //    returnedVariables.Add(new Tuple<string, CVariable>("", (var.cr2w.chunks.First().data as CBehaviorGraph).Toplevelnode.Reference.data));
 
-                    else if (var.Type != null && 
-                        (var.Type.Contains("CMeshSkinningAttachment") ||
-                        var.Type.Contains("CHardAttachment") ||
-                        var.Type.Contains("CAnimatedAttachment")
-                        ))
+                    //else if (var.Type != null && 
+                    //    (var.Type.Contains("CMeshSkinningAttachment") ||
+                    //    var.Type.Contains("CHardAttachment") ||
+                    //    var.Type.Contains("CAnimatedAttachment")
+                    //    ))
+                    //{
+                    //    if ((var as CVector).variables != null && (var as CVector).variables.Count > 0)
+                    //    {
+                    //        if ((var as CVector).variables.First().Name == "parent")
+                    //            returnedVariables.Add(new Tuple<string, CVariable>("skipName,skipType", (var as CVector).variables.First()));
+                    //    }
+                    //}
+                    else if (var.ParentVariable != null)
                     {
-                        if ((var as CVector).variables != null && (var as CVector).variables.Count > 0)
-                        {
-                            if ((var as CVector).variables.First().Name == "parent")
-                                returnedVariables.Add(new Tuple<string, CVariable>("skipName,skipType", (var as CVector).variables.First()));
-                        }
+                        returnedVariables.Add(new Tuple<string, CVariable>("", var.ParentVariable));
                     }
                     #endregion
 
@@ -696,6 +710,10 @@ namespace WolvenKit.CR2W
                     // hack for CStorySceneSection *sigh*
                     else if (var is CStorySceneSection)
                         foreach (CVariable item in (var as CStorySceneSection).sceneEventElements)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", item));
+                    // hack for CStorySceneScript *sigh*
+                    else if (var is CStorySceneScript)
+                        foreach (CVariable item in (var as CStorySceneScript).parameters)
                             returnedVariables.Add(new Tuple<string, CVariable>("", item));
                     // hack for CFXTrackItem *sigh*
                     else if (var is CFXTrackItem)
@@ -832,7 +850,13 @@ namespace WolvenKit.CR2W
                     if (!h.ChunkHandle)
                     {
                         AddUniqueToTable(h.ClassName);
-                        var importtuple = new Tuple<string, string, EImportFlags>(h.ClassName, h.DepotPath, EImportFlags.Default);
+                        var flags = EImportFlags.Default;
+                        if (h.Name == "template" && h.ClassName == "CEntityTemplate")
+                            flags = EImportFlags.Template;
+                        if (var.cr2w.embedded.Any(_ => _.ImportPath == h.DepotPath && _.ImportClass == h.ClassName))
+                            flags = EImportFlags.Inplace;
+
+                        var importtuple = new Tuple<string, string, EImportFlags>(h.ClassName, h.DepotPath, flags);
                         if (!newimportslist.Contains(importtuple))
                         {
                             newimportslist.Add(importtuple);
@@ -886,7 +910,10 @@ namespace WolvenKit.CR2W
                         if (!h.ChunkHandle)
                         {
                             AddUniqueToTable(h.ClassName);
-                            var importtuple = new Tuple<string, string, EImportFlags>(h.ClassName, h.DepotPath, EImportFlags.Default);
+                            var flags = EImportFlags.Default;
+                            if (h.Name == "template")
+                                flags = EImportFlags.Template;
+                            var importtuple = new Tuple<string, string, EImportFlags>(h.ClassName, h.DepotPath, flags);
                             if (!newimportslist.Contains(importtuple))
                             {
                                 newimportslist.Add(importtuple);

@@ -4032,6 +4032,7 @@ namespace WolvenKit.CR2W.Types
                 "WeaponHolster",
                 "WebLineProjectile",
                 "@SItem",
+                "STutorialHighlight"
             };
             foreach (string t in vectors)
             {

@@ -98,34 +98,46 @@ namespace WolvenKit.CR2W.Types
         public override void Write(BinaryWriter file)
         {
             base.Write(file);
-            file.WriteVLQInt32(Trees.array.Count);
+
             if (Trees.Any())
             {
+                file.WriteVLQInt32(Trees.array.Count);
                 foreach (var t in Trees.array)
                 {
                     var currtreetype = (CArray)t;
                     ((CHandle)currtreetype.array[0]).Write(file); //The type of the tree
-                    file.WriteVLQInt32(currtreetype.array.Count-1);
-                    for (int i = 1; i < currtreetype.array.Count;i++) //Start from 1 since the 0th elementh is the type
+                    if (currtreetype.array.Count - 1 == 0)
+                        file.Write((byte)0x80);
+                    else
+                        file.WriteVLQInt32(currtreetype.array.Count - 1);
+                    for (int i = 1; i < currtreetype.array.Count; i++) //Start from 1 since the 0th elementh is the type
                     {
                         currtreetype.array[i].Write(file);
                     }
                 }
             }
-            file.WriteVLQInt32(Grasses.Count());
+            else
+                file.Write((byte)0x80);
+
             if (Grasses.Any())
             {
+                file.WriteVLQInt32(Grasses.Count());
                 foreach (var t in Grasses.array)
                 {
                     var currtreetype = (CArray)t;
                     ((CHandle)currtreetype.array[0]).Write(file); //The type of the Grass
-                    file.WriteVLQInt32(currtreetype.array.Count-1);
-                    for (int i = 1; i < currtreetype.array.Count;i++) //Start from 1 since the 0th elementh is the type
+                    if (currtreetype.array.Count - 1 == 0)
+                        file.Write((byte)0x80);
+                    else
+                        file.WriteVLQInt32(currtreetype.array.Count - 1);
+                    for (int i = 1; i < currtreetype.array.Count; i++) //Start from 1 since the 0th elementh is the type
                     {
                         currtreetype.array[i].Write(file);
                     }
                 }
             }
+            else
+                file.Write((byte)0x80);
         }
 
         public override CVariable SetValue(object val)

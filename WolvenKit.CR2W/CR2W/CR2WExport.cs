@@ -22,7 +22,7 @@ namespace WolvenKit.CR2W
     {
         [DataMember]
         [FieldOffset(0)]
-        public ushort className; //needs to be registered upon new creation!
+        public ushort className;    //needs to be registered upon new creation!
 
         [DataMember]
         [FieldOffset(2)]
@@ -247,7 +247,6 @@ namespace WolvenKit.CR2W
             CreateDefaultData();
 
             data.Read(file, _export.dataSize);
-
             var bytesLeft = _export.dataSize - (file.BaseStream.Position - _export.dataOffset);
 
             unknownBytes = new CBytes(cr2w)
@@ -304,6 +303,9 @@ namespace WolvenKit.CR2W
             }
             //data.Name = Name;
             data.Type = Type;
+            if (ParentChunkId != 0)
+                data.ParentVariable = cr2w.chunks[(int)ParentChunkId - 1].data;
+
         }
 
         public CR2WExportWrapper Copy(CR2WCopyAction context)
