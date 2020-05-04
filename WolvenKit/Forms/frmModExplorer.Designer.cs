@@ -495,7 +495,6 @@ namespace WolvenKit
         private ToolStripMenuItem dumpXMLToolStripMenuItem;
         private ToolStripMenuItem dumpChunksToXMLToolStripMenuItem;
         private ToolStripMenuItem dumpWccliteXMLToolStripMenuItem;
-        private ToolStripMenuItem createW2animsToolStripMenuItem;
         private ToolStripMenuItem fastRenderToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator5;
     }
