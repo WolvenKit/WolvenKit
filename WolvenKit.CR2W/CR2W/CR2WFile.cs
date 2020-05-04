@@ -1,17 +1,17 @@
-﻿using System;
-using System.IO;
-using System.Text;
+﻿using RED.CRC32;
+using RED.FNV1A;
+using System;
 using System.Collections.Generic;
-using System.Xml;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using WolvenKit.CR2W.Types;
-using RED.CRC32;
 using System.Runtime.InteropServices;
-using WolvenKit.Utils;
 using System.Runtime.Serialization;
-
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Xml;
+using WolvenKit.CR2W.Types;
+using WolvenKit.CR2W.Types.Utils;
+using WolvenKit.Utils;
 
 namespace WolvenKit.CR2W
 {
@@ -59,7 +59,7 @@ namespace WolvenKit.CR2W
 
         private CR2WTable[] m_tableheaders;
         private Byte[] m_strings;
-        private Dictionary<uint, string> m_dictionary;
+        public Dictionary<uint, string> StringDictionary { get; private set; }
 
         // misc
         private uint headerOffset = 0;
@@ -138,25 +138,15 @@ namespace WolvenKit.CR2W
             m_strings = ReadStringsBuffer();
             
             // read tables
-            names = ReadTable<CR2WName>(1).Select(_ => new CR2WNameWrapper(_)
-            {
-                Str = m_dictionary[_.value],
-            }).ToList();
-            imports = ReadTable<CR2WImport>(2).Select(_ => new CR2WImportWrapper(_)
-            {
-                DepotPathStr = m_dictionary[_.depotPath],
-                ClassNameStr = names[_.className].Str,
-            }).ToList();
+            names = ReadTable<CR2WName>(1).Select(_ => new CR2WNameWrapper(_, this)).ToList();
+            imports = ReadTable<CR2WImport>(2).Select(_ => new CR2WImportWrapper(_, this)).ToList();
             properties = ReadTable<CR2WProperty>(3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
-            chunks = ReadTable<CR2WExport>(4).Select(_ => new CR2WExportWrapper(this, _)
-            {
-                //ParentChunkId = _.parentID
-            }).ToList();
+            chunks = ReadTable<CR2WExport>(4).Select(_ => new CR2WExportWrapper(_, this)).ToList();
             buffers = ReadTable<CR2WBuffer>(5).Select(_ => new CR2WBufferWrapper(_)).ToList();
             embedded = ReadTable<CR2WEmbedded>(6).Select(_ => new CR2WEmbeddedWrapper(_)
             {
                 ParentImports = imports,
-                Handle = m_dictionary[_.path],
+                Handle = StringDictionary[_.path],
             }).ToList();
             #endregion
 
@@ -178,10 +168,7 @@ namespace WolvenKit.CR2W
             }
             #endregion
 
-
-
-
-            //this never actually triggers
+            //this never actually triggers?
             /*#region Read Buffer
             file.BaseStream.Seek(m_fileheader.fileSize, SeekOrigin.Begin);
             m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
@@ -194,8 +181,39 @@ namespace WolvenKit.CR2W
             }
             #endregion*/
 
+            //dbg++
+            //(var nameslist, var importslist) = GenerateStringtable();
+            //var stringlist = new List<string>(nameslist);
+            //foreach (var import in importslist)
+            //{
+            //    if (!nameslist.Contains(import.Item1))
+            //        nameslist.Add(import.Item1);
+            //    if (!stringlist.Contains(import.Item1))
+            //        stringlist.Add(import.Item1);
+            //    if (!stringlist.Contains(import.Item2))
+            //        stringlist.Add(import.Item2);
+            //}
+            ////TODO add new embedded
+            //foreach (var emb in embedded)
+            //{
+            //    if (!stringlist.Contains(emb.Handle))
+            //        stringlist.Add(emb.Handle);
+            //}
+            //var oldstringslist = StringDictionary.Values.ToList();
+            //string strold = string.Join(",", oldstringslist);
+            //string strnew = string.Join(",", stringlist);
+            //if (strold != strnew)
+            //{
+            //}
+            //dbg--
+
+
             m_stream = null;
         }
+
+
+
+
         #endregion
 
         public CVariable ReadVariable(BinaryReader file)
@@ -263,41 +281,117 @@ namespace WolvenKit.CR2W
             m_stream = file.BaseStream;
 
             // update data
-            #region Update Data
-            m_fileheader.timeStamp = CDateTime.Now.ToUInt64(); //this will change any vanilla assets simply by opening and saving in wkit
-            m_fileheader.numChunks = (uint)chunks.Count;
+            //m_fileheader.timeStamp = CDateTime.Now.ToUInt64(); //this will change any vanilla assets simply by opening and saving in wkit
+            //m_fileheader.numChunks = (uint)chunks.Count;
+            var nn = new List<CR2WNameWrapper>(names);
 
-            // add new names // TODO 
-            foreach (var c in chunks)
+            #region Update Tables
+            (var nameslist, var importslist) = GenerateStringtable();
+            var stringlist = new List<string>(nameslist);
+            foreach (var import in importslist)
             {
-                c.SetExportType((ushort)GetStringIndex(c.Type, true));
+                if (!nameslist.Contains(import.Item1))
+                    nameslist.Add(import.Item1);
+                if (!stringlist.Contains(import.Item1))
+                    stringlist.Add(import.Item1);
+                if (!stringlist.Contains(import.Item2))
+                    stringlist.Add(import.Item2);
+            }
+            //TODO add new embedded
+            foreach (var emb in embedded)
+            {
+                if (!stringlist.Contains(emb.Handle))
+                    stringlist.Add(emb.Handle);
+                int realidx = (int)emb.Embedded.importIndex + 1;
             }
 
-            // Update strings
+            #region Stringtable
             uint stringbuffer_offset = 160; // always 160
             m_tableheaders[0].offset = stringbuffer_offset;
-            m_strings = GetNewStrings();
-            UpdateDictionary();
-            
-            // Update Offsets
-            var inverseDictionary = m_dictionary.ToDictionary(x => x.Value, x => x.Key);
-            for (var i = 0; i < names.Count; i++)
+
+            var newstrings = new List<byte>();
+            foreach (var str in stringlist)
             {
-                var newoffset = inverseDictionary[names[i].Str];
-                if (names[i].Name.value != newoffset)
+                if (str != null)
                 {
-                    names[i].SetOffset(newoffset);
+                    var bytes = Encoding.GetEncoding("iso-8859-1").GetBytes(str);
+                    foreach (var b in bytes)
+                    {
+                        newstrings.Add(b);
+                    }
+                }
+                newstrings.Add((byte)0);
+                
+            }
+            m_strings = newstrings.ToArray();
+
+            var stringscount = m_strings.Length;
+            m_tableheaders[0].size = (uint)stringscount;
+            m_tableheaders[0].crc32 = Crc32Algorithm.Compute(m_strings);
+
+            StringDictionary.Clear();
+            StringDictionary = new Dictionary<uint, string>();
+            StringBuilder sb = new StringBuilder();
+            var tempstring = new List<byte>();
+            uint offset = 0;
+            for (uint i = 0; i < stringscount; i++)
+            {
+                byte b = m_strings[i];
+                if (b == 0)
+                {
+                    var text = Encoding.GetEncoding("iso-8859-1").GetString(tempstring.ToArray());
+                    StringDictionary.Add(offset, text);
+                    //StringDictionary.Add(offset, sb.ToString());
+                    sb.Clear();
+                    tempstring.Clear();
+                    offset = i + 1;
+                }
+                else
+                {
+                    sb.Append((char)b);
+                    tempstring.Add(b);
                 }
             }
-            for (var i = 0; i < imports.Count; i++)
+            #endregion
+
+            var inverseDictionary = StringDictionary.ToDictionary(x => x.Value, x => x.Key);
+
+            #region Names
+            names.Clear();
+            foreach (var name in nameslist)
             {
-                var newoffset = inverseDictionary[imports[i].DepotPathStr];
-                if (newoffset != imports[i].Import.depotPath)
+                //var encodedstring = Encoding.GetEncoding("iso-8859-1")
+                var newoffset = inverseDictionary[name];
+                var hash = FNV1A32HashAlgorithm.HashString(name, Encoding.GetEncoding("iso-8859-1"), true);
+                names.Add(new CR2WNameWrapper(new CR2WName()
                 {
-                    imports[i].SetOffset(newoffset);
-                }
+                    hash = hash,
+                    value = newoffset
+                }, this));
             }
-            for (var i = 0; i < embedded.Count; i++)
+            #endregion
+
+            #region Imports
+            imports.Clear();
+            foreach (var import in importslist)
+            {
+                var nw = names.First(_ => _.Str == import.Item1);
+                ushort flag = (ushort)import.Item3;
+                // check if import is present in embedded files
+
+
+                imports.Add(new CR2WImportWrapper(
+                    new CR2WImport()
+                    {
+                        className = (ushort)names.IndexOf(nw),
+                        depotPath = inverseDictionary[import.Item2],
+                        flags = (ushort)import.Item3    //TODO finish all flags
+                    }, this));
+            }
+            #endregion
+
+            #region Embedded 
+            for (var i = 0; i < embedded.Count; i++)    //TODO
             {
                 var newoffset = inverseDictionary[embedded[i].Handle];
                 if (newoffset != embedded[i].Embedded.path)
@@ -305,8 +399,9 @@ namespace WolvenKit.CR2W
                     embedded[i].SetOffset(newoffset);
                 }
             }
-            
             #endregion
+            #endregion
+
 
             headerOffset = 0;
             using (var ms = new MemoryStream())
@@ -314,7 +409,7 @@ namespace WolvenKit.CR2W
             {
                 // first write the file to memory
                 // this also sets m_fileheader.fileSize and m_fileheader.bufferSize, offsets
-                WriteBuffers(bw);
+                WriteData(bw);
 
                 // Write headers once to allocate the space for it
                 WriteHeader(file);
@@ -327,7 +422,6 @@ namespace WolvenKit.CR2W
             }
 
             #region Update Offsets
-
             for (var i = 0; i < chunks.Count; i++)
             {
                 var newoffset = chunks[i].Export.dataOffset + headerOffset;
@@ -354,68 +448,6 @@ namespace WolvenKit.CR2W
             WriteFileHeader(file);
 
             m_stream = null;
-
-            // LOCAL METHODS
-            void UpdateDictionary()
-            {
-                var size = m_strings.Length;
-                m_tableheaders[0].size = (uint)size;
-                m_tableheaders[0].crc32 = Crc32Algorithm.Compute(m_strings);
-
-                m_dictionary = new Dictionary<uint, string>();
-                StringBuilder sb = new StringBuilder();
-                uint offset = 0;
-                for (uint i = 0; i < size; i++)
-                {
-                    var b = m_strings[i];
-                    if (b == 0)
-                    {
-                        m_dictionary.Add(offset, sb.ToString());
-                        sb.Clear();
-                        offset = i + 1;
-                    }
-                    else
-                    {
-                        sb.Append((char)b);
-                    }
-                }
-            }
-
-            byte[] GetNewStrings()
-            {
-                var newnames = new List<string>();
-                var newstrings = new List<byte>();
-                foreach (CR2WNameWrapper name in names)
-                {
-                    if (!newnames.Contains(name.Str))
-                        newnames.Add(name.Str);
-                }
-                foreach (CR2WImportWrapper import in imports)
-                {
-                    if (!newnames.Contains(import.DepotPathStr))
-                        newnames.Add(import.DepotPathStr);
-                }
-                foreach (CR2WEmbeddedWrapper emb in embedded)
-                {
-                    if (!newnames.Contains(emb.Handle))
-                            newnames.Add(emb.Handle);
-                }
-
-                foreach (var str in newnames)
-                {
-                    if (str != null)
-                    {
-                        var bytes = Encoding.Default.GetBytes(str);
-                        foreach (var b in bytes)
-                        {
-                            newstrings.Add(b);
-                        }
-                    }
-                    newstrings.Add((byte)0);
-                }
-
-                return newstrings.ToArray();
-            }
 
             void FixExportCRC32(CR2WExport export) //FIXME do I wann keep the ref?
             {
@@ -472,6 +504,465 @@ namespace WolvenKit.CR2W
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private (List<string>, List<Tuple<string, string, EImportFlags>>) GenerateStringtable()
+        {
+            var newnameslist = new List<string>
+            {
+                ""
+            };
+            var newimportslist = new List<Tuple<string,string, EImportFlags>>();
+            var newsoftlist = new List<Tuple<string,string, EImportFlags>>();
+
+            var guidlist = new List<Guid>();
+            var chunkguidlist = new List<Guid>();
+            var collection = new List<Tuple<string, CVariable>>();
+            foreach (var c in chunks)
+            {
+                chunkguidlist.Add(c.data.InternalGuid);
+                LoopWrapper(new Tuple<string, CVariable>("skipName", c.data));
+            }
+            foreach (var storedvar in collection)
+            {
+                AddStrings(storedvar);
+            }
+            
+            newimportslist.AddRange(newsoftlist);
+
+            return (newnameslist, newimportslist);
+
+            void LoopWrapper(Tuple<string, CVariable> var)
+            {
+                collection.Add(var);
+                List<Tuple<string, CVariable>> nextl = GetVariables(var.Item2);
+                if (nextl == null)
+                    return;
+                foreach (var l in nextl)
+                {
+                    if (l.Item2 != null)
+                        LoopWrapper(l);
+                }
+            }
+
+            List<Tuple<string,CVariable>> GetVariables(CVariable var)
+            {
+                //check for looping references
+                if (guidlist.Contains(var.InternalGuid))
+                    return null;
+                else
+                    guidlist.Add(var.InternalGuid);
+
+                var returnedVariables = new List<Tuple<string, CVariable>>();
+
+                if (var is CVector)
+                {
+                    #region Buffer Hacks Before Variables
+                    if (var is CEntity)
+                    {
+                        var t = (var as CVector).variables.FirstOrDefault(_ => _.Name == "template");
+                        if (t != null)
+                            returnedVariables.Add(new Tuple<string, CVariable>("skipName,skipType", t as CHandle));
+                    }
+                    // always checks for the variable parent first
+                    //else if (var is CBehaviorGraphStateMachineNode)
+                    //    returnedVariables.Add(new Tuple<string, CVariable>("", (var.cr2w.chunks.First().data as CBehaviorGraph).Toplevelnode.Reference.data));
+                    //else if (var.Type != null && (
+                    //    var.Type.Contains("CBehaviorGraphMimicSlotNode") ||
+                    //    var.Type.Contains("CBehaviorGraphPoseSlotNode") ||
+                    //    var.Type.Contains("CBehaviorGraphAnimationSlotNode") ||
+                    //    var.Type.Contains("CBehaviorGraphAnimationBaseSlotNode")
+                    //    ))
+                    //    returnedVariables.Add(new Tuple<string, CVariable>("", (var.cr2w.chunks.First().data as CBehaviorGraph).Toplevelnode.Reference.data));
+
+                    //else if (var.Type != null && 
+                    //    (var.Type.Contains("CMeshSkinningAttachment") ||
+                    //    var.Type.Contains("CHardAttachment") ||
+                    //    var.Type.Contains("CAnimatedAttachment")
+                    //    ))
+                    //{
+                    //    if ((var as CVector).variables != null && (var as CVector).variables.Count > 0)
+                    //    {
+                    //        if ((var as CVector).variables.First().Name == "parent")
+                    //            returnedVariables.Add(new Tuple<string, CVariable>("skipName,skipType", (var as CVector).variables.First()));
+                    //    }
+                    //}
+                    else if (var.ParentVariable != null)
+                    {
+                        returnedVariables.Add(new Tuple<string, CVariable>("", var.ParentVariable));
+                    }
+                    #endregion
+
+                    // for all other variables 
+                    foreach (var item in (var as CVector).variables)
+                    {
+                        returnedVariables.Add(new Tuple<string, CVariable>("", (item)));
+                    }
+
+                    #region Buffer Hacks After Variables
+                    // hack for CUmbraScene *sigh*
+                    if (var is CFoliageResource)
+                    {
+                        foreach (CVariable item in (var as CFoliageResource).Trees)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", (item)));
+                        foreach (CVariable item in (var as CFoliageResource).Grasses)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", item));
+                    }
+                    // hack for CClipMap *sigh*
+                    else if (var is CClipMap)
+                        returnedVariables.Add(new Tuple<string, CVariable>("", (var as CClipMap).tiles));
+                    // hack for CUmbraScene *sigh*
+                    else if (var is CUmbraScene)
+                        foreach (SUmbraSceneData item in (var as CUmbraScene).tiles.elements) //handled in GetStrings
+                            returnedVariables.Add(new Tuple<string, CVariable>("", item));
+
+                    // hack for CSkeletalAnimationSetEntry *sigh*
+                    else if (var is CSkeletalAnimationSetEntry)
+                        foreach (CVariable item in (var as CSkeletalAnimationSetEntry).entries)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", item));
+                    // hack for CLayerInfo *sigh*
+                    else if (var is CLayerInfo)
+                        returnedVariables.Add(new Tuple<string, CVariable>("", (var as CLayerInfo).ParentGroup.Reference?.data));
+                    // hack for CMaterialInstance *sigh*
+                    else if (var is CMaterialInstance)
+                        foreach (CVariable iparam in (var as CMaterialInstance).instanceParameters)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", iparam));
+                    // hack for CMesh *sigh*
+                    else if (var is CMesh)
+                        returnedVariables.Add(new Tuple<string, CVariable>("", (var as CMesh).boneNames));
+                    // hack for CBehaviorGraphContainerNode *sigh*
+                    else if (var is CBehaviorGraphContainerNode)
+                    {
+                        foreach (CHandle item in (var as CBehaviorGraphContainerNode).inputnodes.elements)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", (item.Reference?.data)));
+                        returnedVariables.Add(new Tuple<string, CVariable>("", (var as CBehaviorGraphContainerNode).unk1));
+                        returnedVariables.Add(new Tuple<string, CVariable>("", (var as CBehaviorGraphContainerNode).unk2));
+                        returnedVariables.Add(new Tuple<string, CVariable>("", (var as CBehaviorGraphContainerNode).outputnode.Reference?.data));
+                    }
+                    // hack for CBehaviorGraphStateMachineNode *sigh*
+                    else if (var is CBehaviorGraphStateMachineNode)
+                    {
+                        foreach (CHandle item in (var as CBehaviorGraphStateMachineNode).inputnodes.elements)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", item.Reference?.data));
+                        returnedVariables.Add(new Tuple<string, CVariable>("", (var as CBehaviorGraphStateMachineNode).unk1));
+                        returnedVariables.Add(new Tuple<string, CVariable>("", (var as CBehaviorGraphStateMachineNode).unk2));
+                    }
+                    // hack for CBehaviorGraphStateMachineNode *sigh*
+                    else if (var is CBehaviorGraph)
+                    {
+                        var b = var as CBehaviorGraph;
+                        returnedVariables.Add(new Tuple<string, CVariable>("", b.Toplevelnode.Reference?.data));
+                        foreach (IdHandle item in b.variables1.elements)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", item));
+                        foreach (CHandle item in b.descriptions.elements)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", item.Reference?.data));
+                        foreach (IdHandle item in b.vectorvariables1.elements)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", item));
+                        foreach (IdHandle item in b.variables2.elements)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", item));
+                        foreach (IdHandle item in b.vectorvariables2.elements)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", item));
+                    }
+                    // hack for CComponent *sigh*
+                    if (var is CNode)
+                    {
+                        foreach (CVariable att in (var as CNode).attachmentsChild)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", att));
+                        foreach (CVariable att in (var as CNode).attachmentsReference)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", att));
+                    }
+                    // hack for CEntity *sigh*
+                    if (var is CEntity)
+                    {
+                        var e = var as CEntity;
+                        foreach (CVariable component in e.components)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", component));
+                        foreach (CEntityBufferType1 buffer in (e.buffer_v1 as CVector).variables)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", buffer));
+                        foreach (CEntityBufferType2 item in e.buffer_v2.elements)
+                        {
+                            returnedVariables.Add(new Tuple<string, CVariable>("skipName,skipType", item.componentName));
+                            foreach (CVariableWrapper el in item.variables.elements)
+                            {
+                                returnedVariables.Add(new Tuple<string, CVariable>("Typefirst", el.variable));
+                            }
+                        }
+                    }
+                    // hack for SAppearanceAttachment *sigh*
+                    else if (var is SAppearanceAttachment)
+                        foreach (CVariable item in (var as SAppearanceAttachment).Data.elements)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", item));
+                    // hack for CSkeletalAnimationSetEntry *sigh*
+                    else if (var is CSkeletalAnimationSetEntry)
+                        foreach (CVariable item in (var as CSkeletalAnimationSetEntry).entries)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", item));
+                    // hack for SAppearanceAttachment *sigh*
+                    else if (var is CCutsceneTemplate)
+                        foreach (CVectorWrapper item in (var as CCutsceneTemplate).animevents.elements)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", item.variable));
+                    // hack for CStorySceneSection *sigh*
+                    else if (var is CStorySceneSection)
+                        foreach (CVariable item in (var as CStorySceneSection).sceneEventElements)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", item));
+                    // hack for CStorySceneScript *sigh*
+                    else if (var is CStorySceneScript)
+                        foreach (CVariable item in (var as CStorySceneScript).parameters)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", item));
+                    // hack for CFXTrackItem *sigh*
+                    else if (var is CFXTrackItem)
+                        returnedVariables.Add(new Tuple<string, CVariable>("skipName,skipType", (var as CFXTrackItem).buffername));
+                    #endregion
+                }
+                // hack for CPhysicalCollision *sigh*
+                else if (var is CPhysicalCollision)
+                {
+                    returnedVariables.Add(new Tuple<string, CVariable>("", (var as CPhysicalCollision).Collisiontypes));
+                }
+                else if (var is CArray)
+                {
+                    foreach (var element in (var as CArray).array)
+                    {
+                        if (
+                            element is CBool || element is CName ||
+                            element is CUInt16 || element is CInt16 ||
+                            element is CUInt32 || element is CInt32 ||
+                            element is CUInt64 || element is CInt64
+                            )
+                        {
+
+                        }
+                        else
+                            returnedVariables.Add(new Tuple<string, CVariable>("", element));
+                    }
+                }
+                else if (var is CPtr)
+                {
+                    var p = var as CPtr;
+                    if (p.Reference != null)
+                        returnedVariables.Add(new Tuple<string, CVariable>("", (var as CPtr).Reference.data));
+                }
+                else if (var is CHandle)
+                {
+                    var h = var as CHandle;
+                    if (h.ChunkHandle)
+                    {
+                        if (h.Reference != null)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", h.Reference.data));
+                    }
+                }
+                else if (var is CSoft)
+                {
+                    //var s = var as CSoft;
+                    //if (!(string.IsNullOrEmpty(s.ClassName) && string.IsNullOrEmpty(s.DepotPath)))
+                    //{
+                    //    var stuple = new Tuple<string, string, EImportFlags>(s.ClassName, s.DepotPath, EImportFlags.Soft);
+                    //    if (!newimportslist.Contains(stuple))
+                    //    {
+                    //        newimportslist.Add(stuple);
+                    //    }
+                    //}
+                }
+                else if (var is IdHandle)
+                {
+                    var i = var as IdHandle;
+                    returnedVariables.Add(new Tuple<string, CVariable>("", i));
+                    returnedVariables.Add(new Tuple<string, CVariable>("", i.handle.Reference?.data));
+                }
+                else if (var is CVariant)
+                {
+                    returnedVariables.Add(new Tuple<string, CVariable>("", (var as CVariant).Variant));
+                }
+
+                return returnedVariables;
+            }
+
+            void AddStrings(Tuple<string, CVariable> tvar)
+            {
+                var var = tvar.Item2;
+                if (var is SFoliageInstance)
+                    return;
+                if (!(var is CBufferVLQ<CName> ||
+                    var is CBufferUInt32<CHandle> ||
+                    var is IdHandle ||
+                    var is CEntityBufferType1 ||
+                    var is SUmbraSceneData
+                    ))
+                {
+                    if (tvar.Item1.Contains("Typefirst"))
+                    {
+                        AddUniqueToTable(var.Type);
+                        AddUniqueToTable(var.Name);
+                    }
+                    // I'm sorry
+                    else if (tvar.Item1 == "skipName" || chunkguidlist.Contains(tvar.Item2.InternalGuid))
+                    {
+                        AddUniqueToTable(var.Type);
+                    }
+                    else if (!tvar.Item1.Contains("skipName,skipType"))
+                    {
+                        AddUniqueToTable(var.Name);
+                        AddUniqueToTable(var.Type);
+                    }
+                }
+
+                if (var is CVector)
+                {
+                    //AddUniqueToTable(var.Name);
+                    //AddUniqueToTable(var.Type);
+                }
+                if (var is SUmbraSceneData)
+                {
+                    var h = (var as SUmbraSceneData).umbratile;
+                    if (!h.ChunkHandle)
+                    {
+                        AddUniqueToTable(h.ClassName);
+                        var importtuple = new Tuple<string, string, EImportFlags>(h.ClassName, h.DepotPath, EImportFlags.Default);
+                        if (!newimportslist.Contains(importtuple))
+                        {
+                            newimportslist.Add(importtuple);
+                        }
+                    }
+                }
+                else if (var is CFlags)
+                {
+                    foreach (var flag in (var as CFlags).flags)
+                    {
+                        AddUniqueToTable(flag.Value);
+                    }
+                }
+                else if (var is CTagList)
+                {
+                    foreach (var tag in (var as CTagList).tags)
+                    {
+                        AddUniqueToTable(tag.Value);
+                    }
+                }
+                else if (var is CHandle)
+                {
+                    var h = var as CHandle;
+                    if (!h.ChunkHandle)
+                    {
+                        AddUniqueToTable(h.ClassName);
+                        var flags = EImportFlags.Default;
+                        if (h.Name == "template" && h.ClassName == "CEntityTemplate")
+                            flags = EImportFlags.Template;
+                        if (var.cr2w.embedded.Any(_ => _.ImportPath == h.DepotPath && _.ImportClass == h.ClassName))
+                            flags = EImportFlags.Inplace;
+
+                        var importtuple = new Tuple<string, string, EImportFlags>(h.ClassName, h.DepotPath, flags);
+                        if (!newimportslist.Contains(importtuple))
+                        {
+                            newimportslist.Add(importtuple);
+                        }
+                    }
+                }
+                else if (var is CSoft)
+                {
+                    var s = var as CSoft;
+                    if (!(string.IsNullOrEmpty(s.ClassName) && string.IsNullOrEmpty(s.DepotPath)))
+                    {
+                        AddUniqueToTable(s.Type);
+                        var stuple = new Tuple<string, string, EImportFlags>(s.ClassName, s.DepotPath, EImportFlags.Soft);
+                        if (!newsoftlist.Contains(stuple))
+                        {
+                            newsoftlist.Add(stuple);
+                        }
+                    }
+                }
+                else if (var is CName)
+                {
+                    var n = var as CName;
+                    AddUniqueToTable(n.Value);
+                }
+                else if (var is CArray)
+                {
+                    AddUniqueToTable(var.Name);
+                    AddUniqueToTable((var as CArray).Type);
+                    foreach (var element in (var as CArray).array)
+                    {
+                        if (element is CName )
+                        {
+                            AddUniqueToTable((element as CName).Value);
+                        }
+                    }
+                }
+                else if (var is CBufferVLQ<CName>)
+                {
+                    foreach (var element in (var as CBufferVLQ<CName>).elements)
+                    {
+                        if (element is CName )
+                        {
+                            AddUniqueToTable((element as CName).Value);
+                        }
+                    }
+                }
+                else if (var is CBufferUInt32<CHandle>)
+                {
+                    foreach (CHandle h in (var as CBufferUInt32<CHandle>).elements)
+                    {
+                        if (!h.ChunkHandle)
+                        {
+                            AddUniqueToTable(h.ClassName);
+                            var flags = EImportFlags.Default;
+                            if (h.Name == "template")
+                                flags = EImportFlags.Template;
+                            var importtuple = new Tuple<string, string, EImportFlags>(h.ClassName, h.DepotPath, flags);
+                            if (!newimportslist.Contains(importtuple))
+                            {
+                                newimportslist.Add(importtuple);
+                            }
+                        }
+                    }
+                }
+                else if (var is CPtr)
+                {
+                }
+                else if (var is IdHandle)
+                {
+                    AddUniqueToTable((var as IdHandle).handlename.Value);
+                }
+                else if (var is CString)
+                {
+                    AddUniqueToTable(var.Name);
+                    AddUniqueToTable(var.Type);
+                }
+                else if (var is CEntityBufferType1)
+                {
+                    AddUniqueToTable((var as CEntityBufferType1).ComponentName.Value);
+                }
+                else
+                {
+                    AddUniqueToTable(var.Type);
+                }
+            }
+
+            void AddUniqueToTable(string str)
+            {
+                if (string.IsNullOrEmpty(str))
+                {
+                    // todo
+                }
+                else
+                {
+                    if (!newnameslist.Contains(str))
+                    {
+                        // hack for CApexClothResource *sigh*
+                        if (str == "apexMaterialNames")
+                        {
+                            if (!newnameslist.Contains("apexBinaryAsset"))
+                                newnameslist.Add("apexBinaryAsset");
+                            if (!newnameslist.Contains("array: 95, 0, Uint8"))
+                                newnameslist.Add("array:95,0,Uint8");
+                        }
+
+                        newnameslist.Add(str);
+                    }
+                }
+            }
+        }
+
         private void WriteHeader(BinaryWriter file)
         {
             WriteFileHeader(file);
@@ -480,9 +971,9 @@ namespace WolvenKit.CR2W
             m_tableheaders[1].size = (uint)names.Count;
             m_tableheaders[1].offset = (uint) file.BaseStream.Position;
             WriteTable<CR2WName>(names.Select(_ => _.Name).ToArray(), 1);
-
+            
             m_tableheaders[2].size = (uint)imports.Count;
-            m_tableheaders[2].offset = (uint) file.BaseStream.Position;
+            m_tableheaders[2].offset = imports.Count > 0 ? (uint) file.BaseStream.Position : 0;
             WriteTable<CR2WImport>(imports.Select(_ => _.Import).ToArray(), 2);
 
             m_tableheaders[3].size = (uint)properties.Count;
@@ -519,7 +1010,7 @@ namespace WolvenKit.CR2W
             WriteStringBuffer();
         }
 
-        private void WriteBuffers(BinaryWriter bw)
+        private void WriteData(BinaryWriter bw)
         {
             // Write chunk data
             for (var i = 0; i < chunks.Count; i++)
@@ -554,21 +1045,26 @@ namespace WolvenKit.CR2W
             var m_temp = new byte[size];
             m_stream.Read(m_temp, 0, m_temp.Length);
 
-            m_dictionary = new Dictionary<uint, string>();
+            StringDictionary = new Dictionary<uint, string>();
             StringBuilder sb = new StringBuilder();
             uint offset = 0;
+            var tempstring = new List<byte>();
             for (uint i = 0; i < size; i++)
             {
-                var b = m_temp[i];
+                byte b = m_temp[i];
                 if (b == 0)
                 {
-                    m_dictionary.Add(offset, sb.ToString());
+                    var text = Encoding.GetEncoding("iso-8859-1").GetString(tempstring.ToArray());
+                    StringDictionary.Add(offset, text);
+                    //StringDictionary.Add(offset, sb.ToString());
                     sb.Clear();
+                    tempstring.Clear();
                     offset = i + 1;
                 }
                 else
                 {
                     sb.Append((char)b);
+                    tempstring.Add(b);
                 }
             }
 
@@ -616,6 +1112,7 @@ namespace WolvenKit.CR2W
                 XmlSerializer.SerializeObject<CR2WFileHeader>(xw, m_fileheader);
                 XmlSerializer.SerializeObject<CR2WTable[]>(xw, m_tableheaders);
 
+                XmlSerializer.SerializeObject(xw, names.Select(_ => new Tuple<int, string>(names.IndexOf(_), _.Str)).ToArray());
                 XmlSerializer.SerializeObject<CR2WName[]>(xw, names.Select(_ => _.Name).ToArray());
                 XmlSerializer.SerializeObject<CR2WImport[]>(xw, imports.Select(_ => _.Import).ToArray());
                 XmlSerializer.SerializeObject<CR2WProperty[]>(xw, properties.Select(_ => _.Property).ToArray());
@@ -739,7 +1236,7 @@ namespace WolvenKit.CR2W
             chunk.CreateDefaultData();
             if (parent != null)
             {
-                chunk.ParentChunkId = (uint)chunks.IndexOf(parent) + 1;
+                chunk.SetParentChunkId((uint)chunks.IndexOf(parent) + 1);
             }
 
             chunks.Add(chunk);
@@ -748,12 +1245,14 @@ namespace WolvenKit.CR2W
 
         public CR2WExportWrapper CreateChunk(string type, CVariable data, CR2WExportWrapper parent = null)
         {
-            var chunk = new CR2WExportWrapper(this);
-            chunk.Type = type;
-            chunk.data = data;
+            var chunk = new CR2WExportWrapper(this)
+            {
+                Type = type,
+                data = data
+            };
             if (parent != null)
             {
-                chunk.ParentChunkId = (uint)chunks.IndexOf(parent) + 1;
+                chunk.SetParentChunkId((uint)chunks.IndexOf(parent) + 1);
             }
 
             chunks.Add(chunk);
@@ -768,49 +1267,51 @@ namespace WolvenKit.CR2W
                     return i;
             }
 
-            if (addnew)
-            {
-                var newstring = new CR2WNameWrapper();
-                newstring.Str = name;
-                names.Add(newstring);
+            //if (addnew)
+            //{
+            //    var newstring = new CR2WNameWrapper
+            //    {
+            //        Str = name
+            //    };
+            //    names.Add(newstring);
 
-                return names.Count - 1;
-            }
-
-            return -1;
-        }
-
-        public int GetHandleIndex(string name, ushort filetype, ushort flags, bool addnew = false)
-        {
-            for (var i = 0; i < imports.Count; i++)
-            {
-                if (imports[i].Import.className == filetype 
-                    && imports[i].Import.flags == flags 
-                    && (imports[i].DepotPathStr == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(imports[i].DepotPathStr))))
-                    return i;
-            }
-
-            if (addnew)
-            {
-                // we can leave the depotpath 0 here, it will get updated on file write
-                // value is the offset in the stringtable, which gets re-written on file write
-                // a better solution might be to dynamically update the string table 
-                var import = new CR2WImport()
-                {
-                    flags = flags,
-                    depotPath = 0, 
-                    className = filetype
-                };
-                imports.Add(new CR2WImportWrapper(import)
-                {
-                    DepotPathStr = name,
-                });
-
-                return imports.Count - 1;
-            }
+            //    return names.Count - 1;
+            //}
 
             return -1;
         }
+
+        //public int GetHandleIndex(string name, ushort filetype, ushort flags, bool addnew = false)
+        //{
+        //    for (var i = 0; i < imports.Count; i++)
+        //    {
+        //        if (imports[i].Import.className == filetype 
+        //            && imports[i].Import.flags == flags 
+        //            && (imports[i].DepotPathStr == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(imports[i].DepotPathStr))))
+        //            return i;
+        //    }
+
+        //    if (addnew)
+        //    {
+        //        // we can leave the depotpath 0 here, it will get updated on file write
+        //        // value is the offset in the stringtable, which gets re-written on file write
+        //        // a better solution might be to dynamically update the import table 
+        //        var import = new CR2WImport()
+        //        {
+        //            flags = flags,
+        //            depotPath = 0, 
+        //            className = filetype
+        //        };
+        //        imports.Add(new CR2WImportWrapper(import)
+        //        {
+        //            DepotPathStr = name,
+        //        });
+
+        //        return imports.Count - 1;
+        //    }
+
+        //    return -1;
+        //}
 
         public CR2WExportWrapper GetChunkByType(string type)
         {
@@ -914,8 +1415,8 @@ namespace WolvenKit.CR2W
             ptr.Name = varname;
             ptr.Type = type;
 
-            ptr.Handle = handle;
-            ptr.FileType = targetType;
+            ptr.DepotPath = handle;
+            ptr.ClassName = targetType;
 
             return ptr;
         }
@@ -957,9 +1458,9 @@ namespace WolvenKit.CR2W
             ptr.Name = varname;
             ptr.Type = type;
 
-            ptr.FileType = targetType;
+            ptr.ClassName = targetType;
             ptr.Flags = 4;
-            ptr.Handle = handle;
+            ptr.DepotPath = handle;
             return ptr;
         }
 
@@ -992,7 +1493,8 @@ namespace WolvenKit.CR2W
 
             if (tochunk != null)
             {
-                ptr.val = chunks.IndexOf(tochunk) + 1;
+                //ptr.val = chunks.IndexOf(tochunk) + 1;
+                ptr.Reference = tochunk;
             }
             return ptr;
         }

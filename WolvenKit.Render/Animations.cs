@@ -32,7 +32,7 @@ namespace WolvenKit.Render
                 if (chunk.Type == "CSkeletalAnimation")
                 {
                     var name = chunk.GetVariableByName("name");
-                    var chunkIdx = (chunk.GetVariableByName("animBuffer") as CPtr).ChunkIndex;
+                    var chunkIdx = (chunk.GetVariableByName("animBuffer") as CPtr).Reference.ChunkIndex;
                     AnimationNames.Add(new KeyValuePair<string, int>((name as CName).Value, chunkIdx));
                 }
             }

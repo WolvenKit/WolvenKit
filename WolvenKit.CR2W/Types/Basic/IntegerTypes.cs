@@ -11,10 +11,9 @@ namespace WolvenKit.CR2W.Types
     {
         
 
-        public CUInt64(CR2WFile cr2w)
-: base(cr2w)
+        public CUInt64(CR2WFile cr2w) : base(cr2w)
         {
-            Type = typeof(CUInt64).Name;
+            Type = "Uint64";
         }
 
         private ulong _val;
@@ -77,7 +76,7 @@ namespace WolvenKit.CR2W.Types
         public CUInt32(CR2WFile cr2w)
             : base(cr2w)
         {
-            Type = typeof(CUInt32).Name;
+            Type = "Uint32";
         }
 
         [DataMember]
@@ -140,7 +139,7 @@ namespace WolvenKit.CR2W.Types
         public CUInt16(CR2WFile cr2w)
 : base(cr2w)
         {
-            Type = typeof(CUInt16).Name;
+            Type = "Uint16";
         }
 
         private ushort _val;
@@ -203,7 +202,7 @@ namespace WolvenKit.CR2W.Types
         public CUInt8(CR2WFile cr2w)
             : base(cr2w)
         {
-            Type = typeof(CUInt8).Name;
+            Type = "Uint8";
         }
 
         [DataMember]
@@ -265,7 +264,7 @@ namespace WolvenKit.CR2W.Types
         public CInt64(CR2WFile cr2w)
             : base(cr2w)
         {
-            Type = typeof(CInt64).Name;
+            Type = "Int64";
         }
 
         [DataMember]
@@ -326,7 +325,7 @@ namespace WolvenKit.CR2W.Types
         public CInt32(CR2WFile cr2w)
             : base(cr2w)
         {
-            Type = typeof(CInt32).Name;
+            Type = "Int32";
         }
 
         [DataMember]
@@ -387,7 +386,7 @@ namespace WolvenKit.CR2W.Types
         public CInt16(CR2WFile cr2w)
             : base(cr2w)
         {
-            Type = typeof(CInt16).Name;
+            Type = "Int16";
         }
 
         [DataMember]
@@ -448,7 +447,7 @@ namespace WolvenKit.CR2W.Types
         public CInt8(CR2WFile cr2w)
             : base(cr2w)
         {
-            Type = typeof(CInt8).Name;
+            Type = "Int8";
         }
 
         [DataMember]
@@ -509,7 +508,7 @@ namespace WolvenKit.CR2W.Types
         public CDynamicInt(CR2WFile cr2w)
             : base(cr2w)
         {
-            Type = typeof(CDynamicInt).Name;
+            Type = "";
         }
 
         [DataMember]
@@ -577,7 +576,7 @@ namespace WolvenKit.CR2W.Types
         public CVLQInt32(CR2WFile cr2w)
             : base(cr2w)
         {
-            Type = typeof(CVLQInt32).Name;
+            Type = "";
         }
 
         [DataMember]
@@ -645,7 +644,7 @@ namespace WolvenKit.CR2W.Types
         public CBool(CR2WFile cr2w)
             : base(cr2w)
         {
-            Type = typeof(CBool).Name;
+            Type = "Bool";
         }
 
         [DataMember]

@@ -12,11 +12,11 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     class CGenericGrassMask : CVector
     {
-        public CByteArray grassmask;
+        public CBytes grassmask;
 
         public CGenericGrassMask(CR2WFile cr2w) : base(cr2w)
         {
-            grassmask = new CByteArray(cr2w)
+            grassmask = new CBytes(cr2w)
             {
                 Name = "Grass mask data",
                 Bytes = new byte[0]
@@ -36,7 +36,8 @@ namespace WolvenKit.CR2W.Types
         public override void Write(BinaryWriter file)
         {
             base.Write(file);
-            grassmask.Write(file);
+            if (grassmask.Bytes.Length > 0)
+                grassmask.Write(file);
         }
 
         public override CVariable Create(CR2WFile cr2w)
@@ -47,7 +48,7 @@ namespace WolvenKit.CR2W.Types
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (CGenericGrassMask) base.Copy(context);
-            var.grassmask = (CByteArray)grassmask;           
+            var.grassmask = (CBytes)grassmask;           
             return var;
         }
 

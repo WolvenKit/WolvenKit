@@ -1,36 +1,51 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace WolvenKit.CR2W.Types
 {
     [DataContract(Namespace = "")]
     public class CName : CVariable
     {
-        public CName(CR2WFile cr2w)
-            : base(cr2w)
+        
+        public CName(CR2WFile cr2w) : base(cr2w)
         {
             Type = typeof(CName).Name;
         }
 
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ushort val
-        {
-            get { return (ushort) cr2w.GetStringIndex(Value, true); }
-            set { Value = cr2w.names[value].Str; }
-        }
-
+        #region Properties
         [DataMember]
         public string Value { get; set; }
+        public bool IsEnum { get; set; }
+        #endregion
 
+
+        #region Methods
         public override void Read(BinaryReader file, uint size)
         {
-            val = file.ReadUInt16();
+            SetValueInternal(file.ReadUInt16());
         }
 
+        /// <summary>
+        /// Call after the stringtable was generated!
+        /// </summary>
+        /// <param name="file"></param>
         public override void Write(BinaryWriter file)
         {
+            ushort val = 0;
+
+            try
+            {
+                var nw = cr2w.names.First(_ => _.Str == Value);
+                val = (ushort)cr2w.names.IndexOf(nw);
+            }
+            catch (Exception)
+            {
+            }
+
             file.Write(val);
         }
 
@@ -38,14 +53,15 @@ namespace WolvenKit.CR2W.Types
         {
             if (val is string)
             {
-                Value = (string) val;
-            }
-            else if (val is ushort)
-            {
-                this.val = (ushort) val;
+                Value = (string)val;
             }
 
             return this;
+        }
+
+        private void SetValueInternal(ushort val)
+        {
+            Value = cr2w.names[val].Str;
         }
 
         public override CVariable Create(CR2WFile cr2w)
@@ -55,7 +71,7 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (CName) base.Copy(context);
+            var var = (CName)base.Copy(context);
             var.Value = Value;
             return var;
         }
@@ -65,7 +81,7 @@ namespace WolvenKit.CR2W.Types
             var enumtypes = typeof(Enums).GetNestedTypes();
             foreach (var item in enumtypes)
             {
-                if(item.Name == this.Type)
+                if (item.Name == this.Type)
                 {
                     ComboBox cb = new ComboBox();
                     cb.Items.AddRange(item.GetEnumNames());
@@ -75,7 +91,7 @@ namespace WolvenKit.CR2W.Types
                 }
             }
             var editor = new TextBox();
-            editor.DataBindings.Add("Text", this, "Value");
+            editor.DataBindings.Add("Text", this, nameof(Value));
             return editor;
         }
 
@@ -88,5 +104,7 @@ namespace WolvenKit.CR2W.Types
         {
             return Value;
         }
+        #endregion
+
     }
 }

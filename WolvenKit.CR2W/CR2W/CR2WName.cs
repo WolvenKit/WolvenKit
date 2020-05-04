@@ -1,7 +1,10 @@
 ﻿using RED.FNV1A;
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace WolvenKit.CR2W
 {
@@ -15,49 +18,22 @@ namespace WolvenKit.CR2W
         public uint hash;
     }
 
+    [DataContract(Namespace = "")]
     public class CR2WNameWrapper
     {
-        private CR2WName _name;
-        private string str;
+        public CR2WName Name { get; set; }
+        [XmlIgnore]
+        [NonSerialized()]
+        private readonly CR2WFile _cr2w;
 
-        public CR2WName Name
+        public string Str => _cr2w.StringDictionary[Name.value];
+
+        public CR2WNameWrapper(CR2WName name, CR2WFile cr2w)
         {
-            get
-            {
-                _name.hash = FNV1A32HashAlgorithm.HashString(Str, Encoding.ASCII, true);
-                return _name;
-            }
-            set => _name = value;
+            Name = name;
+            _cr2w = cr2w;
         }
 
-        public string Str
-        {
-            get
-            {
-                return str;
-            }
-            set
-            {
-                str = value;
-                _name.hash = FNV1A32HashAlgorithm.HashString(str, Encoding.ASCII, true);
-            }
-        }
-
-        public CR2WNameWrapper()
-        {
-            _name = new CR2WName();
-        }
-
-        public CR2WNameWrapper(CR2WName name)
-        {
-            _name = name;
-        }
-
-        public void SetOffset(uint offset) => _name.value = offset;
-
-        public override string ToString()
-        {
-            return Str;
-        }
+        public override string ToString() => Str;
     }
 }

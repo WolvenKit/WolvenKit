@@ -28,9 +28,9 @@ namespace WolvenKit.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
-            var c = file.ReadUInt32();
+            var count = file.ReadUInt32();
 
-            for (int i = 0; i < c; i++)
+            for (int i = 0; i < count; i++)
             {
                 T element = elementFactory.Invoke(cr2w);
                 element.Name = i.ToString();

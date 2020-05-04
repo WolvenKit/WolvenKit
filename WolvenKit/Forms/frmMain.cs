@@ -1134,6 +1134,7 @@ namespace WolvenKit
                 ModExplorer.RequestFileRename += ModExplorer_RequestFileRename;
                 ModExplorer.RequestFileImport += ModExplorer_RequestFileImport;
                 ModExplorer.RequestFileCook += ModExplorer_RequestFileCook;
+                ModExplorer.RequestFileDumpfile += ModExplorer_RequestFileDumpfile;
                 ModExplorer.RequestFastRender += ModExplorer_RequestFastRender;
             }
             ModExplorer.Activate();
@@ -1152,6 +1153,8 @@ namespace WolvenKit
                 return null;
             }
 
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
 
             var doc = new frmCR2WDocument();
             OpenDocuments.Add(doc);
@@ -1296,6 +1299,9 @@ namespace WolvenKit
 
             if (hasUnknownBytes)
                 output.Append("-------\n\n");
+
+            output.Append($"File {filename} loaded in: {stopwatch.Elapsed}\n\n");
+            stopwatch.Stop();
 
             AddOutput(output.ToString(), Logtype.Important);
             return doc;
@@ -1711,6 +1717,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 dir = Path.GetDirectoryName(fullpath);
             else
                 dir = fullpath;
+
             var reldir = dir.TrimStart(ActiveMod.FileDirectory.ToCharArray());
             if (reldir.Substring(0, 3) == "Raw") reldir = reldir.TrimStart("Raw".ToCharArray());
             reldir = reldir.TrimStart(Path.DirectorySeparatorChar);
@@ -1758,6 +1765,23 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             {
                 MessageBox.Show(ex.Message, "Error cooking files.");
             }
+        }
+
+        private async void ModExplorer_RequestFileDumpfile(object sender, RequestFileArgs e)
+        {
+            var filename = e.File;
+            var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
+            if (!File.Exists(fullpath) && !Directory.Exists(fullpath))
+                return;
+            string dir;
+            if (File.Exists(fullpath))
+                dir = Path.GetDirectoryName(fullpath);
+            else
+                dir = fullpath;
+
+
+            await DumpFile(dir, dir);
+
         }
 
         private void ModExplorer_RequestFileRename(object sender, RequestFileArgs e)

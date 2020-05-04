@@ -9,7 +9,8 @@ namespace WolvenKit.CR2W.Types
     {
         public CBytes Image;
         public CUInt32 unk;
-        public CBufferUInt32<CVector3<CUInt32>> mips;
+        public CUInt32 MipsCount;
+        public CCompressedBuffer<CVector3<CUInt32>> mips;
         public CUInt32 filesize;
         public CUInt32 unk2;
 
@@ -17,7 +18,8 @@ namespace WolvenKit.CR2W.Types
         {
 
             unk = new CUInt32(cr2w) { Name = "unk" };
-            mips = new CBufferUInt32<CVector3<CUInt32>>(cr2w, _ => new CVector3<CUInt32>(_, x => new CUInt32(x))) { Name = "mips" };
+            MipsCount = new CUInt32(cr2w) { Name = "MipsCount" };
+            mips = new CCompressedBuffer<CVector3<CUInt32>>(cr2w, _ => new CVector3<CUInt32>(_, x => new CUInt32(x))) { Name = "mips" };
             filesize = new CUInt32(cr2w) { Name = "filesize" };
             unk2 = new CUInt32(cr2w) { Name = "unk2" };
 
@@ -29,10 +31,15 @@ namespace WolvenKit.CR2W.Types
             base.Read(file, size);
 
             unk.Read(file, 4);
-            mips.Read(file, size);
+            MipsCount.Read(file, 4);
+
+            if (MipsCount.val > 0)
+                mips.Read(file, size, (int)MipsCount.val);
+            else
+                mips.Read(file, size, 1);
+
             filesize.Read(file, 4);
             unk2.Read(file, 4);
-
 
             Image.Bytes = file.ReadBytes((int)filesize.val);
         }
@@ -42,7 +49,10 @@ namespace WolvenKit.CR2W.Types
             base.Write(file);
 
             unk.Write(file);
+            MipsCount.Write(file);
+
             mips.Write(file);
+
             filesize.Write(file);
             unk2.Write(file);
 
@@ -63,7 +73,7 @@ namespace WolvenKit.CR2W.Types
         {
             var var = (CBitmapTexture)base.Copy(context);
             var.unk = (CUInt32)unk.Copy(context);
-            var.mips = (CBufferUInt32<CVector3<CUInt32>>)mips.Copy(context);
+            var.mips = (CCompressedBuffer<CVector3<CUInt32>>)mips.Copy(context);
             var.filesize = (CUInt32)filesize.Copy(context);
             var.unk2 = (CUInt32)unk2.Copy(context);
             var.Image = (CBytes)Image.Copy(context);

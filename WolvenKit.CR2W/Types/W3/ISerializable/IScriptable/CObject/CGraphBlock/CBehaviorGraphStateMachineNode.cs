@@ -12,6 +12,7 @@ namespace WolvenKit.CR2W.Types
         public CBufferVLQ<CHandle> inputnodes;
         public CBufferVLQ<CName> unk1;
         public CBufferVLQ<CName> unk2;
+
         public CBufferVLQ<CHandle> unk3;
         public CBufferVLQ<CHandle> unk4;
         public CHandle handle1;

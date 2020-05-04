@@ -26,10 +26,10 @@ namespace WolvenKit.CR2W.Types
                 diffuseTexture = new CHandle(cr2w){ Name = "diffuseTexture", Type = "CHandle"};
 				normalTexture = new CHandle(cr2w){ Name = "normalTexture", Type = "CHandle"};
 				specularColor = new CColor(cr2w){ Name = "specularColor", Type = "Color"};
-				specularScale = new CFloat(cr2w){ Name = "specularScale", Type = "CFloat"};
-				specularBase = new CFloat(cr2w){ Name = "specularBase", Type = "CFloat"};
-				specularity = new CFloat(cr2w){ Name = "specularity", Type = "CFloat"};
-				additiveNormals = new CBool(cr2w){ Name = "additiveNormals", Type = "CBool"};
+				specularScale = new CFloat(cr2w){ Name = "specularScale", Type = "Float"};
+				specularBase = new CFloat(cr2w){ Name = "specularBase", Type = "Float"};
+				specularity = new CFloat(cr2w){ Name = "specularity", Type = "Float"};
+				additiveNormals = new CBool(cr2w){ Name = "additiveNormals", Type = "Bool"};
 				diffuseRandomColor0 = new CColor(cr2w){ Name = "diffuseRandomColor0", Type = "Color"};
 				diffuseRandomColor1 = new CColor(cr2w){ Name = "diffuseRandomColor1", Type = "Color"};
 				subUVType = new CName(cr2w){ Name = "subUVType", Type = "CName"};

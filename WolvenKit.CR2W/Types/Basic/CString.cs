@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public class CString : CVariable
     {
-        public bool isUTF;
+        private bool isUTF;
 
         public CString(CR2WFile cr2w)
             : base(cr2w)

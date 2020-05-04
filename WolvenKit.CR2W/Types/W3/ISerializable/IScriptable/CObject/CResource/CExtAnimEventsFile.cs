@@ -27,13 +27,6 @@ namespace WolvenKit.CR2W.Types
             base.Read(file, size);
 
             unk1.Read(file, 0);
-            
-            //dbg
-            if (unk1.val > 0)
-            {
-                Debugger.Break();
-                throw new NotImplementedException();
-            }
         }
 
         public override void Write(BinaryWriter file)

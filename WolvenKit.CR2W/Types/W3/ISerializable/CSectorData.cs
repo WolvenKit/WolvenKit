@@ -126,7 +126,7 @@ namespace WolvenKit.CR2W.Types
 
         public override string ToString()
         {
-            return null;
+            return "";
         }
 
         public override CVariable SetValue(object val)

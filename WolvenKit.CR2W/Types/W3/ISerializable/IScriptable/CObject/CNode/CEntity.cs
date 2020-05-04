@@ -65,19 +65,20 @@ namespace WolvenKit.CR2W.Types
             bytesleft = size - (endPos - startPos);
             if (bytesleft > 0)
             {
+                int idx = 0;
                 bool canRead;
                 do
                 {
                     var t_buffer = new CEntityBufferType1(cr2w)
                     {
-                        Name = "",
+                        Name = idx.ToString(),
                     };
                     canRead = t_buffer.CanRead(file);
                     if (canRead)
                         t_buffer.Read(file, 0);
                     
                     buffer_v1.AddVariable(t_buffer);
-
+                    idx++;
                 } while (canRead);
             }
             else

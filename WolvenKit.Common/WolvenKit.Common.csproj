@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlphanumComparator.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="IWitcherArchive.cs" />
     <Compile Include="IWitcherArchiveType.cs" />
     <Compile Include="IWitcherFile.cs" />

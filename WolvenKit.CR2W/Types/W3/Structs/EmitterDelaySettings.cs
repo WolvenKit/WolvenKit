@@ -17,10 +17,10 @@ namespace WolvenKit.CR2W.Types
 
         public EmitterDelaySettings(CR2WFile cr2w) : base(cr2w)
         {
-                emitterDelay = new CFloat(cr2w){ Name = "emitterDelay", Type = "CFloat"};
-				emitterDelayLow = new CFloat(cr2w){ Name = "emitterDelayLow", Type = "CFloat"};
-				useEmitterDelayRange = new CBool(cr2w){ Name = "useEmitterDelayRange", Type = "CBool"};
-				useEmitterDelayOnce = new CBool(cr2w){ Name = "useEmitterDelayOnce", Type = "CBool"};
+                emitterDelay = new CFloat(cr2w){ Name = "emitterDelay", Type = "Float"};
+				emitterDelayLow = new CFloat(cr2w){ Name = "emitterDelayLow", Type = "Float"};
+				useEmitterDelayRange = new CBool(cr2w){ Name = "useEmitterDelayRange", Type = "Bool"};
+				useEmitterDelayOnce = new CBool(cr2w){ Name = "useEmitterDelayOnce", Type = "Bool"};
 				
         }
 

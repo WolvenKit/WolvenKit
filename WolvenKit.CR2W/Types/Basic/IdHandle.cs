@@ -12,24 +12,24 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public class IdHandle : CVariable
     {
-        public CUInt16 id;
+        public CName handlename;
         public CHandle handle;
 
         public IdHandle(CR2WFile cr2w) : base(cr2w)
         {
-            id = new CUInt16(cr2w) { Name = "id" };
+            handlename = new CName(cr2w) { Name = "handlename" };
             handle = new CHandle(cr2w) { Name = "handle" };
         }
 
         public override void Read(BinaryReader file, uint size)
         {
-            id.Read(file, 2);
+            handlename.Read(file, 2);
             handle.Read(file, 2);
         }
 
         public override void Write(BinaryWriter file)
         {
-            id.Write(file);
+            handlename.Write(file);
             handle.Write(file);
         }
 
@@ -47,7 +47,7 @@ namespace WolvenKit.CR2W.Types
         {
             var var = (IdHandle)base.Copy(context);
 
-            var.id = (CUInt16)id.Copy(context);
+            var.handlename = (CName)handlename.Copy(context);
             var.handle = (CHandle)handle.Copy(context);
             
 
@@ -58,14 +58,14 @@ namespace WolvenKit.CR2W.Types
         {
             return new List<IEditableVariable>()
             {
-                id,
+                handlename,
                 handle,
             };
         }
 
         public override string ToString()
         {
-            return $"[{id.ToString()}]:{handle.ToString()}";
+            return $"[{handlename.ToString()}]:{handle.ToString()}";
         }
     }
 }

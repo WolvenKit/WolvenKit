@@ -63,7 +63,7 @@ namespace WolvenKit.FlowTreeEditors
                     if (element != null && element is CPtr)
                     {
                         var ptr = (CPtr) element;
-                        switch (ptr.PtrTargetType)
+                        switch (ptr.GetPtrTargetType())
                         {
                             default:
                                 var label = new Label
@@ -75,7 +75,7 @@ namespace WolvenKit.FlowTreeEditors
                                     AutoSize = false,
                                     Text = line.ToString()
                                 };
-                                label.Click += delegate { FireSelectEvent(ptr.PtrTarget); };
+                                label.Click += delegate { FireSelectEvent(ptr.Reference); };
                                 Controls.Add(label);
                                 line++;
 

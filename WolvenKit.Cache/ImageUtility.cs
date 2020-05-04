@@ -17,7 +17,7 @@ namespace WolvenKit.Cache
         /// <returns>A proper dds file</returns>
         public static Bitmap Xbm2Bitmap(CR2WExportWrapper imagechunk)
         {
-            return Xbm2Dds(imagechunk).BitmapImage;
+            return Xbm2Dds(imagechunk)?.BitmapImage;
         }
 
 

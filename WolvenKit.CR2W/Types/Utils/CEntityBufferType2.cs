@@ -15,9 +15,9 @@ namespace WolvenKit.CR2W.Types.Utils
     [DataContract(Namespace = "")]
     public class CEntityBufferType2 : CVariable
     {
-        public CName componentName;
-        public CUInt32 sizeofdata;
-        public CBufferUInt32<CVariableWrapper> variables;
+        public CName componentName { get; set; }
+        public CUInt32 sizeofdata { get; set; }
+        public CBufferUInt32<CVariableWrapper> variables { get; set; }
 
 
         public CEntityBufferType2(CR2WFile cr2w) : base(cr2w)
