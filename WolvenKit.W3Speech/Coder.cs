@@ -61,7 +61,7 @@ namespace WolvenKit.W3Speech
                 br.ReadUInt32();
                 raw_item_infos.Add(Tuple.Create(lang_specific_ID, id_high, wave_offs, wave_size, cr2w_offs, cr2w_size));
             }
-            var key2 = br.ReadUInt16();
+            var key2 = br.ReadUInt16(); //BUG: This break sometimes! "D:\\SteamLibrary\\steamapps\\common\\TW3\\bin\\x64\\..\\..\\DLC\\DLC1\\content\\brpc.w3speech"
             var key = new W3LanguageKey((UInt32)(key1 << 16 | key2));
             var position = 4 + 4 + 2 + ((UInt64)item_count.length) + ((UInt64)item_count.value * 10 * 4) + 2;
             var item_infos = raw_item_infos

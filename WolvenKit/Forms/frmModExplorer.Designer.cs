@@ -71,6 +71,8 @@ namespace WolvenKit
             this.CollapseBTN = new System.Windows.Forms.ToolStripButton();
             this.resetfilesButton = new System.Windows.Forms.ToolStripButton();
             this.modexplorerSlave = new System.IO.FileSystemWatcher();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.fastRenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenu.SuspendLayout();
             this.searchstrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.modexplorerSlave)).BeginInit();
@@ -105,6 +107,8 @@ namespace WolvenKit
             this.cookToolStripMenuItem,
             this.importAsToolStripMenuItem,
             this.toolStripSeparator3,
+            this.fastRenderToolStripMenuItem,
+            this.toolStripSeparator5,
             this.removeFileToolStripMenuItem,
             this.renameToolStripMenuItem,
             this.copyToolStripMenuItem,
@@ -413,6 +417,18 @@ namespace WolvenKit
             this.modexplorerSlave.Deleted += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
             this.modexplorerSlave.Renamed += new System.IO.RenamedEventHandler(this.FileChanges_Detected);
             // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(199, 6);
+            // 
+            // fastRenderToolStripMenuItem
+            // 
+            this.fastRenderToolStripMenuItem.Name = "fastRenderToolStripMenuItem";
+            this.fastRenderToolStripMenuItem.Size = new System.Drawing.Size(202, 26);
+            this.fastRenderToolStripMenuItem.Text = "Fast Render";
+            this.fastRenderToolStripMenuItem.Click += new System.EventHandler(this.fastRenderToolStripMenuItem_Click);
+            // 
             // frmModExplorer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -479,5 +495,8 @@ namespace WolvenKit
         private ToolStripMenuItem dumpXMLToolStripMenuItem;
         private ToolStripMenuItem dumpChunksToXMLToolStripMenuItem;
         private ToolStripMenuItem dumpWccliteXMLToolStripMenuItem;
+        private ToolStripMenuItem createW2animsToolStripMenuItem;
+        private ToolStripMenuItem fastRenderToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator5;
     }
 }
