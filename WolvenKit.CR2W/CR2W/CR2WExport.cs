@@ -30,7 +30,7 @@ namespace WolvenKit.CR2W
 
         [DataMember]
         [FieldOffset(4)]
-        public uint parentID;   //needs to be registered upon new creation!
+        public uint parentID;   //0 means no parent, 1 is chunkID 0
 
         [DataMember]
         [FieldOffset(8)]
@@ -60,31 +60,15 @@ namespace WolvenKit.CR2W
             _export = new CR2WExport
             {
                 objectFlags = 8192,
-                
             };
-
-
-            //ParentPtr = new CPtr(file)
-            //{
-            //    Name = "Parent"
-            //};
-
         }
         public CR2WExportWrapper(CR2WExport export, CR2WFile file)
         {
             this.cr2w = file;
             _export = export;
 
-            //ParentPtr = new CPtr(file)
-            //{
-            //    Name = "Parent"
-            //};
-
             Type = cr2w.names[export.className].Str;
-
         }
-
-        
         #endregion
 
         private CR2WExport _export;
@@ -93,7 +77,6 @@ namespace WolvenKit.CR2W
         {
             get => _export;
         }
-
 
         #region Fields
         [NonSerialized]
@@ -107,25 +90,26 @@ namespace WolvenKit.CR2W
         public CVariable data { get; set; }
 
         // editable variables
-        //private CPtr _parentPtr;
-        //public CPtr ParentPtr
-        //{
-        //    get
-        //    {
-        //        return _parentPtr;
-        //    }
-        //    set
-        //    {
-        //        _parentPtr = value;
+        private CPtr _parentPtr;
+        public CPtr ParentPtr
+        {
+            get
+            {
+                return _parentPtr;
+            }
+            set
+            {
+                _parentPtr = value;
 
-        //        if (_parentPtr.PtrTarget == null)
-        //        {
-        //            _export.parentID = (uint)0;
-        //        }
-        //        else
-        //            _export.parentID = (uint)_parentPtr.PtrTarget.ChunkIndex;
-        //    }
-        //}
+                // this is unneccessary, handled in frmChunkProperties:treeView_CellEditFinished
+                if (_parentPtr.Reference == null)
+                {
+                    _export.parentID = (uint)0;
+                }
+                else
+                    _export.parentID = (uint)_parentPtr.Reference.ChunkIndex + 1;
+            }
+        }
         public uint ParentChunkId => this.Export.parentID;
 
         private string _type;
@@ -212,7 +196,7 @@ namespace WolvenKit.CR2W
 
             var vars = new List<IEditableVariable>
             {
-                //ParentPtr,
+                ParentPtr,
                 data
             };
             if (unknownBytes != null)
@@ -304,8 +288,13 @@ namespace WolvenKit.CR2W
             //data.Name = Name;
             data.Type = Type;
             if (ParentChunkId != 0)
-                data.ParentVariable = cr2w.chunks[(int)ParentChunkId - 1].data;
+                data.ParentVariable = GetParent().data;
 
+            ParentPtr = new CPtr(cr2w)
+            {
+                Name = "Parent",
+                Reference = GetParent()
+            };
         }
 
         public CR2WExportWrapper Copy(CR2WCopyAction context)

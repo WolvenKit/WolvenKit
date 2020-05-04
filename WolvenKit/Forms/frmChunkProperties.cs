@@ -387,8 +387,9 @@ namespace WolvenKit
 
         private void treeView_CellEditFinished(object sender, CellEditEventArgs e)
         {
+            chunk.SetParentChunkId((uint)chunk.ParentPtr.Reference.ChunkIndex + 1);
             OnItemsChanged(sender, e);
-            chunk.SetParentChunkId(chunk.ParentChunkId);
+            
         }
         
         public void ApplyCustomTheme()

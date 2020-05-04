@@ -557,11 +557,6 @@ namespace WolvenKit.CR2W
 
                 var returnedVariables = new List<Tuple<string, CVariable>>();
 
-                if (!string.IsNullOrEmpty(var.Name) && var.Name.Contains("CStorySceneLinkElement"))
-                {
-
-                }
-
                 if (var is CVector)
                 {
                     #region Buffer Hacks Before Variables
