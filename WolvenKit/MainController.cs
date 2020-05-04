@@ -28,6 +28,9 @@ namespace WolvenKit
     using WolvenKit.W3Speech;
     using WolvenKit.Common.Extensions;
     using System.IO.MemoryMappedFiles;
+    using CsvHelper;
+    using System.Globalization;
+    using WolvenKit.Common.Model;
 
     public enum EColorThemes
     {
@@ -45,6 +48,7 @@ namespace WolvenKit
 
         public WccLite WccHelper { get; set; }
         public LoggerService Logger { get; set; }
+        public List<HashDump> Hashdumplist { get; set; }
 
         public const string ManagerCacheDir = "ManagerCache";
         public const string DepotDir = "Depot";
@@ -464,6 +468,13 @@ namespace WolvenKit
                         ZipFile.ExtractToDirectory(DepotZipPath, DepotDir);
                     }
                 }
+                //using (var reader = new StringReader(Properties.Resources.pathhashes))
+                //using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                //{
+                //    //var records = csv.GetRecords<Model.HashDump>();
+                //    Hashdumplist = csv.GetRecords<HashDump>().ToList();
+
+                //}
                 #endregion
 
                 #region MMFUtil

@@ -5,6 +5,11 @@ using System.Diagnostics;
 using System;
 using System.Linq;
 using System.Runtime.Serialization;
+using CsvHelper;
+using System.Globalization;
+using WolvenKit.Common.Model;
+using WolvenKit.CR2W.Resources;
+using RED.FNV1A;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -17,7 +22,8 @@ namespace WolvenKit.CR2W.Types
         public CFloat box3;
         public CFloat box4;
         public CFloat box5;
-        public CUInt64 patchHash;
+        //public CUInt64 patchHash;
+        public CString pathHash;
 
         public CSectorDataResource(CR2WFile cr2w)
             : base(cr2w)
@@ -28,7 +34,7 @@ namespace WolvenKit.CR2W.Types
             box3 = new CFloat(cr2w) { Name = "box3", Type = "Float" };
             box4 = new CFloat(cr2w) { Name = "box4", Type = "Float" };
             box5 = new CFloat(cr2w) { Name = "box5", Type = "Float" };
-            patchHash = new CUInt64(cr2w) { Name = "patchHash", Type = "UInt64" };
+            pathHash = new CString(cr2w) { Name = "pathHash" };
         }
 
         public override CVariable Create(CR2WFile cr2w)
@@ -44,7 +50,11 @@ namespace WolvenKit.CR2W.Types
             box3.Read(file, 4);
             box4.Read(file, 4);
             box5.Read(file, 4);
-            patchHash.Read(file, 8);
+            UInt64 hashint = file.ReadUInt64();
+
+            // here for now until maincontroller is in Wkit.Common
+            var hashdump = Cr2wResourceManager.Get().Hashdumplist.FirstOrDefault(_ => _.HashInt == hashint);
+            pathHash.val = hashdump != null ? hashdump.Path : "";
         }
 
         public override void Write(BinaryWriter file)
@@ -55,7 +65,19 @@ namespace WolvenKit.CR2W.Types
             box3.Write(file);
             box4.Write(file);
             box5.Write(file);
-            patchHash.Write(file);
+
+            // here for now until maincontroller is in Wkit.Common
+            ulong hashint = 0;
+            if (!string.IsNullOrEmpty(pathHash.val))
+            {
+                var hashdump = Cr2wResourceManager.Get().Hashdumplist.FirstOrDefault(_ => _.Path == pathHash.val);
+                if (hashdump != null)
+                    hashint = hashdump.HashInt;
+                else
+                    hashint = FNV1A64HashAlgorithm.HashString(pathHash.val);
+            }
+
+            file.Write(hashint);
         }
 
         public override List<IEditableVariable> GetEditableVariables()
@@ -68,13 +90,13 @@ namespace WolvenKit.CR2W.Types
                 box3,
                 box4,
                 box5,
-                patchHash,
+                pathHash,
             };
         }
 
         public override string ToString()
         {
-            return patchHash.ToString();
+            return pathHash.ToString();
         }
     }
 }

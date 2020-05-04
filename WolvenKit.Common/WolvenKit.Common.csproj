@@ -97,6 +97,7 @@
     <Compile Include="IWitcherArchive.cs" />
     <Compile Include="IWitcherArchiveType.cs" />
     <Compile Include="IWitcherFile.cs" />
+    <Compile Include="Model\HashDump.cs" />
     <Compile Include="ObjectDumper.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="ProtoList.cs" />
