@@ -841,6 +841,9 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="ManagerCache\pathhashes.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <None Include="Properties\app.manifest">
       <SubType>Designer</SubType>
@@ -939,15 +942,12 @@
     <None Include="Resources\arrow-circle-315.png" />
     <None Include="Resources\ui-check-box.png" />
     <None Include="Resources\ui-check-box-uncheck.png" />
-    <None Include="Resources\W3Data\Depot.zip">
+    <Content Include="ManagerCache\Depot.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\W3Data\pathhashes.csv">
+    </Content>
+    <Content Include="ManagerCache\__xbmdump_3768555366.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\W3Data\__xbmdump_3768555366.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="Resources\wooden-box--arrow.png" />
     <None Include="Resources\Logo.png" />
     <None Include="Resources\loading_black.png" />

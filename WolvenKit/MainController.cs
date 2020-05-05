@@ -52,7 +52,7 @@ namespace WolvenKit
 
         public const string ManagerCacheDir = "ManagerCache";
         public const string DepotDir = "Depot";
-        private const string DepotZipPath = "Resources\\W3Data\\Depot.zip";
+        private const string DepotZipPath = "ManagerCache\\Depot.zip";
         public string VLCLibDir = "C:\\Program Files\\VideoLAN\\VLC";
         public string InitialModProject = "";
         public string InitialWKP = "";
@@ -458,7 +458,7 @@ namespace WolvenKit
                 {
                     var shash = BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLower();
                     // check if not same as in config
-                    if (Configuration.DepotHash != shash)
+                    if (Configuration.DepotHash != shash || !Directory.Exists(DepotDir))
                     {
                         Configuration.DepotHash = shash;
 
@@ -468,16 +468,16 @@ namespace WolvenKit
                         ZipFile.ExtractToDirectory(DepotZipPath, DepotDir);
                     }
                 }
-                //using (var reader = new StringReader(Properties.Resources.pathhashes))
-                //using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-                //{
-                //    //var records = csv.GetRecords<Model.HashDump>();
-                //    Hashdumplist = csv.GetRecords<HashDump>().ToList();
-
-                //}
+                foreach (var f in ModBundleManager.FileList)
+                {
+                    if (!Cr2wResourceManager.Get().HashdumpDict.ContainsKey(f.Name))
+                        Cr2wResourceManager.Get().RegisterCustomPath(f.Name);
+                }
+                Cr2wResourceManager.Get().Write();
                 #endregion
 
                 #region MMFUtil
+                loadStatus = "Loading MemoryMappedFile manager!";
                 foreach (var b in BundleManager.Bundles.Values)
                 {
                     var hash = b.FileName.GetHashMD5();

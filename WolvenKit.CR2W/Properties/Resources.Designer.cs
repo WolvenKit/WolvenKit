@@ -59,21 +59,5 @@ namespace WolvenKit.CR2W.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Path,HashHex,HashInt
-        ///ai_wizard_man.wizdef,1e65226785308e43,2190194621797142083
-        ///startupexclusives.xml,03b261a28731c4dc,266382678649062620
-        ///animations\animals\bat\bat_animation.w2anims,80e2be231af7210d,9287194439576920333
-        ///animations\animals\bear\bear_animation.w2anims,da8d81d87258b169,15748386238615826793
-        ///animations\animals\bear\bear_animation.w2anims.1.buffer,4fd1f52968725fa0,5751647757323624352
-        ///animations\animals\bear\bear_animation.w2anims.10.buffer,2af283871be63c28,3094680510268849192
-        ///animations\animals\be [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string pathhashes {
-            get {
-                return ResourceManager.GetString("pathhashes", resourceCulture);
-            }
-        }
     }
 }

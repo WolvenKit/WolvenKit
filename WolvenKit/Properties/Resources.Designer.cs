@@ -67,9 +67,9 @@ namespace WolvenKit.Properties {
         ///characters\models\common\woman_average\body\model\woman_old__body_n01.xbm,2048,2048,TRF_TrueColor,TCM_Normals,CharacterNormal
         ///characters\models\common\woman_average\body\model\woman_old__body_d02 [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string @__xbmdump_3768555366 {
+        internal static string @__xbmdump_37685553661 {
             get {
-                return ResourceManager.GetString("__xbmdump_3768555366", resourceCulture);
+                return ResourceManager.GetString("__xbmdump_37685553661", resourceCulture);
             }
         }
         
@@ -420,21 +420,6 @@ namespace WolvenKit.Properties {
             get {
                 object obj = ResourceManager.GetObject("package_16xLG", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ai_wizard_man.wizdef,1e65226785308e43,2190194621797142083
-        ///startupexclusives.xml,03b261a28731c4dc,266382678649062620
-        ///animations\animals\bat\bat_animation.w2anims,80e2be231af7210d,9287194439576920333
-        ///animations\animals\bear\bear_animation.w2anims,da8d81d87258b169,15748386238615826793
-        ///animations\animals\bear\bear_animation.w2anims.1.buffer,4fd1f52968725fa0,5751647757323624352
-        ///animations\animals\bear\bear_animation.w2anims.10.buffer,2af283871be63c28,3094680510268849192
-        ///animations\animals\bear\bear_animation.w2a [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string pathhashes {
-            get {
-                return ResourceManager.GetString("pathhashes", resourceCulture);
             }
         }
         

@@ -5,11 +5,10 @@ using System.Diagnostics;
 using System;
 using System.Linq;
 using System.Runtime.Serialization;
-using CsvHelper;
 using System.Globalization;
 using WolvenKit.Common.Model;
-using WolvenKit.CR2W.Resources;
 using RED.FNV1A;
+using System.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -53,8 +52,22 @@ namespace WolvenKit.CR2W.Types
             UInt64 hashint = file.ReadUInt64();
 
             // here for now until maincontroller is in Wkit.Common
-            var hashdump = Cr2wResourceManager.Get().Hashdumplist.FirstOrDefault(_ => _.HashInt == hashint);
-            pathHash.val = hashdump != null ? hashdump.Path : "";
+            if (hashint == 0)
+                pathHash.val = "";
+            else
+            {
+                // check for vanilla hashed paths
+                if (Cr2wResourceManager.Get().HashdumpDict.ContainsValue(hashint))
+                    pathHash.val = Cr2wResourceManager.Get().HashdumpDict.First(_ => _.Value == hashint).Key;
+                else
+                {
+                    // check for custom hashed paths
+                    if (Cr2wResourceManager.Get().CHashdumpDict.ContainsValue(hashint))
+                        pathHash.val = Cr2wResourceManager.Get().CHashdumpDict.First(_ => _.Value == hashint).Key;
+                    else
+                        pathHash.val = $"#{hashint}";
+                }
+            }
         }
 
         public override void Write(BinaryWriter file)
@@ -68,15 +81,29 @@ namespace WolvenKit.CR2W.Types
 
             // here for now until maincontroller is in Wkit.Common
             ulong hashint = 0;
-            if (!string.IsNullOrEmpty(pathHash.val))
+            // awkward test for unrecognized custom hashes
+            if (string.IsNullOrEmpty(pathHash.val))
+                hashint = 0;
+            else if (pathHash.val[0] == '#')
             {
-                var hashdump = Cr2wResourceManager.Get().Hashdumplist.FirstOrDefault(_ => _.Path == pathHash.val);
-                if (hashdump != null)
-                    hashint = hashdump.HashInt;
-                else
-                    hashint = FNV1A64HashAlgorithm.HashString(pathHash.val);
+                hashint = ulong.Parse(pathHash.val.TrimStart('#'));
             }
+            else
+            {
+                //check if in game depot hashes
+                if (Cr2wResourceManager.Get().HashdumpDict.ContainsKey(pathHash.val))
+                    hashint = Cr2wResourceManager.Get().HashdumpDict[pathHash.val];
+                else
+                {
+                    //check if in local custom hashes
+                    if (Cr2wResourceManager.Get().CHashdumpDict.ContainsKey(pathHash.val))
+                        hashint = Cr2wResourceManager.Get().CHashdumpDict[pathHash.val];
+                    //hash new path and add to collection
+                    else
+                        hashint = Cr2wResourceManager.Get().RegisterAndWriteCustomPath(pathHash.val);
+                }
 
+            }
             file.Write(hashint);
         }
 
