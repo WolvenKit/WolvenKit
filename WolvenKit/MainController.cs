@@ -31,6 +31,7 @@ namespace WolvenKit
     using CsvHelper;
     using System.Globalization;
     using WolvenKit.Common.Model;
+    using System.Resources;
 
     public enum EColorThemes
     {
@@ -468,12 +469,17 @@ namespace WolvenKit
                         ZipFile.ExtractToDirectory(DepotZipPath, DepotDir);
                     }
                 }
-                foreach (var f in ModBundleManager.FileList)
+                // create pathhashes if they don't already exist
+                fi = new FileInfo(Cr2wResourceManager.pathashespath);
+                if (!fi.Exists)
                 {
-                    if (!Cr2wResourceManager.Get().HashdumpDict.ContainsKey(f.Name))
-                        Cr2wResourceManager.Get().RegisterCustomPath(f.Name);
+                    foreach (IWitcherFile item in BundleManager.FileList)
+                    {
+                        Cr2wResourceManager.Get().RegisterVanillaPath(item.Name);
+                    }
+                    Cr2wResourceManager.Get().WriteVanilla();
                 }
-                Cr2wResourceManager.Get().Write();
+                
                 #endregion
 
                 #region MMFUtil

@@ -18,8 +18,8 @@ namespace WolvenKit.Common.Model
         public Dictionary<string, ulong> HashdumpDict { get; set; }
         public Dictionary<string, ulong> CHashdumpDict { get; set; }
 
-        private const string pathashespath = "ManagerCache\\pathhashes.csv";
-        private const string custompathashespath = "ManagerCache\\custompathhashes.csv";
+        public const string pathashespath = "ManagerCache\\pathhashes.csv";
+        public const string custompathashespath = "ManagerCache\\custompathhashes.csv";
 
 
         public static Cr2wResourceManager Get()
@@ -54,16 +54,41 @@ namespace WolvenKit.Common.Model
                 }
             }
         }
+
+        public void RegisterAndWriteVanillaPaths(List<string> paths)
+        {
+            foreach (var path in paths)
+            {
+                RegisterVanillaPath(path);
+            }
+            Write();
+        }
+        public ulong RegisterVanillaPath(string path)
+        {
+            var hashint = FNV1A64HashAlgorithm.HashString(path);
+            if (!HashdumpDict.ContainsKey(path))
+                HashdumpDict.Add(path, hashint);
+            return hashint;
+        }
+
         public ulong RegisterAndWriteCustomPath(string path)
         {
             var hash = RegisterCustomPath(path);
             Write();
             return hash;
         }
+        public void RegisterAndWriteCustomPaths(List<string> paths)
+        {
+            foreach (var path in paths)
+            {
+                RegisterCustomPath(path);
+            }
+            Write();
+        }
         public ulong RegisterCustomPath(string path)
         {
             var hashint = FNV1A64HashAlgorithm.HashString(path);
-            if (!CHashdumpDict.Keys.Contains(path))
+            if (!CHashdumpDict.ContainsKey(path) && !HashdumpDict.ContainsKey(path))
                 CHashdumpDict.Add(path, hashint);
             return hashint;
         }
@@ -76,7 +101,14 @@ namespace WolvenKit.Common.Model
                 csv.WriteRecords(CHashdumpDict.Select(_ => new HashDump { Path = _.Key, HashInt = _.Value }));
             }
         }
-
+        public void WriteVanilla()
+        {
+            using (var writer = new StreamWriter(pathashespath))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(HashdumpDict.Select(_ => new HashDump { Path = _.Key, HashInt = _.Value }));
+            }
+        }
 
     }
 }

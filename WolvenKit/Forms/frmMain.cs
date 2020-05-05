@@ -43,6 +43,7 @@ namespace WolvenKit
     using Enums = Dfust.Hotkeys.Enums;
     using WolvenKit.Render;
     using System.Text.RegularExpressions;
+    using WolvenKit.Common.Model;
 
     public partial class frmMain : Form
     {
@@ -901,6 +902,12 @@ namespace WolvenKit
                 UpdateModFileList(true);
                 AddOutput("\"" + ActiveMod.Name + "\" loaded successfully!\n", Logtype.Success);
                 MainController.Get().ProjectStatus = "Ready";
+
+                //Hash all filepaths
+                var relativepaths = ActiveMod.ModFiles
+                    .Select(_ => _.Substring(_.IndexOf(Path.DirectorySeparatorChar) + 1))
+                    .ToList();
+                Cr2wResourceManager.Get().RegisterAndWriteCustomPaths(relativepaths);
 
                 //Update the recent files.
                 var files = new List<string>();
