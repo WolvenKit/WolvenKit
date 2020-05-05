@@ -363,8 +363,8 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>..\Atflib\VSLangProj.dll</HintPath>
     </Reference>
-    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=3.0.4.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
-      <HintPath>..\packages\DockPanelSuite.3.0.4\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=3.0.6.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>..\packages\DockPanelSuite.3.0.6\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
     </Reference>
     <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2015, Version=3.0.4.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
       <HintPath>..\packages\DockPanelSuite.ThemeVS2015.3.0.4\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
@@ -578,12 +578,6 @@
     </Compile>
     <Compile Include="Forms\frmTextureFile.Designer.cs">
       <DependentUpon>frmTextureFile.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmUsmPlayer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmUsmPlayer.Designer.cs">
-      <DependentUpon>frmUsmPlayer.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmWCCLicense.cs">
       <SubType>Form</SubType>
@@ -817,9 +811,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmTextureFile.resx">
       <DependentUpon>frmTextureFile.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmUsmPlayer.resx">
-      <DependentUpon>frmUsmPlayer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmWCCLicense.resx">
       <DependentUpon>frmWCCLicense.cs</DependentUpon>

@@ -34,14 +34,15 @@ namespace WolvenKit.Scaleform
             // 
             // frmUsmPlayer
             // 
+            this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.ClientSize = new System.Drawing.Size(729, 419);
             this.Name = "frmUsmPlayer";
+            this.ShowIcon = false;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmUsmPlayer_FormClosing);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private BackgroundWorker videoConverter;
-        private System.Windows.Forms.Label statusLabel;
     }
 }

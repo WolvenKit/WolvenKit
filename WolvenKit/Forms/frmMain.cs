@@ -42,6 +42,7 @@ namespace WolvenKit
     using Common.Services;
     using Enums = Dfust.Hotkeys.Enums;
     using WolvenKit.Render;
+    using WolvenKit.Scaleform;
     using System.Text.RegularExpressions;
     using WolvenKit.Common.Model;
 

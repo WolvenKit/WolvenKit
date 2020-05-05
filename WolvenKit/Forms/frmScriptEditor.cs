@@ -18,7 +18,6 @@ namespace WolvenKit.Forms
         public frmScriptEditor(string filePath)
         {
             InitializeComponent();
-            this.ApplyTheme();
             this.ShowIcon = false;
             this.Text = "Witcherscript editor - " + Path.GetFileName(filePath);
             ScintillaFindReplace = new FindReplace(scintillaControl);
