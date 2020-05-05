@@ -67,9 +67,9 @@ namespace WolvenKit.Properties {
         ///characters\models\common\woman_average\body\model\woman_old__body_n01.xbm,2048,2048,TRF_TrueColor,TCM_Normals,CharacterNormal
         ///characters\models\common\woman_average\body\model\woman_old__body_d02 [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string @__xbmdump_3768555366 {
+        internal static string @__xbmdump_37685553661 {
             get {
-                return ResourceManager.GetString("__xbmdump_3768555366", resourceCulture);
+                return ResourceManager.GetString("__xbmdump_37685553661", resourceCulture);
             }
         }
         

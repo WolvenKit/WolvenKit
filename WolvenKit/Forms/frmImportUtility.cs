@@ -191,7 +191,7 @@ namespace WolvenKit.Forms
             if (objectListView.Objects == null)
                 return;
 
-            using (var reader = new StringReader(Properties.Resources.__xbmdump_3768555366))
+            using (var reader = new StringReader(Properties.Resources.__xbmdump_37685553661))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
                 var records = csv.GetRecords<XBMDump>();
