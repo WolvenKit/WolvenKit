@@ -90,13 +90,28 @@ namespace WolvenKit.Scaleform
                 }));
                 return;
             }
-            //Play video
-            Demuxedfiles.ToList().ForEach(x =>
+            //Write out audio stream
+            var hasaudio = false;
+            var adxpath = Path.Combine("ffmpeg\\ffmpegworkingdir\\", "out.adx");
+            if(Demuxedfiles.Any(z => z.Key.EndsWith("adx")))
             {
-                File.WriteAllBytes(Path.Combine("ffmpeg\\ffmpegworkingdir\\", x.Key), x.Value);
-            });
+                hasaudio = true;
+                var x = Demuxedfiles.ToList().First(y => y.Key.EndsWith("adx"));
+                File.WriteAllBytes(adxpath, x.Value);
+                ConvertAudio(adxpath, Path.ChangeExtension(adxpath, ".wav"));
+            }
+
+
+
+            //Write out video stream
             var path = Path.Combine("ffmpeg\\ffmpegworkingdir\\", "out.m2v");
             File.WriteAllBytes(path, file);
+
+            if(hasaudio)
+            {
+                path = Path.ChangeExtension(path, ".mp4");
+                MergeVideoAndAudio(Path.ChangeExtension(adxpath, ".wav"), Path.ChangeExtension(path, ".m2v"), path);
+            }
 
             ffplay.StartInfo.FileName = "ffmpeg//ffplay.exe";
             ffplay.StartInfo.Arguments = "-autoexit -noborder " + path;
@@ -121,12 +136,16 @@ namespace WolvenKit.Scaleform
             };
             ffplay.Start();
 
-            //Catch ffmpeg's handle really fast so there is no flashing
-            while (string.IsNullOrEmpty(ffplay.MainWindowTitle))
+            //Catch ffplay's handle really fast so there is no flashing
+            try
             {
-                System.Threading.Thread.Sleep(10);
-                ffplay.Refresh();
+                while (string.IsNullOrEmpty(ffplay.MainWindowTitle))
+                {
+                    System.Threading.Thread.Sleep(10);
+                    ffplay.Refresh();
+                }
             }
+            catch (InvalidOperationException) {  }
 
             try
             {
@@ -140,6 +159,34 @@ namespace WolvenKit.Scaleform
             }
             catch (ObjectDisposedException)   {  }
 
+        }
+
+        public void ConvertAudio(string audiofile, string outfile)
+        {
+            string arg = audiofile + " -o " + outfile;
+            var si = new ProcessStartInfo(
+                    "vgmstream\\test.exe",
+                    arg
+                );
+            si.CreateNoWindow = true;
+            si.WindowStyle = ProcessWindowStyle.Hidden;
+            si.UseShellExecute = false;
+            var proc = Process.Start(si);
+            proc.WaitForExit();
+        }
+
+        public void MergeVideoAndAudio(string audio, string video, string outfile)
+        {
+            string arg = $"-i {video} -i {audio} -c:v copy -c:a aac {outfile}";
+            var si = new ProcessStartInfo(
+                    "ffmpeg\\ffmpeg.exe",
+                    arg
+                );
+            si.CreateNoWindow = true;
+            si.WindowStyle = ProcessWindowStyle.Normal;
+            si.UseShellExecute = false;
+            var proc = Process.Start(si);
+            proc.WaitForExit();
         }
 
         private void frmUsmPlayer_FormClosing(object sender, FormClosingEventArgs e)
