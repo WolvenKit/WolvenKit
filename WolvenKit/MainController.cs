@@ -228,7 +228,7 @@ namespace WolvenKit
                     {
                         if (File.Exists(Path.Combine(ManagerCacheDir, "string_cache.bin")) && new FileInfo(Path.Combine(ManagerCacheDir, "string_cache.bin")).Length > 0)
                         {
-                            using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"),FileMode.Open))
+                            using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"), FileMode.Open))
                             {
                                 w3StringManager = ProtoBuf.Serializer.Deserialize<W3StringManager>(file);
                             }
@@ -238,9 +238,9 @@ namespace WolvenKit
                             w3StringManager = new W3StringManager();
                             w3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
                             Directory.CreateDirectory(ManagerCacheDir);
-                            using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"),FileMode.Create))
+                            using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"), FileMode.Create))
                             {
-                                ProtoBuf.Serializer.Serialize(file,w3StringManager);
+                                ProtoBuf.Serializer.Serialize(file, w3StringManager);
                             }
                         }
                     }

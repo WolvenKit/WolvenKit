@@ -38,10 +38,11 @@ namespace WolvenKit.Common.Wcc
                 case ".bmp": 
                 case ".jpg": 
                 case ".tga": 
-                case ".dds": 
+                case ".dds":
+                    return "TextureCache";
                 case ".re": 
                 case ".fbx": 
-                    return "TextureCache";
+                    return "Uncooked";
                 default: return "";
             }
         }

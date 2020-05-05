@@ -133,7 +133,8 @@ namespace WolvenKit.CR2W
             var dt = new CDateTime(m_fileheader.timeStamp);
 
             m_tableheaders = ReadStructs<CR2WTable>(10);
-            
+            m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
+
             // read strings
             m_strings = ReadStringsBuffer();
             
@@ -157,9 +158,12 @@ namespace WolvenKit.CR2W
                 chunk.ReadData(file);
             }
             // Read buffer data //block 6
-            foreach (var buffer in buffers)
+            if (m_hasInternalBuffer)
             {
-                //buffer.ReadData(file);
+                foreach (var buffer in buffers)
+                {
+                    buffer.ReadData(file);
+                }
             }
             // Read embedded files //block 7
             foreach (var emb in embedded)
@@ -169,17 +173,17 @@ namespace WolvenKit.CR2W
             #endregion
 
             //this never actually triggers?
-            /*#region Read Buffer
-            file.BaseStream.Seek(m_fileheader.fileSize, SeekOrigin.Begin);
-            m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
-            byte[] bufferdata;
-            var actualbuffersize = (int)(m_fileheader.bufferSize - m_fileheader.fileSize);
-            if (actualbuffersize > 0)
-            {
-                bufferdata = new byte[actualbuffersize];
-                file.BaseStream.Read(bufferdata, 0, actualbuffersize);
-            }
-            #endregion*/
+            //#region Read Buffer
+            //file.BaseStream.Seek(m_fileheader.fileSize, SeekOrigin.Begin);
+            //m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
+            //byte[] bufferdata;
+            //var actualbuffersize = (int)(m_fileheader.bufferSize - m_fileheader.fileSize);
+            //if (actualbuffersize > 0)
+            //{
+            //    bufferdata = new byte[actualbuffersize];
+            //    file.BaseStream.Read(bufferdata, 0, actualbuffersize);
+            //}
+            //#endregion
 
             //dbg++
             //(var nameslist, var importslist) = GenerateStringtable();
@@ -426,6 +430,11 @@ namespace WolvenKit.CR2W
             {
                 var newoffset = chunks[i].Export.dataOffset + headerOffset;
                 chunks[i].SetOffset(newoffset);
+            }
+            for (var i = 0; i < buffers.Count; i++)
+            {
+                var newoffset = buffers[i].Buffer.offset + headerOffset;
+                buffers[i].SetOffset(newoffset);
             }
             for (var i = 0; i < embedded.Count; i++)
             {

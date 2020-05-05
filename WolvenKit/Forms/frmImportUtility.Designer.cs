@@ -62,15 +62,14 @@
             this.olvColumnImportType,
             this.olvColumnTexturegroup});
             this.objectListView.Cursor = System.Windows.Forms.Cursors.Default;
-            this.objectListView.GridLines = true;
             this.objectListView.HasCollapsibleGroups = false;
-            this.objectListView.HeaderUsesThemes = true;
             this.objectListView.HideSelection = false;
             this.objectListView.Location = new System.Drawing.Point(0, 28);
             this.objectListView.Name = "objectListView";
             this.objectListView.ShowGroups = false;
             this.objectListView.Size = new System.Drawing.Size(800, 422);
             this.objectListView.TabIndex = 0;
+            this.objectListView.UseAlternatingBackColors = true;
             this.objectListView.UseCompatibleStateImageBehavior = false;
             this.objectListView.View = System.Windows.Forms.View.Details;
             this.objectListView.CellEditFinished += new BrightIdeasSoftware.CellEditEventHandler(this.objectListView_CellEditFinished);
@@ -101,6 +100,7 @@
             // olvColumnTexturegroup
             // 
             this.olvColumnTexturegroup.AspectName = "Texturegroup";
+            this.olvColumnTexturegroup.FillsFreeSpace = true;
             this.olvColumnTexturegroup.Groupable = false;
             this.olvColumnTexturegroup.Text = "Texturegroup";
             this.olvColumnTexturegroup.Width = 150;
