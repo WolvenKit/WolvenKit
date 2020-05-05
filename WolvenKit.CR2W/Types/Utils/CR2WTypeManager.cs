@@ -259,6 +259,8 @@ namespace WolvenKit.CR2W.Types
             Register("CCubeTexture", new CCubeTexture(null));
             Register("CTextureArray", new CTextureArray(null));
 
+            Register("CCameraCompressedPose", new CCameraCompressedPose(null));
+
 
             Register("CEnvProbeComponent", new CEnvProbeComponent(null));
 
@@ -4060,25 +4062,6 @@ namespace WolvenKit.CR2W.Types
 
         public CVariable GetByName(string name, string varname, CR2WFile cr2w, bool readUnknownAsBytes = true)
         {
-#if DEBUG
-
-            var debug = new[]
-            {
-                "",
-                "CCameraCompressedPose",
-                //"CUmbraScene",
-                //"CUmbraTile",
-            };
-            if (debug.Contains(name))
-            {
-                //throw new System.NotImplementedException();
-            }
-
-
-
-#endif
-
-
             var fullname = name;
             var reg = new Regex(@"^(\w+):(.+)$");
             var match = reg.Match(name);

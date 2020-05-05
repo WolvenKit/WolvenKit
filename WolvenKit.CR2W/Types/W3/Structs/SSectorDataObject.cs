@@ -72,6 +72,21 @@ namespace WolvenKit.CR2W.Types
             };
         }
 
+        public override CVariable Copy(CR2WCopyAction context)
+        {
+            var var = (CSectorDataObject)base.Copy(context);
+
+            var.type = (CUInt8) type.Copy(context);
+            var.flags = (CUInt8)flags.Copy(context);
+            var.radius = (CUInt16)radius.Copy(context);
+            var.offset = (CUInt64)offset.Copy(context);
+            var.positionX = (CFloat)positionX.Copy(context);
+            var.positionY = (CFloat)positionY.Copy(context);
+            var.positionZ = (CFloat)positionZ.Copy(context);
+
+            return var;
+        }
+
         public override string ToString()
         {
             return "";

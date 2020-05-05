@@ -169,6 +169,7 @@
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\IParticleModule\CParticleInitializerRotationRate.cs" />
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\IParticleModule\CParticleInitializerColor.cs" />
     <Compile Include="Types\W3\ISerializable\IScriptable\CObject\IParticleModule\CParticleInitializerAlpha.cs" />
+    <Compile Include="Types\W3\CCameraCompressedPose.cs" />
     <Compile Include="Types\W3\Structs\SAnimPointCloudLookAtParamData.cs" />
     <Compile Include="Types\W3\Structs\SSectorDataResource.cs" />
     <Compile Include="Types\W3\Structs\SSectorDataObject.cs" />
