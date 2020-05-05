@@ -28,6 +28,10 @@ namespace WolvenKit
     using WolvenKit.W3Speech;
     using WolvenKit.Common.Extensions;
     using System.IO.MemoryMappedFiles;
+    using CsvHelper;
+    using System.Globalization;
+    using WolvenKit.Common.Model;
+    using System.Resources;
 
     public enum EColorThemes
     {
@@ -45,10 +49,11 @@ namespace WolvenKit
 
         public WccLite WccHelper { get; set; }
         public LoggerService Logger { get; set; }
+        public List<HashDump> Hashdumplist { get; set; }
 
         public const string ManagerCacheDir = "ManagerCache";
         public const string DepotDir = "Depot";
-        private const string DepotZipPath = "Resources\\W3Data\\Depot.zip";
+        private const string DepotZipPath = "ManagerCache\\Depot.zip";
         public string VLCLibDir = "C:\\Program Files\\VideoLAN\\VLC";
         public string InitialModProject = "";
         public string InitialWKP = "";
@@ -454,7 +459,7 @@ namespace WolvenKit
                 {
                     var shash = BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLower();
                     // check if not same as in config
-                    if (Configuration.DepotHash != shash)
+                    if (Configuration.DepotHash != shash || !Directory.Exists(DepotDir))
                     {
                         Configuration.DepotHash = shash;
 
@@ -464,9 +469,21 @@ namespace WolvenKit
                         ZipFile.ExtractToDirectory(DepotZipPath, DepotDir);
                     }
                 }
+                // create pathhashes if they don't already exist
+                fi = new FileInfo(Cr2wResourceManager.pathashespath);
+                if (!fi.Exists)
+                {
+                    foreach (IWitcherFile item in BundleManager.FileList)
+                    {
+                        Cr2wResourceManager.Get().RegisterVanillaPath(item.Name);
+                    }
+                    Cr2wResourceManager.Get().WriteVanilla();
+                }
+                
                 #endregion
 
                 #region MMFUtil
+                loadStatus = "Loading MemoryMappedFile manager!";
                 foreach (var b in BundleManager.Bundles.Values)
                 {
                     var hash = b.FileName.GetHashMD5();
