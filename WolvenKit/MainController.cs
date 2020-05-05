@@ -126,7 +126,7 @@ namespace WolvenKit
         public CollisionManager CollisionManager => collisionManager;
         public SpeechManager SpeechManager => speechManager;
 
-        public Dictionary<string, MemoryMappedFile> mmfs = new Dictionary<string, MemoryMappedFile>();
+        //public Dictionary<string, MemoryMappedFile> mmfs = new Dictionary<string, MemoryMappedFile>();
         #endregion
 
         /// <summary>
@@ -479,19 +479,19 @@ namespace WolvenKit
                     }
                     Cr2wResourceManager.Get().WriteVanilla();
                 }
-                
+
                 #endregion
 
-                #region MMFUtil
-                loadStatus = "Loading MemoryMappedFile manager!";
-                foreach (var b in BundleManager.Bundles.Values)
-                {
-                    var hash = b.FileName.GetHashMD5();
+                //#region MMFUtil
+                //loadStatus = "Loading MemoryMappedFile manager!";
+                //foreach (var b in BundleManager.Bundles.Values)
+                //{
+                //    var hash = b.FileName.GetHashMD5();
 
-                    mmfs.Add(hash, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, hash, 0, MemoryMappedFileAccess.Read));
+                //    mmfs.Add(hash, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, hash, 0, MemoryMappedFileAccess.Read));
 
-                }
-                #endregion
+                //}
+                //#endregion
 
                 loadStatus = "Loaded";
 

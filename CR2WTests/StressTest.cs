@@ -57,21 +57,19 @@ namespace CR2WTests
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            mmfs = new Dictionary<string, MemoryMappedFile>();
+            //mmfs = new Dictionary<string, MemoryMappedFile>();
             mc = new BundleManager();
             //mc.LoadAll("D:\\SteamLibrary\\steamapps\\common\\The Witcher 3\\bin\\x64");
             mc.LoadAll("C:\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
 
-            // Load MemoryMapped Bundles
-            foreach (var b in mc.Bundles.Values)
-            {
-                var e = b.FileName.GetHashMD5();
+            //// Load MemoryMapped Bundles
+            //foreach (var b in mc.Bundles.Values)
+            //{
+            //    var e = b.FileName.GetHashMD5();
 
-                mmfs.Add(e, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, e, 0, MemoryMappedFileAccess.Read));
+            //    mmfs.Add(e, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, e, 0, MemoryMappedFileAccess.Read));
 
-            }
-
-
+            //}
         }
 
         // Methods to test for the different file types
