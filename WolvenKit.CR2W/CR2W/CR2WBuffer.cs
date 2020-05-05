@@ -59,13 +59,12 @@ namespace WolvenKit.CR2W
 
         public void WriteData(BinaryWriter file)
         {
-            // there is no Data to write
-            /*_buffer.offset = (uint) file.BaseStream.Position;
+            _buffer.offset = (uint) file.BaseStream.Position;
             if (Data != null)
             {
                 file.Write(Data);
                 _buffer.memSize = (uint)Data.Length;
-            }*/
+            }
             
         }
 

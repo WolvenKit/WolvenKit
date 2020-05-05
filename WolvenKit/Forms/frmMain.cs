@@ -171,132 +171,17 @@ namespace WolvenKit
             this.dockPanel.Theme = theme;
             visualStudioToolStripExtender1.SetStyle(menuStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
             visualStudioToolStripExtender1.SetStyle(toolbarToolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
-            //visualStudioToolStripExtender1.SetStyle(statusToolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
         }
-        /// <summary>
-        /// https://stackoverflow.com/questions/29024910/how-to-design-a-custom-close-minimize-and-maximize-button-in-windows-form-appli/29025094
-        /// https://social.msdn.microsoft.com/Forums/windows/en-US/5e288892-784a-4636-a63d-c2aad58ec097/aerosnap-when-form-border-style-is-set-to-none?forum=winforms
-        /// 
-        /// </summary>
-        private struct RECT
-        {
-            public int left, top, right, bottom;
 
-            public RECT(Rectangle rc)
-            {
-                this.left = rc.Left;
-                this.top = rc.Top;
-                this.right = rc.Right;
-                this.bottom = rc.Bottom;
-            }
+        #region UI formborderstyle none
 
-            public Rectangle ToRectangle()
-            {
-                return Rectangle.FromLTRB(left, top, right, bottom);
-            }
-
-        }
-        private struct NCCALCSIZE_PARAMS
-        {
-            public RECT rgrc0, rgrc1, rgrc2;
-            public WINDOWPOS lppos;
-        }
-        private struct WINDOWPOS
-        {
-            public IntPtr hWnd, hWndInsertAfter;
-            public int x, y, cx, cy, flags;
-        }
-        const uint WM_NCHITTEST = 0x0084, WM_MOUSEMOVE = 0x0200,
-                 HTLEFT = 10, HTRIGHT = 11, HTBOTTOMRIGHT = 17,
-                 HTBOTTOM = 15, HTBOTTOMLEFT = 16, HTTOP = 12,
-                 HTTOPLEFT = 13, HTTOPRIGHT = 14;
-        
-        protected override void WndProc(ref Message m)
-        {
-            /*const int WM_NCCALCSIZE = 0x83;
-            if (m.Msg == WM_NCCALCSIZE)
-            {
-                if (m.WParam.Equals(IntPtr.Zero))
-                {
-                    RECT rc = (RECT)m.GetLParam(typeof(RECT));
-                    Rectangle r = rc.ToRectangle();
-                    r.Inflate(8, 8);
-                    System.Runtime.InteropServices.Marshal.StructureToPtr(new RECT(r), m.LParam, true);
-                }
-                else
-                {
-                    NCCALCSIZE_PARAMS csp = (NCCALCSIZE_PARAMS)m.GetLParam(typeof(NCCALCSIZE_PARAMS));
-                    Rectangle r = csp.rgrc0.ToRectangle();
-                    r.Inflate(8, 8);
-                    csp.rgrc0 = new RECT(r);
-                    System.Runtime.InteropServices.Marshal.StructureToPtr(csp, m.LParam, true);
-                }
-                m.Result = IntPtr.Zero;
-            }*/
-
-            if (m.Msg == WM_NCHITTEST)
-            {
-                Point screenPoint = new Point(m.LParam.ToInt32());
-                Point clientPoint = this.PointToClient(screenPoint);
-                bool bTop = (clientPoint.Y < 4);
-                bool bLeft = (clientPoint.X < 4);
-                bool bRight = (clientPoint.X > this.ClientSize.Width - 4);
-                bool bBottom = (clientPoint.Y > this.ClientSize.Height - 4);
-
-
-                bool bCaption = (clientPoint.Y > 3
-                    && clientPoint.Y < SystemInformation.CaptionHeight
-                    && clientPoint.X < this.ClientSize.Width - 3
-                    && clientPoint.X > 3);
-
-                if (bCaption)
-                {
-                    m.Result = (IntPtr)HTCAPTION;
-                    return;
-                }
-                else if (bBottom && bLeft)
-                {
-                    m.Result = (IntPtr)HTBOTTOMLEFT;
-                    return;
-                }
-                else if (bBottom && bRight)
-                {
-                    m.Result = (IntPtr)HTBOTTOMRIGHT;
-                    return;
-                }
-                else if (bTop && bLeft)
-                {
-                    m.Result = (IntPtr)HTTOPLEFT;
-                    return;
-                }
-                else if (bTop && bRight)
-                {
-                    m.Result = (IntPtr)HTTOPRIGHT;
-                    return;
-                }
-                else if (bLeft)
-                {
-                    m.Result = (IntPtr)HTLEFT;
-                    return;
-                }
-                else if (bTop)
-                {
-                    m.Result = (IntPtr)HTTOP;
-                    return;
-                }
-                else if (bRight)
-                {
-                    m.Result = (IntPtr)HTRIGHT;
-                    return;
-                }
-                else if (bBottom)
-                {
-                    m.Result = (IntPtr)HTBOTTOM;
-                    return;
-                }
-            }
-            base.WndProc(ref m);
-        }
+        private const long WS_SYSMENU = 0x00080000L;
+        private const long WS_BORDER = 0x00800000L;
+        private const long WS_SIZEBOX = 0x00040000L;
+        private const long WS_CHILD = 0x40000000L;
+        private const long WS_DLGFRAME = 0x00400000L;
+        private const long WS_MAXIMIZEBOX = 0x00010000L;
+        private const long WS_CAPTION = 0x00C00000L;
 
         protected override CreateParams CreateParams
         {
@@ -304,17 +189,26 @@ namespace WolvenKit
             {
                 CreateParams cp = base.CreateParams;
                 {
-                    //cp.Style = (int)0x00040000L; //WS_SIZEBOX
-                    //cp.Style |= (int)0x00080000L; //WS_SYSMENU
-                    //cp.Style &= ~(int)0x00040000L;
-
-                    cp.Style = (int)0x00800000L; //WS_BORDER
-                    //cp.Style |= (int)0x00080000L | (int)0x00800000L | (int)0x00040000L; //aerosnap
-                    
+                    cp.Style |= (int)WS_BORDER;
+                    cp.Style |= (int)WS_SYSMENU;
+                    cp.Style |= (int)WS_SIZEBOX;                    
                 }
                 return cp;
             }
         }
+        private void MinimizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowState = FormWindowState.Minimized;
+        }
+
+        private void RestoreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.WindowState != FormWindowState.Maximized)
+                WindowState = FormWindowState.Maximized;
+            else
+                WindowState = FormWindowState.Normal;
+        }
+        #endregion
 
         private void LoggerUpdated(object sender, PropertyChangedEventArgs e)
         {
@@ -1118,6 +1012,8 @@ namespace WolvenKit
             Output = null;
             Console?.Close();
             Console = null;
+            ImportUtility?.Close();
+            ImportUtility = null;
             foreach (var window in dockPanel.FloatWindows.ToList())
                 window.Dispose();
         }
@@ -1140,6 +1036,7 @@ namespace WolvenKit
             ShowModExplorer();
             ShowConsole();
             ShowOutput();
+            ShowImportUtility();
         }
 
         private void ShowModExplorer()
@@ -1691,7 +1588,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 dir = Path.GetDirectoryName(fullpath);
             else
                 dir = fullpath;
-            string reldir = dir.TrimStart(ActiveMod.FileDirectory);
+            string reldir = dir.TrimStart(ActiveMod.FileDirectory).TrimStart(Path.DirectorySeparatorChar);
 
             // Trim working directories in path
             var reg = new Regex(@"^(Raw|Mod)\\(.*)");
@@ -1703,6 +1600,10 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             if (match.Success)
                 reldir = match.Groups[2].Value;
             reg = new Regex(@"^(TextureCache)\\(.*)");
+            match = reg.Match(reldir);
+            if (match.Success)
+                reldir = match.Groups[2].Value;
+            reg = new Regex(@"^(Uncooked)\\(.*)");
             match = reg.Match(reldir);
             if (match.Success)
                 reldir = match.Groups[2].Value;
@@ -2276,30 +2177,6 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                         CR2WVerify.VerifyFile(f);
                     }
                 }
-            }
-        }
-
-        private void MinimizeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            WindowState = FormWindowState.Minimized;
-        }
-
-        private void RestoreToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Screen screen = Screen.FromControl(this);
-            int x = screen.WorkingArea.X - screen.Bounds.X;
-            int y = screen.WorkingArea.Y - screen.Bounds.Y;
-            this.MaximizedBounds = new Rectangle(x, y,
-                screen.WorkingArea.Width, screen.WorkingArea.Height);
-            this.MaximumSize = screen.WorkingArea.Size;
-
-            if (this.WindowState != FormWindowState.Maximized)
-            {
-                WindowState = FormWindowState.Maximized;
-            }
-            else
-            {
-                WindowState = FormWindowState.Normal;
             }
         }
 

@@ -43,13 +43,12 @@ namespace WolvenKit.Forms
         public void ApplyCustomTheme()
         {
             var theme = MainController.Get().GetTheme();
-
             MainController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
 
             this.objectListView.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
             this.objectListView.AlternateRowBackColor = theme.ColorPalette.OverflowButtonHovered.Background;
 
-            this.objectListView.ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text;
+            this.objectListView.ForeColor = Color.Black;
             HeaderFormatStyle hfs = new HeaderFormatStyle()
             {
                 Normal = new HeaderStateStyle()
@@ -72,7 +71,6 @@ namespace WolvenKit.Forms
             objectListView.UnfocusedSelectedBackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background;
         }
 
-        
 
         internal class XBMDump
         {

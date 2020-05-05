@@ -126,7 +126,7 @@ namespace WolvenKit
         public CollisionManager CollisionManager => collisionManager;
         public SpeechManager SpeechManager => speechManager;
 
-        public Dictionary<string, MemoryMappedFile> mmfs = new Dictionary<string, MemoryMappedFile>();
+        //public Dictionary<string, MemoryMappedFile> mmfs = new Dictionary<string, MemoryMappedFile>();
         #endregion
 
         /// <summary>
@@ -228,7 +228,7 @@ namespace WolvenKit
                     {
                         if (File.Exists(Path.Combine(ManagerCacheDir, "string_cache.bin")) && new FileInfo(Path.Combine(ManagerCacheDir, "string_cache.bin")).Length > 0)
                         {
-                            using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"),FileMode.Open))
+                            using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"), FileMode.Open))
                             {
                                 w3StringManager = ProtoBuf.Serializer.Deserialize<W3StringManager>(file);
                             }
@@ -238,9 +238,9 @@ namespace WolvenKit
                             w3StringManager = new W3StringManager();
                             w3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
                             Directory.CreateDirectory(ManagerCacheDir);
-                            using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"),FileMode.Create))
+                            using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"), FileMode.Create))
                             {
-                                ProtoBuf.Serializer.Serialize(file,w3StringManager);
+                                ProtoBuf.Serializer.Serialize(file, w3StringManager);
                             }
                         }
                     }
@@ -479,19 +479,19 @@ namespace WolvenKit
                     }
                     Cr2wResourceManager.Get().WriteVanilla();
                 }
-                
+
                 #endregion
 
-                #region MMFUtil
-                loadStatus = "Loading MemoryMappedFile manager!";
-                foreach (var b in BundleManager.Bundles.Values)
-                {
-                    var hash = b.FileName.GetHashMD5();
+                //#region MMFUtil
+                //loadStatus = "Loading MemoryMappedFile manager!";
+                //foreach (var b in BundleManager.Bundles.Values)
+                //{
+                //    var hash = b.FileName.GetHashMD5();
 
-                    mmfs.Add(hash, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, hash, 0, MemoryMappedFileAccess.Read));
+                //    mmfs.Add(hash, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, hash, 0, MemoryMappedFileAccess.Read));
 
-                }
-                #endregion
+                //}
+                //#endregion
 
                 loadStatus = "Loaded";
 
