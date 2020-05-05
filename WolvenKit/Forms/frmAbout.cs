@@ -17,8 +17,7 @@ namespace WolvenKit
             labelCompanyName.Text = AssemblyTrademark;
             
             webBrowser1.DocumentText = $@"
-<
->
+
     <body bgcolor={ColorTranslator.ToHtml(SystemColors.Control)}>
         <center>
         <h3>Credits</h3> <br>   
@@ -28,6 +27,8 @@ namespace WolvenKit
         Nightingale<br>
         (Major reverse enginering)<br><br> 
         Murzinio<br>
+        (Programming)<br><br> 
+        rfuzzo<br>
         (Programming)<br><br> 
         <br><br>
         <b>Based on the code from {"\"Sarcen's Witcher 3 Mod Editor\""} by Sarcen </b><br>
@@ -39,7 +40,7 @@ namespace WolvenKit
         Cthulhu<br>
         <center>
     <body>
-</html>";
+";
         }
 
         #region Assembly Attribute Accessors
