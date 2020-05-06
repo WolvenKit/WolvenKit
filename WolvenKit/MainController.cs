@@ -54,7 +54,6 @@ namespace WolvenKit
         public const string ManagerCacheDir = "ManagerCache";
         public const string DepotDir = "Depot";
         private const string DepotZipPath = "ManagerCache\\Depot.zip";
-        public string VLCLibDir = "C:\\Program Files\\VideoLAN\\VLC";
         public string InitialModProject = "";
         public string InitialWKP = "";
 
