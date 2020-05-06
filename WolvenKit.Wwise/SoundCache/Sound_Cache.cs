@@ -37,7 +37,7 @@ namespace WolvenKit.Cache
         public string TypeName { get { return "SoundCache"; } }
         public string FileName { get; set; }
 
-        public static SoundBanksInfoXML info => new SoundBanksInfoXML("SoundCache\\soundbanksinfo.xml");
+        public static SoundBanksInfoXML info = new SoundBanksInfoXML("SoundCache\\soundbanksinfo.xml");
 
         /// <summary>
         /// The files packed into the original soundcache.

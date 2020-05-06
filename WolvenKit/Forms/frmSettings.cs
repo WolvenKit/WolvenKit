@@ -171,6 +171,8 @@ Would you like to perform this patch?", "wcc_lite faster patch", MessageBoxButto
                 //wcc_lite is installed to C:\\Program files
                 MessageBox.Show("Please restart WolvenKit as administrator. Couldn't access " + txWCC_Lite.Text,
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Exit with error code 0 so we don't raise a windows error and the user can restart it so we have access to the files.
+                Environment.Exit(0);
             }
             catch (Exception exception)
             {
