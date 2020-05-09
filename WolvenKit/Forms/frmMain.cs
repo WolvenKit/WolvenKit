@@ -1057,7 +1057,55 @@ namespace WolvenKit
             ModExplorer.Activate();
         }
 
-
+        public void ScanAndRegisterCustomClasses()
+        {
+            foreach (var wsfile in ActiveMod.ModFiles.Where(_ => Path.GetExtension(_) == ".ws"))
+            {
+                string fullpath = Path.Combine(ActiveMod.ModDirectory, wsfile);
+                var lines = File.ReadAllLines(fullpath);
+                foreach (var line in lines)
+                {
+                    var reg = new Regex(@"^.*(?:class)\s+(\w+)\s*(.*)");
+                    var match = reg.Match(line);
+                    if (match.Success)
+                    {
+                        // check for extends
+                        string classname = match.Groups[1].Value;
+                        string extends = match.Groups[2].Value;
+                        if (!string.IsNullOrEmpty(extends))
+                        {
+                            var ireg = new Regex(@"^.*(?:extends)\s+(\w+)");
+                            var imatch = ireg.Match(extends);
+                            if (imatch.Success)
+                            {
+                                string parent = imatch.Groups[1].Value;
+                                if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
+                                {
+                                    CR2WTypeManager.Get().RegisterAs(classname, parent);
+                                    AddOutput($"Registering custom class {classname} as {parent}.\r\n", Logtype.Success);
+                                }
+                            }
+                            else
+                            {
+                                if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
+                                {
+                                    CR2WTypeManager.Get().Register(classname, new CVector(null));
+                                    AddOutput($"Registering custom class {classname} as CVector.\r\n", Logtype.Success);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
+                            {
+                                CR2WTypeManager.Get().Register(classname, new CVector(null));
+                                AddOutput($"Registering custom class {classname} as CVector.\r\n", Logtype.Success);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         public frmCR2WDocument LoadDocument(string filename, MemoryStream memoryStream = null, bool suppressErrors = false)
         {
@@ -1072,6 +1120,12 @@ namespace WolvenKit
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
+
+            // check and register custom classes
+            // we do it here because people might edit the .ws files at any time
+            // todo: what do I do if the .ws file has been edited whil the cr2w file is open?
+            ScanAndRegisterCustomClasses();
+
 
             var doc = new frmCR2WDocument();
             OpenDocuments.Add(doc);
@@ -1468,12 +1522,26 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            richpresenceworker.CancelAsync();           
+            richpresenceworker.CancelAsync();
             if (MainController.Get().ProjectUnsaved)
-                if (MessageBox.Show("There are unsaved changes in your project. Would you like to save them?", "WolvenKit", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                var res = MessageBox.Show("There are unsaved changes in your project. Would you like to save them?", "WolvenKit",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Question);
+                if (res == DialogResult.Yes)
+                {
                     saveAllFiles();
+                    SaveMod();
+                }
+                else if (res == DialogResult.Cancel)
+                {
+                    e.Cancel = true;
+                }
+                else
+                {
 
-            SaveMod();
+                }
+            }
         }
 
         private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
