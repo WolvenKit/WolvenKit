@@ -119,12 +119,18 @@ namespace WolvenKit
         private void addChunkToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var dlg = new frmAddChunk();
+            var selectedchunk = treeListView.SelectedObjects.Cast<CR2WExportWrapper>().FirstOrDefault();
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
                     var chunk = File.CreateChunk(dlg.ChunkType);
+                    if (selectedchunk != null)
+                    {
+                        chunk.SetParent(selectedchunk);
+                    }
+                    
                     UpdateList();
 
                     if (OnSelectChunk != null && chunk != null)

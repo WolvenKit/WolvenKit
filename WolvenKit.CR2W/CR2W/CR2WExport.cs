@@ -164,6 +164,11 @@ namespace WolvenKit.CR2W
         #region Methods
         public void SetType(ushort val) => _export.className = val;
         public void SetParentChunkId(uint val) => _export.parentID = val;
+        public void SetParent(CR2WExportWrapper parent)
+        {
+            ParentPtr.Reference = parent;
+            SetParentChunkId((uint)ParentPtr.Reference.ChunkIndex + 1);
+        }
         public void SetOffset(uint offset) => _export.dataOffset = offset;
 
 
@@ -256,6 +261,7 @@ namespace WolvenKit.CR2W
         public void WriteData(BinaryWriter file)
         {
             _export.dataOffset = (uint) file.BaseStream.Position;
+            _export.className = (ushort)cr2w.GetStringIndex(_type);
 
             var posstart = file.BaseStream.Position;
 
