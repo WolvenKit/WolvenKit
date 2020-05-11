@@ -22,31 +22,31 @@ namespace WolvenKit.CR2W
     {
         [DataMember]
         [FieldOffset(0)]
-        public ushort className;    //needs to be registered upon new creation!
+        public ushort className;        //needs to be registered upon new creation and updated on file write!   //done
 
         [DataMember]
         [FieldOffset(2)]
-        public ushort objectFlags;  // can be 0
+        public ushort objectFlags;      // can be 0, TODO
 
         [DataMember]
         [FieldOffset(4)]
-        public uint parentID;   //0 means no parent, 1 is chunkID 0
+        public uint parentID;           //0 means no parent, 1 is chunkID 0 
 
         [DataMember]
         [FieldOffset(8)]
-        public uint dataSize;   // created upon data write
+        public uint dataSize;           // created upon data write  //done
 
         [DataMember]
         [FieldOffset(12)]
-        public uint dataOffset; //created upon data write
+        public uint dataOffset;         // created upon data write  //done
 
         [DataMember]
         [FieldOffset(16)]
-        public uint template;   // can be 0
+        public uint template;           // can be 0 //TODO?
 
         [DataMember]
         [FieldOffset(20)]
-        public uint crc32;  // created upon write
+        public uint crc32;              // created upon write   //done
     }
 
     [DataContract(Namespace = "")]

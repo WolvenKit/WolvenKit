@@ -241,6 +241,8 @@ namespace WolvenKit.Forms
             if (objectListView.Objects == null)
                 return;
 
+            MainController.Get().Window.ModExplorer.PauseMonitoring();
+
             var filesToImport = objectListView.Objects.Cast<ImportableFile>().Where(_ => _.IsSelected).ToList();
             var ActiveMod = MainController.Get().ActiveMod;
 
@@ -263,7 +265,7 @@ namespace WolvenKit.Forms
                 }
             }
 
-
+            MainController.Get().Window.ModExplorer.ResumeMonitoring();
 
 
             async Task StartImport(ImportableFile file)
@@ -281,7 +283,10 @@ namespace WolvenKit.Forms
                 if (relPath.Substring(0, 3) == "DLC") relPath = relPath.TrimStart("DLC".ToCharArray());
                 relPath = relPath.TrimStart(Path.DirectorySeparatorChar);
 
-                var newpath = Path.Combine(ActiveMod.ModDirectory, $"{relPath.TrimEnd(rawext.ToCharArray())}{importext}");
+
+                //var newpath = Path.Combine(ActiveMod.ModDirectory, $"{relPath.TrimEnd(rawext.ToCharArray())}{importext}");
+                var newpath = Path.Combine(ActiveMod.ModDirectory, relPath);
+                newpath = Path.ChangeExtension(newpath, importext);
                 var split = relPath.Split(Path.DirectorySeparatorChar).First();
                 if (split != type)
                     newpath = Path.Combine(ActiveMod.ModDirectory, type, $"{relPath.TrimEnd(rawext.ToCharArray())}{importext}");
