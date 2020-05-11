@@ -430,6 +430,7 @@ namespace WolvenKit.CR2W
             {
                 var newoffset = chunks[i].Export.dataOffset + headerOffset;
                 chunks[i].SetOffset(newoffset);
+                chunks[i].SetType( (ushort)GetStringIndex(chunks[i].Type));
             }
             for (var i = 0; i < buffers.Count; i++)
             {
@@ -745,6 +746,8 @@ namespace WolvenKit.CR2W
                         else
                             returnedVariables.Add(new Tuple<string, CVariable>("", element));
                     }
+                    if ((var as CArray).array.First() is CName)
+                       returnedVariables.Add(new Tuple<string, CVariable>("", var));
                 }
                 else if (var is CPtr)
                 {
