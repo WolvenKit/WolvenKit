@@ -10,27 +10,65 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Cache;
+using WolvenKit.CR2W;
 
 namespace WolvenKit
 {
     public partial class frmTextureFile : DockContent
     {
+        private CR2WFile _file;
+
         public frmTextureFile()
         {
             InitializeComponent();
         }
 
+        public CR2WFile File
+        {
+            get { return _file; }
+            set
+            {
+                _file = value;
+                //pictureBox1.Image = GetImage(value) ?? SystemIcons.Warning.ToBitmap();
+            }
+        }
+
         public void LoadImage(string imgPath)
         {
-            DdsImage ddsImg = new DdsImage(File.ReadAllBytes(imgPath));
-            pictureBox1.Image = ddsImg.BitmapImage;
+            DdsImage ddsImg = new DdsImage(System.IO.File.ReadAllBytes(imgPath));
+            imageBox1.Image = ddsImg.BitmapImage;
 
-            pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
-            pictureBox1.Anchor = AnchorStyles.None;
+            origImg = imageBox1.Image;
 
-            origImg = pictureBox1.Image;
+            Resize += FrmTextureFile_Resize;
 
-            ResizeImage();
+            imageBox1.Image = ddsImg.BitmapImage;
+        }
+
+        public void LoadImage(Stream stream)
+        {
+            DdsImage ddsImg = new DdsImage(stream);
+            imageBox1.Image = ddsImg.BitmapImage;
+
+            origImg = imageBox1.Image;
+
+            Resize += FrmTextureFile_Resize;
+        }
+
+        public void LoadImage(DdsImage ddsImg)
+        {
+            imageBox1.Image = ddsImg.BitmapImage;
+
+            origImg = imageBox1.Image;
+
+            Resize += FrmTextureFile_Resize;
+        }
+
+        public void LoadImage(Bitmap bitmap)
+        {
+            imageBox1.Image = bitmap;
+
+            origImg = bitmap;
 
             Resize += FrmTextureFile_Resize;
         }
@@ -39,7 +77,7 @@ namespace WolvenKit
 
         private void ResizeImage()
         {
-            if (origImg.Width > Width || origImg.Height > Height)
+            /*if (origImg.Width > Width || origImg.Height > Height)
             {
                 Size newSize;
                 float ratio = pictureBox1.Image.Height / (float)pictureBox1.Image.Width;
@@ -51,7 +89,7 @@ namespace WolvenKit
                     pictureBox1.Image = new Bitmap(origImg, newSize);
             }
 
-            CenterPictureBox(pictureBox1, new Bitmap(pictureBox1.Image));
+            CenterPictureBox(pictureBox1, new Bitmap(pictureBox1.Image));*/
         }
         
         private void CenterPictureBox(PictureBox picBox, Bitmap picImage)

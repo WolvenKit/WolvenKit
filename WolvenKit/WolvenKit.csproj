@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WolvenKit</RootNamespace>
     <AssemblyName>WolvenKit</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -44,7 +44,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -134,15 +134,30 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AltoControls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AltoControls.1.0.1\lib\AltoControls.dll</HintPath>
+    </Reference>
+    <Reference Include="AutocompleteMenu-ScintillaNET, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoCompleteMenu-ScintillaNET.1.6.2\lib\net461\AutocompleteMenu-ScintillaNET.dll</HintPath>
     </Reference>
     <Reference Include="AutoUpdater.NET, Version=1.4.11.0, Culture=neutral, PublicKeyToken=501435c91b35f4bc, processorArchitecture=MSIL">
       <HintPath>..\packages\Autoupdater.NET.Official.1.4.11\lib\net40\AutoUpdater.NET.dll</HintPath>
     </Reference>
     <Reference Include="CircularProgressBar, Version=2.5.6403.13419, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CircularProgressBar.2.5.6403.13419\lib\net35-client\CircularProgressBar.dll</HintPath>
+    </Reference>
+    <Reference Include="CommandLine, Version=2.7.82.0, Culture=neutral, PublicKeyToken=5a870481e358d379, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommandLineParser.2.7.82\lib\net461\CommandLine.dll</HintPath>
+    </Reference>
+    <Reference Include="CSharpImageLibrary, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CSharpImageLibrary.4.2.0\lib\net462\CSharpImageLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="CsvHelper, Version=15.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.15.0.4\lib\net47\CsvHelper.dll</HintPath>
     </Reference>
     <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
       <HintPath>..\packages\CyotekImageBox.1.3.0-Alpha1\lib\net20\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
@@ -178,7 +193,7 @@
       <HintPath>..\packages\MarkerMetro.Unity.Ionic.Zlib.2.0.0.14\lib\net35\Ionic.ZLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="IrrlichtLime, Version=1.5.0.0, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="IrrlichtLime, Version=1.6.1.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libs\IrrlichtLime.dll</HintPath>
     </Reference>
@@ -191,10 +206,22 @@
     <Reference Include="LZ4PCL">
       <HintPath>..\packages\LZ4PCL.1.0.0\lib\portable-net4+netcore45+wpa81+MonoAndroid1+MonoTouch1\LZ4PCL.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IO.RecyclableMemoryStream, Version=1.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IO.RecyclableMemoryStream.1.2.2\lib\net45\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.JScript" />
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAPICodePack-Core.1.1.1\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
     </Reference>
     <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
@@ -222,6 +249,12 @@
     <Reference Include="RtfPipe, Version=0.7.6669.2200, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RtfPipe.0.7.0.6\lib\net40\RtfPipe.dll</HintPath>
     </Reference>
+    <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jacobslusser.ScintillaNET.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
+    </Reference>
+    <Reference Include="ScintillaNET_FindReplaceDialog, Version=1.0.3.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ScintillaNET_FindReplaceDialog.1.0.3.3\lib\net40-client\ScintillaNET_FindReplaceDialog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
@@ -242,13 +275,12 @@
     <Reference Include="System.Globalization.Calendars, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
     </Reference>
-    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
@@ -266,8 +298,8 @@
     <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.1\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
@@ -287,6 +319,12 @@
       <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.2\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
     </Reference>
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Threading.Tasks.Dataflow, Version=4.5.24.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Tpl.Dataflow.4.5.24\lib\portable-net45+win8+wpa81\System.Threading.Tasks.Dataflow.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.2\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -298,6 +336,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Xml.ReaderWriter.4.3.1\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
+    </Reference>
+    <Reference Include="UsefulThings, Version=1.7.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UsefulCSharpThings.1.7.3\lib\net462\UsefulThings.dll</HintPath>
     </Reference>
     <Reference Include="vgmtplugin, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <HintPath>..\packages\VGMToolbox.1.0.0.1040\lib\vgmtplugin.dll</HintPath>
@@ -322,8 +363,8 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>..\Atflib\VSLangProj.dll</HintPath>
     </Reference>
-    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=3.0.4.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
-      <HintPath>..\packages\DockPanelSuite.3.0.4\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=3.0.6.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>..\packages\DockPanelSuite.3.0.6\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
     </Reference>
     <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2015, Version=3.0.4.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
       <HintPath>..\packages\DockPanelSuite.ThemeVS2015.3.0.4\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
@@ -340,6 +381,7 @@
     <Compile Include="Extensions\CustomFloatWindow.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="FlowTreeEditors\LinkEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -382,6 +424,18 @@
     <Compile Include="FlowTreeEditors\Scene\SceneSectionEditor.Designer.cs">
       <DependentUpon>SceneSectionEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmImportUtility.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmImportUtility.Designer.cs">
+      <DependentUpon>frmImportUtility.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMimics.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmMimics.Designer.cs">
+      <DependentUpon>frmMimics.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmLoading.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -399,6 +453,24 @@
     </Compile>
     <Compile Include="Forms\frmMusicPlayer.Designer.cs">
       <DependentUpon>frmMusicPlayer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmConsole.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmConsole.Designer.cs">
+      <DependentUpon>frmConsole.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmScriptEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmScriptEditor.Designer.cs">
+      <DependentUpon>frmScriptEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmAnims.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmAnims.Designer.cs">
+      <DependentUpon>frmAnims.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmStringsGuiImporterIDDialog.cs">
       <SubType>Form</SubType>
@@ -507,12 +579,6 @@
     <Compile Include="Forms\frmTextureFile.Designer.cs">
       <DependentUpon>frmTextureFile.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmUsmPlayer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmUsmPlayer.Designer.cs">
-      <DependentUpon>frmUsmPlayer.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\frmWCCLicense.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -618,7 +684,6 @@
       <DependentUpon>frmSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="MainController.cs" />
-    <Compile Include="W3Mod.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestFileOpenArgs.cs" />
@@ -646,6 +711,12 @@
     <EmbeddedResource Include="Forms\frmAddVariable.resx">
       <DependentUpon>frmAddVariable.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmImportUtility.resx">
+      <DependentUpon>frmImportUtility.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmMimics.resx">
+      <DependentUpon>frmMimics.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmAssetBrowser.resx">
       <DependentUpon>frmAssetBrowser.cs</DependentUpon>
@@ -699,6 +770,9 @@
     <EmbeddedResource Include="Forms\frmMusicPlayer.resx">
       <DependentUpon>frmMusicPlayer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmConsole.resx">
+      <DependentUpon>frmConsole.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmOutput.resx">
       <DependentUpon>frmOutput.cs</DependentUpon>
     </EmbeddedResource>
@@ -713,6 +787,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmSaveEditor.resx">
       <DependentUpon>frmSaveEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmAnims.resx">
+      <DependentUpon>frmAnims.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmSettings.resx">
       <DependentUpon>frmSettings.cs</DependentUpon>
@@ -735,9 +812,6 @@
     <EmbeddedResource Include="Forms\frmTextureFile.resx">
       <DependentUpon>frmTextureFile.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmUsmPlayer.resx">
-      <DependentUpon>frmUsmPlayer.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmWCCLicense.resx">
       <DependentUpon>frmWCCLicense.cs</DependentUpon>
     </EmbeddedResource>
@@ -752,6 +826,9 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
@@ -796,7 +873,6 @@
     <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj">
       <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>
       <Name>WolvenKit.CR2W</Name>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
     <ProjectReference Include="..\WolvenKit.Net\WolvenKit.Net.csproj">
       <Project>{f60b8974-617d-45b5-bd33-68a9f739de4f}</Project>
@@ -854,6 +930,12 @@
     <None Include="Resources\arrow-circle-315.png" />
     <None Include="Resources\ui-check-box.png" />
     <None Include="Resources\ui-check-box-uncheck.png" />
+    <Content Include="ManagerCache\Depot.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ManagerCache\__xbmdump_3768555366.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Resources\wooden-box--arrow.png" />
     <None Include="Resources\Logo.png" />
     <None Include="Resources\loading_black.png" />
@@ -861,7 +943,6 @@
     <Content Include="discord-rpc.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\Minimize_16x.png" />
     <None Include="Resources\ExpandAll_16x.png" />
     <None Include="Resources\CollapseAll_16x.png" />
     <None Include="Resources\SaveStatusBar1_16x_c.png" />
@@ -877,8 +958,21 @@
     <None Include="Resources\Property_16x.png" />
     <None Include="Resources\RemoteServer_16x.png" />
     <None Include="Resources\Settings_Inverse_16x.png" />
+    <Content Include="Resources\Clock.ico" />
+    <Content Include="Resources\Clock.png" />
+    <Content Include="Resources\close.png" />
+    <Content Include="Resources\Console_16x.png" />
+    <Content Include="Resources\DownButton.png" />
     <Content Include="Resources\ExpandIcon.png" />
     <None Include="Resources\Refresh_16x.png" />
+    <Content Include="Resources\Highlighter.png" />
+    <Content Include="Resources\ImportPackage_16x.png" />
+    <Content Include="Resources\maximize.jpg" />
+    <Content Include="Resources\maximize.png" />
+    <Content Include="Resources\minimize.png" />
+    <Content Include="Resources\PlayStep_16x.png" />
+    <Content Include="Resources\UpButton.png" />
+    <Content Include="Resources\XToCloseButton.png" />
     <Content Include="wolven_kit_icon.ico" />
     <Content Include="Licenses\License.doboz4net.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1008,16 +1102,6 @@
       <PublishState>Include</PublishState>
       <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
-    </PublishFile>
-    <PublishFile Include="IrrlichtLime">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Licenses\License.doboz4net.txt">
       <Visible>False</Visible>
@@ -1249,16 +1333,6 @@
       <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
-    <PublishFile Include="WolvenKit.CR2W">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
     <PublishFile Include="WolvenKit.Interfaces">
       <Visible>False</Visible>
       <Group>
@@ -1319,16 +1393,6 @@
       <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
-    <PublishFile Include="WolvenKit.Wwise">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
     <PublishFile Include="wolven_kit_icon.ico">
       <Visible>False</Visible>
       <Group>
@@ -1360,4 +1424,9 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Target Name="AfterBuild">
+    <ItemGroup>
+      <MoveToLibFolder Include="$(OutputPath)*.dll ; $(OutputPath)*.pdb ; $(OutputPath)*.xml" />
+    </ItemGroup>
+  </Target>
 </Project>

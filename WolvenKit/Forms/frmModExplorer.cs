@@ -3,21 +3,32 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
-using WolvenKit.Mod;
+using WolvenKit.Bundles;
+using WolvenKit.Common.Services;
+using WolvenKit.Common.Wcc;
 using WolvenKit.Services;
 
 namespace WolvenKit
 {
+    using Common;
+    using Newtonsoft.Json;
+    using System.Threading.Tasks;
+    using WolvenKit.CR2W;
+    using WolvenKit.Render;
+
     public partial class frmModExplorer : DockContent, IThemedContent
     {
-        public frmModExplorer()
+        public frmModExplorer(ILoggerService logger)
         {
             InitializeComponent();
             UpdateModFileList(true,true);
             LastChange = DateTime.Now;
             ApplyCustomTheme();
+
+            Logger = logger;
         }
 
         public W3Mod ActiveMod
@@ -28,14 +39,17 @@ namespace WolvenKit
 
         public event EventHandler<RequestFileArgs> RequestFileOpen;
         public event EventHandler<RequestFileArgs> RequestFileDelete;
-        public event EventHandler<RequestFileArgs> RequestFileAdd;
+        public event EventHandler<RequestFileArgs> RequestAssetBrowser;
         public event EventHandler<RequestFileArgs> RequestFileRename;
+        public event EventHandler<RequestFileArgs> RequestFileCook;
+        public event EventHandler<RequestFileArgs> RequestFileDumpfile;
+        public event EventHandler<RequestFileArgs> RequestFastRender;
         public List<string> FilteredFiles; 
         public bool FoldersShown = true;
 
         public static DateTime LastChange;
         public static TimeSpan mindiff = TimeSpan.FromMilliseconds(500);
-
+        private ILoggerService Logger;
 
         public void PauseMonitoring()
         {
@@ -150,6 +164,14 @@ namespace WolvenKit
             RequestFileOpen?.Invoke(this, new RequestFileArgs {File = e.Node.FullPath});
         }
 
+        private void cookToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                RequestFileCook?.Invoke(this, new RequestFileArgs { File = modFileList.SelectedNode.FullPath });
+            }
+        }
+
         private void removeFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (modFileList.SelectedNode != null)
@@ -157,10 +179,37 @@ namespace WolvenKit
                 RequestFileDelete?.Invoke(this, new RequestFileArgs {File = modFileList.SelectedNode.FullPath});
             }
         }
-
         private void addFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RequestFileAdd?.Invoke(this,new RequestFileArgs {File = GetExplorerString(modFileList.SelectedNode?.FullPath ?? "")});
+            var dlg = new OpenFileDialog() { Title = "Add File to Project" };
+            dlg.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                MainController.Get().Configuration.InitialFileDirectory = Path.GetDirectoryName(dlg.FileName);
+                try
+                {
+                    FileInfo fi = new FileInfo(dlg.FileName);
+                    var newfilepath = Path.Combine(ActiveMod.FileDirectory, fi.Name);
+                    if (modFileList.SelectedNode != null)
+                    {
+                        newfilepath = Path.Combine(ActiveMod.FileDirectory, modFileList.SelectedNode.FullPath);
+                        if (File.Exists(newfilepath))
+                            newfilepath = Path.GetDirectoryName(newfilepath);
+                        newfilepath = Path.Combine(newfilepath, fi.Name);
+                    }
+                    if (File.Exists(newfilepath))
+                        newfilepath = $"{newfilepath.TrimEnd(fi.Extension.ToCharArray())} - copy{fi.Extension}";
+                    fi.CopyTo(newfilepath, false);
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
+
+        private void openAssetBrowserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RequestAssetBrowser?.Invoke(this,new RequestFileArgs {File = GetExplorerString(modFileList.SelectedNode?.FullPath ?? "")});
         }
 
         private void modFileList_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -168,7 +217,7 @@ namespace WolvenKit
             if (e.Button == MouseButtons.Right)
             {
                 modFileList.SelectedNode = e.Node;
-                contextMenu.Show(modFileList, e.Location);
+                //contextMenu.Show(modFileList, e.Location);
             }
         }
 
@@ -206,7 +255,33 @@ namespace WolvenKit
 
         private void contextMenu_Opened(object sender, EventArgs e)
         {
+            var selectedNode = modFileList.SelectedNode;
+            string ext = "";
+
+            if (selectedNode != null)
+            {
+                var fi = new FileInfo(selectedNode.FullPath);
+                ext = fi.Extension.TrimStart('.');
+
+                bool isbundle = Path.Combine(ActiveMod.FileDirectory, fi.ToString()).Contains(Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName));
+                bool israw = Path.Combine(ActiveMod.FileDirectory, fi.ToString()).Contains(Path.Combine(ActiveMod.FileDirectory, "Raw"));
+
+
+                cookToolStripMenuItem.Enabled = (!Enum.GetNames(typeof(EImportable)).Contains(ext) && !isbundle && !israw);
+                markAsModDlcFileToolStripMenuItem.Enabled = isbundle;
+            } 
+
             pasteToolStripMenuItem.Enabled = File.Exists(Clipboard.GetText());
+
+            removeFileToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
+            renameToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
+            copyRelativePathToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
+            copyToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
+            
+            showFileInExplorerToolStripMenuItem.Enabled = modFileList.SelectedNode != null;
+            dumpXMLToolStripMenuItem.Enabled = modFileList.SelectedNode != null && ext != "xml" && ext != "csv" && ext != "ws" && ext != "";
+            dumpChunksToXMLToolStripMenuItem.Enabled = modFileList.SelectedNode != null && ext != "xml" && ext != "csv" && ext != "ws" && ext != "";
+
         }
 
         public static IEnumerable<string> FallbackPaths(string path)
@@ -288,6 +363,93 @@ namespace WolvenKit
             }
         }
 
+        private void dumpXMLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                DumpXML(ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath);
+            }
+
+            void DumpXML(string filepath)
+            {
+                try
+                {
+                    string fileName = $"{filepath}.h.xml";
+                    using (var writer = new FileStream(fileName, FileMode.Create))
+                    using (var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read))
+                    using (var reader = new BinaryReader(fs))
+                    {
+                        var File = new CR2W.CR2WFile(reader);
+                        File.SerializeToXml(writer);
+                    }
+                    Logger.LogString("Dumping XML successful.", Logtype.Success);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogString("Dumping XML failed.", Logtype.Error);
+                }
+            }
+        }
+
+        private void dumpChunksToXMLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                SaveFileDialog sFileDialog = new SaveFileDialog
+                {
+                    Filter = "XML File|*.xml",
+                    Title = "Save XML File",
+                    InitialDirectory = MainController.Get().Configuration.InitialFileDirectory + "\\" + modFileList.SelectedNode.FullPath,
+                    OverwritePrompt = true,
+                    FileName = ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath + ".chunk.xml"
+                };
+                
+                DialogResult result = sFileDialog.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    FileStream writer = new FileStream(sFileDialog.FileName, FileMode.Create);
+                    DumpChunkXML(writer);
+                }
+            }
+
+            void DumpChunkXML(FileStream writer)
+            {
+                try
+                {
+                    string filePath = ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath;
+                    string fileName = writer.Name;
+                    
+                    using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                    using (var reader = new BinaryReader(fs))
+                    {
+                        var File = new CR2W.CR2WFile(reader);
+                        File.FileName = modFileList.SelectedNode.FullPath;
+                        File.SerializeChunksToXml(writer);
+
+                        writer.Flush();
+                        writer.Close();
+                    }
+
+                    //vl: ugly way to suppress ugly xmlns
+                    string text = "";
+                    using (StreamReader streamReader = File.OpenText(fileName)) //vl: TODO: what about encoding??
+                    {
+                        text = streamReader.ReadToEnd();
+                        text = text.Replace(" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+                    }
+                    File.WriteAllText(fileName, text);
+                    
+                    Logger.LogString("Dumping chunks XML successful.", Logtype.Success);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogString(ex.Message, Logtype.Error);
+                    Logger.LogString(ex.StackTrace, Logtype.Error);
+                    Logger.LogString("Dumping chunks XML failed.", Logtype.Error);
+                }
+            }
+        }
+
         private void ExpandBTN_Click(object sender, EventArgs e)
         {
             modFileList.ExpandAll();
@@ -364,6 +526,122 @@ namespace WolvenKit
             this.modFileList.ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text;
 
             this.searchBox.BackColor = theme.ColorPalette.ToolWindowCaptionButtonInactiveHovered.Background;
+        }
+
+
+        private void exportw2rigjsonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+                Console.WriteLine(ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath);
+            string w2rigFilePath = ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath;
+            using (var sf = new SaveFileDialog())
+            {
+                sf.Filter = "W3 json | *.json";
+                sf.FileName = Path.GetFileName(ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath + ".json");
+                if (sf.ShowDialog() == DialogResult.OK)
+                {
+                    CommonData cdata = new CommonData();
+                    Rig exportRig = new Rig(cdata);
+                    byte[] data;
+                    data = File.ReadAllBytes(w2rigFilePath);
+                    using (MemoryStream ms = new MemoryStream(data))
+                    using (BinaryReader br = new BinaryReader(ms))
+                    {
+                        CR2WFile rigFile = new CR2WFile(br);
+                        exportRig.LoadData(rigFile);
+                        exportRig.SaveRig(sf.FileName);
+                    }
+                    MessageBox.Show(this, "Sucessfully wrote file!", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+        private void exportW2animsjsonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var settings = new frmAnims(ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath,
+                                        ActiveMod.FileDirectory + "\\" + "Mod\\Bundle\\characters\\base_entities\\woman_base\\woman_base.w2rig");
+            settings.ShowDialog();
+        }
+
+        private void exportW2cutscenejsonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var settings = new frmAnims(ActiveMod.FileDirectory + "\\" + modFileList.SelectedNode.FullPath,
+                                        ActiveMod.FileDirectory + "\\" + "Mod\\Bundle\\characters\\base_entities\\woman_base\\woman_base.w2rig");
+            settings.ShowDialog();
+        }
+
+        private void exportW3facjsonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            exportw2rigjsonToolStripMenuItem_Click(sender, e);
+        }
+        private void exportW3facposejsonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void contextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                exportw2rigjsonToolStripMenuItem.Visible = Path.GetExtension(modFileList.SelectedNode.Name) == ".w2rig";
+                exportW2animsjsonToolStripMenuItem.Visible = Path.GetExtension(modFileList.SelectedNode.Name) == ".w2anims";
+                exportW2cutscenejsonToolStripMenuItem.Visible = Path.GetExtension(modFileList.SelectedNode.Name) == ".w2cutscene";
+                exportW3facjsonToolStripMenuItem.Visible = Path.GetExtension(modFileList.SelectedNode.Name) == ".w3fac";
+                exportW3facposejsonToolStripMenuItem.Visible = Path.GetExtension(modFileList.SelectedNode.Name) == ".w3fac";
+                fastRenderToolStripMenuItem.Enabled = Path.GetExtension(modFileList.SelectedNode.Name) == ".w2mesh";
+            }
+        }
+
+        private void createW2animsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                var filename = modFileList.SelectedNode.FullPath;
+                var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
+                if (!File.Exists(fullpath) && !Directory.Exists(fullpath))
+                    return;
+                string dir;
+                if (File.Exists(fullpath))
+                    dir = Path.GetDirectoryName(fullpath);
+                else
+                    dir = fullpath;
+                var files = Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories).ToList();
+                var folderName = Path.GetFileName(fullpath);
+                ConvertAnimation anim = new ConvertAnimation();
+                if (File.Exists(fullpath+".w2anims"))
+                {
+                    if (MessageBox.Show(
+                         folderName + ".w2anims already exists. This file will be overwritten. Are you sure you want to permanently overwrite "+ folderName +" w2anims?"
+                         , "Confirmation", MessageBoxButtons.YesNo
+                     ) != DialogResult.Yes)
+                    {
+                        return;
+                    }
+                }
+
+                try
+                {
+                    anim.Load(files, fullpath + ".w2anims");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error cooking files.");
+                }
+            }
+        }
+
+        private async void dumpWccliteXMLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                RequestFileDumpfile?.Invoke(this, new RequestFileArgs { File = modFileList.SelectedNode.FullPath });
+            }
+        }
+        private void fastRenderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (modFileList.SelectedNode != null)
+            {
+                RequestFastRender?.Invoke(this, new RequestFileArgs { File = modFileList.SelectedNode.FullPath });
+            }
         }
     }
 }

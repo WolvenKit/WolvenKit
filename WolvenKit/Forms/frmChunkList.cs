@@ -12,10 +12,10 @@ namespace WolvenKit
 {
     public partial class frmChunkList : DockContent, IThemedContent
     {
+        private bool listview = false;
+        private bool isLargefile = false;
         private CR2WFile file;
-
-
-        private List<int> _parentIds { get; set; } = new List<int>();
+        private List<Tuple<int,List<CR2WExportWrapper>>> chunkHelperList { get; set; } = new List<Tuple<int, List<CR2WExportWrapper>>>();
             
         public frmChunkList()
         {
@@ -23,15 +23,14 @@ namespace WolvenKit
             ApplyCustomTheme();
             //limitTB.Enabled = limitCB.Checked;
             treeListView.ItemSelectionChanged += chunkListView_ItemSelectionChanged;
-            
 
             treeListView.CanExpandGetter = delegate (object x) {
-                return _parentIds.Any(_ => _ - 1 == ((CR2WChunk)x).ChunkIndex);
+                var idx = ((CR2WExportWrapper)x).ChunkIndex;
+                return !listview && chunkHelperList[idx].Item2.Any();
             };
             treeListView.ChildrenGetter = delegate (object x) {
-                var childIdxList = Enumerable.Range(0, _parentIds.Count).Where(i => _parentIds[i] -1 == ((CR2WChunk)x).ChunkIndex).ToList();
-                var results = File.chunks.Where(_ => childIdxList.Contains(_.ChunkIndex)).ToList();
-                return results;
+                var idx = ((CR2WExportWrapper)x).ChunkIndex;
+                return !listview ? chunkHelperList[idx].Item2 : new List<CR2WExportWrapper>();
             };
         }
 
@@ -47,23 +46,47 @@ namespace WolvenKit
 
         private void UpdateHelperList()
         {
-            if (File != null)
-                _parentIds = File.chunks.Select(_ => (int)_.ParentChunkId).ToList();
-        }
+            chunkHelperList.Clear();
 
+            if (File != null)
+            {
+                var parentIds = File.chunks.Select(_ => new Tuple<int,int>((int)_.ParentChunkId - 1,(int)_.ChunkIndex)).ToList();
+
+                for (int i = 0; i < File.chunks.Count; i++)
+                {
+                    var chunk = File.chunks[i];
+                    var childIdxList = parentIds.Where(_ => _.Item1.Equals(chunk.ChunkIndex)).Select(_ => _.Item2).ToList();
+                    var children = File.chunks.Where(_ => childIdxList.Contains(_.ChunkIndex)).ToList();
+                    chunkHelperList.Add(new Tuple<int, List<CR2WExportWrapper>>((int)chunk.ParentChunkId, children));
+                }
+            }
+        }
+        
         public event EventHandler<SelectChunkArgs> OnSelectChunk;
 
         public void UpdateList(string keyword = "")
         {
-            UpdateHelperList();
+            if (File == null)
+                return;
+
+            isLargefile = File.chunks.Count > 1000;
+            if (isLargefile)
+                listview = true;
+
+            if (!isLargefile)
+                UpdateHelperList();
             var limit = -1;
             //if(limitCB.Checked)
             //{
             //    int.TryParse(limitTB.Text,out limit);
             //}
-            if (File == null)
-                return;
-            if(!string.IsNullOrEmpty(keyword))
+
+            if (listview)
+                treeListView.Roots = File.chunks;
+            else
+                treeListView.Roots = File.chunks.Where(_ => _.GetParent() == null).ToList();
+
+            if (!string.IsNullOrEmpty(keyword))
             {
                 if (limit != -1)
                 {
@@ -77,32 +100,37 @@ namespace WolvenKit
             else
             {
                 treeListView.ModelFilter = null;
-                treeListView.Roots = File.chunks.Where(_ => _.Parent == null).ToList();
             }
-            if (File.chunks.Count < 1000)
-            {
-                treeListView.ExpandAll();
-            }
-            
+        }
+
+        private void contextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            pasteChunkToolStripMenuItem.Enabled = CopyController.ChunkList != null && CopyController.ChunkList.Count > 0;
         }
 
         private void chunkListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            if (OnSelectChunk != null && (CR2WChunk)treeListView.SelectedObject != null)
+            if (OnSelectChunk != null && (CR2WExportWrapper)treeListView.SelectedObject != null)
             {
-                OnSelectChunk(this, new SelectChunkArgs { Chunk = (CR2WChunk)treeListView.SelectedObject });
+                OnSelectChunk(this, new SelectChunkArgs { Chunk = (CR2WExportWrapper)treeListView.SelectedObject });
             }
         }
 
         private void addChunkToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var dlg = new frmAddChunk();
+            var selectedchunk = treeListView.SelectedObjects.Cast<CR2WExportWrapper>().FirstOrDefault();
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
                     var chunk = File.CreateChunk(dlg.ChunkType);
+                    if (selectedchunk != null)
+                    {
+                        chunk.SetParent(selectedchunk);
+                    }
+                    
                     UpdateList();
 
                     if (OnSelectChunk != null && chunk != null)
@@ -127,7 +155,7 @@ namespace WolvenKit
                 var selected = treeListView.SelectedObjects;
                 foreach (var obj in selected)
                 {
-                    File.RemoveChunk((CR2WChunk) obj);
+                    File.RemoveChunk((CR2WExportWrapper) obj);
                 }
 
                 UpdateList();
@@ -142,7 +170,7 @@ namespace WolvenKit
         public void CopyChunks()
         {
             Clipboard.Clear();
-            var chunks = treeListView.SelectedObjects.Cast<CR2WChunk>().ToList();
+            var chunks = treeListView.SelectedObjects.Cast<CR2WExportWrapper>().ToList();
             CopyController.ChunkList = chunks;
             pasteChunkToolStripMenuItem.Enabled = true;
         }
@@ -233,5 +261,48 @@ namespace WolvenKit
             
             
         }
+
+        private void showTreetoolStripButton_Click(object sender, EventArgs e)
+        {
+            listview = !listview;
+            UpdateList(toolStripSearchBox.Text);
+        }
+
+        private void expandAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            treeListView.ExpandAll();
+        }
+
+        private void expandAllChildrenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var node = treeListView.SelectedObject;
+            if (node != null)
+            {
+                var children = treeListView.GetChildren(node);
+                foreach (var c in children)
+                {
+                    treeListView.Expand(c);
+                }
+            }
+        }
+
+        private void collapseAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            treeListView.CollapseAll();
+        }
+
+        private void collapseAllChildrenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var node = treeListView.SelectedObject;
+            if (node != null)
+            {
+                var children = treeListView.GetChildren(node);
+                foreach (var c in children)
+                {
+                    treeListView.Collapse(c);
+                }
+            }
+        }
     }
 }
+ 

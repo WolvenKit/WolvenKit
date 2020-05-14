@@ -1,13 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
-using WolvenKit.Bundles;
-using WolvenKit.Cache;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Editors;
-using WolvenKit.CR2W.Types;
-using WolvenKit.W3Strings;
-using WolvenKit.Common;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Collections.Generic;
@@ -16,11 +9,30 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using WolvenKit.Mod;
 using WeifenLuo.WinFormsUI.Docking;
+using System.IO.Compression;
+using System.Security.Cryptography;
 
 namespace WolvenKit
 {
+    using Bundles;
+    using Cache;
+    using CR2W;
+    using CR2W.Editors;
+    using CR2W.Types;
+    using W3Strings;
+    using Common;
+    using Common.Services;
+    using WolvenKit.Common.Wcc;
+    using Render;
+    using WolvenKit.W3Speech;
+    using WolvenKit.Common.Extensions;
+    using System.IO.MemoryMappedFiles;
+    using CsvHelper;
+    using System.Globalization;
+    using WolvenKit.Common.Model;
+    using System.Resources;
+
     public enum EColorThemes
     {
         VS2015Light = 0,
@@ -35,8 +47,13 @@ namespace WolvenKit
         public frmMain Window { get; private set; }
         public W3Mod ActiveMod { get; set; }
 
+        public WccLite WccHelper { get; set; }
+        public LoggerService Logger { get; set; }
+        public List<HashDump> Hashdumplist { get; set; }
+
         public const string ManagerCacheDir = "ManagerCache";
-        public string VLCLibDir = "C:\\Program Files\\VideoLAN\\VLC";
+        public const string DepotDir = "Depot";
+        private const string DepotZipPath = "ManagerCache\\Depot.zip";
         public string InitialModProject = "";
         public string InitialWKP = "";
 
@@ -51,29 +68,29 @@ namespace WolvenKit
         public string ProjectStatus
         {
             get => _projectstatus;
-            set => SetField(ref _projectstatus, value, "ProjectStatus");
+            set => SetField(ref _projectstatus, value, nameof(ProjectStatus));
         }
 
         private string _loadstatus = "Loading...";
         public string loadStatus
         {
             get => _loadstatus;
-            set => SetField(ref _loadstatus, value, "loadStatus");
+            set => SetField(ref _loadstatus, value, nameof(loadStatus));
         }
 
         private bool _loaded = false;
         public bool Loaded
         {
             get => _loaded;
-            set => SetField(ref _loaded, value, "Loaded");
+            set => SetField(ref _loaded, value, nameof(Loaded));
         }
 
 
-        private KeyValuePair<string,frmOutput.Logtype> _logMessage = new KeyValuePair<string, frmOutput.Logtype>("",frmOutput.Logtype.Normal);
-        public KeyValuePair<string, frmOutput.Logtype> LogMessage
+        private KeyValuePair<string,Logtype> _logMessage = new KeyValuePair<string, Logtype>("",Logtype.Normal);
+        public KeyValuePair<string, Logtype> LogMessage
         {
             get => _logMessage;
-            set => SetField(ref _logMessage, value, "LogMessage");
+            set => SetField(ref _logMessage, value, nameof(LogMessage));
         }
 
         /// <summary>
@@ -92,9 +109,13 @@ namespace WolvenKit
         private CollisionManager collisionManager;
         private TextureManager modTextureManager;
         private W3StringManager w3StringManager;
+        private SpeechManager speechManager;
 
         //Public getters
         public W3StringManager W3StringManager => w3StringManager;
+
+      
+
         public BundleManager BundleManager => bundleManager;
         public BundleManager ModBundleManager => modbundleManager;
         public SoundManager SoundManager => soundManager;
@@ -102,16 +123,18 @@ namespace WolvenKit
         public TextureManager TextureManager => textureManager;
         public TextureManager ModTextureManager => modTextureManager;
         public CollisionManager CollisionManager => collisionManager;
+        public SpeechManager SpeechManager => speechManager;
 
+        //public Dictionary<string, MemoryMappedFile> mmfs = new Dictionary<string, MemoryMappedFile>();
         #endregion
 
         /// <summary>
-        /// Usefull function for blindly importing a file.
+        /// Useful function for blindly importing a file.
         /// </summary>
         /// <param name="name">The name of the file.</param>
         /// <param name="archive">The manager to search for the file in.</param>
         /// <returns></returns>
-        public List<byte[]> ImportFile(string name,IWitcherArchive archive)
+        public static List<byte[]> ImportFile(string name,IWitcherArchive archive)
         {
             List<byte[]> ret = new List<byte[]>();
             archive.FileList.ToList().Where(x => x.Name.Contains(name)).ToList().ForEach(x =>
@@ -129,7 +152,7 @@ namespace WolvenKit
         /// Here we setup stuff we need in every form. Borders etc can be done here in the future.
         /// </summary>
         /// <param name="form">The form to initialize.</param>
-        public void InitForm(Form form)
+        public static void InitForm(Form form)
         {
             Bitmap bmp = WolvenKit.Properties.Resources.Logo_wkit;
             form.Icon = Icon.FromHandle(bmp.GetHicon());
@@ -140,14 +163,23 @@ namespace WolvenKit
         /// </summary>
         /// <param name="msg">The message to log.</param>
         /// <param name="type">The type of the log. Not needed.</param>
-        public void QueueLog(string msg, frmOutput.Logtype type = frmOutput.Logtype.Normal)
+        public void QueueLog(string msg, Logtype type = Logtype.Normal)
         {
-            LogMessage = new KeyValuePair<string, frmOutput.Logtype>(msg, type);
+            LogMessage = new KeyValuePair<string, Logtype>(msg, type);
         }
 
         public string GetLocalizedString(uint val)
         {
             return W3StringManager.GetString(val);
+        }
+
+        internal void UpdateWccHelper(string wccLite)
+        {
+            if(WccHelper == null)
+            {
+                mainController.WccHelper = new WccLite(wccLite, mainController.Logger);
+            }
+            WccHelper.UpdatePath(wccLite);
         }
 
         public void CreateVariableEditor(CVariable editvar, EVariableEditorAction action)
@@ -195,7 +227,7 @@ namespace WolvenKit
                     {
                         if (File.Exists(Path.Combine(ManagerCacheDir, "string_cache.bin")) && new FileInfo(Path.Combine(ManagerCacheDir, "string_cache.bin")).Length > 0)
                         {
-                            using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"),FileMode.Open))
+                            using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"), FileMode.Open))
                             {
                                 w3StringManager = ProtoBuf.Serializer.Deserialize<W3StringManager>(file);
                             }
@@ -205,9 +237,9 @@ namespace WolvenKit
                             w3StringManager = new W3StringManager();
                             w3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath));
                             Directory.CreateDirectory(ManagerCacheDir);
-                            using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"),FileMode.Create))
+                            using (var file = File.Open(Path.Combine(ManagerCacheDir, "string_cache.bin"), FileMode.Create))
                             {
-                                ProtoBuf.Serializer.Serialize(file,w3StringManager);
+                                ProtoBuf.Serializer.Serialize(file, w3StringManager);
                             }
                         }
                     }
@@ -349,6 +381,15 @@ namespace WolvenKit
                 }
                 #endregion
 
+                loadStatus = "Loading speech manager!";
+                #region Load speech manager
+                if (speechManager == null)
+                {
+                    speechManager = new SpeechManager();
+                    speechManager.LoadAll(Path.GetDirectoryName(Configuration.ExecutablePath));
+                }
+                #endregion
+
                 loadStatus = "Loading mod texure manager!";
                 #region Load mod texture manager
                 if (modTextureManager == null)
@@ -396,6 +437,7 @@ namespace WolvenKit
                     }
                 }
                 #endregion
+
                 loadStatus = "Loading mod sound manager!";
                 #region Load mod sound manager
                 if (modsoundmanager == null)
@@ -404,14 +446,63 @@ namespace WolvenKit
                     modsoundmanager.LoadModsBundles(Path.GetDirectoryName(Configuration.ExecutablePath));
                 }
                 #endregion
+
+                loadStatus = "Loading depot manager!";
+                #region Load depot manager
+                var fi = new FileInfo(DepotZipPath);
+                if (!fi.Exists)
+                    throw new Exception("Shipped Depot not found: Depot.zip");
+
+                using (MD5 md5 = MD5.Create())
+                using (var stream = File.OpenRead(fi.FullName))
+                {
+                    var shash = BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLower();
+                    // check if not same as in config
+                    if (Configuration.DepotHash != shash || !Directory.Exists(DepotDir))
+                    {
+                        Configuration.DepotHash = shash;
+
+                        if (Directory.Exists(DepotDir))
+                            Directory.Delete(DepotDir, true);
+                        Directory.CreateDirectory(DepotDir);
+                        ZipFile.ExtractToDirectory(DepotZipPath, DepotDir);
+                    }
+                }
+                // create pathhashes if they don't already exist
+                fi = new FileInfo(Cr2wResourceManager.pathashespath);
+                if (!fi.Exists)
+                {
+                    foreach (IWitcherFile item in BundleManager.FileList)
+                    {
+                        Cr2wResourceManager.Get().RegisterVanillaPath(item.Name);
+                    }
+                    Cr2wResourceManager.Get().WriteVanilla();
+                }
+
+                #endregion
+
+                //#region MMFUtil
+                //loadStatus = "Loading MemoryMappedFile manager!";
+                //foreach (var b in BundleManager.Bundles.Values)
+                //{
+                //    var hash = b.FileName.GetHashMD5();
+
+                //    mmfs.Add(hash, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, hash, 0, MemoryMappedFileAccess.Read));
+
+                //}
+                //#endregion
+
                 loadStatus = "Loaded";
+
+                Logger = new LoggerService();
+                WccHelper = new WccLite(MainController.Get().Configuration.WccLite, Logger);
 
                 mainController.Loaded = true;
             }
             catch (Exception e)
             {
                 mainController.Loaded = false;
-                Console.WriteLine(e.Message);
+                System.Console.WriteLine(e.Message);
             }
         }
 

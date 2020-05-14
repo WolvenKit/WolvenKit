@@ -5,17 +5,23 @@ using System.Linq;
 using System.Windows.Forms;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
-using W3Edit.Textures;
 
 namespace WolvenKit.Cache
 {
+    using DDS;
     public class ImageUtility
     {
         /// <summary>
         /// Convert a CBitmapTexture's image to a DDS image
         /// </summary>
         /// <returns>A proper dds file</returns>
-        public static Bitmap Xbm2Dds(CR2WChunk imagechunk)
+        public static Bitmap Xbm2Bitmap(CR2WExportWrapper imagechunk)
+        {
+            return Xbm2Dds(imagechunk)?.BitmapImage;
+        }
+
+
+        public static DdsImage Xbm2Dds(CR2WExportWrapper imagechunk)
         {
             try
             {
@@ -23,48 +29,55 @@ namespace WolvenKit.Cache
                 var compression = imagechunk.GetVariableByName("compression").ToString();
                 var width = uint.Parse(imagechunk.GetVariableByName("width").ToString());
                 var height = uint.Parse(imagechunk.GetVariableByName("height").ToString());
-                var mips = imagechunk.GetVariableByName("residentMipIndex")!=null ? uint.Parse(imagechunk.GetVariableByName("residentMipIndex").ToString()) : 0;
+                var unk2 = uint.Parse(imagechunk.GetVariableByName("unk2").ToString());
+                var residentMipIndex = imagechunk.GetVariableByName("residentMipIndex") != null ? uint.Parse(imagechunk.GetVariableByName("residentMipIndex").ToString()) : 0;
+                var mips = (CBufferUInt32<CVector3<CUInt32>>)imagechunk.GetVariableByName("mips");
                 var tempfile = new MemoryStream();
 
-                var dxt = DDSHeader.Format_DXT1;
+                var format = ETextureFormat.TEXFMT_R8G8B8A8;
                 switch (compression)
                 {
                     case "TCM_DXTNoAlpha":
-                        dxt = DDSHeader.Format_DXT1;
+                        format = ETextureFormat.TEXFMT_BC1;
                         break;
                     case "TCM_DXTAlpha":
-                        dxt = DDSHeader.Format_DXT5;
+                        format = ETextureFormat.TEXFMT_BC3;
                         break;
                     case "TCM_NormalsHigh":
-                        dxt = DDSHeader.Format_DXT5;
+                        format = ETextureFormat.TEXFMT_BC3;
                         break;
                     case "TCM_Normals":
-                        dxt = DDSHeader.Format_DXT1;
+                        format = ETextureFormat.TEXFMT_BC1;
                         break;
                     case "TCM_NormalsGloss":
-                        dxt = DDSHeader.Format_DXT5;
+                        format = ETextureFormat.TEXFMT_BC3;
                         break;
                     case "TCM_QualityControl":
-                        dxt = DDSHeader.Format_DXT5;
+                        format = ETextureFormat.TEXFMT_BC3;
                         break;
                     default:
                         throw new Exception("Invalid compression type! [" + compression + "]");
                 }
 
-                DDSHeader ddsheader = new DDSHeader();
+
                 using (var bw = new BinaryWriter(tempfile))
                 {
-                    bw.Write(ddsheader.generate(width, height, mips, dxt).ToArray());
-                    //bw.Write(image.Bytes);  // First 20 bytes is garbage
-                    bw.Write( (new ArraySegment<byte>(image.Bytes, 20, image.Bytes.Length - 20)).ToArray() );
+                    var residentmipwidth = mips.elements[(int)residentMipIndex].x.val;
+                    var residentmipheight = mips.elements[(int)residentMipIndex].y.val;
+                    var residentmipcount = mips.elements.Count - residentMipIndex;
+
+                    var metadata = new DDSMetadata(residentmipwidth, residentmipheight, (uint)residentmipcount, format);
+                    DDSUtils.GenerateAndWriteHeader(bw.BaseStream, metadata);
+
+                    bw.Write(image.Bytes);
                 }
                 tempfile.Flush();
 #if DEBUG
                 //File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\asd.dds",tempfile.ToArray());
 #endif
-                return new DdsImage(tempfile.ToArray()).BitmapImage;
+                return new DdsImage(tempfile.ToArray());
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 string message = e.Message;
                 string caption = "Error!";
@@ -72,7 +85,7 @@ namespace WolvenKit.Cache
                 MessageBox.Show(message, caption, buttons);
                 return null;
             }
-            
+
         }
 
         /// <summary>

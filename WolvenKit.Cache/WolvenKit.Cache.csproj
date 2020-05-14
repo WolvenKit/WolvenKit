@@ -5,13 +5,14 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{17CF5901-6E1F-467F-AFE0-3CC04DC9688A}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WolvenKit.Cache</RootNamespace>
     <AssemblyName>WolvenKit.Cache</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -111,11 +112,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CollisionCache\CollisionManager.cs" />
-    <Compile Include="Test_Collision.cs" />
+    <Compile Include="DDS\DDSUtils.cs" />
+    <Compile Include="DDS\DDS_HEADER.cs" />
+    <Compile Include="DDS\DDS_HEADER_DXT10.cs" />
+    <Compile Include="DDS\DDS_Metadata.cs" />
+    <Compile Include="DDS\DDS_PIXELFORMAT.cs" />
+    <Compile Include="DDS\DDS_ENUMS.cs" />
     <Compile Include="CollisionCache\CollisionCacheItem.cs" />
     <Compile Include="CollisionCache\Collision_Cache.cs" />
-    <Compile Include="DDSHeader.cs" />
-    <Compile Include="DDSImageParser.cs" />
+    <Compile Include="DDS\DDSImageParser.cs" />
     <Compile Include="ImageUtility.cs" />
     <Compile Include="Cache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

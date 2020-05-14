@@ -59,7 +59,12 @@ namespace WolvenKit.W3Strings
     /// </summary>
     public class W3LanguageKey
     {
-        public readonly UInt32 value;
+        public UInt32 value;
+
+        public W3LanguageKey()
+        {
+
+        }
 
         public W3LanguageKey(UInt32 value)
         {

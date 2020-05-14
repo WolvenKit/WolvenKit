@@ -33,7 +33,7 @@ namespace WolvenKit {
                                          foreach (CVariable blockVectorVariable in ((CVector)block).variables) {
                                              if (blockVectorVariable is CPtr) {
                                                  var nextLinkElementPtr = ((CPtr) blockVectorVariable);
-                                                 if (nextLinkElementPtr.PtrTarget != null) {
+                                                 if (nextLinkElementPtr.Reference != null) {
                                                      list.Add(nextLinkElementPtr);
                                                  }
                                              }
@@ -50,7 +50,7 @@ namespace WolvenKit {
               if (nextLinkElementObj != null && nextLinkElementObj is CPtr)
               {
                   var nextLinkElementPtr = ((CPtr) nextLinkElementObj);
-                  if (nextLinkElementPtr.PtrTarget != null)
+                  if (nextLinkElementPtr.Reference != null)
                   {
                       list.Add(nextLinkElementPtr);
                   }

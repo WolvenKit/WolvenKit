@@ -5,6 +5,7 @@ using Ionic.Zlib;
 using LZ4;
 using Snappy;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 
 namespace WolvenKit.Bundles
 {
@@ -50,55 +51,53 @@ namespace WolvenKit.Bundles
         public void Extract(Stream output)
         {
             using (var file = MemoryMappedFile.CreateFromFile(Bundle.FileName, FileMode.Open))
+            using (var viewstream = file.CreateViewStream(PageOFfset, ZSize, MemoryMappedFileAccess.Read))
             {
-                using (var viewstream = file.CreateViewStream(PageOFfset, ZSize, MemoryMappedFileAccess.Read))
+                switch (CompressionType)
                 {
-                    switch (CompressionType)
+                    case "None":
                     {
-                        case "None":
-                        {
-                            viewstream.CopyTo(output);
-                            break;
-                        }
-                        case "Lz4":
-                        {
-                            var buffer = new byte[ZSize];
-                            var c = viewstream.Read(buffer, 0, buffer.Length);
-                            var uncompressed = LZ4Codec.Decode(buffer, 0, c, (int) Size);
-                            output.Write(uncompressed, 0, uncompressed.Length);
-                            break;
-                        }
-                        case "Snappy":
-                        {
-                            var buffer = new byte[ZSize];
-                            var c = viewstream.Read(buffer, 0, buffer.Length);
-                            var uncompressed = SnappyCodec.Uncompress(buffer);
-                            output.Write(uncompressed,0,uncompressed.Length);
-                            break;
-                        }
-                        case "Doboz":
-                        {
-                            var buffer = new byte[ZSize];
-                            var c = viewstream.Read(buffer, 0, buffer.Length);
-                            var uncompressed = DobozCodec.Decode(buffer, 0, c);
-                            output.Write(uncompressed, 0, uncompressed.Length);
-                            break;
-                        }
-                        case "Zlib":
-                        {
-                            var zlib = new ZlibStream(viewstream, CompressionMode.Decompress);
-                            zlib.CopyTo(output);
-                            break;
-                        }
-                        default:
-                            throw new MissingCompressionException("Unhandled compression algorithm.")
-                            {
-                                Compression = Compression
-                            };
+                        viewstream.CopyTo(output);
+                        break;
                     }
-
-                    viewstream.Close();
+                    case "Lz4":
+                    {
+                        var buffer = new byte[ZSize];
+                        var c = viewstream.Read(buffer, 0, buffer.Length);
+                        var uncompressed = LZ4Codec.Decode(buffer, 0, c, (int) Size);
+                        output.Write(uncompressed, 0, uncompressed.Length);
+                        break;
+                    }
+                    case "Snappy":
+                    {
+                        var buffer = new byte[ZSize];
+                        var c = viewstream.Read(buffer, 0, buffer.Length);
+                        var uncompressed = SnappyCodec.Uncompress(buffer);
+                        output.Write(uncompressed,0,uncompressed.Length);
+                        break;
+                    }
+                    case "Doboz":
+                    {
+                        var buffer = new byte[ZSize];
+                        var c = viewstream.Read(buffer, 0, buffer.Length);
+                        var uncompressed = DobozCodec.Decode(buffer, 0, c);
+                        output.Write(uncompressed, 0, uncompressed.Length);
+                        break;
+                    }
+                    case "Zlib":
+                    {
+                        var zlib = new ZlibStream(viewstream, CompressionMode.Decompress);
+                        zlib.CopyTo(output);
+                        break;
+                    }
+                    default:
+                        throw new MissingCompressionException("Unhandled compression algorithm.")
+                        {
+                            Compression = Compression
+                        };
                 }
+
+                viewstream.Close();
             }
         }
 

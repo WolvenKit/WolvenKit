@@ -1,3 +1,18 @@
+CHANGELOG 0.6.0.1 - 2020.05.06
+ - COMPLETE GAME FILE READING SUPPORT
+ - All the unknownbytes have been figured out apart from some minor ones
+ - Collision-cache reading
+ - Apex-file (apb) modding support
+ - PROPER MESH AND TEXTURE MODDING SUPPORT
+ - FBX export with animations (import is in the works so stay tuned)
+ - Better model renderer
+ - Proper texture import and cooking inside WolvenKit
+ - Support for viewing of all the texturecache details
+ - BATCH EDITING OF MULTIPLE FILES AT ONCE
+ - SOUND MODDING SUPPORT
+ - MODERN UI WITH LIGHT, DARK AND BLUE THEMES
+ - many many bugfixes and minor changes
+
 CHANGELOG 0.3.1.0 - 2018.08.02.
  - Fix loading showing before it knows the paths needed to load
  - Update version

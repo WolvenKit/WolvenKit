@@ -15,7 +15,7 @@ namespace WolvenKit
 {
     public partial class frmChunkProperties : DockContent, IThemedContent
     {
-        private CR2WChunk chunk;
+        private CR2WExportWrapper chunk;
 
         public frmChunkProperties()
         {
@@ -25,7 +25,7 @@ namespace WolvenKit
             treeView.ChildrenGetter = x => ((VariableListNode) x).Children;
         }
 
-        public CR2WChunk Chunk
+        public CR2WExportWrapper Chunk
         {
             get { return chunk; }
             set
@@ -121,6 +121,7 @@ namespace WolvenKit
                 {
                     e.Control.Location = new Point(e.CellBounds.Location.X, e.CellBounds.Location.Y - 1);
                     e.Control.Width = e.CellBounds.Width;
+                    //e.Control.ForeColor = Control.Tex
                 }                
                 e.Cancel = e.Control == null;
             }
@@ -326,10 +327,10 @@ namespace WolvenKit
         private void ptrPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var node = (VariableListNode) treeView.SelectedObject;
-            if ((node?.Variable as CPtr)?.PtrTarget == null)
+            if ((node?.Variable as CPtr)?.Reference == null)
                 return;
 
-            Chunk = ((CPtr) node.Variable).PtrTarget;
+            Chunk = ((CPtr) node.Variable).Reference;
         }
 
         private void copyTextToolStripMenuItem_Click(object sender, EventArgs e)
@@ -386,7 +387,10 @@ namespace WolvenKit
 
         private void treeView_CellEditFinished(object sender, CellEditEventArgs e)
         {
+            if (chunk.ParentPtr.Reference != null)
+                chunk.SetParentChunkId((uint)chunk.ParentPtr.Reference.ChunkIndex + 1);
             OnItemsChanged(sender, e);
+            
         }
         
         public void ApplyCustomTheme()

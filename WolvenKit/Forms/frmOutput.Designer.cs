@@ -51,6 +51,7 @@ namespace WolvenKit
             this.txOutput.Size = new System.Drawing.Size(930, 259);
             this.txOutput.TabIndex = 0;
             this.txOutput.Text = "";
+            this.txOutput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txOutput_KeyDown);
             // 
             // contextMenuStrip1
             // 

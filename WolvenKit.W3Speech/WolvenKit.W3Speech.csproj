@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WolvenKit.W3Speech</RootNamespace>
     <AssemblyName>WolvenKit.W3Speech</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>CS1591</NoWarn>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -88,9 +89,14 @@
     <Compile Include="FileTools.cs" />
     <Compile Include="LanguageTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpeechManager.cs" />
     <Compile Include="StreamTools.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj">
+      <Project>{4D1019F1-F099-450F-85B8-697E0332A94F}</Project>
+      <Name>WolvenKit.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WolvenKit.W3Strings\WolvenKit.W3Strings.csproj">
       <Project>{32d40d10-d6c3-48f0-aeb6-0f41c7e75cfd}</Project>
       <Name>WolvenKit.W3Strings</Name>

@@ -2,16 +2,18 @@
 using BrightIdeasSoftware;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.CR2W;
+using WolvenKit.Services;
 
 namespace WolvenKit
 {
-    public partial class frmEmbeddedFiles : DockContent
+    public partial class frmEmbeddedFiles : DockContent, IThemedContent
     {
         private CR2WFile file;
 
         public frmEmbeddedFiles()
         {
             InitializeComponent();
+            ApplyCustomTheme();
             UpdateList();
         }
 
@@ -30,7 +32,7 @@ namespace WolvenKit
             if (File == null)
                 return;
 
-            listView.Objects = File.block7;
+            listView.Objects = File.embedded;
         }
 
         private void listView_CellClick(object sender, CellClickEventArgs e)
@@ -40,13 +42,13 @@ namespace WolvenKit
 
             if (e.ClickCount == 2)
             {
-                var mem = new MemoryStream(((CR2WHeaderBlock7) e.Model).unknowndata);
+                var mem = new MemoryStream(((CR2WEmbeddedWrapper) e.Model).Data);
 
                 var doc = MainController.Get().LoadDocument("Embedded file", mem);
                 if (doc != null)
                 {
                     doc.OnFileSaved += OnFileSaved;
-                    doc.SaveTarget = (CR2WHeaderBlock7) e.Model;
+                    doc.SaveTarget = (CR2WEmbeddedWrapper) e.Model;
                 }
             }
         }
@@ -54,8 +56,38 @@ namespace WolvenKit
         private void OnFileSaved(object sender, FileSavedEventArgs e)
         {
             var doc = (frmCR2WDocument) sender;
-            var editvar = (CR2WHeaderBlock7) doc.SaveTarget;
-            editvar.unknowndata = ((MemoryStream) e.Stream).ToArray();
+            var editvar = (CR2WEmbeddedWrapper) doc.SaveTarget;
+            editvar.Data = ((MemoryStream) e.Stream).ToArray();
+        }
+
+        public void ApplyCustomTheme()
+        {
+            var theme = MainController.Get().GetTheme();
+
+            this.listView.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
+            this.listView.AlternateRowBackColor = theme.ColorPalette.OverflowButtonHovered.Background;
+
+            this.listView.ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text;
+            HeaderFormatStyle hfs = new HeaderFormatStyle()
+            {
+                Normal = new HeaderStateStyle()
+                {
+                    BackColor = theme.ColorPalette.DockTarget.Background,
+                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
+                },
+                Hot = new HeaderStateStyle()
+                {
+                    BackColor = theme.ColorPalette.OverflowButtonHovered.Background,
+                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
+                },
+                Pressed = new HeaderStateStyle()
+                {
+                    BackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background,
+                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
+                }
+            };
+            this.listView.HeaderFormatStyle = hfs;
+            listView.UnfocusedSelectedBackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background;
         }
     }
 }

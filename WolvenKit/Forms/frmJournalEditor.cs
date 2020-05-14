@@ -52,14 +52,14 @@ namespace WolvenKit
 
         }
 
-        public void ParseImageAndPreview(CR2WChunk chunk)
+        public void ParseImageAndPreview(CR2WExportWrapper chunk)
         {
             var image = chunk.GetVariableByName("image").ToString();
             if (!string.IsNullOrEmpty(image))
             {
                 try
                 {
-                    var files = MainController.Get().ImportFile(image, MainController.Get().TextureManager);
+                    var files = MainController.ImportFile(image, MainController.Get().TextureManager);
                     entityImage.Image = new DdsImage(files[0]).BitmapImage;
                     entimgbox.Image = new DdsImage(files[1]).BitmapImage;
                 }
@@ -72,8 +72,8 @@ namespace WolvenKit
 
         public void ParseJournalType(CPtr pointer)
         {
-            var typenode = pointer.PtrTarget;
-            switch (pointer.PtrTargetType)
+            var typenode = pointer.Reference;
+            switch (pointer.GetPtrTargetType())
             {
                 case "CJournalCreature":
                 {
@@ -169,11 +169,11 @@ namespace WolvenKit
         {
             foreach (CPtr child in childs )
             {
-                switch (child.PtrTarget.Type)
+                switch (child.Reference.Type)
                 {
                     case "CJournalCreatureDescriptionGroup":
                     {
-                        ParseCJournalCreatureDescriptionGroupChildren((CArray)child.PtrTarget.GetVariableByName("children"));
+                        ParseCJournalCreatureDescriptionGroupChildren((CArray)child.Reference.GetVariableByName("children"));
                         break;
                     }
                 }
@@ -184,11 +184,11 @@ namespace WolvenKit
         {
             foreach (CPtr child in childs)
             {
-                switch (child.PtrTarget.Type)
+                switch (child.Reference.Type)
                 {
                     case "CJournalCreatureDescriptionEntry":
                         {
-                            descriptiontext += ("\n\n" +child.PtrTarget.GetVariableByName("description") + "\n");
+                            descriptiontext += ("\n\n" +child.Reference.GetVariableByName("description") + "\n");
                             break;
                         }
                 }
@@ -203,21 +203,21 @@ namespace WolvenKit
             foreach (var cVariable in childs)
             {
                 var child = (CPtr) cVariable;
-                switch (child.PtrTarget.Type)
+                switch (child.Reference.Type)
                 {
                     case "CJournalGlossaryDescription":
                     {
-                        descriptiontext += child.PtrTarget.GetVariableByName("description") + "<br>";
+                        descriptiontext += child.Reference.GetVariableByName("description") + "<br>";
                             break;
                     }
                     case "CJournalCharacterDescription":
                     {
-                        descriptiontext += child.PtrTarget.GetVariableByName("description") + "<br>";
+                        descriptiontext += child.Reference.GetVariableByName("description") + "<br>";
                             break;
                     }
                     case "CJournalStoryBookPageDescription":
                     {
-                        descriptiontext += child.PtrTarget.GetVariableByName("description") + "<br>";
+                        descriptiontext += child.Reference.GetVariableByName("description") + "<br>";
                         break;
                     }
                 }
@@ -232,16 +232,16 @@ namespace WolvenKit
             foreach (var cVariable in childs)
             {
                 var child = (CPtr)cVariable;
-                switch (child.PtrTarget.Type)
+                switch (child.Reference.Type)
                 {
                     case "CJournalQuestDescriptionGroup":
                         {
-                            ParseCJournalQuestDescriptionGroupChild((CArray)child.PtrTarget.GetVariableByName("children"));
+                            ParseCJournalQuestDescriptionGroupChild((CArray)child.Reference.GetVariableByName("children"));
                             break;
                         }
                     case "CJournalQuestPhase":
                         {
-                            ParseCJournalQuestPhaseChild((CArray)child.PtrTarget.GetVariableByName("children"));
+                            ParseCJournalQuestPhaseChild((CArray)child.Reference.GetVariableByName("children"));
                             break;
                         }
                 }
@@ -253,12 +253,12 @@ namespace WolvenKit
             foreach (var cVariable in childs)
             {
                 var child = (CPtr)cVariable;
-                switch (child.PtrTarget.Type)
+                switch (child.Reference.Type)
                 {
                     case "CJournalQuestDescriptionEntry":
                     {
-                        var questnode = new TreeNode(child.PtrTarget.GetVariableByName("baseName").ToString());
-                        questnode.Nodes.Add(new TreeNode(child.PtrTarget.GetVariableByName("description").ToString()));
+                        var questnode = new TreeNode(child.Reference.GetVariableByName("baseName").ToString());
+                        questnode.Nodes.Add(new TreeNode(child.Reference.GetVariableByName("description").ToString()));
                         //QuestView.Nodes.Add(questnode);
                         break;
                     }
@@ -271,17 +271,17 @@ namespace WolvenKit
             foreach (var cVariable in childs)
             {
                 var child = (CPtr)cVariable;
-                switch (child.PtrTarget.Type)
+                switch (child.Reference.Type)
                 {
                     case "CJournalQuestObjective":
                         {
-                            var questnode = new TreeNode(child.PtrTarget.GetVariableByName("baseName").ToString());
-                            questnode.Nodes.Add(new TreeNode(child.PtrTarget.GetVariableByName("title").ToString()));
-                            if (child.PtrTarget.GetVariableByName("children") != null)
+                            var questnode = new TreeNode(child.Reference.GetVariableByName("baseName").ToString());
+                            questnode.Nodes.Add(new TreeNode(child.Reference.GetVariableByName("title").ToString()));
+                            if (child.Reference.GetVariableByName("children") != null)
                             {
-                                if (((CArray) child.PtrTarget.GetVariableByName("children")).array.Count > 0)
+                                if (((CArray) child.Reference.GetVariableByName("children")).array.Count > 0)
                                 {
-                                    var detailnode = ParseCJournalQuestObjectiveChild((CArray)child.PtrTarget.GetVariableByName("children"));
+                                    var detailnode = ParseCJournalQuestObjectiveChild((CArray)child.Reference.GetVariableByName("children"));
                                     if (detailnode.Nodes.Count != 0)
                                     {
                                         questnode.Nodes.Add(detailnode);
@@ -300,13 +300,13 @@ namespace WolvenKit
             var result = new TreeNode("Details");
             foreach (var child in childs.Cast<CPtr>())
             {
-                switch (child.PtrTarget.Type)
+                switch (child.Reference.Type)
                 {
                     case "CJournalQuestMapPin":
                     {
                         var pinnode = new TreeNode("Map pin");
-                        pinnode.Nodes.Add(new TreeNode("Name: " + child.PtrTarget.GetVariableByName("mapPinID")));
-                        pinnode.Nodes.Add(new TreeNode("Radius: " + child.PtrTarget.GetVariableByName("radius")));
+                        pinnode.Nodes.Add(new TreeNode("Name: " + child.Reference.GetVariableByName("mapPinID")));
+                        pinnode.Nodes.Add(new TreeNode("Radius: " + child.Reference.GetVariableByName("radius")));
                         result.Nodes.Add(pinnode);
                         break;
                     }

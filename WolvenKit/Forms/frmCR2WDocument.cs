@@ -15,6 +15,7 @@ namespace WolvenKit
         public frmChunkFlowDiagram flowDiagram;
         public frmJournalEditor JournalEditor;
         public frmImagePreview ImageViewer;
+        public frmTextureFile TextureFile;
         public Render.frmRender RenderViewer;
         private CR2WFile file;
 
@@ -47,7 +48,15 @@ namespace WolvenKit
             chunkList.Activate();
         }
 
-        private void PropertyWindow_OnItemsChanged(object sender, EventArgs e) => chunkList.UpdateList();
+        private void PropertyWindow_OnItemsChanged(object sender, EventArgs e)
+        {
+            var args = (e as BrightIdeasSoftware.CellEditEventArgs);
+            if (args != null)
+            {
+                if (args.ListViewItem.Text == "Parent")
+                    chunkList.UpdateList();
+            }
+        }
 
         public CR2WFile File
         {
@@ -76,6 +85,11 @@ namespace WolvenKit
                     ImageViewer.File = file;
                 }
 
+                if (TextureFile != null && !TextureFile.IsDisposed)
+                {
+                    TextureFile.File = file;
+                }
+
                 if (RenderViewer != null && !RenderViewer.IsDisposed)
                 {
                     RenderViewer.MeshFile = file;
@@ -86,7 +100,7 @@ namespace WolvenKit
                 {
                     embeddedFiles.File = file;
 
-                    if (file.block7.Count > 0)
+                    if (file.embedded.Count > 0)
                     {
                         embeddedFiles.Show(dockPanel, DockState.Document);
                     }
@@ -190,32 +204,27 @@ namespace WolvenKit
 
         private void saveToFileName()
         {
-            try
-            {
+            //try
+            //{
                 using (var mem = new MemoryStream())
+                using (var writer = new BinaryWriter(mem))
                 {
-                    using (var writer = new BinaryWriter(mem))
+                    File.Write(writer);
+                    mem.Seek(0, SeekOrigin.Begin);
+
+                    using (var fs = new FileStream(FileName, FileMode.Create, FileAccess.Write))
                     {
-                        File.Write(writer);
-                        mem.Seek(0, SeekOrigin.Begin);
+                        mem.WriteTo(fs);
 
-                        using (var fs = new FileStream(FileName, FileMode.Create, FileAccess.Write))
-                        {
-                            mem.WriteTo(fs);
-
-                            if (OnFileSaved != null)
-                            {
-                                OnFileSaved(this, new FileSavedEventArgs {FileName = FileName, Stream = fs, File = File});
-                            }
-                            fs.Close();
-                        }
+                        OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = fs, File = File });
+                        fs.Close();
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                MainController.Get().QueueLog("Failed to save the file(s)! They are probably in use.\n" + e.ToString());
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    MainController.Get().QueueLog("Failed to save the file(s)! They are probably in use.\n" + e.ToString());
+            //}
         }
 
         public void ApplyCustomTheme()

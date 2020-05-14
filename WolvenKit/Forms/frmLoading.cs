@@ -23,7 +23,7 @@ namespace WolvenKit.Forms
         {
             this.CenterToScreen();
             MainController.Get().PropertyChanged += MainControllerUpdated;
-            MainController.Get().InitForm(this);
+            MainController.InitForm(this);
             this.VersionLbl.Text = "Version " + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
             this.copyrightLbl.Text = "https://github.com/Traderain/Wolven-kit";
         }

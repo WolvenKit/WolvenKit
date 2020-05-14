@@ -24,18 +24,18 @@ namespace WolvenKit.FlowTreeEditors
             if (questConditionObj != null && questConditionObj is CPtr)
             {
                 var questCondition = (CPtr) questConditionObj;
-                if (questCondition.PtrTarget != null)
+                if (questCondition.Reference != null)
                 {
-                    lblCondition.Click += delegate { FireSelectEvent(questCondition.PtrTarget); };
+                    lblCondition.Click += delegate { FireSelectEvent(questCondition.Reference); };
 
-                    var factIdObj = questCondition.PtrTarget.GetVariableByName("factId");
+                    var factIdObj = questCondition.Reference.GetVariableByName("factId");
                     if (factIdObj != null && factIdObj is CString)
                     {
                         lblCondition.Text = ((CString) factIdObj).val;
                     }
                     else
                     {
-                        lblCondition.Text = questCondition.PtrTarget.Name;
+                        lblCondition.Text = questCondition.Reference.Name;
                     }
                 }
             }
@@ -57,7 +57,7 @@ namespace WolvenKit.FlowTreeEditors
                 if (trueLinkObj != null && trueLinkObj is CPtr)
                 {
                     var nextLinkElementPtr = ((CPtr) trueLinkObj);
-                    if (nextLinkElementPtr.PtrTarget != null)
+                    if (nextLinkElementPtr.Reference != null)
                     {
                         list.Add(nextLinkElementPtr);
                     }
@@ -67,7 +67,7 @@ namespace WolvenKit.FlowTreeEditors
                 if (falseLinkObj != null && falseLinkObj is CPtr)
                 {
                     var nextLinkElementPtr = ((CPtr) falseLinkObj);
-                    if (nextLinkElementPtr.PtrTarget != null)
+                    if (nextLinkElementPtr.Reference != null)
                     {
                         list.Add(nextLinkElementPtr);
                     }

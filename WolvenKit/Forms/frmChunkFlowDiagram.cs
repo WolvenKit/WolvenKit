@@ -69,7 +69,7 @@ namespace WolvenKit
             }
         }
 
-        public Dictionary<CR2WChunk, ChunkEditor> ChunkEditors { get; set; }
+        public Dictionary<CR2WExportWrapper, ChunkEditor> ChunkEditors { get; set; }
         public event EventHandler<SelectChunkArgs> OnSelectChunk;
         public event EventHandler<string> OnOutput;
 
@@ -78,9 +78,9 @@ namespace WolvenKit
             if (File == null)
                 return;
 
-            ChunkEditors = new Dictionary<CR2WChunk, ChunkEditor>();
+            ChunkEditors = new Dictionary<CR2WExportWrapper, ChunkEditor>();
 
-            var rootNodes = new List<CR2WChunk>();
+            var rootNodes = new List<CR2WExportWrapper>();
 
             var activeRoot = File.chunks[0];
 
@@ -144,7 +144,7 @@ namespace WolvenKit
         }
 
 
-        private void createEditor(int depth, CR2WChunk c)
+        private void createEditor(int depth, CR2WExportWrapper c)
         {
             try {
                 if (ChunkEditors.ContainsKey(c))
@@ -170,8 +170,8 @@ namespace WolvenKit
                 var conns = editor.GetConnections();
                 if (conns != null) {
                     foreach (var conn in conns) {
-                        if (conn.PtrTarget != null) {
-                            createEditor(depth + 1, conn.PtrTarget);
+                        if (conn.Reference != null) {
+                            createEditor(depth + 1, conn.Reference);
                         }
                     }
                 }
@@ -204,47 +204,47 @@ namespace WolvenKit
             OnSelectChunk?.Invoke(sender, e);
         }
 
-        private void getStorySceneRootNodes(List<CR2WChunk> rootNodes)
+        private void getStorySceneRootNodes(List<CR2WExportWrapper> rootNodes)
         {
             var controlPartsObj = File.chunks[0].GetVariableByName("controlParts");
             if (controlPartsObj != null && controlPartsObj is CArray)
             {
                 var controlParts = (CArray) controlPartsObj;
-                rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null && part.PtrTargetType == "CStorySceneInput" select part.PtrTarget);
+                rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null && part.GetPtrTargetType() == "CStorySceneInput" select part.Reference);
             }
         }
         
-        private void getQuestPhaseRootNodes(List<CR2WChunk> rootNodes)
+        private void getQuestPhaseRootNodes(List<CR2WExportWrapper> rootNodes)
         {
             var graphObj = File.chunks[0].GetVariableByName("graph");
             if (graphObj != null && graphObj is CPtr)
             {
-                var graphBlocks = ((CPtr)graphObj).PtrTarget.GetVariableByName("graphBlocks");
+                var graphBlocks = ((CPtr)graphObj).Reference.GetVariableByName("graphBlocks");
                 if (graphBlocks != null && graphBlocks is CArray)
                 {
                     var controlParts = (CArray) graphBlocks;
-                    rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null && part.PtrTargetType == "CQuestPhaseInputBlock" select part.PtrTarget);
+                    rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null && part.GetPtrTargetType() == "CQuestPhaseInputBlock" select part.Reference);
                 }
             }
         }
         
-        private void getQuestRootNodes(List<CR2WChunk> rootNodes)
+        private void getQuestRootNodes(List<CR2WExportWrapper> rootNodes)
         {
             var graphObj = File.chunks[0].GetVariableByName("graph");
             if (graphObj != null && graphObj is CPtr)
             {
-                var graphBlocks = ((CPtr)graphObj).PtrTarget.GetVariableByName("graphBlocks");
+                var graphBlocks = ((CPtr)graphObj).Reference.GetVariableByName("graphBlocks");
                 if (graphBlocks != null && graphBlocks is CArray)
                 {
                     var controlParts = (CArray) graphBlocks;
-                    rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null && part.PtrTargetType == "CQuestStartBlock" select part.PtrTarget);
+                    rootNodes.AddRange(from part in controlParts.OfType<CPtr>() where part != null && part.GetPtrTargetType() == "CQuestStartBlock" select part.Reference);
                 }
             }
             
             
         }
 
-        public ChunkEditor GetEditor(CR2WChunk c)
+        public ChunkEditor GetEditor(CR2WExportWrapper c)
         {
             if (c.data is CStorySceneSection)
                 return new SceneSectionEditor();
@@ -295,9 +295,9 @@ namespace WolvenKit
                 {
                     foreach (var conn in conns)
                     {
-                        if (ChunkEditors.ContainsKey(conn.PtrTarget))
+                        if (ChunkEditors.ContainsKey(conn.Reference))
                         {
-                            var c2 = ChunkEditors[conn.PtrTarget];
+                            var c2 = ChunkEditors[conn.Reference];
                             var sp = c.GetConnectionLocation(i);
                             e.Graphics.FillRectangle(brush, c.Location.X + c.Width,
                                 c.Location.Y + sp.Y - connectionPointSize/2, connectionPointSize, connectionPointSize);
@@ -515,7 +515,7 @@ namespace WolvenKit
         {
             if (connectingTarget != null)
             {
-                connectingSource.PtrTarget = connectingTarget.Chunk;
+                connectingSource.Reference = connectingTarget.Chunk;
             }
         }
 

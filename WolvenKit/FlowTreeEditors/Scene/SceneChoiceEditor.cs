@@ -26,13 +26,13 @@ namespace WolvenKit.FlowTreeEditors
                     if (choice != null && choice is CPtr)
                     {
                         var choicePtr = (CPtr) choice;
-                        if (choicePtr.PtrTarget != null)
+                        if (choicePtr.Reference != null)
                         {
-                            var nextLinkElementObj = choicePtr.PtrTarget.GetVariableByName("nextLinkElement");
+                            var nextLinkElementObj = choicePtr.Reference.GetVariableByName("nextLinkElement");
                             if (nextLinkElementObj != null && nextLinkElementObj is CPtr)
                             {
                                 var nextLinkElement = (CPtr) nextLinkElementObj;
-                                if (nextLinkElement.PtrTarget != null)
+                                if (nextLinkElement.Reference != null)
                                 {
                                     list.Add(nextLinkElement);
                                 }
@@ -60,10 +60,10 @@ namespace WolvenKit.FlowTreeEditors
                     if (element != null && element is CPtr)
                     {
                         var ptr = (CPtr) element;
-                        switch (ptr.PtrTargetType)
+                        switch (ptr.GetPtrTargetType())
                         {
                             case "CStorySceneChoiceLine":
-                                var choiceLine = ptr.PtrTarget.GetVariableByName("choiceLine");
+                                var choiceLine = ptr.Reference.GetVariableByName("choiceLine");
 
                                 var label = new Label
                                 {
@@ -74,7 +74,7 @@ namespace WolvenKit.FlowTreeEditors
                                     AutoSize = false,
                                     Text = choiceLine != null ? choiceLine.ToString() : "missing choiceLine"
                                 };
-                                label.Click += delegate { FireSelectEvent(ptr.PtrTarget); };
+                                label.Click += delegate { FireSelectEvent(ptr.Reference); };
                                 Controls.Add(label);
 
                                 y += label.Height;

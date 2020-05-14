@@ -4,6 +4,6 @@ namespace WolvenKit
 {
     public class SelectChunkArgs
     {
-        public CR2WChunk Chunk { get; set; }
+        public CR2WExportWrapper Chunk { get; set; }
     }
 }

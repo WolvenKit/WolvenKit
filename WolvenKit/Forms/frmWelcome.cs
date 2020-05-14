@@ -52,13 +52,11 @@ namespace WolvenKit.Forms
         <h3><strong> Tutorials </strong></h3>
             <ul>
                 <li><a href = ${"\"https://www.youtube.com/watch?v=jUoamicYtjk\""}> Package creation </a></li>
-       
-                       <li> Please stay tuned for more tutorials in the future </li>
-          
-                      </ul>
-          
-              </body>
-          </html>
+                <li><a href = ${"\"https://www.youtube.com/watch?v=jUoamicYtjk\""}> Sound modding </a></li>
+                <li> Please stay tuned for more tutorials in the future </li>
+            </ul>          
+  </body>
+</html>
           ";
         }
 

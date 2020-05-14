@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WolvenKit.CR2W</RootNamespace>
     <AssemblyName>WolvenKit.CR2W</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -23,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS1591</NoWarn>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -79,9 +80,19 @@
     <Reference Include="Cyotek.Windows.Forms.ColorPicker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
       <HintPath>..\packages\Cyotek.Windows.Forms.ColorPicker.1.7.2\lib\net35\Cyotek.Windows.Forms.ColorPicker.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.2\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -90,16 +101,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CR2WChunk.cs" />
-    <Compile Include="CR2WCopyAction.cs" />
-    <Compile Include="CR2WFile.cs" />
-    <Compile Include="CR2WHeaderBlock4.cs" />
-    <Compile Include="CR2WHeaderBlock6.cs" />
-    <Compile Include="CR2WHeaderBlock7.cs" />
-    <Compile Include="CR2WHeaderData.cs" />
-    <Compile Include="CR2WHeaderHandle.cs" />
-    <Compile Include="CR2WHeaderString.cs" />
-    <Compile Include="CR2WReaderExtensions.cs" />
+    <Compile Include="CR2W\CR2WBuffer.cs" />
+    <Compile Include="CR2W\CR2WCopyAction.cs" />
+    <Compile Include="CR2W\CR2WEmbedded.cs" />
+    <Compile Include="CR2W\CR2WExport.cs" />
+    <Compile Include="CR2W\CR2WFile.cs" />
+    <Compile Include="CR2W\CR2WHeaderData.cs" />
+    <Compile Include="CR2W\CR2WHeaderStructs.cs" />
+    <Compile Include="CR2W\CR2WImport.cs" />
+    <Compile Include="CR2W\CR2WName.cs" />
+    <Compile Include="CR2W\CR2WProperty.cs" />
+    <Compile Include="CR2W\CR2WReaderExtensions.cs" />
+    <Compile Include="CR2W\CR2WVerify.cs" />
+    <Compile Include="CRC32\Crc32Algorithm.cs" />
+    <Compile Include="CRC32\Crc32CAlgorithm.cs" />
+    <Compile Include="CRC32\MismatchCRC32Exception.cs" />
+    <Compile Include="CRC32\SafeProxy.cs" />
+    <Compile Include="CRC32\SafeProxyC.cs" />
     <Compile Include="Editors\ByteArrayEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -121,71 +139,143 @@
     <Compile Include="Editors\PtrEditor.Designer.cs">
       <DependentUpon>PtrEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Types\CCubeTexture.cs" />
-    <Compile Include="Types\CDecalSpawne.cs" />
-    <Compile Include="Types\CGenericGrassMask.cs" />
-    <Compile Include="Types\CIndexed2dArray.cs" />
-    <Compile Include="Types\CLayerInfo.cs" />
-    <Compile Include="Types\CParticleSystem.cs" />
-    <Compile Include="Types\CRagdoll.cs" />
-    <Compile Include="Types\CSectorData.cs" />
-    <Compile Include="Types\CSwarmCellMap.cs" />
-    <Compile Include="Types\CSwfTexture.cs" />
-    <Compile Include="Types\EmitterDelaySettings.cs" />
-    <Compile Include="Types\EmitterDurationSettings.cs" />
-    <Compile Include="Types\SBoneIndiceMapping.cs" />
-    <Compile Include="Types\SDynamicDecalMaterialInfo.cs" />
-    <Compile Include="Types\SFoliageInstance.cs" />
+    <Compile Include="Exceptions\InvalidParsingException.cs" />
+    <Compile Include="FNV1A\FNV1A32HashAlgorithm.cs" />
+    <Compile Include="FNV1A\FNV1A64HashAlgorithm.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Types\Basic\CByteArray2.cs" />
+    <Compile Include="Types\Basic\CMatrix3x3.cs" />
+    <Compile Include="Types\Basic\CVector3.cs" />
+    <Compile Include="Types\Basic\IdHandle.cs" />
+    <Compile Include="Types\Basic\EntityHandle.cs" />
+    <Compile Include="Exceptions\InvalidPtrException.cs" />
+    <Compile Include="Types\Basic\SCurveData.cs" />
+    <Compile Include="Types\Utils\CBufferUInt16.cs" />
+    <Compile Include="Types\Utils\CVectorWrapper.cs" />
+    <Compile Include="Types\Utils\CVariableWrapper.cs" />
+    <Compile Include="Types\W3\CPhysicalCollision.cs" />
+    <Compile Include="Types\W3\CUmbraTile.cs" />
+    <Compile Include="Types\W3\CUmbraScene.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CClipMap.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CGraphBlock\CBehaviorGraphBlendMultipleNode.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CGraphBlock\CBehaviorGraphStateMachineNode.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CGraphBlock\CBehaviorGraphContainerNode.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CNode\CNode.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CFXTrackItem.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CBehaviorGraph.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CCookedExploration.cs" />
+    <Compile Include="Types\W3\ISerializable\CAnimPointCloudLookAtParam.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CNode\CComponent\CAreaComponent.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CNode\CComponent\CEnvProbeComponent.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CCutsceneTemplate.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CFont.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CGameWorld.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CTextureArray.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CTerrainTile.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\IParticleModule\CParticleInitializerLifeTime.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\IParticleModule\CParticleInitializerPosition.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\IParticleModule\CParticleInitializerRotation.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\IParticleModule\CParticleInitializerRotation3D.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\IParticleModule\CParticleInitializerRotationRate.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\IParticleModule\CParticleInitializerColor.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\IParticleModule\CParticleInitializerAlpha.cs" />
+    <Compile Include="Types\W3\CCameraCompressedPose.cs" />
+    <Compile Include="Types\W3\Structs\SAnimPointCloudLookAtParamData.cs" />
+    <Compile Include="Types\W3\Structs\SSectorDataResource.cs" />
+    <Compile Include="Types\W3\Structs\SSectorDataObject.cs" />
+    <Compile Include="Types\W3\Structs\SBlockData.cs" />
+    <Compile Include="Types\W3\Structs\SSkeletonRigData.cs" />
+    <Compile Include="Types\Utils\CBufferUInt32.cs" />
+    <Compile Include="Types\Utils\CCompressedBuffer.cs" />
+    <Compile Include="Types\CVectors\CCurve.cs" />
+    <Compile Include="Types\Basic\CQuaternion.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CSkeleton.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CPhysicsDestructionResource.cs" />
+    <Compile Include="Types\Utils\CPaddedBuffer.cs" />
+    <Compile Include="Types\Utils\CBufferVLQ.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CCubeTexture.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CDecalSpawner.cs" />
+    <Compile Include="Types\W3\Structs\SMeshBlock5.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CMesh.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CWayPointsCollection.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CWayPointsCollectionsSet.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CExtAnimEventsFile.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CEntityTemplate.cs" />
+    <Compile Include="Types\W3\CEvaluatorFloatCurve.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CGenericGrassMask.cs" />
+    <Compile Include="Types\CVectors\CIndexed2dArray.cs" />
+    <Compile Include="Types\W3\ISerializable\CLayerGroup.cs" />
+    <Compile Include="Types\W3\ISerializable\CLayerInfo.cs" />
+    <Compile Include="Types\Basic\CMatrix4x4.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\IParticleModule\CParticleSystem.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CRagdoll.cs" />
+    <Compile Include="Types\W3\ISerializable\CSectorData.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CSwarmCellMap.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\ITexture\CSwfTexture.cs" />
+    <Compile Include="Types\Basic\CVector2D.cs" />
+    <Compile Include="Types\W3\Structs\EmitterDelaySettings.cs" />
+    <Compile Include="Types\W3\Structs\EmitterDurationSettings.cs" />
+    <Compile Include="Types\W3\Structs\SBoneIndiceMapping.cs" />
+    <Compile Include="Types\W3\Structs\SDynamicDecalMaterialInfo.cs" />
+    <Compile Include="Types\W3\Structs\SFoliageInstance.cs" />
     <Compile Include="HslColor.cs" />
-    <Compile Include="IVariableEditor.cs" />
+    <Compile Include="Editors\IVariableEditor.cs" />
     <Compile Include="ILocalizedStringSource.cs" />
-    <Compile Include="InvalidChunkTypeException.cs" />
-    <Compile Include="InvalidFileTypeException.cs" />
+    <Compile Include="Exceptions\InvalidChunkTypeException.cs" />
+    <Compile Include="Exceptions\InvalidFileTypeException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Types\CArray.cs" />
-    <Compile Include="Types\CBitmapTexture.cs" />
-    <Compile Include="Types\CByteArray.cs" />
-    <Compile Include="Types\CBytes.cs" />
-    <Compile Include="Types\CColor.cs" />
-    <Compile Include="Types\CColorShift.cs" />
-    <Compile Include="Types\CDateTime.cs" />
-    <Compile Include="Types\CEngineQsTranform.cs" />
-    <Compile Include="Types\CEngineTransform.cs" />
-    <Compile Include="Types\CEntity.cs" />
-    <Compile Include="Types\CFlags.cs" />
-    <Compile Include="Types\CFloat.cs" />
-    <Compile Include="Types\CFoliageResource.cs" />
-    <Compile Include="Types\CGUID.cs" />
-    <Compile Include="Types\CHandle.cs" />
-    <Compile Include="Types\CLocalizedString.cs" />
-    <Compile Include="Types\CMaterialGraph.cs" />
-    <Compile Include="Types\CMaterialInstance.cs" />
-    <Compile Include="Types\CMeshComponent.cs" />
-    <Compile Include="Types\CName.cs" />
-    <Compile Include="Types\CParticleEmitter.cs" />
-    <Compile Include="Types\CPtr.cs" />
-    <Compile Include="Types\CQuestScriptBlock.cs" />
-    <Compile Include="Types\CR2WTypeManager.cs" />
-    <Compile Include="Types\CSkeletalAnimationSetEntry.cs" />
-    <Compile Include="Types\CSoft.cs" />
-    <Compile Include="Types\CStorySceneSection.cs" />
-    <Compile Include="Types\CString.cs" />
-    <Compile Include="Types\CStringAnsi.cs" />
-    <Compile Include="Types\CSwfResource.cs" />
-    <Compile Include="Types\CTagList.cs" />
-    <Compile Include="Types\CVariable.cs" />
-    <Compile Include="Types\CVariant.cs" />
-    <Compile Include="Types\CVector.cs" />
-    <Compile Include="Types\CVector3D.cs" />
-    <Compile Include="Types\CXml.cs" />
-    <Compile Include="Types\Enums.cs" />
-    <Compile Include="Types\IdTag.cs" />
-    <Compile Include="Types\IntegerTypes.cs" />
-    <Compile Include="Types\MissingTypeException.cs" />
-    <Compile Include="Types\SAppearanceAttachment.cs" />
-    <Compile Include="Types\SParticleEmitterLODLevel.cs" />
-    <Compile Include="Types\SSeedKeyValue.cs" />
+    <Compile Include="Types\Basic\CArray.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\ITexture\CBitmapTexture.cs" />
+    <Compile Include="Types\Basic\CByteArray.cs" />
+    <Compile Include="Types\Basic\CBytes.cs" />
+    <Compile Include="Types\CVectors\CColor.cs" />
+    <Compile Include="Types\W3\CColorShift.cs" />
+    <Compile Include="Types\Basic\CDateTime.cs" />
+    <Compile Include="Types\Basic\CEngineQsTranform.cs" />
+    <Compile Include="Types\Basic\CEngineTransform.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CNode\CEntity.cs" />
+    <Compile Include="Types\Basic\CFlags.cs" />
+    <Compile Include="Types\Basic\CFloat.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CFoliageResource.cs" />
+    <Compile Include="Types\Basic\CGUID.cs" />
+    <Compile Include="Types\Basic\CHandle.cs" />
+    <Compile Include="Types\W3\CLocalizedString.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CMaterialGraph.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CMaterialInstance.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CNode\CComponent.cs" />
+    <Compile Include="Types\Basic\CName.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\IParticleModule\CParticleEmitter.cs" />
+    <Compile Include="Types\Basic\CPtr.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CGraphBlock\CQuestScriptBlock.cs" />
+    <Compile Include="Types\Utils\CR2WTypeManager.cs" />
+    <Compile Include="Types\W3\ISerializable\CSkeletalAnimationSetEntry.cs" />
+    <Compile Include="Types\Basic\CSoft.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CGraphBlock\CStorySceneSection.cs" />
+    <Compile Include="Types\Basic\CString.cs" />
+    <Compile Include="Types\Basic\CStringAnsi.cs" />
+    <Compile Include="Types\W3\ISerializable\IScriptable\CObject\CResource\CSwfResource.cs" />
+    <Compile Include="Types\Basic\CTagList.cs" />
+    <Compile Include="Types\Basic\CVariable.cs" />
+    <Compile Include="Types\Basic\CVariant.cs" />
+    <Compile Include="Types\Basic\CVector.cs" />
+    <Compile Include="Types\Basic\CVector3D.cs" />
+    <Compile Include="Types\Basic\CXml.cs" />
+    <Compile Include="Types\Utils\Enums.cs" />
+    <Compile Include="Types\Basic\IdTag.cs" />
+    <Compile Include="Types\Basic\IntegerTypes.cs" />
+    <Compile Include="Exceptions\MissingTypeException.cs" />
+    <Compile Include="Types\W3\Structs\SAppearanceAttachment.cs" />
+    <Compile Include="Types\W3\Structs\SParticleEmitterLODLevel.cs" />
+    <Compile Include="Types\W3\Structs\SParticleEmitterModuleData.cs" />
+    <Compile Include="Types\W3\Structs\SSeedKeyValue.cs" />
+    <Compile Include="Types\Utils\CEntityBufferType1.cs" />
+    <Compile Include="Types\Utils\CEntityBufferType2.cs" />
     <Compile Include="W3ReaderExtensions.cs" />
+    <Compile Include="XmlSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Editors\ByteArrayEditor.resx">
@@ -197,9 +287,19 @@
     <EmbeddedResource Include="Editors\PtrEditor.resx">
       <DependentUpon>PtrEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj">
+      <Project>{4D1019F1-F099-450F-85B8-697E0332A94F}</Project>
+      <Name>WolvenKit.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

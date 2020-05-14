@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
+using Newtonsoft.Json;
+using WolvenKit.Render.Animation;
 
 namespace WolvenKit.Render
 {
@@ -11,7 +13,7 @@ namespace WolvenKit.Render
     {
         public CommonData CData { get; set; }
 
-        private CSkeleton meshSkeleton = new CSkeleton();
+        public CSkeleton meshSkeleton = new CSkeleton();
 
         public Rig(CommonData cdata)
         {
@@ -44,52 +46,63 @@ namespace WolvenKit.Render
                         meshSkeleton.parentIdx.Add(short.Parse(parentIndex.ToString()));
                     }
 
-                    var unknownBytes = chunk.unknownBytes.Bytes;
-                    using (MemoryStream ms = new MemoryStream(unknownBytes))
-                    using (BinaryReader br = new BinaryReader(ms))
+                    var rigdata = (chunk.GetVariableByName("rigdata") as CCompressedBuffer<SSkeletonRigData>).elements;
+
+
+                    for (int i = 0; i < meshSkeleton.nbBones; i++)
                     {
-                        for (uint i = 0; i < meshSkeleton.nbBones; i++)
-                        {
-                            Vector3Df position = new Vector3Df();
-                            position.X = br.ReadSingle();
-                            position.Y = br.ReadSingle();
-                            position.Z = br.ReadSingle();
-                            br.ReadSingle(); // the w component
 
-                            Quaternion orientation = new Quaternion();
-                            orientation.X = br.ReadSingle();
-                            orientation.Y = br.ReadSingle();
-                            orientation.Z = br.ReadSingle();
-                            orientation.W = br.ReadSingle();
+                        Vector3Df position = new Vector3Df(
+                            rigdata[i].position.x.val,
+                            rigdata[i].position.y.val,
+                            rigdata[i].position.z.val);
 
-                            Vector3Df scale;
-                            scale.X = br.ReadSingle();
-                            scale.Y = br.ReadSingle();
-                            scale.Z = br.ReadSingle();
-                            br.ReadSingle(); // the w component
+                        Quaternion orientation = new Quaternion(
+                            rigdata[i].rotation.x.val,
+                            rigdata[i].rotation.y.val,
+                            rigdata[i].rotation.z.val,
+                            rigdata[i].rotation.w.val);
 
-                            Matrix posMat = new Matrix();
-                            posMat.Translation = position;
+                        Vector3Df scale = new Vector3Df(
+                            rigdata[i].scale.x.val,
+                            rigdata[i].scale.y.val,
+                            rigdata[i].scale.z.val);
 
-                            Matrix rotMat = new Matrix();
-                            Vector3Df euler = orientation.ToEuler();
-                            // chechNaNErrors(euler);
+                        Matrix posMat = new Matrix();
+                        posMat.Translation = position;
 
-                            rotMat.SetRotationRadians(euler);
+                        Matrix rotMat = new Matrix();
+                        Vector3Df euler = orientation.ToEuler();
+                        checkNaNErrors(euler);
 
-                            Matrix scaleMat = new Matrix();
-                            scaleMat.Scale = scale;
+                        rotMat.SetRotationRadians(euler);
 
-                            Matrix localTransform = posMat * rotMat * scaleMat;
-                            orientation = orientation.MakeInverse();
-                            meshSkeleton.matrix.Add(localTransform);
-                            meshSkeleton.positions.Add(position);
-                            meshSkeleton.rotations.Add(orientation);
-                            meshSkeleton.scales.Add(scale);
-                        }
+                        Matrix scaleMat = new Matrix();
+                        scaleMat.Scale = scale;
+
+                        Matrix localTransform = posMat * rotMat * scaleMat;
+                        orientation = orientation.MakeInverse();
+                        meshSkeleton.matrix.Add(localTransform);
+                        meshSkeleton.positions.Add(position);
+                        meshSkeleton.rotations.Add(orientation);
+                        meshSkeleton.scales.Add(scale);
                     }
                 }
             }
+        }
+
+        // sometimes toEuler give NaN numbers
+        private void checkNaNErrors(Vector3Df vector3)
+        {
+            if (float.IsNaN(vector3.X) || float.IsNaN(vector3.X))
+                vector3.X = 0.0f;
+
+            if (float.IsNaN(vector3.Y) || float.IsNaN(vector3.Y))
+                vector3.Y = 0.0f;
+
+            if (float.IsNaN(vector3.Z) || float.IsNaN(vector3.Z))
+                vector3.Z = 0.0f;
+
         }
 
         /// <summary>
@@ -147,6 +160,7 @@ namespace WolvenKit.Render
             for (int i = 0; i < CData.boneData.nbBones; i++)
             {
                 var jointIdx = skinnedMesh.GetJointIndex(CData.boneData.jointNames[i]);
+                if (jointIdx == -1) continue; //if the mesh bone is not in the animation rig (ie. dynamic)
                 SJoint joint = skinnedMesh.GetAllJoints()[jointIdx];
 
                 Matrix matrix = CData.boneData.boneMatrices[i];
@@ -231,6 +245,32 @@ namespace WolvenKit.Render
                 w.Strength = fweight;
                 w.VertexId = vertexId;
             }*/
+        }
+
+        public void SaveRig(string filename)
+        {
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.Error = (serializer, err) =>
+            {
+                err.ErrorContext.Handled = true;
+            };
+
+            var jsonResolver = new IgnorableSerializerContractResolver();
+            // ignore single property
+            jsonResolver.Ignore(typeof(IrrlichtLime.Core.Matrix));
+            jsonResolver.Ignore(typeof(Vector3Df), "SphericalCoordinateAngles");
+            jsonResolver.Ignore(typeof(Vector3Df), "HorizontalAngle");
+            jsonResolver.Ignore(typeof(Vector3Df), "LengthSQ");
+            jsonResolver.Ignore(typeof(Vector3Df), "Length");
+
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            settings.ContractResolver = jsonResolver;
+            //open file stream
+            using (StreamWriter file = File.CreateText(filename))
+            {
+                string meshSkeletonJson = JsonConvert.SerializeObject(meshSkeleton, Formatting.Indented, settings);
+                file.Write(meshSkeletonJson);
+            }
         }
     }
 }

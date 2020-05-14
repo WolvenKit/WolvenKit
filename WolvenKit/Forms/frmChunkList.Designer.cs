@@ -45,6 +45,12 @@ namespace WolvenKit
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSearchBox = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripClearButton = new System.Windows.Forms.ToolStripButton();
+            this.showTreetoolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.expandAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.expandAllChildrenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.collapseAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.collapseAllChildrenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.treeListView)).BeginInit();
             this.toolStrip1.SuspendLayout();
@@ -52,40 +58,46 @@ namespace WolvenKit
             // 
             // contextMenuStrip1
             // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.expandAllToolStripMenuItem,
+            this.expandAllChildrenToolStripMenuItem,
+            this.collapseAllToolStripMenuItem,
+            this.collapseAllChildrenToolStripMenuItem,
+            this.toolStripSeparator1,
             this.addChunkToolStripMenuItem,
             this.deleteChunkToolStripMenuItem,
             this.copyChunkToolStripMenuItem,
             this.pasteChunkToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(146, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(185, 208);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // addChunkToolStripMenuItem
             // 
             this.addChunkToolStripMenuItem.Name = "addChunkToolStripMenuItem";
-            this.addChunkToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.addChunkToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addChunkToolStripMenuItem.Text = "Add Chunk";
             this.addChunkToolStripMenuItem.Click += new System.EventHandler(this.addChunkToolStripMenuItem_Click);
             // 
             // deleteChunkToolStripMenuItem
             // 
             this.deleteChunkToolStripMenuItem.Name = "deleteChunkToolStripMenuItem";
-            this.deleteChunkToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.deleteChunkToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.deleteChunkToolStripMenuItem.Text = "Delete Chunk";
             this.deleteChunkToolStripMenuItem.Click += new System.EventHandler(this.deleteChunkToolStripMenuItem_Click);
             // 
             // copyChunkToolStripMenuItem
             // 
             this.copyChunkToolStripMenuItem.Name = "copyChunkToolStripMenuItem";
-            this.copyChunkToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.copyChunkToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.copyChunkToolStripMenuItem.Text = "Copy Chunk";
             this.copyChunkToolStripMenuItem.Click += new System.EventHandler(this.copyChunkToolStripMenuItem_Click);
             // 
             // pasteChunkToolStripMenuItem
             // 
-            this.pasteChunkToolStripMenuItem.Enabled = false;
             this.pasteChunkToolStripMenuItem.Name = "pasteChunkToolStripMenuItem";
-            this.pasteChunkToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.pasteChunkToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.pasteChunkToolStripMenuItem.Text = "Paste Chunk";
             this.pasteChunkToolStripMenuItem.Click += new System.EventHandler(this.pasteChunkToolStripMenuItem_Click);
             // 
@@ -93,18 +105,21 @@ namespace WolvenKit
             // 
             this.treeListView.AllColumns.Add(this.olvcolName);
             this.treeListView.AllColumns.Add(this.olvcolPreview);
+            this.treeListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.treeListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvcolName,
             this.olvcolPreview});
             this.treeListView.ContextMenuStrip = this.contextMenuStrip1;
             this.treeListView.Cursor = System.Windows.Forms.Cursors.Default;
-            this.treeListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeListView.FullRowSelect = true;
             this.treeListView.HideSelection = false;
-            this.treeListView.Location = new System.Drawing.Point(0, 0);
+            this.treeListView.Location = new System.Drawing.Point(0, 27);
+            this.treeListView.Margin = new System.Windows.Forms.Padding(2);
             this.treeListView.Name = "treeListView";
             this.treeListView.ShowGroups = false;
-            this.treeListView.Size = new System.Drawing.Size(861, 719);
+            this.treeListView.Size = new System.Drawing.Size(518, 442);
             this.treeListView.TabIndex = 0;
             this.treeListView.UseCompatibleStateImageBehavior = false;
             this.treeListView.UseFiltering = true;
@@ -120,33 +135,36 @@ namespace WolvenKit
             // 
             // olvcolPreview
             // 
+            this.olvcolPreview.AspectName = "Preview";
             this.olvcolPreview.FillsFreeSpace = true;
             this.olvcolPreview.Text = "Preview";
             this.olvcolPreview.Width = 300;
             // 
             // toolStrip1
             // 
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,
             this.toolStripSearchBox,
-            this.toolStripClearButton});
+            this.toolStripClearButton,
+            this.showTreetoolStripButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(861, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(517, 31);
             this.toolStrip1.TabIndex = 12;
             this.toolStrip1.Text = "toolStrip1";
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(39, 22);
+            this.toolStripLabel1.Size = new System.Drawing.Size(39, 28);
             this.toolStripLabel1.Text = "Filter: ";
             // 
             // toolStripSearchBox
             // 
             this.toolStripSearchBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripSearchBox.Name = "toolStripSearchBox";
-            this.toolStripSearchBox.Size = new System.Drawing.Size(200, 25);
+            this.toolStripSearchBox.Size = new System.Drawing.Size(122, 31);
             this.toolStripSearchBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.searchTB_KeyUp);
             // 
             // toolStripClearButton
@@ -155,22 +173,67 @@ namespace WolvenKit
             this.toolStripClearButton.Image = global::WolvenKit.Properties.Resources.ExitIcon;
             this.toolStripClearButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripClearButton.Name = "toolStripClearButton";
-            this.toolStripClearButton.Size = new System.Drawing.Size(23, 22);
-            this.toolStripClearButton.Text = "toolStripButton2";
+            this.toolStripClearButton.Size = new System.Drawing.Size(28, 28);
+            this.toolStripClearButton.Text = "Clear";
             this.toolStripClearButton.Click += new System.EventHandler(this.resetBTN_Click);
+            // 
+            // showTreetoolStripButton
+            // 
+            this.showTreetoolStripButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.showTreetoolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.showTreetoolStripButton.Image = global::WolvenKit.Properties.Resources.LayerGroupVisibled;
+            this.showTreetoolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.showTreetoolStripButton.Name = "showTreetoolStripButton";
+            this.showTreetoolStripButton.Size = new System.Drawing.Size(28, 28);
+            this.showTreetoolStripButton.Text = "Show/Hide Tree";
+            this.showTreetoolStripButton.Click += new System.EventHandler(this.showTreetoolStripButton_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            // 
+            // expandAllToolStripMenuItem
+            // 
+            this.expandAllToolStripMenuItem.Name = "expandAllToolStripMenuItem";
+            this.expandAllToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.expandAllToolStripMenuItem.Text = "Expand All";
+            this.expandAllToolStripMenuItem.Click += new System.EventHandler(this.expandAllToolStripMenuItem_Click);
+            // 
+            // expandAllChildrenToolStripMenuItem
+            // 
+            this.expandAllChildrenToolStripMenuItem.Name = "expandAllChildrenToolStripMenuItem";
+            this.expandAllChildrenToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.expandAllChildrenToolStripMenuItem.Text = "Expand All Children";
+            this.expandAllChildrenToolStripMenuItem.Click += new System.EventHandler(this.expandAllChildrenToolStripMenuItem_Click);
+            // 
+            // collapseAllToolStripMenuItem
+            // 
+            this.collapseAllToolStripMenuItem.Name = "collapseAllToolStripMenuItem";
+            this.collapseAllToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.collapseAllToolStripMenuItem.Text = "Collapse All";
+            this.collapseAllToolStripMenuItem.Click += new System.EventHandler(this.collapseAllToolStripMenuItem_Click);
+            // 
+            // collapseAllChildrenToolStripMenuItem
+            // 
+            this.collapseAllChildrenToolStripMenuItem.Name = "collapseAllChildrenToolStripMenuItem";
+            this.collapseAllChildrenToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.collapseAllChildrenToolStripMenuItem.Text = "Collapse All Children";
+            this.collapseAllChildrenToolStripMenuItem.Click += new System.EventHandler(this.collapseAllChildrenToolStripMenuItem_Click);
             // 
             // frmChunkList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(861, 719);
+            this.ClientSize = new System.Drawing.Size(517, 467);
             this.CloseButton = false;
             this.CloseButtonVisible = false;
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.treeListView);
             this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.Document)));
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MinimumSize = new System.Drawing.Size(100, 100);
+            this.Margin = new System.Windows.Forms.Padding(2);
+            this.MinimumSize = new System.Drawing.Size(66, 79);
             this.Name = "frmChunkList";
             this.Text = "Chunk List";
             this.contextMenuStrip1.ResumeLayout(false);
@@ -196,5 +259,11 @@ namespace WolvenKit
         private ToolStripTextBox toolStripSearchBox;
         private ToolStripButton toolStripClearButton;
         private ToolStripLabel toolStripLabel1;
+        private ToolStripButton showTreetoolStripButton;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem expandAllToolStripMenuItem;
+        private ToolStripMenuItem expandAllChildrenToolStripMenuItem;
+        private ToolStripMenuItem collapseAllToolStripMenuItem;
+        private ToolStripMenuItem collapseAllChildrenToolStripMenuItem;
     }
 }
