@@ -310,8 +310,12 @@ namespace WolvenKit
             if (extensionCB.SelectedIndex != -1)
                 bundletype = extensionCB.Items[bundleTypeIdx].ToString();
             var found = SearchFiles(FileList.ToArray(), s, bundletype, extension);
-            if (found.Length > 1000)
-                found = found.Take(1000).ToArray();
+            if (limitCheckBox.Checked)
+            {
+                int limit = (int)limitUpDown.Value;
+                if (found.Length > limit)
+                    found = found.Take(limit).ToArray();
+            }
             fileListView.Items.Clear();
             var results = new List<WitcherListViewItem>();
             foreach (var file in found)
