@@ -124,9 +124,16 @@ namespace WolvenKit.CR2W.Types
             }
 
             // Write Buffer 1 (always)
-            foreach (var n in buffer_v1.variables)
+            if (buffer_v1.variables.Count > 0)
             {
-                n.Write(file);
+                foreach (var buf in buffer_v1.variables)
+                {
+                    buf.Write(file);
+                }
+            }
+            else
+            {
+                file.Write((ushort)0x0); //2 null bytes
             }
 
             // Write Buffer 2 (if created from template)

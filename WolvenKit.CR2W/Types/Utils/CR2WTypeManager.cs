@@ -27,10 +27,7 @@ namespace WolvenKit.CR2W.Types
         {
 
             // Testing area. Put your CVectors which don't work fully yet here.
-#if DEBUG
             Register("CFont", new CFont(null));
-#endif
-
             Register("CParticleEmitter", new CParticleEmitter(null));
 
             #region Basic Types
@@ -4058,6 +4055,14 @@ namespace WolvenKit.CR2W.Types
         {
             if (!types.ContainsKey(name))
                 types.Add(name, new CR2WTypeDefinition(name, var));
+        }
+
+        public void RegisterAs(string name, string parent)
+        {
+            if (types.ContainsKey(parent))
+                Register(name, types[parent].var);
+            else
+                Register(name, new CVector(null));
         }
 
         public CVariable GetByName(string name, string varname, CR2WFile cr2w, bool readUnknownAsBytes = true)

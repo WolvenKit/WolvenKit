@@ -96,13 +96,13 @@ namespace WolvenKit
             // colValue
             // 
             this.colValue.AspectName = "Value";
+            this.colValue.FillsFreeSpace = true;
             this.colValue.Text = "Value";
             this.colValue.Width = 404;
             // 
             // colType
             // 
             this.colType.AspectName = "Type";
-            this.colType.FillsFreeSpace = true;
             this.colType.Text = "Type";
             this.colType.Width = 100;
             // 
