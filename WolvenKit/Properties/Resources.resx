@@ -286,4 +286,31 @@
   <data name="__xbmdump_37685553661" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\managercache\__xbmdump_3768555366.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="EditTableRow_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\edittablerow_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="radish_32x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\radish_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RunPause_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\runpause_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RunUpdate_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\runupdate_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Run_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\run_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="LinkValidator_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\linkvalidator_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImportPackage_16x1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\importpackage_16x.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PictureResample_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\pictureresample_16x.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="radish_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\radish_icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

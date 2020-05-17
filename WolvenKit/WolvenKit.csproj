@@ -424,6 +424,12 @@
     <Compile Include="FlowTreeEditors\Scene\SceneSectionEditor.Designer.cs">
       <DependentUpon>SceneSectionEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmRadish.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmRadish.Designer.cs">
+      <DependentUpon>frmRadish.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmImportUtility.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -712,6 +718,9 @@
       <DependentUpon>frmAddVariable.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmRadish.resx">
+      <DependentUpon>frmRadish.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmImportUtility.resx">
       <DependentUpon>frmImportUtility.cs</DependentUpon>
     </EmbeddedResource>
@@ -963,14 +972,23 @@
     <Content Include="Resources\close.png" />
     <Content Include="Resources\Console_16x.png" />
     <Content Include="Resources\DownButton.png" />
+    <Content Include="Resources\EditTableRow_16x.png" />
     <Content Include="Resources\ExpandIcon.png" />
     <None Include="Resources\Refresh_16x.png" />
     <Content Include="Resources\Highlighter.png" />
+    <Content Include="Resources\ImportPackage_16x.ico" />
     <Content Include="Resources\ImportPackage_16x.png" />
+    <Content Include="Resources\LinkValidator_16x.png" />
     <Content Include="Resources\maximize.jpg" />
     <Content Include="Resources\maximize.png" />
     <Content Include="Resources\minimize.png" />
+    <Content Include="Resources\PictureResample_16x.ico" />
     <Content Include="Resources\PlayStep_16x.png" />
+    <Content Include="Resources\radish_32x.png" />
+    <Content Include="Resources\radish_icon.ico" />
+    <Content Include="Resources\RunPause_16x.png" />
+    <Content Include="Resources\RunUpdate_16x.png" />
+    <Content Include="Resources\Run_16x.png" />
     <Content Include="Resources\UpButton.png" />
     <Content Include="Resources\XToCloseButton.png" />
     <Content Include="wolven_kit_icon.ico" />

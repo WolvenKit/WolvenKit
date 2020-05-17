@@ -283,8 +283,6 @@ namespace WolvenKit.Forms
                 if (relPath.Substring(0, 3) == "DLC") relPath = relPath.TrimStart("DLC".ToCharArray());
                 relPath = relPath.TrimStart(Path.DirectorySeparatorChar);
 
-
-                //var newpath = Path.Combine(ActiveMod.ModDirectory, $"{relPath.TrimEnd(rawext.ToCharArray())}{importext}");
                 var newpath = Path.Combine(ActiveMod.ModDirectory, relPath);
                 newpath = Path.ChangeExtension(newpath, importext);
                 var split = relPath.Split(Path.DirectorySeparatorChar).First();

@@ -16,6 +16,7 @@ namespace WolvenKit
     using Common;
     using Newtonsoft.Json;
     using System.Threading.Tasks;
+    using UsefulThings;
     using WolvenKit.CR2W;
     using WolvenKit.Render;
 
@@ -49,7 +50,7 @@ namespace WolvenKit
 
         public static DateTime LastChange;
         public static TimeSpan mindiff = TimeSpan.FromMilliseconds(500);
-        private ILoggerService Logger;
+        private readonly ILoggerService Logger;
 
         public void PauseMonitoring()
         {
@@ -92,18 +93,56 @@ namespace WolvenKit
             if (ActiveMod == null)
                 return;
             modFileList.BeginUpdate();
+
+            var filedir = new DirectoryInfo(ActiveMod.FileDirectory);
+            var dirlist = Directory.GetDirectories(ActiveMod.FileDirectory, "*", SearchOption.AllDirectories)
+                .Select(x => new DirectoryInfo(x).FullName.Substring(filedir.FullName.Length + 1)).ToList();
+            var filelist = Directory.GetFiles(ActiveMod.FileDirectory, "*.*", SearchOption.AllDirectories)
+                .Select(x => new FileInfo(x).FullName.Substring(filedir.FullName.Length + 1)).ToList();
+
             if (FilteredFiles == null || FilteredFiles.Count == 0)
             {
-                FilteredFiles = ActiveMod.Files;
+                //FilteredFiles = ActiveMod.Files;
+                FilteredFiles = filelist;
             }
             if (clear)
             {
                 modFileList.Nodes.Clear();
             }
 
+            foreach (var item in dirlist)
+            {
+                var current = modFileList.Nodes;
+
+                if (showfolders)
+                {
+                    var parts = item.Split('\\');
+                    for (var i = 0; i < parts.Length; i++)
+                    {
+                        if (!current.ContainsKey(parts[i]))
+                        {
+
+                            var newNode = current.Add(parts[i], parts[i]);
+                            newNode.ImageKey = "FolderOpened";
+                            newNode.SelectedImageKey = "FolderOpened";
+                            newNode.Parent?.Expand();
+                            current = newNode.Nodes;
+                        }
+                        else
+                        {
+                            current = current[parts[i]].Nodes;
+                        }
+                    }
+                }
+            }
             foreach (var item in FilteredFiles)
             {
                 var current = modFileList.Nodes;
+
+                //filter out extensions
+                if (Path.GetExtension(item) == ".bat")
+                    continue;
+
                 if (!showfolders)
                 {
                     var newNode = current.Add(item, item);
@@ -156,6 +195,7 @@ namespace WolvenKit
 
                 }
             }
+            
             modFileList.EndUpdate();
         }
 
@@ -217,7 +257,10 @@ namespace WolvenKit
             if (e.Button == MouseButtons.Right)
             {
                 modFileList.SelectedNode = e.Node;
-                //contextMenu.Show(modFileList, e.Location);
+            }
+            else if (e.Button == MouseButtons.Left)
+            {
+                RequestFileOpen?.Invoke(this, new RequestFileArgs { File = e.Node.FullPath, Inspect = true  });
             }
         }
 

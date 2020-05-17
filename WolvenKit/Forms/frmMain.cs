@@ -56,6 +56,9 @@ namespace WolvenKit
         public frmOutput Output { get; set; }
         public frmConsole Console { get; set; }
         public frmImportUtility ImportUtility { get; set; }
+        public frmRadish RadishUtility { get; set; }
+
+        public LoggerService Logger { get; set; }
 
         public frmCR2WDocument ActiveDocument
         {
@@ -76,7 +79,7 @@ namespace WolvenKit
         private HotkeyCollection hotkeys;
         private readonly ToolStripRenderer toolStripRenderer = new ToolStripProfessionalRenderer();
 
-        private LoggerService Logger;
+        
         private WccLite WccHelper;
 
         private delegate void strDelegate(string t);
@@ -532,6 +535,29 @@ namespace WolvenKit
 
             var ext = Path.GetExtension(fullpath);
 
+            if (e.Inspect)
+            {
+                switch (ext)
+                {
+                    case ".csv":
+                    case ".txt":
+                    case ".ws":
+                    case ".xml":
+                    case ".yml":
+                    case ".bat":
+                    case ".log":
+                    case ".ini":
+                        {
+                            var se = new frmScriptEditor(fullpath);
+                            se.Show(dockPanel, DockState.Document);
+                            break;
+                        }
+                    default:
+                        break;
+                }
+                return;
+            }
+
             switch (ext)
             {
                 case ".csv":
@@ -565,6 +591,44 @@ namespace WolvenKit
                     {
                         var se = new frmScriptEditor(fullpath);
                         se.Show(dockPanel, DockState.Document);
+                        break;
+                    }
+                case ".bat":
+                    {
+                        using (Process p = new Process())
+                        {
+                            p.StartInfo.RedirectStandardError = true;
+                            p.StartInfo.RedirectStandardOutput = true;
+                            p.StartInfo.UseShellExecute = false;
+                            p.StartInfo.CreateNoWindow = true;
+
+                            p.StartInfo.FileName = fullpath;
+                            p.StartInfo.WorkingDirectory = Path.GetDirectoryName(fullpath);
+
+                            p.OutputDataReceived += new DataReceivedEventHandler((s, ev) =>
+                            {
+                                if (ev.Data != null)
+                                {
+                                    if (ev.Data.StartsWith("WARN"))
+                                        Logger.LogString(ev.Data, Logtype.Important);
+                                    else if (ev.Data.StartsWith("ERROR"))
+                                        Logger.LogString(ev.Data, Logtype.Error);
+                                    else if (ev.Data.StartsWith("INFO"))
+                                        Logger.LogString(ev.Data, Logtype.Normal);
+                                    else
+                                        Logger.LogString(ev.Data);
+                                }
+                            });
+                            p.ErrorDataReceived += new DataReceivedEventHandler((s, ev) =>
+                            {
+                                Logger.LogString(ev.Data, Logtype.Error);
+                            });
+
+                            p.Start();
+                            p.BeginOutputReadLine();
+                            p.BeginErrorReadLine();
+                        }
+
                         break;
                     }
                 case ".dds":
@@ -645,6 +709,26 @@ namespace WolvenKit
 
             ImportUtility.Focus();
         }
+        private void ShowRadishUtility()
+        {
+            var filedir = new DirectoryInfo(MainController.Get().ActiveMod.FileDirectory);
+            var radishdir = filedir.GetFiles("*.bat", SearchOption.AllDirectories)?.FirstOrDefault(_ => _.Name == "_settings_.bat")?.Directory;
+            if (radishdir == null)
+            {
+                Logger.LogString("ERROR! No radish mod directory found.\r\n", Logtype.Error);
+                return;
+            }
+
+
+            if (RadishUtility == null || RadishUtility.IsDisposed)
+            {
+                RadishUtility = new frmRadish();
+                RadishUtility.Show(dockPanel, DockState.Document);
+            }
+
+            RadishUtility.Focus();
+        }
+        
 
         private void newModToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -691,6 +775,42 @@ namespace WolvenKit
                     Name = modname
                 };
                 ResetWindows();
+
+                // detect if radish-mod
+                var filedir = new DirectoryInfo(MainController.Get().ActiveMod.ProjectDirectory).Parent;
+                var radishdir = filedir.GetFiles("*.bat", SearchOption.AllDirectories)?.FirstOrDefault(_ => _.Name == "_settings_.bat")?.Directory;
+                if (radishdir != null)
+                {
+                    switch (MessageBox.Show(
+                        "WolvenKit detected a radish mod project installation in this directory. Would you like to add the radish files to the Mod Project?",
+                        "Radish Tool Integration",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                    {
+                        default:
+                            return;
+                        case DialogResult.Yes:
+                            {
+                                if (!Directory.Exists(Path.Combine(ActiveMod.FileDirectory, "Radish")))
+                                    Directory.CreateDirectory(Path.Combine(ActiveMod.FileDirectory, "Radish"));
+                                //move radish files into Modfiledir
+                                foreach (var file in radishdir.GetFiles("*", SearchOption.TopDirectoryOnly))
+                                {
+                                    File.Move(file.FullName, Path.Combine(ActiveMod.FileDirectory, "Radish", file.Name));
+                                }
+                                foreach (var dir in radishdir.GetDirectories("*", SearchOption.TopDirectoryOnly))
+                                {
+                                    if (dir.FullName == ActiveMod.ProjectDirectory)
+                                        continue;
+                                    Directory.Move(dir.FullName, Path.Combine(ActiveMod.FileDirectory, "Radish", dir.Name));
+                                }
+                                break;
+                            }
+                        case DialogResult.No:
+                            {
+                                break;
+                            }
+                    }
+                }
                 UpdateModFileList(true);
                 SaveMod();
                 AddOutput("\"" + ActiveMod.Name + "\" sucesfully created and loaded!\n", Logtype.Success);
@@ -987,6 +1107,15 @@ namespace WolvenKit
             }
             ModExplorer?.Close();
             ModExplorer = null;
+            ImportUtility?.Close();
+            ImportUtility = null;
+            RadishUtility?.Close();
+            RadishUtility = null;
+            Console?.Close();
+            Console = null;
+            Output?.Close();
+            Output = null;
+
             ShowModExplorer();
             ShowConsole();
             ShowOutput();
@@ -1014,6 +1143,8 @@ namespace WolvenKit
             Console = null;
             ImportUtility?.Close();
             ImportUtility = null;
+            RadishUtility?.Close();
+            RadishUtility = null;
             foreach (var window in dockPanel.FloatWindows.ToList())
                 window.Dispose();
         }
@@ -1036,7 +1167,6 @@ namespace WolvenKit
             ShowModExplorer();
             ShowConsole();
             ShowOutput();
-            ShowImportUtility();
         }
 
         private void ShowModExplorer()
@@ -2337,6 +2467,10 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
         {
             ShowImportUtility();
         }
+        private void RadishUtilitytoolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowRadishUtility();
+        }
 
         private void ModExplorer_RequestFastRender(object sender, RequestFileArgs e)
         {
@@ -2907,8 +3041,9 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
         }
 
 
+
         #endregion // Mod Pack
 
-        
+
     }
 }
