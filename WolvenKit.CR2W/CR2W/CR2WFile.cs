@@ -732,22 +732,25 @@ namespace WolvenKit.CR2W
                 }
                 else if (var is CArray)
                 {
-                    foreach (var element in (var as CArray).array)
+                    if ((var as CArray).array.Count > 0 )
                     {
-                        if (
-                            element is CBool || element is CName ||
-                            element is CUInt16 || element is CInt16 ||
-                            element is CUInt32 || element is CInt32 ||
-                            element is CUInt64 || element is CInt64
-                            )
+                        foreach (var element in (var as CArray).array)
                         {
+                            if (
+                                element is CBool || element is CName ||
+                                element is CUInt16 || element is CInt16 ||
+                                element is CUInt32 || element is CInt32 ||
+                                element is CUInt64 || element is CInt64
+                                )
+                            {
 
+                            }
+                            else
+                                returnedVariables.Add(new Tuple<string, CVariable>("", element));
                         }
-                        else
-                            returnedVariables.Add(new Tuple<string, CVariable>("", element));
+                        if ((var as CArray).array.First() is CName)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", var));
                     }
-                    if ((var as CArray).array.First() is CName)
-                       returnedVariables.Add(new Tuple<string, CVariable>("", var));
                 }
                 else if (var is CPtr)
                 {

@@ -1,0 +1,119 @@
+# skip some "vanilla" warnings and errors
+[[highlight]]
+keyword = "[Warning][Core] CContentManager: no cooked language files found. Defaulting to EN"
+skip = true
+color = "Yellow"
+
+[[highlight]]
+keyword = "[Warning][Core] ScanForDlcFiles: no dlc packs were found!"
+skip = true
+color = "Yellow"
+
+[[highlight]]
+keyword = "[Warning][Core] Loading priority for tag"
+skip = true
+color = "Yellow"
+
+[[highlight]]
+keyword = "[Warning][Shaders] StaticShaderCache"
+skip = true
+color = "Yellow"
+
+[[highlight]]
+keyword = "[Warning][Core] Trying to create property modifierMap in class SItemTagModifier"
+skip = true
+color = "Yellow"
+
+[[highlight]]
+keyword = "[Warning][Core] Resource extension 'w2w' is already used by class 'CWorld'. Trying to reuse it for class 'CGameWorld'"
+skip = true
+color = "Yellow"
+
+[[highlight]]
+keyword = "[Warning][Engine] Failed to initialize tablet library"
+skip = true
+color = "Yellow"
+
+[[highlight]]
+keyword = "[Warning][Engine] Engine not run in read-only mode, startup package will not be loaded"
+skip = true
+color = "Yellow"
+
+[[highlight]]
+keyword = "[Warning][Game] CItemManager: item 'q304_item__notebook'"
+skip = true
+color = "Yellow"
+
+[[highlight]]
+keyword = "[Warning][Game] CItemManager: item 'mh302_item__dwarf_woodcutter'"
+skip = true
+color = "Yellow"
+
+[[highlight]]
+keyword = "[Warning][Game] CItemManager: item 'pickaxe_01'"
+skip = true
+color = "Yellow"
+
+[[highlight]]
+keyword = "[Warning][Game] CItemManager: item 'q001_dead_horse'"
+skip = true
+color = "Yellow"
+
+[[highlight]]
+keyword = "[Warning][Core] Unable to load cooked 'gameplay\\gui\\fonts"
+skip = true
+color = "Yellow"
+
+[[highlight]]
+keyword = "' with no GUID. Restoring."
+skip = true
+color = "Yellow"
+
+[[highlight]]
+keyword = "[Warning][Profiler] Profiling not started!!!"
+skip = true
+color = "Yellow"
+
+# some old version envs from modkit r4data
+[[highlight]]
+keyword = "in 'CAreaEnvironmentParams' uses unknown type. Property value will be lost."
+skip = true
+color = "Yellow"
+
+# some old version/uncooked mesh files from modkit r4data
+[[highlight]]
+keyword = "[Warning][Core] Property 'chunkShadowInfo' in 'CMesh' uses unknown type. Property value will be lost."
+skip = true
+color = "Yellow"
+
+[[highlight]]
+keyword = "[Info][Game] Error: no speed config defined in speedConfig.xml"
+skip = true
+color = "Red"
+
+[[highlight]]
+keyword = "[Error][WWise_Global] Voice Starvation"
+skip = true
+color = "Red"
+
+[[highlight]]
+keyword = "failed for some reason. Storing as uncompressed."
+skip = true
+color = "Red"
+
+# this indicates some kind of error
+[[highlight]]
+keyword = "Debug Information"
+color = "Red"
+
+[[highlight]]
+keyword = "Error"
+color = "Red"
+
+[[highlight]]
+keyword = "[Warning]"
+color = "Yellow"
+
+[[redirect]]
+keyword = "*"
+file = "wcc.log"

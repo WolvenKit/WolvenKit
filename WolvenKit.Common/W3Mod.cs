@@ -59,6 +59,34 @@ namespace WolvenKit.Common
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
+        public string RawDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "files", "Raw");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
+            }
+        }
+
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string RadishDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "files", "Radish");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
+            }
+        }
+
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
         public List<string> Files
         {
             get
@@ -101,6 +129,36 @@ namespace WolvenKit.Common
             }
         }
 
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public List<string> RawFiles
+        {
+            get
+            {
+                if (!Directory.Exists(RawDirectory))
+                {
+                    Directory.CreateDirectory(RawDirectory);
+                }
+                return Directory.EnumerateFiles(RawDirectory, "*", SearchOption.AllDirectories).Select(file => file.Substring(RawDirectory.Length + 1)).ToList();
+            }
+        }
+
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public List<string> RadishFiles
+        {
+            get
+            {
+                if (!Directory.Exists(RadishDirectory))
+                {
+                    Directory.CreateDirectory(RadishDirectory);
+                }
+                return Directory.EnumerateFiles(RadishDirectory, "*", SearchOption.AllDirectories).Select(file => file.Substring(RadishDirectory.Length + 1)).ToList();
+            }
+        }
+
         [Browsable(false)] 
         public List<string> LastOpenedFiles;
 
@@ -125,6 +183,14 @@ namespace WolvenKit.Common
             clone.version = version;
             clone.LastOpenedFiles = LastOpenedFiles;
             return clone;
+        }
+
+        public void CreateDefaultDirectories()
+        {
+            _ = ModDirectory;
+            _ = DlcDirectory;
+            _ = RawDirectory;
+            _ = RadishDirectory;
         }
     }
 }

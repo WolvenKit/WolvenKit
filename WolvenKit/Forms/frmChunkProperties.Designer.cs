@@ -104,7 +104,7 @@ namespace WolvenKit
             // 
             this.colType.AspectName = "Type";
             this.colType.Text = "Type";
-            this.colType.Width = 100;
+            this.colType.Width = 150;
             // 
             // contextMenu
             // 
