@@ -47,7 +47,6 @@ namespace WolvenKit.Forms
 
             this.objectListView.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
             this.objectListView.AlternateRowBackColor = theme.ColorPalette.OverflowButtonHovered.Background;
-
             this.objectListView.ForeColor = Color.Black;
             HeaderFormatStyle hfs = new HeaderFormatStyle()
             {

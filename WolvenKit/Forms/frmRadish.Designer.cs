@@ -158,7 +158,7 @@
             // 
             // tsb_StartGame
             // 
-            this.tsb_StartGame.Image = global::WolvenKit.Properties.Resources.witcher3_101;
+            this.tsb_StartGame.Image = global::WolvenKit.Properties.Resources.package_16xLG;
             this.tsb_StartGame.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsb_StartGame.Name = "tsb_StartGame";
             this.tsb_StartGame.Size = new System.Drawing.Size(85, 22);

@@ -424,6 +424,12 @@
     <Compile Include="FlowTreeEditors\Scene\SceneSectionEditor.Designer.cs">
       <DependentUpon>SceneSectionEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmProgress.Designer.cs">
+      <DependentUpon>frmProgress.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmRadish.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -718,6 +724,9 @@
       <DependentUpon>frmAddVariable.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmProgress.resx">
+      <DependentUpon>frmProgress.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmRadish.resx">
       <DependentUpon>frmRadish.cs</DependentUpon>
     </EmbeddedResource>
@@ -856,19 +865,19 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\gear_16xLG.png" />
+    <None Include="Resources\VisualStudio\gear_16xLG.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\AddNodefromFile_354.png" />
+    <None Include="Resources\VisualStudio\AddNodefromFile_354.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\properties_16xLG.png" />
+    <None Include="Resources\VisualStudio\properties_16xLG.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\package_16xLG.png" />
+    <None Include="Resources\VisualStudio\package_16xLG.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\FileGroup_10135_16x.png" />
+    <None Include="Resources\VisualStudio\FileGroup_10135_16x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Bundles\WolvenKit.Bundles.csproj">
@@ -918,79 +927,138 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\geralt.jpg" />
+    <None Include="Resources\Pictures\geralt.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\mail.png" />
-    <None Include="Resources\player_record.png" />
+    <None Include="Resources\CustomImages\mail.png" />
+    <None Include="Resources\CustomImages\player_record.png" />
     <Content Include="..\Libs\Irrlicht.dll">
       <Link>Irrlicht.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\box.png" />
-    <None Include="Resources\box--arrow.png" />
-    <None Include="Resources\bug.png" />
-    <None Include="Resources\exclamation-red.png" />
-    <None Include="Resources\edit-letter-spacing.png" />
-    <None Include="Resources\ui-menu-blue.png" />
-    <None Include="Resources\home.png" />
-    <None Include="Resources\stickman.png" />
-    <None Include="Resources\t-shirt-gray.png" />
-    <None Include="Resources\arrow-circle-315.png" />
-    <None Include="Resources\ui-check-box.png" />
-    <None Include="Resources\ui-check-box-uncheck.png" />
+    <None Include="Resources\CustomImages\box.png" />
+    <None Include="Resources\CustomImages\box--arrow.png" />
+    <None Include="Resources\CustomImages\bug.png" />
+    <None Include="Resources\CustomImages\exclamation-red.png" />
+    <None Include="Resources\CustomImages\edit-letter-spacing.png" />
+    <None Include="Resources\CustomImages\ui-menu-blue.png" />
+    <None Include="Resources\CustomImages\home.png" />
+    <None Include="Resources\CustomImages\stickman.png" />
+    <None Include="Resources\CustomImages\t-shirt-gray.png" />
+    <None Include="Resources\CustomImages\arrow-circle-315.png" />
+    <None Include="Resources\CustomImages\ui-check-box.png" />
+    <None Include="Resources\CustomImages\ui-check-box-uncheck.png" />
     <Content Include="ManagerCache\Depot.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ManagerCache\__xbmdump_3768555366.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\wooden-box--arrow.png" />
-    <None Include="Resources\Logo.png" />
-    <None Include="Resources\loading_black.png" />
-    <None Include="Resources\Logo_wkit.png" />
+    <None Include="Resources\CustomImages\wooden-box--arrow.png" />
+    <None Include="Resources\Pictures\Logo.png" />
+    <None Include="Resources\Pictures\loading_black.png" />
+    <None Include="Resources\Pictures\Logo_wkit.png" />
     <Content Include="discord-rpc.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\ExpandAll_16x.png" />
-    <None Include="Resources\CollapseAll_16x.png" />
-    <None Include="Resources\SaveStatusBar1_16x_c.png" />
-    <None Include="Resources\FolderOpened_16x.png" />
-    <None Include="Resources\BlankFile_16x.png" />
-    <None Include="Resources\OpenFolder_16x.png" />
-    <None Include="Resources\OpenFile_16x.png" />
-    <None Include="Resources\Save_16x.png" />
-    <None Include="Resources\SaveAll_16x.png" />
-    <None Include="Resources\NewSolutionFolder_16x.png" />
-    <None Include="Resources\SaveStatusBar1_16x.png" />
-    <None Include="Resources\Output_16x.png" />
-    <None Include="Resources\Property_16x.png" />
-    <None Include="Resources\RemoteServer_16x.png" />
-    <None Include="Resources\Settings_Inverse_16x.png" />
-    <Content Include="Resources\Clock.ico" />
-    <Content Include="Resources\Clock.png" />
-    <Content Include="Resources\close.png" />
-    <Content Include="Resources\Console_16x.png" />
-    <Content Include="Resources\DownButton.png" />
-    <Content Include="Resources\EditTableRow_16x.png" />
-    <Content Include="Resources\ExpandIcon.png" />
-    <None Include="Resources\Refresh_16x.png" />
-    <Content Include="Resources\Highlighter.png" />
-    <Content Include="Resources\ImportPackage_16x.ico" />
-    <Content Include="Resources\ImportPackage_16x.png" />
-    <Content Include="Resources\LinkValidator_16x.png" />
-    <Content Include="Resources\maximize.jpg" />
-    <Content Include="Resources\maximize.png" />
-    <Content Include="Resources\minimize.png" />
-    <Content Include="Resources\PictureResample_16x.ico" />
-    <Content Include="Resources\PlayStep_16x.png" />
-    <Content Include="Resources\radish_32x.png" />
-    <Content Include="Resources\radish_icon.ico" />
-    <Content Include="Resources\RunPause_16x.png" />
-    <Content Include="Resources\RunUpdate_16x.png" />
-    <Content Include="Resources\Run_16x.png" />
-    <Content Include="Resources\UpButton.png" />
-    <Content Include="Resources\XToCloseButton.png" />
+    <None Include="Resources\VisualStudio\ExpandAll_16x.png" />
+    <None Include="Resources\VisualStudio\CollapseAll_16x.png" />
+    <None Include="Resources\VisualStudio\SaveStatusBar1_16x_c.png" />
+    <None Include="Resources\VisualStudio\FolderOpened_16x.png" />
+    <None Include="Resources\VisualStudio\BlankFile_16x.png" />
+    <None Include="Resources\VisualStudio\OpenFolder_16x.png" />
+    <None Include="Resources\VisualStudio\OpenFile_16x.png" />
+    <None Include="Resources\VisualStudio\Save_16x.png" />
+    <None Include="Resources\VisualStudio\SaveAll_16x.png" />
+    <None Include="Resources\VisualStudio\NewSolutionFolder_16x.png" />
+    <None Include="Resources\VisualStudio\Output_16x.png" />
+    <None Include="Resources\VisualStudio\Property_16x.png" />
+    <None Include="Resources\VisualStudio\RemoteServer_16x.png" />
+    <None Include="Resources\VisualStudio\Settings_Inverse_16x.png" />
+    <Content Include="Resources\Icons\Clock.ico" />
+    <Content Include="Resources\CustomImages\Clock.png" />
+    <Content Include="Resources\CustomImages\close.png" />
+    <Content Include="Resources\RedEngine\bird.png" />
+    <Content Include="Resources\RedEngine\csv.png" />
+    <Content Include="Resources\RedEngine\detail.png" />
+    <Content Include="Resources\RedEngine\env.png" />
+    <Content Include="Resources\RedEngine\fev.png" />
+    <Content Include="Resources\RedEngine\journal.png" />
+    <Content Include="Resources\RedEngine\redgame.png" />
+    <Content Include="Resources\RedEngine\redswf.png" />
+    <Content Include="Resources\RedEngine\spawntree.png" />
+    <Content Include="Resources\RedEngine\swf.png" />
+    <Content Include="Resources\RedEngine\vbrush.png" />
+    <Content Include="Resources\RedEngine\w2ainfo.png" />
+    <Content Include="Resources\RedEngine\w2am.png" />
+    <Content Include="Resources\RedEngine\w2anim.png" />
+    <Content Include="Resources\RedEngine\w2animev.png" />
+    <Content Include="Resources\RedEngine\w2anims.png" />
+    <Content Include="Resources\RedEngine\w2beh.png" />
+    <Content Include="Resources\RedEngine\w2behtree.png" />
+    <Content Include="Resources\RedEngine\w2blb.png" />
+    <Content Include="Resources\RedEngine\w2brix.png" />
+    <Content Include="Resources\RedEngine\w2cent.png" />
+    <Content Include="Resources\RedEngine\w2comm.png" />
+    <Content Include="Resources\RedEngine\w2conv.png" />
+    <Content Include="Resources\RedEngine\w2cube.png" />
+    <Content Include="Resources\RedEngine\w2cutscene.png" />
+    <Content Include="Resources\RedEngine\w2ds.png" />
+    <Content Include="Resources\RedEngine\w2dset.png" />
+    <Content Include="Resources\RedEngine\w2ent.png" />
+    <Content Include="Resources\RedEngine\w2expr.png" />
+    <Content Include="Resources\RedEngine\w2f.png" />
+    <Content Include="Resources\RedEngine\w2faces.png" />
+    <Content Include="Resources\RedEngine\w2fnt.png" />
+    <Content Include="Resources\RedEngine\w2goalcrv.png" />
+    <Content Include="Resources\RedEngine\w2guidesc.png" />
+    <Content Include="Resources\RedEngine\w2je.png" />
+    <Content Include="Resources\RedEngine\w2job.png" />
+    <Content Include="Resources\RedEngine\w2l.png" />
+    <Content Include="Resources\RedEngine\w2mesh.png" />
+    <Content Include="Resources\RedEngine\w2mg.png" />
+    <Content Include="Resources\RedEngine\w2mi.png" />
+    <Content Include="Resources\RedEngine\w2p.png" />
+    <Content Include="Resources\RedEngine\w2phase.png" />
+    <Content Include="Resources\RedEngine\w2pr.png" />
+    <Content Include="Resources\RedEngine\w2ps.png" />
+    <Content Include="Resources\RedEngine\w2qlog.png" />
+    <Content Include="Resources\RedEngine\w2quest.png" />
+    <Content Include="Resources\RedEngine\w2rag.png" />
+    <Content Include="Resources\RedEngine\w2ragdoll.png" />
+    <Content Include="Resources\RedEngine\w2react.png" />
+    <Content Include="Resources\RedEngine\w2rig.png" />
+    <Content Include="Resources\RedEngine\w2rigm.png" />
+    <Content Include="Resources\RedEngine\w2sbnk.png" />
+    <Content Include="Resources\RedEngine\w2scene.png" />
+    <Content Include="Resources\RedEngine\w2spwn.png" />
+    <Content Include="Resources\RedEngine\w2steer.png" />
+    <Content Include="Resources\RedEngine\w2surf.png" />
+    <Content Include="Resources\RedEngine\w2w.png" />
+    <Content Include="Resources\RedEngine\worldmap.png" />
+    <Content Include="Resources\VisualStudio\Console_16x.png" />
+    <Content Include="Resources\CustomImages\DownButton.png" />
+    <Content Include="Resources\VisualStudio\EditTableRow_16x.png" />
+    <Content Include="Resources\RedEngine\ExpandIcon.png" />
+    <None Include="Resources\VisualStudio\Refresh_16x.png" />
+    <Content Include="Resources\CustomImages\Highlighter.png" />
+    <Content Include="Resources\Icons\ImportPackage_16x.ico" />
+    <Content Include="Resources\VisualStudio\FolderClosed_16x.png" />
+    <Content Include="Resources\VisualStudio\ImportPackage_16x.png" />
+    <Content Include="Resources\VisualStudio\LinkValidator_16x.png" />
+    <Content Include="Resources\CustomImages\maximize.jpg" />
+    <Content Include="Resources\CustomImages\maximize.png" />
+    <Content Include="Resources\CustomImages\minimize.png" />
+    <Content Include="Resources\Icons\PictureResample_16x.ico" />
+    <Content Include="Resources\Pictures\witcher3.png" />
+    <Content Include="Resources\VisualStudio\PlayStep_16x.png" />
+    <Content Include="Resources\Pictures\radish_32x.png" />
+    <Content Include="Resources\Icons\radish_icon.ico" />
+    <Content Include="Resources\VisualStudio\RunPause_16x.png" />
+    <Content Include="Resources\VisualStudio\RunUpdate_16x.png" />
+    <Content Include="Resources\VisualStudio\Run_16x.png" />
+    <Content Include="Resources\CustomImages\UpButton.png" />
+    <Content Include="Resources\CustomImages\XToCloseButton.png" />
     <Content Include="wolven_kit_icon.ico" />
     <Content Include="Licenses\License.doboz4net.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1013,15 +1081,15 @@
     <Content Include="Licenses\License.W3SaveGameEditor.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\ExitIcon.png" />
-    <None Include="Resources\LayerGroupVisibled.png" />
+    <None Include="Resources\RedEngine\ExitIcon.png" />
+    <None Include="Resources\RedEngine\LayerGroupVisibled.png" />
     <None Include="Resources\wcc_eula.rtf" />
-    <None Include="Resources\witcher3_102.ico" />
-    <None Include="Resources\witcher3_101.ico" />
-    <None Include="Resources\2c21aeda16de354ba5334551a883b481.png" />
-    <None Include="Resources\info-icon-23818.jpg" />
-    <None Include="Resources\refresh.png" />
-    <None Include="Resources\aERVQbx_460s.jpg" />
+    <None Include="Resources\Icons\witcher3_102.ico" />
+    <None Include="Resources\Icons\witcher3_101.ico" />
+    <None Include="Resources\Pictures\2c21aeda16de354ba5334551a883b481.png" />
+    <None Include="Resources\CustomImages\info-icon-23818.jpg" />
+    <None Include="Resources\CustomImages\refresh.png" />
+    <None Include="Resources\Pictures\aERVQbx_460s.jpg" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

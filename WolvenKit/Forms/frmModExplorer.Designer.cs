@@ -34,7 +34,6 @@ namespace WolvenKit
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmModExplorer));
-            this.modFileList = new System.Windows.Forms.TreeView();
             this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.createW2animsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,7 +62,6 @@ namespace WolvenKit
             this.dumpWccliteXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.showFileInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.treeImages = new System.Windows.Forms.ImageList(this.components);
             this.searchstrip = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.searchBox = new System.Windows.Forms.ToolStripTextBox();
@@ -72,30 +70,13 @@ namespace WolvenKit
             this.CollapseBTN = new System.Windows.Forms.ToolStripButton();
             this.resetfilesButton = new System.Windows.Forms.ToolStripButton();
             this.modexplorerSlave = new System.IO.FileSystemWatcher();
+            this.treeListView = new BrightIdeasSoftware.TreeListView();
+            this.olvColumnName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenu.SuspendLayout();
             this.searchstrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.modexplorerSlave)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.treeListView)).BeginInit();
             this.SuspendLayout();
-            // 
-            // modFileList
-            // 
-            this.modFileList.BackColor = System.Drawing.SystemColors.Control;
-            this.modFileList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.modFileList.ContextMenuStrip = this.contextMenu;
-            this.modFileList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.modFileList.ForeColor = System.Drawing.SystemColors.Control;
-            this.modFileList.ImageIndex = 0;
-            this.modFileList.ImageList = this.treeImages;
-            this.modFileList.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.modFileList.Location = new System.Drawing.Point(0, 27);
-            this.modFileList.Margin = new System.Windows.Forms.Padding(1);
-            this.modFileList.Name = "modFileList";
-            this.modFileList.SelectedImageIndex = 0;
-            this.modFileList.Size = new System.Drawing.Size(164, 194);
-            this.modFileList.TabIndex = 0;
-            this.modFileList.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.modFileList_NodeMouseClick);
-            this.modFileList.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.modFileList_NodeMouseDoubleClick);
-            this.modFileList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.modFileList_KeyDown);
             // 
             // contextMenu
             // 
@@ -121,7 +102,7 @@ namespace WolvenKit
             this.toolStripSeparator4,
             this.showFileInExplorerToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(197, 420);
+            this.contextMenu.Size = new System.Drawing.Size(197, 398);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             this.contextMenu.Opened += new System.EventHandler(this.contextMenu_Opened);
             // 
@@ -318,25 +299,6 @@ namespace WolvenKit
             this.showFileInExplorerToolStripMenuItem.Text = "Show file in explorer";
             this.showFileInExplorerToolStripMenuItem.Click += new System.EventHandler(this.showFileInExplorerToolStripMenuItem_Click);
             // 
-            // treeImages
-            // 
-            this.treeImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("treeImages.ImageStream")));
-            this.treeImages.TransparentColor = System.Drawing.Color.Transparent;
-            this.treeImages.Images.SetKeyName(0, "csv");
-            this.treeImages.Images.SetKeyName(1, "redswf");
-            this.treeImages.Images.SetKeyName(2, "env");
-            this.treeImages.Images.SetKeyName(3, "journal");
-            this.treeImages.Images.SetKeyName(4, "w2beh");
-            this.treeImages.Images.SetKeyName(5, "xml");
-            this.treeImages.Images.SetKeyName(6, "w2behtree");
-            this.treeImages.Images.SetKeyName(7, "w2scene");
-            this.treeImages.Images.SetKeyName(8, "w2p");
-            this.treeImages.Images.SetKeyName(9, "w2rig");
-            this.treeImages.Images.SetKeyName(10, "normalFolder");
-            this.treeImages.Images.SetKeyName(11, "FolderOpened_grey");
-            this.treeImages.Images.SetKeyName(12, "FolderOpened");
-            this.treeImages.Images.SetKeyName(13, "genericFile");
-            // 
             // searchstrip
             // 
             this.searchstrip.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -349,7 +311,7 @@ namespace WolvenKit
             this.resetfilesButton});
             this.searchstrip.Location = new System.Drawing.Point(0, 0);
             this.searchstrip.Name = "searchstrip";
-            this.searchstrip.Size = new System.Drawing.Size(164, 27);
+            this.searchstrip.Size = new System.Drawing.Size(333, 27);
             this.searchstrip.TabIndex = 1;
             this.searchstrip.Text = "toolStrip1";
             // 
@@ -421,12 +383,42 @@ namespace WolvenKit
             this.modexplorerSlave.Deleted += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
             this.modexplorerSlave.Renamed += new System.IO.RenamedEventHandler(this.FileChanges_Detected);
             // 
+            // treeListView
+            // 
+            this.treeListView.AllColumns.Add(this.olvColumnName);
+            this.treeListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumnName});
+            this.treeListView.ContextMenuStrip = this.contextMenu;
+            this.treeListView.Cursor = System.Windows.Forms.Cursors.Default;
+            this.treeListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeListView.HideSelection = false;
+            this.treeListView.Location = new System.Drawing.Point(0, 27);
+            this.treeListView.Name = "treeListView";
+            this.treeListView.ShowGroups = false;
+            this.treeListView.Size = new System.Drawing.Size(333, 345);
+            this.treeListView.TabIndex = 2;
+            this.treeListView.UseCompatibleStateImageBehavior = false;
+            this.treeListView.View = System.Windows.Forms.View.Details;
+            this.treeListView.VirtualMode = true;
+            this.treeListView.Expanded += new System.EventHandler<BrightIdeasSoftware.TreeBranchExpandedEventArgs>(this.treeListView_Expanded);
+            this.treeListView.Collapsed += new System.EventHandler<BrightIdeasSoftware.TreeBranchCollapsedEventArgs>(this.treeListView_Collapsed);
+            this.treeListView.CellClick += new System.EventHandler<BrightIdeasSoftware.CellClickEventArgs>(this.treeListView_CellClick);
+            this.treeListView.CellRightClick += new System.EventHandler<BrightIdeasSoftware.CellRightClickEventArgs>(this.treeListView_CellRightClick);
+            this.treeListView.ItemActivate += new System.EventHandler(this.treeListView_ItemActivate);
+            this.treeListView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.modFileList_KeyDown);
+            // 
+            // olvColumnName
+            // 
+            this.olvColumnName.AspectName = "Name";
+            this.olvColumnName.FillsFreeSpace = true;
+            this.olvColumnName.Text = "Name";
+            // 
             // frmModExplorer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(164, 221);
-            this.Controls.Add(this.modFileList);
+            this.ClientSize = new System.Drawing.Size(333, 372);
+            this.Controls.Add(this.treeListView);
             this.Controls.Add(this.searchstrip);
             this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 
             | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight) 
@@ -443,15 +435,13 @@ namespace WolvenKit
             this.searchstrip.ResumeLayout(false);
             this.searchstrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.modexplorerSlave)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.treeListView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private TreeView modFileList;
-        private ImageList treeImages;
         private ContextMenuStrip contextMenu;
         private ToolStripMenuItem removeFileToolStripMenuItem;
         private ToolStripMenuItem assetBrowserToolStripMenuItem;
@@ -488,5 +478,7 @@ namespace WolvenKit
         private ToolStripMenuItem dumpWccliteXMLToolStripMenuItem;
         private ToolStripMenuItem fastRenderToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator5;
+        private BrightIdeasSoftware.TreeListView treeListView;
+        private BrightIdeasSoftware.OLVColumn olvColumnName;
     }
 }
