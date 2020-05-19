@@ -98,7 +98,7 @@ namespace WolvenKit
                 };
                 if (of.ShowDialog() == DialogResult.OK)
                 {
-                    var loadedxml = XDocument.Load(of.FileName);
+                    var loadedxml = XDocument.Parse(System.IO.File.ReadAllText(of.FileName));
                     MenuObject.Groups = loadedxml.Root?.Elements("Group").Select(DeserializeGroup).ToList();
                     PaintMenuTree();
                 }
