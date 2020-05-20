@@ -4,8 +4,8 @@ using System.Text;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using RED.CRC32;
-using RED.FNV1A;
 using WolvenKit.CR2W.Types;
+using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.CR2W
 {

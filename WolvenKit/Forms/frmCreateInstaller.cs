@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using ICSharpCode.SharpZipLib.Zip;
+using WolvenKit.App;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.Forms
@@ -88,7 +89,7 @@ namespace WolvenKit.Forms
                     dir.Delete(true);
                 }
             }
-            var packtask = MainController.Get().Window.PackAndInstallMod();
+            var packtask = UIController.Get().Window.PackAndInstallMod();
             await packtask;
             var installdir = Path.Combine(MainController.Get().ActiveMod.ProjectDirectory, @"Installer/");
             if (!Directory.Exists(installdir))

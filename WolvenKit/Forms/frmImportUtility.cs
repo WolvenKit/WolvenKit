@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.App;
 using WolvenKit.Common.Wcc;
 using WolvenKit.CR2W;
 using WolvenKit.Extensions;
@@ -42,8 +43,8 @@ namespace WolvenKit.Forms
 
         public void ApplyCustomTheme()
         {
-            var theme = MainController.Get().GetTheme();
-            MainController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+            var theme = UIController.Get().GetTheme();
+            UIController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
 
             this.objectListView.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
             this.objectListView.AlternateRowBackColor = theme.ColorPalette.OverflowButtonHovered.Background;
@@ -155,9 +156,7 @@ namespace WolvenKit.Forms
                 EImportable type = (EImportable)Enum.Parse(typeof(EImportable), ext.TrimStart('.'));
                 //var filedir = new DirectoryInfo(f);
 
-                var relpath = f.TrimStart(importdepot.FullName);
-                relpath = relpath.TrimStart(Path.DirectorySeparatorChar);
-
+                var relpath = f.Substring(importdepot.FullName.Length + 1);
 
                 var importableobj = new ImportableFile(
                     relpath, 
@@ -188,7 +187,7 @@ namespace WolvenKit.Forms
             if (objectListView.Objects == null)
                 return;
 
-            using (var reader = new StringReader(Properties.Resources.__xbmdump_37685553661))
+            using (var reader = new StringReader(MainController.XBMDumpPath))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
                 var records = csv.GetRecords<XBMDump>();
@@ -240,7 +239,7 @@ namespace WolvenKit.Forms
             if (objectListView.Objects == null)
                 return;
 
-            MainController.Get().Window.ModExplorer.PauseMonitoring();
+            UIController.Get().Window.ModExplorer.PauseMonitoring();
 
             var filesToImport = objectListView.Objects.Cast<ImportableFile>().Where(_ => _.IsSelected).ToList();
             var ActiveMod = MainController.Get().ActiveMod;
@@ -264,7 +263,7 @@ namespace WolvenKit.Forms
                 }
             }
 
-            MainController.Get().Window.ModExplorer.ResumeMonitoring();
+            UIController.Get().Window.ModExplorer.ResumeMonitoring();
 
 
             async Task StartImport(ImportableFile file)

@@ -1,51 +1,44 @@
-﻿using System;
+﻿using AutoUpdaterDotNET;
+using Dfust.Hotkeys;
+using SharpPresence;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using AutoUpdaterDotNET;
-using Dfust.Hotkeys;
-using SharpPresence;
 using WeifenLuo.WinFormsUI.Docking;
-using SearchOption = System.IO.SearchOption;
-using WolvenKit.Common;
-using WolvenKit.Cache;
-using WolvenKit.Bundles;
-using WolvenKit.Forms;
-using Enums = Dfust.Hotkeys.Enums;
-using WolvenKit.Wwise.Player;
-using WolvenKit.Extensions;
-using WolvenKit.Common.Wcc;
-using WolvenKit.Common.Services;
-using System.ComponentModel;
 using WolvenKit.Wwise.Wwise;
+using SearchOption = System.IO.SearchOption;
+
 
 namespace WolvenKit
 {
+    using Bundles;
+    using Cache;
+    using Common;
+    using Common.Services;
+    using Common.Wcc;
     using CR2W;
     using CR2W.Types;
-    using Common;
-    using Cache;
-    using Bundles;
-    using Forms;
-    using Wwise.Player;
     using Extensions;
-    using Common.Wcc;
-    using Common.Services;
-    using Enums = Dfust.Hotkeys.Enums;
+    using Forms;
+    using WolvenKit.App;
+    using WolvenKit.Common.Model;
     using WolvenKit.Render;
     using WolvenKit.Scaleform;
-    using System.Text.RegularExpressions;
-    using WolvenKit.Common.Model;
-    using System.Runtime.InteropServices;
+    using Wwise.Player;
+    using Enums = Dfust.Hotkeys.Enums;
 
     public partial class frmMain : Form
     {
@@ -110,7 +103,7 @@ namespace WolvenKit
 
             this.dockPanel.Theme.Extender.FloatWindowFactory = new CustomFloatWindowFactory();
             visualStudioToolStripExtender1.DefaultRenderer = toolStripRenderer;
-            MainController.Get().ToolStripExtender = visualStudioToolStripExtender1;
+            UIController.Get().ToolStripExtender = visualStudioToolStripExtender1;
             ApplyCustomTheme();
 
             UpdateTitle();
@@ -138,7 +131,7 @@ namespace WolvenKit
             hotkeys.RegisterHotkey(Keys.F1, HKHelp, "Help");
             hotkeys.RegisterHotkey(Keys.Control | Keys.C, HKCopy, "Copy");
             hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste, "Paste");
-            MainController.InitForm(this);
+            UIController.InitForm(this);
 
             backgroundWorker1.WorkerReportsProgress = true;
             backgroundWorker1.WorkerSupportsCancellation = true;
@@ -182,7 +175,7 @@ namespace WolvenKit
         }
         private void ApplyCustomTheme()
         {
-            var theme = MainController.Get().GetTheme();
+            var theme = UIController.Get().GetTheme();
             this.dockPanel.Theme = theme;
             visualStudioToolStripExtender1.SetStyle(menuStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
             visualStudioToolStripExtender1.SetStyle(toolbarToolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
@@ -1611,7 +1604,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
 
         private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
         {
-            var config = MainController.Get().Configuration;
+            var config = UIController.Get().Configuration;
 
             config.MainState = WindowState;
 
@@ -1625,7 +1618,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
         private void frmMain_Shown(object sender, EventArgs e)
         {
             ResetWindows();
-            var config = MainController.Get().Configuration;
+            var config = UIController.Get().Configuration;
             Size = config.MainSize;
             Location = config.MainLocation;
             WindowState = config.MainState;
@@ -1781,7 +1774,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 dir = Path.GetDirectoryName(fullpath);
             else
                 dir = fullpath;
-            string reldir = dir.TrimStart(ActiveMod.FileDirectory).TrimStart(Path.DirectorySeparatorChar);
+            string reldir = dir.Substring(ActiveMod.FileDirectory.Length + 1);
 
             // Trim working directories in path
             var reg = new Regex(@"^(Raw|Mod)\\(.*)");
@@ -2021,7 +2014,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                     {
                         try
                         {
-                            MainController.Get()?.Window?.ModExplorer?.StopMonitoringDirectory();
+                            UIController.Get()?.Window?.ModExplorer?.StopMonitoringDirectory();
                             //Close all docs so they won't cause problems
                             OpenDocuments.ToList().ForEach(x => x.Close());
                             //Move the files directory
@@ -2046,7 +2039,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                     {
                         openMod(MainController.Get().ActiveMod?.FileName);
                     }
-                    Commonfunctions.SendNotification("Succesfully updated mod settings!");
+                    CommonUIFunctions.SendNotification("Succesfully updated mod settings!");
                 }
             }
         }
@@ -2079,7 +2072,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                         pi.ShowDialog();
                 }
                 else
-                    Commonfunctions.SendNotification("Invalid file!");
+                    CommonUIFunctions.SendNotification("Invalid file!");
             }
         }
 

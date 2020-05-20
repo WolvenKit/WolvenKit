@@ -1,5 +1,4 @@
 ﻿using RED.CRC32;
-using RED.FNV1A;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,6 +8,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.CR2W.Types;
 using WolvenKit.CR2W.Types.Utils;
 using WolvenKit.Utils;

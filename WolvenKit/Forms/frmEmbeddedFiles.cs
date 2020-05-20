@@ -44,7 +44,7 @@ namespace WolvenKit
             {
                 var mem = new MemoryStream(((CR2WEmbeddedWrapper) e.Model).Data);
 
-                var doc = MainController.Get().LoadDocument("Embedded file", mem);
+                var doc = UIController.Get().LoadDocument("Embedded file", mem);
                 if (doc != null)
                 {
                     doc.OnFileSaved += OnFileSaved;
@@ -62,7 +62,7 @@ namespace WolvenKit
 
         public void ApplyCustomTheme()
         {
-            var theme = MainController.Get().GetTheme();
+            var theme = UIController.Get().GetTheme();
 
             this.listView.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
             this.listView.AlternateRowBackColor = theme.ColorPalette.OverflowButtonHovered.Background;

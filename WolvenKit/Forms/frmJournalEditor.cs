@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.App;
 using WolvenKit.Cache;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;

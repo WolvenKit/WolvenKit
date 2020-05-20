@@ -1,7 +1,4 @@
 ﻿using BrightIdeasSoftware;
-using CsvHelper;
-using IrrlichtLime;
-using Microsoft.WindowsAPICodePack.Dialogs;
 using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
 using System;
@@ -10,33 +7,23 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.Design;
-using System.Xml.Serialization;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.App;
 using WolvenKit.Common.Services;
-using WolvenKit.Common.Wcc;
-using WolvenKit.CR2W;
-using WolvenKit.Extensions;
+using WolvenKit.Radish.Model;
 using WolvenKit.Services;
 
 namespace WolvenKit.Forms
 {
-    
+
 
 
     public partial class frmRadish : DockContent, IThemedContent
     {
-        
-        
-        
-
         private readonly List<BatFile> filelist = new List<BatFile>();
         private readonly LoggerService logger;
 
@@ -63,7 +50,7 @@ namespace WolvenKit.Forms
             ApplyCustomTheme();
 
             Config = new RadishConfig();
-            logger = MainController.Get().Window.Logger;
+            logger = UIController.Get().Window.Logger;
 
             var filedir = new DirectoryInfo(MainController.Get().ActiveMod.FileDirectory);
             radishdir = filedir.GetFiles("*.bat", SearchOption.AllDirectories)?.FirstOrDefault(_ => _.Name == "_settings_.bat")?.Directory;
@@ -306,10 +293,10 @@ namespace WolvenKit.Forms
             {
                 streamWriter.Write(scintillaControl.Text);
             }
-            MainController.Get().QueueLog(FilePath + " saved!", Common.Services.Logtype.Normal);
+            UIController.Get().QueueLog(FilePath + " saved!", Common.Services.Logtype.Normal);
 
             // register all new classes
-            MainController.Get().Window.ScanAndRegisterCustomClasses();
+            UIController.Get().Window.ScanAndRegisterCustomClasses();
         }
 
         private Color IntToColor(int rgbValue)
@@ -375,8 +362,8 @@ namespace WolvenKit.Forms
         #region Methods
         public void ApplyCustomTheme()
         {
-            var theme = MainController.Get().GetTheme();
-            MainController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+            var theme = UIController.Get().GetTheme();
+            UIController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
 
             // objectListView
             this.objectListView.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
+using WolvenKit.Radish.Model;
 
-namespace WolvenKit.Radish.Model
+namespace WolvenKit.App
 {
     public class RadishConfig
     {
@@ -18,7 +17,7 @@ namespace WolvenKit.Radish.Model
         {
             get
             {
-                var path = Application.ExecutablePath;
+                var path = AppDomain.CurrentDomain.BaseDirectory;
                 var filename = Path.GetFileNameWithoutExtension(path);
                 var dir = Path.GetDirectoryName(path);
                 return Path.Combine(dir ?? "", filename + "_radishconfig.xml");

@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using VanWassenhove.Util;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.App;
 using WolvenKit.Net;
 
 namespace WolvenKit
@@ -62,7 +63,7 @@ namespace WolvenKit
         {
             if (GameSocket.Connected)
             {
-                Commonfunctions.SendNotification("Already connected!");
+                CommonUIFunctions.SendNotification("Already connected!");
             }
             else
             {
@@ -70,13 +71,13 @@ namespace WolvenKit
                 if (GameSocket.Connected)
                 {
                     statusLabel.Text = "Status: Connected";
-                    Commonfunctions.SendNotification("Connected!");
+                    CommonUIFunctions.SendNotification("Connected!");
                     DataRecieveWorker.RunWorkerAsync();
                 }
                 else
                 {
                     statusLabel.Text = "Status: Error";
-                    Commonfunctions.SendNotification("Failed to connect!");
+                    CommonUIFunctions.SendNotification("Failed to connect!");
                 }
             }
         }
@@ -111,7 +112,7 @@ namespace WolvenKit
                 return;
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
-                Commonfunctions.SendNotification("Game is already running!");
+                CommonUIFunctions.SendNotification("Game is already running!");
                 return;
             }
             var config = MainController.Get().Configuration;

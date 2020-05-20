@@ -1,5 +1,4 @@
-﻿using RED.FNV1A;
-using System;
+﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;

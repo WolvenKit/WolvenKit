@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.App;
 using WolvenKit.CR2W;
 using WolvenKit.Services;
 
@@ -168,7 +169,7 @@ namespace WolvenKit
                 File = new CR2WFile(reader)
                 {
                     FileName = filename,
-                    EditorController = MainController.Get(),
+                    EditorController = UIController.Get(),
                     LocalizedStringSource = MainController.Get()
                 };
             }
@@ -229,7 +230,7 @@ namespace WolvenKit
 
         public void ApplyCustomTheme()
         {
-            var theme = MainController.Get().GetTheme();
+            var theme = UIController.Get().GetTheme();
             this.dockPanel.Theme = theme;
             dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath),
                 "cr2wdocument_layout.xml"));

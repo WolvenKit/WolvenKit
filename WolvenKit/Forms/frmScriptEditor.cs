@@ -171,10 +171,10 @@ namespace WolvenKit.Forms
             {
                 streamWriter.Write(scintillaControl.Text);
             }
-            MainController.Get().QueueLog(FilePath + " saved!", Common.Services.Logtype.Normal);
+            UIController.Get().QueueLog(FilePath + " saved!", Common.Services.Logtype.Normal);
 
             // register all new classes
-            MainController.Get().Window.ScanAndRegisterCustomClasses();
+            UIController.Get().Window.ScanAndRegisterCustomClasses();
         }
 
         private Color IntToColor(int rgbValue)

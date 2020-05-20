@@ -19,6 +19,8 @@ namespace WolvenKit
     using System.Collections.ObjectModel;
     using System.Drawing;
     using UsefulThings;
+    using WolvenKit.App;
+    using WolvenKit.Common.Extensions;
     using WolvenKit.CR2W;
     using WolvenKit.Extensions;
     using WolvenKit.Render;
@@ -167,8 +169,8 @@ namespace WolvenKit
         #region Methods
         public void ApplyCustomTheme()
         {
-            var theme = MainController.Get().GetTheme();
-            MainController.Get().ToolStripExtender.SetStyle(searchstrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+            var theme = UIController.Get().GetTheme();
+            UIController.Get().ToolStripExtender.SetStyle(searchstrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
 
             this.treeListView.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
             this.treeListView.ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text;

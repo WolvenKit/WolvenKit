@@ -8,11 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using ICSharpCode.SharpZipLib.Zip;
-using Ionic.Zlib;
 
-namespace WolvenKit
+namespace WolvenKit.App
 {
-    class WKPackage
+    public class WKPackage
     {
         private XDocument Assembly;
         private string Icon;
