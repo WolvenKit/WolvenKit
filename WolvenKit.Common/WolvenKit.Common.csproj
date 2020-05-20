@@ -7,8 +7,8 @@
     <ProjectGuid>{4D1019F1-F099-450F-85B8-697E0332A94F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WolvenKit.Interfaces</RootNamespace>
-    <AssemblyName>WolvenKit.Interfaces</AssemblyName>
+    <RootNamespace>WolvenKit.Common</RootNamespace>
+    <AssemblyName>WolvenKit.Common</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

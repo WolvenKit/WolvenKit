@@ -39,7 +39,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Nvidia", "Wolveki
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameFormats", "GameFormats", "{B437E733-AAAD-437E-9923-FD0BA00AE6C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wolvenkit.Radish", "Wolvenkit.Radish\Wolvenkit.Radish.csproj", "{D4D390BB-C14D-423A-861A-470BED6D40A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Radish", "Wolvenkit.Radish\WolvenKit.Radish.csproj", "{D4D390BB-C14D-423A-861A-470BED6D40A9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{327FE2E2-83A6-46F9-BFC2-DFCD066B4263}"
 EndProject
