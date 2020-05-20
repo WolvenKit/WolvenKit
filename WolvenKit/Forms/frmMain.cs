@@ -2126,6 +2126,11 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 renderW2meshToolStripMenuItem.Image = Properties.Resources.ui_check_box;
             }
         }
+        private void cR2WToTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var fctt = new frmCR2WtoText();
+            fctt.ShowDialog();
+        }
 
         private void RecordStepsToReproduceBugToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2909,6 +2914,6 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
 
         #endregion // Mod Pack
 
-        
+
     }
 }
