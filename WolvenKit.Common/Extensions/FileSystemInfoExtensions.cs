@@ -16,6 +16,8 @@ namespace WolvenKit.Common.Extensions
 
         public static bool HasFilesOrFolders(this FileSystemInfo fsi)
         {
+            if (!fsi.Exists)
+                return false;
             if (!fsi.IsDirectory())
                 return false;
             var di = fsi as DirectoryInfo;

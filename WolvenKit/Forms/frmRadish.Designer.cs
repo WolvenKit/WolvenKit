@@ -40,14 +40,11 @@
             this.tsb_Pack = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsb_StartGame = new System.Windows.Forms.ToolStripButton();
-            this.objectListView = new BrightIdeasSoftware.ObjectListView();
-            this.olvColumn1 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnSelected = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnImportType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnTexturegroup = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.splitContainerMain = new System.Windows.Forms.SplitContainer();
-            this.splitContainerLeft = new System.Windows.Forms.SplitContainer();
             this.WorkflowobjectListView = new BrightIdeasSoftware.ObjectListView();
             this.olvColumn2 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.WorkflowcontextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -55,17 +52,12 @@
             this.RemovetoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.PropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.splitContainerBats = new System.Windows.Forms.SplitContainer();
-            this.scintillaControl = new ScintillaNET.Scintilla();
+            this.PropertyGridSettings = new System.Windows.Forms.PropertyGrid();
             this.toolStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.objectListView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
             this.splitContainerMain.Panel2.SuspendLayout();
             this.splitContainerMain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerLeft)).BeginInit();
-            this.splitContainerLeft.Panel1.SuspendLayout();
-            this.splitContainerLeft.Panel2.SuspendLayout();
-            this.splitContainerLeft.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.WorkflowobjectListView)).BeginInit();
             this.WorkflowcontextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerBats)).BeginInit();
@@ -165,33 +157,6 @@
             this.tsb_StartGame.Text = "Start Game";
             this.tsb_StartGame.Click += new System.EventHandler(this.tsb_StartGame_Click);
             // 
-            // objectListView
-            // 
-            this.objectListView.AllColumns.Add(this.olvColumn1);
-            this.objectListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.olvColumn1});
-            this.objectListView.Cursor = System.Windows.Forms.Cursors.Default;
-            this.objectListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.objectListView.FullRowSelect = true;
-            this.objectListView.HasCollapsibleGroups = false;
-            this.objectListView.HideSelection = false;
-            this.objectListView.Location = new System.Drawing.Point(0, 0);
-            this.objectListView.Name = "objectListView";
-            this.objectListView.ShowGroups = false;
-            this.objectListView.Size = new System.Drawing.Size(639, 321);
-            this.objectListView.TabIndex = 2;
-            this.objectListView.UseAlternatingBackColors = true;
-            this.objectListView.UseCompatibleStateImageBehavior = false;
-            this.objectListView.View = System.Windows.Forms.View.Details;
-            this.objectListView.SelectionChanged += new System.EventHandler(this.objectListView_SelectionChanged);
-            // 
-            // olvColumn1
-            // 
-            this.olvColumn1.AspectName = "Name";
-            this.olvColumn1.FillsFreeSpace = true;
-            this.olvColumn1.IsEditable = false;
-            this.olvColumn1.Text = "Name";
-            // 
             // olvColumnSelected
             // 
             this.olvColumnSelected.AspectName = "IsSelected";
@@ -230,7 +195,7 @@
             // 
             // splitContainerMain.Panel1
             // 
-            this.splitContainerMain.Panel1.Controls.Add(this.splitContainerLeft);
+            this.splitContainerMain.Panel1.Controls.Add(this.PropertyGrid);
             // 
             // splitContainerMain.Panel2
             // 
@@ -238,24 +203,6 @@
             this.splitContainerMain.Size = new System.Drawing.Size(1013, 644);
             this.splitContainerMain.SplitterDistance = 370;
             this.splitContainerMain.TabIndex = 3;
-            // 
-            // splitContainerLeft
-            // 
-            this.splitContainerLeft.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerLeft.Location = new System.Drawing.Point(0, 0);
-            this.splitContainerLeft.Name = "splitContainerLeft";
-            this.splitContainerLeft.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainerLeft.Panel1
-            // 
-            this.splitContainerLeft.Panel1.Controls.Add(this.WorkflowobjectListView);
-            // 
-            // splitContainerLeft.Panel2
-            // 
-            this.splitContainerLeft.Panel2.Controls.Add(this.PropertyGrid);
-            this.splitContainerLeft.Size = new System.Drawing.Size(370, 644);
-            this.splitContainerLeft.SplitterDistance = 133;
-            this.splitContainerLeft.TabIndex = 21;
             // 
             // WorkflowobjectListView
             // 
@@ -271,7 +218,7 @@
             this.WorkflowobjectListView.Location = new System.Drawing.Point(0, 0);
             this.WorkflowobjectListView.Name = "WorkflowobjectListView";
             this.WorkflowobjectListView.ShowGroups = false;
-            this.WorkflowobjectListView.Size = new System.Drawing.Size(370, 133);
+            this.WorkflowobjectListView.Size = new System.Drawing.Size(639, 321);
             this.WorkflowobjectListView.TabIndex = 20;
             this.WorkflowobjectListView.UseAlternatingBackColors = true;
             this.WorkflowobjectListView.UseCompatibleStateImageBehavior = false;
@@ -313,7 +260,7 @@
             this.PropertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PropertyGrid.Location = new System.Drawing.Point(0, 0);
             this.PropertyGrid.Name = "PropertyGrid";
-            this.PropertyGrid.Size = new System.Drawing.Size(370, 507);
+            this.PropertyGrid.Size = new System.Drawing.Size(370, 644);
             this.PropertyGrid.TabIndex = 19;
             // 
             // splitContainerBats
@@ -325,23 +272,24 @@
             // 
             // splitContainerBats.Panel1
             // 
-            this.splitContainerBats.Panel1.Controls.Add(this.objectListView);
+            this.splitContainerBats.Panel1.Controls.Add(this.WorkflowobjectListView);
             // 
             // splitContainerBats.Panel2
             // 
-            this.splitContainerBats.Panel2.Controls.Add(this.scintillaControl);
+            this.splitContainerBats.Panel2.Controls.Add(this.PropertyGridSettings);
             this.splitContainerBats.Size = new System.Drawing.Size(639, 644);
             this.splitContainerBats.SplitterDistance = 321;
             this.splitContainerBats.TabIndex = 3;
             // 
-            // scintillaControl
+            // PropertyGridSettings
             // 
-            this.scintillaControl.CaretLineVisible = true;
-            this.scintillaControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.scintillaControl.Location = new System.Drawing.Point(0, 0);
-            this.scintillaControl.Name = "scintillaControl";
-            this.scintillaControl.Size = new System.Drawing.Size(639, 319);
-            this.scintillaControl.TabIndex = 1;
+            this.PropertyGridSettings.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PropertyGridSettings.Location = new System.Drawing.Point(0, 0);
+            this.PropertyGridSettings.Name = "PropertyGridSettings";
+            this.PropertyGridSettings.Size = new System.Drawing.Size(639, 319);
+            this.PropertyGridSettings.TabIndex = 0;
+            this.PropertyGridSettings.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.PropertyGridSettings_PropertyValueChanged);
+            this.PropertyGridSettings.SelectedObjectsChanged += new System.EventHandler(this.PropertyGridSettings_SelectedObjectsChanged);
             // 
             // frmRadish
             // 
@@ -356,15 +304,10 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmRadish_FormClosing);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.objectListView)).EndInit();
             this.splitContainerMain.Panel1.ResumeLayout(false);
             this.splitContainerMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).EndInit();
             this.splitContainerMain.ResumeLayout(false);
-            this.splitContainerLeft.Panel1.ResumeLayout(false);
-            this.splitContainerLeft.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerLeft)).EndInit();
-            this.splitContainerLeft.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.WorkflowobjectListView)).EndInit();
             this.WorkflowcontextMenuStrip.ResumeLayout(false);
             this.splitContainerBats.Panel1.ResumeLayout(false);
@@ -384,24 +327,21 @@
         private System.Windows.Forms.ToolStripButton tsb_Pack;
         private System.Windows.Forms.ToolStripButton tsb_LaunchQuestEditor;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private BrightIdeasSoftware.ObjectListView objectListView;
         private BrightIdeasSoftware.OLVColumn olvColumnSelected;
         private BrightIdeasSoftware.OLVColumn olvColumnName;
         private BrightIdeasSoftware.OLVColumn olvColumnImportType;
         private BrightIdeasSoftware.OLVColumn olvColumnTexturegroup;
         private System.Windows.Forms.SplitContainer splitContainerMain;
         private System.Windows.Forms.SplitContainer splitContainerBats;
-        private ScintillaNET.Scintilla scintillaControl;
-        private BrightIdeasSoftware.OLVColumn olvColumn1;
         private System.Windows.Forms.ToolStripButton tsb_RunSelected;
         private System.Windows.Forms.ToolStripButton tsb_ReCreateLinks;
         private System.Windows.Forms.ToolStripButton tsb_StartGame;
         private System.Windows.Forms.PropertyGrid PropertyGrid;
         private System.Windows.Forms.ContextMenuStrip WorkflowcontextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem AddtoolStripMenuItem;
-        private System.Windows.Forms.SplitContainer splitContainerLeft;
         private BrightIdeasSoftware.ObjectListView WorkflowobjectListView;
         private BrightIdeasSoftware.OLVColumn olvColumn2;
         private System.Windows.Forms.ToolStripMenuItem RemovetoolStripMenuItem;
+        private System.Windows.Forms.PropertyGrid PropertyGridSettings;
     }
 }

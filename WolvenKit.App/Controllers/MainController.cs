@@ -21,24 +21,43 @@ namespace WolvenKit.App
     using WolvenKit.Common.Wcc;
     using WolvenKit.W3Speech;
 
-    public class MainController : ILocalizedStringSource, INotifyPropertyChanged
+    public class MainController : ObservableObject, ILocalizedStringSource
     {
         private static MainController mainController;
-        public Configuration Configuration { get; private set; }
-        public W3Mod ActiveMod { get; set; }
 
-        public WccLite WccHelper { get; set; }
-        public LoggerService Logger { get; set; }
-        public List<HashDump> Hashdumplist { get; set; }
+        private MainController() { }
 
+        public static MainController Get()
+        {
+            if (mainController == null)
+            {
+                mainController = new MainController
+                {
+                    Configuration = Configuration.Load(),
+                    Logger = new LoggerService()
+                };
+            }
+            return mainController;
+        }
+
+        #region Fields
         public const string ManagerCacheDir = "ManagerCache";
         public const string DepotDir = "Depot";
         public const string DepotZipPath = "ManagerCache\\Depot.zip";
         public const string XBMDumpPath = "ManagerCache\\__xbmdump_37685553661.csv";
         public string InitialModProject = "";
         public string InitialWKP = "";
-       
-        public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
+
+        #region Properties
+        public Configuration Configuration { get; private set; }
+        public W3Mod ActiveMod { get; set; }
+        public WccLite WccHelper { get; set; }
+        public List<HashDump> Hashdumplist { get; set; }
+        /// <summary>
+        /// Shows wheteher there are unsaved changes in the project.
+        /// </summary>
+        public bool ProjectUnsaved = false;
 
         private string _projectstatus = "Idle";
         public string ProjectStatus
@@ -60,21 +79,7 @@ namespace WolvenKit.App
             get => _loaded;
             set => SetField(ref _loaded, value, nameof(Loaded));
         }
-
-
-        private KeyValuePair<string,Logtype> _logMessage = new KeyValuePair<string, Logtype>("",Logtype.Normal);
-        public KeyValuePair<string, Logtype> LogMessage
-        {
-            get => _logMessage;
-            set => SetField(ref _logMessage, value, nameof(LogMessage));
-        }
-
-        /// <summary>
-        /// Shows wheteher there are unsaved changes in the project.
-        /// </summary>
-        public bool ProjectUnsaved = false;
-
-        private MainController()  {  }
+        #endregion
 
         #region Archive Managers
         private SoundManager soundManager;
@@ -104,50 +109,37 @@ namespace WolvenKit.App
         //public Dictionary<string, MemoryMappedFile> mmfs = new Dictionary<string, MemoryMappedFile>();
         #endregion
 
+        #region Logging
+        public LoggerService Logger { get; set; }
+
+        private KeyValuePair<string, Logtype> _logMessage = new KeyValuePair<string, Logtype>("", Logtype.Normal);
+        public KeyValuePair<string, Logtype> LogMessage
+        {
+            get => _logMessage;
+            set => SetField(ref _logMessage, value, nameof(LogMessage));
+        }
         /// <summary>
-        /// Useful function for blindly importing a file.
+        /// Queues a string for logging in the main window.
         /// </summary>
-        /// <param name="name">The name of the file.</param>
-        /// <param name="archive">The manager to search for the file in.</param>
-        /// <returns></returns>
-        public static List<byte[]> ImportFile(string name,IWitcherArchive archive)
+        /// <param name="msg">The message to log.</param>
+        /// <param name="type">The type of the log. Not needed.</param>
+        public void QueueLog(string msg, Logtype type = Logtype.Normal)
         {
-            List<byte[]> ret = new List<byte[]>();
-            archive.FileList.ToList().Where(x => x.Name.Contains(name)).ToList().ForEach(x =>
-            {
-                using (var ms = new MemoryStream())
-                {
-                    x.Extract(ms);
-                    ret.Add(ms.ToArray());
-                }
-            });
-            return ret;
+            LogMessage = new KeyValuePair<string, Logtype>(msg, type);
         }
 
-        public string GetLocalizedString(uint val)
+        /// <summary>
+        /// Use this for threadsafe logging.
+        /// </summary>
+        /// <param name="value"></param>
+        public static void LogString(string value, Logtype logtype)
         {
-            return W3StringManager.GetString(val);
+            if (Get().Logger != null)
+                Get().Logger.LogString(value, logtype);
         }
+        #endregion
 
-        public void UpdateWccHelper(string wccLite)
-        {
-            if(WccHelper == null)
-            {
-                mainController.WccHelper = new WccLite(wccLite, mainController.Logger);
-            }
-            WccHelper.UpdatePath(wccLite);
-        }
-
-        public static MainController Get()
-        {
-            if (mainController == null)
-            {
-                mainController = new MainController();
-                mainController.Configuration = Configuration.Load();
-            }
-            return mainController;
-        }
-
+        #region Methods
         /// <summary>
         /// Initializes the archive managers in an async thread
         /// </summary>
@@ -433,7 +425,7 @@ namespace WolvenKit.App
 
                 loadStatus = "Loaded";
 
-                Logger = new LoggerService();
+                
                 WccHelper = new WccLite(MainController.Get().Configuration.WccLite, Logger);
 
                 mainController.Loaded = true;
@@ -444,10 +436,38 @@ namespace WolvenKit.App
                 System.Console.WriteLine(e.Message);
             }
         }
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        /// <summary>
+        /// Useful function for blindly importing a file.
+        /// </summary>
+        /// <param name="name">The name of the file.</param>
+        /// <param name="archive">The manager to search for the file in.</param>
+        /// <returns></returns>
+        public static List<byte[]> ImportFile(string name,IWitcherArchive archive)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            List<byte[]> ret = new List<byte[]>();
+            archive.FileList.ToList().Where(x => x.Name.Contains(name)).ToList().ForEach(x =>
+            {
+                using (var ms = new MemoryStream())
+                {
+                    x.Extract(ms);
+                    ret.Add(ms.ToArray());
+                }
+            });
+            return ret;
+        }
+
+        public string GetLocalizedString(uint val)
+        {
+            return W3StringManager.GetString(val);
+        }
+
+        public void UpdateWccHelper(string wccLite)
+        {
+            if(WccHelper == null)
+            {
+                mainController.WccHelper = new WccLite(wccLite, mainController.Logger);
+            }
+            WccHelper.UpdatePath(wccLite);
         }
 
         public void ReloadStringManager()
@@ -462,5 +482,7 @@ namespace WolvenKit.App
             OnPropertyChanged(propertyName);
             return true;
         }
+        #endregion
+
     }
 }

@@ -42,7 +42,9 @@ namespace WolvenKit
             };
             this.treeListView.ChildrenGetter = delegate (object x) {
                 DirectoryInfo dir = (DirectoryInfo)x;
-                return dir.Exists ? new ArrayList(dir.GetFileSystemInfos()) : new ArrayList();
+                return dir.Exists ? new ArrayList(dir.GetFileSystemInfos()
+                    .Where(_ => _.Extension != ".bat")
+                    .ToArray()) : new ArrayList();
             };
             treeListView.SmallImageList = new ImageList();
             this.olvColumnName.ImageGetter = delegate (object row) {
@@ -796,7 +798,7 @@ namespace WolvenKit
 
         private void treeListView_CellClick(object sender, CellClickEventArgs e)
         {
-            if (treeListView.SelectedObject is FileSystemInfo selectedobject)
+            if (treeListView.SelectedObject is FileSystemInfo selectedobject && e.Item != null)
             {
                 var node = (FileSystemInfo)e.Item.RowObject;
 

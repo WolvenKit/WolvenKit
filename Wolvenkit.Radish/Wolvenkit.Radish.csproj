@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\RadishBatFile.cs" />
+    <Compile Include="Model\RadishBatFileWrapper.cs" />
     <Compile Include="Model\RadishWorkflow.cs" />
     <Compile Include="WitcherTool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

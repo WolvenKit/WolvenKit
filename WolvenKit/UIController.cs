@@ -47,14 +47,6 @@ namespace WolvenKit
        
         public event PropertyChangedEventHandler PropertyChanged;
 
-
-        private KeyValuePair<string,Logtype> _logMessage = new KeyValuePair<string, Logtype>("",Logtype.Normal);
-        public KeyValuePair<string, Logtype> LogMessage
-        {
-            get => _logMessage;
-            set => SetField(ref _logMessage, value, nameof(LogMessage));
-        }
-
         private UIController()  {  }
 
         /// <summary>
@@ -66,17 +58,6 @@ namespace WolvenKit
             Bitmap bmp = WolvenKit.Properties.Resources.Logo_wkit;
             form.Icon = Icon.FromHandle(bmp.GetHicon());
         }
-
-        /// <summary>
-        /// Queues a string for logging in the main window.
-        /// </summary>
-        /// <param name="msg">The message to log.</param>
-        /// <param name="type">The type of the log. Not needed.</param>
-        public void QueueLog(string msg, Logtype type = Logtype.Normal)
-        {
-            LogMessage = new KeyValuePair<string, Logtype>(msg, type);
-        }
-
 
         public void CreateVariableEditor(CVariable editvar, EVariableEditorAction action)
         {
@@ -105,14 +86,16 @@ namespace WolvenKit
             return mainController;
         }
 
+        
+
         public frmCR2WDocument LoadDocument(string filename, bool suppressErrors = false)
         {
-            return Task.Run(() => Window.LoadDocument(filename, null, suppressErrors)).Result; //FIXMEEEEEE
+            return Window.LoadDocument(filename, null, suppressErrors);
         }
 
         public frmCR2WDocument LoadDocument(string filename, MemoryStream memoryStream, bool suppressErrors = false)
         {
-            return Task.Run(() => Window.LoadDocument(filename, memoryStream, suppressErrors)).Result; //FIXMEEEEEE
+            return Window.LoadDocument(filename, memoryStream, suppressErrors);
         }
 
 

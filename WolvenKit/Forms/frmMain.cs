@@ -182,7 +182,11 @@ namespace WolvenKit
         }
 
         
-
+        /// <summary>
+        /// Deprecated. Use MainController.QueueLog 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LoggerUpdated(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Log")
@@ -1402,6 +1406,40 @@ namespace WolvenKit
         #endregion //Methods
 
         #region  Control events
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            //Load/Setup the config
+            var Exit = false;
+            while (!File.Exists(MainController.Get().Configuration.ExecutablePath))
+            {
+                var sets = new frmSettings();
+                if (sets.ShowDialog() != DialogResult.OK)
+                {
+                    Exit = true;
+                    break;
+                }
+                else
+                    MainController.Get().ProjectStatus = "Ready";
+            }
+
+            if (Exit)
+            {
+                Visible = false;
+                Close();
+            }
+
+            //Start loading if everything is set up.
+            var frmload = new frmLoading();
+            frmload.ShowDialog();
+
+            WccHelper = MainController.Get().WccHelper;
+            Logger = MainController.Get().Logger;
+            Logger.PropertyChanged += LoggerUpdated;
+
+            //Update check should be after we are all set up. It goes on in the background.
+            AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
+            richpresenceworker.RunWorkerAsync();
+        }
         private void richpresenceworker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             string project = "non";
@@ -1947,40 +1985,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             AddOutput("Saved!\n", Logtype.Success);
         }
 
-        private void frmMain_Load(object sender, EventArgs e)
-        {
-            //Load/Setup the config
-            var Exit = false;
-            while (!File.Exists(MainController.Get().Configuration.ExecutablePath))
-            {
-                var sets = new frmSettings();
-                if (sets.ShowDialog() != DialogResult.OK)
-                {
-                    Exit = true;
-                    break;
-                }
-                else
-                    MainController.Get().ProjectStatus = "Ready";
-            }
-
-            if (Exit)
-            {
-                Visible = false;
-                Close();
-            }
-
-            //Start loading if everything is set up.
-            var frmload = new frmLoading();
-            frmload.ShowDialog();
-
-            WccHelper = MainController.Get().WccHelper;
-            Logger = MainController.Get().Logger;
-            Logger.PropertyChanged += LoggerUpdated;
-
-            //Update check should be after we are all set up. It goes on in the background.
-            AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
-            richpresenceworker.RunWorkerAsync();
-        }
+        
 
 
         private void tbtNewMod_Click(object sender, EventArgs e)

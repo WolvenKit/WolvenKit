@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.App;
 
 namespace WolvenKit.Forms
 {
@@ -171,7 +172,7 @@ namespace WolvenKit.Forms
             {
                 streamWriter.Write(scintillaControl.Text);
             }
-            UIController.Get().QueueLog(FilePath + " saved!", Common.Services.Logtype.Normal);
+            MainController.LogString(FilePath + " saved!", Common.Services.Logtype.Normal);
 
             // register all new classes
             UIController.Get().Window.ScanAndRegisterCustomClasses();
