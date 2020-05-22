@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Wolvenkit.Radish
+namespace WolvenKit.Radish
 {
     public abstract class WitcherTool
     {

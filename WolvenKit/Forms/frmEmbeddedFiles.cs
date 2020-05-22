@@ -3,6 +3,7 @@ using BrightIdeasSoftware;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.CR2W;
 using WolvenKit.Services;
+using System.Linq;
 
 namespace WolvenKit
 {
@@ -42,9 +43,9 @@ namespace WolvenKit
 
             if (e.ClickCount == 2)
             {
-                var mem = new MemoryStream(((CR2WEmbeddedWrapper) e.Model).Data);
+                var mem = new MemoryStream(((CR2WEmbeddedWrapper) e.Model).Data.ToArray());
 
-                var doc = MainController.Get().LoadDocument("Embedded file", mem);
+                var doc = UIController.Get().LoadDocument("Embedded file", mem);
                 if (doc != null)
                 {
                     doc.OnFileSaved += OnFileSaved;
@@ -57,12 +58,12 @@ namespace WolvenKit
         {
             var doc = (frmCR2WDocument) sender;
             var editvar = (CR2WEmbeddedWrapper) doc.SaveTarget;
-            editvar.Data = ((MemoryStream) e.Stream).ToArray();
+            editvar.Data = ((MemoryStream) e.Stream).ToArray().ToList();
         }
 
         public void ApplyCustomTheme()
         {
-            var theme = MainController.Get().GetTheme();
+            var theme = UIController.Get().GetTheme();
 
             this.listView.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
             this.listView.AlternateRowBackColor = theme.ColorPalette.OverflowButtonHovered.Background;

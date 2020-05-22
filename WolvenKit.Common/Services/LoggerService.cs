@@ -18,7 +18,7 @@ namespace WolvenKit.Common.Services
     }
 
     [TypeConverter(typeof(ExpandableObjectConverter))]
-    public class LoggerService : ObservableObject, ILoggerService, INotifyPropertyChanged
+    public class LoggerService : ObservableObject, ILoggerService
     {
         public LoggerService()
         {
@@ -29,7 +29,37 @@ namespace WolvenKit.Common.Services
 
         #region Properties
         public ObservableCollection<InterpretedLogMessage> ErrorLog { get; set; }
-        public string Log { get; set; } = "Log initialized.\n\r";
+        #region modname
+        private string _log;
+        public string Log
+        {
+            get => _log;
+            set
+            {
+                if (_log != value)
+                {
+                    _log = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        #endregion
+        #region progress
+        private Tuple<int, string> _progress;
+        public Tuple<int,string> Progress
+        {
+            get => _progress;
+            set
+            {
+                if (_progress != value)
+                {
+                    _progress = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
         public Logtype Logtype { get; set; } = Logtype.Normal;
         #endregion
 
@@ -39,14 +69,29 @@ namespace WolvenKit.Common.Services
 
         #region Methods
         /// <summary>
-        /// Log an string
+        /// Log string
         /// </summary>
         /// <param name="value"></param>
         public void LogString(string value, Logtype type = Logtype.Normal)
         {
             Logtype = type;
             Log = value;// + "\r\n";
-            OnPropertyChanged(nameof(Log));
+        }
+        /// <summary>
+        /// Log progress value
+        /// </summary>
+        /// <param name="value"></param>
+        public void LogProgress(int value)
+        {
+            Progress = new Tuple<int, string>(value, "");
+        }
+        /// <summary>
+        /// Log progress value
+        /// </summary>
+        /// <param name="value"></param>
+        public void LogProgress(int value, string str)
+        {
+            Progress = new Tuple<int, string>(value, str);
         }
         /// <summary>
         /// Log an Interpretable LogMessage

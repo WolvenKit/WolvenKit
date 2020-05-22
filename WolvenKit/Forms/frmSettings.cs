@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using IniParserLTK;
 using Microsoft.Win32;
+using WolvenKit.App;
 
 namespace WolvenKit
 {
@@ -31,7 +32,7 @@ namespace WolvenKit
             txVoiceLanguage.Text = config.VoiceLanguage;
             txWCC_Lite.Text = config.WccLite;
             comboBoxTheme.Items.AddRange(Enum.GetValues(typeof(EColorThemes)).Cast<object>().ToArray());
-            comboBoxTheme.SelectedItem = config.ColorTheme;
+            comboBoxTheme.SelectedItem = UIController.Get().Configuration.ColorTheme;
             exeSearcherSlave.RunWorkerAsync();
             btSave.Enabled =
                 (File.Exists(txWCC_Lite.Text) && Path.GetExtension(txWCC_Lite.Text) == ".exe" && txWCC_Lite.Text.Contains("wcc_lite.exe")) &&
@@ -69,16 +70,17 @@ namespace WolvenKit
                 return;
             }
             var config = MainController.Get().Configuration;
+            var uiconfig = UIController.Get().Configuration;
 
             // Apply Theme
-            bool applyTheme = config.ColorTheme != (EColorThemes)comboBoxTheme.SelectedItem;
+            bool applyTheme = uiconfig.ColorTheme != (EColorThemes)comboBoxTheme.SelectedItem;
             
 
             config.ExecutablePath = txExecutablePath.Text;
             config.WccLite = txWCC_Lite.Text;
             config.TextLanguage = txTextLanguage.Text;
             config.VoiceLanguage = txVoiceLanguage.Text;
-            config.ColorTheme = (EColorThemes)comboBoxTheme.SelectedItem;
+            uiconfig.ColorTheme = (EColorThemes)comboBoxTheme.SelectedItem;
             config.Save();
 
             MainController.Get().UpdateWccHelper(config.WccLite);
@@ -86,7 +88,7 @@ namespace WolvenKit
 
             if (applyTheme)
             {
-                MainController.Get().Window.GlobalApplyTheme();
+                UIController.Get().Window.GlobalApplyTheme();
             }
                 
 

@@ -25,7 +25,7 @@ namespace WolvenKit.Forms
         {
             progressBar1.Value = percentValue;
             if (userState is string)
-                label1.Text = userState as string;
+                labelDescription.Text = userState as string;
         }
     }
 }

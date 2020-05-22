@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
+using WolvenKit.App;
 
 namespace WolvenKit
 {

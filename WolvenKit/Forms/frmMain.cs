@@ -1,51 +1,44 @@
-﻿using System;
+﻿using AutoUpdaterDotNET;
+using Dfust.Hotkeys;
+using SharpPresence;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using AutoUpdaterDotNET;
-using Dfust.Hotkeys;
-using SharpPresence;
 using WeifenLuo.WinFormsUI.Docking;
-using SearchOption = System.IO.SearchOption;
-using WolvenKit.Common;
-using WolvenKit.Cache;
-using WolvenKit.Bundles;
-using WolvenKit.Forms;
-using Enums = Dfust.Hotkeys.Enums;
-using WolvenKit.Wwise.Player;
-using WolvenKit.Extensions;
-using WolvenKit.Common.Wcc;
-using WolvenKit.Common.Services;
-using System.ComponentModel;
 using WolvenKit.Wwise.Wwise;
+using SearchOption = System.IO.SearchOption;
+
 
 namespace WolvenKit
 {
+    using Bundles;
+    using Cache;
+    using Common;
+    using Common.Services;
+    using Common.Wcc;
     using CR2W;
     using CR2W.Types;
-    using Common;
-    using Cache;
-    using Bundles;
-    using Forms;
-    using Wwise.Player;
     using Extensions;
-    using Common.Wcc;
-    using Common.Services;
-    using Enums = Dfust.Hotkeys.Enums;
+    using Forms;
+    using WolvenKit.App;
+    using WolvenKit.Common.Model;
     using WolvenKit.Render;
     using WolvenKit.Scaleform;
-    using System.Text.RegularExpressions;
-    using WolvenKit.Common.Model;
-    using System.Runtime.InteropServices;
+    using Wwise.Player;
+    using Enums = Dfust.Hotkeys.Enums;
 
     public partial class frmMain : Form
     {
@@ -110,7 +103,7 @@ namespace WolvenKit
 
             this.dockPanel.Theme.Extender.FloatWindowFactory = new CustomFloatWindowFactory();
             visualStudioToolStripExtender1.DefaultRenderer = toolStripRenderer;
-            MainController.Get().ToolStripExtender = visualStudioToolStripExtender1;
+            UIController.Get().ToolStripExtender = visualStudioToolStripExtender1;
             ApplyCustomTheme();
 
             UpdateTitle();
@@ -138,18 +131,15 @@ namespace WolvenKit
             hotkeys.RegisterHotkey(Keys.F1, HKHelp, "Help");
             hotkeys.RegisterHotkey(Keys.Control | Keys.C, HKCopy, "Copy");
             hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste, "Paste");
-            MainController.InitForm(this);
+            UIController.InitForm(this);
 
-            backgroundWorker1.WorkerReportsProgress = true;
-            backgroundWorker1.WorkerSupportsCancellation = true;
-            backgroundWorker1.DoWork += new DoWorkEventHandler(backgroundWorker1_DoWork);
-            backgroundWorker1.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker1_ProgressChanged);
-            backgroundWorker1.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
+            MainBackgroundWorker.WorkerReportsProgress = true;
+            MainBackgroundWorker.WorkerSupportsCancellation = true;
+            MainBackgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker1_DoWork);
+            MainBackgroundWorker.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker1_ProgressChanged);
+            MainBackgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
         }
         #endregion
-
-
-
 
         #region Methods
         Action<object, DoWorkEventArgs> workerAction;
@@ -182,19 +172,33 @@ namespace WolvenKit
         }
         private void ApplyCustomTheme()
         {
-            var theme = MainController.Get().GetTheme();
+            var theme = UIController.Get().GetTheme();
             this.dockPanel.Theme = theme;
             visualStudioToolStripExtender1.SetStyle(menuStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
             visualStudioToolStripExtender1.SetStyle(toolbarToolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
         }
 
         
-
+        /// <summary>
+        /// Deprecated. Use MainController.QueueLog 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LoggerUpdated(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Log")
             {
                 Invoke(new logDelegate(AddOutput), ((LoggerService)sender).Log + "\n", ((LoggerService)sender).Logtype);
+            }
+            if (e.PropertyName == "Progress")
+            {
+                if (MainBackgroundWorker != null)
+                {
+                    if (string.IsNullOrEmpty(Logger.Progress.Item2))
+                        MainBackgroundWorker.ReportProgress(Logger.Progress.Item1);
+                    else
+                        MainBackgroundWorker.ReportProgress(Logger.Progress.Item1, Logger.Progress.Item2);
+                }
             }
         }
         /// <summary>
@@ -484,20 +488,20 @@ namespace WolvenKit
             ModExplorer?.PauseMonitoring();
             // Delete from file structure
             var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
-            if (File.Exists(fullpath))
+            try
             {
-                File.Delete(fullpath);
-            }
-            else
-            {
-                try
+                if (File.Exists(fullpath))
+                {
+                    File.Delete(fullpath);
+                }
+                else
                 {
                     Directory.Delete(fullpath, true);
                 }
-                catch (Exception)
-                {
-                    AddOutput("Failed to delete " + fullpath + "!");
-                }
+            }
+            catch (Exception)
+            {
+                AddOutput("Failed to delete " + fullpath + "!\r\n");
             }
             ModExplorer?.ResumeMonitoring();
 
@@ -1172,6 +1176,19 @@ namespace WolvenKit
             }
         }
 
+        internal class LoadFileArgs
+        {
+            public string Filename { get; set; }
+            public MemoryStream Stream { get; set; }
+            public frmCR2WDocument Doc { get; set; }
+            public LoadFileArgs(string filename, frmCR2WDocument doc, MemoryStream stream = null)
+            {
+                Filename = filename;
+                Doc = doc;
+                if (stream != null)
+                    Stream = stream;
+            }
+        }
         public frmCR2WDocument LoadDocument(string filename, MemoryStream memoryStream = null, bool suppressErrors = false)
         {
             if (memoryStream == null && !File.Exists(filename))
@@ -1183,12 +1200,14 @@ namespace WolvenKit
                 return null;
             }
 
+            // Backgroundwork Start
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
+
             // check and register custom classes
             // we do it here because people might edit the .ws files at any time
-            // todo: what do I do if the .ws file has been edited whil the cr2w file is open?
+            // todo: what do I do if the .ws file has been edited while the cr2w file is open?
             ScanAndRegisterCustomClasses();
 
 
@@ -1199,11 +1218,13 @@ namespace WolvenKit
             {
                 if (memoryStream != null)
                 {
-                    doc.LoadFile(filename, memoryStream);
+                    WorkerLoadFileSetup(new LoadFileArgs(filename, doc, memoryStream));
+                    //doc.LoadFile(filename, memoryStream);
                 }
                 else
                 {
-                    doc.LoadFile(filename);
+                    WorkerLoadFileSetup(new LoadFileArgs(filename, doc));
+                    //doc.LoadFile(filename);
                 }
             }
             catch (InvalidFileTypeException ex)
@@ -1343,7 +1364,63 @@ namespace WolvenKit
             return doc;
         }
 
-        
+        private void WorkerLoadFileSetup(LoadFileArgs args)
+        {
+            MainController.Get().ProjectStatus = "Busy";
+
+            // Backgroundworker
+            if (!MainBackgroundWorker.IsBusy)
+            {
+
+                m_frmProgress = new frmProgress()
+                {
+                    Text = "Loading File...",
+                    StartPosition = FormStartPosition.CenterParent,
+                    FormBorderStyle = FormBorderStyle.None
+                };
+
+                workerAction = WorkerLoadFile;
+                MainBackgroundWorker.RunWorkerAsync(args);
+
+                DialogResult dr = m_frmProgress.ShowDialog(this);
+                switch (dr)
+                {
+                    case DialogResult.Cancel:
+                        {
+                            MainBackgroundWorker.CancelAsync();
+                            m_frmProgress.Cancel = true;
+                            break;
+                        }
+                    case DialogResult.None:
+                    case DialogResult.OK:
+                    case DialogResult.Abort:
+                    case DialogResult.Retry:
+                    case DialogResult.Ignore:
+                    case DialogResult.Yes:
+                    case DialogResult.No:
+                    default:
+                        break;
+                }
+            }
+            else
+                Logger.LogString("The background worker is currently busy.\r\n", Logtype.Error);
+
+            MainController.Get().ProjectStatus = "Ready";
+        }
+
+        protected private void WorkerLoadFile(object sender, DoWorkEventArgs e)
+        {
+            object arg = e.Argument;
+            if (!(arg is LoadFileArgs))
+                throw new NotImplementedException();
+            var Args = (LoadFileArgs)arg;
+            //BackgroundWorker bwAsync = sender as BackgroundWorker;
+
+            if (Args.Stream != null)
+                Args.Doc.LoadFile(Args.Filename, Args.Stream);
+            else
+                Args.Doc.LoadFile(Args.Filename);
+        }
 
         public CR2WFile LoadDocumentAndGetFile(string filename)
         {
@@ -1409,6 +1486,40 @@ namespace WolvenKit
         #endregion //Methods
 
         #region  Control events
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            //Load/Setup the config
+            var Exit = false;
+            while (!File.Exists(MainController.Get().Configuration.ExecutablePath))
+            {
+                var sets = new frmSettings();
+                if (sets.ShowDialog() != DialogResult.OK)
+                {
+                    Exit = true;
+                    break;
+                }
+                else
+                    MainController.Get().ProjectStatus = "Ready";
+            }
+
+            if (Exit)
+            {
+                Visible = false;
+                Close();
+            }
+
+            //Start loading if everything is set up.
+            var frmload = new frmLoading();
+            frmload.ShowDialog();
+
+            WccHelper = MainController.Get().WccHelper;
+            Logger = MainController.Get().Logger;
+            Logger.PropertyChanged += LoggerUpdated;
+
+            //Update check should be after we are all set up. It goes on in the background.
+            AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
+            richpresenceworker.RunWorkerAsync();
+        }
         private void richpresenceworker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             string project = "non";
@@ -1611,7 +1722,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
 
         private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
         {
-            var config = MainController.Get().Configuration;
+            var config = UIController.Get().Configuration;
 
             config.MainState = WindowState;
 
@@ -1625,7 +1736,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
         private void frmMain_Shown(object sender, EventArgs e)
         {
             ResetWindows();
-            var config = MainController.Get().Configuration;
+            var config = UIController.Get().Configuration;
             Size = config.MainSize;
             Location = config.MainLocation;
             WindowState = config.MainState;
@@ -1691,10 +1802,11 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 MessageBox.Show(@"Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+
             MainController.Get().ProjectStatus = "Busy";
 
-
-            if (!backgroundWorker1.IsBusy)
+            // Backgroundworker
+            if (!MainBackgroundWorker.IsBusy)
             {
                 ModExplorer.PauseMonitoring();
                 
@@ -1705,15 +1817,14 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 };
 
                 workerAction = WorkerAssetBrowserAddFiles;
-                backgroundWorker1.RunWorkerAsync(Details);
+                MainBackgroundWorker.RunWorkerAsync(Details);
 
                 DialogResult dr = m_frmProgress.ShowDialog(this);
                 switch (dr)
                 {
                     case DialogResult.Cancel:
                         {
-                            Logger.LogString("Cancelling....\r\n", Logtype.Error);
-                            backgroundWorker1.CancelAsync();
+                            MainBackgroundWorker.CancelAsync();
                             m_frmProgress.Cancel = true;
                             break;
                         }
@@ -1759,10 +1870,9 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 WitcherListViewItem item = Details.Item2[i];
                 skipping = AddToMod(item, skipping, Details.Item1, Details.Item3);
 
-                
-                double perc = (float)i / (float)count * 100.0;
-                int percentprogress = (int)(perc);
-                backgroundWorker1.ReportProgress(percentprogress, item.Text);
+
+                int percentprogress = (int)((float)i / (float)count * 100.0);
+                MainBackgroundWorker.ReportProgress(percentprogress, item.Text);
             }
         }
         private void openModToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1781,7 +1891,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 dir = Path.GetDirectoryName(fullpath);
             else
                 dir = fullpath;
-            string reldir = dir.TrimStart(ActiveMod.FileDirectory).TrimStart(Path.DirectorySeparatorChar);
+            string reldir = dir.Substring(ActiveMod.FileDirectory.Length + 1);
 
             // Trim working directories in path
             var reg = new Regex(@"^(Raw|Mod)\\(.*)");
@@ -1954,40 +2064,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             AddOutput("Saved!\n", Logtype.Success);
         }
 
-        private void frmMain_Load(object sender, EventArgs e)
-        {
-            //Load/Setup the config
-            var Exit = false;
-            while (!File.Exists(MainController.Get().Configuration.ExecutablePath))
-            {
-                var sets = new frmSettings();
-                if (sets.ShowDialog() != DialogResult.OK)
-                {
-                    Exit = true;
-                    break;
-                }
-                else
-                    MainController.Get().ProjectStatus = "Ready";
-            }
-
-            if (Exit)
-            {
-                Visible = false;
-                Close();
-            }
-
-            //Start loading if everything is set up.
-            var frmload = new frmLoading();
-            frmload.ShowDialog();
-
-            WccHelper = MainController.Get().WccHelper;
-            Logger = MainController.Get().Logger;
-            Logger.PropertyChanged += LoggerUpdated;
-
-            //Update check should be after we are all set up. It goes on in the background.
-            AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
-            richpresenceworker.RunWorkerAsync();
-        }
+        
 
 
         private void tbtNewMod_Click(object sender, EventArgs e)
@@ -2021,7 +2098,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                     {
                         try
                         {
-                            MainController.Get()?.Window?.ModExplorer?.StopMonitoringDirectory();
+                            UIController.Get()?.Window?.ModExplorer?.StopMonitoringDirectory();
                             //Close all docs so they won't cause problems
                             OpenDocuments.ToList().ForEach(x => x.Close());
                             //Move the files directory
@@ -2046,7 +2123,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                     {
                         openMod(MainController.Get().ActiveMod?.FileName);
                     }
-                    Commonfunctions.SendNotification("Succesfully updated mod settings!");
+                    CommonUIFunctions.SendNotification("Succesfully updated mod settings!");
                 }
             }
         }
@@ -2079,7 +2156,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                         pi.ShowDialog();
                 }
                 else
-                    Commonfunctions.SendNotification("Invalid file!");
+                    CommonUIFunctions.SendNotification("Invalid file!");
             }
         }
 

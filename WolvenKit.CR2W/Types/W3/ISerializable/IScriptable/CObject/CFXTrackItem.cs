@@ -26,22 +26,37 @@ namespace WolvenKit.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
+            var startpos = file.BaseStream.Position;
             base.Read(file, size);
 
-            buffername.Read(file, 2);
-            count.Read(file, size);
-            unk.Read(file, 1);
-            buffer.Read(file, 0, count.val);
+            var endpos = file.BaseStream.Position;
+
+            var bytesread = endpos - startpos;
+            if (bytesread < size)
+            {
+                buffername.Read(file, 2);
+                count.Read(file, size);
+                unk.Read(file, 1);
+                buffer.Read(file, 0, count.val);
+            }
+            else if (bytesread > size)
+            {
+
+            }
         }
 
         public override void Write(BinaryWriter file)
         {
             base.Write(file);
 
-            buffername.Write(file);
-            count.Write(file);
-            unk.Write(file);
-            buffer.Write(file);
+            if (buffername != null)
+                buffername.Write(file);
+            if (count != null)
+                count.Write(file);
+            if (buffername != null)
+                unk.Write(file);
+            if (buffer != null)
+                buffer.Write(file);
         }
 
         public override CVariable SetValue(object val)
@@ -58,10 +73,14 @@ namespace WolvenKit.CR2W.Types
         {
             var var = (CFXTrackItem) base.Copy(context);
 
-            var.buffername = (CName)buffername.Copy(context);
-            var.count = (CDynamicInt)count.Copy(context);
-            var.unk = (CUInt8)unk.Copy(context);
-            var.buffer = (CCompressedBuffer<CBufferUInt16<CFloat>>)buffer.Copy(context);
+            if (buffername != null)
+                var.buffername = (CName)buffername.Copy(context);
+            if (count != null)
+                var.count = (CDynamicInt)count.Copy(context);
+            if (buffername != null)
+                var.unk = (CUInt8)unk.Copy(context);
+            if (buffer != null)
+                var.buffer = (CCompressedBuffer<CBufferUInt16<CFloat>>)buffer.Copy(context);
 
             return var;
         }

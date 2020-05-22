@@ -7,7 +7,6 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Globalization;
 using WolvenKit.Common.Model;
-using RED.FNV1A;
 using System.Reflection;
 
 namespace WolvenKit.CR2W.Types
