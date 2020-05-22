@@ -980,6 +980,7 @@
     <Content Include="Resources\maximize.png" />
     <Content Include="Resources\minimize.png" />
     <Content Include="Resources\PlayStep_16x.png" />
+    <None Include="Resources\TextFileIcon64px.png" />
     <Content Include="Resources\UpButton.png" />
     <Content Include="Resources\XToCloseButton.png" />
     <Content Include="wolven_kit_icon.ico" />

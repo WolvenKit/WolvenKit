@@ -97,6 +97,7 @@ namespace WolvenKit
             this.menuCreatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dumpFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renderW2meshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cR2WToTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.experimentalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.terrainViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.verifyFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -130,7 +131,6 @@ namespace WolvenKit
             this.richpresenceworker = new System.ComponentModel.BackgroundWorker();
             this.visualStudioToolStripExtender1 = new WeifenLuo.WinFormsUI.Docking.VisualStudioToolStripExtender(this.components);
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
-            this.cR2WToTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolbarToolStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.statusToolStrip.SuspendLayout();
@@ -701,6 +701,14 @@ namespace WolvenKit
             this.renderW2meshToolStripMenuItem.Text = "Render w2mesh";
             this.renderW2meshToolStripMenuItem.Click += new System.EventHandler(this.renderW2meshToolStripMenuItem_Click);
             // 
+            // cR2WToTextToolStripMenuItem
+            // 
+            this.cR2WToTextToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.TextFileIcon64px;
+            this.cR2WToTextToolStripMenuItem.Name = "cR2WToTextToolStripMenuItem";
+            this.cR2WToTextToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.cR2WToTextToolStripMenuItem.Text = "CR2W To Text";
+            this.cR2WToTextToolStripMenuItem.Click += new System.EventHandler(this.cR2WToTextToolStripMenuItem_Click);
+            // 
             // experimentalToolStripMenuItem
             // 
             this.experimentalToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -989,13 +997,6 @@ namespace WolvenKit
             this.toolStripContainer1.Size = new System.Drawing.Size(824, 365);
             this.toolStripContainer1.TabIndex = 14;
             this.toolStripContainer1.Text = "toolStripContainer1";
-            // 
-            // cR2WToTextToolStripMenuItem
-            // 
-            this.cR2WToTextToolStripMenuItem.Name = "cR2WToTextToolStripMenuItem";
-            this.cR2WToTextToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
-            this.cR2WToTextToolStripMenuItem.Text = "CR2W To Text";
-            this.cR2WToTextToolStripMenuItem.Click += new System.EventHandler(this.cR2WToTextToolStripMenuItem_Click);
             // 
             // frmMain
             // 

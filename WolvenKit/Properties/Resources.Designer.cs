@@ -65,7 +65,7 @@ namespace WolvenKit.Properties {
         ///characters\models\common\woman_average\body\model\woman_old__body_a01.xbm,1024,1024,TRF_TrueColor,TCM_DXTNoAlpha,CharacterDiffuse
         ///characters\models\common\woman_average\body\model\woman_old__body_d01.xbm,2048,2048,TRF_TrueColor,TCM_DXTNoAlpha,CharacterDiffuse
         ///characters\models\common\woman_average\body\model\woman_old__body_n01.xbm,2048,2048,TRF_TrueColor,TCM_Normals,CharacterNormal
-        ///characters\models\common\woman_average\body\model\woman_old__body_d02 [rest of string was truncated]&quot;;.
+        ///characters\models\common\woman_average\body\model\woman_old__body_d02.xbm [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string @__xbmdump_37685553661 {
             get {
@@ -546,6 +546,16 @@ namespace WolvenKit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap TextFileIcon64px {
+            get {
+                object obj = ResourceManager.GetObject("TextFileIcon64px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ui_check_box {
             get {
                 object obj = ResourceManager.GetObject("ui-check-box", resourceCulture);
@@ -575,7 +585,7 @@ namespace WolvenKit.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to {\rtf1\adeflang1025\ansi\ansicpg1250\uc1\adeff31507\deff0\stshfdbch31506\stshfloch31506\stshfhich31506\stshfbi31507\deflang1045\deflangfe1045\themelang2057\themelangfe1041\themelangcs0{\fonttbl{\f0\fbidi \froman\fcharset238\fprq2{\*\panose 02020603050405020304}Times New Roman;}{\f1\fbidi \fswiss\fcharset238\fprq2{\*\panose 020b0604020202020204}Arial;}
-        ///{\f2\fbidi \fmodern\fcharset238\fprq1{\*\panose 02070309020205020404}Courier New;}{\f3\fbidi \froman\fcharset2\fprq2{\*\panose 05050102010706020507}Symbol;}{ [rest of string was truncated]&quot;;.
+        ///{\f2\fbidi \fmodern\fcharset238\fprq1{\*\panose 02070309020205020404}Courier New;}{\f3\fbidi \froman\fcharset2\fprq2{\*\panose 05050102010706020507}Symbol;}{\ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string wcc_eula {
             get {

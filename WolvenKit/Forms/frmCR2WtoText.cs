@@ -1,20 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.ServiceModel.Configuration;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.Design;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Editors;
-using WolvenKit.CR2W.Types;
 using static WolvenKit.frmChunkProperties;
 
 namespace WolvenKit.Forms
@@ -22,12 +14,72 @@ namespace WolvenKit.Forms
 
     public partial class frmCR2WtoText : Form
     {
-        private IEnumerable<string> files;
+
+        private IEnumerable<string> _files;
+        private IEnumerable<string> files
+        {
+            get => _files;
+            set
+            {
+                _files = value;
+                if (files.Count() > 0)
+                {
+                    string count = files.Count().ToString();
+                    labFileCount.Text = count;
+                    pnlFileCount.Visible = true;
+                    prgProgressBar.Maximum = files.Count();
+                    prgProgressBar.Step = 1;
+                    prgProgressBar.Value = 1;
+                }
+            }
+        }
         StreamWriter outputFile;
+
+        private bool _outputSingleFile = true;
+        private bool outputSingleFile
+        {
+            get => _outputSingleFile;
+            set
+            {
+                _outputSingleFile = value;
+                txtOutputDestination.Clear();
+            }
+        }
+        private string outputDestination;
+
+        private bool existingOverwrite = true;
+
+        private bool running = false;
 
         public frmCR2WtoText()
         {
             InitializeComponent();
+            setDefaults();
+        }
+
+        private void setDefaults()
+        {
+            radExistingOverwrite.Checked = existingOverwrite;
+            radExistingSkip.Checked = !existingOverwrite;
+            radOutputModeSingleFile.Checked = outputSingleFile;
+            radOutputModeSeparateFiles.Checked = !outputSingleFile;
+            chkDumpSDB.Checked = true;
+            chkDumpFCD.Checked = false;
+        }
+
+        // Thread safe methods to update the processed counts while dumping async.
+        private delegate void setProcessedDelegate(int total, int count);
+        private void setProcessedStatic(int count, int total)
+        {
+            Invoke(new setProcessedDelegate(setProcessed), count, total);
+        }
+
+        private void setProcessed(int count, int total)
+        {
+            labProcessedCount.Text = count.ToString();
+            labProcessedTotal.Text = total.ToString();
+            if (count>0)
+                prgProgressBar.PerformStep();
         }
 
         private void btnChoosePath_Click(object sender, EventArgs e)
@@ -44,37 +96,80 @@ namespace WolvenKit.Forms
 
         private void btnRun_Click(object sender, EventArgs e)
         {
-            var outputText = txtOutputFile.Text;
-
-            btnRun.Enabled = false;
-            using (outputFile = new StreamWriter(outputText, true))
+            if (!running)
             {
-                if (files.Count() > 0)
-                {
-                    txtOutput.Clear();
+                startRun();
+            }
+            else
+            {
+                btnRun.Text = "Stopping...";
+                running = false;
+            }
+        }
 
-                    foreach (string fileName in files)
+        private void controlsEnabledDuringRun(bool b)
+        {
+            // During run, all controls are disabled, and the run button changes to abort
+            foreach (Control ctrl in pnlControls.Controls)
+                ctrl.Enabled = b;
+            btnRun.Text = b ? "Run CR2W Dump" : "Abort";
+            // During run, progress bar, and processed files count/totals are made visible.
+            prgProgressBar.Visible = !b;
+            if (prgProgressBar.Visible) // reset progress bar each time it's made visible.
+                prgProgressBar.Value = 1;
+            pnlProcessedFiles.Visible = !b;
+        }
+        private async void startRun()
+        {
+            controlsEnabledDuringRun(false);
+            running = true;
+
+            await Task<bool>.Run(doRun);
+
+            running = false;
+            controlsEnabledDuringRun(true);
+        }
+        private async Task doRun()
+        {
+            setProcessedStatic(0, files.Count());
+
+            if (files.Count() > 0)
+            {
+                int fileCount = 1;
+                foreach (string fileName in files)
+                {
+                    if (!running)
+                        break; // Abort button was pressed.
+
+                    string fileBaseName = Path.GetFileName(fileName);
+
+                    if (outputSingleFile)
+                        outputDestination = txtOutputDestination.Text;
+                    else
+                        outputDestination = txtOutputDestination.Text + "\\" + fileBaseName + ".txt";
+
+                    using (outputFile = new StreamWriter(outputDestination, true))
                     {
                         writeText("FILE", fileName);
                         int level = 1;
                         try
                         {
                             var cf = new LoggerCR2W(fileName);
-                            string fileBaseName = Path.GetFileName(fileName);
                             processCR2W(cf, fileBaseName, level);
                         }
                         catch (FormatException fe)
                         {
-                            writeText(fileName, "Not a valid CR2W file, or file is damaged.");
+                            if (outputSingleFile)
+                                writeText(fileName, "Not a valid CR2W file, or file is damaged.");
                         }
                         catch (Exception ex)
                         {
                             writeText(fileName, "Exception: " + ex.ToString());
                         }
+                        setProcessedStatic(fileCount++, files.Count());
                     }
                 }
             }
-            btnRun.Enabled = true;
         }
 
         private void processCR2W(LoggerCR2W lc, string fileName, int level)
@@ -89,7 +184,6 @@ namespace WolvenKit.Forms
 
         private void processNode(string fileName, VariableListNode node, int level)
         {
-
             if (node.Name == "unknownBytes" && node.Value == "0 bytes"
                 || node.Name == "unk1" && node.Value == "0")
                 return;
@@ -113,51 +207,66 @@ namespace WolvenKit.Forms
                 processCR2W(lc, fileName, level + 1);
             }
         }
+        private bool writeText(string prefix, string text, int level = 0)
+        {
+            string line;
+            string indent = "";
 
+            for (int i = 0; i < level; i++)
+                indent += "    ";
+
+            line = prefix + ":" + indent + text + "\r\n";
+            outputFile.Write(line);
+
+            return true;
+        }
+        private void enableRunButton()
+        {
+            btnRun.Enabled = txtPath.Text != "" && txtOutputDestination.Text != "" && files.Count() > 0;
+        }
         private IEnumerable<string> GetFiles(string path, params string[] extExclude)
         {
             return Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)
                             .Where(file => !extExclude.Any(x => file.EndsWith(x, StringComparison.OrdinalIgnoreCase)));
         }
-
-        private bool writeText(string prefix, string text, int level = 0)
-        {
-            string line;
-            string indent = "";
-            if (level > 0)
-            {
-                for (int i = 0; i < level; i++)
-                {
-                    indent += "    ";
-                }
-            }
-            line = prefix + ":" + indent + text + "\r\n";
-            if (txtOutputFile.Text == "")
-                txtOutput.AppendText(line);
-            else
-                outputFile.Write(line);
-
-            return true;
-        }
-
         private void txtPath_TextChanged(object sender, EventArgs e)
         {
             var path = txtPath.Text;
-            string[] extExclude = new[] { ".txt", ".json", ".csv", ".xml", ".jpg", ".png", ".wem", ".dds", ".bnk", ".xbm" };
+            string[] extExclude = new[] { ".txt", ".json", ".csv", ".xml", ".jpg", ".png",
+                                          ".wem", ".dds", ".bnk", ".xbm", ".bundle", ".w3strings", ".store" };
+
             files = GetFiles(path, extExclude);
-
-            labFileCount.Text = files.Count().ToString();
+            enableRunButton();
         }
-
-        private void btnPickFile_Click(object sender, EventArgs e)
+        private void txtOutputDestination_TextChanged(object sender, EventArgs e)
         {
-            var sf = new SaveFileDialog
-            {
-                Title = "Select a file to output to.",
-                Filter = "TXT Files | *.txt"
-            };
-            if (sf.ShowDialog() == DialogResult.OK)
-                txtOutputFile.Text = sf.FileName;
+            enableRunButton();
+        }
+        private void btnPickOutput_Click(object sender, EventArgs e)
+        {
+            CommonDialog dlg;
+            if (outputSingleFile)
+                dlg = new SaveFileDialog
+                {
+                    Title = "Select a file to output to.",
+                    Filter = "TXT Files | *.txt"
+                };
+            else
+                dlg = new FolderBrowserDialog
+                {
+                    Description = "Choose output folder."
+                };
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+                txtOutputDestination.Text = outputSingleFile ? ((SaveFileDialog)dlg).FileName : ((FolderBrowserDialog)dlg).SelectedPath;
+        }
+        private void radOutputModeSingleFile_CheckedChanged(object sender, EventArgs e)
+        {
+            outputSingleFile = radOutputModeSingleFile.Checked;
+        }
+        private void radOutputModeSeparateFiles_CheckedChanged(object sender, EventArgs e)
+        {
+            outputSingleFile = radOutputModeSingleFile.Checked;
         }
     }
     internal class LoggerCR2W
@@ -169,17 +278,8 @@ namespace WolvenKit.Forms
             using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             using (var reader = new BinaryReader(fs))
             {
-                try
-                {
-                    cr2w = new CR2WFile(reader);
-                    chunks = cr2w.chunks;
-                }
-                catch (FormatException fe)
-                {
-                    throw;
-                    //writeText(filePathAndName, "Not a CR2W file, or damaged file.", 1);
-                }
-                fs.Close();
+                cr2w = new CR2WFile(reader);
+                chunks = cr2w.chunks;
             }
         }
 
@@ -191,7 +291,7 @@ namespace WolvenKit.Forms
 
         public VariableListNode getNodes(CR2WExportWrapper chunk)
         {
-            return AddListViewItems((IEditableVariable)chunk);
+            return AddListViewItems(chunk);
         }
 
         private VariableListNode AddListViewItems(IEditableVariable v, VariableListNode parent = null,
