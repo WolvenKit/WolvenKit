@@ -137,6 +137,15 @@ namespace WolvenKit.App
             if (Get().Logger != null)
                 Get().Logger.LogString(value, logtype);
         }
+        /// <summary>
+        /// Use this for threadsafe progress updates.
+        /// </summary>
+        /// <param name="value"></param>
+        public static void LogProgress(int value)
+        {
+            if (Get().Logger != null)
+                Get().Logger.LogProgress(value);
+        }
         #endregion
 
         #region Methods

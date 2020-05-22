@@ -217,6 +217,7 @@
     <Compile Include="Controllers\RadishConfiguration.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\IViewModel.cs" />
+    <Compile Include="ViewModels\CR2WDocumentViewModel.cs" />
     <Compile Include="ViewModels\RadishViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
   </ItemGroup>

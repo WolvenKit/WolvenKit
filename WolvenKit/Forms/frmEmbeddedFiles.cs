@@ -3,6 +3,7 @@ using BrightIdeasSoftware;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.CR2W;
 using WolvenKit.Services;
+using System.Linq;
 
 namespace WolvenKit
 {
@@ -42,7 +43,7 @@ namespace WolvenKit
 
             if (e.ClickCount == 2)
             {
-                var mem = new MemoryStream(((CR2WEmbeddedWrapper) e.Model).Data);
+                var mem = new MemoryStream(((CR2WEmbeddedWrapper) e.Model).Data.ToArray());
 
                 var doc = UIController.Get().LoadDocument("Embedded file", mem);
                 if (doc != null)
@@ -57,7 +58,7 @@ namespace WolvenKit
         {
             var doc = (frmCR2WDocument) sender;
             var editvar = (CR2WEmbeddedWrapper) doc.SaveTarget;
-            editvar.Data = ((MemoryStream) e.Stream).ToArray();
+            editvar.Data = ((MemoryStream) e.Stream).ToArray().ToList();
         }
 
         public void ApplyCustomTheme()

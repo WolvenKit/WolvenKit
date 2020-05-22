@@ -131,7 +131,7 @@ namespace WolvenKit
             this.richpresenceworker = new System.ComponentModel.BackgroundWorker();
             this.visualStudioToolStripExtender1 = new WeifenLuo.WinFormsUI.Docking.VisualStudioToolStripExtender(this.components);
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.MainBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.toolbarToolStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.statusToolStrip.SuspendLayout();
@@ -1133,6 +1133,6 @@ namespace WolvenKit
         private DockPanel dockPanel;
         private ToolStripMenuItem DLCScriptToolStripMenuItem;
         private ToolStripMenuItem RadishUtilitytoolStripMenuItem;
-        private BackgroundWorker backgroundWorker1;
+        private BackgroundWorker MainBackgroundWorker;
     }
 }

@@ -133,16 +133,13 @@ namespace WolvenKit
             hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste, "Paste");
             UIController.InitForm(this);
 
-            backgroundWorker1.WorkerReportsProgress = true;
-            backgroundWorker1.WorkerSupportsCancellation = true;
-            backgroundWorker1.DoWork += new DoWorkEventHandler(backgroundWorker1_DoWork);
-            backgroundWorker1.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker1_ProgressChanged);
-            backgroundWorker1.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
+            MainBackgroundWorker.WorkerReportsProgress = true;
+            MainBackgroundWorker.WorkerSupportsCancellation = true;
+            MainBackgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker1_DoWork);
+            MainBackgroundWorker.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker1_ProgressChanged);
+            MainBackgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
         }
         #endregion
-
-
-
 
         #region Methods
         Action<object, DoWorkEventArgs> workerAction;
@@ -192,6 +189,16 @@ namespace WolvenKit
             if (e.PropertyName == "Log")
             {
                 Invoke(new logDelegate(AddOutput), ((LoggerService)sender).Log + "\n", ((LoggerService)sender).Logtype);
+            }
+            if (e.PropertyName == "Progress")
+            {
+                if (MainBackgroundWorker != null)
+                {
+                    if (string.IsNullOrEmpty(Logger.Progress.Item2))
+                        MainBackgroundWorker.ReportProgress(Logger.Progress.Item1);
+                    else
+                        MainBackgroundWorker.ReportProgress(Logger.Progress.Item1, Logger.Progress.Item2);
+                }
             }
         }
         /// <summary>
@@ -481,20 +488,20 @@ namespace WolvenKit
             ModExplorer?.PauseMonitoring();
             // Delete from file structure
             var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
-            if (File.Exists(fullpath))
+            try
             {
-                File.Delete(fullpath);
-            }
-            else
-            {
-                try
+                if (File.Exists(fullpath))
+                {
+                    File.Delete(fullpath);
+                }
+                else
                 {
                     Directory.Delete(fullpath, true);
                 }
-                catch (Exception)
-                {
-                    AddOutput("Failed to delete " + fullpath + "!");
-                }
+            }
+            catch (Exception)
+            {
+                AddOutput("Failed to delete " + fullpath + "!\r\n");
             }
             ModExplorer?.ResumeMonitoring();
 
@@ -1169,6 +1176,19 @@ namespace WolvenKit
             }
         }
 
+        internal class LoadFileArgs
+        {
+            public string Filename { get; set; }
+            public MemoryStream Stream { get; set; }
+            public frmCR2WDocument Doc { get; set; }
+            public LoadFileArgs(string filename, frmCR2WDocument doc, MemoryStream stream = null)
+            {
+                Filename = filename;
+                Doc = doc;
+                if (stream != null)
+                    Stream = stream;
+            }
+        }
         public frmCR2WDocument LoadDocument(string filename, MemoryStream memoryStream = null, bool suppressErrors = false)
         {
             if (memoryStream == null && !File.Exists(filename))
@@ -1180,12 +1200,14 @@ namespace WolvenKit
                 return null;
             }
 
+            // Backgroundwork Start
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
+
             // check and register custom classes
             // we do it here because people might edit the .ws files at any time
-            // todo: what do I do if the .ws file has been edited whil the cr2w file is open?
+            // todo: what do I do if the .ws file has been edited while the cr2w file is open?
             ScanAndRegisterCustomClasses();
 
 
@@ -1196,11 +1218,13 @@ namespace WolvenKit
             {
                 if (memoryStream != null)
                 {
-                    doc.LoadFile(filename, memoryStream);
+                    WorkerLoadFileSetup(new LoadFileArgs(filename, doc, memoryStream));
+                    //doc.LoadFile(filename, memoryStream);
                 }
                 else
                 {
-                    doc.LoadFile(filename);
+                    WorkerLoadFileSetup(new LoadFileArgs(filename, doc));
+                    //doc.LoadFile(filename);
                 }
             }
             catch (InvalidFileTypeException ex)
@@ -1340,7 +1364,63 @@ namespace WolvenKit
             return doc;
         }
 
-        
+        private void WorkerLoadFileSetup(LoadFileArgs args)
+        {
+            MainController.Get().ProjectStatus = "Busy";
+
+            // Backgroundworker
+            if (!MainBackgroundWorker.IsBusy)
+            {
+
+                m_frmProgress = new frmProgress()
+                {
+                    Text = "Loading File...",
+                    StartPosition = FormStartPosition.CenterParent,
+                    FormBorderStyle = FormBorderStyle.None
+                };
+
+                workerAction = WorkerLoadFile;
+                MainBackgroundWorker.RunWorkerAsync(args);
+
+                DialogResult dr = m_frmProgress.ShowDialog(this);
+                switch (dr)
+                {
+                    case DialogResult.Cancel:
+                        {
+                            MainBackgroundWorker.CancelAsync();
+                            m_frmProgress.Cancel = true;
+                            break;
+                        }
+                    case DialogResult.None:
+                    case DialogResult.OK:
+                    case DialogResult.Abort:
+                    case DialogResult.Retry:
+                    case DialogResult.Ignore:
+                    case DialogResult.Yes:
+                    case DialogResult.No:
+                    default:
+                        break;
+                }
+            }
+            else
+                Logger.LogString("The background worker is currently busy.\r\n", Logtype.Error);
+
+            MainController.Get().ProjectStatus = "Ready";
+        }
+
+        protected private void WorkerLoadFile(object sender, DoWorkEventArgs e)
+        {
+            object arg = e.Argument;
+            if (!(arg is LoadFileArgs))
+                throw new NotImplementedException();
+            var Args = (LoadFileArgs)arg;
+            //BackgroundWorker bwAsync = sender as BackgroundWorker;
+
+            if (Args.Stream != null)
+                Args.Doc.LoadFile(Args.Filename, Args.Stream);
+            else
+                Args.Doc.LoadFile(Args.Filename);
+        }
 
         public CR2WFile LoadDocumentAndGetFile(string filename)
         {
@@ -1722,10 +1802,11 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 MessageBox.Show(@"Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+
             MainController.Get().ProjectStatus = "Busy";
 
-
-            if (!backgroundWorker1.IsBusy)
+            // Backgroundworker
+            if (!MainBackgroundWorker.IsBusy)
             {
                 ModExplorer.PauseMonitoring();
                 
@@ -1736,15 +1817,14 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 };
 
                 workerAction = WorkerAssetBrowserAddFiles;
-                backgroundWorker1.RunWorkerAsync(Details);
+                MainBackgroundWorker.RunWorkerAsync(Details);
 
                 DialogResult dr = m_frmProgress.ShowDialog(this);
                 switch (dr)
                 {
                     case DialogResult.Cancel:
                         {
-                            Logger.LogString("Cancelling....\r\n", Logtype.Error);
-                            backgroundWorker1.CancelAsync();
+                            MainBackgroundWorker.CancelAsync();
                             m_frmProgress.Cancel = true;
                             break;
                         }
@@ -1790,10 +1870,9 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 WitcherListViewItem item = Details.Item2[i];
                 skipping = AddToMod(item, skipping, Details.Item1, Details.Item3);
 
-                
-                double perc = (float)i / (float)count * 100.0;
-                int percentprogress = (int)(perc);
-                backgroundWorker1.ReportProgress(percentprogress, item.Text);
+
+                int percentprogress = (int)((float)i / (float)count * 100.0);
+                MainBackgroundWorker.ReportProgress(percentprogress, item.Text);
             }
         }
         private void openModToolStripMenuItem_Click(object sender, EventArgs e)
