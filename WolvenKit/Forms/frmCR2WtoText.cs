@@ -56,7 +56,6 @@ namespace WolvenKit.Forms
             InitializeComponent();
             setDefaults();
         }
-
         private void setDefaults()
         {
             radExistingOverwrite.Checked = existingOverwrite;
@@ -66,22 +65,19 @@ namespace WolvenKit.Forms
             chkDumpSDB.Checked = true;
             chkDumpFCD.Checked = false;
         }
-
         // Thread safe methods to update the processed counts while dumping async.
         private delegate void setProcessedDelegate(int total, int count);
         private void setProcessedStatic(int count, int total)
         {
             Invoke(new setProcessedDelegate(setProcessed), count, total);
         }
-
         private void setProcessed(int count, int total)
         {
             labProcessedCount.Text = count.ToString();
             labProcessedTotal.Text = total.ToString();
-            if (count>0)
+            if (count > prgProgressBar.Minimum)
                 prgProgressBar.PerformStep();
         }
-
         private void btnChoosePath_Click(object sender, EventArgs e)
         {
             var dlg = new FolderBrowserDialog
@@ -93,7 +89,6 @@ namespace WolvenKit.Forms
                 txtPath.Text = dlg.SelectedPath;
             }
         }
-
         private void btnRun_Click(object sender, EventArgs e)
         {
             if (!running)
@@ -106,7 +101,6 @@ namespace WolvenKit.Forms
                 running = false;
             }
         }
-
         private void controlsEnabledDuringRun(bool b)
         {
             // During run, all controls are disabled, and the run button changes to abort
@@ -171,9 +165,14 @@ namespace WolvenKit.Forms
                 }
             }
         }
-
         private void processCR2W(LoggerCR2W lc, string fileName, int level)
         {
+            if (chkDumpEmbedded.Checked && lc.embedded != null && lc.embedded.Count() > 0)
+            {
+                writeText(fileName, "Embedded files:", level);
+                processEmbedded(lc, fileName, level + 1);
+            }
+            writeText(fileName, "Chunks:", level);
             foreach (var chunk in lc.chunks)
             {
                 writeText(fileName, chunk.Name + " (" + chunk.Type + ") : " + chunk.Preview, level);
@@ -181,7 +180,21 @@ namespace WolvenKit.Forms
                 processNode(fileName, node, level);
             }
         }
-
+        private void processEmbedded(LoggerCR2W lc, string fileName, int level)
+        {
+            //TODO: Also dump the embedded files (optionally)
+            int fileCounter = 1;
+            foreach (CR2WEmbeddedWrapper embed in lc.embedded)
+            {
+                writeText(fileName, "(" + fileCounter++ + "):", level);
+                writeText(fileName, "Index: " + embed.Embedded.importIndex, level + 1);
+                writeText(fileName, "ImportPath: " + embed.ImportPath, level + 1);
+                writeText(fileName, "ImportClass: " + embed.ImportClass, level + 1);
+                writeText(fileName, "Size: " + embed.Embedded.dataSize, level + 1);
+                writeText(fileName, "ClassName: " + embed.ClassName, level + 1);
+                writeText(fileName, "Handle: " + embed.Handle, level + 1);
+            }
+        }
         private void processNode(string fileName, VariableListNode node, int level)
         {
             if (node.Name == "unknownBytes" && node.Value == "0 bytes"
@@ -200,8 +213,13 @@ namespace WolvenKit.Forms
                     processNode(fileName, child, level + 1);
                 }
 
-            if (node.Type == "SharedDataBuffer") // || node.Name == "flatCompiledData" )
-            {
+            if (  (node.Type == "SharedDataBuffer" && chkDumpSDB.Checked) 
+                || node.Type == "array:2,0,Uint8" )
+            {   // Embedded CR2W dump:
+                // Dump SharedDataBuffer if option is set.
+                // Dump "array:2,0,Uint8" always, unless it's FCD in which case only if option is set.
+                if (node.Name == "flatCompiledData" && !chkDumpFCD.Checked)
+                    return;
                 CR2WFile embedcr2w = new CR2WFile(((IByteSource)node.Variable).Bytes);
                 var lc = new LoggerCR2W(embedcr2w);
                 processCR2W(lc, fileName, level + 1);
@@ -273,6 +291,7 @@ namespace WolvenKit.Forms
     {
         private CR2WFile cr2w;
         public List<CR2WExportWrapper> chunks { get; private set; }
+        public List<CR2WEmbeddedWrapper> embedded { get; private set; }
         internal LoggerCR2W(string fileName)
         {
             using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
@@ -280,6 +299,7 @@ namespace WolvenKit.Forms
             {
                 cr2w = new CR2WFile(reader);
                 chunks = cr2w.chunks;
+                embedded = cr2w.embedded;
             }
         }
 

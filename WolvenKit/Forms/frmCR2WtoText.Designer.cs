@@ -37,6 +37,7 @@
             this.prgProgressBar = new System.Windows.Forms.ProgressBar();
             this.rtfDescription = new System.Windows.Forms.RichTextBox();
             this.pnlControls = new System.Windows.Forms.Panel();
+            this.chkDumpEmbedded = new System.Windows.Forms.CheckBox();
             this.grpExistingFiles = new System.Windows.Forms.GroupBox();
             this.radExistingSkip = new System.Windows.Forms.RadioButton();
             this.radExistingOverwrite = new System.Windows.Forms.RadioButton();
@@ -71,7 +72,7 @@
             this.btnRun.Enabled = false;
             this.btnRun.Image = global::WolvenKit.Properties.Resources.Output_16x;
             this.btnRun.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRun.Location = new System.Drawing.Point(45, 503);
+            this.btnRun.Location = new System.Drawing.Point(45, 532);
             this.btnRun.Name = "btnRun";
             this.btnRun.Size = new System.Drawing.Size(421, 23);
             this.btnRun.TabIndex = 10;
@@ -118,7 +119,7 @@
             // 
             // prgProgressBar
             // 
-            this.prgProgressBar.Location = new System.Drawing.Point(45, 445);
+            this.prgProgressBar.Location = new System.Drawing.Point(45, 474);
             this.prgProgressBar.Minimum = 1;
             this.prgProgressBar.Name = "prgProgressBar";
             this.prgProgressBar.Size = new System.Drawing.Size(421, 22);
@@ -142,6 +143,7 @@
             // 
             // pnlControls
             // 
+            this.pnlControls.Controls.Add(this.chkDumpEmbedded);
             this.pnlControls.Controls.Add(this.grpExistingFiles);
             this.pnlControls.Controls.Add(this.pnlFileCount);
             this.pnlControls.Controls.Add(this.chkPrefixFileName);
@@ -159,14 +161,26 @@
             this.pnlControls.Controls.Add(this.grpRadioOutputMode);
             this.pnlControls.Location = new System.Drawing.Point(12, 159);
             this.pnlControls.Name = "pnlControls";
-            this.pnlControls.Size = new System.Drawing.Size(476, 281);
+            this.pnlControls.Size = new System.Drawing.Size(476, 303);
             this.pnlControls.TabIndex = 21;
+            // 
+            // chkDumpEmbedded
+            // 
+            this.chkDumpEmbedded.AutoSize = true;
+            this.chkDumpEmbedded.Checked = true;
+            this.chkDumpEmbedded.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDumpEmbedded.Location = new System.Drawing.Point(95, 177);
+            this.chkDumpEmbedded.Name = "chkDumpEmbedded";
+            this.chkDumpEmbedded.Size = new System.Drawing.Size(116, 17);
+            this.chkDumpEmbedded.TabIndex = 34;
+            this.chkDumpEmbedded.Text = "List embedded files";
+            this.chkDumpEmbedded.UseVisualStyleBackColor = true;
             // 
             // grpExistingFiles
             // 
             this.grpExistingFiles.Controls.Add(this.radExistingSkip);
             this.grpExistingFiles.Controls.Add(this.radExistingOverwrite);
-            this.grpExistingFiles.Location = new System.Drawing.Point(95, 218);
+            this.grpExistingFiles.Location = new System.Drawing.Point(95, 238);
             this.grpExistingFiles.Name = "grpExistingFiles";
             this.grpExistingFiles.Size = new System.Drawing.Size(142, 56);
             this.grpExistingFiles.TabIndex = 33;
@@ -238,7 +252,7 @@
             // chkDumpFCD
             // 
             this.chkDumpFCD.AutoSize = true;
-            this.chkDumpFCD.Location = new System.Drawing.Point(95, 198);
+            this.chkDumpFCD.Location = new System.Drawing.Point(95, 219);
             this.chkDumpFCD.Name = "chkDumpFCD";
             this.chkDumpFCD.Size = new System.Drawing.Size(137, 17);
             this.chkDumpFCD.TabIndex = 29;
@@ -250,7 +264,7 @@
             this.chkDumpSDB.AutoSize = true;
             this.chkDumpSDB.Checked = true;
             this.chkDumpSDB.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDumpSDB.Location = new System.Drawing.Point(95, 177);
+            this.chkDumpSDB.Location = new System.Drawing.Point(95, 198);
             this.chkDumpSDB.Name = "chkDumpSDB";
             this.chkDumpSDB.Size = new System.Drawing.Size(142, 17);
             this.chkDumpSDB.TabIndex = 27;
@@ -280,7 +294,7 @@
             // labOverwrite
             // 
             this.labOverwrite.AutoSize = true;
-            this.labOverwrite.Location = new System.Drawing.Point(13, 241);
+            this.labOverwrite.Location = new System.Drawing.Point(13, 261);
             this.labOverwrite.Name = "labOverwrite";
             this.labOverwrite.Size = new System.Drawing.Size(80, 13);
             this.labOverwrite.TabIndex = 22;
@@ -290,7 +304,7 @@
             // labDumpOptions
             // 
             this.labDumpOptions.AutoSize = true;
-            this.labDumpOptions.Location = new System.Drawing.Point(18, 177);
+            this.labDumpOptions.Location = new System.Drawing.Point(18, 186);
             this.labDumpOptions.Name = "labDumpOptions";
             this.labDumpOptions.Size = new System.Drawing.Size(75, 13);
             this.labDumpOptions.TabIndex = 22;
@@ -384,7 +398,7 @@
             this.pnlProcessedFiles.Controls.Add(this.labProcessedCount);
             this.pnlProcessedFiles.Controls.Add(this.labProcessedTotal);
             this.pnlProcessedFiles.Controls.Add(this.labProcessedDivider);
-            this.pnlProcessedFiles.Location = new System.Drawing.Point(157, 473);
+            this.pnlProcessedFiles.Location = new System.Drawing.Point(157, 502);
             this.pnlProcessedFiles.Name = "pnlProcessedFiles";
             this.pnlProcessedFiles.Size = new System.Drawing.Size(199, 24);
             this.pnlProcessedFiles.TabIndex = 22;
@@ -394,7 +408,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(503, 532);
+            this.ClientSize = new System.Drawing.Size(503, 565);
             this.Controls.Add(this.pnlProcessedFiles);
             this.Controls.Add(this.rtfDescription);
             this.Controls.Add(this.btnRun);
@@ -452,5 +466,6 @@
         private System.Windows.Forms.GroupBox grpExistingFiles;
         private System.Windows.Forms.RadioButton radExistingSkip;
         private System.Windows.Forms.RadioButton radExistingOverwrite;
+        private System.Windows.Forms.CheckBox chkDumpEmbedded;
     }
 }
