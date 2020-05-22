@@ -23,7 +23,7 @@ namespace WolvenKit.Forms
 {
     public partial class frmRadish : DockContent, IThemedContent
     {
-        private RadishViewModel viewModel;
+        private readonly RadishViewModel viewModel;
 
         public frmRadish()
         {

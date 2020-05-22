@@ -23,7 +23,7 @@ namespace WolvenKit.Cache
 
         public static DdsImage Xbm2Dds(CR2WExportWrapper imagechunk)
         {
-            try
+            //try
             {
                 var image = ((CBitmapTexture)(imagechunk.data)).Image;
                 var compression = imagechunk.GetVariableByName("compression").ToString();
@@ -31,7 +31,7 @@ namespace WolvenKit.Cache
                 var height = uint.Parse(imagechunk.GetVariableByName("height").ToString());
                 var unk2 = uint.Parse(imagechunk.GetVariableByName("unk2").ToString());
                 var residentMipIndex = imagechunk.GetVariableByName("residentMipIndex") != null ? uint.Parse(imagechunk.GetVariableByName("residentMipIndex").ToString()) : 0;
-                var mips = (CBufferUInt32<CVector3<CUInt32>>)imagechunk.GetVariableByName("mips");
+                var mips = (CCompressedBuffer<CVector3<CUInt32>>)imagechunk.GetVariableByName("mips");
                 var tempfile = new MemoryStream();
 
                 var format = ETextureFormat.TEXFMT_R8G8B8A8;
@@ -77,14 +77,14 @@ namespace WolvenKit.Cache
 #endif
                 return new DdsImage(tempfile.ToArray());
             }
-            catch (Exception e)
-            {
-                string message = e.Message;
-                string caption = "Error!";
-                MessageBoxButtons buttons = MessageBoxButtons.OK;
-                MessageBox.Show(message, caption, buttons);
-                return null;
-            }
+            //catch (Exception e)
+            //{
+            //    string message = e.Message;
+            //    string caption = "Error!";
+            //    MessageBoxButtons buttons = MessageBoxButtons.OK;
+            //    MessageBox.Show(message, caption, buttons);
+            //    return null;
+            //}
 
         }
 

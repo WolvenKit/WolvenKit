@@ -6,17 +6,13 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.App.ViewModels;
+using WolvenKit.Common;
 
 namespace WolvenKit.App
 {
-    public class MockKernel : INotifyPropertyChanged
+    public class MockKernel : ObservableObject
     {
         private static MockKernel mainController;
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public ViewModel RadishVM { get; set; }
-
-
         private MockKernel() { }
 
         public static MockKernel Get()
@@ -28,19 +24,16 @@ namespace WolvenKit.App
             return mainController;
         }
 
-        public ViewModel GetRadishVM()
-        {
-            if (RadishVM == null)
-            {
-                RadishVM = new RadishViewModel(MainController.Get().Logger);
-            }
-            return RadishVM;
-        }
 
+        #region Properties
+        private ViewModel RadishVM { get; set; }
+        private ViewModel ImportVM { get; set; }
 
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        private Dictionary<string, ViewModel> DocumentViewModels { get; set; } = new Dictionary<string, ViewModel>();
+
+        #endregion
+
+        public ViewModel GetRadishVM() => RadishVM ?? new RadishViewModel();
+        public ViewModel GetImportViewModel() => ImportVM ?? new ImportViewModel();
     }
 }

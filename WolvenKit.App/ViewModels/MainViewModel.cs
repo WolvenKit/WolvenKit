@@ -36,24 +36,7 @@ namespace WolvenKit.App.ViewModels
             }
         }
         #endregion
-        #region ContentId
-        private string _contentId;
-        public virtual string ContentId
-        {
-            get
-            {
-                return _contentId;
-            }
-            set
-            {
-                if (_contentId != value)
-                {
-                    _contentId = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        #endregion
+
        
 
         #endregion
@@ -66,7 +49,6 @@ namespace WolvenKit.App.ViewModels
         public MainViewModel()
         {
             Title = "WolvenKit";
-            ContentId = "wolvenkit";
 
            
         }
