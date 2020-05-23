@@ -820,6 +820,9 @@
     <EmbeddedResource Include="Forms\frmAnims.resx">
       <DependentUpon>frmAnims.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmScriptEditor.resx">
+      <DependentUpon>frmScriptEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmSettings.resx">
       <DependentUpon>frmSettings.cs</DependentUpon>
     </EmbeddedResource>

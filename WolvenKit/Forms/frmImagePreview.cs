@@ -37,6 +37,7 @@ namespace WolvenKit
                     ImagePreviewControl.Image = ImageUtility.FromFile(path) ?? SystemIcons.Warning.ToBitmap();
                 else
                     ImagePreviewControl.Image = SystemIcons.Warning.ToBitmap();
+                this.Text = Path.GetFileName(path);
             }
             catch (Exception)
             {
@@ -50,6 +51,7 @@ namespace WolvenKit
             {
                 CBitmapTexture xbm = chunk.data as CBitmapTexture;
                 ImagePreviewControl.Image = ImageUtility.Xbm2Bmp(xbm) ?? SystemIcons.Warning.ToBitmap();
+                //this.Text = Path.GetFileName(path);
             }
             catch (Exception)
             {

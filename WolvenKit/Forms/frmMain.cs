@@ -44,17 +44,30 @@ namespace WolvenKit
     {
         #region Forms
         private frmCR2WDocument _activedocument;
-        public List<frmCR2WDocument> OpenDocuments = new List<frmCR2WDocument>();
-        public frmModExplorer ModExplorer { get; set; }
-        public frmStringsGui stringsGui;
-        public frmOutput Output { get; set; }
-        public frmConsole Console { get; set; }
-        public frmImportUtility ImportUtility { get; set; }
-        public frmRadish RadishUtility { get; set; }
+        private List<frmCR2WDocument> OpenDocuments { get; set; } = new List<frmCR2WDocument>();
+        private frmModExplorer ModExplorer { get; set; }
+        private frmStringsGui stringsGui { get; set; }
+        private frmOutput Output { get; set; }
+        private frmConsole Console { get; set; }
 
-        public frmProgress m_frmProgress { get; set; }
+        private frmImportUtility ImportUtility { get; set; }
+        private frmRadish RadishUtility { get; set; }
+        private frmProgress m_frmProgress { get; set; }
+
+
+        private frmScriptEditor ScriptPreview { get; set; }
+        private List<frmScriptEditor> OpenScripts { get; set; } = new List<frmScriptEditor>();
+        private frmImagePreview ImagePreview { get; set; }
+        private List<frmImagePreview> OpenImages { get; set; } = new List<frmImagePreview>();
+
+        #endregion
+
+
 
         public LoggerService Logger { get; set; }
+
+
+
 
         public frmCR2WDocument ActiveDocument
         {
@@ -66,7 +79,7 @@ namespace WolvenKit
             }
         }
 
-        #endregion
+        
 
         #region Fields
         private readonly string BaseTitle = "Wolven kit";
@@ -509,27 +522,72 @@ namespace WolvenKit
             SaveMod();
         }
 
+        public void AddToOpenScripts(frmScriptEditor frmScriptEditor)
+        {
+            if (!OpenScripts.Any(_ => _.Text == frmScriptEditor.Text))
+            {
+                frmScriptEditor.Show(dockPanel, DockState.Document);
+                OpenScripts.Add(frmScriptEditor);
+                //ScriptPreview.Close();
+                ScriptPreview = null;
+            }
+        }
+        public void RemoveFromOpenScrips(frmScriptEditor frmScriptEditor)
+        {
+            if (OpenScripts.Any(_ => _.Text == frmScriptEditor.Text))
+            {
+                OpenScripts.Remove(frmScriptEditor);
+            }
+        }
+
         private void ModExplorer_RequestFileOpen(object sender, RequestFileArgs e)
         {
             var fullpath = e.File;
 
-            var ext = Path.GetExtension(fullpath);
+            var ext = Path.GetExtension(fullpath).ToUpper() ;
 
+            // click
             if (e.Inspect)
             {
                 switch (ext)
                 {
-                    case ".csv":
-                    case ".xml":
-                    case ".txt":
-                    case ".ws":
-                    case ".yml":
-                    case ".bat":
-                    case ".log":
-                    case ".ini":
+                    case ".CSV":
+                    case ".XML":
+                    case ".TXT":
+                    case ".BAT":
+
+                    case ".WS":
+                    case ".YML":
+                    case ".LOG":
+                    case ".INI":
                         {
-                            var se = new frmScriptEditor(fullpath);
-                            se.Show(dockPanel, DockState.Document);
+                            if (OpenScripts.Any(_ => _.FileName == Path.GetFileName(fullpath)))
+                            {
+                                OpenScripts.First(_ => _.FileName == Path.GetFileName(fullpath)).Activate();
+                            }
+                            else
+                            {
+                                ShowScriptPreview();
+                                ScriptPreview.LoadFile(fullpath);
+                            }
+                            break;
+                        }
+                    case ".PNG":
+                    case ".JPG":
+                    case ".TGA":
+                    case ".BMP":
+                    case ".JPEG":
+                    case ".DDS":
+                        {
+                            if (OpenImages.Any(_ => _.Text == Path.GetFileName(fullpath)))
+                            {
+                                OpenImages.First(_ => _.Text == Path.GetFileName(fullpath)).Activate();
+                            }
+                            else
+                            {
+                                ShowImagePreview();
+                                ImagePreview.SetImage(fullpath);
+                            }
                             break;
                         }
                     default:
@@ -538,20 +596,38 @@ namespace WolvenKit
                 return;
             }
 
+            // double click
             switch (ext)
             {
-                case ".csv":
-                case ".xml":
-                case ".txt":
-                case ".bat":
+                case ".CSV":
+                case ".XML":
+                case ".TXT":
                     ShellExecute(fullpath);
                     break;
-                case ".ws":
-                case ".yml":
-                case ".log":
-                case ".ini":
-                    break;
-                case ".wem":
+                case ".BAT":
+                case ".WS":
+                case ".YML":
+                case ".LOG":
+                case ".INI":
+                    {
+                        if (OpenScripts.Any(_ => _.FileName == Path.GetFileName(fullpath)))
+                        {
+                            OpenScripts.First(_ => _.FileName == Path.GetFileName(fullpath)).Activate();
+                        }
+                        else
+                        {
+                            if (ScriptPreview.FileName == Path.GetFileName(fullpath))
+                            {
+                                ScriptPreview.Close();
+                            }
+                            var se = new frmScriptEditor();
+                            se.Show(dockPanel, DockState.Document);
+                            se.LoadFile(fullpath);
+                            OpenScripts.Add(se);
+                        }
+                        break;
+                    }
+                case ".WEM":
                     {
                         using (var sp = new frmAudioPlayer(fullpath))
                         {
@@ -559,13 +635,13 @@ namespace WolvenKit
                         }
                         break;
                     }
-                case ".subs":
+                case ".SUBS":
                     PolymorphExecute(fullpath, ".txt");
                     break;
-                case ".usm":
+                case ".USM":
                     LoadUsmFile(fullpath);
                     break;
-                case ".bnk":
+                case ".BNK":
                     {
                         using (var sp = new frmAudioPlayer(fullpath))
                         {
@@ -573,19 +649,30 @@ namespace WolvenKit
                         }
                         break;
                     }
-                case ".png":
                 case ".PNG":
-                case ".jpg":
                 case ".JPG":
-                case ".tga":
                 case ".TGA":
-                case ".bmp":
                 case ".BMP":
-                case ".jpeg":
                 case ".JPEG":
-                case ".dds":
-                    LoadImageFile(fullpath);
-                    break;
+                case ".DDS":
+                    {
+                        if (OpenImages.Any(_ => _.Text == Path.GetFileName(fullpath)))
+                        {
+                            OpenImages.First(_ => _.Text == Path.GetFileName(fullpath)).Activate();
+                        }
+                        else
+                        {
+                            if (ImagePreview.Text == Path.GetFileName(fullpath))
+                            {
+                                ImagePreview.Close();
+                            }
+                            var dockedImage = new frmImagePreview();
+                            dockedImage.Show(dockPanel, DockState.Document);
+                            dockedImage.SetImage(fullpath);
+                            OpenImages.Add(dockedImage);
+                        }
+                        break;
+                    }
                 default:
                     LoadDocument(fullpath);
                     break;
@@ -622,14 +709,6 @@ namespace WolvenKit
 
         }
 
-        public void LoadImageFile(string path)
-        {
-            var dockedImage = new frmImagePreview();
-            dockedImage.Show(dockPanel, DockState.Document);
-            dockedImage.Text = Path.GetFileName(path);
-            dockedImage.SetImage(path);
-        }
-
         private void ShowOutput()
         {
             if (Output == null || Output.IsDisposed)
@@ -638,7 +717,7 @@ namespace WolvenKit
                 Output.Show(dockPanel, DockState.DockBottom);
             }
 
-            Output.Focus();
+            Output.Activate();
         }
         private void ShowConsole()
         {
@@ -648,7 +727,7 @@ namespace WolvenKit
                 Console.Show(dockPanel, DockState.DockBottom);
             }
 
-            Console.Focus();
+            Console.Activate();
         }
 
         private void ShowImportUtility()
@@ -659,7 +738,7 @@ namespace WolvenKit
                 ImportUtility.Show(dockPanel, DockState.Document);
             }
 
-            ImportUtility.Focus();
+            ImportUtility.Activate();
         }
         private void ShowRadishUtility()
         {
@@ -678,9 +757,27 @@ namespace WolvenKit
                 RadishUtility.Show(dockPanel, DockState.Document);
             }
 
-            RadishUtility.Focus();
+            RadishUtility.Activate();
         }
-        
+        private void ShowImagePreview()
+        {
+            if (ImagePreview == null || ImagePreview.IsDisposed)
+            {
+                ImagePreview = new frmImagePreview();
+                ImagePreview.Show(dockPanel, DockState.Document);
+            }
+            ImagePreview.Activate();
+        }
+        private void ShowScriptPreview()
+        {
+            if (ScriptPreview == null || ScriptPreview.IsDisposed)
+            {
+                ScriptPreview = new frmScriptEditor();
+                ScriptPreview.Show(dockPanel, DockState.Document);
+            }
+            
+            ScriptPreview.Activate();
+        }
 
         private void newModToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1043,24 +1140,7 @@ namespace WolvenKit
         /// </summary>
         private void ResetWindows()
         {
-            if (ActiveMod != null)
-            {
-                foreach (var t in OpenDocuments.ToList())
-                {
-                    t.Close();
-                    break;
-                }
-            }
-            ModExplorer?.Close();
-            ModExplorer = null;
-            ImportUtility?.Close();
-            ImportUtility = null;
-            RadishUtility?.Close();
-            RadishUtility = null;
-            Console?.Close();
-            Console = null;
-            Output?.Close();
-            Output = null;
+            CloseWindows();
 
             ShowModExplorer();
             ShowConsole();
@@ -1091,8 +1171,26 @@ namespace WolvenKit
             ImportUtility = null;
             RadishUtility?.Close();
             RadishUtility = null;
+            ScriptPreview = null;
+            ScriptPreview?.Close();
+            ImagePreview = null;
+            ImagePreview?.Close();
+
+            foreach (var t in OpenScripts.ToList())
+            {
+                t.SaveFile();
+                t.Close();
+            }
+            foreach (var t in OpenImages.ToList())
+            {
+                t.Close();
+            }
+
             foreach (var window in dockPanel.FloatWindows.ToList())
+            {
                 window.Dispose();
+                window.Close();
+            }
         }
 
         /// <summary>
