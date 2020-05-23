@@ -21,6 +21,7 @@ namespace WolvenKit
     using UsefulThings;
     using WolvenKit.App;
     using WolvenKit.Common.Extensions;
+    using WolvenKit.Common.Model;
     using WolvenKit.CR2W;
     using WolvenKit.Extensions;
     using WolvenKit.Render;

@@ -4,31 +4,59 @@ using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.CR2W;
 using WolvenKit.Cache;
+using WolvenKit.CR2W.Types;
+using System.IO;
+using System.Linq;
 
 namespace WolvenKit
 {
     public partial class frmImagePreview : DockContent
     {
-        private CR2WFile _file;
+        private enum EGDIFormats
+        {
+            BMP,
+            GIF,
+            JPG, //?
+            JPEG,
+            PNG,
+            TIFF
+        }
 
         public frmImagePreview()
         {
             InitializeComponent();
         }
 
-        public CR2WFile File
+        public void SetImage(string path)
         {
-            get { return _file; }
-            set {
-                _file = value;
-                ImagePreviewControl.Image = GetImage(value) ?? SystemIcons.Warning.ToBitmap();
+            try
+            {
+                if (Enum.GetNames(typeof(EGDIFormats)).Contains(Path.GetExtension(path).TrimStart('.').ToUpper()))
+                    ImagePreviewControl.Image = Image.FromFile(path) ?? SystemIcons.Warning.ToBitmap();
+                else if (Path.GetExtension(path).ToUpper().Contains("TGA") || Path.GetExtension(path).ToUpper().Contains("DDS"))
+                    ImagePreviewControl.Image = ImageUtility.FromFile(path) ?? SystemIcons.Warning.ToBitmap();
+                else
+                    ImagePreviewControl.Image = SystemIcons.Warning.ToBitmap();
+            }
+            catch (Exception)
+            {
+
             }
         }
 
-        private static Bitmap GetImage(CR2WFile file)
+        public void SetImage(CR2WExportWrapper chunk)
         {
-            return file.chunks[0].Type == "CBitmapTexture" ? ImageUtility.Xbm2Bitmap(file.chunks[0]) : null;
+            try
+            {
+                CBitmapTexture xbm = chunk.data as CBitmapTexture;
+                ImagePreviewControl.Image = ImageUtility.Xbm2Bmp(xbm) ?? SystemIcons.Warning.ToBitmap();
+            }
+            catch (Exception)
+            {
+
+            }
         }
+
 
         private void copyImageToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -65,10 +93,10 @@ namespace WolvenKit
         public void UpdateFileWithImage(Image image)
         {
             //TODO: Finish this
-            if (File.chunks[0].Type == "CBitmapTexture")
-            {
-                //((CBitmapTexture)File.chunks[0].data).Image.Bytes = ImageUtility.Dds2Xbm(System.IO.File.ReadAllBytes(of.FileName));
-            }
+            //if (File.chunks[0].Type == "CBitmapTexture")
+            //{
+            //    //((CBitmapTexture)File.chunks[0].data).Image.Bytes = ImageUtility.Dds2Xbm(System.IO.File.ReadAllBytes(of.FileName));
+            //}
         }
     }
 }

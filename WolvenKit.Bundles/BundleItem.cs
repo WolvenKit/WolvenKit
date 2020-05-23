@@ -6,6 +6,7 @@ using LZ4;
 using Snappy;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.Bundles
 {
@@ -101,9 +102,9 @@ namespace WolvenKit.Bundles
             }
         }
 
-        public void Extract(string filename)
+        public void Extract(BundleFileExtractArgs e)
         {
-            using (var output = new FileStream(filename, FileMode.CreateNew, FileAccess.Write))
+            using (var output = new FileStream(e.FileName, FileMode.CreateNew, FileAccess.Write))
             {
                 Extract(output);
                 output.Close();

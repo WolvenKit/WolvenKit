@@ -17,6 +17,9 @@ namespace WolvenKit.Console
     using Cache;
     using Bundles;
     using Common;
+    using static WolvenKit.CR2W.Types.Enums;
+    using ConsoleProgressBar;
+    using WolvenKit.Common.Model;
 
     public class WolvenKitConsole
     {
@@ -31,7 +34,7 @@ namespace WolvenKit.Console
                     string line = System.Console.ReadLine();
                     Parse(line.Split(' '));
                 }
-                
+
             }
             else
             {
@@ -41,19 +44,283 @@ namespace WolvenKit.Console
 
         internal static async Task Parse(string[] _args)
         {
-            var result = Parser.Default.ParseArguments<CacheOptions, BundleOptions>(_args)
+            var result = Parser.Default.ParseArguments<CacheOptions, BundleOptions, DumpXbmsOptions, DumpDDSOptions>(_args)
                         .MapResult(
-                          async (CacheOptions opts) => await RunCache(opts),
+                          async (CacheOptions opts) => await DumpCache(opts),
                           async (BundleOptions opts) => await RunBundle(opts),
-                          
+                          async (DumpXbmsOptions opts) => await DumpXbmInfo(opts),
+                          async (DumpDDSOptions opts) => await DumpDDSInfo(opts),
                           //errs => 1,
                           _ => Task.FromResult(1));
         }
 
+        internal class XBMBundleInfo
+        {
+            public string Name { get; set; }
+            public uint Width { get; set; }
+            public uint Height { get; set; }
+            public ETextureRawFormat Format { get; set; }
+            public ETextureCompression Compression { get; set; }
+            public string TextureGroup { get; set; }
+        }
 
-        
 
-        private static async Task<int> RunCache(CacheOptions options)
+        private static async Task<int> DumpDDSInfo(DumpDDSOptions options)
+        {
+            var dt = DateTime.Now;
+            string idx = RED.CRC32.Crc32Algorithm.Compute(Encoding.ASCII.GetBytes($"{dt.Year}{dt.Month}{dt.Day}{dt.Hour}{dt.Minute}{dt.Second}")).ToString();
+            var outDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "DDSTest", $"ExtractedFiles_{idx}");
+
+            using (var pb = new ProgressBar())
+            {
+                if (!Directory.Exists(outDir))
+                    Directory.CreateDirectory(outDir);
+                var txc = new TextureManager();
+                //using (var p11 = pb.Progress.Fork(0.25, "Loading TextureManager"))
+                {
+                    txc.LoadAll("C:\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
+                }
+                System.Console.WriteLine($"Loaded TextureManager");
+
+                //combined bundle dump
+                // load xbm bundle infos
+                var bundlexbmDict = new Dictionary<uint, XBMBundleInfo>();
+                var mc = new BundleManager();
+                //using (var p12 = pb.Progress.Fork(0.25, "Loading BundleManager"))
+                {
+                    mc.LoadAll("C:\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
+                }
+
+                System.Console.WriteLine($"Loaded BundleManager");
+
+
+                //using (var p2 = pb.Progress.Fork(0.5, "Loading Bundle Info"))
+                using (var p2 = pb.Progress.Fork(0.5, "Bundle Info"))
+                {
+                    var filesb = mc.FileList.Where(x => x.Name.EndsWith("xbm")).ToList();
+                    for (int i = 0; i < filesb.Count; i++)
+                    {
+                        var f = filesb[i];
+                        try
+                        {
+                            var buff = new byte[f.Size];
+                            using (var s = new MemoryStream())
+                            {
+                                f.Extract(s);
+
+                                using (var ms = new MemoryStream(s.ToArray()))
+                                using (var br = new BinaryReader(ms))
+                                {
+                                    var crw = new CR2WFile();
+                                    crw.Read(br);
+
+                                    foreach (var c in crw.chunks)
+                                    {
+                                        if (c.data is CBitmapTexture)
+                                        {
+                                            var x = c.data as CBitmapTexture;
+
+                                            if (!bundlexbmDict.ContainsKey(((CUInt32)x.GetVariableByName("TextureCacheKey")).val))
+                                            {
+                                                var ecompression = (CName)x.GetVariableByName("Compression");
+                                                ETextureCompression compression = (ETextureCompression)Enum.Parse(typeof(ETextureCompression), ecompression.Value);
+                                                var eformat = (CName)x.GetVariableByName("Format");
+                                                ETextureRawFormat format = (ETextureRawFormat)Enum.Parse(typeof(ETextureRawFormat), eformat.Value);
+
+                                                bundlexbmDict.Add(((CUInt32)x.GetVariableByName("TextureCacheKey")).val, new XBMBundleInfo()
+                                                {
+                                                    Name = f.Name,
+                                                    Width = (CUInt32)x.GetVariableByName("Width") == null ? 0 : ((CUInt32)x.GetVariableByName("Width")).val,
+                                                    Height = (CUInt32)x.GetVariableByName("Width") == null ? 0 : ((CUInt32)x.GetVariableByName("Height")).val,
+                                                    Format = format,
+                                                    Compression = compression,
+                                                    TextureGroup = (CName)x.GetVariableByName("TextureGroup") == null ? "" : ((CName)x.GetVariableByName("TextureGroup")).Value,
+
+                                                }
+                                                );
+                                            }
+                                            else
+                                            {
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            throw ex;
+                        }
+                        p2.Report(i / (double)filesb.Count, $"Loading bundle entries: {i}/{filesb.Count}");
+                    }
+                }
+                System.Console.WriteLine($"Loaded {bundlexbmDict.Values.Count} Bundle Entries");
+
+                using (var p3 = pb.Progress.Fork(0.5, "Cache Info"))
+                {
+                    // Dump texture cache infos
+                    using (StreamWriter writer = File.CreateText(Path.Combine(outDir, $"__ddsdump_{idx}.txt")))
+                    {
+                        string head = "Format1\t" +
+                            "Format2\t" +
+                            "BPP\t" +
+                            "Width\t" +
+                            "Height\t" +
+                            "Size\t" +
+                            "Mips\t" +
+                            "Slices\t" +
+                            "Cube\t" +
+                            "Unk1\t" +
+                            "Hash\t" +
+                            "Name\t";
+                        head += "XBMFormat\t" +
+                            "XBMCompression\t" +
+                            "XBMTExtureGroup\t"
+                            ;
+                        writer.WriteLine(head);
+
+                        //string ext = "xbm";
+                        //var files = txc.FileList.Where(x => x.Name.EndsWith(ext)).ToList();
+                        var files = txc.FileList;
+                        for (int j = 0; j < files.Count; j++)
+                        {
+                            IWitcherFile f = files[j];
+                            TextureCacheItem x = f as TextureCacheItem;
+
+                            string info = $"{x.Type1}/{x.Type1:X2}\t" +
+                                $"{x.Type2}/{x.Type2:X2}\t" +
+                                $"{x.BaseAlignment}\t" +
+                                $"{x.BaseWidth}\t" +
+                                $"{x.BaseHeight}\t" +
+                                $"{x.Size}\t" +
+                                $"{x.Mipcount}\t" +
+                                $"{x.SliceCount}\t" +
+                                $"{x.IsCube:X2}\t" +
+                                $"{x.Unk1}/{x.Unk1:X2}\t" +
+                                $"{x.Hash}\t" +
+                                $"{x.Name}\t"
+                                ;
+
+                            //info += "<";
+                            //foreach (var y in x.MipMapInfo)
+                            //{
+                            //    info += $"<{y.Item1},{y.Item2}>";
+                            //}
+                            //info += ">";
+
+                            if (bundlexbmDict.ContainsKey(x.Hash))
+                            {
+                                XBMBundleInfo bundleinfo = bundlexbmDict[x.Hash];
+                                info +=
+                                    //$"{bundleinfo.Width}\t" +
+                                    //$"{bundleinfo.Height}\t" +
+                                    $"{bundleinfo.Format}\t" +
+                                    $"{bundleinfo.Compression}\t" +
+                                    $"{bundleinfo.TextureGroup}\t"
+                                    ;
+                            }
+                            else
+                            {
+
+                            }
+
+
+
+                            //System.Console.WriteLine(info);
+                            writer.WriteLine(info);
+                            p3.Report(j / (double)files.Count, $"Dumping cache entries: {j}/{files.Count}");
+                        }
+                        System.Console.WriteLine($"Finished dumping {files.Count} texture cache infos.\r\n");
+                    }
+                }
+            }
+            System.Console.WriteLine($"Finished.\r\n");
+            System.Console.ReadLine();
+
+            return 1;
+        }
+
+        private static async Task<int> DumpXbmInfo(DumpXbmsOptions options)
+        {
+            var dt = DateTime.Now;
+            string idx = RED.CRC32.Crc32Algorithm.Compute(Encoding.ASCII.GetBytes($"{dt.Year}{dt.Month}{dt.Day}{dt.Hour}{dt.Minute}{dt.Second}")).ToString();
+            var outDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "XBMTest", $"ExtractedFiles_{idx}");
+            if (!Directory.Exists(outDir))
+                Directory.CreateDirectory(outDir);
+            var mc = new BundleManager();
+            mc.LoadAll("C:\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
+            string ext = "xbm";
+
+            using (StreamWriter writer = File.CreateText(Path.Combine(outDir, $"__xbmdump_{idx}.txt")))
+            {
+
+                string head = "RedName\t" +
+                            "Width\t" +
+                            "Height\t" +
+                            "Format\t" +
+                            "Compression\t" +
+                            "TextureGroup\t" +
+                            "TextureCacheKey\t"
+                            ;
+                writer.WriteLine(head);
+                System.Console.WriteLine(head);
+
+
+                var files = mc.FileList.Where(x => x.Name.EndsWith(ext)).ToList();
+                for (int i = 0; i < files.Count; i++)
+                {
+                    var f = files[i];
+                    try
+                    {
+                        var buff = new byte[f.Size];
+                        using (var s = new MemoryStream())
+                        {
+                            f.Extract(s);
+
+                            using (var ms = new MemoryStream(s.ToArray()))
+                            using (var br = new BinaryReader(ms))
+                            {
+                                var crw = new CR2WFile();
+                                crw.Read(br);
+
+                                foreach (var c in crw.chunks)
+                                {
+                                    if (c.data is CBitmapTexture)
+                                    {
+                                        var x = c.data as CBitmapTexture;
+
+                                        string info = $"{f.Name}\t" +
+                                            $"{x.GetVariableByName("Width")}\t" +
+                                            $"{x.GetVariableByName("Height")}\t" +
+                                            $"{x.GetVariableByName("Format")}\t" +
+                                            $"{x.GetVariableByName("Compression")}\t" +
+                                            $"{x.GetVariableByName("TextureGroup")}\t" +
+                                            $"{x.GetVariableByName("TextureCacheKey")}\t"
+                                            ;
+
+                                        //System.Console.WriteLine(info);
+                                        writer.WriteLine(info);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                    //System.Console.WriteLine($"Finished extracting {f.Name}");
+                }
+            }
+
+            System.Console.WriteLine($"Finished extracting.");
+            System.Console.ReadLine();
+
+            return 1;
+        }
+
+        private static async Task<int> DumpCache(CacheOptions options)
         {
             bool WHITELIST = true;
             var whitelistExt = new[]
@@ -80,6 +347,7 @@ namespace WolvenKit.Console
                     using (StreamWriter writer = File.CreateText(Path.Combine(outDir, $"__txtdump_{idx}.txt")))
                     {
                         string head = "Format\t" +
+                            "Format2\t" +
                             "BPP\t" +
                             "Width\t" +
                             "Height\t" +
@@ -98,7 +366,8 @@ namespace WolvenKit.Console
                             if (!whitelistExt.Contains(ext) && WHITELIST)
                                 continue;
 
-                            string info = $"{x.Type.ToString("X4")}\t" +
+                            string info = $"{x.Type1:X2}\t" +
+                                $"{x.Type2:X2}\t" +
                                 $"{x.BaseAlignment}\t" +
                                 $"{x.BaseWidth}\t" +
                                 $"{x.BaseHeight}\t" +
@@ -126,7 +395,7 @@ namespace WolvenKit.Console
                                 string fullpath = Path.Combine(outDir, x.Name);
                                 string filename = Path.GetFileName(fullpath);
                                 string newpath = Path.Combine(outDir, filename);
-                                x.Extract(newpath);
+                                x.Extract(new BundleFileExtractArgs(newpath));
                                 System.Console.WriteLine($"Finished extracting {x.Name}");
                             }
                         }
@@ -186,7 +455,7 @@ namespace WolvenKit.Console
                 var sc = new CollisionCache(old);
                 foreach (var item in sc.Files)
                 {
-                    item.Extract(clonedir + "\\" + item.Name);
+                    item.Extract(new BundleFileExtractArgs(clonedir + "\\" + item.Name));
                     System.Console.WriteLine("Extracted: " + item.Name);
                 }
                 var orderedfiles = new List<string>();
@@ -221,7 +490,7 @@ namespace WolvenKit.Console
         }
 
 
-        
+
 
     }
 }

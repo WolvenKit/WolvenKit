@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.App;
+using WolvenKit.App.Model;
 using WolvenKit.Common;
 using WolvenKit.CR2W;
 using WolvenKit.Services;
@@ -20,7 +21,6 @@ namespace WolvenKit
         public frmChunkFlowDiagram flowDiagram;
         public frmJournalEditor JournalEditor;
         public frmImagePreview ImageViewer;
-        public frmTextureFile TextureFile;
         public Render.frmRender RenderViewer;
         private CR2WFile file;
 
@@ -96,12 +96,6 @@ namespace WolvenKit
 
                 if (ImageViewer != null && !ImageViewer.IsDisposed)
                 {
-                    ImageViewer.File = file;
-                }
-
-                if (TextureFile != null && !TextureFile.IsDisposed)
-                {
-                    TextureFile.File = file;
                 }
 
                 if (RenderViewer != null && !RenderViewer.IsDisposed)

@@ -573,8 +573,18 @@ namespace WolvenKit
                         }
                         break;
                     }
+                case ".png":
+                case ".PNG":
+                case ".jpg":
+                case ".JPG":
+                case ".tga":
+                case ".TGA":
+                case ".bmp":
+                case ".BMP":
+                case ".jpeg":
+                case ".JPEG":
                 case ".dds":
-                    LoadDDSFile(fullpath);
+                    LoadImageFile(fullpath);
                     break;
                 default:
                     LoadDocument(fullpath);
@@ -612,12 +622,12 @@ namespace WolvenKit
 
         }
 
-        public void LoadDDSFile(string path)
+        public void LoadImageFile(string path)
         {
-            var dockedImage = new frmTextureFile();
+            var dockedImage = new frmImagePreview();
             dockedImage.Show(dockPanel, DockState.Document);
             dockedImage.Text = Path.GetFileName(path);
-            dockedImage.LoadImage(path);
+            dockedImage.SetImage(path);
         }
 
         private void ShowOutput()
@@ -941,7 +951,7 @@ namespace WolvenKit
                             {
                                 File.Delete(filename);
                             }
-                            selectedBundle.Extract(filename);
+                            selectedBundle.Extract(new BundleFileExtractArgs(filename, MainController.Get().Configuration.UncookExtension));
                         }
                         catch { }
                         return skip;
@@ -955,7 +965,7 @@ namespace WolvenKit
                             File.Delete(filename);
                         }
 
-                        archives.FirstOrDefault().Value.Extract(filename);
+                        archives.FirstOrDefault().Value.Extract(new BundleFileExtractArgs(filename, MainController.Get().Configuration.UncookExtension));
                     }
                     catch (Exception ex)
                     {
@@ -1284,10 +1294,11 @@ namespace WolvenKit
                     {
                         doc.ImageViewer = new frmImagePreview
                         {
-                            File = doc.File,
                             DockAreas = DockAreas.Document
                         };
                         doc.ImageViewer.Show(doc.FormPanel, DockState.Document);
+                        CR2WExportWrapper imagechunk = doc.File?.chunks?.FirstOrDefault(_ => _.data.Type.Contains("CBitmapTexture"));
+                        doc.ImageViewer.SetImage(imagechunk);
                         break;
                     }
                 case ".w2mesh":
@@ -1414,7 +1425,6 @@ namespace WolvenKit
             if (!(arg is LoadFileArgs))
                 throw new NotImplementedException();
             var Args = (LoadFileArgs)arg;
-            //BackgroundWorker bwAsync = sender as BackgroundWorker;
 
             if (Args.Stream != null)
                 Args.Doc.LoadFile(Args.Filename, Args.Stream);
@@ -1595,7 +1605,7 @@ namespace WolvenKit
                             foreach (var f in ccf.Files)
                             {
                                 string extractedfilename = Path.ChangeExtension(Path.Combine(outdir, f.Name), "apb");
-                                f.Extract(extractedfilename);
+                                f.Extract(new BundleFileExtractArgs(extractedfilename, MainController.Get().Configuration.UncookExtension));
                                 AddOutput($"Extracted {extractedfilename}.\n");
                             }
                         }
@@ -3277,5 +3287,15 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
 
 
         #endregion
+
+        private void toolStripButtonRadishUtil_Click(object sender, EventArgs e)
+        {
+            ShowRadishUtility();
+        }
+
+        private void toolStripButtonImportUtil_Click(object sender, EventArgs e)
+        {
+            ShowImportUtility();
+        }
     }
 }

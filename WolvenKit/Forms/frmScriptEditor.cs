@@ -16,9 +16,11 @@ namespace WolvenKit.Forms
         public string autocompletelist = "array< PushBack string int integer bool float name range event function abstract const final private protected public theGame theInput thePlayer theSound enum struct state array false NULL true out inlined autobind editable entry exec hint import latent optional out quest saved statemachine timer break case continue else for if return switch while";
 
 
+
         public frmScriptEditor(string filePath)
         {
             InitializeComponent();
+
             this.ShowIcon = false;
             this.Text = "Witcherscript editor - " + Path.GetFileName(filePath);
             ScintillaFindReplace = new FindReplace(scintillaControl);

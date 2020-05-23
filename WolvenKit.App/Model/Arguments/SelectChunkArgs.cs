@@ -1,6 +1,6 @@
 ﻿using WolvenKit.CR2W;
 
-namespace WolvenKit
+namespace WolvenKit.App.Model
 {
     public class SelectChunkArgs
     {

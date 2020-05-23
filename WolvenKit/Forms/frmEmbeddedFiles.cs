@@ -4,6 +4,7 @@ using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.CR2W;
 using WolvenKit.Services;
 using System.Linq;
+using WolvenKit.App.Model;
 
 namespace WolvenKit
 {

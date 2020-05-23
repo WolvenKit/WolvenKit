@@ -21,6 +21,7 @@ namespace WolvenKit
     using W3Strings;
     using Common;
     using App;
+    using WolvenKit.App.Model;
 
     public enum EColorThemes
     {

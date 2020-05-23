@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.App
 {
@@ -32,7 +33,9 @@ namespace WolvenKit.App
         public string InitialModDirectory { get; set; }
         public string InitialFileDirectory { get; set; }
         public string InitialExportDirectory { get; set; }
-        
+
+        public EUncookExtension UncookExtension { get; set; }
+
 
         [XmlIgnore]
         public string GameDLCDir => Path.Combine(ExecutablePath, @"..\..\DLC\");

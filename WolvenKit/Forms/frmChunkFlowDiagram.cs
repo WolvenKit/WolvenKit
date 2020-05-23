@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.App.Model;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 using WolvenKit.FlowTreeEditors;

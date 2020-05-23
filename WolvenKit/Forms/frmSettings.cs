@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using IniParserLTK;
 using Microsoft.Win32;
 using WolvenKit.App;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit
 {
@@ -31,8 +32,13 @@ namespace WolvenKit
             txTextLanguage.Text = config.TextLanguage;
             txVoiceLanguage.Text = config.VoiceLanguage;
             txWCC_Lite.Text = config.WccLite;
+            
             comboBoxTheme.Items.AddRange(Enum.GetValues(typeof(EColorThemes)).Cast<object>().ToArray());
             comboBoxTheme.SelectedItem = UIController.Get().Configuration.ColorTheme;
+            
+            comboBoxExtension.Items.AddRange(Enum.GetValues(typeof(EUncookExtension)).Cast<object>().ToArray());
+            comboBoxExtension.SelectedItem = MainController.Get().Configuration.UncookExtension;
+
             exeSearcherSlave.RunWorkerAsync();
             btSave.Enabled =
                 (File.Exists(txWCC_Lite.Text) && Path.GetExtension(txWCC_Lite.Text) == ".exe" && txWCC_Lite.Text.Contains("wcc_lite.exe")) &&
@@ -80,8 +86,11 @@ namespace WolvenKit
             config.WccLite = txWCC_Lite.Text;
             config.TextLanguage = txTextLanguage.Text;
             config.VoiceLanguage = txVoiceLanguage.Text;
+            config.UncookExtension = (EUncookExtension)comboBoxExtension.SelectedItem;
             uiconfig.ColorTheme = (EColorThemes)comboBoxTheme.SelectedItem;
+
             config.Save();
+            uiconfig.Save();
 
             MainController.Get().UpdateWccHelper(config.WccLite);
 

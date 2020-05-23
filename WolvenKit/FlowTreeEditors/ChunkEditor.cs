@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using WolvenKit.App.Model;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 

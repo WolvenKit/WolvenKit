@@ -6,13 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ionic.Zlib;
-//using W3Edit.Textures;
 using WolvenKit.Common;
 using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.Cache
 {
     using DDS;
+    using WolvenKit.Common.Model;
+    using static WolvenKit.CR2W.Types.Enums;
 
     public class TextureCacheItem : IWitcherFile
     {
@@ -24,7 +25,7 @@ namespace WolvenKit.Cache
         public string ParentFile;
 
         public string Name { get; set; }
-        public Int32 Hash;
+        public UInt32 Hash;
         public Int32 PathStringIndex;
         public long PageOFfset { get; set; }
         public Int32 CompressedSize;
@@ -37,7 +38,8 @@ namespace WolvenKit.Cache
         public Int32 MipOffsetIndex;
         public Int32 NumMipOffsets;
         public Int64 TimeStamp;
-        public Int16 Type;
+        public byte Type1;
+        public byte Type2;
         public Byte IsCube;
         public Byte Unk1;
 
@@ -47,19 +49,34 @@ namespace WolvenKit.Cache
 
         public List<Tuple<uint, uint>> MipMapInfo = new List<Tuple<uint, uint>>();
 
-        public Dictionary<Int16,ETextureFormat> formats = new Dictionary<Int16,ETextureFormat>()
+        public Dictionary<short, ETextureFormat> formats = new Dictionary<short, ETextureFormat>()
         {
-            {0x0,ETextureFormat.TEXFMT_R8G8B8A8}, 
-            {0x3FD,ETextureFormat.TEXFMT_R8G8B8A8}, //DDS_RGBA    32  0xff0000 	0xff00 	0xff 	0xff000000
-            {0x407,ETextureFormat.TEXFMT_BC1},  //DDS_FOURCC 	"DXT1"
-            {0x408,ETextureFormat.TEXFMT_BC3},  //DDS_FOURCC  "DXT5"
-            {0x409, ETextureFormat.TEXFMT_BC6H},    
-            {0x40A, ETextureFormat.TEXFMT_BC7}, 
-            {0x40B,ETextureFormat.TEXFMT_Float_R16G16B16A16},   //DDS_FOURCC 	113
-            {0x40C,ETextureFormat.TEXFMT_Float_R32G32B32A32},   //DDS_FOURCC 	116
-            {0x40D, ETextureFormat.TEXFMT_BC2}, //DDS_FOURCC  "DXT3"
-            {0x40E, ETextureFormat.TEXFMT_BC4}, //DDS_FOURCC  "BC4U"
-            {0x40F, ETextureFormat.TEXFMT_BC5}  //DDS_FOURCC  "ATI2"
+           
+            
+            // 0 only used for env probes, 
+            {0x0, ETextureFormat.TEXFMT_R8G8B8A8},              //          0x09  
+            //  253 used for pngs, w2cube, env probes, 
+            {0xFD, ETextureFormat.TEXFMT_R8G8B8A8},            //0x4   4    0x01               //None
+            //  7   1
+            {0x07, ETextureFormat.TEXFMT_BC1},                 //0x17  23   0x32   "DXT1"    
+            //  8
+            {0x08, ETextureFormat.TEXFMT_BC3},                 //0x19  25   0x34   "DXT5"    
+            ////  9
+            //{0x09, ETextureFormat.TEXFMT_BC6H},                //0x1C  28  
+            //  10 clouds, fx
+            {0x0A, ETextureFormat.TEXFMT_BC7},                 //0x1D  29   0x35            //QualityColor
+            //// 11
+            //{0x0B, ETextureFormat.TEXFMT_Float_R16G16B16A16},  //DDS_FOURCC 	113
+            //// 12
+            //{0x0C, ETextureFormat.TEXFMT_Float_R32G32B32A32},  //DDS_FOURCC 	116
+            //  13 icons
+            {0x0D, ETextureFormat.TEXFMT_BC2},                 //0x18  24   0x33   "DXT3"    //empty
+            //  14 dlc fx
+            {0x0E, ETextureFormat.TEXFMT_BC4},                 //0x1A  26         "BC4U"    //QualityR
+            //  15 dlc fx
+            {0x0F, ETextureFormat.TEXFMT_BC5},                 //0x1B  27         "BC5U"    //QualityRG
+            
+            
         };
 
         public TextureCacheItem(IWitcherArchiveType parent)
@@ -72,7 +89,7 @@ namespace WolvenKit.Cache
             using (var file = MemoryMappedFile.CreateFromFile(this.ParentFile, FileMode.Open))
             {
                 // generate header
-                ETextureFormat format = formats[Type];
+                ETextureFormat format = formats[Type1];
                 var metadata = new DDSMetadata(
                     BaseWidth,
                     BaseHeight,
@@ -81,11 +98,11 @@ namespace WolvenKit.Cache
                     BaseAlignment,
                     IsCube == 1,
                     SliceCount,
-                    false,
-                    false);
+                    false
+                    );
                 DDSUtils.GenerateAndWriteHeader(output, metadata);
 
-                
+
                 if (IsCube == 0)
                 {
                     using (var viewstream = file.CreateViewStream((PageOFfset * 4096) + 9, ZSize, MemoryMappedFileAccess.Read))
@@ -107,7 +124,7 @@ namespace WolvenKit.Cache
                 }
                 else
                 {
-                    
+
                     using (var imagestream = new MemoryStream())
                     using (var mipmapstream = new MemoryStream())
                     using (var imagereader = new BinaryReader(imagestream))
@@ -119,7 +136,7 @@ namespace WolvenKit.Cache
                         {
                             //if ( format != ETextureFormat.TEXFMT_R8G8B8A8)
                             new ZlibStream(vs, CompressionMode.Decompress).CopyTo(imagestream);
-                            
+
                         }
                         //mipmaps
                         var mipmapoffsets = new List<Tuple<long, long>>();
@@ -144,7 +161,7 @@ namespace WolvenKit.Cache
                             var facesize = (int)imagestream.Length / 6;
                             var face = imagereader.ReadBytes(facesize);
                             output.Write(face, 0, face.Length);
-                            
+
                             foreach (var o in mipmapoffsets)
                             {
                                 var mipsize = (o.Item2 / 6);
@@ -154,13 +171,14 @@ namespace WolvenKit.Cache
                                 output.Write(mipmap, 0, mipmap.Length);
                             }
                         }
-                    } 
+                    }
                 }
             }
         }
 
-        public void Extract(string fullpath)
+        public void Extract(BundleFileExtractArgs e)
         {
+            var fullpath = e.FileName;
             fullpath = Path.ChangeExtension(fullpath, "dds");
 
             Directory.CreateDirectory(Path.GetDirectoryName(fullpath) ?? "");
@@ -173,6 +191,24 @@ namespace WolvenKit.Cache
             {
                 Extract(output);
             }
+
+            if (e.Extension != EUncookExtension.DDS)
+            {
+                //convert
+                var fi = new FileInfo(fullpath);
+                if (fi.Exists)
+                {
+                    Texconv.Convert(Path.GetDirectoryName(fullpath), fullpath, e.Extension);
+                }
+
+                // delete old DDS
+                fi.Delete();
+            }
+        }
+
+        void p_Exited(object sender, EventArgs e)
+        {
+           
         }
     }
 }
