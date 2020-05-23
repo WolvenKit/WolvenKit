@@ -37,10 +37,7 @@ namespace WolvenKit.CR2W.Types
             Resources = new CBufferVLQ<CSectorDataResource>(cr2w, _ => new CSectorDataResource(_)) { Name = "resources", };
             Objects = new CBufferVLQ<CSectorDataObject>(cr2w, _ => new CSectorDataObject(_)) { Name = "objects", };
 
-            BlockData = new CCompressedBuffer<SBlockData>(cr2w, _ => new SBlockData(_))
-            {
-                Name = "blockData",
-            };
+            BlockData = new CCompressedBuffer<SBlockData>(cr2w, _ => new SBlockData(_)) { Name = "blockData", };
         }
 
         public override CVariable Create(CR2WFile cr2w)
