@@ -33,7 +33,7 @@ namespace WolvenKit.App.ViewModels
         }
 
         #region Fields
-        private readonly List<string> importableexts = Enum.GetNames(typeof(EImportable)).Select(_ => $".{_}").ToList();
+        private readonly List<string> importableexts = Enum.GetNames(typeof(EImportable)).Select(_ => $".{_}".ToLower()).ToList();
         private readonly LoggerService Logger;
         
         private DirectoryInfo importdepot;
@@ -70,12 +70,21 @@ namespace WolvenKit.App.ViewModels
         protected bool CanUseLocalResources() => MainController.Get().ActiveMod != null;
         protected void UseLocalResources()
         {
-            var importablefiles = (from file in MainController.Get().ActiveMod.Files
-                                   from ext in importableexts
-                                   where file.Contains(ext)
-                                   select file).ToList();
+            var importablefiles = new List<string>();
+            foreach (var file in MainController.Get().ActiveMod.Files)
+            {
+                var lowerExt = Path.GetExtension(file).ToLower();
+                if (importableexts.Contains(lowerExt))
+                {
+                    // rename file first because wcc can't handle uppercase file extensions
+                    var oldpath = Path.Combine(MainController.Get().ActiveMod.FileDirectory, file);
+                    var newpath = Path.ChangeExtension(oldpath, lowerExt);
+                    File.Move(oldpath, newpath);
 
+                    importablefiles.Add(Path.ChangeExtension(file, lowerExt));
+                }
 
+            }
             AddObjects(importablefiles, MainController.Get().ActiveMod.FileDirectory);
         }
 
@@ -100,7 +109,7 @@ namespace WolvenKit.App.ViewModels
                 {
                     // check for non-texture files
                     if (importable.GetImportableType() != EImportable.bmp &&
-                        importable.GetImportableType() != EImportable.dds &&
+                        //importable.GetImportableType() != EImportable.dds &&
                         importable.GetImportableType() != EImportable.jpg &&
                         importable.GetImportableType() != EImportable.png &&
                         importable.GetImportableType() != EImportable.tga
@@ -201,7 +210,7 @@ namespace WolvenKit.App.ViewModels
             foreach (var f in importablefiles)
             {
                 string ext = Path.GetExtension(f);
-                EImportable type = (EImportable)Enum.Parse(typeof(EImportable), ext.TrimStart('.'));
+                EImportable type = (EImportable)Enum.Parse(typeof(EImportable), ext.TrimStart('.').ToLower());
 
                 var importableobj = new ImportableFile(
                     f,

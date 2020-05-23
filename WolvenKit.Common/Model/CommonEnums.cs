@@ -8,12 +8,12 @@ namespace WolvenKit.Common.Model
 {
     public enum EUncookExtension
     {
-        TGA,
-        BMP,
-        JPG,
-        JPEG,
-        PNG,
-        DDS,
+        tga,
+        bmp,
+        jpg,
+        jpeg,
+        png,
+        dds,
         //HDR,
         //TIF,
         //TIFF,

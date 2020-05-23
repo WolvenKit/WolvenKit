@@ -60,14 +60,22 @@ namespace WolvenKit.App
 
         public static Configuration Load()
         {
-            if (File.Exists(ConfigurationPath) && new FileInfo(ConfigurationPath).Length != 0)
+            try
             {
-                var ser = new XmlSerializer(typeof (Configuration));
-                var stream = new FileStream(ConfigurationPath, FileMode.Open, FileAccess.Read);
-                var config = (Configuration) ser.Deserialize(stream);
-                stream.Close();
-                return config;
+                if (File.Exists(ConfigurationPath) && new FileInfo(ConfigurationPath).Length != 0)
+                {
+                    var ser = new XmlSerializer(typeof(Configuration));
+                    var stream = new FileStream(ConfigurationPath, FileMode.Open, FileAccess.Read);
+                    var config = (Configuration)ser.Deserialize(stream);
+                    stream.Close();
+                    return config;
+                }
             }
+            catch (Exception)
+            {
+
+            }
+            
 
             // Defaults
             return new Configuration

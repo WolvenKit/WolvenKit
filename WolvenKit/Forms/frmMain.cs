@@ -288,7 +288,9 @@ namespace WolvenKit
 
         private void UpdateTitle()
         {
-            buildDateToolStripMenuItem.Text = Assembly.GetExecutingAssembly().GetLinkerTime().ToString("yyyy MMMM dd");
+            buildDateToolStripMenuItem.Text = $"v{Version}: {Assembly.GetExecutingAssembly().GetLinkerTime().ToString("yyyy MMMM dd")}";
+            MenuLabelProject.Text = ActiveMod != null ? ActiveMod.Name : "<No Mod Loaded!>";
+
             Text = BaseTitle + " v" + Version;
             if (ActiveMod != null)
             {

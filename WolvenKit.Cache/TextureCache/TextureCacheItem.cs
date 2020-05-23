@@ -192,7 +192,7 @@ namespace WolvenKit.Cache
                 Extract(output);
             }
 
-            if (e.Extension != EUncookExtension.DDS)
+            if (e.Extension != EUncookExtension.dds)
             {
                 //convert
                 var fi = new FileInfo(fullpath);

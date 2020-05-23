@@ -40,12 +40,12 @@ namespace WolvenKit.CR2W.Types
 
             // Imported and Cooked xbms have a different file structure. 
             // Imported xbms can be identified by their Sourcedata being not null
-            var SourceData = this.GetVariableByName("SourceData");
+            var SourceData = this.GetVariableByName("sourceData");
 
             if (SourceData != null)
             {
                 //dbg
-                var ResidentMipIndex = this.GetVariableByName("ResidentMipIndex");
+                var ResidentMipIndex = this.GetVariableByName("residentMipIndex");
                 if (ResidentMipIndex != null)
                     throw new NotImplementedException();
 

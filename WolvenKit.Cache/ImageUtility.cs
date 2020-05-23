@@ -139,10 +139,10 @@ namespace WolvenKit.Cache
             if (xbm == null)
                 return null;
 
-            int residentMipIndex = xbm.GetVariableByName("ResidentMipIndex") == null ? 0 : (int)((CUInt8)xbm.GetVariableByName("ResidentMipIndex")).val;
+            int residentMipIndex = xbm.GetVariableByName("residentMipIndex") == null ? 0 : (int)((CUInt8)xbm.GetVariableByName("residentMipIndex")).val;
             byte[] bytesource;
             // handle cooked xbms
-            if (xbm.GetVariableByName("SourceData") == null && xbm.Residentmip != null)
+            if (xbm.GetVariableByName("sourceData") == null && xbm.Residentmip != null)
             {
                 bytesource = xbm.Residentmip.Bytes;
 
@@ -246,10 +246,14 @@ namespace WolvenKit.Cache
                 uint width = xbm.Mipdata.elements[residentMipIndex].Width.val;
                 uint height = xbm.Mipdata.elements[residentMipIndex].Height.val;
 
-                var ecompression = (CName)xbm.GetVariableByName("Compression");
+                var ecompression = (CName)xbm.GetVariableByName("compression");
                 ETextureCompression compression = (ETextureCompression)Enum.Parse(typeof(ETextureCompression), ecompression.Value);
-                var eformat = (CName)xbm.GetVariableByName("Format");
-                ETextureRawFormat format = (ETextureRawFormat)Enum.Parse(typeof(ETextureRawFormat), eformat.Value);
+                var eformat = (CName)xbm.GetVariableByName("format");
+                ETextureRawFormat format = ETextureRawFormat.TRF_TrueColor;
+                if (eformat != null)
+                    format = (ETextureRawFormat)Enum.Parse(typeof(ETextureRawFormat), eformat.Value);
+
+
 
                 var ddsformat = ETextureFormat.TEXFMT_R8G8B8A8;
                 switch (compression)

@@ -4,7 +4,7 @@ namespace WolvenKit.Common.Model
 {
     public class BundleFileExtractArgs
     {
-        public BundleFileExtractArgs(string fullpath, EUncookExtension extension = EUncookExtension.TGA)
+        public BundleFileExtractArgs(string fullpath, EUncookExtension extension = EUncookExtension.tga)
         {
             FileName = fullpath;
             Extension = extension;

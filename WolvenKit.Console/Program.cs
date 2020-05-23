@@ -120,21 +120,21 @@ namespace WolvenKit.Console
                                         {
                                             var x = c.data as CBitmapTexture;
 
-                                            if (!bundlexbmDict.ContainsKey(((CUInt32)x.GetVariableByName("TextureCacheKey")).val))
+                                            if (!bundlexbmDict.ContainsKey(((CUInt32)x.GetVariableByName("textureCacheKey")).val))
                                             {
-                                                var ecompression = (CName)x.GetVariableByName("Compression");
+                                                var ecompression = (CName)x.GetVariableByName("compression");
                                                 ETextureCompression compression = (ETextureCompression)Enum.Parse(typeof(ETextureCompression), ecompression.Value);
-                                                var eformat = (CName)x.GetVariableByName("Format");
+                                                var eformat = (CName)x.GetVariableByName("format");
                                                 ETextureRawFormat format = (ETextureRawFormat)Enum.Parse(typeof(ETextureRawFormat), eformat.Value);
 
-                                                bundlexbmDict.Add(((CUInt32)x.GetVariableByName("TextureCacheKey")).val, new XBMBundleInfo()
+                                                bundlexbmDict.Add(((CUInt32)x.GetVariableByName("textureCacheKey")).val, new XBMBundleInfo()
                                                 {
                                                     Name = f.Name,
-                                                    Width = (CUInt32)x.GetVariableByName("Width") == null ? 0 : ((CUInt32)x.GetVariableByName("Width")).val,
-                                                    Height = (CUInt32)x.GetVariableByName("Width") == null ? 0 : ((CUInt32)x.GetVariableByName("Height")).val,
+                                                    Width = (CUInt32)x.GetVariableByName("width") == null ? 0 : ((CUInt32)x.GetVariableByName("width")).val,
+                                                    Height = (CUInt32)x.GetVariableByName("width") == null ? 0 : ((CUInt32)x.GetVariableByName("height")).val,
                                                     Format = format,
                                                     Compression = compression,
-                                                    TextureGroup = (CName)x.GetVariableByName("TextureGroup") == null ? "" : ((CName)x.GetVariableByName("TextureGroup")).Value,
+                                                    TextureGroup = (CName)x.GetVariableByName("textureGroup") == null ? "" : ((CName)x.GetVariableByName("textureGroup")).Value,
 
                                                 }
                                                 );
@@ -291,12 +291,12 @@ namespace WolvenKit.Console
                                         var x = c.data as CBitmapTexture;
 
                                         string info = $"{f.Name}\t" +
-                                            $"{x.GetVariableByName("Width")}\t" +
-                                            $"{x.GetVariableByName("Height")}\t" +
-                                            $"{x.GetVariableByName("Format")}\t" +
-                                            $"{x.GetVariableByName("Compression")}\t" +
-                                            $"{x.GetVariableByName("TextureGroup")}\t" +
-                                            $"{x.GetVariableByName("TextureCacheKey")}\t"
+                                            $"{x.GetVariableByName("width")}\t" +
+                                            $"{x.GetVariableByName("height")}\t" +
+                                            $"{x.GetVariableByName("format")}\t" +
+                                            $"{x.GetVariableByName("compression")}\t" +
+                                            $"{x.GetVariableByName("textureGroup")}\t" +
+                                            $"{x.GetVariableByName("textureCacheKey")}\t"
                                             ;
 
                                         //System.Console.WriteLine(info);
