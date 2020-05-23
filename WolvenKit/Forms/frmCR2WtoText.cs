@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Microsoft.JScript;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VisualPlus.Extensibility;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Editors;
 using static WolvenKit.frmChunkProperties;
@@ -14,28 +17,9 @@ namespace WolvenKit.Forms
 
     public partial class frmCR2WtoText : Form
     {
+        private List<string> Files = new List<string>();
 
-        private IEnumerable<string> _files;
-        private IEnumerable<string> files
-        {
-            get => _files;
-            set
-            {
-                _files = value;
-                if (files.Count() > 0)
-                {
-                    string count = files.Count().ToString();
-                    labFileCount.Text = count;
-                    pnlFileCount.Visible = true;
-                    prgProgressBar.Maximum = files.Count();
-                    prgProgressBar.Step = 1;
-                    prgProgressBar.Value = 1;
-                }
-            }
-        }
-        StreamWriter outputFile;
-
-        private bool _outputSingleFile = true;
+        private bool _outputSingleFile = false;
         private bool outputSingleFile
         {
             get => _outputSingleFile;
@@ -45,8 +29,6 @@ namespace WolvenKit.Forms
                 txtOutputDestination.Clear();
             }
         }
-        private string outputDestination;
-
         private bool existingOverwrite = true;
 
         private bool running = false;
@@ -64,19 +46,33 @@ namespace WolvenKit.Forms
             radOutputModeSeparateFiles.Checked = !outputSingleFile;
             chkDumpSDB.Checked = true;
             chkDumpFCD.Checked = false;
+            chkDumpEmbedded.Checked = true;
         }
         // Thread safe methods to update the processed counts while dumping async.
-        private delegate void setProcessedDelegate(int total, int count);
-        private void setProcessedStatic(int count, int total)
+        private delegate void setStatusDelegate(int count, int total, int nonCR2W, int exceptions);
+        private void setStatusStatic(int count, int total, int nonCR2W, int exceptions)
         {
-            Invoke(new setProcessedDelegate(setProcessed), count, total);
+            Invoke(new setStatusDelegate(setStatus), count, total, nonCR2W, exceptions);
         }
-        private void setProcessed(int count, int total)
+        private void setStatus(int count, int processed, int nonCR2W, int exceptions)
         {
-            labProcessedCount.Text = count.ToString();
-            labProcessedTotal.Text = total.ToString();
-            if (count > prgProgressBar.Minimum)
-                prgProgressBar.PerformStep();
+            string[] row = { count.ToString("N0"), processed.ToString("N0"), nonCR2W.ToString("N0"), exceptions.ToString("N0") };
+            if (dataStatus.Rows.Count == 0)
+                dataStatus.Rows.Add(row);
+            else
+                dataStatus.Rows[0].SetValues(row);
+
+            if (processed > 0)
+                updateProgressBarStatic(processed);
+        }
+        private delegate void updateProgressBarDelegate(int processed);
+        private void updateProgressBarStatic(int processed)
+        {
+            Invoke(new updateProgressBarDelegate(updateProgressBar), processed);
+        }
+        private void updateProgressBar(int processed)
+        {
+            prgProgressBar.PerformStep();
         }
         private void btnChoosePath_Click(object sender, EventArgs e)
         {
@@ -104,161 +100,257 @@ namespace WolvenKit.Forms
         private void controlsEnabledDuringRun(bool b)
         {
             // During run, all controls are disabled, and the run button changes to abort
-            foreach (Control ctrl in pnlControls.Controls)
-                ctrl.Enabled = b;
+            pnlControls.Enabled = b;
             btnRun.Text = b ? "Run CR2W Dump" : "Abort";
-            // During run, progress bar, and processed files count/totals are made visible.
-            prgProgressBar.Visible = !b;
-            if (prgProgressBar.Visible) // reset progress bar each time it's made visible.
-                prgProgressBar.Value = 1;
-            pnlProcessedFiles.Visible = !b;
         }
         private async void startRun()
         {
             controlsEnabledDuringRun(false);
+            prgProgressBar.Value = 0;
+            prgProgressBar.Visible = true;
             running = true;
 
-            await Task<bool>.Run(doRun);
+            await Task.Run(doRun);
 
             running = false;
             controlsEnabledDuringRun(true);
+            prgProgressBar.Visible = false;
+        }
+        private StreamWriter getOutputSingleFile(string outputChosen)
+        {
+            string outputDestination;
+            outputDestination = outputChosen;
+            if (File.Exists(outputDestination))
+                File.Delete(outputDestination);
+            return new StreamWriter(outputDestination, false);
+        }
+        private StreamWriter getOutputSeparateFiles(string fileName, string sourcePath, string outputChosen, string fileBaseName)
+        {
+            string outputDestination;
+            if (chkCreateFolders.Checked)
+            {   // Recreate the file structure of the source folder in the destination folder.
+                // Strip the sourcepath from the start of the filename, then create the remaining folders
+                fileName.ReplaceFirst(sourcePath, "", out sourcePath);
+                int i = sourcePath.LastIndexOf(fileBaseName);
+                outputDestination = outputChosen + sourcePath.Substring(0, i);
+
+                Directory.CreateDirectory(outputDestination);
+            }
+            else
+                outputDestination = outputChosen;
+
+            outputDestination = outputDestination + "\\" + fileBaseName + ".txt";
+
+            if (File.Exists(outputDestination))
+                if (radExistingOverwrite.Checked)
+                    File.Delete(outputDestination);
+                else
+                    return null;
+
+            return new StreamWriter(outputDestination, false);
         }
         private async Task doRun()
         {
-            setProcessedStatic(0, files.Count());
+            setStatusStatic(Files.Count(), 0, 0, 0);
 
-            if (files.Count() > 0)
+            if (Files.Count() > 0)
             {
                 int fileCount = 1;
-                foreach (string fileName in files)
+                int nonCR2WCount = 0;
+                int exceptionCount = 0;
+
+                string sourcePath = txtPath.Text;
+                string outputChosen = txtOutputDestination.Text;
+                StreamWriter outputFile = null;
+
+                var loggerOptions = new LoggerCR2WOptions
+                {
+                    startingIndentLevel = 1,
+                    listEmbedded = chkDumpEmbedded.Checked,
+                    dumpFCD = chkDumpFCD.Checked,
+                    dumpSDB = chkDumpSDB.Checked
+                };
+
+                if (outputSingleFile)
+                    outputFile = getOutputSingleFile(outputChosen);
+
+                foreach (string fileName in Files)
                 {
                     if (!running)
                         break; // Abort button was pressed.
 
                     string fileBaseName = Path.GetFileName(fileName);
 
-                    if (outputSingleFile)
-                        outputDestination = txtOutputDestination.Text;
-                    else
-                        outputDestination = txtOutputDestination.Text + "\\" + fileBaseName + ".txt";
+                    if (!outputSingleFile)
+                        outputFile = getOutputSeparateFiles(fileName, sourcePath, outputChosen, fileBaseName);
 
-                    using (outputFile = new StreamWriter(outputDestination, true))
+                    if (outputFile != null)
                     {
-                        writeText("FILE", fileName);
-                        int level = 1;
                         try
                         {
-                            var cf = new LoggerCR2W(fileName);
-                            processCR2W(cf, fileBaseName, level);
+                            doDump(outputFile, fileName, fileBaseName, loggerOptions);
                         }
                         catch (FormatException fe)
                         {
                             if (outputSingleFile)
-                                writeText(fileName, "Not a valid CR2W file, or file is damaged.");
+                                outputFile.WriteLine(fileName + ": Not a valid CR2W file, or file is damaged.");
+                            nonCR2WCount++;
                         }
                         catch (Exception ex)
                         {
-                            writeText(fileName, "Exception: " + ex.ToString());
+                            outputFile.WriteLine(fileName + ": Exception: " + ex.ToString());
+                            exceptionCount++;
                         }
-                        setProcessedStatic(fileCount++, files.Count());
+                        if (!outputSingleFile)
+                            outputFile.Close();
                     }
+
+                    setStatusStatic(Files.Count(), fileCount++, nonCR2WCount, exceptionCount);
                 }
+                if (outputSingleFile)
+                    outputFile.Close();
             }
         }
-        private void processCR2W(LoggerCR2W lc, string fileName, int level)
+        private async Task doRunOLD()
         {
-            if (chkDumpEmbedded.Checked && lc.embedded != null && lc.embedded.Count() > 0)
-            {
-                writeText(fileName, "Embedded files:", level);
-                processEmbedded(lc, fileName, level + 1);
-            }
-            writeText(fileName, "Chunks:", level);
-            foreach (var chunk in lc.chunks)
-            {
-                writeText(fileName, chunk.Name + " (" + chunk.Type + ") : " + chunk.Preview, level);
-                var node = lc.getNodes(chunk);
-                processNode(fileName, node, level);
-            }
-        }
-        private void processEmbedded(LoggerCR2W lc, string fileName, int level)
-        {
-            //TODO: Also dump the embedded files (optionally)
-            int fileCounter = 1;
-            foreach (CR2WEmbeddedWrapper embed in lc.embedded)
-            {
-                writeText(fileName, "(" + fileCounter++ + "):", level);
-                writeText(fileName, "Index: " + embed.Embedded.importIndex, level + 1);
-                writeText(fileName, "ImportPath: " + embed.ImportPath, level + 1);
-                writeText(fileName, "ImportClass: " + embed.ImportClass, level + 1);
-                writeText(fileName, "Size: " + embed.Embedded.dataSize, level + 1);
-                writeText(fileName, "ClassName: " + embed.ClassName, level + 1);
-                writeText(fileName, "Handle: " + embed.Handle, level + 1);
-            }
-        }
-        private void processNode(string fileName, VariableListNode node, int level)
-        {
-            if (node.Name == "unknownBytes" && node.Value == "0 bytes"
-                || node.Name == "unk1" && node.Value == "0")
-                return;
+            setStatusStatic(Files.Count(), 0, 0, 0);
 
-            if (node.Name == "Parent" && node.Value == "NULL")
-                return;
+            if (Files.Count() > 0)
+            {
+                int fileCount = 1;
+                int nonCR2WCount = 0;
+                int exceptionCount = 0;
 
-            if (node.Name != node.Value) // Chunk node is already printed in processCR2W
-                writeText(fileName, node.Name + " (" + node.Type + ") : " + node.Value, level);
+                string outputDestination = "";
+                string sourcePath = txtPath.Text;
+                string outputChosen = txtOutputDestination.Text;
+                StreamWriter outputFile;
 
-            if (node.ChildCount > 0)
-                foreach (var child in node.Children)
+                if (outputSingleFile)
                 {
-                    processNode(fileName, child, level + 1);
+                    outputDestination = outputChosen;
+                    if (File.Exists(outputDestination))
+                        File.Delete(outputDestination);
+                    outputFile = new StreamWriter(outputDestination, false);
                 }
 
-            if (  (node.Type == "SharedDataBuffer" && chkDumpSDB.Checked) 
-                || node.Type == "array:2,0,Uint8" )
-            {   // Embedded CR2W dump:
-                // Dump SharedDataBuffer if option is set.
-                // Dump "array:2,0,Uint8" always, unless it's FCD in which case only if option is set.
-                if (node.Name == "flatCompiledData" && !chkDumpFCD.Checked)
-                    return;
-                CR2WFile embedcr2w = new CR2WFile(((IByteSource)node.Variable).Bytes);
-                var lc = new LoggerCR2W(embedcr2w);
-                processCR2W(lc, fileName, level + 1);
+                foreach (string fileName in Files)
+                {
+                    if (!running)
+                        break; // Abort button was pressed.
+
+                    string fileBaseName = Path.GetFileName(fileName);
+
+                    bool skip = false;
+                    if (!outputSingleFile)
+                    {
+                        if (chkCreateFolders.Checked)
+                        {   // Recreate the file structure of the source folder in the destination folder.
+                            // Strip the sourcepath from the start of the filename, then create the remaining folders
+                            fileName.ReplaceFirst(sourcePath, "", out sourcePath);
+                            int i = sourcePath.LastIndexOf(fileBaseName);
+                            outputDestination = outputChosen + sourcePath.Substring(0, i);
+
+                            Directory.CreateDirectory(outputDestination);
+                        }
+                        else
+                            outputDestination = outputChosen;
+
+                        outputDestination = outputDestination + "\\" + fileBaseName + ".txt";
+
+                        if (File.Exists(outputDestination))
+                            if (radExistingOverwrite.Checked)
+                                File.Delete(outputDestination);
+                            else
+                                skip = true;
+                        outputFile = new StreamWriter(outputDestination, false);
+                    }
+
+                    // If "Overwrite existing" set (and we're in separate files mode), delete existing file, otherwise skip it.
+
+                    if (!skip)
+                        // Open output file for writing. Set append to true if we're in single file mode.
+                        try
+                        {
+                            //doDump(outputFile, fileName, fileBaseName);
+                        }
+                        catch (FormatException fe)
+                        {
+                            if (outputSingleFile)
+                                //outputFile.WriteLine(fileName + ": Not a valid CR2W file, or file is damaged.");
+                            nonCR2WCount++;
+                        }
+                        catch (Exception ex)
+                        {
+                            //outputFile.WriteLine(fileName + ": Exception: " + ex.ToString());
+                            exceptionCount++;
+                        }
+                    //outputFile.Close();
+                    setStatusStatic(Files.Count(), fileCount++, nonCR2WCount, exceptionCount);
+                }
             }
         }
-        private bool writeText(string prefix, string text, int level = 0)
+        private void doDump(StreamWriter outputFile, string fileName, string fileBaseName, LoggerCR2WOptions options)
         {
-            string line;
-            string indent = "";
-
-            for (int i = 0; i < level; i++)
-                indent += "    ";
-
-            line = prefix + ":" + indent + text + "\r\n";
-            outputFile.Write(line);
-
-            return true;
+            var writer = new LoggerWriter(outputFile, chkPrefixFileName.Checked ? fileBaseName : null);
+            outputFile.WriteLine("FILE: " + fileName);
+            var cf = new LoggerCR2W(fileName, writer, options);
+            cf.processCR2W();
         }
-        private void enableRunButton()
+
+        private void checkEnableRunButton()
         {
-            btnRun.Enabled = txtPath.Text != "" && txtOutputDestination.Text != "" && files.Count() > 0;
+            btnRun.Enabled = txtPath.Text != "" && txtOutputDestination.Text != "" && Files.Count() > 0;
         }
-        private IEnumerable<string> GetFiles(string path, params string[] extExclude)
+        private async Task updateSourceFolder(string path)
         {
-            return Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)
-                            .Where(file => !extExclude.Any(x => file.EndsWith(x, StringComparison.OrdinalIgnoreCase)));
-        }
-        private void txtPath_TextChanged(object sender, EventArgs e)
-        {
-            var path = txtPath.Text;
             string[] extExclude = new[] { ".txt", ".json", ".csv", ".xml", ".jpg", ".png",
                                           ".wem", ".dds", ".bnk", ".xbm", ".bundle", ".w3strings", ".store" };
 
-            files = GetFiles(path, extExclude);
-            enableRunButton();
+            Files.Clear();
+            if (Directory.Exists(path))
+            {
+                btnRun.Enabled = false;
+                pnlControls.Enabled = false;
+                await Task.Run(() =>
+                {
+                    int fileCounter = 1;
+                    foreach (var file in Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)
+                                                  .Where(file => !extExclude.Any(x => file.EndsWith(x, StringComparison.OrdinalIgnoreCase))))
+                    {
+                        Files.Add(file);
+                        if (fileCounter % 100 == 0) // Only update status for every 100 files
+                            setStatusStatic(fileCounter, 0, 0, 0);
+                        fileCounter++;
+                    }
+                });
+
+                int count = Files.Count();
+                setStatusStatic(count, 0, 0, 0);
+                resetProgressBar(count);
+
+                pnlControls.Enabled = true;
+                checkEnableRunButton();
+            }
+            else
+            {
+                Files.Clear();
+                setStatusStatic(0, 0, 0, 0);
+            }
+
+        }
+        private void resetProgressBar(int count)
+        {
+            prgProgressBar.Maximum = count;
+            prgProgressBar.Step = 1;
+        }
+        private void txtPath_TextChanged(object sender, EventArgs e)
+        {
+            updateSourceFolder(txtPath.Text);
         }
         private void txtOutputDestination_TextChanged(object sender, EventArgs e)
         {
-            enableRunButton();
+            checkEnableRunButton();
         }
         private void btnPickOutput_Click(object sender, EventArgs e)
         {
@@ -278,42 +370,153 @@ namespace WolvenKit.Forms
             if (dlg.ShowDialog() == DialogResult.OK)
                 txtOutputDestination.Text = outputSingleFile ? ((SaveFileDialog)dlg).FileName : ((FolderBrowserDialog)dlg).SelectedPath;
         }
-        private void radOutputModeSingleFile_CheckedChanged(object sender, EventArgs e)
+        private void radioOututModeChanged(object sender, EventArgs e)
         {
             outputSingleFile = radOutputModeSingleFile.Checked;
+            // Create intermediate folders only enabled if Separate Files output selected.
+            chkCreateFolders.Enabled = radOutputModeSeparateFiles.Checked;
+            // Overwrite mode radio only enabled if Separate Files output selected.
+            grpExistingFiles.Enabled = radOutputModeSeparateFiles.Checked;
         }
-        private void radOutputModeSeparateFiles_CheckedChanged(object sender, EventArgs e)
+    }
+    internal class LoggerWriter
+    {
+        StreamWriter outputFile { get; set; }
+        bool usePrefix { get; set; }
+        string prefix { get; set; }
+        internal LoggerWriter(StreamWriter file, string prefix = null)
         {
-            outputSingleFile = radOutputModeSingleFile.Checked;
+            this.outputFile = file;
+            if (prefix != null)
+            {
+                this.usePrefix = true;
+                this.prefix = prefix;
+            }
         }
+        public bool writeText(string text, int level = 0)
+        {
+            string line;
+            string indent = "";
+
+            for (int i = 0; i < level; i++)
+                indent += "    ";
+
+            if (usePrefix)
+                line = prefix + ":" + indent + text + "\r\n";
+            else
+                line = indent + text + "\r\n";
+
+            outputFile.Write(line);
+
+            return true;
+        }
+    }
+    internal struct LoggerCR2WOptions
+    {
+        public int startingIndentLevel { get; set; }
+        public bool listEmbedded { get; set; }
+        public bool dumpSDB { get; set; }
+        public bool dumpFCD { get; set; }
     }
     internal class LoggerCR2W
     {
         private CR2WFile cr2w;
-        public List<CR2WExportWrapper> chunks { get; private set; }
-        public List<CR2WEmbeddedWrapper> embedded { get; private set; }
-        internal LoggerCR2W(string fileName)
-        {
-            using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-            using (var reader = new BinaryReader(fs))
+        private CR2WFile CR2W
+        { 
+            get => cr2w;
+            set
             {
-                cr2w = new CR2WFile(reader);
-                chunks = cr2w.chunks;
-                embedded = cr2w.embedded;
+                cr2w = value;
+                chunks = CR2W.chunks;
+                embedded = CR2W.embedded;
             }
         }
-
-        internal LoggerCR2W(CR2WFile cr2wFile)
+        private LoggerWriter writer { get; set; }
+        private LoggerCR2WOptions options { get; set; }
+        public List<CR2WExportWrapper> chunks { get; private set; }
+        public List<CR2WEmbeddedWrapper> embedded { get; private set; }
+        internal LoggerCR2W(string fileName, LoggerWriter writer, LoggerCR2WOptions options)
         {
-            cr2w = cr2wFile;
-            chunks = cr2w.chunks;
-        }
+            using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+                using (var reader = new BinaryReader(fs))
+                    CR2W = new CR2WFile(reader);
 
+            this.writer = writer;
+            this.options = options;
+        }
+        internal LoggerCR2W(CR2WFile cr2wFile, LoggerWriter writer, LoggerCR2WOptions options)
+        {
+            CR2W = cr2wFile;
+            this.writer = writer;
+            this.options = options;
+        }
+        public void processCR2W(int overrideLevel = 0)
+        {
+            int level = (overrideLevel > 0) ? overrideLevel : options.startingIndentLevel;
+            if (options.listEmbedded && embedded != null && embedded.Count() > 0)
+            {
+                writer.writeText("Embedded files:", level);
+                processEmbedded(level);
+            }
+            writer.writeText("Chunks:", level);
+            foreach (var chunk in chunks)
+            {
+                writer.writeText(chunk.Name + " (" + chunk.Type + ") : " + chunk.Preview, level);
+                var node = getNodes(chunk);
+                processNode(node, level + 1);
+            }
+        }
+        private void processEmbedded(int level)
+        {
+            //TODO: Also dump the embedded files? (optionally)
+            int fileCounter = 1;
+            foreach (CR2WEmbeddedWrapper embed in embedded)
+            {
+                writer.writeText("(" + fileCounter++ + "):", level);
+                writer.writeText("Index: " + embed.Embedded.importIndex, level + 1);
+                writer.writeText("ImportPath: " + embed.ImportPath, level + 1);
+                writer.writeText("ImportClass: " + embed.ImportClass, level + 1);
+                writer.writeText("Size: " + embed.Embedded.dataSize, level + 1);
+                writer.writeText("ClassName: " + embed.ClassName, level + 1);
+                writer.writeText("Handle: " + embed.Handle, level + 1);
+            }
+        }
+        private void processNode(VariableListNode node, int level)
+        {
+            if (node.Name == "unknownBytes" && node.Value == "0 bytes"
+                || node.Name == "unk1" && node.Value == "0")
+                return;
+
+            if (node.Name == "Parent" && node.Value == "NULL")
+                return;
+
+            if (node.Name != node.Value) // Chunk node is already printed in processCR2W, so don't print it again.
+            {
+                writer.writeText(node.Name + " (" + node.Type + ") : " + node.Value, level);
+                level++;
+            }
+
+            if (node.ChildCount > 0)
+                foreach (var child in node.Children)
+                    processNode(child, level);
+
+            if (  (node.Type == "SharedDataBuffer" && options.dumpSDB) 
+                || node.Type == "array:2,0,Uint8" )
+            {   // Embedded CR2W dump:
+                // Dump SharedDataBuffer if option is set.
+                // Dump "array:2,0,Uint8", unless it's FCD in which case only dump if options.dumpFCD is set.
+                if (node.Name != "flatCompiledData" || options.dumpFCD)
+                {
+                    CR2WFile embedcr2w = new CR2WFile(((IByteSource)node.Variable).Bytes);
+                    var lc = new LoggerCR2W(embedcr2w, writer, options);
+                    lc.processCR2W(level);
+                }
+            }
+        }
         public VariableListNode getNodes(CR2WExportWrapper chunk)
         {
             return AddListViewItems(chunk);
         }
-
         private VariableListNode AddListViewItems(IEditableVariable v, VariableListNode parent = null,
             int arrayindex = 0)
         {
