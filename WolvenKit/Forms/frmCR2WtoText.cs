@@ -1,18 +1,12 @@
-﻿using Microsoft.JScript;
-using Microsoft.WindowsAPICodePack.Dialogs;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Interop;
-using VGMToolbox.format.hoot;
 using VisualPlus.Extensibility;
-using Vlc.DotNet.Core.Interops.Signatures;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Editors;
 using static WolvenKit.frmChunkProperties;
@@ -22,7 +16,7 @@ namespace WolvenKit.Forms
 
     public partial class frmCR2WtoText : Form
     {
-        private List<string> Files = new List<string>();
+        private readonly List<string> Files = new List<string>();
 
         private CancellationTokenSource Cancel;
 
@@ -39,6 +33,7 @@ namespace WolvenKit.Forms
         private bool existingOverwrite = true;
 
         private bool _running = false;
+        private bool _stopping = false;
 
         public frmCR2WtoText()
         {
@@ -59,25 +54,17 @@ namespace WolvenKit.Forms
             SetStatus(0, 0, 0, 0);
         }
         // Thread safe methods to update the processed counts while dumping async.
-        private void SetStatusStatic(int count, int total, int nonCr2W, int exceptions)
+        private void SetStatusStatic(int count, int total, int nonCR2W, int exceptions)
         {
-            Invoke(new SetStatusDelegate(SetStatus), count, total, nonCr2W, exceptions);
+            Invoke(new SetStatusDelegate(SetStatus), count, total, nonCR2W, exceptions);
         }
         private void SetStatus(int count, int processed, int nonCR2W, int exceptions)
         {
-            // TODO: Why can't I assign this all at once with an int[]? 
-            // When I try, the row shows 'System.Int32[]' in the first cell and nothing else.
-            // A string[] works, but not an int[] for some reason.
             int[] row = { count, processed, nonCR2W, exceptions };
             if (dataStatus.Rows.Count == 0)
                 dataStatus.Rows.Add(count, processed, nonCR2W, exceptions);
             else
                 dataStatus.Rows[0].SetValues(count, processed, nonCR2W, exceptions);
-            /*
-            dataStatus.Rows[0].Cells[0].Value = count;
-            dataStatus.Rows[0].Cells[1].Value = processed;
-            dataStatus.Rows[0].Cells[2].Value = nonCR2W;
-            dataStatus.Rows[0].Cells[3].Value = exceptions;*/
 
             if (processed > 0)
                 UpdateProgressBarStatic(processed);
@@ -109,11 +96,11 @@ namespace WolvenKit.Forms
             {
                 StartRun();
             }
-            else
+            else if (!_stopping)
             {
                 btnRun.Text = "Stopping...";
-                _running = false;
                 Cancel.Cancel();
+                _stopping = true;
             }
         }
         private void ControlsEnabledDuringRun(bool b)
@@ -131,9 +118,10 @@ namespace WolvenKit.Forms
 
             await Task.Run(DoRun);
 
-            _running = false;
             prgProgressBar.Visible = false;
             ControlsEnabledDuringRun(true);
+            _running = false;
+            _stopping = false;
         }
         private async Task DoRun()
         {
@@ -197,19 +185,18 @@ namespace WolvenKit.Forms
                 pnlControls.Enabled = false;
                 await Task.Run(() =>
                 {
-                    int fileCounter = 1;
+                    int fileCounter = 0;
                     foreach (var file in Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)
                                                   .Where(file => !extExclude.Any(x => file.EndsWith(x, StringComparison.OrdinalIgnoreCase))))
                     {
                         Files.Add(file);
-                        if (fileCounter++ % 100 == 0) // Only update status for every 100 files
+                        if (++fileCounter % 100 == 0) // Only update status for every 100 files
                             SetStatusStatic(fileCounter, 0, 0, 0);
                     }
                 });
 
-                int count = Files.Count();
-                SetStatusStatic(count, 0, 0, 0);
-                ResetProgressBar(count);
+                SetStatusStatic(Files.Count(), 0, 0, 0);
+                ResetProgressBar(Files.Count());
 
                 pnlControls.Enabled = true;
                 CheckEnableRunButton();
@@ -270,6 +257,12 @@ namespace WolvenKit.Forms
             chkCreateFolders.Enabled = radOutputModeSeparateFiles.Checked;
             grpExistingFiles.Enabled = radOutputModeSeparateFiles.Checked;
             numThreads.Enabled = radOutputModeSeparateFiles.Checked;
+        }
+
+        private void frmCR2WtoText_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_running)
+                e.Cancel = true;
         }
     }
 

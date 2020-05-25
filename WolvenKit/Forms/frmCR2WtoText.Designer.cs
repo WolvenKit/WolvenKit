@@ -478,6 +478,7 @@
             this.Name = "frmCR2WtoText";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Dump CR2W Files To Text";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmCR2WtoText_FormClosing);
             this.pnlControls.ResumeLayout(false);
             this.pnlControls.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numThreads)).EndInit();
