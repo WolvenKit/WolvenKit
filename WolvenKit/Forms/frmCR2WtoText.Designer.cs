@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCR2WtoText));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnRun = new System.Windows.Forms.Button();
             this.rtfDescription = new System.Windows.Forms.RichTextBox();
             this.pnlControls = new System.Windows.Forms.Panel();
@@ -61,6 +62,7 @@
             this.dataStatus = new System.Windows.Forms.DataGridView();
             this.colSourceFolderFiles = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colProcessedFiles = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colSkipped = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colNonCR2W = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colExceptions = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlControls.SuspendLayout();
@@ -76,9 +78,9 @@
             this.btnRun.Enabled = false;
             this.btnRun.Image = global::WolvenKit.Properties.Resources.Output_16x;
             this.btnRun.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRun.Location = new System.Drawing.Point(47, 464);
+            this.btnRun.Location = new System.Drawing.Point(50, 464);
             this.btnRun.Name = "btnRun";
-            this.btnRun.Size = new System.Drawing.Size(421, 23);
+            this.btnRun.Size = new System.Drawing.Size(420, 23);
             this.btnRun.TabIndex = 10;
             this.btnRun.Text = "Run CR2W Dump";
             this.btnRun.UseVisualStyleBackColor = true;
@@ -94,7 +96,7 @@
             this.rtfDescription.Name = "rtfDescription";
             this.rtfDescription.ReadOnly = true;
             this.rtfDescription.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.rtfDescription.Size = new System.Drawing.Size(476, 139);
+            this.rtfDescription.Size = new System.Drawing.Size(480, 139);
             this.rtfDescription.TabIndex = 20;
             this.rtfDescription.Text = resources.GetString("rtfDescription.Text");
             // 
@@ -120,7 +122,7 @@
             this.pnlControls.Controls.Add(this.grpRadioOutputMode);
             this.pnlControls.Location = new System.Drawing.Point(12, 159);
             this.pnlControls.Name = "pnlControls";
-            this.pnlControls.Size = new System.Drawing.Size(476, 295);
+            this.pnlControls.Size = new System.Drawing.Size(480, 295);
             this.pnlControls.TabIndex = 21;
             // 
             // labNumThreads
@@ -366,9 +368,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.prgProgressBar});
             this.statusStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-            this.statusStrip1.Location = new System.Drawing.Point(0, 586);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 564);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(503, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(504, 22);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 25;
             this.statusStrip1.Text = "statusStrip1";
@@ -398,27 +400,36 @@
             this.dataStatus.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colSourceFolderFiles,
             this.colProcessedFiles,
+            this.colSkipped,
             this.colNonCR2W,
             this.colExceptions});
-            this.dataStatus.Location = new System.Drawing.Point(47, 498);
+            this.dataStatus.Location = new System.Drawing.Point(50, 498);
             this.dataStatus.MultiSelect = false;
             this.dataStatus.Name = "dataStatus";
             this.dataStatus.ReadOnly = true;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Info;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Info;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataStatus.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataStatus.RowHeadersVisible = false;
             this.dataStatus.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.Format = "N0";
-            dataGridViewCellStyle2.NullValue = "-";
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.WindowText;
-            this.dataStatus.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Info;
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.Format = "N0";
+            dataGridViewCellStyle3.NullValue = "-";
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Info;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.WindowText;
+            this.dataStatus.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dataStatus.RowTemplate.ReadOnly = true;
             this.dataStatus.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.dataStatus.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataStatus.ShowEditingIcon = false;
-            this.dataStatus.Size = new System.Drawing.Size(421, 57);
+            this.dataStatus.Size = new System.Drawing.Size(420, 57);
             this.dataStatus.TabIndex = 26;
             this.dataStatus.TabStop = false;
             // 
@@ -430,7 +441,7 @@
             this.colSourceFolderFiles.ReadOnly = true;
             this.colSourceFolderFiles.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.colSourceFolderFiles.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colSourceFolderFiles.Width = 105;
+            this.colSourceFolderFiles.Width = 84;
             // 
             // colProcessedFiles
             // 
@@ -440,7 +451,17 @@
             this.colProcessedFiles.ReadOnly = true;
             this.colProcessedFiles.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.colProcessedFiles.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colProcessedFiles.Width = 105;
+            this.colProcessedFiles.Width = 84;
+            // 
+            // colSkipped
+            // 
+            this.colSkipped.Frozen = true;
+            this.colSkipped.HeaderText = "Skipped Files";
+            this.colSkipped.Name = "colSkipped";
+            this.colSkipped.ReadOnly = true;
+            this.colSkipped.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.colSkipped.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colSkipped.Width = 84;
             // 
             // colNonCR2W
             // 
@@ -450,7 +471,7 @@
             this.colNonCR2W.ReadOnly = true;
             this.colNonCR2W.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.colNonCR2W.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colNonCR2W.Width = 105;
+            this.colNonCR2W.Width = 84;
             // 
             // colExceptions
             // 
@@ -459,13 +480,13 @@
             this.colExceptions.Name = "colExceptions";
             this.colExceptions.ReadOnly = true;
             this.colExceptions.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.colExceptions.Width = 105;
+            this.colExceptions.Width = 84;
             // 
             // frmCR2WtoText
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(503, 608);
+            this.ClientSize = new System.Drawing.Size(504, 586);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.dataStatus);
             this.Controls.Add(this.rtfDescription);
@@ -521,11 +542,12 @@
         private System.Windows.Forms.ToolStripProgressBar prgProgressBar;
         private System.Windows.Forms.CheckBox chkCreateFolders;
         private System.Windows.Forms.DataGridView dataStatus;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colSourceFolderFiles;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colProcessedFiles;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colNonCR2W;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colExceptions;
         private System.Windows.Forms.Label labNumThreads;
         private System.Windows.Forms.NumericUpDown numThreads;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colSourceFolderFiles;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colProcessedFiles;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colSkipped;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colNonCR2W;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colExceptions;
     }
 }

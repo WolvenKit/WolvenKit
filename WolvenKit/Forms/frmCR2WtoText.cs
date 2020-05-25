@@ -5,17 +5,19 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using VisualPlus.Extensibility;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Editors;
 using static WolvenKit.frmChunkProperties;
+using DataGrid = System.Windows.Forms.DataGrid;
 
 namespace WolvenKit.Forms
 {
-
     public partial class frmCR2WtoText : Form
     {
+        private StatusController statusController;
         private readonly List<string> Files = new List<string>();
 
         private CancellationTokenSource Cancel;
@@ -30,7 +32,6 @@ namespace WolvenKit.Forms
                 txtOutputDestination.Clear();
             }
         }
-        private bool existingOverwrite = true;
 
         private bool _running = false;
         private bool _stopping = false;
@@ -42,8 +43,8 @@ namespace WolvenKit.Forms
         }
         private void SetDefaults()
         {
-            radExistingOverwrite.Checked = existingOverwrite;
-            radExistingSkip.Checked = !existingOverwrite;
+            radExistingOverwrite.Checked = true;
+            radExistingSkip.Checked = !radExistingOverwrite.Checked;
             radOutputModeSingleFile.Checked = OutputSingleFile;
             radOutputModeSeparateFiles.Checked = !OutputSingleFile;
             chkDumpSDB.Checked = true;
@@ -51,23 +52,7 @@ namespace WolvenKit.Forms
             chkDumpEmbedded.Checked = true;
             numThreads.Value = Environment.ProcessorCount;
             numThreads.Maximum = Environment.ProcessorCount;
-            SetStatus(0, 0, 0, 0);
-        }
-        // Thread safe methods to update the processed counts while dumping async.
-        private void SetStatusStatic(int count, int total, int nonCR2W, int exceptions)
-        {
-            Invoke(new SetStatusDelegate(SetStatus), count, total, nonCR2W, exceptions);
-        }
-        private void SetStatus(int count, int processed, int nonCR2W, int exceptions)
-        {
-            int[] row = { count, processed, nonCR2W, exceptions };
-            if (dataStatus.Rows.Count == 0)
-                dataStatus.Rows.Add(count, processed, nonCR2W, exceptions);
-            else
-                dataStatus.Rows[0].SetValues(count, processed, nonCR2W, exceptions);
-
-            if (processed > 0)
-                UpdateProgressBarStatic(processed);
+            statusController = new StatusController(dataStatus);
         }
         private delegate void UpdateProgressBarDelegate(int processed);
         private void UpdateProgressBarStatic(int processed)
@@ -125,8 +110,7 @@ namespace WolvenKit.Forms
         }
         private async Task DoRun()
         {
-            SetStatusStatic(Files.Count(), 0, 0, 0);
-
+            statusController.Processed = statusController.Skipped = statusController.NonCR2W = statusController.Exceptions = 0;
             if (Files.Any())
             {
                 string sourcePath = txtPath.Text;
@@ -142,10 +126,10 @@ namespace WolvenKit.Forms
 
                 Cancel = new CancellationTokenSource();
 
-                var loggerOptions = new LoggerWriterOptions
+                var loggerOptions = new LoggerWriterData
                 {
                     CancelToken = Cancel.Token,
-                    SetStatusDel = SetStatus,
+                    Status = statusController,
                     OutputSingleFile = this.OutputSingleFile,
                     NumThreads = (int) numThreads.Value,
                     SourcePath = sourcePath,
@@ -162,12 +146,12 @@ namespace WolvenKit.Forms
                 else
                     writer = new LoggerWriterSeparate(Files, loggerOptions, cr2wOptions);
 
-                await writer.StartDump();
+                writer.EventOnProcessed += UpdateProgressBarStatic;
+                await writer.PrepareDump();
 
                 Cancel.Dispose();
             }
         }
-
         private void CheckEnableRunButton()
         {
             btnRun.Enabled = txtPath.Text != "" && txtOutputDestination.Text != "" && Files.Any();
@@ -177,7 +161,6 @@ namespace WolvenKit.Forms
             string[] extExclude = new[] { ".txt", ".json", ".csv", ".xml", ".jpg", ".png", ".buffer", ".navgraph", ".navtile",
                                           ".usm", ".wem", ".dds", ".bnk", ".xbm", ".bundle", ".w3strings", ".store", ".navconfig",
                                           ".srt", ".naviobstacles", ".navmesh"};
-
             Files.Clear();
             if (Directory.Exists(path))
             {
@@ -191,11 +174,11 @@ namespace WolvenKit.Forms
                     {
                         Files.Add(file);
                         if (++fileCounter % 100 == 0) // Only update status for every 100 files
-                            SetStatusStatic(fileCounter, 0, 0, 0);
+                            statusController.Count = fileCounter;
                     }
                 });
 
-                SetStatusStatic(Files.Count(), 0, 0, 0);
+                statusController.Count = Files.Count();
                 ResetProgressBar(Files.Count());
 
                 pnlControls.Enabled = true;
@@ -204,13 +187,13 @@ namespace WolvenKit.Forms
             else
             {
                 Files.Clear();
-                SetStatusStatic(0, 0, 0, 0);
+                statusController.Count = 0;
             }
 
         }
-        private void ResetProgressBar(int count)
+        private void ResetProgressBar(int filesCount)
         {
-            prgProgressBar.Maximum = count;
+            prgProgressBar.Maximum = filesCount;
             prgProgressBar.Step = 1;
         }
         private void txtPath_TextChanged(object sender, EventArgs e)
@@ -258,32 +241,95 @@ namespace WolvenKit.Forms
             grpExistingFiles.Enabled = radOutputModeSeparateFiles.Checked;
             numThreads.Enabled = radOutputModeSeparateFiles.Checked;
         }
-
         private void frmCR2WtoText_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (_running)
-                e.Cancel = true;
+        {   // Don't allow form to close if dump is running.
+            e.Cancel = _running;
         }
     }
 
+    internal class StatusController
+    {
+        private int _count;
+        public int Count
+        {
+            get => _count;
+            set
+            {
+                _count = value;
+                UpdateCell(0, _count);
+            }
+        }
+        private int _processed;
+        public int Processed
+        {
+            get => _processed;
+            set
+            {
+                _processed = value;
+                UpdateCell(1, _processed);
+            }
+        }
+        private int _skipped;
+        public int Skipped
+        {
+            get => _skipped;
+            set
+            {
+                _skipped = value;
+                UpdateCell(2, _skipped);
+            }
+        }
+        private int _nonCR2W;
+        public int NonCR2W
+        {
+            get => _nonCR2W;
+            set
+            {
+                _nonCR2W = value;
+                UpdateCell(3, _nonCR2W);
+;
+            }
+        }
+        private int _exceptions;
+        public int Exceptions
+        {
+            get => _exceptions;
+            set
+            {
+                _exceptions = value;
+                UpdateCell(4, _exceptions);
+            }
+        }
+        private DataGridView Grid { get; }
+        private void UpdateCell(int index, int value)
+        {
+            Grid.Rows[0].Cells[index].Value = value;
+        }
+        internal StatusController(DataGridView grid)
+        {
+            Grid = grid;
+            object[] row = {0, 0, 0, 0, 0};
+            if (Grid.Rows.Count == 0)
+                Grid.Rows.Add(row);
+            else
+                Grid.Rows[0].SetValues(row);
+        }
+    }
     internal class LoggerWriterSeparate : LoggerWriter
     {
-        internal LoggerWriterSeparate(List<string> files, LoggerWriterOptions writerOptions, LoggerCR2WOptions cr2wOptions)
-            : base(files, writerOptions, cr2wOptions)
-        {
-        }
-        public override async Task StartDump()
+        internal LoggerWriterSeparate(List<string> files, LoggerWriterData writerData, LoggerCR2WOptions cr2wOptions)
+            : base(files, writerData, cr2wOptions) { }
+        public override async Task PrepareDump()
         {
             var parOptions = new ParallelOptions()
             {
-                MaxDegreeOfParallelism = WriterOptions.NumThreads,
-                CancellationToken = WriterOptions.CancelToken
+                MaxDegreeOfParallelism = WriterData.NumThreads,
+                CancellationToken = WriterData.CancelToken
             };
 
-            if (!Directory.Exists(WriterOptions.OutputLocation))
-                Directory.CreateDirectory(WriterOptions.OutputLocation);
+            if (!Directory.Exists(WriterData.OutputLocation))
+                Directory.CreateDirectory(WriterData.OutputLocation);
 
-            int fileCount = 0, nonCR2WCount = 0, exceptionCount = 0;
             try
             {
                 Parallel.ForEach(Files, parOptions, async fileName =>
@@ -291,37 +337,41 @@ namespace WolvenKit.Forms
                     string outputDestination;
                     string fileBaseName = Path.GetFileName(fileName);
 
-                    if (WriterOptions.CreateFolders)
+                    if (WriterData.CreateFolders)
                     {
                         // Recreate the file structure of the source folder in the destination folder.
                         // Strip the sourcepath from the start of the filename, then create the remaining folders
-                        fileName.ReplaceFirst(WriterOptions.SourcePath, "", out var replacedSourcePath);
+                        fileName.ReplaceFirst(WriterData.SourcePath, "", out var replacedSourcePath);
                         var i = replacedSourcePath.LastIndexOf(fileBaseName, StringComparison.Ordinal);
-                        outputDestination = WriterOptions.OutputLocation + replacedSourcePath.Substring(0, i);
+                        outputDestination = WriterData.OutputLocation + replacedSourcePath.Substring(0, i);
 
                         Directory.CreateDirectory(outputDestination);
                     }
                     else
-                        outputDestination = WriterOptions.OutputLocation;
+                        outputDestination = WriterData.OutputLocation;
 
                     outputDestination = outputDestination + "\\" + fileBaseName + ".txt";
 
                     bool skip = false;
                     if (File.Exists(outputDestination))
-                        if (WriterOptions.OverwriteFiles)
+                        if (WriterData.OverwriteFiles)
                             File.Delete(outputDestination);
                         else
                             skip = true;
 
                     if (!skip)
+                    {
                         using (StreamWriter streamDestination = new StreamWriter(outputDestination, false))
                         {
                             var dumpResult = await Dump(streamDestination, fileName);
-                            nonCR2WCount += dumpResult.nonCR2W ? 1 : 0;
-                            exceptionCount += dumpResult.exceptions ? 1 : 0;
+                            WriterData.Status.NonCR2W += dumpResult.nonCR2W ? 1 : 0;
+                            WriterData.Status.Exceptions += dumpResult.exceptions ? 1 : 0;
                         }
 
-                    SetStatusStatic(Files.Count(), ++fileCount, nonCR2WCount, exceptionCount);
+                        EventOnProcessed(++WriterData.Status.Processed);
+                    }
+                    else
+                        WriterData.Status.Skipped++;
                 });
             }
             catch (OperationCanceledException)
@@ -332,51 +382,47 @@ namespace WolvenKit.Forms
     }
     internal class LoggerWriterSingle : LoggerWriter
     {
-        internal LoggerWriterSingle(List<string> files, LoggerWriterOptions writerOptions, LoggerCR2WOptions cr2wOptions)
-            : base(files, writerOptions, cr2wOptions)
+        internal LoggerWriterSingle(List<string> files, LoggerWriterData writerData, LoggerCR2WOptions cr2wOptions)
+            : base(files, writerData, cr2wOptions) { }
+        public override async Task PrepareDump()
         {
-        }
-        public override async Task StartDump()
-        {
-            string outputDestination = WriterOptions.OutputLocation;
+            string outputDestination = WriterData.OutputLocation;
             if (File.Exists(outputDestination))
                 File.Delete(outputDestination);
 
-            int fileCount = 0, nonCR2WCount = 0, exceptionCount = 0;
             using (StreamWriter streamDestination = new StreamWriter(outputDestination, false))
                 foreach (var fileName in Files)
                 {
-                    if (WriterOptions.CancelToken.IsCancellationRequested)
+                    if (WriterData.CancelToken.IsCancellationRequested)
                         break;
                     var dumpResult = await Dump(streamDestination, fileName);
-                    nonCR2WCount += dumpResult.nonCR2W ? 1 : 0;
-                    exceptionCount += dumpResult.exceptions ? 1 : 0;
-                    SetStatusStatic(Files.Count(), ++fileCount, nonCR2WCount, exceptionCount);
+                    WriterData.Status.NonCR2W += dumpResult.nonCR2W ? 1 : 0;
+                    WriterData.Status.Exceptions += dumpResult.exceptions ? 1 : 0;
+                    WriterData.Status.Processed++;
                 }
         }
     }
-
     internal abstract class LoggerWriter
     {
         protected LoggerCR2WOptions CR2WOptions;
         protected List<string> Files { get; }
-        protected LoggerWriterOptions WriterOptions { get; set; }
-        internal LoggerWriter(List<string> files, LoggerWriterOptions writerOptions, LoggerCR2WOptions cr2wOptions)
+        protected LoggerWriterData WriterData { get; set; }
+        internal LoggerWriter(List<string> files, LoggerWriterData writerData, LoggerCR2WOptions cr2wOptions)
         {
             Files = files;
-            WriterOptions = writerOptions;
+            WriterData = writerData;
             CR2WOptions = cr2wOptions;
         }
 
-        public abstract Task StartDump();
-        protected void SetStatusStatic(int count, int total, int nonCr2W, int exceptions)
-        {
-            WriterOptions.SetStatusDel(count, total, nonCr2W, exceptions);
-        }
+        public abstract Task PrepareDump();
+
+        public delegate void OnProcessedDelegate(int count);
+
+        public OnProcessedDelegate EventOnProcessed;
 
         protected async Task<(bool nonCR2W, bool exceptions)> Dump(StreamWriter streamDestination, string fileName)
         {
-            LoggerOutputFile outputFile = new LoggerOutputFile(streamDestination, WriterOptions.PrefixFileName,
+            LoggerOutputFile outputFile = new LoggerOutputFile(streamDestination, WriterData.PrefixFileName,
                 Path.GetFileName(fileName));
             bool gotExceptions = false;
             bool nonCR2W = false;
@@ -430,22 +476,20 @@ namespace WolvenKit.Forms
                 indent += "    ";
 
             if (PrefixLine)
-                line = Prefix + ":" + indent + text + "\r\n";
+                line = Prefix + ":" + indent + text;
             else
-                line = indent + text + "\r\n";
+                line = indent + text;
 
-            OutputFile.Write(line);
+            OutputFile.WriteLine(line);
 
             return true;
         }
     }
 
-    internal delegate void SetStatusDelegate(int count, int total, int nonCR2W, int exceptions);
-
-    internal struct LoggerWriterOptions
+    internal struct LoggerWriterData
     {
         public CancellationToken CancelToken { get; set; }
-        public SetStatusDelegate SetStatusDel { get; set; }
+        public StatusController Status { get; set; }
         public List<string> Files { get; set; }
         public bool OutputSingleFile { get; set; }
         public int NumThreads { get; set; }
@@ -471,15 +515,14 @@ namespace WolvenKit.Forms
         private LoggerCR2WOptions Options { get; }
         private List<CR2WExportWrapper> Chunks { get; }
         private List<CR2WEmbeddedWrapper> Embedded { get; }
-
-        private static CR2WFile loadCR2W(string fileName)
+        private static CR2WFile LoadCR2W(string fileName)
         {
             using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
                 using (var reader = new BinaryReader(fs))
                     return new CR2WFile(reader);
         }
-        internal LoggerCR2W(string fileName, LoggerOutputFile writer, LoggerCR2WOptions options) : this(LoggerCR2W.loadCR2W(fileName), writer, options)
-        {}
+        internal LoggerCR2W(string fileName, LoggerOutputFile writer, LoggerCR2WOptions options)
+            : this(LoggerCR2W.LoadCR2W(fileName), writer, options) {}
         internal LoggerCR2W(CR2WFile cr2wFile, LoggerOutputFile writer, LoggerCR2WOptions options)
         {
             CR2W = cr2wFile;
