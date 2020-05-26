@@ -88,8 +88,7 @@ namespace WolvenKit.Forms
         }
         private void LogLine(string line)
         {
-            txtLog.Text += line + "\r\n";
-            txtLog.ScrollToCaret();
+            txtLog.AppendText(line + "\r\n");
         }
         private void btnChoosePath_Click(object sender, EventArgs e)
         {
@@ -129,9 +128,11 @@ namespace WolvenKit.Forms
             prgProgressBar.Visible = true;
             _running = true;
             txtLog.Clear();
+            LogLine($"Dump started at: " + DateTime.Now);
 
             await Task.Run(DoRun);
 
+            LogLine($"Dump finished at: " + DateTime.Now);
             prgProgressBar.Visible = false;
             ControlsEnabledDuringRun(true);
             _running = false;
@@ -403,6 +404,8 @@ namespace WolvenKit.Forms
                                     WriterData.Status.NonCR2W++;
                                     OnNonCR2WFile?.Invoke(fileNameNoSourcePath);
                                 }
+                                if (dumpResult.exceptions)
+                                    WriterData.Status.Exceptions++;
                                 WriterData.Status.Processed++;
                             }
                         }
@@ -440,6 +443,8 @@ namespace WolvenKit.Forms
                         WriterData.Status.NonCR2W++;
                         OnNonCR2WFile?.Invoke(fileName);
                     }
+                    if (dumpResult.exceptions)
+                        WriterData.Status.Exceptions++;
                     WriterData.Status.Processed++;
                 }
         }
