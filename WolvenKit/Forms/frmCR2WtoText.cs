@@ -42,6 +42,7 @@ namespace WolvenKit.Forms
             InitializeComponent();
             SetDefaults();
             InitDataGrid();
+            InitStatusController();
             foreach (var ext in extExclude)
             {   // Add the list of excluded file extensions to info box so user knows what files will never be opened.
                 rtfDescription.AppendText(ext + " ");
@@ -54,6 +55,9 @@ namespace WolvenKit.Forms
                 dataStatus.Rows.Add(row);
             else
                 dataStatus.Rows[0].SetValues(row);
+        }
+        private void InitStatusController()
+        {
             statusController = new StatusController();
             statusController.OnCountUpdated += (x) => { UpdateStatusGrid(0, x); };
             statusController.OnProcessedUpdated += (x) => { UpdateStatusGrid(1, x); };
@@ -87,7 +91,8 @@ namespace WolvenKit.Forms
         }
         private void UpdateProgressBar(int processed)
         {
-            prgProgressBar.PerformStep();
+            if (processed > prgProgressBar.Value)
+                prgProgressBar.PerformStep();
         }
         private void LogLineStatic(string line)
         {
@@ -208,8 +213,7 @@ namespace WolvenKit.Forms
         private async Task UpdateSourceFolder(string path)
         {
             Files.Clear();
-            statusController.Count = 0;
-            statusController.NonCR2W = 0;
+            statusController.UpdateAll(0,0,0,0,0); // Clear stats
             if (Directory.Exists(path))
             {
                 btnRun.Enabled = false;
@@ -241,6 +245,7 @@ namespace WolvenKit.Forms
         private void ResetProgressBar(int filesCount)
         {
             prgProgressBar.Maximum = filesCount;
+            prgProgressBar.Value = 0;
             prgProgressBar.Step = 1;
         }
         private void txtPath_TextChanged(object sender, EventArgs e)
@@ -304,6 +309,14 @@ namespace WolvenKit.Forms
         public StatusDelegate OnNonCR2WUpdated;
         public StatusDelegate OnExceptionsUpdated;
 
+        public void UpdateAll(int count, int processed, int skipped, int nonCR2W, int exceptions)
+        {
+            Count = count;
+            Processed = processed;
+            Skipped = skipped;
+            NonCR2W = nonCR2W;
+            Exceptions = exceptions;
+        }
         private int _count;
         public int Count
         {
@@ -357,7 +370,6 @@ namespace WolvenKit.Forms
     }
     internal class LoggerWriterSeparate : LoggerWriter
     {
-        private readonly object statusLock = new object();
         internal LoggerWriterSeparate(List<string> files, LoggerWriterData writerData, LoggerCR2WOptions cr2wOptions)
             : base(files, writerData, cr2wOptions) { }
         public override async Task PrepareDump()
@@ -405,46 +417,20 @@ namespace WolvenKit.Forms
                             {
                                 using (StreamWriter streamDestination = new StreamWriter(outputDestination, false))
                                 {
-                                    var dumpResult = await Dump(streamDestination, fileName);
+                                    await Dump(streamDestination, fileName);
                                     lock (statusLock)
-                                    {
-                                        //TODO: Duplicated code; do this in Dump?
-                                        if (dumpResult.nonCR2W)
-                                        {
-                                            WriterData.Status.NonCR2W++;
-                                            OnNonCR2WFile?.Invoke(fileNameNoSourcePath);
-                                        }
-                                        if (dumpResult.exceptions)
-                                            WriterData.Status.Exceptions++;
-
                                         WriterData.Status.Processed++;
-                                    }
                                 }
                             }
                             else
                                 lock (statusLock)
                                     WriterData.Status.Skipped++;
                         }
-                        catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException)
-                        {
-                            OnExceptionFile?.Invoke(fileName, "Could not find file or directory - did it get deleted? Skipping.");
-                            lock (statusLock)
-                                WriterData.Status.Skipped++;
-                        }
                         catch (UnauthorizedAccessException)
                         {
                             // Couldn't write to destination file for some reason, eg read-only
-                            OnExceptionFile?.Invoke(outputDestination, "Could not write to file - is it readonly? Skipping.");
-                        }
-                        catch (OperationCanceledException)
-                        {
-                            throw;
-                        }
-                        catch (Exception e)
-                        {
-                            OnExceptionFile?.Invoke(fileName, "An unknown exception occurred, file is not processed.");
-                            lock (statusLock)
-                                WriterData.Status.Skipped++;
+                            string msg = "Could not write to file - is it readonly? Skipping.";
+                            ExceptionOccurred(fileName, msg);
                         }
                     });
             }
@@ -469,21 +455,14 @@ namespace WolvenKit.Forms
                 {
                     if (WriterData.CancelToken.IsCancellationRequested)
                         break;
-                    var dumpResult = await Dump(streamDestination, fileName);
-                    //TODO: Duplicated code; do this in Dump?
-                    if (dumpResult.nonCR2W)
-                    {
-                        WriterData.Status.NonCR2W++;
-                        OnNonCR2WFile?.Invoke(fileName);
-                    }
-                    if (dumpResult.exceptions)
-                        WriterData.Status.Exceptions++;
+                    await Dump(streamDestination, fileName);
                     WriterData.Status.Processed++;
                 }
         }
     }
     internal abstract class LoggerWriter
     {
+        protected readonly object statusLock = new object();
         public delegate void OnExceptionFileDelegate(string fileName, string msg);
         public delegate void OnNonCR2WFileDelegate(string msg);
 
@@ -506,12 +485,19 @@ namespace WolvenKit.Forms
             fileName.ReplaceFirst(sourcePath, "", out var fileNameNoSourcePath);
             return fileNameNoSourcePath;
         }
-        protected async Task<(bool nonCR2W, bool exceptions)> Dump(StreamWriter streamDestination, string fileName)
+        protected void ExceptionOccurred(string fileName, string msg)
+        {
+            lock (statusLock)
+            {
+                WriterData.Status.Skipped++;
+                WriterData.Status.Exceptions++;
+            }
+            OnExceptionFile?.Invoke(fileName, msg);
+        }
+        protected async Task Dump(StreamWriter streamDestination, string fileName)
         {
             LoggerOutputFileTxt outputFile = new LoggerOutputFileTxt(streamDestination, WriterData.PrefixFileName,
                 Path.GetFileName(fileName));
-            bool gotExceptions = false;
-            bool nonCR2W = false;
             try
             {
                 var lCR2W = new LoggerCR2W(fileName, outputFile, CR2WOptions);
@@ -522,27 +508,32 @@ namespace WolvenKit.Forms
                 };
                 lCR2W.processCR2W();
                 if (lCR2W.ExceptionCount > 0)
-                    gotExceptions = true;
+                    lock(statusLock)
+                        WriterData.Status.Exceptions++;
             }
             catch (FormatException)
-            {
+            {   // Non CR2W file.
                 string msg = fileName + ": Not a valid CR2W file, or file is damaged.";
                 Console.WriteLine(msg);
-                nonCR2W = true;
+                lock (statusLock)
+                {
+                    WriterData.Status.NonCR2W++;
+                }
+                var fileNameNoSourcePath = FileNameNoSourcePath(fileName, WriterData.SourcePath);
+                OnNonCR2WFile?.Invoke(fileNameNoSourcePath);
             }
             catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException)
-            {   // Could not open file, probably deleted; handled in higher try block.
-                throw;
+            {
+                string msg = "Could not find file or directory - did it get deleted? Skipping.";
+                ExceptionOccurred(fileName, msg);
             }
             catch (Exception ex)
             {
                 string msg = fileName + ": Exception: " + ex.ToString();
                 outputFile.WriteLine(msg);
                 Console.WriteLine(msg);
-                gotExceptions = true;
+                ExceptionOccurred(fileName, "An exception occurred processing this file. Skipping. Details: " + ex.Message);
             }
-
-            return (nonCR2W, gotExceptions);
         }
     }
 
@@ -706,10 +697,10 @@ namespace WolvenKit.Forms
                     catch (Exception e)
                     {
                         string msg = node.Name + ":" + node.Type + ": ";
-                        OnException?.Invoke(msg, e);
                         string logMsg = msg + ": Buffer or 'array:2,0,Uint8' caught exception: ";
                         Writer.Write(logMsg + e, level);
                         Console.WriteLine(logMsg + e);
+                        OnException?.Invoke(msg, e);
                         ExceptionCount++;
                     }
                 }
