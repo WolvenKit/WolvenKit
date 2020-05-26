@@ -708,28 +708,7 @@ namespace WolvenKit.Forms
         }
         public VariableListNode GetNodes(CR2WExportWrapper chunk)
         {
-            return AddListViewItems(chunk);
-        }
-        private VariableListNode AddListViewItems(IEditableVariable v, VariableListNode parent = null,
-            int arrayindex = 0)
-        {
-            // This function is 100% copied from frmChunkProperties.cs !
-            var node = new VariableListNode()
-            {
-                Variable = v,
-                Children = new List<VariableListNode>(),
-                Parent = parent
-            };
-            var vars = v.GetEditableVariables();
-            if (vars != null)
-            {
-                for (var i = 0; i < vars.Count; i++)
-                {
-                    node.Children.Add(AddListViewItems(vars[i], node, i));
-                }
-            }
-
-            return node;
+            return frmChunkProperties.AddListViewItems(chunk);
         }
     }
 }
