@@ -120,7 +120,7 @@ namespace WolvenKit.CR2W
             {
                 _type = value;
 
-                _export.className = (ushort)cr2w.GetStringIndex(_type);
+                //_export.className = (ushort)cr2w.GetStringIndex(_type);
             }
         }
 
@@ -261,7 +261,7 @@ namespace WolvenKit.CR2W
         public void WriteData(BinaryWriter file)
         {
             _export.dataOffset = (uint) file.BaseStream.Position;
-            _export.className = (ushort)cr2w.GetStringIndex(_type);
+            //_export.className = (ushort)cr2w.GetStringIndex(_type);
 
             var posstart = file.BaseStream.Position;
 

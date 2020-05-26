@@ -21,7 +21,15 @@ namespace WolvenKit.Common.Extensions
             if (!fsi.IsDirectory())
                 return false;
             var di = fsi as DirectoryInfo;
-            return (di.GetFiles().Any() || di.GetDirectories().Any());
+            try
+            {
+                return ((di.GetFiles() != null && di.GetFiles().Any()) || (di.GetDirectories() != null && di.GetDirectories().Any()));
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            
         }
 
         public static DirectoryInfo GetParent(this FileSystemInfo fsi)

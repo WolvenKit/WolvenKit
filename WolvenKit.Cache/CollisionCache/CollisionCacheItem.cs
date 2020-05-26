@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ionic.Zlib;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.Cache
 {
@@ -110,8 +111,9 @@ namespace WolvenKit.Cache
             }
         }
 
-        public void Extract(string filename)
+        public void Extract(BundleFileExtractArgs e)
         {
+            var filename = e.FileName;
             switch (Comtype)
             {
                 case 2:

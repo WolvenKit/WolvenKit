@@ -37,17 +37,19 @@
             this.scintillaControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.scintillaControl.Location = new System.Drawing.Point(0, 0);
             this.scintillaControl.Name = "scintillaControl";
-            this.scintillaControl.Size = new System.Drawing.Size(800, 600);
+            this.scintillaControl.Size = new System.Drawing.Size(784, 561);
             this.scintillaControl.TabIndex = 0;
             // 
-            // ScriptEditor
+            // frmScriptEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(784, 561);
             this.Controls.Add(this.scintillaControl);
-            this.Name = "ScriptEditor";
-            this.Size = new System.Drawing.Size(800, 600);
+            this.Name = "frmScriptEditor";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmScriptEditor_FormClosing);
             this.ResumeLayout(false);
+
         }
 
         #endregion

@@ -51,6 +51,9 @@ namespace WolvenKit
             this.launchWithCustomParametersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.packProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.packProjectAndRunGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonImportUtil = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonRadishUtil = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.iconToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -123,6 +126,7 @@ namespace WolvenKit
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.maximizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.minimizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuLabelProject = new System.Windows.Forms.ToolStripMenuItem();
             this.DLCScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.statusToolStrip = new System.Windows.Forms.ToolStrip();
@@ -154,7 +158,10 @@ namespace WolvenKit
             this.toolStripButton7,
             this.toolStripSeparator2,
             this.btPack,
-            this.rungameToolStrip});
+            this.rungameToolStrip,
+            this.toolStripSeparator10,
+            this.toolStripButtonImportUtil,
+            this.toolStripButtonRadishUtil});
             this.toolbarToolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolbarToolStrip.Name = "toolbarToolStrip";
             this.toolbarToolStrip.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
@@ -296,6 +303,31 @@ namespace WolvenKit
             this.packProjectAndRunGameToolStripMenuItem.Text = "Pack project and run game";
             this.packProjectAndRunGameToolStripMenuItem.Click += new System.EventHandler(this.PackProjectAndRunGameToolStripMenuItem_Click);
             // 
+            // toolStripSeparator10
+            // 
+            this.toolStripSeparator10.Name = "toolStripSeparator10";
+            this.toolStripSeparator10.Size = new System.Drawing.Size(32, 6);
+            // 
+            // toolStripButtonImportUtil
+            // 
+            this.toolStripButtonImportUtil.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonImportUtil.Image = global::WolvenKit.Properties.Resources.ImportPackage_16x;
+            this.toolStripButtonImportUtil.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonImportUtil.Name = "toolStripButtonImportUtil";
+            this.toolStripButtonImportUtil.Size = new System.Drawing.Size(32, 24);
+            this.toolStripButtonImportUtil.Text = "Import Utility";
+            this.toolStripButtonImportUtil.Click += new System.EventHandler(this.toolStripButtonImportUtil_Click);
+            // 
+            // toolStripButtonRadishUtil
+            // 
+            this.toolStripButtonRadishUtil.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRadishUtil.Image = global::WolvenKit.Properties.Resources.radish_32x;
+            this.toolStripButtonRadishUtil.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRadishUtil.Name = "toolStripButtonRadishUtil";
+            this.toolStripButtonRadishUtil.Size = new System.Drawing.Size(32, 24);
+            this.toolStripButtonRadishUtil.Text = "Radish Utility";
+            this.toolStripButtonRadishUtil.Click += new System.EventHandler(this.toolStripButtonRadishUtil_Click);
+            // 
             // menuStrip1
             // 
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -310,7 +342,8 @@ namespace WolvenKit
             this.buildDateToolStripMenuItem,
             this.closeToolStripMenuItem,
             this.maximizeToolStripMenuItem,
-            this.minimizeToolStripMenuItem});
+            this.minimizeToolStripMenuItem,
+            this.MenuLabelProject});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
@@ -919,6 +952,16 @@ namespace WolvenKit
             this.minimizeToolStripMenuItem.ToolTipText = "Minimize";
             this.minimizeToolStripMenuItem.Click += new System.EventHandler(this.MinimizeToolStripMenuItem_Click);
             // 
+            // MenuLabelProject
+            // 
+            this.MenuLabelProject.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.MenuLabelProject.Enabled = false;
+            this.MenuLabelProject.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.MenuLabelProject.Name = "MenuLabelProject";
+            this.MenuLabelProject.ShowShortcutKeys = false;
+            this.MenuLabelProject.Size = new System.Drawing.Size(72, 24);
+            this.MenuLabelProject.Text = "Build date";
+            // 
             // DLCScriptToolStripMenuItem
             // 
             this.DLCScriptToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.FileGroup_10135_16x;
@@ -1134,5 +1177,9 @@ namespace WolvenKit
         private ToolStripMenuItem DLCScriptToolStripMenuItem;
         private ToolStripMenuItem RadishUtilitytoolStripMenuItem;
         private BackgroundWorker MainBackgroundWorker;
+        private ToolStripSeparator toolStripSeparator10;
+        private ToolStripButton toolStripButtonImportUtil;
+        private ToolStripButton toolStripButtonRadishUtil;
+        private ToolStripMenuItem MenuLabelProject;
     }
 }

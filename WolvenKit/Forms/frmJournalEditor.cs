@@ -61,8 +61,8 @@ namespace WolvenKit
                 try
                 {
                     var files = MainController.ImportFile(image, MainController.Get().TextureManager);
-                    entityImage.Image = new DdsImage(files[0]).BitmapImage;
-                    entimgbox.Image = new DdsImage(files[1]).BitmapImage;
+                    entityImage.Image = ImageUtility.FromBytes(files[0]);
+                    entimgbox.Image = ImageUtility.FromBytes(files[1]);
                 }
                 catch
                 {

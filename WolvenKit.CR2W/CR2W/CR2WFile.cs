@@ -1299,6 +1299,7 @@ namespace WolvenKit.CR2W
             //    return names.Count - 1;
             //}
 
+            throw new NotImplementedException();
             return -1;
         }
 

@@ -12,14 +12,14 @@ namespace WolvenKit.CR2W.Types
     public class SBlockData : CVariable
     {
 
-        CMatrix3x3 rotationMatrix;
-        CVector3D position;
-        CUInt16 streamingRadius;
-        CUInt16 flags;
-        CUInt32 occlusionSystemID;
-        CUInt32 resourceIndex;
+        public CMatrix3x3 rotationMatrix;
+        public CVector3D position;
+        public CUInt16 streamingRadius;
+        public CUInt16 flags;
+        public CUInt32 occlusionSystemID;
+        public CUInt32 resourceIndex;
 
-        CBytes tail;
+        public CBytes tail;
 
         public SBlockData(CR2WFile cr2w) :
             base(cr2w)

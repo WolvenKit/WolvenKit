@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WolvenKit
+namespace WolvenKit.Common.Model
 {
     public class RequestFileArgs : EventArgs
     {

@@ -9,34 +9,33 @@ using System.Runtime.Serialization;
 namespace WolvenKit.CR2W.Types
 {
     [DataContract(Namespace = "")]
-    public class SMeshBlock5 : CVariable
+    public class SMipData : CVariable
     {
-        private const int fixedbuffersize = 46;
+        public CUInt32 Width;
+        public CUInt32 Height;
+        public CUInt32 Blocksize;
 
-        public CUInt16 bytesize;
-        public CBytes unk1;
-
-        public SMeshBlock5(CR2WFile cr2w) :
+        public SMipData(CR2WFile cr2w) :
             base(cr2w)
         {
-            bytesize = new CUInt16(cr2w) { Name = "size" };
-            unk1 = new CBytes(cr2w) { Name = "unk1" };
+            Width = new CUInt32(cr2w) { Name = "Width" };
+            Height = new CUInt32(cr2w) { Name = "Height" };
+            Blocksize = new CUInt32(cr2w) { Name = "Blocksize" };
+            
         }
 
         public override void Read(BinaryReader file, uint size)
         {
-            bytesize.Read(file, 2);
-
-            if ((int)bytesize.val != fixedbuffersize)
-                throw new NotImplementedException();
-
-            unk1.Read(file, (uint)bytesize.val - 2);
+            Width.Read(file, 4);
+            Height.Read(file, 4);
+            Blocksize.Read(file, 4);
         }
 
         public override void Write(BinaryWriter file)
         {
-            bytesize.Write(file);
-            unk1.Write(file);
+            Width.Write(file);
+            Height.Write(file);
+            Blocksize.Write(file);
         }
 
         public override CVariable SetValue(object val)
@@ -46,16 +45,16 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Create(CR2WFile cr2w)
         {
-            return new SMeshBlock5(cr2w);
+            return new SMipData(cr2w);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var var = (SMeshBlock5)base.Copy(context);
+            var var = (SMipData)base.Copy(context);
 
-            var.bytesize = (CUInt16)bytesize.Copy(context);
-            var.unk1 = (CBytes)unk1.Copy(context);
-            
+            var.Width = (CUInt32)Width.Copy(context);
+            var.Height = (CUInt32)Height.Copy(context);
+            var.Blocksize = (CUInt32)Blocksize.Copy(context);
 
             return var;
         }
@@ -64,8 +63,9 @@ namespace WolvenKit.CR2W.Types
         {
             return new List<IEditableVariable>()
             {
-                bytesize,
-                unk1
+                Width,
+                Height,
+                Blocksize,
             };
         }
 

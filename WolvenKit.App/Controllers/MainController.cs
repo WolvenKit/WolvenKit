@@ -44,7 +44,7 @@ namespace WolvenKit.App
         public const string ManagerCacheDir = "ManagerCache";
         public const string DepotDir = "Depot";
         public const string DepotZipPath = "ManagerCache\\Depot.zip";
-        public const string XBMDumpPath = "ManagerCache\\__xbmdump_37685553661.csv";
+        public const string XBMDumpPath = "ManagerCache\\__xbmdump_3768555366.csv";
         public string InitialModProject = "";
         public string InitialWKP = "";
         #endregion
@@ -55,7 +55,7 @@ namespace WolvenKit.App
         public WccLite WccHelper { get; set; }
         public List<HashDump> Hashdumplist { get; set; }
         /// <summary>
-        /// Shows wheteher there are unsaved changes in the project.
+        /// Shows if there are unsaved changes in the project.
         /// </summary>
         public bool ProjectUnsaved = false;
 
@@ -420,17 +420,6 @@ namespace WolvenKit.App
                 }
 
                 #endregion
-
-                //#region MMFUtil
-                //loadStatus = "Loading MemoryMappedFile manager!";
-                //foreach (var b in BundleManager.Bundles.Values)
-                //{
-                //    var hash = b.FileName.GetHashMD5();
-
-                //    mmfs.Add(hash, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, hash, 0, MemoryMappedFileAccess.Read));
-
-                //}
-                //#endregion
 
                 loadStatus = "Loaded";
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.App
 {
@@ -32,7 +33,9 @@ namespace WolvenKit.App
         public string InitialModDirectory { get; set; }
         public string InitialFileDirectory { get; set; }
         public string InitialExportDirectory { get; set; }
-        
+
+        public EUncookExtension UncookExtension { get; set; }
+
 
         [XmlIgnore]
         public string GameDLCDir => Path.Combine(ExecutablePath, @"..\..\DLC\");
@@ -57,14 +60,22 @@ namespace WolvenKit.App
 
         public static Configuration Load()
         {
-            if (File.Exists(ConfigurationPath) && new FileInfo(ConfigurationPath).Length != 0)
+            try
             {
-                var ser = new XmlSerializer(typeof (Configuration));
-                var stream = new FileStream(ConfigurationPath, FileMode.Open, FileAccess.Read);
-                var config = (Configuration) ser.Deserialize(stream);
-                stream.Close();
-                return config;
+                if (File.Exists(ConfigurationPath) && new FileInfo(ConfigurationPath).Length != 0)
+                {
+                    var ser = new XmlSerializer(typeof(Configuration));
+                    var stream = new FileStream(ConfigurationPath, FileMode.Open, FileAccess.Read);
+                    var config = (Configuration)ser.Deserialize(stream);
+                    stream.Close();
+                    return config;
+                }
             }
+            catch (Exception)
+            {
+
+            }
+            
 
             // Defaults
             return new Configuration

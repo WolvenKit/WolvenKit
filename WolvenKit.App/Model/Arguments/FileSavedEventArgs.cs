@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using WolvenKit.CR2W;
 
-namespace WolvenKit
+namespace WolvenKit.App.Model
 {
     public class FileSavedEventArgs
     {

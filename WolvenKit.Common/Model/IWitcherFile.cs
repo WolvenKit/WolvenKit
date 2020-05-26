@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common
 {
@@ -17,6 +18,9 @@ namespace WolvenKit.Common
         string CompressionType { get; }
 
         void Extract(Stream output);
-        void Extract(string filename);
+        void Extract(BundleFileExtractArgs e);
     }
+
+
+
 }

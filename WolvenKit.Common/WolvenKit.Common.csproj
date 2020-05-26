@@ -106,6 +106,8 @@
   <ItemGroup>
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\FileSystemInfoExtensions.cs" />
+    <Compile Include="Model\Arguments\BundleFileExtractArgs.cs" />
+    <Compile Include="Model\Arguments\RequestFileOpenArgs.cs" />
     <Compile Include="Tools\AlphanumComparator.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Tools\FNV1A\FNV1A32HashAlgorithm.cs" />

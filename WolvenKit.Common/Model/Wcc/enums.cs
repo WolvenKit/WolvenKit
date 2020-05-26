@@ -29,6 +29,7 @@ namespace WolvenKit.Common.Wcc
 
         public static string RawExtensionToCacheType(string ext)
         {
+            ext = ext.ToLower();
             switch (ext)
             {
                 case ".apb": 
@@ -49,6 +50,7 @@ namespace WolvenKit.Common.Wcc
 
         public static Enum RawExtensionToEnum(string ext)
         {
+            ext = ext.ToLower();
             switch (ext)
             {
                 case ".apb": return new EApbImports();
@@ -98,7 +100,7 @@ namespace WolvenKit.Common.Wcc
         png,
         jpg,
         tga,
-        dds,
+        //dds,
 
         apb,
         fbx,

@@ -34,13 +34,9 @@ namespace WolvenKit.App.ViewModels
             }
         }
 
-
-        public bool IsCorrupt { get; private set; }
-
-        public RadishViewModel(LoggerService logger)
+        public RadishViewModel()
         {
-            Logger = logger;
-
+            Logger = MainController.Get().Logger;
             switch (RadishController.Get().CheckSelf())
             {
                 case RadishController.ERadishStatus.SettingsError:
@@ -151,6 +147,7 @@ namespace WolvenKit.App.ViewModels
         #endregion
 
         #region Properties
+        public bool IsCorrupt { get; private set; }
 
         #region SelectedItem
         private RadishWorkflow _currentWorkflow = null;

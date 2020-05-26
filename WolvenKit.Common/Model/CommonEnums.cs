@@ -6,5 +6,19 @@ using System.Threading.Tasks;
 
 namespace WolvenKit.Common.Model
 {
-
+    public enum EUncookExtension
+    {
+        tga,
+        bmp,
+        jpg,
+        jpeg,
+        png,
+        dds,
+        //HDR,
+        //TIF,
+        //TIFF,
+        //WDP,
+        //HDP,
+        //JXR
+    }
 }

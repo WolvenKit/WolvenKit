@@ -14,26 +14,32 @@ namespace WolvenKit.Forms
         private readonly FindReplace ScintillaFindReplace;
 
         public string autocompletelist = "array< PushBack string int integer bool float name range event function abstract const final private protected public theGame theInput thePlayer theSound enum struct state array false NULL true out inlined autobind editable entry exec hint import latent optional out quest saved statemachine timer break case continue else for if return switch while";
+        public bool IsUnsafed { get; set; }
 
 
-        public frmScriptEditor(string filePath)
+        public frmScriptEditor()
         {
             InitializeComponent();
-            this.ShowIcon = false;
-            this.Text = "Witcherscript editor - " + Path.GetFileName(filePath);
+
             ScintillaFindReplace = new FindReplace(scintillaControl);
             ScintillaFindReplace.KeyPressed += ScintillaFindReplaceOnKeyPressed;
             this.ShowIcon = false;
-            FilePath = filePath;
+
             ConfigureScintilla();
             scintillaControl.ScrollWidth = 0;
             scintillaControl.ScrollWidthTracking = true;
-            scintillaControl.Text = File.ReadAllText(FilePath);
             scintillaControl.KeyDown += ScintillaControlOnKeyDown;
         }
 
-        public string FilePath { get; set; }
-
+        private string FilePath;
+        public string FileName => Path.GetFileName(FilePath);
+        public void LoadFile(string filePath)
+        {
+            this.Text = /*"Witcherscript editor - " + */Path.GetFileName(filePath);
+            
+            FilePath = filePath;
+            scintillaControl.Text = File.ReadAllText(FilePath);
+        }
 
         private void ConfigureScintilla()
         {
@@ -59,6 +65,11 @@ namespace WolvenKit.Forms
                 if (!scintillaControl.AutoCActive)
                     scintillaControl.AutoCShow(lenEntered, autocompletelist);
             }
+
+            // notify unsaved
+            IsUnsafed = true;
+            this.Text = $"{Path.GetFileName(FilePath)}*";
+            UIController.Get().Window.AddToOpenScripts(this);
         }
 
 
@@ -117,7 +128,6 @@ namespace WolvenKit.Forms
             numbers.Sensitive = true;
             numbers.Mask = 0;
         }
-
         private void SetupCodeFolding()
         {
             //Styles code folding
@@ -156,7 +166,6 @@ namespace WolvenKit.Forms
             // Enable automatic folding
             scintillaControl.AutomaticFold = AutomaticFold.Show | AutomaticFold.Click | AutomaticFold.Change;
         }
-
         private void ClearUsedHotKeys()
         {
             //Clear hot keys that conflict with the ones that have just been assigned.
@@ -176,6 +185,9 @@ namespace WolvenKit.Forms
 
             // register all new classes
             UIController.Get().Window.ScanAndRegisterCustomClasses();
+
+            IsUnsafed = false;
+            this.Text = Path.GetFileName(FilePath);
         }
 
         private Color IntToColor(int rgbValue)
@@ -235,6 +247,31 @@ namespace WolvenKit.Forms
         private void ScintillaFindReplaceOnKeyPressed(object sender, KeyEventArgs e)
         {
             ScintillaControlOnKeyDown(sender, e);
+        }
+
+        private void frmScriptEditor_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (IsUnsafed)
+            {
+                var res = MessageBox.Show($"{FileName} has been modified, save changes?", "Save Changes?",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Warning);
+                if (res == DialogResult.Yes)
+                {
+                    SaveFile();
+                    UIController.Get().Window.RemoveFromOpenScrips(this);
+                }
+                else if (res == DialogResult.Cancel)
+                {
+                    e.Cancel = true;
+                }
+                else
+                {
+                    UIController.Get().Window.RemoveFromOpenScrips(this);
+                }
+            }
+            
+
         }
     }
 }

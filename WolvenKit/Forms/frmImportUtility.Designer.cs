@@ -100,7 +100,7 @@
             // 
             // olvColumnTexturegroup
             // 
-            this.olvColumnTexturegroup.AspectName = "Texturegroup";
+            this.olvColumnTexturegroup.AspectName = "TextureGroup";
             this.olvColumnTexturegroup.FillsFreeSpace = true;
             this.olvColumnTexturegroup.Groupable = false;
             this.olvColumnTexturegroup.Text = "Texturegroup";
