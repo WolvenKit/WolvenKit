@@ -89,10 +89,10 @@ namespace WolvenKit
 
         
 
-        public frmCR2WDocument LoadDocument(string filename, bool suppressErrors = false)
-        {
-            return Window.LoadDocument(filename, null, suppressErrors);
-        }
+        //public frmCR2WDocument LoadDocument(string filename, bool suppressErrors = false)
+        //{
+        //    return Window.LoadDocument(filename, null, suppressErrors);
+        //}
 
         public frmCR2WDocument LoadDocument(string filename, MemoryStream memoryStream, bool suppressErrors = false)
         {

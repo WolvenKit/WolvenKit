@@ -33,6 +33,7 @@ namespace WolvenKit
     using CR2W.Types;
     using Extensions;
     using Forms;
+    using System.CodeDom;
     using WolvenKit.App;
     using WolvenKit.Common.Model;
     using WolvenKit.Render;
@@ -155,18 +156,37 @@ namespace WolvenKit
         #endregion
 
         #region Methods
-        Action<object, DoWorkEventArgs> workerAction;
+        Func<object, DoWorkEventArgs, object> workerAction;
+        Func<object, object> workerCompletedAction;
         void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker bwAsync = sender as BackgroundWorker;
-            workerAction(sender, e);
+            e.Result = workerAction(sender, e);
+
+            // add a result
+            //e.Result
         }
         void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             m_frmProgress.SetProgressBarValue(e.ProgressPercentage, e.UserState);
         }
+        frmCR2WDocument HACK_bwform = null;
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            // has errors
+            if (e.Error != null)
+            {
+                // do not continue to the completed action
+            }
+            else // has completed successfully
+            {
+                if (workerCompletedAction != null)
+                {
+                    HACK_bwform = (frmCR2WDocument)workerCompletedAction(e.Result);
+                }
+                workerCompletedAction = null;
+            }
+
             m_frmProgress.Close();
         }
         
@@ -1291,14 +1311,23 @@ namespace WolvenKit
             public string Filename { get; set; }
             public MemoryStream Stream { get; set; }
             public frmCR2WDocument Doc { get; set; }
-            public LoadFileArgs(string filename, frmCR2WDocument doc, MemoryStream stream = null)
+            public bool SuppressErrors { get; set; }
+            public LoadFileArgs(string filename, frmCR2WDocument doc, MemoryStream stream = null, bool suppressErrors = false)
             {
                 Filename = filename;
                 Doc = doc;
                 if (stream != null)
                     Stream = stream;
+                SuppressErrors = suppressErrors;
             }
         }
+
+        /// <summary>
+        /// Opens a document in the background
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="memoryStream"></param>
+        /// <param name="suppressErrors"></param>
         public frmCR2WDocument LoadDocument(string filename, MemoryStream memoryStream = null, bool suppressErrors = false)
         {
             if (memoryStream == null && !File.Exists(filename))
@@ -1310,11 +1339,6 @@ namespace WolvenKit
                 return null;
             }
 
-            // Backgroundwork Start
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-
             // check and register custom classes
             // we do it here because people might edit the .ws files at any time
             // todo: what do I do if the .ws file has been edited while the cr2w file is open?
@@ -1324,18 +1348,81 @@ namespace WolvenKit
             var doc = new frmCR2WDocument();
             OpenDocuments.Add(doc);
 
+            WorkerLoadFileSetup(new LoadFileArgs(filename, doc, memoryStream, suppressErrors));
+
+            // wait for the backgroundworker to finish
+            // this is not good practice since I am blocking
+            // but there are some functions (the renderer etc) that rely on a return document
+            // also I am blocking with the progress form regardless so it's already bad
+            if (MainBackgroundWorker.IsBusy)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                
+            }
+            var ret = HACK_bwform;
+            HACK_bwform = null;
+            return ret;
+        }
+
+
+        /// <summary>
+        /// Setup the backgroundworker and progress forms (Main thread)
+        /// </summary>
+        /// <param name="args"></param>
+        private void WorkerLoadFileSetup(LoadFileArgs args)
+        {
+            MainController.Get().ProjectStatus = "Busy";
+
+            // Backgroundworker
+            if (!MainBackgroundWorker.IsBusy)
+            {
+
+                m_frmProgress = new frmProgress()
+                {
+                    Text = "Loading File...",
+                    StartPosition = FormStartPosition.CenterParent,
+                    FormBorderStyle = FormBorderStyle.None
+                };
+
+                workerAction = WorkerLoadFile;
+                MainBackgroundWorker.RunWorkerAsync(args);
+                DialogResult dr = m_frmProgress.ShowDialog();
+
+
+            }
+            else
+                Logger.LogString("The background worker is currently busy.\r\n", Logtype.Error);
+
+            MainController.Get().ProjectStatus = "Ready";
+        }
+
+        /// <summary>
+        /// This runs on a worker thread in the background and 
+        /// returns the LoadFileArgs it reveived if succesfull, null otherwise.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        protected private object WorkerLoadFile(object sender, DoWorkEventArgs e)
+        {
+            object arg = e.Argument;
+            if (!(arg is LoadFileArgs))
+                throw new NotImplementedException();
+            var Args = (LoadFileArgs)arg;
+
+            var doc = Args.Doc;
+            var filename = Args.Filename;
+            var suppressErrors = Args.SuppressErrors;
+
             try
             {
-                if (memoryStream != null)
-                {
-                    WorkerLoadFileSetup(new LoadFileArgs(filename, doc, memoryStream));
-                    //doc.LoadFile(filename, memoryStream);
-                }
+                if (Args.Stream != null)
+                    Args.Doc.LoadFile(Args.Filename, Args.Stream);
                 else
-                {
-                    WorkerLoadFileSetup(new LoadFileArgs(filename, doc));
-                    //doc.LoadFile(filename);
-                }
+                    Args.Doc.LoadFile(Args.Filename);
             }
             catch (InvalidFileTypeException ex)
             {
@@ -1343,7 +1430,7 @@ namespace WolvenKit
                     MessageBox.Show(this, ex.Message, @"Error opening file.");
 
                 OpenDocuments.Remove(doc);
-                doc.Dispose();
+                //doc.Dispose();
                 return null;
             }
             catch (MissingTypeException ex)
@@ -1352,7 +1439,7 @@ namespace WolvenKit
                     MessageBox.Show(this, ex.Message, @"Error opening file.");
 
                 OpenDocuments.Remove(doc);
-                doc.Dispose();
+                //doc.Dispose();
                 return null;
             }
             catch (FormatException ex)
@@ -1361,14 +1448,38 @@ namespace WolvenKit
                     MessageBox.Show(this, ex.Message, @"Error opening file.");
 
                 OpenDocuments.Remove(doc);
-                doc.Dispose();
+                //doc.Dispose();
+                throw ex;
                 return null;
             }
+
+            workerCompletedAction = WorkerLoadFileCompleted;
+            return Args;
+        }
+
+        /// <summary>
+        /// This is called if the backgroundworker has completed sucessfully. 
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        protected private object WorkerLoadFileCompleted(object arg)
+        {
+            if (!(arg is LoadFileArgs))
+                throw new NotImplementedException();
+            var Args = (LoadFileArgs)arg;
+            var doc = Args.Doc;
+            var filename = Args.Filename;
+
+            #region SetupFile
+            // Backgroundwork Start
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             switch (Path.GetExtension(filename))
             {
                 case ".w2scene":
                 case ".w2quest":
-                case ".w2phase": 
+                case ".w2phase":
                     {
                         doc.flowDiagram = new frmChunkFlowDiagram();
                         doc.flowDiagram.OnOutput += OnOutput;
@@ -1379,7 +1490,7 @@ namespace WolvenKit
                         doc.flowDiagram.Show(doc.FormPanel, DockState.Document);
                         break;
                     }
-                
+
                 case ".journal":
                     {
                         doc.JournalEditor = new frmJournalEditor
@@ -1473,63 +1584,7 @@ namespace WolvenKit
 
             AddOutput(output.ToString(), Logtype.Important);
             return doc;
-        }
-
-        private void WorkerLoadFileSetup(LoadFileArgs args)
-        {
-            MainController.Get().ProjectStatus = "Busy";
-
-            // Backgroundworker
-            if (!MainBackgroundWorker.IsBusy)
-            {
-
-                m_frmProgress = new frmProgress()
-                {
-                    Text = "Loading File...",
-                    StartPosition = FormStartPosition.CenterParent,
-                    FormBorderStyle = FormBorderStyle.None
-                };
-
-                workerAction = WorkerLoadFile;
-                MainBackgroundWorker.RunWorkerAsync(args);
-
-                DialogResult dr = m_frmProgress.ShowDialog(this);
-                switch (dr)
-                {
-                    case DialogResult.Cancel:
-                        {
-                            MainBackgroundWorker.CancelAsync();
-                            m_frmProgress.Cancel = true;
-                            break;
-                        }
-                    case DialogResult.None:
-                    case DialogResult.OK:
-                    case DialogResult.Abort:
-                    case DialogResult.Retry:
-                    case DialogResult.Ignore:
-                    case DialogResult.Yes:
-                    case DialogResult.No:
-                    default:
-                        break;
-                }
-            }
-            else
-                Logger.LogString("The background worker is currently busy.\r\n", Logtype.Error);
-
-            MainController.Get().ProjectStatus = "Ready";
-        }
-
-        protected private void WorkerLoadFile(object sender, DoWorkEventArgs e)
-        {
-            object arg = e.Argument;
-            if (!(arg is LoadFileArgs))
-                throw new NotImplementedException();
-            var Args = (LoadFileArgs)arg;
-
-            if (Args.Stream != null)
-                Args.Doc.LoadFile(Args.Filename, Args.Stream);
-            else
-                Args.Doc.LoadFile(Args.Filename);
+            #endregion
         }
 
         public CR2WFile LoadDocumentAndGetFile(string filename)
@@ -1957,7 +2012,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             MainController.Get().ProjectStatus = "Ready";
             
         }
-        protected void WorkerAssetBrowserAddFiles(object sender, DoWorkEventArgs e)
+        protected object WorkerAssetBrowserAddFiles(object sender, DoWorkEventArgs e)
         {
             object arg = e.Argument;
             if (!(arg is Tuple<List<IWitcherArchive>, List<WitcherListViewItem>, bool>))
@@ -1974,7 +2029,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 {
                     Logger.LogString("Background worker cancelled.\r\n", Logtype.Error);
                     e.Cancel = true;
-                    return;
+                    return false;
                 }
 
                 WitcherListViewItem item = Details.Item2[i];
@@ -1984,6 +2039,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 int percentprogress = (int)((float)i / (float)count * 100.0);
                 MainBackgroundWorker.ReportProgress(percentprogress, item.Text);
             }
+            return true;
         }
         private void openModToolStripMenuItem_Click(object sender, EventArgs e)
         {
