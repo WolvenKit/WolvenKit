@@ -73,6 +73,7 @@ namespace WolvenKit.Forms
             InitDataGrid();
         }
         private delegate void UpdateProgressBarDelegate(int processed);
+        private delegate void LogLineDelegate(string line);
         private void UpdateProgressBarStatic(int processed)
         {
             Invoke(new UpdateProgressBarDelegate(UpdateProgressBar), processed);
@@ -80,6 +81,15 @@ namespace WolvenKit.Forms
         private void UpdateProgressBar(int processed)
         {
             prgProgressBar.PerformStep();
+        }
+        private void LogLineStatic(string line)
+        {
+            Invoke(new LogLineDelegate(LogLine), line);
+        }
+        private void LogLine(string line)
+        {
+            txtLog.Text += line + "\r\n";
+            txtLog.ScrollToCaret();
         }
         private void btnChoosePath_Click(object sender, EventArgs e)
         {
@@ -118,6 +128,7 @@ namespace WolvenKit.Forms
             prgProgressBar.Value = 0;
             prgProgressBar.Visible = true;
             _running = true;
+            txtLog.Clear();
 
             await Task.Run(DoRun);
 
@@ -128,6 +139,7 @@ namespace WolvenKit.Forms
         }
         private async Task DoRun()
         {
+            // Clear status and log prior to new run.
             statusController.Processed = statusController.Skipped = statusController.NonCR2W = statusController.Exceptions = 0;
             if (Files.Any())
             {
@@ -164,6 +176,15 @@ namespace WolvenKit.Forms
                 else
                     writer = new LoggerWriterSeparate(Files, loggerOptions, cr2wOptions);
 
+                writer.OnExceptionFile += (string fileName, string msg) =>
+                {
+                    msg = msg.Replace("\r\n", " ");
+                    LogLineStatic($"Exception in : {fileName} : {msg}");
+                };
+                writer.OnNonCR2WFile += (string msg) =>
+                {
+                    LogLineStatic($"Non CR2W file: {msg}");
+                };
                 await writer.PrepareDump();
 
                 Cancel.Dispose();
@@ -177,7 +198,7 @@ namespace WolvenKit.Forms
         {
             string[] extExclude = new[] { ".txt", ".json", ".csv", ".xml", ".jpg", ".png", ".buffer", ".navgraph", ".navtile",
                                           ".usm", ".wem", ".dds", ".bnk", ".xbm", ".bundle", ".w3strings", ".store", ".navconfig",
-                                          ".srt", ".naviobstacles", ".navmesh"};
+                                          ".srt", ".naviobstacles", ".navmesh", ".sav", ".subs"};
             Files.Clear();
             if (Directory.Exists(path))
             {
@@ -347,13 +368,13 @@ namespace WolvenKit.Forms
                 {
                     string outputDestination;
                     string fileBaseName = Path.GetFileName(fileName);
+                    string fileNameNoSourcePath = FileNameNoSourcePath(fileName, WriterData.SourcePath);
 
                     if (WriterData.CreateFolders)
                     {   // Recreate the file structure of the source folder in the destination folder.
                         // Strip sourcePath from the start of the filename, strip filename from end, then create the remaining folders.
-                        fileName.ReplaceFirst(WriterData.SourcePath, "", out var replacedSourcePath);
-                        var i = replacedSourcePath.LastIndexOf(fileBaseName, StringComparison.Ordinal);
-                        outputDestination = WriterData.OutputLocation + replacedSourcePath.Substring(0, i);
+                        var i = fileNameNoSourcePath.LastIndexOf(fileBaseName, StringComparison.Ordinal);
+                        outputDestination = WriterData.OutputLocation + fileNameNoSourcePath.Substring(0, i);
 
                         Directory.CreateDirectory(outputDestination);
                     }
@@ -376,10 +397,12 @@ namespace WolvenKit.Forms
                             var dumpResult = await Dump(streamDestination, fileName);
                             lock (statusLock)
                             {
+                                //TODO: Duplicated code; do this in Dump?
                                 if (dumpResult.nonCR2W)
+                                {
                                     WriterData.Status.NonCR2W++;
-                                if (dumpResult.exceptions)
-                                    WriterData.Status.Exceptions++;
+                                    OnNonCR2WFile?.Invoke(fileNameNoSourcePath);
+                                }
                                 WriterData.Status.Processed++;
                             }
                         }
@@ -411,14 +434,24 @@ namespace WolvenKit.Forms
                     if (WriterData.CancelToken.IsCancellationRequested)
                         break;
                     var dumpResult = await Dump(streamDestination, fileName);
-                    WriterData.Status.NonCR2W += dumpResult.nonCR2W ? 1 : 0;
-                    WriterData.Status.Exceptions += dumpResult.exceptions ? 1 : 0;
+                    //TODO: Duplicated code; do this in Dump?
+                    if (dumpResult.nonCR2W)
+                    {
+                        WriterData.Status.NonCR2W++;
+                        OnNonCR2WFile?.Invoke(fileName);
+                    }
                     WriterData.Status.Processed++;
                 }
         }
     }
     internal abstract class LoggerWriter
     {
+        public delegate void OnExceptionFileDelegate(string fileName, string msg);
+        public delegate void OnNonCR2WFileDelegate(string msg);
+
+        public OnExceptionFileDelegate OnExceptionFile;
+        public OnNonCR2WFileDelegate OnNonCR2WFile;
+
         protected LoggerCR2WOptions CR2WOptions;
         protected List<string> Files { get; }
         protected LoggerWriterData WriterData { get; set; }
@@ -429,6 +462,12 @@ namespace WolvenKit.Forms
             CR2WOptions = cr2wOptions;
         }
         public abstract Task PrepareDump();
+
+        public static string FileNameNoSourcePath(string fileName, string sourcePath)
+        {
+            fileName.ReplaceFirst(sourcePath, "", out var fileNameNoSourcePath);
+            return fileNameNoSourcePath;
+        }
         protected async Task<(bool nonCR2W, bool exceptions)> Dump(StreamWriter streamDestination, string fileName)
         {
             LoggerOutputFile outputFile = new LoggerOutputFile(streamDestination, WriterData.PrefixFileName,
@@ -437,10 +476,15 @@ namespace WolvenKit.Forms
             bool nonCR2W = false;
             try
             {
-                var cf = new LoggerCR2W(fileName, outputFile, CR2WOptions);
+                var lCR2W = new LoggerCR2W(fileName, outputFile, CR2WOptions);
                 outputFile.WriteLine("FILE: " + fileName);
-                cf.processCR2W();
-                if (cf.ExceptionCount > 0)
+                lCR2W.OnException += (string msg, Exception e) =>
+                {
+                    var fileNameNoSourcePath = FileNameNoSourcePath(fileName, WriterData.SourcePath);
+                    OnExceptionFile?.Invoke(fileNameNoSourcePath ,msg + e.Message);
+                };
+                lCR2W.processCR2W();
+                if (lCR2W.ExceptionCount > 0)
                     gotExceptions = true;
             }
             catch (FormatException)
@@ -518,6 +562,10 @@ namespace WolvenKit.Forms
     internal class LoggerCR2W
     {
         public int ExceptionCount = 0;
+
+        public delegate void OnExceptionDelegate(string msg, Exception e);
+
+        public OnExceptionDelegate OnException;
 
         private CR2WFile CR2W { get; }
         private LoggerOutputFile Writer { get; }
@@ -610,9 +658,11 @@ namespace WolvenKit.Forms
                     }
                     catch (Exception e)
                     {
-                        string msg = node.Name + " - " + node.Type + ": Buffer or 'array:2,0,Uint8' caught exception: " + e.ToString();
-                        Writer.DumpText(msg, level);
-                        Console.WriteLine(msg);
+                        string msg = node.Name + ":" + node.Type + ": ";
+                        OnException?.Invoke(msg, e);
+                        string logMsg = msg + ": Buffer or 'array:2,0,Uint8' caught exception: ";
+                        Writer.DumpText(logMsg + e, level);
+                        Console.WriteLine(logMsg + e);
                         ExceptionCount++;
                     }
                 }

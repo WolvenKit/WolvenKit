@@ -65,6 +65,7 @@
             this.colSkipped = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colNonCR2W = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colExceptions = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txtLog = new System.Windows.Forms.TextBox();
             this.pnlControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numThreads)).BeginInit();
             this.grpExistingFiles.SuspendLayout();
@@ -78,7 +79,7 @@
             this.btnRun.Enabled = false;
             this.btnRun.Image = global::WolvenKit.Properties.Resources.Output_16x;
             this.btnRun.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRun.Location = new System.Drawing.Point(50, 464);
+            this.btnRun.Location = new System.Drawing.Point(195, 440);
             this.btnRun.Name = "btnRun";
             this.btnRun.Size = new System.Drawing.Size(420, 23);
             this.btnRun.TabIndex = 10;
@@ -96,7 +97,7 @@
             this.rtfDescription.Name = "rtfDescription";
             this.rtfDescription.ReadOnly = true;
             this.rtfDescription.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.rtfDescription.Size = new System.Drawing.Size(480, 139);
+            this.rtfDescription.Size = new System.Drawing.Size(740, 115);
             this.rtfDescription.TabIndex = 20;
             this.rtfDescription.Text = resources.GetString("rtfDescription.Text");
             // 
@@ -120,15 +121,15 @@
             this.pnlControls.Controls.Add(this.btnChoosePath);
             this.pnlControls.Controls.Add(this.txtPath);
             this.pnlControls.Controls.Add(this.grpRadioOutputMode);
-            this.pnlControls.Location = new System.Drawing.Point(12, 159);
+            this.pnlControls.Location = new System.Drawing.Point(12, 139);
             this.pnlControls.Name = "pnlControls";
-            this.pnlControls.Size = new System.Drawing.Size(480, 295);
+            this.pnlControls.Size = new System.Drawing.Size(740, 295);
             this.pnlControls.TabIndex = 21;
             // 
             // labNumThreads
             // 
             this.labNumThreads.AutoSize = true;
-            this.labNumThreads.Location = new System.Drawing.Point(256, 57);
+            this.labNumThreads.Location = new System.Drawing.Point(305, 53);
             this.labNumThreads.Name = "labNumThreads";
             this.labNumThreads.Size = new System.Drawing.Size(97, 13);
             this.labNumThreads.TabIndex = 37;
@@ -136,7 +137,7 @@
             // 
             // numThreads
             // 
-            this.numThreads.Location = new System.Drawing.Point(357, 55);
+            this.numThreads.Location = new System.Drawing.Point(406, 51);
             this.numThreads.Minimum = new decimal(new int[] {
             1,
             0,
@@ -157,7 +158,7 @@
             this.chkCreateFolders.AutoSize = true;
             this.chkCreateFolders.Checked = true;
             this.chkCreateFolders.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkCreateFolders.Location = new System.Drawing.Point(95, 131);
+            this.chkCreateFolders.Location = new System.Drawing.Point(144, 127);
             this.chkCreateFolders.Name = "chkCreateFolders";
             this.chkCreateFolders.Size = new System.Drawing.Size(151, 17);
             this.chkCreateFolders.TabIndex = 35;
@@ -169,7 +170,7 @@
             this.chkDumpEmbedded.AutoSize = true;
             this.chkDumpEmbedded.Checked = true;
             this.chkDumpEmbedded.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDumpEmbedded.Location = new System.Drawing.Point(95, 172);
+            this.chkDumpEmbedded.Location = new System.Drawing.Point(144, 168);
             this.chkDumpEmbedded.Name = "chkDumpEmbedded";
             this.chkDumpEmbedded.Size = new System.Drawing.Size(116, 17);
             this.chkDumpEmbedded.TabIndex = 34;
@@ -180,7 +181,7 @@
             // 
             this.grpExistingFiles.Controls.Add(this.radExistingSkip);
             this.grpExistingFiles.Controls.Add(this.radExistingOverwrite);
-            this.grpExistingFiles.Location = new System.Drawing.Point(95, 233);
+            this.grpExistingFiles.Location = new System.Drawing.Point(144, 229);
             this.grpExistingFiles.Name = "grpExistingFiles";
             this.grpExistingFiles.Size = new System.Drawing.Size(142, 56);
             this.grpExistingFiles.TabIndex = 33;
@@ -213,7 +214,7 @@
             this.chkPrefixFileName.AutoSize = true;
             this.chkPrefixFileName.Checked = true;
             this.chkPrefixFileName.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkPrefixFileName.Location = new System.Drawing.Point(95, 152);
+            this.chkPrefixFileName.Location = new System.Drawing.Point(144, 148);
             this.chkPrefixFileName.Name = "chkPrefixFileName";
             this.chkPrefixFileName.Size = new System.Drawing.Size(165, 17);
             this.chkPrefixFileName.TabIndex = 31;
@@ -223,7 +224,7 @@
             // chkDumpFCD
             // 
             this.chkDumpFCD.AutoSize = true;
-            this.chkDumpFCD.Location = new System.Drawing.Point(95, 213);
+            this.chkDumpFCD.Location = new System.Drawing.Point(144, 209);
             this.chkDumpFCD.Name = "chkDumpFCD";
             this.chkDumpFCD.Size = new System.Drawing.Size(137, 17);
             this.chkDumpFCD.TabIndex = 29;
@@ -235,7 +236,7 @@
             this.chkDumpSDB.AutoSize = true;
             this.chkDumpSDB.Checked = true;
             this.chkDumpSDB.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDumpSDB.Location = new System.Drawing.Point(95, 193);
+            this.chkDumpSDB.Location = new System.Drawing.Point(144, 189);
             this.chkDumpSDB.Name = "chkDumpSDB";
             this.chkDumpSDB.Size = new System.Drawing.Size(177, 17);
             this.chkDumpSDB.TabIndex = 27;
@@ -245,7 +246,7 @@
             // labOutputFileMode
             // 
             this.labOutputFileMode.AutoSize = true;
-            this.labOutputFileMode.Location = new System.Drawing.Point(6, 57);
+            this.labOutputFileMode.Location = new System.Drawing.Point(55, 53);
             this.labOutputFileMode.Name = "labOutputFileMode";
             this.labOutputFileMode.Size = new System.Drawing.Size(87, 13);
             this.labOutputFileMode.TabIndex = 30;
@@ -254,7 +255,7 @@
             // 
             // btnPickOutput
             // 
-            this.btnPickOutput.Location = new System.Drawing.Point(396, 96);
+            this.btnPickOutput.Location = new System.Drawing.Point(603, 93);
             this.btnPickOutput.Name = "btnPickOutput";
             this.btnPickOutput.Size = new System.Drawing.Size(75, 23);
             this.btnPickOutput.TabIndex = 25;
@@ -265,7 +266,7 @@
             // labOverwrite
             // 
             this.labOverwrite.AutoSize = true;
-            this.labOverwrite.Location = new System.Drawing.Point(13, 256);
+            this.labOverwrite.Location = new System.Drawing.Point(62, 252);
             this.labOverwrite.Name = "labOverwrite";
             this.labOverwrite.Size = new System.Drawing.Size(80, 13);
             this.labOverwrite.TabIndex = 22;
@@ -275,7 +276,7 @@
             // labDumpOptions
             // 
             this.labDumpOptions.AutoSize = true;
-            this.labDumpOptions.Location = new System.Drawing.Point(18, 172);
+            this.labDumpOptions.Location = new System.Drawing.Point(67, 168);
             this.labDumpOptions.Name = "labDumpOptions";
             this.labDumpOptions.Size = new System.Drawing.Size(75, 13);
             this.labDumpOptions.TabIndex = 22;
@@ -285,7 +286,7 @@
             // labOutputFile
             // 
             this.labOutputFile.AutoSize = true;
-            this.labOutputFile.Location = new System.Drawing.Point(6, 101);
+            this.labOutputFile.Location = new System.Drawing.Point(55, 97);
             this.labOutputFile.Name = "labOutputFile";
             this.labOutputFile.Size = new System.Drawing.Size(87, 13);
             this.labOutputFile.TabIndex = 23;
@@ -295,7 +296,7 @@
             // labPath
             // 
             this.labPath.AutoSize = true;
-            this.labPath.Location = new System.Drawing.Point(20, 18);
+            this.labPath.Location = new System.Drawing.Point(69, 14);
             this.labPath.Name = "labPath";
             this.labPath.Size = new System.Drawing.Size(73, 13);
             this.labPath.TabIndex = 21;
@@ -304,15 +305,15 @@
             // 
             // txtOutputDestination
             // 
-            this.txtOutputDestination.Location = new System.Drawing.Point(95, 98);
+            this.txtOutputDestination.Location = new System.Drawing.Point(144, 94);
             this.txtOutputDestination.Name = "txtOutputDestination";
-            this.txtOutputDestination.Size = new System.Drawing.Size(295, 20);
+            this.txtOutputDestination.Size = new System.Drawing.Size(453, 20);
             this.txtOutputDestination.TabIndex = 24;
             this.txtOutputDestination.TextChanged += new System.EventHandler(this.txtOutputDestination_TextChanged);
             // 
             // btnChoosePath
             // 
-            this.btnChoosePath.Location = new System.Drawing.Point(396, 14);
+            this.btnChoosePath.Location = new System.Drawing.Point(603, 11);
             this.btnChoosePath.Name = "btnChoosePath";
             this.btnChoosePath.Size = new System.Drawing.Size(75, 20);
             this.btnChoosePath.TabIndex = 19;
@@ -322,9 +323,9 @@
             // 
             // txtPath
             // 
-            this.txtPath.Location = new System.Drawing.Point(95, 15);
+            this.txtPath.Location = new System.Drawing.Point(144, 11);
             this.txtPath.Name = "txtPath";
-            this.txtPath.Size = new System.Drawing.Size(295, 20);
+            this.txtPath.Size = new System.Drawing.Size(453, 20);
             this.txtPath.TabIndex = 18;
             this.txtPath.TextChanged += new System.EventHandler(this.txtPath_TextChanged);
             // 
@@ -333,7 +334,7 @@
             this.grpRadioOutputMode.Controls.Add(this.radOutputModeSeparateFiles);
             this.grpRadioOutputMode.Controls.Add(this.radOutputModeSingleFile);
             this.grpRadioOutputMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.grpRadioOutputMode.Location = new System.Drawing.Point(95, 37);
+            this.grpRadioOutputMode.Location = new System.Drawing.Point(144, 33);
             this.grpRadioOutputMode.Name = "grpRadioOutputMode";
             this.grpRadioOutputMode.Size = new System.Drawing.Size(142, 51);
             this.grpRadioOutputMode.TabIndex = 20;
@@ -368,9 +369,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.prgProgressBar});
             this.statusStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-            this.statusStrip1.Location = new System.Drawing.Point(0, 564);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 688);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(504, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(764, 22);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 25;
             this.statusStrip1.Text = "statusStrip1";
@@ -379,7 +380,7 @@
             // 
             this.prgProgressBar.Name = "prgProgressBar";
             this.prgProgressBar.Overflow = System.Windows.Forms.ToolStripItemOverflow.Always;
-            this.prgProgressBar.Size = new System.Drawing.Size(500, 16);
+            this.prgProgressBar.Size = new System.Drawing.Size(760, 16);
             // 
             // dataStatus
             // 
@@ -403,7 +404,7 @@
             this.colSkipped,
             this.colNonCR2W,
             this.colExceptions});
-            this.dataStatus.Location = new System.Drawing.Point(50, 498);
+            this.dataStatus.Location = new System.Drawing.Point(195, 471);
             this.dataStatus.MultiSelect = false;
             this.dataStatus.Name = "dataStatus";
             this.dataStatus.ReadOnly = true;
@@ -482,11 +483,25 @@
             this.colExceptions.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.colExceptions.Width = 84;
             // 
+            // txtLog
+            // 
+            this.txtLog.BackColor = System.Drawing.SystemColors.Window;
+            this.txtLog.Location = new System.Drawing.Point(12, 537);
+            this.txtLog.Multiline = true;
+            this.txtLog.Name = "txtLog";
+            this.txtLog.ReadOnly = true;
+            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtLog.Size = new System.Drawing.Size(740, 148);
+            this.txtLog.TabIndex = 27;
+            this.txtLog.TabStop = false;
+            this.txtLog.WordWrap = false;
+            // 
             // frmCR2WtoText
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(504, 586);
+            this.ClientSize = new System.Drawing.Size(764, 710);
+            this.Controls.Add(this.txtLog);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.dataStatus);
             this.Controls.Add(this.rtfDescription);
@@ -549,5 +564,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colSkipped;
         private System.Windows.Forms.DataGridViewTextBoxColumn colNonCR2W;
         private System.Windows.Forms.DataGridViewTextBoxColumn colExceptions;
+        private System.Windows.Forms.TextBox txtLog;
     }
 }
