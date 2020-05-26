@@ -15,6 +15,9 @@ namespace WolvenKit.Forms
 {
     public partial class frmCR2WtoText : Form
     {
+        private readonly string[] extExclude = { ".txt", ".json", ".csv", ".xml", ".jpg", ".png", ".buffer", ".navgraph", ".navtile",
+                                                 ".usm", ".wem", ".dds", ".bnk", ".xbm", ".bundle", ".w3strings", ".store", ".navconfig",
+                                                 ".srt", ".naviobstacles", ".navmesh", ".sav", ".subs"};
         private StatusController statusController;
         private readonly List<string> Files = new List<string>();
 
@@ -71,6 +74,10 @@ namespace WolvenKit.Forms
             numThreads.Value = Environment.ProcessorCount;
             numThreads.Maximum = Environment.ProcessorCount;
             InitDataGrid();
+            foreach (var ext in extExclude)
+            {
+                rtfDescription.AppendText(ext + " ");
+            }
         }
         private delegate void UpdateProgressBarDelegate(int processed);
         private delegate void LogLineDelegate(string line);
@@ -88,7 +95,7 @@ namespace WolvenKit.Forms
         }
         private void LogLine(string line)
         {
-            txtLog.AppendText(line + "\r\n");
+            txtLog.AppendText(DateTime.Now + ": " + line + "\r\n");
         }
         private void btnChoosePath_Click(object sender, EventArgs e)
         {
@@ -111,6 +118,7 @@ namespace WolvenKit.Forms
             else if (!_stopping)
             {
                 btnRun.Text = "Stopping...";
+                LogLineStatic("Stopping dump once in-process files complete.");
                 Cancel.Cancel();
                 _stopping = true;
             }
@@ -128,11 +136,11 @@ namespace WolvenKit.Forms
             prgProgressBar.Visible = true;
             _running = true;
             txtLog.Clear();
-            LogLine($"Dump started at: " + DateTime.Now);
+            LogLine("Dump started.");
 
             await Task.Run(DoRun);
 
-            LogLine($"Dump finished at: " + DateTime.Now);
+            LogLine("Dump finished.");
             prgProgressBar.Visible = false;
             ControlsEnabledDuringRun(true);
             _running = false;
@@ -141,7 +149,7 @@ namespace WolvenKit.Forms
         private async Task DoRun()
         {
             // Clear status and log prior to new run.
-            statusController.Processed = statusController.Skipped = statusController.NonCR2W = statusController.Exceptions = 0;
+            statusController.Processed = statusController.Skipped = statusController.Exceptions = 0;
             if (Files.Any())
             {
                 string sourcePath = txtPath.Text;
@@ -179,12 +187,14 @@ namespace WolvenKit.Forms
 
                 writer.OnExceptionFile += (string fileName, string msg) =>
                 {
+                    var fileNameNoSource = LoggerWriter.FileNameNoSourcePath(fileName, sourcePath);
                     msg = msg.Replace("\r\n", " ");
-                    LogLineStatic($"Exception in : {fileName} : {msg}");
+                    LogLineStatic($"Exception: {fileNameNoSource} : {msg}");
                 };
-                writer.OnNonCR2WFile += (string msg) =>
+                writer.OnNonCR2WFile += (string fileName) =>
                 {
-                    LogLineStatic($"Non CR2W file: {msg}");
+                    var fileNameNoSource = LoggerWriter.FileNameNoSourcePath(fileName, sourcePath);
+                    LogLineStatic($"Non CR2W file: {fileNameNoSource}");
                 };
                 await writer.PrepareDump();
 
@@ -197,29 +207,31 @@ namespace WolvenKit.Forms
         }
         private async Task UpdateSourceFolder(string path)
         {
-            string[] extExclude = new[] { ".txt", ".json", ".csv", ".xml", ".jpg", ".png", ".buffer", ".navgraph", ".navtile",
-                                          ".usm", ".wem", ".dds", ".bnk", ".xbm", ".bundle", ".w3strings", ".store", ".navconfig",
-                                          ".srt", ".naviobstacles", ".navmesh", ".sav", ".subs"};
             Files.Clear();
             if (Directory.Exists(path))
             {
                 btnRun.Enabled = false;
                 pnlControls.Enabled = false;
+                LogLine("Reading source folder...");
                 await Task.Run(() =>
                 {
                     int fileCounter = 0;
-                    foreach (var file in Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)
-                                                  .Where(file => !extExclude.Any(x => file.EndsWith(x, StringComparison.OrdinalIgnoreCase))))
+                    foreach (var file in Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories))
                     {
-                        Files.Add(file);
-                        if (++fileCounter % 100 == 0) // Only update status for every 100 files
-                            statusController.Count = fileCounter;
+                        if (!extExclude.Any(x => file.EndsWith(x, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            Files.Add(file);
+                            statusController.Count = ++fileCounter;
+                        }
+                        else
+                            statusController.NonCR2W++;
                     }
                 });
 
                 statusController.Count = Files.Count();
                 ResetProgressBar(Files.Count());
 
+                LogLine("Finished reading source folder.");
                 pnlControls.Enabled = true;
                 CheckEnableRunButton();
             }
@@ -227,6 +239,7 @@ namespace WolvenKit.Forms
             {
                 Files.Clear();
                 statusController.Count = 0;
+                statusController.NonCR2W = 0;
             }
 
         }
@@ -366,54 +379,73 @@ namespace WolvenKit.Forms
             try
             {
                 Parallel.ForEach(Files, parOptions, async fileName =>
-                {
-                    string outputDestination;
-                    string fileBaseName = Path.GetFileName(fileName);
-                    string fileNameNoSourcePath = FileNameNoSourcePath(fileName, WriterData.SourcePath);
-
-                    if (WriterData.CreateFolders)
-                    {   // Recreate the file structure of the source folder in the destination folder.
-                        // Strip sourcePath from the start of the filename, strip filename from end, then create the remaining folders.
-                        var i = fileNameNoSourcePath.LastIndexOf(fileBaseName, StringComparison.Ordinal);
-                        outputDestination = WriterData.OutputLocation + fileNameNoSourcePath.Substring(0, i);
-
-                        Directory.CreateDirectory(outputDestination);
-                    }
-                    else
-                        outputDestination = WriterData.OutputLocation;
-
-                    outputDestination = outputDestination + "\\" + fileBaseName + ".txt";
-
-                    bool skip = false;
-                    if (File.Exists(outputDestination))
-                        if (WriterData.OverwriteFiles)
-                            File.Delete(outputDestination);
-                        else
-                            skip = true;
-
-                    if (!skip)
                     {
-                        using (StreamWriter streamDestination = new StreamWriter(outputDestination, false))
-                        {
-                            var dumpResult = await Dump(streamDestination, fileName);
-                            lock (statusLock)
-                            {
-                                //TODO: Duplicated code; do this in Dump?
-                                if (dumpResult.nonCR2W)
-                                {
-                                    WriterData.Status.NonCR2W++;
-                                    OnNonCR2WFile?.Invoke(fileNameNoSourcePath);
-                                }
-                                if (dumpResult.exceptions)
-                                    WriterData.Status.Exceptions++;
-                                WriterData.Status.Processed++;
-                            }
+                        string outputDestination;
+                        string fileBaseName = Path.GetFileName(fileName);
+                        string fileNameNoSourcePath = FileNameNoSourcePath(fileName, WriterData.SourcePath);
+
+                        if (WriterData.CreateFolders)
+                        {   // Recreate the file structure of the source folder in the destination folder.
+                            // Strip sourcePath from the start of the filename, strip filename from end, then create the remaining folders.
+                            var i = fileNameNoSourcePath.LastIndexOf(fileBaseName, StringComparison.Ordinal);
+                            outputDestination = WriterData.OutputLocation + fileNameNoSourcePath.Substring(0, i);
+
+                            Directory.CreateDirectory(outputDestination);
                         }
-                    }
-                    else
-                        lock (statusLock)
-                            WriterData.Status.Skipped++;
-                });
+                        else
+                            outputDestination = WriterData.OutputLocation;
+
+                        outputDestination = outputDestination + "\\" + fileBaseName + ".txt";
+
+                        try
+                        {
+                            bool skip = false;
+                            if (File.Exists(outputDestination))
+                                if (WriterData.OverwriteFiles)
+                                    File.Delete(outputDestination);
+                                else
+                                    skip = true;
+
+                            if (!skip)
+                            {
+                                using (StreamWriter streamDestination = new StreamWriter(outputDestination, false))
+                                {
+                                    var dumpResult = await Dump(streamDestination, fileName);
+                                    lock (statusLock)
+                                    {
+                                        //TODO: Duplicated code; do this in Dump?
+                                        if (dumpResult.nonCR2W)
+                                        {
+                                            WriterData.Status.NonCR2W++;
+                                            OnNonCR2WFile?.Invoke(fileNameNoSourcePath);
+                                        }
+
+                                        if (dumpResult.exceptions)
+                                            WriterData.Status.Exceptions++;
+                                        WriterData.Status.Processed++;
+                                    }
+                                }
+                            }
+                            else
+                                lock (statusLock)
+                                    WriterData.Status.Skipped++;
+                        }
+                        catch (UnauthorizedAccessException)
+                        {
+                            // Couldn't write to destination file for some reason, eg read-only
+                            OnExceptionFile?.Invoke(fileName, "Could not write to file - is it readonly? Skipping.");
+                            lock (statusLock)
+                                WriterData.Status.Skipped++;
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            throw;
+                        }
+                        catch (Exception e)
+                        {
+                            OnExceptionFile?.Invoke(fileName,"An unknown exception occurred writing to file.");
+                        }
+                    });
             }
             catch (OperationCanceledException)
             {
@@ -485,8 +517,7 @@ namespace WolvenKit.Forms
                 outputFile.WriteLine("FILE: " + fileName);
                 lCR2W.OnException += (string msg, Exception e) =>
                 {
-                    var fileNameNoSourcePath = FileNameNoSourcePath(fileName, WriterData.SourcePath);
-                    OnExceptionFile?.Invoke(fileNameNoSourcePath ,msg + e.Message);
+                    OnExceptionFile?.Invoke(fileName, msg + e.Message);
                 };
                 lCR2W.processCR2W();
                 if (lCR2W.ExceptionCount > 0)

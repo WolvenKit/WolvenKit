@@ -122,7 +122,9 @@
 
 This text output can then be compared using a tool such as WinMerge, or searched.  This can provide a way to compare modified files to visualise changes, or to search through files in bulk to find references to files or values of interest.
 
-Be aware that text dumps can be much larger than the original files; some vanilla CR2W files will produce text dumps of several megabytes each.  To dump the vanilla game + DLCs will require 25+GB.</value>
+Be aware that text dumps can be much larger than the original files; some vanilla CR2W files will produce text dumps of several megabytes each.  To dump the vanilla game + DLCs will require 25+GB.
+
+The following file extensions will not be processed: </value>
   </data>
   <metadata name="statusStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>

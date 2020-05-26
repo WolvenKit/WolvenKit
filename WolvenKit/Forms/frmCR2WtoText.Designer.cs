@@ -79,7 +79,7 @@
             this.btnRun.Enabled = false;
             this.btnRun.Image = global::WolvenKit.Properties.Resources.Output_16x;
             this.btnRun.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRun.Location = new System.Drawing.Point(195, 440);
+            this.btnRun.Location = new System.Drawing.Point(195, 475);
             this.btnRun.Name = "btnRun";
             this.btnRun.Size = new System.Drawing.Size(420, 23);
             this.btnRun.TabIndex = 10;
@@ -97,7 +97,7 @@
             this.rtfDescription.Name = "rtfDescription";
             this.rtfDescription.ReadOnly = true;
             this.rtfDescription.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.rtfDescription.Size = new System.Drawing.Size(740, 115);
+            this.rtfDescription.Size = new System.Drawing.Size(740, 149);
             this.rtfDescription.TabIndex = 20;
             this.rtfDescription.Text = resources.GetString("rtfDescription.Text");
             // 
@@ -121,7 +121,7 @@
             this.pnlControls.Controls.Add(this.btnChoosePath);
             this.pnlControls.Controls.Add(this.txtPath);
             this.pnlControls.Controls.Add(this.grpRadioOutputMode);
-            this.pnlControls.Location = new System.Drawing.Point(12, 139);
+            this.pnlControls.Location = new System.Drawing.Point(12, 171);
             this.pnlControls.Name = "pnlControls";
             this.pnlControls.Size = new System.Drawing.Size(740, 295);
             this.pnlControls.TabIndex = 21;
@@ -369,7 +369,7 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.prgProgressBar});
             this.statusStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-            this.statusStrip1.Location = new System.Drawing.Point(0, 688);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 806);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(764, 22);
             this.statusStrip1.SizingGrip = false;
@@ -404,7 +404,7 @@
             this.colSkipped,
             this.colNonCR2W,
             this.colExceptions});
-            this.dataStatus.Location = new System.Drawing.Point(195, 471);
+            this.dataStatus.Location = new System.Drawing.Point(195, 509);
             this.dataStatus.MultiSelect = false;
             this.dataStatus.Name = "dataStatus";
             this.dataStatus.ReadOnly = true;
@@ -486,12 +486,12 @@
             // txtLog
             // 
             this.txtLog.BackColor = System.Drawing.SystemColors.Window;
-            this.txtLog.Location = new System.Drawing.Point(12, 537);
+            this.txtLog.Location = new System.Drawing.Point(12, 574);
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtLog.Size = new System.Drawing.Size(740, 148);
+            this.txtLog.Size = new System.Drawing.Size(740, 227);
             this.txtLog.TabIndex = 27;
             this.txtLog.TabStop = false;
             this.txtLog.WordWrap = false;
@@ -500,7 +500,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(764, 710);
+            this.ClientSize = new System.Drawing.Size(764, 828);
             this.Controls.Add(this.txtLog);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.dataStatus);
