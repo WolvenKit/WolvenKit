@@ -57,7 +57,6 @@ namespace WolvenKit.Forms
             statusController.OnNonCR2WUpdated += (x) => { UpdateStatusGrid(3, x); };
             statusController.OnExceptionsUpdated += (x) => { UpdateStatusGrid(4, x); };
         }
-
         private void UpdateStatusGrid(int cell, int value)
         {
             dataStatus.Rows[0].Cells[cell].Value = value;
@@ -148,7 +147,7 @@ namespace WolvenKit.Forms
         }
         private async Task DoRun()
         {
-            // Clear status and log prior to new run.
+            // Clear status prior to new run.
             statusController.Processed = statusController.Skipped = statusController.Exceptions = 0;
             if (Files.Any())
             {
@@ -507,7 +506,7 @@ namespace WolvenKit.Forms
         }
         protected async Task<(bool nonCR2W, bool exceptions)> Dump(StreamWriter streamDestination, string fileName)
         {
-            LoggerOutputFile outputFile = new LoggerOutputFile(streamDestination, WriterData.PrefixFileName,
+            LoggerOutputFileTxt outputFile = new LoggerOutputFileTxt(streamDestination, WriterData.PrefixFileName,
                 Path.GetFileName(fileName));
             bool gotExceptions = false;
             bool nonCR2W = false;
@@ -541,14 +540,13 @@ namespace WolvenKit.Forms
         }
     }
 
-    internal class LoggerOutputFile
+    internal class LoggerOutputFileTxt : LoggerOutputFile
     {
         private string Prefix { get; }
         private bool PrefixLine { get; }
-        private StreamWriter OutputFile { get; }
-        internal LoggerOutputFile(StreamWriter streamDestination, bool prefixLine, string prefix)
+        internal LoggerOutputFileTxt(StreamWriter streamDestination, bool prefixLine, string prefix)
+            : base(streamDestination)
         {
-            OutputFile = streamDestination;
             PrefixLine = prefixLine;
             Prefix = prefix;
         }
@@ -556,7 +554,7 @@ namespace WolvenKit.Forms
         {
             OutputFile.WriteLine(line);
         }
-        public virtual bool DumpText(string text, int level = 0)
+        public override void Write(string text, int level = 0)
         {
             string line;
             string indent = "";
@@ -569,10 +567,17 @@ namespace WolvenKit.Forms
             else
                 line = indent + text;
 
-            OutputFile.WriteLine(line);
-
-            return true;
+            WriteLine(line);
         }
+    }
+    internal abstract class LoggerOutputFile
+    {
+        protected StreamWriter OutputFile { get; }
+        internal LoggerOutputFile(StreamWriter streamDestination)
+        {
+            OutputFile = streamDestination;
+        }
+        public abstract void Write(string text, int level = 0);
     }
 
     internal class LoggerWriterData
@@ -629,13 +634,13 @@ namespace WolvenKit.Forms
             int level = (overrideLevel > 0) ? overrideLevel : Options.StartingIndentLevel;
             if (Options.ListEmbedded && Embedded != null && Embedded.Any())
             {
-                Writer.DumpText("Embedded files:", level);
+                Writer.Write("Embedded files:", level);
                 ProcessEmbedded(level);
             }
-            Writer.DumpText("Chunks:", level);
+            Writer.Write("Chunks:", level);
             foreach (var chunk in Chunks)
             {
-                Writer.DumpText(chunk.Name + " (" + chunk.Type + ") : " + chunk.Preview, level);
+                Writer.Write(chunk.Name + " (" + chunk.Type + ") : " + chunk.Preview, level);
                 var node = GetNodes(chunk);
                 ProcessNode(node, level + 1);
             }
@@ -646,13 +651,13 @@ namespace WolvenKit.Forms
             int fileCounter = 1;
             foreach (CR2WEmbeddedWrapper embed in Embedded)
             {
-                Writer.DumpText("(" + fileCounter++ + "):", level);
-                Writer.DumpText("Index: " + embed.Embedded.importIndex, level + 1);
-                Writer.DumpText("ImportPath: " + embed.ImportPath, level + 1);
-                Writer.DumpText("ImportClass: " + embed.ImportClass, level + 1);
-                Writer.DumpText("Size: " + embed.Embedded.dataSize, level + 1);
-                Writer.DumpText("ClassName: " + embed.ClassName, level + 1);
-                Writer.DumpText("Handle: " + embed.Handle, level + 1);
+                Writer.Write("(" + fileCounter++ + "):", level);
+                Writer.Write("Index: " + embed.Embedded.importIndex, level + 1);
+                Writer.Write("ImportPath: " + embed.ImportPath, level + 1);
+                Writer.Write("ImportClass: " + embed.ImportClass, level + 1);
+                Writer.Write("Size: " + embed.Embedded.dataSize, level + 1);
+                Writer.Write("ClassName: " + embed.ClassName, level + 1);
+                Writer.Write("Handle: " + embed.Handle, level + 1);
             }
         }
         private void ProcessNode(VariableListNode node, int level)
@@ -666,7 +671,7 @@ namespace WolvenKit.Forms
 
             if (node.Name != node.Value) // Chunk node is already printed in processCR2W, so don't print it again.
             {
-                Writer.DumpText(node.Name + " (" + node.Type + ") : " + node.Value, level);
+                Writer.Write(node.Name + " (" + node.Type + ") : " + node.Value, level);
                 level++;
             }
 
@@ -697,7 +702,7 @@ namespace WolvenKit.Forms
                         string msg = node.Name + ":" + node.Type + ": ";
                         OnException?.Invoke(msg, e);
                         string logMsg = msg + ": Buffer or 'array:2,0,Uint8' caught exception: ";
-                        Writer.DumpText(logMsg + e, level);
+                        Writer.Write(logMsg + e, level);
                         Console.WriteLine(logMsg + e);
                         ExceptionCount++;
                     }
