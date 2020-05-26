@@ -41,6 +41,11 @@ namespace WolvenKit.Forms
         {
             InitializeComponent();
             SetDefaults();
+            InitDataGrid();
+            foreach (var ext in extExclude)
+            {   // Add the list of excluded file extensions to info box so user knows what files will never be opened.
+                rtfDescription.AppendText(ext + " ");
+            }
         }
         private void InitDataGrid()
         {
@@ -72,12 +77,8 @@ namespace WolvenKit.Forms
             chkDumpEmbedded.Checked = true;
             numThreads.Value = Environment.ProcessorCount;
             numThreads.Maximum = Environment.ProcessorCount;
-            InitDataGrid();
-            foreach (var ext in extExclude)
-            {
-                rtfDescription.AppendText(ext + " ");
-            }
         }
+        // Delegates for thread-safe updating of progress bar and console textbox.
         private delegate void UpdateProgressBarDelegate(int processed);
         private delegate void LogLineDelegate(string line);
         private void UpdateProgressBarStatic(int processed)
@@ -207,6 +208,8 @@ namespace WolvenKit.Forms
         private async Task UpdateSourceFolder(string path)
         {
             Files.Clear();
+            statusController.Count = 0;
+            statusController.NonCR2W = 0;
             if (Directory.Exists(path))
             {
                 btnRun.Enabled = false;
@@ -234,13 +237,6 @@ namespace WolvenKit.Forms
                 pnlControls.Enabled = true;
                 CheckEnableRunButton();
             }
-            else
-            {
-                Files.Clear();
-                statusController.Count = 0;
-                statusController.NonCR2W = 0;
-            }
-
         }
         private void ResetProgressBar(int filesCount)
         {
@@ -418,9 +414,9 @@ namespace WolvenKit.Forms
                                             WriterData.Status.NonCR2W++;
                                             OnNonCR2WFile?.Invoke(fileNameNoSourcePath);
                                         }
-
                                         if (dumpResult.exceptions)
                                             WriterData.Status.Exceptions++;
+
                                         WriterData.Status.Processed++;
                                     }
                                 }
@@ -429,12 +425,16 @@ namespace WolvenKit.Forms
                                 lock (statusLock)
                                     WriterData.Status.Skipped++;
                         }
+                        catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException)
+                        {
+                            OnExceptionFile?.Invoke(fileName, "Could not find file or directory - did it get deleted? Skipping.");
+                            lock (statusLock)
+                                WriterData.Status.Skipped++;
+                        }
                         catch (UnauthorizedAccessException)
                         {
                             // Couldn't write to destination file for some reason, eg read-only
-                            OnExceptionFile?.Invoke(fileName, "Could not write to file - is it readonly? Skipping.");
-                            lock (statusLock)
-                                WriterData.Status.Skipped++;
+                            OnExceptionFile?.Invoke(outputDestination, "Could not write to file - is it readonly? Skipping.");
                         }
                         catch (OperationCanceledException)
                         {
@@ -442,7 +442,9 @@ namespace WolvenKit.Forms
                         }
                         catch (Exception e)
                         {
-                            OnExceptionFile?.Invoke(fileName,"An unknown exception occurred writing to file.");
+                            OnExceptionFile?.Invoke(fileName, "An unknown exception occurred, file is not processed.");
+                            lock (statusLock)
+                                WriterData.Status.Skipped++;
                         }
                     });
             }
@@ -527,6 +529,10 @@ namespace WolvenKit.Forms
                 string msg = fileName + ": Not a valid CR2W file, or file is damaged.";
                 Console.WriteLine(msg);
                 nonCR2W = true;
+            }
+            catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException)
+            {   // Could not open file, probably deleted; handled in higher try block.
+                throw;
             }
             catch (Exception ex)
             {
