@@ -5,13 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using VisualPlus.Extensibility;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Editors;
 using static WolvenKit.frmChunkProperties;
-using DataGrid = System.Windows.Forms.DataGrid;
 
 namespace WolvenKit.Forms
 {
@@ -41,6 +39,26 @@ namespace WolvenKit.Forms
             InitializeComponent();
             SetDefaults();
         }
+        private void InitDataGrid()
+        {
+            object[] row = {0, 0, 0, 0, 0};
+            if (dataStatus.Rows.Count == 0)
+                dataStatus.Rows.Add(row);
+            else
+                dataStatus.Rows[0].SetValues(row);
+            statusController = new StatusController();
+            statusController.OnCountUpdated += (x) => { UpdateStatusGrid(0, x); };
+            statusController.OnProcessedUpdated += (x) => { UpdateStatusGrid(1, x); };
+            statusController.OnProcessedUpdated += UpdateProgressBarStatic;
+            statusController.OnSkippedUpdated += (x) => { UpdateStatusGrid(2, x); };
+            statusController.OnNonCR2WUpdated += (x) => { UpdateStatusGrid(3, x); };
+            statusController.OnExceptionsUpdated += (x) => { UpdateStatusGrid(4, x); };
+        }
+
+        private void UpdateStatusGrid(int cell, int value)
+        {
+            dataStatus.Rows[0].Cells[cell].Value = value;
+        }
         private void SetDefaults()
         {
             radExistingOverwrite.Checked = true;
@@ -52,7 +70,7 @@ namespace WolvenKit.Forms
             chkDumpEmbedded.Checked = true;
             numThreads.Value = Environment.ProcessorCount;
             numThreads.Maximum = Environment.ProcessorCount;
-            statusController = new StatusController(dataStatus);
+            InitDataGrid();
         }
         private delegate void UpdateProgressBarDelegate(int processed);
         private void UpdateProgressBarStatic(int processed)
@@ -146,7 +164,6 @@ namespace WolvenKit.Forms
                 else
                     writer = new LoggerWriterSeparate(Files, loggerOptions, cr2wOptions);
 
-                writer.EventOnProcessed += UpdateProgressBarStatic;
                 await writer.PrepareDump();
 
                 Cancel.Dispose();
@@ -249,6 +266,13 @@ namespace WolvenKit.Forms
 
     internal class StatusController
     {
+        public delegate void StatusDelegate(int count);
+
+        public StatusDelegate OnCountUpdated;
+        public StatusDelegate OnProcessedUpdated;
+        public StatusDelegate OnSkippedUpdated;
+        public StatusDelegate OnNonCR2WUpdated;
+        public StatusDelegate OnExceptionsUpdated;
         private int _count;
         public int Count
         {
@@ -256,7 +280,7 @@ namespace WolvenKit.Forms
             set
             {
                 _count = value;
-                UpdateCell(0, _count);
+                OnCountUpdated?.Invoke(_count);
             }
         }
         private int _processed;
@@ -266,7 +290,7 @@ namespace WolvenKit.Forms
             set
             {
                 _processed = value;
-                UpdateCell(1, _processed);
+                OnProcessedUpdated?.Invoke(_processed);
             }
         }
         private int _skipped;
@@ -276,7 +300,7 @@ namespace WolvenKit.Forms
             set
             {
                 _skipped = value;
-                UpdateCell(2, _skipped);
+                OnSkippedUpdated?.Invoke(_skipped);
             }
         }
         private int _nonCR2W;
@@ -286,7 +310,7 @@ namespace WolvenKit.Forms
             set
             {
                 _nonCR2W = value;
-                UpdateCell(3, _nonCR2W);
+                OnNonCR2WUpdated?.Invoke(_nonCR2W);
 ;
             }
         }
@@ -297,22 +321,8 @@ namespace WolvenKit.Forms
             set
             {
                 _exceptions = value;
-                UpdateCell(4, _exceptions);
+                OnExceptionsUpdated?.Invoke(_exceptions);
             }
-        }
-        private DataGridView Grid { get; }
-        private void UpdateCell(int index, int value)
-        {
-            Grid.Rows[0].Cells[index].Value = value;
-        }
-        internal StatusController(DataGridView grid)
-        {
-            Grid = grid;
-            object[] row = {0, 0, 0, 0, 0};
-            if (Grid.Rows.Count == 0)
-                Grid.Rows.Add(row);
-            else
-                Grid.Rows[0].SetValues(row);
         }
     }
     internal class LoggerWriterSeparate : LoggerWriter
@@ -338,9 +348,8 @@ namespace WolvenKit.Forms
                     string fileBaseName = Path.GetFileName(fileName);
 
                     if (WriterData.CreateFolders)
-                    {
-                        // Recreate the file structure of the source folder in the destination folder.
-                        // Strip the sourcepath from the start of the filename, then create the remaining folders
+                    {   // Recreate the file structure of the source folder in the destination folder.
+                        // Strip sourcePath from the start of the filename, strip filename from end, then create the remaining folders.
                         fileName.ReplaceFirst(WriterData.SourcePath, "", out var replacedSourcePath);
                         var i = replacedSourcePath.LastIndexOf(fileBaseName, StringComparison.Ordinal);
                         outputDestination = WriterData.OutputLocation + replacedSourcePath.Substring(0, i);
@@ -368,7 +377,7 @@ namespace WolvenKit.Forms
                             WriterData.Status.Exceptions += dumpResult.exceptions ? 1 : 0;
                         }
 
-                        EventOnProcessed(++WriterData.Status.Processed);
+                        WriterData.Status.Processed++;
                     }
                     else
                         WriterData.Status.Skipped++;
@@ -413,13 +422,7 @@ namespace WolvenKit.Forms
             WriterData = writerData;
             CR2WOptions = cr2wOptions;
         }
-
         public abstract Task PrepareDump();
-
-        public delegate void OnProcessedDelegate(int count);
-
-        public OnProcessedDelegate EventOnProcessed;
-
         protected async Task<(bool nonCR2W, bool exceptions)> Dump(StreamWriter streamDestination, string fileName)
         {
             LoggerOutputFile outputFile = new LoggerOutputFile(streamDestination, WriterData.PrefixFileName,
@@ -434,7 +437,7 @@ namespace WolvenKit.Forms
                 if (cf.ExceptionCount > 0)
                     gotExceptions = true;
             }
-            catch (FormatException fe)
+            catch (FormatException)
             {
                 string msg = fileName + ": Not a valid CR2W file, or file is damaged.";
                 Console.WriteLine(msg);
