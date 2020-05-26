@@ -273,6 +273,7 @@ namespace WolvenKit.Forms
         public StatusDelegate OnSkippedUpdated;
         public StatusDelegate OnNonCR2WUpdated;
         public StatusDelegate OnExceptionsUpdated;
+
         private int _count;
         public int Count
         {
@@ -311,7 +312,6 @@ namespace WolvenKit.Forms
             {
                 _nonCR2W = value;
                 OnNonCR2WUpdated?.Invoke(_nonCR2W);
-;
             }
         }
         private int _exceptions;
@@ -327,6 +327,7 @@ namespace WolvenKit.Forms
     }
     internal class LoggerWriterSeparate : LoggerWriter
     {
+        private readonly object statusLock = new object();
         internal LoggerWriterSeparate(List<string> files, LoggerWriterData writerData, LoggerCR2WOptions cr2wOptions)
             : base(files, writerData, cr2wOptions) { }
         public override async Task PrepareDump()
@@ -373,14 +374,19 @@ namespace WolvenKit.Forms
                         using (StreamWriter streamDestination = new StreamWriter(outputDestination, false))
                         {
                             var dumpResult = await Dump(streamDestination, fileName);
-                            WriterData.Status.NonCR2W += dumpResult.nonCR2W ? 1 : 0;
-                            WriterData.Status.Exceptions += dumpResult.exceptions ? 1 : 0;
+                            lock (statusLock)
+                            {
+                                if (dumpResult.nonCR2W)
+                                    WriterData.Status.NonCR2W++;
+                                if (dumpResult.exceptions)
+                                    WriterData.Status.Exceptions++;
+                                WriterData.Status.Processed++;
+                            }
                         }
-
-                        WriterData.Status.Processed++;
                     }
                     else
-                        WriterData.Status.Skipped++;
+                        lock (statusLock)
+                            WriterData.Status.Skipped++;
                 });
             }
             catch (OperationCanceledException)
@@ -489,7 +495,7 @@ namespace WolvenKit.Forms
         }
     }
 
-    internal struct LoggerWriterData
+    internal class LoggerWriterData
     {
         public CancellationToken CancelToken { get; set; }
         public StatusController Status { get; set; }
