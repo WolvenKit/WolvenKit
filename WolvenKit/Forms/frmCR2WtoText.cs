@@ -706,7 +706,7 @@ namespace WolvenKit.Forms
                 }
             }
         }
-        public VariableListNode GetNodes(CR2WExportWrapper chunk)
+        private VariableListNode GetNodes(CR2WExportWrapper chunk)
         {
             return frmChunkProperties.AddListViewItems(chunk);
         }
