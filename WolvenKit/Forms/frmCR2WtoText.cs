@@ -17,7 +17,7 @@ namespace WolvenKit.Forms
     {
         private readonly string[] extExclude = { ".txt", ".json", ".csv", ".xml", ".jpg", ".png", ".buffer", ".navgraph", ".navtile",
                                                  ".usm", ".wem", ".dds", ".bnk", ".xbm", ".bundle", ".w3strings", ".store", ".navconfig",
-                                                 ".srt", ".naviobstacles", ".navmesh", ".sav", ".subs"};
+                                                 ".srt", ".naviobstacles", ".navmesh", ".sav", ".subs" };
         private StatusController statusController;
         private readonly List<string> Files = new List<string>();
 
@@ -82,7 +82,7 @@ namespace WolvenKit.Forms
             numThreads.Value = Environment.ProcessorCount;
             numThreads.Maximum = Environment.ProcessorCount;
         }
-        // Delegates for thread-safe updating of progress bar and console textbox.
+        // Delegates for cross-thread updating of progress bar and console textbox.
         private delegate void UpdateProgressBarDelegate(int processed);
         private delegate void LogLineDelegate(string line);
         private void UpdateProgressBarStatic(int processed)
@@ -142,17 +142,17 @@ namespace WolvenKit.Forms
             ControlsEnabledDuringRun(false);
             prgProgressBar.Value = 0;
             prgProgressBar.Visible = true;
-            _running = true;
             txtLog.Clear();
             LogLine("Dump started.");
+            _running = true;
 
             await Task.Run(DoRun);
 
+            _running = false;
+            _stopping = false;
             LogLine("Dump finished.");
             prgProgressBar.Visible = false;
             ControlsEnabledDuringRun(true);
-            _running = false;
-            _stopping = false;
         }
         private async Task DoRun()
         {
@@ -170,42 +170,42 @@ namespace WolvenKit.Forms
                     DumpSDB = chkDumpSDB.Checked,
                 };
 
-                Cancel = new CancellationTokenSource();
-
-                var loggerOptions = new LoggerWriterData
+                using (Cancel = new CancellationTokenSource())
                 {
-                    CancelToken = Cancel.Token,
-                    Status = statusController,
-                    OutputSingleFile = this.OutputSingleFile,
-                    NumThreads = (int) numThreads.Value,
-                    SourcePath = sourcePath,
-                    OutputLocation = txtOutputDestination.Text,
-                    CreateFolders = chkCreateFolders.Checked,
-                    PrefixFileName = chkPrefixFileName.Checked,
-                    OverwriteFiles = radExistingOverwrite.Checked
-                };
+                    var loggerOptions = new LoggerWriterData
+                    {
+                        CancelToken = Cancel.Token,
+                        Status = statusController,
+                        OutputSingleFile = this.OutputSingleFile,
+                        NumThreads = (int) numThreads.Value,
+                        SourcePath = sourcePath,
+                        OutputLocation = txtOutputDestination.Text,
+                        CreateFolders = chkCreateFolders.Checked,
+                        PrefixFileName = chkPrefixFileName.Checked,
+                        OverwriteFiles = radExistingOverwrite.Checked
+                    };
 
-                LoggerWriter writer;
+                    LoggerWriter writer;
 
-                if (OutputSingleFile)
-                    writer = new LoggerWriterSingle(Files, loggerOptions, cr2wOptions);
-                else
-                    writer = new LoggerWriterSeparate(Files, loggerOptions, cr2wOptions);
+                    if (OutputSingleFile)
+                        writer = new LoggerWriterSingle(Files, loggerOptions, cr2wOptions);
+                    else
+                        writer = new LoggerWriterSeparate(Files, loggerOptions, cr2wOptions);
 
-                writer.OnExceptionFile += (fileName, msg) =>
-                {
-                    var fileNameNoSource = LoggerWriter.FileNameNoSourcePath(fileName, sourcePath);
-                    msg = msg.Replace("\r\n", " ");
-                    LogLineStatic($"Exception: {fileNameNoSource} : {msg}");
-                };
-                writer.OnNonCR2WFile += fileName =>
-                {
-                    var fileNameNoSource = LoggerWriter.FileNameNoSourcePath(fileName, sourcePath);
-                    LogLineStatic($"Non CR2W file: {fileNameNoSource}");
-                };
+                    writer.OnExceptionFile += (fileName, msg) =>
+                    {
+                        var fileNameNoSource = LoggerWriter.FileNameNoSourcePath(fileName, sourcePath);
+                        msg = msg.Replace("\r\n", " ");
+                        LogLineStatic($"Exception: {fileNameNoSource} : {msg}");
+                    };
+                    writer.OnNonCR2WFile += fileName =>
+                    {
+                        var fileNameNoSource = LoggerWriter.FileNameNoSourcePath(fileName, sourcePath);
+                        LogLineStatic($"Non CR2W file: {fileNameNoSource}");
+                    };
 
-                await writer.StartDump();
-                Cancel.Dispose();
+                    await writer.StartDump();
+                }
             }
         }
         private void CheckEnableRunButton()
@@ -223,20 +223,18 @@ namespace WolvenKit.Forms
                 LogLine("Reading source folder...");
                 await Task.Run(() =>
                 {
-                    int fileCounter = 0;
                     foreach (var file in Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories))
                     {
                         if (!extExclude.Any(x => file.EndsWith(x, StringComparison.OrdinalIgnoreCase)))
                         {
                             Files.Add(file);
-                            statusController.Count = ++fileCounter;
+                            statusController.Count++;
                         }
                         else
                             statusController.NonCR2W++;
                     }
                 });
 
-                statusController.Count = Files.Count();
                 ResetProgressBar(Files.Count());
 
                 LogLine("Finished reading source folder.");
