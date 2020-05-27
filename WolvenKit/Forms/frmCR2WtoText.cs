@@ -117,10 +117,13 @@ namespace WolvenKit.Forms
         private void btnRun_Click(object sender, EventArgs e)
         {
             if (!_running)
-            {
                 StartRun();
-            }
-            else if (!_stopping)
+            else
+                StopRun();
+        }
+        private void StopRun()
+        {
+            if (!_stopping)
             {
                 btnRun.Text = "Stopping...";
                 LogLineStatic("Stopping dump once in-process files complete.");
@@ -293,11 +296,23 @@ namespace WolvenKit.Forms
             numThreads.Enabled = radOutputModeSeparateFiles.Checked;
         }
         private void frmCR2WtoText_FormClosing(object sender, FormClosingEventArgs e)
-        {   // Don't allow form to close if dump is running.
-            e.Cancel = _running;
+        {   // If user clicks form close while dump is running, abort close and offer chance to cancel dump.
+            if (_running)
+            {
+                var msg = "A dump is running. Did you want to cancel this operation?";
+                var caption = "Cancel running dump?";
+                var icon = MessageBoxIcon.Exclamation;
+                var buttons = MessageBoxButtons.YesNo;
+
+                if (MessageBox.Show(msg, caption, buttons, icon) == DialogResult.Yes)
+                    StopRun();
+
+                e.Cancel = true;
+            }
+            else
+                e.Cancel = false;
         }
     }
-
     internal class StatusController
     {
         public delegate void StatusDelegate(int value);
