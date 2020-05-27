@@ -1,6 +1,7 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -50,7 +51,7 @@ namespace WolvenKit.Forms
         }
         private void InitDataGrid()
         {
-            object[] row = {0, 0, 0, 0, 0};
+            object[] row = {0, 0, 0, 0, 0, 0};
             if (dataStatus.Rows.Count == 0)
                 dataStatus.Rows.Add(row);
             else
@@ -59,12 +60,13 @@ namespace WolvenKit.Forms
         private void InitStatusController()
         {
             statusController = new StatusController();
-            statusController.OnCountUpdated += (x) => { UpdateStatusCell(0, x); };
-            statusController.OnProcessedUpdated += (x) => { UpdateStatusCell(1, x); };
+            statusController.OnTotalFilesUpdated += (x) => { UpdateStatusCell(0, x); };
+            statusController.OnNonCR2WUpdated += (x) => { UpdateStatusCell(1, x); };
+            statusController.OnMatchingUpdated += (x) => { UpdateStatusCell(2, x); };
+            statusController.OnProcessedUpdated += (x) => { UpdateStatusCell(3, x); };
             statusController.OnProcessedUpdated += UpdateProgressBarStatic;
-            statusController.OnSkippedUpdated += (x) => { UpdateStatusCell(2, x); };
-            statusController.OnNonCR2WUpdated += (x) => { UpdateStatusCell(3, x); };
-            statusController.OnExceptionsUpdated += (x) => { UpdateStatusCell(4, x); };
+            statusController.OnSkippedUpdated += (x) => { UpdateStatusCell(4, x); };
+            statusController.OnExceptionsUpdated += (x) => { UpdateStatusCell(5, x); };
         }
         private void UpdateStatusCell(int cell, int value)
         {
@@ -80,7 +82,7 @@ namespace WolvenKit.Forms
             chkDumpFCD.Checked = false;
             chkDumpEmbedded.Checked = true;
             numThreads.Value = Environment.ProcessorCount;
-            numThreads.Maximum = Environment.ProcessorCount;
+            numThreads.Maximum = Environment.ProcessorCount * 2;
         }
         // Delegates for cross-thread updating of progress bar and console textbox.
         private delegate void UpdateProgressBarDelegate(int processed);
@@ -126,7 +128,7 @@ namespace WolvenKit.Forms
             if (!_stopping)
             {
                 btnRun.Text = "Stopping...";
-                LogLineStatic("Stopping dump once in-process files complete.");
+                LogLineStatic("Stopping dump once in-progress files complete.");
                 Cancel.Cancel();
                 _stopping = true;
             }
@@ -142,15 +144,14 @@ namespace WolvenKit.Forms
             ControlsEnabledDuringRun(false);
             prgProgressBar.Value = 0;
             prgProgressBar.Visible = true;
-            txtLog.Clear();
-            LogLine("Dump started.");
+            LogLine($"Dump starting ({txtPath.Text})");
             _running = true;
 
             await Task.Run(DoRun);
 
             _running = false;
             _stopping = false;
-            LogLine("Dump finished.");
+            LogLine($"Dump finished ({txtPath.Text})");
             prgProgressBar.Visible = false;
             ControlsEnabledDuringRun(true);
         }
@@ -205,6 +206,13 @@ namespace WolvenKit.Forms
                     };
 
                     await writer.StartDump();
+
+                    var statusLogMsg = $"Dump stats: Processed: {statusController.Processed}, " +
+                                             $"Skipped: {statusController.Skipped}, " + 
+                                             $"Non CR2W: {statusController.NonCR2W}, " + 
+                                             $"Exceptions in/while reading: {statusController.Exceptions}. " + 
+                                             $"Not processed: {statusController.Matching - statusController.Processed - statusController.Skipped}.";
+                    LogLineStatic(statusLogMsg);
                 }
             }
         }
@@ -228,7 +236,7 @@ namespace WolvenKit.Forms
                         if (!extExclude.Any(x => file.EndsWith(x, StringComparison.OrdinalIgnoreCase)))
                         {
                             Files.Add(file);
-                            statusController.Count++;
+                            statusController.Matching++;
                         }
                         else
                             statusController.NonCR2W++;
@@ -239,8 +247,8 @@ namespace WolvenKit.Forms
 
                 LogLine("Finished reading source folder.");
                 pnlControls.Enabled = true;
-                CheckEnableRunButton();
             }
+            CheckEnableRunButton();
         }
         private void ResetProgressBar(int filesCount)
         {
@@ -297,14 +305,16 @@ namespace WolvenKit.Forms
         {   // If user clicks form close while dump is running, abort close and offer chance to cancel dump.
             if (_running)
             {
-                var msg = "A dump is running. Did you want to cancel this operation?";
-                var caption = "Cancel running dump?";
-                var icon = MessageBoxIcon.Exclamation;
-                var buttons = MessageBoxButtons.YesNo;
+                if (!_stopping)
+                {
+                    var msg = "A dump is running. Did you want to cancel this operation?";
+                    var caption = "Cancel running dump?";
+                    var icon = MessageBoxIcon.Exclamation;
+                    var buttons = MessageBoxButtons.YesNo;
 
-                if (MessageBox.Show(msg, caption, buttons, icon) == DialogResult.Yes)
-                    StopRun();
-
+                    if (MessageBox.Show(msg, caption, buttons, icon) == DialogResult.Yes)
+                        StopRun();
+                }
                 e.Cancel = true;
             }
             else
@@ -314,27 +324,44 @@ namespace WolvenKit.Forms
     internal class StatusController
     {
         public delegate void StatusDelegate(int value);
-        public StatusDelegate OnCountUpdated;
+        public StatusDelegate OnTotalFilesUpdated;
+        public StatusDelegate OnNonCR2WUpdated;
+        public StatusDelegate OnMatchingUpdated;
         public StatusDelegate OnProcessedUpdated;
         public StatusDelegate OnSkippedUpdated;
-        public StatusDelegate OnNonCR2WUpdated;
         public StatusDelegate OnExceptionsUpdated;
-        public void UpdateAll(int count, int processed, int skipped, int nonCR2W, int exceptions)
+        public void UpdateAll(int nonCR2W, int matching, int processed, int skipped, int exceptions)
         {
-            Count = count;
+            NonCR2W = nonCR2W;
+            Matching = matching;
             Processed = processed;
             Skipped = skipped;
-            NonCR2W = nonCR2W;
             Exceptions = exceptions;
         }
-        private int _count;
-        public int Count
+        public int TotalFiles
         {
-            get => _count;
+            get => Matching + NonCR2W;
+        }
+        private int _nonCR2W;
+        public int NonCR2W
+        {
+            get => _nonCR2W;
             set
             {
-                _count = value;
-                OnCountUpdated?.Invoke(_count);
+                _nonCR2W = value;
+                OnNonCR2WUpdated?.Invoke(_nonCR2W);
+                OnTotalFilesUpdated?.Invoke(TotalFiles);
+            }
+        }
+        private int _matching;
+        public int Matching
+        {
+            get => _matching;
+            set
+            {
+                _matching = value;
+                OnMatchingUpdated?.Invoke(_matching);
+                OnTotalFilesUpdated?.Invoke(TotalFiles);
             }
         }
         private int _processed;
@@ -355,16 +382,6 @@ namespace WolvenKit.Forms
             {
                 _skipped = value;
                 OnSkippedUpdated?.Invoke(_skipped);
-            }
-        }
-        private int _nonCR2W;
-        public int NonCR2W
-        {
-            get => _nonCR2W;
-            set
-            {
-                _nonCR2W = value;
-                OnNonCR2WUpdated?.Invoke(_nonCR2W);
             }
         }
         private int _exceptions;
@@ -523,8 +540,9 @@ namespace WolvenKit.Forms
                 string msg = fileName + ": Not a valid CR2W file, or file is damaged.";
                 Console.WriteLine(msg);
                 lock (statusLock)
-                {
+                {   // File wasn't CR2W, so move its count from Matching to NonCR2W.
                     WriterData.Status.NonCR2W++;
+                    WriterData.Status.Matching--;
                 }
                 var fileNameNoSourcePath = FileNameNoSourcePath(fileName, WriterData.SourcePath);
                 OnNonCR2WFile?.Invoke(fileNameNoSourcePath);
@@ -696,7 +714,7 @@ namespace WolvenKit.Forms
                     }
                     catch (FormatException)
                     {
-                        Console.WriteLine(node.Name + ": Buffer or 'array:2,0,Uint8' was not a CR2W file.");
+                        // Embedded buffer/array:2,0,Uint8 was not a CR2W file. Do nothing.
                     }
                     catch (Exception e)
                     {

@@ -60,12 +60,13 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.prgProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.dataStatus = new System.Windows.Forms.DataGridView();
-            this.colSourceFolderFiles = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txtLog = new System.Windows.Forms.TextBox();
+            this.colAllFiles = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colNonCR2W = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colMatchingFiles = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colProcessedFiles = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colSkipped = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colNonCR2W = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colExceptions = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.txtLog = new System.Windows.Forms.TextBox();
             this.pnlControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numThreads)).BeginInit();
             this.grpExistingFiles.SuspendLayout();
@@ -399,10 +400,11 @@
             this.dataStatus.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataStatus.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataStatus.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colSourceFolderFiles,
+            this.colAllFiles,
+            this.colNonCR2W,
+            this.colMatchingFiles,
             this.colProcessedFiles,
             this.colSkipped,
-            this.colNonCR2W,
             this.colExceptions});
             this.dataStatus.Location = new System.Drawing.Point(195, 528);
             this.dataStatus.MultiSelect = false;
@@ -434,55 +436,6 @@
             this.dataStatus.TabIndex = 26;
             this.dataStatus.TabStop = false;
             // 
-            // colSourceFolderFiles
-            // 
-            this.colSourceFolderFiles.Frozen = true;
-            this.colSourceFolderFiles.HeaderText = "Files in source folder";
-            this.colSourceFolderFiles.Name = "colSourceFolderFiles";
-            this.colSourceFolderFiles.ReadOnly = true;
-            this.colSourceFolderFiles.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.colSourceFolderFiles.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colSourceFolderFiles.Width = 84;
-            // 
-            // colProcessedFiles
-            // 
-            this.colProcessedFiles.Frozen = true;
-            this.colProcessedFiles.HeaderText = "Processed Files";
-            this.colProcessedFiles.Name = "colProcessedFiles";
-            this.colProcessedFiles.ReadOnly = true;
-            this.colProcessedFiles.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.colProcessedFiles.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colProcessedFiles.Width = 84;
-            // 
-            // colSkipped
-            // 
-            this.colSkipped.Frozen = true;
-            this.colSkipped.HeaderText = "Skipped Files";
-            this.colSkipped.Name = "colSkipped";
-            this.colSkipped.ReadOnly = true;
-            this.colSkipped.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.colSkipped.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colSkipped.Width = 84;
-            // 
-            // colNonCR2W
-            // 
-            this.colNonCR2W.Frozen = true;
-            this.colNonCR2W.HeaderText = "Non-CR2W Files";
-            this.colNonCR2W.Name = "colNonCR2W";
-            this.colNonCR2W.ReadOnly = true;
-            this.colNonCR2W.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.colNonCR2W.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colNonCR2W.Width = 84;
-            // 
-            // colExceptions
-            // 
-            this.colExceptions.Frozen = true;
-            this.colExceptions.HeaderText = "Files with exceptions";
-            this.colExceptions.Name = "colExceptions";
-            this.colExceptions.ReadOnly = true;
-            this.colExceptions.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.colExceptions.Width = 84;
-            // 
             // txtLog
             // 
             this.txtLog.BackColor = System.Drawing.SystemColors.Window;
@@ -495,6 +448,66 @@
             this.txtLog.TabIndex = 27;
             this.txtLog.TabStop = false;
             this.txtLog.WordWrap = false;
+            // 
+            // colAllFiles
+            // 
+            this.colAllFiles.Frozen = true;
+            this.colAllFiles.HeaderText = "All Files";
+            this.colAllFiles.Name = "colAllFiles";
+            this.colAllFiles.ReadOnly = true;
+            this.colAllFiles.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.colAllFiles.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colAllFiles.Width = 70;
+            // 
+            // colNonCR2W
+            // 
+            this.colNonCR2W.Frozen = true;
+            this.colNonCR2W.HeaderText = "Non-CR2W Files";
+            this.colNonCR2W.Name = "colNonCR2W";
+            this.colNonCR2W.ReadOnly = true;
+            this.colNonCR2W.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.colNonCR2W.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colNonCR2W.Width = 70;
+            // 
+            // colMatchingFiles
+            // 
+            this.colMatchingFiles.Frozen = true;
+            this.colMatchingFiles.HeaderText = "Matching Files";
+            this.colMatchingFiles.Name = "colMatchingFiles";
+            this.colMatchingFiles.ReadOnly = true;
+            this.colMatchingFiles.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.colMatchingFiles.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colMatchingFiles.Width = 70;
+            // 
+            // colProcessedFiles
+            // 
+            this.colProcessedFiles.Frozen = true;
+            this.colProcessedFiles.HeaderText = "Processed Files";
+            this.colProcessedFiles.Name = "colProcessedFiles";
+            this.colProcessedFiles.ReadOnly = true;
+            this.colProcessedFiles.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.colProcessedFiles.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colProcessedFiles.Width = 70;
+            // 
+            // colSkipped
+            // 
+            this.colSkipped.Frozen = true;
+            this.colSkipped.HeaderText = "Skipped Files";
+            this.colSkipped.Name = "colSkipped";
+            this.colSkipped.ReadOnly = true;
+            this.colSkipped.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.colSkipped.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colSkipped.Width = 70;
+            // 
+            // colExceptions
+            // 
+            this.colExceptions.Frozen = true;
+            this.colExceptions.HeaderText = "Files with exceptions";
+            this.colExceptions.Name = "colExceptions";
+            this.colExceptions.ReadOnly = true;
+            this.colExceptions.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.colExceptions.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colExceptions.Width = 70;
             // 
             // frmCR2WtoText
             // 
@@ -559,11 +572,12 @@
         private System.Windows.Forms.DataGridView dataStatus;
         private System.Windows.Forms.Label labNumThreads;
         private System.Windows.Forms.NumericUpDown numThreads;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colSourceFolderFiles;
+        private System.Windows.Forms.TextBox txtLog;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colAllFiles;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colNonCR2W;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colMatchingFiles;
         private System.Windows.Forms.DataGridViewTextBoxColumn colProcessedFiles;
         private System.Windows.Forms.DataGridViewTextBoxColumn colSkipped;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colNonCR2W;
         private System.Windows.Forms.DataGridViewTextBoxColumn colExceptions;
-        private System.Windows.Forms.TextBox txtLog;
     }
 }
