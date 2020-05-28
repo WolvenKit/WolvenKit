@@ -168,7 +168,7 @@ namespace WolvenKit
         }
         void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            m_frmProgress.SetProgressBarValue(e.ProgressPercentage, e.UserState);
+            m_frmProgress?.SetProgressBarValue(e.ProgressPercentage, e.UserState);
         }
         frmCR2WDocument HACK_bwform = null;
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -2485,6 +2485,11 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 renderW2meshToolStripMenuItem.Tag = true;
                 renderW2meshToolStripMenuItem.Image = Properties.Resources.ui_check_box;
             }
+        }
+        private void cR2WToTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var fctt = new frmCR2WtoText();
+            fctt.ShowDialog();
         }
 
         private void RecordStepsToReproduceBugToolStripMenuItem_Click(object sender, EventArgs e)

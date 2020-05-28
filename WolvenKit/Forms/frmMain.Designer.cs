@@ -100,6 +100,7 @@ namespace WolvenKit
             this.menuCreatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dumpFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renderW2meshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cR2WToTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.experimentalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.terrainViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.verifyFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -669,6 +670,7 @@ namespace WolvenKit
             this.menuCreatorToolStripMenuItem,
             this.dumpFileToolStripMenuItem,
             this.renderW2meshToolStripMenuItem,
+            this.cR2WToTextToolStripMenuItem,
             this.experimentalToolStripMenuItem,
             this.verifyFileToolStripMenuItem,
             this.toolStripSeparator5,
@@ -733,6 +735,14 @@ namespace WolvenKit
             this.renderW2meshToolStripMenuItem.Tag = "false";
             this.renderW2meshToolStripMenuItem.Text = "Render w2mesh";
             this.renderW2meshToolStripMenuItem.Click += new System.EventHandler(this.renderW2meshToolStripMenuItem_Click);
+            // 
+            // cR2WToTextToolStripMenuItem
+            // 
+            this.cR2WToTextToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.TextFileIcon64px;
+            this.cR2WToTextToolStripMenuItem.Name = "cR2WToTextToolStripMenuItem";
+            this.cR2WToTextToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.cR2WToTextToolStripMenuItem.Text = "CR2W To Text";
+            this.cR2WToTextToolStripMenuItem.Click += new System.EventHandler(this.cR2WToTextToolStripMenuItem_Click);
             // 
             // experimentalToolStripMenuItem
             // 
@@ -1181,5 +1191,6 @@ namespace WolvenKit
         private ToolStripButton toolStripButtonImportUtil;
         private ToolStripButton toolStripButtonRadishUtil;
         private ToolStripMenuItem MenuLabelProject;
+        private ToolStripMenuItem cR2WToTextToolStripMenuItem;
     }
 }

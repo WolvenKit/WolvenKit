@@ -91,7 +91,7 @@ namespace WolvenKit
             return expandedSomething;
         }
 
-        private VariableListNode AddListViewItems(IEditableVariable v, VariableListNode parent = null,
+        internal static VariableListNode AddListViewItems(IEditableVariable v, VariableListNode parent = null,
             int arrayindex = 0)
         {
             var node = new VariableListNode()
