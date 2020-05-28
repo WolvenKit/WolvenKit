@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Threading.Tasks;
 using CommandLine;
+using WolvenKit.App;
 
 namespace WolvenKit
 {
@@ -87,31 +88,32 @@ namespace WolvenKit
         
         public void ApplyCustomTheme()
         {
-            this.txOutput.BackColor = MainController.Get().GetTheme().ColorPalette.ToolWindowTabSelectedInactive.Background;
-            this.txOutput.ForeColor = MainController.Get().GetTheme().ColorPalette.CommandBarMenuDefault.Text;
+            this.txOutput.BackColor = UIController.Get().GetTheme().ColorPalette.ToolWindowTabSelectedInactive.Background;
+            this.txOutput.ForeColor = UIController.Get().GetTheme().ColorPalette.CommandBarMenuDefault.Text;
         }
 
-        private void txOutput_KeyDown(object sender, KeyEventArgs e)
+        private async void txOutput_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
                 string line = txOutput.Lines.Last();
                 lastCommand = line;
-                AddText("\r\n", Logtype.Important);
+                AddTextStatic("\r\n", Logtype.Important);
 
                 if (!string.IsNullOrEmpty(line))
                 {
-                    Parse(line.Split(' '));
+                    //await Task.Run(() => Parse(line.Split(' ')));
+                    await Task.Run(() => Parse(line.Split(' ')));
                 }
 
             }
             if (e.KeyCode == Keys.Up)
             {
-                AddText(lastCommand, Logtype.Important);
+                AddTextStatic(lastCommand, Logtype.Important);
             }
         }
 
-        internal async Task Parse(string[] _args)
+        internal async Task /*void*/ Parse(string[] _args)
         {
             using (var sw = new StringWriter())
             {
@@ -119,26 +121,21 @@ namespace WolvenKit
                     .ParseArguments<BulkEditOptions>(_args)
                     .MapResult(
                         async (BulkEditOptions opts) => await RunBulkEdit(opts),
-                        //errs => 1,
-                        _ => Task.FromResult(1));
+                        _ => Task.FromResult(1) /*1*/);
 
-                AddText(sw.ToString(), Logtype.Important);
+                AddTextStatic(sw.ToString(), Logtype.Important);
             }
         }
 
 
-        private async Task<int> RunBulkEdit(BulkEditOptions opts)
+        private async Task<int> /*int*/ RunBulkEdit(BulkEditOptions opts)
         {
-            return await Task.Run(() => RunBulkEdit(opts.ext, opts.chunk, opts.var, opts.type, opts.val));
+            return await Task.Run(() => RunBulkEditInternal(opts));
+            //return RunBulkEdit(opts.ext, opts.chunk, opts.var, opts.type, opts.val);
         }
 
 
-        private async Task<int> RunBulkEdit(
-           string ext,
-           string chunk,
-           string var,
-           string type,
-           string val)
+        private async Task<int> /*int*/ RunBulkEditInternal(BulkEditOptions opts)
         {
 
             List<string> files = MainController.Get().ActiveMod.Files;
@@ -146,7 +143,7 @@ namespace WolvenKit
             foreach (var path in files)
             {
                 var fullpath = Path.Combine(MainController.Get().ActiveMod.FileDirectory, path);
-                if (ext != null && !Path.GetExtension(fullpath).Contains(ext))
+                if (opts.ext != null && !Path.GetExtension(fullpath).Contains(opts.ext))
                     continue;
 
 
@@ -157,10 +154,11 @@ namespace WolvenKit
                     cr2w = new CR2WFile(reader);
                     fs.Close();
                 }
-                var task = Task.Run(() => EditVariablesInFile(path, cr2w, chunk, var, type, val));
-                await task.ContinueWith(antecedent =>
+                //EditVariablesInFile(path, cr2w, chunk, var, type, val);
+                await Task.Run(() => EditVariablesInFile(path, cr2w, opts))
+                    .ContinueWith(antecedent =>
                 {
-                    using (var fs = new FileStream(fullpath, FileMode.Open, FileAccess.ReadWrite))
+                    using (var fs = new FileStream($"{fullpath}", FileMode.Create, FileAccess.ReadWrite))
                     using (var writer = new BinaryWriter(fs))
                     {
                         cr2w.Write(writer);
@@ -171,26 +169,24 @@ namespace WolvenKit
             return 0;
         }
 
-        private async Task EditVariablesInFile(string path,
+        private void EditVariablesInFile(string path,
             CR2WFile file,
-            string chunk,
-            string var,
-            string type,
-            string val
+            BulkEditOptions opts
             )
         {
             if (file == null)
                 return;
-            if (chunk != null && !file.chunks.Any(_ => chunk.Contains(_.Type)))
+            if (opts.chunk != null && !file.chunks.Any(_ => opts.chunk.Contains(_.Type)))
                 return;
 
             // get chunks that match chunkname
-            List<CR2WExportWrapper> chunks = chunk != null ? file.chunks.Where(_ => chunk.Contains(_.Type)).ToList() : file.chunks;
+            List<CR2WExportWrapper> chunks = opts.chunk != null ? file.chunks.Where(_ => opts.chunk.Contains(_.Type)).ToList() : file.chunks;
 
             foreach (CR2WExportWrapper c in chunks)
             {
                 EditVariables(c.data);
             }
+            AddTextStatic($"Finished {path}.\r\n", Logtype.Success);
 
             // local 
             void EditVariables(CVariable vec)
@@ -198,15 +194,17 @@ namespace WolvenKit
                 if (vec == null)
                     return;
 
-                TryEditVariable(vec);
+                TryEditVariable(vec, vec.Name);
 
                 //check children
                 FieldInfo[] fields = vec.GetType().GetFields();
                 foreach (var f in fields)
                 {
+                    // exclude the cr2w parent variable 
                     if (f.Name == "cr2w")
                         continue;
 
+                    // edit lists
                     var v = f.GetValue(vec);
                     if (v is IList && v.GetType().IsGenericType)
                     {
@@ -216,57 +214,93 @@ namespace WolvenKit
                                 EditVariables(listitem as CVariable);
                         }
                     }
-                    if (v is CVariable)
+                    if (v is CVariable variable)
                     {
-                        TryEditVariable(v as CVariable);
-                        // check if variable has more children
-                        EditVariables(((CVariable)v));
+                        if (!TryEditVariable(v as CVariable, vec.Name))
+                            EditVariables(variable);      // check if variable has more children
                     }
                 }
             }
 
-            void TryEditVariable(CVariable v)
+            bool TryEditVariable(CVariable v, string parentname)
             {
                 if (v == null)
-                    return;
-                // is a match
-                if (((CVariable)v).Name == var)
+                    return false;
+                // is a match for name
+                if (v.Name == opts.var)
                 {
                     // is not of type
-                    if (type != null && ((CVariable)v).Type != type)
-                    {
-                        return;
-                    }
+                    if (opts.type != null && v.Type != opts.type)
+                        return false;
+                    // exclude values
+                    if (opts.exc != null && opts.exc.Count() > 0 && opts.exc.Contains(v.ToString()))
+                        return false;
+                    if (opts.inc != null && opts.inc.Count() > 0 && !opts.inc.Contains(v.ToString()))
+                        return false;
                     // edit value
-                    ((CVariable)v).SetValue(val);
-                    AddTextStatic($"Succesfully edited a variable in {path}.\r\n", Logtype.Success);
+                    try
+                    {
+                        v.SetValue(opts.val);
+                        AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal);
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        bool errors;
+                        bool.TryParse(opts.err, out errors);
+                        if (errors)
+                            AddTextStatic($"Some parsing error: {ex.Message}.\r\n", Logtype.Error);
+                        return false;
+                    }
+                    
                 }
+                return false;
             }
 
         }
     }
 
-    [Verb("bulkedit", HelpText = "Bulk edit cr2w files.")]
+    [Verb("bulkedit", HelpText = "Bulk edit cr2w files. " +
+        "Example use: -v 9999 -n autohidedistance -c CMesh -t Uint16 --err=true --exc=0,1029")]
     class BulkEditOptions
     {
-
-        [Option(HelpText = "Specify the file extension to edit.", Required = false)]
-        public string ext { get; set; }
-
-        [Option(HelpText = "Specify the chunk name.", Required = false)]
-        public string chunk { get; set; }
-
-
-        [Option(HelpText = "Specify the variable name.", Required = true)]
+        [Option('n', HelpText = "Specify the variable name. " +
+            "Example: -n autohidedistance", Required = true)]
         public string var { get; set; }
 
-        [Option(HelpText = "Specify the variable type.", Required = false)]
-        public string type { get; set; }
-
-        [Option(HelpText = "Specify the new variable value.", Required = true)]
+        // Required
+        [Option('v', HelpText = "Specify the new variable value. " +
+            "Example: -v 9999", Required = true)]
         public string val { get; set; }
 
+        // Optional string
+        [Option('e', HelpText = "Specify the file extension to edit. " +
+            "Example: -e w2mesh", Required = false)]
+        public string ext { get; set; }
 
+        [Option('c', HelpText = "Specify the chunk name. Example: -c CMesh", Required = false)]
+        public string chunk { get; set; }
+
+        [Option('t', HelpText = "Specify the variable type. " +
+            "Available types are Bool, Uint64, Int64, Uint32, Int32, Uint16, Int16, Uint8, Int8" +
+            "Example: -t Uint16"
+            , Required = false)]
+        public string type { get; set; }
+
+        //[Option('p', HelpText = "Specify the parent name of the variable you want to edit.", Required = false)]
+        //public string parent { get; set; }
+
+        [Option(HelpText = "Verbose errors. " +
+            "Example: --err=true", Required = false)]
+        public string err { get; set; }
+
+        // Optional lists
+        [Option(Separator = ',', HelpText = "Exclude the following values. " +
+            "Example: --exc=0,64,1028,2053", Required = false)]
+        public IEnumerable<string> exc { get; set; }
+        [Option(Separator = ',', HelpText = "Include only the following values. " +
+            "Example: --inc=0,32,64", Required = false)]
+        public IEnumerable<string> inc { get; set; }
     }
 
 }

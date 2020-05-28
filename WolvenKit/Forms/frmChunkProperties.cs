@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.App;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Types;
@@ -395,7 +396,7 @@ namespace WolvenKit
         
         public void ApplyCustomTheme()
         {
-            var theme = MainController.Get().GetTheme();
+            var theme = UIController.Get().GetTheme();
 
             this.treeView.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
             this.treeView.AlternateRowBackColor = theme.ColorPalette.OverflowButtonHovered.Background;

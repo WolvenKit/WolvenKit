@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 using WolvenKit.W3Strings;
 
 namespace WolvenKit.W3Speech
@@ -80,14 +81,14 @@ namespace WolvenKit.W3Speech
             }
         }
 
-        public void Extract(string filename)
+        public void Extract(BundleFileExtractArgs e)
         {
             PageOFfset = cr2w_offs;
             ZSize = cr2w_size;
-            Extract(new FileStream(Path.ChangeExtension(filename, ".cr2w"), FileMode.Create));
+            Extract(new FileStream(Path.ChangeExtension(e.FileName, ".cr2w"), FileMode.Create));
             PageOFfset = wem_offs;
             ZSize = wem_size;
-            Extract(new FileStream(Path.ChangeExtension(filename, ".wem"), FileMode.Create));
+            Extract(new FileStream(Path.ChangeExtension(e.FileName, ".wem"), FileMode.Create));
         }
 
         public override string ToString()

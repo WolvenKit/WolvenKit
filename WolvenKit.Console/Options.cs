@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WolvenKit.Console
 {
-    
+
     [Verb("cache", HelpText = "Witcher 3 Cache IO.")]
     class CacheOptions
     {
@@ -20,5 +20,14 @@ namespace WolvenKit.Console
         [Option(HelpText = "Specify the bundle path.", Required = true)]
         public string path { get; set; }
     }
-    
+    [Verb("dumpXBM", HelpText = "Dumps xbm info from bundles.")]
+    class DumpXbmsOptions
+    {
+
+    }
+    [Verb("dumpDDS", HelpText = "Dumps dds info from texture caches.")]
+    class DumpDDSOptions
+    {
+
+    }
 }

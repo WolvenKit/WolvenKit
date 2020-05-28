@@ -1,5 +1,4 @@
 ﻿using RED.CRC32;
-using RED.FNV1A;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,6 +8,8 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Services;
 using WolvenKit.CR2W.Types;
 using WolvenKit.CR2W.Types.Utils;
 using WolvenKit.Utils;
@@ -35,11 +36,19 @@ namespace WolvenKit.CR2W
 
         public CR2WFile(BinaryReader file)
         {
+            Logger = new LoggerService(); //dummy
             Read(file);
             //m_filePath = 
         }
-        public CR2WFile(byte[] data)
+        public CR2WFile(BinaryReader file, LoggerService logger)
         {
+            Logger = logger;
+            Read(file);
+            //m_filePath = 
+        }
+        public CR2WFile(byte[] data, LoggerService logger)
+        {
+            Logger = logger;
             using (var ms = new MemoryStream(data))
             using (var br = new BinaryReader(ms))
             {
@@ -49,6 +58,7 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Fields
+        
         // constants
         private const uint MAGIC = 0x57325243;
         private const uint DEADBEEF = 0xDEADBEEF;
@@ -69,6 +79,8 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Properties
+        public LoggerService Logger { get; set; }
+
         // Tables
         public List<CR2WNameWrapper> names { get; set; }
         public List<CR2WImportWrapper> imports { get; set; }
@@ -121,6 +133,7 @@ namespace WolvenKit.CR2W
             m_stream = file.BaseStream;
 
             #region Read Headers
+            Logger.LogProgress(1, "Reading headers...");
             // read file header
             var id = ReadStruct<uint>();
             if (id != MAGIC)
@@ -146,71 +159,47 @@ namespace WolvenKit.CR2W
             buffers = ReadTable<CR2WBuffer>(5).Select(_ => new CR2WBufferWrapper(_)).ToList();
             embedded = ReadTable<CR2WEmbedded>(6).Select(_ => new CR2WEmbeddedWrapper(_)
             {
+                ParentFile = this,
                 ParentImports = imports,
                 Handle = StringDictionary[_.path],
             }).ToList();
+
+            Logger.LogProgress(100);
             #endregion
 
             #region Read Data
+            Logger.LogProgress(1, "Reading chunks...");
             // Read object data //block 5
-            foreach (var chunk in chunks)
+            for (int i = 0; i < chunks.Count; i++)
             {
+                CR2WExportWrapper chunk = chunks[i];
                 chunk.ReadData(file);
+
+                int percentprogress = (int)((float)i / (float)chunks.Count * 100.0);
+                Logger.LogProgress(percentprogress, $"Reading chunk {chunk.Name}...");
             }
             // Read buffer data //block 6
             if (m_hasInternalBuffer)
             {
-                foreach (var buffer in buffers)
+                for (int i = 0; i < buffers.Count; i++)
                 {
+                    CR2WBufferWrapper buffer = buffers[i];
                     buffer.ReadData(file);
+
+                    int percentprogress = (int)((float)i / (float)buffers.Count * 100.0);
+                    Logger.LogProgress(percentprogress);
                 }
             }
             // Read embedded files //block 7
-            foreach (var emb in embedded)
+            for (int i = 0; i < embedded.Count; i++)
             {
+                CR2WEmbeddedWrapper emb = embedded[i];
                 emb.ReadData(file);
+
+                int percentprogress = (int)((float)i / (float)embedded.Count * 100.0);
+                Logger.LogProgress(percentprogress, $"Reading embedded file {emb.ClassName}...");
             }
             #endregion
-
-            //this never actually triggers?
-            //#region Read Buffer
-            //file.BaseStream.Seek(m_fileheader.fileSize, SeekOrigin.Begin);
-            //m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
-            //byte[] bufferdata;
-            //var actualbuffersize = (int)(m_fileheader.bufferSize - m_fileheader.fileSize);
-            //if (actualbuffersize > 0)
-            //{
-            //    bufferdata = new byte[actualbuffersize];
-            //    file.BaseStream.Read(bufferdata, 0, actualbuffersize);
-            //}
-            //#endregion
-
-            //dbg++
-            //(var nameslist, var importslist) = GenerateStringtable();
-            //var stringlist = new List<string>(nameslist);
-            //foreach (var import in importslist)
-            //{
-            //    if (!nameslist.Contains(import.Item1))
-            //        nameslist.Add(import.Item1);
-            //    if (!stringlist.Contains(import.Item1))
-            //        stringlist.Add(import.Item1);
-            //    if (!stringlist.Contains(import.Item2))
-            //        stringlist.Add(import.Item2);
-            //}
-            ////TODO add new embedded
-            //foreach (var emb in embedded)
-            //{
-            //    if (!stringlist.Contains(emb.Handle))
-            //        stringlist.Add(emb.Handle);
-            //}
-            //var oldstringslist = StringDictionary.Values.ToList();
-            //string strold = string.Join(",", oldstringslist);
-            //string strnew = string.Join(",", stringlist);
-            //if (strold != strnew)
-            //{
-            //}
-            //dbg--
-
 
             m_stream = null;
         }
@@ -285,8 +274,8 @@ namespace WolvenKit.CR2W
             m_stream = file.BaseStream;
 
             // update data
-            //m_fileheader.timeStamp = CDateTime.Now.ToUInt64(); //this will change any vanilla assets simply by opening and saving in wkit
-            //m_fileheader.numChunks = (uint)chunks.Count;
+            //m_fileheader.timeStamp = CDateTime.Now.ToUInt64();    //this will change any vanilla assets simply by opening and saving in wkit
+            //m_fileheader.numChunks = (uint)chunks.Count;          //this is weird, I don't think it actually is the number of chunks
             var nn = new List<CR2WNameWrapper>(names);
 
             #region Update Tables
@@ -306,7 +295,6 @@ namespace WolvenKit.CR2W
             {
                 if (!stringlist.Contains(emb.Handle))
                     stringlist.Add(emb.Handle);
-                int realidx = (int)emb.Embedded.importIndex + 1;
             }
 
             #region Stringtable
@@ -374,15 +362,12 @@ namespace WolvenKit.CR2W
                 }, this));
             }
             #endregion
-
             #region Imports
             imports.Clear();
             foreach (var import in importslist)
             {
                 var nw = names.First(_ => _.Str == import.Item1);
                 ushort flag = (ushort)import.Item3;
-                // check if import is present in embedded files
-
 
                 imports.Add(new CR2WImportWrapper(
                     new CR2WImport()
@@ -393,14 +378,27 @@ namespace WolvenKit.CR2W
                     }, this));
             }
             #endregion
-
             #region Embedded 
-            for (var i = 0; i < embedded.Count; i++)    //TODO
+            for (var i = 0; i < embedded.Count; i++)
             {
-                var newoffset = inverseDictionary[embedded[i].Handle];
-                if (newoffset != embedded[i].Embedded.path)
+                var emb = embedded[i];
+                // update path index
+                var handleoffset = inverseDictionary[emb.Handle];
+                if (handleoffset != emb.Embedded.path)
                 {
-                    embedded[i].SetOffset(newoffset);
+                    emb.SetPath(handleoffset);
+                    // check path hash
+                    var pathhash = FNV1A64HashAlgorithm.HashString(emb.Handle);
+                    if (pathhash != emb.Embedded.pathHash)
+                        emb.SetPathHash(pathhash);
+                }
+                // uddate import index
+                int realidx = (int)emb.Embedded.importIndex - 1;
+                if (imports[realidx].ClassNameStr != emb.ImportClass || emb.ImportPath != imports[realidx].DepotPathStr)
+                {
+                    var importindex = imports.FindIndex(_ => _.ClassNameStr == emb.ImportClass && _.DepotPathStr == emb.ImportPath);
+                    if (importindex != -1)
+                        emb.SetImportIndex((uint)importindex);
                 }
             }
             #endregion
@@ -432,10 +430,13 @@ namespace WolvenKit.CR2W
                 chunks[i].SetOffset(newoffset);
                 chunks[i].SetType( (ushort)GetStringIndex(chunks[i].Type));
             }
-            for (var i = 0; i < buffers.Count; i++)
+            if (m_hasInternalBuffer)
             {
-                var newoffset = buffers[i].Buffer.offset + headerOffset;
-                buffers[i].SetOffset(newoffset);
+                for (var i = 0; i < buffers.Count; i++)
+                {
+                    var newoffset = buffers[i].Buffer.offset + headerOffset;
+                    buffers[i].SetOffset(newoffset);
+                }
             }
             for (var i = 0; i < embedded.Count; i++)
             {
@@ -459,7 +460,7 @@ namespace WolvenKit.CR2W
 
             m_stream = null;
 
-            void FixExportCRC32(CR2WExport export) //FIXME do I wann keep the ref?
+            void FixExportCRC32(CR2WExport export) //FIXME do I wanna keep the ref?
             {
                 m_stream.Seek(export.dataOffset, SeekOrigin.Begin);
                 var m_temp = new byte[export.dataSize];
@@ -467,7 +468,7 @@ namespace WolvenKit.CR2W
                 export.crc32 = Crc32Algorithm.Compute(m_temp);
             }
 
-            void FixBufferCRC32(CR2WBuffer buffer) //FIXME do I wann keep the ref?
+            void FixBufferCRC32(CR2WBuffer buffer) //FIXME do I wanna keep the ref?
             {
                 //This might throw errors, the way it should be checked for is by reading
                 //the object tree to find the deferred data buffers that will point to a buffer.
@@ -732,22 +733,25 @@ namespace WolvenKit.CR2W
                 }
                 else if (var is CArray)
                 {
-                    foreach (var element in (var as CArray).array)
+                    if ((var as CArray).array.Count > 0 )
                     {
-                        if (
-                            element is CBool || element is CName ||
-                            element is CUInt16 || element is CInt16 ||
-                            element is CUInt32 || element is CInt32 ||
-                            element is CUInt64 || element is CInt64
-                            )
+                        foreach (var element in (var as CArray).array)
                         {
+                            if (
+                                element is CBool || element is CName ||
+                                element is CUInt16 || element is CInt16 ||
+                                element is CUInt32 || element is CInt32 ||
+                                element is CUInt64 || element is CInt64
+                                )
+                            {
 
+                            }
+                            else
+                                returnedVariables.Add(new Tuple<string, CVariable>("", element));
                         }
-                        else
-                            returnedVariables.Add(new Tuple<string, CVariable>("", element));
+                        if ((var as CArray).array.First() is CName)
+                            returnedVariables.Add(new Tuple<string, CVariable>("", var));
                     }
-                    if ((var as CArray).array.First() is CName)
-                       returnedVariables.Add(new Tuple<string, CVariable>("", var));
                 }
                 else if (var is CPtr)
                 {
@@ -1029,21 +1033,26 @@ namespace WolvenKit.CR2W
             {
                 chunks[i].WriteData(bw);
             }
+
+            m_fileheader.fileSize = (uint)bw.BaseStream.Position;
+
+            //Write Buffer data
+            if (m_hasInternalBuffer)
+            {
+                for (var i = 0; i < buffers.Count; i++)
+                {
+                    buffers[i].WriteData(bw);
+                }
+            }
+            m_fileheader.bufferSize = (uint)bw.BaseStream.Position;
+
             // Write embedded data
             for (var i = 0; i < embedded.Count; i++)
             {
                 embedded[i].WriteData(bw);
             }
 
-            m_fileheader.fileSize = (uint) bw.BaseStream.Position;
-
-            //Write Buffer data
-            for (var i = 0; i < buffers.Count; i++)
-            {
-                buffers[i].WriteData(bw);
-            }
-
-            m_fileheader.bufferSize = (uint) bw.BaseStream.Position;
+            
         }
         #endregion
 
@@ -1290,6 +1299,7 @@ namespace WolvenKit.CR2W
             //    return names.Count - 1;
             //}
 
+            throw new NotImplementedException();
             return -1;
         }
 

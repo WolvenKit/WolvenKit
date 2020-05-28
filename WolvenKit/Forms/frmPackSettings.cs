@@ -18,15 +18,15 @@ namespace WolvenKit
         public frmPackSettings()
         {
             InitializeComponent();
-            if (MainController.Get().Window.ActiveMod.Files.Any(x => x.EndsWith(".xbm")))
+            if (UIController.Get().Window.ActiveMod.Files.Any(x => x.EndsWith(".xbm")))
                 texturecachecCHB.Checked = true;
-            if (MainController.Get().Window.ActiveMod.Files.Any(x => x.EndsWith(".ws")))
+            if (UIController.Get().Window.ActiveMod.Files.Any(x => x.EndsWith(".ws")))
                 scriptsCHB.Checked = true;
-            if (MainController.Get().Window.ActiveMod.Files.Any(x => x.EndsWith(".wem") || x.EndsWith(".bnk")))
+            if (UIController.Get().Window.ActiveMod.Files.Any(x => x.EndsWith(".wem") || x.EndsWith(".bnk")))
                 soundCHB.Checked = true;
-            if (Directory.Exists((MainController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")) && Directory.GetFiles((MainController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")).Any(x => x.EndsWith(".w3strings")))
+            if (Directory.Exists((UIController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")) && Directory.GetFiles((UIController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")).Any(x => x.EndsWith(".w3strings")))
                 stringsCHB.Checked = true;
-            if (MainController.Get().Window.ActiveMod.Files.Any(x => x.EndsWith(".apx") || x.EndsWith(".apb")))
+            if (UIController.Get().Window.ActiveMod.Files.Any(x => x.EndsWith(".apx") || x.EndsWith(".apb")))
                 collisionCacheCHB.Checked = true;
         }
 

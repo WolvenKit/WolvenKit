@@ -7,8 +7,8 @@
     <ProjectGuid>{4D1019F1-F099-450F-85B8-697E0332A94F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WolvenKit.Interfaces</RootNamespace>
-    <AssemblyName>WolvenKit.Interfaces</AssemblyName>
+    <RootNamespace>WolvenKit.Common</RootNamespace>
+    <AssemblyName>WolvenKit.Common</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -75,25 +75,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CsvHelper, Version=15.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
-      <HintPath>..\packages\CsvHelper.15.0.4\lib\net47\CsvHelper.dll</HintPath>
+      <HintPath>..\packages\CsvHelper.15.0.5\lib\net47\CsvHelper.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.1\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
-    <Reference Include="protobuf-net, Version=2.3.15.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <HintPath>..\packages\protobuf-net.2.3.15\lib\net40\protobuf-net.dll</HintPath>
+    <Reference Include="protobuf-net, Version=2.4.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\packages\protobuf-net.2.4.6\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.1\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.2\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -104,31 +104,38 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlphanumComparator.cs" />
+    <Compile Include="Extensions\AssemblyExtensions.cs" />
+    <Compile Include="Extensions\FileSystemInfoExtensions.cs" />
+    <Compile Include="Model\Arguments\BundleFileExtractArgs.cs" />
+    <Compile Include="Model\Arguments\RequestFileOpenArgs.cs" />
+    <Compile Include="Tools\AlphanumComparator.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="FNV1A\FNV1A32HashAlgorithm.cs" />
-    <Compile Include="FNV1A\FNV1A64HashAlgorithm.cs" />
-    <Compile Include="IWitcherArchive.cs" />
-    <Compile Include="IWitcherArchiveType.cs" />
-    <Compile Include="IWitcherFile.cs" />
+    <Compile Include="Tools\FNV1A\FNV1A32HashAlgorithm.cs" />
+    <Compile Include="Tools\FNV1A\FNV1A64HashAlgorithm.cs" />
+    <Compile Include="Model\IWitcherArchive.cs" />
+    <Compile Include="Model\IWitcherArchiveType.cs" />
+    <Compile Include="Model\IWitcherFile.cs" />
+    <Compile Include="Model\CommonEnums.cs" />
     <Compile Include="Model\HashDump.cs" />
     <Compile Include="ObjectDumper.cs" />
     <Compile Include="ObservableObject.cs" />
-    <Compile Include="ProtoList.cs" />
+    <Compile Include="Tools\ProtoList.cs" />
     <Compile Include="Model\Cr2wResourceManager.cs" />
     <Compile Include="Services\ILoggerService.cs" />
     <Compile Include="Services\LoggerService.cs" />
     <Compile Include="Services\LoggerTypes.cs" />
-    <Compile Include="W3Mod.cs" />
-    <Compile Include="Wcc\enums.cs" />
-    <Compile Include="Wcc\REDAttributes.cs" />
-    <Compile Include="Wcc\wcc_command.cs" />
-    <Compile Include="Wcc\wcc_commands.cs" />
-    <Compile Include="Wcc\wcc_task.cs" />
-    <Compile Include="WitcherTreeNode.cs" />
+    <Compile Include="Model\W3Mod.cs" />
+    <Compile Include="Tools\SortableBindinglist.cs" />
+    <Compile Include="Model\Wcc\enums.cs" />
+    <Compile Include="Model\Wcc\REDAttributes.cs" />
+    <Compile Include="Model\Wcc\wcc_command.cs" />
+    <Compile Include="Model\Wcc\wcc_commands.cs" />
+    <Compile Include="Model\Wcc\wcc_task.cs" />
+    <Compile Include="Model\WitcherTreeNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

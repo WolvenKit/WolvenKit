@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.IO.MemoryMappedFiles;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.Wwise.SoundCache
 {
@@ -40,9 +41,9 @@ namespace WolvenKit.Wwise.SoundCache
             }
         }
 
-        public void Extract(string filename)
+        public void Extract(BundleFileExtractArgs e)
         {
-            using (var output = new FileStream(filename, FileMode.CreateNew, FileAccess.Write))
+            using (var output = new FileStream(e.FileName, FileMode.CreateNew, FileAccess.Write))
             {
                 Extract(output);
                 output.Close();

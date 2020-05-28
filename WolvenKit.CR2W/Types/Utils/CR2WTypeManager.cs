@@ -245,8 +245,9 @@ namespace WolvenKit.CR2W.Types
                 "CFXTrackItemPause",
                 "CFXTrackItemPlayItemEffect",
                 "CFXTrackItemPlayPropertyAnim",
-                "CFXTrackItemSetDissolve",
-                //"CFXTrackItemSoundEvent",
+                "CFXTrackItemSetDissolve", // No buffer?
+                "CFXTrackItemBrightnessTint",
+                "CFXTrackItemSoundEvent", // NO buffer?
             };
             foreach (var item in CFXTrackItems)
             {

@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WolvenKit.App;
 
 namespace WolvenKit.Forms
 {
@@ -23,7 +24,7 @@ namespace WolvenKit.Forms
         {
             this.CenterToScreen();
             MainController.Get().PropertyChanged += MainControllerUpdated;
-            MainController.InitForm(this);
+            UIController.InitForm(this);
             this.VersionLbl.Text = "Version " + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
             this.copyrightLbl.Text = "https://github.com/Traderain/Wolven-kit";
         }

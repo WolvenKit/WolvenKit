@@ -5,87 +5,318 @@ using System.Linq;
 using System.Windows.Forms;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
+using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.Cache
 {
     using DDS;
-    public class ImageUtility
+    using ImageFormat = Pfim.ImageFormat;
+
+    public static class ImageUtility
     {
-        /// <summary>
-        /// Convert a CBitmapTexture's image to a DDS image
-        /// </summary>
-        /// <returns>A proper dds file</returns>
-        public static Bitmap Xbm2Bitmap(CR2WExportWrapper imagechunk)
+        public static Bitmap FromFile(string path)
         {
-            return Xbm2Dds(imagechunk)?.BitmapImage;
+            using (var image = Pfim.Pfim.FromFile(path))
+            {
+                PixelFormat format;
+
+                // Convert from Pfim's backend agnostic image format into GDI+'s image format
+                switch (image.Format)
+                {
+                    case ImageFormat.Rgb24:
+                        format = PixelFormat.Format24bppRgb;
+                        break;
+
+                    case ImageFormat.Rgba32:
+                        format = PixelFormat.Format32bppArgb;
+                        break;
+
+                    case ImageFormat.R5g5b5:
+                        format = PixelFormat.Format16bppRgb555;
+                        break;
+
+                    case ImageFormat.R5g6b5:
+                        format = PixelFormat.Format16bppRgb565;
+                        break;
+
+                    case ImageFormat.R5g5b5a1:
+                        format = PixelFormat.Format16bppArgb1555;
+                        break;
+
+                    case ImageFormat.Rgb8:
+                        format = PixelFormat.Format8bppIndexed;
+                        break;
+
+                    default:
+                        var msg = $"{image.Format} is not recognized for Bitmap on Windows Forms. " +
+                                   "You'd need to write a conversion function to convert the data to known format";
+                        var caption = "Unrecognized format";
+                        MessageBox.Show(msg, caption, MessageBoxButtons.OK);
+                        return null;
+                }
+
+                // Pin pfim's data array so that it doesn't get reaped by GC
+                var handle = GCHandle.Alloc(image.Data, GCHandleType.Pinned);
+                try
+                {
+                    var data = Marshal.UnsafeAddrOfPinnedArrayElement(image.Data, 0);
+                    return new Bitmap(image.Width, image.Height, image.Stride, format, data);
+                }
+                finally
+                {
+                    handle.Free();
+                }
+            }
+        }
+
+        public static Bitmap FromBytes(byte[] bytes)
+        {
+            using (var ms = new MemoryStream(bytes))
+            {
+                return FromStream(ms);
+            }
+        }
+
+        public static Bitmap FromStream(Stream stream)
+        {
+            using (var image = Pfim.Pfim.FromStream(stream))
+            {
+                PixelFormat format;
+
+                // Convert from Pfim's backend agnostic image format into GDI+'s image format
+                switch (image.Format)
+                {
+                    case ImageFormat.Rgb24:
+                        format = PixelFormat.Format24bppRgb;
+                        break;
+
+                    case ImageFormat.Rgba32:
+                        format = PixelFormat.Format32bppArgb;
+                        break;
+
+                    case ImageFormat.R5g5b5:
+                        format = PixelFormat.Format16bppRgb555;
+                        break;
+
+                    case ImageFormat.R5g6b5:
+                        format = PixelFormat.Format16bppRgb565;
+                        break;
+
+                    case ImageFormat.R5g5b5a1:
+                        format = PixelFormat.Format16bppArgb1555;
+                        break;
+
+                    case ImageFormat.Rgb8:
+                        format = PixelFormat.Format8bppIndexed;
+                        break;
+
+                    default:
+                        var msg = $"{image.Format} is not recognized for Bitmap on Windows Forms. " +
+                                   "You'd need to write a conversion function to convert the data to known format";
+                        var caption = "Unrecognized format";
+                        MessageBox.Show(msg, caption, MessageBoxButtons.OK);
+                        return null;
+                }
+
+                // Pin pfim's data array so that it doesn't get reaped by GC
+                var handle = GCHandle.Alloc(image.Data, GCHandleType.Pinned);
+                try
+                {
+                    var data = Marshal.UnsafeAddrOfPinnedArrayElement(image.Data, 0);
+                    return new Bitmap(image.Width, image.Height, image.Stride, format, data);
+                }
+                finally
+                {
+                    handle.Free();
+                }
+            }
+        }
+
+        public static Bitmap Xbm2Bmp(CBitmapTexture xbm)
+        {
+            if (xbm == null)
+                return null;
+
+            int residentMipIndex = xbm.GetVariableByName("residentMipIndex") == null ? 0 : (int)((CUInt8)xbm.GetVariableByName("residentMipIndex")).val;
+            byte[] bytesource;
+            // handle cooked xbms
+            if (xbm.GetVariableByName("sourceData") == null && xbm.Residentmip != null)
+            {
+                bytesource = xbm.Residentmip.Bytes;
+
+            }
+            // handle imported xbms
+            else if (xbm.Mips != null)
+            {
+                bytesource = xbm.Mips.elements[residentMipIndex].Bytes;
+            }
+            else
+            {
+                return null;
+            }
+
+            using (var ms = new MemoryStream(Xbm2DdsBytes(xbm, bytesource)))
+            {
+                return FromStream(ms);
+            }
+        }
+
+        //public static DdsImage Xbm2Dds(CBitmapTexture xbm, byte[] rawimage)
+        //{
+        //    if (xbm == null || rawimage == null)
+        //        return null;
+        //    return new DdsImage(Xbm2DdsBytes(xbm, rawimage));
+        //}
+
+
+
+        public static byte[] Xbm2DdsBytes(CBitmapTexture xbm)
+        {
+            if (xbm == null)
+                return null;
+
+            int residentMipIndex = xbm.GetVariableByName("ResidentMipIndex") == null ? 0 : (int)((CUInt8)xbm.GetVariableByName("ResidentMipIndex")).val;
+            byte[] bytesource;
+            // handle cooked xbms
+            if (xbm.GetVariableByName("SourceData") == null)
+            {
+                bytesource = xbm.Residentmip.Bytes;
+            }
+            // handle imported xbms
+            else
+            {
+                bytesource = xbm.Mips.elements[residentMipIndex].Bytes;
+            }
+
+            using (var ms = new MemoryStream())
+            using (var bw = new BinaryWriter(ms))
+            {
+                DDSUtils.GenerateAndWriteHeader(bw.BaseStream, Xbm2Ddsheader(xbm));
+
+                bw.Write(bytesource);
+
+                ms.Flush();
+
+                return ms.ToArray();
+            }
+        }
+
+        public static byte[] Xbm2DdsBytes(CBitmapTexture xbm, byte[] bytesource)
+        {
+            if (xbm == null)
+                return null;
+
+            using (var ms = new MemoryStream())
+            using (var bw = new BinaryWriter(ms))
+            {
+                DDSUtils.GenerateAndWriteHeader(bw.BaseStream, Xbm2Ddsheader(xbm));
+
+                bw.Write(bytesource);
+
+                ms.Flush();
+
+                return ms.ToArray();
+            }
         }
 
 
-        public static DdsImage Xbm2Dds(CR2WExportWrapper imagechunk)
+
+
+
+        private static DDSMetadata Xbm2Ddsheader(CBitmapTexture xbm)
         {
             try
             {
-                var image = ((CBitmapTexture)(imagechunk.data)).Image;
-                var compression = imagechunk.GetVariableByName("compression").ToString();
-                var width = uint.Parse(imagechunk.GetVariableByName("width").ToString());
-                var height = uint.Parse(imagechunk.GetVariableByName("height").ToString());
-                var unk2 = uint.Parse(imagechunk.GetVariableByName("unk2").ToString());
-                var residentMipIndex = imagechunk.GetVariableByName("residentMipIndex") != null ? uint.Parse(imagechunk.GetVariableByName("residentMipIndex").ToString()) : 0;
-                var mips = (CBufferUInt32<CVector3<CUInt32>>)imagechunk.GetVariableByName("mips");
-                var tempfile = new MemoryStream();
+                int residentMipIndex = xbm.GetVariableByName("ResidentMipIndex") == null ? 0 : (int)((CUInt8)xbm.GetVariableByName("ResidentMipIndex")).val;
 
-                var format = ETextureFormat.TEXFMT_R8G8B8A8;
+                int mipcount;
+                // handle cooked xbms
+                if (xbm.GetVariableByName("SourceData") == null)
+                {
+                    mipcount = xbm.Mipdata.elements.Count - residentMipIndex;
+                }
+                // handle imported xbms
+                else
+                {
+                    mipcount = 0;
+                }
+
+                uint width = xbm.Mipdata.elements[residentMipIndex].Width.val;
+                uint height = xbm.Mipdata.elements[residentMipIndex].Height.val;
+
+                var ecompression = (CName)xbm.GetVariableByName("compression");
+                ETextureCompression compression = (ETextureCompression)Enum.Parse(typeof(ETextureCompression), ecompression.Value);
+                var eformat = (CName)xbm.GetVariableByName("format");
+                ETextureRawFormat format = ETextureRawFormat.TRF_TrueColor;
+                if (eformat != null)
+                    format = (ETextureRawFormat)Enum.Parse(typeof(ETextureRawFormat), eformat.Value);
+
+
+
+                var ddsformat = ETextureFormat.TEXFMT_R8G8B8A8;
                 switch (compression)
                 {
-                    case "TCM_DXTNoAlpha":
-                        format = ETextureFormat.TEXFMT_BC1;
+                    
+                    case ETextureCompression.TCM_DXTNoAlpha:
+                        ddsformat = ETextureFormat.TEXFMT_BC1;
                         break;
-                    case "TCM_DXTAlpha":
-                        format = ETextureFormat.TEXFMT_BC3;
+                    case ETextureCompression.TCM_DXTAlpha:
+                        ddsformat = ETextureFormat.TEXFMT_BC3;
                         break;
-                    case "TCM_NormalsHigh":
-                        format = ETextureFormat.TEXFMT_BC3;
+                    case ETextureCompression.TCM_Normals:
+                        ddsformat = ETextureFormat.TEXFMT_BC1;
                         break;
-                    case "TCM_Normals":
-                        format = ETextureFormat.TEXFMT_BC1;
+                    case ETextureCompression.TCM_NormalsHigh:
+                        ddsformat = ETextureFormat.TEXFMT_BC3;
                         break;
-                    case "TCM_NormalsGloss":
-                        format = ETextureFormat.TEXFMT_BC3;
+                    case ETextureCompression.TCM_NormalsGloss:
+                        ddsformat = ETextureFormat.TEXFMT_BC3;
                         break;
-                    case "TCM_QualityControl":
-                        format = ETextureFormat.TEXFMT_BC3;
+                    case ETextureCompression.TCM_QualityR:
+                        ddsformat = ETextureFormat.TEXFMT_BC4;
+                        break;
+                    case ETextureCompression.TCM_QualityRG:
+                        ddsformat = ETextureFormat.TEXFMT_BC5;
+                        break;
+                    case ETextureCompression.TCM_QualityColor:
+                        ddsformat = ETextureFormat.TEXFMT_BC3;
+                        break;
+                    case ETextureCompression.TCM_DXTAlphaLinear:
+                    case ETextureCompression.TCM_RGBE:
+                    case ETextureCompression.TCM_None:
+                        switch (format)
+                        {
+                            case ETextureRawFormat.TRF_TrueColor:
+                                ddsformat = ETextureFormat.TEXFMT_R8G8B8A8;
+                                break;
+                            case ETextureRawFormat.TRF_Grayscale:
+                                break;
+                            case ETextureRawFormat.TRF_HDR:
+                            case ETextureRawFormat.TRF_AlphaGrayscale:
+                            case ETextureRawFormat.TRF_HDRGrayscale:
+                            default:
+                                throw new Exception("Invalid compression type! [" + compression + "]");
+                        }
                         break;
                     default:
                         throw new Exception("Invalid compression type! [" + compression + "]");
                 }
 
+                return new DDSMetadata(width, height, (uint)mipcount, ddsformat);
 
-                using (var bw = new BinaryWriter(tempfile))
-                {
-                    var residentmipwidth = mips.elements[(int)residentMipIndex].x.val;
-                    var residentmipheight = mips.elements[(int)residentMipIndex].y.val;
-                    var residentmipcount = mips.elements.Count - residentMipIndex;
-
-                    var metadata = new DDSMetadata(residentmipwidth, residentmipheight, (uint)residentmipcount, format);
-                    DDSUtils.GenerateAndWriteHeader(bw.BaseStream, metadata);
-
-                    bw.Write(image.Bytes);
-                }
-                tempfile.Flush();
-#if DEBUG
-                //File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\asd.dds",tempfile.ToArray());
-#endif
-                return new DdsImage(tempfile.ToArray());
+                
             }
-            catch (Exception e)
+            catch(Exception e)
             {
-                string message = e.Message;
-                string caption = "Error!";
-                MessageBoxButtons buttons = MessageBoxButtons.OK;
-                MessageBox.Show(message, caption, buttons);
-                return null;
+                //string message = e.Message;
+                //string caption = "Error!";
+                //MessageBoxButtons buttons = MessageBoxButtons.OK;
+                //MessageBox.Show(message, caption, buttons);
+                throw e;
             }
-
+            
         }
 
         /// <summary>

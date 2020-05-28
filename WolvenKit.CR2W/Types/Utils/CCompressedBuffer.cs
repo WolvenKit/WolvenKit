@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,13 +11,19 @@ using WolvenKit.CR2W.Editors;
 namespace WolvenKit.CR2W.Types
 {
     [DataContract(Namespace = "")]
-    public class CCompressedBuffer<T> : CVariable where T : CVariable
+    public class CCompressedBuffer<T> : CVariable, IList<T> where T : CVariable
     {
         public List<T> elements = new List<T>();
         public Func<CR2WFile, T> elementFactory;
 
         private int m_count = -1;
         public new string Type { get => $"CCompressedBuffer<{typeof(T)}>"; }
+
+        public int Count => ((ICollection<T>)elements).Count;
+
+        public bool IsReadOnly => ((ICollection<T>)elements).IsReadOnly;
+
+        public T this[int index] { get => ((IList<T>)elements)[index]; set => ((IList<T>)elements)[index] = value; }
 
         public CCompressedBuffer(CR2WFile cr2w, Func<CR2WFile, T> elementFactory) : base(cr2w)
         {
@@ -135,6 +142,56 @@ namespace WolvenKit.CR2W.Types
             {
                 elements[i].Name = i.ToString();
             }
+        }
+
+        public int IndexOf(T item)
+        {
+            return ((IList<T>)elements).IndexOf(item);
+        }
+
+        public void Insert(int index, T item)
+        {
+            ((IList<T>)elements).Insert(index, item);
+        }
+
+        public void RemoveAt(int index)
+        {
+            ((IList<T>)elements).RemoveAt(index);
+        }
+
+        public void Add(T item)
+        {
+            ((ICollection<T>)elements).Add(item);
+        }
+
+        public void Clear()
+        {
+            ((ICollection<T>)elements).Clear();
+        }
+
+        public bool Contains(T item)
+        {
+            return ((ICollection<T>)elements).Contains(item);
+        }
+
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            ((ICollection<T>)elements).CopyTo(array, arrayIndex);
+        }
+
+        public bool Remove(T item)
+        {
+            return ((ICollection<T>)elements).Remove(item);
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return ((IEnumerable<T>)elements).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable)elements).GetEnumerator();
         }
     }
 }

@@ -1,61 +1,74 @@
-﻿using System;
+﻿using AutoUpdaterDotNET;
+using Dfust.Hotkeys;
+using SharpPresence;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using AutoUpdaterDotNET;
-using Dfust.Hotkeys;
-using SharpPresence;
 using WeifenLuo.WinFormsUI.Docking;
-using SearchOption = System.IO.SearchOption;
-using WolvenKit.Common;
-using WolvenKit.Cache;
-using WolvenKit.Bundles;
-using WolvenKit.Forms;
-using Enums = Dfust.Hotkeys.Enums;
-using WolvenKit.Wwise.Player;
-using WolvenKit.Extensions;
-using WolvenKit.Common.Wcc;
-using WolvenKit.Common.Services;
-using System.ComponentModel;
 using WolvenKit.Wwise.Wwise;
+using SearchOption = System.IO.SearchOption;
+
 
 namespace WolvenKit
 {
+    using Bundles;
+    using Cache;
+    using Common;
+    using Common.Services;
+    using Common.Wcc;
     using CR2W;
     using CR2W.Types;
-    using Common;
-    using Cache;
-    using Bundles;
-    using Forms;
-    using Wwise.Player;
     using Extensions;
-    using Common.Wcc;
-    using Common.Services;
-    using Enums = Dfust.Hotkeys.Enums;
+    using Forms;
+    using System.CodeDom;
+    using WolvenKit.App;
+    using WolvenKit.Common.Model;
     using WolvenKit.Render;
     using WolvenKit.Scaleform;
-    using System.Text.RegularExpressions;
-    using WolvenKit.Common.Model;
+    using Wwise.Player;
+    using Enums = Dfust.Hotkeys.Enums;
 
     public partial class frmMain : Form
     {
         #region Forms
         private frmCR2WDocument _activedocument;
-        public List<frmCR2WDocument> OpenDocuments = new List<frmCR2WDocument>();
-        public frmModExplorer ModExplorer { get; set; }
-        public frmStringsGui stringsGui;
-        public frmOutput Output { get; set; }
-        public frmConsole Console { get; set; }
-        public frmImportUtility ImportUtility { get; set; }
+        private List<frmCR2WDocument> OpenDocuments { get; set; } = new List<frmCR2WDocument>();
+        private frmModExplorer ModExplorer { get; set; }
+        private frmStringsGui stringsGui { get; set; }
+        private frmOutput Output { get; set; }
+        private frmConsole Console { get; set; }
+
+        private frmImportUtility ImportUtility { get; set; }
+        private frmRadish RadishUtility { get; set; }
+        private frmProgress m_frmProgress { get; set; }
+
+
+        private frmScriptEditor ScriptPreview { get; set; }
+        private List<frmScriptEditor> OpenScripts { get; set; } = new List<frmScriptEditor>();
+        private frmImagePreview ImagePreview { get; set; }
+        private List<frmImagePreview> OpenImages { get; set; } = new List<frmImagePreview>();
+
+        #endregion
+
+
+
+        public LoggerService Logger { get; set; }
+
+
+
 
         public frmCR2WDocument ActiveDocument
         {
@@ -67,7 +80,7 @@ namespace WolvenKit
             }
         }
 
-        #endregion
+        
 
         #region Fields
         private readonly string BaseTitle = "Wolven kit";
@@ -76,18 +89,11 @@ namespace WolvenKit
         private HotkeyCollection hotkeys;
         private readonly ToolStripRenderer toolStripRenderer = new ToolStripProfessionalRenderer();
 
-        private LoggerService Logger;
+        
         private WccLite WccHelper;
 
         private delegate void strDelegate(string t);
         private delegate void logDelegate(string t, Logtype type);
-
-        public const int WM_NCLBUTTONDOWN = 0xA1;
-        public const int HTCAPTION = 0x2;
-        [System.Runtime.InteropServices.DllImport("USer32.dll")]
-        public static extern bool ReleaseCapture();
-        [System.Runtime.InteropServices.DllImport("USer32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         #endregion
 
         #region Properties
@@ -111,7 +117,7 @@ namespace WolvenKit
 
             this.dockPanel.Theme.Extender.FloatWindowFactory = new CustomFloatWindowFactory();
             visualStudioToolStripExtender1.DefaultRenderer = toolStripRenderer;
-            MainController.Get().ToolStripExtender = visualStudioToolStripExtender1;
+            UIController.Get().ToolStripExtender = visualStudioToolStripExtender1;
             ApplyCustomTheme();
 
             UpdateTitle();
@@ -139,20 +145,52 @@ namespace WolvenKit
             hotkeys.RegisterHotkey(Keys.F1, HKHelp, "Help");
             hotkeys.RegisterHotkey(Keys.Control | Keys.C, HKCopy, "Copy");
             hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste, "Paste");
-            MainController.InitForm(this);
+            UIController.InitForm(this);
 
-            
-            
-
-            Screen screen = Screen.FromControl(this);
-            int x = screen.WorkingArea.X - screen.Bounds.X;
-            int y = screen.WorkingArea.Y - screen.Bounds.Y;
-            this.MaximizedBounds = new Rectangle(x, y,
-                screen.WorkingArea.Width, screen.WorkingArea.Height);
+            MainBackgroundWorker.WorkerReportsProgress = true;
+            MainBackgroundWorker.WorkerSupportsCancellation = true;
+            MainBackgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker1_DoWork);
+            MainBackgroundWorker.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker1_ProgressChanged);
+            MainBackgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
         }
         #endregion
 
         #region Methods
+        Func<object, DoWorkEventArgs, object> workerAction;
+        Func<object, object> workerCompletedAction;
+        void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker bwAsync = sender as BackgroundWorker;
+            e.Result = workerAction(sender, e);
+
+            // add a result
+            //e.Result
+        }
+        void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            m_frmProgress.SetProgressBarValue(e.ProgressPercentage, e.UserState);
+        }
+        frmCR2WDocument HACK_bwform = null;
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            // has errors
+            if (e.Error != null)
+            {
+                // do not continue to the completed action
+            }
+            else // has completed successfully
+            {
+                if (workerCompletedAction != null)
+                {
+                    HACK_bwform = (frmCR2WDocument)workerCompletedAction(e.Result);
+                }
+                workerCompletedAction = null;
+            }
+
+            m_frmProgress.Close();
+        }
+        
+
         public void GlobalApplyTheme()
         {
             dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"));
@@ -167,54 +205,33 @@ namespace WolvenKit
         }
         private void ApplyCustomTheme()
         {
-            var theme = MainController.Get().GetTheme();
+            var theme = UIController.Get().GetTheme();
             this.dockPanel.Theme = theme;
             visualStudioToolStripExtender1.SetStyle(menuStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
             visualStudioToolStripExtender1.SetStyle(toolbarToolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
         }
 
-        #region UI formborderstyle none
-
-        private const long WS_SYSMENU = 0x00080000L;
-        private const long WS_BORDER = 0x00800000L;
-        private const long WS_SIZEBOX = 0x00040000L;
-        private const long WS_CHILD = 0x40000000L;
-        private const long WS_DLGFRAME = 0x00400000L;
-        private const long WS_MAXIMIZEBOX = 0x00010000L;
-        private const long WS_CAPTION = 0x00C00000L;
-
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams cp = base.CreateParams;
-                {
-                    cp.Style |= (int)WS_BORDER;
-                    cp.Style |= (int)WS_SYSMENU;
-                    cp.Style |= (int)WS_SIZEBOX;                    
-                }
-                return cp;
-            }
-        }
-        private void MinimizeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            WindowState = FormWindowState.Minimized;
-        }
-
-        private void RestoreToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (this.WindowState != FormWindowState.Maximized)
-                WindowState = FormWindowState.Maximized;
-            else
-                WindowState = FormWindowState.Normal;
-        }
-        #endregion
-
+        
+        /// <summary>
+        /// Deprecated. Use MainController.QueueLog 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LoggerUpdated(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Log")
             {
                 Invoke(new logDelegate(AddOutput), ((LoggerService)sender).Log + "\n", ((LoggerService)sender).Logtype);
+            }
+            if (e.PropertyName == "Progress")
+            {
+                if (MainBackgroundWorker != null)
+                {
+                    if (string.IsNullOrEmpty(Logger.Progress.Item2))
+                        MainBackgroundWorker.ReportProgress(Logger.Progress.Item1);
+                    else
+                        MainBackgroundWorker.ReportProgress(Logger.Progress.Item1, Logger.Progress.Item2);
+                }
             }
         }
         /// <summary>
@@ -291,7 +308,9 @@ namespace WolvenKit
 
         private void UpdateTitle()
         {
-            buildDateToolStripMenuItem.Text = Assembly.GetExecutingAssembly().GetLinkerTime().ToString("yyyy MMMM dd");
+            buildDateToolStripMenuItem.Text = $"v{Version}: {Assembly.GetExecutingAssembly().GetLinkerTime().ToString("yyyy MMMM dd")}";
+            MenuLabelProject.Text = ActiveMod != null ? ActiveMod.Name : "<No Mod Loaded!>";
+
             Text = BaseTitle + " v" + Version;
             if (ActiveMod != null)
             {
@@ -501,45 +520,136 @@ namespace WolvenKit
                 break;
             }
 
-
+            ModExplorer?.PauseMonitoring();
             // Delete from file structure
             var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
-            if (File.Exists(fullpath))
+            try
             {
-                File.Delete(fullpath);
-            }
-            else
-            {
-                try
+                if (File.Exists(fullpath))
+                {
+                    File.Delete(fullpath);
+                }
+                else
                 {
                     Directory.Delete(fullpath, true);
                 }
-                catch (Exception)
-                {
-                    AddOutput("Failed to delete " + fullpath + "!");
-                }
             }
+            catch (Exception)
+            {
+                AddOutput("Failed to delete " + fullpath + "!\r\n");
+            }
+            ModExplorer?.ResumeMonitoring();
 
-            // Delete from mod explorer
-            ModExplorer?.DeleteNode(filename);
 
             SaveMod();
         }
 
+        public void AddToOpenScripts(frmScriptEditor frmScriptEditor)
+        {
+            if (!OpenScripts.Any(_ => _.Text == frmScriptEditor.Text))
+            {
+                frmScriptEditor.Show(dockPanel, DockState.Document);
+                OpenScripts.Add(frmScriptEditor);
+                //ScriptPreview.Close();
+                ScriptPreview = null;
+            }
+        }
+        public void RemoveFromOpenScrips(frmScriptEditor frmScriptEditor)
+        {
+            if (OpenScripts.Any(_ => _.Text == frmScriptEditor.Text))
+            {
+                OpenScripts.Remove(frmScriptEditor);
+            }
+        }
+
         private void ModExplorer_RequestFileOpen(object sender, RequestFileArgs e)
         {
-            var fullpath = Path.Combine(ActiveMod.FileDirectory, e.File);
+            var fullpath = e.File;
 
-            var ext = Path.GetExtension(fullpath);
+            var ext = Path.GetExtension(fullpath).ToUpper() ;
 
+            // click
+            if (e.Inspect)
+            {
+                switch (ext)
+                {
+                    case ".CSV":
+                    case ".XML":
+                    case ".TXT":
+                    case ".BAT":
+
+                    case ".WS":
+                    case ".YML":
+                    case ".LOG":
+                    case ".INI":
+                        {
+                            if (OpenScripts.Any(_ => _.FileName == Path.GetFileName(fullpath)))
+                            {
+                                OpenScripts.First(_ => _.FileName == Path.GetFileName(fullpath)).Activate();
+                            }
+                            else
+                            {
+                                ShowScriptPreview();
+                                ScriptPreview.LoadFile(fullpath);
+                            }
+                            break;
+                        }
+                    case ".PNG":
+                    case ".JPG":
+                    case ".TGA":
+                    case ".BMP":
+                    case ".JPEG":
+                    case ".DDS":
+                        {
+                            if (OpenImages.Any(_ => _.Text == Path.GetFileName(fullpath)))
+                            {
+                                OpenImages.First(_ => _.Text == Path.GetFileName(fullpath)).Activate();
+                            }
+                            else
+                            {
+                                ShowImagePreview();
+                                ImagePreview.SetImage(fullpath);
+                            }
+                            break;
+                        }
+                    default:
+                        break;
+                }
+                return;
+            }
+
+            // double click
             switch (ext)
             {
-                case ".csv":
-                case ".xml":
-                case ".txt":
+                case ".CSV":
+                case ".XML":
+                case ".TXT":
                     ShellExecute(fullpath);
                     break;
-                case ".wem":
+                case ".BAT":
+                case ".WS":
+                case ".YML":
+                case ".LOG":
+                case ".INI":
+                    {
+                        if (OpenScripts.Any(_ => _.FileName == Path.GetFileName(fullpath)))
+                        {
+                            OpenScripts.First(_ => _.FileName == Path.GetFileName(fullpath)).Activate();
+                        }
+                        else
+                        {
+                            if (ScriptPreview.FileName == Path.GetFileName(fullpath))
+                            {
+                                ScriptPreview.Close();
+                            }
+                            var se = new frmScriptEditor();
+                            se.Show(dockPanel, DockState.Document);
+                            se.LoadFile(fullpath);
+                            OpenScripts.Add(se);
+                        }
+                        break;
+                    }
+                case ".WEM":
                     {
                         using (var sp = new frmAudioPlayer(fullpath))
                         {
@@ -547,13 +657,13 @@ namespace WolvenKit
                         }
                         break;
                     }
-                case ".subs":
+                case ".SUBS":
                     PolymorphExecute(fullpath, ".txt");
                     break;
-                case ".usm":
+                case ".USM":
                     LoadUsmFile(fullpath);
                     break;
-                case ".bnk":
+                case ".BNK":
                     {
                         using (var sp = new frmAudioPlayer(fullpath))
                         {
@@ -561,15 +671,30 @@ namespace WolvenKit
                         }
                         break;
                     }
-                case ".ws":
+                case ".PNG":
+                case ".JPG":
+                case ".TGA":
+                case ".BMP":
+                case ".JPEG":
+                case ".DDS":
                     {
-                        var se = new frmScriptEditor(fullpath);
-                        se.Show(dockPanel, DockState.Document);
+                        if (OpenImages.Any(_ => _.Text == Path.GetFileName(fullpath)))
+                        {
+                            OpenImages.First(_ => _.Text == Path.GetFileName(fullpath)).Activate();
+                        }
+                        else
+                        {
+                            if (ImagePreview.Text == Path.GetFileName(fullpath))
+                            {
+                                ImagePreview.Close();
+                            }
+                            var dockedImage = new frmImagePreview();
+                            dockedImage.Show(dockPanel, DockState.Document);
+                            dockedImage.SetImage(fullpath);
+                            OpenImages.Add(dockedImage);
+                        }
                         break;
                     }
-                case ".dds":
-                    LoadDDSFile(fullpath);
-                    break;
                 default:
                     LoadDocument(fullpath);
                     break;
@@ -606,14 +731,6 @@ namespace WolvenKit
 
         }
 
-        public void LoadDDSFile(string path)
-        {
-            var dockedImage = new frmTextureFile();
-            dockedImage.Show(dockPanel, DockState.Document);
-            dockedImage.Text = Path.GetFileName(path);
-            dockedImage.LoadImage(path);
-        }
-
         private void ShowOutput()
         {
             if (Output == null || Output.IsDisposed)
@@ -622,7 +739,7 @@ namespace WolvenKit
                 Output.Show(dockPanel, DockState.DockBottom);
             }
 
-            Output.Focus();
+            Output.Activate();
         }
         private void ShowConsole()
         {
@@ -632,7 +749,7 @@ namespace WolvenKit
                 Console.Show(dockPanel, DockState.DockBottom);
             }
 
-            Console.Focus();
+            Console.Activate();
         }
 
         private void ShowImportUtility()
@@ -643,7 +760,45 @@ namespace WolvenKit
                 ImportUtility.Show(dockPanel, DockState.Document);
             }
 
-            ImportUtility.Focus();
+            ImportUtility.Activate();
+        }
+        private void ShowRadishUtility()
+        {
+            var filedir = new DirectoryInfo(MainController.Get().ActiveMod.FileDirectory);
+            var radishdir = filedir.GetFiles("*.bat", SearchOption.AllDirectories)?.FirstOrDefault(_ => _.Name == "_settings_.bat")?.Directory;
+            if (radishdir == null)
+            {
+                Logger.LogString("ERROR! No radish mod directory found.\r\n", Logtype.Error);
+                return;
+            }
+
+
+            if (RadishUtility == null || RadishUtility.IsDisposed)
+            {
+                RadishUtility = new frmRadish();
+                RadishUtility.Show(dockPanel, DockState.Document);
+            }
+
+            RadishUtility.Activate();
+        }
+        private void ShowImagePreview()
+        {
+            if (ImagePreview == null || ImagePreview.IsDisposed)
+            {
+                ImagePreview = new frmImagePreview();
+                ImagePreview.Show(dockPanel, DockState.Document);
+            }
+            ImagePreview.Activate();
+        }
+        private void ShowScriptPreview()
+        {
+            if (ScriptPreview == null || ScriptPreview.IsDisposed)
+            {
+                ScriptPreview = new frmScriptEditor();
+                ScriptPreview.Show(dockPanel, DockState.Document);
+            }
+            
+            ScriptPreview.Activate();
         }
 
         private void newModToolStripMenuItem_Click(object sender, EventArgs e)
@@ -690,8 +845,45 @@ namespace WolvenKit
                     FileName = dlg.FileName,
                     Name = modname
                 };
+                // create default directories
+                ActiveMod.CreateDefaultDirectories();
                 ResetWindows();
-                UpdateModFileList(true);
+
+                // detect if radish-mod
+                var filedir = new DirectoryInfo(MainController.Get().ActiveMod.ProjectDirectory).Parent;
+                var radishdir = filedir.GetFiles("*.bat", SearchOption.AllDirectories)?.FirstOrDefault(_ => _.Name == "_settings_.bat")?.Directory;
+                if (radishdir != null)
+                {
+                    switch (MessageBox.Show(
+                        "WolvenKit detected a radish mod project installation in this directory. Would you like to add the radish files to the Mod Project?",
+                        "Radish Tool Integration",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                    {
+                        default:
+                            return;
+                        case DialogResult.Yes:
+                            {
+                                if (!Directory.Exists(ActiveMod.RadishDirectory))
+                                    Directory.CreateDirectory(ActiveMod.RadishDirectory);
+                                //move radish files into Modfiledir
+                                foreach (var file in radishdir.GetFiles("*", SearchOption.TopDirectoryOnly))
+                                {
+                                    File.Move(file.FullName, Path.Combine(ActiveMod.RadishDirectory, file.Name));
+                                }
+                                foreach (var dir in radishdir.GetDirectories("*", SearchOption.TopDirectoryOnly))
+                                {
+                                    if (dir.FullName == ActiveMod.ProjectDirectory)
+                                        continue;
+                                    Directory.Move(dir.FullName, Path.Combine(ActiveMod.RadishDirectory, dir.Name));
+                                }
+                                break;
+                            }
+                        case DialogResult.No:
+                            {
+                                break;
+                            }
+                    }
+                }
                 SaveMod();
                 AddOutput("\"" + ActiveMod.Name + "\" sucesfully created and loaded!\n", Logtype.Success);
                 break;
@@ -775,6 +967,7 @@ namespace WolvenKit
                         FileName = file,
                         version = "1.0"
                     };
+                    
                     File.Delete(file);
                     XmlSerializer xs = new XmlSerializer(typeof(W3Mod));
                     var mf = new FileStream(file, FileMode.Create);
@@ -786,15 +979,16 @@ namespace WolvenKit
                 OpenDocuments.ToList().ForEach(x => x.Close());
 
                 MainController.Get().Configuration.InitialModDirectory = Path.GetDirectoryName(file);
+                
 
                 //Loading the project
                 var ser = new XmlSerializer(typeof(W3Mod));
                 var modfile = new FileStream(file, FileMode.Open, FileAccess.Read);
                 ActiveMod = (W3Mod)ser.Deserialize(modfile);
                 ActiveMod.FileName = file;
+                ActiveMod.CreateDefaultDirectories();
                 modfile.Close();
                 ResetWindows();
-                UpdateModFileList(true);
                 AddOutput("\"" + ActiveMod.Name + "\" loaded successfully!\n", Logtype.Success);
                 MainController.Get().ProjectStatus = "Ready";
 
@@ -849,7 +1043,7 @@ namespace WolvenKit
                     if (archives.First().Value.Bundle.TypeName == MainController.Get().CollisionManager.TypeName ||
                         archives.First().Value.Bundle.TypeName == MainController.Get().TextureManager.TypeName)
                     {
-                        filename = Path.Combine(ActiveMod.FileDirectory, "Raw", AddAsDLC ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName, "dlc", ActiveMod.Name, item.FullPath) : Path.Combine("Mod", archives.First().Value.Bundle.TypeName, item.FullPath));
+                        filename = Path.Combine(ActiveMod.RawDirectory, AddAsDLC ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName, "dlc", ActiveMod.Name, item.FullPath) : Path.Combine("Mod", archives.First().Value.Bundle.TypeName, item.FullPath));
                     }
                     else
                     {
@@ -876,7 +1070,7 @@ namespace WolvenKit
                             {
                                 File.Delete(filename);
                             }
-                            selectedBundle.Extract(filename);
+                            selectedBundle.Extract(new BundleFileExtractArgs(filename, MainController.Get().Configuration.UncookExtension));
                         }
                         catch { }
                         return skip;
@@ -890,7 +1084,7 @@ namespace WolvenKit
                             File.Delete(filename);
                         }
 
-                        archives.FirstOrDefault().Value.Extract(filename);
+                        archives.FirstOrDefault().Value.Extract(new BundleFileExtractArgs(filename, MainController.Get().Configuration.UncookExtension));
                     }
                     catch (Exception ex)
                     {
@@ -964,29 +1158,12 @@ namespace WolvenKit
         }
 
         /// <summary>
-        /// Update the list of files in the ModExplorer
-        /// </summary>
-        /// <param name="clear">if true files or completely redrawn</param>
-        private void UpdateModFileList(bool clear = false)
-        {
-            ModExplorer.UpdateModFileList(true, clear);
-        }
-
-        /// <summary>
         /// Closes all the "file documents", resets modexplorer and clears the output.
         /// </summary>
         private void ResetWindows()
         {
-            if (ActiveMod != null)
-            {
-                foreach (var t in OpenDocuments.ToList())
-                {
-                    t.Close();
-                    break;
-                }
-            }
-            ModExplorer?.Close();
-            ModExplorer = null;
+            CloseWindows();
+
             ShowModExplorer();
             ShowConsole();
             ShowOutput();
@@ -1014,8 +1191,28 @@ namespace WolvenKit
             Console = null;
             ImportUtility?.Close();
             ImportUtility = null;
+            RadishUtility?.Close();
+            RadishUtility = null;
+            ScriptPreview = null;
+            ScriptPreview?.Close();
+            ImagePreview = null;
+            ImagePreview?.Close();
+
+            foreach (var t in OpenScripts.ToList())
+            {
+                t.SaveFile();
+                t.Close();
+            }
+            foreach (var t in OpenImages.ToList())
+            {
+                t.Close();
+            }
+
             foreach (var window in dockPanel.FloatWindows.ToList())
+            {
                 window.Dispose();
+                window.Close();
+            }
         }
 
         /// <summary>
@@ -1036,7 +1233,6 @@ namespace WolvenKit
             ShowModExplorer();
             ShowConsole();
             ShowOutput();
-            ShowImportUtility();
         }
 
         private void ShowModExplorer()
@@ -1059,6 +1255,9 @@ namespace WolvenKit
 
         public void ScanAndRegisterCustomClasses()
         {
+            if (ActiveMod == null)
+                return;
+
             foreach (var wsfile in ActiveMod.ModFiles.Where(_ => Path.GetExtension(_) == ".ws"))
             {
                 string fullpath = Path.Combine(ActiveMod.ModDirectory, wsfile);
@@ -1107,6 +1306,28 @@ namespace WolvenKit
             }
         }
 
+        internal class LoadFileArgs
+        {
+            public string Filename { get; set; }
+            public MemoryStream Stream { get; set; }
+            public frmCR2WDocument Doc { get; set; }
+            public bool SuppressErrors { get; set; }
+            public LoadFileArgs(string filename, frmCR2WDocument doc, MemoryStream stream = null, bool suppressErrors = false)
+            {
+                Filename = filename;
+                Doc = doc;
+                if (stream != null)
+                    Stream = stream;
+                SuppressErrors = suppressErrors;
+            }
+        }
+
+        /// <summary>
+        /// Opens a document in the background
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="memoryStream"></param>
+        /// <param name="suppressErrors"></param>
         public frmCR2WDocument LoadDocument(string filename, MemoryStream memoryStream = null, bool suppressErrors = false)
         {
             if (memoryStream == null && !File.Exists(filename))
@@ -1118,28 +1339,90 @@ namespace WolvenKit
                 return null;
             }
 
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
             // check and register custom classes
             // we do it here because people might edit the .ws files at any time
-            // todo: what do I do if the .ws file has been edited whil the cr2w file is open?
+            // todo: what do I do if the .ws file has been edited while the cr2w file is open?
             ScanAndRegisterCustomClasses();
 
 
             var doc = new frmCR2WDocument();
             OpenDocuments.Add(doc);
 
+            WorkerLoadFileSetup(new LoadFileArgs(filename, doc, memoryStream, suppressErrors));
+
+            // wait for the backgroundworker to finish
+            // this is not good practice since I am blocking
+            // but there are some functions (the renderer etc) that rely on a return document
+            // also I am blocking with the progress form regardless so it's already bad
+            if (MainBackgroundWorker.IsBusy)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                
+            }
+            var ret = HACK_bwform;
+            HACK_bwform = null;
+            return ret;
+        }
+
+
+        /// <summary>
+        /// Setup the backgroundworker and progress forms (Main thread)
+        /// </summary>
+        /// <param name="args"></param>
+        private void WorkerLoadFileSetup(LoadFileArgs args)
+        {
+            MainController.Get().ProjectStatus = "Busy";
+
+            // Backgroundworker
+            if (!MainBackgroundWorker.IsBusy)
+            {
+
+                m_frmProgress = new frmProgress()
+                {
+                    Text = "Loading File...",
+                    StartPosition = FormStartPosition.CenterParent,
+                    FormBorderStyle = FormBorderStyle.None
+                };
+
+                workerAction = WorkerLoadFile;
+                MainBackgroundWorker.RunWorkerAsync(args);
+                DialogResult dr = m_frmProgress.ShowDialog();
+
+
+            }
+            else
+                Logger.LogString("The background worker is currently busy.\r\n", Logtype.Error);
+
+            MainController.Get().ProjectStatus = "Ready";
+        }
+
+        /// <summary>
+        /// This runs on a worker thread in the background and 
+        /// returns the LoadFileArgs it reveived if succesfull, null otherwise.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        protected private object WorkerLoadFile(object sender, DoWorkEventArgs e)
+        {
+            object arg = e.Argument;
+            if (!(arg is LoadFileArgs))
+                throw new NotImplementedException();
+            var Args = (LoadFileArgs)arg;
+
+            var doc = Args.Doc;
+            var filename = Args.Filename;
+            var suppressErrors = Args.SuppressErrors;
+
             try
             {
-                if (memoryStream != null)
-                {
-                    doc.LoadFile(filename, memoryStream);
-                }
+                if (Args.Stream != null)
+                    Args.Doc.LoadFile(Args.Filename, Args.Stream);
                 else
-                {
-                    doc.LoadFile(filename);
-                }
+                    Args.Doc.LoadFile(Args.Filename);
             }
             catch (InvalidFileTypeException ex)
             {
@@ -1147,7 +1430,7 @@ namespace WolvenKit
                     MessageBox.Show(this, ex.Message, @"Error opening file.");
 
                 OpenDocuments.Remove(doc);
-                doc.Dispose();
+                //doc.Dispose();
                 return null;
             }
             catch (MissingTypeException ex)
@@ -1156,7 +1439,7 @@ namespace WolvenKit
                     MessageBox.Show(this, ex.Message, @"Error opening file.");
 
                 OpenDocuments.Remove(doc);
-                doc.Dispose();
+                //doc.Dispose();
                 return null;
             }
             catch (FormatException ex)
@@ -1165,14 +1448,38 @@ namespace WolvenKit
                     MessageBox.Show(this, ex.Message, @"Error opening file.");
 
                 OpenDocuments.Remove(doc);
-                doc.Dispose();
+                //doc.Dispose();
+                throw ex;
                 return null;
             }
+
+            workerCompletedAction = WorkerLoadFileCompleted;
+            return Args;
+        }
+
+        /// <summary>
+        /// This is called if the backgroundworker has completed sucessfully. 
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        protected private object WorkerLoadFileCompleted(object arg)
+        {
+            if (!(arg is LoadFileArgs))
+                throw new NotImplementedException();
+            var Args = (LoadFileArgs)arg;
+            var doc = Args.Doc;
+            var filename = Args.Filename;
+
+            #region SetupFile
+            // Backgroundwork Start
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             switch (Path.GetExtension(filename))
             {
                 case ".w2scene":
                 case ".w2quest":
-                case ".w2phase": 
+                case ".w2phase":
                     {
                         doc.flowDiagram = new frmChunkFlowDiagram();
                         doc.flowDiagram.OnOutput += OnOutput;
@@ -1183,7 +1490,7 @@ namespace WolvenKit
                         doc.flowDiagram.Show(doc.FormPanel, DockState.Document);
                         break;
                     }
-                
+
                 case ".journal":
                     {
                         doc.JournalEditor = new frmJournalEditor
@@ -1198,10 +1505,11 @@ namespace WolvenKit
                     {
                         doc.ImageViewer = new frmImagePreview
                         {
-                            File = doc.File,
                             DockAreas = DockAreas.Document
                         };
                         doc.ImageViewer.Show(doc.FormPanel, DockState.Document);
+                        CR2WExportWrapper imagechunk = doc.File?.chunks?.FirstOrDefault(_ => _.data.Type.Contains("CBitmapTexture"));
+                        doc.ImageViewer.SetImage(imagechunk);
                         break;
                     }
                 case ".w2mesh":
@@ -1276,9 +1584,8 @@ namespace WolvenKit
 
             AddOutput(output.ToString(), Logtype.Important);
             return doc;
+            #endregion
         }
-
-        
 
         public CR2WFile LoadDocumentAndGetFile(string filename)
         {
@@ -1344,6 +1651,40 @@ namespace WolvenKit
         #endregion //Methods
 
         #region  Control events
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            //Load/Setup the config
+            var Exit = false;
+            while (!File.Exists(MainController.Get().Configuration.ExecutablePath))
+            {
+                var sets = new frmSettings();
+                if (sets.ShowDialog() != DialogResult.OK)
+                {
+                    Exit = true;
+                    break;
+                }
+                else
+                    MainController.Get().ProjectStatus = "Ready";
+            }
+
+            if (Exit)
+            {
+                Visible = false;
+                Close();
+            }
+
+            //Start loading if everything is set up.
+            var frmload = new frmLoading();
+            frmload.ShowDialog();
+
+            WccHelper = MainController.Get().WccHelper;
+            Logger = MainController.Get().Logger;
+            Logger.PropertyChanged += LoggerUpdated;
+
+            //Update check should be after we are all set up. It goes on in the background.
+            AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
+            richpresenceworker.RunWorkerAsync();
+        }
         private void richpresenceworker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             string project = "non";
@@ -1419,7 +1760,7 @@ namespace WolvenKit
                             foreach (var f in ccf.Files)
                             {
                                 string extractedfilename = Path.ChangeExtension(Path.Combine(outdir, f.Name), "apb");
-                                f.Extract(extractedfilename);
+                                f.Extract(new BundleFileExtractArgs(extractedfilename, MainController.Get().Configuration.UncookExtension));
                                 AddOutput($"Extracted {extractedfilename}.\n");
                             }
                         }
@@ -1546,7 +1887,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
 
         private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
         {
-            var config = MainController.Get().Configuration;
+            var config = UIController.Get().Configuration;
 
             config.MainState = WindowState;
 
@@ -1560,7 +1901,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
         private void frmMain_Shown(object sender, EventArgs e)
         {
             ResetWindows();
-            var config = MainController.Get().Configuration;
+            var config = UIController.Get().Configuration;
             Size = config.MainSize;
             Location = config.MainLocation;
             WindowState = config.MainState;
@@ -1620,26 +1961,86 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
 
         private void Assetbrowser_FileAdd(object sender, Tuple<List<IWitcherArchive>, List<WitcherListViewItem>,bool> Details)
         {
-            ModExplorer.PauseMonitoring();
+            
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
                 MessageBox.Show(@"Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            MainController.Get().ProjectStatus = "Busy";
-            var skipping = false;
-            foreach (WitcherListViewItem item in Details.Item2)
-            {
-                skipping = AddToMod(item, skipping, Details.Item1, Details.Item3);
-            }
-            SaveMod();
-            MainController.Get().ProjectStatus = "Ready";
-            ModExplorer.FoldersShown = true;
-            ModExplorer.FilteredFiles = ActiveMod.Files;
-            ModExplorer.UpdateModFileList(true,true);
-            ModExplorer.ResumeMonitoring();
-        }
 
+            MainController.Get().ProjectStatus = "Busy";
+
+            // Backgroundworker
+            if (!MainBackgroundWorker.IsBusy)
+            {
+                ModExplorer.PauseMonitoring();
+                
+                m_frmProgress = new frmProgress()
+                {
+                    Text = "Adding Assets",
+                    StartPosition = FormStartPosition.CenterParent,
+                };
+
+                workerAction = WorkerAssetBrowserAddFiles;
+                MainBackgroundWorker.RunWorkerAsync(Details);
+
+                DialogResult dr = m_frmProgress.ShowDialog(this);
+                switch (dr)
+                {
+                    case DialogResult.Cancel:
+                        {
+                            MainBackgroundWorker.CancelAsync();
+                            m_frmProgress.Cancel = true;
+                            break;
+                        }
+                    case DialogResult.None:
+                    case DialogResult.OK:
+                    case DialogResult.Abort:
+                    case DialogResult.Retry:
+                    case DialogResult.Ignore:
+                    case DialogResult.Yes:
+                    case DialogResult.No:
+                    default:
+                        break;
+                }
+                ModExplorer.ResumeMonitoring();
+                SaveMod();
+            }
+            else
+                Logger.LogString("The background worker is currently busy.\r\n", Logtype.Error);
+           
+            MainController.Get().ProjectStatus = "Ready";
+            
+        }
+        protected object WorkerAssetBrowserAddFiles(object sender, DoWorkEventArgs e)
+        {
+            object arg = e.Argument;
+            if (!(arg is Tuple<List<IWitcherArchive>, List<WitcherListViewItem>, bool>))
+                throw new NotImplementedException();
+            var Details = (Tuple<List<IWitcherArchive>, List<WitcherListViewItem>, bool>)arg;
+            BackgroundWorker bwAsync = sender as BackgroundWorker;
+
+
+            var skipping = false;
+            var count = Details.Item2.Count;
+            for (int i = 0; i < count; i++)
+            {
+                if (bwAsync.CancellationPending || m_frmProgress.Cancel)
+                {
+                    Logger.LogString("Background worker cancelled.\r\n", Logtype.Error);
+                    e.Cancel = true;
+                    return false;
+                }
+
+                WitcherListViewItem item = Details.Item2[i];
+                skipping = AddToMod(item, skipping, Details.Item1, Details.Item3);
+
+
+                int percentprogress = (int)((float)i / (float)count * 100.0);
+                MainBackgroundWorker.ReportProgress(percentprogress, item.Text);
+            }
+            return true;
+        }
         private void openModToolStripMenuItem_Click(object sender, EventArgs e)
         {
             openMod();
@@ -1656,7 +2057,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 dir = Path.GetDirectoryName(fullpath);
             else
                 dir = fullpath;
-            string reldir = dir.TrimStart(ActiveMod.FileDirectory).TrimStart(Path.DirectorySeparatorChar);
+            string reldir = dir.Substring(ActiveMod.FileDirectory.Length + 1);
 
             // Trim working directories in path
             var reg = new Regex(@"^(Raw|Mod)\\(.*)");
@@ -1738,8 +2139,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
         {
             var filename = e.File;
 
-            var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
-            if (!File.Exists(fullpath))
+            if (!File.Exists(filename))
                 return;
 
             var dlg = new frmRenameDialog() { FileName = filename };
@@ -1759,14 +2159,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 {
                 }
 
-                File.Move(fullpath, newfullpath);
-
-                // Rename file in mod explorer
-                if (ModExplorer != null)
-                {
-                    ModExplorer.DeleteNode(filename);
-                    ModExplorer.UpdateModFileList(true, true);
-                }
+                File.Move(filename, newfullpath);
             }
             MainController.Get().ProjectStatus = "File renamed";
         }
@@ -1837,40 +2230,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             AddOutput("Saved!\n", Logtype.Success);
         }
 
-        private void frmMain_Load(object sender, EventArgs e)
-        {
-            //Load/Setup the config
-            var Exit = false;
-            while (!File.Exists(MainController.Get().Configuration.ExecutablePath))
-            {
-                var sets = new frmSettings();
-                if (sets.ShowDialog() != DialogResult.OK)
-                {
-                    Exit = true;
-                    break;
-                }
-                else
-                    MainController.Get().ProjectStatus = "Ready";
-            }
-
-            if (Exit)
-            {
-                Visible = false;
-                Close();
-            }
-
-            //Start loading if everything is set up.
-            var frmload = new frmLoading();
-            frmload.ShowDialog();
-
-            WccHelper = MainController.Get().WccHelper;
-            Logger = MainController.Get().Logger;
-            Logger.PropertyChanged += LoggerUpdated;
-
-            //Update check should be after we are all set up. It goes on in the background.
-            AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
-            richpresenceworker.RunWorkerAsync();
-        }
+        
 
 
         private void tbtNewMod_Click(object sender, EventArgs e)
@@ -1904,7 +2264,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                     {
                         try
                         {
-                            MainController.Get()?.Window?.ModExplorer?.StopMonitoringDirectory();
+                            UIController.Get()?.Window?.ModExplorer?.StopMonitoringDirectory();
                             //Close all docs so they won't cause problems
                             OpenDocuments.ToList().ForEach(x => x.Close());
                             //Move the files directory
@@ -1929,7 +2289,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                     {
                         openMod(MainController.Get().ActiveMod?.FileName);
                     }
-                    Commonfunctions.SendNotification("Succesfully updated mod settings!");
+                    CommonUIFunctions.SendNotification("Succesfully updated mod settings!");
                 }
             }
         }
@@ -1962,7 +2322,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                         pi.ShowDialog();
                 }
                 else
-                    Commonfunctions.SendNotification("Invalid file!");
+                    CommonUIFunctions.SendNotification("Invalid file!");
             }
         }
 
@@ -2341,6 +2701,10 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
         private void importUtilityToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowImportUtility();
+        }
+        private void RadishUtilitytoolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowRadishUtility();
         }
 
         private void ModExplorer_RequestFastRender(object sender, RequestFileArgs e)
@@ -2912,8 +3276,187 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
         }
 
 
+
         #endregion // Mod Pack
 
+        #region UI formborderstyle none
 
+        private const long WS_SYSMENU = 0x00080000L;
+        private const long WS_BORDER = 0x00800000L;
+        private const long WS_SIZEBOX = 0x00040000L;
+        private const long WS_CHILD = 0x40000000L;
+        private const long WS_DLGFRAME = 0x00400000L;
+        private const long WS_MAXIMIZEBOX = 0x00010000L;
+        private const long WS_CAPTION = 0x00C00000L;
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HTCAPTION = 0x2;
+        
+        [System.Runtime.InteropServices.DllImport("user32")]
+        public static extern bool ReleaseCapture();
+        [System.Runtime.InteropServices.DllImport("user32")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        [System.Runtime.InteropServices.DllImport("user32")]
+        internal static extern bool GetMonitorInfo(IntPtr hMonitor, MONITORINFO lpmi);
+
+        [System.Runtime.InteropServices.DllImport("user32")]
+        internal static extern IntPtr MonitorFromWindow(IntPtr handle, int flags);
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                {
+                    cp.Style |= (int)WS_BORDER;
+                    cp.Style |= (int)WS_SYSMENU;
+                    cp.Style |= (int)WS_SIZEBOX;
+                }
+                return cp;
+            }
+        }
+        private void MinimizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowState = FormWindowState.Minimized;
+        }
+
+        private void RestoreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Screen screen = Screen.FromControl(this);
+            //int x = screen.WorkingArea.X - screen.Bounds.X;
+            //int y = screen.WorkingArea.Y - screen.Bounds.Y;
+            //this.MaximizedBounds = new Rectangle(x, y,
+            //    screen.WorkingArea.Width, screen.WorkingArea.Height);
+
+            if (this.WindowState != FormWindowState.Maximized)
+                WindowState = FormWindowState.Maximized;
+            else
+                WindowState = FormWindowState.Normal;
+        }
+
+        // https://stackoverflow.com/a/42806834
+        protected override void WndProc(ref Message m)
+        {
+            Boolean handled = false;
+
+            switch (m.Msg)
+            {
+                case 0x0024:
+                    WmGetMinMaxInfo(m.HWnd, m.LParam);
+                    
+                    handled = true;
+                    break;
+            }
+            m.Result = IntPtr.Zero;
+            if (handled) DefWndProc(ref m); else base.WndProc(ref m);
+        }
+
+        private const int WINDOW_BORDER_BUFFER = 10;
+        private static void WmGetMinMaxInfo(IntPtr hwnd, IntPtr lParam)
+        {
+            MINMAXINFO mmi = (MINMAXINFO)Marshal.PtrToStructure(lParam, typeof(MINMAXINFO));
+            int MONITOR_DEFAULTTONEAREST = 0x00000002;
+            IntPtr monitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+            if (monitor != IntPtr.Zero)
+            {
+                MONITORINFO monitorInfo = new MONITORINFO();
+                GetMonitorInfo(monitor, monitorInfo);
+                RECT rcWorkArea = monitorInfo.rcWork;
+                RECT rcMonitorArea = monitorInfo.rcMonitor;
+                mmi.ptMaxPosition.x = Math.Abs(rcWorkArea.left - rcMonitorArea.left) - WINDOW_BORDER_BUFFER;
+                mmi.ptMaxPosition.y = Math.Abs(rcWorkArea.top - rcMonitorArea.top) - WINDOW_BORDER_BUFFER;
+                mmi.ptMaxSize.x = Math.Abs(rcWorkArea.right - rcWorkArea.left) + (2 * WINDOW_BORDER_BUFFER);
+                mmi.ptMaxSize.y = Math.Abs(rcWorkArea.bottom - rcWorkArea.top) + (2 * WINDOW_BORDER_BUFFER);
+            }
+            Marshal.StructureToPtr(mmi, lParam, true);
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct POINT
+        {
+            /// <summary>x coordinate of point.</summary>
+            public int x;
+            /// <summary>y coordinate of point.</summary>
+            public int y;
+            /// <summary>Construct a point of coordinates (x,y).</summary>
+            public POINT(int x, int y)
+            {
+                this.x = x;
+                this.y = y;
+            }
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MINMAXINFO
+        {
+            public POINT ptReserved;
+            public POINT ptMaxSize;
+            public POINT ptMaxPosition;
+            public POINT ptMinTrackSize;
+            public POINT ptMaxTrackSize;
+        };
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+        public class MONITORINFO
+        {
+            public int cbSize = Marshal.SizeOf(typeof(MONITORINFO));
+            public RECT rcMonitor = new RECT();
+            public RECT rcWork = new RECT();
+            public int dwFlags = 0;
+        }
+
+        [StructLayout(LayoutKind.Sequential, Pack = 0)]
+        public struct RECT
+        {
+            public int left;
+            public int top;
+            public int right;
+            public int bottom;
+            public static readonly RECT Empty = new RECT();
+            public int Width { get { return Math.Abs(right - left); } }
+            public int Height { get { return bottom - top; } }
+            public RECT(int left, int top, int right, int bottom)
+            {
+                this.left = left;
+                this.top = top;
+                this.right = right;
+                this.bottom = bottom;
+            }
+            public RECT(RECT rcSrc)
+            {
+                left = rcSrc.left;
+                top = rcSrc.top;
+                right = rcSrc.right;
+                bottom = rcSrc.bottom;
+            }
+            public bool IsEmpty { get { return left >= right || top >= bottom; } }
+            public override string ToString()
+            {
+                if (this == Empty) { return "RECT {Empty}"; }
+                return "RECT { left : " + left + " / top : " + top + " / right : " + right + " / bottom : " + bottom + " }";
+            }
+            public override bool Equals(object obj)
+            {
+                if (!(obj is System.Windows.Rect)) { return false; }
+                return (this == (RECT)obj);
+            }
+            /// <summary>Return the HashCode for this struct (not garanteed to be unique)</summary>
+            public override int GetHashCode() => left.GetHashCode() + top.GetHashCode() + right.GetHashCode() + bottom.GetHashCode();
+            /// <summary> Determine if 2 RECT are equal (deep compare)</summary>
+            public static bool operator ==(RECT rect1, RECT rect2) { return (rect1.left == rect2.left && rect1.top == rect2.top && rect1.right == rect2.right && rect1.bottom == rect2.bottom); }
+            /// <summary> Determine if 2 RECT are different(deep compare)</summary>
+            public static bool operator !=(RECT rect1, RECT rect2) { return !(rect1 == rect2); }
+        }
+
+
+        #endregion
+
+        private void toolStripButtonRadishUtil_Click(object sender, EventArgs e)
+        {
+            ShowRadishUtility();
+        }
+
+        private void toolStripButtonImportUtil_Click(object sender, EventArgs e)
+        {
+            ShowImportUtility();
+        }
     }
 }

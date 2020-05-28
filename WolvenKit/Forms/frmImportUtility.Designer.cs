@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmImportUtility));
             this.objectListView = new BrightIdeasSoftware.ObjectListView();
             this.olvColumnSelected = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -99,7 +100,7 @@
             // 
             // olvColumnTexturegroup
             // 
-            this.olvColumnTexturegroup.AspectName = "Texturegroup";
+            this.olvColumnTexturegroup.AspectName = "TextureGroup";
             this.olvColumnTexturegroup.FillsFreeSpace = true;
             this.olvColumnTexturegroup.Groupable = false;
             this.olvColumnTexturegroup.Text = "Texturegroup";
@@ -173,6 +174,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.objectListView);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmImportUtility";
             this.Text = "Import Utility";
             ((System.ComponentModel.ISupportInitialize)(this.objectListView)).EndInit();

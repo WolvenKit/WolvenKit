@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using AutoUpdaterDotNET;
+using WolvenKit.App;
 
 namespace WolvenKit
 {
@@ -36,7 +37,7 @@ namespace WolvenKit
                     }
                 }
             }
-            Application.Run(MainController.Get().Window);   
+            Application.Run(UIController.Get().Window);   
         }
     }
 }

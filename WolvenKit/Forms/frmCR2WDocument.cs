@@ -1,13 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.App;
+using WolvenKit.App.Model;
+using WolvenKit.Common;
 using WolvenKit.CR2W;
 using WolvenKit.Services;
 
 namespace WolvenKit
 {
-    public partial class frmCR2WDocument : DockContent, IThemedContent
+    public partial class frmCR2WDocument : DockContent, IThemedContent, INotifyPropertyChanged
     {
         public frmChunkList chunkList;
         public frmChunkProperties propertyWindow;
@@ -15,7 +21,6 @@ namespace WolvenKit
         public frmChunkFlowDiagram flowDiagram;
         public frmJournalEditor JournalEditor;
         public frmImagePreview ImageViewer;
-        public frmTextureFile TextureFile;
         public Render.frmRender RenderViewer;
         private CR2WFile file;
 
@@ -45,9 +50,18 @@ namespace WolvenKit
             propertyWindow.Show(dockPanel, DockState.DockBottom);
             propertyWindow.OnItemsChanged += PropertyWindow_OnItemsChanged;
 
+            this.PropertyChanged += FormUpdated;
+
             chunkList.Activate();
         }
 
+        private delegate void strDelegate(string t);
+        private void FormUpdated(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "FormText")
+                Invoke(new strDelegate(UpdateFormText), (FormText));
+        }
+        protected void UpdateFormText(string val) => this.Text = val;
         private void PropertyWindow_OnItemsChanged(object sender, EventArgs e)
         {
             var args = (e as BrightIdeasSoftware.CellEditEventArgs);
@@ -82,12 +96,6 @@ namespace WolvenKit
 
                 if (ImageViewer != null && !ImageViewer.IsDisposed)
                 {
-                    ImageViewer.File = file;
-                }
-
-                if (TextureFile != null && !TextureFile.IsDisposed)
-                {
-                    TextureFile.File = file;
                 }
 
                 if (RenderViewer != null && !RenderViewer.IsDisposed)
@@ -108,14 +116,33 @@ namespace WolvenKit
             }
         }
 
+        #region FormText
+        private string _formText;
+        public string FormText
+        {
+            get => _formText;
+            set
+            {
+                if (_formText != value)
+                {
+                    _formText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
         public string FileName
         {
             get { return File.FileName; }
-            set { File.FileName = value; }
         }
 
         public object SaveTarget { get; set; }
         public event EventHandler<FileSavedEventArgs> OnFileSaved;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public void frmCR2WDocument_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -161,14 +188,15 @@ namespace WolvenKit
 
         private void loadFile(Stream stream, string filename)
         {
-            Text = Path.GetFileName(filename) + " [" + filename + "]";
+            //Text = Path.GetFileName(filename) + " [" + filename + "]";
+            FormText = Path.GetFileName(filename) + " [" + filename + "]";
 
             using (var reader = new BinaryReader(stream))
             {
-                File = new CR2WFile(reader)
+                File = new CR2WFile(reader, MainController.Get().Logger)
                 {
                     FileName = filename,
-                    EditorController = MainController.Get(),
+                    EditorController = UIController.Get(),
                     LocalizedStringSource = MainController.Get()
                 };
             }
@@ -229,7 +257,7 @@ namespace WolvenKit
 
         public void ApplyCustomTheme()
         {
-            var theme = MainController.Get().GetTheme();
+            var theme = UIController.Get().GetTheme();
             this.dockPanel.Theme = theme;
             dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath),
                 "cr2wdocument_layout.xml"));

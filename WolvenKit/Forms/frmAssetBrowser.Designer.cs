@@ -76,12 +76,15 @@ namespace WolvenKit
             this.addDLCFile = new System.Windows.Forms.Button();
             this.homeBTN = new System.Windows.Forms.Button();
             this.fileSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.limitCheckBox = new System.Windows.Forms.CheckBox();
+            this.limitUpDown = new System.Windows.Forms.NumericUpDown();
             this.filebrowserMenuStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fileSplitContainer)).BeginInit();
             this.fileSplitContainer.Panel1.SuspendLayout();
             this.fileSplitContainer.Panel2.SuspendLayout();
             this.fileSplitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.limitUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // btOpen
@@ -534,11 +537,43 @@ namespace WolvenKit
             this.fileSplitContainer.SplitterWidth = 3;
             this.fileSplitContainer.TabIndex = 29;
             // 
+            // limitCheckBox
+            // 
+            this.limitCheckBox.AutoSize = true;
+            this.limitCheckBox.Checked = true;
+            this.limitCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.limitCheckBox.Location = new System.Drawing.Point(366, 97);
+            this.limitCheckBox.Name = "limitCheckBox";
+            this.limitCheckBox.Size = new System.Drawing.Size(98, 17);
+            this.limitCheckBox.TabIndex = 30;
+            this.limitCheckBox.Text = "Limit results to :";
+            this.limitCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // limitUpDown
+            // 
+            this.limitUpDown.Location = new System.Drawing.Point(464, 96);
+            this.limitUpDown.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.limitUpDown.Name = "limitUpDown";
+            this.limitUpDown.Size = new System.Drawing.Size(64, 20);
+            this.limitUpDown.TabIndex = 32;
+            this.limitUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.limitUpDown.Value = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            // 
             // frmAssetBrowser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(811, 525);
+            this.Controls.Add(this.limitUpDown);
+            this.Controls.Add(this.limitCheckBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.fileSplitContainer);
             this.Controls.Add(this.homeBTN);
@@ -573,6 +608,7 @@ namespace WolvenKit
             this.fileSplitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fileSplitContainer)).EndInit();
             this.fileSplitContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.limitUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -623,5 +659,7 @@ namespace WolvenKit
         private Button addDLCFile;
         private Button homeBTN;
         private SplitContainer fileSplitContainer;
+        private CheckBox limitCheckBox;
+        private NumericUpDown limitUpDown;
     }
 }

@@ -13,8 +13,8 @@ namespace WolvenKit.CR2W.Types
     {
         private const int fixedbuffersize = 46;
 
-        CUInt16 bytesize;
-        CBytes unk1;
+        public CUInt16 bytesize;
+        public CBytes unk1;
 
         public SMeshBlock5(CR2WFile cr2w) :
             base(cr2w)

@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using WolvenKit.App;
 using WolvenKit.Cache;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
@@ -60,8 +61,8 @@ namespace WolvenKit
                 try
                 {
                     var files = MainController.ImportFile(image, MainController.Get().TextureManager);
-                    entityImage.Image = new DdsImage(files[0]).BitmapImage;
-                    entimgbox.Image = new DdsImage(files[1]).BitmapImage;
+                    entityImage.Image = ImageUtility.FromBytes(files[0]);
+                    entimgbox.Image = ImageUtility.FromBytes(files[1]);
                 }
                 catch
                 {

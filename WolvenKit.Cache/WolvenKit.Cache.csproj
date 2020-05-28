@@ -96,6 +96,9 @@
     <Reference Include="LZ4, Version=1.0.15.93, Culture=neutral, PublicKeyToken=62e1b5ec1eec9bdd, processorArchitecture=MSIL">
       <HintPath>..\packages\lz4net.1.0.15.93\lib\net4-client\LZ4.dll</HintPath>
     </Reference>
+    <Reference Include="Pfim, Version=0.9.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Pfim.0.9.1\lib\netstandard2.0\Pfim.dll</HintPath>
+    </Reference>
     <Reference Include="Snappy.NET, Version=1.1.1.8, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Snappy.NET.1.1.1.8\lib\net45\Snappy.NET.dll</HintPath>
     </Reference>
@@ -120,7 +123,7 @@
     <Compile Include="DDS\DDS_ENUMS.cs" />
     <Compile Include="CollisionCache\CollisionCacheItem.cs" />
     <Compile Include="CollisionCache\Collision_Cache.cs" />
-    <Compile Include="DDS\DDSImageParser.cs" />
+    <Compile Include="DDS\Texconv.cs" />
     <Compile Include="ImageUtility.cs" />
     <Compile Include="Cache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -145,6 +148,11 @@
       <Project>{32d40d10-d6c3-48f0-aeb6-0f41c7e75cfd}</Project>
       <Name>WolvenKit.W3Strings</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DDS\texconv.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

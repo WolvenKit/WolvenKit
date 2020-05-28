@@ -30,6 +30,7 @@ namespace WolvenKit.Cache
 
         public TextureCache()
         {
+
             Chunkoffsets = new List<uint>();
             Names = new List<string>();
             Files = new List<TextureCacheItem>();
@@ -44,8 +45,8 @@ namespace WolvenKit.Cache
         {
             try
             {
-                            FileName = filepath;
-            Chunkoffsets = new List<uint>();
+                FileName = filepath;
+                Chunkoffsets = new List<uint>();
                 using (var br = new BinaryReader(new FileStream(filepath, FileMode.Open)))
                 {
                     Files = new List<TextureCacheItem>();
@@ -80,7 +81,7 @@ namespace WolvenKit.Cache
                         {
                             Name = Names[i],
                             ParentFile = FileName,
-                            Hash = br.ReadInt32(),
+                            Hash = br.ReadUInt32(),
                             /*-------------TextureCacheEntryBase---------------*/
                             PathStringIndex = br.ReadInt32(),
                             PageOFfset = br.ReadInt32(),
@@ -95,7 +96,8 @@ namespace WolvenKit.Cache
                             NumMipOffsets = br.ReadInt32(),
                             TimeStamp = br.ReadInt64(),
                             /*-------------TextureCacheEntryBase---------------*/
-                            Type = br.ReadInt16(),
+                            Type1 = br.ReadByte(),
+                            Type2 = br.ReadByte(),
                             IsCube = br.ReadByte(),
                             Unk1 = br.ReadByte()
                         };
@@ -110,7 +112,7 @@ namespace WolvenKit.Cache
                         t.SliceIdx = br.ReadByte(); //maybe the 48bit part of OFFSET
 
                         var lastpos = br.BaseStream.Position + t.ZSize;
-                        
+
 
                         for (int i = 0; i < t.NumMipOffsets; i++)
                         {
