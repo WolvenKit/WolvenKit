@@ -168,7 +168,7 @@ namespace WolvenKit
         }
         void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            m_frmProgress.SetProgressBarValue(e.ProgressPercentage, e.UserState);
+            m_frmProgress?.SetProgressBarValue(e.ProgressPercentage, e.UserState);
         }
         frmCR2WDocument HACK_bwform = null;
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
