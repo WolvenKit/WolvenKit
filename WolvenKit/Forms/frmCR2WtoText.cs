@@ -8,6 +8,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VisualPlus.Extensibility;
+using WolvenKit.App;
+using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Editors;
 using static WolvenKit.frmChunkProperties;
@@ -708,7 +710,7 @@ namespace WolvenKit.Forms
                 {
                     try
                     {
-                        CR2WFile embedcr2w = new CR2WFile(((IByteSource)node.Variable).Bytes);
+                        CR2WFile embedcr2w = new CR2WFile(((IByteSource)node.Variable).Bytes, MainController.Get().Logger);
                         var lc = new LoggerCR2W(embedcr2w, Writer, Options);
                         lc.processCR2W(level);
                     }
