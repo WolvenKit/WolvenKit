@@ -122,7 +122,7 @@
 
 This text output can then be compared using a tool such as WinMerge, or searched.  This can provide a way to compare modified files to visualise changes, or to search through files in bulk to find references to files or values of interest.
 
-Be aware that text dumps can be much larger than the original files; some vanilla CR2W files will produce text dumps of several megabytes each.  To dump the vanilla game + DLCs will require 25+GB.
+Be aware that text dumps can be much larger than the original files; some vanilla CR2W files will produce text dumps of several megabytes each.  To dump the vanilla game plus its DLCs with default settings will consume 35+ GB.
 
 The following file extensions will not be opened: </value>
   </data>

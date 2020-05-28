@@ -60,13 +60,13 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.prgProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.dataStatus = new System.Windows.Forms.DataGridView();
-            this.txtLog = new System.Windows.Forms.TextBox();
             this.colAllFiles = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colNonCR2W = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colMatchingFiles = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colProcessedFiles = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colSkipped = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colExceptions = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txtLog = new System.Windows.Forms.TextBox();
             this.pnlControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numThreads)).BeginInit();
             this.grpExistingFiles.SuspendLayout();
@@ -83,7 +83,7 @@
             this.btnRun.Location = new System.Drawing.Point(195, 494);
             this.btnRun.Name = "btnRun";
             this.btnRun.Size = new System.Drawing.Size(420, 23);
-            this.btnRun.TabIndex = 10;
+            this.btnRun.TabIndex = 30;
             this.btnRun.Text = "Run CR2W Dump";
             this.btnRun.UseVisualStyleBackColor = true;
             this.btnRun.Click += new System.EventHandler(this.btnRun_Click);
@@ -100,6 +100,7 @@
             this.rtfDescription.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.rtfDescription.Size = new System.Drawing.Size(740, 170);
             this.rtfDescription.TabIndex = 20;
+            this.rtfDescription.TabStop = false;
             this.rtfDescription.Text = resources.GetString("rtfDescription.Text");
             // 
             // pnlControls
@@ -146,7 +147,7 @@
             0});
             this.numThreads.Name = "numThreads";
             this.numThreads.Size = new System.Drawing.Size(36, 20);
-            this.numThreads.TabIndex = 36;
+            this.numThreads.TabIndex = 6;
             this.numThreads.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numThreads.Value = new decimal(new int[] {
             4,
@@ -162,7 +163,7 @@
             this.chkCreateFolders.Location = new System.Drawing.Point(144, 127);
             this.chkCreateFolders.Name = "chkCreateFolders";
             this.chkCreateFolders.Size = new System.Drawing.Size(151, 17);
-            this.chkCreateFolders.TabIndex = 35;
+            this.chkCreateFolders.TabIndex = 10;
             this.chkCreateFolders.Text = "Create intermediate folders";
             this.chkCreateFolders.UseVisualStyleBackColor = true;
             // 
@@ -174,7 +175,7 @@
             this.chkDumpEmbedded.Location = new System.Drawing.Point(144, 168);
             this.chkDumpEmbedded.Name = "chkDumpEmbedded";
             this.chkDumpEmbedded.Size = new System.Drawing.Size(116, 17);
-            this.chkDumpEmbedded.TabIndex = 34;
+            this.chkDumpEmbedded.TabIndex = 12;
             this.chkDumpEmbedded.Text = "List embedded files";
             this.chkDumpEmbedded.UseVisualStyleBackColor = true;
             // 
@@ -185,7 +186,7 @@
             this.grpExistingFiles.Location = new System.Drawing.Point(144, 229);
             this.grpExistingFiles.Name = "grpExistingFiles";
             this.grpExistingFiles.Size = new System.Drawing.Size(142, 56);
-            this.grpExistingFiles.TabIndex = 33;
+            this.grpExistingFiles.TabIndex = 20;
             this.grpExistingFiles.TabStop = false;
             // 
             // radExistingSkip
@@ -194,7 +195,8 @@
             this.radExistingSkip.Location = new System.Drawing.Point(6, 33);
             this.radExistingSkip.Name = "radExistingSkip";
             this.radExistingSkip.Size = new System.Drawing.Size(105, 17);
-            this.radExistingSkip.TabIndex = 0;
+            this.radExistingSkip.TabIndex = 22;
+            this.radExistingSkip.TabStop = true;
             this.radExistingSkip.Text = "Skip existing files";
             this.radExistingSkip.UseVisualStyleBackColor = true;
             // 
@@ -205,7 +207,7 @@
             this.radExistingOverwrite.Location = new System.Drawing.Point(6, 12);
             this.radExistingOverwrite.Name = "radExistingOverwrite";
             this.radExistingOverwrite.Size = new System.Drawing.Size(129, 17);
-            this.radExistingOverwrite.TabIndex = 0;
+            this.radExistingOverwrite.TabIndex = 21;
             this.radExistingOverwrite.TabStop = true;
             this.radExistingOverwrite.Text = "Overwrite existing files";
             this.radExistingOverwrite.UseVisualStyleBackColor = true;
@@ -218,7 +220,7 @@
             this.chkPrefixFileName.Location = new System.Drawing.Point(144, 148);
             this.chkPrefixFileName.Name = "chkPrefixFileName";
             this.chkPrefixFileName.Size = new System.Drawing.Size(165, 17);
-            this.chkPrefixFileName.TabIndex = 31;
+            this.chkPrefixFileName.TabIndex = 11;
             this.chkPrefixFileName.Text = "Prefix each line with file name";
             this.chkPrefixFileName.UseVisualStyleBackColor = true;
             // 
@@ -228,7 +230,7 @@
             this.chkDumpFCD.Location = new System.Drawing.Point(144, 209);
             this.chkDumpFCD.Name = "chkDumpFCD";
             this.chkDumpFCD.Size = new System.Drawing.Size(137, 17);
-            this.chkDumpFCD.TabIndex = 29;
+            this.chkDumpFCD.TabIndex = 14;
             this.chkDumpFCD.Text = "Dump flatCompiledData";
             this.chkDumpFCD.UseVisualStyleBackColor = true;
             // 
@@ -240,7 +242,7 @@
             this.chkDumpSDB.Location = new System.Drawing.Point(144, 189);
             this.chkDumpSDB.Name = "chkDumpSDB";
             this.chkDumpSDB.Size = new System.Drawing.Size(177, 17);
-            this.chkDumpSDB.TabIndex = 27;
+            this.chkDumpSDB.TabIndex = 13;
             this.chkDumpSDB.Text = "Dump SharedDataBuffer buffers";
             this.chkDumpSDB.UseVisualStyleBackColor = true;
             // 
@@ -259,7 +261,7 @@
             this.btnPickOutput.Location = new System.Drawing.Point(603, 93);
             this.btnPickOutput.Name = "btnPickOutput";
             this.btnPickOutput.Size = new System.Drawing.Size(75, 23);
-            this.btnPickOutput.TabIndex = 25;
+            this.btnPickOutput.TabIndex = 8;
             this.btnPickOutput.Text = "Set output";
             this.btnPickOutput.UseVisualStyleBackColor = true;
             this.btnPickOutput.Click += new System.EventHandler(this.btnPickOutput_Click);
@@ -309,7 +311,7 @@
             this.txtOutputDestination.Location = new System.Drawing.Point(144, 94);
             this.txtOutputDestination.Name = "txtOutputDestination";
             this.txtOutputDestination.Size = new System.Drawing.Size(453, 20);
-            this.txtOutputDestination.TabIndex = 24;
+            this.txtOutputDestination.TabIndex = 7;
             this.txtOutputDestination.TextChanged += new System.EventHandler(this.txtOutputDestination_TextChanged);
             // 
             // btnChoosePath
@@ -317,7 +319,7 @@
             this.btnChoosePath.Location = new System.Drawing.Point(603, 11);
             this.btnChoosePath.Name = "btnChoosePath";
             this.btnChoosePath.Size = new System.Drawing.Size(75, 20);
-            this.btnChoosePath.TabIndex = 19;
+            this.btnChoosePath.TabIndex = 2;
             this.btnChoosePath.Text = "Select path";
             this.btnChoosePath.UseVisualStyleBackColor = true;
             this.btnChoosePath.Click += new System.EventHandler(this.btnChoosePath_Click);
@@ -327,7 +329,7 @@
             this.txtPath.Location = new System.Drawing.Point(144, 11);
             this.txtPath.Name = "txtPath";
             this.txtPath.Size = new System.Drawing.Size(453, 20);
-            this.txtPath.TabIndex = 18;
+            this.txtPath.TabIndex = 1;
             this.txtPath.TextChanged += new System.EventHandler(this.txtPath_TextChanged);
             // 
             // grpRadioOutputMode
@@ -338,7 +340,7 @@
             this.grpRadioOutputMode.Location = new System.Drawing.Point(144, 33);
             this.grpRadioOutputMode.Name = "grpRadioOutputMode";
             this.grpRadioOutputMode.Size = new System.Drawing.Size(142, 51);
-            this.grpRadioOutputMode.TabIndex = 20;
+            this.grpRadioOutputMode.TabIndex = 3;
             this.grpRadioOutputMode.TabStop = false;
             // 
             // radOutputModeSeparateFiles
@@ -348,7 +350,7 @@
             this.radOutputModeSeparateFiles.Location = new System.Drawing.Point(6, 11);
             this.radOutputModeSeparateFiles.Name = "radOutputModeSeparateFiles";
             this.radOutputModeSeparateFiles.Size = new System.Drawing.Size(130, 17);
-            this.radOutputModeSeparateFiles.TabIndex = 5;
+            this.radOutputModeSeparateFiles.TabIndex = 4;
             this.radOutputModeSeparateFiles.TabStop = true;
             this.radOutputModeSeparateFiles.Text = "One file per source file";
             this.radOutputModeSeparateFiles.UseVisualStyleBackColor = true;
@@ -360,7 +362,7 @@
             this.radOutputModeSingleFile.Location = new System.Drawing.Point(6, 29);
             this.radOutputModeSingleFile.Name = "radOutputModeSingleFile";
             this.radOutputModeSingleFile.Size = new System.Drawing.Size(70, 17);
-            this.radOutputModeSingleFile.TabIndex = 4;
+            this.radOutputModeSingleFile.TabIndex = 5;
             this.radOutputModeSingleFile.Text = "Single file";
             this.radOutputModeSingleFile.UseVisualStyleBackColor = true;
             this.radOutputModeSingleFile.CheckedChanged += new System.EventHandler(this.RadioOutputModeChanged);
@@ -433,21 +435,8 @@
             this.dataStatus.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataStatus.ShowEditingIcon = false;
             this.dataStatus.Size = new System.Drawing.Size(420, 57);
-            this.dataStatus.TabIndex = 26;
+            this.dataStatus.TabIndex = 31;
             this.dataStatus.TabStop = false;
-            // 
-            // txtLog
-            // 
-            this.txtLog.BackColor = System.Drawing.SystemColors.Window;
-            this.txtLog.Location = new System.Drawing.Point(12, 593);
-            this.txtLog.Multiline = true;
-            this.txtLog.Name = "txtLog";
-            this.txtLog.ReadOnly = true;
-            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtLog.Size = new System.Drawing.Size(740, 227);
-            this.txtLog.TabIndex = 27;
-            this.txtLog.TabStop = false;
-            this.txtLog.WordWrap = false;
             // 
             // colAllFiles
             // 
@@ -508,6 +497,19 @@
             this.colExceptions.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.colExceptions.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.colExceptions.Width = 70;
+            // 
+            // txtLog
+            // 
+            this.txtLog.BackColor = System.Drawing.SystemColors.Window;
+            this.txtLog.Location = new System.Drawing.Point(12, 593);
+            this.txtLog.Multiline = true;
+            this.txtLog.Name = "txtLog";
+            this.txtLog.ReadOnly = true;
+            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtLog.Size = new System.Drawing.Size(740, 227);
+            this.txtLog.TabIndex = 32;
+            this.txtLog.TabStop = false;
+            this.txtLog.WordWrap = false;
             // 
             // frmCR2WtoText
             // 

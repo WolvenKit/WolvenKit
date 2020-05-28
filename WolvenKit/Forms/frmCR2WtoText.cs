@@ -207,16 +207,27 @@ namespace WolvenKit.Forms
                         LogLineStatic($"Non CR2W file: {fileNameNoSource}");
                     };
 
+                    LogLineStatic("Starting counts: " + statusLogMessage(false));
+
                     await writer.StartDump();
 
-                    var statusLogMsg = $"Dump stats: Processed: {statusController.Processed}, " +
-                                             $"Skipped: {statusController.Skipped}, " + 
-                                             $"Non CR2W: {statusController.NonCR2W}, " + 
-                                             $"Exceptions in/while reading: {statusController.Exceptions}. " + 
-                                             $"Not processed: {statusController.Matching - statusController.Processed - statusController.Skipped}.";
-                    LogLineStatic(statusLogMsg);
+                    LogLineStatic("Completed dump stats: " + statusLogMessage(true));
                 }
             }
+        }
+        private string statusLogMessage(bool after)
+        {
+            var log = $"Files in source folder: {statusController.TotalFiles}, " +
+                            $"Non CR2W: {statusController.NonCR2W}. " +
+                            $"To be processed: {statusController.Matching}. ";
+            if (after)
+            {
+                log += $"Processed: {statusController.Processed}, " +
+                       $"Skipped: {statusController.Skipped}, " +
+                       $"Exceptions in/while reading: {statusController.Exceptions}. " +
+                       $"Not processed: {statusController.Matching - statusController.Processed - statusController.Skipped}.";
+            }
+            return log;
         }
         private void CheckEnableRunButton()
         {
