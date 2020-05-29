@@ -721,7 +721,8 @@ namespace WolvenKit.Forms
                 {
                     try
                     {
-                        CR2WFile embedcr2w = new CR2WFile(((IByteSource)node.Variable).Bytes, MainController.Get().Logger);
+                        var ls = new LoggerService();
+                        CR2WFile embedcr2w = new CR2WFile( ((IByteSource)node.Variable).Bytes, ls );
                         var lc = new LoggerCR2W(embedcr2w, Writer, Options);
                         lc.processCR2W(level);
                     }
