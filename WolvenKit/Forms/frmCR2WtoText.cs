@@ -171,6 +171,7 @@ namespace WolvenKit.Forms
                     ListEmbedded = chkDumpEmbedded.Checked,
                     DumpFCD = chkDumpFCD.Checked,
                     DumpSDB = chkDumpSDB.Checked,
+                    LocalizeStrings = chkLocalizedString.Checked
                 };
 
                 using (Cancel = new CancellationTokenSource())
@@ -298,7 +299,6 @@ namespace WolvenKit.Forms
                     EnsurePathExists = false,
                     EnsureFileExists = false,
                     EnsureValidNames = true
-
                 };
 
                 if (folderDlg.ShowDialog() == CommonFileDialogResult.Ok)
@@ -634,6 +634,7 @@ namespace WolvenKit.Forms
         public bool ListEmbedded { get; set; }
         public bool DumpSDB { get; set; }
         public bool DumpFCD { get; set; }
+        public bool LocalizeStrings { get; set; }
     }
     internal class LoggerCR2W
     {
@@ -660,6 +661,8 @@ namespace WolvenKit.Forms
             Embedded = CR2W.embedded;
             Writer = writer;
             Options = options;
+            if (Options.LocalizeStrings)
+                CR2W.LocalizedStringSource = MainController.Get();
         }
         public void processCR2W(int overrideLevel = 0)
         {
