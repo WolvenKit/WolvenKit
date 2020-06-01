@@ -657,12 +657,12 @@ namespace WolvenKit.Forms
         internal LoggerCR2W(CR2WFile cr2wFile, LoggerOutputFile writer, LoggerCR2WOptions options)
         {
             CR2W = cr2wFile;
-            if (options.LocalizeStrings)
-                CR2W.LocalizedStringSource = MainController.Get();
             Chunks = CR2W.chunks;
             Embedded = CR2W.embedded;
             Writer = writer;
             Options = options;
+            if (Options.LocalizeStrings)
+                CR2W.LocalizedStringSource = MainController.Get();
         }
         public void processCR2W(int overrideLevel = 0)
         {
