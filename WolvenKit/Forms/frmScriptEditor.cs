@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using System.Text;
 using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
 using WeifenLuo.WinFormsUI.Docking;
@@ -176,7 +177,10 @@ namespace WolvenKit.Forms
 
         public void SaveFile()
         {
-            File.WriteAllText(FilePath, "");
+            // encode in UTF-16LE
+            Encoding enc = Encoding.Unicode;
+
+            File.WriteAllText(FilePath, "", enc);
             using (var streamWriter = File.AppendText(FilePath))
             {
                 streamWriter.Write(scintillaControl.Text);

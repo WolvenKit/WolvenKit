@@ -82,6 +82,7 @@ namespace WolvenKit.CR2W.Types
 
             #region Flags
             Register("Flags", new CFlags(null));
+
             Register("EDrawableFlags", new CFlags(null));
             Register("ETriggerChannel", new CFlags(null));
             Register("ELightChannel", new CFlags(null));
