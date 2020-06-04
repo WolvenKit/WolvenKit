@@ -2535,6 +2535,10 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             var pack = PackAndInstallMod();
             while (!pack.IsCompleted)
                 Application.DoEvents();
+
+            if (!pack.Result)
+                return;
+
             var getparams = new Input("Please give the commands to launch the game with!");
             if (getparams.ShowDialog() == DialogResult.OK)
             {
@@ -2548,6 +2552,8 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             while (!pack.IsCompleted)
                 Application.DoEvents();
 
+            if (!pack.Result)
+                return;
             executeGame();
         }
 
@@ -2737,14 +2743,14 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
         #endregion
 
         #region Mod Pack
-        public async Task PackAndInstallMod(bool install = true)
+        public async Task<bool> PackAndInstallMod(bool install = true)
         {
             if (ActiveMod == null)
-                return;
+                return false;
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
                 MessageBox.Show("Please close The Witcher 3 before tinkering with the files!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
+                return false;
             }
 
             var packsettings = new frmPackSettings();
@@ -2985,7 +2991,12 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 //Report that we are done
                 MainController.Get().ProjectStatus = install ? "Mod Packed&Installed" : "Mod packed!"; 
                 btPack.Enabled = true;
-            }           
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
