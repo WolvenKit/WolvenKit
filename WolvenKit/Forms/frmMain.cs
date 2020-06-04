@@ -145,6 +145,9 @@ namespace WolvenKit
             hotkeys.RegisterHotkey(Keys.F1, HKHelp, "Help");
             hotkeys.RegisterHotkey(Keys.Control | Keys.C, HKCopy, "Copy");
             hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste, "Paste");
+
+            hotkeys.RegisterHotkey(Keys.F5 , HKRun, "Run");
+            hotkeys.RegisterHotkey(Keys.Control | Keys.F5 , HKRunAndLaunch, "Run");
             UIController.InitForm(this);
 
             MainBackgroundWorker.WorkerReportsProgress = true;
@@ -252,6 +255,23 @@ namespace WolvenKit
         private void SetStatusLabelText(string text)
         {
             statusLBL.Text = text;
+        }
+
+        private void HKRun(HotKeyEventArgs e)
+        {
+            var pack = PackAndInstallMod();
+            while (!pack.IsCompleted)
+                Application.DoEvents();
+        }
+        private void HKRunAndLaunch(HotKeyEventArgs e)
+        {
+            var pack = PackAndInstallMod();
+            while (!pack.IsCompleted)
+                Application.DoEvents();
+
+            if (!pack.Result)
+                return;
+            executeGame();
         }
 
         private void HKSave(HotKeyEventArgs e)
