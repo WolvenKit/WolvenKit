@@ -641,7 +641,8 @@ namespace WolvenKit
             {
                 if (s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Length > 2)
                 {
-                    return string.Join(Path.DirectorySeparatorChar.ToString(), s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Skip(2).ToArray());
+                    var relpath = s.Substring(ActiveMod.FileDirectory.Length + 1);
+                    return string.Join(Path.DirectorySeparatorChar.ToString(), relpath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Skip(2).ToArray());
                 }
                 else
                     return s;

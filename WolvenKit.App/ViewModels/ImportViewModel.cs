@@ -176,18 +176,35 @@ namespace WolvenKit.App.ViewModels
                 var filepath = Path.Combine(importdepot.FullName, file.GetRelativePath());
                 string type = REDTypes.RawExtensionToCacheType(rawext);
 
-                if (relPath.Substring(0, 3) == "Raw") relPath = relPath.TrimStart("Raw".ToCharArray());
-                relPath = relPath.TrimStart(Path.DirectorySeparatorChar);
-                if (relPath.Substring(0, 3) == "Mod") relPath = relPath.TrimStart("Mod".ToCharArray());
-                relPath = relPath.TrimStart(Path.DirectorySeparatorChar);
-                if (relPath.Substring(0, 3) == "DLC") relPath = relPath.TrimStart("DLC".ToCharArray());
-                relPath = relPath.TrimStart(Path.DirectorySeparatorChar);
+                // make new path
+                // first, trim Raw from the path
+                if (relPath.Substring(0, 3) == "Raw" )
+                    relPath = relPath.Substring(4);
+                // then, trim Mod or dlc from the path
+                bool isDLC = false;
+                if (relPath.Substring(0, 3) == "Mod")
+                {
+                    relPath = relPath.Substring(4);
+                }
+                if (relPath.Substring(0, 3) == "DLC")
+                {
+                    isDLC = true;
+                    relPath = relPath.Substring(4);
+                }
 
-                var newpath = Path.Combine(ActiveMod.ModDirectory, relPath);
-                newpath = Path.ChangeExtension(newpath, importext);
-                var split = relPath.Split(Path.DirectorySeparatorChar).First();
-                if (split != type)
-                    newpath = Path.Combine(ActiveMod.ModDirectory, type, $"{relPath.TrimEnd(rawext.ToCharArray())}{importext}");
+                // new path with new extension
+                relPath = Path.ChangeExtension(relPath, importext);
+
+                // check if directory starts with TextureCache or CollisionCache
+                var newpath = "";
+                if (relPath.Substring(0, type.Length) == type)
+                {
+                    newpath = isDLC ? Path.Combine(ActiveMod.DlcDirectory, relPath) : Path.Combine(ActiveMod.ModDirectory, relPath);
+                }
+                else
+                {
+                    newpath = isDLC ? Path.Combine(ActiveMod.DlcDirectory, type, relPath) : Path.Combine(ActiveMod.ModDirectory, type, relPath);
+                }
 
                 var import = new Wcc_lite.import()
                 {

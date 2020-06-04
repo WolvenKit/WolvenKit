@@ -91,6 +91,15 @@ namespace WolvenKit.CR2W.Types
 
         #region Flags
         [Flags]
+        public enum ELightChannel
+        {
+            LC_Characters,
+            LC_Interactive,
+            LC_Custom0,
+            LC_FoliageOutline,
+            LC_VisibleThroughtWalls
+        }
+        [Flags]
         public enum EDismembermentEffectTypeFlag
         {
             DETF_Base = 1,
