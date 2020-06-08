@@ -94,6 +94,8 @@ namespace WolvenKit
 
         private delegate void strDelegate(string t);
         private delegate void logDelegate(string t, Logtype type);
+
+        private Queue<string> _lastClosedTab = new Queue<string>();
         #endregion
 
         #region Properties
@@ -147,7 +149,11 @@ namespace WolvenKit
             hotkeys.RegisterHotkey(Keys.Control | Keys.V, HKPaste, "Paste");
 
             hotkeys.RegisterHotkey(Keys.F5 , HKRun, "Run");
-            hotkeys.RegisterHotkey(Keys.Control | Keys.F5 , HKRunAndLaunch, "Run");
+            hotkeys.RegisterHotkey(Keys.Control | Keys.F5, HKRunAndLaunch, "RunAndLaunch");
+            hotkeys.RegisterHotkey(Keys.Control | Keys.W , HKCloseTab, "CloseTab");
+            hotkeys.RegisterHotkey(Keys.Control | Keys.Shift | Keys.T , HKReopenTab, "ReopenTab");
+
+
             UIController.InitForm(this);
 
             MainBackgroundWorker.WorkerReportsProgress = true;
@@ -272,6 +278,17 @@ namespace WolvenKit
             if (!pack.Result)
                 return;
             executeGame();
+        }
+        
+        private void HKCloseTab(HotKeyEventArgs e)
+        {
+            _lastClosedTab.Enqueue(ActiveDocument.FileName);
+            ActiveDocument.Close();
+        }
+        private void HKReopenTab(HotKeyEventArgs e)
+        {
+            string filetoopen = _lastClosedTab.Dequeue();
+            LoadDocument(filetoopen);
         }
 
         private void HKSave(HotKeyEventArgs e)
@@ -631,6 +648,22 @@ namespace WolvenKit
                                 ImagePreview.SetImage(fullpath);
                             }
                             break;
+                            //if (OpenImages.Any(_ => _.Text == Path.GetFileName(fullpath)))
+                            //{
+                            //    OpenImages.First(_ => _.Text == Path.GetFileName(fullpath)).Activate();
+                            //}
+                            //else
+                            //{
+                            //    if (ImagePreview.Text == Path.GetFileName(fullpath))
+                            //    {
+                            //        ImagePreview.Close();
+                            //    }
+                            //    var dockedImage = new frmImagePreview();
+                            //    dockedImage.Show(dockPanel, DockState.Document);
+                            //    dockedImage.SetImage(fullpath);
+                            //    OpenImages.Add(dockedImage);
+                            //}
+                            //break;
                         }
                     default:
                         break;
@@ -641,16 +674,28 @@ namespace WolvenKit
             // double click
             switch (ext)
             {
+                    // images
+                case ".PNG":
+                case ".JPG":
+                case ".TGA":
+                case ".BMP":
+                case ".JPEG":
+                case ".DDS":
+                    //text
                 case ".CSV":
                 case ".XML":
                 case ".TXT":
+                case ".WS":
+                    // other
+                case ".APB":
                     ShellExecute(fullpath);
                     break;
                 case ".BAT":
-                case ".WS":
+                //case ".WS":
                 case ".YML":
                 case ".LOG":
                 case ".INI":
+                    
                     {
                         if (OpenScripts.Any(_ => _.FileName == Path.GetFileName(fullpath)))
                         {
@@ -688,30 +733,6 @@ namespace WolvenKit
                         using (var sp = new frmAudioPlayer(fullpath))
                         {
                             sp.ShowDialog();
-                        }
-                        break;
-                    }
-                case ".PNG":
-                case ".JPG":
-                case ".TGA":
-                case ".BMP":
-                case ".JPEG":
-                case ".DDS":
-                    {
-                        if (OpenImages.Any(_ => _.Text == Path.GetFileName(fullpath)))
-                        {
-                            OpenImages.First(_ => _.Text == Path.GetFileName(fullpath)).Activate();
-                        }
-                        else
-                        {
-                            if (ImagePreview.Text == Path.GetFileName(fullpath))
-                            {
-                                ImagePreview.Close();
-                            }
-                            var dockedImage = new frmImagePreview();
-                            dockedImage.Show(dockPanel, DockState.Document);
-                            dockedImage.SetImage(fullpath);
-                            OpenImages.Add(dockedImage);
                         }
                         break;
                     }
@@ -771,7 +792,6 @@ namespace WolvenKit
 
             Console.Activate();
         }
-
         private void ShowImportUtility()
         {
             if (ImportUtility == null || ImportUtility.IsDisposed)
@@ -1326,22 +1346,6 @@ namespace WolvenKit
             }
         }
 
-        internal class LoadFileArgs
-        {
-            public string Filename { get; set; }
-            public MemoryStream Stream { get; set; }
-            public frmCR2WDocument Doc { get; set; }
-            public bool SuppressErrors { get; set; }
-            public LoadFileArgs(string filename, frmCR2WDocument doc, MemoryStream stream = null, bool suppressErrors = false)
-            {
-                Filename = filename;
-                Doc = doc;
-                if (stream != null)
-                    Stream = stream;
-                SuppressErrors = suppressErrors;
-            }
-        }
-
         /// <summary>
         /// Opens a document in the background
         /// </summary>
@@ -1872,6 +1876,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
 
         private void doc_FormClosed(object sender, FormClosedEventArgs e)
         {
+            _lastClosedTab.Enqueue(((frmCR2WDocument)sender).FileName);
             var doc = (frmCR2WDocument)sender;
             OpenDocuments.Remove(doc);
 
@@ -1945,9 +1950,12 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             }
             else
             {
-                using(var ws = new frmWelcome(this))
+                if (!MainController.Get().Configuration.IsWelcomeFormDisabled)
                 {
-                    ws.ShowDialog();
+                    using (var ws = new frmWelcome(this))
+                    {
+                        ws.ShowDialog();
+                    }
                 }
             }
         }

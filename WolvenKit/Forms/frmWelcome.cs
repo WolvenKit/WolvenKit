@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using WolvenKit.App;
 
 namespace WolvenKit.Forms
 {
@@ -20,6 +21,9 @@ namespace WolvenKit.Forms
         {
             main = mainref;
             InitializeComponent();
+
+            checkBoxDisable.Checked = MainController.Get().Configuration.IsWelcomeFormDisabled;
+
             recentfilesListView.DoubleClick += RecentFile_click;
             recentfilesListView.MultiSelect = false;
             recentfilesListView.Items.Clear();
@@ -29,7 +33,13 @@ namespace WolvenKit.Forms
                 recentfilesListView.Enabled = doc.Descendants("recentfile").Any();
                 foreach (var f in doc.Descendants("recentfile"))
                 {
-                    var it = new ListViewItem(f.Value);
+                    var fullpath = f.Value;
+                    var it = new ListViewItem()
+                    {
+                        Text = Path.GetFileName(fullpath),
+                        Tag = fullpath,
+                        ToolTipText = fullpath
+                    };
                     recentfilesListView.Items.Add(it);
                 }
                 recentfilesListView.Enabled = true;
@@ -51,6 +61,7 @@ namespace WolvenKit.Forms
         </center>
         <h3><strong> Tutorials </strong></h3>
             <ul>
+                <li><a href = ${"\"https://github.com/Traderain/Wolven-kit/wiki\""}> WolvenKit Wiki </a></li>
                 <li><a href = ${"\"https://www.youtube.com/watch?v=jUoamicYtjk\""}> Package creation </a></li>
                 <li><a href = ${"\"https://www.youtube.com/watch?v=jUoamicYtjk\""}> Sound modding </a></li>
                 <li> Please stay tuned for more tutorials in the future </li>
@@ -64,7 +75,7 @@ namespace WolvenKit.Forms
         {
             if(recentfilesListView.SelectedItems.Count> 0)
             {
-                main.openMod(recentfilesListView.SelectedItems[0].Text);
+                main.openMod(recentfilesListView.SelectedItems[0].Tag as string);
                 this.Close();
             }
 
@@ -100,6 +111,18 @@ namespace WolvenKit.Forms
                 string url = new String(e.Url.AbsoluteUri.ToArray().Skip(6).Skip(4).Reverse().Skip(3).Reverse().ToArray()).Trim().TrimStart('$', '\\').ToString();
                 System.Diagnostics.Process.Start(url);
             }
+        }
+
+        private void frmWelcome_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // save disable option
+            MainController.Get().Configuration.IsWelcomeFormDisabled = checkBoxDisable.Checked;
+            MainController.Get().Configuration.Save();
+        }
+
+        private void OpenProjectButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

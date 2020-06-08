@@ -35,6 +35,7 @@ namespace WolvenKit.App
         public string InitialExportDirectory { get; set; }
 
         public EUncookExtension UncookExtension { get; set; }
+        public bool IsWelcomeFormDisabled { get; set; }
 
 
         [XmlIgnore]

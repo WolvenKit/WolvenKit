@@ -22,10 +22,7 @@ namespace WolvenKit.App.ViewModels
         private string _title;
         public virtual string Title
         {
-            get
-            {
-                return _title;
-            }
+            get => _title;
             set
             {
                 if (_title != value)
@@ -37,12 +34,12 @@ namespace WolvenKit.App.ViewModels
         }
         #endregion
 
-       
+
 
         #endregion
 
         #region Fields
-        
+
         #endregion
 
 

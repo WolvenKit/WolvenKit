@@ -240,8 +240,81 @@ namespace WolvenKit
                     // edit value
                     try
                     {
-                        v.SetValue(opts.val);
-                        AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal);
+                        // check option 
+                        switch (opts.option)
+                        {
+                            case "*":
+                                {
+                                    switch (opts.type)
+                                    {
+                                        case "Uint64": ((CUInt64)v).val *= ulong.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Int64": ((CInt64)v).val *= long.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Uint32": ((CUInt32)v).val *= uint.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Int32": ((CInt32)v).val *= int.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Uint16": ((CUInt16)v).val *= ushort.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Int16": ((CInt16)v).val *= short.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Uint8": ((CUInt8)v).val *= byte.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Int8": ((CInt8)v).val *= sbyte.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        default: break;
+                                    }
+                                    break;
+                                }
+                            case "/":
+                                {
+                                    switch (opts.type)
+                                    {
+                                        case "Uint64": ((CUInt64)v).val /= ulong.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Int64": ((CInt64)v).val /= long.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Uint32": ((CUInt32)v).val /= uint.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Int32": ((CInt32)v).val /= int.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Uint16": ((CUInt16)v).val /= ushort.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Int16": ((CInt16)v).val /= short.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Uint8": ((CUInt8)v).val /= byte.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Int8": ((CInt8)v).val /= sbyte.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        default: break;
+                                    }
+                                    break;
+                                }
+                            case "+":
+                                {
+                                    switch (opts.type)
+                                    {
+                                        case "Uint64": ((CUInt64)v).val += ulong.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Int64": ((CInt64)v).val += long.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Uint32": ((CUInt32)v).val += uint.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Int32": ((CInt32)v).val += int.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Uint16": ((CUInt16)v).val += ushort.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Int16": ((CInt16)v).val += short.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Uint8": ((CUInt8)v).val += byte.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "Int8": ((CInt8)v).val += sbyte.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
+                                        case "String": ((CString)v).val += opts.val; break;
+
+                                        default: break;
+                                    }
+                                    break;
+                                }
+                            case "-":
+                                {
+                                    switch (opts.type)
+                                    {
+                                        case "Uint64": ((CUInt64)v).val -= ulong.Parse(opts.val); break;
+                                        case "Int64": ((CInt64)v).val -= long.Parse(opts.val); break;
+                                        case "Uint32": ((CUInt32)v).val -= uint.Parse(opts.val); break;
+                                        case "Int32": ((CInt32)v).val -= int.Parse(opts.val); break;
+                                        case "Uint16": ((CUInt16)v).val -= ushort.Parse(opts.val); break;
+                                        case "Int16": ((CInt16)v).val -= short.Parse(opts.val); break;
+                                        case "Uint8": ((CUInt8)v).val -= byte.Parse(opts.val); break;
+                                        case "Int8": ((CInt8)v).val -= sbyte.Parse(opts.val); break;
+
+                                        default: break;
+                                    }
+                                    break;
+                                }
+                            default:
+                                v.SetValue(opts.val);
+                                AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal);
+                                break;
+                        }
                         return true;
                     }
                     catch (Exception ex)
@@ -260,45 +333,53 @@ namespace WolvenKit
         }
     }
 
-    [Verb("bulkedit", HelpText = "Bulk edit cr2w files. " +
+    [Verb("bulkedit", HelpText = "Bulk edit cr2w files. \n\r" +
         "Example use: -v 9999 -n autohidedistance -c CMesh -t Uint16 --err=true --exc=0,1029")]
     class BulkEditOptions
     {
-        [Option('n', HelpText = "Specify the variable name. " +
+        // Required
+        [Option('n', HelpText = "Specify the variable name. \n\r" +
             "Example: -n autohidedistance", Required = true)]
         public string var { get; set; }
 
-        // Required
-        [Option('v', HelpText = "Specify the new variable value. " +
+        [Option('v', HelpText = "Specify the new variable value. \n\r" +
             "Example: -v 9999", Required = true)]
         public string val { get; set; }
 
         // Optional string
-        [Option('e', HelpText = "Specify the file extension to edit. " +
+        [Option('e', HelpText = "Specify the file extension to edit. \n\r" +
             "Example: -e w2mesh", Required = false)]
         public string ext { get; set; }
 
-        [Option('c', HelpText = "Specify the chunk name. Example: -c CMesh", Required = false)]
+        [Option('c', HelpText = "Specify the chunk name. \n\r" +
+            "Example: -c CMesh", Required = false)]
         public string chunk { get; set; }
 
-        [Option('t', HelpText = "Specify the variable type. " +
-            "Available types are Bool, Uint64, Int64, Uint32, Int32, Uint16, Int16, Uint8, Int8" +
+        [Option('t', HelpText = "Specify the variable type. \n\r" +
+            "Available types are Bool, Uint64, Int64, Uint32, Int32, Uint16, Int16, Uint8, Int8\n\r" +
             "Example: -t Uint16"
             , Required = false)]
         public string type { get; set; }
 
+        [Option('o', HelpText = "Specify the option type. Default is replace. This option requires a valid type to be set with -t !!\n\r" +
+           "Available types are Multiplication (*), Division (/), Addition (+), Subtraction (-),\n\r" +
+            "Example: -o + -t Uint16\n\r" +
+            "Example: -o / -t Int32"
+           , Required = false)]
+        public string option { get; set; }
+
         //[Option('p', HelpText = "Specify the parent name of the variable you want to edit.", Required = false)]
         //public string parent { get; set; }
 
-        [Option(HelpText = "Verbose errors. " +
+        [Option(HelpText = "Verbose errors.\n\r" +
             "Example: --err=true", Required = false)]
         public string err { get; set; }
 
         // Optional lists
-        [Option(Separator = ',', HelpText = "Exclude the following values. " +
+        [Option(Separator = ',', HelpText = "Exclude the following values.\n\r" +
             "Example: --exc=0,64,1028,2053", Required = false)]
         public IEnumerable<string> exc { get; set; }
-        [Option(Separator = ',', HelpText = "Include only the following values. " +
+        [Option(Separator = ',', HelpText = "Include only the following values.\n\r" +
             "Example: --inc=0,32,64", Required = false)]
         public IEnumerable<string> inc { get; set; }
     }
