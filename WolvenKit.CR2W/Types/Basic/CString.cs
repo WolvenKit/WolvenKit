@@ -13,6 +13,7 @@ namespace WolvenKit.CR2W.Types
         public CString(CR2WFile cr2w)
             : base(cr2w)
         {
+            Type = "String";
         }
 
         [DataMember]

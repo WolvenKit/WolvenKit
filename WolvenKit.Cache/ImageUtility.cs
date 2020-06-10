@@ -177,10 +177,10 @@ namespace WolvenKit.Cache
             if (xbm == null)
                 return null;
 
-            int residentMipIndex = xbm.GetVariableByName("ResidentMipIndex") == null ? 0 : (int)((CUInt8)xbm.GetVariableByName("ResidentMipIndex")).val;
+            int residentMipIndex = xbm.GetVariableByName("residentMipIndex") == null ? 0 : (int)((CUInt8)xbm.GetVariableByName("residentMipIndex")).val;
             byte[] bytesource;
             // handle cooked xbms
-            if (xbm.GetVariableByName("SourceData") == null)
+            if (xbm.GetVariableByName("sourceData") == null)
             {
                 bytesource = xbm.Residentmip.Bytes;
             }
@@ -229,11 +229,11 @@ namespace WolvenKit.Cache
         {
             try
             {
-                int residentMipIndex = xbm.GetVariableByName("ResidentMipIndex") == null ? 0 : (int)((CUInt8)xbm.GetVariableByName("ResidentMipIndex")).val;
+                int residentMipIndex = xbm.GetVariableByName("residentMipIndex") == null ? 0 : (int)((CUInt8)xbm.GetVariableByName("residentMipIndex")).val;
 
                 int mipcount;
                 // handle cooked xbms
-                if (xbm.GetVariableByName("SourceData") == null)
+                if (xbm.GetVariableByName("sourceData") == null)
                 {
                     mipcount = xbm.Mipdata.elements.Count - residentMipIndex;
                 }

@@ -32,6 +32,7 @@ namespace WolvenKit
             txTextLanguage.Text = config.TextLanguage;
             txVoiceLanguage.Text = config.VoiceLanguage;
             txWCC_Lite.Text = config.WccLite;
+            checkBoxDisableWelcomeForm.Checked = config.IsWelcomeFormDisabled;
             
             comboBoxTheme.Items.AddRange(Enum.GetValues(typeof(EColorThemes)).Cast<object>().ToArray());
             comboBoxTheme.SelectedItem = UIController.Get().Configuration.ColorTheme;
@@ -75,20 +76,26 @@ namespace WolvenKit
                 MessageBox.Show("Invalid wcc_lite.exe path", "failed to save.");
                 return;
             }
+
+            // get configs
             var config = MainController.Get().Configuration;
             var uiconfig = UIController.Get().Configuration;
 
             // Apply Theme
             bool applyTheme = uiconfig.ColorTheme != (EColorThemes)comboBoxTheme.SelectedItem;
             
-
+            // save settings
             config.ExecutablePath = txExecutablePath.Text;
             config.WccLite = txWCC_Lite.Text;
             config.TextLanguage = txTextLanguage.Text;
             config.VoiceLanguage = txVoiceLanguage.Text;
             config.UncookExtension = (EUncookExtension)comboBoxExtension.SelectedItem;
+            config.IsWelcomeFormDisabled = checkBoxDisableWelcomeForm.Checked;
+
+
             uiconfig.ColorTheme = (EColorThemes)comboBoxTheme.SelectedItem;
 
+            // save configs
             config.Save();
             uiconfig.Save();
 
@@ -100,7 +107,7 @@ namespace WolvenKit
                 UIController.Get().Window.GlobalApplyTheme();
             }
                 
-
+            /// debug console enabling
             try
             {
                 IniParser ip = new IniParser(Path.Combine(MainController.Get().Configuration.GameRootDir, "bin\\config\\base\\general.ini"));
@@ -120,6 +127,7 @@ namespace WolvenKit
                 MessageBox.Show(exception.ToString());
             }
 
+            // patch wcc_lite
             try
             {
                 using (var fs = new FileStream(txWCC_Lite.Text, FileMode.Open))

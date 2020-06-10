@@ -51,6 +51,7 @@ namespace WolvenKit
             this.comboBoxTheme = new System.Windows.Forms.ComboBox();
             this.comboBoxExtension = new System.Windows.Forms.ComboBox();
             this.labelExtension = new System.Windows.Forms.Label();
+            this.checkBoxDisableWelcomeForm = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // txExecutablePath
@@ -218,7 +219,7 @@ namespace WolvenKit
             this.comboBoxTheme.FormattingEnabled = true;
             this.comboBoxTheme.Location = new System.Drawing.Point(170, 176);
             this.comboBoxTheme.Name = "comboBoxTheme";
-            this.comboBoxTheme.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxTheme.Size = new System.Drawing.Size(135, 21);
             this.comboBoxTheme.TabIndex = 16;
             // 
             // comboBoxExtension
@@ -227,7 +228,7 @@ namespace WolvenKit
             this.comboBoxExtension.FormattingEnabled = true;
             this.comboBoxExtension.Location = new System.Drawing.Point(170, 206);
             this.comboBoxExtension.Name = "comboBoxExtension";
-            this.comboBoxExtension.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxExtension.Size = new System.Drawing.Size(135, 21);
             this.comboBoxExtension.TabIndex = 18;
             // 
             // labelExtension
@@ -240,6 +241,16 @@ namespace WolvenKit
             this.labelExtension.TabIndex = 17;
             this.labelExtension.Text = "Uncooked Extension";
             // 
+            // checkBoxDisableWelcomeForm
+            // 
+            this.checkBoxDisableWelcomeForm.AutoSize = true;
+            this.checkBoxDisableWelcomeForm.Location = new System.Drawing.Point(423, 111);
+            this.checkBoxDisableWelcomeForm.Name = "checkBoxDisableWelcomeForm";
+            this.checkBoxDisableWelcomeForm.Size = new System.Drawing.Size(135, 17);
+            this.checkBoxDisableWelcomeForm.TabIndex = 19;
+            this.checkBoxDisableWelcomeForm.Text = "Disable Welcome Form";
+            this.checkBoxDisableWelcomeForm.UseVisualStyleBackColor = true;
+            // 
             // frmSettings
             // 
             this.AcceptButton = this.btSave;
@@ -247,6 +258,7 @@ namespace WolvenKit
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
             this.ClientSize = new System.Drawing.Size(588, 272);
+            this.Controls.Add(this.checkBoxDisableWelcomeForm);
             this.Controls.Add(this.comboBoxExtension);
             this.Controls.Add(this.labelExtension);
             this.Controls.Add(this.comboBoxTheme);
@@ -295,5 +307,6 @@ namespace WolvenKit
         private ComboBox comboBoxTheme;
         private ComboBox comboBoxExtension;
         private Label labelExtension;
+        private CheckBox checkBoxDisableWelcomeForm;
     }
 }
