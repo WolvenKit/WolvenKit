@@ -155,7 +155,6 @@ namespace WolvenKit
             hotkeys.RegisterHotkey(Keys.Control | Keys.W, HKCloseTab, "CloseTab");
             hotkeys.RegisterHotkey(Keys.Control | Keys.Shift | Keys.T, HKReopenTab, "ReopenTab");
 
-
             UIController.InitForm(this);
 
             MainBackgroundWorker.WorkerReportsProgress = true;
@@ -326,7 +325,6 @@ namespace WolvenKit
                 return;
             executeGame();
         }
-
         private void HKCloseTab(HotKeyEventArgs e)
         {
             _lastClosedTab.Enqueue(ActiveDocument.FileName);
@@ -337,7 +335,6 @@ namespace WolvenKit
             string filetoopen = _lastClosedTab.Dequeue();
             LoadDocument(filetoopen);
         }
-
         private void HKSave(HotKeyEventArgs e)
         {
             if (ActiveDocument != null)
