@@ -50,6 +50,7 @@ namespace WolvenKit
         private frmStringsGui stringsGui { get; set; }
         private frmOutput Output { get; set; }
         private frmConsole Console { get; set; }
+        private frmWelcome Welcome { get; set; }
 
         private frmImportUtility ImportUtility { get; set; }
         private frmRadish RadishUtility { get; set; }
@@ -161,7 +162,11 @@ namespace WolvenKit
             MainBackgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker1_DoWork);
             MainBackgroundWorker.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker1_ProgressChanged);
             MainBackgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
+
+            
         }
+
+       
         #endregion
 
         #region Methods
@@ -220,7 +225,12 @@ namespace WolvenKit
             visualStudioToolStripExtender1.SetStyle(toolbarToolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
         }
 
-        
+        private void Welcome_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Welcome = null;
+        }
+
+
         /// <summary>
         /// Deprecated. Use MainController.QueueLog 
         /// </summary>
@@ -1229,14 +1239,20 @@ namespace WolvenKit
             Output = null;
             Console?.Close();
             Console = null;
+            if (Welcome != null)
+            {
+                Welcome?.Close();
+                Welcome = new frmWelcome(this);
+            }
             ImportUtility?.Close();
             ImportUtility = null;
             RadishUtility?.Close();
             RadishUtility = null;
-            ScriptPreview = null;
             ScriptPreview?.Close();
-            ImagePreview = null;
+            ScriptPreview = null;
             ImagePreview?.Close();
+            ImagePreview = null;
+            
 
             foreach (var t in OpenScripts.ToList())
             {
@@ -1273,6 +1289,9 @@ namespace WolvenKit
             ShowModExplorer();
             ShowConsole();
             ShowOutput();
+            
+            if (Welcome != null)
+                Welcome.Show(dockPanel, DockState.Document);
         }
 
         private void ShowModExplorer()
@@ -1952,10 +1971,9 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             {
                 if (!MainController.Get().Configuration.IsWelcomeFormDisabled)
                 {
-                    using (var ws = new frmWelcome(this))
-                    {
-                        ws.ShowDialog();
-                    }
+                    Welcome = new frmWelcome(this);
+                    Welcome.Show(dockPanel, DockState.Document);
+                    Welcome.FormClosed += Welcome_FormClosed;
                 }
             }
         }
