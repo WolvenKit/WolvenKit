@@ -179,6 +179,8 @@ namespace WolvenKit.Cache
         public void Extract(BundleFileExtractArgs e)
         {
             var fullpath = e.FileName;
+            var isPng = Path.GetExtension(fullpath) == ".png";
+
             fullpath = Path.ChangeExtension(fullpath, "dds");
 
             Directory.CreateDirectory(Path.GetDirectoryName(fullpath) ?? "");
@@ -192,13 +194,16 @@ namespace WolvenKit.Cache
                 Extract(output);
             }
 
-            if (e.Extension != EUncookExtension.dds)
+            // convert all dds files to the extension specified in the settings
+            // also convert "pngs" to pngs lol
+            if (e.Extension != EUncookExtension.dds || isPng)
             {
                 //convert
                 var fi = new FileInfo(fullpath);
                 if (fi.Exists)
                 {
-                    Texconv.Convert(Path.GetDirectoryName(fullpath), fullpath, e.Extension);
+                    // convert to png if file is a png, else convert to custom extension 
+                    Texconv.Convert(Path.GetDirectoryName(fullpath), fullpath, isPng ? EUncookExtension.png : e.Extension);
                 }
 
                 // delete old DDS
