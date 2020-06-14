@@ -152,6 +152,7 @@ namespace WolvenKit
 
             hotkeys.RegisterHotkey(Keys.F5, HKRun, "Run");
             hotkeys.RegisterHotkey(Keys.Control | Keys.F5, HKRunAndLaunch, "RunAndLaunch");
+
             hotkeys.RegisterHotkey(Keys.Control | Keys.W, HKCloseTab, "CloseTab");
             hotkeys.RegisterHotkey(Keys.Control | Keys.Shift | Keys.T, HKReopenTab, "ReopenTab");
 
@@ -327,13 +328,20 @@ namespace WolvenKit
         }
         private void HKCloseTab(HotKeyEventArgs e)
         {
-            _lastClosedTab.Enqueue(ActiveDocument.FileName);
-            ActiveDocument.Close();
+            if (ActiveDocument != null)
+            {
+                _lastClosedTab.Enqueue(ActiveDocument.FileName);
+                ActiveDocument.Close();
+            }
         }
         private void HKReopenTab(HotKeyEventArgs e)
         {
-            string filetoopen = _lastClosedTab.Dequeue();
-            LoadDocument(filetoopen);
+            if (_lastClosedTab.Count > 0)
+            {
+                string filetoopen = _lastClosedTab.Dequeue();
+                if (!string.IsNullOrEmpty(filetoopen))
+                    LoadDocument(filetoopen);
+            }
         }
         private void HKSave(HotKeyEventArgs e)
         {
