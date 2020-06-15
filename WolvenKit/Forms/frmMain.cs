@@ -1538,7 +1538,7 @@ namespace WolvenKit
 
                 workerAction = WorkerLoadFile;
                 MainBackgroundWorker.RunWorkerAsync(args);
-                DialogResult dr = m_frmProgress.ShowDialog();
+                DialogResult dr = m_frmProgress.ShowDialog(this);
 
 
             }
