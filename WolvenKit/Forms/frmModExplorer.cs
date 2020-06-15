@@ -381,8 +381,12 @@ namespace WolvenKit
                 s = s.Substring(ActiveMod.FileDirectory.Length + 1);
                 if (s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Length > 1)
                 {
-                    var r = string.Join(Path.DirectorySeparatorChar.ToString(), new[] { "Root" }.Concat(s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Skip(1)).ToArray());
-                    return string.Join(Path.DirectorySeparatorChar.ToString(), new[] { "Root" }.Concat(s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Skip(1)).ToArray());
+                    int skip = s.StartsWith("Raw") ? 2 : 1;
+
+                    var r = string
+                        .Join(Path.DirectorySeparatorChar.ToString(), new[] { "Root" }
+                        .Concat(s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Skip(skip)).ToArray());
+                    return r;
                 }
                 else
                     return s;

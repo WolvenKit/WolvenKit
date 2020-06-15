@@ -152,6 +152,7 @@ namespace WolvenKit
 
             hotkeys.RegisterHotkey(Keys.F5, HKRun, "Run");
             hotkeys.RegisterHotkey(Keys.Control | Keys.F5, HKRunAndLaunch, "RunAndLaunch");
+
             hotkeys.RegisterHotkey(Keys.Control | Keys.W, HKCloseTab, "CloseTab");
             hotkeys.RegisterHotkey(Keys.Control | Keys.Shift | Keys.T, HKReopenTab, "ReopenTab");
 
@@ -327,13 +328,20 @@ namespace WolvenKit
         }
         private void HKCloseTab(HotKeyEventArgs e)
         {
-            _lastClosedTab.Enqueue(ActiveDocument.FileName);
-            ActiveDocument.Close();
+            if (ActiveDocument != null)
+            {
+                _lastClosedTab.Enqueue(ActiveDocument.FileName);
+                ActiveDocument.Close();
+            }
         }
         private void HKReopenTab(HotKeyEventArgs e)
         {
-            string filetoopen = _lastClosedTab.Dequeue();
-            LoadDocument(filetoopen);
+            if (_lastClosedTab.Count > 0)
+            {
+                string filetoopen = _lastClosedTab.Dequeue();
+                if (!string.IsNullOrEmpty(filetoopen))
+                    LoadDocument(filetoopen);
+            }
         }
         private void HKSave(HotKeyEventArgs e)
         {
@@ -1187,14 +1195,27 @@ namespace WolvenKit
                 {
                     var archives = manager.FileList.Where(x => x.Name == item.FullPath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
                     string filename;
-                    if (archives.First().Value.Bundle.TypeName == MainController.Get().CollisionManager.TypeName ||
-                        archives.First().Value.Bundle.TypeName == MainController.Get().TextureManager.TypeName)
+                    if (archives.First().Value.Bundle.TypeName == MainController.Get().CollisionManager.TypeName 
+                        || archives.First().Value.Bundle.TypeName == MainController.Get().TextureManager.TypeName)
                     {
-                        filename = Path.Combine(ActiveMod.RawDirectory, AddAsDLC ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName, "dlc", ActiveMod.Name, item.FullPath) : Path.Combine("Mod", archives.First().Value.Bundle.TypeName, item.FullPath));
+                        // add pngs directly to TextureCache (not Raw, since pngs don't get imported)
+                        if (Path.GetExtension(item.FullPath) == ".png")
+                        {
+                            filename = Path.Combine(ActiveMod.FileDirectory, AddAsDLC
+                                ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName, "dlc", ActiveMod.Name, item.FullPath)
+                                : Path.Combine("Mod", archives.First().Value.Bundle.TypeName, item.FullPath));
+                        }
+                        // all other textures go into Raw (since they have to be imported first)
+                        else
+                            filename = Path.Combine(ActiveMod.RawDirectory, AddAsDLC 
+                                ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName, "dlc", ActiveMod.Name, item.FullPath) 
+                                : Path.Combine("Mod", archives.First().Value.Bundle.TypeName, item.FullPath));
                     }
                     else
                     {
-                        filename = Path.Combine(ActiveMod.FileDirectory, AddAsDLC ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName, "dlc", ActiveMod.Name, item.FullPath) : Path.Combine("Mod", archives.First().Value.Bundle.TypeName, item.FullPath));
+                        filename = Path.Combine(ActiveMod.FileDirectory, AddAsDLC 
+                            ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName, "dlc", ActiveMod.Name, item.FullPath) 
+                            : Path.Combine("Mod", archives.First().Value.Bundle.TypeName, item.FullPath));
                     }
                     if (archives.Count() > 1)
                     {
@@ -1517,7 +1538,7 @@ namespace WolvenKit
 
                 workerAction = WorkerLoadFile;
                 MainBackgroundWorker.RunWorkerAsync(args);
-                DialogResult dr = m_frmProgress.ShowDialog();
+                DialogResult dr = m_frmProgress.ShowDialog(this);
 
 
             }
@@ -2113,15 +2134,18 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             {
                 ModExplorer.PauseMonitoring();
                 
+                // progress bar
                 m_frmProgress = new frmProgress()
                 {
                     Text = "Adding Assets",
                     StartPosition = FormStartPosition.CenterParent,
                 };
 
+                // background worker action
                 workerAction = WorkerAssetBrowserAddFiles;
                 MainBackgroundWorker.RunWorkerAsync(Details);
 
+                // cancellation dialog
                 DialogResult dr = m_frmProgress.ShowDialog(this);
                 switch (dr)
                 {
