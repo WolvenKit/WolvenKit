@@ -153,7 +153,7 @@ namespace WolvenKit
             pasteToolStripMenuItem.Enabled = CopyController.VariableTargets != null 
                 && sNodes.All(x => x.Variable != null 
                 && CopyController.VariableTargets.Any(z => x.Variable.CanAddVariable(z)));
-            ptrPropertiesToolStripMenuItem.Visible = sNodes.All(x => x.Variable is CPtr) && sNodes.Count == 1;
+            ptrPropertiesToolStripMenuItem.Visible = sNodes.All(x => x.Variable is IPtrAccessor) && sNodes.Count == 1;
         }
 
         public void CopyVariable()
@@ -233,10 +233,9 @@ namespace WolvenKit
 
             CVariable newvar = null;
 
-            if (node.Variable is CArray)
+            if (node.Variable is IArrayAccessor array)
             {
-                var nodearray = (CArray) node.Variable;
-                newvar = CR2WTypeManager.Get().GetByName(nodearray.elementtype, "", Chunk.cr2w, false);
+                newvar = CR2WTypeManager.Create(array.GetElementType(), "", Chunk.cr2w, node.Variable as CVariable, false);
                 if (newvar == null)
                     return;
             }
@@ -248,22 +247,22 @@ namespace WolvenKit
                     return;
                 }
 
-                newvar = CR2WTypeManager.Get().GetByName(frm.VariableType, frm.VariableName, Chunk.cr2w, false);
+                newvar = CR2WTypeManager.Create(frm.VariableType, frm.VariableName, Chunk.cr2w, node.Variable as CVariable, false);
                 if (newvar == null)
                     return;
 
                 newvar.Name = frm.VariableName;
-                newvar.Type = frm.VariableType;
+                //newvar.Type = frm.VariableType;
             }
 
-            if (newvar is CHandle)
+            if (newvar is IHandleAccessor h)
             {
                 var result = MessageBox.Show("Add as chunk handle? (Yes for chunk handle, No for normal handle)",
                     "Adding handle.", MessageBoxButtons.YesNoCancel);
                 if (result == DialogResult.Cancel)
                     return;
 
-                ((CHandle) newvar).ChunkHandle = result == DialogResult.Yes;
+                h.ChunkHandle = result == DialogResult.Yes;
             }
 
             node.Variable.AddVariable(newvar);
@@ -355,10 +354,10 @@ namespace WolvenKit
         private void ptrPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var node = (VariableListNode) treeView.SelectedObject;
-            if ((node?.Variable as CPtr)?.Reference == null)
+            if ((node?.Variable as IPtrAccessor)?.Reference == null)
                 return;
 
-            Chunk = ((CPtr) node.Variable).Reference;
+            Chunk = ((IPtrAccessor) node.Variable).Reference;
         }
 
         private void copyTextToolStripMenuItem_Click(object sender, EventArgs e)

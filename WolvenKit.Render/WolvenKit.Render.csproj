@@ -133,7 +133,7 @@
     <Compile Include="Animation\ExportFace.cs" />
     <Compile Include="Animation\IgnorableSerializerContractResolver.cs" />
     <Compile Include="CommonData.cs" />
-    <Compile Include="CSkeleton.cs" />
+    <Compile Include="RenderSkeleton.cs" />
     <Compile Include="FastRender\frmFastRender.cs">
       <SubType>Form</SubType>
     </Compile>

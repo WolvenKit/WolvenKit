@@ -13,28 +13,26 @@ namespace WolvenKit.FlowTreeEditors
             InitializeComponent();
         }
 
-        public override List<CPtr> GetConnections()
+        public override List<IPtrAccessor> GetConnections()
         {
-            var list = new List<CPtr>();
+            var list = new List<IPtrAccessor>();
+            CStorySceneChoice sceneChoice = (CStorySceneChoice)Chunk.data;
 
-            var choiceLinesObj = Chunk.GetVariableByName("choiceLines");
-            if (choiceLinesObj != null && choiceLinesObj is CArray)
+            CArray<CPtr<CStorySceneChoiceLine>> choiceLines = sceneChoice.ChoiceLines;
+            if (choiceLines != null)
             {
-                var choiceLines = ((CArray) choiceLinesObj);
-                foreach (var choice in choiceLines)
+                foreach (var choice in choiceLines.elements)
                 {
-                    if (choice != null && choice is CPtr)
+                    if (choice != null)
                     {
-                        var choicePtr = (CPtr) choice;
-                        if (choicePtr.Reference != null)
+                        if (choice.Reference != null)
                         {
-                            var nextLinkElementObj = choicePtr.Reference.GetVariableByName("nextLinkElement");
-                            if (nextLinkElementObj != null && nextLinkElementObj is CPtr)
+                            CPtr<CStorySceneLinkElement> nextLinkElementObj = (choice.Reference.data as CStorySceneChoiceLine).NextLinkElement;
+                            if (nextLinkElementObj != null)
                             {
-                                var nextLinkElement = (CPtr) nextLinkElementObj;
-                                if (nextLinkElement.Reference != null)
+                                if (nextLinkElementObj.Reference != null)
                                 {
-                                    list.Add(nextLinkElement);
+                                    list.Add(nextLinkElementObj);
                                 }
                             }
                         }
@@ -51,19 +49,17 @@ namespace WolvenKit.FlowTreeEditors
 
             var y = 21;
 
-            var sceneElementsObj = Chunk.GetVariableByName("choiceLines");
-            if (sceneElementsObj != null && sceneElementsObj is CArray)
+            CArray<CPtr<CStorySceneChoiceLine>> sceneElements = (Chunk.data as CStorySceneChoice).ChoiceLines;
+            if (sceneElements != null)
             {
-                var sceneElements = (CArray) sceneElementsObj;
-                foreach (var element in sceneElements)
+                foreach (var element in sceneElements.elements)
                 {
-                    if (element != null && element is CPtr)
+                    if (element != null)
                     {
-                        var ptr = (CPtr) element;
-                        switch (ptr.GetPtrTargetType())
+                        switch (element.GetPtrTargetType())
                         {
                             case "CStorySceneChoiceLine":
-                                var choiceLine = ptr.Reference.GetVariableByName("choiceLine");
+                                var choiceLine = (element.Reference.data as CStorySceneChoiceLine).ChoiceLine;
 
                                 var label = new Label
                                 {
@@ -74,7 +70,7 @@ namespace WolvenKit.FlowTreeEditors
                                     AutoSize = false,
                                     Text = choiceLine != null ? choiceLine.ToString() : "missing choiceLine"
                                 };
-                                label.Click += delegate { FireSelectEvent(ptr.Reference); };
+                                label.Click += delegate { FireSelectEvent(element.Reference); };
                                 Controls.Add(label);
 
                                 y += label.Height;

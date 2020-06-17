@@ -9,11 +9,11 @@ namespace WolvenKit.CR2W
     {
         internal List<CR2WExportWrapper> chunks;
         internal Dictionary<int, int> chunkTranslation;
-        internal List<CPtr> ptrs;
+        internal List<CPtr<CVariable>> ptrs;
 
         public CR2WCopyAction()
         {
-            ptrs = new List<CPtr>();
+            ptrs = new List<CPtr<CVariable>>();
             chunks = new List<CR2WExportWrapper>();
             chunkTranslation = new Dictionary<int, int>();
         }
@@ -190,10 +190,10 @@ namespace WolvenKit.CR2W
                     OnCopyStorySceneSection(chunkcopy);
                 }
 
-                var CStoryScene = DestinationFile.GetChunkByType("CStoryScene");
+                CStoryScene CStoryScene = DestinationFile.GetChunkByType("CStoryScene").data as CStoryScene;
                 if (CStoryScene != null)
                 {
-                    var controlParts = CStoryScene.GetVariableByName("controlParts") as CArray;
+                    CArray<CPtr<CStorySceneControlPart>> controlParts = CStoryScene.ControlParts;
                     // Add this chunk to the controlParts
                     if (controlParts != null)
                     {
@@ -211,7 +211,12 @@ namespace WolvenKit.CR2W
                             case "CStorySceneOutput":
                             case "CStorySceneCutscenePlayer":
 
-                                DestinationFile.CreatePtr(controlParts, chunkcopy);
+                                //DestinationFile.CreatePtr(controlParts, chunkcopy);
+                                controlParts.AddVariable(new CPtr<CStorySceneControlPart>(DestinationFile)
+                                {
+                                    Reference = chunkcopy
+                                }
+                                );
                                 break;
 
                             default:
@@ -219,7 +224,7 @@ namespace WolvenKit.CR2W
                         }
                     }
 
-                    var sections = CStoryScene.GetVariableByName("sections") as CArray;
+                    CArray<CPtr<CStorySceneSection>> sections = CStoryScene.Sections;
                     // Add this chunk to the sections
                     if (sections != null)
                     {
@@ -229,7 +234,12 @@ namespace WolvenKit.CR2W
                             case "CStorySceneCutsceneSection":
                             case "CStorySceneVideoSection":
 
-                                DestinationFile.CreatePtr(sections, chunkcopy);
+                                //DestinationFile.CreatePtr(sections, chunkcopy);
+                                sections.AddVariable(new CPtr<CStorySceneControlPart>(DestinationFile)
+                                {
+                                    Reference = chunkcopy
+                                }
+                                );
                                 break;
 
                             default:
@@ -270,8 +280,8 @@ namespace WolvenKit.CR2W
         private static void removeStorySceneAddFacts(CStorySceneSection storysection)
         {
             var factevents =
-                storysection.sceneEventElements.FindAll(
-                    delegate(CVariable sectionitem) { return sectionitem.Type == "CStorySceneAddFactEvent"; });
+                storysection.sceneEventElements.elements.FindAll(
+                    delegate(CVariableWrapper sectionitem) { return sectionitem.Type == "CStorySceneAddFactEvent"; });
 
             foreach (var factevent in factevents)
             {
@@ -281,18 +291,18 @@ namespace WolvenKit.CR2W
 
         private void copyStorySceneCameras(CStorySceneSection storysection)
         {
-            var CStoryScene = DestinationFile.GetChunkByType("CStoryScene");
-            var cameraInstances = (CArray) CStoryScene.GetVariableByName("cameraDefinitions");
+            CStoryScene CStoryScene = DestinationFile.GetChunkByType("CStoryScene").data as CStoryScene;
+            CArray<StorySceneCameraDefinition> cameraInstances = CStoryScene.CameraDefinitions;
 
-            var CStorySceneSource = SourceFile.GetChunkByType("CStoryScene");
-            var cameraInstancesSource = (CArray) CStorySceneSource.GetVariableByName("cameraDefinitions");
+            CStoryScene CStorySceneSource = SourceFile.GetChunkByType("CStoryScene").data as CStoryScene;
+            CArray<StorySceneCameraDefinition> cameraInstancesSource = CStorySceneSource.CameraDefinitions;
 
             foreach (var e in storysection.sceneEventElements)
             {
-                if (e != null && e is CVector && e.Type == "CStorySceneEventCustomCameraInstance")
+                if (e != null && e is CStorySceneEventCustomCameraInstance && e.Type == "CStorySceneEventCustomCameraInstance")
                 {
-                    var v = (CVector) e;
-                    var n = v.GetVariableByName("customCameraName") as CName;
+                    var v = (CStorySceneEventCustomCameraInstance) e.Variable;
+                    CName n = v.CustomCameraName;
                     if (n != null)
                     {
                         var camera = findCameraInstance(cameraInstances, n.Value);
@@ -312,32 +322,27 @@ namespace WolvenKit.CR2W
             }
         }
 
-        private CVariable findCameraInstance(CArray cameraInstances, string findCameraName)
+        private CVariable findCameraInstance(CArray<StorySceneCameraDefinition> cameraInstances, string findCameraName)
         {
-            var camera = cameraInstances.array.Find(delegate(CVariable c)
+            try
             {
-                if (c != null && c is CVector)
-                {
-                    var v = (CVector) c;
-                    var cameraName = v.GetVariableByName("cameraName") as CName;
-                    return (cameraName != null && cameraName.Value == findCameraName);
-                }
-
-                return false;
-            });
-
-            return camera;
+                return cameraInstances.elements.FirstOrDefault(_ => _.CameraName.Value == findCameraName);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         private CR2WExportWrapper findDialogset(CR2WFile infile, string dialogsetName)
         {
-            var camera = infile.chunks.Find(delegate(CR2WExportWrapper c)
+            var camera = infile.chunks.Find(delegate (CR2WExportWrapper chunk)
             {
-                if (c != null && c.data != null && c.data is CVector)
+                if (chunk != null && chunk.data != null)
                 {
-                    var v = (CVector) c.data;
-                    var name = v.GetVariableByName("name") as CName;
-                    return (name != null && name.Value == dialogsetName);
+                    var scene = chunk.data as CStoryScene;
+                    var name = scene.Name; //FIXME
+                    return (name != null && name == dialogsetName);
                 }
 
                 return false;
@@ -349,7 +354,7 @@ namespace WolvenKit.CR2W
         private void copyDialogset(CStorySceneSection storysection)
         {
             // see if it has a change dialog set property
-            var dlgset = storysection.GetVariableByName("dialogsetChangeTo") as CName;
+            CName dlgset = storysection.DialogsetChangeTo;
             if (dlgset != null)
             {
                 // see if we already have a dialog set with this name
@@ -360,14 +365,22 @@ namespace WolvenKit.CR2W
                     var srcdlgset = findDialogset(SourceFile, dlgset.Value);
                     if (srcdlgset != null)
                     {
-                        var CStoryScene = DestinationFile.GetChunkByType("CStoryScene");
-                        var dialogsetInstances = (CArray) CStoryScene.GetVariableByName("dialogsetInstances");
+                        CStoryScene CStoryScene = DestinationFile.GetChunkByType("CStoryScene").data as CStoryScene;
+                        CArray<CPtr<CStorySceneDialogsetInstance>> dialogsetInstances = CStoryScene.DialogsetInstances;
 
-                        var copieddialogset = srcdlgset.Copy(this);
-                        DestinationFile.CreatePtr(dialogsetInstances, copieddialogset);
-                        var placementTag = (CTagList) copieddialogset.GetVariableByName("placementTag");
+                        var copieddialogsetchunk = srcdlgset.Copy(this);
+                        CStorySceneDialogsetInstance copieddialogset = (CStorySceneDialogsetInstance)copieddialogsetchunk.data;
+
+                        //DestinationFile.CreatePtr(dialogsetInstances, copieddialogset);
+                        dialogsetInstances.AddVariable(new CPtr<CStorySceneDialogsetInstance>(DestinationFile)
+                        {
+                            Reference = copieddialogsetchunk
+                        }
+                        );
+
+                        TagList placementTag = copieddialogset.PlacementTag;
                         placementTag.tags.Clear();
-                        placementTag.tags.Add((CName) DestinationFile.CreateVariable("CName").SetValue("PLAYER"));
+                        placementTag.tags.AddVariable(new CName(DestinationFile) { Value = "PLAYER" }); //FIXME variable name or value?
                     }
                 }
             }
@@ -378,67 +391,63 @@ namespace WolvenKit.CR2W
             var placement_x = 0.0f;
             var placement_y = 0.0f;
             var placement_z = 0.0f;
-            storysection.sceneEventElements.ForEach(delegate(CVariable sectionvar)
+            storysection.sceneEventElements.elements.ForEach(delegate (CVariableWrapper sectionvar)
             {
-                var sectionitem = ((CVector) sectionvar);
-
-                if (sectionitem.Type == "CStorySceneEventOverridePlacement")
+                if (sectionvar.Type == "CStorySceneEventOverridePlacement")
                 {
-                    var placement = (CEngineTransform) sectionitem.variables.GetVariableByName("placement");
+                    var placement = (sectionvar.Variable as CStorySceneEventOverridePlacement).Placement;
 
-                    if (placement_x == 0 || Math.Abs(placement.x.val) < Math.Abs(placement_x))
-                        placement_x = placement.x.val;
-                    if (placement_y == 0 || Math.Abs(placement.y.val) < Math.Abs(placement_y))
-                        placement_y = placement.y.val;
-                    if (placement_z == 0 || Math.Abs(placement.z.val) < Math.Abs(placement_z))
-                        placement_z = placement.z.val;
+                    if (placement_x == 0 || Math.Abs(placement.X.val) < Math.Abs(placement_x))
+                        placement_x = placement.X.val;
+                    if (placement_y == 0 || Math.Abs(placement.Y.val) < Math.Abs(placement_y))
+                        placement_y = placement.Y.val;
+                    if (placement_z == 0 || Math.Abs(placement.Z.val) < Math.Abs(placement_z))
+                        placement_z = placement.Z.val;
                 }
             });
 
             // Remove Unnessasary teleportation
-            storysection.sceneEventElements.ForEach(delegate(CVariable sectionvar)
+            storysection.sceneEventElements.elements.ForEach(delegate (CVariableWrapper sectionvar)
             {
-                var sectionitem = ((CVector) sectionvar);
-
-                if (sectionitem.Type == "CStorySceneEventOverridePlacement")
+                if (sectionvar.Type == "CStorySceneEventOverridePlacement")
                 {
-                    var placement = (CEngineTransform) sectionitem.variables.GetVariableByName("placement");
+                    var placement = (sectionvar.Variable as CStorySceneEventOverridePlacement).Placement;
                     if (placement != null)
                     {
-                        placement.x.val -= placement_x;
-                        placement.y.val -= placement_y;
-                        placement.z.val -= placement_z;
+                        placement.X.val -= placement_x;
+                        placement.Y.val -= placement_y;
+                        placement.Z.val -= placement_z;
                     }
                 }
-                else if (sectionitem.Type == "CStorySceneEventCustomCamera")
+                else if (sectionvar.Type == "CStorySceneEventCustomCamera")
                 {
-                    var cameraDefinition = (CVector) sectionitem.variables.GetVariableByName("cameraDefinition");
-                    var cameraTransform = (CEngineTransform) cameraDefinition.GetVariableByName("cameraTransform");
+                    var cameraDefinition = (sectionvar.Variable as CStorySceneEventCustomCamera).CameraDefinition;
+                    var cameraTransform = cameraDefinition.CameraTransform;
 
-                    cameraTransform.x.val -= placement_x;
-                    cameraTransform.y.val -= placement_y;
-                    cameraTransform.z.val -= placement_z;
+                    cameraTransform.X.val -= placement_x;
+                    cameraTransform.Y.val -= placement_y;
+                    cameraTransform.Z.val -= placement_z;
 
-                    var cameraTranslation = (CVector) sectionitem.variables.GetVariableByName("cameraTranslation");
+                    var cameraTranslation = (sectionvar.Variable as CStorySceneEventCustomCamera).CameraTranslation;
                     if (cameraTranslation != null)
                     {
-                        ((CFloat) cameraTranslation.GetVariableByName("X")).val -= placement_x;
-                        ((CFloat) cameraTranslation.GetVariableByName("Y")).val -= placement_y;
-                        ((CFloat) cameraTranslation.GetVariableByName("Z")).val -= placement_z;
+                        cameraTranslation.X.val -= placement_x;
+                        cameraTranslation.Y.val -= placement_y;
+                        cameraTranslation.Z.val -= placement_z;
                     }
                 }
-                else if (sectionitem.Type == "CStorySceneEventCameraLight")
+                else if (sectionvar.Type == "CStorySceneEventCameraLight")
                 {
-                    var lightMod1 = (CVector) sectionitem.variables.GetVariableByName("lightMod1");
+                    SStorySceneCameraLightMod lightMod1 = (sectionvar.Variable as CStorySceneEventCameraLight).LightMod1;
                     if (lightMod1 != null)
                     {
-                        var lightOffset = (CVector) lightMod1.GetVariableByName("lightOffset");
+                        var lightOffset = lightMod1.LightOffset;
 
                         if (lightOffset != null)
                         {
-                            ((CFloat) lightOffset.GetVariableByName("X")).val -= placement_x;
-                            ((CFloat) lightOffset.GetVariableByName("Y")).val -= placement_y;
-                            ((CFloat) lightOffset.GetVariableByName("Z")).val -= placement_z;
+                            lightOffset.X.val -= placement_x;
+                            lightOffset.Y.val -= placement_y;
+                            lightOffset.Z.val -= placement_z;
                         }
                     }
                 }

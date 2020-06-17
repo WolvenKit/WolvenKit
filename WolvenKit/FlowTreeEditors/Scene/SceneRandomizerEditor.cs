@@ -13,19 +13,18 @@ namespace WolvenKit.FlowTreeEditors
             InitializeComponent();
         }
 
-        public override List<CPtr> GetConnections()
+        public override List<IPtrAccessor> GetConnections()
         {
-            var list = new List<CPtr>();
+            var list = new List<IPtrAccessor>();
+            CStorySceneRandomizer resource = (CStorySceneRandomizer)Chunk.data;
 
-            var choiceLinesObj = Chunk.GetVariableByName("outputs");
-            if (choiceLinesObj != null && choiceLinesObj is CArray)
+            CArray<CPtr<CStorySceneLinkElement>> outputs = resource.Outputs;
+            if (outputs != null)
             {
-                var choiceLines = ((CArray) choiceLinesObj);
-                foreach (var choice in choiceLines)
+                foreach (CPtr<CStorySceneLinkElement> choice in outputs.elements)
                 {
-                    if (choice != null && choice is CPtr)
+                    if (choice != null)
                     {
-                        var choicePtr = (CPtr) choice;
                         //if (choicePtr.PtrTarget != null)
                         //{
                         //    var nextLinkElementObj = choicePtr.PtrTarget.GetVariableByName("nextLinkElement");
@@ -38,7 +37,7 @@ namespace WolvenKit.FlowTreeEditors
                         //        }
                         //    }
                         //}
-                        list.Add(choicePtr);
+                        list.Add(choice);
                     }
                 }
             }
@@ -54,16 +53,16 @@ namespace WolvenKit.FlowTreeEditors
 
             var line = 0;
 
-            var sceneElementsObj = Chunk.GetVariableByName("outputs");
-            if (sceneElementsObj != null && sceneElementsObj is CArray)
+            CStorySceneRandomizer resource = (CStorySceneRandomizer)Chunk.data;
+
+            CArray<CPtr<CStorySceneLinkElement>> outputs = resource.Outputs;
+            if (outputs != null)
             {
-                var sceneElements = (CArray) sceneElementsObj;
-                foreach (var element in sceneElements)
+                foreach (var element in outputs.elements)
                 {
-                    if (element != null && element is CPtr)
+                    if (element != null)
                     {
-                        var ptr = (CPtr) element;
-                        switch (ptr.GetPtrTargetType())
+                        switch (element.GetPtrTargetType())
                         {
                             default:
                                 var label = new Label
@@ -75,7 +74,7 @@ namespace WolvenKit.FlowTreeEditors
                                     AutoSize = false,
                                     Text = line.ToString()
                                 };
-                                label.Click += delegate { FireSelectEvent(ptr.Reference); };
+                                label.Click += delegate { FireSelectEvent(element.Reference); };
                                 Controls.Add(label);
                                 line++;
 
@@ -92,7 +91,7 @@ namespace WolvenKit.FlowTreeEditors
 
         public override Point GetConnectionLocation(int i)
         {
-            return new Point(0, i*20 + 21 + 10);
+            return new Point(0, i * 20 + 21 + 10);
         }
     }
 }

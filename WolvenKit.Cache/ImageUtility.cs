@@ -139,10 +139,10 @@ namespace WolvenKit.Cache
             if (xbm == null)
                 return null;
 
-            int residentMipIndex = xbm.GetVariableByName("residentMipIndex") == null ? 0 : (int)((CUInt8)xbm.GetVariableByName("residentMipIndex")).val;
+            int residentMipIndex = xbm.ResidentMipIndex == null ? 0 : xbm.ResidentMipIndex.val;
             byte[] bytesource;
             // handle cooked xbms
-            if (xbm.GetVariableByName("sourceData") == null && xbm.Residentmip != null)
+            if (xbm.SourceData == null && xbm.Residentmip != null)
             {
                 bytesource = xbm.Residentmip.Bytes;
 
@@ -177,10 +177,10 @@ namespace WolvenKit.Cache
             if (xbm == null)
                 return null;
 
-            int residentMipIndex = xbm.GetVariableByName("residentMipIndex") == null ? 0 : (int)((CUInt8)xbm.GetVariableByName("residentMipIndex")).val;
+            int residentMipIndex = xbm.ResidentMipIndex == null ? 0 : xbm.ResidentMipIndex.val;
             byte[] bytesource;
             // handle cooked xbms
-            if (xbm.GetVariableByName("sourceData") == null)
+            if (xbm.SourceData == null)
             {
                 bytesource = xbm.Residentmip.Bytes;
             }
@@ -229,11 +229,11 @@ namespace WolvenKit.Cache
         {
             try
             {
-                int residentMipIndex = xbm.GetVariableByName("residentMipIndex") == null ? 0 : (int)((CUInt8)xbm.GetVariableByName("residentMipIndex")).val;
+                int residentMipIndex = xbm.ResidentMipIndex == null ? 0 : xbm.ResidentMipIndex.val;
 
                 int mipcount;
                 // handle cooked xbms
-                if (xbm.GetVariableByName("sourceData") == null)
+                if (xbm.SourceData == null)
                 {
                     mipcount = xbm.Mipdata.elements.Count - residentMipIndex;
                 }
@@ -246,14 +246,8 @@ namespace WolvenKit.Cache
                 uint width = xbm.Mipdata.elements[residentMipIndex].Width.val;
                 uint height = xbm.Mipdata.elements[residentMipIndex].Height.val;
 
-                var ecompression = (CName)xbm.GetVariableByName("compression");
-                ETextureCompression compression = (ETextureCompression)Enum.Parse(typeof(ETextureCompression), ecompression.Value);
-                var eformat = (CName)xbm.GetVariableByName("format");
-                ETextureRawFormat format = ETextureRawFormat.TRF_TrueColor;
-                if (eformat != null)
-                    format = (ETextureRawFormat)Enum.Parse(typeof(ETextureRawFormat), eformat.Value);
-
-
+                ETextureCompression compression = xbm.Compression;
+                ETextureRawFormat format = xbm.Format;
 
                 var ddsformat = ETextureFormat.TEXFMT_R8G8B8A8;
                 switch (compression)

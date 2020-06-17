@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Xml;
 using WolvenKit.Utils;
+using System.Linq;
 
 [assembly: ContractNamespaceAttribute("",    ClrNamespace = "WolvenKit.CR2W")]
 
@@ -90,8 +91,8 @@ namespace WolvenKit.CR2W
         public CVariable data { get; set; }
 
         // editable variables
-        private CPtr _parentPtr;
-        public CPtr ParentPtr
+        private CPtr<CVariable> _parentPtr;
+        public CPtr<CVariable> ParentPtr
         {
             get
             {
@@ -141,15 +142,15 @@ namespace WolvenKit.CR2W
         {
             get
             {
-                if (data is CVector)
+                if (data is CVariable)
                 {
-                    var firstString = ((CVector)data).GetVariableByType("String");
+                    var firstString = data.GetEditableVariables().First(_ => _.Type == "String");
                     if (firstString != null)
                     {
                         return ((CString)firstString).val;
                     }
 
-                    var firstName = ((CVector)data).GetVariableByType("CName");
+                    var firstName = data.GetEditableVariables().First(_ => _.Type == "CName");
                     if (firstName != null)
                     {
                         return ((CName)firstName).Value;
@@ -246,7 +247,6 @@ namespace WolvenKit.CR2W
             unknownBytes = new CBytes(cr2w)
             {
                 Name = "unknownBytes",
-                Type = "byte[]"
             };
 
             if (bytesLeft > 0)
@@ -290,18 +290,16 @@ namespace WolvenKit.CR2W
 
         public void CreateDefaultData()
         {
-            data = CR2WTypeManager.Get().GetByName(Type, "", cr2w, false);
+            data = CR2WTypeManager.Create(Type, "", cr2w, null);
             if (data == null)
             {
-                // default chunks to vector type
-                data = new CVector(cr2w);
+                throw new NotImplementedException();
             }
-            //data.Name = Name;
-            data.Type = Type;
+
             if (ParentChunkId != 0)
                 data.Parent = GetParent().data;
 
-            ParentPtr = new CPtr(cr2w)
+            ParentPtr = new CPtr<CVariable>(cr2w)
             {
                 Name = "Parent",
                 Reference = GetParent()
@@ -330,7 +328,7 @@ namespace WolvenKit.CR2W
 
             if (data != null)
             {
-                copy.data = (CVector) data.Copy(context);
+                copy.data = data.Copy(context);
             }
             if (unknownBytes != null)
             {

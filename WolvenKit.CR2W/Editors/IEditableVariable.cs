@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Editors
     public interface IEditableVariable
     {
         string Name { get; set; }
-        string Type { get; set; }
+        string Type { get; }
         string Value { get; }
         Guid InternalGuid { get; set; }
         IEditableVariable Parent { get; set; }

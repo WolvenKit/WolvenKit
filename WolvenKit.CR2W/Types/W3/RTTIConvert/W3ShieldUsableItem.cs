@@ -1,0 +1,29 @@
+using System.IO;using System.Runtime.Serialization;
+using WolvenKit.CR2W.Reflection;
+using static WolvenKit.CR2W.Types.Enums;
+
+
+namespace WolvenKit.CR2W.Types
+{
+	[DataContract(Namespace = "")]
+	[REDMeta]
+	public class W3ShieldUsableItem : W3UsableItem
+	{
+		[RED("factAddedOnUse")] 		public CString FactAddedOnUse { get; set;}
+
+		[RED("factValue")] 		public CInt32 FactValue { get; set;}
+
+		[RED("factTimeValid")] 		public CInt32 FactTimeValid { get; set;}
+
+		[RED("removeFactOnHide")] 		public CBool RemoveFactOnHide { get; set;}
+
+		public W3ShieldUsableItem(CR2WFile cr2w) : base(cr2w){ }
+
+		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
+
+		public override void Write(BinaryWriter file) => base.Write(file);
+
+		public override CVariable Create(CR2WFile cr2w) => new W3ShieldUsableItem(cr2w);
+
+	}
+}

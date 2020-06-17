@@ -191,20 +191,20 @@ namespace WolvenKit
         {
             reader.BaseStream.Seek(bytestart, SeekOrigin.Begin);
 
-            try
-            {
-                var obj = new CVector(File);
-                obj.Read(reader, (uint) (bytes.Length - bytestart));
-                var v = CreatePropertyLayout(obj);
-                v.Endpos = (int) reader.BaseStream.Position;
-                v.HexValue = bytes[bytestart].ToString("X2");
-                v.Method = "CVector";
-            }
-            catch
-            {
-            }
+            //try
+            //{
+            //    var obj = new CVariable(File);
+            //    obj.Read(reader, (uint) (bytes.Length - bytestart));
+            //    var v = CreatePropertyLayout(obj);
+            //    v.Endpos = (int) reader.BaseStream.Position;
+            //    v.HexValue = bytes[bytestart].ToString("X2");
+            //    v.Method = "CVector";
+            //}
+            //catch
+            //{
+            //}
 
-            reader.BaseStream.Seek(bytestart, SeekOrigin.Begin);
+            //reader.BaseStream.Seek(bytestart, SeekOrigin.Begin);
 
             try
             {
@@ -333,7 +333,7 @@ namespace WolvenKit
 
             try
             {
-                var obj = new CHandle(File);
+                var obj = new CHandle<CVariable>(File);
 
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
@@ -351,7 +351,7 @@ namespace WolvenKit
 
             try
             {
-                var obj = new CSoft(File);
+                var obj = new CSoft<CVariable>(File);
 
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);

@@ -1,0 +1,27 @@
+using System.IO;using System.Runtime.Serialization;
+using WolvenKit.CR2W.Reflection;
+using static WolvenKit.CR2W.Types.Enums;
+
+
+namespace WolvenKit.CR2W.Types
+{
+	[DataContract(Namespace = "")]
+	[REDMeta]
+	public class SpawnMultipleEntitiesPoisonProjectile : PoisonProjectile
+	{
+		[RED("numberOfSpawns")] 		public CInt32 NumberOfSpawns { get; set;}
+
+		[RED("minDistFromTarget")] 		public CInt32 MinDistFromTarget { get; set;}
+
+		[RED("maxDistFromTarget")] 		public CInt32 MaxDistFromTarget { get; set;}
+
+		public SpawnMultipleEntitiesPoisonProjectile(CR2WFile cr2w) : base(cr2w){ }
+
+		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
+
+		public override void Write(BinaryWriter file) => base.Write(file);
+
+		public override CVariable Create(CR2WFile cr2w) => new SpawnMultipleEntitiesPoisonProjectile(cr2w);
+
+	}
+}

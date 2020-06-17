@@ -1,0 +1,29 @@
+using System.IO;using System.Runtime.Serialization;
+using WolvenKit.CR2W.Reflection;
+using static WolvenKit.CR2W.Types.Enums;
+
+
+namespace WolvenKit.CR2W.Types
+{
+	[DataContract(Namespace = "")]
+	[REDMeta]
+	public class CBTTaskChanceDef : IBehTreeTaskDefinition
+	{
+		[RED("chance")] 		public CBehTreeValInt Chance { get; set;}
+
+		[RED("frequency")] 		public CFloat Frequency { get; set;}
+
+		[RED("scaleWithNumberOfOpponents")] 		public CBool ScaleWithNumberOfOpponents { get; set;}
+
+		[RED("chancePerOpponent")] 		public CInt32 ChancePerOpponent { get; set;}
+
+		public CBTTaskChanceDef(CR2WFile cr2w) : base(cr2w){ }
+
+		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
+
+		public override void Write(BinaryWriter file) => base.Write(file);
+
+		public override CVariable Create(CR2WFile cr2w) => new CBTTaskChanceDef(cr2w);
+
+	}
+}

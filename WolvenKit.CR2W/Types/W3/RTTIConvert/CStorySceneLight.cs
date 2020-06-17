@@ -1,0 +1,41 @@
+using System.IO;using System.Runtime.Serialization;
+using WolvenKit.CR2W.Reflection;
+using static WolvenKit.CR2W.Types.Enums;
+
+
+namespace WolvenKit.CR2W.Types
+{
+	[DataContract(Namespace = "")]
+	[REDMeta]
+	public class CStorySceneLight : IStorySceneItem
+	{
+		[RED("id")] 		public CName Id { get; set;}
+
+		[RED("type")] 		public ELightType Type { get; set;}
+
+		[RED("innerAngle")] 		public CFloat InnerAngle { get; set;}
+
+		[RED("outerAngle")] 		public CFloat OuterAngle { get; set;}
+
+		[RED("softness")] 		public CFloat Softness { get; set;}
+
+		[RED("shadowCastingMode")] 		public ELightShadowCastingMode ShadowCastingMode { get; set;}
+
+		[RED("shadowFadeDistance")] 		public CFloat ShadowFadeDistance { get; set;}
+
+		[RED("shadowFadeRange")] 		public CFloat ShadowFadeRange { get; set;}
+
+		[RED("dimmerType")] 		public EDimmerType DimmerType { get; set;}
+
+		[RED("dimmerAreaMarker")] 		public CBool DimmerAreaMarker { get; set;}
+
+		public CStorySceneLight(CR2WFile cr2w) : base(cr2w){ }
+
+		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
+
+		public override void Write(BinaryWriter file) => base.Write(file);
+
+		public override CVariable Create(CR2WFile cr2w) => new CStorySceneLight(cr2w);
+
+	}
+}

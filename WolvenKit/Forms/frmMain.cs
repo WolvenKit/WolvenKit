@@ -1445,7 +1445,7 @@ namespace WolvenKit
                                 string parent = imatch.Groups[1].Value;
                                 if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
                                 {
-                                    CR2WTypeManager.Get().RegisterAs(classname, parent);
+                                    //CR2WTypeManager.Get().RegisterAs(classname, parent);
                                     AddOutput($"Registering custom class {classname} as {parent}.\r\n", Logtype.Success);
                                 }
                             }
@@ -1453,7 +1453,7 @@ namespace WolvenKit
                             {
                                 if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
                                 {
-                                    CR2WTypeManager.Get().Register(classname, new CVector(null));
+                                    //CR2WTypeManager.Get().Register(classname, new CVector(null));
                                     AddOutput($"Registering custom class {classname} as CVector.\r\n", Logtype.Success);
                                 }
                             }
@@ -1462,7 +1462,7 @@ namespace WolvenKit
                         {
                             if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
                             {
-                                CR2WTypeManager.Get().Register(classname, new CVector(null));
+                                //CR2WTypeManager.Get().Register(classname, new CVector(null));
                                 AddOutput($"Registering custom class {classname} as CVector.\r\n", Logtype.Success);
                             }
                         }

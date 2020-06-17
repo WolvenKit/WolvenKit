@@ -1,56 +1,31 @@
-﻿
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization;
-using WolvenKit.CR2W.Editors;
+using System.IO;using System.Runtime.Serialization;
+using WolvenKit.CR2W.Reflection;
+using static WolvenKit.CR2W.Types.Enums;
+
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
-    class SParticleEmitterLODLevel : CVector
-    {
-        public CFloat distance;
-		
+	[DataContract(Namespace = "")]
+	[REDMeta]
+	public class SParticleEmitterLODLevel : CVariable
+	{
+		[RED("emitterDurationSettings")] 		public EmitterDurationSettings EmitterDurationSettings { get; set;}
 
-        public SParticleEmitterLODLevel(CR2WFile cr2w) : base(cr2w)
-        {
-            distance = new CFloat(cr2w)
-            {
-                Name = "distance"
-            };
-        }
+		[RED("emitterDelaySettings")] 		public EmitterDelaySettings EmitterDelaySettings { get; set;}
 
-        public override void Read(BinaryReader file, uint size)
-        {
-            //base.Read(file, size);
+		[RED("burstList", 2,0)] 		public CArray<ParticleBurst> BurstList { get; set;}
 
-            distance.Read(file, size);
-        }
+		[RED("birthRate")] 		public CPtr<IEvaluatorFloat> BirthRate { get; set;}
 
-        public override void Write(BinaryWriter file)
-        {
-            distance.Write(file);
-        }
+		[RED("sortBackToFront")] 		public CBool SortBackToFront { get; set;}
 
-        public override CVariable Create(CR2WFile cr2w)
-        {
-            return new SParticleEmitterLODLevel(cr2w);
-        }
+		[RED("isEnabled")] 		public CBool IsEnabled { get; set;}
 
-        public override CVariable Copy(CR2WCopyAction context)
-        {
-            var var = (SParticleEmitterLODLevel)base.Copy(context);
-            var.distance = (CFloat) distance.Copy(context);
-            return var;
-        }
+		public SParticleEmitterLODLevel(CR2WFile cr2w) : base(cr2w){ }
 
-        public override List<IEditableVariable> GetEditableVariables()
-        {
-            var list = new List<IEditableVariable>(variables)
-            {
-                distance
-            };
-            return list;
-        }
-    }
+
+
+		public override CVariable Create(CR2WFile cr2w) => new SParticleEmitterLODLevel(cr2w);
+
+	}
 }

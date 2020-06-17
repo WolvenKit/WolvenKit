@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
 
 namespace Wolvekit.Nvidia.HairWorks
 {
@@ -13,7 +14,7 @@ namespace Wolvekit.Nvidia.HairWorks
 
 
         public string checksum = "0x299b335f 0x2cad8b54 0xcaf3c98f 0xa3094fa7";
-        public XElement serialize(CR2WExportWrapper apexChunk)
+        public XElement serialize(CFurMeshResource apexChunk)
         {
             var ret = NvidiaXML.CreateStructHeader("","Ref","HairSceneDescriptor","1.0",checksum);
             var values = new XElement("struct", new XAttribute("name", ""));

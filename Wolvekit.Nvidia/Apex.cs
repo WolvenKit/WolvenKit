@@ -25,10 +25,9 @@ namespace WolvenKit
 
             public static XDocument ConvertToApexXml(CR2WFile ApexChunk)
             {
-                if (ApexChunk.chunks[0].Type == "CFurMeshResource")
+                if (ApexChunk.chunks[0].Type == "CFurMeshResource" && ApexChunk.chunks[0].data is CFurMeshResource cFurMesh)
                 {
                     var root = new XElement("root",""); 
-                    var chunk = ApexChunk.chunks[0];                    
                     // NvParameters
                     var NvParameters = new XElement("NvParameters");
                     NvParameters.Add(new XAttribute("numObjects", "4"));
@@ -36,16 +35,16 @@ namespace WolvenKit
                     root.Add(NvParameters);
                     //NvHairAssetHeaderInfo
                     var hairassetheaderinfo = new NvHairAssetHeaderInfo();
-                    root.Add(hairassetheaderinfo.serialize(chunk,4));
+                    root.Add(hairassetheaderinfo.serialize(cFurMesh, 4));
                     //HairSceneDescriptor
                     var hairscenedesc = new HairSceneDescriptor();
-                    root.Add(hairscenedesc.serialize(chunk));
+                    root.Add(hairscenedesc.serialize(cFurMesh));
                     //NvHairAssetDescriptor    
                     var hairassetdescriptor = new NvHairAssetDescriptor();
-                    root.Add(hairassetdescriptor.serialize(chunk));
+                    root.Add(hairassetdescriptor.serialize(cFurMesh));
                     //HairInstanceDescriptor
                     var hairinstancedescriptor = new NvHairInstanceDescriptor();
-                    root.Add(hairinstancedescriptor.serialize(chunk));
+                    root.Add(hairinstancedescriptor.serialize(cFurMesh));
                     return new XDocument(root);
                 }
                 else
@@ -67,17 +66,14 @@ namespace WolvenKit
         /// </summary>
         /// <param name="coords">Coordinates to format.</param>
         /// <returns>The string of coordinates.</returns>
-        public static string FormatCoordinateArray(CArray coords)
+        public static string FormatCoordinateArray(CArray<Vector> coords)
         {
             var ret = "";
-            foreach (var coord in coords.array)
+            foreach (var coord in coords)
             {
-                if (((CVector) (coord)).variables.Count > 3)
-                {
-                    ret += ((CVector)(coord)).variables[0] + " ";
-                    ret += ((CVector)(coord)).variables[1] + " ";
-                    ret += ((CVector)(coord)).variables[2] + ", ";
-                }
+                ret += coord.X.ToString() + " ";
+                ret += coord.Y.ToString() + " ";
+                ret += coord.Z.ToString() + ", ";
             }
             return ret.Trim(',',' ');
         }

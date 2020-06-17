@@ -34,151 +34,85 @@ namespace WolvenKit.Render
             // *************** READ CHUNK INFOS ***************
             foreach (var chunk in meshFile.chunks)
             {
-                if (chunk.Type == "CMesh")
+                if (chunk.Type == "CMesh" && chunk.data is CMesh cmesh)
                 {
                     List<SVertexBufferInfos> vertexBufferInfos = new List<SVertexBufferInfos>();
-                    var cookedDatas = chunk.GetVariableByName("cookedData") as CVector;
-                    foreach (var cookedData in cookedDatas.variables)
+                    SMeshCookedData meshCookedData = cmesh.CookedData;
+
+
+                    var bytes = meshCookedData.RenderChunks.Bytes;
+                    using (MemoryStream ms = new MemoryStream(bytes))
+                    using (BinaryReader br = new BinaryReader(ms))
                     {
-                        switch (cookedData.Name)
+                        var nbBuffers = br.ReadByte();
+                        for (uint i = 0; i < nbBuffers; i++)
                         {
-                            case "renderChunks":
-                                {
-                                    var bytes = ((CByteArray)cookedData).Bytes;
-                                    using (MemoryStream ms = new MemoryStream(bytes))
-                                    using (BinaryReader br = new BinaryReader(ms))
-                                    {
-                                        var nbBuffers = br.ReadByte();
-                                        for (uint i = 0; i < nbBuffers; i++)
-                                        {
-                                            SVertexBufferInfos buffInfo = new SVertexBufferInfos();
+                            SVertexBufferInfos buffInfo = new SVertexBufferInfos();
 
-                                            br.BaseStream.Position += 1; // Unknown
-                                            buffInfo.verticesCoordsOffset = br.ReadUInt32();
-                                            buffInfo.uvOffset = br.ReadUInt32();
-                                            buffInfo.normalsOffset = br.ReadUInt32();
+                            br.BaseStream.Position += 1; // Unknown
+                            buffInfo.verticesCoordsOffset = br.ReadUInt32();
+                            buffInfo.uvOffset = br.ReadUInt32();
+                            buffInfo.normalsOffset = br.ReadUInt32();
 
-                                            br.BaseStream.Position += 9; // Unknown
-                                            buffInfo.indicesOffset = br.ReadUInt32();
-                                            br.BaseStream.Position += 1; // 0x1D
+                            br.BaseStream.Position += 9; // Unknown
+                            buffInfo.indicesOffset = br.ReadUInt32();
+                            br.BaseStream.Position += 1; // 0x1D
 
-                                            buffInfo.nbVertices = br.ReadUInt16();
-                                            buffInfo.nbIndices = br.ReadUInt32();
-                                            buffInfo.materialID = br.ReadByte();
-                                            br.BaseStream.Position += 2; // Unknown
-                                            buffInfo.lod = br.ReadByte(); // lod ?
+                            buffInfo.nbVertices = br.ReadUInt16();
+                            buffInfo.nbIndices = br.ReadUInt32();
+                            buffInfo.materialID = br.ReadByte();
+                            br.BaseStream.Position += 2; // Unknown
+                            buffInfo.lod = br.ReadByte(); // lod ?
 
-                                            vertexBufferInfos.Add(buffInfo);
-                                        }
-                                    }
-                                    break;
-                                }
-                            case "indexBufferOffset":
-                                {
-                                    bufferInfos.indexBufferOffset = uint.Parse(cookedData.ToString());
-                                    break;
-                                }
-                            case "indexBufferSize":
-                                {
-                                    bufferInfos.indexBufferSize = uint.Parse(cookedData.ToString());
-                                    break;
-                                }
-                            case "vertexBufferOffset":
-                                {
-                                    bufferInfos.vertexBufferOffset = uint.Parse(cookedData.ToString());
-                                    break;
-                                }
-                            case "vertexBufferSize":
-                                {
-                                    bufferInfos.vertexBufferSize = uint.Parse(cookedData.ToString());
-                                    break;
-                                }
-                            case "quantizationOffset":
-                                {
-                                    bufferInfos.quantizationOffset.X = float.Parse((cookedData as CVector).variables[0].ToString());
-                                    bufferInfos.quantizationOffset.Y = float.Parse((cookedData as CVector).variables[1].ToString());
-                                    bufferInfos.quantizationOffset.Z = float.Parse((cookedData as CVector).variables[2].ToString());
-                                    break;
-                                }
-                            case "quantizationScale":
-                                {
-                                    bufferInfos.quantizationScale.X = float.Parse((cookedData as CVector).variables[0].ToString());
-                                    bufferInfos.quantizationScale.Y = float.Parse((cookedData as CVector).variables[1].ToString());
-                                    bufferInfos.quantizationScale.Z = float.Parse((cookedData as CVector).variables[2].ToString());
-                                    break;
-                                }
-                            case "bonePositions":
-                                {
-                                    foreach (CVector item in cookedData as CArray)
-                                    {
-                                        if (item.variables.Count == 4)
-                                        {
-                                            Vector3Df pos = new Vector3Df();
-                                            pos.X = (item.variables[0] as CFloat).val;
-                                            pos.Y = (item.variables[1] as CFloat).val;
-                                            pos.Z = (item.variables[2] as CFloat).val;
-                                            bonePositions.Add(pos);
-                                        }
-                                    }
-                                    break;
-                                }
+                            vertexBufferInfos.Add(buffInfo);
                         }
                     }
+
+                    bufferInfos.indexBufferOffset = meshCookedData.IndexBufferOffset.val;
+                    bufferInfos.indexBufferSize = meshCookedData.IndexBufferSize.val;
+                    //bufferInfos.vertexBufferOffset = meshCookedData.vertexBufferOffset.val; //FIXME
+                    bufferInfos.vertexBufferSize = meshCookedData.VertexBufferSize.val;
+                    bufferInfos.quantizationOffset.X = meshCookedData.QuantizationOffset.X.val;
+                    bufferInfos.quantizationOffset.Y = meshCookedData.QuantizationOffset.Y.val;
+                    bufferInfos.quantizationOffset.Z = meshCookedData.QuantizationOffset.Z.val;
+                    bufferInfos.quantizationScale.X = meshCookedData.QuantizationScale.X.val;
+                    bufferInfos.quantizationScale.Y = meshCookedData.QuantizationScale.Y.val;
+                    bufferInfos.quantizationScale.Z = meshCookedData.QuantizationScale.Z.val;
+
+                    foreach (var item in meshCookedData.BonePositions)
+                    {
+                        Vector3Df pos = new Vector3Df();
+                        pos.X = item.X.val;
+                        pos.Y = item.Y.val;
+                        pos.Z = item.Z.val;
+                        bonePositions.Add(pos);
+                    }
+
+
                     bufferInfos.verticesBuffer = vertexBufferInfos;
-                    var meshChunks = chunk.GetVariableByName("chunks") as CArray;
-                    foreach (var meshChunk in meshChunks.array)
+                    CArray<SMeshChunkPacked> meshChunks = cmesh.Chunks;
+                    foreach (SMeshChunkPacked meshChunk in meshChunks.elements)
                     {
                         SMeshInfos meshInfo = new SMeshInfos();
-                        foreach (var meshinfo in (meshChunk as CVector).variables)
-                        {
-                            switch (meshinfo.Name)
-                            {
-                                case "numVertices":
-                                    {
-                                        meshInfo.numVertices = uint.Parse(meshinfo.ToString());
-                                        break;
-                                    }
-                                case "numIndices":
-                                    {
-                                        meshInfo.numIndices = uint.Parse(meshinfo.ToString());
-                                        break;
-                                    }
-                                case "numBonesPerVertex":
-                                    {
-                                        meshInfo.numBonesPerVertex = uint.Parse(meshinfo.ToString());
-                                        break;
-                                    }
-                                case "firstVertex":
-                                    {
-                                        meshInfo.firstVertex = uint.Parse(meshinfo.ToString());
-                                        break;
-                                    }
-                                case "firstIndex":
-                                    {
-                                        meshInfo.firstIndex = uint.Parse(meshinfo.ToString());
-                                        break;
-                                    }
-                                case "vertexType":
-                                    {
-                                        if ((meshinfo as CName).Value == "MVT_StaticMesh")
-                                            meshInfo.vertexType = SMeshInfos.EMeshVertexType.EMVT_STATIC;
-                                        else if ((meshinfo as CName).Value == "MVT_SkinnedMesh")
-                                            meshInfo.vertexType = SMeshInfos.EMeshVertexType.EMVT_SKINNED;
-                                        break;
-                                    }
-                                case "materialID":
-                                    {
-                                        meshInfo.materialID = uint.Parse(meshinfo.ToString());
-                                        break;
-                                    }
-                            }
-                        }
+
+                        meshInfo.numVertices = meshChunk.NumVertices.val;
+                        meshInfo.numIndices = meshChunk.NumIndices.val;
+                        meshInfo.numBonesPerVertex = meshChunk.NumBonesPerVertex.val;
+                        meshInfo.firstVertex = meshChunk.FirstVertex.val;
+                        meshInfo.firstIndex = meshChunk.FirstIndex.val;
+                        meshInfo.materialID = meshChunk.MaterialID.val;
+
+                        if (meshChunk.VertexType == Enums.EMeshVertexType.MVT_StaticMesh)
+                            meshInfo.vertexType = SMeshInfos.EMeshVertexType.EMVT_STATIC;
+                        else if (meshChunk.VertexType == Enums.EMeshVertexType.MVT_SkinnedMesh)
+                            meshInfo.vertexType = SMeshInfos.EMeshVertexType.EMVT_SKINNED;
+
                         CData.meshInfos.Add(meshInfo);
                     }
 
                     // bone names and matrices
-                    CBufferVLQ<CName> boneNames = chunk.GetVariableByName("boneNames") as CBufferVLQ<CName>;
-                    CBufferVLQ<CMatrix4x4> bonematrices = chunk.GetVariableByName("bonematrices") as CBufferVLQ<CMatrix4x4>;
+                    CBufferVLQ<CName> boneNames = cmesh.boneNames;
+                    CBufferVLQ<CMatrix4x4> bonematrices = cmesh.bonematrices;
                     CData.boneData.nbBones = (uint)boneNames.elements.Count;
                     for (int i = 0; i < CData.boneData.nbBones; i++)
                     {

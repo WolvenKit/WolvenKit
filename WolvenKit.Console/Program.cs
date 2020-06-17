@@ -120,21 +120,19 @@ namespace WolvenKit.Console
                                         {
                                             var x = c.data as CBitmapTexture;
 
-                                            if (!bundlexbmDict.ContainsKey(((CUInt32)x.GetVariableByName("textureCacheKey")).val))
+                                            if (!bundlexbmDict.ContainsKey(x.TextureCacheKey.val))
                                             {
-                                                var ecompression = (CName)x.GetVariableByName("compression");
-                                                ETextureCompression compression = (ETextureCompression)Enum.Parse(typeof(ETextureCompression), ecompression.Value);
-                                                var eformat = (CName)x.GetVariableByName("format");
-                                                ETextureRawFormat format = (ETextureRawFormat)Enum.Parse(typeof(ETextureRawFormat), eformat.Value);
+                                                var compression = x.Compression;
+                                                var format = x.Format;
 
-                                                bundlexbmDict.Add(((CUInt32)x.GetVariableByName("textureCacheKey")).val, new XBMBundleInfo()
+                                                bundlexbmDict.Add(x.TextureCacheKey.val, new XBMBundleInfo()
                                                 {
                                                     Name = f.Name,
-                                                    Width = (CUInt32)x.GetVariableByName("width") == null ? 0 : ((CUInt32)x.GetVariableByName("width")).val,
-                                                    Height = (CUInt32)x.GetVariableByName("width") == null ? 0 : ((CUInt32)x.GetVariableByName("height")).val,
+                                                    Width = x.Width == null ? 0 : x.Width.val,
+                                                    Height = x.Height == null ? 0 : x.Height.val,
                                                     Format = format,
                                                     Compression = compression,
-                                                    TextureGroup = (CName)x.GetVariableByName("textureGroup") == null ? "" : ((CName)x.GetVariableByName("textureGroup")).Value,
+                                                    TextureGroup = x.TextureGroup == null ? "" : x.TextureGroup.Value,
 
                                                 }
                                                 );
@@ -291,12 +289,12 @@ namespace WolvenKit.Console
                                         var x = c.data as CBitmapTexture;
 
                                         string info = $"{f.Name}\t" +
-                                            $"{x.GetVariableByName("width")}\t" +
-                                            $"{x.GetVariableByName("height")}\t" +
-                                            $"{x.GetVariableByName("format")}\t" +
-                                            $"{x.GetVariableByName("compression")}\t" +
-                                            $"{x.GetVariableByName("textureGroup")}\t" +
-                                            $"{x.GetVariableByName("textureCacheKey")}\t"
+                                            $"{x.Width.val}\t" +
+                                            $"{x.Height.val}\t" +
+                                            $"{x.Format}\t" +
+                                            $"{x.Compression}\t" +
+                                            $"{x.TextureGroup}\t" +
+                                            $"{x.TextureCacheKey}\t"
                                             ;
 
                                         //System.Console.WriteLine(info);

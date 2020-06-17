@@ -75,7 +75,7 @@ namespace WolvenKit.FlowTreeEditors
             Size = TextRenderer.MeasureText(lblTitle.Text, lblTitle.Font) + Margin.Size;
         }
 
-        public virtual List<CPtr> GetConnections()
+        public virtual List<IPtrAccessor> GetConnections()
         {
             return null;
         }

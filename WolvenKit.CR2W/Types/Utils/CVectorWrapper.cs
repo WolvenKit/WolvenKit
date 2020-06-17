@@ -40,11 +40,11 @@ namespace WolvenKit.CR2W.Types.Utils
 
                 var typename = cr2w.names[typeId].Str;
 
-                parsedvar = CR2WTypeManager.Get().GetByName(typename, "", cr2w);
+                parsedvar = CR2WTypeManager.Create(typename, "", cr2w, this);
 
                 parsedvar.Read(br, size);
 
-                parsedvar.typeId = typeId;
+                //parsedvar.typeId = typeId;
             }
 
             variable = parsedvar;
