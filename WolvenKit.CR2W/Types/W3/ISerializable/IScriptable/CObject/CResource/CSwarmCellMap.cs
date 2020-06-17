@@ -83,11 +83,6 @@ namespace WolvenKit.CR2W.Types
             return new CSwarmCellMap(cr2w);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Copy(CR2WCopyAction context)
         {
             var var = (CSwarmCellMap)base.Copy(context);

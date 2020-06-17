@@ -78,11 +78,6 @@ namespace WolvenKit.CR2W.Types
             file.Write(buffer);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            throw new NotImplementedException();
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new SAppearanceAttachment(cr2w);

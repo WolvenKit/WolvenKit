@@ -78,6 +78,15 @@ namespace WolvenKit.CR2W.Types
             return newvar == null || newvar is T;
         }
 
+        public override CVariable SetValue(object val)
+        {
+            if (val is CBufferVLQ<T> buffer)
+            {
+                this.elements = buffer.elements;
+            }
+            return this;
+        }
+
         public override string ToString()
         {
             var builder = new StringBuilder().Append(elements.Count);

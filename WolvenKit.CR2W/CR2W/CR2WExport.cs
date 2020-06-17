@@ -159,6 +159,11 @@ namespace WolvenKit.CR2W
                 return "";
             }
         }
+
+        public Guid InternalGuid { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        IEditableVariable IEditableVariable.Parent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public string Value => this.ToString();
         #endregion
 
         #region Methods
@@ -294,7 +299,7 @@ namespace WolvenKit.CR2W
             //data.Name = Name;
             data.Type = Type;
             if (ParentChunkId != 0)
-                data.ParentVariable = GetParent().data;
+                data.Parent = GetParent().data;
 
             ParentPtr = new CPtr(cr2w)
             {

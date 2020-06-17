@@ -33,11 +33,6 @@ namespace WolvenKit.CR2W.Types
             curveData.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CCurve(cr2w);

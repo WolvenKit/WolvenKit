@@ -35,11 +35,6 @@ namespace WolvenKit.CR2W.Types
             explfile.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CCookedExplorations(cr2w);

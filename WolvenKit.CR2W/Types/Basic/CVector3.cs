@@ -39,11 +39,6 @@ namespace WolvenKit.CR2W.Types
             z.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CVector3<T>(cr2w, elementFactory);

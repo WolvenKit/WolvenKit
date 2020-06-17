@@ -44,11 +44,6 @@ namespace WolvenKit.CR2W.Types
             animevents.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CCutsceneTemplate(cr2w);

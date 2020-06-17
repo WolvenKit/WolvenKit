@@ -64,11 +64,6 @@ namespace WolvenKit.CR2W.Types
             boneIndecesMappingBoneIndex.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CMesh(cr2w);

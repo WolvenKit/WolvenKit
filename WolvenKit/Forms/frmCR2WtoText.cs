@@ -676,8 +676,11 @@ namespace WolvenKit.Forms
             foreach (var chunk in Chunks)
             {
                 Writer.Write(chunk.Name + " (" + chunk.Type + ") : " + chunk.Preview, level);
-                var node = GetNodes(chunk);
-                ProcessNode(node, level + 1);
+                //var node = GetNodes(chunk);
+                foreach (var item in chunk.GetEditableVariables())
+                {
+                    ProcessNode(item, level + 1);
+                }
             }
         }
         private void ProcessEmbedded(int level)
@@ -695,23 +698,23 @@ namespace WolvenKit.Forms
                 Writer.Write("Handle: " + embed.Handle, level + 1);
             }
         }
-        private void ProcessNode(VariableListNode node, int level)
+        private void ProcessNode(IEditableVariable node, int level)
         {
-            if (node.Name == "unknownBytes" && node.Value == "0 bytes"
-                || node.Name == "unk1" && node.Value == "0")
+            if (node.Name == "unknownBytes" && node.ToString() == "0 bytes"
+                || node.Name == "unk1" && node.ToString() == "0")
                 return;
 
-            if (node.Name == "Parent" && node.Value == "NULL")
+            if (node.Name == "Parent" && node.ToString() == "NULL")
                 return;
 
-            if (node.Name != node.Value) // Chunk node is already printed in processCR2W, so don't print it again.
+            if (node.Name != node.ToString()) // Chunk node is already printed in processCR2W, so don't print it again.
             {
-                Writer.Write(node.Name + " (" + node.Type + ") : " + node.Value, level);
+                Writer.Write(node.Name + " (" + node.Type + ") : " + node.ToString(), level);
                 level++;
             }
 
-            if (node.ChildCount > 0)
-                foreach (var child in node.Children)
+            if (node.GetEditableVariables().Count > 0)
+                foreach (var child in node.GetEditableVariables())
                     ProcessNode(child, level);
 
             if (   (node.Type == "SharedDataBuffer" && Options.DumpSDB) 
@@ -725,7 +728,7 @@ namespace WolvenKit.Forms
                     try
                     {
                         var ls = new LoggerService();
-                        CR2WFile embedcr2w = new CR2WFile( ((IByteSource)node.Variable).Bytes, ls );
+                        CR2WFile embedcr2w = new CR2WFile( ((IByteSource)node).Bytes, ls );
                         var lc = new LoggerCR2W(embedcr2w, Writer, Options);
                         lc.processCR2W(level);
                     }
@@ -745,9 +748,9 @@ namespace WolvenKit.Forms
                 }
             }
         }
-        private VariableListNode GetNodes(CR2WExportWrapper chunk)
-        {
-            return frmChunkProperties.AddListViewItems(chunk);
-        }
+        //private VariableListNode GetNodes(CR2WExportWrapper chunk)
+        //{
+        //    return frmChunkProperties.AddListViewItems(chunk);
+        //}
     }
 }

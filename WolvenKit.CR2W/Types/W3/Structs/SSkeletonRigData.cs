@@ -37,11 +37,6 @@ namespace WolvenKit.CR2W.Types
             scale.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new SSkeletonRigData(cr2w);

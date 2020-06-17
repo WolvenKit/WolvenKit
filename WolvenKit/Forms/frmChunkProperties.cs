@@ -36,30 +36,23 @@ namespace WolvenKit
             }
         }
 
-        public IEditableVariable EditObject { get; set; }
         public object Source { get; set; }
 
         public void CreatePropertyLayout(IEditableVariable v)
         {
-            if (EditObject != v)
+            if (v == null)
             {
-                EditObject = v;
+                treeView.Roots = null;
+                return;
+            }
 
+            var root = AddListViewItems(v);
 
-                if (v == null)
-                {
-                    treeView.Roots = null;
-                    return;
-                }
+            treeView.Roots = root.Children;
+            treeView.RefreshObjects(root.Children);
 
-                var root = AddListViewItems(v);
-
-                treeView.Roots = root.Children;
-                treeView.RefreshObjects(root.Children);
-
-                for (var depth = 0; ExpandOneLevel(depth, root.Children); depth++)
-                {
-                }
+            for (var depth = 0; ExpandOneLevel(depth, root.Children); depth++)
+            {
             }
         }
 
@@ -155,11 +148,15 @@ namespace WolvenKit
 
             addVariableToolStripMenuItem.Enabled = sNodes.All(x => x.Variable.CanAddVariable(null));
             removeVariableToolStripMenuItem.Enabled = sNodes.All(x => x.Parent != null && x.Parent.Variable.CanRemoveVariable(x.Variable));
-            pasteToolStripMenuItem.Enabled = CopyController.VariableTargets != null && sNodes.All(x => x.Variable != null && CopyController.VariableTargets.Any(z => x.Variable.CanAddVariable(z)));
+
+
+            pasteToolStripMenuItem.Enabled = CopyController.VariableTargets != null 
+                && sNodes.All(x => x.Variable != null 
+                && CopyController.VariableTargets.Any(z => x.Variable.CanAddVariable(z)));
             ptrPropertiesToolStripMenuItem.Visible = sNodes.All(x => x.Variable is CPtr) && sNodes.Count == 1;
         }
 
-        public void copyVariable()
+        public void CopyVariable()
         {
             var tocopynodes = (from VariableListNode item in treeView.SelectedObjects where item?.Variable != null select item.Variable).ToList();
             if (tocopynodes.Count > 0)
@@ -168,7 +165,7 @@ namespace WolvenKit
             }
         }
 
-        public void pasteVariable()
+        public void PasteVariable()
         {
             var node = (VariableListNode) treeView.SelectedObject;
             if (CopyController.VariableTargets == null || node?.Variable == null || !node.Variable.CanAddVariable(null))
@@ -176,6 +173,36 @@ namespace WolvenKit
                 return;
             }
 
+            // replace node with new node
+            if (CopyController.VariableTargets.Count == 1
+                && CopyController.VariableTargets.First() is CVariable cvar
+                && cvar.Type == node.Variable.Type
+                && node.Variable is CVariable targetvar
+                )
+            {
+                var context = new CR2WCopyAction();
+                targetvar.SetValue(cvar.Copy(context));
+
+                CreatePropertyLayout(chunk);
+
+                //var newnode = AddListViewItems(targetvar, node.Parent);
+                //node = newnode;
+
+                //treeView.RefreshObject(node);
+                //foreach (var item in node.Children)
+                //{
+                //    treeView.RefreshObject(item);
+                //}
+                //var root = AddListViewItems(EditObject);
+
+                //treeView.Roots = root.Children;
+                //treeView.RefreshObjects(root.Children);
+                //treeView.RebuildAll(true);
+
+                return;
+            }
+
+            // add subitems
             if (CopyController.VariableTargets.All(x => x is CVariable))
             {
                 foreach (var newvar in from v in CopyController.VariableTargets.Select(x => (CVariable) x) let context = new CR2WCopyAction
@@ -302,12 +329,12 @@ namespace WolvenKit
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            copyVariable();
+            CopyVariable();
         }
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            pasteVariable();
+            PasteVariable();
         }
 
         private void treeView_CellClick(object sender, CellClickEventArgs e)

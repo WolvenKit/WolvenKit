@@ -41,11 +41,6 @@ namespace WolvenKit.CR2W.Types
             unk1.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CEntityTemplate(cr2w);

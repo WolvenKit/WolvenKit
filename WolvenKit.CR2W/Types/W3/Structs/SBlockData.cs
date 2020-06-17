@@ -58,11 +58,6 @@ namespace WolvenKit.CR2W.Types
             tail.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new SBlockData(cr2w);

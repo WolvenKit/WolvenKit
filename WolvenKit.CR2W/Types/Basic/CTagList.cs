@@ -38,11 +38,6 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CTagList(cr2w);
@@ -70,7 +65,7 @@ namespace WolvenKit.CR2W.Types
             {
                 var tag = (CName) var;
                 tags.Add(tag);
-                tag.ParentVariable = this;
+                tag.Parent = this;
             }
         }
 
@@ -96,7 +91,7 @@ namespace WolvenKit.CR2W.Types
             {
                 var tag = (CName) child;
                 tags.Remove(tag);
-                tag.ParentVariable = null;
+                tag.Parent = null;
             }
         }
 

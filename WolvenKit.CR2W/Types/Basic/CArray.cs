@@ -75,7 +75,7 @@ namespace WolvenKit.CR2W.Types
                     var = new CVector(cr2w);
                 var.Read(file, (size - 4)/count);
 
-                //var.Name = i.ToString();
+                var.Name = i.ToString();
                 //var.Type = elementtype;
 
                 AddVariable(var);
@@ -154,7 +154,7 @@ namespace WolvenKit.CR2W.Types
         public override void AddVariable(CVariable v)
         {
             array.Add(v);
-            v.ParentVariable = this;
+            v.Parent = this;
 
             if (fixedTypeArray)
             {
@@ -168,7 +168,7 @@ namespace WolvenKit.CR2W.Types
             {
                 var v = (CVariable) child;
                 array.Remove(v);
-                v.ParentVariable = null;
+                v.Parent = null;
 
                 if (fixedTypeArray)
                 {

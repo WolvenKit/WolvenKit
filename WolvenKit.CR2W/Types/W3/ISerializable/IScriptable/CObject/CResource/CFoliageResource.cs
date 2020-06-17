@@ -140,11 +140,6 @@ namespace WolvenKit.CR2W.Types
                 file.Write((byte)0x80);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CFoliageResource(cr2w);

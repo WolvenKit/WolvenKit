@@ -104,11 +104,6 @@ namespace WolvenKit.CR2W.Types
             Residentmip.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CBitmapTexture(cr2w);

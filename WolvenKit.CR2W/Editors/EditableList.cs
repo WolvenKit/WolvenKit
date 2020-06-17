@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -26,6 +27,10 @@ namespace WolvenKit.CR2W.Editors
         public string Type { get; set; }
         public CR2WFile CR2WOwner { get; }
 
+        IEditableVariable IEditableVariable.Parent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string Value => this.ToString();
+        public Guid InternalGuid { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public Control GetEditor()
         {
             return null;
@@ -52,7 +57,7 @@ namespace WolvenKit.CR2W.Editors
             {
                 List.Add((T) var);
 
-                var.ParentVariable = null;
+                var.Parent = null;
             }
         }
 
@@ -63,7 +68,7 @@ namespace WolvenKit.CR2W.Editors
                 List.Remove((T) child);
                 if (child is CVariable)
                 {
-                    ((CVariable) child).ParentVariable = null;
+                    ((CVariable) child).Parent = null;
                 }
             }
         }

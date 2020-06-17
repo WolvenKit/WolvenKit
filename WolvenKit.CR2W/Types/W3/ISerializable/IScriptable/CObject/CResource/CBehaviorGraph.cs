@@ -90,11 +90,6 @@ namespace WolvenKit.CR2W.Types
             vectorvariables2.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CBehaviorGraph(cr2w);

@@ -8,18 +8,18 @@ using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Schema;
-
+using WolvenKit.Common;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.Utils;
 
 namespace WolvenKit.CR2W.Types
 {
     [DataContract(Namespace = "")]
-    public abstract class CVariable : IEditableVariable
+    public abstract class CVariable : ObservableObject, IEditableVariable
     {
         [NonSerialized]
         public CR2WFile cr2w;
-        public Guid InternalGuid;
+        public Guid InternalGuid { get; set; }
 
         public CVariable(CR2WFile cr2w)
         {
@@ -42,18 +42,19 @@ namespace WolvenKit.CR2W.Types
             set { Name = cr2w.names[value].Str; }
         }
 
-        public CVariable ParentVariable { get; set; }
+        public IEditableVariable Parent { get; set; }
+        public string Value => this.ToString();
 
         public string FullName
         {
             get
             {
                 var name = Name;
-                var c = ParentVariable;
+                var c = Parent;
                 while (c != null)
                 {
                     name = c.Name + "/" + name;
-                    c = c.ParentVariable;
+                    c = c.Parent;
                 }
                 return name;
             }
@@ -66,8 +67,6 @@ namespace WolvenKit.CR2W.Types
 
         //[DataMember(EmitDefaultValue = false)]
         public string Type { get; set; }
-
-
 
         public virtual Control GetEditor()
         {

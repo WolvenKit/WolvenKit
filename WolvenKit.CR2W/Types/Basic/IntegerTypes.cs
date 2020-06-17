@@ -34,13 +34,11 @@ namespace WolvenKit.CR2W.Types
         public override CVariable SetValue(object val)
         {
             if (val is ulong)
-            {
                 this.val = (ulong)val;
-            }
-            if (val is string)
-            {
+            else if (val is string)
                 this.val = ulong.Parse(val as string);
-            }
+            else if (val is CUInt64 v)
+                this.val = v.val;
 
             return this;
         }
@@ -95,13 +93,11 @@ namespace WolvenKit.CR2W.Types
         public override CVariable SetValue(object val)
         {
             if (val is uint)
-            {
                 this.val = (uint) val;
-            }
-            if (val is string)
-            {
+            else if (val is string)
                 this.val = uint.Parse(val as string);
-            }
+            else if (val is CUInt32 v)
+                this.val = v.val;
 
             return this;
         }
@@ -121,7 +117,7 @@ namespace WolvenKit.CR2W.Types
         public override Control GetEditor()
         {
             var editor = new TextBox();
-            editor.DataBindings.Add("Text", this, "val");
+            editor.DataBindings.Add(nameof(editor.Text), this, nameof(val));
             return editor;
         }
 
@@ -134,10 +130,7 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public class CUInt16 : CVariable
     {
-       
-
-        public CUInt16(CR2WFile cr2w)
-: base(cr2w)
+        public CUInt16(CR2WFile cr2w) : base(cr2w)
         {
             Type = "Uint16";
         }
@@ -160,13 +153,11 @@ namespace WolvenKit.CR2W.Types
         public override CVariable SetValue(object val)
         {
             if (val is ushort)
-            {
                 this.val = (ushort)val;
-            }
-            if (val is string)
-            {
+            else if (val is string)
                 this.val = ushort.Parse(val as string);
-            }
+            else if (val is CUInt16 v)
+                this.val = v.val;
 
             return this;
         }
@@ -221,13 +212,11 @@ namespace WolvenKit.CR2W.Types
         public override CVariable SetValue(object val)
         {
             if (val is byte)
-            {
                 this.val = (byte) val;
-            }
-            if (val is string)
-            {
+            else if (val is string)
                 this.val = byte.Parse(val as string);
-            }
+            else if (val is CUInt8 v)
+                this.val = v.val;
 
             return this;
         }
@@ -257,7 +246,6 @@ namespace WolvenKit.CR2W.Types
         }
     }
 
-
     [DataContract(Namespace = "")]
     public class CInt64 : CVariable
     {
@@ -283,13 +271,11 @@ namespace WolvenKit.CR2W.Types
         public override CVariable SetValue(object val)
         {
             if (val is long)
-            {
                 this.val = (long) val;
-            }
-            if (val is string)
-            {
+            else if (val is string)
                 this.val = long.Parse(val as string);
-            }
+            else if (val is CInt64 v)
+                this.val = v.val;
 
             return this;
         }
@@ -344,13 +330,11 @@ namespace WolvenKit.CR2W.Types
         public override CVariable SetValue(object val)
         {
             if (val is int)
-            {
                 this.val = (int) val;
-            }
-            if (val is string)
-            {
+            else if (val is string)
                 this.val = int.Parse(val as string);
-            }
+            else if (val is CInt32 v)
+                this.val = v.val;
 
             return this;
         }
@@ -405,13 +389,11 @@ namespace WolvenKit.CR2W.Types
         public override CVariable SetValue(object val)
         {
             if (val is short)
-            {
                 this.val = (short) val;
-            }
-            if (val is string)
-            {
+            else if (val is string)
                 this.val = short.Parse(val as string);
-            }
+            else if (val is CInt16 v)
+                this.val = v.val;
 
             return this;
         }
@@ -463,16 +445,14 @@ namespace WolvenKit.CR2W.Types
             file.Write(val);
         }
 
-        public override CVariable SetValue(object val)
+        public override CVariable SetValue(object newval)
         {
-            if (val is sbyte)
-            {
-                this.val = (sbyte) val;
-            }
-            if (val is string)
-            {
-                this.val = sbyte.Parse(val as string);
-            }
+            if (newval is sbyte)
+                this.val = (sbyte) newval;
+            else if (newval is string)
+                this.val = sbyte.Parse(newval as string);
+            else if (newval is CInt8 v)
+                this.val = v.val;
 
             return this;
         }
@@ -527,13 +507,11 @@ namespace WolvenKit.CR2W.Types
         public override CVariable SetValue(object val)
         {
             if (val is sbyte)
-            {
                 this.val = (sbyte) val;
-            }
-            if (val is string)
-            {
+            else if (val is string)
                 this.val = sbyte.Parse(val as string);
-            }
+            else if (val is CDynamicInt v)
+                this.val = v.val;
 
             return this;
         }
@@ -595,13 +573,11 @@ namespace WolvenKit.CR2W.Types
         public override CVariable SetValue(object val)
         {
             if (val is sbyte)
-            {
                 this.val = (sbyte)val;
-            }
-            if (val is string)
-            {
+            else if (val is string)
                 this.val = sbyte.Parse(val as string);
-            }
+            else if (val is CVLQInt32 v)
+                this.val = v.val;
 
             return this;
         }
@@ -663,13 +639,11 @@ namespace WolvenKit.CR2W.Types
         public override CVariable SetValue(object val)
         {
             if (val is bool)
-            {
                 this.val = (bool) val;
-            }
-            if (val is string)
-            {
+            else if (val is string)
                 this.val = bool.Parse(val as string);
-            }
+            else if (val is CBool v)
+                this.val = v.val;
 
             return this;
         }

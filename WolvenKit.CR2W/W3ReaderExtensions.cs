@@ -10,20 +10,19 @@ namespace WolvenKit.CR2W
 
         public static CVariable CopyViaBuffer(CVariable source, CVariable destination)
         {
-            using (MemoryStream temporaryBuffer = new MemoryStream())
+            using (MemoryStream ms = new MemoryStream())
+            using (BinaryWriter bw = new BinaryWriter(ms))
             {
-                using (BinaryWriter writer = new BinaryWriter(temporaryBuffer))
-                {
-                    source.Write(writer);
-                }
+                source.Write(bw);
 
-                temporaryBuffer.Position = 0;
+                ms.Position = 0;
 
-                using (BinaryReader reader = new BinaryReader(temporaryBuffer))
+                using (BinaryReader reader = new BinaryReader(ms))
                 {
-                    destination.Read(reader, (uint)temporaryBuffer.Length);
+                    destination.Read(reader, (uint)ms.Length);
                 }
             }
+            
 
             return destination;
         }

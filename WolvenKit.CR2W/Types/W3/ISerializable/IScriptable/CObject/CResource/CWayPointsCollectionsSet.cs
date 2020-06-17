@@ -39,7 +39,6 @@ namespace WolvenKit.CR2W.Types
             handle.Write(file);
         }
 
-        public override CVariable SetValue(object val) => this;
 
         public override CVariable Create(CR2WFile cr2w) => new SWayPointsCollectionsSetData(cr2w);
 
@@ -94,11 +93,6 @@ namespace WolvenKit.CR2W.Types
             base.Write(file);
 
             waypointcollections.Write(file);
-        }
-
-        public override CVariable SetValue(object val)
-        {
-            return this;
         }
 
         public override CVariable Create(CR2WFile cr2w)

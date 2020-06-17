@@ -35,11 +35,6 @@ namespace WolvenKit.CR2W.Types
             block5.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CPhysicsDestructionResource(cr2w);

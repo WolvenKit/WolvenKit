@@ -49,8 +49,10 @@ namespace WolvenKit.CR2W.Types
 
         public override Control GetEditor()
         {
-            var editor = new TextBox();
-            editor.Margin = new Padding(3, 3, 3, 0);
+            var editor = new TextBox
+            {
+                Margin = new Padding(3, 3, 3, 0)
+            };
             editor.DataBindings.Add("Text", this, "val");
             //editor.Dock = System.Windows.Forms.DockStyle.Fill;
             //editor.BorderStyle = System.Windows.Forms.BorderStyle.None;

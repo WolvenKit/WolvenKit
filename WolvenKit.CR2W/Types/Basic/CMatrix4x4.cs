@@ -77,6 +77,14 @@ namespace WolvenKit.CR2W.Types
             return copy;
         }
 
+        public override CVariable SetValue(object val)
+        {
+            if (val is CMatrix4x4 v)
+                this.fields = v.fields;
+
+            return this;
+        }
+
         public override string ToString()
         {
             var builder = new StringBuilder().Append(fields.Length);

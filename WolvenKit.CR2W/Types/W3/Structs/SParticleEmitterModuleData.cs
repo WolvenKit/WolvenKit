@@ -12,7 +12,8 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public class SParticleEmitterModuleData : CVariable
     {
-        public CVariable[] fields;
+        private CVariable[] fields { get; set; }
+
         public CBufferVLQ<CFloat> alpha, lifeTime, rotation, rotationRate, spawnInnerRadius, spawnOuterRadius, velocity_inherit_scale, velocity_spread_scale, texture_animation_initial_frame,
             accelerationScale, rotationOverLife, rotationRateOverLife, alphaOverLife, textureAnimationSpeed,
             velocityTurbulizeTimelifeLimit, targetForceScale, targetKillRadius, unk;
@@ -185,5 +186,18 @@ namespace WolvenKit.CR2W.Types
         {
             return W3ReaderExtensions.CopyViaBuffer(this, base.Copy(context));
         }
+
+        public override CVariable SetValue(object val)
+        {
+            if (val is SParticleEmitterModuleData)
+            {
+                fields = (val as SParticleEmitterModuleData).fields;
+            }
+            return this;
+        }
+
+        public override bool CanAddVariable(IEditableVariable newvar) => newvar == null || (newvar is SParticleEmitterModuleData);
+
+
     }
 }

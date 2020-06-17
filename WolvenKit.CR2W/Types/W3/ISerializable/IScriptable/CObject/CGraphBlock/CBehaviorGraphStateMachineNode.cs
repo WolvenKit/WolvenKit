@@ -56,11 +56,6 @@ namespace WolvenKit.CR2W.Types
             outputnode.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CBehaviorGraphStateMachineNode(cr2w);

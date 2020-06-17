@@ -32,11 +32,6 @@ namespace WolvenKit.CR2W.Types
             buffer.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CAnimPointCloudLookAtParam(cr2w);

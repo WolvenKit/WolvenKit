@@ -142,11 +142,6 @@ namespace WolvenKit.CR2W.Types
 
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CEntity(cr2w);

@@ -77,6 +77,22 @@ namespace WolvenKit.CR2W.Types
             return variables.Cast<IEditableVariable>().ToList();
         }
 
+        public override CVariable SetValue(object val)
+        {
+            if (val is CVector cVector
+                && val.GetType() == this.GetType()
+                && cVector.Type == this.Type)
+            {
+                this.variables = cVector.variables;
+            }
+            else
+            {
+
+            }
+
+            return this;
+        }
+
         public override bool CanRemoveVariable(IEditableVariable child)
         {
             if (child is CVariable)
@@ -96,7 +112,7 @@ namespace WolvenKit.CR2W.Types
         public override void AddVariable(CVariable var)
         {
             variables.Add(var);
-            var.ParentVariable = this;
+            var.Parent = this;
         }
 
         public override void RemoveVariable(IEditableVariable child)
@@ -105,7 +121,7 @@ namespace WolvenKit.CR2W.Types
             {
                 var v = (CVariable) child;
                 variables.Remove(v);
-                v.ParentVariable = null;
+                v.Parent = null;
             }
         }
 

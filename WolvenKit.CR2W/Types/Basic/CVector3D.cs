@@ -75,6 +75,13 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            if (val is CVector3D v)
+            {
+                this.x = v.x;
+                this.y = v.y;
+                this.z = v.z;
+            }
+
             return this;
         }
 
@@ -95,10 +102,12 @@ namespace WolvenKit.CR2W.Types
 
         public override List<IEditableVariable> GetEditableVariables()
         {
-            var vars = new List<IEditableVariable>();
-            vars.Add(x);
-            vars.Add(y);
-            vars.Add(z);
+            var vars = new List<IEditableVariable>
+            {
+                x,
+                y,
+                z
+            };
             return vars;
         }
 

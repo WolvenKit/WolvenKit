@@ -134,11 +134,6 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CWayPointsCollection(cr2w);
@@ -203,8 +198,6 @@ namespace WolvenKit.CR2W.Types
             componentsMapping.Write(file);
         }
 
-        public override CVariable SetValue(object val) => this;
-
         public override CVariable Create(CR2WFile cr2w) => new SBufferWaypoints(cr2w);
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -268,8 +261,6 @@ namespace WolvenKit.CR2W.Types
             guid.Write(file);
             guid2.Write(file);
         }
-
-        public override CVariable SetValue(object val) => this;
 
         public override CVariable Create(CR2WFile cr2w) => new SBufferComponentsMappings(cr2w);
 
@@ -349,8 +340,6 @@ namespace WolvenKit.CR2W.Types
             nullbytes.Write(file);
             groupIdx.Write(file);
         }
-
-        public override CVariable SetValue(object val) => this;
 
         public override CVariable Create(CR2WFile cr2w) => new SBufferwaypointsGroup(cr2w);
 

@@ -125,11 +125,6 @@ namespace WolvenKit.CR2W.Types
         {
             return "";
         }
-
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
     }
     
 }

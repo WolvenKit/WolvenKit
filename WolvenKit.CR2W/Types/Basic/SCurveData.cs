@@ -55,11 +55,6 @@ namespace WolvenKit.CR2W.Types
             //unk4.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new SCurveData(cr2w);

@@ -40,6 +40,12 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            if (val is CVector2D v)
+            {
+                this.x = v.x;
+                this.y = v.y;
+            }
+
             return this;
         }
 

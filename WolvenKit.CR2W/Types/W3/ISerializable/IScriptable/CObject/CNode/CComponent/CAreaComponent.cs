@@ -34,11 +34,6 @@ namespace WolvenKit.CR2W.Types
             bufferdata.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CAreaComponent(cr2w);

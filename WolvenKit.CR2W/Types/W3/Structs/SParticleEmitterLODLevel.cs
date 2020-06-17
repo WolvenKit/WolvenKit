@@ -32,11 +32,6 @@ namespace WolvenKit.CR2W.Types
             distance.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new SParticleEmitterLODLevel(cr2w);

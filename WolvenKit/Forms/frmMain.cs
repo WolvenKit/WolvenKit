@@ -371,7 +371,7 @@ namespace WolvenKit
                 }
                 else if (ActiveDocument.propertyWindow.IsActivated)
                 {
-                    ActiveDocument.propertyWindow.copyVariable();
+                    ActiveDocument.propertyWindow.CopyVariable();
                     AddOutput("Selected propertie(s) copied!\n");
                 }
             }
@@ -388,7 +388,7 @@ namespace WolvenKit
                 }
                 else if (ActiveDocument.propertyWindow.IsActivated)
                 {
-                    ActiveDocument.propertyWindow.pasteVariable();
+                    ActiveDocument.propertyWindow.PasteVariable();
                     AddOutput("Copied propertie(s) pasted!\n");
                 }
             }

@@ -29,11 +29,6 @@ namespace WolvenKit.CR2W.Types
             color.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CParticleInitializerColor(cr2w);

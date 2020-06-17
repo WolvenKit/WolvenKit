@@ -95,7 +95,7 @@ namespace WolvenKit.CR2W.Types
             if (v is CName v2)
             {
                 flags.Add(v2);
-                v.ParentVariable = this;
+                v.Parent = this;
             }
 
         }
@@ -105,7 +105,7 @@ namespace WolvenKit.CR2W.Types
             if (child is CName v)
             {
                 flags.Remove(v);
-                v.ParentVariable = null;
+                v.Parent = null;
             }
         }
 

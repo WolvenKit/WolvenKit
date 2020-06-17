@@ -73,11 +73,6 @@ namespace WolvenKit.CR2W.Types
             file.Write((ushort) 0);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CStorySceneScript(cr2w);

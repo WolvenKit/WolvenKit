@@ -96,11 +96,6 @@ namespace WolvenKit.CR2W.Types.W3.ISerializable.IScriptable.CObject.CResource.IT
             return var;
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CTerrainTile(cr2w);

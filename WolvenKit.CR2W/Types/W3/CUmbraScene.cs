@@ -45,11 +45,6 @@ namespace WolvenKit.CR2W.Types
             tiles.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CUmbraScene(cr2w);
@@ -111,11 +106,6 @@ namespace WolvenKit.CR2W.Types
             positionZ.Write(file);
             positionW.Write(file);
             umbratile.Write(file);
-        }
-
-        public override CVariable SetValue(object val)
-        {
-            return this;
         }
 
         public override CVariable Create(CR2WFile cr2w)

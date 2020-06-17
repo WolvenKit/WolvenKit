@@ -26,6 +26,10 @@ namespace WolvenKit.CR2W.Editors
         public string Type { get; set; }
         public CR2WFile CR2WOwner { get; }
 
+        IEditableVariable IEditableVariable.Parent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Guid InternalGuid { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string Value => this.ToString();
+
         public Control GetEditor()
         {
             return null;

@@ -33,11 +33,6 @@ namespace WolvenKit.CR2W.Types
             name.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CMaterialGraphParameter(cr2w);
@@ -141,11 +136,6 @@ namespace WolvenKit.CR2W.Types
             //}
 
             file.Write(0);
-        }
-
-        public override CVariable SetValue(object val)
-        {
-            return this;
         }
 
         public override CVariable Create(CR2WFile cr2w)

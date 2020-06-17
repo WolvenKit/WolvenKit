@@ -38,11 +38,6 @@ namespace WolvenKit.CR2W.Types
             Blocksize.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new SMipData(cr2w);

@@ -25,11 +25,6 @@ namespace WolvenKit.CR2W.Types
             base.Write(file);
         }
 
-        public override CVariable SetValue(object val)
-        {
-            return this;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CComponent(cr2w);
