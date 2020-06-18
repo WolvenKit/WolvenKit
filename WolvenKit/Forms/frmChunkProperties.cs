@@ -202,25 +202,28 @@ namespace WolvenKit
                 return;
             }
 
+            // deprecated
+
+
             // add subitems
-            if (CopyController.VariableTargets.All(x => x is CVariable))
-            {
-                foreach (var newvar in from v in CopyController.VariableTargets.Select(x => (CVariable) x) let context = new CR2WCopyAction
-                {
-                    SourceFile = v.cr2w,
-                    DestinationFile = node.Variable.CR2WOwner,
-                    MaxIterationDepth = 0
-                } select v.Copy(context))
-                {
-                    node.Variable.AddVariable(newvar);
+            //if (CopyController.VariableTargets.All(x => x is CVariable))
+            //{
+            //    foreach (var newvar in from v in CopyController.VariableTargets.Select(x => (CVariable) x) let context = new CR2WCopyAction
+            //    {
+            //        SourceFile = v.cr2w,
+            //        DestinationFile = node.Variable.cr2w,
+            //        MaxIterationDepth = 0
+            //    } select v.Copy(context))
+            //    {
+            //        node.Variable.AddVariable(newvar);
 
-                    var subnode = AddListViewItems(newvar, node);
-                    node.Children.Add(subnode);
+            //        var subnode = AddListViewItems(newvar, node);
+            //        node.Children.Add(subnode);
 
-                    treeView.RefreshObject(node);
-                    treeView.RefreshObject(subnode);
-                }
-            }
+            //        treeView.RefreshObject(node);
+            //        treeView.RefreshObject(subnode);
+            //    }
+            //}
         }
 
         private void addVariableToolStripMenuItem_Click(object sender, EventArgs e)

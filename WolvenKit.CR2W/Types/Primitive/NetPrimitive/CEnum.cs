@@ -8,7 +8,7 @@ using WolvenKit.CR2W.Reflection;
 namespace WolvenKit.CR2W.Types
 {
     [DataContract(Namespace = "")]
-    [REDMeta(EREDMetaInfo.REDPrimitive)]
+    [REDMeta()]
     public class CEnum : CName
     {
         public Enum Enum { get; set; }
@@ -39,5 +39,7 @@ namespace WolvenKit.CR2W.Types
         }
 
         public override void Write(BinaryWriter file) => base.Write(file);
+
+        public override Control GetEditor() =>  base.GetEditor();    
     }
 }

@@ -156,7 +156,7 @@ namespace WolvenKit
                 editor.Bytes = ((IByteSource)editvar).Bytes;
             }
 
-            editor.Text = "Hex Viewer [" + editvar.FullName + "]";
+            editor.Text = "Hex Viewer [" + editvar.GetFullName() + "]";
             editor.Show();
         }
 
@@ -171,7 +171,7 @@ namespace WolvenKit
 
             if (bytes != null)
             {
-                var doc = LoadDocument(editvar.cr2w.FileName + ":" + editvar.FullName, new MemoryStream(bytes), true);
+                var doc = LoadDocument(editvar.cr2w.FileName + ":" + editvar.GetFullName(), new MemoryStream(bytes), true);
                 if (doc != null)
                 {
                     doc.OnFileSaved += OnVariableEditorSave;

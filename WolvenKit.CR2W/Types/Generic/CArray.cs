@@ -22,7 +22,7 @@ namespace WolvenKit.CR2W.Types
 
     }
 
-    [DataContract(Namespace = "")]
+    [REDMeta()]
     public class CArray<T> : CArrayBase<T>, IArrayAccessor where T : CVariable
     {
 

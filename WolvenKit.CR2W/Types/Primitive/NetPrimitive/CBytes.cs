@@ -4,10 +4,11 @@ using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Xml;
 using WolvenKit.CR2W.Editors;
+using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
+    [REDMeta()]
     public class CBytes : CVariable, IByteSource
     {
         public CBytes(CR2WFile cr2w)

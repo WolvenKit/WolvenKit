@@ -369,7 +369,7 @@ namespace WolvenKit
 
             try
             {
-                var obj = File.ReadVariable(reader);
+                var obj = File.ReadVariable(reader, null);
 
                 if (obj != null)
                 {

@@ -6,10 +6,11 @@ using System;
 using System.Linq;
 using System.Globalization;
 using System.Runtime.Serialization;
+using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
+    [REDMeta()]
     public class EntityHandle : CVariable
     {
         public CUInt16 id;

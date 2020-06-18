@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Xml;
+using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -31,7 +32,7 @@ namespace WolvenKit.CR2W.Types
     /// <summary>
     /// Represents a REDEngine compatible datetime value.
     /// </summary>
-    [DataContract(Namespace = "")]
+    [REDMeta()]
     public sealed class CDateTime : CVariable, IEquatable<CDateTime>
     {
         /// <summary>

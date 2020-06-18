@@ -3,10 +3,11 @@ using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Xml;
 using WolvenKit.CR2W.Editors;
+using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
+    [REDMeta()]
     public class CByteArray2 : CVariable, IByteSource
     {
         public CByteArray2(CR2WFile cr2w)

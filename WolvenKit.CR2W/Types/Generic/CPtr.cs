@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Xml;
+using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -14,7 +15,7 @@ namespace WolvenKit.CR2W.Types
     /// <summary>
     /// A pointer to a chunk within the same cr2w file.
     /// </summary>
-    [DataContract(Namespace = "")]
+    [REDMeta()]
     public class CPtr<T> : CVariable, IPtrAccessor where T : CVariable
     {
 

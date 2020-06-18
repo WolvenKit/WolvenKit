@@ -3,10 +3,15 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using WolvenKit.CR2W.Editors;
+using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
+    /// <summary>
+    /// A generic wrapper class for a single CVariable
+    /// Format: [ushort typeID] [uint size] [byte[size] data]
+    /// </summary>
+    [REDMeta()]
     public class CVariant : CVariable
     {
         public CVariable Variant;
@@ -19,20 +24,20 @@ namespace WolvenKit.CR2W.Types
         public override void Read(BinaryReader file, uint size)
         {
             var typepos = file.BaseStream.Position;
+
             var typeId = file.ReadUInt16();
+            var typename = cr2w.names[typeId].Str;
 
             var varsize = file.ReadUInt32() - 4;
-            var typename = cr2w.names[typeId].Str;
+
 
             Variant = CR2WTypeManager.Create(typename, "", cr2w, this);
             Variant.Read(file, varsize);
-
-            //Variant.typeId = typeId;
         }
 
         public override void Write(BinaryWriter file)
         {
-            file.Write(Variant.typeId);
+            file.Write(Variant.GettypeId());
 
             byte[] buffer = System.Array.Empty<byte>();
             using (var ms = new MemoryStream())

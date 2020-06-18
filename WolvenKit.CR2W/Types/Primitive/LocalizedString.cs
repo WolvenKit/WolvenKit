@@ -2,10 +2,11 @@
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Xml;
+using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
+    [REDMeta()]
     public class LocalizedString : CVariable
     {
         public LocalizedString(CR2WFile cr2w)

@@ -1,10 +1,12 @@
 ﻿using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
+using WolvenKit.CR2W.Reflection;
+
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
+    [REDMeta()]
     public class CFloat : CVariable
     {
         public CFloat(CR2WFile cr2w)

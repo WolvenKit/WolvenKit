@@ -281,7 +281,7 @@ namespace WolvenKit.CR2W
         {
             var factevents =
                 storysection.sceneEventElements.elements.FindAll(
-                    delegate(CVariableWrapper sectionitem) { return sectionitem.Type == "CStorySceneAddFactEvent"; });
+                    delegate(CVariantSizeTypeName sectionitem) { return sectionitem.Type == "CStorySceneAddFactEvent"; });
 
             foreach (var factevent in factevents)
             {
@@ -391,7 +391,7 @@ namespace WolvenKit.CR2W
             var placement_x = 0.0f;
             var placement_y = 0.0f;
             var placement_z = 0.0f;
-            storysection.sceneEventElements.elements.ForEach(delegate (CVariableWrapper sectionvar)
+            storysection.sceneEventElements.elements.ForEach(delegate (CVariantSizeTypeName sectionvar)
             {
                 if (sectionvar.Type == "CStorySceneEventOverridePlacement")
                 {
@@ -407,7 +407,7 @@ namespace WolvenKit.CR2W
             });
 
             // Remove Unnessasary teleportation
-            storysection.sceneEventElements.elements.ForEach(delegate (CVariableWrapper sectionvar)
+            storysection.sceneEventElements.elements.ForEach(delegate (CVariantSizeTypeName sectionvar)
             {
                 if (sectionvar.Type == "CStorySceneEventOverridePlacement")
                 {

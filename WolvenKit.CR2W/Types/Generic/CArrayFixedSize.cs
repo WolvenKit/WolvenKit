@@ -11,6 +11,8 @@ using System.ComponentModel;
 
 namespace WolvenKit.CR2W.Types
 {
+    [REDMeta()]
+
     public class CArrayFixedSize<T> : CArray<T> where T : CVariable
     {
         public CArrayFixedSize(CR2WFile cr2w) : base(cr2w) { }

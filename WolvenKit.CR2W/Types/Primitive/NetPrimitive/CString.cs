@@ -2,10 +2,11 @@
 using System.Runtime.Serialization;
 using System.Text;
 using System.Windows.Forms;
+using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
+    [REDMeta()]
     public class CString : CVariable
     {
         private bool isUTF;

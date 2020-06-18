@@ -80,14 +80,14 @@ namespace WolvenKit.CR2W
         }
 
         #region Fields
-        [NonSerialized]
-        public CR2WFile cr2w;
 
         [NonSerialized]
         public CBytes unknownBytes;
         #endregion
 
         #region Properties
+        public CR2WFile cr2w { get; set; }
+
         public CVariable data { get; set; }
 
         // editable variables
@@ -133,10 +133,7 @@ namespace WolvenKit.CR2W
             set { }
         }
 
-        /// <summary>
-        /// Deprecated
-        /// </summary>
-        public CR2WFile CR2WOwner => cr2w;
+
         public int ChunkIndex => cr2w.chunks.IndexOf(this);
         public string Preview
         {
@@ -144,13 +141,14 @@ namespace WolvenKit.CR2W
             {
                 if (data is CVariable)
                 {
-                    var firstString = data.GetEditableVariables().First(_ => _.Type == "String");
+                    var vars = data.GetEditableVariables();
+                    var firstString = vars.FirstOrDefault(_ => _.Type == "String");
                     if (firstString != null)
                     {
                         return ((CString)firstString).val;
                     }
 
-                    var firstName = data.GetEditableVariables().First(_ => _.Type == "CName");
+                    var firstName = vars.FirstOrDefault(_ => _.Type == "CName");
                     if (firstName != null)
                     {
                         return ((CName)firstName).Value;

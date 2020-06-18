@@ -13,8 +13,8 @@ using System.Text.RegularExpressions;
 
 namespace WolvenKit.CR2W.Types
 {
-    
-    [DataContract(Namespace = "")]
+
+    [REDMeta()]
     public abstract class CArrayBase<T> : CVariable, IList<T>, IList where T : CVariable
     {
         
@@ -44,6 +44,11 @@ namespace WolvenKit.CR2W.Types
         public CArrayBase(CR2WFile cr2w) : base(cr2w)
         {
 
+        }
+
+        public override List<IEditableVariable> GetEditableVariables()
+        {
+            return elements.Cast<IEditableVariable>().ToList();
         }
 
         public override void Read(BinaryReader file, uint size)

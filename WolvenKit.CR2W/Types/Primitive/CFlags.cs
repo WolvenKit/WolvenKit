@@ -3,10 +3,11 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Editors;
+using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
+    [REDMeta()]
     public class CFlags : CVariable
     {
         public List<CName> flags = new List<CName>();

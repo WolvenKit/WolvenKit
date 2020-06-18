@@ -193,46 +193,46 @@ namespace WolvenKit.CR2W.Reflection
 
         #region Property
         #endregion
-        public static IEnumerable<PropertyInfo> GetREDProperties(Type type)
-        {
-            var allprops = type.GetProperties( BindingFlags.Instance | BindingFlags.Public);
-            return allprops.Where(prop => prop.IsDefined(typeof(REDAttribute))).ToList();
-        }
-        public static IEnumerable<PropertyInfo> GetREDProperties(Type type, BindingFlags flags)
-        {
-            var allprops = type.GetProperties(flags);
-            return allprops.Where(prop => prop.IsDefined(typeof(REDAttribute))).ToList();
-        }
+        //public static IEnumerable<PropertyInfo> GetREDProperties(Type type)
+        //{
+        //    var allprops = type.GetProperties( BindingFlags.Instance | BindingFlags.Public);
+        //    return allprops.Where(prop => prop.IsDefined(typeof(REDAttribute))).ToList();
+        //}
+        //public static IEnumerable<PropertyInfo> GetREDProperties(Type type, BindingFlags flags)
+        //{
+        //    var allprops = type.GetProperties(flags);
+        //    return allprops.Where(prop => prop.IsDefined(typeof(REDAttribute))).ToList();
+        //}
 
-        public static PropertyInfo GetREDProperty(Type classType, string name, string type)
-        {
-            foreach (var p in GetREDProperties(classType))
-            {
-                var attribute = p.GetCustomAttribute<REDAttribute>();
-                var flags = attribute.Flags.AsEnumerable().GetEnumerator();
-                var n = attribute.Name;
-                if (String.IsNullOrWhiteSpace(n))
-                {
-                    n = p.Name;
-                }
-                if (n == name && GetREDTypeString(p.PropertyType, flags) == type)
-                    return p;
-            }
-            return null;
-        }
+        //public static PropertyInfo GetREDProperty(Type classType, string name, string type)
+        //{
+        //    foreach (var p in GetREDProperties(classType))
+        //    {
+        //        var attribute = p.GetCustomAttribute<REDAttribute>();
+        //        var flags = attribute.Flags.AsEnumerable().GetEnumerator();
+        //        var n = attribute.Name;
+        //        if (String.IsNullOrWhiteSpace(n))
+        //        {
+        //            n = p.Name;
+        //        }
+        //        if (n == name && GetREDTypeString(p.PropertyType, flags) == type)
+        //            return p;
+        //    }
+        //    return null;
+        //}
 
-        public static PropertyInfo GetREDProperty(Type classType, string type)
-        {
-            foreach (var prop in GetREDProperties(classType))
-            {
-                var attribute = prop.GetCustomAttribute<REDAttribute>();
-                var flags = attribute.Flags.AsEnumerable().GetEnumerator();
+        //public static PropertyInfo GetREDProperty(Type classType, string type)
+        //{
+        //    foreach (var prop in GetREDProperties(classType))
+        //    {
+        //        var attribute = prop.GetCustomAttribute<REDAttribute>();
+        //        var flags = attribute.Flags.AsEnumerable().GetEnumerator();
 
-                if (GetREDTypeString(prop.PropertyType, flags) == type)
-                    return prop;
-            }
-            return null;
-        }
+        //        if (GetREDTypeString(prop.PropertyType, flags) == type)
+        //            return prop;
+        //    }
+        //    return null;
+        //}
 
 
 

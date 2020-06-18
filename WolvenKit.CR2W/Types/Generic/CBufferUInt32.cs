@@ -6,10 +6,11 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.CR2W.Editors;
+using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
+    [REDMeta()]
     public class CBufferUInt32<T> : CVariable where T : CVariable
     {
         public List<T> elements = new List<T>();

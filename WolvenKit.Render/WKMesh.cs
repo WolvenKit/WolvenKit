@@ -111,8 +111,8 @@ namespace WolvenKit.Render
                     }
 
                     // bone names and matrices
-                    CBufferVLQ<CName> boneNames = cmesh.boneNames;
-                    CBufferVLQ<CMatrix4x4> bonematrices = cmesh.bonematrices;
+                    CBufferVLQ<CName> boneNames = cmesh.BoneNames;
+                    CBufferVLQ<CMatrix4x4> bonematrices = cmesh.Bonematrices;
                     CData.boneData.nbBones = (uint)boneNames.elements.Count;
                     for (int i = 0; i < CData.boneData.nbBones; i++)
                     {

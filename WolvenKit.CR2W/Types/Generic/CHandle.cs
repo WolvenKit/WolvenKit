@@ -5,6 +5,8 @@ using System.Runtime.Serialization;
 using System.Windows.Forms;
 using WolvenKit.CR2W.Editors;
 using System.Linq;
+using WolvenKit.CR2W.Reflection;
+
 
 namespace WolvenKit.CR2W.Types
 {
@@ -27,7 +29,7 @@ namespace WolvenKit.CR2W.Types
     /// if ImportHandle: A string Handle, string Filetype and ushort Flags
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    [DataContract(Namespace = "")]
+    [REDMeta()]
     public class CHandle<T> : CVariable, IHandleAccessor where T : CVariable
     {
         public CHandle(CR2WFile cr2w) : base(cr2w)

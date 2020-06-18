@@ -210,7 +210,7 @@ namespace WolvenKit.CR2W
 
         #endregion
 
-        public CVariable ReadVariable(BinaryReader file)
+        public CVariable ReadVariable(BinaryReader file, CVariable parent)
         {
             // Read Name
             var nameId = file.ReadUInt16();
@@ -229,7 +229,7 @@ namespace WolvenKit.CR2W
             var size = file.ReadUInt32();
             
             // Read Value
-            var parsedvar = CR2WTypeManager.Create(typename, varname, this, null);
+            var parsedvar = CR2WTypeManager.Create(typename, varname, this, parent);
             parsedvar.Read(file, size - 4);
 
             var afterVarPos = file.BaseStream.Position;
@@ -245,29 +245,9 @@ namespace WolvenKit.CR2W
                 throw new InvalidParsingException("Parsing Variable read too far.");
             }
 
-            parsedvar.nameId = nameId;
-            //parsedvar.typeId = typeId;
-
             return parsedvar;
         }
-        
-        public static void WriteVariable(BinaryWriter file, CVariable var)
-        {
-            file.Write(var.nameId);
-            file.Write(var.typeId);
 
-            var pos = file.BaseStream.Position;
-            file.Write((uint) 0); // size placeholder
-
-
-            var.Write(file);
-            var endpos = file.BaseStream.Position;
-
-            file.Seek((int) pos, SeekOrigin.Begin);
-            var actualsize = (uint) (endpos - pos);
-            file.Write(actualsize); // Write size
-            file.Seek((int) endpos, SeekOrigin.Begin);
-        }
 
         #region Write
         public void Write(BinaryWriter file)
@@ -632,7 +612,7 @@ namespace WolvenKit.CR2W
 
                     // hack for CSkeletalAnimationSetEntry *sigh*
                     else if (var is CSkeletalAnimationSetEntry)
-                        foreach (CVariable item in (var as CSkeletalAnimationSetEntry).Entries)
+                        foreach (CVariantSizeType item in (var as CSkeletalAnimationSetEntry).Entries)
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("", item));
                     // hack for CLayerInfo *sigh*
                     else if (var is CLayerInfo)
@@ -643,7 +623,7 @@ namespace WolvenKit.CR2W
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("", iparam));
                     // hack for CMesh *sigh*
                     else if (var is CMesh)
-                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", (var as CMesh).boneNames));
+                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", (var as CMesh).BoneNames));
                     // hack for CBehaviorGraphContainerNode *sigh*
                     else if (var is CBehaviorGraphContainerNode)
                     {
@@ -698,7 +678,7 @@ namespace WolvenKit.CR2W
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("skipName,skipType", item.componentName));
                             foreach (var el in item.variables.elements)
                             {
-                                returnedVariables.Add(new Tuple<string, IEditableVariable>("Typefirst", el.variable));
+                                returnedVariables.Add(new Tuple<string, IEditableVariable>("Typefirst", el.Variable));
                             }
                         }
                     }
@@ -708,12 +688,12 @@ namespace WolvenKit.CR2W
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("", item));
                     // hack for CSkeletalAnimationSetEntry *sigh*
                     else if (var is CSkeletalAnimationSetEntry)
-                        foreach (CVariable item in (var as CSkeletalAnimationSetEntry).Entries)
+                        foreach (CVariantSizeType item in (var as CSkeletalAnimationSetEntry).Entries)
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("", item));
                     // hack for SAppearanceAttachment *sigh*
                     else if (var is CCutsceneTemplate)
-                        foreach (CVectorWrapper item in (var as CCutsceneTemplate).animevents.elements)
-                            returnedVariables.Add(new Tuple<string, IEditableVariable>("", item.variable));
+                        foreach (CVariantSizeType item in (var as CCutsceneTemplate).animevents.elements)
+                            returnedVariables.Add(new Tuple<string, IEditableVariable>("", item.Variable));
                     // hack for CStorySceneSection *sigh*
                     else if (var is CStorySceneSection)
                         foreach (CVariable item in (var as CStorySceneSection).sceneEventElements)
@@ -865,7 +845,7 @@ namespace WolvenKit.CR2W
                         var flags = EImportFlags.Default;
                         if (h.Name == "template" && h.ClassName == "CEntityTemplate")
                             flags = EImportFlags.Template;
-                        if (var.CR2WOwner.embedded.Any(_ => _.ImportPath == h.DepotPath && _.ImportClass == h.ClassName))
+                        if (var.cr2w.embedded.Any(_ => _.ImportPath == h.DepotPath && _.ImportClass == h.ClassName))
                             flags = EImportFlags.Inplace;
 
                         var importtuple = new Tuple<string, string, EImportFlags>(h.ClassName, h.DepotPath, flags);
@@ -1264,22 +1244,6 @@ namespace WolvenKit.CR2W
             return chunk;
         }
 
-        public CR2WExportWrapper CreateChunk(string type, CVariable data, CR2WExportWrapper parent = null)
-        {
-            var chunk = new CR2WExportWrapper(this)
-            {
-                Type = type,
-                data = data
-            };
-            if (parent != null)
-            {
-                chunk.SetParentChunkId((uint)chunks.IndexOf(parent) + 1);
-            }
-
-            chunks.Add(chunk);
-            return chunk;
-        }
-
         public int GetStringIndex(string name, bool addnew = false)
         {
             for (var i = 0; i < names.Count; i++)
@@ -1288,52 +1252,9 @@ namespace WolvenKit.CR2W
                     return i;
             }
 
-            //if (addnew)
-            //{
-            //    var newstring = new CR2WNameWrapper
-            //    {
-            //        Str = name
-            //    };
-            //    names.Add(newstring);
-
-            //    return names.Count - 1;
-            //}
-
             throw new NotImplementedException();
             return -1;
         }
-
-        //public int GetHandleIndex(string name, ushort filetype, ushort flags, bool addnew = false)
-        //{
-        //    for (var i = 0; i < imports.Count; i++)
-        //    {
-        //        if (imports[i].Import.className == filetype 
-        //            && imports[i].Import.flags == flags 
-        //            && (imports[i].DepotPathStr == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(imports[i].DepotPathStr))))
-        //            return i;
-        //    }
-
-        //    if (addnew)
-        //    {
-        //        // we can leave the depotpath 0 here, it will get updated on file write
-        //        // value is the offset in the stringtable, which gets re-written on file write
-        //        // a better solution might be to dynamically update the import table 
-        //        var import = new CR2WImport()
-        //        {
-        //            flags = flags,
-        //            depotPath = 0, 
-        //            className = filetype
-        //        };
-        //        imports.Add(new CR2WImportWrapper(import)
-        //        {
-        //            DepotPathStr = name,
-        //        });
-
-        //        return imports.Count - 1;
-        //    }
-
-        //    return -1;
-        //}
 
         public CR2WExportWrapper GetChunkByType(string type)
         {
@@ -1345,181 +1266,6 @@ namespace WolvenKit.CR2W
 
             return null;
         }
-
-        //public CVector CreateVector(CR2WExportWrapper in_chunk, string type, string varname = "")
-        //{
-        //    var var = CreateVector(type, varname);
-        //    in_chunk.data.AddVariable(var);
-        //    return var;
-        //}
-
-        //public CVector CreateVector(CArray in_array, string varname = "")
-        //{
-        //    var var = CreateVector("", varname);
-        //    in_array.AddVariable(var);
-        //    return var;
-        //}
-
-        //public CVector CreateVector(string type, string varname = "")
-        //{
-        //    var var = new CVector(this);
-        //    var.Type = type;
-        //    var.Name = varname;
-        //    return var;
-        //}
-
-        //public CVariable CreateVariable(CVector in_vector, string type, string varname = "")
-        //{
-        //    var var = CreateVariable(type, varname);
-        //    in_vector.AddVariable(var);
-        //    return var;
-        //}
-
-        //public CVariable CreateVariable(CR2WExportWrapper in_chunk, string type, string varname = "")
-        //{
-        //    var var = CreateVariable(type, varname);
-        //    in_chunk.data.AddVariable(var);
-        //    return var;
-        //}
-
-        //public CVariable CreateVariable(string type, string varname = "")
-        //{
-        //    var var = CR2WTypeManager.Get().GetByName(type, varname, this, false);
-        //    var.Type = type;
-        //    var.Name = varname;
-        //    return var;
-        //}
-
-        //public CVariable CreateVariable(CArray in_array, string type)
-        //{
-        //    var var = CreateVariable(type);
-        //    in_array.AddVariable(var);
-        //    return var;
-        //}
-
-        //public CHandle CreateHandle(CArray in_array, string type, string handle, string varname = "")
-        //{
-        //    var var = CreateHandle(type, handle, varname);
-        //    in_array.AddVariable(var);
-        //    return var;
-        //}
-
-        //public CHandle CreateHandle(CVector in_vector, string type, string handle, string varname = "")
-        //{
-        //    var var = CreateHandle(type, handle, varname);
-        //    in_vector.AddVariable(var);
-        //    return var;
-        //}
-
-        //public CHandle CreateHandle(CR2WExportWrapper in_chunk, string type, string handle, string varname = "")
-        //{
-        //    var var = CreateHandle(type, handle, varname);
-        //    in_chunk.data.AddVariable(var);
-        //    return var;
-        //}
-
-        //public CHandle CreateHandle(string type, string handle, string varname = "")
-        //{
-        //    var reg = new Regex(@"(\w+):(.+)");
-        //    var match = reg.Match(type);
-        //    var targetType = type;
-
-        //    if (match.Success)
-        //    {
-        //        targetType = match.Groups[2].Value;
-        //    }
-
-        //    if (handle != null)
-        //    {
-        //        handle = handle.Replace('/', '\\');
-        //    }
-        //    var ptr = new CHandle(this);
-        //    ptr.Name = varname;
-        //    ptr.Type = type;
-
-        //    ptr.DepotPath = handle;
-        //    ptr.ClassName = targetType;
-
-        //    return ptr;
-        //}
-
-        //public CSoft CreateSoft(CArray in_array, string type, string handle, string varname = "")
-        //{
-        //    var var = CreateSoft(type, handle, varname);
-        //    in_array.AddVariable(var);
-        //    return var;
-        //}
-
-        //public CSoft CreateSoft(CVector in_vector, string type, string handle, string varname = "")
-        //{
-        //    var var = CreateSoft(type, handle, varname);
-        //    in_vector.AddVariable(var);
-        //    return var;
-        //}
-
-        //public CSoft CreateSoft(CR2WExportWrapper in_chunk, string type, string handle, string varname = "")
-        //{
-        //    var var = CreateSoft(type, handle, varname);
-        //    in_chunk.data.AddVariable(var);
-        //    return var;
-        //}
-
-        //public CSoft CreateSoft(string type, string handle, string varname = "")
-        //{
-        //    var reg = new Regex(@"(\w+):(.+)");
-        //    var match = reg.Match(type);
-        //    var targetType = type;
-
-        //    if (match.Success)
-        //    {
-        //        targetType = match.Groups[2].Value;
-        //    }
-
-        //    handle = handle.Replace('/', '\\');
-        //    var ptr = new CSoft(this);
-        //    ptr.Name = varname;
-        //    ptr.Type = type;
-
-        //    ptr.ClassName = targetType;
-        //    ptr.Flags = 4;
-        //    ptr.DepotPath = handle;
-        //    return ptr;
-        //}
-
-        //public CPtr CreatePtr(CArray in_array, CR2WExportWrapper to_chunk, string varname = "")
-        //{
-        //    var var = CreatePtr("", to_chunk, varname);
-        //    in_array.AddVariable(var);
-        //    return var;
-        //}
-
-        //public CPtr CreatePtr(CVector in_vector, string type, CR2WExportWrapper to_chunk, string varname = "")
-        //{
-        //    var var = CreatePtr(type, to_chunk, varname);
-        //    in_vector.AddVariable(var);
-        //    return var;
-        //}
-
-        //public CPtr CreatePtr(CR2WExportWrapper in_chunk, string type, CR2WExportWrapper to_chunk, string varname = "")
-        //{
-        //    var var = CreatePtr(type, to_chunk, varname);
-        //    in_chunk.data.AddVariable(var);
-        //    return var;
-        //}
-
-        //public CPtr CreatePtr(string type, CR2WExportWrapper tochunk, string varname = "")
-        //{
-        //    var ptr = new CPtr(this);
-        //    ptr.Name = varname;
-        //    ptr.Type = type;
-
-        //    if (tochunk != null)
-        //    {
-        //        //ptr.val = chunks.IndexOf(tochunk) + 1;
-        //        ptr.Reference = tochunk;
-        //    }
-        //    return ptr;
-        //}
 
         public bool RemoveChunk(CR2WExportWrapper chunk)
         {

@@ -191,7 +191,7 @@ namespace WolvenKit
                 {
                     try
                     {
-                        var pastedchunk = CR2WCopyAction.CopyChunk(chunk, chunk.CR2WOwner);
+                        var pastedchunk = CR2WCopyAction.CopyChunk(chunk, chunk.cr2w);
                         OnSelectChunk?.Invoke(this, new SelectChunkArgs { Chunk = pastedchunk });
                         MainController.Get().ProjectStatus = "Chunk copied";
                         UpdateList();

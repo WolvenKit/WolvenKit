@@ -16,7 +16,8 @@ namespace WolvenKit.CR2W.Editors
         IEditableVariable Parent { get; set; }
 
 
-        CR2WFile CR2WOwner { get; }
+        CR2WFile cr2w { get; set; }
+
 
         Control GetEditor();
         List<IEditableVariable> GetEditableVariables();

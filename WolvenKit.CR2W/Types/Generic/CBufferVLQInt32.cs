@@ -10,7 +10,7 @@ using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
+    [REDMeta()]
     public class CBufferVLQInt32<T> : CArrayBase<T> where T : CVariable
     {
         public CBufferVLQInt32(CR2WFile cr2w) : base(cr2w)

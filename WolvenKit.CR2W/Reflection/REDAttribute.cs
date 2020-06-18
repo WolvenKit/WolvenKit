@@ -47,7 +47,7 @@ namespace WolvenKit.CR2W.Reflection
     /// Marks a field as a compressed buffer for cr2w IO.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    internal class REDBufferAttribute : Attribute
+    internal class REDBufferAttribute : REDAttribute
     {
         public bool IsIgnored { get; private set; }
 
@@ -97,10 +97,8 @@ namespace WolvenKit.CR2W.Reflection
 
     public enum EREDMetaInfo
     {
-        //REDClass,
         REDStruct,
-        REDComplex,
-        REDPrimitive
+        //REDComplex,
     }
 
 }

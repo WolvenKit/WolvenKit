@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.Windows.Forms;
 using WolvenKit.CR2W.Editors;
 using System.Linq;
+using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -17,7 +18,7 @@ namespace WolvenKit.CR2W.Types
     }
 
 
-    [DataContract(Namespace = "")]
+    [REDMeta()]
     public class CSoft<T> : CVariable, ISoftAccessor where T : CVariable
     {
         public CSoft(CR2WFile cr2w)

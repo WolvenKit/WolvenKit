@@ -4,10 +4,11 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Linq;
+using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
+    [REDMeta()]
     public class CName : CVariable
     {
         
