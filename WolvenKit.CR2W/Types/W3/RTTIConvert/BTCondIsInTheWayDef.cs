@@ -9,11 +9,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondIsInTheWayDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("origin")] 		public ETargetName Origin { get; set;}
+		[RED("origin")] 		public CEnum<ETargetName> Origin { get; set;}
 
-		[RED("obstacle")] 		public ETargetName Obstacle { get; set;}
+		[RED("obstacle")] 		public CEnum<ETargetName> Obstacle { get; set;}
 
-		[RED("destination")] 		public ETargetName Destination { get; set;}
+		[RED("destination")] 		public CEnum<ETargetName> Destination { get; set;}
 
 		[RED("requiredDistanceFromLine")] 		public CFloat RequiredDistanceFromLine { get; set;}
 

@@ -87,7 +87,7 @@ namespace WolvenKit
 
             if (File != null && File.chunks.Count > 0)
             {
-                switch (activeRoot.Type)
+                switch (activeRoot.REDType)
                 {
                     case "CQuestPhase":
                         getQuestPhaseRootNodes(rootNodes);
@@ -250,7 +250,7 @@ namespace WolvenKit
             if (c.data is CStorySceneSection)
                 return new SceneSectionEditor();
 
-            switch (c.Type)
+            switch (c.REDType)
             {
                 // quest
                 

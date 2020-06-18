@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("tag")] 		public CName Tag { get; set;}
 
-		[RED("operator")] 		public EOperator Operator { get; set;}
+		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
 		[RED("numberOfActors")] 		public CInt32 NumberOfActors { get; set;}
 

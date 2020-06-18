@@ -27,7 +27,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("defaultEventEndTime")] 		public CFloat DefaultEventEndTime { get; set;}
 
-		[RED("hingeAxis")] 		public EAxis HingeAxis { get; set;}
+		[RED("hingeAxis")] 		public CEnum<EAxis> HingeAxis { get; set;}
 
 		[RED("enforceEndPosition")] 		public CBool EnforceEndPosition { get; set;}
 

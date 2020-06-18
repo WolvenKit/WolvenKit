@@ -13,11 +13,11 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("count")] 		public CInt32 Count { get; set;}
 
-		[RED("immortalityMode")] 		public EActorImmortalityMode ImmortalityMode { get; set;}
+		[RED("immortalityMode")] 		public CEnum<EActorImmortalityMode> ImmortalityMode { get; set;}
 
 		[RED("attitudeOverride")] 		public CBool AttitudeOverride { get; set;}
 
-		[RED("attitudeToPlayer")] 		public EAIAttitude AttitudeToPlayer { get; set;}
+		[RED("attitudeToPlayer")] 		public CEnum<EAIAttitude> AttitudeToPlayer { get; set;}
 
 		[RED("hostileSpawnerTag")] 		public CName HostileSpawnerTag { get; set;}
 
@@ -29,7 +29,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("initialHealth")] 		public CInt32 InitialHealth { get; set;}
 
-		[RED("spawnAnimation")] 		public EExplorationMode SpawnAnimation { get; set;}
+		[RED("spawnAnimation")] 		public CEnum<EExplorationMode> SpawnAnimation { get; set;}
 
 		public CSpawner(CR2WFile cr2w) : base(cr2w){ }
 

@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("level")] 		public CInt32 Level { get; set;}
 
-		[RED("operator")] 		public EOperator Operator { get; set;}
+		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
 		public W3PlayerLevelCondition(CR2WFile cr2w) : base(cr2w){ }
 

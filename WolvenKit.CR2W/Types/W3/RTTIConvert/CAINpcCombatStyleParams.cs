@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("chooseSilverIfPossible")] 		public CBool ChooseSilverIfPossible { get; set;}
 
-		[RED("behGraph")] 		public EBehaviorGraph BehGraph { get; set;}
+		[RED("behGraph")] 		public CEnum<EBehaviorGraph> BehGraph { get; set;}
 
 		[RED("minCombatStyleDistance")] 		public CFloat MinCombatStyleDistance { get; set;}
 

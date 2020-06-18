@@ -19,9 +19,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("charStats")] 		public CHandle<CCharacterStats> CharStats { get; set;}
 
-		[RED("usedDifficultyMode")] 		public EDifficultyMode UsedDifficultyMode { get; set;}
+		[RED("usedDifficultyMode")] 		public CEnum<EDifficultyMode> UsedDifficultyMode { get; set;}
 
-		[RED("usedHealthType")] 		public EBaseCharacterStats UsedHealthType { get; set;}
+		[RED("usedHealthType")] 		public CEnum<EBaseCharacterStats> UsedHealthType { get; set;}
 
 		[RED("difficultyAbilities", 2,0)] 		public CArray<CArray<CName>> DifficultyAbilities { get; set;}
 

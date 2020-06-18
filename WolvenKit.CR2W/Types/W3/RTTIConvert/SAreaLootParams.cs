@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("remainingItemDrops", 2,0)] 		public CArray<SAreaItemDefinition> RemainingItemDrops { get; set;}
 
-		[RED("areaType")] 		public EAreaName AreaType { get; set;}
+		[RED("areaType")] 		public CEnum<EAreaName> AreaType { get; set;}
 
 		public SAreaLootParams(CR2WFile cr2w) : base(cr2w){ }
 

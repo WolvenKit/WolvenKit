@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("scene")] 		public CSoft<CStoryScene> Scene { get; set;}
 
-		[RED("forcingMode")] 		public EStorySceneForcingMode ForcingMode { get; set;}
+		[RED("forcingMode")] 		public CEnum<EStorySceneForcingMode> ForcingMode { get; set;}
 
 		[RED("forceSpawnedActors")] 		public CBool ForceSpawnedActors { get; set;}
 
@@ -23,7 +23,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("shouldFadeOnLoading_ValuesCooked", 2,0)] 		public CArray<CBool> ShouldFadeOnLoading_ValuesCooked { get; set;}
 
-		[RED("saveMode")] 		public EQuestSceneSaveMode SaveMode { get; set;}
+		[RED("saveMode")] 		public CEnum<EQuestSceneSaveMode> SaveMode { get; set;}
 
 		[RED("saveSkipOutputNode")] 		public CName SaveSkipOutputNode { get; set;}
 

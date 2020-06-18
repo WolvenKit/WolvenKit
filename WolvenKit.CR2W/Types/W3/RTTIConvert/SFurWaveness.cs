@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("waveScaleTex")] 		public CHandle<CBitmapTexture> WaveScaleTex { get; set;}
 
-		[RED("waveScaleTexChannel")] 		public EHairTextureChannel WaveScaleTexChannel { get; set;}
+		[RED("waveScaleTexChannel")] 		public CEnum<EHairTextureChannel> WaveScaleTexChannel { get; set;}
 
 		[RED("waveScaleNoise")] 		public CFloat WaveScaleNoise { get; set;}
 
@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("waveFreqTex")] 		public CHandle<CBitmapTexture> WaveFreqTex { get; set;}
 
-		[RED("waveFreqTexChannel")] 		public EHairTextureChannel WaveFreqTexChannel { get; set;}
+		[RED("waveFreqTexChannel")] 		public CEnum<EHairTextureChannel> WaveFreqTexChannel { get; set;}
 
 		[RED("waveFreqNoise")] 		public CFloat WaveFreqNoise { get; set;}
 

@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("triggeringCollisionGroupNames", 2,0)] 		public CArray<CName> TriggeringCollisionGroupNames { get; set;}
 
-		[RED("shapeType")] 		public EPhantomShape ShapeType { get; set;}
+		[RED("shapeType")] 		public CEnum<EPhantomShape> ShapeType { get; set;}
 
 		[RED("shapeDimensions")] 		public Vector ShapeDimensions { get; set;}
 

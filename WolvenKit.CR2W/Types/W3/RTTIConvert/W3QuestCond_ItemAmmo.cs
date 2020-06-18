@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("ammoQuantity")] 		public CInt32 AmmoQuantity { get; set;}
 
-		[RED("comparator")] 		public ECompareOp Comparator { get; set;}
+		[RED("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
 
 		public W3QuestCond_ItemAmmo(CR2WFile cr2w) : base(cr2w){ }
 

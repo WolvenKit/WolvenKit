@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIWolfCombatLogicParams : CAIMonsterCombatLogicParams
 	{
-		[RED("attackMovementType")] 		public EMoveType AttackMovementType { get; set;}
+		[RED("attackMovementType")] 		public CEnum<EMoveType> AttackMovementType { get; set;}
 
 		public CAIWolfCombatLogicParams(CR2WFile cr2w) : base(cr2w){ }
 

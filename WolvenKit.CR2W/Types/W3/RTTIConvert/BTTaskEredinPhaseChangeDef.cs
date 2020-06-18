@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskEredinPhaseChangeDef : IBehTreeTaskDefinition
 	{
-		[RED("action")] 		public EEredinPhaseChangeAction Action { get; set;}
+		[RED("action")] 		public CEnum<EEredinPhaseChangeAction> Action { get; set;}
 
 		public BTTaskEredinPhaseChangeDef(CR2WFile cr2w) : base(cr2w){ }
 

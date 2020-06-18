@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("maxPitch")] 		public CFloat MaxPitch { get; set;}
 
-		[RED("sensitivityPreset")] 		public EInputSensitivityPreset SensitivityPreset { get; set;}
+		[RED("sensitivityPreset")] 		public CEnum<EInputSensitivityPreset> SensitivityPreset { get; set;}
 
 		public ICustomCameraPivotRotationController(CR2WFile cr2w) : base(cr2w){ }
 

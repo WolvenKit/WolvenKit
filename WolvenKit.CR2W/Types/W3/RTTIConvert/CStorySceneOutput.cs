@@ -23,7 +23,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("gameplayCameraUseFocusTarget")] 		public CBool GameplayCameraUseFocusTarget { get; set;}
 
-		[RED("action")] 		public EStorySceneOutputAction Action { get; set;}
+		[RED("action")] 		public CEnum<EStorySceneOutputAction> Action { get; set;}
 
 		public CStorySceneOutput(CR2WFile cr2w) : base(cr2w){ }
 

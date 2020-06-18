@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("planeInFocus")] 		public CFloat PlaneInFocus { get; set;}
 
-		[RED("fStops")] 		public EApertureValue FStops { get; set;}
+		[RED("fStops")] 		public CEnum<EApertureValue> FStops { get; set;}
 
 		[RED("bokehSizeMuliplier")] 		public CFloat BokehSizeMuliplier { get; set;}
 

@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("dontGrantExp")] 		public CBool DontGrantExp { get; set;}
 
-		[RED("actionIcon")] 		public EDialogActionIcon ActionIcon { get; set;}
+		[RED("actionIcon")] 		public CEnum<EDialogActionIcon> ActionIcon { get; set;}
 
 		public CPayStorySceneChoiceAction(CR2WFile cr2w) : base(cr2w){ }
 

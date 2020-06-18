@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("useRotation")] 		public CBool UseRotation { get; set;}
 
-		[RED("performAction")] 		public EStoryScenePerformActionMode PerformAction { get; set;}
+		[RED("performAction")] 		public CEnum<EStoryScenePerformActionMode> PerformAction { get; set;}
 
 		public CStorySceneActorPosition(CR2WFile cr2w) : base(cr2w){ }
 

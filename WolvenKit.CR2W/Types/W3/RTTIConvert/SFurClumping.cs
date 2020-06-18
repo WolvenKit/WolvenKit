@@ -13,19 +13,19 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("clumpScaleTex")] 		public CHandle<CBitmapTexture> ClumpScaleTex { get; set;}
 
-		[RED("clumpScaleTexChannel")] 		public EHairTextureChannel ClumpScaleTexChannel { get; set;}
+		[RED("clumpScaleTexChannel")] 		public CEnum<EHairTextureChannel> ClumpScaleTexChannel { get; set;}
 
 		[RED("clumpRoundness")] 		public CFloat ClumpRoundness { get; set;}
 
 		[RED("clumpRoundnessTex")] 		public CHandle<CBitmapTexture> ClumpRoundnessTex { get; set;}
 
-		[RED("clumpRoundnessTexChannel")] 		public EHairTextureChannel ClumpRoundnessTexChannel { get; set;}
+		[RED("clumpRoundnessTexChannel")] 		public CEnum<EHairTextureChannel> ClumpRoundnessTexChannel { get; set;}
 
 		[RED("clumpNoise")] 		public CFloat ClumpNoise { get; set;}
 
 		[RED("clumpNoiseTex")] 		public CHandle<CBitmapTexture> ClumpNoiseTex { get; set;}
 
-		[RED("clumpNoiseTexChannel")] 		public EHairTextureChannel ClumpNoiseTexChannel { get; set;}
+		[RED("clumpNoiseTexChannel")] 		public CEnum<EHairTextureChannel> ClumpNoiseTexChannel { get; set;}
 
 		[RED("clumpNumSubclumps")] 		public CUInt32 ClumpNumSubclumps { get; set;}
 

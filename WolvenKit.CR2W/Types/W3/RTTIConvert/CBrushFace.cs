@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("material")] 		public CHandle<IMaterial> Material { get; set;}
 
-		[RED("mapping")] 		public EBrushFaceMapping Mapping { get; set;}
+		[RED("mapping")] 		public CEnum<EBrushFaceMapping> Mapping { get; set;}
 
 		[RED("scaleU")] 		public CFloat ScaleU { get; set;}
 

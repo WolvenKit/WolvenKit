@@ -9,11 +9,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_chosenLanguage : CQuestScriptedCondition
 	{
-		[RED("ChoosenTextLanguage")] 		public ECheckedLanguage ChoosenTextLanguage { get; set;}
+		[RED("ChoosenTextLanguage")] 		public CEnum<ECheckedLanguage> ChoosenTextLanguage { get; set;}
 
-		[RED("ChoosenSpeechLanguage")] 		public ECheckedLanguage ChoosenSpeechLanguage { get; set;}
+		[RED("ChoosenSpeechLanguage")] 		public CEnum<ECheckedLanguage> ChoosenSpeechLanguage { get; set;}
 
-		[RED("checkFor")] 		public ELanguageCheckType CheckFor { get; set;}
+		[RED("checkFor")] 		public CEnum<ELanguageCheckType> CheckFor { get; set;}
 
 		public W3QuestCond_chosenLanguage(CR2WFile cr2w) : base(cr2w){ }
 

@@ -11,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("tag")] 		public CName Tag { get; set;}
 
-		[RED("questArea")] 		public EAreaName QuestArea { get; set;}
+		[RED("questArea")] 		public CEnum<EAreaName> QuestArea { get; set;}
 
 		[RED("questObjective")] 		public CHandle<CJournalQuestObjective> QuestObjective { get; set;}
 
 		[RED("position")] 		public Vector Position { get; set;}
 
-		[RED("areaPosType")] 		public WmkAreaPositionType AreaPosType { get; set;}
+		[RED("areaPosType")] 		public CEnum<WmkAreaPositionType> AreaPosType { get; set;}
 
 		[RED("titleStringId")] 		public CInt32 TitleStringId { get; set;}
 

@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeInitializerSetImmortality : ISpawnTreeScriptedInitializer
 	{
-		[RED("immortalityMode")] 		public EActorImmortalityMode ImmortalityMode { get; set;}
+		[RED("immortalityMode")] 		public CEnum<EActorImmortalityMode> ImmortalityMode { get; set;}
 
 		public CSpawnTreeInitializerSetImmortality(CR2WFile cr2w) : base(cr2w){ }
 

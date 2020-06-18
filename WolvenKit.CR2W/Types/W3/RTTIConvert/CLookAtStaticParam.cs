@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CLookAtStaticParam : CEntityTemplateParam
 	{
-		[RED("maxLookAtLevel")] 		public ELookAtLevel MaxLookAtLevel { get; set;}
+		[RED("maxLookAtLevel")] 		public CEnum<ELookAtLevel> MaxLookAtLevel { get; set;}
 
 		[RED("maxHorAngle")] 		public CFloat MaxHorAngle { get; set;}
 

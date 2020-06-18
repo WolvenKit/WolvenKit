@@ -27,7 +27,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("targetObject")] 		public CPtr<IBehaviorConstraintObject> TargetObject { get; set;}
 
-		[RED("dampType")] 		public EBehaviorConstraintDampType DampType { get; set;}
+		[RED("dampType")] 		public CEnum<EBehaviorConstraintDampType> DampType { get; set;}
 
 		[RED("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
 

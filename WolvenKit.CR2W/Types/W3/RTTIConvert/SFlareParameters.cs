@@ -9,11 +9,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFlareParameters : CVariable
 	{
-		[RED("category")] 		public EFlareCategory Category { get; set;}
+		[RED("category")] 		public CEnum<EFlareCategory> Category { get; set;}
 
-		[RED("colorGroup")] 		public EEnvFlareColorGroup ColorGroup { get; set;}
+		[RED("colorGroup")] 		public CEnum<EEnvFlareColorGroup> ColorGroup { get; set;}
 
-		[RED("lensFlareGroup")] 		public ELensFlareGroup LensFlareGroup { get; set;}
+		[RED("lensFlareGroup")] 		public CEnum<ELensFlareGroup> LensFlareGroup { get; set;}
 
 		[RED("occlusionExtent")] 		public CFloat OcclusionExtent { get; set;}
 

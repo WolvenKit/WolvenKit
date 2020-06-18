@@ -11,9 +11,7 @@ using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
-    [REDMeta()]
-    public class CCubeTexture : CResource
+    public partial class CCubeTexture : CResource
     {
         // 20 bytes header
         [REDBuffer] public CUInt32 Texturecachekey { get; set; }
@@ -40,7 +38,7 @@ namespace WolvenKit.CR2W.Types
         {
             base.Read(file, size);
 
-            Rawfile = new CBytes(cr2w) { Name = "Image" };
+            Rawfile = new CBytes(cr2w) { REDName = "Image" };
             Rawfile.Read(file, Filesize.val);
         }
 
@@ -50,12 +48,5 @@ namespace WolvenKit.CR2W.Types
 
             Rawfile.Write(file);
         }
-
-        public override CVariable Create(CR2WFile cr2w)
-        {
-            return new CCubeTexture(cr2w);
-        }
-
-        
     }
 }

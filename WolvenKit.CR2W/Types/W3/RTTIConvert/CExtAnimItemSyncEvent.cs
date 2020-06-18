@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("holdSlot")] 		public CName HoldSlot { get; set;}
 
-		[RED("action")] 		public EItemLatentAction Action { get; set;}
+		[RED("action")] 		public CEnum<EItemLatentAction> Action { get; set;}
 
 		public CExtAnimItemSyncEvent(CR2WFile cr2w) : base(cr2w){ }
 

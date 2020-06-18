@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("targetTag")] 		public CName TargetTag { get; set;}
 
-		[RED("moveType")] 		public EMoveType MoveType { get; set;}
+		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
 		[RED("keepDistance")] 		public CBool KeepDistance { get; set;}
 

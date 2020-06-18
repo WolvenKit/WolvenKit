@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("owner")] 		public CHandle<CActor> Owner { get; set;}
 
-		[RED("buff")] 		public EEffectType Buff { get; set;}
+		[RED("buff")] 		public CEnum<EEffectType> Buff { get; set;}
 
 		[RED("buffDuration")] 		public CFloat BuffDuration { get; set;}
 

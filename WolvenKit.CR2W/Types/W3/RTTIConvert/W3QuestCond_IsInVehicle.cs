@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_IsInVehicle : CQCActorScriptedCondition
 	{
-		[RED("vehicleType")] 		public EVehicleType VehicleType { get; set;}
+		[RED("vehicleType")] 		public CEnum<EVehicleType> VehicleType { get; set;}
 
 		[RED("vehicleTag")] 		public CName VehicleTag { get; set;}
 

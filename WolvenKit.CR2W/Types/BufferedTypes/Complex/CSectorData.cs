@@ -9,9 +9,8 @@ using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
-    [REDMeta()]
-    public class CSectorData : ISerializable
+
+    public partial class CSectorData : ISerializable
     {
 
         [REDBuffer] public CUInt32 Unknown1 { get; set; }
@@ -28,13 +27,10 @@ namespace WolvenKit.CR2W.Types
         {
 
             blocksize = new CVLQInt32(cr2w);
-            BlockData = new CCompressedBuffer<SBlockData>(cr2w, _ => new SBlockData(_)) { Name = "blockData", };
+            BlockData = new CCompressedBuffer<SBlockData>(cr2w, _ => new SBlockData(_)) { REDName = "blockData", };
         }
 
-        public override CVariable Create(CR2WFile cr2w)
-        {
-            return new CSectorData(cr2w);
-        }
+
 
         public override void Read(BinaryReader file, uint size)
         {

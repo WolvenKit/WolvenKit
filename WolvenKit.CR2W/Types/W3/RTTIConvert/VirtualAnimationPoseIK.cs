@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("time")] 		public CFloat Time { get; set;}
 
-		[RED("ids", 2,0)] 		public CArray<EnumWrapper<ETCrEffectorId>> Ids { get; set;}
+		[RED("ids", 2,0)] 		public CArray<CEnum<ETCrEffectorId>> Ids { get; set;}
 
 		[RED("positionsMS", 2,0)] 		public CArray<Vector> PositionsMS { get; set;}
 

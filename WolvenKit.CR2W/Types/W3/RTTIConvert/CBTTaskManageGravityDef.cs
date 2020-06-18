@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskManageGravityDef : IBehTreeTaskDefinition
 	{
-		[RED("manageGravity")] 		public EManageGravity ManageGravity { get; set;}
+		[RED("manageGravity")] 		public CEnum<EManageGravity> ManageGravity { get; set;}
 
 		[RED("onActivate")] 		public CBool OnActivate { get; set;}
 

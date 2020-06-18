@@ -11,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("distance")] 		public CFloat Distance { get; set;}
 
-		[RED("endLess")] 		public EAttackType EndLess { get; set;}
+		[RED("endLess")] 		public CEnum<EAttackType> EndLess { get; set;}
 
-		[RED("endMore")] 		public EAttackType EndMore { get; set;}
+		[RED("endMore")] 		public CEnum<EAttackType> EndMore { get; set;}
 
 		public CBTTask3StateWithDistDef(CR2WFile cr2w) : base(cr2w){ }
 

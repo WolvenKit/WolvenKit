@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("destroyObstacleOnCollision")] 		public CBool DestroyObstacleOnCollision { get; set;}
 
-		[RED("chargeType")] 		public EChargeAttackType ChargeType { get; set;}
+		[RED("chargeType")] 		public CEnum<EChargeAttackType> ChargeType { get; set;}
 
 		[RED("forceCriticalEffect")] 		public CBool ForceCriticalEffect { get; set;}
 

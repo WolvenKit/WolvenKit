@@ -68,7 +68,7 @@ namespace WolvenKit.CR2W
             this.cr2w = file;
             _export = export;
 
-            Type = cr2w.names[export.className].Str;
+            REDType = cr2w.names[export.className].Str;
         }
         #endregion
 
@@ -114,7 +114,7 @@ namespace WolvenKit.CR2W
         public uint ParentChunkId => this.Export.parentID;
 
         private string _type;
-        public string Type
+        public string REDType
         {
             get { return _type; }
             set
@@ -127,9 +127,9 @@ namespace WolvenKit.CR2W
 
 
         [DataMember]
-        public string Name
+        public string REDName
         {
-            get { return Type + " #" + (ChunkIndex); }
+            get { return REDType + " #" + (ChunkIndex); }
             set { }
         }
 
@@ -142,13 +142,13 @@ namespace WolvenKit.CR2W
                 if (data is CVariable)
                 {
                     var vars = data.GetEditableVariables();
-                    var firstString = vars.FirstOrDefault(_ => _.Type == "String");
+                    var firstString = vars.FirstOrDefault(_ => _.REDType == "String");
                     if (firstString != null)
                     {
                         return ((CString)firstString).val;
                     }
 
-                    var firstName = vars.FirstOrDefault(_ => _.Type == "CName");
+                    var firstName = vars.FirstOrDefault(_ => _.REDType == "CName");
                     if (firstName != null)
                     {
                         return ((CName)firstName).Value;
@@ -162,7 +162,9 @@ namespace WolvenKit.CR2W
         public Guid InternalGuid { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         IEditableVariable IEditableVariable.Parent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public string Value => this.ToString();
+        public string REDValue => this.ToString();
+
+        public bool IsSerialized { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         #endregion
 
         #region Methods
@@ -201,7 +203,7 @@ namespace WolvenKit.CR2W
 
         public virtual List<IEditableVariable> GetEditableVariables()
         {
-            data.Name = Name;
+            data.REDName = REDName;
 
             var vars = new List<IEditableVariable>
             {
@@ -244,7 +246,7 @@ namespace WolvenKit.CR2W
 
             unknownBytes = new CBytes(cr2w)
             {
-                Name = "unknownBytes",
+                REDName = "unknownBytes",
             };
 
             if (bytesLeft > 0)
@@ -288,7 +290,7 @@ namespace WolvenKit.CR2W
 
         public void CreateDefaultData()
         {
-            data = CR2WTypeManager.Create(Type, "", cr2w, null);
+            data = CR2WTypeManager.Create(REDType, "", cr2w, null);
             if (data == null)
             {
                 throw new NotImplementedException();
@@ -299,7 +301,7 @@ namespace WolvenKit.CR2W
 
             ParentPtr = new CPtr<CVariable>(cr2w)
             {
-                Name = "Parent",
+                REDName = "Parent",
                 Reference = GetParent()
             };
         }
@@ -311,12 +313,12 @@ namespace WolvenKit.CR2W
                 return null;
 
 
-            var copy = context.DestinationFile.CreateChunk(Type);
+            var copy = context.DestinationFile.CreateChunk(REDType);
 
             context.chunks.Add(copy);
             context.chunkTranslation.Add(ChunkIndex, copy.ChunkIndex);
 
-            copy.Type = Type;
+            copy.REDType = REDType;
             copy._export.template = _export.template;
             copy._export.crc32 = _export.crc32;
 
@@ -347,7 +349,7 @@ namespace WolvenKit.CR2W
 
         public override string ToString()
         {
-            return Name;
+            return REDName;
         }
         #endregion
     }

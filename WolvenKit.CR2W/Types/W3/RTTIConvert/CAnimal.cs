@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimal : CNewNPC
 	{
-		[RED("animalType")] 		public EAnimalType AnimalType { get; set;}
+		[RED("animalType")] 		public CEnum<EAnimalType> AnimalType { get; set;}
 
 		public CAnimal(CR2WFile cr2w) : base(cr2w){ }
 

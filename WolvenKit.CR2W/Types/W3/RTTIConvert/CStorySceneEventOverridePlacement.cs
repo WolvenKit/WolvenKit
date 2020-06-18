@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("placement")] 		public EngineTransform Placement { get; set;}
 
-		[RED("resetCloth")] 		public EDialogResetClothAndDanglesType ResetCloth { get; set;}
+		[RED("resetCloth")] 		public CEnum<EDialogResetClothAndDanglesType> ResetCloth { get; set;}
 
 		public CStorySceneEventOverridePlacement(CR2WFile cr2w) : base(cr2w){ }
 

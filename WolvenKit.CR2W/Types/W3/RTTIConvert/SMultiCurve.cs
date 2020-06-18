@@ -9,17 +9,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMultiCurve : CVariable
 	{
-		[RED("type")] 		public ECurveType Type { get; set;}
+		[RED("type")] 		public CEnum<ECurveType> Type { get; set;}
 
 		[RED("color")] 		public CColor Color { get; set;}
 
-		[RED("showFlags")] 		public EShowFlags ShowFlags { get; set;}
+		[RED("showFlags")] 		public CEnum<EShowFlags> ShowFlags { get; set;}
 
-		[RED("positionInterpolationMode")] 		public ECurveInterpolationMode PositionInterpolationMode { get; set;}
+		[RED("positionInterpolationMode")] 		public CEnum<ECurveInterpolationMode> PositionInterpolationMode { get; set;}
 
-		[RED("positionManualMode")] 		public ECurveManualMode PositionManualMode { get; set;}
+		[RED("positionManualMode")] 		public CEnum<ECurveManualMode> PositionManualMode { get; set;}
 
-		[RED("rotationInterpolationMode")] 		public ECurveInterpolationMode RotationInterpolationMode { get; set;}
+		[RED("rotationInterpolationMode")] 		public CEnum<ECurveInterpolationMode> RotationInterpolationMode { get; set;}
 
 		[RED("totalTime")] 		public CFloat TotalTime { get; set;}
 
@@ -43,11 +43,11 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("easeParams", 2,0)] 		public CArray<SCurveEaseParam> EaseParams { get; set;}
 
-		[RED("translationRelativeMode")] 		public ECurveRelativeMode TranslationRelativeMode { get; set;}
+		[RED("translationRelativeMode")] 		public CEnum<ECurveRelativeMode> TranslationRelativeMode { get; set;}
 
-		[RED("rotationRelativeMode")] 		public ECurveRelativeMode RotationRelativeMode { get; set;}
+		[RED("rotationRelativeMode")] 		public CEnum<ECurveRelativeMode> RotationRelativeMode { get; set;}
 
-		[RED("scaleRelativeMode")] 		public ECurveRelativeMode ScaleRelativeMode { get; set;}
+		[RED("scaleRelativeMode")] 		public CEnum<ECurveRelativeMode> ScaleRelativeMode { get; set;}
 
 		[RED("initialParentTransform")] 		public EngineTransform InitialParentTransform { get; set;}
 

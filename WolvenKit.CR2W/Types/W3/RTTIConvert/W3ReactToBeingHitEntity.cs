@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("dealDamage")] 		public CBool DealDamage { get; set;}
 
-		[RED("debuffType")] 		public EEffectType DebuffType { get; set;}
+		[RED("debuffType")] 		public CEnum<EEffectType> DebuffType { get; set;}
 
 		[RED("debuffDuration")] 		public CFloat DebuffDuration { get; set;}
 

@@ -19,34 +19,9 @@ namespace WolvenKit.CR2W.Types
         }
     }
 
-    public class CR2WTypeManager
+    public static class CR2WTypeManager
     {
-        private static CR2WTypeManager instance;
-        private static readonly Dictionary<string, CR2WTypeDefinition> EnumsDict = new Dictionary<string, CR2WTypeDefinition>();
-
-        public CR2WTypeManager()
-        {
-            foreach (var enm in typeof(Enums).GetNestedTypes())
-            {
-                Enum e = (Enum)Activator.CreateInstance(enm);
-
-                if (e.GetType().IsDefined(typeof(FlagsAttribute), false))
-                {
-                    string typename = e.GetType().Name;
-                    var etype = Type.GetType($"WolvenKit.CR2W.Types.{typename}");
-                    object einstance = Activator.CreateInstance(etype, null);
-
-                    if (!EnumsDict.ContainsKey(enm.Name))
-                        EnumsDict.Add(enm.Name, new CR2WTypeDefinition(enm.Name, einstance as CVariable));
-                }
-
-                CEnum cenum = new CEnum(null) { Enum = e };
-                if (!EnumsDict.ContainsKey(enm.Name))
-                    EnumsDict.Add(enm.Name, new CR2WTypeDefinition(enm.Name, cenum));
-            }
-        }
-
-        public List<string> AvailableTypes
+        public static List<string> AvailableTypes
         {
             get
             {
@@ -60,23 +35,21 @@ namespace WolvenKit.CR2W.Types
                 q.ToList().ForEach(t => classNames.Add(t.Name));
 
                 // enum names
-                List<string> enumNames = EnumsDict.Keys.ToList();
+                List<string> enumNames = new List<string>();
+                foreach (var enm in typeof(Enums).GetNestedTypes())
+                {
+                    enumNames.Add(enm.Name);
+                }
 
                 return classNames.Concat(enumNames).ToList();
             }
         }
 
-        public static CR2WTypeManager Get()
-        {
-            return instance ?? (instance = new CR2WTypeManager());
-        }
-
-
         public static CVariable Create(string typename, string varname, CR2WFile cr2w, CVariable parentVariable, bool readUnknownAsBytes = true)
         {
             CVariable variable = CreateInner(typename, cr2w, readUnknownAsBytes);
             variable.Parent = parentVariable;
-            variable.Name = varname;
+            variable.REDName = varname;
             return variable;
         }
 
@@ -98,13 +71,9 @@ namespace WolvenKit.CR2W.Types
                     return einstance as CVariable;
                 }
 
-                return new CEnum(cr2w) { Enum = e };
+                var cenum = MakeGenericEnumType(typeof(CEnum<>), e);
+                return cenum;
             }
-
-            //if (EnumsDict.ContainsKey(typename))
-            //{
-            //    return EnumsDict[typename].var;
-            //}
 
             #endregion
 
@@ -236,6 +205,11 @@ namespace WolvenKit.CR2W.Types
                             CVariable innerobject = CreateInner(match.Groups[2].Value, cr2w);
                             return MakeGenericType(typeof(CPaddedBuffer<>), innerobject);
                         }
+                    case "CEnum":
+                        {
+                            Enum innerobject = CreateInnerEnum(match.Groups[2].Value);
+                            return MakeGenericEnumType(typeof(CEnum<>), innerobject);
+                        }
                     default:
                         typename = match.Groups[1].Value;
                         break;
@@ -297,8 +271,33 @@ namespace WolvenKit.CR2W.Types
                     throw new Exception();
                 }
             }
-            
+
+            CVariable MakeGenericEnumType(Type gentype, Enum innerobject)
+            {
+                if (innerobject != null)
+                {
+                    Type elementType = gentype.MakeGenericType(innerobject.GetType());
+                    CVariable handle = Activator.CreateInstance(elementType, cr2w) as CVariable;
+                    return handle;
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
             #endregion
+        }
+
+        private static Enum CreateInnerEnum(string value)
+        {
+            Enum e = (Enum)Activator.CreateInstance(typeof(Enums).GetNestedTypes().FirstOrDefault(_ => _.Name == value));
+
+            if (e.GetType().IsDefined(typeof(FlagsAttribute), false))
+            {
+                throw new NotImplementedException(); 
+            }
+
+            return e;
         }
     }
 }

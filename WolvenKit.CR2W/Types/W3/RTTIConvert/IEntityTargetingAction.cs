@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IEntityTargetingAction : IPerformableAction
 	{
-		[RED("entitySelectionType")] 		public EEntityTargetingActionMechanism EntitySelectionType { get; set;}
+		[RED("entitySelectionType")] 		public CEnum<EEntityTargetingActionMechanism> EntitySelectionType { get; set;}
 
 		[RED("entityHandle")] 		public EntityHandle EntityHandle { get; set;}
 

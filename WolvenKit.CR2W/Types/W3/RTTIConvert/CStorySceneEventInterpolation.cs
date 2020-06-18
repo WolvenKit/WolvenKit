@@ -11,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("keyGuids", 2,0)] 		public CArray<CGUID> KeyGuids { get; set;}
 
-		[RED("interpolationMethod")] 		public EInterpolationMethod InterpolationMethod { get; set;}
+		[RED("interpolationMethod")] 		public CEnum<EInterpolationMethod> InterpolationMethod { get; set;}
 
-		[RED("easeInStyle")] 		public EInterpolationEasingStyle EaseInStyle { get; set;}
+		[RED("easeInStyle")] 		public CEnum<EInterpolationEasingStyle> EaseInStyle { get; set;}
 
 		[RED("easeInParameter")] 		public CFloat EaseInParameter { get; set;}
 
-		[RED("easeOutStyle")] 		public EInterpolationEasingStyle EaseOutStyle { get; set;}
+		[RED("easeOutStyle")] 		public CEnum<EInterpolationEasingStyle> EaseOutStyle { get; set;}
 
 		[RED("easeOutParameter")] 		public CFloat EaseOutParameter { get; set;}
 

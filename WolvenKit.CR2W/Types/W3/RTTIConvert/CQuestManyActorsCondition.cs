@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("actorTags")] 		public TagList ActorTags { get; set;}
 
-		[RED("logicOperation")] 		public EQuestActorConditionLogicOperation LogicOperation { get; set;}
+		[RED("logicOperation")] 		public CEnum<EQuestActorConditionLogicOperation> LogicOperation { get; set;}
 
 		[RED("condition")] 		public CPtr<IActorConditionType> Condition { get; set;}
 

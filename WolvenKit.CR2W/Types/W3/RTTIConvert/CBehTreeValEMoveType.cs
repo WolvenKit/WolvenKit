@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("varName")] 		public CName VarName { get; set;}
 
-		[RED("value")] 		public EMoveType Value { get; set;}
+		[RED("value")] 		public CEnum<EMoveType> Value { get; set;}
 
 		public CBehTreeValEMoveType(CR2WFile cr2w) : base(cr2w){ }
 

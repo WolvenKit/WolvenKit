@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("solverSteps")] 		public CInt32 SolverSteps { get; set;}
 
-		[RED("forwardEndBoneDir")] 		public EAxis ForwardEndBoneDir { get; set;}
+		[RED("forwardEndBoneDir")] 		public CEnum<EAxis> ForwardEndBoneDir { get; set;}
 
 		public CBehaviorGraphConstraintNodeChain(CR2WFile cr2w) : base(cr2w){ }
 

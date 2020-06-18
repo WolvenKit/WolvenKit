@@ -19,14 +19,13 @@ namespace WolvenKit.CR2W.Types
         #region Properties
         [DataMember]
         public string Value { get; set; }
-        public bool IsEnum { get; set; }
         #endregion
 
 
         #region Methods
         public override void Read(BinaryReader file, uint size)
         {
-            SetValueInternal(file.ReadUInt16());
+            Value = cr2w.names[file.ReadUInt16()].Str;
         }
 
         /// <summary>
@@ -59,11 +58,6 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        private void SetValueInternal(ushort val)
-        {
-            Value = cr2w.names[val].Str;
-        }
-
         public override CVariable Create(CR2WFile cr2w)
         {
             return new CName(cr2w);
@@ -78,26 +72,9 @@ namespace WolvenKit.CR2W.Types
 
         public override Control GetEditor()
         {
-            var enumtypes = typeof(Enums).GetNestedTypes();
-            foreach (var item in enumtypes)
-            {
-                if (item.Name == this.Type)
-                {
-                    ComboBox cb = new ComboBox();
-                    cb.Items.AddRange(item.GetEnumNames());
-                    cb.SelectedValue = this.Type;
-                    cb.SelectedValueChanged += HandleEnumPick;
-                    return cb;
-                }
-            }
             var editor = new TextBox();
             editor.DataBindings.Add("Text", this, nameof(Value));
             return editor;
-        }
-
-        private void HandleEnumPick(object sender, System.EventArgs e)
-        {
-            SetValue((sender as ComboBox).SelectedItem);
         }
 
         public override string ToString()

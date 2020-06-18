@@ -9,11 +9,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCheckActorSpeedDef : IBehTreeTaskDefinition
 	{
-		[RED("checkedActor")] 		public EStatOwner CheckedActor { get; set;}
+		[RED("checkedActor")] 		public CEnum<EStatOwner> CheckedActor { get; set;}
 
-		[RED("moveType")] 		public EMoveType MoveType { get; set;}
+		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
-		[RED("operator")] 		public EOperator Operator { get; set;}
+		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
 		[RED("customSpeed")] 		public CBool CustomSpeed { get; set;}
 

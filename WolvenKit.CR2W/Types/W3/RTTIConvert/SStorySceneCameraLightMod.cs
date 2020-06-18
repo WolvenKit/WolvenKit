@@ -25,7 +25,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("attenuation")] 		public CFloat Attenuation { get; set;}
 
-		[RED("usageMask")] 		public ECameraLightBitfield UsageMask { get; set;}
+		[RED("usageMask")] 		public CEnum<ECameraLightBitfield> UsageMask { get; set;}
 
 		public SStorySceneCameraLightMod(CR2WFile cr2w) : base(cr2w){ }
 

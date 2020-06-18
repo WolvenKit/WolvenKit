@@ -43,7 +43,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("checkMoveType")] 		public CBool CheckMoveType { get; set;}
 
-		[RED("activateOnGreaterEqualMoveType")] 		public EMoveType ActivateOnGreaterEqualMoveType { get; set;}
+		[RED("activateOnGreaterEqualMoveType")] 		public CEnum<EMoveType> ActivateOnGreaterEqualMoveType { get; set;}
 
 		[RED("zTolerance")] 		public CFloat ZTolerance { get; set;}
 

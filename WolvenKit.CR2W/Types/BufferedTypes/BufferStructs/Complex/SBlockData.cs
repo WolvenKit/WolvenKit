@@ -25,7 +25,7 @@ namespace WolvenKit.CR2W.Types
         public SBlockData(CR2WFile cr2w) :
             base(cr2w)
         {
-            tail = new CBytes(cr2w) { Name = "tail", Parent = this };
+            tail = new CBytes(cr2w) { REDName = "tail", Parent = this };
         }
 
         public override void Read(BinaryReader file, uint size)

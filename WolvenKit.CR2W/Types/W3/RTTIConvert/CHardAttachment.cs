@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("parentSlotName")] 		public CName ParentSlotName { get; set;}
 
-		[RED("attachmentFlags")] 		public EHardAttachmentFlags AttachmentFlags { get; set;}
+		[RED("attachmentFlags")] 		public CEnum<EHardAttachmentFlags> AttachmentFlags { get; set;}
 
 		[RED("parentSlot")] 		public CPtr<ISlot> ParentSlot { get; set;}
 

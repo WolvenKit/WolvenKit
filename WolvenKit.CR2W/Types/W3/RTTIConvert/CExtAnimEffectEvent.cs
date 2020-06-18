@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("effectName")] 		public CName EffectName { get; set;}
 
-		[RED("action")] 		public EAnimEffectAction Action { get; set;}
+		[RED("action")] 		public CEnum<EAnimEffectAction> Action { get; set;}
 
 		public CExtAnimEffectEvent(CR2WFile cr2w) : base(cr2w){ }
 

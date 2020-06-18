@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCustomOrientationInfo : CVariable
 	{
-		[RED("orientationTarget")] 		public EOrientationTarget OrientationTarget { get; set;}
+		[RED("orientationTarget")] 		public CEnum<EOrientationTarget> OrientationTarget { get; set;}
 
 		[RED("sourceName")] 		public CName SourceName { get; set;}
 

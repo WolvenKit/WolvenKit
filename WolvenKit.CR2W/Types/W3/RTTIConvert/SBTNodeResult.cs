@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBTNodeResult : CVariable
 	{
-		[RED("status")] 		public EBTNodeStatus Status { get; set;}
+		[RED("status")] 		public CEnum<EBTNodeStatus> Status { get; set;}
 
 		public SBTNodeResult(CR2WFile cr2w) : base(cr2w){ }
 

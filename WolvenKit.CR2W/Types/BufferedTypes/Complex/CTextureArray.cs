@@ -8,13 +8,9 @@ using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
-    [REDMeta()]
-    public class CTextureArray : CResource
+    public partial class CTextureArray : CResource
     {
-        [RED("bitmaps", 2, 0)] public CArray<CTextureArrayEntry> Bitmaps { get; set; }
 
-        [RED("textureGroup")] public CName TextureGroup { get; set; }
 
         // 24 bytes header
         [REDBuffer] public CUInt32 texturecachekey { get; set; }
@@ -37,7 +33,7 @@ namespace WolvenKit.CR2W.Types
         public CTextureArray(CR2WFile cr2w) : base(cr2w)
         {
 
-            rawfile = new CBytes(cr2w) { Name = "rawfile" };
+            rawfile = new CBytes(cr2w) { REDName = "rawfile" };
             
         }
 
@@ -56,9 +52,5 @@ namespace WolvenKit.CR2W.Types
             rawfile.Write(file);
         }
 
-        public override CVariable Create(CR2WFile cr2w)
-        {
-            return new CTextureArray(cr2w);
-        }
     }
 }

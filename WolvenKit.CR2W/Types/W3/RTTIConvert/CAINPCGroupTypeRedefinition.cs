@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINPCGroupTypeRedefinition : CAIRedefinitionParameters
 	{
-		[RED("npcGroupType")] 		public ENPCGroupType NpcGroupType { get; set;}
+		[RED("npcGroupType")] 		public CEnum<ENPCGroupType> NpcGroupType { get; set;}
 
 		public CAINPCGroupTypeRedefinition(CR2WFile cr2w) : base(cr2w){ }
 

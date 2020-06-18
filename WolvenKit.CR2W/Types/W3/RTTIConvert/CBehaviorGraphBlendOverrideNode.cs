@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("syncMethodFromParent")] 		public CPtr<IBehaviorSyncMethod> SyncMethodFromParent { get; set;}
 
-		[RED("lodAtOrAboveLevel")] 		public EBehaviorLod LodAtOrAboveLevel { get; set;}
+		[RED("lodAtOrAboveLevel")] 		public CEnum<EBehaviorLod> LodAtOrAboveLevel { get; set;}
 
 		[RED("Bones with weights", 2,0)] 		public CArray<SBehaviorGraphBoneInfo> Bones_with_weights { get; set;}
 

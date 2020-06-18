@@ -25,7 +25,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("fadeEndDuration")] 		public CFloat FadeEndDuration { get; set;}
 
-		[RED("focusModeHighlight")] 		public EFocusModeVisibility FocusModeHighlight { get; set;}
+		[RED("focusModeHighlight")] 		public CEnum<EFocusModeVisibility> FocusModeHighlight { get; set;}
 
 		[RED("alignLeft")] 		public CBool AlignLeft { get; set;}
 

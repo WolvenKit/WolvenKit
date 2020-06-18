@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("wasLearned")] 		public CBool WasLearned { get; set;}
 
-		[RED("skillType")] 		public ESkill SkillType { get; set;}
+		[RED("skillType")] 		public CEnum<ESkill> SkillType { get; set;}
 
 		public STutorialTemporarySkill(CR2WFile cr2w) : base(cr2w){ }
 

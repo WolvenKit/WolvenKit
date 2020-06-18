@@ -246,8 +246,8 @@ namespace WolvenKit.Cache
                 uint width = xbm.Mipdata.elements[residentMipIndex].Width.val;
                 uint height = xbm.Mipdata.elements[residentMipIndex].Height.val;
 
-                ETextureCompression compression = xbm.Compression;
-                ETextureRawFormat format = xbm.Format;
+                ETextureCompression compression = xbm.Compression.WrappedEnum;
+                ETextureRawFormat format = xbm.Format.WrappedEnum;
 
                 var ddsformat = ETextureFormat.TEXFMT_R8G8B8A8;
                 switch (compression)

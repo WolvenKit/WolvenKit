@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("birdsSpawnPointsTag")] 		public CName BirdsSpawnPointsTag { get; set;}
 
-		[RED("birdType")] 		public EBirdType BirdType { get; set;}
+		[RED("birdType")] 		public CEnum<EBirdType> BirdType { get; set;}
 
 		[RED("spawnRange")] 		public CFloat SpawnRange { get; set;}
 

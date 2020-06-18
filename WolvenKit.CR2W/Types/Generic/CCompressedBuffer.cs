@@ -18,7 +18,6 @@ namespace WolvenKit.CR2W.Types
         public Func<CR2WFile, T> elementFactory;
 
         private int m_count = -1;
-        public new string Type { get => $"CCompressedBuffer<{typeof(T)}>"; }
 
         public int Count => ((ICollection<T>)elements).Count;
 
@@ -50,7 +49,7 @@ namespace WolvenKit.CR2W.Types
             for (int i = 0; i < m_count; i++)
             {
                 T element = elementFactory.Invoke(cr2w);
-                element.Name = i.ToString();
+                element.REDName = i.ToString();
                 element.Read(file, size);
                 elements.Add(element);
             }
@@ -132,7 +131,7 @@ namespace WolvenKit.CR2W.Types
         {
             if (variable is T)
             {
-                variable.Name = elements.Count.ToString();
+                variable.REDName = elements.Count.ToString();
                 elements.Add(variable as T);
             }
         }
@@ -141,7 +140,7 @@ namespace WolvenKit.CR2W.Types
         {
             for (int i = 0; i < elements.Count; i++)
             {
-                elements[i].Name = i.ToString();
+                elements[i].REDName = i.ToString();
             }
         }
 

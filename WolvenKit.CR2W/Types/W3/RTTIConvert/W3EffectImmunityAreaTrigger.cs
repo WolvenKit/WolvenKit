@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3EffectImmunityAreaTrigger : CEntity
 	{
-		[RED("effectImmunity")] 		public EEffectType EffectImmunity { get; set;}
+		[RED("effectImmunity")] 		public CEnum<EEffectType> EffectImmunity { get; set;}
 
 		public W3EffectImmunityAreaTrigger(CR2WFile cr2w) : base(cr2w){ }
 

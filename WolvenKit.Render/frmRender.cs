@@ -331,7 +331,7 @@ namespace WolvenKit.Render
                 Material mat = new Material();
                 foreach (var material in materialInstance.InstanceParameters)
                 {
-                    switch (material.Name)
+                    switch (material.REDName)
                     {
                         case "Diffuse":
                             Texture diffTexture = GetTexture(driver, (material as IHandleAccessor).DepotPath);

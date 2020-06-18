@@ -13,11 +13,11 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("factId")] 		public CString FactId { get; set;}
 
-		[RED("queryFact")] 		public EQueryFact QueryFact { get; set;}
+		[RED("queryFact")] 		public CEnum<EQueryFact> QueryFact { get; set;}
 
 		[RED("value")] 		public CInt32 Value { get; set;}
 
-		[RED("compareFunc")] 		public ECompareFunc CompareFunc { get; set;}
+		[RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
 
 		public SAIReactionFactTest(CR2WFile cr2w) : base(cr2w){ }
 

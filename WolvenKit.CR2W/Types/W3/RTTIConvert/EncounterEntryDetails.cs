@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("canBeRepeated")] 		public CBool CanBeRepeated { get; set;}
 
-		[RED("occurenceTime")] 		public EOcurrenceTime OccurenceTime { get; set;}
+		[RED("occurenceTime")] 		public CEnum<EOcurrenceTime> OccurenceTime { get; set;}
 
 		[RED("questFileEntry", 2,0)] 		public CArray<CHandle<CEntityTemplate>> QuestFileEntry { get; set;}
 

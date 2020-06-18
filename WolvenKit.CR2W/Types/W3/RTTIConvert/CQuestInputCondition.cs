@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("gameInput")] 		public CName GameInput { get; set;}
 
-		[RED("valueCompareFunc")] 		public EInputCompareFunc ValueCompareFunc { get; set;}
+		[RED("valueCompareFunc")] 		public CEnum<EInputCompareFunc> ValueCompareFunc { get; set;}
 
 		[RED("value")] 		public CFloat Value { get; set;}
 

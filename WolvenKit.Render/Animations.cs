@@ -29,7 +29,7 @@ namespace WolvenKit.Render
             if (animFile != null)
             foreach (var chunk in animFile.chunks)
             {
-                if (chunk.Type == "CSkeletalAnimation" && chunk.data is CSkeletalAnimation anim)
+                if (chunk.REDType == "CSkeletalAnimation" && chunk.data is CSkeletalAnimation anim)
                 {
                     var name = anim.Name;
                     var chunkIdx = anim.AnimBuffer.Reference.ChunkIndex;
@@ -55,7 +55,7 @@ namespace WolvenKit.Render
                 scalesKeyframes.Clear();
                 foreach (var chunk in animFile.chunks)
                 {
-                    if (chunk.Type == "CAnimationBufferBitwiseCompressed" && chunk.ChunkIndex == AnimationNames[selectedAnimIdx].Value
+                    if (chunk.REDType == "CAnimationBufferBitwiseCompressed" && chunk.ChunkIndex == AnimationNames[selectedAnimIdx].Value
                         && chunk.data is CAnimationBufferBitwiseCompressed buffer)
                     {
                         uint numFrames = buffer.NumFrames.val;

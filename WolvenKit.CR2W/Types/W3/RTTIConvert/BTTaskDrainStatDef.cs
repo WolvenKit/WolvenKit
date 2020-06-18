@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskDrainStatDef : IBehTreeTaskDefinition
 	{
-		[RED("stat")] 		public EBaseCharacterStats Stat { get; set;}
+		[RED("stat")] 		public CEnum<EBaseCharacterStats> Stat { get; set;}
 
 		[RED("val")] 		public CFloat Val { get; set;}
 

@@ -42,7 +42,7 @@ namespace WolvenKit
 
             if (File != null && File.chunks.Count > 0)
             {
-                switch (basenode.Type)
+                switch (basenode.REDType)
                 {
                     case "CJournalResource":
                         //ParseJournalType((CPtr)File.chunks[0].GetVariableByName("entry"));
@@ -57,7 +57,7 @@ namespace WolvenKit
 
         public void ParseImageAndPreview(CJournalCreature creature)
         {
-            var image = creature.Image.Value;
+            var image = creature.Image.REDValue;
             if (!string.IsNullOrEmpty(image))
             {
                 try
@@ -75,7 +75,7 @@ namespace WolvenKit
 
         public void ParseImageAndPreview(CJournalCharacter character)
         {
-            var image = character.Image.Value;
+            var image = character.Image.REDValue;
             if (!string.IsNullOrEmpty(image))
             {
                 try
@@ -162,7 +162,7 @@ namespace WolvenKit
             {
                 vulnerable_treview.Hide();
                 var name = (target as CJournalBase).BaseName;
-                this.Text = $@"{typenode.Type} editor [{name}]";
+                this.Text = $@"{typenode.REDType} editor [{name}]";
             }
         }
 
@@ -206,7 +206,7 @@ namespace WolvenKit
         {
             foreach (var child in childs.elements)
             {
-                switch (child.Reference.Type)
+                switch (child.Reference.REDType)
                 {
                     case "CJournalGlossaryDescription":
                         {
@@ -234,7 +234,7 @@ namespace WolvenKit
         {
             foreach (var child in childs.elements)
             {
-                switch (child.Reference.Type)
+                switch (child.Reference.REDType)
                 {
                     case "CJournalQuestDescriptionGroup":
                         {
@@ -254,7 +254,7 @@ namespace WolvenKit
         {
             foreach (var child in childs.elements)
             {
-                switch (child.Reference.Type)
+                switch (child.Reference.REDType)
                 {
                     case "CJournalQuestDescriptionEntry":
                         {
@@ -271,7 +271,7 @@ namespace WolvenKit
         {
             foreach (var child in childs.elements)
             {
-                switch (child.Reference.Type)
+                switch (child.Reference.REDType)
                 {
                     case "CJournalQuestObjective":
                         {
@@ -300,7 +300,7 @@ namespace WolvenKit
             var result = new TreeNode("Details");
             foreach (var child in childs.elements)
             {
-                switch (child.Reference.Type)
+                switch (child.Reference.REDType)
                 {
                     case "CJournalQuestMapPin":
                         {

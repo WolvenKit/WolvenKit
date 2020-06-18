@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSkyTransformComponent : CComponent
 	{
-		[RED("transformType")] 		public ESkyTransformType TransformType { get; set;}
+		[RED("transformType")] 		public CEnum<ESkyTransformType> TransformType { get; set;}
 
 		[RED("cameraDistance")] 		public CFloat CameraDistance { get; set;}
 

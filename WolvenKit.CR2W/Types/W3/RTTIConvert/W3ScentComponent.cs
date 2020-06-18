@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ScentComponent : CR4Component
 	{
-		[RED("foodGroup")] 		public EFoodGroup FoodGroup { get; set;}
+		[RED("foodGroup")] 		public CEnum<EFoodGroup> FoodGroup { get; set;}
 
 		[RED("attractionRange")] 		public CFloat AttractionRange { get; set;}
 

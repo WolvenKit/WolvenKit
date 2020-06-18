@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskMaintainSpeedDef : IBehTreeTaskDefinition
 	{
-		[RED("moveType")] 		public EMoveType MoveType { get; set;}
+		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
 		[RED("manageFlySpeed")] 		public CBool ManageFlySpeed { get; set;}
 

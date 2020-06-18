@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimGlobalParam : CEntityTemplateParam
 	{
-		[RED("skeletonType")] 		public ESkeletonType SkeletonType { get; set;}
+		[RED("skeletonType")] 		public CEnum<ESkeletonType> SkeletonType { get; set;}
 
 		[RED("defaultAnimationName")] 		public CName DefaultAnimationName { get; set;}
 

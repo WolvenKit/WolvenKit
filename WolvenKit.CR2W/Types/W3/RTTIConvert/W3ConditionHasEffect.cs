@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ConditionHasEffect : W3Condition
 	{
-		[RED("effect")] 		public EEffectType Effect { get; set;}
+		[RED("effect")] 		public CEnum<EEffectType> Effect { get; set;}
 
 		public W3ConditionHasEffect(CR2WFile cr2w) : base(cr2w){ }
 

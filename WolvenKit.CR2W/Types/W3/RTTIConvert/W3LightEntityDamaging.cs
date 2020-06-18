@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3LightEntityDamaging : CLightEntitySimple
 	{
-		[RED("hitReactionType")] 		public EHitReactionType HitReactionType { get; set;}
+		[RED("hitReactionType")] 		public CEnum<EHitReactionType> HitReactionType { get; set;}
 
 		[RED("damagePerSec")] 		public CFloat DamagePerSec { get; set;}
 

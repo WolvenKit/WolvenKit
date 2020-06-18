@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCustomEffectParams : CVariable
 	{
-		[RED("effectType")] 		public EEffectType EffectType { get; set;}
+		[RED("effectType")] 		public CEnum<EEffectType> EffectType { get; set;}
 
 		[RED("creator")] 		public CHandle<CGameplayEntity> Creator { get; set;}
 

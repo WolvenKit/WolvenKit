@@ -13,9 +13,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("factId2")] 		public CString FactId2 { get; set;}
 
-		[RED("queryFact")] 		public EQueryFact QueryFact { get; set;}
+		[RED("queryFact")] 		public CEnum<EQueryFact> QueryFact { get; set;}
 
-		[RED("compareFunc")] 		public ECompareFunc CompareFunc { get; set;}
+		[RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
 
 		public CQuestFactsDBExCondition(CR2WFile cr2w) : base(cr2w){ }
 

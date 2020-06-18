@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("blackscreenFadeDuration")] 		public CFloat BlackscreenFadeDuration { get; set;}
 
-		[RED("saveMode")] 		public EQuestPhaseSaveMode SaveMode { get; set;}
+		[RED("saveMode")] 		public CEnum<EQuestPhaseSaveMode> SaveMode { get; set;}
 
 		[RED("soundBanksDependency", 2,0)] 		public CArray<CName> SoundBanksDependency { get; set;}
 

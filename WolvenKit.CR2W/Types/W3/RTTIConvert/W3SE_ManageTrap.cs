@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("trapTag")] 		public CName TrapTag { get; set;}
 
-		[RED("operations", 2,0)] 		public CArray<EnumWrapper<ETrapOperation>> Operations { get; set;}
+		[RED("operations", 2,0)] 		public CArray<CEnum<ETrapOperation>> Operations { get; set;}
 
 		public W3SE_ManageTrap(CR2WFile cr2w) : base(cr2w){ }
 

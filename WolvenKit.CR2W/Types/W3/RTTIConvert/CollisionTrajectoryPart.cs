@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CollisionTrajectoryPart : CPhantomComponent
 	{
-		[RED("part")] 		public ECollisionTrajectoryPart Part { get; set;}
+		[RED("part")] 		public CEnum<ECollisionTrajectoryPart> Part { get; set;}
 
 		[RED("waterUpPosCheckSlotName")] 		public CName WaterUpPosCheckSlotName { get; set;}
 

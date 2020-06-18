@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("holdSlot")] 		public CName HoldSlot { get; set;}
 
-		[RED("action")] 		public EItemLatentAction Action { get; set;}
+		[RED("action")] 		public CEnum<EItemLatentAction> Action { get; set;}
 
 		[RED("correctionBone")] 		public CName CorrectionBone { get; set;}
 

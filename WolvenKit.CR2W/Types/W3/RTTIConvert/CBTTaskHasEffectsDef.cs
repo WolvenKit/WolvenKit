@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskHasEffectsDef : IBehTreeTaskDefinition
 	{
-		[RED("effects", 2,0)] 		public CArray<EnumWrapper<EEffectType>> Effects { get; set;}
+		[RED("effects", 2,0)] 		public CArray<CEnum<EEffectType>> Effects { get; set;}
 
 		public CBTTaskHasEffectsDef(CR2WFile cr2w) : base(cr2w){ }
 

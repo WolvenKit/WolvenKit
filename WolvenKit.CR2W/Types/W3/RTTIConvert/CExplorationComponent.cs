@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationComponent : CComponent
 	{
-		[RED("explorationId")] 		public EExplorationType ExplorationId { get; set;}
+		[RED("explorationId")] 		public CEnum<EExplorationType> ExplorationId { get; set;}
 
 		[RED("start")] 		public Vector Start { get; set;}
 

@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAIAttitudeDummy : CVariable
 	{
-		[RED("atttitude")] 		public EAIAttitude Atttitude { get; set;}
+		[RED("atttitude")] 		public CEnum<EAIAttitude> Atttitude { get; set;}
 
 		public SAIAttitudeDummy(CR2WFile cr2w) : base(cr2w){ }
 

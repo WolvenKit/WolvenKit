@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("berserkTime")] 		public EngineTime BerserkTime { get; set;}
 
-		[RED("npcGroupType")] 		public ENPCGroupType NpcGroupType { get; set;}
+		[RED("npcGroupType")] 		public CEnum<ENPCGroupType> NpcGroupType { get; set;}
 
 		[RED("isImmortal")] 		public CBool IsImmortal { get; set;}
 

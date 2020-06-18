@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("eventName")] 		public CName EventName { get; set;}
 
-		[RED("eventType")] 		public EAnimationEventType EventType { get; set;}
+		[RED("eventType")] 		public CEnum<EAnimationEventType> EventType { get; set;}
 
 		public CMoveSCAnimEvent(CR2WFile cr2w) : base(cr2w){ }
 

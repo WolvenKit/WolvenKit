@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskEredinSetIsAttackAvailableDef : IBehTreeTaskDefinition
 	{
-		[RED("attack")] 		public EBossSpecialAttacks Attack { get; set;}
+		[RED("attack")] 		public CEnum<EBossSpecialAttacks> Attack { get; set;}
 
 		[RED("val")] 		public CBool Val { get; set;}
 

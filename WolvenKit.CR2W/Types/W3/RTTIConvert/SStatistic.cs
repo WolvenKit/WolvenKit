@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStatistic : CVariable
 	{
-		[RED("statType")] 		public EStatistic StatType { get; set;}
+		[RED("statType")] 		public CEnum<EStatistic> StatType { get; set;}
 
 		[RED("registeredAchievements", 2,0)] 		public CArray<SAchievement> RegisteredAchievements { get; set;}
 

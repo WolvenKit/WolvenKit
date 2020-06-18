@@ -9,11 +9,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SComboAttackCallbackInfo : CVariable
 	{
-		[RED("outDirection")] 		public EAttackDirection OutDirection { get; set;}
+		[RED("outDirection")] 		public CEnum<EAttackDirection> OutDirection { get; set;}
 
-		[RED("outDistance")] 		public EAttackDistance OutDistance { get; set;}
+		[RED("outDistance")] 		public CEnum<EAttackDistance> OutDistance { get; set;}
 
-		[RED("outAttackType")] 		public EComboAttackType OutAttackType { get; set;}
+		[RED("outAttackType")] 		public CEnum<EComboAttackType> OutAttackType { get; set;}
 
 		[RED("inAspectName")] 		public CName InAspectName { get; set;}
 

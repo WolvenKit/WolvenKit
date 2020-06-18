@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("jobTreeRootNode")] 		public CPtr<CJobTreeNode> JobTreeRootNode { get; set;}
 
-		[RED("movementMode")] 		public EJobMovementMode MovementMode { get; set;}
+		[RED("movementMode")] 		public CEnum<EJobMovementMode> MovementMode { get; set;}
 
 		[RED("customMovementSpeed")] 		public CFloat CustomMovementSpeed { get; set;}
 

@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("validCategories", 2,0)] 		public CArray<CName> ValidCategories { get; set;}
 
-		[RED("selectionMode")] 		public EJobTreeNodeSelectionMode SelectionMode { get; set;}
+		[RED("selectionMode")] 		public CEnum<EJobTreeNodeSelectionMode> SelectionMode { get; set;}
 
 		[RED("iterations")] 		public CUInt32 Iterations { get; set;}
 

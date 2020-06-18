@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("doorTag")] 		public CName DoorTag { get; set;}
 
-		[RED("operations", 2,0)] 		public CArray<EnumWrapper<EDoorOperation>> Operations { get; set;}
+		[RED("operations", 2,0)] 		public CArray<CEnum<EDoorOperation>> Operations { get; set;}
 
 		[RED("force")] 		public CBool Force { get; set;}
 

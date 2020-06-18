@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("spawnFrequencyMax")] 		public CFloat SpawnFrequencyMax { get; set;}
 
-		[RED("movementPatern")] 		public EWhaleMovementPatern MovementPatern { get; set;}
+		[RED("movementPatern")] 		public CEnum<EWhaleMovementPatern> MovementPatern { get; set;}
 
 		public W3WhaleArea(CR2WFile cr2w) : base(cr2w){ }
 

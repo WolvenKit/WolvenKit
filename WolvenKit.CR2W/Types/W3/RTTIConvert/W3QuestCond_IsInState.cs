@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_IsInState : CQCActorScriptedCondition
 	{
-		[RED("actorState")] 		public EQuestNPCStates ActorState { get; set;}
+		[RED("actorState")] 		public CEnum<EQuestNPCStates> ActorState { get; set;}
 
 		public W3QuestCond_IsInState(CR2WFile cr2w) : base(cr2w){ }
 

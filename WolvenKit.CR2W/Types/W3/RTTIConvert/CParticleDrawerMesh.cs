@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("meshes", 2,0)] 		public CArray<CHandle<CMesh>> Meshes { get; set;}
 
-		[RED("orientationMode")] 		public EMeshParticleOrientationMode OrientationMode { get; set;}
+		[RED("orientationMode")] 		public CEnum<EMeshParticleOrientationMode> OrientationMode { get; set;}
 
 		[RED("lightChannels")] 		public ELightChannel LightChannels { get; set;}
 

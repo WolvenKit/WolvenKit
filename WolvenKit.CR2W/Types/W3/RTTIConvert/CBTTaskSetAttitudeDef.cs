@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("gameplayEventName")] 		public CBehTreeValCName GameplayEventName { get; set;}
 
-		[RED("attitude")] 		public EAIAttitude Attitude { get; set;}
+		[RED("attitude")] 		public CEnum<EAIAttitude> Attitude { get; set;}
 
 		public CBTTaskSetAttitudeDef(CR2WFile cr2w) : base(cr2w){ }
 

@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskEredinIsAttackAvailableDef : IBehTreeTaskDefinition
 	{
-		[RED("attack")] 		public EBossSpecialAttacks Attack { get; set;}
+		[RED("attack")] 		public CEnum<EBossSpecialAttacks> Attack { get; set;}
 
 		public BTTaskEredinIsAttackAvailableDef(CR2WFile cr2w) : base(cr2w){ }
 

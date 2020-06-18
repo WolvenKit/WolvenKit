@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventSurfaceEffect : CStorySceneEvent
 	{
-		[RED("type")] 		public ESceneEventSurfacePostFXType Type { get; set;}
+		[RED("type")] 		public CEnum<ESceneEventSurfacePostFXType> Type { get; set;}
 
 		[RED("position")] 		public Vector Position { get; set;}
 

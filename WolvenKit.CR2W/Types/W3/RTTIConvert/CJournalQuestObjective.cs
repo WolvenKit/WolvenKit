@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("world")] 		public CUInt32 World { get; set;}
 
-		[RED("counterType")] 		public eQuestObjectiveType CounterType { get; set;}
+		[RED("counterType")] 		public CEnum<eQuestObjectiveType> CounterType { get; set;}
 
 		[RED("count")] 		public CUInt32 Count { get; set;}
 

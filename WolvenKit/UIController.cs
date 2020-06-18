@@ -129,7 +129,7 @@ namespace WolvenKit
                 bytes = ((IByteSource)editvar).Bytes;
             }
 
-            dlg.Filter = string.Join("|", ImportExportUtility.GetPossibleExtensions(bytes, editvar.Name));
+            dlg.Filter = string.Join("|", ImportExportUtility.GetPossibleExtensions(bytes, editvar.REDName));
             dlg.InitialDirectory = MainController.Get().Configuration.InitialExportDirectory;
 
             if (dlg.ShowDialog() == DialogResult.OK)

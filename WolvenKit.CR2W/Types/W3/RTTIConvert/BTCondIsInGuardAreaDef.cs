@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondIsInGuardAreaDef : IBehTreeTaskDefinition
 	{
-		[RED("position")] 		public ETargetName Position { get; set;}
+		[RED("position")] 		public CEnum<ETargetName> Position { get; set;}
 
 		[RED("namedTarget")] 		public CName NamedTarget { get; set;}
 

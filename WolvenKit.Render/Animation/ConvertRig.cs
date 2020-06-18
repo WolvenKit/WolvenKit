@@ -47,9 +47,9 @@ namespace WolvenKit.Render
                     {
                         SSkeletonBone newBone = new SSkeletonBone(W2RigFile);
                         newBone.Name = new StringAnsi(w2rigFile).SetValue(skeleton.names[i] + "\0") as StringAnsi;
-                        newBone.Name.Name = "name";
+                        newBone.Name.REDName = "name";
                         newBone.NameAsCName = new CName(W2RigFile).SetValue(skeleton.names[i]) as CName;
-                        newBone.NameAsCName.Name = "nameAsCName";
+                        newBone.NameAsCName.REDName = "nameAsCName";
                         bonesorig.AddVariable(newBone);
                         skel.ParentIndices.AddVariable(new CInt16(W2RigFile).SetValue(skeleton.parentIdx[i]));
                     }

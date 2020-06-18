@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("tagId")] 		public CName TagId { get; set;}
 
-		[RED("type")] 		public EAnimationAttackType Type { get; set;}
+		[RED("type")] 		public CEnum<EAnimationAttackType> Type { get; set;}
 
 		[RED("slowMotionTimeFactor")] 		public CFloat SlowMotionTimeFactor { get; set;}
 

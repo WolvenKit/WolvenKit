@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("parentBone")] 		public CString ParentBone { get; set;}
 
-		[RED("forwardDir")] 		public EAxis ForwardDir { get; set;}
+		[RED("forwardDir")] 		public CEnum<EAxis> ForwardDir { get; set;}
 
 		[RED("localOffset")] 		public Vector LocalOffset { get; set;}
 
@@ -23,9 +23,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("downLimitAngle")] 		public CFloat DownLimitAngle { get; set;}
 
-		[RED("rangeLimitUpAxis")] 		public EAxis RangeLimitUpAxis { get; set;}
+		[RED("rangeLimitUpAxis")] 		public CEnum<EAxis> RangeLimitUpAxis { get; set;}
 
-		[RED("solverType")] 		public ELookAtSolverType SolverType { get; set;}
+		[RED("solverType")] 		public CEnum<ELookAtSolverType> SolverType { get; set;}
 
 		[RED("deadZone")] 		public CFloat DeadZone { get; set;}
 

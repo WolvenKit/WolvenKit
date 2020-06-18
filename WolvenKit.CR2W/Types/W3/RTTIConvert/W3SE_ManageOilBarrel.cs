@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("oilBarrelTag")] 		public CName OilBarrelTag { get; set;}
 
-		[RED("operations", 2,0)] 		public CArray<EnumWrapper<EOilBarrelOperation>> Operations { get; set;}
+		[RED("operations", 2,0)] 		public CArray<CEnum<EOilBarrelOperation>> Operations { get; set;}
 
 		public W3SE_ManageOilBarrel(CR2WFile cr2w) : base(cr2w){ }
 

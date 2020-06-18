@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDeniedAreaComponent : CAreaComponent
 	{
-		[RED("collisionType")] 		public EPathLibCollision CollisionType { get; set;}
+		[RED("collisionType")] 		public CEnum<EPathLibCollision> CollisionType { get; set;}
 
 		[RED("isEnabled")] 		public CBool IsEnabled { get; set;}
 

@@ -13,9 +13,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("type")] 		public CInt32 Type { get; set;}
 
-		[RED("direction")] 		public EAttackDirection Direction { get; set;}
+		[RED("direction")] 		public CEnum<EAttackDirection> Direction { get; set;}
 
-		[RED("distance")] 		public EAttackDistance Distance { get; set;}
+		[RED("distance")] 		public CEnum<EAttackDistance> Distance { get; set;}
 
 		[RED("attackTime")] 		public CFloat AttackTime { get; set;}
 

@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestSpawnVehicleBlock : CQuestGraphBlock
 	{
-		[RED("vehicleType")] 		public EVehicleType VehicleType { get; set;}
+		[RED("vehicleType")] 		public CEnum<EVehicleType> VehicleType { get; set;}
 
 		[RED("spawnPointTag")] 		public CName SpawnPointTag { get; set;}
 

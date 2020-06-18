@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("appearance")] 		public CName Appearance { get; set;}
 
-		[RED("type")] 		public ECutsceneActorType Type { get; set;}
+		[RED("type")] 		public CEnum<ECutsceneActorType> Type { get; set;}
 
 		[RED("finalPosition")] 		public TagList FinalPosition { get; set;}
 

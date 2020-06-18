@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("buffs", 2,0)] 		public CArray<EnumWrapper<EEffectType>> Buffs { get; set;}
+		[RED("buffs", 2,0)] 		public CArray<CEnum<EEffectType>> Buffs { get; set;}
 
 		[RED("duration")] 		public CFloat Duration { get; set;}
 

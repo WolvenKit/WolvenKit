@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("behVarValue")] 		public CInt32 BehVarValue { get; set;}
 
-		[RED("compareOperation")] 		public ECompareOp CompareOperation { get; set;}
+		[RED("compareOperation")] 		public CEnum<ECompareOp> CompareOperation { get; set;}
 
 		public CBTCondBehVarCheckDef(CR2WFile cr2w) : base(cr2w){ }
 

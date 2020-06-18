@@ -20,7 +20,7 @@ namespace WolvenKit.CR2W.Types
         public CPaddedBuffer(CR2WFile cr2w, Func<CR2WFile, T> elementFactory) : base(cr2w)
         {
             this.elementFactory = elementFactory;
-            padding = new CFloat(cr2w) { Name = "padding" };
+            padding = new CFloat(cr2w) { REDName = "padding" };
         }
 
         public override CVariable Create(CR2WFile cr2w)
@@ -36,7 +36,7 @@ namespace WolvenKit.CR2W.Types
             for (int i = 0; i < count.val; i++)
             {
                 T element = elementFactory.Invoke(cr2w);
-                element.Name = i.ToString();
+                element.REDName = i.ToString();
                 element.Read(file, size);
                 elements.Add(element);
             }
@@ -131,7 +131,7 @@ namespace WolvenKit.CR2W.Types
         {
             if (variable is T)
             {
-                variable.Name = elements.Count.ToString();
+                variable.REDName = elements.Count.ToString();
                 elements.Add(variable as T);
             }
         }
@@ -140,7 +140,7 @@ namespace WolvenKit.CR2W.Types
         {
             for (int i = 0; i < elements.Count; i++)
             {
-                elements[i].Name = i.ToString();
+                elements[i].REDName = i.ToString();
             }
         }
     }

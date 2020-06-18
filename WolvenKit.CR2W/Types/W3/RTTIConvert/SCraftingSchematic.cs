@@ -13,9 +13,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("craftedItemCount")] 		public CInt32 CraftedItemCount { get; set;}
 
-		[RED("requiredCraftsmanType")] 		public ECraftsmanType RequiredCraftsmanType { get; set;}
+		[RED("requiredCraftsmanType")] 		public CEnum<ECraftsmanType> RequiredCraftsmanType { get; set;}
 
-		[RED("requiredCraftsmanLevel")] 		public ECraftsmanLevel RequiredCraftsmanLevel { get; set;}
+		[RED("requiredCraftsmanLevel")] 		public CEnum<ECraftsmanLevel> RequiredCraftsmanLevel { get; set;}
 
 		[RED("baseCraftingPrice")] 		public CInt32 BaseCraftingPrice { get; set;}
 

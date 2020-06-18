@@ -19,22 +19,22 @@ namespace WolvenKit.CR2W.Types
         {
 
             fields = new CVariable[] {
-                ax = new CFloat(cr2w) { Name = "ax",  },
-                ay = new CFloat(cr2w) { Name = "ay",  },
-                az = new CFloat(cr2w) { Name = "az",  },
-                aw = new CFloat(cr2w) { Name = "aw",  },
-                bx = new CFloat(cr2w) { Name = "bx",  },
-                by = new CFloat(cr2w) { Name = "by",  },
-                bz = new CFloat(cr2w) { Name = "bz",  },
-                bw = new CFloat(cr2w) { Name = "bw",  },
-                cx = new CFloat(cr2w) { Name = "cx",  },
-                cy = new CFloat(cr2w) { Name = "cy",  },
-                cz = new CFloat(cr2w) { Name = "cz",  },
-                cw = new CFloat(cr2w) { Name = "cw",  },
-                dx = new CFloat(cr2w) { Name = "dx",  },
-                dy = new CFloat(cr2w) { Name = "dy",  },
-                dz = new CFloat(cr2w) { Name = "dz",  },
-                dw = new CFloat(cr2w) { Name = "dw",  }
+                ax = new CFloat(cr2w) { REDName = "ax",  },
+                ay = new CFloat(cr2w) { REDName = "ay",  },
+                az = new CFloat(cr2w) { REDName = "az",  },
+                aw = new CFloat(cr2w) { REDName = "aw",  },
+                bx = new CFloat(cr2w) { REDName = "bx",  },
+                by = new CFloat(cr2w) { REDName = "by",  },
+                bz = new CFloat(cr2w) { REDName = "bz",  },
+                bw = new CFloat(cr2w) { REDName = "bw",  },
+                cx = new CFloat(cr2w) { REDName = "cx",  },
+                cy = new CFloat(cr2w) { REDName = "cy",  },
+                cz = new CFloat(cr2w) { REDName = "cz",  },
+                cw = new CFloat(cr2w) { REDName = "cw",  },
+                dx = new CFloat(cr2w) { REDName = "dx",  },
+                dy = new CFloat(cr2w) { REDName = "dy",  },
+                dz = new CFloat(cr2w) { REDName = "dz",  },
+                dw = new CFloat(cr2w) { REDName = "dw",  }
             };
         }
 

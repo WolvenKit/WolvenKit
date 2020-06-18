@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskLeshyGrabAttackDef : IBehTreeTaskDefinition
 	{
-		[RED("attackType")] 		public EAttackType AttackType { get; set;}
+		[RED("attackType")] 		public CEnum<EAttackType> AttackType { get; set;}
 
 		[RED("stopTaskAfterDealingDmg")] 		public CBool StopTaskAfterDealingDmg { get; set;}
 

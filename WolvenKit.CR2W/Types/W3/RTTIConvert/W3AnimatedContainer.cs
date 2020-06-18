@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("holsterWeaponAtTheBeginning")] 		public CBool HolsterWeaponAtTheBeginning { get; set;}
 
-		[RED("interactionAnim")] 		public EPlayerExplorationAction InteractionAnim { get; set;}
+		[RED("interactionAnim")] 		public CEnum<EPlayerExplorationAction> InteractionAnim { get; set;}
 
 		[RED("slotAnimName")] 		public CName SlotAnimName { get; set;}
 

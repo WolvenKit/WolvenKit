@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("numberOfCircles")] 		public CInt32 NumberOfCircles { get; set;}
 
-		[RED("spawnPositionPattern")] 		public ESpawnPositionPattern SpawnPositionPattern { get; set;}
+		[RED("spawnPositionPattern")] 		public CEnum<ESpawnPositionPattern> SpawnPositionPattern { get; set;}
 
 		[RED("randomnessInCircles")] 		public CFloat RandomnessInCircles { get; set;}
 
@@ -25,7 +25,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("spawnEntityRadius")] 		public CFloat SpawnEntityRadius { get; set;}
 
-		[RED("spawnRotation")] 		public ESpawnRotation SpawnRotation { get; set;}
+		[RED("spawnRotation")] 		public CEnum<ESpawnRotation> SpawnRotation { get; set;}
 
 		[RED("leaveOpenSpaceForDodge")] 		public CBool LeaveOpenSpaceForDodge { get; set;}
 

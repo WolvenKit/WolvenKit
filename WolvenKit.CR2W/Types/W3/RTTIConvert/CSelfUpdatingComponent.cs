@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSelfUpdatingComponent : CScriptedComponent
 	{
-		[RED("tickGroup")] 		public ETickGroup TickGroup { get; set;}
+		[RED("tickGroup")] 		public CEnum<ETickGroup> TickGroup { get; set;}
 
 		[RED("tickedByDefault")] 		public CBool TickedByDefault { get; set;}
 

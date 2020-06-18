@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("pitch")] 		public CUInt32 Pitch { get; set;}
 
-		[RED("format")] 		public ETextureRawFormat Format { get; set;}
+		[RED("format")] 		public CEnum<ETextureRawFormat> Format { get; set;}
 
 		public CSourceTexture(CR2WFile cr2w) : base(cr2w){ }
 

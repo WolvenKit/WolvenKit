@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("uniqueTag")] 		public CName UniqueTag { get; set;}
 
-		[RED("area")] 		public EAreaName Area { get; set;}
+		[RED("area")] 		public CEnum<EAreaName> Area { get; set;}
 
 		[RED("pin")] 		public SCommonMapPinInstance Pin { get; set;}
 

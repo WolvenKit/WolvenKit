@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeConditionAttackersCountDefinition : CBehTreeNodeConditionDefinition
 	{
-		[RED("compare")] 		public ECompareFunc Compare { get; set;}
+		[RED("compare")] 		public CEnum<ECompareFunc> Compare { get; set;}
 
 		[RED("count")] 		public CBehTreeValInt Count { get; set;}
 

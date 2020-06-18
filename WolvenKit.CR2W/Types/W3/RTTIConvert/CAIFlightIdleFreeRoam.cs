@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("flyAroundDurationMax")] 		public CFloat FlyAroundDurationMax { get; set;}
 
-		[RED("flightAreaSelection")] 		public EAIAreaSelectionMode FlightAreaSelection { get; set;}
+		[RED("flightAreaSelection")] 		public CEnum<EAIAreaSelectionMode> FlightAreaSelection { get; set;}
 
 		[RED("flightAreaOptionalTag")] 		public CName FlightAreaOptionalTag { get; set;}
 

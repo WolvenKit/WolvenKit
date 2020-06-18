@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("entry")] 		public CHandle<CJournalPath> Entry { get; set;}
 
-		[RED("status")] 		public EJournalStatus Status { get; set;}
+		[RED("status")] 		public CEnum<EJournalStatus> Status { get; set;}
 
 		[RED("inverted")] 		public CBool Inverted { get; set;}
 

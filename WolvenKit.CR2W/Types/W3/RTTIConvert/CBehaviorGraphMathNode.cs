@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMathNode : CBehaviorGraphValueNode
 	{
-		[RED("operation")] 		public EBehaviorMathOp Operation { get; set;}
+		[RED("operation")] 		public CEnum<EBehaviorMathOp> Operation { get; set;}
 
 		[RED("cachedFirstInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedFirstInputNode { get; set;}
 

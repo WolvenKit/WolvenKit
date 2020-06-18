@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("value")] 		public CInt32 Value { get; set;}
 
-		[RED("operator")] 		public EOperator Operator { get; set;}
+		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
 		public CBTCondCheckFactDef(CR2WFile cr2w) : base(cr2w){ }
 

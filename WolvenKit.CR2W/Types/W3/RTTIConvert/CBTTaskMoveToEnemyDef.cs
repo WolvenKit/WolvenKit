@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[RED("moveType")] 		public EMoveType MoveType { get; set;}
+		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
 		[RED("absSpeed")] 		public CFloat AbsSpeed { get; set;}
 

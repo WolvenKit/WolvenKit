@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("id")] 		public CName Id { get; set;}
 
-		[RED("type")] 		public ELightType Type { get; set;}
+		[RED("type")] 		public CEnum<ELightType> Type { get; set;}
 
 		[RED("innerAngle")] 		public CFloat InnerAngle { get; set;}
 
@@ -19,13 +19,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("softness")] 		public CFloat Softness { get; set;}
 
-		[RED("shadowCastingMode")] 		public ELightShadowCastingMode ShadowCastingMode { get; set;}
+		[RED("shadowCastingMode")] 		public CEnum<ELightShadowCastingMode> ShadowCastingMode { get; set;}
 
 		[RED("shadowFadeDistance")] 		public CFloat ShadowFadeDistance { get; set;}
 
 		[RED("shadowFadeRange")] 		public CFloat ShadowFadeRange { get; set;}
 
-		[RED("dimmerType")] 		public EDimmerType DimmerType { get; set;}
+		[RED("dimmerType")] 		public CEnum<EDimmerType> DimmerType { get; set;}
 
 		[RED("dimmerAreaMarker")] 		public CBool DimmerAreaMarker { get; set;}
 

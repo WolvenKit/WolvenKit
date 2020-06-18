@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("woundName")] 		public CName WoundName { get; set;}
 
-		[RED("finisherSide")] 		public EFinisherSide FinisherSide { get; set;}
+		[RED("finisherSide")] 		public CEnum<EFinisherSide> FinisherSide { get; set;}
 
 		[RED("leftCameraAnimName")] 		public CName LeftCameraAnimName { get; set;}
 

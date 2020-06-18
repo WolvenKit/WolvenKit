@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("changeBehaviorGraphOnStart")] 		public CBool ChangeBehaviorGraphOnStart { get; set;}
 
-		[RED("behGraph")] 		public EBehaviorGraph BehGraph { get; set;}
+		[RED("behGraph")] 		public CEnum<EBehaviorGraph> BehGraph { get; set;}
 
 		[RED("changeBahviorGraphToExplorationOnDeacitvate")] 		public CBool ChangeBahviorGraphToExplorationOnDeacitvate { get; set;}
 

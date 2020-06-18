@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("value")] 		public CInt32 Value { get; set;}
 
-		[RED("comparator")] 		public ECompareOp Comparator { get; set;}
+		[RED("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
 
 		public W3QuestCond_GameplayFact(CR2WFile cr2w) : base(cr2w){ }
 

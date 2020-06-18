@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("mimicsQuality")] 		public CUInt32 MimicsQuality { get; set;}
 
-		[RED("behaviorLOD")] 		public EBehaviorLod BehaviorLOD { get; set;}
+		[RED("behaviorLOD")] 		public CEnum<EBehaviorLod> BehaviorLOD { get; set;}
 
 		[RED("animatedComponentUpdateFrameSkip")] 		public CUInt32 AnimatedComponentUpdateFrameSkip { get; set;}
 

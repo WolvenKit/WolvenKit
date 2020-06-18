@@ -25,7 +25,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("overrideAttitude")] 		public CBool OverrideAttitude { get; set;}
 
-		[RED("attitudeToPlayer")] 		public EAIAttitude AttitudeToPlayer { get; set;}
+		[RED("attitudeToPlayer")] 		public CEnum<EAIAttitude> AttitudeToPlayer { get; set;}
 
 		[RED("count")] 		public CInt32 Count { get; set;}
 
@@ -33,7 +33,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[RED("spawnAnimation")] 		public EExplorationMode SpawnAnimation { get; set;}
+		[RED("spawnAnimation")] 		public CEnum<EExplorationMode> SpawnAnimation { get; set;}
 
 		[RED("forcedSpawnAnim")] 		public CInt32 ForcedSpawnAnim { get; set;}
 

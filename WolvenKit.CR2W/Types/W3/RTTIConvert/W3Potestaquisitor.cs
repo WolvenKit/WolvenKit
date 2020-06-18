@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("potestaquisitorFact")] 		public CString PotestaquisitorFact { get; set;}
 
-		[RED("soundEffectType")] 		public EFocusModeSoundEffectType SoundEffectType { get; set;}
+		[RED("soundEffectType")] 		public CEnum<EFocusModeSoundEffectType> SoundEffectType { get; set;}
 
 		[RED("effect")] 		public CName Effect { get; set;}
 

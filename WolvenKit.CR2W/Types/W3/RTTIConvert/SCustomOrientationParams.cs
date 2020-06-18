@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("source")] 		public CHandle<CActor> Source { get; set;}
 
-		[RED("customOrientationTarget")] 		public EOrientationTarget CustomOrientationTarget { get; set;}
+		[RED("customOrientationTarget")] 		public CEnum<EOrientationTarget> CustomOrientationTarget { get; set;}
 
 		public SCustomOrientationParams(CR2WFile cr2w) : base(cr2w){ }
 

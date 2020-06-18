@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("cacheStaticShadows")] 		public CBool CacheStaticShadows { get; set;}
 
-		[RED("dynamicShadowsFaceMask")] 		public ELightCubeSides DynamicShadowsFaceMask { get; set;}
+		[RED("dynamicShadowsFaceMask")] 		public CEnum<ELightCubeSides> DynamicShadowsFaceMask { get; set;}
 
 		public CPointLightComponent(CR2WFile cr2w) : base(cr2w){ }
 

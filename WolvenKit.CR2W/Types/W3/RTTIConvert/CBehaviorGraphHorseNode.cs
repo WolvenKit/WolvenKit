@@ -25,7 +25,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("endBoneF")] 		public CString EndBoneF { get; set;}
 
-		[RED("hingeAxisF")] 		public EAxis HingeAxisF { get; set;}
+		[RED("hingeAxisF")] 		public CEnum<EAxis> HingeAxisF { get; set;}
 
 		[RED("firstBoneB")] 		public CString FirstBoneB { get; set;}
 
@@ -35,15 +35,15 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("endBoneB")] 		public CString EndBoneB { get; set;}
 
-		[RED("hingeAxisB")] 		public EAxis HingeAxisB { get; set;}
+		[RED("hingeAxisB")] 		public CEnum<EAxis> HingeAxisB { get; set;}
 
 		[RED("root")] 		public CString Root { get; set;}
 
 		[RED("pelvis")] 		public CString Pelvis { get; set;}
 
-		[RED("axisRootFB")] 		public EAxis AxisRootFB { get; set;}
+		[RED("axisRootFB")] 		public CEnum<EAxis> AxisRootFB { get; set;}
 
-		[RED("axisRootLR")] 		public EAxis AxisRootLR { get; set;}
+		[RED("axisRootLR")] 		public CEnum<EAxis> AxisRootLR { get; set;}
 
 		[RED("headFirst")] 		public CString HeadFirst { get; set;}
 
@@ -51,7 +51,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("headThird")] 		public CString HeadThird { get; set;}
 
-		[RED("hingeAxisHead")] 		public EAxis HingeAxisHead { get; set;}
+		[RED("hingeAxisHead")] 		public CEnum<EAxis> HingeAxisHead { get; set;}
 
 		[RED("walkFBP")] 		public SHorseStateOffsets WalkFBP { get; set;}
 

@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("spawnAbilityName")] 		public CName SpawnAbilityName { get; set;}
 
-		[RED("spawnType")] 		public EEffectType SpawnType { get; set;}
+		[RED("spawnType")] 		public CEnum<EEffectType> SpawnType { get; set;}
 
 		[RED("spawnFlagsHostile")] 		public CBool SpawnFlagsHostile { get; set;}
 

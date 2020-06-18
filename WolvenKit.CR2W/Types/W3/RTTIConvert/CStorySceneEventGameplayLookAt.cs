@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("staticPoint")] 		public Vector StaticPoint { get; set;}
 
-		[RED("type")] 		public EDialogLookAtType Type { get; set;}
+		[RED("type")] 		public CEnum<EDialogLookAtType> Type { get; set;}
 
 		[RED("useWeightCurve")] 		public CBool UseWeightCurve { get; set;}
 

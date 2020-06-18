@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("max")] 		public CFloat Max { get; set;}
 
-		[RED("type")] 		public EBaseCharacterStats Type { get; set;}
+		[RED("type")] 		public CEnum<EBaseCharacterStats> Type { get; set;}
 
 		public SBaseStat(CR2WFile cr2w) : base(cr2w){ }
 

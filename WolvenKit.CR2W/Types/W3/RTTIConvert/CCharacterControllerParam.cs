@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("interactionPriority")] 		public CFloat InteractionPriority { get; set;}
 
-		[RED("interactionPriorityEnum")] 		public EInteractionPriority InteractionPriorityEnum { get; set;}
+		[RED("interactionPriorityEnum")] 		public CEnum<EInteractionPriority> InteractionPriorityEnum { get; set;}
 
 		[RED("stepOffset")] 		public CFloat StepOffset { get; set;}
 

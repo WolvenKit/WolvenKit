@@ -18,9 +18,9 @@ namespace WolvenKit.CR2W.Types
         public SVector3D(CR2WFile cr2w = null)
             : base(cr2w)
         {
-            x = new CFloat(null) { Name = "x" };
-            y = new CFloat(null) { Name = "y" };
-            z = new CFloat(null) { Name = "z" };
+            x = new CFloat(null) { REDName = "x" };
+            y = new CFloat(null) { REDName = "y" };
+            z = new CFloat(null) { REDName = "z" };
         }
 
         public void Read(BinaryReader file, int compression)

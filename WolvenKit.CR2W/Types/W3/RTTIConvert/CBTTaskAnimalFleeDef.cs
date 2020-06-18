@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("ignoreEntitiesWithTag")] 		public CName IgnoreEntitiesWithTag { get; set;}
 
-		[RED("moveType")] 		public EMoveType MoveType { get; set;}
+		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
 		public CBTTaskAnimalFleeDef(CR2WFile cr2w) : base(cr2w){ }
 

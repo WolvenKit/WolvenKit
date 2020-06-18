@@ -13,11 +13,11 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("itemName_optional")] 		public CName ItemName_optional { get; set;}
 
-		[RED("action")] 		public EItemAction Action { get; set;}
+		[RED("action")] 		public CEnum<EItemAction> Action { get; set;}
 
 		[RED("ignoreItemsWithTag")] 		public CName IgnoreItemsWithTag { get; set;}
 
-		[RED("itemGetting")] 		public EGettingItem ItemGetting { get; set;}
+		[RED("itemGetting")] 		public CEnum<EGettingItem> ItemGetting { get; set;}
 
 		public CExtAnimItemEvent(CR2WFile cr2w) : base(cr2w){ }
 

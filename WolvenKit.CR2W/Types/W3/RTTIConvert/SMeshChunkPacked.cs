@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMeshChunkPacked : CVariable
 	{
-		[RED("vertexType")] 		public EMeshVertexType VertexType { get; set;}
+		[RED("vertexType")] 		public CEnum<EMeshVertexType> VertexType { get; set;}
 
 		[RED("materialID")] 		public CUInt32 MaterialID { get; set;}
 
@@ -23,7 +23,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("firstIndex")] 		public CUInt32 FirstIndex { get; set;}
 
-		[RED("renderMask")] 		public EMeshChunkRenderMask RenderMask { get; set;}
+		[RED("renderMask")] 		public CEnum<EMeshChunkRenderMask> RenderMask { get; set;}
 
 		[RED("useForShadowmesh")] 		public CBool UseForShadowmesh { get; set;}
 

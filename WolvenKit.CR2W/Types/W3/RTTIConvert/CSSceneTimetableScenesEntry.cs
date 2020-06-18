@@ -17,9 +17,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("weight")] 		public CFloat Weight { get; set;}
 
-		[RED("priority")] 		public EArbitratorPriorities Priority { get; set;}
+		[RED("priority")] 		public CEnum<EArbitratorPriorities> Priority { get; set;}
 
-		[RED("forceMode")] 		public EStorySceneForcingMode ForceMode { get; set;}
+		[RED("forceMode")] 		public CEnum<EStorySceneForcingMode> ForceMode { get; set;}
 
 		public CSSceneTimetableScenesEntry(CR2WFile cr2w) : base(cr2w){ }
 

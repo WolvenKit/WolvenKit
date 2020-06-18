@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SE_AddBuff : W3SwitchEvent
 	{
-		[RED("applyEffect")] 		public EEffectType ApplyEffect { get; set;}
+		[RED("applyEffect")] 		public CEnum<EEffectType> ApplyEffect { get; set;}
 
 		[RED("useDefaultValuesFromXML")] 		public CBool UseDefaultValuesFromXML { get; set;}
 

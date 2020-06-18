@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_OilApplied : CQuestScriptedCondition
 	{
-		[RED("swordType")] 		public EQuestSword SwordType { get; set;}
+		[RED("swordType")] 		public CEnum<EQuestSword> SwordType { get; set;}
 
 		[RED("oilName")] 		public CName OilName { get; set;}
 

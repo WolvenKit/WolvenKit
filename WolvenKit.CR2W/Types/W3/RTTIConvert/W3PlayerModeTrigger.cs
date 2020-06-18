@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("isEnabled")] 		public CBool IsEnabled { get; set;}
 
-		[RED("playerMode")] 		public EPlayerMode PlayerMode { get; set;}
+		[RED("playerMode")] 		public CEnum<EPlayerMode> PlayerMode { get; set;}
 
 		public W3PlayerModeTrigger(CR2WFile cr2w) : base(cr2w){ }
 

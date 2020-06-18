@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("walkToFrontDistance")] 		public CFloat WalkToFrontDistance { get; set;}
 
-		[RED("allowedGroups")] 		public EAllowedActorGroups AllowedGroups { get; set;}
+		[RED("allowedGroups")] 		public CEnum<EAllowedActorGroups> AllowedGroups { get; set;}
 
 		[RED("animShiftStart", 2,0)] 		public CArray<Vector> AnimShiftStart { get; set;}
 

@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CReactionLookAtAction : IReactionAction
 	{
-		[RED("lookAtType")] 		public EReactionLookAtType LookAtType { get; set;}
+		[RED("lookAtType")] 		public CEnum<EReactionLookAtType> LookAtType { get; set;}
 
 		public CReactionLookAtAction(CR2WFile cr2w) : base(cr2w){ }
 

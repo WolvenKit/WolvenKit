@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("description")] 		public LocalizedString Description { get; set;}
 
-		[RED("action")] 		public EJournalVisibilityAction Action { get; set;}
+		[RED("action")] 		public CEnum<EJournalVisibilityAction> Action { get; set;}
 
 		[RED("active")] 		public CBool Active { get; set;}
 

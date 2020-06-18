@@ -35,11 +35,11 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("setBehVarValueOnDeactivation")] 		public CFloat SetBehVarValueOnDeactivation { get; set;}
 
-		[RED("debuffTypeInRangeMin")] 		public EEffectType DebuffTypeInRangeMin { get; set;}
+		[RED("debuffTypeInRangeMin")] 		public CEnum<EEffectType> DebuffTypeInRangeMin { get; set;}
 
 		[RED("rotateToNodeByTagOnDebuffMin")] 		public CName RotateToNodeByTagOnDebuffMin { get; set;}
 
-		[RED("debuffTypeInRangeMax")] 		public EEffectType DebuffTypeInRangeMax { get; set;}
+		[RED("debuffTypeInRangeMax")] 		public CEnum<EEffectType> DebuffTypeInRangeMax { get; set;}
 
 		[RED("debuffDurationInRangeMin")] 		public CFloat DebuffDurationInRangeMin { get; set;}
 

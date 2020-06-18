@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("filename")] 		public CString Filename { get; set;}
 
-		[RED("slotType")] 		public ESaveGameType SlotType { get; set;}
+		[RED("slotType")] 		public CEnum<ESaveGameType> SlotType { get; set;}
 
 		[RED("slotIndex")] 		public CInt32 SlotIndex { get; set;}
 

@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStaticCamera : CCamera
 	{
-		[RED("solver")] 		public ECameraSolver Solver { get; set;}
+		[RED("solver")] 		public CEnum<ECameraSolver> Solver { get; set;}
 
 		[RED("activationDuration")] 		public CFloat ActivationDuration { get; set;}
 

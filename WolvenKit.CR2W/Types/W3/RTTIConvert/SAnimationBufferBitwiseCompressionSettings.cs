@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("orientationTolerance")] 		public CFloat OrientationTolerance { get; set;}
 
-		[RED("orientationCompressionMethod")] 		public SAnimationBufferOrientationCompressionMethod OrientationCompressionMethod { get; set;}
+		[RED("orientationCompressionMethod")] 		public CEnum<SAnimationBufferOrientationCompressionMethod> OrientationCompressionMethod { get; set;}
 
 		[RED("orientationSkipFrameTolerance")] 		public CFloat OrientationSkipFrameTolerance { get; set;}
 

@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("sourceName")] 		public CName SourceName { get; set;}
 
-		[RED("sourceType")] 		public ETimescaleSource SourceType { get; set;}
+		[RED("sourceType")] 		public CEnum<ETimescaleSource> SourceType { get; set;}
 
 		[RED("sourcePriority")] 		public CInt32 SourcePriority { get; set;}
 

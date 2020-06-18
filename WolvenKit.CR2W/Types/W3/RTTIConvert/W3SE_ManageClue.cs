@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("clueTag")] 		public CName ClueTag { get; set;}
 
-		[RED("operations", 2,0)] 		public CArray<EnumWrapper<EClueOperation>> Operations { get; set;}
+		[RED("operations", 2,0)] 		public CArray<CEnum<EClueOperation>> Operations { get; set;}
 
 		public W3SE_ManageClue(CR2WFile cr2w) : base(cr2w){ }
 

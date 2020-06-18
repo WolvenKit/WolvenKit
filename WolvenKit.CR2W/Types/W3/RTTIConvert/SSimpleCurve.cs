@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSimpleCurve : CVariable
 	{
-		[RED("CurveType")] 		public ESimpleCurveType CurveType { get; set;}
+		[RED("CurveType")] 		public CEnum<ESimpleCurveType> CurveType { get; set;}
 
 		[RED("ScalarEditScale")] 		public CFloat ScalarEditScale { get; set;}
 
@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("dataCurveValues", 142,0)] 		public CArray<SCurveDataEntry> DataCurveValues { get; set;}
 
-		[RED("dataBaseType")] 		public ECurveBaseType DataBaseType { get; set;}
+		[RED("dataBaseType")] 		public CEnum<ECurveBaseType> DataBaseType { get; set;}
 
 		public SSimpleCurve(CR2WFile cr2w) : base(cr2w){ }
 

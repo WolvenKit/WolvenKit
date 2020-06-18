@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("maxTimeDifference")] 		public CFloat MaxTimeDifference { get; set;}
 
-		[RED("criticalState")] 		public ECriticalStateType CriticalState { get; set;}
+		[RED("criticalState")] 		public CEnum<ECriticalStateType> CriticalState { get; set;}
 
 		public CBTTaskWasInCriticalStateDef(CR2WFile cr2w) : base(cr2w){ }
 

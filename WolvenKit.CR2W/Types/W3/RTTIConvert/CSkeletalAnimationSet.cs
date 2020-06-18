@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("compressedPoses", 2,0)] 		public CArray<CPtr<ICompressedPose>> CompressedPoses { get; set;}
 
-		[RED("Streaming option")] 		public SAnimationBufferStreamingOption Streaming_option { get; set;}
+		[RED("Streaming option")] 		public CEnum<SAnimationBufferStreamingOption> Streaming_option { get; set;}
 
 		[RED("Number of non-streamable bones")] 		public CUInt32 Number_of_non_streamable_bones { get; set;}
 

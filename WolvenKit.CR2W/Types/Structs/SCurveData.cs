@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SCurveData : CVariable
     {
-        public CFloat time;
-		public CFloat value;
-		public Vector controlPoint1;
-		public Vector controlPoint2;
-        public CUInt32 curveTypeL;
-        public CUInt32 curveTypeR;
+        [RED] public CFloat time { get; set; }
+        [RED] public CFloat value { get; set; }
+        [RED] public Vector controlPoint1 { get; set; }
+        [RED] public Vector controlPoint2 { get; set; }
+        [RED] public CUInt32 curveTypeL { get; set; }
+        [RED] public CUInt32 curveTypeR { get; set; }
         //public CUInt16 unk3;
         //public CUInt16 unk4;
-		
+
 
         public SCurveData(CR2WFile cr2w) : base(cr2w)
         {

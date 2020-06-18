@@ -109,13 +109,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("indexToeR")] 		public CInt32 IndexToeR { get; set;}
 
-		[RED("pelvisUpDir")] 		public EAxis PelvisUpDir { get; set;}
+		[RED("pelvisUpDir")] 		public CEnum<EAxis> PelvisUpDir { get; set;}
 
-		[RED("torso1UpDir")] 		public EAxis Torso1UpDir { get; set;}
+		[RED("torso1UpDir")] 		public CEnum<EAxis> Torso1UpDir { get; set;}
 
-		[RED("torso2UpDir")] 		public EAxis Torso2UpDir { get; set;}
+		[RED("torso2UpDir")] 		public CEnum<EAxis> Torso2UpDir { get; set;}
 
-		[RED("torso3UpDir")] 		public EAxis Torso3UpDir { get; set;}
+		[RED("torso3UpDir")] 		public CEnum<EAxis> Torso3UpDir { get; set;}
 
 		public TCrDefinition(CR2WFile cr2w) : base(cr2w){ }
 

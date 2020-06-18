@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("referenceValue")] 		public CInt32 ReferenceValue { get; set;}
 
-		[RED("damageMode")] 		public EQueryFightMode DamageMode { get; set;}
+		[RED("damageMode")] 		public CEnum<EQueryFightMode> DamageMode { get; set;}
 
 		public CQuestFightCondition(CR2WFile cr2w) : base(cr2w){ }
 

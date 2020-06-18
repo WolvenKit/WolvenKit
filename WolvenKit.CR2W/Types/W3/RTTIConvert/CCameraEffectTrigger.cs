@@ -15,9 +15,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("useSharedEffects")] 		public CBool UseSharedEffects { get; set;}
 
-		[RED("effectEntityPosition")] 		public EEffectEntityPosition EffectEntityPosition { get; set;}
+		[RED("effectEntityPosition")] 		public CEnum<EEffectEntityPosition> EffectEntityPosition { get; set;}
 
-		[RED("effectEntityRotation")] 		public EEffectEntityRotation EffectEntityRotation { get; set;}
+		[RED("effectEntityRotation")] 		public CEnum<EEffectEntityRotation> EffectEntityRotation { get; set;}
 
 		[RED("effectEntityOffset")] 		public Vector3 EffectEntityOffset { get; set;}
 

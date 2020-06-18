@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("boneName")] 		public CName BoneName { get; set;}
 
-		[RED("teleportDetectionAxisLS")] 		public EAxis TeleportDetectionAxisLS { get; set;}
+		[RED("teleportDetectionAxisLS")] 		public CEnum<EAxis> TeleportDetectionAxisLS { get; set;}
 
 		public STeleportBone(CR2WFile cr2w) : base(cr2w){ }
 

@@ -13,13 +13,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("animationName")] 		public CName AnimationName { get; set;}
 
-		[RED("operation")] 		public EPropertyAnimationOperation Operation { get; set;}
+		[RED("operation")] 		public CEnum<EPropertyAnimationOperation> Operation { get; set;}
 
 		[RED("playCount")] 		public CUInt32 PlayCount { get; set;}
 
 		[RED("playLengthScale")] 		public CFloat PlayLengthScale { get; set;}
 
-		[RED("playPropertyCurveMode")] 		public EPropertyCurveMode PlayPropertyCurveMode { get; set;}
+		[RED("playPropertyCurveMode")] 		public CEnum<EPropertyCurveMode> PlayPropertyCurveMode { get; set;}
 
 		[RED("rewindTime")] 		public CFloat RewindTime { get; set;}
 

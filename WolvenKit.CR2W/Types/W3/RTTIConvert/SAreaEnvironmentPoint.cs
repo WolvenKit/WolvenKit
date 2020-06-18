@@ -13,9 +13,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("direction")] 		public EulerAngles Direction { get; set;}
 
-		[RED("type")] 		public EAreaEnvironmentPointType Type { get; set;}
+		[RED("type")] 		public CEnum<EAreaEnvironmentPointType> Type { get; set;}
 
-		[RED("blend")] 		public EAreaEnvironmentPointBlend Blend { get; set;}
+		[RED("blend")] 		public CEnum<EAreaEnvironmentPointBlend> Blend { get; set;}
 
 		[RED("innerRadius")] 		public CFloat InnerRadius { get; set;}
 

@@ -19,11 +19,11 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("picture")] 		public CString Picture { get; set;}
 
-		[RED("faction")] 		public eGwintFaction Faction { get; set;}
+		[RED("faction")] 		public CEnum<eGwintFaction> Faction { get; set;}
 
 		[RED("typeFlags")] 		public CInt32 TypeFlags { get; set;}
 
-		[RED("effectFlags", 2,0)] 		public CArray<EnumWrapper<eGwintEffect>> EffectFlags { get; set;}
+		[RED("effectFlags", 2,0)] 		public CArray<CEnum<eGwintEffect>> EffectFlags { get; set;}
 
 		[RED("summonFlags", 2,0)] 		public CArray<CInt32> SummonFlags { get; set;}
 

@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("allowHorseInThisInterior")] 		public CBool AllowHorseInThisInterior { get; set;}
 
-		[RED("movementLock")] 		public EPlayerMovementLockType MovementLock { get; set;}
+		[RED("movementLock")] 		public CEnum<EPlayerMovementLockType> MovementLock { get; set;}
 
 		public CR4InteriorAreaComponent(CR2WFile cr2w) : base(cr2w){ }
 

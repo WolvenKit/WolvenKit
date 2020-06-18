@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("itemSlot")] 		public CName ItemSlot { get; set;}
 
-		[RED("action")] 		public EItemEffectAction Action { get; set;}
+		[RED("action")] 		public CEnum<EItemEffectAction> Action { get; set;}
 
 		public CExtAnimItemEffectEvent(CR2WFile cr2w) : base(cr2w){ }
 

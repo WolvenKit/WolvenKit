@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("maxFlyingActors")] 		public CInt32 MaxFlyingActors { get; set;}
 
-		[RED("flyingCheckType")] 		public EFlyingCheck FlyingCheckType { get; set;}
+		[RED("flyingCheckType")] 		public CEnum<EFlyingCheck> FlyingCheckType { get; set;}
 
 		[RED("ifNot")] 		public CBool IfNot { get; set;}
 

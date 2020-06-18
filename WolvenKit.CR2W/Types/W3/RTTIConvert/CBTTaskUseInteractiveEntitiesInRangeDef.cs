@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("minDistanceToSelf")] 		public CFloat MinDistanceToSelf { get; set;}
 
-		[RED("targetType")] 		public EChosenTarget TargetType { get; set;}
+		[RED("targetType")] 		public CEnum<EChosenTarget> TargetType { get; set;}
 
 		[RED("targetTag")] 		public CName TargetTag { get; set;}
 

@@ -23,9 +23,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("syncPose")] 		public CBool SyncPose { get; set;}
 
-		[RED("fixBaseBonesHierarchyType")] 		public EFixBonesHierarchyType FixBaseBonesHierarchyType { get; set;}
+		[RED("fixBaseBonesHierarchyType")] 		public CEnum<EFixBonesHierarchyType> FixBaseBonesHierarchyType { get; set;}
 
-		[RED("fixSpawnedBonesHierarchyType")] 		public EFixBonesHierarchyType FixSpawnedBonesHierarchyType { get; set;}
+		[RED("fixSpawnedBonesHierarchyType")] 		public CEnum<EFixBonesHierarchyType> FixSpawnedBonesHierarchyType { get; set;}
 
 		[RED("effectsNames", 2,0)] 		public CArray<CName> EffectsNames { get; set;}
 

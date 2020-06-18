@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IFXPhysicalForce : CObject
 	{
-		[RED("fieldType")] 		public EFieldType FieldType { get; set;}
+		[RED("fieldType")] 		public CEnum<EFieldType> FieldType { get; set;}
 
 		[RED("simulateLocalyInEntity")] 		public CBool SimulateLocalyInEntity { get; set;}
 

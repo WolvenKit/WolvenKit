@@ -16,7 +16,7 @@ namespace WolvenKit.CR2W.Types
     public interface IArrayAccessor
     {
         List<int> Flags { get; set; }
-        string Type { get; }
+        string REDType { get; }
 
         string GetElementType();
 

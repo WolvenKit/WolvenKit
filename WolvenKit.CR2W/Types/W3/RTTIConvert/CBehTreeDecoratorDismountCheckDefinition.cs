@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeDecoratorDismountCheckDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("dismountType")] 		public EDismountType DismountType { get; set;}
+		[RED("dismountType")] 		public CEnum<EDismountType> DismountType { get; set;}
 
 		public CBehTreeDecoratorDismountCheckDefinition(CR2WFile cr2w) : base(cr2w){ }
 

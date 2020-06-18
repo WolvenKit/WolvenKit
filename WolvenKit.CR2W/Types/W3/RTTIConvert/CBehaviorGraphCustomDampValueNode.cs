@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphCustomDampValueNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("type")] 		public EBehaviorCustomDampType Type { get; set;}
+		[RED("type")] 		public CEnum<EBehaviorCustomDampType> Type { get; set;}
 
 		[RED("directionalAcc_MaxAccDiffFromZero")] 		public CFloat DirectionalAcc_MaxAccDiffFromZero { get; set;}
 

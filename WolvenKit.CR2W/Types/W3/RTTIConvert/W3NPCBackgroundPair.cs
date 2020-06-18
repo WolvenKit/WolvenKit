@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3NPCBackgroundPair : CGameplayEntity
 	{
-		[RED("work")] 		public EBackgroundNPCWork_Paired Work { get; set;}
+		[RED("work")] 		public CEnum<EBackgroundNPCWork_Paired> Work { get; set;}
 
 		[RED("entitiesToSpawn", 2,0)] 		public CArray<SBackgroundPairSpawnedEntity> EntitiesToSpawn { get; set;}
 

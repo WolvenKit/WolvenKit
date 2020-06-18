@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTAdjustRotationChanges : IMoveSteeringTask
 	{
-		[RED("scenario")] 		public EAdjustRotationChangesScenario Scenario { get; set;}
+		[RED("scenario")] 		public CEnum<EAdjustRotationChangesScenario> Scenario { get; set;}
 
 		public CMoveSTAdjustRotationChanges(CR2WFile cr2w) : base(cr2w){ }
 

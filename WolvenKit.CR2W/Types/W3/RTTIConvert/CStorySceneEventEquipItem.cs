@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("ignoreItemsWithTag")] 		public CName IgnoreItemsWithTag { get; set;}
 
-		[RED("internalMode")] 		public ESceneItemEventMode InternalMode { get; set;}
+		[RED("internalMode")] 		public CEnum<ESceneItemEventMode> InternalMode { get; set;}
 
 		[RED("instant")] 		public CBool Instant { get; set;}
 

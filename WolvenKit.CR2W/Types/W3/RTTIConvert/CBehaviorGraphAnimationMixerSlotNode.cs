@@ -13,9 +13,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("canUseIdles")] 		public CBool CanUseIdles { get; set;}
 
-		[RED("postIdleAdditiveType")] 		public EAdditiveType PostIdleAdditiveType { get; set;}
+		[RED("postIdleAdditiveType")] 		public CEnum<EAdditiveType> PostIdleAdditiveType { get; set;}
 
-		[RED("postAllAdditiveType")] 		public EAdditiveType PostAllAdditiveType { get; set;}
+		[RED("postAllAdditiveType")] 		public CEnum<EAdditiveType> PostAllAdditiveType { get; set;}
 
 		[RED("fullEyesWeightMimicsTracks", 2,0)] 		public CArray<CName> FullEyesWeightMimicsTracks { get; set;}
 

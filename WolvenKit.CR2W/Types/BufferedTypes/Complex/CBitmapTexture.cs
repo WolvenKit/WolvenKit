@@ -9,31 +9,8 @@ using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
-    [REDMeta()]
-    public class CBitmapTexture : ITexture
+    public partial class CBitmapTexture : ITexture
     {
-        [RED("width")] public CUInt32 Width { get; set; }
-
-        [RED("height")] public CUInt32 Height { get; set; }
-
-        [RED("format")] public ETextureRawFormat Format { get; set; }
-
-        [RED("compression")] public ETextureCompression Compression { get; set; }
-
-        [RED("sourceData")] public CHandle<CSourceTexture> SourceData { get; set; }
-
-        [RED("textureGroup")] public CName TextureGroup { get; set; }
-
-        [RED("pcDownscaleBias")] public CInt32 PcDownscaleBias { get; set; }
-
-        [RED("xboneDownscaleBias")] public CInt32 XboneDownscaleBias { get; set; }
-
-        [RED("ps4DownscaleBias")] public CInt32 Ps4DownscaleBias { get; set; }
-
-        [RED("residentMipIndex")] public CUInt8 ResidentMipIndex { get; set; }
-
-        [RED("textureCacheKey")] public CUInt32 TextureCacheKey { get; set; }
 
         [REDBuffer] public CUInt32 unk { get; set; }
         [REDBuffer] public CUInt32 MipsCount { get; set; }
@@ -50,11 +27,11 @@ namespace WolvenKit.CR2W.Types
         {
 
 
-            Mipdata = new CCompressedBuffer<SMipData>(cr2w, _ => new SMipData(_)) { Name = "Mipdata" };
-            unk2 = new CUInt32(cr2w) { Name = "unk2" };
-            Mips = new CCompressedBuffer<CByteArray>(cr2w, _ => new CByteArray(_)) { Name = "mips" };
-            ResidentmipSize = new CUInt32(cr2w) { Name = "filesize" };
-            Residentmip = new CBytes(cr2w) { Name = "Image" };
+            Mipdata = new CCompressedBuffer<SMipData>(cr2w, _ => new SMipData(_)) { REDName = "Mipdata" };
+            unk2 = new CUInt32(cr2w) { REDName = "unk2" };
+            Mips = new CCompressedBuffer<CByteArray>(cr2w, _ => new CByteArray(_)) { REDName = "mips" };
+            ResidentmipSize = new CUInt32(cr2w) { REDName = "filesize" };
+            Residentmip = new CBytes(cr2w) { REDName = "Image" };
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -111,11 +88,6 @@ namespace WolvenKit.CR2W.Types
             unk2.Write(file);
 
             Residentmip.Write(file);
-        }
-
-        public override CVariable Create(CR2WFile cr2w)
-        {
-            return new CBitmapTexture(cr2w);
         }
     }
 }

@@ -7,7 +7,7 @@ using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
-    [REDMeta()]
+    [REDMeta]
     public class CPhysicalCollision : CVariable
     {
         [REDBuffer(true)] public CUInt32 Unk1 { get; set; }
@@ -17,9 +17,9 @@ namespace WolvenKit.CR2W.Types
         public CPhysicalCollision(CR2WFile cr2w) :
             base(cr2w)
         {
-            Unk1 = new CUInt32(cr2w) { Name = nameof(Unk1) };
-            Data = new CBytes(cr2w) { Name = nameof(Data) };
-            Collisiontypes = new CBufferVLQ<CName>(cr2w) { Name = nameof(Collisiontypes) };
+            Unk1 = new CUInt32(cr2w) { REDName = nameof(Unk1) };
+            Data = new CBytes(cr2w) { REDName = nameof(Data) };
+            Collisiontypes = new CBufferVLQ<CName>(cr2w) { REDName = nameof(Collisiontypes) };
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -41,9 +41,6 @@ namespace WolvenKit.CR2W.Types
             Data.Write(file);
         }
 
-        public override CVariable Create(CR2WFile cr2w)
-        {
-            return new CPhysicalCollision(cr2w);
-        }
+        public override CVariable Create(CR2WFile cr2w) => new CPhysicalCollision(cr2w);
     }
 }

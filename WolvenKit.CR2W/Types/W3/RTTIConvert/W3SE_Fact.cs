@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("fact")] 		public CString Fact { get; set;}
 
-		[RED("operation")] 		public EFactOperation Operation { get; set;}
+		[RED("operation")] 		public CEnum<EFactOperation> Operation { get; set;}
 
 		[RED("value")] 		public CInt32 Value { get; set;}
 

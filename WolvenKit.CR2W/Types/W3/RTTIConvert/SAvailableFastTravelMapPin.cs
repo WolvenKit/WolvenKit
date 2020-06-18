@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("type")] 		public CName Type { get; set;}
 
-		[RED("area")] 		public EAreaName Area { get; set;}
+		[RED("area")] 		public CEnum<EAreaName> Area { get; set;}
 
 		public SAvailableFastTravelMapPin(CR2WFile cr2w) : base(cr2w){ }
 

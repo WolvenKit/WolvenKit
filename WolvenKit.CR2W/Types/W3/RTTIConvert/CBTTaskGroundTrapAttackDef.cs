@@ -41,7 +41,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("delayDamage")] 		public CFloat DelayDamage { get; set;}
 
-		[RED("debuffType")] 		public EEffectType DebuffType { get; set;}
+		[RED("debuffType")] 		public CEnum<EEffectType> DebuffType { get; set;}
 
 		[RED("debuffDuration")] 		public CFloat DebuffDuration { get; set;}
 

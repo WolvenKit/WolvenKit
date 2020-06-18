@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventCameraLight : CStorySceneEvent
 	{
-		[RED("cameralightType")] 		public ECameraLightModType CameralightType { get; set;}
+		[RED("cameralightType")] 		public CEnum<ECameraLightModType> CameralightType { get; set;}
 
 		[RED("lightMod1")] 		public SStorySceneCameraLightMod LightMod1 { get; set;}
 

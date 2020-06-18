@@ -59,7 +59,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("eventOnDestruction", 2,0)] 		public CArray<CPtr<IPerformableAction>> EventOnDestruction { get; set;}
 
-		[RED("pathLibCollisionType")] 		public EPathLibCollision PathLibCollisionType { get; set;}
+		[RED("pathLibCollisionType")] 		public CEnum<EPathLibCollision> PathLibCollisionType { get; set;}
 
 		[RED("disableObstacleOnDestruction")] 		public CBool DisableObstacleOnDestruction { get; set;}
 

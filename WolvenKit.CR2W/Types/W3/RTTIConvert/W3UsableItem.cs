@@ -9,9 +9,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3UsableItem : CItemEntity
 	{
-		[RED("itemType")] 		public EUsableItemType ItemType { get; set;}
+		[RED("itemType")] 		public CEnum<EUsableItemType> ItemType { get; set;}
 
-		[RED("blockedActions", 2,0)] 		public CArray<EnumWrapper<EInputActionBlock>> BlockedActions { get; set;}
+		[RED("blockedActions", 2,0)] 		public CArray<CEnum<EInputActionBlock>> BlockedActions { get; set;}
 
 		public W3UsableItem(CR2WFile cr2w) : base(cr2w){ }
 

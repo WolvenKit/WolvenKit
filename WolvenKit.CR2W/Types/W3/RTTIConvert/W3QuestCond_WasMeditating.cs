@@ -11,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("hours")] 		public CInt32 Hours { get; set;}
 
-		[RED("comparator")] 		public ECompareOp Comparator { get; set;}
+		[RED("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
 
-		[RED("dayPart")] 		public EDayPart DayPart { get; set;}
+		[RED("dayPart")] 		public CEnum<EDayPart> DayPart { get; set;}
 
 		[RED("meditateToHour")] 		public CBool MeditateToHour { get; set;}
 

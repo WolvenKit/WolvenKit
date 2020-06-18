@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimDropItemEvent : CExtAnimEvent
 	{
-		[RED("action")] 		public EDropAction Action { get; set;}
+		[RED("action")] 		public CEnum<EDropAction> Action { get; set;}
 
 		public CExtAnimDropItemEvent(CR2WFile cr2w) : base(cr2w){ }
 

@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3NPCBackground : CGameplayEntity
 	{
-		[RED("work")] 		public EBackgroundNPCWork_Single Work { get; set;}
+		[RED("work")] 		public CEnum<EBackgroundNPCWork_Single> Work { get; set;}
 
 		public W3NPCBackground(CR2WFile cr2w) : base(cr2w){ }
 

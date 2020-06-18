@@ -41,7 +41,7 @@ namespace WolvenKit.Render
             CVariable newvar = CR2WTypeManager.Create(type, name, file, parent, false);
             if (newvar == null)
                 throw new Exception("Nope");
-            newvar.Name = name;
+            newvar.REDName = name;
             //newvar.Type = type;
             return newvar;
         }
@@ -149,13 +149,13 @@ namespace WolvenKit.Render
                     Bufferdata = new CInt16(bitbuff.cr2w) { val = (short)bufferNumber},
                     Parent = buffer
                 };
-                buffer.OrientationCompressionMethod = Enums.SAnimationBufferOrientationCompressionMethod.ABOCM_PackIn48bits;
+                buffer.OrientationCompressionMethod = new CEnum<Enums.SAnimationBufferOrientationCompressionMethod>(bitbuff.cr2w) { WrappedEnum = Enums.SAnimationBufferOrientationCompressionMethod.ABOCM_PackIn48bits };
 
                 buffer.Duration = (CFloat)new CFloat(bitbuff.cr2w).SetValue(1F);
                 buffer.NumFrames = (CUInt32)new CUInt32(bitbuff.cr2w).SetValue((uint)30);
                 buffer.Dt = (CFloat)new CFloat(bitbuff.cr2w).SetValue(0.03333334F);
 
-                buffer.StreamingOption = Enums.SAnimationBufferStreamingOption.ABSO_NonStreamable;
+                buffer.StreamingOption = new CEnum<Enums.SAnimationBufferStreamingOption>(bitbuff.cr2w) { WrappedEnum = Enums.SAnimationBufferStreamingOption.ABSO_NonStreamable };
 
                 buffer.HasRefIKBones = (CBool)new CBool(bitbuff.cr2w).SetValue(true);
             }

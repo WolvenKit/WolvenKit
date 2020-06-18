@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_ActorSpeed : CQCActorScriptedCondition
 	{
-		[RED("condition")] 		public ECompareOp Condition { get; set;}
+		[RED("condition")] 		public CEnum<ECompareOp> Condition { get; set;}
 
 		[RED("speed")] 		public CFloat Speed { get; set;}
 

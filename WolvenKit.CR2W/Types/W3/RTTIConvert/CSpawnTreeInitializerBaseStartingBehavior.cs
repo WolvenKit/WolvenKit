@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("runBehaviorOnLoading")] 		public CBool RunBehaviorOnLoading { get; set;}
 
-		[RED("actionPriority")] 		public ETopLevelAIPriorities ActionPriority { get; set;}
+		[RED("actionPriority")] 		public CEnum<ETopLevelAIPriorities> ActionPriority { get; set;}
 
 		public CSpawnTreeInitializerBaseStartingBehavior(CR2WFile cr2w) : base(cr2w){ }
 

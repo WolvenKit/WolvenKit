@@ -47,7 +47,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("m_TimeToPrepareForLandF")] 		public CFloat M_TimeToPrepareForLandF { get; set;}
 
-		[RED("m_JumpTypeE")] 		public EJumpType M_JumpTypeE { get; set;}
+		[RED("m_JumpTypeE")] 		public CEnum<EJumpType> M_JumpTypeE { get; set;}
 
 		[RED("m_DontRecalcFootOnLand")] 		public CBool M_DontRecalcFootOnLand { get; set;}
 

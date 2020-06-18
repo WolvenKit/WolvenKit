@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("endBone")] 		public CString EndBone { get; set;}
 
-		[RED("hingeAxis")] 		public EAxis HingeAxis { get; set;}
+		[RED("hingeAxis")] 		public CEnum<EAxis> HingeAxis { get; set;}
 
 		[RED("angleMax")] 		public CFloat AngleMax { get; set;}
 

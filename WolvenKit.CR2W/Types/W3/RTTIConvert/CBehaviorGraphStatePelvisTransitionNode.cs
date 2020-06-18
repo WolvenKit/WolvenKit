@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("pelvisBoneName")] 		public CString PelvisBoneName { get; set;}
 
-		[RED("pelvisDirectionFwdLS")] 		public EAxis PelvisDirectionFwdLS { get; set;}
+		[RED("pelvisDirectionFwdLS")] 		public CEnum<EAxis> PelvisDirectionFwdLS { get; set;}
 
 		[RED("usePelvisBlendMethod")] 		public CBool UsePelvisBlendMethod { get; set;}
 

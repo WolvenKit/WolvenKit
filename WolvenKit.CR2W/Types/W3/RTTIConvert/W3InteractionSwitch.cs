@@ -9,9 +9,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3InteractionSwitch : W3PhysicalSwitch
 	{
-		[RED("focusModeHighlight")] 		public EFocusModeVisibility FocusModeHighlight { get; set;}
+		[RED("focusModeHighlight")] 		public CEnum<EFocusModeVisibility> FocusModeHighlight { get; set;}
 
-		[RED("interactionActiveInState")] 		public ESwitchState InteractionActiveInState { get; set;}
+		[RED("interactionActiveInState")] 		public CEnum<ESwitchState> InteractionActiveInState { get; set;}
 
 		public W3InteractionSwitch(CR2WFile cr2w) : base(cr2w){ }
 

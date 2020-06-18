@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("freeSkillPoints")] 		public CInt32 FreeSkillPoints { get; set;}
 
-		[RED("comparator")] 		public ECompareOp Comparator { get; set;}
+		[RED("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
 
 		public W3QuestCond_PlayerSkillPoints(CR2WFile cr2w) : base(cr2w){ }
 

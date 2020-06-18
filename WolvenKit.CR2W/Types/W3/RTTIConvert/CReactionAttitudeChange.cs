@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CReactionAttitudeChange : IReactionAction
 	{
-		[RED("attitude")] 		public EAIAttitude Attitude { get; set;}
+		[RED("attitude")] 		public CEnum<EAIAttitude> Attitude { get; set;}
 
 		[RED("towardSource")] 		public CBool TowardSource { get; set;}
 

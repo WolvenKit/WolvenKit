@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("name")] 		public CName Name { get; set;}
 
-		[RED("type")] 		public EAbilityAttributeType Type { get; set;}
+		[RED("type")] 		public CEnum<EAbilityAttributeType> Type { get; set;}
 
 		[RED("alwaysRandom")] 		public CBool AlwaysRandom { get; set;}
 

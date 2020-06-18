@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("quantity")] 		public CUInt32 Quantity { get; set;}
 
-		[RED("compareFunc")] 		public ECompareFunc CompareFunc { get; set;}
+		[RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
 
 		public CQCHasItemGE(CR2WFile cr2w) : base(cr2w){ }
 

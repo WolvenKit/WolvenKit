@@ -169,7 +169,7 @@ namespace WolvenKit.CR2W
         public bool ShouldCopy(CVariable item)
         {
             if (ExcludeProperties != null &&
-                ExcludeProperties.Contains(item.Name))
+                ExcludeProperties.Contains(item.REDName))
                 return false;
 
             return true;
@@ -178,7 +178,7 @@ namespace WolvenKit.CR2W
         private CR2WExportWrapper CopyChunk(CR2WExportWrapper chunk)
         {
             if (ExcludeChunks != null
-                && ExcludeChunks.Contains(chunk.Type))
+                && ExcludeChunks.Contains(chunk.REDType))
                 return null;
 
             var chunkcopy = chunk.Copy(this);
@@ -197,7 +197,7 @@ namespace WolvenKit.CR2W
                     // Add this chunk to the controlParts
                     if (controlParts != null)
                     {
-                        switch (chunkcopy.Type)
+                        switch (chunkcopy.REDType)
                         {
                             case "CStorySceneInput":
 
@@ -228,7 +228,7 @@ namespace WolvenKit.CR2W
                     // Add this chunk to the sections
                     if (sections != null)
                     {
-                        switch (chunkcopy.Type)
+                        switch (chunkcopy.REDType)
                         {
                             case "CStorySceneSection":
                             case "CStorySceneCutsceneSection":
@@ -281,7 +281,7 @@ namespace WolvenKit.CR2W
         {
             var factevents =
                 storysection.sceneEventElements.elements.FindAll(
-                    delegate(CVariantSizeTypeName sectionitem) { return sectionitem.Type == "CStorySceneAddFactEvent"; });
+                    delegate(CVariantSizeTypeName sectionitem) { return sectionitem.REDType == "CStorySceneAddFactEvent"; });
 
             foreach (var factevent in factevents)
             {
@@ -299,7 +299,7 @@ namespace WolvenKit.CR2W
 
             foreach (var e in storysection.sceneEventElements)
             {
-                if (e != null && e is CStorySceneEventCustomCameraInstance && e.Type == "CStorySceneEventCustomCameraInstance")
+                if (e != null && e is CStorySceneEventCustomCameraInstance && e.REDType == "CStorySceneEventCustomCameraInstance")
                 {
                     var v = (CStorySceneEventCustomCameraInstance) e.Variable;
                     CName n = v.CustomCameraName;
@@ -341,7 +341,7 @@ namespace WolvenKit.CR2W
                 if (chunk != null && chunk.data != null)
                 {
                     var scene = chunk.data as CStoryScene;
-                    var name = scene.Name; //FIXME
+                    var name = scene.REDName; //FIXME
                     return (name != null && name == dialogsetName);
                 }
 
@@ -393,7 +393,7 @@ namespace WolvenKit.CR2W
             var placement_z = 0.0f;
             storysection.sceneEventElements.elements.ForEach(delegate (CVariantSizeTypeName sectionvar)
             {
-                if (sectionvar.Type == "CStorySceneEventOverridePlacement")
+                if (sectionvar.REDType == "CStorySceneEventOverridePlacement")
                 {
                     var placement = (sectionvar.Variable as CStorySceneEventOverridePlacement).Placement;
 
@@ -409,7 +409,7 @@ namespace WolvenKit.CR2W
             // Remove Unnessasary teleportation
             storysection.sceneEventElements.elements.ForEach(delegate (CVariantSizeTypeName sectionvar)
             {
-                if (sectionvar.Type == "CStorySceneEventOverridePlacement")
+                if (sectionvar.REDType == "CStorySceneEventOverridePlacement")
                 {
                     var placement = (sectionvar.Variable as CStorySceneEventOverridePlacement).Placement;
                     if (placement != null)
@@ -419,7 +419,7 @@ namespace WolvenKit.CR2W
                         placement.Z.val -= placement_z;
                     }
                 }
-                else if (sectionvar.Type == "CStorySceneEventCustomCamera")
+                else if (sectionvar.REDType == "CStorySceneEventCustomCamera")
                 {
                     var cameraDefinition = (sectionvar.Variable as CStorySceneEventCustomCamera).CameraDefinition;
                     var cameraTransform = cameraDefinition.CameraTransform;
@@ -436,7 +436,7 @@ namespace WolvenKit.CR2W
                         cameraTranslation.Z.val -= placement_z;
                     }
                 }
-                else if (sectionvar.Type == "CStorySceneEventCameraLight")
+                else if (sectionvar.REDType == "CStorySceneEventCameraLight")
                 {
                     SStorySceneCameraLightMod lightMod1 = (sectionvar.Variable as CStorySceneEventCameraLight).LightMod1;
                     if (lightMod1 != null)

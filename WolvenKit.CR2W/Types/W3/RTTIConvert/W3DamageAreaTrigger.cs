@@ -47,7 +47,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("immunityFact")] 		public CString ImmunityFact { get; set;}
 
-		[RED("damageType")] 		public ETriggeredDamageType DamageType { get; set;}
+		[RED("damageType")] 		public CEnum<ETriggeredDamageType> DamageType { get; set;}
 
 		public W3DamageAreaTrigger(CR2WFile cr2w) : base(cr2w){ }
 

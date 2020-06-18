@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("masterBones", 2,0)] 		public CArray<CInt32> MasterBones { get; set;}
 
-		[RED("masterBoneAxis")] 		public EAxis MasterBoneAxis { get; set;}
+		[RED("masterBoneAxis")] 		public CEnum<EAxis> MasterBoneAxis { get; set;}
 
 		[RED("maxMasterMotionAngleDeg")] 		public CFloat MaxMasterMotionAngleDeg { get; set;}
 

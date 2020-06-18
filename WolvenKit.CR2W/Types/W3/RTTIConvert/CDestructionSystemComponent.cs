@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("m_fracturedPhysicalCollisionType")] 		public CPhysicalCollision M_fracturedPhysicalCollisionType { get; set;}
 
-		[RED("dispacher selection")] 		public EDispatcherSelection Dispacher_selection { get; set;}
+		[RED("dispacher selection")] 		public CEnum<EDispatcherSelection> Dispacher_selection { get; set;}
 
 		[RED("dynamic")] 		public CBool Dynamic { get; set;}
 
@@ -49,7 +49,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("minimumFractureDepth")] 		public CUInt32 MinimumFractureDepth { get; set;}
 
-		[RED("preset")] 		public EDestructionPreset Preset { get; set;}
+		[RED("preset")] 		public CEnum<EDestructionPreset> Preset { get; set;}
 
 		[RED("debrisDestructionProbability")] 		public CFloat DebrisDestructionProbability { get; set;}
 
@@ -89,7 +89,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("eventOnDestruction", 2,0)] 		public CArray<CPtr<IPerformableAction>> EventOnDestruction { get; set;}
 
-		[RED("pathLibCollisionType")] 		public EPathLibCollision PathLibCollisionType { get; set;}
+		[RED("pathLibCollisionType")] 		public CEnum<EPathLibCollision> PathLibCollisionType { get; set;}
 
 		[RED("disableObstacleOnDestruction")] 		public CBool DisableObstacleOnDestruction { get; set;}
 

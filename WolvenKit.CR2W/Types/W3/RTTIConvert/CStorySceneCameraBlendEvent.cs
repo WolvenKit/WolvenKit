@@ -13,9 +13,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("lastPointOfInterpolation")] 		public CFloat LastPointOfInterpolation { get; set;}
 
-		[RED("firstPartInterpolation")] 		public ECameraInterpolation FirstPartInterpolation { get; set;}
+		[RED("firstPartInterpolation")] 		public CEnum<ECameraInterpolation> FirstPartInterpolation { get; set;}
 
-		[RED("lastPartInterpolation")] 		public ECameraInterpolation LastPartInterpolation { get; set;}
+		[RED("lastPartInterpolation")] 		public CEnum<ECameraInterpolation> LastPartInterpolation { get; set;}
 
 		public CStorySceneCameraBlendEvent(CR2WFile cr2w) : base(cr2w){ }
 

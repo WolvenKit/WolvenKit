@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIRunExplorationActionTreeParams : IAIActionParameters
 	{
-		[RED("explorationType")] 		public EExplorationType ExplorationType { get; set;}
+		[RED("explorationType")] 		public CEnum<EExplorationType> ExplorationType { get; set;}
 
 		[RED("entityTag")] 		public CName EntityTag { get; set;}
 

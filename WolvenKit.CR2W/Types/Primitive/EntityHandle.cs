@@ -19,9 +19,9 @@ namespace WolvenKit.CR2W.Types
 
         public EntityHandle(CR2WFile cr2w) : base(cr2w)
         {
-            id = new CUInt16(cr2w) { Name = "id" };
-            guid = new CGUID(cr2w) { Name = "guid" };
-            unk1 = new CBytes(cr2w) { Name = "unk1", Bytes = Array.Empty<byte>() };
+            id = new CUInt16(cr2w) { REDName = "id" };
+            guid = new CGUID(cr2w) { REDName = "guid" };
+            unk1 = new CBytes(cr2w) { REDName = "unk1", Bytes = Array.Empty<byte>() };
         }
 
         public override void Read(BinaryReader file, uint size)

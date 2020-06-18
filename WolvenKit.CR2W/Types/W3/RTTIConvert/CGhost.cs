@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("isCastingShadows")] 		public CBool IsCastingShadows { get; set;}
 
-		[RED("soundEffectType")] 		public EFocusModeSoundEffectType SoundEffectType { get; set;}
+		[RED("soundEffectType")] 		public CEnum<EFocusModeSoundEffectType> SoundEffectType { get; set;}
 
 		public CGhost(CR2WFile cr2w) : base(cr2w){ }
 

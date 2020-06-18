@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskAttackDef : CBTTaskPlayAnimationEventDecoratorDef
 	{
-		[RED("attackType")] 		public EAttackType AttackType { get; set;}
+		[RED("attackType")] 		public CEnum<EAttackType> AttackType { get; set;}
 
 		[RED("stopTaskAfterDealingDmg")] 		public CBool StopTaskAfterDealingDmg { get; set;}
 
@@ -47,9 +47,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("hitDestructablesInAttackRange")] 		public CBool HitDestructablesInAttackRange { get; set;}
 
-		[RED("applyEffectType")] 		public EEffectType ApplyEffectType { get; set;}
+		[RED("applyEffectType")] 		public CEnum<EEffectType> ApplyEffectType { get; set;}
 
-		[RED("applyEffectTypeArray", 2,0)] 		public CArray<EnumWrapper<EEffectType>> ApplyEffectTypeArray { get; set;}
+		[RED("applyEffectTypeArray", 2,0)] 		public CArray<CEnum<EEffectType>> ApplyEffectTypeArray { get; set;}
 
 		[RED("stopTaskOnCustomItemCollision")] 		public CBool StopTaskOnCustomItemCollision { get; set;}
 

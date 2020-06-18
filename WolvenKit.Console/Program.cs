@@ -130,8 +130,8 @@ namespace WolvenKit.Console
                                                     Name = f.Name,
                                                     Width = x.Width == null ? 0 : x.Width.val,
                                                     Height = x.Height == null ? 0 : x.Height.val,
-                                                    Format = format,
-                                                    Compression = compression,
+                                                    Format = format.WrappedEnum,
+                                                    Compression = compression.WrappedEnum,
                                                     TextureGroup = x.TextureGroup == null ? "" : x.TextureGroup.Value,
 
                                                 }

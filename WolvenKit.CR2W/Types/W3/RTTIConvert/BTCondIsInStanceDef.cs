@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondIsInStanceDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("currStance")] 		public ENpcStance CurrStance { get; set;}
+		[RED("currStance")] 		public CEnum<ENpcStance> CurrStance { get; set;}
 
 		[RED("ifNot")] 		public CBool IfNot { get; set;}
 

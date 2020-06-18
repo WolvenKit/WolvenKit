@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("waypoint")] 		public CName Waypoint { get; set;}
 
-		[RED("moveType")] 		public EMoveType MoveType { get; set;}
+		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
 		[RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
 

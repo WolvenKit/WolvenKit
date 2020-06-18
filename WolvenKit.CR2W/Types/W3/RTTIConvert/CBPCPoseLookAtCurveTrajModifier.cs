@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBPCPoseLookAtCurveTrajModifier : IBehaviorPoseConstraintPoseLookAtModifier
 	{
-		[RED("axis")] 		public EAxis Axis { get; set;}
+		[RED("axis")] 		public CEnum<EAxis> Axis { get; set;}
 
 		[RED("curve")] 		public CPtr<CCurve> Curve { get; set;}
 

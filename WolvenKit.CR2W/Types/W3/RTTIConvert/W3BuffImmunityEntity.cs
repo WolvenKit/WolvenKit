@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3BuffImmunityEntity : CGameplayEntity
 	{
-		[RED("immunities", 2,0)] 		public CArray<EnumWrapper<EEffectType>> Immunities { get; set;}
+		[RED("immunities", 2,0)] 		public CArray<CEnum<EEffectType>> Immunities { get; set;}
 
 		[RED("range")] 		public CFloat Range { get; set;}
 

@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJobForceOutAction : CJobActionBase
 	{
-		[RED("itemDropMode")] 		public EJobForceOutDropMode ItemDropMode { get; set;}
+		[RED("itemDropMode")] 		public CEnum<EJobForceOutDropMode> ItemDropMode { get; set;}
 
 		[RED("speedMul")] 		public CFloat SpeedMul { get; set;}
 

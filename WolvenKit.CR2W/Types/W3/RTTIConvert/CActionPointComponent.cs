@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("activateOnStart")] 		public CBool ActivateOnStart { get; set;}
 
-		[RED("placementImportance")] 		public EWorkPlacementImportance PlacementImportance { get; set;}
+		[RED("placementImportance")] 		public CEnum<EWorkPlacementImportance> PlacementImportance { get; set;}
 
 		[RED("ignoreCollosions")] 		public CBool IgnoreCollosions { get; set;}
 

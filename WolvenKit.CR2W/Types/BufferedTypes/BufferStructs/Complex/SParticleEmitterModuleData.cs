@@ -77,9 +77,9 @@ namespace WolvenKit.CR2W.Types
                 velocity_spread_conserve_momentum = new CBool(cr2w),
                 //CParticleModificatorTextureAnimation
                 texture_animation_initial_frame = new CBufferVLQ<CFloat>(cr2w),
-                p140 = new CUInt32(cr2w) { Name = "p140" },
-                p144 = new CUInt32(cr2w) { Name = "p144" },
-                p148 = new CUInt32(cr2w) { Name = "p148" },
+                p140 = new CUInt32(cr2w) { REDName = "p140" },
+                p144 = new CUInt32(cr2w) { REDName = "p144" },
+                p148 = new CUInt32(cr2w) { REDName = "p148" },
 
                 //CParticleModificatorVelocityOverLife
                 velocityOverLife = new CBufferVLQ<SVector3D>(cr2w),
@@ -128,16 +128,16 @@ namespace WolvenKit.CR2W.Types
 
 
 
-                collisionTriggeringGroupIndex = new CUInt64(cr2w) { Name = "collisionTriggeringGroupIndex" },
-                collision_dynamic_friction = new CFloat(cr2w) { Name = "collision_dynamic_friction" },
-                collision_static_friction = new CFloat(cr2w) { Name = "collision_static_friction" },
-                collision_restitution = new CFloat(cr2w) { Name = "collision_restitution" },
-                collision_velocity_dampening = new CFloat(cr2w) { Name = "collision_velocity_dampening" },
-                collision_disable_gravity = new CBool(cr2w) { Name = "disableGravity" },
-                collision_use_gpu = new CBool(cr2w) { Name = "collision_use_gpu" },
-                collision_radius = new CFloat(cr2w) { Name = "collision_radius"},
-                collision_kill_when_collide = new CBool(cr2w) { Name = "killWhenCollide", },
-                collision_self_emitter_index = new CUInt32(cr2w) { Name = "collision_self_emitter_index" },
+                collisionTriggeringGroupIndex = new CUInt64(cr2w) { REDName = "collisionTriggeringGroupIndex" },
+                collision_dynamic_friction = new CFloat(cr2w) { REDName = "collision_dynamic_friction" },
+                collision_static_friction = new CFloat(cr2w) { REDName = "collision_static_friction" },
+                collision_restitution = new CFloat(cr2w) { REDName = "collision_restitution" },
+                collision_velocity_dampening = new CFloat(cr2w) { REDName = "collision_velocity_dampening" },
+                collision_disable_gravity = new CBool(cr2w) { REDName = "disableGravity" },
+                collision_use_gpu = new CBool(cr2w) { REDName = "collision_use_gpu" },
+                collision_radius = new CFloat(cr2w) { REDName = "collision_radius"},
+                collision_kill_when_collide = new CBool(cr2w) { REDName = "killWhenCollide", },
+                collision_self_emitter_index = new CUInt32(cr2w) { REDName = "collision_self_emitter_index" },
                 
 
                
@@ -145,13 +145,13 @@ namespace WolvenKit.CR2W.Types
                 
 
                 //CParticleModificatorCollision
-                collision_spawn_probability = new CFloat(cr2w) { Name = "collision_spawn_probability"},
-                collision_spawn_parent_emitter_index = new CUInt32(cr2w) { Name = "collision_spawn_parent_emitter_index" },
+                collision_spawn_probability = new CFloat(cr2w) { REDName = "collision_spawn_probability"},
+                collision_spawn_parent_emitter_index = new CUInt32(cr2w) { REDName = "collision_spawn_parent_emitter_index" },
 
                 
                 //CParticleModificatorAlphaByDistance
-                alphaByDistanceFar = new CFloat(cr2w) { Name = "alphaByDistanceFar"},
-                alphaByDistanceNear = new CFloat(cr2w) { Name = "alphaByDistanceNear"}
+                alphaByDistanceFar = new CFloat(cr2w) { REDName = "alphaByDistanceFar"},
+                alphaByDistanceNear = new CFloat(cr2w) { REDName = "alphaByDistanceNear"}
             };
         }
 

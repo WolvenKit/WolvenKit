@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("parentValueName")] 		public CName ParentValueName { get; set;}
 
-		[RED("compareFunc")] 		public ECompareFunc CompareFunc { get; set;}
+		[RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
 
 		[RED("compareParentInputName")] 		public CName CompareParentInputName { get; set;}
 

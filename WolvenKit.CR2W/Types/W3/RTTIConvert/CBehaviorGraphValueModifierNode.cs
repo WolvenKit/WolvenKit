@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphValueModifierNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("type")] 		public EBehaviorValueModifierType Type { get; set;}
+		[RED("type")] 		public CEnum<EBehaviorValueModifierType> Type { get; set;}
 
 		public CBehaviorGraphValueModifierNode(CR2WFile cr2w) : base(cr2w){ }
 

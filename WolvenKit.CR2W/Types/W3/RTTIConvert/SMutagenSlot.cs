@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("skillGroupID")] 		public CInt32 SkillGroupID { get; set;}
 
-		[RED("equipmentSlot")] 		public EEquipmentSlots EquipmentSlot { get; set;}
+		[RED("equipmentSlot")] 		public CEnum<EEquipmentSlots> EquipmentSlot { get; set;}
 
 		public SMutagenSlot(CR2WFile cr2w) : base(cr2w){ }
 

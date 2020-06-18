@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("cookedItemName")] 		public CName CookedItemName { get; set;}
 
-		[RED("cookedItemType")] 		public EAlchemyCookedItemType CookedItemType { get; set;}
+		[RED("cookedItemType")] 		public CEnum<EAlchemyCookedItemType> CookedItemType { get; set;}
 
 		[RED("cookedItemIconPath")] 		public CString CookedItemIconPath { get; set;}
 

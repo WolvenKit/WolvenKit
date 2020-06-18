@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("blendTime")] 		public CFloat BlendTime { get; set;}
 
-		[RED("interpolation")] 		public EInterpolationType Interpolation { get; set;}
+		[RED("interpolation")] 		public CEnum<EInterpolationType> Interpolation { get; set;}
 
 		[RED("synchronizeOnSwitch")] 		public CBool SynchronizeOnSwitch { get; set;}
 

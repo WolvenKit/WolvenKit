@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("pinTag")] 		public CName PinTag { get; set;}
 
-		[RED("conditionType")] 		public EFastTravelConditionType ConditionType { get; set;}
+		[RED("conditionType")] 		public CEnum<EFastTravelConditionType> ConditionType { get; set;}
 
 		public CQuestUsedFastTravelCondition(CR2WFile cr2w) : base(cr2w){ }
 

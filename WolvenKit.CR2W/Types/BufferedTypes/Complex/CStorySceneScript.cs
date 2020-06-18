@@ -8,13 +8,8 @@ using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
-    [REDMeta()]
-    public class CStorySceneScript : CStorySceneControlPart
+    public partial class CStorySceneScript : CStorySceneControlPart
     {
-        [RED("functionName")] public CName FunctionName { get; set; }
-
-        [RED("links", 2, 0)] public CArray<CPtr<CStorySceneLinkElement>> Links { get; set; }
 
         [REDBuffer(true)] public CCompressedBuffer<CVariant> parameters { get; set; }
 
@@ -39,7 +34,7 @@ namespace WolvenKit.CR2W.Types
                 var varname = cr2w.names[nameId].Str;
                 CVariant cVariant = new CVariant(cr2w)
                 {
-                    Name = varname,
+                    REDName = varname,
                     Parent = parameters
                 };
                 cVariant.Read(file, 0);
@@ -61,11 +56,6 @@ namespace WolvenKit.CR2W.Types
                 variable.Write(file);
             }
             file.Write((ushort)0);
-        }
-
-        public override CVariable Create(CR2WFile cr2w)
-        {
-            return new CStorySceneScript(cr2w);
         }
 
     }

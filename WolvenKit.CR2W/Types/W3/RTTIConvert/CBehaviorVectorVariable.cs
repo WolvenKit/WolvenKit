@@ -17,9 +17,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("maxValue")] 		public Vector MaxValue { get; set;}
 
-		[RED("space")] 		public EVariableSpace Space { get; set;}
+		[RED("space")] 		public CEnum<EVariableSpace> Space { get; set;}
 
-		[RED("type")] 		public EVectorVariableType Type { get; set;}
+		[RED("type")] 		public CEnum<EVectorVariableType> Type { get; set;}
 
 		[RED("shouldBeSyncedBetweenGraphs")] 		public CBool ShouldBeSyncedBetweenGraphs { get; set;}
 

@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("ticketName")] 		public CName TicketName { get; set;}
 
-		[RED("ticketsProvider")] 		public EBehTreeTicketSourceProviderType TicketsProvider { get; set;}
+		[RED("ticketsProvider")] 		public CEnum<EBehTreeTicketSourceProviderType> TicketsProvider { get; set;}
 
 		public IBehTreeNodeCombatTicketDecoratorBaseDefinition(CR2WFile cr2w) : base(cr2w){ }
 

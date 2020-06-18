@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("compareValue")] 		public CFloat CompareValue { get; set;}
 
-		[RED("compareFunc")] 		public ECompareFunc CompareFunc { get; set;}
+		[RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
 
 		public CInternalVariableStateTransitionCondition(CR2WFile cr2w) : base(cr2w){ }
 

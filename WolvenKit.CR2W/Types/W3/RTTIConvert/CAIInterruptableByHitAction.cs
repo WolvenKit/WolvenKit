@@ -11,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("shouldForceHitReaction")] 		public CBool ShouldForceHitReaction { get; set;}
 
-		[RED("hitReactionType")] 		public EHitReactionType HitReactionType { get; set;}
+		[RED("hitReactionType")] 		public CEnum<EHitReactionType> HitReactionType { get; set;}
 
-		[RED("hitReactionSide")] 		public EHitReactionSide HitReactionSide { get; set;}
+		[RED("hitReactionSide")] 		public CEnum<EHitReactionSide> HitReactionSide { get; set;}
 
-		[RED("hitReactionDirection")] 		public EHitReactionDirection HitReactionDirection { get; set;}
+		[RED("hitReactionDirection")] 		public CEnum<EHitReactionDirection> HitReactionDirection { get; set;}
 
-		[RED("hitSwingType")] 		public EAttackSwingType HitSwingType { get; set;}
+		[RED("hitSwingType")] 		public CEnum<EAttackSwingType> HitSwingType { get; set;}
 
-		[RED("hitSwingDirection")] 		public EAttackSwingDirection HitSwingDirection { get; set;}
+		[RED("hitSwingDirection")] 		public CEnum<EAttackSwingDirection> HitSwingDirection { get; set;}
 
 		public CAIInterruptableByHitAction(CR2WFile cr2w) : base(cr2w){ }
 

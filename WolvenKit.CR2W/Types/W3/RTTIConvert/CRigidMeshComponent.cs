@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CRigidMeshComponent : CStaticMeshComponent
 	{
-		[RED("motionType")] 		public EMotionType MotionType { get; set;}
+		[RED("motionType")] 		public CEnum<EMotionType> MotionType { get; set;}
 
 		[RED("linearDamping")] 		public CFloat LinearDamping { get; set;}
 

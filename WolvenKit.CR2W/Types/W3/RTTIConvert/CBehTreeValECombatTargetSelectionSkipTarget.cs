@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("varName")] 		public CName VarName { get; set;}
 
-		[RED("value")] 		public ECombatTargetSelectionSkipTarget Value { get; set;}
+		[RED("value")] 		public CEnum<ECombatTargetSelectionSkipTarget> Value { get; set;}
 
 		public CBehTreeValECombatTargetSelectionSkipTarget(CR2WFile cr2w) : base(cr2w){ }
 

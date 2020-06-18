@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestManageFastTravelBlock : CQuestGraphBlock
 	{
-		[RED("operation")] 		public EQuestManageFastTravelOperation Operation { get; set;}
+		[RED("operation")] 		public CEnum<EQuestManageFastTravelOperation> Operation { get; set;}
 
 		[RED("enable")] 		public CBool Enable { get; set;}
 

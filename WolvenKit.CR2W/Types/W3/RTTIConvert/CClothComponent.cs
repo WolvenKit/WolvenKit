@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("resource")] 		public CHandle<CApexResource> Resource { get; set;}
 
-		[RED("dispacher selection")] 		public EDispatcherSelection Dispacher_selection { get; set;}
+		[RED("dispacher selection")] 		public CEnum<EDispatcherSelection> Dispacher_selection { get; set;}
 
 		[RED("recomputeNormals")] 		public CBool RecomputeNormals { get; set;}
 
@@ -47,7 +47,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("triggeringCollisionGroupNames", 2,0)] 		public CArray<CName> TriggeringCollisionGroupNames { get; set;}
 
-		[RED("triggerType")] 		public ETriggerShape TriggerType { get; set;}
+		[RED("triggerType")] 		public CEnum<ETriggerShape> TriggerType { get; set;}
 
 		[RED("triggerDimensions")] 		public Vector TriggerDimensions { get; set;}
 

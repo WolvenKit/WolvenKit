@@ -15,7 +15,6 @@ namespace WolvenKit.CR2W.Types
     {
         public List<T> elements = new List<T>();
         public Func<CR2WFile, T> elementFactory;
-        public new string Type { get => $"CBufferUInt32<{typeof(T)}>"; }
 
         public CBufferUInt32(CR2WFile cr2w, Func<CR2WFile, T> elementFactory) : base(cr2w)
         {
@@ -34,7 +33,7 @@ namespace WolvenKit.CR2W.Types
             for (int i = 0; i < count; i++)
             {
                 T element = elementFactory.Invoke(cr2w);
-                element.Name = i.ToString();
+                element.REDName = i.ToString();
                 element.Read(file, size);
                 elements.Add(element);
             }
@@ -120,7 +119,7 @@ namespace WolvenKit.CR2W.Types
         {
             if (variable is T)
             {
-                variable.Name = elements.Count.ToString();
+                variable.REDName = elements.Count.ToString();
                 elements.Add(variable as T);
             }
         }
@@ -129,7 +128,7 @@ namespace WolvenKit.CR2W.Types
         {
             for (int i = 0; i < elements.Count; i++)
             {
-                elements[i].Name = i.ToString();
+                elements[i].REDName = i.ToString();
             }
         }
     }

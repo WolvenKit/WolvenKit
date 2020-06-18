@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphComparatorNode : CBehaviorGraphValueNode
 	{
-		[RED("operation")] 		public ECompareFunc Operation { get; set;}
+		[RED("operation")] 		public CEnum<ECompareFunc> Operation { get; set;}
 
 		[RED("firstValue")] 		public CFloat FirstValue { get; set;}
 

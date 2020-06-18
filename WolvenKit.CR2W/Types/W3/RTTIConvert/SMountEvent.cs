@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("newSlotName")] 		public CName NewSlotName { get; set;}
 
-		[RED("entityContainingSlot")] 		public EBgNPCType EntityContainingSlot { get; set;}
+		[RED("entityContainingSlot")] 		public CEnum<EBgNPCType> EntityContainingSlot { get; set;}
 
 		public SMountEvent(CR2WFile cr2w) : base(cr2w){ }
 

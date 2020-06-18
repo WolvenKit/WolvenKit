@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SGraphLayer : CVariable
 	{
-		[RED("state")] 		public EGraphLayerState State { get; set;}
+		[RED("state")] 		public CEnum<EGraphLayerState> State { get; set;}
 
 		[RED("name")] 		public CString Name { get; set;}
 

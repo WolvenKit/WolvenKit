@@ -13,9 +13,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("boneNameB")] 		public CString BoneNameB { get; set;}
 
-		[RED("boneAxisA")] 		public EAxis BoneAxisA { get; set;}
+		[RED("boneAxisA")] 		public CEnum<EAxis> BoneAxisA { get; set;}
 
-		[RED("boneAxisB")] 		public EAxis BoneAxisB { get; set;}
+		[RED("boneAxisB")] 		public CEnum<EAxis> BoneAxisB { get; set;}
 
 		[RED("boneValueA")] 		public CFloat BoneValueA { get; set;}
 

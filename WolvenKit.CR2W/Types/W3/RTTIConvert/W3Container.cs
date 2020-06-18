@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("skipInventoryPanel")] 		public CBool SkipInventoryPanel { get; set;}
 
-		[RED("focusModeHighlight")] 		public EFocusModeVisibility FocusModeHighlight { get; set;}
+		[RED("focusModeHighlight")] 		public CEnum<EFocusModeVisibility> FocusModeHighlight { get; set;}
 
 		[RED("factOnContainerOpened")] 		public CString FactOnContainerOpened { get; set;}
 

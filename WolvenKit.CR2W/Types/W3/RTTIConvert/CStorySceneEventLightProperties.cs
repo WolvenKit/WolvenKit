@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("color")] 		public CColor Color { get; set;}
 
-		[RED("lightColorSource")] 		public ESceneEventLightColorSource LightColorSource { get; set;}
+		[RED("lightColorSource")] 		public CEnum<ESceneEventLightColorSource> LightColorSource { get; set;}
 
 		[RED("radius")] 		public SSimpleCurve Radius { get; set;}
 

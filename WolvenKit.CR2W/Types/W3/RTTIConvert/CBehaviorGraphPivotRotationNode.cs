@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("pivotBoneName")] 		public CString PivotBoneName { get; set;}
 
-		[RED("axis")] 		public EAxis Axis { get; set;}
+		[RED("axis")] 		public CEnum<EAxis> Axis { get; set;}
 
 		[RED("scale")] 		public CFloat Scale { get; set;}
 

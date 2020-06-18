@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("referenceSlot")] 		public CInt32 ReferenceSlot { get; set;}
 
-		[RED("type")] 		public EFormationConstraintType Type { get; set;}
+		[RED("type")] 		public CEnum<EFormationConstraintType> Type { get; set;}
 
 		[RED("value")] 		public Vector2 Value { get; set;}
 

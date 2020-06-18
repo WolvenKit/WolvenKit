@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("toxicityOffset")] 		public CFloat ToxicityOffset { get; set;}
 
-		[RED("effectType")] 		public EEffectType EffectType { get; set;}
+		[RED("effectType")] 		public CEnum<EEffectType> EffectType { get; set;}
 
 		public SDrunkMutagen(CR2WFile cr2w) : base(cr2w){ }
 

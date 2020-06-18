@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBuffImmunity : CVariable
 	{
-		[RED("buffType")] 		public EEffectType BuffType { get; set;}
+		[RED("buffType")] 		public CEnum<EEffectType> BuffType { get; set;}
 
 		[RED("sources", 2,0)] 		public CArray<CName> Sources { get; set;}
 

@@ -9,9 +9,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalQuest : CJournalContainer
 	{
-		[RED("type")] 		public eQuestType Type { get; set;}
+		[RED("type")] 		public CEnum<eQuestType> Type { get; set;}
 
-		[RED("contentType")] 		public EJournalContentType ContentType { get; set;}
+		[RED("contentType")] 		public CEnum<EJournalContentType> ContentType { get; set;}
 
 		[RED("world")] 		public CUInt32 World { get; set;}
 

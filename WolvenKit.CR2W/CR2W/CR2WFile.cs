@@ -177,7 +177,7 @@ namespace WolvenKit.CR2W
                 chunk.ReadData(file);
 
                 int percentprogress = (int)((float)i / (float)chunks.Count * 100.0);
-                Logger.LogProgress(percentprogress, $"Reading chunk {chunk.Name}...");
+                Logger.LogProgress(percentprogress, $"Reading chunk {chunk.REDName}...");
             }
             // Read buffer data //block 6
             if (m_hasInternalBuffer)
@@ -209,6 +209,30 @@ namespace WolvenKit.CR2W
 
 
         #endregion
+
+
+        public static void WriteVariable(BinaryWriter file, IEditableVariable ivar)
+        {
+            if (ivar is CVariable cvar)
+            {
+                file.Write(cvar.GetnameId());
+                file.Write(cvar.GettypeId());
+
+                var pos = file.BaseStream.Position;
+                file.Write((uint)0); // size placeholder
+
+
+                cvar.Write(file);
+                var endpos = file.BaseStream.Position;
+
+                file.Seek((int)pos, SeekOrigin.Begin);
+                var actualsize = (uint)(endpos - pos);
+                file.Write(actualsize); // Write size
+                file.Seek((int)endpos, SeekOrigin.Begin);
+            }
+            else
+                throw new SerializationException();
+        }
 
         public CVariable ReadVariable(BinaryReader file, CVariable parent)
         {
@@ -409,7 +433,7 @@ namespace WolvenKit.CR2W
             {
                 var newoffset = chunks[i].Export.dataOffset + headerOffset;
                 chunks[i].SetOffset(newoffset);
-                chunks[i].SetType( (ushort)GetStringIndex(chunks[i].Type));
+                chunks[i].SetType( (ushort)GetStringIndex(chunks[i].REDType));
             }
             if (m_hasInternalBuffer)
             {
@@ -669,7 +693,7 @@ namespace WolvenKit.CR2W
                     if (var is CEntity)
                     {
                         var e = var as CEntity;
-                        foreach (CVariable component in e.components)
+                        foreach (CVariable component in e.Components)
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("", component));
                         foreach (SEntityBufferType1 buffer in e.buffer_v1)
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("", buffer));
@@ -787,18 +811,18 @@ namespace WolvenKit.CR2W
                 {
                     if (tvar.Item1.Contains("Typefirst"))
                     {
-                        AddUniqueToTable(var.Type);
-                        AddUniqueToTable(var.Name);
+                        AddUniqueToTable(var.REDType);
+                        AddUniqueToTable(var.REDName);
                     }
                     // I'm sorry
                     else if (tvar.Item1 == "skipName" || chunkguidlist.Contains(tvar.Item2.InternalGuid))
                     {
-                        AddUniqueToTable(var.Type);
+                        AddUniqueToTable(var.REDType);
                     }
                     else if (!tvar.Item1.Contains("skipName,skipType"))
                     {
-                        AddUniqueToTable(var.Name);
-                        AddUniqueToTable(var.Type);
+                        AddUniqueToTable(var.REDName);
+                        AddUniqueToTable(var.REDType);
                     }
                 }
 
@@ -843,7 +867,7 @@ namespace WolvenKit.CR2W
                     {
                         AddUniqueToTable(h.ClassName);
                         var flags = EImportFlags.Default;
-                        if (h.Name == "template" && h.ClassName == "CEntityTemplate")
+                        if (h.REDName == "template" && h.ClassName == "CEntityTemplate")
                             flags = EImportFlags.Template;
                         if (var.cr2w.embedded.Any(_ => _.ImportPath == h.DepotPath && _.ImportClass == h.ClassName))
                             flags = EImportFlags.Inplace;
@@ -859,7 +883,7 @@ namespace WolvenKit.CR2W
                 {
                     if (!(string.IsNullOrEmpty(s.ClassName) && string.IsNullOrEmpty(s.DepotPath)))
                     {
-                        AddUniqueToTable(s.Type);
+                        AddUniqueToTable(s.REDType);
                         var stuple = new Tuple<string, string, EImportFlags>(s.ClassName, s.DepotPath, EImportFlags.Soft);
                         if (!newsoftlist.Contains(stuple))
                         {
@@ -874,8 +898,8 @@ namespace WolvenKit.CR2W
                 }
                 else if (var is CArray<CVariable> a)
                 {
-                    AddUniqueToTable(var.Name);
-                    AddUniqueToTable(a.Type);
+                    AddUniqueToTable(var.REDName);
+                    AddUniqueToTable(a.REDType);
                     foreach (var element in a)
                     {
                         if (element is CName )
@@ -902,7 +926,7 @@ namespace WolvenKit.CR2W
                         {
                             AddUniqueToTable(h2.ClassName);
                             var flags = EImportFlags.Default;
-                            if (h2.Name == "template")
+                            if (h2.REDName == "template")
                                 flags = EImportFlags.Template;
                             var importtuple = new Tuple<string, string, EImportFlags>(h2.ClassName, h2.DepotPath, flags);
                             if (!newimportslist.Contains(importtuple))
@@ -921,8 +945,8 @@ namespace WolvenKit.CR2W
                 }
                 else if (var is CString)
                 {
-                    AddUniqueToTable(var.Name);
-                    AddUniqueToTable(var.Type);
+                    AddUniqueToTable(var.REDName);
+                    AddUniqueToTable(var.REDType);
                 }
                 else if (var is SEntityBufferType1)
                 {
@@ -930,7 +954,7 @@ namespace WolvenKit.CR2W
                 }
                 else
                 {
-                    AddUniqueToTable(var.Type);
+                    AddUniqueToTable(var.REDType);
                 }
             }
 
@@ -1231,7 +1255,7 @@ namespace WolvenKit.CR2W
             
             var chunk = new CR2WExportWrapper(this)
             {
-                Type = type
+                REDType = type
             };
 
             chunk.CreateDefaultData();
@@ -1260,7 +1284,7 @@ namespace WolvenKit.CR2W
         {
             for (var i = 0; i < chunks.Count; i++)
             {
-                if (chunks[i].Type == type)
+                if (chunks[i].REDType == type)
                     return chunks[i];
             }
 

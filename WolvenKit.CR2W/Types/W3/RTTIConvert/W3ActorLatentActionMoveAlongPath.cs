@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("pathMargin")] 		public CFloat PathMargin { get; set;}
 
-		[RED("moveType")] 		public EMoveType MoveType { get; set;}
+		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
 		[RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
 

@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("isEnabled")] 		public CBool IsEnabled { get; set;}
 
-		[RED("shadowCastingMode")] 		public ELightShadowCastingMode ShadowCastingMode { get; set;}
+		[RED("shadowCastingMode")] 		public CEnum<ELightShadowCastingMode> ShadowCastingMode { get; set;}
 
 		[RED("shadowFadeDistance")] 		public CFloat ShadowFadeDistance { get; set;}
 
@@ -27,7 +27,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("color")] 		public CColor Color { get; set;}
 
-		[RED("envColorGroup")] 		public EEnvColorGroup EnvColorGroup { get; set;}
+		[RED("envColorGroup")] 		public CEnum<EEnvColorGroup> EnvColorGroup { get; set;}
 
 		[RED("autoHideDistance")] 		public CFloat AutoHideDistance { get; set;}
 

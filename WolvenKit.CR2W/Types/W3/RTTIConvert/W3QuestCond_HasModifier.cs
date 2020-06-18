@@ -9,11 +9,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_HasModifier : CQCActorScriptedCondition
 	{
-		[RED("modifier")] 		public EEffectType Modifier { get; set;}
+		[RED("modifier")] 		public CEnum<EEffectType> Modifier { get; set;}
 
 		[RED("timePercents")] 		public CInt32 TimePercents { get; set;}
 
-		[RED("condition")] 		public ECompareOp Condition { get; set;}
+		[RED("condition")] 		public CEnum<ECompareOp> Condition { get; set;}
 
 		[RED("modifierParam1")] 		public CName ModifierParam1 { get; set;}
 

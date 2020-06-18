@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCookable : CVariable
 	{
-		[RED("type")] 		public EAlchemyCookedItemType Type { get; set;}
+		[RED("type")] 		public CEnum<EAlchemyCookedItemType> Type { get; set;}
 
 		[RED("cnt")] 		public CInt32 Cnt { get; set;}
 

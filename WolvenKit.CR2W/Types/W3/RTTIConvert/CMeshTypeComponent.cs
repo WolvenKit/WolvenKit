@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("forceAutoHideDistance")] 		public CUInt16 ForceAutoHideDistance { get; set;}
 
-		[RED("shadowImportanceBias")] 		public EMeshShadowImportanceBias ShadowImportanceBias { get; set;}
+		[RED("shadowImportanceBias")] 		public CEnum<EMeshShadowImportanceBias> ShadowImportanceBias { get; set;}
 
 		[RED("defaultEffectParams")] 		public Vector DefaultEffectParams { get; set;}
 

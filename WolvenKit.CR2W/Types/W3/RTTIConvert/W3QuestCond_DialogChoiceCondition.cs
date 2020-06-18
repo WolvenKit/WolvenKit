@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_DialogChoiceCondition : CQuestScriptedCondition
 	{
-		[RED("dialogChoice")] 		public EDialogActionIcon DialogChoice { get; set;}
+		[RED("dialogChoice")] 		public CEnum<EDialogActionIcon> DialogChoice { get; set;}
 
 		[RED("onOptionSelected")] 		public CBool OnOptionSelected { get; set;}
 

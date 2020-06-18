@@ -9,9 +9,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCraftsman : CVariable
 	{
-		[RED("type")] 		public ECraftsmanType Type { get; set;}
+		[RED("type")] 		public CEnum<ECraftsmanType> Type { get; set;}
 
-		[RED("level")] 		public ECraftsmanLevel Level { get; set;}
+		[RED("level")] 		public CEnum<ECraftsmanLevel> Level { get; set;}
 
 		[RED("noCraftingCost")] 		public CBool NoCraftingCost { get; set;}
 

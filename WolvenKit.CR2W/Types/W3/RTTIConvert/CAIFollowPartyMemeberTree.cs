@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("followDistance")] 		public CFloat FollowDistance { get; set;}
 
-		[RED("moveType")] 		public EMoveType MoveType { get; set;}
+		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
 		public CAIFollowPartyMemeberTree(CR2WFile cr2w) : base(cr2w){ }
 

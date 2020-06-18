@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("animationSpeed")] 		public CPtr<IEvaluatorFloat> AnimationSpeed { get; set;}
 
-		[RED("animationMode")] 		public ETextureAnimationMode AnimationMode { get; set;}
+		[RED("animationMode")] 		public CEnum<ETextureAnimationMode> AnimationMode { get; set;}
 
 		public CParticleModificatorTextureAnimation(CR2WFile cr2w) : base(cr2w){ }
 

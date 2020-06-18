@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("discoveryOnelinerTag")] 		public CString DiscoveryOnelinerTag { get; set;}
 
-		[RED("focusModeHighlight")] 		public EFocusModeVisibility FocusModeHighlight { get; set;}
+		[RED("focusModeHighlight")] 		public CEnum<EFocusModeVisibility> FocusModeHighlight { get; set;}
 
 		public W3IllusionaryObstacle(CR2WFile cr2w) : base(cr2w){ }
 

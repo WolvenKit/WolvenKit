@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestBehaviorCtrlBlock : CQuestScopeBlock
 	{
-		[RED("saveMode")] 		public EQuestBehaviorSceneSaveMode SaveMode { get; set;}
+		[RED("saveMode")] 		public CEnum<EQuestBehaviorSceneSaveMode> SaveMode { get; set;}
 
 		[RED("activationTimeout")] 		public CFloat ActivationTimeout { get; set;}
 

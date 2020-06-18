@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("blendOut")] 		public CFloat BlendOut { get; set;}
 
-		[RED("weightBlendType")] 		public EInterpolationType WeightBlendType { get; set;}
+		[RED("weightBlendType")] 		public CEnum<EInterpolationType> WeightBlendType { get; set;}
 
 		[RED("weight")] 		public CFloat Weight { get; set;}
 

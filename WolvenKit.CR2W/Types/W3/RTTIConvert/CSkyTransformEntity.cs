@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSkyTransformEntity : CEntity
 	{
-		[RED("transformType")] 		public ESkyTransformType TransformType { get; set;}
+		[RED("transformType")] 		public CEnum<ESkyTransformType> TransformType { get; set;}
 
 		[RED("alignToPlayer")] 		public CBool AlignToPlayer { get; set;}
 

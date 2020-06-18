@@ -9,17 +9,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSkill : CVariable
 	{
-		[RED("skillType")] 		public ESkill SkillType { get; set;}
+		[RED("skillType")] 		public CEnum<ESkill> SkillType { get; set;}
 
-		[RED("skillPath")] 		public ESkillPath SkillPath { get; set;}
+		[RED("skillPath")] 		public CEnum<ESkillPath> SkillPath { get; set;}
 
-		[RED("skillSubPath")] 		public ESkillSubPath SkillSubPath { get; set;}
+		[RED("skillSubPath")] 		public CEnum<ESkillSubPath> SkillSubPath { get; set;}
 
 		[RED("level")] 		public CInt32 Level { get; set;}
 
 		[RED("maxLevel")] 		public CInt32 MaxLevel { get; set;}
 
-		[RED("requiredSkills", 2,0)] 		public CArray<EnumWrapper<ESkill>> RequiredSkills { get; set;}
+		[RED("requiredSkills", 2,0)] 		public CArray<CEnum<ESkill>> RequiredSkills { get; set;}
 
 		[RED("requiredSkillsIsAlternative")] 		public CBool RequiredSkillsIsAlternative { get; set;}
 
@@ -55,7 +55,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("remainingBlockedTime")] 		public CFloat RemainingBlockedTime { get; set;}
 
-		[RED("precachedModifierSkills", 2,0)] 		public CArray<EnumWrapper<ESkill>> PrecachedModifierSkills { get; set;}
+		[RED("precachedModifierSkills", 2,0)] 		public CArray<CEnum<ESkill>> PrecachedModifierSkills { get; set;}
 
 		public SSkill(CR2WFile cr2w) : base(cr2w){ }
 

@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("isAreaMarker")] 		public CBool IsAreaMarker { get; set;}
 
-		[RED("dimmerType")] 		public EDimmerType DimmerType { get; set;}
+		[RED("dimmerType")] 		public CEnum<EDimmerType> DimmerType { get; set;}
 
 		[RED("ambientLevel")] 		public CFloat AmbientLevel { get; set;}
 

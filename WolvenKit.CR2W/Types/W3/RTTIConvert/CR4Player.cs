@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4Player : CPlayer
 	{
-		[RED("uselessProp")] 		public EAsyncCheckResult UselessProp { get; set;}
+		[RED("uselessProp")] 		public CEnum<EAsyncCheckResult> UselessProp { get; set;}
 
 		[RED("horseWithInventory")] 		public EntityHandle HorseWithInventory { get; set;}
 

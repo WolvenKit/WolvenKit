@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("lightChannels")] 		public ELightChannel LightChannels { get; set;}
 
-		[RED("renderingPlane")] 		public ERenderingPlane RenderingPlane { get; set;}
+		[RED("renderingPlane")] 		public CEnum<ERenderingPlane> RenderingPlane { get; set;}
 
 		public CDrawableComponent(CR2WFile cr2w) : base(cr2w){ }
 

@@ -40,7 +40,7 @@ namespace WolvenKit.FlowTreeEditors
                     }
                     else
                     {
-                        lblCondition.Text = questCondition.Reference.Name;
+                        lblCondition.Text = questCondition.Reference.REDName;
                     }
                 }
             }

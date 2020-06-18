@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("boneName")] 		public CString BoneName { get; set;}
 
-		[RED("type")] 		public ETransformType Type { get; set;}
+		[RED("type")] 		public CEnum<ETransformType> Type { get; set;}
 
 		[RED("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
 

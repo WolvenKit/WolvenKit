@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("mechanismTag")] 		public CName MechanismTag { get; set;}
 
-		[RED("operations", 2,0)] 		public CArray<EnumWrapper<EPhysicalDamagemechanismOperation>> Operations { get; set;}
+		[RED("operations", 2,0)] 		public CArray<CEnum<EPhysicalDamagemechanismOperation>> Operations { get; set;}
 
 		public W3SE_ManagePchysicalDamageMechanism(CR2WFile cr2w) : base(cr2w){ }
 

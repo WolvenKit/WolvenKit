@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("applyEffectInterval")] 		public CFloat ApplyEffectInterval { get; set;}
 
-		[RED("effectType")] 		public EEffectType EffectType { get; set;}
+		[RED("effectType")] 		public CEnum<EEffectType> EffectType { get; set;}
 
 		[RED("effectDuration")] 		public CFloat EffectDuration { get; set;}
 

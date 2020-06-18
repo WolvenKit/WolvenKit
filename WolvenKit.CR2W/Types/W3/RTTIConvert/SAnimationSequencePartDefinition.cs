@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("animation")] 		public CName Animation { get; set;}
 
-		[RED("syncType")] 		public EAnimationManualSyncType SyncType { get; set;}
+		[RED("syncType")] 		public CEnum<EAnimationManualSyncType> SyncType { get; set;}
 
 		[RED("syncEventName")] 		public CName SyncEventName { get; set;}
 
@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("useRefBone")] 		public CName UseRefBone { get; set;}
 
-		[RED("rotationTypeUsingRefBone")] 		public ESyncRotationUsingRefBoneType RotationTypeUsingRefBone { get; set;}
+		[RED("rotationTypeUsingRefBone")] 		public CEnum<ESyncRotationUsingRefBoneType> RotationTypeUsingRefBone { get; set;}
 
 		[RED("finalPosition")] 		public Vector FinalPosition { get; set;}
 

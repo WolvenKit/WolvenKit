@@ -27,7 +27,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("weightCurve")] 		public SCurveData WeightCurve { get; set;}
 
-		[RED("resetCloth")] 		public EDialogResetClothAndDanglesType ResetCloth { get; set;}
+		[RED("resetCloth")] 		public CEnum<EDialogResetClothAndDanglesType> ResetCloth { get; set;}
 
 		public CStorySceneEventChangePose(CR2WFile cr2w) : base(cr2w){ }
 

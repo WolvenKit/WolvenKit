@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondThreatLevelDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("operator")] 		public EOperator Operator { get; set;}
+		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
 		[RED("value")] 		public CInt32 Value { get; set;}
 

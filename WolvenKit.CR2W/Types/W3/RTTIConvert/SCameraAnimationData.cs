@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("animation")] 		public CName Animation { get; set;}
 
-		[RED("priority")] 		public ECameraAnimPriority Priority { get; set;}
+		[RED("priority")] 		public CEnum<ECameraAnimPriority> Priority { get; set;}
 
 		[RED("blend")] 		public CFloat Blend { get; set;}
 

@@ -22,6 +22,7 @@ namespace WolvenKit
         {
             InitializeComponent();
             ApplyCustomTheme();
+
             treeView.CanExpandGetter = x => ((VariableListNode) x).ChildCount > 0;
             treeView.ChildrenGetter = x => ((VariableListNode) x).Children;
         }
@@ -176,7 +177,7 @@ namespace WolvenKit
             // replace node with new node
             if (CopyController.VariableTargets.Count == 1
                 && CopyController.VariableTargets.First() is CVariable cvar
-                && cvar.Type == node.Variable.Type
+                && cvar.REDType == node.Variable.REDType
                 && node.Variable is CVariable targetvar
                 )
             {
@@ -254,7 +255,7 @@ namespace WolvenKit
                 if (newvar == null)
                     return;
 
-                newvar.Name = frm.VariableName;
+                newvar.REDName = frm.VariableName;
                 //newvar.Type = frm.VariableType;
             }
 
@@ -344,11 +345,11 @@ namespace WolvenKit
             if (e.Column == null || e.Item == null)
                 return;
 
-            if (e.ClickCount == 2 && e.Column.AspectName == "Name")
+            if (e.ClickCount == 2 && e.Column.AspectName == nameof(VariableListNode.Name))
             {
                 treeView.StartCellEdit(e.Item, 0);
             }
-            else if (e.Column.AspectName == "Value")
+            else if (e.Column.AspectName == nameof(VariableListNode.Value))
             {
                 treeView.StartCellEdit(e.Item, 1);
             }
@@ -384,23 +385,23 @@ namespace WolvenKit
             {
                 get
                 {
-                    if (Variable.Name != null)
-                        return Variable.Name;
+                    if (Variable.REDName != null)
+                        return Variable.REDName;
 
                     return Parent?.Children.IndexOf(this).ToString() ?? "";
                 }
                 set
                 {
-                    if (Variable.Name != null)
+                    if (Variable.REDName != null)
                     {
-                        Variable.Name = value;
+                        Variable.REDName = value;
                     }
                 }
             }
 
-            public string Value => Variable.ToString();
+            public string Value => Variable.REDValue;
 
-            public string Type => Variable.Type;
+            public string Type => Variable.REDType;
 
             public int ChildCount => Children.Count;
 

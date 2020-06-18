@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("ignoreArmor")] 		public CBool IgnoreArmor { get; set;}
 
-		[RED("projEfect")] 		public EEffectType ProjEfect { get; set;}
+		[RED("projEfect")] 		public CEnum<EEffectType> ProjEfect { get; set;}
 
 		[RED("persistFxAfterCollision")] 		public CBool PersistFxAfterCollision { get; set;}
 

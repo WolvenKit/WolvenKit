@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_ReplacerCondition : CQuestScriptedCondition
 	{
-		[RED("replacerType")] 		public EPlayerReplacerType ReplacerType { get; set;}
+		[RED("replacerType")] 		public CEnum<EPlayerReplacerType> ReplacerType { get; set;}
 
 		[RED("inverted")] 		public CBool Inverted { get; set;}
 

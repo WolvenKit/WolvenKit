@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("worldSpace")] 		public CBool WorldSpace { get; set;}
 
-		[RED("interpolation")] 		public EInterpolationType Interpolation { get; set;}
+		[RED("interpolation")] 		public CEnum<EInterpolationType> Interpolation { get; set;}
 
 		[RED("blendFloatTracks")] 		public CBool BlendFloatTracks { get; set;}
 

@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
 
-		[RED("moveType")] 		public EMoveType MoveType { get; set;}
+		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
 		[RED("targetTag")] 		public CName TargetTag { get; set;}
 

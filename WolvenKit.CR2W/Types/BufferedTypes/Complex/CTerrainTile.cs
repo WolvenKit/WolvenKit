@@ -10,16 +10,9 @@ using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.CR2W.Types
 {
-    [REDMeta()]
-    class CTerrainTile : CVariable
+    public partial class CTerrainTile : CResource
     {
-        [RED("tileFileVersion")] public CUInt32 TileFileVersion { get; set; }
 
-        [RED("collisionType")] public ETerrainTileCollision CollisionType { get; set; }
-
-        [RED("maxHeightValue")] public CUInt16 MaxHeightValue { get; set; }
-
-        [RED("minHeightValue")] public CUInt16 MinHeightValue { get; set; }
 
 
         [REDBuffer] public CArray<STerrainTileData> Groups { get; set; }
@@ -49,7 +42,6 @@ namespace WolvenKit.CR2W.Types
             file.Write(maxres);
         }
 
-        public override CVariable Create(CR2WFile cr2w) => new CTerrainTile(cr2w);
     }
 
 

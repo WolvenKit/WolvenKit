@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("switchTag")] 		public CName SwitchTag { get; set;}
 
-		[RED("stateToCheck")] 		public ESwitchStateCondition StateToCheck { get; set;}
+		[RED("stateToCheck")] 		public CEnum<ESwitchStateCondition> StateToCheck { get; set;}
 
 		public W3QuestCond_SwitchState(CR2WFile cr2w) : base(cr2w){ }
 

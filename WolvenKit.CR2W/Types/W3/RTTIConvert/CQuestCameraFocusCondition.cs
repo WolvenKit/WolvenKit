@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("testLineOfSight")] 		public CBool TestLineOfSight { get; set;}
 
-		[RED("lineOfSightSource")] 		public ECameraFocusConditionLineOfSightSource LineOfSightSource { get; set;}
+		[RED("lineOfSightSource")] 		public CEnum<ECameraFocusConditionLineOfSightSource> LineOfSightSource { get; set;}
 
 		public CQuestCameraFocusCondition(CR2WFile cr2w) : base(cr2w){ }
 

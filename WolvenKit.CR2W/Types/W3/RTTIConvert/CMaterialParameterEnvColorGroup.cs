@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialParameterEnvColorGroup : CMaterialBlock
 	{
-		[RED("colorGroup")] 		public EEnvColorGroup ColorGroup { get; set;}
+		[RED("colorGroup")] 		public CEnum<EEnvColorGroup> ColorGroup { get; set;}
 
 		public CMaterialParameterEnvColorGroup(CR2WFile cr2w) : base(cr2w){ }
 

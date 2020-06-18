@@ -25,7 +25,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("completeAfterSpawn")] 		public CBool CompleteAfterSpawn { get; set;}
 
-		[RED("spawnAreaCenter")] 		public ETargetName SpawnAreaCenter { get; set;}
+		[RED("spawnAreaCenter")] 		public CEnum<ETargetName> SpawnAreaCenter { get; set;}
 
 		[RED("minDistanceFromSpawner")] 		public CFloat MinDistanceFromSpawner { get; set;}
 

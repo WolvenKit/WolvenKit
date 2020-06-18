@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_ActorRotationToNode : CQCActorScriptedCondition
 	{
-		[RED("condition")] 		public ECompareOp Condition { get; set;}
+		[RED("condition")] 		public CEnum<ECompareOp> Condition { get; set;}
 
 		[RED("degrees")] 		public CFloat Degrees { get; set;}
 

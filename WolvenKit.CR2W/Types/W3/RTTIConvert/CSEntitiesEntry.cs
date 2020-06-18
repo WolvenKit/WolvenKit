@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("mappinTag")] 		public CName MappinTag { get; set;}
 
-		[RED("mappinType")] 		public ECommMapPinType MappinType { get; set;}
+		[RED("mappinType")] 		public CEnum<ECommMapPinType> MappinType { get; set;}
 
 		[RED("initializers")] 		public CPtr<CCommunityInitializers> Initializers { get; set;}
 

@@ -31,7 +31,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("blendCurve")] 		public CHandle<CCurve> BlendCurve { get; set;}
 
-		[RED("blendZBasedOn")] 		public ECameraBlendSpeedMode BlendZBasedOn { get; set;}
+		[RED("blendZBasedOn")] 		public CEnum<ECameraBlendSpeedMode> BlendZBasedOn { get; set;}
 
 		[RED("blendZDistToForceStart")] 		public CFloat BlendZDistToForceStart { get; set;}
 

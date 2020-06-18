@@ -31,7 +31,7 @@ namespace WolvenKit.Render
             if (rigFile != null)
             foreach (var chunk in rigFile.chunks)
             {
-                if (chunk.Type == "CSkeleton" && chunk.data is CSkeleton cSkeleton)
+                if (chunk.REDType == "CSkeleton" && chunk.data is CSkeleton cSkeleton)
                 {
                     var bones = cSkeleton.Bones;
                     meshSkeleton.nbBones = (uint)bones.Count;

@@ -33,15 +33,15 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("playerWeight")] 		public CFloat PlayerWeight { get; set;}
 
-		[RED("skipVehicle")] 		public ECombatTargetSelectionSkipTarget SkipVehicle { get; set;}
+		[RED("skipVehicle")] 		public CEnum<ECombatTargetSelectionSkipTarget> SkipVehicle { get; set;}
 
 		[RED("skipVehicleProbability")] 		public CInt32 SkipVehicleProbability { get; set;}
 
-		[RED("skipUnreachable")] 		public ECombatTargetSelectionSkipTarget SkipUnreachable { get; set;}
+		[RED("skipUnreachable")] 		public CEnum<ECombatTargetSelectionSkipTarget> SkipUnreachable { get; set;}
 
 		[RED("skipUnreachableProbability")] 		public CInt32 SkipUnreachableProbability { get; set;}
 
-		[RED("skipNotThreatening")] 		public ECombatTargetSelectionSkipTarget SkipNotThreatening { get; set;}
+		[RED("skipNotThreatening")] 		public CEnum<ECombatTargetSelectionSkipTarget> SkipNotThreatening { get; set;}
 
 		[RED("skipNotThreateningProbability")] 		public CInt32 SkipNotThreateningProbability { get; set;}
 

@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("spell")] 		public CHandle<CEntityTemplate> Spell { get; set;}
 
-		[RED("castPosition")] 		public EProjectileCastPosition CastPosition { get; set;}
+		[RED("castPosition")] 		public CEnum<EProjectileCastPosition> CastPosition { get; set;}
 
 		[RED("boneName")] 		public CName BoneName { get; set;}
 

@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("entryNme")] 		public CName EntryNme { get; set;}
 
-		[RED("operator")] 		public EOperator Operator { get; set;}
+		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
 		public W3KilledCounterByEntryCondition(CR2WFile cr2w) : base(cr2w){ }
 

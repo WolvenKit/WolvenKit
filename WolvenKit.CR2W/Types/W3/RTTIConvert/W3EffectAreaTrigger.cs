@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3EffectAreaTrigger : CGameplayEntity
 	{
-		[RED("effect")] 		public EEffectType Effect { get; set;}
+		[RED("effect")] 		public CEnum<EEffectType> Effect { get; set;}
 
 		[RED("useDefaultValuesFromXML")] 		public CBool UseDefaultValuesFromXML { get; set;}
 

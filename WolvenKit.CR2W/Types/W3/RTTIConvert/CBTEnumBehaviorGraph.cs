@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTEnumBehaviorGraph : IBehTreeValueEnum
 	{
-		[RED("value")] 		public EBehaviorGraph Value { get; set;}
+		[RED("value")] 		public CEnum<EBehaviorGraph> Value { get; set;}
 
 		public CBTEnumBehaviorGraph(CR2WFile cr2w) : base(cr2w){ }
 

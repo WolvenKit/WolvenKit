@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_IsDLCEnabled : CQuestScriptedCondition
 	{
-		[RED("dlc")] 		public EQuestConditionDLCType Dlc { get; set;}
+		[RED("dlc")] 		public CEnum<EQuestConditionDLCType> Dlc { get; set;}
 
 		[RED("invert")] 		public CBool Invert { get; set;}
 

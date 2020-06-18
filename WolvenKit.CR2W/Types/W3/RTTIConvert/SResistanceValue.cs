@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("percents")] 		public SAbilityAttributeValue Percents { get; set;}
 
-		[RED("type")] 		public ECharacterDefenseStats Type { get; set;}
+		[RED("type")] 		public CEnum<ECharacterDefenseStats> Type { get; set;}
 
 		public SResistanceValue(CR2WFile cr2w) : base(cr2w){ }
 

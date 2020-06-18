@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphWaveValueNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("type")] 		public EBehaviorWaveValueType Type { get; set;}
+		[RED("type")] 		public CEnum<EBehaviorWaveValueType> Type { get; set;}
 
 		[RED("freq")] 		public CFloat Freq { get; set;}
 

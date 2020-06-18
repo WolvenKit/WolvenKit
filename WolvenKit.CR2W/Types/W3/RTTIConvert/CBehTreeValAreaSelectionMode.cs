@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("varName")] 		public CName VarName { get; set;}
 
-		[RED("value")] 		public EAIAreaSelectionMode Value { get; set;}
+		[RED("value")] 		public CEnum<EAIAreaSelectionMode> Value { get; set;}
 
 		public CBehTreeValAreaSelectionMode(CR2WFile cr2w) : base(cr2w){ }
 

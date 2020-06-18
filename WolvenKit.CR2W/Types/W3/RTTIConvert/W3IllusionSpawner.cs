@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("m_factOnDispelOverride")] 		public CString M_factOnDispelOverride { get; set;}
 
-		[RED("m_discoveryOneliner")] 		public EIllusionDiscoveredOneliner M_discoveryOneliner { get; set;}
+		[RED("m_discoveryOneliner")] 		public CEnum<EIllusionDiscoveredOneliner> M_discoveryOneliner { get; set;}
 
 		[RED("m_factOnDiscoveryOverride")] 		public CString M_factOnDiscoveryOverride { get; set;}
 

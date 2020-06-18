@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("title")] 		public CString Title { get; set;}
 
-		[RED("status")] 		public EJournalStatus Status { get; set;}
+		[RED("status")] 		public CEnum<EJournalStatus> Status { get; set;}
 
 		[RED("journalEntry")] 		public CHandle<CJournalBase> JournalEntry { get; set;}
 

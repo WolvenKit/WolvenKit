@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("nameAsCName")] 		public CName NameAsCName { get; set;}
 
-		[RED("flags")] 		public ESkeletonBoneFlags Flags { get; set;}
+		[RED("flags")] 		public CEnum<ESkeletonBoneFlags> Flags { get; set;}
 
 		public SSkeletonBone(CR2WFile cr2w) : base(cr2w){ }
 

@@ -13,8 +13,8 @@ namespace WolvenKit.CR2W.Types
     {
         string DepotPath { get; set; }
         string ClassName { get; set; }
-        string Name { get; set; }
-        string Type { get; }
+        string REDName { get; set; }
+        string REDType { get; }
     }
 
 

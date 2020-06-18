@@ -15,11 +15,11 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("enabled")] 		public CBool Enabled { get; set;}
 
-		[RED("type")] 		public EDialogLookAtType Type { get; set;}
+		[RED("type")] 		public CEnum<EDialogLookAtType> Type { get; set;}
 
 		[RED("speed")] 		public CFloat Speed { get; set;}
 
-		[RED("level")] 		public ELookAtLevel Level { get; set;}
+		[RED("level")] 		public CEnum<ELookAtLevel> Level { get; set;}
 
 		[RED("range")] 		public CFloat Range { get; set;}
 
@@ -39,7 +39,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("eyesLookAtDampScale")] 		public CFloat EyesLookAtDampScale { get; set;}
 
-		[RED("resetCloth")] 		public EDialogResetClothAndDanglesType ResetCloth { get; set;}
+		[RED("resetCloth")] 		public CEnum<EDialogResetClothAndDanglesType> ResetCloth { get; set;}
 
 		public CStorySceneEventLookAt(CR2WFile cr2w) : base(cr2w){ }
 

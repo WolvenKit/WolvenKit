@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphLookAtUsingAnimationsCommonBaseNode : CBehaviorGraphLookAtUsingAnimationsProcessingNode
 	{
-		[RED("Additive blend type")] 		public EAdditiveType Additive_blend_type { get; set;}
+		[RED("Additive blend type")] 		public CEnum<EAdditiveType> Additive_blend_type { get; set;}
 
 		[RED("Horizontal blend is first")] 		public CBool Horizontal_blend_is_first { get; set;}
 

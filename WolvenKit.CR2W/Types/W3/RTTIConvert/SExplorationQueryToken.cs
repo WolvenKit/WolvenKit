@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("valid")] 		public CBool Valid { get; set;}
 
-		[RED("type")] 		public EExplorationType Type { get; set;}
+		[RED("type")] 		public CEnum<EExplorationType> Type { get; set;}
 
 		[RED("pointOnEdge")] 		public Vector PointOnEdge { get; set;}
 

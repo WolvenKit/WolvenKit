@@ -11,24 +11,15 @@ using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
-    [REDMeta()]
-    public class SAppearanceAttachment : CVariable
+    public partial class SAppearanceAttachment : CVariable
     {
-        [RED("parentClass")] public CName ParentClass { get; set; }
-
-        [RED("parentName")] public CName ParentName { get; set; }
-
-        [RED("childClass")] public CName ChildClass { get; set; }
-
-        [RED("childName")] public CName ChildName { get; set; }
 
         [REDBuffer(true)] public CBufferVLQ<CVariable> Data { get; set; }
 
         public SAppearanceAttachment(CR2WFile cr2w)
             : base(cr2w)
         {
-            Data = new CBufferVLQ<CVariable>(cr2w) { Name = nameof(Data), Parent = this};
+            Data = new CBufferVLQ<CVariable>(cr2w) { REDName = nameof(Data), Parent = this};
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -51,7 +42,7 @@ namespace WolvenKit.CR2W.Types
                 
 
                 Data.AddVariable(parsedvar);
-                parsedvar.Name = ClassName.Value;
+                parsedvar.REDName = ClassName.Value;
             }
 
            
@@ -77,7 +68,7 @@ namespace WolvenKit.CR2W.Types
                 {
                     var ClassName = new CName(cr2w)
                     {
-                        Value = cvar.Type
+                        Value = cvar.REDType
                     };
                     ClassName.Write(bw);
 
@@ -90,9 +81,5 @@ namespace WolvenKit.CR2W.Types
             file.Write(buffer);
         }
 
-        public override CVariable Create(CR2WFile cr2w)
-        {
-            return new SAppearanceAttachment(cr2w);
-        }
     }
 }

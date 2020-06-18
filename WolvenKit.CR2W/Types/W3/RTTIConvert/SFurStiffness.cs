@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("stiffnessTex")] 		public CHandle<CBitmapTexture> StiffnessTex { get; set;}
 
-		[RED("stiffnessTexChannel")] 		public EHairTextureChannel StiffnessTexChannel { get; set;}
+		[RED("stiffnessTexChannel")] 		public CEnum<EHairTextureChannel> StiffnessTexChannel { get; set;}
 
 		[RED("interactionStiffness")] 		public CFloat InteractionStiffness { get; set;}
 
@@ -25,7 +25,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("rootStiffnessTex")] 		public CHandle<CBitmapTexture> RootStiffnessTex { get; set;}
 
-		[RED("rootStiffnessTexChannel")] 		public EHairTextureChannel RootStiffnessTexChannel { get; set;}
+		[RED("rootStiffnessTexChannel")] 		public CEnum<EHairTextureChannel> RootStiffnessTexChannel { get; set;}
 
 		[RED("stiffnessDamping")] 		public CFloat StiffnessDamping { get; set;}
 

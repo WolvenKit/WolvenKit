@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CChangeFacingDirectionTransitionCondition : IBehaviorStateTransitionCondition
 	{
-		[RED("side")] 		public EChangeFacingDirectionSide Side { get; set;}
+		[RED("side")] 		public CEnum<EChangeFacingDirectionSide> Side { get; set;}
 
 		[RED("angleDiffMin")] 		public CFloat AngleDiffMin { get; set;}
 

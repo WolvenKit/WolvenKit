@@ -9,9 +9,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3PhysicalSwitch : W3Switch
 	{
-		[RED("switchOnAnimationType")] 		public PhysicalSwitchAnimationType SwitchOnAnimationType { get; set;}
+		[RED("switchOnAnimationType")] 		public CEnum<PhysicalSwitchAnimationType> SwitchOnAnimationType { get; set;}
 
-		[RED("switchOffAnimationType")] 		public PhysicalSwitchAnimationType SwitchOffAnimationType { get; set;}
+		[RED("switchOffAnimationType")] 		public CEnum<PhysicalSwitchAnimationType> SwitchOffAnimationType { get; set;}
 
 		public W3PhysicalSwitch(CR2WFile cr2w) : base(cr2w){ }
 

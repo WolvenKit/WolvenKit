@@ -9,13 +9,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CClimbType : CVariable
 	{
-		[RED("requiredState")] 		public EClimbRequirementType RequiredState { get; set;}
+		[RED("requiredState")] 		public CEnum<EClimbRequirementType> RequiredState { get; set;}
 
-		[RED("requiredVault")] 		public EClimbRequirementVault RequiredVault { get; set;}
+		[RED("requiredVault")] 		public CEnum<EClimbRequirementVault> RequiredVault { get; set;}
 
-		[RED("requiredPlatform")] 		public EClimbRequirementPlatform RequiredPlatform { get; set;}
+		[RED("requiredPlatform")] 		public CEnum<EClimbRequirementPlatform> RequiredPlatform { get; set;}
 
-		[RED("type")] 		public EClimbHeightType Type { get; set;}
+		[RED("type")] 		public CEnum<EClimbHeightType> Type { get; set;}
 
 		[RED("heightUseDefaults")] 		public CBool HeightUseDefaults { get; set;}
 

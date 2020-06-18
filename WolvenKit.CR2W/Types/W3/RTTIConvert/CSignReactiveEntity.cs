@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("aard")] 		public CBool Aard { get; set;}
 
-		[RED("clueActionWhenDestroyed")] 		public EClueOperation ClueActionWhenDestroyed { get; set;}
+		[RED("clueActionWhenDestroyed")] 		public CEnum<EClueOperation> ClueActionWhenDestroyed { get; set;}
 
 		[RED("igniteOnInteraction")] 		public CBool IgniteOnInteraction { get; set;}
 

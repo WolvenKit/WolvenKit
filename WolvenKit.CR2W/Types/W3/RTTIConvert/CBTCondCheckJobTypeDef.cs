@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondCheckJobTypeDef : IBehTreeReactionTaskDefinition
 	{
-		[RED("jobType")] 		public EJobTreeType JobType { get; set;}
+		[RED("jobType")] 		public CEnum<EJobTreeType> JobType { get; set;}
 
 		public CBTCondCheckJobTypeDef(CR2WFile cr2w) : base(cr2w){ }
 

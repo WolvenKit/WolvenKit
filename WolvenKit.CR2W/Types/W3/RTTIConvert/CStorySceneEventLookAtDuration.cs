@@ -21,9 +21,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("bodyStaticPointWS")] 		public Vector BodyStaticPointWS { get; set;}
 
-		[RED("type")] 		public EDialogLookAtType Type { get; set;}
+		[RED("type")] 		public CEnum<EDialogLookAtType> Type { get; set;}
 
-		[RED("level")] 		public ELookAtLevel Level { get; set;}
+		[RED("level")] 		public CEnum<ELookAtLevel> Level { get; set;}
 
 		[RED("bodyTransitionWeight")] 		public CFloat BodyTransitionWeight { get; set;}
 
@@ -51,7 +51,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("limitDeact")] 		public CBool LimitDeact { get; set;}
 
-		[RED("resetCloth")] 		public EDialogResetClothAndDanglesType ResetCloth { get; set;}
+		[RED("resetCloth")] 		public CEnum<EDialogResetClothAndDanglesType> ResetCloth { get; set;}
 
 		[RED("oldLookAtEyesSpeed")] 		public CFloat OldLookAtEyesSpeed { get; set;}
 

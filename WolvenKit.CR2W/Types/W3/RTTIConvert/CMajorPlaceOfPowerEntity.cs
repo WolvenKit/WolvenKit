@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMajorPlaceOfPowerEntity : CInteractiveEntity
 	{
-		[RED("buffType")] 		public EShrineBuffs BuffType { get; set;}
+		[RED("buffType")] 		public CEnum<EShrineBuffs> BuffType { get; set;}
 
 		[RED("buffUniqueName")] 		public CString BuffUniqueName { get; set;}
 

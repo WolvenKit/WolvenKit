@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("criticalState")] 		public CHandle<CAINpcCriticalState> CriticalState { get; set;}
 
-		[RED("preferedCombatStyle")] 		public EBehaviorGraph PreferedCombatStyle { get; set;}
+		[RED("preferedCombatStyle")] 		public CEnum<EBehaviorGraph> PreferedCombatStyle { get; set;}
 
 		[RED("increaseHitCounterOnlyOnMelee")] 		public CBool IncreaseHitCounterOnlyOnMelee { get; set;}
 
@@ -41,11 +41,11 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("playerWeight")] 		public CFloat PlayerWeight { get; set;}
 
-		[RED("skipVehicle")] 		public ECombatTargetSelectionSkipTarget SkipVehicle { get; set;}
+		[RED("skipVehicle")] 		public CEnum<ECombatTargetSelectionSkipTarget> SkipVehicle { get; set;}
 
 		[RED("skipVehicleProbability")] 		public CInt32 SkipVehicleProbability { get; set;}
 
-		[RED("skipUnreachable")] 		public ECombatTargetSelectionSkipTarget SkipUnreachable { get; set;}
+		[RED("skipUnreachable")] 		public CEnum<ECombatTargetSelectionSkipTarget> SkipUnreachable { get; set;}
 
 		[RED("skipUnreachableProbability")] 		public CInt32 SkipUnreachableProbability { get; set;}
 

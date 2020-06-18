@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("containerTag")] 		public CName ContainerTag { get; set;}
 
-		[RED("contents")] 		public EContainerMode Contents { get; set;}
+		[RED("contents")] 		public CEnum<EContainerMode> Contents { get; set;}
 
 		public W3QuestCond_Container(CR2WFile cr2w) : base(cr2w){ }
 

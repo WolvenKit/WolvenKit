@@ -13,11 +13,11 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("horse")] 		public CHandle<CActor> Horse { get; set;}
 
-		[RED("mountStatus")] 		public EVehicleMountStatus MountStatus { get; set;}
+		[RED("mountStatus")] 		public CEnum<EVehicleMountStatus> MountStatus { get; set;}
 
 		[RED("boat")] 		public EntityHandle Boat { get; set;}
 
-		[RED("vehicleSlot")] 		public EVehicleSlot VehicleSlot { get; set;}
+		[RED("vehicleSlot")] 		public CEnum<EVehicleSlot> VehicleSlot { get; set;}
 
 		public CHorseRiderSharedParams(CR2WFile cr2w) : base(cr2w){ }
 

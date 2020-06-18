@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("switchTag")] 		public CName SwitchTag { get; set;}
 
-		[RED("operations", 2,0)] 		public CArray<EnumWrapper<ESwitchOperation>> Operations { get; set;}
+		[RED("operations", 2,0)] 		public CArray<CEnum<ESwitchOperation>> Operations { get; set;}
 
 		[RED("force")] 		public CBool Force { get; set;}
 

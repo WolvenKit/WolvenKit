@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_gameDifficulty : CQuestScriptedCondition
 	{
-		[RED("targetDifficulty")] 		public EDifficultyMode TargetDifficulty { get; set;}
+		[RED("targetDifficulty")] 		public CEnum<EDifficultyMode> TargetDifficulty { get; set;}
 
 		public W3QuestCond_gameDifficulty(CR2WFile cr2w) : base(cr2w){ }
 

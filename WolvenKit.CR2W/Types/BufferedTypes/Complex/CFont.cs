@@ -12,12 +12,8 @@ using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
-    [REDMeta()]
-    public class CFont : CResource
+    public partial class CFont : CResource
     {
-        [RED("textures", 2, 0)] public CArray<CHandle<CBitmapTexture>> Textures { get; set; }
-
         [REDBuffer(true)] public CArray<CUInt16> Unicodemapping { get; set; }
         [REDBuffer(true)] public CInt32 Linedist { get; set; }
         [REDBuffer(true)] public CInt32 Maxglyphheight { get; set; }
@@ -57,38 +53,38 @@ namespace WolvenKit.CR2W.Types
             {
                 var glyph = new CArray<CFloat>(cr2w)
                 {
-                    Name = "Glyph - " + i
+                    REDName = "Glyph - " + i
                 };
                 // UVs
-                CFloat uv00 = new CFloat(cr2w) { Name = "UV[0][0]" };
+                CFloat uv00 = new CFloat(cr2w) { REDName = "UV[0][0]" };
                 uv00.Read(file, size);
                 glyph.AddVariable(uv00);
-                CFloat uv01 = new CFloat(cr2w) { Name = "UV[0][1]" };
+                CFloat uv01 = new CFloat(cr2w) { REDName = "UV[0][1]" };
                 uv01.Read(file, size);
                 glyph.AddVariable(uv01);
-                CFloat uv10 = new CFloat(cr2w) { Name = "UV[1][0]" };
+                CFloat uv10 = new CFloat(cr2w) { REDName = "UV[1][0]" };
                 uv10.Read(file, size);
                 glyph.AddVariable(uv10);
-                CFloat uv11 = new CFloat(cr2w) { Name = "UV[1][1]" };
+                CFloat uv11 = new CFloat(cr2w) { REDName = "UV[1][1]" };
                 uv11.Read(file, size);
                 glyph.AddVariable(uv11);
 
-                CInt32 textureindex = new CInt32(cr2w) { Name = "Texture index" };
+                CInt32 textureindex = new CInt32(cr2w) { REDName = "Texture index" };
                 textureindex.Read(file, size);
                 glyph.AddVariable(textureindex);
-                CInt32 width = new CInt32(cr2w) { Name = "Width" };
+                CInt32 width = new CInt32(cr2w) { REDName = "Width" };
                 width.Read(file, size);
                 glyph.AddVariable(width);
-                CInt32 height = new CInt32(cr2w) { Name = "Height" };
+                CInt32 height = new CInt32(cr2w) { REDName = "Height" };
                 height.Read(file, size);
                 glyph.AddVariable(height);
-                CInt32 advance_x = new CInt32(cr2w) { Name = "Advance X" };
+                CInt32 advance_x = new CInt32(cr2w) { REDName = "Advance X" };
                 advance_x.Read(file, size);
                 glyph.AddVariable(advance_x);
-                CInt32 bearing_x = new CInt32(cr2w) { Name = "Bearing X" };
+                CInt32 bearing_x = new CInt32(cr2w) { REDName = "Bearing X" };
                 bearing_x.Read(file, size);
                 glyph.AddVariable(bearing_x);
-                CInt32 bearing_y = new CInt32(cr2w) { Name = "Bearing Y" };
+                CInt32 bearing_y = new CInt32(cr2w) { REDName = "Bearing Y" };
                 bearing_y.Read(file, size);
                 glyph.AddVariable(bearing_y);
 
@@ -119,11 +115,6 @@ namespace WolvenKit.CR2W.Types
                }
             }
 
-        }
-
-        public override CVariable Create(CR2WFile cr2w)
-        {
-            return new CFont(cr2w);
         }
     }
 }

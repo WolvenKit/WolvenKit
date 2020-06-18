@@ -38,7 +38,7 @@ namespace WolvenKit.FlowTreeEditors
 
         public virtual string GetCopyText()
         {
-            return chunk.Name;
+            return chunk.REDName;
         }
 
         public event EventHandler<SelectChunkArgs> OnSelectChunk;
@@ -71,7 +71,7 @@ namespace WolvenKit.FlowTreeEditors
 
         public virtual void UpdateView()
         {
-            lblTitle.Text = chunk.Name;
+            lblTitle.Text = chunk.REDName;
             Size = TextRenderer.MeasureText(lblTitle.Text, lblTitle.Font) + Margin.Size;
         }
 

@@ -12,7 +12,7 @@ namespace WolvenKit
         {
             base.UpdateView();
 
-            lblTitle.Text = Chunk.Name + " : " + Chunk.Preview;
+            lblTitle.Text = Chunk.REDName + " : " + Chunk.Preview;
             Size = TextRenderer.MeasureText(lblTitle.Text, lblTitle.Font) + Margin.Size;
         }
 

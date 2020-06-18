@@ -639,12 +639,12 @@ namespace CR2WTests
             {
                 var ubsl = c.unknownBytes?.Bytes != null ? c.unknownBytes.Bytes.Length : 0;
 
-                if (!chunkstate.ContainsKey(c.Type))
+                if (!chunkstate.ContainsKey(c.REDType))
                 {
-                    chunkstate.Add(c.Type, new Tuple<long, long>(0, 0));
+                    chunkstate.Add(c.REDType, new Tuple<long, long>(0, 0));
                 }
-                var already = chunkstate[c.Type];
-                chunkstate[c.Type] = new Tuple<long, long>(
+                var already = chunkstate[c.REDType];
+                chunkstate[c.REDType] = new Tuple<long, long>(
                         already.Item1 + c.Export.dataSize,
                         already.Item2 + ubsl
                     );

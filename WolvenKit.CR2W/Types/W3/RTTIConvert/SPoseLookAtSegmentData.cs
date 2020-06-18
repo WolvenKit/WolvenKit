@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SPoseLookAtSegmentData : CVariable
 	{
-		[RED("segmentLevel")] 		public ELookAtLevel SegmentLevel { get; set;}
+		[RED("segmentLevel")] 		public CEnum<ELookAtLevel> SegmentLevel { get; set;}
 
 		[RED("boneNameFirst")] 		public CString BoneNameFirst { get; set;}
 
@@ -25,9 +25,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("onlyFirst")] 		public CBool OnlyFirst { get; set;}
 
-		[RED("up")] 		public EAxis Up { get; set;}
+		[RED("up")] 		public CEnum<EAxis> Up { get; set;}
 
-		[RED("front")] 		public EAxis Front { get; set;}
+		[RED("front")] 		public CEnum<EAxis> Front { get; set;}
 
 		[RED("angleMaxHor")] 		public CFloat AngleMaxHor { get; set;}
 

@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphLatchValueNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("type")] 		public EBehaviorValueLatchType Type { get; set;}
+		[RED("type")] 		public CEnum<EBehaviorValueLatchType> Type { get; set;}
 
 		public CBehaviorGraphLatchValueNode(CR2WFile cr2w) : base(cr2w){ }
 

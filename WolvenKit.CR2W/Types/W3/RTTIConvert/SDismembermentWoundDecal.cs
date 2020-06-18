@@ -25,7 +25,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("doubleSided")] 		public CBool DoubleSided { get; set;}
 
-		[RED("projectionMode")] 		public ERenderDynamicDecalProjection ProjectionMode { get; set;}
+		[RED("projectionMode")] 		public CEnum<ERenderDynamicDecalProjection> ProjectionMode { get; set;}
 
 		[RED("applyToFillMesh")] 		public CBool ApplyToFillMesh { get; set;}
 

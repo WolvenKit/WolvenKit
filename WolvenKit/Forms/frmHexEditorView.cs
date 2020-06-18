@@ -597,8 +597,8 @@ namespace WolvenKit
             {
                 get
                 {
-                    if (Variable?.Name != null)
-                        return Variable.Name;
+                    if (Variable?.REDName != null)
+                        return Variable.REDName;
 
                     if (Parent == null)
                         return "";
@@ -609,7 +609,7 @@ namespace WolvenKit
 
             public string Value => Variable.ToString();
 
-            public string Type => Variable.Type;
+            public string Type => Variable.REDType;
 
             public int Endpos { get; set; }
 

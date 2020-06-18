@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("cachedValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedValueNode { get; set;}
 
-		[RED("mathOp")] 		public EBehaviorMimicMathOp MathOp { get; set;}
+		[RED("mathOp")] 		public CEnum<EBehaviorMimicMathOp> MathOp { get; set;}
 
 		[RED("value")] 		public CFloat Value { get; set;}
 

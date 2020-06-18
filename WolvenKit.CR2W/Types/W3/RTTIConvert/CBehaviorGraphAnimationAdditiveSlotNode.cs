@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphAnimationAdditiveSlotNode : CBehaviorGraphAnimationSlotNode
 	{
-		[RED("additiveType")] 		public EAdditiveType AdditiveType { get; set;}
+		[RED("additiveType")] 		public CEnum<EAdditiveType> AdditiveType { get; set;}
 
 		[RED("cachedBaseAnimInputNode")] 		public CPtr<CBehaviorGraphNode> CachedBaseAnimInputNode { get; set;}
 

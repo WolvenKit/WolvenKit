@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("requiredSwitchTag")] 		public CName RequiredSwitchTag { get; set;}
 
-		[RED("switchState")] 		public ERequiredSwitchState SwitchState { get; set;}
+		[RED("switchState")] 		public CEnum<ERequiredSwitchState> SwitchState { get; set;}
 
 		public SRequiredSwitch(CR2WFile cr2w) : base(cr2w){ }
 

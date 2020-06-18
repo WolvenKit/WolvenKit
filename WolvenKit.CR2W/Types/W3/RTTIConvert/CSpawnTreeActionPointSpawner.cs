@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeActionPointSpawner : CVariable
 	{
-		[RED("visibility")] 		public ESpawnTreeSpawnVisibility Visibility { get; set;}
+		[RED("visibility")] 		public CEnum<ESpawnTreeSpawnVisibility> Visibility { get; set;}
 
 		[RED("spawnpointDelay")] 		public CFloat SpawnpointDelay { get; set;}
 

@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBgNpcTriggerActionLookAt : IBgNpcTriggerAction
 	{
-		[RED("type")] 		public EReactionLookAtType Type { get; set;}
+		[RED("type")] 		public CEnum<EReactionLookAtType> Type { get; set;}
 
 		[RED("onlyPlayer")] 		public CBool OnlyPlayer { get; set;}
 

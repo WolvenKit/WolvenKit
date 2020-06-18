@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("disabled")] 		public CBool Disabled { get; set;}
 
-		[RED("dialogAction")] 		public EDialogActionIcon DialogAction { get; set;}
+		[RED("dialogAction")] 		public CEnum<EDialogActionIcon> DialogAction { get; set;}
 
 		[RED("playGoChunk")] 		public CName PlayGoChunk { get; set;}
 

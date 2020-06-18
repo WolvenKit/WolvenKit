@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondIsInInteriorDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("testSubject")] 		public ETestSubject TestSubject { get; set;}
+		[RED("testSubject")] 		public CEnum<ETestSubject> TestSubject { get; set;}
 
 		public CBTCondIsInInteriorDef(CR2WFile cr2w) : base(cr2w){ }
 

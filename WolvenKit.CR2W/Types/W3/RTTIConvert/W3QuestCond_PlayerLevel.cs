@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("level")] 		public CInt32 Level { get; set;}
 
-		[RED("comparator")] 		public ECompareOp Comparator { get; set;}
+		[RED("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
 
 		[RED("useComparator")] 		public CBool UseComparator { get; set;}
 

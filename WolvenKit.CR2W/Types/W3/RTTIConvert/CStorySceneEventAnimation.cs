@@ -29,11 +29,11 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("bonesWeight", 2,0)] 		public CArray<CFloat> BonesWeight { get; set;}
 
-		[RED("animationType")] 		public EStorySceneAnimationType AnimationType { get; set;}
+		[RED("animationType")] 		public CEnum<EStorySceneAnimationType> AnimationType { get; set;}
 
 		[RED("addConvertToAdditive")] 		public CBool AddConvertToAdditive { get; set;}
 
-		[RED("addAdditiveType")] 		public EAdditiveType AddAdditiveType { get; set;}
+		[RED("addAdditiveType")] 		public CEnum<EAdditiveType> AddAdditiveType { get; set;}
 
 		[RED("useWeightCurve")] 		public CBool UseWeightCurve { get; set;}
 

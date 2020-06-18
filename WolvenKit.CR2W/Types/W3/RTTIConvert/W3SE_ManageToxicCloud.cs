@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("entityTag")] 		public CName EntityTag { get; set;}
 
-		[RED("operations", 2,0)] 		public CArray<EnumWrapper<EToxicCloudOperation>> Operations { get; set;}
+		[RED("operations", 2,0)] 		public CArray<CEnum<EToxicCloudOperation>> Operations { get; set;}
 
 		public W3SE_ManageToxicCloud(CR2WFile cr2w) : base(cr2w){ }
 

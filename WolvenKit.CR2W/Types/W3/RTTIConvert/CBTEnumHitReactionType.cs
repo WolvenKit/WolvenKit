@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTEnumHitReactionType : IBehTreeValueEnum
 	{
-		[RED("value")] 		public EHitReactionType Value { get; set;}
+		[RED("value")] 		public CEnum<EHitReactionType> Value { get; set;}
 
 		public CBTEnumHitReactionType(CR2WFile cr2w) : base(cr2w){ }
 

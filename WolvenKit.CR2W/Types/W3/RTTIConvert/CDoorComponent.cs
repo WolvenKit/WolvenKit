@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDoorComponent : CInteractionComponent
 	{
-		[RED("initialState")] 		public EDoorState InitialState { get; set;}
+		[RED("initialState")] 		public CEnum<EDoorState> InitialState { get; set;}
 
 		[RED("isTrapdoor")] 		public CBool IsTrapdoor { get; set;}
 

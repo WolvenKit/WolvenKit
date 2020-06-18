@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPursueTargetDef : IBehTreeTaskDefinition
 	{
-		[RED("moveType")] 		public EMoveType MoveType { get; set;}
+		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
 		[RED("minDistance")] 		public CBehTreeValFloat MinDistance { get; set;}
 

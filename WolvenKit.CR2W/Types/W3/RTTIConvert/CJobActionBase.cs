@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("fireBlendedEvents")] 		public CBool FireBlendedEvents { get; set;}
 
-		[RED("allowedLookAtLevel")] 		public ELookAtLevel AllowedLookAtLevel { get; set;}
+		[RED("allowedLookAtLevel")] 		public CEnum<ELookAtLevel> AllowedLookAtLevel { get; set;}
 
 		[RED("ignoreIfItemMounted")] 		public CName IgnoreIfItemMounted { get; set;}
 

@@ -24,7 +24,7 @@ namespace WolvenKit.CR2W.Types
         public int elementcount { get; set; }
 
         [Browsable(false)]
-        public override string Type
+        public override string REDType
         {
             get
             {
@@ -129,7 +129,7 @@ namespace WolvenKit.CR2W.Types
         {
             if (variable is T)
             {
-                variable.Name = elements.Count.ToString();
+                variable.REDName = elements.Count.ToString();
                 elements.Add(variable as T);
             }
         }
@@ -138,7 +138,7 @@ namespace WolvenKit.CR2W.Types
         {
             for (int i = 0; i < elements.Count; i++)
             {
-                elements[i].Name = i.ToString();
+                elements[i].REDName = i.ToString();
             }
         }
 

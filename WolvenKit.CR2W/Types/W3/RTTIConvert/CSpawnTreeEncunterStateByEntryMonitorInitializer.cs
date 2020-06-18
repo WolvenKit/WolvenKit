@@ -9,11 +9,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeEncunterStateByEntryMonitorInitializer : ISpawnTreeSpawnMonitorInitializer
 	{
-		[RED("counterType")] 		public EEncounterMonitorCounterType CounterType { get; set;}
+		[RED("counterType")] 		public CEnum<EEncounterMonitorCounterType> CounterType { get; set;}
 
 		[RED("referenceValue")] 		public CInt32 ReferenceValue { get; set;}
 
-		[RED("operator")] 		public EOperator Operator { get; set;}
+		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
 		[RED("disableMonitorAfterTasksFinished")] 		public CBool DisableMonitorAfterTasksFinished { get; set;}
 

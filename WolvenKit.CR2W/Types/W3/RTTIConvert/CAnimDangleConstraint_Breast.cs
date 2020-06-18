@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimDangleConstraint_Breast : CAnimSkeletalDangleConstraint
 	{
-		[RED("preset")] 		public EBreastPreset Preset { get; set;}
+		[RED("preset")] 		public CEnum<EBreastPreset> Preset { get; set;}
 
 		[RED("simTime")] 		public CFloat SimTime { get; set;}
 

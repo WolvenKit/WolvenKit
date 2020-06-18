@@ -17,9 +17,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("tagId")] 		public CName TagId { get; set;}
 
-		[RED("selectorType")] 		public EAnimationTrajectorySelectorType SelectorType { get; set;}
+		[RED("selectorType")] 		public CEnum<EAnimationTrajectorySelectorType> SelectorType { get; set;}
 
-		[RED("proxySyncType")] 		public EActionMoveAnimationSyncType ProxySyncType { get; set;}
+		[RED("proxySyncType")] 		public CEnum<EActionMoveAnimationSyncType> ProxySyncType { get; set;}
 
 		[RED("proxy")] 		public CHandle<CActionMoveAnimationProxy> Proxy { get; set;}
 

@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("mapPinID")] 		public CName MapPinID { get; set;}
 
-		[RED("type")] 		public EJournalMapPinType Type { get; set;}
+		[RED("type")] 		public CEnum<EJournalMapPinType> Type { get; set;}
 
 		[RED("enabledAtStartup")] 		public CBool EnabledAtStartup { get; set;}
 

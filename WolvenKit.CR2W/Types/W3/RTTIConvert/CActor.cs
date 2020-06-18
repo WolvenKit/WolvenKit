@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CActor : CGameplayEntity
 	{
-		[RED("actorGroups")] 		public EPathEngineAgentType ActorGroups { get; set;}
+		[RED("actorGroups")] 		public CEnum<EPathEngineAgentType> ActorGroups { get; set;}
 
 		[RED("aimOffset")] 		public CFloat AimOffset { get; set;}
 

@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("brushIndex")] 		public CInt32 BrushIndex { get; set;}
 
-		[RED("csgType")] 		public EBrushCSGType CsgType { get; set;}
+		[RED("csgType")] 		public CEnum<EBrushCSGType> CsgType { get; set;}
 
 		[RED("faces", 2,0)] 		public CArray<CPtr<CBrushFace>> Faces { get; set;}
 

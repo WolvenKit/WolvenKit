@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("elevator")] 		public EntityHandle Elevator { get; set;}
 
-		[RED("switchType")] 		public EElevatorSwitchType SwitchType { get; set;}
+		[RED("switchType")] 		public CEnum<EElevatorSwitchType> SwitchType { get; set;}
 
 		public W3ElevatorSwitch(CR2WFile cr2w) : base(cr2w){ }
 

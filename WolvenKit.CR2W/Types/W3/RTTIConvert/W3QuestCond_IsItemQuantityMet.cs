@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("itemCategory")] 		public CName ItemCategory { get; set;}
 
-		[RED("comparator")] 		public ECompareOp Comparator { get; set;}
+		[RED("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
 
 		[RED("count")] 		public CInt32 Count { get; set;}
 

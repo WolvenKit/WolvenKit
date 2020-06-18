@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CriticalStateStruct : CVariable
 	{
-		[RED("CSType")] 		public ECriticalStateType CSType { get; set;}
+		[RED("CSType")] 		public CEnum<ECriticalStateType> CSType { get; set;}
 
 		[RED("isActive")] 		public CBool IsActive { get; set;}
 

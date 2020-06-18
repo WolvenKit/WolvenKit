@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("stateName")] 		public CName StateName { get; set;}
 
-		[RED("playerState")] 		public EQuestConditionPlayerState PlayerState { get; set;}
+		[RED("playerState")] 		public CEnum<EQuestConditionPlayerState> PlayerState { get; set;}
 
 		[RED("inverted")] 		public CBool Inverted { get; set;}
 

@@ -27,13 +27,13 @@ namespace WolvenKit.CR2W.Types
         public CSectorDataResource(CR2WFile cr2w)
             : base(cr2w)
         {
-            box0 = new CFloat(cr2w) { Name = "box0", };
-            box1 = new CFloat(cr2w) { Name = "box1", };
-            box2 = new CFloat(cr2w) { Name = "box2", };
-            box3 = new CFloat(cr2w) { Name = "box3", };
-            box4 = new CFloat(cr2w) { Name = "box4", };
-            box5 = new CFloat(cr2w) { Name = "box5", };
-            pathHash = new CString(cr2w) { Name = "pathHash" };
+            box0 = new CFloat(cr2w) { REDName = "box0", };
+            box1 = new CFloat(cr2w) { REDName = "box1", };
+            box2 = new CFloat(cr2w) { REDName = "box2", };
+            box3 = new CFloat(cr2w) { REDName = "box3", };
+            box4 = new CFloat(cr2w) { REDName = "box4", };
+            box5 = new CFloat(cr2w) { REDName = "box5", };
+            pathHash = new CString(cr2w) { REDName = "pathHash" };
         }
 
         public override CVariable Create(CR2WFile cr2w)

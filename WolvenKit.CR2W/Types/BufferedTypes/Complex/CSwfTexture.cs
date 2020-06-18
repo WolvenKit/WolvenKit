@@ -9,11 +9,9 @@ using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
-    [REDMeta()]
-    public class CSwfTexture : CBitmapTexture
+
+    public partial class CSwfTexture : CBitmapTexture
     {
-        [RED("linkageName")] public CString LinkageName { get; set; }
 
         [REDBuffer(true)] public CBytes swfTexture { get; set; }
 
@@ -21,7 +19,7 @@ namespace WolvenKit.CR2W.Types
         {
             swfTexture = new CBytes(cr2w)
             {
-                Name = "swfTexture"
+                REDName = "swfTexture"
             };
         }
 
@@ -41,11 +39,6 @@ namespace WolvenKit.CR2W.Types
             base.Write(file);
 
             swfTexture.Write(file);
-        }
-
-        public override CVariable Create(CR2WFile cr2w)
-        {
-            return new CSwfTexture(cr2w);
         }
 
     }

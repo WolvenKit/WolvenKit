@@ -23,7 +23,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("signalGameplayEventWhileInHitAnim")] 		public CBool SignalGameplayEventWhileInHitAnim { get; set;}
 
-		[RED("alwaysAvailableOnDodgeType")] 		public EDodgeType AlwaysAvailableOnDodgeType { get; set;}
+		[RED("alwaysAvailableOnDodgeType")] 		public CEnum<EDodgeType> AlwaysAvailableOnDodgeType { get; set;}
 
 		[RED("allowDodgeOverlap")] 		public CBool AllowDodgeOverlap { get; set;}
 

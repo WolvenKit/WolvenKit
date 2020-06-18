@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimLookAtEvent : CExtAnimDurationEvent
 	{
-		[RED("level")] 		public ELookAtLevel Level { get; set;}
+		[RED("level")] 		public CEnum<ELookAtLevel> Level { get; set;}
 
 		public CExtAnimLookAtEvent(CR2WFile cr2w) : base(cr2w){ }
 

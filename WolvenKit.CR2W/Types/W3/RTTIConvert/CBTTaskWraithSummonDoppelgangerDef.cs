@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("numberToSummon")] 		public CInt32 NumberToSummon { get; set;}
 
-		[RED("summonPositionPattern")] 		public ESpawnPositionPattern SummonPositionPattern { get; set;}
+		[RED("summonPositionPattern")] 		public CEnum<ESpawnPositionPattern> SummonPositionPattern { get; set;}
 
 		[RED("summonMaxDistance")] 		public CFloat SummonMaxDistance { get; set;}
 

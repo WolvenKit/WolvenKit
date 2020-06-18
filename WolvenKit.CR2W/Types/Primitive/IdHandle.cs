@@ -18,8 +18,8 @@ namespace WolvenKit.CR2W.Types
 
         public IdHandle(CR2WFile cr2w) : base(cr2w)
         {
-            handlename = new CName(cr2w) { Name = "handlename" };
-            handle = new CHandle<CBehaviorVariable>(cr2w) { Name = "handle" };
+            handlename = new CName(cr2w) { REDName = "handlename" };
+            handle = new CHandle<CBehaviorVariable>(cr2w) { REDName = "handle" };
         }
 
         public override void Read(BinaryReader file, uint size)

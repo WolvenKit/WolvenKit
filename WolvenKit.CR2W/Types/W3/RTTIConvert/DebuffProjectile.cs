@@ -9,9 +9,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class DebuffProjectile : W3AdvancedProjectile
 	{
-		[RED("debuffType")] 		public EEffectType DebuffType { get; set;}
+		[RED("debuffType")] 		public CEnum<EEffectType> DebuffType { get; set;}
 
-		[RED("hitReactionType")] 		public EHitReactionType HitReactionType { get; set;}
+		[RED("hitReactionType")] 		public CEnum<EHitReactionType> HitReactionType { get; set;}
 
 		[RED("damageTypeName")] 		public CName DamageTypeName { get; set;}
 

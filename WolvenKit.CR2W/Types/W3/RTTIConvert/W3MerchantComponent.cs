@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MerchantComponent : CScriptedComponent
 	{
-		[RED("mapPinType")] 		public EMerchantMapPinType MapPinType { get; set;}
+		[RED("mapPinType")] 		public CEnum<EMerchantMapPinType> MapPinType { get; set;}
 
 		public W3MerchantComponent(CR2WFile cr2w) : base(cr2w){ }
 

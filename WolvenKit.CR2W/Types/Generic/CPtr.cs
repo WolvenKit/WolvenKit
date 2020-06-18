@@ -35,7 +35,7 @@ namespace WolvenKit.CR2W.Types
                 if (Reference == null)
                     return "NULL";
                 else
-                    return Reference.Type;
+                    return Reference.REDType;
             }
             catch (Exception ex)
             {
@@ -109,7 +109,7 @@ namespace WolvenKit.CR2W.Types
             {
                 editor.Items.Add(new PtrComboItem
                 {
-                    Text = $"{chunk.Type} #{chunk.ChunkIndex}", //real index
+                    Text = $"{chunk.REDType} #{chunk.ChunkIndex}", //real index
                     Value = chunk
                 }
                 );
@@ -137,7 +137,7 @@ namespace WolvenKit.CR2W.Types
             if (Reference == null)
                 return "NULL";
             else
-                return Reference.Type + " #" + (Reference.ChunkIndex);
+                return Reference.REDType + " #" + (Reference.ChunkIndex);
         }
 
         public override void SerializeToXml(XmlWriter xw)

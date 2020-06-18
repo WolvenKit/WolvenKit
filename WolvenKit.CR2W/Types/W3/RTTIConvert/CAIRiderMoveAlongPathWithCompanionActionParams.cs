@@ -25,7 +25,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("allowLeaderToRideOff")] 		public CBool AllowLeaderToRideOff { get; set;}
 
-		[RED("moveTypeAfterMaxDistance")] 		public EMoveType MoveTypeAfterMaxDistance { get; set;}
+		[RED("moveTypeAfterMaxDistance")] 		public CEnum<EMoveType> MoveTypeAfterMaxDistance { get; set;}
 
 		public CAIRiderMoveAlongPathWithCompanionActionParams(CR2WFile cr2w) : base(cr2w){ }
 

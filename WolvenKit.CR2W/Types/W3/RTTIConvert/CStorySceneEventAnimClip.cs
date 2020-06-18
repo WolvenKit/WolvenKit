@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("stretch")] 		public CFloat Stretch { get; set;}
 
-		[RED("allowLookatsLevel")] 		public ELookAtLevel AllowLookatsLevel { get; set;}
+		[RED("allowLookatsLevel")] 		public CEnum<ELookAtLevel> AllowLookatsLevel { get; set;}
 
 		[RED("weight")] 		public CFloat Weight { get; set;}
 

@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class UserMessageActionData : CVariable
 	{
-		[RED("actionId")] 		public EUserMessageAction ActionId { get; set;}
+		[RED("actionId")] 		public CEnum<EUserMessageAction> ActionId { get; set;}
 
 		[RED("label")] 		public CString Label { get; set;}
 

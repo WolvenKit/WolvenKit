@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("onDectivate")] 		public CBool OnDectivate { get; set;}
 
-		[RED("infoType")] 		public EActionInfoType InfoType { get; set;}
+		[RED("infoType")] 		public CEnum<EActionInfoType> InfoType { get; set;}
 
 		[RED("notifyPlayerInsteadOfCombatTarget")] 		public CBool NotifyPlayerInsteadOfCombatTarget { get; set;}
 

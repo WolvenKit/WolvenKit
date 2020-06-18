@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("image")] 		public CString Image { get; set;}
 
-		[RED("importance")] 		public ECharacterImportance Importance { get; set;}
+		[RED("importance")] 		public CEnum<ECharacterImportance> Importance { get; set;}
 
 		[RED("entityTemplate")] 		public CSoft<CEntityTemplate> EntityTemplate { get; set;}
 

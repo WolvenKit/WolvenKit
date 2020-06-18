@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CLightEntitySimpleWithEffectImmunity : CLightEntitySimple
 	{
-		[RED("effectImmunity")] 		public EEffectType EffectImmunity { get; set;}
+		[RED("effectImmunity")] 		public CEnum<EEffectType> EffectImmunity { get; set;}
 
 		[RED("duration")] 		public CFloat Duration { get; set;}
 

@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SLandData : CVariable
 	{
-		[RED("landType")] 		public ELandType LandType { get; set;}
+		[RED("landType")] 		public CEnum<ELandType> LandType { get; set;}
 
 		[RED("timeBeforeChain")] 		public CFloat TimeBeforeChain { get; set;}
 
@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("timeSafetyEnd")] 		public CFloat TimeSafetyEnd { get; set;}
 
-		[RED("landEndForcedMode")] 		public ELandRunForcedMode LandEndForcedMode { get; set;}
+		[RED("landEndForcedMode")] 		public CEnum<ELandRunForcedMode> LandEndForcedMode { get; set;}
 
 		[RED("shouldFlipFoot")] 		public CBool ShouldFlipFoot { get; set;}
 

@@ -9,9 +9,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeLoopDecoratorDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("onCompleted")] 		public EBTLoopMode OnCompleted { get; set;}
+		[RED("onCompleted")] 		public CEnum<EBTLoopMode> OnCompleted { get; set;}
 
-		[RED("onFailed")] 		public EBTLoopMode OnFailed { get; set;}
+		[RED("onFailed")] 		public CEnum<EBTLoopMode> OnFailed { get; set;}
 
 		[RED("maxIterations")] 		public CBehTreeValInt MaxIterations { get; set;}
 

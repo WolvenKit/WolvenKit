@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSCFlags : IMoveSteeringCondition
 	{
-		[RED("movementFlags")] 		public EMovementFlags MovementFlags { get; set;}
+		[RED("movementFlags")] 		public CEnum<EMovementFlags> MovementFlags { get; set;}
 
 		public CMoveSCFlags(CR2WFile cr2w) : base(cr2w){ }
 

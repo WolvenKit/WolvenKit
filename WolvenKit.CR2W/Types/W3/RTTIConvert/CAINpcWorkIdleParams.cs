@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("actionPointSelector")] 		public CHandle<CActionPointSelector> ActionPointSelector { get; set;}
 
-		[RED("actionPointMoveType")] 		public EMoveType ActionPointMoveType { get; set;}
+		[RED("actionPointMoveType")] 		public CEnum<EMoveType> ActionPointMoveType { get; set;}
 
 		public CAINpcWorkIdleParams(CR2WFile cr2w) : base(cr2w){ }
 

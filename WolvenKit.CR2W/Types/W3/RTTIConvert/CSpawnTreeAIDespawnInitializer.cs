@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("ai")] 		public CHandle<CAIDespawnTree> Ai { get; set;}
 
-		[RED("aiPriority")] 		public ETopLevelAIPriorities AiPriority { get; set;}
+		[RED("aiPriority")] 		public CEnum<ETopLevelAIPriorities> AiPriority { get; set;}
 
 		public CSpawnTreeAIDespawnInitializer(CR2WFile cr2w) : base(cr2w){ }
 

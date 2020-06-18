@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("immunityTo", 2,0)] 		public CArray<CInt32> ImmunityTo { get; set;}
 
-		[RED("flags")] 		public EImmunityFlags Flags { get; set;}
+		[RED("flags")] 		public CEnum<EImmunityFlags> Flags { get; set;}
 
 		public CBuffImmunityParam(CR2WFile cr2w) : base(cr2w){ }
 

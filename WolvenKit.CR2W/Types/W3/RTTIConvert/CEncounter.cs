@@ -35,7 +35,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("defaultImmediateDespawnConfiguration")] 		public SSpawnTreeDespawnConfiguration DefaultImmediateDespawnConfiguration { get; set;}
 
-		[RED("spawnTreeType")] 		public ESpawnTreeType SpawnTreeType { get; set;}
+		[RED("spawnTreeType")] 		public CEnum<ESpawnTreeType> SpawnTreeType { get; set;}
 
 		[RED("dataManager")] 		public CHandle<CEncounterDataManager> DataManager { get; set;}
 

@@ -31,7 +31,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("autoHideRange")] 		public CFloat AutoHideRange { get; set;}
 
-		[RED("colorGroup")] 		public EEnvColorGroup ColorGroup { get; set;}
+		[RED("colorGroup")] 		public CEnum<EEnvColorGroup> ColorGroup { get; set;}
 
 		[RED("isSpotlight")] 		public CBool IsSpotlight { get; set;}
 

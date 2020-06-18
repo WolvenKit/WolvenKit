@@ -25,7 +25,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("lastTransBone")] 		public CInt32 LastTransBone { get; set;}
 
-		[RED("compressTranslationType")] 		public ECompressTranslationType CompressTranslationType { get; set;}
+		[RED("compressTranslationType")] 		public CEnum<ECompressTranslationType> CompressTranslationType { get; set;}
 
 		public CPoseCompressionDefault(CR2WFile cr2w) : base(cr2w){ }
 

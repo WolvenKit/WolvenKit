@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("gameplayFlags")] 		public CUInt32 GameplayFlags { get; set;}
 
-		[RED("focusModeVisibility")] 		public EFocusModeVisibility FocusModeVisibility { get; set;}
+		[RED("focusModeVisibility")] 		public CEnum<EFocusModeVisibility> FocusModeVisibility { get; set;}
 
 		[RED("minLootParamNumber")] 		public CInt32 MinLootParamNumber { get; set;}
 

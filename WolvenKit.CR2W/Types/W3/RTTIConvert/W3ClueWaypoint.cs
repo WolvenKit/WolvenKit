@@ -11,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("waypointTag")] 		public CName WaypointTag { get; set;}
 
-		[RED("clueStateInWaypoint")] 		public EBoidClueState ClueStateInWaypoint { get; set;}
+		[RED("clueStateInWaypoint")] 		public CEnum<EBoidClueState> ClueStateInWaypoint { get; set;}
 
-		[RED("conditionsLogicalOperator")] 		public ELogicalOperator ConditionsLogicalOperator { get; set;}
+		[RED("conditionsLogicalOperator")] 		public CEnum<ELogicalOperator> ConditionsLogicalOperator { get; set;}
 
 		[RED("waypointReachedConditions", 2,0)] 		public CArray<CHandle<W3ClueCondition>> WaypointReachedConditions { get; set;}
 

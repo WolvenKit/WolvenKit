@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class STutorialMessage : CVariable
 	{
-		[RED("type")] 		public ETutorialMessageType Type { get; set;}
+		[RED("type")] 		public CEnum<ETutorialMessageType> Type { get; set;}
 
 		[RED("tutorialScriptTag")] 		public CName TutorialScriptTag { get; set;}
 
@@ -29,7 +29,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("forceToQueueFront")] 		public CBool ForceToQueueFront { get; set;}
 
-		[RED("hintPositionType")] 		public ETutorialHintPositionType HintPositionType { get; set;}
+		[RED("hintPositionType")] 		public CEnum<ETutorialHintPositionType> HintPositionType { get; set;}
 
 		[RED("hintPosX")] 		public CFloat HintPosX { get; set;}
 
@@ -57,7 +57,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("isHUDTutorial")] 		public CBool IsHUDTutorial { get; set;}
 
-		[RED("hintDurationType")] 		public ETutorialHintDurationType HintDurationType { get; set;}
+		[RED("hintDurationType")] 		public CEnum<ETutorialHintDurationType> HintDurationType { get; set;}
 
 		[RED("blockInput")] 		public CBool BlockInput { get; set;}
 

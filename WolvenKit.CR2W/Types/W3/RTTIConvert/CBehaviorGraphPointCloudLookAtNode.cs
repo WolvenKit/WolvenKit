@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("additiveMode")] 		public CBool AdditiveMode { get; set;}
 
-		[RED("additiveType")] 		public EAdditiveType AdditiveType { get; set;}
+		[RED("additiveType")] 		public CEnum<EAdditiveType> AdditiveType { get; set;}
 
 		[RED("writeToPoseLikeAdditiveNode")] 		public CBool WriteToPoseLikeAdditiveNode { get; set;}
 

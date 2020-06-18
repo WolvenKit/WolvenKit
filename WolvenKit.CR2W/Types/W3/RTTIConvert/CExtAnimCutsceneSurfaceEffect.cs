@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimCutsceneSurfaceEffect : CExtAnimCutsceneEvent
 	{
-		[RED("type")] 		public ESceneEventSurfacePostFXType Type { get; set;}
+		[RED("type")] 		public CEnum<ESceneEventSurfacePostFXType> Type { get; set;}
 
 		[RED("worldPos")] 		public CBool WorldPos { get; set;}
 

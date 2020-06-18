@@ -25,7 +25,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("strandTex")] 		public CHandle<CBitmapTexture> StrandTex { get; set;}
 
-		[RED("strandBlendMode")] 		public EHairStrandBlendModeType StrandBlendMode { get; set;}
+		[RED("strandBlendMode")] 		public CEnum<EHairStrandBlendModeType> StrandBlendMode { get; set;}
 
 		[RED("strandBlendScale")] 		public CFloat StrandBlendScale { get; set;}
 

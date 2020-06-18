@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3POI_RescuingTownEntity : CR4MapPinEntity
 	{
-		[RED("regionType")] 		public EEP2PoiType RegionType { get; set;}
+		[RED("regionType")] 		public CEnum<EEP2PoiType> RegionType { get; set;}
 
 		public W3POI_RescuingTownEntity(CR2WFile cr2w) : base(cr2w){ }
 

@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("weight")] 		public CFloat Weight { get; set;}
 
-		[RED("mode")] 		public ESAnimationMappedPoseMode Mode { get; set;}
+		[RED("mode")] 		public CEnum<ESAnimationMappedPoseMode> Mode { get; set;}
 
 		[RED("correctionID")] 		public CGUID CorrectionID { get; set;}
 

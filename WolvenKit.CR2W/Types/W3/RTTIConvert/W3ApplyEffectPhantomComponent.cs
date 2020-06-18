@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ApplyEffectPhantomComponent : CPhantomComponent
 	{
-		[RED("effectToApply")] 		public EEffectType EffectToApply { get; set;}
+		[RED("effectToApply")] 		public CEnum<EEffectType> EffectToApply { get; set;}
 
 		[RED("effectDuration")] 		public CFloat EffectDuration { get; set;}
 

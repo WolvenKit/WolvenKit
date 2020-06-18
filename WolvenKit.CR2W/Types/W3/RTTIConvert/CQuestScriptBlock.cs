@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("functionName")] 		public CName FunctionName { get; set;}
 
-		[RED("saveMode")] 		public EQuestScriptSaveMode SaveMode { get; set;}
+		[RED("saveMode")] 		public CEnum<EQuestScriptSaveMode> SaveMode { get; set;}
 
 		[RED("parameters", 2,0)] 		public CArray<QuestScriptParam> Parameters { get; set;}
 

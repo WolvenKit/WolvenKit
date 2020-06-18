@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("dontShowHitParticle")] 		public CBool DontShowHitParticle { get; set;}
 
-		[RED("powerStatType")] 		public ECharacterPowerStats PowerStatType { get; set;}
+		[RED("powerStatType")] 		public CEnum<ECharacterPowerStats> PowerStatType { get; set;}
 
 		[RED("isEnvironment")] 		public CBool IsEnvironment { get; set;}
 

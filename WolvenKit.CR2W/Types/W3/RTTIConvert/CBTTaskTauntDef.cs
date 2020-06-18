@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskTauntDef : CBTTaskPlayAnimationEventDecoratorDef
 	{
-		[RED("tauntType")] 		public ETauntType TauntType { get; set;}
+		[RED("tauntType")] 		public CEnum<ETauntType> TauntType { get; set;}
 
 		[RED("tauntDelay")] 		public CFloat TauntDelay { get; set;}
 

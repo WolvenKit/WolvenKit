@@ -47,11 +47,11 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("nestUpdateDefintion")] 		public SMonsterNestUpdateDefinition NestUpdateDefintion { get; set;}
 
-		[RED("monsterNestType")] 		public ENestType MonsterNestType { get; set;}
+		[RED("monsterNestType")] 		public CEnum<ENestType> MonsterNestType { get; set;}
 
-		[RED("regionType")] 		public EEP2PoiType RegionType { get; set;}
+		[RED("regionType")] 		public CEnum<EEP2PoiType> RegionType { get; set;}
 
-		[RED("entityType")] 		public EMonsterNestType EntityType { get; set;}
+		[RED("entityType")] 		public CEnum<EMonsterNestType> EntityType { get; set;}
 
 		public CMonsterNestEntity(CR2WFile cr2w) : base(cr2w){ }
 

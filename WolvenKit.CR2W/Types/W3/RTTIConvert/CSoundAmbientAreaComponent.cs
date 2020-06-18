@@ -39,11 +39,11 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("parameterEnteringTime")] 		public CFloat ParameterEnteringTime { get; set;}
 
-		[RED("parameterEnteringCurve")] 		public ESoundParameterCurveType ParameterEnteringCurve { get; set;}
+		[RED("parameterEnteringCurve")] 		public CEnum<ESoundParameterCurveType> ParameterEnteringCurve { get; set;}
 
 		[RED("parameterExitingTime")] 		public CFloat ParameterExitingTime { get; set;}
 
-		[RED("parameterExitingCurve")] 		public ESoundParameterCurveType ParameterExitingCurve { get; set;}
+		[RED("parameterExitingCurve")] 		public CEnum<ESoundParameterCurveType> ParameterExitingCurve { get; set;}
 
 		[RED("useListernerDistance")] 		public CBool UseListernerDistance { get; set;}
 
@@ -91,7 +91,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("foliageVitalAreaPoints")] 		public CUInt32 FoliageVitalAreaPoints { get; set;}
 
-		[RED("dynamicParameters", 2,0)] 		public CArray<EnumWrapper<ESoundAmbientDynamicParameter>> DynamicParameters { get; set;}
+		[RED("dynamicParameters", 2,0)] 		public CArray<CEnum<ESoundAmbientDynamicParameter>> DynamicParameters { get; set;}
 
 		[RED("dynamicEvents", 2,0)] 		public CArray<SSoundAmbientDynamicSoundEvents> DynamicEvents { get; set;}
 

@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("storyPhaseTimetable", 2,0)] 		public CArray<CSStoryPhaseTimetableEntry> StoryPhaseTimetable { get; set;}
 
-		[RED("spawnsetType")] 		public ECommunitySpawnsetType SpawnsetType { get; set;}
+		[RED("spawnsetType")] 		public CEnum<ECommunitySpawnsetType> SpawnsetType { get; set;}
 
 		public CCommunity(CR2WFile cr2w) : base(cr2w){ }
 

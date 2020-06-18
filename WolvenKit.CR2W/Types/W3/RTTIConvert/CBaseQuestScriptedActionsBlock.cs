@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("handleBehaviorOutcome")] 		public CBool HandleBehaviorOutcome { get; set;}
 
-		[RED("actionsPriority")] 		public ETopLevelAIPriorities ActionsPriority { get; set;}
+		[RED("actionsPriority")] 		public CEnum<ETopLevelAIPriorities> ActionsPriority { get; set;}
 
 		[RED("onlyOneActor")] 		public CBool OnlyOneActor { get; set;}
 

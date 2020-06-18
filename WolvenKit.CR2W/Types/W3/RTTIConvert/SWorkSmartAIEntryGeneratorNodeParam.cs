@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("keepActionPointOnceSelected")] 		public CBool KeepActionPointOnceSelected { get; set;}
 
-		[RED("actionPointMoveType")] 		public EMoveType ActionPointMoveType { get; set;}
+		[RED("actionPointMoveType")] 		public CEnum<EMoveType> ActionPointMoveType { get; set;}
 
 		public SWorkSmartAIEntryGeneratorNodeParam(CR2WFile cr2w) : base(cr2w){ }
 

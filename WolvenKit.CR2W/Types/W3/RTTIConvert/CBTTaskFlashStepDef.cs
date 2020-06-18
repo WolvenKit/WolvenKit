@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("teleportOutsidePlayerFOV")] 		public CBool TeleportOutsidePlayerFOV { get; set;}
 
-		[RED("teleportType")] 		public ETeleportType TeleportType { get; set;}
+		[RED("teleportType")] 		public CEnum<ETeleportType> TeleportType { get; set;}
 
 		[RED("disappearfxName")] 		public CName DisappearfxName { get; set;}
 

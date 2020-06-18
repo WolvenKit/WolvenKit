@@ -12,11 +12,9 @@ using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
-    [REDMeta()]
-    public class CGenericGrassMask : CResource
+
+    public partial class CGenericGrassMask : CResource
     {
-        [RED("maskRes")] public CUInt32 MaskRes { get; set; }
 
         [REDBuffer(true)] public CBytes grassmask { get; set; }
 
@@ -24,7 +22,7 @@ namespace WolvenKit.CR2W.Types
         {
             grassmask = new CBytes(cr2w)
             {
-                Name = "Grass mask data",
+                REDName = "Grass mask data",
                 Bytes = new byte[0],
                 Parent = this
             };
@@ -47,9 +45,5 @@ namespace WolvenKit.CR2W.Types
                 grassmask.Write(file);
         }
 
-        public override CVariable Create(CR2WFile cr2w)
-        {
-            return new CGenericGrassMask(cr2w);
-        }
     }
 }

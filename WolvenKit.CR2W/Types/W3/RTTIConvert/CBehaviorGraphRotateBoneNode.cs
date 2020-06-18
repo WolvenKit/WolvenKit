@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("boneName")] 		public CString BoneName { get; set;}
 
-		[RED("axis")] 		public EBoneRotationAxis Axis { get; set;}
+		[RED("axis")] 		public CEnum<EBoneRotationAxis> Axis { get; set;}
 
 		[RED("scale")] 		public CFloat Scale { get; set;}
 

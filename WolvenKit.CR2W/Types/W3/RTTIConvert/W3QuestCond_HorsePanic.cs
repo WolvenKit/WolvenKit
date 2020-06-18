@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_HorsePanic : CQCActorScriptedCondition
 	{
-		[RED("condition")] 		public ECompareOp Condition { get; set;}
+		[RED("condition")] 		public CEnum<ECompareOp> Condition { get; set;}
 
 		[RED("percents")] 		public CInt32 Percents { get; set;}
 

@@ -11,24 +11,8 @@ using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
-    [REDMeta()]
-    public class CEntity : CNode
+    public partial class CEntity : CNode
     {
-        [RED("components", 2, 0)] public CArray<CPtr<CComponent>> components { get; set; }
-
-        [RED("template")] public CHandle<CEntityTemplate> Template { get; set; }
-
-        [RED("streamingDataBuffer")] public SharedDataBuffer StreamingDataBuffer { get; set; }
-
-        [RED("streamingDistance")] public CUInt8 StreamingDistance { get; set; }
-
-        [RED("entityStaticFlags")] public EEntityStaticFlags EntityStaticFlags { get; set; }
-
-        [RED("autoPlayEffectName")] public CName AutoPlayEffectName { get; set; }
-
-        [RED("entityFlags")] public CUInt8 EntityFlags { get; set; }
-
 
         [REDBuffer(true)] public CCompressedBuffer<SEntityBufferType1> buffer_v1 { get; set; }
         [REDBuffer(true)] public CBufferUInt32<SEntityBufferType2> buffer_v2 { get; set; }
@@ -52,6 +36,9 @@ namespace WolvenKit.CR2W.Types
 
             // Read Component Array (should only be present if NOT created from template)
             #region Componentsarray
+            if (Components == null)
+                Components = new CArray<CPtr<CComponent>>(cr2w) { REDName = nameof(Components), Parent = this };
+
             var endPos = file.BaseStream.Position;
             var bytesleft = size - (endPos - startPos);
             if (!isCreatedFromTemplate)
@@ -61,9 +48,9 @@ namespace WolvenKit.CR2W.Types
                     var elementcount = file.ReadBit6();
                     for (var i = 0; i < elementcount; i++)
                     {
-                        var handle = new CHandle<CComponent>(cr2w);
-                        handle.Read(file, 0);
-                        components.AddVariable(handle);
+                        var ptr = new CPtr<CComponent>(cr2w) { REDName = i.ToString(), Parent = Components };
+                        ptr.Read(file, 0);
+                        Components.AddVariable(ptr);
                     }
                 }
                 else
@@ -86,7 +73,7 @@ namespace WolvenKit.CR2W.Types
                 {
                     var t_buffer = new SEntityBufferType1(cr2w)
                     {
-                        Name = idx.ToString(),
+                        REDName = idx.ToString(),
                     };
                     canRead = t_buffer.CanRead(file);
                     if (canRead)
@@ -131,10 +118,10 @@ namespace WolvenKit.CR2W.Types
             // Write componentsarray (if not created from template)
             if (!isCreatedFromTemplate)
             {
-                file.WriteBit6(components.Count);
-                for (var i = 0; i < components.Count; i++)
+                file.WriteBit6(Components.Count);
+                for (var i = 0; i < Components.Count; i++)
                 {
-                    components[i].Write(file);
+                    Components[i].Write(file);
                 }
             }
 
@@ -155,11 +142,6 @@ namespace WolvenKit.CR2W.Types
             if (isCreatedFromTemplate)
                 buffer_v2.Write(file);
 
-        }
-
-        public override CVariable Create(CR2WFile cr2w)
-        {
-            return new CEntity(cr2w);
         }
     }
 }

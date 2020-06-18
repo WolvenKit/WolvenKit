@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("cooldownTime")] 		public CFloat CooldownTime { get; set;}
 
-		[RED("visibilityTest")] 		public EVisibilityTest VisibilityTest { get; set;}
+		[RED("visibilityTest")] 		public CEnum<EVisibilityTest> VisibilityTest { get; set;}
 
 		[RED("range")] 		public SAIReactionRange Range { get; set;}
 

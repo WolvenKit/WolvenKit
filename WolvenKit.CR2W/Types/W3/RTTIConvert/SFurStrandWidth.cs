@@ -17,11 +17,11 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("rootWidthTex")] 		public CHandle<CBitmapTexture> RootWidthTex { get; set;}
 
-		[RED("rootWidthTexChannel")] 		public EHairTextureChannel RootWidthTexChannel { get; set;}
+		[RED("rootWidthTexChannel")] 		public CEnum<EHairTextureChannel> RootWidthTexChannel { get; set;}
 
 		[RED("tipWidthTex")] 		public CHandle<CBitmapTexture> TipWidthTex { get; set;}
 
-		[RED("tipWidthTexChannel")] 		public EHairTextureChannel TipWidthTexChannel { get; set;}
+		[RED("tipWidthTexChannel")] 		public CEnum<EHairTextureChannel> TipWidthTexChannel { get; set;}
 
 		[RED("widthNoise")] 		public CFloat WidthNoise { get; set;}
 

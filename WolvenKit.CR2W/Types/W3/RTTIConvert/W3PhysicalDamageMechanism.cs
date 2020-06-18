@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("dmgValue")] 		public CFloat DmgValue { get; set;}
 
-		[RED("hitReactionType")] 		public EHitReactionType HitReactionType { get; set;}
+		[RED("hitReactionType")] 		public CEnum<EHitReactionType> HitReactionType { get; set;}
 
 		[RED("reactivationTimer")] 		public CFloat ReactivationTimer { get; set;}
 

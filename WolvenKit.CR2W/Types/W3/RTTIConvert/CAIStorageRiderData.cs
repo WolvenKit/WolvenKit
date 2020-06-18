@@ -13,11 +13,11 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("ridingManagerMountError")] 		public CBool RidingManagerMountError { get; set;}
 
-		[RED("ridingManagerCurrentTask")] 		public ERidingManagerTask RidingManagerCurrentTask { get; set;}
+		[RED("ridingManagerCurrentTask")] 		public CEnum<ERidingManagerTask> RidingManagerCurrentTask { get; set;}
 
 		[RED("horseScriptedActionTree")] 		public CHandle<IAIActionTree> HorseScriptedActionTree { get; set;}
 
-		[RED("ridingManagerDismountType")] 		public EDismountType RidingManagerDismountType { get; set;}
+		[RED("ridingManagerDismountType")] 		public CEnum<EDismountType> RidingManagerDismountType { get; set;}
 
 		[RED("ridingManagerInstantMount")] 		public CBool RidingManagerInstantMount { get; set;}
 

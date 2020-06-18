@@ -13,19 +13,19 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("tutorialStateName")] 		public CName TutorialStateName { get; set;}
 
-		[RED("triggerCondition")] 		public EUITutorialTriggerCondition TriggerCondition { get; set;}
+		[RED("triggerCondition")] 		public CEnum<EUITutorialTriggerCondition> TriggerCondition { get; set;}
 
 		[RED("requiredGameplayFactName")] 		public CString RequiredGameplayFactName { get; set;}
 
 		[RED("requiredGameplayFactValueInt")] 		public CInt32 RequiredGameplayFactValueInt { get; set;}
 
-		[RED("requiredGameplayFactComparator")] 		public ECompareOp RequiredGameplayFactComparator { get; set;}
+		[RED("requiredGameplayFactComparator")] 		public CEnum<ECompareOp> RequiredGameplayFactComparator { get; set;}
 
 		[RED("requiredGameplayFactName2")] 		public CString RequiredGameplayFactName2 { get; set;}
 
 		[RED("requiredGameplayFactValueInt2")] 		public CInt32 RequiredGameplayFactValueInt2 { get; set;}
 
-		[RED("requiredGameplayFactComparator2")] 		public ECompareOp RequiredGameplayFactComparator2 { get; set;}
+		[RED("requiredGameplayFactComparator2")] 		public CEnum<ECompareOp> RequiredGameplayFactComparator2 { get; set;}
 
 		[RED("priority")] 		public CInt32 Priority { get; set;}
 

@@ -74,7 +74,7 @@ namespace WolvenKit.CR2W.Types
         /// otherwise has to be set manually
         /// Consider moving this to the constructor
         /// </summary>
-        public string Name
+        public string REDName
         {
             get
             {
@@ -89,27 +89,26 @@ namespace WolvenKit.CR2W.Types
         /// e.g. Color from CColor, or Uint64 from CUInt64
         /// Can be overwritten (e.g. in Array, Ptr and other generic types)
         /// </summary>
-        public virtual string Type => REDReflection.GetREDTypeString(this.GetType());
+        public virtual string REDType => REDReflection.GetREDTypeString(this.GetType());
 
         /// <summary>
         /// AspectName in frmChunkProperties
         /// </summary>
-        public string Value => this.ToString();
+        public string REDValue => this.ToString();
         #endregion
 
-
         #region Methods
-        public ushort GettypeId() => (ushort)cr2w.GetStringIndex(Type, true);
+        public ushort GettypeId() => (ushort)cr2w.GetStringIndex(REDType, true);
 
-        public ushort GetnameId() => (ushort)cr2w.GetStringIndex(Name, true);
+        public ushort GetnameId() => (ushort)cr2w.GetStringIndex(REDName, true);
 
         public string GetFullName()
         {
-            var name = Name;
+            var name = REDName;
             var c = Parent;
             while (c != null)
             {
-                name = c.Name + "/" + name;
+                name = c.REDName + "/" + name;
                 c = c.Parent;
             }
             return name;
@@ -133,16 +132,6 @@ namespace WolvenKit.CR2W.Types
                 {
                     redvariables.Add(cvar);
                 }
-                // proper enums
-                else if (pi?.GetValue(this) is Enum @enum)
-                {
-                    redvariables.Add(new CEnum(this.cr2w)
-                    {
-                        Name = pi.Name,
-                        Enum = @enum,
-
-                    });
-                }
             }
 
             return redvariables;
@@ -156,34 +145,18 @@ namespace WolvenKit.CR2W.Types
         /// <param name="size"></param>
         public virtual void Read(BinaryReader file, uint size)
         {
-            var type = this.GetType();
-            REDMetaAttribute meta = (REDMetaAttribute)Attribute.GetCustomAttribute(type, typeof(REDMetaAttribute));
+            REDMetaAttribute meta = (REDMetaAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(REDMetaAttribute));
             EREDMetaInfo[] tags = meta?.Keywords;
-            List<CVariable> fields = new List<CVariable>();
 
-            // complex w3 types
-            //if (tags.Contains())
-            //{
-            //    this.Read(file, (uint)size);
-            //    return;
-            //}
+            List<CVariable> fields = new List<CVariable>();
 
             // fixed class/struct (no leading null byte), read all properties in order
             if (tags.Contains(EREDMetaInfo.REDStruct))
             {
-                //if (tags.Contains())
-                //{
-                //    this.Read(file, (uint)size);
-                //    return;
-                //}
-                //else
                 fields.AddRange(ReadAllRedVariables<REDAttribute>(file));
-
             }
             else
             {
-
-                #region CVectors
                 var zero = file.ReadByte();
 
                 // quests\minor_quests\skellige\mq2008_lured_into_drowners.w2phase
@@ -212,11 +185,8 @@ namespace WolvenKit.CR2W.Types
                     fields.Add(cvar);
                 }
 
-
                 // parse buffers
                 fields.AddRange(ReadAllRedVariables<REDBufferAttribute>(file));
-
-                #endregion
             }
 
 
@@ -224,19 +194,23 @@ namespace WolvenKit.CR2W.Types
             // Set all variables in the class
             foreach (var cvar in fields)
             {
-                TryAddVariable(cvar);
+                if (!TryAddVariable(cvar))
+                {
+
+                }
             }
         }
 
         /// <summary>
         /// Instantiates and reads all REDVariables and REDBuffers in a CVariable 
         /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="br"></param>
+        /// <returns></returns>
         private List<CVariable> ReadAllRedVariables<T>(BinaryReader br) where T : REDAttribute
         {
             var parsedvars = new List<CVariable>();
 
-            #region REDAttribute
             List<PropertyInfo> redprops = REDReflection.GetREDProperties<T>(this.GetType()).ToList();
             foreach (var pi in redprops)
             {
@@ -257,9 +231,6 @@ namespace WolvenKit.CR2W.Types
                 parsedvar.IsSerialized = true;
                 parsedvars.Add(parsedvar);
             }
-            #endregion
-
-            
 
             return parsedvars;
         }
@@ -268,7 +239,7 @@ namespace WolvenKit.CR2W.Types
         /// Tries to set a Cvariable in the class
         /// </summary>
         /// <param name="value"></param>
-        private void TryAddVariable(CVariable value)
+        private bool TryAddVariable(CVariable value)
         {
             #region RedReflection
             //List<PropertyInfo> redprops = REDReflection.GetREDProperties<REDAttribute>(this.GetType()).ToList();
@@ -292,31 +263,28 @@ namespace WolvenKit.CR2W.Types
             // not sure which is faster
             #region FastAccessor
             var accessor = TypeAccessor.Create(this.GetType());
-            string varname = value.Name.FirstCharToUpper();
+            string varname = value.REDName.FirstCharToUpper();
 
             varname = NormalizeName(varname);
             try
             {
-                if (value is CEnum)
-                    accessor[this, varname] = (value as CEnum).Enum;
-                else
-                    accessor[this, varname] = value;
+                accessor[this, varname] = value;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 try
                 {
                     varname = varname.FirstCharToLower();
-                    if (value is CEnum)
-                        accessor[this, varname] = (value as CEnum).Enum;
-                    else
-                        accessor[this, varname] = value;
+                    accessor[this, varname] = value;
                 }
-                catch (Exception)
+                catch (Exception ex2)
                 {
-                    Debug.WriteLine($"({value.Type}){varname} not found in ({this.Type}){this.Name}");
+                    Debug.WriteLine($"({value.REDType}){varname} not found in ({this.REDType}){this.REDName}");
+                    return false;
                 }
             }
+
+            return true;
 
             string NormalizeName(string name)
             {
@@ -345,8 +313,42 @@ namespace WolvenKit.CR2W.Types
         /// <param name="file"></param>
         public virtual void Write(BinaryWriter file)
         {
-            throw new NotImplementedException();
+            REDMetaAttribute meta = (REDMetaAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(REDMetaAttribute));
+            EREDMetaInfo[] tags = meta?.Keywords;
+
+            file.Write((byte)0);
+
+            List<PropertyInfo> redprops = REDReflection.GetREDProperties<REDAttribute>(this.GetType()).ToList();
+            foreach (PropertyInfo pi in redprops)
+            {
+                if (pi.GetCustomAttribute<REDAttribute>() is REDBufferAttribute bufferAttribute
+                    && bufferAttribute.IsIgnored)
+                    continue;
+
+
+                if (pi?.GetValue(this) is CVariable cvar)
+                {
+                    if (cvar != null)
+                        CR2WFile.WriteVariable(file, cvar);
+                    else
+                        throw new SerializationException();
+
+                }
+                // proper enums
+                else if (pi?.GetValue(this) is Enum @enum)
+                {
+
+                }
+            }
+
+            file.Write((ushort)0);
         }
+
+
+
+
+
+
 
         /// <summary>
         /// Copies this CVariable
@@ -358,7 +360,7 @@ namespace WolvenKit.CR2W.Types
         {
             // creates a new instance of the CVariable
             var copy = Create(context.DestinationFile);
-            copy.Name = Name;
+            copy.REDName = REDName;
 
             // copy all REDProperties and REDBuffers
             foreach (IEditableVariable item in GetEditableVariables())
@@ -412,7 +414,6 @@ namespace WolvenKit.CR2W.Types
         }
         #endregion
 
-
         #region Abstract
         public abstract CVariable Create(CR2WFile cr2w);
 
@@ -428,8 +429,8 @@ namespace WolvenKit.CR2W.Types
             unchecked
             {
                 int hash = 17;
-                hash = Type == null ? hash : hash * 29 + Type.GetHashCode();
-                hash = Name == null ? hash : hash * 29 + Name.GetHashCode();
+                hash = REDType == null ? hash : hash * 29 + REDType.GetHashCode();
+                hash = REDName == null ? hash : hash * 29 + REDName.GetHashCode();
                 hash = GetFullName() == null ? hash : hash * 29 + GetFullName().GetHashCode();
                 hash = hash * 29 + ToString().GetHashCode();
                 var evars = GetEditableVariables();
@@ -447,7 +448,6 @@ namespace WolvenKit.CR2W.Types
         #endregion
 
         #endregion
-
 
         #region serialization
         //vl: I leave it commented here for it's rareness

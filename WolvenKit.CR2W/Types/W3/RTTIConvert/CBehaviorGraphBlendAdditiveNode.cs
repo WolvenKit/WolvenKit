@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphBlendAdditiveNode : CBehaviorGraphNode
 	{
-		[RED("type")] 		public EAdditiveType Type { get; set;}
+		[RED("type")] 		public CEnum<EAdditiveType> Type { get; set;}
 
 		[RED("synchronize")] 		public CBool Synchronize { get; set;}
 

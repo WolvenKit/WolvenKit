@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("eventName")] 		public CName EventName { get; set;}
 
-		[RED("eventType")] 		public EAnimationEventType EventType { get; set;}
+		[RED("eventType")] 		public CEnum<EAnimationEventType> EventType { get; set;}
 
 		[RED("data")] 		public CPreAttackEventData Data { get; set;}
 

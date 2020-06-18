@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("scaleFactor")] 		public CFloat ScaleFactor { get; set;}
 
-		[RED("scaleAxis")] 		public EAxis ScaleAxis { get; set;}
+		[RED("scaleAxis")] 		public CEnum<EAxis> ScaleAxis { get; set;}
 
 		[RED("leftThighBone")] 		public CString LeftThighBone { get; set;}
 

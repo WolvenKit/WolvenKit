@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("multiplier")] 		public CFloat Multiplier { get; set;}
 
-		[RED("difficulty")] 		public EDifficultyMode Difficulty { get; set;}
+		[RED("difficulty")] 		public CEnum<EDifficultyMode> Difficulty { get; set;}
 
 		public SDurabilityThreshold(CR2WFile cr2w) : base(cr2w){ }
 

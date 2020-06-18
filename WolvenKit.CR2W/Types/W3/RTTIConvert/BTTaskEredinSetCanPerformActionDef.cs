@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskEredinSetCanPerformActionDef : IBehTreeTaskDefinition
 	{
-		[RED("action")] 		public EBossAction Action { get; set;}
+		[RED("action")] 		public CEnum<EBossAction> Action { get; set;}
 
 		[RED("value")] 		public CBool Value { get; set;}
 

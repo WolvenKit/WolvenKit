@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTSetBehaviorVariable : IMoveSteeringTask
 	{
-		[RED("variableContext")] 		public EBehaviorVarContext VariableContext { get; set;}
+		[RED("variableContext")] 		public CEnum<EBehaviorVarContext> VariableContext { get; set;}
 
 		[RED("variableName")] 		public CName VariableName { get; set;}
 

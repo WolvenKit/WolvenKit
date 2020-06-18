@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("enumValue")] 		public CVariant EnumValue { get; set;}
 
-		[RED("operation")] 		public ECompareFunc Operation { get; set;}
+		[RED("operation")] 		public CEnum<ECompareFunc> Operation { get; set;}
 
 		[RED("cachedFirstInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedFirstInputNode { get; set;}
 

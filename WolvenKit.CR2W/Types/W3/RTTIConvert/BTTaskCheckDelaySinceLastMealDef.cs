@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("value")] 		public CFloat Value { get; set;}
 
-		[RED("operator")] 		public EOperator Operator { get; set;}
+		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
 		public BTTaskCheckDelaySinceLastMealDef(CR2WFile cr2w) : base(cr2w){ }
 

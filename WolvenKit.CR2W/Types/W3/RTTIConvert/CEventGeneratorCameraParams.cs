@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEventGeneratorCameraParams : CVariable
 	{
-		[RED("cameraPlane")] 		public ECameraPlane CameraPlane { get; set;}
+		[RED("cameraPlane")] 		public CEnum<ECameraPlane> CameraPlane { get; set;}
 
 		[RED("tags")] 		public TagList Tags { get; set;}
 

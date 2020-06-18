@@ -9,13 +9,8 @@ using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.CR2W.Types
 {
-    [DataContract(Namespace = "")]
-    [REDMeta()]
-    public class CFXTrackItem : CFXBase
+    public partial class CFXTrackItem : CFXBase
     {
-        [RED("timeBegin")] public CFloat TimeBegin { get; set; }
-
-        [RED("timeDuration")] public CFloat TimeDuration { get; set; }
 
         [REDBuffer(true)] public CName buffername { get; set; }
         [REDBuffer(true)] public CDynamicInt count { get; set; }
@@ -25,10 +20,10 @@ namespace WolvenKit.CR2W.Types
         public CFXTrackItem(CR2WFile cr2w) :
             base(cr2w)
         {
-            buffername = new CName(cr2w) { Name = "buffername", Parent = this };
-            count = new CDynamicInt(cr2w) { Name = "count", Parent = this };
-            unk = new CUInt8(cr2w) { Name = "unk", Parent = this };
-            buffer = new CCompressedBuffer<CBufferUInt16<CFloat>>(cr2w, _ => new CBufferUInt16<CFloat>(_, x => new CFloat(x))) { Name = "buffer", Parent = this };
+            buffername = new CName(cr2w) { REDName = "buffername", Parent = this };
+            count = new CDynamicInt(cr2w) { REDName = "count", Parent = this };
+            unk = new CUInt8(cr2w) { REDName = "unk", Parent = this };
+            buffer = new CCompressedBuffer<CBufferUInt16<CFloat>>(cr2w, _ => new CBufferUInt16<CFloat>(_, x => new CFloat(x))) { REDName = "buffer", Parent = this };
             
         }
 
@@ -67,9 +62,6 @@ namespace WolvenKit.CR2W.Types
                 buffer.Write(file);
         }
 
-        public override CVariable Create(CR2WFile cr2w)
-        {
-            return new CFXTrackItem(cr2w);
-        }
+
     }
 }

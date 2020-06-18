@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("unlockedOnLevel")] 		public CInt32 UnlockedOnLevel { get; set;}
 
-		[RED("socketedSkill")] 		public ESkill SocketedSkill { get; set;}
+		[RED("socketedSkill")] 		public CEnum<ESkill> SocketedSkill { get; set;}
 
 		[RED("unlocked")] 		public CBool Unlocked { get; set;}
 

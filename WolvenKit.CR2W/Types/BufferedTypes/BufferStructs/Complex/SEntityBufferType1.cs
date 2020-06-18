@@ -21,15 +21,15 @@ namespace WolvenKit.CR2W.Types.Utils
         {
             ComponentName = new CName(cr2w)
             {
-                Name = "Name",
+                REDName = "Name",
             };
             Guid = new CGUID(cr2w)
             {
-                Name = "GUID"
+                REDName = "GUID"
             };
             Buffer = new CByteArray2(cr2w)
             {
-                Name = "Data",
+                REDName = "Data",
             };
         }
 

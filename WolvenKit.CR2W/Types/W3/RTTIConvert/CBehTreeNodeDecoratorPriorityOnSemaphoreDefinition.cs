@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("counterValue")] 		public CBehTreeValInt CounterValue { get; set;}
 
-		[RED("comparison")] 		public ECompareFunc Comparison { get; set;}
+		[RED("comparison")] 		public CEnum<ECompareFunc> Comparison { get; set;}
 
 		public CBehTreeNodeDecoratorPriorityOnSemaphoreDefinition(CR2WFile cr2w) : base(cr2w){ }
 

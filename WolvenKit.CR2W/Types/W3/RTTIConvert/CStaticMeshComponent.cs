@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStaticMeshComponent : CMeshComponent
 	{
-		[RED("pathLibCollisionType")] 		public EPathLibCollision PathLibCollisionType { get; set;}
+		[RED("pathLibCollisionType")] 		public CEnum<EPathLibCollision> PathLibCollisionType { get; set;}
 
 		[RED("fadeOnCameraCollision")] 		public CBool FadeOnCameraCollision { get; set;}
 

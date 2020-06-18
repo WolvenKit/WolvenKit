@@ -23,7 +23,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("teleportInRandomDirection")] 		public CBool TeleportInRandomDirection { get; set;}
 
-		[RED("randomPositionPattern")] 		public ESpawnPositionPattern RandomPositionPattern { get; set;}
+		[RED("randomPositionPattern")] 		public CEnum<ESpawnPositionPattern> RandomPositionPattern { get; set;}
 
 		[RED("randomTeleportMinRange")] 		public CFloat RandomTeleportMinRange { get; set;}
 

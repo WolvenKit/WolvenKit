@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("name")] 		public CName Name { get; set;}
 
-		[RED("streamingType")] 		public ESkeletalAnimationStreamingType StreamingType { get; set;}
+		[RED("streamingType")] 		public CEnum<ESkeletalAnimationStreamingType> StreamingType { get; set;}
 
 		[RED("hasBundingBox")] 		public CBool HasBundingBox { get; set;}
 

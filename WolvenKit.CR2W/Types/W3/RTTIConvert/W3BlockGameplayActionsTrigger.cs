@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3BlockGameplayActionsTrigger : CGameplayEntity
 	{
-		[RED("blockedActions", 2,0)] 		public CArray<EnumWrapper<EInputActionBlock>> BlockedActions { get; set;}
+		[RED("blockedActions", 2,0)] 		public CArray<CEnum<EInputActionBlock>> BlockedActions { get; set;}
 
 		[RED("sourceName")] 		public CName SourceName { get; set;}
 

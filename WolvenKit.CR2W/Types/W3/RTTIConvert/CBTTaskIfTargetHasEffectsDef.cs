@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskIfTargetHasEffectsDef : IBehTreeTaskDefinition
 	{
-		[RED("effects", 2,0)] 		public CArray<EnumWrapper<EEffectType>> Effects { get; set;}
+		[RED("effects", 2,0)] 		public CArray<CEnum<EEffectType>> Effects { get; set;}
 
 		[RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 

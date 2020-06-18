@@ -9,13 +9,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphChooseRecoverFromRagdollAnimNode : CBehaviorGraphNode
 	{
-		[RED("mode")] 		public EBehaviorGraphChooseRecoverFromRagdollAnimMode Mode { get; set;}
+		[RED("mode")] 		public CEnum<EBehaviorGraphChooseRecoverFromRagdollAnimMode> Mode { get; set;}
 
 		[RED("additionalOneFrameRotationYaw")] 		public CFloat AdditionalOneFrameRotationYaw { get; set;}
 
 		[RED("pelvisBone")] 		public CName PelvisBone { get; set;}
 
-		[RED("pelvisBoneFrontAxis")] 		public EAxis PelvisBoneFrontAxis { get; set;}
+		[RED("pelvisBoneFrontAxis")] 		public CEnum<EAxis> PelvisBoneFrontAxis { get; set;}
 
 		[RED("pelvisBoneFrontAxisInverted")] 		public CBool PelvisBoneFrontAxisInverted { get; set;}
 
@@ -23,7 +23,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("shoulderBone")] 		public CName ShoulderBone { get; set;}
 
-		[RED("shoulderBoneFrontAxis")] 		public EAxis ShoulderBoneFrontAxis { get; set;}
+		[RED("shoulderBoneFrontAxis")] 		public CEnum<EAxis> ShoulderBoneFrontAxis { get; set;}
 
 		[RED("shoulderBoneFrontAxisInverted")] 		public CBool ShoulderBoneFrontAxisInverted { get; set;}
 

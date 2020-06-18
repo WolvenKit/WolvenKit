@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("visualizeBoundingBox")] 		public CBool VisualizeBoundingBox { get; set;}
 
-		[RED("colorizeMode")] 		public EHairColorizeMode ColorizeMode { get; set;}
+		[RED("colorizeMode")] 		public CEnum<EHairColorizeMode> ColorizeMode { get; set;}
 
 		[RED("visualizeCullSphere")] 		public CBool VisualizeCullSphere { get; set;}
 

@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("orientation")] 		public SAnimationBufferBitwiseCompressedData Orientation { get; set;}
 
-		[RED("scale")]			public SAnimationBufferBitwiseCompressedData Scale { get; set; }
+		[RED("scale")] public SAnimationBufferBitwiseCompressedData Scale { get; set; }
 
 
 		public SAnimationBufferBitwiseCompressedBoneTrack(CR2WFile cr2w) : base(cr2w){ }

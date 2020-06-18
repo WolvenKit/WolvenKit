@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskChangeStanceDef : IBehTreeTaskDefinition
 	{
-		[RED("newStance")] 		public ENpcStance NewStance { get; set;}
+		[RED("newStance")] 		public CEnum<ENpcStance> NewStance { get; set;}
 
 		[RED("setPrevStanceOnDeactivation")] 		public CBool SetPrevStanceOnDeactivation { get; set;}
 

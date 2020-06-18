@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("entry")] 		public CPtr<CJournalBase> Entry { get; set;}
 
-		[RED("status")] 		public EJournalStatus Status { get; set;}
+		[RED("status")] 		public CEnum<EJournalStatus> Status { get; set;}
 
 		[RED("unread")] 		public CBool Unread { get; set;}
 

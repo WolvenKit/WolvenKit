@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMimicPoseNode : CBehaviorGraphBaseMimicNode
 	{
-		[RED("poseType")] 		public EMimicNodePoseType PoseType { get; set;}
+		[RED("poseType")] 		public CEnum<EMimicNodePoseType> PoseType { get; set;}
 
 		[RED("poseName")] 		public CName PoseName { get; set;}
 

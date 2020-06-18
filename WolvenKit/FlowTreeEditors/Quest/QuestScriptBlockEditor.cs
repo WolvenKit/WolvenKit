@@ -30,7 +30,7 @@ namespace WolvenKit {
         public override void UpdateView() {
             base.UpdateView();
 
-            lblTitle.Text = Chunk.Name + " : " + Chunk.Preview;
+            lblTitle.Text = Chunk.REDName + " : " + Chunk.Preview;
             script.Text = getScript();
             script.Location = Location + new Size(0, lblTitle.Height);
             Size measureText = TextRenderer.MeasureText(lblTitle.Text, lblTitle.Font);

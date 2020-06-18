@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("creatureDefinition", 2,0)] 		public CArray<CPtr<CEncounterCreatureDefinition>> CreatureDefinition { get; set;}
 
-		[RED("spawnTreeType")] 		public ESpawnTreeType SpawnTreeType { get; set;}
+		[RED("spawnTreeType")] 		public CEnum<ESpawnTreeType> SpawnTreeType { get; set;}
 
 		public CSpawnTree(CR2WFile cr2w) : base(cr2w){ }
 

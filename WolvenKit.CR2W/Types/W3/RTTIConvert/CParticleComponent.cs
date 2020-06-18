@@ -11,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("particleSystem")] 		public CHandle<CParticleSystem> ParticleSystem { get; set;}
 
-		[RED("transparencySortGroup")] 		public ETransparencySortGroup TransparencySortGroup { get; set;}
+		[RED("transparencySortGroup")] 		public CEnum<ETransparencySortGroup> TransparencySortGroup { get; set;}
 
-		[RED("envAutoHideGroup")] 		public EEnvAutoHideGroup EnvAutoHideGroup { get; set;}
+		[RED("envAutoHideGroup")] 		public CEnum<EEnvAutoHideGroup> EnvAutoHideGroup { get; set;}
 
 		public CParticleComponent(CR2WFile cr2w) : base(cr2w){ }
 

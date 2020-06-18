@@ -19,9 +19,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("tolerance")] 		public CFloat Tolerance { get; set;}
 
-		[RED("moveTypeBeforePath")] 		public EMoveType MoveTypeBeforePath { get; set;}
+		[RED("moveTypeBeforePath")] 		public CEnum<EMoveType> MoveTypeBeforePath { get; set;}
 
-		[RED("moveType")] 		public EMoveType MoveType { get; set;}
+		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
 		[RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
 

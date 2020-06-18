@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SUpdateEvent : CVariable
 	{
-		[RED("eventType")] 		public EUpdateEventType EventType { get; set;}
+		[RED("eventType")] 		public CEnum<EUpdateEventType> EventType { get; set;}
 
 		[RED("delay")] 		public CInt32 Delay { get; set;}
 

@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
         bool ChunkHandle { get; set; }
         string DepotPath { get; set; }
         string ClassName { get; set; }
-        string Name { get; set; }
+        string REDName { get; set; }
 
         CR2WExportWrapper Reference { get; set; }
     }
@@ -145,7 +145,7 @@ namespace WolvenKit.CR2W.Types
                 if (Reference == null)
                     return "NULL";
                 else
-                    return Reference.Type + " #" + (Reference.ChunkIndex);
+                    return Reference.REDType + " #" + (Reference.ChunkIndex);
             }
 
             return ClassName + ": " + DepotPath;
@@ -162,7 +162,7 @@ namespace WolvenKit.CR2W.Types
                 {
                     editor.Items.Add(new PtrComboItem
                     {
-                        Text = $"{chunk.Type} #{chunk.ChunkIndex}", //real index
+                        Text = $"{chunk.REDType} #{chunk.ChunkIndex}", //real index
                         Value = chunk
                     }
                     );

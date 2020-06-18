@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("blendKeys", 2,0)] 		public CArray<SStorySceneCameraBlendKey> BlendKeys { get; set;}
 
-		[RED("interpolationType")] 		public ECameraInterpolation InterpolationType { get; set;}
+		[RED("interpolationType")] 		public CEnum<ECameraInterpolation> InterpolationType { get; set;}
 
 		public CStorySceneEventCameraBlend(CR2WFile cr2w) : base(cr2w){ }
 

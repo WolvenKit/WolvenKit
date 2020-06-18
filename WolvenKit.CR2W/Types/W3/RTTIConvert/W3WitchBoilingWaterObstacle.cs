@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3WitchBoilingWaterObstacle : W3DurationObstacle
 	{
-		[RED("applyDebuffType")] 		public EEffectType ApplyDebuffType { get; set;}
+		[RED("applyDebuffType")] 		public CEnum<EEffectType> ApplyDebuffType { get; set;}
 
 		[RED("debuffDuration")] 		public CFloat DebuffDuration { get; set;}
 
@@ -31,7 +31,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("attackEffectName")] 		public CName AttackEffectName { get; set;}
 
-		[RED("hitReactionType")] 		public EHitReactionType HitReactionType { get; set;}
+		[RED("hitReactionType")] 		public CEnum<EHitReactionType> HitReactionType { get; set;}
 
 		[RED("loopedAttack")] 		public CBool LoopedAttack { get; set;}
 

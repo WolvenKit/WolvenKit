@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("spawnSlotName")] 		public CName SpawnSlotName { get; set;}
 
-		[RED("workAnimationEvent")] 		public EBackgroundNPCWork_Single WorkAnimationEvent { get; set;}
+		[RED("workAnimationEvent")] 		public CEnum<EBackgroundNPCWork_Single> WorkAnimationEvent { get; set;}
 
 		[RED("appearanceName")] 		public CName AppearanceName { get; set;}
 

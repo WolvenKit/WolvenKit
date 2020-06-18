@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("manageGravity")] 		public CBool ManageGravity { get; set;}
 
-		[RED("spawnCondition")] 		public ESpawnCondition SpawnCondition { get; set;}
+		[RED("spawnCondition")] 		public CEnum<ESpawnCondition> SpawnCondition { get; set;}
 
 		[RED("swarmStabilizeTime")] 		public CFloat SwarmStabilizeTime { get; set;}
 

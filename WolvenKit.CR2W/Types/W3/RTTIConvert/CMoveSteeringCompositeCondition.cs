@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("notFirstCondition")] 		public CBool NotFirstCondition { get; set;}
 
-		[RED("operator")] 		public ELogicOperator Operator { get; set;}
+		[RED("operator")] 		public CEnum<ELogicOperator> Operator { get; set;}
 
 		[RED("secondCondition")] 		public CPtr<IMoveSteeringCondition> SecondCondition { get; set;}
 

@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("priceRepair")] 		public CFloat PriceRepair { get; set;}
 
-		[RED("fundsType")] 		public EInventoryFundsType FundsType { get; set;}
+		[RED("fundsType")] 		public CEnum<EInventoryFundsType> FundsType { get; set;}
 
 		public CInventoryComponent(CR2WFile cr2w) : base(cr2w){ }
 

@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("dismembermentOnlyWhenLootingTrophy")] 		public CBool DismembermentOnlyWhenLootingTrophy { get; set;}
 
-		[RED("dismembermentType")] 		public EDismembermentWoundTypes DismembermentType { get; set;}
+		[RED("dismembermentType")] 		public CEnum<EDismembermentWoundTypes> DismembermentType { get; set;}
 
 		[RED("dismembermentName")] 		public CName DismembermentName { get; set;}
 

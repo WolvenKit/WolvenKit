@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("value")] 		public CInt32 Value { get; set;}
 
-		[RED("compare")] 		public ECompareFunc Compare { get; set;}
+		[RED("compare")] 		public CEnum<ECompareFunc> Compare { get; set;}
 
 		public CSpawnConditionFact(CR2WFile cr2w) : base(cr2w){ }
 

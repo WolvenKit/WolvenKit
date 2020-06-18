@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("minDistance")] 		public CFloat MinDistance { get; set;}
 
-		[RED("moveType")] 		public EMoveType MoveType { get; set;}
+		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
 		[RED("minSpeed")] 		public CFloat MinSpeed { get; set;}
 

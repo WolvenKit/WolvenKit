@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_World : CQuestScriptedCondition
 	{
-		[RED("currentArea")] 		public EAreaName CurrentArea { get; set;}
+		[RED("currentArea")] 		public CEnum<EAreaName> CurrentArea { get; set;}
 
 		public W3QuestCond_World(CR2WFile cr2w) : base(cr2w){ }
 

@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("varName")] 		public CName VarName { get; set;}
 
-		[RED("value")] 		public EExplorationType Value { get; set;}
+		[RED("value")] 		public CEnum<EExplorationType> Value { get; set;}
 
 		public CBehTreeValEExplorationType(CR2WFile cr2w) : base(cr2w){ }
 

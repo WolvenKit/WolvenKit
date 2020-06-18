@@ -9,12 +9,13 @@ namespace WolvenKit.CR2W.Editors
 {
     public interface IEditableVariable
     {
-        string Name { get; set; }
-        string Type { get; }
-        string Value { get; }
+        string REDName { get; set; }
+        string REDType { get; }
+        string REDValue { get; }
+
         Guid InternalGuid { get; set; }
         IEditableVariable Parent { get; set; }
-
+        bool IsSerialized { get; set; }
 
         CR2WFile cr2w { get; set; }
 

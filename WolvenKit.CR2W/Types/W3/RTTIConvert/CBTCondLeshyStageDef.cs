@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("equalHigherThanStage")] 		public CBool EqualHigherThanStage { get; set;}
 
-		[RED("activeInStage")] 		public ENPCFightStage ActiveInStage { get; set;}
+		[RED("activeInStage")] 		public CEnum<ENPCFightStage> ActiveInStage { get; set;}
 
 		public CBTCondLeshyStageDef(CR2WFile cr2w) : base(cr2w){ }
 

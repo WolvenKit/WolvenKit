@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("valueScale")] 		public CFloat ValueScale { get; set;}
 
-		[RED("axis")] 		public EAxis Axis { get; set;}
+		[RED("axis")] 		public CEnum<EAxis> Axis { get; set;}
 
 		[RED("clamp")] 		public CBool Clamp { get; set;}
 

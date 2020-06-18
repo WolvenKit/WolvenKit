@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("deferredData")] 		public DeferredDataBuffer DeferredData { get; set;}
 
-		[RED("orientationCompressionMethod")] 		public SAnimationBufferOrientationCompressionMethod OrientationCompressionMethod { get; set;}
+		[RED("orientationCompressionMethod")] 		public CEnum<SAnimationBufferOrientationCompressionMethod> OrientationCompressionMethod { get; set;}
 
 		[RED("duration")] 		public CFloat Duration { get; set;}
 
@@ -29,7 +29,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("dt")] 		public CFloat Dt { get; set;}
 
-		[RED("streamingOption")] 		public SAnimationBufferStreamingOption StreamingOption { get; set;}
+		[RED("streamingOption")] 		public CEnum<SAnimationBufferStreamingOption> StreamingOption { get; set;}
 
 		[RED("nonStreamableBones")] 		public CUInt32 NonStreamableBones { get; set;}
 

@@ -19,15 +19,15 @@ namespace WolvenKit.CR2W.Types
         {
 
             fields = new CVariable[] {
-                ax = new CFloat(cr2w) { Name = "ax",  },
-                ay = new CFloat(cr2w) { Name = "ay",  },
-                az = new CFloat(cr2w) { Name = "az", },
-                bx = new CFloat(cr2w) { Name = "bx", },
-                by = new CFloat(cr2w) { Name = "by", },
-                bz = new CFloat(cr2w) { Name = "bz", },
-                cx = new CFloat(cr2w) { Name = "cx", },
-                cy = new CFloat(cr2w) { Name = "cy", },
-                cz = new CFloat(cr2w) { Name = "cz", },
+                ax = new CFloat(cr2w) { REDName = "ax",  },
+                ay = new CFloat(cr2w) { REDName = "ay",  },
+                az = new CFloat(cr2w) { REDName = "az", },
+                bx = new CFloat(cr2w) { REDName = "bx", },
+                by = new CFloat(cr2w) { REDName = "by", },
+                bz = new CFloat(cr2w) { REDName = "bz", },
+                cx = new CFloat(cr2w) { REDName = "cx", },
+                cy = new CFloat(cr2w) { REDName = "cy", },
+                cz = new CFloat(cr2w) { REDName = "cz", },
             };
         }
 

@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("densityTex")] 		public CHandle<CBitmapTexture> DensityTex { get; set;}
 
-		[RED("densityTexChannel")] 		public EHairTextureChannel DensityTexChannel { get; set;}
+		[RED("densityTexChannel")] 		public CEnum<EHairTextureChannel> DensityTexChannel { get; set;}
 
 		[RED("usePixelDensity")] 		public CBool UsePixelDensity { get; set;}
 
@@ -23,7 +23,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("lengthTex")] 		public CHandle<CBitmapTexture> LengthTex { get; set;}
 
-		[RED("lengthTexChannel")] 		public EHairTextureChannel LengthTexChannel { get; set;}
+		[RED("lengthTexChannel")] 		public CEnum<EHairTextureChannel> LengthTexChannel { get; set;}
 
 		public SFurVolume(CR2WFile cr2w) : base(cr2w){ }
 

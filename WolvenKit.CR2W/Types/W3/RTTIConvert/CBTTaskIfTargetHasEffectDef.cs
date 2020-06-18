@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskIfTargetHasEffectDef : IBehTreeTaskDefinition
 	{
-		[RED("effect")] 		public EEffectType Effect { get; set;}
+		[RED("effect")] 		public CEnum<EEffectType> Effect { get; set;}
 
 		[RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 

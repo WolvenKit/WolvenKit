@@ -6,6 +6,7 @@ using System.IO;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 using System.Linq;
+using System;
 
 namespace WolvenKit.Render
 {
@@ -34,7 +35,7 @@ namespace WolvenKit.Render
             // *************** READ CHUNK INFOS ***************
             foreach (var chunk in meshFile.chunks)
             {
-                if (chunk.Type == "CMesh" && chunk.data is CMesh cmesh)
+                if (chunk.REDType == "CMesh" && chunk.data is CMesh cmesh)
                 {
                     List<SVertexBufferInfos> vertexBufferInfos = new List<SVertexBufferInfos>();
                     SMeshCookedData meshCookedData = cmesh.CookedData;
@@ -102,9 +103,9 @@ namespace WolvenKit.Render
                         meshInfo.firstIndex = meshChunk.FirstIndex.val;
                         meshInfo.materialID = meshChunk.MaterialID.val;
 
-                        if (meshChunk.VertexType == Enums.EMeshVertexType.MVT_StaticMesh)
+                        if (meshChunk.VertexType.WrappedEnum == Enums.EMeshVertexType.MVT_StaticMesh)
                             meshInfo.vertexType = SMeshInfos.EMeshVertexType.EMVT_STATIC;
-                        else if (meshChunk.VertexType == Enums.EMeshVertexType.MVT_SkinnedMesh)
+                        else if (meshChunk.VertexType.WrappedEnum == Enums.EMeshVertexType.MVT_SkinnedMesh)
                             meshInfo.vertexType = SMeshInfos.EMeshVertexType.EMVT_SKINNED;
 
                         CData.meshInfos.Add(meshInfo);
@@ -130,7 +131,7 @@ namespace WolvenKit.Render
                     }
                 }
 
-                else if (chunk.Type == "CMaterialInstance")
+                else if (chunk.REDType == "CMaterialInstance")
                 {
                     CData.materialInstances.Add(chunk.data as CMaterialInstance);
                 }

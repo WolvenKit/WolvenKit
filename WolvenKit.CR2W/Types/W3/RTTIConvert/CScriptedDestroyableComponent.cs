@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CScriptedDestroyableComponent : CRigidMeshComponent
 	{
-		[RED("destroyWay")] 		public EDestroyWay DestroyWay { get; set;}
+		[RED("destroyWay")] 		public CEnum<EDestroyWay> DestroyWay { get; set;}
 
 		[RED("distanceValue")] 		public CFloat DistanceValue { get; set;}
 

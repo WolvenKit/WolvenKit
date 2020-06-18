@@ -1443,7 +1443,7 @@ namespace WolvenKit
                             if (imatch.Success)
                             {
                                 string parent = imatch.Groups[1].Value;
-                                if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
+                                if (!CR2WTypeManager.AvailableTypes.Contains(classname))
                                 {
                                     //CR2WTypeManager.Get().RegisterAs(classname, parent);
                                     AddOutput($"Registering custom class {classname} as {parent}.\r\n", Logtype.Success);
@@ -1451,7 +1451,7 @@ namespace WolvenKit
                             }
                             else
                             {
-                                if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
+                                if (!CR2WTypeManager.AvailableTypes.Contains(classname))
                                 {
                                     //CR2WTypeManager.Get().Register(classname, new CVector(null));
                                     AddOutput($"Registering custom class {classname} as CVector.\r\n", Logtype.Success);
@@ -1460,7 +1460,7 @@ namespace WolvenKit
                         }
                         else
                         {
-                            if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
+                            if (!CR2WTypeManager.AvailableTypes.Contains(classname))
                             {
                                 //CR2WTypeManager.Get().Register(classname, new CVector(null));
                                 AddOutput($"Registering custom class {classname} as CVector.\r\n", Logtype.Success);
@@ -1657,7 +1657,7 @@ namespace WolvenKit
                             DockAreas = DockAreas.Document
                         };
                         doc.ImageViewer.Show(doc.FormPanel, DockState.Document);
-                        CR2WExportWrapper imagechunk = doc.File?.chunks?.FirstOrDefault(_ => _.data.Type.Contains("CBitmapTexture"));
+                        CR2WExportWrapper imagechunk = doc.File?.chunks?.FirstOrDefault(_ => _.data.REDType.Contains("CBitmapTexture"));
                         doc.ImageViewer.SetImage(imagechunk);
                         break;
                     }
@@ -1721,7 +1721,7 @@ namespace WolvenKit
 
             foreach (var t in doc.File.chunks.Where(t => t.unknownBytes?.Bytes != null && t.unknownBytes.Bytes.Length > 0))
             {
-                output.Append(t.Name + " contains " + t.unknownBytes.Bytes.Length + " unknown bytes. \n");
+                output.Append(t.REDName + " contains " + t.unknownBytes.Bytes.Length + " unknown bytes. \n");
                 hasUnknownBytes = true;
             }
 

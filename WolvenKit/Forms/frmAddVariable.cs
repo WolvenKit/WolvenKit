@@ -9,9 +9,7 @@ namespace WolvenKit
         {
             InitializeComponent();
 
-            var mng = CR2WTypeManager.Get();
-
-            var types = mng.AvailableTypes;
+            var types = CR2WTypeManager.AvailableTypes;
             types.Sort();
 
             txType.Items.AddRange(types.ToArray());

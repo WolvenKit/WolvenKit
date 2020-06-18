@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("params.m_effectorRadius")] 		public CFloat Params_m_effectorRadius { get; set;}
 
-		[RED("acceptor")] 		public EZoneAcceptor Acceptor { get; set;}
+		[RED("acceptor")] 		public CEnum<EZoneAcceptor> Acceptor { get; set;}
 
 		[RED("params.m_shapeType")] 		public CName Params_m_shapeType { get; set;}
 

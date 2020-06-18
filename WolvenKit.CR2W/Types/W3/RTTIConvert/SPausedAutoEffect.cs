@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SPausedAutoEffect : CVariable
 	{
-		[RED("effectType")] 		public EEffectType EffectType { get; set;}
+		[RED("effectType")] 		public CEnum<EEffectType> EffectType { get; set;}
 
 		[RED("duration")] 		public CFloat Duration { get; set;}
 

@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("enable")] 		public CBool Enable { get; set;}
 
-		[RED("trackingType")] 		public ELightTrackingType TrackingType { get; set;}
+		[RED("trackingType")] 		public CEnum<ELightTrackingType> TrackingType { get; set;}
 
 		[RED("radius")] 		public SSimpleCurve Radius { get; set;}
 

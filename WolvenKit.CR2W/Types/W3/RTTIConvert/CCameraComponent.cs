@@ -11,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("fov")] 		public CFloat Fov { get; set;}
 
-		[RED("nearPlane")] 		public ENearPlaneDistance NearPlane { get; set;}
+		[RED("nearPlane")] 		public CEnum<ENearPlaneDistance> NearPlane { get; set;}
 
-		[RED("farPlane")] 		public EFarPlaneDistance FarPlane { get; set;}
+		[RED("farPlane")] 		public CEnum<EFarPlaneDistance> FarPlane { get; set;}
 
 		[RED("customClippingPlanes")] 		public SCustomClippingPlanes CustomClippingPlanes { get; set;}
 

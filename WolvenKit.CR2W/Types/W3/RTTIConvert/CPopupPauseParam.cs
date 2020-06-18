@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPopupPauseParam : IPopupTimeParam
 	{
-		[RED("pauseType")] 		public EPopupPauseType PauseType { get; set;}
+		[RED("pauseType")] 		public CEnum<EPopupPauseType> PauseType { get; set;}
 
 		public CPopupPauseParam(CR2WFile cr2w) : base(cr2w){ }
 

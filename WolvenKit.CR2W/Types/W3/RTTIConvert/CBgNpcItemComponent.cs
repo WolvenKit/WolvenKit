@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("itemCategory")] 		public CName ItemCategory { get; set;}
 
-		[RED("defaultState")] 		public EItemState DefaultState { get; set;}
+		[RED("defaultState")] 		public CEnum<EItemState> DefaultState { get; set;}
 
 		[RED("equipSlot")] 		public CName EquipSlot { get; set;}
 

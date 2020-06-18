@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondMonsterTacticIsUsedDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("tactic")] 		public EMonsterTactic Tactic { get; set;}
+		[RED("tactic")] 		public CEnum<EMonsterTactic> Tactic { get; set;}
 
 		[RED("distanceToCheck")] 		public CFloat DistanceToCheck { get; set;}
 

@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_SelectedSign : CQuestScriptedCondition
 	{
-		[RED("signType")] 		public ESignType SignType { get; set;}
+		[RED("signType")] 		public CEnum<ESignType> SignType { get; set;}
 
 		public W3QuestCond_SelectedSign(CR2WFile cr2w) : base(cr2w){ }
 

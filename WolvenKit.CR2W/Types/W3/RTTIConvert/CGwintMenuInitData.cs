@@ -11,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("deckName")] 		public CName DeckName { get; set;}
 
-		[RED("difficulty")] 		public EGwintDifficultyMode Difficulty { get; set;}
+		[RED("difficulty")] 		public CEnum<EGwintDifficultyMode> Difficulty { get; set;}
 
-		[RED("aggression")] 		public EGwintAggressionMode Aggression { get; set;}
+		[RED("aggression")] 		public CEnum<EGwintAggressionMode> Aggression { get; set;}
 
 		[RED("allowMultipleMatches")] 		public CBool AllowMultipleMatches { get; set;}
 
-		[RED("forceFaction")] 		public eGwintFaction ForceFaction { get; set;}
+		[RED("forceFaction")] 		public CEnum<eGwintFaction> ForceFaction { get; set;}
 
 		public CGwintMenuInitData(CR2WFile cr2w) : base(cr2w){ }
 

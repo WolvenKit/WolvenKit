@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("dstGroup")] 		public CName DstGroup { get; set;}
 
-		[RED("attitude")] 		public EAIAttitude Attitude { get; set;}
+		[RED("attitude")] 		public CEnum<EAIAttitude> Attitude { get; set;}
 
 		public W3QuestCond_GlobalAttitude(CR2WFile cr2w) : base(cr2w){ }
 

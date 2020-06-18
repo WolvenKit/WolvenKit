@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ApertureDofParams : CVariable
 	{
-		[RED("aperture")] 		public EApertureValue Aperture { get; set;}
+		[RED("aperture")] 		public CEnum<EApertureValue> Aperture { get; set;}
 
 		[RED("focalLength")] 		public CFloat FocalLength { get; set;}
 

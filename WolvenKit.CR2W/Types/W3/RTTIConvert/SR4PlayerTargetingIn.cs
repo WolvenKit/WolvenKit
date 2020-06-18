@@ -49,9 +49,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("isInParryOrCounter")] 		public CBool IsInParryOrCounter { get; set;}
 
-		[RED("bufferActionType")] 		public EBufferActionType BufferActionType { get; set;}
+		[RED("bufferActionType")] 		public CEnum<EBufferActionType> BufferActionType { get; set;}
 
-		[RED("orientationTarget")] 		public EOrientationTarget OrientationTarget { get; set;}
+		[RED("orientationTarget")] 		public CEnum<EOrientationTarget> OrientationTarget { get; set;}
 
 		[RED("coneDist")] 		public CFloat ConeDist { get; set;}
 

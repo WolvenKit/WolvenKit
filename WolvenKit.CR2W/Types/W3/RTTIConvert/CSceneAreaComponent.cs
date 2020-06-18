@@ -9,9 +9,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSceneAreaComponent : CTriggerAreaComponent
 	{
-		[RED("sceneSelectionMode")] 		public ESceneSelectionMode SceneSelectionMode { get; set;}
+		[RED("sceneSelectionMode")] 		public CEnum<ESceneSelectionMode> SceneSelectionMode { get; set;}
 
-		[RED("scenesPriority")] 		public EArbitratorPriorities ScenesPriority { get; set;}
+		[RED("scenesPriority")] 		public CEnum<EArbitratorPriorities> ScenesPriority { get; set;}
 
 		[RED("intervalBetweenScenes")] 		public CFloat IntervalBetweenScenes { get; set;}
 
@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("scenes", 2,0)] 		public CArray<CScenesTableEntry> Scenes { get; set;}
 
-		[RED("actorsType")] 		public ESceneActorType ActorsType { get; set;}
+		[RED("actorsType")] 		public CEnum<ESceneActorType> ActorsType { get; set;}
 
 		public CSceneAreaComponent(CR2WFile cr2w) : base(cr2w){ }
 

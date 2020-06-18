@@ -9,11 +9,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondSubmersionLevelDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("checkedActor")] 		public EStatOwner CheckedActor { get; set;}
+		[RED("checkedActor")] 		public CEnum<EStatOwner> CheckedActor { get; set;}
 
 		[RED("value")] 		public CFloat Value { get; set;}
 
-		[RED("operator")] 		public EOperator Operator { get; set;}
+		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
 		public BTCondSubmersionLevelDef(CR2WFile cr2w) : base(cr2w){ }
 

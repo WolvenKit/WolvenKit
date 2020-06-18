@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
 
-		[RED("type")] 		public EBehaviorMimicBlendType Type { get; set;}
+		[RED("type")] 		public CEnum<EBehaviorMimicBlendType> Type { get; set;}
 
 		public CBehaviorGraphMimicsBlendNode(CR2WFile cr2w) : base(cr2w){ }
 

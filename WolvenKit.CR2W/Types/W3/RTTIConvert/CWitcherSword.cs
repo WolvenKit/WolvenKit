@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CWitcherSword : CItemEntity
 	{
-		[RED("swordType")] 		public EWitcherSwordType SwordType { get; set;}
+		[RED("swordType")] 		public CEnum<EWitcherSwordType> SwordType { get; set;}
 
 		[RED("padBacklightColor")] 		public Vector PadBacklightColor { get; set;}
 

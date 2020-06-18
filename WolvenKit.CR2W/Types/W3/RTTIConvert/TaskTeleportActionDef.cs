@@ -33,7 +33,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("teleportWithinPlayerFOV")] 		public CBool TeleportWithinPlayerFOV { get; set;}
 
-		[RED("teleportType")] 		public ETeleportType TeleportType { get; set;}
+		[RED("teleportType")] 		public CEnum<ETeleportType> TeleportType { get; set;}
 
 		[RED("minWaterDepthToAppear")] 		public CFloat MinWaterDepthToAppear { get; set;}
 

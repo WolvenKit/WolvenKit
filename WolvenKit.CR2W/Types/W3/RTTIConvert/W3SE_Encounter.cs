@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("encounterTag")] 		public CName EncounterTag { get; set;}
 
-		[RED("operation")] 		public EEncounterOperation Operation { get; set;}
+		[RED("operation")] 		public CEnum<EEncounterOperation> Operation { get; set;}
 
 		public W3SE_Encounter(CR2WFile cr2w) : base(cr2w){ }
 

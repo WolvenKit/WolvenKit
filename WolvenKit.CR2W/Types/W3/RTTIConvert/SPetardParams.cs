@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("cylinderOffsetZ")] 		public CFloat CylinderOffsetZ { get; set;}
 
-		[RED("playHitAnimMode")] 		public EActionHitAnim PlayHitAnimMode { get; set;}
+		[RED("playHitAnimMode")] 		public CEnum<EActionHitAnim> PlayHitAnimMode { get; set;}
 
 		[RED("disabledAbilities", 2,0)] 		public CArray<SBlockedAbility> DisabledAbilities { get; set;}
 

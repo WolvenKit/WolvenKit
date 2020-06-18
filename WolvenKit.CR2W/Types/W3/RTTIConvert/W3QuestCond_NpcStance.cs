@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_NpcStance : CQCActorScriptedCondition
 	{
-		[RED("stance")] 		public ENpcStance Stance { get; set;}
+		[RED("stance")] 		public CEnum<ENpcStance> Stance { get; set;}
 
 		public W3QuestCond_NpcStance(CR2WFile cr2w) : base(cr2w){ }
 

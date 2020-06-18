@@ -9,13 +9,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMutation : CVariable
 	{
-		[RED("type")] 		public EPlayerMutationType Type { get; set;}
+		[RED("type")] 		public CEnum<EPlayerMutationType> Type { get; set;}
 
-		[RED("colors", 2,0)] 		public CArray<EnumWrapper<ESkillColor>> Colors { get; set;}
+		[RED("colors", 2,0)] 		public CArray<CEnum<ESkillColor>> Colors { get; set;}
 
 		[RED("progress")] 		public SMutationProgress Progress { get; set;}
 
-		[RED("requiredMutations", 2,0)] 		public CArray<EnumWrapper<EPlayerMutationType>> RequiredMutations { get; set;}
+		[RED("requiredMutations", 2,0)] 		public CArray<CEnum<EPlayerMutationType>> RequiredMutations { get; set;}
 
 		[RED("localizationNameKey")] 		public CName LocalizationNameKey { get; set;}
 

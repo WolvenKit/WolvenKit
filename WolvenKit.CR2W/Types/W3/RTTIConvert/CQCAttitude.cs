@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQCAttitude : IActorConditionType
 	{
-		[RED("attitude")] 		public EAIAttitude Attitude { get; set;}
+		[RED("attitude")] 		public CEnum<EAIAttitude> Attitude { get; set;}
 
 		public CQCAttitude(CR2WFile cr2w) : base(cr2w){ }
 

@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIExecuteAttackAction : IAIActionTree
 	{
-		[RED("attackParameter")] 		public EAttackType AttackParameter { get; set;}
+		[RED("attackParameter")] 		public CEnum<EAttackType> AttackParameter { get; set;}
 
 		public CAIExecuteAttackAction(CR2WFile cr2w) : base(cr2w){ }
 

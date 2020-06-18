@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("level")] 		public CInt32 Level { get; set;}
 
-		[RED("skillType")] 		public ESkill SkillType { get; set;}
+		[RED("skillType")] 		public CEnum<ESkill> SkillType { get; set;}
 
 		public SSimpleSkill(CR2WFile cr2w) : base(cr2w){ }
 

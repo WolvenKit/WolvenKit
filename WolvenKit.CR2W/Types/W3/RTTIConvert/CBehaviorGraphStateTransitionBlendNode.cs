@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("syncMethod")] 		public CPtr<IBehaviorSyncMethod> SyncMethod { get; set;}
 
-		[RED("motionBlendType")] 		public EBehaviorTransitionBlendMotion MotionBlendType { get; set;}
+		[RED("motionBlendType")] 		public CEnum<EBehaviorTransitionBlendMotion> MotionBlendType { get; set;}
 
 		public CBehaviorGraphStateTransitionBlendNode(CR2WFile cr2w) : base(cr2w){ }
 

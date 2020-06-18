@@ -13,13 +13,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("voicetagMappings", 2,0)] 		public CArray<CStorySceneVoicetagMapping> VoicetagMappings { get; set;}
 
-		[RED("musicState")] 		public ESoundStateDuringScene MusicState { get; set;}
+		[RED("musicState")] 		public CEnum<ESoundStateDuringScene> MusicState { get; set;}
 
-		[RED("ambientsState")] 		public ESoundStateDuringScene AmbientsState { get; set;}
+		[RED("ambientsState")] 		public CEnum<ESoundStateDuringScene> AmbientsState { get; set;}
 
-		[RED("sceneNearPlane")] 		public ENearPlaneDistance SceneNearPlane { get; set;}
+		[RED("sceneNearPlane")] 		public CEnum<ENearPlaneDistance> SceneNearPlane { get; set;}
 
-		[RED("sceneFarPlane")] 		public EFarPlaneDistance SceneFarPlane { get; set;}
+		[RED("sceneFarPlane")] 		public CEnum<EFarPlaneDistance> SceneFarPlane { get; set;}
 
 		[RED("dontStopByExternalSystems")] 		public CBool DontStopByExternalSystems { get; set;}
 

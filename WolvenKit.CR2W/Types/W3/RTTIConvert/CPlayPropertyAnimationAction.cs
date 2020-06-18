@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("lengthScale")] 		public CFloat LengthScale { get; set;}
 
-		[RED("mode")] 		public EPropertyCurveMode Mode { get; set;}
+		[RED("mode")] 		public CEnum<EPropertyCurveMode> Mode { get; set;}
 
 		public CPlayPropertyAnimationAction(CR2WFile cr2w) : base(cr2w){ }
 

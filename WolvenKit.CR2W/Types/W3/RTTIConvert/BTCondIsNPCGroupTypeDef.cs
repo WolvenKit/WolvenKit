@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondIsNPCGroupTypeDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("npcType")] 		public ENPCGroupType NpcType { get; set;}
+		[RED("npcType")] 		public CEnum<ENPCGroupType> NpcType { get; set;}
 
 		public BTCondIsNPCGroupTypeDef(CR2WFile cr2w) : base(cr2w){ }
 

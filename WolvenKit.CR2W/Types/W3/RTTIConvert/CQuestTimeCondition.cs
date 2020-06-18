@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("time")] 		public GameTime Time { get; set;}
 
-		[RED("comparison")] 		public ECompareFunc Comparison { get; set;}
+		[RED("comparison")] 		public CEnum<ECompareFunc> Comparison { get; set;}
 
 		public CQuestTimeCondition(CR2WFile cr2w) : base(cr2w){ }
 

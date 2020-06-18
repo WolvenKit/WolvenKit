@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphTimerValueNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("type")] 		public EBehaviorValueTimerType Type { get; set;}
+		[RED("type")] 		public CEnum<EBehaviorValueTimerType> Type { get; set;}
 
 		[RED("maxValue")] 		public CFloat MaxValue { get; set;}
 

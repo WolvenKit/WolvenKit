@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMimicsModifierNode : CBehaviorGraphBaseMimicNode
 	{
-		[RED("type")] 		public EMimicGeneratorType Type { get; set;}
+		[RED("type")] 		public CEnum<EMimicGeneratorType> Type { get; set;}
 
 		[RED("cachedWeightVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedWeightVariableNode { get; set;}
 

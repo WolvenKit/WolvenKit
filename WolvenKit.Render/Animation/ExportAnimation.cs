@@ -52,7 +52,7 @@ namespace WolvenKit.Render
             if (animFile != null)
                 foreach (var chunk in animFile.chunks)
                 {
-                    if (chunk.Type == "CSkeletalAnimation" && chunk.data is CSkeletalAnimation anim)
+                    if (chunk.REDType == "CSkeletalAnimation" && chunk.data is CSkeletalAnimation anim)
                     {
                         var name = anim.Name;
                         var chunkIdx = anim.AnimBuffer.Reference.ChunkIndex;
@@ -79,7 +79,7 @@ namespace WolvenKit.Render
             if (animFile != null)
                 foreach (var chunk in animFile.chunks)
                 {
-                    if (chunk.Type == "CAnimationBufferMultipart" && chunk.ChunkIndex == AnimationNames[selectedAnimIdx].Value 
+                    if (chunk.REDType == "CAnimationBufferMultipart" && chunk.ChunkIndex == AnimationNames[selectedAnimIdx].Value 
                         && chunk.data is CAnimationBufferMultipart multipart)
                     {
                         foreach (CPtr<IAnimationBuffer> Buffer in multipart.Parts)
@@ -93,7 +93,7 @@ namespace WolvenKit.Render
                         }
                         break;
                     }
-                    if (chunk.Type == "CAnimationBufferBitwiseCompressed" && chunk.ChunkIndex == AnimationNames[selectedAnimIdx].Value)
+                    if (chunk.REDType == "CAnimationBufferBitwiseCompressed" && chunk.ChunkIndex == AnimationNames[selectedAnimIdx].Value)
                     {
                         readBuffer(chunk.data as CAnimationBufferBitwiseCompressed, selectedAnimIdx, animFile);
                         break;
@@ -118,7 +118,7 @@ namespace WolvenKit.Render
             var streamingOption = buffer.StreamingOption;
 
             if (deferredData != null && deferredData.Bufferdata.val != 0)
-                if (streamingOption == Enums.SAnimationBufferStreamingOption.ABSO_PartiallyStreamable)
+                if (streamingOption.WrappedEnum == Enums.SAnimationBufferStreamingOption.ABSO_PartiallyStreamable)
                     data = ConvertAnimation.Combine(buffer.Data.Bytes,
                     File.ReadAllBytes(animFile.FileName + "." + deferredData.Bufferdata.val + ".buffer"));
                 else

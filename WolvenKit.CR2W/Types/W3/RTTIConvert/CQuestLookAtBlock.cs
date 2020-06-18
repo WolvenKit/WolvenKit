@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("enabled")] 		public CBool Enabled { get; set;}
 
-		[RED("type")] 		public EDialogLookAtType Type { get; set;}
+		[RED("type")] 		public CEnum<EDialogLookAtType> Type { get; set;}
 
 		[RED("duration")] 		public CFloat Duration { get; set;}
 
@@ -25,7 +25,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("speed")] 		public CFloat Speed { get; set;}
 
-		[RED("level")] 		public ELookAtLevel Level { get; set;}
+		[RED("level")] 		public CEnum<ELookAtLevel> Level { get; set;}
 
 		[RED("range")] 		public CFloat Range { get; set;}
 

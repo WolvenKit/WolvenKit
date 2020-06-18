@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("cameraShakeRange")] 		public CFloat CameraShakeRange { get; set;}
 
-		[RED("hitReactionType")] 		public EHitReactionType HitReactionType { get; set;}
+		[RED("hitReactionType")] 		public CEnum<EHitReactionType> HitReactionType { get; set;}
 
 		[RED("noLoopEffectIfHitWater")] 		public CBool NoLoopEffectIfHitWater { get; set;}
 

@@ -25,11 +25,11 @@ namespace WolvenKit.CR2W.Types.Utils
         {
             componentName = new CName(cr2w)
             {
-                Name = "Name",
+                REDName = "Name",
             };
             sizeofdata = new CUInt32(cr2w)
             {
-                Name = "Size",
+                REDName = "Size",
             };
             variables = new CBufferUInt32<CVariantSizeTypeName>(cr2w, _ => new CVariantSizeTypeName(_));
 

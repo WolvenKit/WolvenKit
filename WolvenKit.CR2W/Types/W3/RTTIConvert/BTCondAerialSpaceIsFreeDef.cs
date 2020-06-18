@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("cylinderHeightToCheck")] 		public CFloat CylinderHeightToCheck { get; set;}
 
-		[RED("checkedNode")] 		public ETargetName CheckedNode { get; set;}
+		[RED("checkedNode")] 		public CEnum<ETargetName> CheckedNode { get; set;}
 
 		[RED("namedTarget")] 		public CName NamedTarget { get; set;}
 

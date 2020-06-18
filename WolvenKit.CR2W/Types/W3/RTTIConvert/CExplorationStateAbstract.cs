@@ -29,7 +29,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("m_CameraSetS")] 		public CHandle<CCameraParametersSet> M_CameraSetS { get; set;}
 
-		[RED("m_InputContextE")] 		public EGameplayContextInput M_InputContextE { get; set;}
+		[RED("m_InputContextE")] 		public CEnum<EGameplayContextInput> M_InputContextE { get; set;}
 
 		[RED("m_TurnAdjustTimeF")] 		public CFloat M_TurnAdjustTimeF { get; set;}
 

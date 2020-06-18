@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("timeBetweenFireDamage")] 		public CFloat TimeBetweenFireDamage { get; set;}
 
-		[RED("baseStat")] 		public EBaseCharacterStats BaseStat { get; set;}
+		[RED("baseStat")] 		public CEnum<EBaseCharacterStats> BaseStat { get; set;}
 
 		[RED("requiredHits")] 		public CInt32 RequiredHits { get; set;}
 

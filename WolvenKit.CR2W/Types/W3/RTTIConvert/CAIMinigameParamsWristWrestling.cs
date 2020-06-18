@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("hotSpotMaxWidth")] 		public CInt32 HotSpotMaxWidth { get; set;}
 
-		[RED("gameDifficulty")] 		public EAIMinigameDifficulty GameDifficulty { get; set;}
+		[RED("gameDifficulty")] 		public CEnum<EAIMinigameDifficulty> GameDifficulty { get; set;}
 
 		public CAIMinigameParamsWristWrestling(CR2WFile cr2w) : base(cr2w){ }
 

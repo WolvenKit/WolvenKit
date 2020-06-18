@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("isIgnoringFM")] 		public CBool IsIgnoringFM { get; set;}
 
-		[RED("playerVoiceset")] 		public EPlayerVoicesetType PlayerVoiceset { get; set;}
+		[RED("playerVoiceset")] 		public CEnum<EPlayerVoicesetType> PlayerVoiceset { get; set;}
 
 		[RED("clueEntries", 2,0)] 		public CArray<CString> ClueEntries { get; set;}
 
@@ -31,7 +31,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("medallionVibrationDistance")] 		public CFloat MedallionVibrationDistance { get; set;}
 
-		[RED("medallionVibrationBehavior")] 		public EFocusClueMedallionReaction MedallionVibrationBehavior { get; set;}
+		[RED("medallionVibrationBehavior")] 		public CEnum<EFocusClueMedallionReaction> MedallionVibrationBehavior { get; set;}
 
 		[RED("eventOnDetected", 2,0)] 		public CArray<CHandle<IPerformableAction>> EventOnDetected { get; set;}
 

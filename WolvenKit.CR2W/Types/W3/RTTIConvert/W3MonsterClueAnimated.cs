@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MonsterClueAnimated : W3MonsterClue
 	{
-		[RED("animation")] 		public EMonsterClueAnim Animation { get; set;}
+		[RED("animation")] 		public CEnum<EMonsterClueAnim> Animation { get; set;}
 
 		[RED("witnessWholeAnimation")] 		public CBool WitnessWholeAnimation { get; set;}
 

@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_PlayerSkillLevel : CQuestScriptedCondition
 	{
-		[RED("mode")] 		public EQuestPlayerSkillLevel Mode { get; set;}
+		[RED("mode")] 		public CEnum<EQuestPlayerSkillLevel> Mode { get; set;}
 
 		[RED("skills", 2,0)] 		public CArray<SQuestPlayerSkill> Skills { get; set;}
 

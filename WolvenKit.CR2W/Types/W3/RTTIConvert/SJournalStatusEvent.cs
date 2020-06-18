@@ -9,9 +9,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SJournalStatusEvent : SJournalEvent
 	{
-		[RED("oldStatus")] 		public EJournalStatus OldStatus { get; set;}
+		[RED("oldStatus")] 		public CEnum<EJournalStatus> OldStatus { get; set;}
 
-		[RED("newStatus")] 		public EJournalStatus NewStatus { get; set;}
+		[RED("newStatus")] 		public CEnum<EJournalStatus> NewStatus { get; set;}
 
 		[RED("silent")] 		public CBool Silent { get; set;}
 

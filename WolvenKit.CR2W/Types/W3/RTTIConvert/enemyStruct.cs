@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class enemyStruct : CVariable
 	{
-		[RED("enemyType")] 		public EMonsterCategory EnemyType { get; set;}
+		[RED("enemyType")] 		public CEnum<EMonsterCategory> EnemyType { get; set;}
 
 		[RED("enemyCount")] 		public CInt32 EnemyCount { get; set;}
 

@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("hitsEssence")] 		public CBool HitsEssence { get; set;}
 
-		[RED("resistance")] 		public ECharacterDefenseStats Resistance { get; set;}
+		[RED("resistance")] 		public CEnum<ECharacterDefenseStats> Resistance { get; set;}
 
 		public SDoTDamage(CR2WFile cr2w) : base(cr2w){ }
 

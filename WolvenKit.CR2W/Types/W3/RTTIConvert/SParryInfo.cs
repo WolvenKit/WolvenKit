@@ -17,9 +17,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("targetToAttackerDist")] 		public CFloat TargetToAttackerDist { get; set;}
 
-		[RED("attackSwingType")] 		public EAttackSwingType AttackSwingType { get; set;}
+		[RED("attackSwingType")] 		public CEnum<EAttackSwingType> AttackSwingType { get; set;}
 
-		[RED("attackSwingDir")] 		public EAttackSwingDirection AttackSwingDir { get; set;}
+		[RED("attackSwingDir")] 		public CEnum<EAttackSwingDirection> AttackSwingDir { get; set;}
 
 		[RED("attackActionName")] 		public CName AttackActionName { get; set;}
 

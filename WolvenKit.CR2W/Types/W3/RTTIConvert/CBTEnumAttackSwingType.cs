@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTEnumAttackSwingType : IBehTreeValueEnum
 	{
-		[RED("value")] 		public EAttackSwingType Value { get; set;}
+		[RED("value")] 		public CEnum<EAttackSwingType> Value { get; set;}
 
 		public CBTEnumAttackSwingType(CR2WFile cr2w) : base(cr2w){ }
 
