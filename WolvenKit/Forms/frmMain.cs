@@ -246,13 +246,31 @@ namespace WolvenKit
         {
             dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"));
 
-            CloseWindows();
+            switch (MessageBox.Show(
+                        "This will close all windows. You will loose any unsaved progress in open files. " +
+                        "Would you like to continue without saving?",
+                        "Apply Theme",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            {
+                default:
+                    return;
+                case DialogResult.Yes:
+                    {
+                        CloseWindows(false);
 
-            this.ApplyCustomTheme();
+                        this.ApplyCustomTheme();
 
-            dockPanel.LoadFromXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"), m_deserializeDockContent);
+                        dockPanel.LoadFromXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"), m_deserializeDockContent);
 
-            ReopenWindows();
+                        ReopenWindows();
+                        break;
+                    }
+                case DialogResult.No:
+                    {
+                        return;
+                    }
+            }
+            
         }
         private void ApplyCustomTheme()
         {
@@ -1347,13 +1365,14 @@ namespace WolvenKit
         /// <summary>
         /// Closes and saves all the "file documents", resets modexplorer.
         /// </summary>
-        private void CloseWindows()
+        private void CloseWindows(bool saveall = true)
         {
             if (ActiveMod != null)
             {
                 foreach (var t in OpenDocuments.ToList())
                 {
-                    t.SaveFile();
+                    if (saveall)
+                        t.SaveFile();
                     t.Close();
                 }
             }
@@ -1380,7 +1399,8 @@ namespace WolvenKit
 
             foreach (var t in OpenScripts.ToList())
             {
-                t.SaveFile();
+                if (saveall)
+                    t.SaveFile();
                 t.Close();
             }
             foreach (var t in OpenImages.ToList())

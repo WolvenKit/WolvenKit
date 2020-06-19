@@ -235,10 +235,10 @@ namespace WolvenKit
         {
             var theme = UIController.Get().GetTheme();
             UIController.Get().ToolStripExtender.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+            toolStripSearchBox.BackColor = theme.ColorPalette.ToolWindowCaptionButtonInactiveHovered.Background;
+
 
             this.treeListView.BackColor = theme.ColorPalette.TabButtonSelectedInactivePressed.Background; 
-            toolStripSearchBox.BackColor = theme.ColorPalette.ToolWindowCaptionButtonInactiveHovered.Background; 
-
             this.treeListView.ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text;
             HeaderFormatStyle hfs = new HeaderFormatStyle()
             {

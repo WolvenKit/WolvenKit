@@ -164,7 +164,7 @@ namespace WolvenKit.CR2W
 
         public string REDValue => this.ToString();
 
-        public bool IsSerialized { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool IsSerialized { get => true; set => throw new NotImplementedException(); }
         #endregion
 
         #region Methods
@@ -286,7 +286,7 @@ namespace WolvenKit.CR2W
 
         public void CreateDefaultData()
         {
-            data = CR2WTypeManager.Create(REDType, "", cr2w, GetParent().data);
+            data = CR2WTypeManager.Create(REDType, REDType, cr2w, GetParent()?.data);
             if (data == null)
             {
                 throw new NotImplementedException();
@@ -296,6 +296,8 @@ namespace WolvenKit.CR2W
             {
                 Reference = GetParent()
             };
+
+            data.IsSerialized = true;
         }
 
         public CR2WExportWrapper Copy(CR2WCopyAction context)

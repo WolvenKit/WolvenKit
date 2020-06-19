@@ -11,20 +11,20 @@ using WolvenKit.CR2W.Reflection;
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta()]
-    public class CBufferVLQ<T> : CArrayBase<T> where T : CVariable
+    public class CBufferVLQInt32<T> : CArrayBase<T> where T : CVariable
     {
-        public CBufferVLQ(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public CBufferVLQInt32(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        {
+        }
 
         public override void Read(BinaryReader file, uint size)
         {
-            elementcount = (int)file.ReadBit6();
-
-            base.Read(file, size);
+            base.Read(file, size, (int)file.ReadVLQInt32());
         }
 
         public override void Write(BinaryWriter file)
         {
-            CDynamicInt count = new CDynamicInt(cr2w, null, "");
+            CVLQInt32 count = new CVLQInt32(cr2w, null, "");
             count.val = elements.Count;
             count.Write(file);
 
@@ -36,7 +36,7 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Copy(CR2WCopyAction context)
         {
-            var copy = base.Copy(context) as CBufferVLQ<T>;
+            var copy = base.Copy(context) as CBufferVLQInt32<T>;
 
             foreach (var element in elements)
             {
@@ -46,6 +46,8 @@ namespace WolvenKit.CR2W.Types
             return copy;
         }
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBufferVLQ<T>(cr2w, parent, name);
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBufferVLQInt32<T>(cr2w, parent, name);
     }
+
+    
 }

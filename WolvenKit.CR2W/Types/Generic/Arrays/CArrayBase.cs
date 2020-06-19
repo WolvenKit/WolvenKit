@@ -10,6 +10,7 @@ using WolvenKit.CR2W.Reflection;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.CodeDom;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -17,11 +18,19 @@ namespace WolvenKit.CR2W.Types
     [REDMeta()]
     public abstract class CArrayBase<T> : CVariable, IList<T>, IList where T : CVariable
     {
-        
+        public CArrayBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+        #region Properties
         public List<T> elements { get; set; } = new List<T>();
 
+        //[Browsable(false)]
+        //public int elementcount { get; set; }
+
         [Browsable(false)]
-        public int elementcount { get; set; }
+        public List<int> Flags { get; set; }
+        #endregion
+
+
 
         [Browsable(false)]
         public override string REDType
@@ -34,21 +43,18 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
-
-        [Browsable(false)]
-        public List<int> Flags { get; set; }
-
-        [Browsable(false)]
-        public T this[int index] { get => ((IList<T>)elements)[index]; set => ((IList<T>)elements)[index] = value; }
-
-        public CArrayBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-
         public override List<IEditableVariable> GetEditableVariables()
         {
             return elements.Cast<IEditableVariable>().ToList();
         }
 
+
         public override void Read(BinaryReader file, uint size)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Read(BinaryReader file, uint size, int elementcount)
         {
             string redtype;
             if (Flags == null)
@@ -78,11 +84,33 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
-       
-
         public override bool CanAddVariable(IEditableVariable newvar)
         {
             return newvar == null || newvar is T;
+        }
+
+        public override void AddVariable(CVariable variable)
+        {
+            if (variable is T)
+            {
+                variable.SetREDName(elements.Count.ToString());
+                elements.Add(variable as T);
+            }
+        }
+        public override bool CanRemoveVariable(IEditableVariable child)
+        {
+            return child is T && elements.Count > 0;
+        }
+
+        public override bool RemoveVariable(IEditableVariable child)
+        {
+            if (child is T)
+            {
+                elements.Remove(child as T);
+                UpdateNames();
+                return true;
+            }
+            return false;
         }
 
         public override string ToString()
@@ -108,31 +136,6 @@ namespace WolvenKit.CR2W.Types
             return builder.ToString();
         }
 
-        public override bool CanRemoveVariable(IEditableVariable child)
-        {
-            return true;
-        }
-
-        public override bool RemoveVariable(IEditableVariable child)
-        {
-            if (child is T)
-            {
-                elements.Remove(child as T);
-                UpdateNames();
-                return true;
-            }
-            return false;
-        }
-
-        public override void AddVariable(CVariable variable)
-        {
-            if (variable is T)
-            {
-                variable.SetREDName(elements.Count.ToString());
-                elements.Add(variable as T);
-            }
-        }
-
         private void UpdateNames()
         {
             for (int i = 0; i < elements.Count; i++)
@@ -141,7 +144,12 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
+
         #region interface implements
+
+        [Browsable(false)]
+        public T this[int index] { get => ((IList<T>)elements)[index]; set => ((IList<T>)elements)[index] = value; }
+
         public int Count => ((IList<T>)elements).Count;
 
         public bool IsReadOnly => ((IList<T>)elements).IsReadOnly;
@@ -171,12 +179,14 @@ namespace WolvenKit.CR2W.Types
 
         public void Insert(int index, T item)
         {
-            ((IList<T>)elements).Insert(index, item);
+            throw new NotImplementedException(); 
+            //((IList<T>)elements).Insert(index, item);
         }
 
         public void RemoveAt(int index)
         {
-            ((IList<T>)elements).RemoveAt(index);
+            throw new NotImplementedException();
+            //((IList<T>)elements).RemoveAt(index);
         }
 
         public void Add(T item)
@@ -226,7 +236,8 @@ namespace WolvenKit.CR2W.Types
 
         public void Insert(int index, object value)
         {
-            ((IList)elements).Insert(index, value);
+            throw new NotImplementedException();
+            //((IList)elements).Insert(index, value);
         }
 
         public void Remove(object value)

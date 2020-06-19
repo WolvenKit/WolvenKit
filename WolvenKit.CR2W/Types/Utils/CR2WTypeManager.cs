@@ -66,7 +66,7 @@ namespace WolvenKit.CR2W.Types
                 {
                     typename = REDReflection.GetWKitTypeFromREDType(typename);
                     var etype = Type.GetType($"WolvenKit.CR2W.Types.{typename}");
-                    object einstance = Activator.CreateInstance(etype, cr2w);
+                    object einstance = Activator.CreateInstance(etype, cr2w, parentVariable, varname);
                     return einstance as CVariable;
                 }
 
@@ -219,7 +219,7 @@ namespace WolvenKit.CR2W.Types
             #region W3 TYPES 
             typename = REDReflection.GetWKitTypeFromREDType(typename);
             var type = Type.GetType($"WolvenKit.CR2W.Types.{typename}");
-            object instance = Activator.CreateInstance(type, cr2w);
+            object instance = Activator.CreateInstance(type, cr2w, parentVariable, varname);
             #endregion
 
 

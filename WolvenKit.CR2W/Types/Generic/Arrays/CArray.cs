@@ -33,9 +33,7 @@ namespace WolvenKit.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
-            elementcount = (int)file.ReadUInt32();
-
-            base.Read(file, size);
+            base.Read(file, size, (int)file.ReadUInt32());
         }
 
 
@@ -67,7 +65,7 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            throw new NotImplementedException();
+            return new CArray<T>(cr2w, parent, name);
         }
 
         public string GetElementType()

@@ -29,10 +29,12 @@ namespace WolvenKit.CR2W.Types
             this.REDName = name;
 
             InternalGuid = Guid.NewGuid();
+            accessor = TypeAccessor.Create(this.GetType());
         }
 
 
         #region Fields
+        private TypeAccessor accessor;
         #endregion
 
         #region Properties
@@ -83,6 +85,7 @@ namespace WolvenKit.CR2W.Types
             {
                 if (string.IsNullOrEmpty(name))
                 {
+                    throw new NotImplementedException();
                     return "<NO NAME SET>";
                 }
                 else
@@ -142,9 +145,31 @@ namespace WolvenKit.CR2W.Types
             List<PropertyInfo> redprops = REDReflection.GetREDProperties<REDAttribute>(this.GetType()).ToList();
             foreach (PropertyInfo pi in redprops)
             {
-                if (pi?.GetValue(this) is CVariable cvar)
+                // gets instantiated variables
+                if (pi.GetValue(this) is CVariable cvar)
                 {
                     redvariables.Add(cvar);
+                }
+                else
+                {
+                    // what if they're null? 
+                    var cv = pi.GetValue(this);
+                    if (cv is null)
+                    {
+                        // instantiate
+                        var redname = REDReflection.GetREDNameString(pi);                           // get redname from attribute
+                        var redtype = REDReflection.GetREDTypeString(pi.PropertyType);              // get redtype from type
+                        var newvar = CR2WTypeManager.Create(redtype, redname, this.cr2w, this);     // create new variable and parent to this 
+
+                        if (newvar != null)
+                            pi.SetValue(this, newvar);  // set value
+                        else
+                            throw new NotImplementedException();
+                    }
+                    else
+                    {
+                        throw new NotImplementedException();
+                    }
                 }
             }
 
@@ -276,9 +301,8 @@ namespace WolvenKit.CR2W.Types
 
             // not sure which is faster
             #region FastAccessor
-            var accessor = TypeAccessor.Create(this.GetType());
+            
             string varname = value.REDName.FirstCharToUpper();
-
             varname = NormalizeName(varname);
             try
             {
@@ -339,11 +363,24 @@ namespace WolvenKit.CR2W.Types
                     && bufferAttribute.IsIgnored)
                     continue;
 
-
+                // try get value
                 if (pi?.GetValue(this) is CVariable cvar)
                 {
                     if (cvar != null)
-                        CR2WFile.WriteVariable(file, cvar);
+                    {
+                        // only write values that are instantiated AND edited
+                        if (cvar.IsSerialized)
+                        {
+                            // check if healthy? don't know how
+
+                            // finally: write to stream
+                            CR2WFile.WriteVariable(file, cvar);
+                        }
+                        else
+                        {
+
+                        }
+                    }
                     else
                         throw new SerializationException();
 
@@ -446,7 +483,8 @@ namespace WolvenKit.CR2W.Types
                 hash = REDType == null ? hash : hash * 29 + REDType.GetHashCode();
                 hash = REDName == null ? hash : hash * 29 + REDName.GetHashCode();
                 hash = GetFullName() == null ? hash : hash * 29 + GetFullName().GetHashCode();
-                hash = hash * 29 + ToString().GetHashCode();
+                var tos = ToString();
+                hash = hash * 29 + tos.GetHashCode();
                 var evars = GetEditableVariables();
                 if (evars != null)
                 {

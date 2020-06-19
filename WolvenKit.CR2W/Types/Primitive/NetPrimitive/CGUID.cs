@@ -11,12 +11,15 @@ namespace WolvenKit.CR2W.Types
     {
         public byte[] guid;
 
-        public CGUID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public CGUID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        {
+            guid = new byte[16];
+        }
 
         [DataMember]
         public string GuidString
         {
-            get { return new Guid(guid).ToString(); }
+            get { return ToString(); }
             set
             {
                 Guid g;
@@ -69,9 +72,13 @@ namespace WolvenKit.CR2W.Types
 
         public override string ToString()
         {
-            var g = new Guid(guid);
-
-            return g.ToString();
+            if (guid != null && guid.Length > 0)
+                return new Guid(guid).ToString();
+            else
+            {
+                guid = new byte[16];
+                return ToString();
+            }
         }
     }
 }

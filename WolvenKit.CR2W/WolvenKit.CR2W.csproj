@@ -153,9 +153,9 @@
     <Compile Include="Reflection\REDAttribute.cs" />
     <Compile Include="Reflection\REDReflection.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
-    <Compile Include="Types\Generic\CArrayBase.cs" />
-    <Compile Include="Types\Generic\CArrayFixedSize.cs" />
-    <Compile Include="Types\Generic\CBufferVLQInt32.cs" />
+    <Compile Include="Types\Generic\Arrays\CArrayBase.cs" />
+    <Compile Include="Types\Generic\Arrays\CArrayFixedSize.cs" />
+    <Compile Include="Types\Generic\Arrays\CBufferVLQInt32.cs" />
     <Compile Include="Types\Utils\CVariantSizeTypeName.cs" />
     <Compile Include="Types\Utils\CVariantSizeNameType.cs" />
     <Compile Include="Types\Utils\CVariantSizeType.cs" />
@@ -167,7 +167,7 @@
     <Compile Include="Exceptions\InvalidPtrException.cs" />
     <Compile Include="Types\Primitive\NetPrimitive\CEnum.cs" />
     <Compile Include="Types\Structs\SCurveData.cs" />
-    <Compile Include="Types\Generic\CBufferUInt16.cs" />
+    <Compile Include="Types\Generic\Arrays\CBufferUInt16.cs" />
     <Compile Include="Types\Utils\CR2WTypeManager.cs" />
     <Compile Include="Types\Primitive\Flags.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\CTerrainTileData.cs" />
@@ -6757,12 +6757,12 @@
     <Compile Include="Types\BufferedTypes\BufferStructs\SSectorDataObject.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SBlockData.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\SSkeletonRigData.cs" />
-    <Compile Include="Types\Generic\CBufferUInt32.cs" />
-    <Compile Include="Types\Generic\CCompressedBuffer.cs" />
+    <Compile Include="Types\Generic\Arrays\CBufferUInt32.cs" />
+    <Compile Include="Types\Generic\Arrays\CCompressedBuffer.cs" />
     <None Include="Types\Utils\CQuaternion.cs.deprecated" />
     <Compile Include="Types\BufferedTypes\Complex\CSkeleton.cs" />
-    <Compile Include="Types\Generic\CPaddedBuffer.cs" />
-    <Compile Include="Types\Generic\CBufferVLQ.cs" />
+    <Compile Include="Types\Generic\Arrays\CPaddedBuffer.cs" />
+    <Compile Include="Types\Generic\Arrays\CBufferVLQ.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CCubeTexture.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SMeshBlock5.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CWayPointsCollection.cs" />
@@ -6782,7 +6782,7 @@
     <Compile Include="Exceptions\InvalidChunkTypeException.cs" />
     <Compile Include="Exceptions\InvalidFileTypeException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Types\Generic\CArray.cs" />
+    <Compile Include="Types\Generic\Arrays\CArray.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CBitmapTexture.cs" />
     <Compile Include="Types\Primitive\NetPrimitive\CByteArray.cs" />
     <Compile Include="Types\Primitive\NetPrimitive\CBytes.cs" />
