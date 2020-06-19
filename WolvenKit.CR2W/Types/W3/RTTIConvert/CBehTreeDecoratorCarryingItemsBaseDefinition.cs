@@ -13,13 +13,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("storeTag")] 		public CBehTreeValCName StoreTag { get; set;}
 
-		public CBehTreeDecoratorCarryingItemsBaseDefinition(CR2WFile cr2w) : base(cr2w){ }
+		public CBehTreeDecoratorCarryingItemsBaseDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeDecoratorCarryingItemsBaseDefinition(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CBehTreeDecoratorCarryingItemsBaseDefinition(cr2w);
 
 	}
 }

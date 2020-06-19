@@ -17,9 +17,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("guid")] 		public CGUID Guid { get; set;}
 
-		public CNode(CR2WFile cr2w) : base(cr2w){ }
+		public CNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public override CVariable Create(CR2WFile cr2w) => new CNode(cr2w);
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CNode(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

@@ -15,13 +15,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("flag")] 		public CInt32 Flag { get; set;}
 
-		public CBehTreeNodeConditionalFlagTreeDefinition(CR2WFile cr2w) : base(cr2w){ }
+		public CBehTreeNodeConditionalFlagTreeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeNodeConditionalFlagTreeDefinition(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CBehTreeNodeConditionalFlagTreeDefinition(cr2w);
 
 	}
 }

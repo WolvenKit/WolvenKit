@@ -17,9 +17,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("boneIndex")] 		public CUInt32 BoneIndex { get; set;}
 
-		public SBoneIndiceMapping(CR2WFile cr2w) : base(cr2w){ }
+		public SBoneIndiceMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public override CVariable Create(CR2WFile cr2w) => new SBoneIndiceMapping(cr2w);
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBoneIndiceMapping(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

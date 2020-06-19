@@ -25,14 +25,14 @@ namespace WolvenKit.CR2W.Types
 
         public T this[int index] { get => ((IList<T>)elements)[index]; set => ((IList<T>)elements)[index] = value; }
 
-        public CCompressedBuffer(CR2WFile cr2w, Func<CR2WFile, T> elementFactory) : base(cr2w)
+        public CCompressedBuffer(CR2WFile cr2w, CVariable parent, string name, Func<CR2WFile, T> elementFactory) : base(cr2w, parent, name)
         {
             this.elementFactory = elementFactory;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CCompressedBuffer<T>(cr2w, elementFactory);
+            return new CCompressedBuffer<T>(cr2w, parent, name, elementFactory);
         }
 
         public void Read(BinaryReader file, uint size, int count)
@@ -49,7 +49,7 @@ namespace WolvenKit.CR2W.Types
             for (int i = 0; i < m_count; i++)
             {
                 T element = elementFactory.Invoke(cr2w);
-                element.REDName = i.ToString();
+
                 element.Read(file, size);
                 elements.Add(element);
             }
@@ -118,20 +118,22 @@ namespace WolvenKit.CR2W.Types
             return true;
         }
 
-        public override void RemoveVariable(IEditableVariable child)
+        public override bool RemoveVariable(IEditableVariable child)
         {
             if (child is T)
             {
                 elements.Remove(child as T);
                 UpdateNames();
+                return true;
             }
+            return false;
         }
 
         public override void AddVariable(CVariable variable)
         {
             if (variable is T)
             {
-                variable.REDName = elements.Count.ToString();
+                variable.SetREDName(elements.Count.ToString());
                 elements.Add(variable as T);
             }
         }
@@ -140,7 +142,7 @@ namespace WolvenKit.CR2W.Types
         {
             for (int i = 0; i < elements.Count; i++)
             {
-                elements[i].REDName = i.ToString();
+                elements[i].SetREDName(i.ToString());
             }
         }
 
@@ -161,7 +163,7 @@ namespace WolvenKit.CR2W.Types
 
         public void Add(T item)
         {
-            ((ICollection<T>)elements).Add(item);
+            AddVariable(item);
         }
 
         public void Clear()
@@ -181,7 +183,7 @@ namespace WolvenKit.CR2W.Types
 
         public bool Remove(T item)
         {
-            return ((ICollection<T>)elements).Remove(item);
+            return RemoveVariable(item);
         }
 
         public IEnumerator<T> GetEnumerator()

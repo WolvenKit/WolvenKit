@@ -16,16 +16,11 @@ namespace WolvenKit.CR2W.Types
         [RED] public CUInt32 Height { get; set; }
         [RED] public CUInt32 Blocksize { get; set; }
 
-        public SMipData(CR2WFile cr2w) :
-            base(cr2w)
-        {
+        public SMipData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
-            
-        }
-
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new SMipData(cr2w);
+            return new SMipData(cr2w, parent, name);
         }
     }
 }

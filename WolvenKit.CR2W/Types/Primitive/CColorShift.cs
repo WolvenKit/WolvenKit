@@ -21,11 +21,11 @@ namespace WolvenKit.CR2W.Types
 
         public HslColor Color = new HslColor(0, 0, 0);
 
-        public CColorShift(CR2WFile cr2w) : base(cr2w)
+        public CColorShift(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            Hue = new CUInt16(cr2w);
-            Saturation = new CInt8(cr2w);
-            Luminance = new CInt8(cr2w);
+            Hue = new CUInt16(cr2w, this, nameof(Hue));
+            Saturation = new CInt8(cr2w, this, nameof(Saturation));
+            Luminance = new CInt8(cr2w, this, nameof(Luminance));
         }
 
 
@@ -63,9 +63,9 @@ namespace WolvenKit.CR2W.Types
             return panel;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CColorShift(cr2w);
+            return new CColorShift(cr2w, parent, name);
         }
 
         private void panel_Click(object sender, EventArgs e)

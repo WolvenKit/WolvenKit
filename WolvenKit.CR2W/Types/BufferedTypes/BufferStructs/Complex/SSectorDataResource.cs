@@ -24,21 +24,20 @@ namespace WolvenKit.CR2W.Types
         //public CUInt64 patchHash;
         [RED] public CString pathHash { get; set; }
 
-        public CSectorDataResource(CR2WFile cr2w)
-            : base(cr2w)
+        public CSectorDataResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            box0 = new CFloat(cr2w) { REDName = "box0", };
-            box1 = new CFloat(cr2w) { REDName = "box1", };
-            box2 = new CFloat(cr2w) { REDName = "box2", };
-            box3 = new CFloat(cr2w) { REDName = "box3", };
-            box4 = new CFloat(cr2w) { REDName = "box4", };
-            box5 = new CFloat(cr2w) { REDName = "box5", };
-            pathHash = new CString(cr2w) { REDName = "pathHash" };
+            box0 = new CFloat(cr2w, this, nameof(box0));
+            box1 = new CFloat(cr2w, this, nameof(box1));
+            box2 = new CFloat(cr2w, this, nameof(box2));
+            box3 = new CFloat(cr2w, this, nameof(box3));
+            box4 = new CFloat(cr2w, this, nameof(box4));
+            box5 = new CFloat(cr2w, this, nameof(box5));
+            pathHash = new CString(cr2w, this, nameof(pathHash));
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CSectorDataResource(cr2w);
+            return new CSectorDataResource(cr2w, parent, name);
         }
 
         public override void Read(BinaryReader file, uint size)

@@ -53,13 +53,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("behIncreasedFwdSpeed")] 		public CName BehIncreasedFwdSpeed { get; set;}
 
-		public CExplorationSkatingGlobal(CR2WFile cr2w) : base(cr2w){ }
+		public CExplorationSkatingGlobal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CExplorationSkatingGlobal(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CExplorationSkatingGlobal(cr2w);
 
 	}
 }

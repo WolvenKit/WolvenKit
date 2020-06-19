@@ -13,13 +13,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("Bones with only scale", 2,0)] 		public CArray<SBehaviorGraphBoneInfo> Bones_with_only_scale { get; set;}
 
-		public CBehaviorGraphRetargetCharacterNodeMethod_Skeleton(CR2WFile cr2w) : base(cr2w){ }
+		public CBehaviorGraphRetargetCharacterNodeMethod_Skeleton(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphRetargetCharacterNodeMethod_Skeleton(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CBehaviorGraphRetargetCharacterNodeMethod_Skeleton(cr2w);
 
 	}
 }

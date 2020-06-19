@@ -26,7 +26,7 @@ namespace WolvenKit.CR2W.Types
     public class CArray<T> : CArrayBase<T>, IArrayAccessor where T : CVariable
     {
 
-        public CArray(CR2WFile cr2w) : base(cr2w)
+        public CArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
         }
@@ -41,7 +41,7 @@ namespace WolvenKit.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            CUInt32 count = new CUInt32(cr2w)
+            CUInt32 count = new CUInt32(cr2w, null, "")
             {
                 val = (uint)elements.Count
             };
@@ -65,7 +65,7 @@ namespace WolvenKit.CR2W.Types
             return copy;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             throw new NotImplementedException();
         }

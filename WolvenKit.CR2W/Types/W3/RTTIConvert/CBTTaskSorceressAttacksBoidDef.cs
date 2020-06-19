@@ -13,13 +13,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("attackDist")] 		public CBehTreeValFloat AttackDist { get; set;}
 
-		public CBTTaskSorceressAttacksBoidDef(CR2WFile cr2w) : base(cr2w){ }
+		public CBTTaskSorceressAttacksBoidDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskSorceressAttacksBoidDef(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CBTTaskSorceressAttacksBoidDef(cr2w);
 
 	}
 }

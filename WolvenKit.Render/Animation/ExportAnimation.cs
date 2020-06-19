@@ -190,7 +190,7 @@ namespace WolvenKit.Render
                         keyFrame = idx;
                         //keyFrame += numFrames;
                         currkeyframe.Add(keyFrame);
-                        var vec = new SVector3D();
+                        var vec = new SVector3D(null, null, "");
                         vec.Read(br, compression);
                         Vector3Df pos = new Vector3Df(vec.x.val, vec.y.val, vec.z.val);
                         currposition.Add(pos);
@@ -215,7 +215,7 @@ namespace WolvenKit.Render
                         keyFrame = idx;
                         //keyFrame += numFrames;
                         currkeyframe.Add(keyFrame);
-                        var vec = new SVector3D();
+                        var vec = new SVector3D(null, null, "");
                         vec.Read(br, compression);
                         Vector3Df scale = new Vector3Df(vec.x.val, vec.y.val, vec.z.val);
                         currscale.Add(scale);

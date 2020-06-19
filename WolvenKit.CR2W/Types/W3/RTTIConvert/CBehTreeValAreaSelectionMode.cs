@@ -13,13 +13,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("value")] 		public CEnum<EAIAreaSelectionMode> Value { get; set;}
 
-		public CBehTreeValAreaSelectionMode(CR2WFile cr2w) : base(cr2w){ }
+		public CBehTreeValAreaSelectionMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeValAreaSelectionMode(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CBehTreeValAreaSelectionMode(cr2w);
 
 	}
 }

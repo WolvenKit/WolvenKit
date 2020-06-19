@@ -9,10 +9,7 @@ namespace WolvenKit.CR2W.Types
     [REDMeta()]
     public class CFloat : CVariable
     {
-        public CFloat(CR2WFile cr2w)
-            : base(cr2w)
-        {
-        }
+        public CFloat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         [DataMember]
         public float val { get; set; }
@@ -37,9 +34,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CFloat(cr2w);
+            return new CFloat(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)

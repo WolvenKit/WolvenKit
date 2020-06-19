@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
     [REDMeta]
     public class EEntityStaticFlags : CFlags
     {
-        public EEntityStaticFlags(CR2WFile cr2w) : base(cr2w) { }
+        public EEntityStaticFlags(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
@@ -20,7 +20,7 @@ namespace WolvenKit.CR2W.Types
     [REDMeta]
     public class EDrawableFlags : CFlags
     {
-        public EDrawableFlags(CR2WFile cr2w) : base(cr2w) { }
+        public EDrawableFlags(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
@@ -30,7 +30,7 @@ namespace WolvenKit.CR2W.Types
     [REDMeta]
     public class ETriggerChannel : CFlags
     {
-        public ETriggerChannel(CR2WFile cr2w) : base(cr2w) { }
+        public ETriggerChannel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
@@ -40,7 +40,7 @@ namespace WolvenKit.CR2W.Types
     [REDMeta]
     public class ELightChannel : CFlags
     {
-        public ELightChannel(CR2WFile cr2w) : base(cr2w) { }
+        public ELightChannel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
@@ -50,7 +50,7 @@ namespace WolvenKit.CR2W.Types
     [REDMeta]
     public class ELightUsageMask : CFlags
     {
-        public ELightUsageMask(CR2WFile cr2w) : base(cr2w) { }
+        public ELightUsageMask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
@@ -60,7 +60,7 @@ namespace WolvenKit.CR2W.Types
     [REDMeta]
     public class EDismembermentEffectTypeFlag : CFlags
     {
-        public EDismembermentEffectTypeFlag(CR2WFile cr2w) : base(cr2w) { }
+        public EDismembermentEffectTypeFlag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

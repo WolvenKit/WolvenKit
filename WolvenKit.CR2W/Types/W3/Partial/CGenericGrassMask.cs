@@ -11,8 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("maskRes")] 		public CUInt32 MaskRes { get; set;}
 
-
-		public override CVariable Create(CR2WFile cr2w) => new CGenericGrassMask(cr2w);
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CGenericGrassMask(cr2w, parent, name);
 
 	}
 }

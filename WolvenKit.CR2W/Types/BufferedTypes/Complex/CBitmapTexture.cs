@@ -23,15 +23,15 @@ namespace WolvenKit.CR2W.Types
         [REDBuffer(true)] public CBytes Residentmip { get; set; }
 
 
-        public CBitmapTexture(CR2WFile cr2w) : base(cr2w)
+        public CBitmapTexture(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
 
-            Mipdata = new CCompressedBuffer<SMipData>(cr2w, _ => new SMipData(_)) { REDName = "Mipdata" };
-            unk2 = new CUInt32(cr2w) { REDName = "unk2" };
-            Mips = new CCompressedBuffer<CByteArray>(cr2w, _ => new CByteArray(_)) { REDName = "mips" };
-            ResidentmipSize = new CUInt32(cr2w) { REDName = "filesize" };
-            Residentmip = new CBytes(cr2w) { REDName = "Image" };
+            Mipdata = new CCompressedBuffer<SMipData>(cr2w, this, nameof(Mipdata), _ => new SMipData(_, Mipdata, ""));
+            unk2 = new CUInt32(cr2w, this, nameof(unk2));
+            Mips = new CCompressedBuffer<CByteArray>(cr2w, this, nameof(Mips), _ => new CByteArray(_, Mips, ""));
+            ResidentmipSize = new CUInt32(cr2w, this, nameof(ResidentmipSize));
+            Residentmip = new CBytes(cr2w, this, nameof(Residentmip));
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -49,11 +49,11 @@ namespace WolvenKit.CR2W.Types
 
                 for (int i = 0; i < MipsCount.val; i++)
                 {
-                    var mipdata = new SMipData(cr2w);
+                    var mipdata = new SMipData(cr2w, Mipdata, "");
                     mipdata.Read(file, 16);
                     Mipdata.AddVariable(mipdata);
 
-                    var img = new CByteArray(cr2w);
+                    var img = new CByteArray(cr2w, Mips, "");
                     //img.SetParent(this);
                     img.Read(file, 0);
                     Mips.AddVariable(img);

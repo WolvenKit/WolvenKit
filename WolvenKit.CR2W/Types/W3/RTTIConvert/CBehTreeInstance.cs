@@ -13,13 +13,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("onReattachCallback", 2,0)] 		public CArray<CHandle<IBehTreeMetanodeOnSpawnDefinition>> OnReattachCallback { get; set;}
 
-		public CBehTreeInstance(CR2WFile cr2w) : base(cr2w){ }
+		public CBehTreeInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeInstance(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CBehTreeInstance(cr2w);
 
 	}
 }

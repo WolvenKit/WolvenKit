@@ -17,17 +17,17 @@ namespace WolvenKit.CR2W.Types
         [RED] public CFloat positionW { get; set; }
         [RED] public CHandle<CUmbraTile> umbratile { get; set; }
 
-        public SUmbraSceneData(CR2WFile cr2w) :
-            base(cr2w)
+        public SUmbraSceneData(CR2WFile cr2w, CVariable parent, string name) :
+            base(cr2w, parent, name)
         {
 
         }
 
 
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new SUmbraSceneData(cr2w);
+            return new SUmbraSceneData(cr2w, parent, name);
         }
     }
 }

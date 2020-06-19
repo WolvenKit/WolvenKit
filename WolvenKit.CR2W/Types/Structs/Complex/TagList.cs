@@ -12,10 +12,7 @@ namespace WolvenKit.CR2W.Types
     {
         [RED] public CBufferVLQ<CName> tags { get; set; }
 
-        public TagList(CR2WFile cr2w)
-            : base(cr2w)
-        {
-        }
+        public TagList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -24,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
             for (var i = 0; i < count; i++)
             {
-                var var = new CName(cr2w);
+                var var = new CName(cr2w, tags, i.ToString());
                 var.Read(file, 0);
                 AddVariable(var);
             }
@@ -39,9 +36,9 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new TagList(cr2w);
+            return new TagList(cr2w, parent, name);
         }
 
         public override void AddVariable(CVariable var)
@@ -50,7 +47,6 @@ namespace WolvenKit.CR2W.Types
             {
                 var tag = (CName) var;
                 tags.Add(tag);
-                tag.Parent = this;
             }
         }
 
@@ -70,14 +66,15 @@ namespace WolvenKit.CR2W.Types
             return false;
         }
 
-        public override void RemoveVariable(IEditableVariable child)
+        public override bool RemoveVariable(IEditableVariable child)
         {
             if (child is CName)
             {
                 var tag = (CName) child;
                 tags.Remove(tag);
-                tag.Parent = null;
+                return true;
             }
+            return false;
         }
 
         public override string ToString()

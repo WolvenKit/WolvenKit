@@ -11,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("value")] 		public CEnum<EAttackSwingType> Value { get; set;}
 
-		public CBTEnumAttackSwingType(CR2WFile cr2w) : base(cr2w){ }
+		public CBTEnumAttackSwingType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTEnumAttackSwingType(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CBTEnumAttackSwingType(cr2w);
 
 	}
 }

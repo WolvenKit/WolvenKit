@@ -13,10 +13,9 @@ namespace WolvenKit.CR2W.Types
 
         [REDBuffer(true)] public CCompressedBuffer<CVariant> parameters { get; set; }
 
-        public CStorySceneScript(CR2WFile cr2w) :
-            base(cr2w)
+        public CStorySceneScript(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            parameters = new CCompressedBuffer<CVariant>(cr2w, _ => new CVariant(_));
+            parameters = new CCompressedBuffer<CVariant>(cr2w, this, nameof(parameters), _ => new CVariant(_, this, nameof(parameters)));
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -32,11 +31,7 @@ namespace WolvenKit.CR2W.Types
 
                 // read cvariant
                 var varname = cr2w.names[nameId].Str;
-                CVariant cVariant = new CVariant(cr2w)
-                {
-                    REDName = varname,
-                    Parent = parameters
-                };
+                CVariant cVariant = new CVariant(cr2w, parameters, varname);
                 cVariant.Read(file, 0);
 
                 parameters.Add(cVariant);

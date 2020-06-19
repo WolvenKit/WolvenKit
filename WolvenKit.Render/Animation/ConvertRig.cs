@@ -45,13 +45,14 @@ namespace WolvenKit.Render
                     CArray<SSkeletonBone> bonesorig = skel.Bones;
                     for (int i = 0; i < skeleton.names.Count; i++)
                     {
-                        SSkeletonBone newBone = new SSkeletonBone(W2RigFile);
-                        newBone.Name = new StringAnsi(w2rigFile).SetValue(skeleton.names[i] + "\0") as StringAnsi;
-                        newBone.Name.REDName = "name";
-                        newBone.NameAsCName = new CName(W2RigFile).SetValue(skeleton.names[i]) as CName;
-                        newBone.NameAsCName.REDName = "nameAsCName";
+                        SSkeletonBone newBone = new SSkeletonBone(W2RigFile, bonesorig, "");
+                        newBone.Name = new StringAnsi(w2rigFile, newBone, "name").SetValue(skeleton.names[i] + "\0") as StringAnsi;
+
+                        newBone.NameAsCName = new CName(W2RigFile, newBone, "nameAsCName").SetValue(skeleton.names[i]) as CName;
+
                         bonesorig.AddVariable(newBone);
-                        skel.ParentIndices.AddVariable(new CInt16(W2RigFile).SetValue(skeleton.parentIdx[i]));
+
+                        skel.ParentIndices.AddVariable(new CInt16(W2RigFile, skel.ParentIndices, "").SetValue(skeleton.parentIdx[i]));
                     }
 
                     using (var stream = new MemoryStream())

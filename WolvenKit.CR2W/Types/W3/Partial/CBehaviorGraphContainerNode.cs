@@ -13,9 +13,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("vectorValueInputs", 2,0)] 		public CArray<CName> VectorValueInputs { get; set;}
 
-		public CBehaviorGraphContainerNode(CR2WFile cr2w) : base(cr2w){ }
+		public CBehaviorGraphContainerNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public override CVariable Create(CR2WFile cr2w) => new CBehaviorGraphContainerNode(cr2w);
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphContainerNode(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

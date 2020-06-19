@@ -22,10 +22,9 @@ namespace WolvenKit.CR2W.Types
 
         [REDBuffer(true)] public CBytes tail { get; set; }
 
-        public SBlockData(CR2WFile cr2w) :
-            base(cr2w)
+        public SBlockData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            tail = new CBytes(cr2w) { REDName = "tail", Parent = this };
+            tail = new CBytes(cr2w, this, nameof(tail));
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -42,9 +41,9 @@ namespace WolvenKit.CR2W.Types
             tail.Write(file);
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new SBlockData(cr2w);
+            return new SBlockData(cr2w, parent, name);
         }
 
         public override string ToString()

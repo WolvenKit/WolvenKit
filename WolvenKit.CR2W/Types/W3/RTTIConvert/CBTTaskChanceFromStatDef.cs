@@ -19,13 +19,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("chancePerOpponent")] 		public CInt32 ChancePerOpponent { get; set;}
 
-		public CBTTaskChanceFromStatDef(CR2WFile cr2w) : base(cr2w){ }
+		public CBTTaskChanceFromStatDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskChanceFromStatDef(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CBTTaskChanceFromStatDef(cr2w);
 
 	}
 }

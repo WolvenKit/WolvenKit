@@ -13,13 +13,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("val2")] 		public Vector Val2 { get; set;}
 
-		public STerrainTextureParameters(CR2WFile cr2w) : base(cr2w){ }
+		public STerrainTextureParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new STerrainTextureParameters(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new STerrainTextureParameters(cr2w);
 
 	}
 }

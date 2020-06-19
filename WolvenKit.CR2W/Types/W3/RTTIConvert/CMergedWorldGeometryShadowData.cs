@@ -39,13 +39,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("killAngle")] 		public CFloat KillAngle { get; set;}
 
-		public CMergedWorldGeometryShadowData(CR2WFile cr2w) : base(cr2w){ }
+		public CMergedWorldGeometryShadowData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMergedWorldGeometryShadowData(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CMergedWorldGeometryShadowData(cr2w);
 
 	}
 }

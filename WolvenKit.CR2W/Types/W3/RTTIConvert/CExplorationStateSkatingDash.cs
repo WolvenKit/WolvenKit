@@ -27,13 +27,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("behEventEnd")] 		public CName BehEventEnd { get; set;}
 
-		public CExplorationStateSkatingDash(CR2WFile cr2w) : base(cr2w){ }
+		public CExplorationStateSkatingDash(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CExplorationStateSkatingDash(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CExplorationStateSkatingDash(cr2w);
 
 	}
 }

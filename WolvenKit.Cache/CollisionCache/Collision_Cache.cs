@@ -21,7 +21,7 @@ namespace WolvenKit.Cache
 
         public static byte[] Magic = { (byte)'C', (byte)'C', (byte)'3', (byte)'W' };
         public static long Version = 1;
-        public static CDateTime date = new CDateTime(null);
+        public static CDateTime date = new CDateTime(null, null, "");
         public uint InfoOffset;
         public uint NumberOfFiles;
         public uint NameTableOffset;

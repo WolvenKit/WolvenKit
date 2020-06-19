@@ -15,13 +15,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("externalRiddleFx")] 		public SExternalRiddleEffectEntityDef ExternalRiddleFx { get; set;}
 
-		public SPairedRiddleNodeDef(CR2WFile cr2w) : base(cr2w){ }
+		public SPairedRiddleNodeDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SPairedRiddleNodeDef(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new SPairedRiddleNodeDef(cr2w);
 
 	}
 }

@@ -17,9 +17,9 @@ namespace WolvenKit.CR2W.Types
 
         [REDBuffer(true)] public CCompressedBuffer<SSkeletonRigData> rigdata { get; set; }
 
-        public CSkeleton(CR2WFile cr2w) : base(cr2w)
+        public CSkeleton(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            rigdata = new CCompressedBuffer<SSkeletonRigData>(cr2w, _ => new SSkeletonRigData(_)) { REDName = "rigdata" };
+            rigdata = new CCompressedBuffer<SSkeletonRigData>(cr2w, this, nameof(rigdata), _ => new SSkeletonRigData(_, rigdata, ""));
         }
 
         public override void Read(BinaryReader file, uint size)

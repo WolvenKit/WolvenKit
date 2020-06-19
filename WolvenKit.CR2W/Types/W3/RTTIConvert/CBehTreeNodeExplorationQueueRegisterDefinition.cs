@@ -17,13 +17,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		public CBehTreeNodeExplorationQueueRegisterDefinition(CR2WFile cr2w) : base(cr2w){ }
+		public CBehTreeNodeExplorationQueueRegisterDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeNodeExplorationQueueRegisterDefinition(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CBehTreeNodeExplorationQueueRegisterDefinition(cr2w);
 
 	}
 }

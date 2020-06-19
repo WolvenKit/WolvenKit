@@ -17,11 +17,11 @@ namespace WolvenKit.CR2W.Types
         [RED] public CInt16 Lod3 { get; set; }
         [RED] public CInt32 Resolution { get; set; }
 
-        public STerrainTileData(CR2WFile cr2w) :
-            base(cr2w)
+        public STerrainTileData(CR2WFile cr2w, CVariable parent, string name) :
+            base(cr2w, parent, name)
         {
         }
 
-        public override CVariable Create(CR2WFile cr2w) => new STerrainTileData(cr2w);
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new STerrainTileData(cr2w, parent, name);
     }
 }

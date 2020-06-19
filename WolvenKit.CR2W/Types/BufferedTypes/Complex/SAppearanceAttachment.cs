@@ -16,10 +16,9 @@ namespace WolvenKit.CR2W.Types
 
         [REDBuffer(true)] public CBufferVLQ<CVariable> Data { get; set; }
 
-        public SAppearanceAttachment(CR2WFile cr2w)
-            : base(cr2w)
+        public SAppearanceAttachment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            Data = new CBufferVLQ<CVariable>(cr2w) { REDName = nameof(Data), Parent = this};
+            Data = new CBufferVLQ<CVariable>(cr2w, this, nameof(Data));
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -34,7 +33,7 @@ namespace WolvenKit.CR2W.Types
             var count = file.ReadBit6();
             for (int i = 0; i < count; i++)
             {
-                var ClassName = new CName(cr2w);
+                var ClassName = new CName(cr2w, null, "");
                 ClassName.Read(file, 2);
 
                 var parsedvar = CR2WTypeManager.Create(ClassName.Value, "", cr2w, Data);
@@ -42,7 +41,6 @@ namespace WolvenKit.CR2W.Types
                 
 
                 Data.AddVariable(parsedvar);
-                parsedvar.REDName = ClassName.Value;
             }
 
            
@@ -66,7 +64,7 @@ namespace WolvenKit.CR2W.Types
                 bw.WriteBit6(Data.elements.Count);
                 foreach (var cvar in Data.elements)
                 {
-                    var ClassName = new CName(cr2w)
+                    var ClassName = new CName(cr2w, null, "")
                     {
                         Value = cvar.REDType
                     };

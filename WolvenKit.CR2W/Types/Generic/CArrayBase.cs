@@ -41,10 +41,7 @@ namespace WolvenKit.CR2W.Types
         [Browsable(false)]
         public T this[int index] { get => ((IList<T>)elements)[index]; set => ((IList<T>)elements)[index] = value; }
 
-        public CArrayBase(CR2WFile cr2w) : base(cr2w)
-        {
-
-        }
+        public CArrayBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override List<IEditableVariable> GetEditableVariables()
         {
@@ -71,7 +68,7 @@ namespace WolvenKit.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            CUInt32 count = new CUInt32(cr2w);
+            CUInt32 count = new CUInt32(cr2w, null, "");
             count.val = (uint)elements.Count;
             count.Write(file);
 
@@ -116,20 +113,22 @@ namespace WolvenKit.CR2W.Types
             return true;
         }
 
-        public override void RemoveVariable(IEditableVariable child)
+        public override bool RemoveVariable(IEditableVariable child)
         {
             if (child is T)
             {
                 elements.Remove(child as T);
                 UpdateNames();
+                return true;
             }
+            return false;
         }
 
         public override void AddVariable(CVariable variable)
         {
             if (variable is T)
             {
-                variable.REDName = elements.Count.ToString();
+                variable.SetREDName(elements.Count.ToString());
                 elements.Add(variable as T);
             }
         }
@@ -138,7 +137,7 @@ namespace WolvenKit.CR2W.Types
         {
             for (int i = 0; i < elements.Count; i++)
             {
-                elements[i].REDName = i.ToString();
+                elements[i].SetREDName(i.ToString());
             }
         }
 
@@ -182,7 +181,7 @@ namespace WolvenKit.CR2W.Types
 
         public void Add(T item)
         {
-            ((IList<T>)elements).Add(item);
+            AddVariable(item);
         }
 
         public void Clear()
@@ -202,12 +201,17 @@ namespace WolvenKit.CR2W.Types
 
         public bool Remove(T item)
         {
-            return ((IList<T>)elements).Remove(item);
+            return RemoveVariable(item);
         }
 
         public int Add(object value)
         {
-            return ((IList)elements).Add(value);
+            if (value is T cvar)
+            {
+                AddVariable(cvar);
+                return elements.Count;
+            }
+            return -1;
         }
 
         public bool Contains(object value)
@@ -227,7 +231,8 @@ namespace WolvenKit.CR2W.Types
 
         public void Remove(object value)
         {
-            ((IList)elements).Remove(value);
+            if (value is T cvar)
+                RemoveVariable(cvar);
         }
 
         public void CopyTo(Array array, int index)

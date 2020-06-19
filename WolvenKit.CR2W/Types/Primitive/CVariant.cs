@@ -16,10 +16,7 @@ namespace WolvenKit.CR2W.Types
     {
         public CVariable Variant;
 
-        public CVariant(CR2WFile cr2w)
-            : base(cr2w)
-        {
-        }
+        public CVariant(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -71,9 +68,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CVariant(cr2w);
+            return new CVariant(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)

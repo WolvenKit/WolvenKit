@@ -15,13 +15,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("mapping", 2,0)] 		public CArray<CInt32> Mapping { get; set;}
 
-		public SMimicTrackPose(CR2WFile cr2w) : base(cr2w){ }
+		public SMimicTrackPose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SMimicTrackPose(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new SMimicTrackPose(cr2w);
 
 	}
 }

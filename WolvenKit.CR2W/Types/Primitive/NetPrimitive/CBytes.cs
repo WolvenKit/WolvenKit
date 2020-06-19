@@ -11,10 +11,7 @@ namespace WolvenKit.CR2W.Types
     [REDMeta()]
     public class CBytes : CVariable, IByteSource
     {
-        public CBytes(CR2WFile cr2w)
-            : base(cr2w)
-        {
-        }
+        public CBytes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public byte[] Bytes { get; set; }
 
@@ -38,9 +35,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CBytes(cr2w);
+            return new CBytes(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -77,8 +74,9 @@ namespace WolvenKit.CR2W.Types
             return true;
         }
 
-        public override void RemoveVariable(IEditableVariable child)
+        public override bool RemoveVariable(IEditableVariable child)
         {
+            return false;
         }
 
         public override void AddVariable(CVariable var)

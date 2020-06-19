@@ -11,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("rotation")] 		public CPtr<IEvaluatorFloat> Rotation { get; set;}
 
-		public CParticleInitializerRotation(CR2WFile cr2w) : base(cr2w){ }
+		public CParticleInitializerRotation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CParticleInitializerRotation(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CParticleInitializerRotation(cr2w);
 
 	}
 }

@@ -16,10 +16,10 @@ namespace WolvenKit.CR2W.Types
         public CName handlename;
         public CHandle<CBehaviorVariable> handle;
 
-        public IdHandle(CR2WFile cr2w) : base(cr2w)
+        public IdHandle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            handlename = new CName(cr2w) { REDName = "handlename" };
-            handle = new CHandle<CBehaviorVariable>(cr2w) { REDName = "handle" };
+            handlename = new CName(cr2w, this, "handlename" );
+            handle = new CHandle<CBehaviorVariable>(cr2w, this, "handle" );
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -34,9 +34,9 @@ namespace WolvenKit.CR2W.Types
             handle.Write(file);
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new IdHandle(cr2w);
+            return new IdHandle(cr2w, parent, name);
         }
 
         public override string ToString()

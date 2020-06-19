@@ -23,8 +23,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("partyWaypoints", 2,0)] 		public CArray<SPartyWaypointData> PartyWaypoints { get; set;}
 
-
-		public override CVariable Create(CR2WFile cr2w) => new CWayPointsCollection(cr2w);
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CWayPointsCollection(cr2w, parent, name);
 
 	}
 }

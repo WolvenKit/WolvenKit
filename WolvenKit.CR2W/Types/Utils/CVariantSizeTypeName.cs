@@ -20,10 +20,7 @@ namespace WolvenKit.CR2W.Types
     {
         [RED] public CVariable Variable { get; set; }
 
-        public CVariantSizeTypeName(CR2WFile cr2w) : base(cr2w)
-        {
-
-        }
+        public CVariantSizeTypeName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -80,6 +77,6 @@ namespace WolvenKit.CR2W.Types
             return Variable.ToString();
         }
 
-        public override CVariable Create(CR2WFile cr2w) => new CVariantSizeTypeName(cr2w);
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CVariantSizeTypeName(cr2w, parent, name);
     }
 }

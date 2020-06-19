@@ -15,13 +15,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("morphComponentId")] 		public CName MorphComponentId { get; set;}
 
-		public CStorySceneMorphEvent(CR2WFile cr2w) : base(cr2w){ }
+		public CStorySceneMorphEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CStorySceneMorphEvent(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CStorySceneMorphEvent(cr2w);
 
 	}
 }

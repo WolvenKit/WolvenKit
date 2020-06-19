@@ -13,13 +13,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("name")] 		public CString Name { get; set;}
 
-		public SGraphLayer(CR2WFile cr2w) : base(cr2w){ }
+		public SGraphLayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SGraphLayer(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new SGraphLayer(cr2w);
 
 	}
 }

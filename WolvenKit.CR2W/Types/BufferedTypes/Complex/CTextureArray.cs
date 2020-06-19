@@ -30,10 +30,10 @@ namespace WolvenKit.CR2W.Types
         [REDBuffer(true)] public CBytes rawfile { get; set; }
 
 
-        public CTextureArray(CR2WFile cr2w) : base(cr2w)
+        public CTextureArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
-            rawfile = new CBytes(cr2w) { REDName = "rawfile" };
+            rawfile = new CBytes(cr2w, this, nameof(rawfile));
             
         }
 

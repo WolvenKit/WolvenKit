@@ -17,8 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("minHeightValue")] 		public CUInt16 MinHeightValue { get; set;}
 
-
-		public override CVariable Create(CR2WFile cr2w) => new CTerrainTile(cr2w);
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CTerrainTile(cr2w, parent, name);
 
 	}
 }

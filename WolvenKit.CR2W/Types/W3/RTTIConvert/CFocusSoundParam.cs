@@ -17,13 +17,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("visualEffectBoneName")] 		public CName VisualEffectBoneName { get; set;}
 
-		public CFocusSoundParam(CR2WFile cr2w) : base(cr2w){ }
+		public CFocusSoundParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CFocusSoundParam(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CFocusSoundParam(cr2w);
 
 	}
 }

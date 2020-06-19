@@ -15,9 +15,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("data.m_loop")] 		public CBool Data_m_loop { get; set;}
 
-		public CCurve(CR2WFile cr2w) : base(cr2w){ }
+		public CCurve(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public override CVariable Create(CR2WFile cr2w) => new CCurve(cr2w);
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCurve(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

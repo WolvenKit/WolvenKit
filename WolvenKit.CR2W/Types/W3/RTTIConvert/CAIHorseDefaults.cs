@@ -13,13 +13,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("canMoveOutOfAWay")] 		public CBool CanMoveOutOfAWay { get; set;}
 
-		public CAIHorseDefaults(CR2WFile cr2w) : base(cr2w){ }
+		public CAIHorseDefaults(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIHorseDefaults(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CAIHorseDefaults(cr2w);
 
 	}
 }

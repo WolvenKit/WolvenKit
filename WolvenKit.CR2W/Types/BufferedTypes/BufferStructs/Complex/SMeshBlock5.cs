@@ -17,11 +17,10 @@ namespace WolvenKit.CR2W.Types
         [RED] public CUInt16 bytesize { get; set; }
         [RED] public CBytes unk1 { get; set; }
 
-        public SMeshBlock5(CR2WFile cr2w) :
-            base(cr2w)
+        public SMeshBlock5(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            bytesize = new CUInt16(cr2w) { REDName = "size" };
-            unk1 = new CBytes(cr2w) { REDName = "unk1" };
+            bytesize = new CUInt16(cr2w, this, nameof(bytesize));
+            unk1 = new CBytes(cr2w, this, nameof(unk1));
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -40,9 +39,9 @@ namespace WolvenKit.CR2W.Types
             unk1.Write(file);
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new SMeshBlock5(cr2w);
+            return new SMeshBlock5(cr2w, parent, name);
         }
 
         public override string ToString()

@@ -11,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("children", 2,0)] 		public CArray<CPtr<IMoveSteeringNode>> Children { get; set;}
 
-		public IMoveSNComposite(CR2WFile cr2w) : base(cr2w){ }
+		public IMoveSNComposite(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new IMoveSNComposite(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new IMoveSNComposite(cr2w);
 
 	}
 }

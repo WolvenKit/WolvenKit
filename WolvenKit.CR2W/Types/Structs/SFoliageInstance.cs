@@ -18,15 +18,15 @@ namespace WolvenKit.CR2W.Types
         [RED] public CFloat Pitch { get; set; }
         [RED] public CFloat Roll { get; set; }
 
-        public SFoliageInstance(CR2WFile cr2w) : base(cr2w)
+        public SFoliageInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
         }
 
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new SFoliageInstance(cr2w);
+            return new SFoliageInstance(cr2w, parent, name);
         }
     }
 }

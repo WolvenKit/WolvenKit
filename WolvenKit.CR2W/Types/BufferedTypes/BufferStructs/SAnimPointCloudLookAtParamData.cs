@@ -17,15 +17,15 @@ namespace WolvenKit.CR2W.Types
         [RED] public CUInt16 unk2 { get; set; }
         [RED] public CUInt16 unk3 { get; set; }
 
-        public SAnimPointCloudLookAtParamData(CR2WFile cr2w) : base(cr2w)
+        public SAnimPointCloudLookAtParamData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
         }
 
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new SAnimPointCloudLookAtParamData(cr2w);
+            return new SAnimPointCloudLookAtParamData(cr2w, parent, name);
         }
 
         public override string ToString()

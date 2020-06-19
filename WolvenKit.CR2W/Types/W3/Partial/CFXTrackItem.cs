@@ -13,8 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("timeDuration")] 		public CFloat TimeDuration { get; set;}
 
-
-		public override CVariable Create(CR2WFile cr2w) => new CFXTrackItem(cr2w);
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CFXTrackItem(cr2w, parent, name);
 
 	}
 }

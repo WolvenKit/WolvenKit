@@ -14,12 +14,11 @@ namespace WolvenKit.CR2W.Types
         [REDBuffer(true)] public CBufferVLQ<CName> Collisiontypes { get; set; }
         [REDBuffer(true)] public CBytes Data { get; set; }
 
-        public CPhysicalCollision(CR2WFile cr2w) :
-            base(cr2w)
+        public CPhysicalCollision(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) 
         {
-            Unk1 = new CUInt32(cr2w) { REDName = nameof(Unk1) };
-            Data = new CBytes(cr2w) { REDName = nameof(Data) };
-            Collisiontypes = new CBufferVLQ<CName>(cr2w) { REDName = nameof(Collisiontypes) };
+            Unk1 = new CUInt32(cr2w, this, nameof(Unk1) );
+            Data = new CBytes(cr2w, this, nameof(Data) );
+            Collisiontypes = new CBufferVLQ<CName>(cr2w, this, nameof(Collisiontypes));
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -41,6 +40,6 @@ namespace WolvenKit.CR2W.Types
             Data.Write(file);
         }
 
-        public override CVariable Create(CR2WFile cr2w) => new CPhysicalCollision(cr2w);
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPhysicalCollision(cr2w, parent, name);
     }
 }

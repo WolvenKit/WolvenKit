@@ -18,13 +18,11 @@ namespace WolvenKit.CR2W.Types
 
         [REDBuffer(true)] public CBytes grassmask { get; set; }
 
-        public CGenericGrassMask(CR2WFile cr2w) : base(cr2w)
+        public CGenericGrassMask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            grassmask = new CBytes(cr2w)
+            grassmask = new CBytes(cr2w, this, nameof(grassmask))
             {
-                REDName = "Grass mask data",
                 Bytes = new byte[0],
-                Parent = this
             };
         }
 

@@ -20,7 +20,7 @@ namespace WolvenKit.CR2W.Types
     {
         [RED] public CVariable Variable { get; set; }
 
-        public CVariantSizeType(CR2WFile cr2w) : base(cr2w)
+        public CVariantSizeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
         }
@@ -70,9 +70,9 @@ namespace WolvenKit.CR2W.Types
             return Variable.ToString();
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CVariantSizeType(cr2w);
+            return new CVariantSizeType(cr2w, parent, name);
         }
     }
 }

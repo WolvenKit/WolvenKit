@@ -19,13 +19,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("journalEntry")] 		public CSoft<CJournalResource> JournalEntry { get; set;}
 
-		public SStaticMapPin(CR2WFile cr2w) : base(cr2w){ }
+		public SStaticMapPin(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SStaticMapPin(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new SStaticMapPin(cr2w);
 
 	}
 }

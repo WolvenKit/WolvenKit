@@ -29,13 +29,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("clumpNumSubclumps")] 		public CUInt32 ClumpNumSubclumps { get; set;}
 
-		public SFurClumping(CR2WFile cr2w) : base(cr2w){ }
+		public SFurClumping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SFurClumping(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new SFurClumping(cr2w);
 
 	}
 }

@@ -18,7 +18,7 @@ namespace WolvenKit.CR2W.Types
         public string Value { get; set; }
         #endregion
 
-        public CEnum(CR2WFile cr2w) : base(cr2w) { }
+        public CEnum(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
 
 
@@ -104,6 +104,6 @@ namespace WolvenKit.CR2W.Types
 
         public override string ToString() => Value;
 
-        public override CVariable Create(CR2WFile cr2w) => new CEnum<T>(cr2w);
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEnum<T>(cr2w, parent, name);
     }
 }

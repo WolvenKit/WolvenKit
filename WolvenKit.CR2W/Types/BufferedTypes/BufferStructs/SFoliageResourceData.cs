@@ -18,9 +18,9 @@ namespace WolvenKit.CR2W.Types
         [RED] public CHandle<CSRTBaseTree> Treetype { get; set; }
         [RED] public CBufferVLQInt32<SFoliageInstanceData> TreeCollection { get; set; }
 
-        public SFoliageResourceData(CR2WFile cr2w) : base(cr2w) { }
+        public SFoliageResourceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
-        public override CVariable Create(CR2WFile cr2w) => new SFoliageResourceData(cr2w);
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SFoliageResourceData(cr2w, parent, name);
     }
 
 }

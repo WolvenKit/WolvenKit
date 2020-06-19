@@ -11,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("completeOnTargetReached")] 		public CBool CompleteOnTargetReached { get; set;}
 
-		public CBehTreeNodeBaseRotateToTargetDefinition(CR2WFile cr2w) : base(cr2w){ }
+		public CBehTreeNodeBaseRotateToTargetDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeNodeBaseRotateToTargetDefinition(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CBehTreeNodeBaseRotateToTargetDefinition(cr2w);
 
 	}
 }

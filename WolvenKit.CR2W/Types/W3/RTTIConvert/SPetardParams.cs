@@ -51,13 +51,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("decalComponentScaleModifier")] 		public CFloat DecalComponentScaleModifier { get; set;}
 
-		public SPetardParams(CR2WFile cr2w) : base(cr2w){ }
+		public SPetardParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SPetardParams(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new SPetardParams(cr2w);
 
 	}
 }

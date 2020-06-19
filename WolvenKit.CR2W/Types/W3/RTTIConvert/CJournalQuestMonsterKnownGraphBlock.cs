@@ -11,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("manualQuest")] 		public CHandle<CJournalPath> ManualQuest { get; set;}
 
-		public CJournalQuestMonsterKnownGraphBlock(CR2WFile cr2w) : base(cr2w){ }
+		public CJournalQuestMonsterKnownGraphBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CJournalQuestMonsterKnownGraphBlock(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CJournalQuestMonsterKnownGraphBlock(cr2w);
 
 	}
 }

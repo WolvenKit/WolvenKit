@@ -17,8 +17,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("childName")] 		public CName ChildName { get; set;}
 
-
-		public override CVariable Create(CR2WFile cr2w) => new SAppearanceAttachment(cr2w);
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SAppearanceAttachment(cr2w, parent, name);
 
 	}
 }

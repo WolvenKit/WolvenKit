@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
     [REDMeta]
     public class CHelpTextComponent : CComponent
     {
-        public CHelpTextComponent(CR2WFile cr2w) : base(cr2w) { }
+        public CHelpTextComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         [RED("text")] public CString Text { get; set; }
 

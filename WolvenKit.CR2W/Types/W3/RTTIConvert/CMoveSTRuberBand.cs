@@ -15,13 +15,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("minAllowedSpeed")] 		public CFloat MinAllowedSpeed { get; set;}
 
-		public CMoveSTRuberBand(CR2WFile cr2w) : base(cr2w){ }
+		public CMoveSTRuberBand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMoveSTRuberBand(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CMoveSTRuberBand(cr2w);
 
 	}
 }

@@ -19,10 +19,10 @@ namespace WolvenKit.CR2W.Types
 
         private bool isCreatedFromTemplate;
             
-        public CEntity(CR2WFile cr2w) : base(cr2w)
+        public CEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            buffer_v1 = new CCompressedBuffer<SEntityBufferType1>(cr2w, _ => new SEntityBufferType1(_));
-            buffer_v2 = new CBufferUInt32<SEntityBufferType2>(cr2w, _ => new SEntityBufferType2(_));
+            buffer_v1 = new CCompressedBuffer<SEntityBufferType1>(cr2w, this, nameof(buffer_v1), _ => new SEntityBufferType1(_, buffer_v1, ""));
+            buffer_v2 = new CBufferUInt32<SEntityBufferType2>(cr2w, this, nameof(buffer_v1), _ => new SEntityBufferType2(_, buffer_v2, ""));
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -37,7 +37,7 @@ namespace WolvenKit.CR2W.Types
             // Read Component Array (should only be present if NOT created from template)
             #region Componentsarray
             if (Components == null)
-                Components = new CArray<CPtr<CComponent>>(cr2w) { REDName = nameof(Components), Parent = this };
+                Components = new CArray<CPtr<CComponent>>(cr2w, this, nameof(Components));
 
             var endPos = file.BaseStream.Position;
             var bytesleft = size - (endPos - startPos);
@@ -48,7 +48,7 @@ namespace WolvenKit.CR2W.Types
                     var elementcount = file.ReadBit6();
                     for (var i = 0; i < elementcount; i++)
                     {
-                        var ptr = new CPtr<CComponent>(cr2w) { REDName = i.ToString(), Parent = Components };
+                        var ptr = new CPtr<CComponent>(cr2w, Components, i.ToString());
                         ptr.Read(file, 0);
                         Components.AddVariable(ptr);
                     }
@@ -71,10 +71,7 @@ namespace WolvenKit.CR2W.Types
                 bool canRead;
                 do
                 {
-                    var t_buffer = new SEntityBufferType1(cr2w)
-                    {
-                        REDName = idx.ToString(),
-                    };
+                    var t_buffer = new SEntityBufferType1(cr2w, buffer_v1, idx.ToString());
                     canRead = t_buffer.CanRead(file);
                     if (canRead)
                         t_buffer.Read(file, 0);

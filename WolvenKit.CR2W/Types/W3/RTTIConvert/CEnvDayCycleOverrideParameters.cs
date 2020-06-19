@@ -17,13 +17,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("customSunRotation")] 		public EulerAngles CustomSunRotation { get; set;}
 
-		public CEnvDayCycleOverrideParameters(CR2WFile cr2w) : base(cr2w){ }
+		public CEnvDayCycleOverrideParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEnvDayCycleOverrideParameters(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CEnvDayCycleOverrideParameters(cr2w);
 
 	}
 }

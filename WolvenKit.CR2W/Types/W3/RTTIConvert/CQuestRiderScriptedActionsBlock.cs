@@ -11,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("ai")] 		public CHandle<IRiderActionTree> Ai { get; set;}
 
-		public CQuestRiderScriptedActionsBlock(CR2WFile cr2w) : base(cr2w){ }
+		public CQuestRiderScriptedActionsBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CQuestRiderScriptedActionsBlock(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CQuestRiderScriptedActionsBlock(cr2w);
 
 	}
 }

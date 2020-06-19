@@ -17,13 +17,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("useHideFactor")] 		public CBool UseHideFactor { get; set;}
 
-		public CDynamicColliderComponent(CR2WFile cr2w) : base(cr2w){ }
+		public CDynamicColliderComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CDynamicColliderComponent(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CDynamicColliderComponent(cr2w);
 
 	}
 }

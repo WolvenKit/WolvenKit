@@ -15,12 +15,11 @@ namespace WolvenKit.CR2W.Types
         [RED] public CFloat y { get; set; }
         [RED] public CFloat z { get; set; }
 
-        public SVector3D(CR2WFile cr2w = null)
-            : base(cr2w)
+        public SVector3D(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            x = new CFloat(null) { REDName = "x" };
-            y = new CFloat(null) { REDName = "y" };
-            z = new CFloat(null) { REDName = "z" };
+            x = new CFloat(cr2w, this, nameof(x));
+            y = new CFloat(cr2w, this, nameof(y));
+            z = new CFloat(cr2w, this, nameof(z));
         }
 
         public void Read(BinaryReader file, int compression)
@@ -87,9 +86,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new SVector3D(cr2w);
+            return new SVector3D(cr2w, parent, name);
         }
 
         public override string ToString()

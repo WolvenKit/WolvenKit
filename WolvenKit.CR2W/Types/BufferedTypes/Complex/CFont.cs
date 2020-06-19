@@ -22,13 +22,13 @@ namespace WolvenKit.CR2W.Types
 
 
 
-        public CFont(CR2WFile cr2w) : base(cr2w)
+        public CFont(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            Unicodemapping = new CArray<CUInt16>(cr2w);
-            Linedist = new CInt32(cr2w);
-            Maxglyphheight = new CInt32(cr2w);
-            Kerning = new CBool(cr2w);
-            Glyphs = new CArray<CArray<CFloat>>(cr2w);
+            Unicodemapping = new CArray<CUInt16>(cr2w, this, nameof(Unicodemapping));
+            Linedist = new CInt32(cr2w, this, nameof(Linedist));
+            Maxglyphheight = new CInt32(cr2w, this, nameof(Maxglyphheight));
+            Kerning = new CBool(cr2w, this, nameof(Kerning));
+            Glyphs = new CArray<CArray<CFloat>>(cr2w, this, nameof(Glyphs));
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -39,7 +39,7 @@ namespace WolvenKit.CR2W.Types
             for (int i = 0; i < cnt; i++)
             {
                 //This is actually a byte-byte pair but no idea why or how anyone would edit this
-                var mapping = new CUInt16(cr2w);
+                var mapping = new CUInt16(cr2w, Unicodemapping, "");
                 mapping.Read(file, size);
                 Unicodemapping.AddVariable(mapping);
             }
@@ -51,40 +51,37 @@ namespace WolvenKit.CR2W.Types
 
             for(int i = 0; i < num; i++)
             {
-                var glyph = new CArray<CFloat>(cr2w)
-                {
-                    REDName = "Glyph - " + i
-                };
+                var glyph = new CArray<CFloat>(cr2w, Glyphs, "Glyph - " + i);
                 // UVs
-                CFloat uv00 = new CFloat(cr2w) { REDName = "UV[0][0]" };
+                CFloat uv00 = new CFloat(cr2w, glyph, "UV[0][0]" );
                 uv00.Read(file, size);
                 glyph.AddVariable(uv00);
-                CFloat uv01 = new CFloat(cr2w) { REDName = "UV[0][1]" };
+                CFloat uv01 = new CFloat(cr2w, glyph, "UV[0][1]" );
                 uv01.Read(file, size);
                 glyph.AddVariable(uv01);
-                CFloat uv10 = new CFloat(cr2w) { REDName = "UV[1][0]" };
+                CFloat uv10 = new CFloat(cr2w, glyph, "UV[1][0]" );
                 uv10.Read(file, size);
                 glyph.AddVariable(uv10);
-                CFloat uv11 = new CFloat(cr2w) { REDName = "UV[1][1]" };
+                CFloat uv11 = new CFloat(cr2w, glyph, "UV[1][1]" );
                 uv11.Read(file, size);
                 glyph.AddVariable(uv11);
 
-                CInt32 textureindex = new CInt32(cr2w) { REDName = "Texture index" };
+                CInt32 textureindex = new CInt32(cr2w, glyph, "Texture index" );
                 textureindex.Read(file, size);
                 glyph.AddVariable(textureindex);
-                CInt32 width = new CInt32(cr2w) { REDName = "Width" };
+                CInt32 width = new CInt32(cr2w, glyph, "Width" );
                 width.Read(file, size);
                 glyph.AddVariable(width);
-                CInt32 height = new CInt32(cr2w) { REDName = "Height" };
+                CInt32 height = new CInt32(cr2w, glyph, "Height" );
                 height.Read(file, size);
                 glyph.AddVariable(height);
-                CInt32 advance_x = new CInt32(cr2w) { REDName = "Advance X" };
+                CInt32 advance_x = new CInt32(cr2w, glyph, "Advance X" );
                 advance_x.Read(file, size);
                 glyph.AddVariable(advance_x);
-                CInt32 bearing_x = new CInt32(cr2w) { REDName = "Bearing X" };
+                CInt32 bearing_x = new CInt32(cr2w, glyph, "Bearing X" );
                 bearing_x.Read(file, size);
                 glyph.AddVariable(bearing_x);
-                CInt32 bearing_y = new CInt32(cr2w) { REDName = "Bearing Y" };
+                CInt32 bearing_y = new CInt32(cr2w, glyph, "Bearing Y" );
                 bearing_y.Read(file, size);
                 glyph.AddVariable(bearing_y);
 

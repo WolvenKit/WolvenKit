@@ -234,7 +234,6 @@
     <Compile Include="Types\Structs\Matrix.cs" />
     <Compile Include="Types\W3\Partial\SAppearanceAttachment.cs" />
     <Compile Include="Types\W3\Partial\SBoneIndiceMapping.cs" />
-    <None Include="Types\W3\Partial\SCurveData.cs.deprecated" />
     <Compile Include="Types\W3\Partial\SDynamicDecalMaterialInfo.cs" />
     <Compile Include="Types\W3\RTTIConvert\AACylinder.cs" />
     <Compile Include="Types\W3\RTTIConvert\actorNameType.cs" />
@@ -5296,7 +5295,7 @@
     <Compile Include="Types\W3\RTTIConvert\SAnimatedComponentSlotAnimationSettings.cs" />
     <Compile Include="Types\W3\RTTIConvert\SAnimatedComponentSyncSettings.cs" />
     <Compile Include="Types\W3\RTTIConvert\SAnimatedSlideSettings.cs" />
-    <Compile Include="Types\W3\RTTIConvert\SAnimationBufferBitwiseCompressedBoneTrack.cs" />
+    <Compile Include="Types\W3\SAnimationBufferBitwiseCompressedBoneTrack.cs" />
     <Compile Include="Types\W3\RTTIConvert\SAnimationBufferBitwiseCompressedData.cs" />
     <Compile Include="Types\W3\RTTIConvert\SAnimationBufferBitwiseCompressionSettings.cs" />
     <Compile Include="Types\W3\RTTIConvert\SAnimationEventAnimInfo.cs" />

@@ -19,9 +19,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("imageImportOptions")] 		public CString ImageImportOptions { get; set;}
 
-		public CSwfResource(CR2WFile cr2w) : base(cr2w){ }
+		public CSwfResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public override CVariable Create(CR2WFile cr2w) => new CSwfResource(cr2w);
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSwfResource(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

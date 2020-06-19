@@ -144,7 +144,7 @@ namespace WolvenKit.CR2W
             if (m_fileheader.version > 163 || m_fileheader.version < 159)
                 throw new FormatException($"Unknown Version {m_fileheader.version}. Supported versions: 159 - 163.");
 
-            var dt = new CDateTime(m_fileheader.timeStamp);
+            var dt = new CDateTime(m_fileheader.timeStamp, null, "");
 
             m_tableheaders = ReadStructs<CR2WTable>(10);
             m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;

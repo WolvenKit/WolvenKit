@@ -12,7 +12,7 @@ namespace WolvenKit.CR2W.Types
     {
         
 
-        public CUInt64(CR2WFile cr2w) : base(cr2w)
+        public CUInt64(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
@@ -43,9 +43,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CUInt64(cr2w);
+            return new CUInt64(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -71,8 +71,8 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public class CUInt32 : CVariable
     {
-        public CUInt32(CR2WFile cr2w)
-            : base(cr2w)
+        public CUInt32(CR2WFile cr2w, CVariable parent, string name)
+            : base(cr2w, parent, name)
         {
         }
 
@@ -101,9 +101,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CUInt32(cr2w);
+            return new CUInt32(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -129,7 +129,7 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public class CUInt16 : CVariable
     {
-        public CUInt16(CR2WFile cr2w) : base(cr2w)
+        public CUInt16(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
@@ -160,9 +160,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CUInt16(cr2w);
+            return new CUInt16(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -188,8 +188,8 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public class CUInt8 : CVariable
     {
-        public CUInt8(CR2WFile cr2w)
-            : base(cr2w)
+        public CUInt8(CR2WFile cr2w, CVariable parent, string name)
+            : base(cr2w, parent, name)
         {
         }
 
@@ -218,9 +218,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CUInt8(cr2w);
+            return new CUInt8(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -246,8 +246,8 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public class CInt64 : CVariable
     {
-        public CInt64(CR2WFile cr2w)
-            : base(cr2w)
+        public CInt64(CR2WFile cr2w, CVariable parent, string name)
+            : base(cr2w, parent, name)
         {
         }
 
@@ -276,9 +276,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CInt64(cr2w);
+            return new CInt64(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -304,8 +304,8 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public class CInt32 : CVariable
     {
-        public CInt32(CR2WFile cr2w)
-            : base(cr2w)
+        public CInt32(CR2WFile cr2w, CVariable parent, string name)
+            : base(cr2w, parent, name)
         {
         }
 
@@ -334,9 +334,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CInt32(cr2w);
+            return new CInt32(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -362,8 +362,8 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public class CInt16 : CVariable
     {
-        public CInt16(CR2WFile cr2w)
-            : base(cr2w)
+        public CInt16(CR2WFile cr2w, CVariable parent, string name)
+            : base(cr2w, parent, name)
         {
         }
 
@@ -392,9 +392,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CInt16(cr2w);
+            return new CInt16(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -420,8 +420,8 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public class CInt8 : CVariable
     {
-        public CInt8(CR2WFile cr2w)
-            : base(cr2w)
+        public CInt8(CR2WFile cr2w, CVariable parent, string name)
+            : base(cr2w, parent, name)
         {
         }
 
@@ -450,9 +450,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CInt8(cr2w);
+            return new CInt8(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -478,8 +478,8 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public class CDynamicInt : CVariable
     {
-        public CDynamicInt(CR2WFile cr2w)
-            : base(cr2w)
+        public CDynamicInt(CR2WFile cr2w, CVariable parent, string name)
+            : base(cr2w, parent, name)
         {
         }
 
@@ -508,9 +508,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CInt8(cr2w);
+            return new CInt8(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -543,8 +543,8 @@ namespace WolvenKit.CR2W.Types
     [DataContract(Namespace = "")]
     public class CVLQInt32 : CVariable
     {
-        public CVLQInt32(CR2WFile cr2w)
-            : base(cr2w)
+        public CVLQInt32(CR2WFile cr2w, CVariable parent, string name)
+            : base(cr2w, parent, name)
         {
         }
 
@@ -573,9 +573,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CInt8(cr2w);
+            return new CInt8(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -597,19 +597,14 @@ namespace WolvenKit.CR2W.Types
             return val.ToString();
         }
 
-        internal byte ToByte()
-        {
-            byte result;
-            byte.TryParse(val.ToString(), out result);
-            return result;
-        }
+      
     }
 
     [DataContract(Namespace = "")]
     public class CBool : CVariable
     {
-        public CBool(CR2WFile cr2w)
-            : base(cr2w)
+        public CBool(CR2WFile cr2w, CVariable parent, string name)
+            : base(cr2w, parent, name)
         {
         }
 
@@ -638,9 +633,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CBool(cr2w);
+            return new CBool(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)

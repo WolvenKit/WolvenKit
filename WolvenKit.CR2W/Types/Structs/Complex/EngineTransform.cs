@@ -23,18 +23,17 @@ namespace WolvenKit.CR2W.Types
         [RED] public CFloat Y { get; set; }
         [RED] public CFloat Z { get; set; }
 
-        public EngineTransform(CR2WFile cr2w)
-            : base(cr2w)
+        public EngineTransform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            X = new CFloat(null);
-            Y = new CFloat(null);
-            Z = new CFloat(null);
-            Pitch = new CFloat(null);
-            Yaw = new CFloat(null);
-            Roll = new CFloat(null);
-            Scale_x = new CFloat(null);
-            Scale_y = new CFloat(null);
-            Scale_z = new CFloat(null);
+            X = new CFloat(cr2w, this, nameof(X));
+            Y = new CFloat(cr2w, this, nameof(Y));
+            Z = new CFloat(cr2w, this, nameof(Z));
+            Pitch = new CFloat(cr2w, this, nameof(Pitch));
+            Yaw = new CFloat(cr2w, this, nameof(Yaw));
+            Roll = new CFloat(cr2w, this, nameof(Roll));
+            Scale_x = new CFloat(cr2w, this, nameof(Scale_x));
+            Scale_y = new CFloat(cr2w, this, nameof(Scale_y));
+            Scale_z = new CFloat(cr2w, this, nameof(Scale_z));
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -99,6 +98,6 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
-        public override CVariable Create(CR2WFile cr2w) => new EngineTransform(cr2w);
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new EngineTransform(cr2w, parent, name);
     }
 }

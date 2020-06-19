@@ -20,13 +20,12 @@ namespace WolvenKit.CR2W.Types
         [REDBuffer(true)] public CCompressedBuffer<SBufferwaypointsGroup> waypointsGroups { get; set; }
         [REDBuffer(true)] public CCompressedBuffer<CUInt16> indexes { get; set; }
 
-        public CWayPointsCollection(CR2WFile cr2w) :
-            base(cr2w)
+        public CWayPointsCollection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            waypoints = new CCompressedBuffer<SBufferWaypoints>(cr2w, _ => new SBufferWaypoints(_));
-            componentsMappings = new CCompressedBuffer<SBufferComponentsMappings>(cr2w, _ => new SBufferComponentsMappings(_));
-            waypointsGroups = new CCompressedBuffer<SBufferwaypointsGroup>(cr2w, _ => new SBufferwaypointsGroup(_));
-            indexes = new CCompressedBuffer<CUInt16>(cr2w, _ => new CUInt16(_));
+            waypoints = new CCompressedBuffer<SBufferWaypoints>(cr2w, this, nameof(waypoints), _ => new SBufferWaypoints(_, waypoints, ""));
+            componentsMappings = new CCompressedBuffer<SBufferComponentsMappings>(cr2w, this, nameof(componentsMappings), _ => new SBufferComponentsMappings(_, componentsMappings, ""));
+            waypointsGroups = new CCompressedBuffer<SBufferwaypointsGroup>(cr2w, this, nameof(waypointsGroups), _ => new SBufferwaypointsGroup(_, waypointsGroups, ""));
+            indexes = new CCompressedBuffer<CUInt16>(cr2w, this, nameof(indexes), _ => new CUInt16(_, indexes, ""));
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -103,19 +102,9 @@ namespace WolvenKit.CR2W.Types
         [RED] public CInt32 componentsMapping { get; set; }
 
 
-        public SBufferWaypoints(CR2WFile cr2w) :
-            base(cr2w)
-        {
+        public SBufferWaypoints(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
-        }
-
-        public override CVariable Create(CR2WFile cr2w) => new SBufferWaypoints(cr2w);
-
-
-        public override string ToString()
-        {
-            return "";
-        }
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBufferWaypoints(cr2w, parent, name);
     }
     #endregion
 
@@ -127,19 +116,9 @@ namespace WolvenKit.CR2W.Types
         [RED] public CGUID guid2 { get; set; }
 
 
-        public SBufferComponentsMappings(CR2WFile cr2w) :
-            base(cr2w)
-        {
+        public SBufferComponentsMappings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
-        }
-
-        public override CVariable Create(CR2WFile cr2w) => new SBufferComponentsMappings(cr2w);
-
-
-        public override string ToString()
-        {
-            return "";
-        }
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBufferComponentsMappings(cr2w, parent, name);
     }
     #endregion
 
@@ -153,18 +132,8 @@ namespace WolvenKit.CR2W.Types
         [RED] public CUInt16 groupIdx { get; set; }
 
 
-        public SBufferwaypointsGroup(CR2WFile cr2w) :
-            base(cr2w)
-        {
-
-        }
-        public override CVariable Create(CR2WFile cr2w) => new SBufferwaypointsGroup(cr2w);
-
-
-        public override string ToString()
-        {
-            return "";
-        }
+        public SBufferwaypointsGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBufferwaypointsGroup(cr2w, parent, name);
     }
     #endregion
 

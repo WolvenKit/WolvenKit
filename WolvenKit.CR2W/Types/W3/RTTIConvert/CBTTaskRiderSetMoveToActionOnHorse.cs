@@ -9,13 +9,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskRiderSetMoveToActionOnHorse : IBehTreeTask
 	{
-		public CBTTaskRiderSetMoveToActionOnHorse(CR2WFile cr2w) : base(cr2w){ }
+		public CBTTaskRiderSetMoveToActionOnHorse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskRiderSetMoveToActionOnHorse(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CBTTaskRiderSetMoveToActionOnHorse(cr2w);
 
 	}
 }

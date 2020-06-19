@@ -16,8 +16,7 @@ namespace WolvenKit.CR2W.Types
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class CXml : CVariable
     {
-        public CXml(CR2WFile cr2w)
-            : base(cr2w)
+        public CXml(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
@@ -48,9 +47,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CXml(cr2w);
+            return new CXml(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)

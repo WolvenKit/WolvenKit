@@ -15,32 +15,32 @@ namespace WolvenKit.CR2W.Types
         public CVariable[] fields;
         public CFloat ax, ay, az, aw, bx, by, bz, bw, cx, cy, cz, cw, dx, dy, dz, dw;
 
-        public CMatrix4x4(CR2WFile cr2w) : base(cr2w)
+        public CMatrix4x4(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
             fields = new CVariable[] {
-                ax = new CFloat(cr2w) { REDName = "ax",  },
-                ay = new CFloat(cr2w) { REDName = "ay",  },
-                az = new CFloat(cr2w) { REDName = "az",  },
-                aw = new CFloat(cr2w) { REDName = "aw",  },
-                bx = new CFloat(cr2w) { REDName = "bx",  },
-                by = new CFloat(cr2w) { REDName = "by",  },
-                bz = new CFloat(cr2w) { REDName = "bz",  },
-                bw = new CFloat(cr2w) { REDName = "bw",  },
-                cx = new CFloat(cr2w) { REDName = "cx",  },
-                cy = new CFloat(cr2w) { REDName = "cy",  },
-                cz = new CFloat(cr2w) { REDName = "cz",  },
-                cw = new CFloat(cr2w) { REDName = "cw",  },
-                dx = new CFloat(cr2w) { REDName = "dx",  },
-                dy = new CFloat(cr2w) { REDName = "dy",  },
-                dz = new CFloat(cr2w) { REDName = "dz",  },
-                dw = new CFloat(cr2w) { REDName = "dw",  }
+                ax = new CFloat(cr2w, this, "ax"),
+                ay = new CFloat(cr2w, this, "ay"),
+                az = new CFloat(cr2w, this, "az"),
+                aw = new CFloat(cr2w, this, "aw"),
+                bx = new CFloat(cr2w, this, "bx"),
+                by = new CFloat(cr2w, this, "by"),
+                bz = new CFloat(cr2w, this, "bz"),
+                bw = new CFloat(cr2w, this, "bw"),
+                cx = new CFloat(cr2w, this, "cx"),
+                cy = new CFloat(cr2w, this, "cy"),
+                cz = new CFloat(cr2w, this, "cz"),
+                cw = new CFloat(cr2w, this, "cw"),
+                dx = new CFloat(cr2w, this, "dx"),
+                dy = new CFloat(cr2w, this, "dy"),
+                dz = new CFloat(cr2w, this, "dz"),
+                dw = new CFloat(cr2w, this, "dw")
             };
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CMatrix4x4(cr2w);
+            return new CMatrix4x4(cr2w, parent, name);
         }
 
         public override List<IEditableVariable> GetEditableVariables()

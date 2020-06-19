@@ -17,13 +17,14 @@ namespace WolvenKit.CR2W.Types
         [REDBuffer(true)] public CUInt8 unk { get; set; }
         [REDBuffer(true)] public CCompressedBuffer<CBufferUInt16<CFloat>> buffer { get; set; }
 
-        public CFXTrackItem(CR2WFile cr2w) :
-            base(cr2w)
+        public CFXTrackItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            buffername = new CName(cr2w) { REDName = "buffername", Parent = this };
-            count = new CDynamicInt(cr2w) { REDName = "count", Parent = this };
-            unk = new CUInt8(cr2w) { REDName = "unk", Parent = this };
-            buffer = new CCompressedBuffer<CBufferUInt16<CFloat>>(cr2w, _ => new CBufferUInt16<CFloat>(_, x => new CFloat(x))) { REDName = "buffer", Parent = this };
+            buffername = new CName(cr2w, this, nameof(buffername));
+            count = new CDynamicInt(cr2w, this, nameof(count));
+            unk = new CUInt8(cr2w, this, nameof(unk));
+            buffer = new CCompressedBuffer<CBufferUInt16<CFloat>>(cr2w, this, nameof(buffer), 
+                _ => new CBufferUInt16<CFloat>(_, buffer, "innerbuffer", 
+                x => new CFloat(x, null, "value" )));
             
         }
 

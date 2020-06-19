@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
     public class CPtr<T> : CVariable, IPtrAccessor where T : CVariable
     {
 
-        public CPtr(CR2WFile cr2w) : base(cr2w)
+        public CPtr(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
@@ -84,9 +84,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CPtr<T>(cr2w);
+            return new CPtr<T>(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)

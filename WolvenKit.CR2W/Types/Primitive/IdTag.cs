@@ -43,11 +43,11 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
-        public IdTag(CR2WFile cr2w) : base(cr2w) { }
+        public IdTag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new IdTag(cr2w);
+            return new IdTag(cr2w, parent, name);
         }
 
         public override void Read(BinaryReader file, uint size)

@@ -15,13 +15,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("m_noItemMessageStringKey")] 		public CName M_noItemMessageStringKey { get; set;}
 
-		public W3HouseDecorationBase(CR2WFile cr2w) : base(cr2w){ }
+		public W3HouseDecorationBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3HouseDecorationBase(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new W3HouseDecorationBase(cr2w);
 
 	}
 }

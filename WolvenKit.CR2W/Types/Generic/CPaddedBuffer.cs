@@ -17,26 +17,26 @@ namespace WolvenKit.CR2W.Types
         public Func<CR2WFile, T> elementFactory;
         public CFloat padding;
 
-        public CPaddedBuffer(CR2WFile cr2w, Func<CR2WFile, T> elementFactory) : base(cr2w)
+        public CPaddedBuffer(CR2WFile cr2w, CVariable parent, string name, Func<CR2WFile, T> elementFactory) : base(cr2w, parent, name)
         {
             this.elementFactory = elementFactory;
-            padding = new CFloat(cr2w) { REDName = "padding" };
+            padding = new CFloat(cr2w, this, "padding" );
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CPaddedBuffer<T>(cr2w, elementFactory);
+            return new CPaddedBuffer<T>(cr2w, parent, name, elementFactory);
         }
 
         public override void Read(BinaryReader file, uint size)
         {
-            CDynamicInt count = new CDynamicInt(cr2w);
+            CDynamicInt count = new CDynamicInt(cr2w, null, "");
             count.Read(file, size);
 
             for (int i = 0; i < count.val; i++)
             {
                 T element = elementFactory.Invoke(cr2w);
-                element.REDName = i.ToString();
+
                 element.Read(file, size);
                 elements.Add(element);
             }
@@ -54,7 +54,7 @@ namespace WolvenKit.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            CDynamicInt count = new CDynamicInt(cr2w);
+            CDynamicInt count = new CDynamicInt(cr2w, null, "");
             count.val = elements.Count;
             count.Write(file);
 
@@ -118,20 +118,22 @@ namespace WolvenKit.CR2W.Types
             return true;
         }
 
-        public override void RemoveVariable(IEditableVariable child)
+        public override bool RemoveVariable(IEditableVariable child)
         {
             if (child is T)
             {
                 elements.Remove(child as T);
                 UpdateNames();
+                return true;
             }
+            return false;
         }
 
         public override void AddVariable(CVariable variable)
         {
             if (variable is T)
             {
-                variable.REDName = elements.Count.ToString();
+                variable.SetREDName(elements.Count.ToString());
                 elements.Add(variable as T);
             }
         }
@@ -140,7 +142,7 @@ namespace WolvenKit.CR2W.Types
         {
             for (int i = 0; i < elements.Count; i++)
             {
-                elements[i].REDName = i.ToString();
+                elements[i].SetREDName(i.ToString());
             }
         }
     }

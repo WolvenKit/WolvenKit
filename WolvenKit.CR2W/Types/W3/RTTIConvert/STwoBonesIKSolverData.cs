@@ -51,13 +51,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("Joint bend dir in lower's BS")] 		public Vector Joint_bend_dir_in_lower_s_BS { get; set;}
 
-		public STwoBonesIKSolverData(CR2WFile cr2w) : base(cr2w){ }
+		public STwoBonesIKSolverData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new STwoBonesIKSolverData(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new STwoBonesIKSolverData(cr2w);
 
 	}
 }

@@ -11,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("rangeForIcyclesActivation")] 		public CFloat RangeForIcyclesActivation { get; set;}
 
-		public CBTTaskIceGiantFallingIciclesDef(CR2WFile cr2w) : base(cr2w){ }
+		public CBTTaskIceGiantFallingIciclesDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskIceGiantFallingIciclesDef(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CBTTaskIceGiantFallingIciclesDef(cr2w);
 
 	}
 }

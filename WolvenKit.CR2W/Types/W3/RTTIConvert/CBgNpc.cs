@@ -25,13 +25,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("originalTemplete")] 		public CHandle<CEntityTemplate> OriginalTemplete { get; set;}
 
-		public CBgNpc(CR2WFile cr2w) : base(cr2w){ }
+		public CBgNpc(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBgNpc(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CBgNpc(cr2w);
 
 	}
 }

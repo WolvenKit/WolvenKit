@@ -47,14 +47,13 @@ namespace WolvenKit.CR2W.Types
 
         public static CVariable Create(string typename, string varname, CR2WFile cr2w, CVariable parentVariable, bool readUnknownAsBytes = true)
         {
-            CVariable variable = CreateInner(typename, cr2w, readUnknownAsBytes);
-            variable.Parent = parentVariable;
-            variable.REDName = varname;
+            CVariable variable = CreateInner(typename, varname, cr2w, parentVariable, readUnknownAsBytes);
+            
             return variable;
         }
 
 
-        private static CVariable CreateInner(string typename, CR2WFile cr2w, bool readUnknownAsBytes = true)
+        private static CVariable CreateInner(string typename, string varname, CR2WFile cr2w, CVariable parentVariable, bool readUnknownAsBytes = true)
         {
 
 
@@ -93,19 +92,19 @@ namespace WolvenKit.CR2W.Types
                     case "CHandle":
                     case "handle":
                         {
-                            CVariable innerobject = CreateInner(match.Groups[2].Value, cr2w);
+                            CVariable innerobject = CreateInner(match.Groups[2].Value, "", cr2w, null);
                             return MakeGenericType(typeof(CHandle<>), innerobject);
                         }
                     case "CPtr":
                     case "ptr":
                         {
-                            CVariable innerobject = CreateInner(match.Groups[2].Value, cr2w);
+                            CVariable innerobject = CreateInner(match.Groups[2].Value, "", cr2w, null);
                             return MakeGenericType(typeof(CPtr<>), innerobject);
                         }
                     case "CSoft":
                     case "soft":
                         {
-                            CVariable innerobject = CreateInner(match.Groups[2].Value, cr2w);
+                            CVariable innerobject = CreateInner(match.Groups[2].Value, "", cr2w, null);
                             return MakeGenericType(typeof(CSoft<>), innerobject);
                         }
                     case "array":
@@ -121,12 +120,12 @@ namespace WolvenKit.CR2W.Types
                                 //byte arrays, these can be huge, using ordinary arrays is just too slow.
                                 if (matchArrayType.Groups[3].Value == "Uint8" || matchArrayType.Groups[3].Value == "Int8")
                                 {
-                                    var bytearray = new CByteArray(cr2w);
+                                    var bytearray = new CByteArray(cr2w, parentVariable, varname);
                                     //bytearray.Type = fullname;
                                     return bytearray;
                                 }
 
-                                CVariable innerobject = CreateInner(matchArrayType.Groups[3].Value, cr2w);
+                                CVariable innerobject = CreateInner(matchArrayType.Groups[3].Value, "", cr2w, null);
                                 var arrayacc = MakeArray(innerobject);
                                 arrayacc.Flags = new List<int>() { int.Parse(matchArrayType.Groups[1].Value), int.Parse(matchArrayType.Groups[2].Value) };
                                 return arrayacc as CVariable;
@@ -149,7 +148,7 @@ namespace WolvenKit.CR2W.Types
 
 
                                 //throw new InvalidParsingException($"Invalid array type format: typename: {typename}.");
-                                CVariable innerobject = CreateInner(match.Groups[2].Value, cr2w);
+                                CVariable innerobject = CreateInner(match.Groups[2].Value, "", cr2w, null);
                                 return MakeGenericType(typeof(CArray<>), innerobject);
                             }
                         }
@@ -170,7 +169,7 @@ namespace WolvenKit.CR2W.Types
                                     //return new CByteArray(cr2w);
                                 }
 
-                                CVariable innerobject = CreateInner(matchArrayType.Groups[2].Value, cr2w);
+                                CVariable innerobject = CreateInner(matchArrayType.Groups[2].Value, "", cr2w, null);
                                 var arrayacc = MakeArray(innerobject);
                                 arrayacc.Flags = new List<int>() { int.Parse(matchArrayType.Groups[1].Value) };
                                 return arrayacc as CVariable;
@@ -182,27 +181,27 @@ namespace WolvenKit.CR2W.Types
                         }
                     case "CBufferUInt16":
                         {
-                            CVariable innerobject = CreateInner(match.Groups[2].Value, cr2w);
+                            CVariable innerobject = CreateInner(match.Groups[2].Value, "", cr2w, null);
                             return MakeGenericType(typeof(CBufferUInt16<>), innerobject);
                         }
                     case "CBufferVLQ":
                         {
-                            CVariable innerobject = CreateInner(match.Groups[2].Value, cr2w);
+                            CVariable innerobject = CreateInner(match.Groups[2].Value, "", cr2w, null);
                             return MakeGenericType(typeof(CBufferVLQ<>), innerobject);
                         }
                     case "CBufferVLQInt32":
                         {
-                            CVariable innerobject = CreateInner(match.Groups[2].Value, cr2w);
+                            CVariable innerobject = CreateInner(match.Groups[2].Value, "", cr2w, null);
                             return MakeGenericType(typeof(CBufferVLQInt32<>), innerobject);
                         }
                     case "CCompressedBuffer":
                         {
-                            CVariable innerobject = CreateInner(match.Groups[2].Value, cr2w);
+                            CVariable innerobject = CreateInner(match.Groups[2].Value, "", cr2w, null);
                             return MakeGenericType(typeof(CCompressedBuffer<>), innerobject);
                         }
                     case "CPaddedBuffer":
                         {
-                            CVariable innerobject = CreateInner(match.Groups[2].Value, cr2w);
+                            CVariable innerobject = CreateInner(match.Groups[2].Value, "", cr2w, null);
                             return MakeGenericType(typeof(CPaddedBuffer<>), innerobject);
                         }
                     case "CEnum":
@@ -232,7 +231,7 @@ namespace WolvenKit.CR2W.Types
 
                 if (readUnknownAsBytes)
                 {
-                    return new CBytes(cr2w);
+                    return new CBytes(cr2w, parentVariable, "unknown bytes");
                 }
             }
 
@@ -246,8 +245,8 @@ namespace WolvenKit.CR2W.Types
                 if (innerobject != null)
                 {
                     Type elementType = typeof(CArray<>).MakeGenericType(innerobject.GetType());
-                    var array = Activator.CreateInstance(elementType, cr2w) as CVariable;
-                    innerobject.Parent = array;
+                    var array = Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
+                    //innerobject.Parent = array;
                     return array as IArrayAccessor;
                 }
                 else
@@ -262,8 +261,8 @@ namespace WolvenKit.CR2W.Types
                 if (innerobject != null)
                 {
                     Type elementType = gentype.MakeGenericType(innerobject.GetType());
-                    CVariable handle = Activator.CreateInstance(elementType, cr2w) as CVariable;
-                    innerobject.Parent = handle;
+                    CVariable handle = Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
+                    //innerobject.Parent = handle;
                     return handle;
                 }
                 else
@@ -277,7 +276,7 @@ namespace WolvenKit.CR2W.Types
                 if (innerobject != null)
                 {
                     Type elementType = gentype.MakeGenericType(innerobject.GetType());
-                    CVariable handle = Activator.CreateInstance(elementType, cr2w) as CVariable;
+                    CVariable handle = Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
                     return handle;
                 }
                 else

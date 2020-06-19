@@ -11,8 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("textures", 2,0)] 		public CArray<CHandle<CBitmapTexture>> Textures { get; set;}
 
-
-		public override CVariable Create(CR2WFile cr2w) => new CFont(cr2w);
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CFont(cr2w, parent, name);
 
 	}
 }

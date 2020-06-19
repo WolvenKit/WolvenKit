@@ -50,7 +50,7 @@ namespace WolvenKit.CR2W.Types
         /// Initialise a new instance of the CDateTime.
         /// </summary>
         /// <param name="value"></param>
-        public CDateTime(CR2WFile cr2w = null) : base(cr2w)
+        public CDateTime(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
@@ -58,7 +58,7 @@ namespace WolvenKit.CR2W.Types
         /// Initialise a new instance of the CDateTime object using a .NET <see cref="System.DateTime"/> object.
         /// </summary>
         /// <param name="value"></param>
-        public CDateTime(DateTime value, CR2WFile cr2w = null) : base(cr2w)
+        public CDateTime(DateTime value, CVariable parent, string name, CR2WFile cr2w = null) : base(cr2w, parent, name)
         {
             m_value = value;
         }
@@ -68,15 +68,16 @@ namespace WolvenKit.CR2W.Types
         /// If the value is formatted incorrectly, Min value will be used.
         /// </summary>
         /// <param name="value">A formatted UInt64 representing a datetime value.</param>
-        public CDateTime(UInt64 value, CR2WFile cr2w = null) : base(cr2w)
+        public CDateTime(UInt64 value, CVariable parent, string name, CR2WFile cr2w = null) : base(cr2w, parent, name)
         {
             TryParse(this, value);
         }
 
         /// <summary>
         /// Get a CDateTime object set to the current time of the system.
+        /// !! Do not use as CVariable for serialization !!
         /// </summary>
-        public static CDateTime Now => new CDateTime(DateTime.Now);
+        public static CDateTime Now => new CDateTime(DateTime.Now, null, "");
 
         /// <summary>
         /// Convert a CDateTime value into a redengine UInt64 compatible representation.
@@ -199,9 +200,9 @@ namespace WolvenKit.CR2W.Types
             file.Write(this.ToUInt64());
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CDateTime(cr2w);
+            return new CDateTime(cr2w, parent, name);
         }
 
         public static bool operator ==(CDateTime left, CDateTime right)

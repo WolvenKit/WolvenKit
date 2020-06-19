@@ -22,12 +22,11 @@ namespace WolvenKit.CR2W.Types
         [REDBuffer(true)] public CVLQInt32 blocksize { get; set; }
         [REDBuffer(true)] public CCompressedBuffer<SBlockData> BlockData { get; set; }
 
-        public CSectorData(CR2WFile cr2w)
-            : base(cr2w)
+        public CSectorData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
-            blocksize = new CVLQInt32(cr2w);
-            BlockData = new CCompressedBuffer<SBlockData>(cr2w, _ => new SBlockData(_)) { REDName = "blockData", };
+            blocksize = new CVLQInt32(cr2w, this, nameof(blocksize));
+            BlockData = new CCompressedBuffer<SBlockData>(cr2w, this, nameof(BlockData),  _ => new SBlockData(_, BlockData, ""));
         }
 
 
@@ -61,7 +60,7 @@ namespace WolvenKit.CR2W.Types
                 {
                     len = (ulong)blocksize.val - curoffset;
                 }
-                var blockdata = new SBlockData(cr2w);
+                var blockdata = new SBlockData(cr2w, BlockData, "");
                 blockdata.Read(file, (uint)len);
                 BlockData.AddVariable(blockdata);
             }

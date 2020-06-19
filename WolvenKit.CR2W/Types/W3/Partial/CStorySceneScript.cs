@@ -13,8 +13,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("links", 2,0)] 		public CArray<CPtr<CStorySceneLinkElement>> Links { get; set;}
 
-
-		public override CVariable Create(CR2WFile cr2w) => new CStorySceneScript(cr2w);
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CStorySceneScript(cr2w, parent, name);
 
 	}
 }

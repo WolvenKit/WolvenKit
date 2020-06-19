@@ -17,11 +17,12 @@ namespace WolvenKit.CR2W.Types
         public CGUID guid;
         public CBytes unk1;
 
-        public EntityHandle(CR2WFile cr2w) : base(cr2w)
+        public EntityHandle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            id = new CUInt16(cr2w) { REDName = "id" };
-            guid = new CGUID(cr2w) { REDName = "guid" };
-            unk1 = new CBytes(cr2w) { REDName = "unk1", Bytes = Array.Empty<byte>() };
+            id = new CUInt16(cr2w, this, nameof(id));
+            guid = new CGUID(cr2w, this, nameof(guid));
+            unk1 = new CBytes(cr2w, this, nameof(unk1))
+            { Bytes = Array.Empty<byte>() };
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -42,9 +43,9 @@ namespace WolvenKit.CR2W.Types
             unk1.Write(file);
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new EntityHandle(cr2w);
+            return new EntityHandle(cr2w, parent, name);
         }
 
         public override string ToString()

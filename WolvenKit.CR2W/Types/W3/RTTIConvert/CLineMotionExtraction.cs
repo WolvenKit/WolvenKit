@@ -13,13 +13,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("times", 2,0)] 		public CArray<CFloat> Times { get; set;}
 
-		public CLineMotionExtraction(CR2WFile cr2w) : base(cr2w){ }
+		public CLineMotionExtraction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CLineMotionExtraction(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CLineMotionExtraction(cr2w);
 
 	}
 }

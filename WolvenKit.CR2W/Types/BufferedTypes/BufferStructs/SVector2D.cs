@@ -14,10 +14,7 @@ namespace WolvenKit.CR2W.Types
         [RED] public CFloat x { get; set; }
         [RED] public CFloat y { get; set; }
 
-        public SVector2D(CR2WFile cr2w = null)
-            : base(cr2w)
-        {
-        }
+        public SVector2D(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
 
         public override CVariable SetValue(object val)
@@ -31,9 +28,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new SVector2D(cr2w);
+            return new SVector2D(cr2w, parent, name);
         }
 
 

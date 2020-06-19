@@ -22,12 +22,12 @@ namespace WolvenKit.CR2W.Types
         [RED] public CUInt8 Alpha { get; set; }
 
 
-        public CColor(CR2WFile cr2w) : base(cr2w)
+        public CColor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            Red = new CUInt8(cr2w);
-            Green = new CUInt8(cr2w);
-            Blue = new CUInt8(cr2w);
-            Alpha = new CUInt8(cr2w);
+            Red = new CUInt8(cr2w, this, nameof(Red));
+            Green = new CUInt8(cr2w, this, nameof(Green));
+            Blue = new CUInt8(cr2w, this, nameof(Blue));
+            Alpha = new CUInt8(cr2w, this, nameof(Alpha));
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -86,6 +86,6 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
-        public override CVariable Create(CR2WFile cr2w) => new CColor(cr2w);
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CColor(cr2w, parent, name);
     }
 }

@@ -9,13 +9,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SpringDamper : CObject
 	{
-		public SpringDamper(CR2WFile cr2w) : base(cr2w){ }
+		public SpringDamper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SpringDamper(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new SpringDamper(cr2w);
 
 	}
 }

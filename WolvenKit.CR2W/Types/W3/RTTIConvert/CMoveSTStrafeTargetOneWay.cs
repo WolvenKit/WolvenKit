@@ -11,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("left")] 		public CBool Left { get; set;}
 
-		public CMoveSTStrafeTargetOneWay(CR2WFile cr2w) : base(cr2w){ }
+		public CMoveSTStrafeTargetOneWay(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMoveSTStrafeTargetOneWay(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CMoveSTStrafeTargetOneWay(cr2w);
 
 	}
 }

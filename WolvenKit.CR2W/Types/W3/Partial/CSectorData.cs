@@ -9,8 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CSectorData : ISerializable
 	{
-
-		public override CVariable Create(CR2WFile cr2w) => new CSectorData(cr2w);
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSectorData(cr2w, parent, name);
 
 	}
 }

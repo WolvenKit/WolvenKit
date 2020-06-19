@@ -19,13 +19,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("yawMaxSpeed")] 		public CFloat YawMaxSpeed { get; set;}
 
-		public CCameraRotationControllerInteraction(CR2WFile cr2w) : base(cr2w){ }
+		public CCameraRotationControllerInteraction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCameraRotationControllerInteraction(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CCameraRotationControllerInteraction(cr2w);
 
 	}
 }

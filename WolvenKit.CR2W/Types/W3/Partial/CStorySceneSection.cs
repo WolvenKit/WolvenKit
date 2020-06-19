@@ -87,9 +87,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("distantLightStartOverride")] 		public CFloat DistantLightStartOverride { get; set;}
 
-		public CStorySceneSection(CR2WFile cr2w) : base(cr2w){ }
+		public CStorySceneSection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public override CVariable Create(CR2WFile cr2w) => new CStorySceneSection(cr2w);
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CStorySceneSection(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

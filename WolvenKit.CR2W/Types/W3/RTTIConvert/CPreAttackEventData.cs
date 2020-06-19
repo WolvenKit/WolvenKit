@@ -43,13 +43,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("cameraAnimOnMissedHit")] 		public CName CameraAnimOnMissedHit { get; set;}
 
-		public CPreAttackEventData(CR2WFile cr2w) : base(cr2w){ }
+		public CPreAttackEventData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPreAttackEventData(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CPreAttackEventData(cr2w);
 
 	}
 }

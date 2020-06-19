@@ -11,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("tracks", 2,0)] 		public CArray<CFloat> Tracks { get; set;}
 
-		public CCameraCompressedPose(CR2WFile cr2w) : base(cr2w){ }
+		public CCameraCompressedPose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public override CVariable Create(CR2WFile cr2w) => new CCameraCompressedPose(cr2w);
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCameraCompressedPose(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

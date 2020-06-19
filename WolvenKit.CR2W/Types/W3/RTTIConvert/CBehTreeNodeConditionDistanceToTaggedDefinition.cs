@@ -19,13 +19,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("allowActivationWhenNoTarget")] 		public CBool AllowActivationWhenNoTarget { get; set;}
 
-		public CBehTreeNodeConditionDistanceToTaggedDefinition(CR2WFile cr2w) : base(cr2w){ }
+		public CBehTreeNodeConditionDistanceToTaggedDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeNodeConditionDistanceToTaggedDefinition(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CBehTreeNodeConditionDistanceToTaggedDefinition(cr2w);
 
 	}
 }

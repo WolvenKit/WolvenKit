@@ -17,13 +17,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("m_TimeThresholdF")] 		public CFloat M_TimeThresholdF { get; set;}
 
-		public CInputAxisDoubleTap(CR2WFile cr2w) : base(cr2w){ }
+		public CInputAxisDoubleTap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CInputAxisDoubleTap(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CInputAxisDoubleTap(cr2w);
 
 	}
 }

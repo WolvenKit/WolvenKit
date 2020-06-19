@@ -47,9 +47,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("effects", 2,0)] 		public CArray<CPtr<CFXDefinition>> Effects { get; set;}
 
-		public CCutsceneTemplate(CR2WFile cr2w) : base(cr2w){ }
+		public CCutsceneTemplate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public override CVariable Create(CR2WFile cr2w) => new CCutsceneTemplate(cr2w);
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCutsceneTemplate(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

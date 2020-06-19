@@ -15,9 +15,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("version")] 		public CUInt32 Version { get; set;}
 
-		public CFoliageResource(CR2WFile cr2w) : base(cr2w){ }
+		public CFoliageResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public override CVariable Create(CR2WFile cr2w) => new CFoliageResource(cr2w);
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CFoliageResource(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

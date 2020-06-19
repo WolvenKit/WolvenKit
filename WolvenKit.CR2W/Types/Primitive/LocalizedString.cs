@@ -9,8 +9,7 @@ namespace WolvenKit.CR2W.Types
     [REDMeta()]
     public class LocalizedString : CVariable
     {
-        public LocalizedString(CR2WFile cr2w)
-            : base(cr2w)
+        public LocalizedString(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             if (cr2w != null)
             {
@@ -57,9 +56,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new LocalizedString(cr2w);
+            return new LocalizedString(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)

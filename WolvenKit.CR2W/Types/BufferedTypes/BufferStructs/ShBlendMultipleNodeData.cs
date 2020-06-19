@@ -13,8 +13,8 @@ namespace WolvenKit.CR2W.Types
         [RED] public CUInt32 index { get; set; }
         [RED] public CFloat blendvalue { get; set; }
 
-        public ShBlendMultipleNodeData(CR2WFile cr2w) : base(cr2w) { }
-        public override CVariable Create(CR2WFile cr2w) => new ShBlendMultipleNodeData(cr2w);
+        public ShBlendMultipleNodeData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new ShBlendMultipleNodeData(cr2w, parent, name);
     }
 
 

@@ -160,7 +160,7 @@ namespace WolvenKit.CR2W
         }
 
         public Guid InternalGuid { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        IEditableVariable IEditableVariable.Parent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        IEditableVariable IEditableVariable.Parent { get => throw new NotImplementedException();}
 
         public string REDValue => this.ToString();
 
@@ -203,8 +203,6 @@ namespace WolvenKit.CR2W
 
         public virtual List<IEditableVariable> GetEditableVariables()
         {
-            data.REDName = REDName;
-
             var vars = new List<IEditableVariable>
             {
                 ParentPtr,
@@ -231,8 +229,9 @@ namespace WolvenKit.CR2W
         {
         }
 
-        public virtual void RemoveVariable(IEditableVariable child)
+        public virtual bool RemoveVariable(IEditableVariable child)
         {
+            return false;
         }
 
         public void ReadData(BinaryReader file)
@@ -244,10 +243,7 @@ namespace WolvenKit.CR2W
             data.Read(file, _export.dataSize);
             var bytesLeft = _export.dataSize - (file.BaseStream.Position - _export.dataOffset);
 
-            unknownBytes = new CBytes(cr2w)
-            {
-                REDName = "unknownBytes",
-            };
+            unknownBytes = new CBytes(cr2w, data, "unknownBytes");
 
             if (bytesLeft > 0)
             {
@@ -290,18 +286,14 @@ namespace WolvenKit.CR2W
 
         public void CreateDefaultData()
         {
-            data = CR2WTypeManager.Create(REDType, "", cr2w, null);
+            data = CR2WTypeManager.Create(REDType, "", cr2w, GetParent().data);
             if (data == null)
             {
                 throw new NotImplementedException();
             }
 
-            if (ParentChunkId != 0)
-                data.Parent = GetParent().data;
-
-            ParentPtr = new CPtr<CVariable>(cr2w)
+            ParentPtr = new CPtr<CVariable>(cr2w, data, "Parent")
             {
-                REDName = "Parent",
                 Reference = GetParent()
             };
         }

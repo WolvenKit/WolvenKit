@@ -25,9 +25,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("worldPoints", 2,0)] 		public CArray<Vector> WorldPoints { get; set;}
 
-		public CAreaComponent(CR2WFile cr2w) : base(cr2w){ }
+		public CAreaComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public override CVariable Create(CR2WFile cr2w) => new CAreaComponent(cr2w);
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAreaComponent(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

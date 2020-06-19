@@ -9,13 +9,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeCustomWorkDefinition : IBehTreeDynamicNodeBaseDefinition
 	{
-		public CBehTreeNodeCustomWorkDefinition(CR2WFile cr2w) : base(cr2w){ }
+		public CBehTreeNodeCustomWorkDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeNodeCustomWorkDefinition(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CBehTreeNodeCustomWorkDefinition(cr2w);
 
 	}
 }

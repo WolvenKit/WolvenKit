@@ -13,13 +13,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("switchState")] 		public CEnum<ERequiredSwitchState> SwitchState { get; set;}
 
-		public SRequiredSwitch(CR2WFile cr2w) : base(cr2w){ }
+		public SRequiredSwitch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SRequiredSwitch(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new SRequiredSwitch(cr2w);
 
 	}
 }

@@ -15,25 +15,25 @@ namespace WolvenKit.CR2W.Types
         public CVariable[] fields;
         public CFloat ax, ay, az, bx, by, bz, cx, cy, cz;
 
-        public CMatrix3x3(CR2WFile cr2w) : base(cr2w)
+        public CMatrix3x3(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
             fields = new CVariable[] {
-                ax = new CFloat(cr2w) { REDName = "ax",  },
-                ay = new CFloat(cr2w) { REDName = "ay",  },
-                az = new CFloat(cr2w) { REDName = "az", },
-                bx = new CFloat(cr2w) { REDName = "bx", },
-                by = new CFloat(cr2w) { REDName = "by", },
-                bz = new CFloat(cr2w) { REDName = "bz", },
-                cx = new CFloat(cr2w) { REDName = "cx", },
-                cy = new CFloat(cr2w) { REDName = "cy", },
-                cz = new CFloat(cr2w) { REDName = "cz", },
+                ax = new CFloat(cr2w, this, nameof(ax)),
+                ay = new CFloat(cr2w, this, nameof(ay)),
+                az = new CFloat(cr2w, this, nameof(az)),
+                bx = new CFloat(cr2w, this, nameof(by)),
+                by = new CFloat(cr2w, this, nameof(bz)),
+                bz = new CFloat(cr2w, this, nameof(by)),
+                cx = new CFloat(cr2w, this, nameof(cz)),
+                cy = new CFloat(cr2w, this, nameof(cy)),
+                cz = new CFloat(cr2w, this, nameof(cz)),
             };
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CMatrix3x3(cr2w);
+            return new CMatrix3x3(cr2w, parent, name);
         }
 
         public override List<IEditableVariable> GetEditableVariables()

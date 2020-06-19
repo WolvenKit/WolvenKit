@@ -13,13 +13,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("parameters")] 		public SFlareParameters Parameters { get; set;}
 
-		public CFlareComponent(CR2WFile cr2w) : base(cr2w){ }
+		public CFlareComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CFlareComponent(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CFlareComponent(cr2w);
 
 	}
 }

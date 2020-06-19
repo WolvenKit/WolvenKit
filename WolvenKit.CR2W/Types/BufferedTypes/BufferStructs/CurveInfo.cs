@@ -14,13 +14,14 @@ namespace WolvenKit.CR2W.Types
     {
         [RED] public CName someName { get; set; }
         [RED] public CUInt8 someByte { get; set; }
-        public List<CurvePiece> pieces; // MAX LIMIT 4
 
-        public CurveInfo(CR2WFile cr2w) : base(cr2w)
+        [RED] public CCompressedBuffer<CurvePiece> pieces { get; set; } // MAX LIMIT 4
+
+        public CurveInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            someName = new CName(cr2w) { REDName = "someName", };
-            someByte = new CUInt8(cr2w) { REDName = "someByte", };
-            pieces = new List<CurvePiece>();
+            someName = new CName(cr2w, this, nameof(someName));
+            someByte = new CUInt8(cr2w, this, nameof(someByte));
+            pieces = new CCompressedBuffer<CurvePiece>(cr2w, this, nameof(pieces), _ => new CurvePiece(_, pieces, ""));
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -37,9 +38,9 @@ namespace WolvenKit.CR2W.Types
             return copy;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CurveInfo(cr2w);
+            return new CurveInfo(cr2w, parent, name);
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -56,12 +57,9 @@ namespace WolvenKit.CR2W.Types
 
             someByte.Read(file, size);
 
-            for (int i = 0; i < count; i++)
-            {
-                var piece = new CurvePiece(cr2w) { REDName = i.ToString() };
-                piece.Read(file, size);
-                pieces.Add(piece);
-            }
+            pieces.Read(file, size, count);
+
+            
         }
 
         public override void Write(BinaryWriter file)
@@ -78,10 +76,7 @@ namespace WolvenKit.CR2W.Types
             file.Write(pieceCount);
             someByte.Write(file);
 
-            for (var i = 0; i < pieceCount; i++)
-            {
-                pieces[i].Write(file);
-            }
+            pieces.Write(file);
         }
     }
 

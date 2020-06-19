@@ -13,13 +13,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("isAtlas")] 		public CBool IsAtlas { get; set;}
 
-		public CMaterialParameterTexture(CR2WFile cr2w) : base(cr2w){ }
+		public CMaterialParameterTexture(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMaterialParameterTexture(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CMaterialParameterTexture(cr2w);
 
 	}
 }

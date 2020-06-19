@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
     [REDMeta()]
     public class CFlags : CVariable
     {
-        public List<CName> flags = new List<CName>();
+        [RED] public CCompressedBuffer<CName> flags { get; set; }
 
-        public CFlags(CR2WFile cr2w)
-            : base(cr2w)
+        public CFlags(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
+            flags = new CCompressedBuffer<CName>(cr2w, this, nameof(flags), _ => new CName(_, flags, ""));
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -24,7 +24,8 @@ namespace WolvenKit.CR2W.Types
                 var val = file.ReadUInt16();
                 if (val == 0)
                     break;
-                flags.Add(new CName(cr2w) {Value = cr2w.names[val].Str});
+                flags.Add(new CName(cr2w, flags, nameof(flags))
+                { Value = cr2w.names[val].Str});
             }
         }
 
@@ -43,20 +44,20 @@ namespace WolvenKit.CR2W.Types
             {
                 foreach (var flag in (string[]) val)
                 {
-                    flags.Add(new CName(cr2w) {Value = flag});
+                    flags.Add(new CName(cr2w, flags, "") {Value = flag});
                 }
             }
             else if (val is string)
             {
-                flags.Add(new CName(cr2w) {Value = (string) val});
+                flags.Add(new CName(cr2w, flags, "") {Value = (string) val});
             }
 
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CFlags(cr2w);
+            return new CFlags(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -91,18 +92,18 @@ namespace WolvenKit.CR2W.Types
             if (v is CName v2)
             {
                 flags.Add(v2);
-                v.Parent = this;
             }
 
         }
 
-        public override void RemoveVariable(IEditableVariable child)
+        public override bool RemoveVariable(IEditableVariable child)
         {
             if (child is CName v)
             {
                 flags.Remove(v);
-                v.Parent = null;
+                return true;
             }
+            return false;
         }
 
         public override string ToString()

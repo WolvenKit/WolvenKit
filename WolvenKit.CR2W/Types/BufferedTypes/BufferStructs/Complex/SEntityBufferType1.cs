@@ -17,20 +17,11 @@ namespace WolvenKit.CR2W.Types.Utils
         [RED] public CGUID Guid { get; set; }
         [RED] public CByteArray2 Buffer { get; set; }
 
-        public SEntityBufferType1(CR2WFile cr2w) : base(cr2w)
+        public SEntityBufferType1(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            ComponentName = new CName(cr2w)
-            {
-                REDName = "Name",
-            };
-            Guid = new CGUID(cr2w)
-            {
-                REDName = "GUID"
-            };
-            Buffer = new CByteArray2(cr2w)
-            {
-                REDName = "Data",
-            };
+            ComponentName = new CName(cr2w, this, nameof(ComponentName));
+            Guid = new CGUID(cr2w, this, nameof(Guid));
+            Buffer = new CByteArray2(cr2w, this, nameof(Buffer));
         }
 
         public bool CanRead(BinaryReader file)
@@ -63,9 +54,9 @@ namespace WolvenKit.CR2W.Types.Utils
             }
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new SEntityBufferType1(cr2w);
+            return new SEntityBufferType1(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)

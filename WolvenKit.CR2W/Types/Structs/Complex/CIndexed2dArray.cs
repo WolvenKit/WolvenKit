@@ -17,9 +17,9 @@ namespace WolvenKit.CR2W.Types
         [DataMember]
         [RED("Serialized Data")] public CByteArray SerializedData { get; set; }
 
-        public CIndexed2dArray(CR2WFile cr2w) : base(cr2w)
+        public CIndexed2dArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            SerializedData = new CByteArray(cr2w);
+            SerializedData = new CByteArray(cr2w, parent, name);
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -56,6 +56,6 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
-        public override CVariable Create(CR2WFile cr2w) => new CIndexed2dArray(cr2w);
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CIndexed2dArray(cr2w, parent, name);
     }
 }

@@ -15,7 +15,7 @@ namespace WolvenKit.CR2W.Types
 
     public class CArrayFixedSize<T> : CArray<T> where T : CVariable
     {
-        public CArrayFixedSize(CR2WFile cr2w) : base(cr2w) { }
+        public CArrayFixedSize(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
 
 

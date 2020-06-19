@@ -16,7 +16,7 @@ namespace WolvenKit.CR2W.Types
 
         [REDBuffer(true)] public CHandle<CLayerGroup> ParentGroup { get; set; }
 
-        public CLayerInfo(CR2WFile cr2w) : base(cr2w)
+        public CLayerInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
         }

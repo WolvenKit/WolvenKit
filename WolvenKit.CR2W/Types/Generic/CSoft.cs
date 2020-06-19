@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
     {
         string DepotPath { get; set; }
         string ClassName { get; set; }
-        string REDName { get; set; }
+        string REDName { get; }
         string REDType { get; }
     }
 
@@ -21,8 +21,7 @@ namespace WolvenKit.CR2W.Types
     [REDMeta()]
     public class CSoft<T> : CVariable, ISoftAccessor where T : CVariable
     {
-        public CSoft(CR2WFile cr2w)
-            : base(cr2w)
+        public CSoft(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
@@ -93,9 +92,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CSoft<T>(cr2w);
+            return new CSoft<T>(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)

@@ -13,13 +13,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("actionCategories", 2,0)] 		public CArray<CSStoryPhaseTimetableACategoriesEntry> ActionCategories { get; set;}
 
-		public CSStoryPhaseTimetableActionEntry(CR2WFile cr2w) : base(cr2w){ }
+		public CSStoryPhaseTimetableActionEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSStoryPhaseTimetableActionEntry(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CSStoryPhaseTimetableActionEntry(cr2w);
 
 	}
 }

@@ -32,112 +32,112 @@ namespace WolvenKit.CR2W.Types
         public CBool collision_use_gpu, collision_kill_when_collide, collision_disable_gravity, sizeKeepRatio, spawnWorldSpace, spawnSurfaceOnly, velocity_world_space, velocity_spread_conserve_momentum;
         public CBool spawn_positive_x, spawn_negative_x, spawn_positive_y, spawn_negative_y, spawn_positive_z, spawn_negative_z, spawn_velocity, modulate;
 
-        public SParticleEmitterModuleData(CR2WFile cr2w) : base(cr2w)
+        public SParticleEmitterModuleData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             fields = new CVariable[] {
                 // CParticleInitializerAlpha
-                alpha = new CBufferVLQ<CFloat>(cr2w),
+                alpha = new CBufferVLQ<CFloat>(cr2w, this, nameof(alpha)),
                 //CParticleInitializerColor
-                color = new CBufferVLQ<SVector3D>(cr2w),
+                color = new CBufferVLQ<SVector3D>(cr2w, this, nameof(alpha)),
                 //CParticleInitializerLifeTime
-                lifeTime = new CBufferVLQ<CFloat>(cr2w),
+                lifeTime = new CBufferVLQ<CFloat>(cr2w, this, nameof(alpha)),
                 //CParticleInitializerPosition
-                position = new CBufferVLQ<SVector3D>(cr2w),
-                position_offset = new CFloat(cr2w),
+                position = new CBufferVLQ<SVector3D>(cr2w, this, nameof(alpha)),
+                position_offset = new CFloat(cr2w, this, nameof(alpha)),
                 //CParticleInitializerRotation
-                rotation = new CBufferVLQ<CFloat>(cr2w),
+                rotation = new CBufferVLQ<CFloat>(cr2w, this, nameof(alpha)),
                 //CParticleInitializerRotation3D
-                rotation3d = new CBufferVLQ<SVector3D>(cr2w),
+                rotation3d = new CBufferVLQ<SVector3D>(cr2w, this, nameof(alpha)),
                 //CParticleInitializerRotationRate
-                rotationRate = new CBufferVLQ<CFloat>(cr2w),
+                rotationRate = new CBufferVLQ<CFloat>(cr2w, this, nameof(alpha)),
                 //CParticleInitializerRotationRate3D
-                rotationRate3d = new CBufferVLQ<SVector3D>(cr2w),
+                rotationRate3d = new CBufferVLQ<SVector3D>(cr2w, this, nameof(alpha)),
                 //CParticleInitializerSize
-                size = new CBufferVLQ<SVector2D>(cr2w),
+                size = new CBufferVLQ<SVector2D>(cr2w, this, nameof(alpha)),
                 //CParticleInitializerSize3d
-                size_3d = new CBufferVLQ<SVector3D>(cr2w),
-                sizeKeepRatio = new CBool(cr2w),
+                size_3d = new CBufferVLQ<SVector3D>(cr2w, this, nameof(alpha)),
+                sizeKeepRatio = new CBool(cr2w, this, nameof(alpha)),
                 //CParticleInitializerSpawnBox
-                spawnExtents = new CBufferVLQ<SVector3D>(cr2w),
+                spawnExtents = new CBufferVLQ<SVector3D>(cr2w, this, nameof(alpha)),
                 //CParticleInitializerSpawnCircle
-                spawnInnerRadius = new CBufferVLQ<CFloat>(cr2w),
-                spawnOuterRadius = new CBufferVLQ<CFloat>(cr2w),
-                spawnWorldSpace = new CBool(cr2w),
-                spawnSurfaceOnly = new CBool(cr2w),
-                p0A8 = new SVector3D(cr2w),
-                spawnToLocalMatrix = new CMatrix4x4(cr2w),
+                spawnInnerRadius = new CBufferVLQ<CFloat>(cr2w, this, nameof(alpha)),
+                spawnOuterRadius = new CBufferVLQ<CFloat>(cr2w, this, nameof(alpha)),
+                spawnWorldSpace = new CBool(cr2w, this, nameof(alpha)),
+                spawnSurfaceOnly = new CBool(cr2w, this, nameof(alpha)),
+                p0A8 = new SVector3D(cr2w, this, nameof(alpha)),
+                spawnToLocalMatrix = new CMatrix4x4(cr2w, this, nameof(alpha)),
 
                 //CParticleInitializerVelocity
-                velocity = new CBufferVLQ<SVector3D>(cr2w),
-                velocity_world_space = new CBool(cr2w),
+                velocity = new CBufferVLQ<SVector3D>(cr2w, this, nameof(alpha)),
+                velocity_world_space = new CBool(cr2w, this, nameof(alpha)),
                 //CParticleInitializerVelocityInherit
-                velocity_inherit_scale = new CBufferVLQ<CFloat>(cr2w),
+                velocity_inherit_scale = new CBufferVLQ<CFloat>(cr2w, this, nameof(alpha)),
                 //CParticleInitializerVelocitySpread
-                velocity_spread_scale = new CBufferVLQ<CFloat>(cr2w),
-                velocity_spread_conserve_momentum = new CBool(cr2w),
+                velocity_spread_scale = new CBufferVLQ<CFloat>(cr2w, this, nameof(alpha)),
+                velocity_spread_conserve_momentum = new CBool(cr2w, this, nameof(alpha)),
                 //CParticleModificatorTextureAnimation
-                texture_animation_initial_frame = new CBufferVLQ<CFloat>(cr2w),
-                p140 = new CUInt32(cr2w) { REDName = "p140" },
-                p144 = new CUInt32(cr2w) { REDName = "p144" },
-                p148 = new CUInt32(cr2w) { REDName = "p148" },
+                texture_animation_initial_frame = new CBufferVLQ<CFloat>(cr2w, this, nameof(alpha)),
+                p140 = new CUInt32(cr2w, this, nameof(alpha)),
+                p144 = new CUInt32(cr2w, this, nameof(alpha)),
+                p148 = new CUInt32(cr2w, this, nameof(alpha)),
 
                 //CParticleModificatorVelocityOverLife
-                velocityOverLife = new CBufferVLQ<SVector3D>(cr2w),
+                velocityOverLife = new CBufferVLQ<SVector3D>(cr2w, this, nameof(alpha)),
                 //CParticleModificatorAcceleration
-                accelerationDirection = new CBufferVLQ<SVector3D>(cr2w),
-                accelerationScale = new CBufferVLQ<CFloat>(cr2w),
+                accelerationDirection = new CBufferVLQ<SVector3D>(cr2w, this, nameof(alpha)),
+                accelerationScale = new CBufferVLQ<CFloat>(cr2w, this, nameof(alpha)),
                 //CParticleModificatorRotationOverLife
-                rotationOverLife = new CBufferVLQ<CFloat>(cr2w),
+                rotationOverLife = new CBufferVLQ<CFloat>(cr2w, this, nameof(alpha)),
                 //CParticleModificatorRotationRateOverLife
-                rotationRateOverLife = new CBufferVLQ<CFloat>(cr2w),
+                rotationRateOverLife = new CBufferVLQ<CFloat>(cr2w, this, nameof(alpha)),
                 //CParticleModificatorRotation3DOverLife
-                rotation3dOverLife = new CBufferVLQ<SVector3D>(cr2w),
+                rotation3dOverLife = new CBufferVLQ<SVector3D>(cr2w, this, nameof(alpha)),
                 //CParticleModificatorRotationRate3DOverLife
-                rotationRate3dOverLife = new CBufferVLQ<SVector3D>(cr2w),
+                rotationRate3dOverLife = new CBufferVLQ<SVector3D>(cr2w, this, nameof(alpha)),
                 //CParticleModificatorColorOverLife
-                colorOverLife = new CBufferVLQ<SVector3D>(cr2w),
+                colorOverLife = new CBufferVLQ<SVector3D>(cr2w, this, nameof(alpha)),
                 //CParticleModificatorAlphaOverLife
-                alphaOverLife = new CBufferVLQ<CFloat>(cr2w),
+                alphaOverLife = new CBufferVLQ<CFloat>(cr2w, this, nameof(alpha)),
                 //CParticleModificatorSizeOverLife
-                sizeOverLife = new CBufferVLQ<SVector2D>(cr2w),
+                sizeOverLife = new CBufferVLQ<SVector2D>(cr2w, this, nameof(alpha)),
                 //?
-                sizeOverLifeOrientation = new CBufferVLQ<SVector3D>(cr2w),
+                sizeOverLifeOrientation = new CBufferVLQ<SVector3D>(cr2w, this, nameof(alpha)),
                 //CParticleModificatorTextureAnimation (initial frame is... missing? animation mode is defined by flags)
-                textureAnimationSpeed = new CBufferVLQ<CFloat>(cr2w),
+                textureAnimationSpeed = new CBufferVLQ<CFloat>(cr2w, this, nameof(alpha)),
 
                 //CParticleModificatorVelocityTurbulize
-                velocityTurbulizeScale = new CBufferVLQ<SVector3D>(cr2w),
-                velocityTurbulizeTimelifeLimit = new CBufferVLQ<CFloat>(cr2w),
-                velocityTurbulizeNoiseInterval = new CFloat(cr2w),
-                velocityTurbulizeDuration = new CFloat(cr2w),
+                velocityTurbulizeScale = new CBufferVLQ<SVector3D>(cr2w, this, nameof(alpha)),
+                velocityTurbulizeTimelifeLimit = new CBufferVLQ<CFloat>(cr2w, this, nameof(alpha)),
+                velocityTurbulizeNoiseInterval = new CFloat(cr2w, this, nameof(alpha)),
+                velocityTurbulizeDuration = new CFloat(cr2w, this, nameof(alpha)),
 
                 //CParticleModificatorTarget
-                targetForceScale = new CBufferVLQ<CFloat>(cr2w),
-                targetKillRadius = new CBufferVLQ<CFloat>(cr2w),
-                targetMaxForce = new CFloat(cr2w),
-                targetPosition = new CBufferVLQ<SVector3D>(cr2w),
+                targetForceScale = new CBufferVLQ<CFloat>(cr2w, this, nameof(alpha)),
+                targetKillRadius = new CBufferVLQ<CFloat>(cr2w, this, nameof(alpha)),
+                targetMaxForce = new CFloat(cr2w, this, nameof(alpha)),
+                targetPosition = new CBufferVLQ<SVector3D>(cr2w, this, nameof(alpha)),
 
                 //CParticleInitializerSpawnSphere
-                spawn_positive_x = new CBool(cr2w),
-                spawn_negative_x = new CBool(cr2w),
-                spawn_positive_y = new CBool(cr2w),
-                spawn_negative_y = new CBool(cr2w),
-                spawn_positive_z = new CBool(cr2w),
-                spawn_negative_z = new CBool(cr2w),
-                spawn_velocity = new CBool(cr2w),
+                spawn_positive_x = new CBool(cr2w, this, nameof(alpha)),
+                spawn_negative_x = new CBool(cr2w, this, nameof(alpha)),
+                spawn_positive_y = new CBool(cr2w, this, nameof(alpha)),
+                spawn_negative_y = new CBool(cr2w, this, nameof(alpha)),
+                spawn_positive_z = new CBool(cr2w, this, nameof(alpha)),
+                spawn_negative_z = new CBool(cr2w, this, nameof(alpha)),
+                spawn_velocity = new CBool(cr2w, this, nameof(alpha)),
 
 
 
-                collisionTriggeringGroupIndex = new CUInt64(cr2w) { REDName = "collisionTriggeringGroupIndex" },
-                collision_dynamic_friction = new CFloat(cr2w) { REDName = "collision_dynamic_friction" },
-                collision_static_friction = new CFloat(cr2w) { REDName = "collision_static_friction" },
-                collision_restitution = new CFloat(cr2w) { REDName = "collision_restitution" },
-                collision_velocity_dampening = new CFloat(cr2w) { REDName = "collision_velocity_dampening" },
-                collision_disable_gravity = new CBool(cr2w) { REDName = "disableGravity" },
-                collision_use_gpu = new CBool(cr2w) { REDName = "collision_use_gpu" },
-                collision_radius = new CFloat(cr2w) { REDName = "collision_radius"},
-                collision_kill_when_collide = new CBool(cr2w) { REDName = "killWhenCollide", },
-                collision_self_emitter_index = new CUInt32(cr2w) { REDName = "collision_self_emitter_index" },
+                collisionTriggeringGroupIndex = new CUInt64(cr2w, this, nameof(alpha)),
+                collision_dynamic_friction = new CFloat(cr2w, this, nameof(alpha)),
+                collision_static_friction = new CFloat(cr2w, this, nameof(alpha)),
+                collision_restitution = new CFloat(cr2w, this, nameof(alpha)),
+                collision_velocity_dampening = new CFloat(cr2w, this, nameof(alpha)),
+                collision_disable_gravity = new CBool(cr2w, this, nameof(alpha)),
+                collision_use_gpu = new CBool(cr2w, this, nameof(alpha)),
+                collision_radius = new CFloat(cr2w, this, nameof(alpha)),
+                collision_kill_when_collide = new CBool(cr2w, this, nameof(alpha)),
+                collision_self_emitter_index = new CUInt32(cr2w, this, nameof(alpha)),
                 
 
                
@@ -145,19 +145,19 @@ namespace WolvenKit.CR2W.Types
                 
 
                 //CParticleModificatorCollision
-                collision_spawn_probability = new CFloat(cr2w) { REDName = "collision_spawn_probability"},
-                collision_spawn_parent_emitter_index = new CUInt32(cr2w) { REDName = "collision_spawn_parent_emitter_index" },
+                collision_spawn_probability = new CFloat(cr2w, this, nameof(alpha)),
+                collision_spawn_parent_emitter_index = new CUInt32(cr2w, this, nameof(alpha)),
 
                 
                 //CParticleModificatorAlphaByDistance
-                alphaByDistanceFar = new CFloat(cr2w) { REDName = "alphaByDistanceFar"},
-                alphaByDistanceNear = new CFloat(cr2w) { REDName = "alphaByDistanceNear"}
+                alphaByDistanceFar = new CFloat(cr2w, this, nameof(alpha)),
+                alphaByDistanceNear = new CFloat(cr2w, this, nameof(alpha))
             };
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new SParticleEmitterModuleData(cr2w);
+            return new SParticleEmitterModuleData(cr2w, parent, name);
         }
 
         public override List<IEditableVariable> GetEditableVariables()

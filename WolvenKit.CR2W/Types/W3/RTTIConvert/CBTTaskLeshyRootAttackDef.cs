@@ -17,13 +17,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("projEntity")] 		public CHandle<CEntityTemplate> ProjEntity { get; set;}
 
-		public CBTTaskLeshyRootAttackDef(CR2WFile cr2w) : base(cr2w){ }
+		public CBTTaskLeshyRootAttackDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskLeshyRootAttackDef(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CBTTaskLeshyRootAttackDef(cr2w);
 
 	}
 }

@@ -212,7 +212,7 @@ namespace WolvenKit.CR2W
                             case "CStorySceneCutscenePlayer":
 
                                 //DestinationFile.CreatePtr(controlParts, chunkcopy);
-                                controlParts.AddVariable(new CPtr<CStorySceneControlPart>(DestinationFile)
+                                controlParts.AddVariable(new CPtr<CStorySceneControlPart>(DestinationFile, controlParts, "")
                                 {
                                     Reference = chunkcopy
                                 }
@@ -235,7 +235,7 @@ namespace WolvenKit.CR2W
                             case "CStorySceneVideoSection":
 
                                 //DestinationFile.CreatePtr(sections, chunkcopy);
-                                sections.AddVariable(new CPtr<CStorySceneControlPart>(DestinationFile)
+                                sections.AddVariable(new CPtr<CStorySceneControlPart>(DestinationFile, sections, "")
                                 {
                                     Reference = chunkcopy
                                 }
@@ -372,7 +372,7 @@ namespace WolvenKit.CR2W
                         CStorySceneDialogsetInstance copieddialogset = (CStorySceneDialogsetInstance)copieddialogsetchunk.data;
 
                         //DestinationFile.CreatePtr(dialogsetInstances, copieddialogset);
-                        dialogsetInstances.AddVariable(new CPtr<CStorySceneDialogsetInstance>(DestinationFile)
+                        dialogsetInstances.AddVariable(new CPtr<CStorySceneDialogsetInstance>(DestinationFile, dialogsetInstances, "")
                         {
                             Reference = copieddialogsetchunk
                         }
@@ -380,7 +380,7 @@ namespace WolvenKit.CR2W
 
                         TagList placementTag = copieddialogset.PlacementTag;
                         placementTag.tags.Clear();
-                        placementTag.tags.AddVariable(new CName(DestinationFile) { Value = "PLAYER" }); //FIXME variable name or value?
+                        placementTag.tags.AddVariable(new CName(DestinationFile, placementTag.tags, "") { Value = "PLAYER" }); //FIXME variable name or value?
                     }
                 }
             }

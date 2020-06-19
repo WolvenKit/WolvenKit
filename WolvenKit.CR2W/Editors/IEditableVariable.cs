@@ -9,12 +9,12 @@ namespace WolvenKit.CR2W.Editors
 {
     public interface IEditableVariable
     {
-        string REDName { get; set; }
+        string REDName { get; }
         string REDType { get; }
         string REDValue { get; }
 
         Guid InternalGuid { get; set; }
-        IEditableVariable Parent { get; set; }
+        IEditableVariable Parent { get; }
         bool IsSerialized { get; set; }
 
         CR2WFile cr2w { get; set; }
@@ -26,7 +26,7 @@ namespace WolvenKit.CR2W.Editors
         CVariable CreateDefaultVariable();
         bool CanAddVariable(IEditableVariable newvar);
         void AddVariable(CVariable var);
-        void RemoveVariable(IEditableVariable child);
+        bool RemoveVariable(IEditableVariable child);
         void SerializeToXml(XmlWriter xw);
 
 

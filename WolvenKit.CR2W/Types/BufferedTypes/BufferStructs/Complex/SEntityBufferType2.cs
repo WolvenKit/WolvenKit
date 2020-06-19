@@ -21,23 +21,17 @@ namespace WolvenKit.CR2W.Types.Utils
         [RED] public CBufferUInt32<CVariantSizeTypeName> variables { get; set; }
 
 
-        public SEntityBufferType2(CR2WFile cr2w) : base(cr2w)
+        public SEntityBufferType2(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            componentName = new CName(cr2w)
-            {
-                REDName = "Name",
-            };
-            sizeofdata = new CUInt32(cr2w)
-            {
-                REDName = "Size",
-            };
-            variables = new CBufferUInt32<CVariantSizeTypeName>(cr2w, _ => new CVariantSizeTypeName(_));
+            componentName = new CName(cr2w, this, nameof(componentName));
+            sizeofdata = new CUInt32(cr2w, this, nameof(sizeofdata));
+            variables = new CBufferUInt32<CVariantSizeTypeName>(cr2w, this, nameof(variables), _ => new CVariantSizeTypeName(_, variables, ""));
 
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new SEntityBufferType2(cr2w);
+            return new SEntityBufferType2(cr2w, parent, name);
         }
 
         public override void Read(BinaryReader file, uint size)

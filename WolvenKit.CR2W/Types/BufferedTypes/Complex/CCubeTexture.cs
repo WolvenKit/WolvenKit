@@ -28,7 +28,7 @@ namespace WolvenKit.CR2W.Types
         [REDBuffer(true)] public CBytes Rawfile { get; set; }
 
 
-        public CCubeTexture(CR2WFile cr2w) : base(cr2w)
+        public CCubeTexture(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             
             
@@ -38,7 +38,7 @@ namespace WolvenKit.CR2W.Types
         {
             base.Read(file, size);
 
-            Rawfile = new CBytes(cr2w) { REDName = "Image" };
+            Rawfile = new CBytes(cr2w, this, "Image" );
             Rawfile.Read(file, Filesize.val);
         }
 

@@ -10,8 +10,7 @@ namespace WolvenKit.CR2W.Types
     [REDMeta()]
     public class CByteArray2 : CVariable, IByteSource
     {
-        public CByteArray2(CR2WFile cr2w)
-            : base(cr2w)
+        public CByteArray2(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
@@ -39,9 +38,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CByteArray2(cr2w);
+            return new CByteArray2(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)

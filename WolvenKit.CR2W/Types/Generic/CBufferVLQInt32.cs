@@ -13,7 +13,7 @@ namespace WolvenKit.CR2W.Types
     [REDMeta()]
     public class CBufferVLQInt32<T> : CArrayBase<T> where T : CVariable
     {
-        public CBufferVLQInt32(CR2WFile cr2w) : base(cr2w)
+        public CBufferVLQInt32(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
@@ -26,7 +26,7 @@ namespace WolvenKit.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            CVLQInt32 count = new CVLQInt32(cr2w);
+            CVLQInt32 count = new CVLQInt32(cr2w, null, "");
             count.val = elements.Count;
             count.Write(file);
 
@@ -48,7 +48,7 @@ namespace WolvenKit.CR2W.Types
             return copy;
         }
 
-        public override CVariable Create(CR2WFile cr2w) => new CBufferVLQInt32<T>(cr2w);
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBufferVLQInt32<T>(cr2w, parent, name);
     }
 
     

@@ -21,13 +21,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("radius")] 		public CFloat Radius { get; set;}
 
-		public CStorySceneEventSurfaceEffect(CR2WFile cr2w) : base(cr2w){ }
+		public CStorySceneEventSurfaceEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CStorySceneEventSurfaceEffect(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CStorySceneEventSurfaceEffect(cr2w);
 
 	}
 }

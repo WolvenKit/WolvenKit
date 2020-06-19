@@ -254,9 +254,6 @@ namespace WolvenKit
                 newvar = CR2WTypeManager.Create(frm.VariableType, frm.VariableName, Chunk.cr2w, node.Variable as CVariable, false);
                 if (newvar == null)
                     return;
-
-                newvar.REDName = frm.VariableName;
-                //newvar.Type = frm.VariableType;
             }
 
             if (newvar is IHandleAccessor h)
@@ -387,16 +384,16 @@ namespace WolvenKit
                 {
                     if (Variable.REDName != null)
                         return Variable.REDName;
-
-                    return Parent?.Children.IndexOf(this).ToString() ?? "";
+                    else
+                        return Parent?.Children.IndexOf(this).ToString() ?? "";
                 }
-                set
-                {
-                    if (Variable.REDName != null)
-                    {
-                        Variable.REDName = value;
-                    }
-                }
+                //set
+                //{
+                //    if (Variable.REDName != null)
+                //    {
+                //        Variable.REDName = value;
+                //    }
+                //}
             }
 
             public string Value => Variable.REDValue;

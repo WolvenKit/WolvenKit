@@ -15,13 +15,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("pos")] 		public Vector Pos { get; set;}
 
-		public SSbDescEventLookAt(CR2WFile cr2w) : base(cr2w){ }
+		public SSbDescEventLookAt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SSbDescEventLookAt(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new SSbDescEventLookAt(cr2w);
 
 	}
 }

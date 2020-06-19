@@ -22,9 +22,12 @@ namespace WolvenKit.CR2W.Types
     public abstract class CVariable : ObservableObject, IEditableVariable
     {
 
-        public CVariable(CR2WFile cr2w)
+        public CVariable(CR2WFile cr2w, CVariable parent, string name)
         {
             this.cr2w = cr2w;
+            this.Parent = parent;
+            this.REDName = name;
+
             InternalGuid = Guid.NewGuid();
         }
 
@@ -62,7 +65,7 @@ namespace WolvenKit.CR2W.Types
         /// otherwise must be set manually
         /// Consider moving this to the constructor
         /// </summary>
-        public IEditableVariable Parent { get; set; }
+        public IEditableVariable Parent { get; private set; }
 
 
 
@@ -78,10 +81,21 @@ namespace WolvenKit.CR2W.Types
         {
             get
             {
-                return string.IsNullOrEmpty(name) ? "<NO NAME SET>" : name;
+                if (string.IsNullOrEmpty(name))
+                {
+                    return "<NO NAME SET>";
+                }
+                else
+                    return  name;
             }
-            set => name = value;
+            private set => name = value;
         }
+
+        /// <summary>
+        /// !! Must ONLY be called from CArray type variables!!
+        /// </summary>
+        /// <param name="val"></param>
+        public void SetREDName(string val) => REDName = val;
 
         /// <summary>
         /// AspectName in frmChunkProperties
@@ -359,8 +373,7 @@ namespace WolvenKit.CR2W.Types
         public virtual CVariable Copy(CR2WCopyAction context)
         {
             // creates a new instance of the CVariable
-            var copy = Create(context.DestinationFile);
-            copy.REDName = REDName;
+            var copy = Create(context.DestinationFile, null , REDName); //FIXME
 
             // copy all REDProperties and REDBuffers
             foreach (IEditableVariable item in GetEditableVariables())
@@ -392,8 +405,9 @@ namespace WolvenKit.CR2W.Types
             return false;
         }
 
-        public virtual void RemoveVariable(IEditableVariable child)
+        public virtual bool RemoveVariable(IEditableVariable child)
         {
+            return false;
         }
 
 
@@ -415,7 +429,7 @@ namespace WolvenKit.CR2W.Types
         #endregion
 
         #region Abstract
-        public abstract CVariable Create(CR2WFile cr2w);
+        public abstract CVariable Create(CR2WFile cr2w, CVariable parent, string name);
 
 
 

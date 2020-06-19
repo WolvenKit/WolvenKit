@@ -15,13 +15,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("sceneAnimationsMimicsEmoStatesFilePath")] 		public CString SceneAnimationsMimicsEmoStatesFilePath { get; set;}
 
-		public CR4SceneAnimationsDLCMounter(CR2WFile cr2w) : base(cr2w){ }
+		public CR4SceneAnimationsDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4SceneAnimationsDLCMounter(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CR4SceneAnimationsDLCMounter(cr2w);
 
 	}
 }

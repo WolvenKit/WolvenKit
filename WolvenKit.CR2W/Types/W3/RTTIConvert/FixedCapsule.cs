@@ -13,13 +13,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("Height")] 		public CFloat Height { get; set;}
 
-		public FixedCapsule(CR2WFile cr2w) : base(cr2w){ }
+		public FixedCapsule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new FixedCapsule(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new FixedCapsule(cr2w);
 
 	}
 }

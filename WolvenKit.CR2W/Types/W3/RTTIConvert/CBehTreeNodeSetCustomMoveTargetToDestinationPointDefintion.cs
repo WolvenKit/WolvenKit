@@ -9,13 +9,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeSetCustomMoveTargetToDestinationPointDefintion : IBehTreeNodeSetupCustomMoveDataDefinition
 	{
-		public CBehTreeNodeSetCustomMoveTargetToDestinationPointDefintion(CR2WFile cr2w) : base(cr2w){ }
+		public CBehTreeNodeSetCustomMoveTargetToDestinationPointDefintion(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeNodeSetCustomMoveTargetToDestinationPointDefintion(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CBehTreeNodeSetCustomMoveTargetToDestinationPointDefintion(cr2w);
 
 	}
 }

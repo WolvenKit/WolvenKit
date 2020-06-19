@@ -19,13 +19,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("speedMinLimitToBreak")] 		public CFloat SpeedMinLimitToBreak { get; set;}
 
-		public CMoveSCFastSurround(CR2WFile cr2w) : base(cr2w){ }
+		public CMoveSCFastSurround(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMoveSCFastSurround(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CMoveSCFastSurround(cr2w);
 
 	}
 }

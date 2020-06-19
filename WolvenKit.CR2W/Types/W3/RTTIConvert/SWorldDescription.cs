@@ -13,13 +13,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("world")] 		public CSoft<CWorld> World { get; set;}
 
-		public SWorldDescription(CR2WFile cr2w) : base(cr2w){ }
+		public SWorldDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SWorldDescription(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new SWorldDescription(cr2w);
 
 	}
 }

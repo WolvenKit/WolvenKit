@@ -41,7 +41,6 @@ namespace WolvenKit.Render
             CVariable newvar = CR2WTypeManager.Create(type, name, file, parent, false);
             if (newvar == null)
                 throw new Exception("Nope");
-            newvar.REDName = name;
             //newvar.Type = type;
             return newvar;
         }
@@ -61,11 +60,10 @@ namespace WolvenKit.Render
             {
                 var SkeletalAnimationSet = w2AnimFile.chunks[0];
                 CSkeletalAnimationSet set = w2AnimFile.chunks[0].data as CSkeletalAnimationSet;
-                set.Animations = new CArray<CPtr<CSkeletalAnimationSetEntry>>(set.cr2w);
-                set.Animations.AddVariable(new CPtr<CSkeletalAnimationSetEntry>(set.cr2w)
+                set.Animations = new CArray<CPtr<CSkeletalAnimationSetEntry>>(set.cr2w, set, "animations");
+                set.Animations.AddVariable(new CPtr<CSkeletalAnimationSetEntry>(set.cr2w, set.Animations, "")
                 {
                     Reference = SkeletalAnimationSet.cr2w.chunks[startIndex + 2],
-                    Parent = set.Animations
                 });
 
                 // create chunks
@@ -75,37 +73,30 @@ namespace WolvenKit.Render
 
                 // CSkeletalAnimationSetEntry
                 var setentry = SkeletalAnimation.data as CSkeletalAnimationSetEntry;
-                setentry.Animation = new CPtr<CSkeletalAnimation>(SkeletalAnimationSetEntry.cr2w)
+                setentry.Animation = new CPtr<CSkeletalAnimation>(SkeletalAnimationSetEntry.cr2w, setentry, "animation")
                 {
                     Reference = SkeletalAnimation.cr2w.chunks[startIndex + 4],
-                    Parent = setentry
                 };
 
                 // SkeletalAnimation start
                 var anim = SkeletalAnimation.data as CSkeletalAnimation;
-                anim.Name = new CName(SkeletalAnimation.cr2w)
-                {
-                    Parent = anim
-                };
-                anim.AnimBuffer = new CPtr<IAnimationBuffer>(SkeletalAnimation.cr2w)
+                anim.Name = new CName(SkeletalAnimation.cr2w, anim, "name");
+                anim.AnimBuffer = new CPtr<IAnimationBuffer>(SkeletalAnimation.cr2w, anim, "animBuffer")
                 {
                     Reference = SkeletalAnimation.cr2w.chunks[startIndex + 4],
-                    Parent = anim
                 };
-                anim.FramesPerSecond = (CFloat)new CFloat(SkeletalAnimation.cr2w)
+                anim.FramesPerSecond = (CFloat)new CFloat(SkeletalAnimation.cr2w, anim, "framesPerSecond")
                 {
                     val = 30F,
-                    Parent = anim
                 };
-                anim.Duration = (CFloat)new CFloat(SkeletalAnimation.cr2w)
+                anim.Duration = (CFloat)new CFloat(SkeletalAnimation.cr2w, anim, "duration")
                 {
                     val = 1F,
-                    Parent = anim
                 };
 
                 //bitbuff
                 CAnimationBufferBitwiseCompressed buffer = bitbuff.data as CAnimationBufferBitwiseCompressed;
-                buffer.Version = (CUInt32)new CUInt32(bitbuff.cr2w).SetValue((uint)2);
+                buffer.Version = (CUInt32)new CUInt32(bitbuff.cr2w, buffer, "version").SetValue((uint)2);
 
 
                 CVariable bones = animVar("array:129,0,SAnimationBufferBitwiseCompressedBoneTrack", "bones", bitbuff.cr2w, bitbuff.data);
@@ -142,22 +133,27 @@ namespace WolvenKit.Render
                     (bones as CArray<SAnimationBufferBitwiseCompressedBoneTrack>).AddVariable(newvar);
                 }
 
-                buffer.Data = new CByteArray(bitbuff.cr2w);
-                buffer.FallbackData = new CByteArray(bitbuff.cr2w);
-                buffer.DeferredData = new DeferredDataBuffer(bitbuff.cr2w)
+                buffer.Data = new CByteArray(bitbuff.cr2w, buffer, "data");
+                buffer.FallbackData = new CByteArray(bitbuff.cr2w, buffer, "fallbackData");
+                buffer.DeferredData = new DeferredDataBuffer(bitbuff.cr2w, buffer, "deferredData")
                 {
-                    Bufferdata = new CInt16(bitbuff.cr2w) { val = (short)bufferNumber},
-                    Parent = buffer
+                    Bufferdata = new CInt16(bitbuff.cr2w, buffer.DeferredData, "Bufferdata") { val = (short)bufferNumber},
                 };
-                buffer.OrientationCompressionMethod = new CEnum<Enums.SAnimationBufferOrientationCompressionMethod>(bitbuff.cr2w) { WrappedEnum = Enums.SAnimationBufferOrientationCompressionMethod.ABOCM_PackIn48bits };
+                buffer.OrientationCompressionMethod = new CEnum<Enums.SAnimationBufferOrientationCompressionMethod>(bitbuff.cr2w, buffer, "orientationCompressionMethod")
+                {
+                    WrappedEnum = Enums.SAnimationBufferOrientationCompressionMethod.ABOCM_PackIn48bits
+                };
 
-                buffer.Duration = (CFloat)new CFloat(bitbuff.cr2w).SetValue(1F);
-                buffer.NumFrames = (CUInt32)new CUInt32(bitbuff.cr2w).SetValue((uint)30);
-                buffer.Dt = (CFloat)new CFloat(bitbuff.cr2w).SetValue(0.03333334F);
+                buffer.Duration = (CFloat)new CFloat(bitbuff.cr2w, buffer, "duration").SetValue(1F);
+                buffer.NumFrames = (CUInt32)new CUInt32(bitbuff.cr2w, buffer, "numFrames").SetValue((uint)30);
+                buffer.Dt = (CFloat)new CFloat(bitbuff.cr2w, buffer, "dt").SetValue(0.03333334F);
 
-                buffer.StreamingOption = new CEnum<Enums.SAnimationBufferStreamingOption>(bitbuff.cr2w) { WrappedEnum = Enums.SAnimationBufferStreamingOption.ABSO_NonStreamable };
+                buffer.StreamingOption = new CEnum<Enums.SAnimationBufferStreamingOption>(bitbuff.cr2w, buffer, "streamingOption")
+                { 
+                    WrappedEnum = Enums.SAnimationBufferStreamingOption.ABSO_NonStreamable 
+                };
 
-                buffer.HasRefIKBones = (CBool)new CBool(bitbuff.cr2w).SetValue(true);
+                buffer.HasRefIKBones = (CBool)new CBool(bitbuff.cr2w, buffer, "hasRefIKBones").SetValue(true);
             }
             catch (InvalidChunkTypeException ex)
             {

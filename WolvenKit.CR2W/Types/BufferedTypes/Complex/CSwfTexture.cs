@@ -15,12 +15,9 @@ namespace WolvenKit.CR2W.Types
 
         [REDBuffer(true)] public CBytes swfTexture { get; set; }
 
-        public CSwfTexture(CR2WFile cr2w) : base(cr2w)
+        public CSwfTexture(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            swfTexture = new CBytes(cr2w)
-            {
-                REDName = "swfTexture"
-            };
+            swfTexture = new CBytes(cr2w, this, nameof(swfTexture));
         }
 
         public override void Read(BinaryReader file, uint size)

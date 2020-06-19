@@ -35,13 +35,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("appearanceOnDeactivate")] 		public CName AppearanceOnDeactivate { get; set;}
 
-		public BTTaskManageMistFormDef(CR2WFile cr2w) : base(cr2w){ }
+		public BTTaskManageMistFormDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskManageMistFormDef(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new BTTaskManageMistFormDef(cr2w);
 
 	}
 }

@@ -15,13 +15,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("fadeTime")] 		public CFloat FadeTime { get; set;}
 
-		public CPlaySoundOnActorRequest(CR2WFile cr2w) : base(cr2w){ }
+		public CPlaySoundOnActorRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPlaySoundOnActorRequest(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CPlaySoundOnActorRequest(cr2w);
 
 	}
 }

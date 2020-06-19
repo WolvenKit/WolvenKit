@@ -11,39 +11,39 @@ namespace WolvenKit.CR2W.Types
     public class DataBuffer : CVariable
     {
         [REDBuffer] public CByteArray Bufferdata { get; set; }
-        public DataBuffer(CR2WFile cr2w) : base(cr2w) { }
-        public override CVariable Create(CR2WFile cr2w) => new DataBuffer(cr2w);
+        public DataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new DataBuffer(cr2w, parent, name);
     }
 
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SharedDataBuffer : CVariable
     {
         [REDBuffer] public CByteArray Bufferdata { get; set; }
-        public SharedDataBuffer(CR2WFile cr2w) : base(cr2w) { }
-        public override CVariable Create(CR2WFile cr2w) => new SharedDataBuffer(cr2w);
+        public SharedDataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SharedDataBuffer(cr2w, parent, name);
     }
 
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class DeferredDataBuffer : CVariable
     {
         [REDBuffer] public CInt16 Bufferdata { get; set; }
-        public DeferredDataBuffer(CR2WFile cr2w) : base(cr2w) {  }
-        public override CVariable Create(CR2WFile cr2w) => new DeferredDataBuffer(cr2w);
+        public DeferredDataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) {  }
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new DeferredDataBuffer(cr2w, parent, name);
     }
 
     //FIXME is that an ID?
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class GlobalVisID : CVariable
     {
-        public GlobalVisID(CR2WFile cr2w) : base(cr2w) { }
-        public override CVariable Create(CR2WFile cr2w) => new GlobalVisID(cr2w);
+        public GlobalVisID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new GlobalVisID(cr2w, parent, name);
     }
 
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SMeshTypeResourceLODLevel : CVariable
     {
         [REDBuffer] public CFloat ResourceLODLevel { get; set; }
-        public SMeshTypeResourceLODLevel(CR2WFile cr2w) : base(cr2w) { }
-        public override CVariable Create(CR2WFile cr2w) => new SMeshTypeResourceLODLevel(cr2w);
+        public SMeshTypeResourceLODLevel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SMeshTypeResourceLODLevel(cr2w, parent, name);
     }
 }

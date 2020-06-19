@@ -17,13 +17,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("mode")] 		public CEnum<EPropertyCurveMode> Mode { get; set;}
 
-		public CPlayPropertyAnimationAction(CR2WFile cr2w) : base(cr2w){ }
+		public CPlayPropertyAnimationAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPlayPropertyAnimationAction(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CPlayPropertyAnimationAction(cr2w);
 
 	}
 }

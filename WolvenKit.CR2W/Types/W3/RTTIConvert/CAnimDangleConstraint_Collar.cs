@@ -17,13 +17,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("radius2")] 		public CFloat Radius2 { get; set;}
 
-		public CAnimDangleConstraint_Collar(CR2WFile cr2w) : base(cr2w){ }
+		public CAnimDangleConstraint_Collar(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAnimDangleConstraint_Collar(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CAnimDangleConstraint_Collar(cr2w);
 
 	}
 }

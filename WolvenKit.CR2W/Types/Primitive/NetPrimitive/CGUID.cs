@@ -11,10 +11,7 @@ namespace WolvenKit.CR2W.Types
     {
         public byte[] guid;
 
-        public CGUID(CR2WFile cr2w)
-            : base(cr2w)
-        {
-        }
+        public CGUID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         [DataMember]
         public string GuidString
@@ -50,9 +47,9 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
-            return new CGUID(cr2w);
+            return new CGUID(cr2w, parent, name);
         }
 
         public override CVariable Copy(CR2WCopyAction context)

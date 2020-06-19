@@ -9,13 +9,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPlayerStateDismountBoat : CPlayerStateDismountTheVehicle
 	{
-		public CPlayerStateDismountBoat(CR2WFile cr2w) : base(cr2w){ }
+		public CPlayerStateDismountBoat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPlayerStateDismountBoat(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
 		public override void Write(BinaryWriter file) => base.Write(file);
-
-		public override CVariable Create(CR2WFile cr2w) => new CPlayerStateDismountBoat(cr2w);
 
 	}
 }
