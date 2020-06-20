@@ -14,7 +14,7 @@ namespace WolvenKit.CR2W.Types
 
         public CFlags(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            flags = new CCompressedBuffer<CName>(cr2w, this, nameof(flags), _ => new CName(_, flags, ""));
+            flags = new CCompressedBuffer<CName>(cr2w, this, nameof(flags));
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -55,7 +55,7 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             return new CFlags(cr2w, parent, name);
         }

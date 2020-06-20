@@ -11,13 +11,11 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("cellSize")] 		public CFloat CellSize { get; set;}
 
-		public CSwarmCellMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		
 
-		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSwarmCellMap(cr2w, parent, name);
+		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSwarmCellMap(cr2w, parent, name);
 
-		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
-
-		public override void Write(BinaryWriter file) => base.Write(file);
+		
 
 	}
 }

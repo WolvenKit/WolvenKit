@@ -86,6 +86,6 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CColor(cr2w, parent, name);
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CColor(cr2w, parent, name);
     }
 }

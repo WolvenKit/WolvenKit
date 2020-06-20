@@ -49,7 +49,7 @@ namespace WolvenKit.CR2W.Types
             file.Write((ushort) 0);
         }
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             return new CVector(cr2w);
         }

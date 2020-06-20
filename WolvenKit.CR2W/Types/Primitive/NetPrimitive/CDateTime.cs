@@ -200,7 +200,7 @@ namespace WolvenKit.CR2W.Types
             file.Write(this.ToUInt64());
         }
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             return new CDateTime(cr2w, parent, name);
         }

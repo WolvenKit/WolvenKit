@@ -22,10 +22,8 @@ namespace WolvenKit.CR2W.Types
             buffername = new CName(cr2w, this, nameof(buffername));
             count = new CDynamicInt(cr2w, this, nameof(count));
             unk = new CUInt8(cr2w, this, nameof(unk));
-            buffer = new CCompressedBuffer<CBufferUInt16<CFloat>>(cr2w, this, nameof(buffer), 
-                _ => new CBufferUInt16<CFloat>(_, buffer, "innerbuffer", 
-                x => new CFloat(x, null, "value" )));
-            
+            buffer = new CCompressedBuffer<CBufferUInt16<CFloat>>(cr2w, this, nameof(buffer));
+
         }
 
         public override void Read(BinaryReader file, uint size)

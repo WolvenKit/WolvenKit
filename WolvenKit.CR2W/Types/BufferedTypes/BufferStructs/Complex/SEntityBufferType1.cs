@@ -54,7 +54,7 @@ namespace WolvenKit.CR2W.Types.Utils
             }
         }
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             return new SEntityBufferType1(cr2w, parent, name);
         }

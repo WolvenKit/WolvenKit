@@ -11,7 +11,7 @@ using WolvenKit.CR2W.Reflection;
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta()]
-    public class CBufferVLQInt32<T> : CArrayBase<T> where T : CVariable
+    public class CBufferVLQInt32<T> : CBufferBase<T> where T : CVariable
     {
         public CBufferVLQInt32(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
@@ -28,25 +28,10 @@ namespace WolvenKit.CR2W.Types
             count.val = elements.Count;
             count.Write(file);
 
-            foreach (var element in elements)
-            {
-                element.Write(file);
-            }
+            base.Write(file);
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
-        {
-            var copy = base.Copy(context) as CBufferVLQInt32<T>;
-
-            foreach (var element in elements)
-            {
-                copy.elements.Add(element.Copy(context) as T);
-            }
-
-            return copy;
-        }
-
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBufferVLQInt32<T>(cr2w, parent, name);
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBufferVLQInt32<T>(cr2w, parent, name);
     }
 
     

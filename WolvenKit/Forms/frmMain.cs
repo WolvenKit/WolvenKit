@@ -302,9 +302,9 @@ namespace WolvenKit
                 if (MainBackgroundWorker != null)
                 {
                     if (string.IsNullOrEmpty(Logger.Progress.Item2))
-                        MainBackgroundWorker.ReportProgress(Logger.Progress.Item1);
+                        MainBackgroundWorker.ReportProgress(Math.Min((int)Logger.Progress.Item1, 100));
                     else
-                        MainBackgroundWorker.ReportProgress(Logger.Progress.Item1, Logger.Progress.Item2);
+                        MainBackgroundWorker.ReportProgress(Math.Min((int)Logger.Progress.Item1, 100), Logger.Progress.Item2);
                 }
             }
         }
@@ -1560,6 +1560,7 @@ namespace WolvenKit
                 MainBackgroundWorker.RunWorkerAsync(args);
                 DialogResult dr = m_frmProgress.ShowDialog(this);
 
+                //WorkerLoadFile(null, new DoWorkEventArgs(args));
 
             }
             else
@@ -1589,9 +1590,15 @@ namespace WolvenKit
             try
             {
                 if (Args.Stream != null)
+                {
                     Args.Doc.LoadFile(Args.Filename, Args.Stream);
+                    return Args;
+                }
                 else
+                {
                     Args.Doc.LoadFile(Args.Filename);
+
+                } 
             }
             catch (InvalidFileTypeException ex)
             {
@@ -1623,7 +1630,9 @@ namespace WolvenKit
             }
 
             workerCompletedAction = WorkerLoadFileCompleted;
+            //WorkerLoadFileCompleted(arg);
             return Args;
+
         }
 
         /// <summary>
@@ -1641,8 +1650,8 @@ namespace WolvenKit
 
             #region SetupFile
             // Backgroundwork Start
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+            //Stopwatch stopwatch = new Stopwatch();
+            //stopwatch.Start();
 
             switch (Path.GetExtension(filename))
             {
@@ -1748,8 +1757,8 @@ namespace WolvenKit
             if (hasUnknownBytes)
                 output.Append("-------\n\n");
 
-            output.Append($"File {filename} loaded in: {stopwatch.Elapsed}\n\n");
-            stopwatch.Stop();
+            //output.Append($"File {filename} loaded in: {stopwatch.Elapsed}\n\n");
+            //stopwatch.Stop();
 
             AddOutput(output.ToString(), Logtype.Important);
             return doc;
@@ -2466,7 +2475,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                             if (File.Exists(oldmod.FileName))
                                 File.Delete(oldmod.FileName);
                         }
-                        catch (System.IO.IOException ex)
+                        catch (System.IO.IOException)
                         {
                             MessageBox.Show("Please check that you don't have Windows Explorer open at the old mod's path and that no folder/mod with that name already exists.", "Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
                             return;

@@ -3,6 +3,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Linq;
 using System;
+using System.IO.MemoryMappedFiles;
+using System.Threading.Tasks;
 
 namespace WolvenKit.CR2W
 {
@@ -86,11 +88,50 @@ namespace WolvenKit.CR2W
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // FIXME handle exceptions
                 throw new NotImplementedException();
             }
+        }
+
+        public /*async Task*/ void ReadData(MemoryMappedFile mmf)
+        {
+            //await Task.Run(() =>
+            //{
+                using (MemoryMappedViewStream vs = mmf.CreateViewStream(_embedded.dataOffset, _embedded.dataSize, MemoryMappedFileAccess.Read))
+                using (BinaryReader br = new BinaryReader(vs))
+                {
+                    Data = br.ReadBytes((int)_embedded.dataSize).ToList();
+
+                    try
+                    {
+                        parsedFile = new CR2WFile(Data.ToArray(), ParentFile.Logger);
+                        if (parsedFile != null)
+                        {
+                            if (parsedFile.chunks != null && parsedFile.chunks.Any())
+                                ClassName = parsedFile.chunks.FirstOrDefault().REDType;
+                        }
+
+                        if (ParentImports != null && ParentImports.Any())
+                        {
+                            if (ParentImports.Count > (int)Embedded.importIndex - 1)
+                            {
+                                var import = ParentImports[(int)Embedded.importIndex - 1];
+                                ImportClass = import.ClassNameStr;
+                                ImportPath = import.DepotPathStr;
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        // FIXME handle exceptions
+                        throw new NotImplementedException();
+                    }
+
+                }
+            //}
+            //);
         }
 
         public void WriteData(BinaryWriter file)

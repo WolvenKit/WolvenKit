@@ -40,6 +40,6 @@ namespace WolvenKit.CR2W.Types
             Data.Write(file);
         }
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPhysicalCollision(cr2w, parent, name);
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPhysicalCollision(cr2w, parent, name);
     }
 }

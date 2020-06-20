@@ -40,7 +40,7 @@ namespace WolvenKit.Wwise.Wwise
                 _dataIndex = null;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Console.WriteLine("Could not open soundbank, program is down");
                 Environment.Exit(0);

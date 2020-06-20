@@ -34,7 +34,8 @@ namespace WolvenKit.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
-            Value = cr2w.names[file.ReadUInt16()].Str;
+            var idx = file.ReadUInt16();
+            Value = cr2w.names[idx].Str;
 
             //handle EnumValues with Spaces in them. facepalm
             string finalvalue = Value.Replace(" ", string.Empty);
@@ -110,6 +111,6 @@ namespace WolvenKit.CR2W.Types
 
         public override string ToString() => Value;
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEnum<T>(cr2w, parent, name);
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEnum<T>(cr2w, parent, name);
     }
 }

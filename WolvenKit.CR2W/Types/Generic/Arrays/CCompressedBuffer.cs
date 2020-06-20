@@ -12,188 +12,38 @@ using WolvenKit.CR2W.Reflection;
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta()]
-    public class CCompressedBuffer<T> : CVariable, IList<T> where T : CVariable
+    public class CCompressedBuffer<T> : CBufferBase<T> where T : CVariable
     {
-        public List<T> elements = new List<T>();
-        public Func<CR2WFile, T> elementFactory;
 
-        private int m_count = -1;
-
-        public int Count => ((ICollection<T>)elements).Count;
-
-        public bool IsReadOnly => ((ICollection<T>)elements).IsReadOnly;
-
-        public T this[int index] { get => ((IList<T>)elements)[index]; set => ((IList<T>)elements)[index] = value; }
-
-        public CCompressedBuffer(CR2WFile cr2w, CVariable parent, string name, Func<CR2WFile, T> elementFactory) : base(cr2w, parent, name)
+        public CCompressedBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            this.elementFactory = elementFactory;
         }
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCompressedBuffer<T>(cr2w, parent, name);
+
+        public new void Read(BinaryReader file, uint size, int count)
         {
-            return new CCompressedBuffer<T>(cr2w, parent, name, elementFactory);
+            
+
+            base.Read(file, size, count);
+
+            
         }
 
-        public void Read(BinaryReader file, uint size, int count)
-        {
-            m_count = count;
-            Read(file, size);
-        }
-
+        /// <summary>
+        /// This should not be called for CCompressedBuffers. Call Read(BinaryReader file, uint size, int count) instead.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="size"></param>
         public override void Read(BinaryReader file, uint size)
         {
-            if (m_count == -1)
-                throw new Exception("Count not set for Compressed Buffer.");
-
-            for (int i = 0; i < m_count; i++)
-            {
-                T element = elementFactory.Invoke(cr2w);
-
-                element.Read(file, size);
-                elements.Add(element);
-            }
-        }
-
-        public override List<IEditableVariable> GetEditableVariables()
-        {
-            return new List<IEditableVariable>(elements);
+            throw new NotImplementedException();
         }
 
         public override void Write(BinaryWriter file)
         {
-            foreach (var element in elements)
-            {
-                element.Write(file);
-            }
+            base.Write(file);
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
-        {
-            var copy = base.Copy(context) as CCompressedBuffer<T>;
-
-            foreach (var element in elements)
-            {
-                copy.elements.Add(element.Copy(context) as T);
-            }
-
-            return copy;
-        }
-
-        public override CVariable CreateDefaultVariable()
-        {
-            return elementFactory.Invoke(cr2w);
-        }
-
-        public override bool CanAddVariable(IEditableVariable newvar)
-        {
-            return newvar == null || newvar is T;
-        }
-
-        public override string ToString()
-        {
-            var builder = new StringBuilder().Append(elements.Count);
-
-            if (elements.Count > 0)
-            {
-                builder.Append(":");
-
-                foreach (var element in elements)
-                {
-                    builder.Append(" <").Append(element.ToString()).Append(">");
-
-                    if (builder.Length > 100)
-                    {
-                        builder.Remove(100, builder.Length - 100);
-                        break;
-                    }
-                }
-            }
-
-            return builder.ToString();
-        }
-
-        public override bool CanRemoveVariable(IEditableVariable child)
-        {
-            return true;
-        }
-
-        public override bool RemoveVariable(IEditableVariable child)
-        {
-            if (child is T)
-            {
-                elements.Remove(child as T);
-                UpdateNames();
-                return true;
-            }
-            return false;
-        }
-
-        public override void AddVariable(CVariable variable)
-        {
-            if (variable is T)
-            {
-                variable.SetREDName(elements.Count.ToString());
-                elements.Add(variable as T);
-            }
-        }
-
-        private void UpdateNames()
-        {
-            for (int i = 0; i < elements.Count; i++)
-            {
-                elements[i].SetREDName(i.ToString());
-            }
-        }
-
-        public int IndexOf(T item)
-        {
-            return ((IList<T>)elements).IndexOf(item);
-        }
-
-        public void Insert(int index, T item)
-        {
-            ((IList<T>)elements).Insert(index, item);
-        }
-
-        public void RemoveAt(int index)
-        {
-            ((IList<T>)elements).RemoveAt(index);
-        }
-
-        public void Add(T item)
-        {
-            AddVariable(item);
-        }
-
-        public void Clear()
-        {
-            ((ICollection<T>)elements).Clear();
-        }
-
-        public bool Contains(T item)
-        {
-            return ((ICollection<T>)elements).Contains(item);
-        }
-
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            ((ICollection<T>)elements).CopyTo(array, arrayIndex);
-        }
-
-        public bool Remove(T item)
-        {
-            return RemoveVariable(item);
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return ((IEnumerable<T>)elements).GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable)elements).GetEnumerator();
-        }
     }
 }

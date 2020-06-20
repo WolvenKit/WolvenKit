@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.App;
@@ -173,17 +175,33 @@ namespace WolvenKit
 
         public void LoadFile(string filename)
         {
-            using (var fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
+
+            using (var fs = MemoryMappedFile.CreateFromFile(filename, FileMode.Open))
+            //using (var fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
             {
                 loadFile(fs, filename);
 
-                fs.Close();
+                //fs.Close();
             }
         }
 
         public void LoadFile(string filename, Stream stream)
         {
             loadFile(stream, filename);
+        }
+
+        private void loadFile(MemoryMappedFile mmf, string filename)
+        {
+            FormText = Path.GetFileName(filename) + " [" + filename + "]";
+
+            var cr2w = new CR2WFile(mmf, MainController.Get().Logger)
+            {
+                FileName = filename,
+                EditorController = UIController.Get(),
+                LocalizedStringSource = MainController.Get()
+            };
+
+            File = cr2w.Read(mmf);
         }
 
         private void loadFile(Stream stream, string filename)

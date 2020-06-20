@@ -28,7 +28,7 @@ namespace WolvenKit.CR2W.Types
         {
             // This has a fixed size in memory, but for some reason file format is allowed to not provide all,
             // leaving the rest to zero values. Possibly has individual fields instead of an array.
-            values = new CCompressedBuffer<CFloat>(cr2w, this, nameof(values), _ => new CFloat(_, values, ""));
+            values = new CCompressedBuffer<CFloat>(cr2w, this, nameof(values));
             valueCount = new CUInt16(cr2w, this, "count") { val = 16 };
 
             
@@ -43,7 +43,7 @@ namespace WolvenKit.CR2W.Types
             return copy;
         }
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             return new CurvePiece(cr2w, parent, name);
         }

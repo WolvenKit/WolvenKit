@@ -25,7 +25,7 @@ namespace WolvenKit.CR2W.Types
 
 
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             return new SUmbraSceneData(cr2w, parent, name);
         }

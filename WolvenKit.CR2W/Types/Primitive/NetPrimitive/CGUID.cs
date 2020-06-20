@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using WolvenKit.CR2W.Reflection;
@@ -30,6 +31,8 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
+
+
         public override void Read(BinaryReader file, uint size)
         {
             guid = file.ReadBytes(16);
@@ -50,7 +53,7 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             return new CGUID(cr2w, parent, name);
         }

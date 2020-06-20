@@ -26,7 +26,7 @@ namespace WolvenKit.CR2W.Types
         {
 
             blocksize = new CVLQInt32(cr2w, this, nameof(blocksize));
-            BlockData = new CCompressedBuffer<SBlockData>(cr2w, this, nameof(BlockData),  _ => new SBlockData(_, BlockData, ""));
+            BlockData = new CCompressedBuffer<SBlockData>(cr2w, this, nameof(BlockData));
         }
 
 
@@ -39,7 +39,7 @@ namespace WolvenKit.CR2W.Types
             for (int i = 0; i < Objects.elements.Count; i++)
             {
                 
-                CSectorDataObject curobj = (CSectorDataObject)Objects.GetEditableVariables()[i];
+                CSectorDataObject curobj = Objects[i];
 
                 ulong curoffset = curobj.offset.val;
                 byte type = curobj.type.val;
@@ -52,7 +52,7 @@ namespace WolvenKit.CR2W.Types
                 ulong len;
                 if (i < Objects.elements.Count - 1)
                 {
-                    CSectorDataObject nextobj = (CSectorDataObject)Objects.GetEditableVariables()[i + 1];
+                    CSectorDataObject nextobj = Objects[i + 1];
                     ulong nextoffset = nextobj.offset.val;
                     len = nextoffset - curoffset;
                 }

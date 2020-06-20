@@ -41,7 +41,7 @@ namespace WolvenKit.CR2W.Types
             tail.Write(file);
         }
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             return new SBlockData(cr2w, parent, name);
         }

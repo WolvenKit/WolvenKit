@@ -251,9 +251,14 @@ paket-files/
 .idea/
 *.sln.iml
 
+# Ignore VTune Profiler
+WolvenKit/VTune Profiler Results/
+
 # Ignore folders
 W3Edit.Render/Models/**
 !W3Edit.Render/Models/**
 
 # Ignore nuget packages
 packages/**
+
+

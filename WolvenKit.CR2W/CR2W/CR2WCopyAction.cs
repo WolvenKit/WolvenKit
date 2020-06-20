@@ -297,9 +297,9 @@ namespace WolvenKit.CR2W
             CStoryScene CStorySceneSource = SourceFile.GetChunkByType("CStoryScene").data as CStoryScene;
             CArray<StorySceneCameraDefinition> cameraInstancesSource = CStorySceneSource.CameraDefinitions;
 
-            foreach (var e in storysection.sceneEventElements)
+            foreach (CVariantSizeTypeName e in storysection.sceneEventElements)
             {
-                if (e != null && e is CStorySceneEventCustomCameraInstance && e.REDType == "CStorySceneEventCustomCameraInstance")
+                if (e != null && e.REDType == "CStorySceneEventCustomCameraInstance")
                 {
                     var v = (CStorySceneEventCustomCameraInstance) e.Variable;
                     CName n = v.CustomCameraName;

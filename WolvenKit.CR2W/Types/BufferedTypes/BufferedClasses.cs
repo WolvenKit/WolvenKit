@@ -1,4 +1,5 @@
-﻿using WolvenKit.CR2W.Reflection;
+﻿using System.IO;
+using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -74,7 +75,7 @@ namespace WolvenKit.CR2W.Types
 
     public partial class CCutsceneTemplate : CSkeletalAnimationSet
     {
-        [REDBuffer] public CUInt32 unk1 { get; set; }
+        [REDBuffer] public CUInt32 unk11 { get; set; }
         [REDBuffer] public CBufferUInt32<CVariantSizeType> animevents { get; set; }
     }
     public partial class CEntityTemplate : CResource
@@ -180,15 +181,59 @@ namespace WolvenKit.CR2W.Types
         [REDBuffer()] public CFloat CellSize1 { get; set; }
         [REDBuffer()] public CInt32 DataSizeBits1 { get; set; }
         [REDBuffer()] public CUInt16 DataSize1 { get; set; }
-        [REDBuffer()] public CByteArray Data { get; set; }
-        [REDBuffer()] public CFloat CornerPositionX { get; set; }
-        [REDBuffer()] public CFloat CornerPositionY { get; set; }
-        [REDBuffer()] public CFloat CornerPositionZ { get; set; }
-        [REDBuffer()] public CInt32 DataSizeX { get; set; }
-        [REDBuffer()] public CInt32 DataSizeY { get; set; }
-        [REDBuffer()] public CInt32 DataSizeZ { get; set; }
-        [REDBuffer()] public CInt32 DataSizeBits { get; set; }
-        [REDBuffer()] public CFloat SizeInKbytes { get; set; }
+        [REDBuffer(true)] public CBytes Data { get; set; }
+        [REDBuffer(true)] public CFloat CornerPositionX { get; set; }
+        [REDBuffer(true)] public CFloat CornerPositionY { get; set; }
+        [REDBuffer(true)] public CFloat CornerPositionZ { get; set; }
+        [REDBuffer(true)] public CInt32 DataSizeX { get; set; }
+        [REDBuffer(true)] public CInt32 DataSizeY { get; set; }
+        [REDBuffer(true)] public CInt32 DataSizeZ { get; set; }
+        [REDBuffer(true)] public CInt32 DataSizeBits { get; set; }
+        [REDBuffer(true)] public CFloat SizeInKbytes { get; set; }
+
+        public CSwarmCellMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        {
+            Data = new CBytes(cr2w, this, nameof(Data));
+            CornerPositionX = new CFloat(cr2w, this, nameof(CornerPositionX));
+            CornerPositionY = new CFloat(cr2w, this, nameof(CornerPositionY));
+            CornerPositionZ = new CFloat(cr2w, this, nameof(CornerPositionZ));
+            DataSizeX = new CInt32(cr2w, this, nameof(DataSizeX));
+            DataSizeY = new CInt32(cr2w, this, nameof(DataSizeY));
+            DataSizeZ = new CInt32(cr2w, this, nameof(DataSizeZ));
+            DataSizeBits = new CInt32(cr2w, this, nameof(DataSizeBits));
+            SizeInKbytes = new CFloat(cr2w, this, nameof(SizeInKbytes));
+        }
+
+        public override void Read(BinaryReader file, uint size)
+        {
+            base.Read(file, size);
+
+            Data.Read(file, (uint)((file.BaseStream.Length - 32) - file.BaseStream.Position));
+            CornerPositionX.Read(file, size);
+            CornerPositionY.Read(file, size);
+            CornerPositionZ.Read(file, size);
+            DataSizeX.Read(file, size);
+            DataSizeY.Read(file, size);
+            DataSizeZ.Read(file, size);
+            DataSizeBits.Read(file, size);
+            SizeInKbytes.Read(file, size);
+        }
+
+        public override void Write(BinaryWriter file)
+        {
+            base.Write(file);
+
+            Data.Write(file);
+            CornerPositionX.Write(file);
+            CornerPositionY.Write(file);
+            CornerPositionZ.Write(file);
+            DataSizeX.Write(file);
+            DataSizeY.Write(file);
+            DataSizeZ.Write(file);
+            DataSizeBits.Write(file);
+            SizeInKbytes.Write(file);
+
+        }
     }
 
     public partial class CSwfResource : CResource

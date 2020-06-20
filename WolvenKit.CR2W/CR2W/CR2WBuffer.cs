@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace WolvenKit.CR2W
 {
@@ -55,6 +57,19 @@ namespace WolvenKit.CR2W
         {
             file.BaseStream.Seek(_buffer.offset, SeekOrigin.Begin);
             Data = file.ReadBytes((int) _buffer.memSize);
+        }
+
+        public /*async Task*/ void ReadData(MemoryMappedFile mmf)
+        {
+            //await Task.Run(() =>
+            //{
+                using (MemoryMappedViewStream vs = mmf.CreateViewStream(_buffer.offset, _buffer.memSize, MemoryMappedFileAccess.Read))
+                using (BinaryReader br = new BinaryReader(vs))
+                {
+                    Data = br.ReadBytes((int)_buffer.memSize);
+                }
+            //}
+            //);
         }
 
         public void WriteData(BinaryWriter file)

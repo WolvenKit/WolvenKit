@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
 
 		public override void Write(BinaryWriter file) => base.Write(file);
 
-		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new Vector3(cr2w, parent, name);
+		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new Vector3(cr2w, parent, name);
 
 	}
 }

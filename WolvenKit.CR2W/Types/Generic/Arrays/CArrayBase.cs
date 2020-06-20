@@ -16,15 +16,13 @@ namespace WolvenKit.CR2W.Types
 {
 
     [REDMeta()]
-    public abstract class CArrayBase<T> : CVariable, IList<T>, IList where T : CVariable
+    public abstract class CArrayBase<T> : CVariable, IList<T>, IList where T : IEditableVariable
     {
         public CArrayBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         #region Properties
         public List<T> elements { get; set; } = new List<T>();
 
-        //[Browsable(false)]
-        //public int elementcount { get; set; }
 
         [Browsable(false)]
         public List<int> Flags { get; set; }
@@ -68,16 +66,13 @@ namespace WolvenKit.CR2W.Types
                 CVariable element = CR2WTypeManager.Create(redtype, i.ToString(), cr2w, this);
 
                 element.Read(file, 0);
-                elements.Add(element as T);
+                if (element is T te)
+                    elements.Add(te);
             }
         }
 
         public override void Write(BinaryWriter file)
         {
-            CUInt32 count = new CUInt32(cr2w, null, "");
-            count.val = (uint)elements.Count;
-            count.Write(file);
-
             foreach (var element in elements)
             {
                 element.Write(file);
@@ -91,10 +86,10 @@ namespace WolvenKit.CR2W.Types
 
         public override void AddVariable(CVariable variable)
         {
-            if (variable is T)
+            if (variable is T tvar)
             {
                 variable.SetREDName(elements.Count.ToString());
-                elements.Add(variable as T);
+                elements.Add(tvar);
             }
         }
         public override bool CanRemoveVariable(IEditableVariable child)
@@ -104,9 +99,9 @@ namespace WolvenKit.CR2W.Types
 
         public override bool RemoveVariable(IEditableVariable child)
         {
-            if (child is T)
+            if (child is T tvar)
             {
-                elements.Remove(child as T);
+                elements.Remove(tvar);
                 UpdateNames();
                 return true;
             }
@@ -144,6 +139,19 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
+        public override CVariable Copy(CR2WCopyAction context)
+        {
+            var copy = base.Copy(context) as CArrayBase<T>;
+
+            foreach (var element in elements)
+            {
+                var ccopy = element.Copy(context);
+                if (ccopy is T copye)
+                    copy.elements.Add(copye);
+            }
+
+            return copy;
+        }
 
         #region interface implements
 
@@ -191,7 +199,7 @@ namespace WolvenKit.CR2W.Types
 
         public void Add(T item)
         {
-            AddVariable(item);
+            AddVariable(item as CVariable);
         }
 
         public void Clear()
@@ -216,9 +224,9 @@ namespace WolvenKit.CR2W.Types
 
         public int Add(object value)
         {
-            if (value is T cvar)
+            if (value is T tvar)
             {
-                AddVariable(cvar);
+                AddVariable(tvar as CVariable);
                 return elements.Count;
             }
             return -1;

@@ -23,7 +23,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("entityFlags")] 		public CUInt8 EntityFlags { get; set;}
 
-		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEntity(cr2w, parent, name);
+		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEntity(cr2w, parent, name);
 
 	}
 }

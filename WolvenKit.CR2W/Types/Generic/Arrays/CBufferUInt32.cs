@@ -11,131 +11,28 @@ using WolvenKit.CR2W.Reflection;
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta()]
-    public class CBufferUInt32<T> : CVariable where T : IEditableVariable
+    public class CBufferUInt32<T> : CBufferBase<T> where T : CVariable
     {
-        public List<T> elements = new List<T>();
-        public Func<CR2WFile, T> elementFactory;
-
-        public CBufferUInt32(CR2WFile cr2w, CVariable parent, string name, Func<CR2WFile, T> elementFactory) : base(cr2w, parent, name)
+        public CBufferUInt32(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            this.elementFactory = elementFactory;
         }
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CBufferUInt32<T>(cr2w, parent, name, elementFactory);
-        }
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBufferUInt32<T>(cr2w, parent, name);
 
         public override void Read(BinaryReader file, uint size)
         {
-            var count = file.ReadUInt32();
-
-            for (int i = 0; i < count; i++)
-            {
-                T element = elementFactory.Invoke(cr2w);
-
-                element.Read(file, size);
-                elements.Add(element);
-            }
-        }
-
-        public override List<IEditableVariable> GetEditableVariables()
-        {
-            var ret = new List<IEditableVariable>();
-            ret.AddRange(elements.Cast<IEditableVariable>());
-            return ret;
+            base.Read(file, size, (int)file.ReadUInt32());
         }
 
         public override void Write(BinaryWriter file)
         {
-            CUInt32 count = new CUInt32(cr2w, null, "");
-            count.val = (uint)elements.Count;
+            CUInt32 count = new CUInt32(cr2w, null, "")
+            {
+                val = (uint)elements.Count
+            };
             count.Write(file);
 
-            foreach (var element in elements)
-            {
-                element.Write(file);
-            }
-        }
-
-        public override CVariable Copy(CR2WCopyAction context)
-        {
-            var copy = base.Copy(context) as CBufferUInt32<T>;
-
-            foreach (var element in elements)
-            {
-                var ccopy = element.Copy(context);
-                if (ccopy is T copye)
-                    copy.elements.Add(copye);
-            }
-
-            return copy;
-        }
-
-        public override CVariable CreateDefaultVariable()
-        {
-            return elementFactory.Invoke(cr2w) as CVariable;
-        }
-
-        public override bool CanAddVariable(IEditableVariable newvar)
-        {
-            return newvar == null || newvar is T;
-        }
-
-        public override string ToString()
-        {
-            var builder = new StringBuilder().Append(elements.Count);
-
-            if (elements.Count > 0)
-            {
-                builder.Append(":");
-
-                foreach (var element in elements)
-                {
-                    builder.Append(" <").Append(element.ToString()).Append(">");
-
-                    if (builder.Length > 100)
-                    {
-                        builder.Remove(100, builder.Length - 100);
-                        break;
-                    }
-                }
-            }
-
-            return builder.ToString();
-        }
-
-        public override bool CanRemoveVariable(IEditableVariable child)
-        {
-            return true;
-        }
-
-        public override bool RemoveVariable(IEditableVariable child)
-        {
-            if (child is T tchild)
-            {
-                elements.Remove(tchild);
-                UpdateNames();
-                return true;
-            }
-            return false;
-        }
-
-        public override void AddVariable(CVariable variable)
-        {
-            if (variable is T tvar)
-            {
-                variable.SetREDName(elements.Count.ToString());
-                elements.Add(tvar);
-            }
-        }
-
-        private void UpdateNames()
-        {
-            for (int i = 0; i < elements.Count; i++)
-            {
-                elements[i].SetREDName(i.ToString());
-            }
+            base.Write(file);
         }
     }
 }

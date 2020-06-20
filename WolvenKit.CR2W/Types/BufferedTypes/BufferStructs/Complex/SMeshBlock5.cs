@@ -39,7 +39,7 @@ namespace WolvenKit.CR2W.Types
             unk1.Write(file);
         }
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             return new SMeshBlock5(cr2w, parent, name);
         }

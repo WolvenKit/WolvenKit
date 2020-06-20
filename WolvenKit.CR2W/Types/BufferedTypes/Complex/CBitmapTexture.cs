@@ -27,9 +27,9 @@ namespace WolvenKit.CR2W.Types
         {
 
 
-            Mipdata = new CCompressedBuffer<SMipData>(cr2w, this, nameof(Mipdata), _ => new SMipData(_, Mipdata, ""));
+            Mipdata = new CCompressedBuffer<SMipData>(cr2w, this, nameof(Mipdata));
             unk2 = new CUInt32(cr2w, this, nameof(unk2));
-            Mips = new CCompressedBuffer<CByteArray>(cr2w, this, nameof(Mips), _ => new CByteArray(_, Mips, ""));
+            Mips = new CCompressedBuffer<CByteArray>(cr2w, this, nameof(Mips));
             ResidentmipSize = new CUInt32(cr2w, this, nameof(ResidentmipSize));
             Residentmip = new CBytes(cr2w, this, nameof(Residentmip));
         }

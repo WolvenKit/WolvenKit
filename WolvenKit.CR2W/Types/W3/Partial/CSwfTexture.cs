@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("linkageName")] 		public CString LinkageName { get; set;}
 
-		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSwfTexture(cr2w, parent, name);
+		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSwfTexture(cr2w, parent, name);
 
 	}
 }

@@ -11,6 +11,9 @@ using System.Runtime.Serialization;
 using System.Xml;
 using WolvenKit.Utils;
 using System.Linq;
+using System.IO.MemoryMappedFiles;
+using System.Threading.Tasks;
+using System.Diagnostics;
 
 [assembly: ContractNamespaceAttribute("",    ClrNamespace = "WolvenKit.CR2W")]
 
@@ -176,12 +179,6 @@ namespace WolvenKit.CR2W
         }
         public void SetOffset(uint offset) => _export.dataOffset = offset;
 
-
-        public CVariable CreateDefaultVariable()
-        {
-            throw new NotImplementedException();
-        }
-
         public CR2WExportWrapper GetParent()
         {
             try
@@ -240,10 +237,10 @@ namespace WolvenKit.CR2W
             CreateDefaultData();
 
             data.Read(file, _export.dataSize);
+
+            // Unknown bytes
             var bytesLeft = _export.dataSize - (file.BaseStream.Position - _export.dataOffset);
-
             unknownBytes = new CBytes(cr2w, data, "unknownBytes");
-
             if (bytesLeft > 0)
             {
                 unknownBytes.Read(file, (uint) bytesLeft);
@@ -257,6 +254,88 @@ namespace WolvenKit.CR2W
                 unknownBytes.Bytes = new byte[0];
             }
         }
+
+        public /*async Task*/ void ReadData(MemoryMappedFile mmf)
+        {
+            //await Task.Run(() =>
+            //{
+                using (MemoryMappedViewStream vs = mmf.CreateViewStream(_export.dataOffset, _export.dataSize, MemoryMappedFileAccess.Read))
+                using (BinaryReader br = new BinaryReader(vs))
+                {
+                    CreateDefaultData();
+
+                    data.Read(br, _export.dataSize);
+
+                    // Unknown bytes
+                    var bytesLeft = _export.dataSize - (br.BaseStream.Position - _export.dataOffset);
+                    unknownBytes = new CBytes(cr2w, data, "unknownBytes");
+                    if (bytesLeft > 0)
+                    {
+                        unknownBytes.Read(br, (uint)bytesLeft);
+                    }
+                    else if (bytesLeft < 0)
+                    {
+                        //throw new InvalidParsingException("File read too far.");
+                    }
+                    else
+                    {
+                        unknownBytes.Bytes = new byte[0];
+                    }
+
+                    if (cr2w.Logger!= null)
+                    {
+                        float percentprogress = (float)((float)1 / (float)cr2w.chunks.Count * 100.0);
+                        cr2w.Logger.LogProgressInc(percentprogress, $"Reading chunk {REDName}...");
+                    }
+                    
+                }
+            //}
+            //);
+        }
+
+
+        public /*async Task*/ void ReadData(MemoryMappedViewStream vs)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            //await Task.Run(() =>
+            //{
+            using (BinaryReader br = new BinaryReader(vs))
+            {
+                CreateDefaultData();
+
+                data.Read(br, _export.dataSize);
+
+                // Unknown bytes
+                var bytesLeft = _export.dataSize - (br.BaseStream.Position - _export.dataOffset);
+                unknownBytes = new CBytes(cr2w, data, "unknownBytes");
+                if (bytesLeft > 0)
+                {
+                    unknownBytes.Read(br, (uint)bytesLeft);
+                }
+                else if (bytesLeft < 0)
+                {
+                    //throw new InvalidParsingException("File read too far.");
+                }
+                else
+                {
+                    unknownBytes.Bytes = new byte[0];
+                }
+
+                stopwatch.Stop();
+                if (cr2w.Logger != null)
+                {
+                    float percentprogress = (float)((float)1 / (float)cr2w.chunks.Count * 100.0);
+                    cr2w.Logger.LogProgressInc(percentprogress, $"Reading chunk {REDName}...");
+                    //cr2w.Logger.LogString($"{stopwatch.Elapsed} CHUNK {REDName}\n");
+                }
+
+            }
+            //}
+            //);
+        }
+
 
         public void WriteData(BinaryWriter file)
         {

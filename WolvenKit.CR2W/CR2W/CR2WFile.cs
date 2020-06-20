@@ -1,12 +1,14 @@
 ﻿using RED.CRC32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
@@ -20,6 +22,16 @@ namespace WolvenKit.CR2W
     [ DataContract(Namespace = "") ]
     public class CR2WFile
     {
+        #region Constants
+        private const long MAGIC_SIZE = 4;
+        private const long FILEHEADER_SIZE = 36;
+        private const long TABLEHEADER_SIZE = 12 * 10;
+        private readonly int[] TABLES_SIZES = new int[6] { 8, 8, 16, 24, 24, 24 };
+
+
+        #endregion
+
+
         #region Constructor
         public CR2WFile()
         {
@@ -45,6 +57,15 @@ namespace WolvenKit.CR2W
                 Logger = logger;
 
             Read(file);
+        }
+        public CR2WFile(MemoryMappedFile file, LoggerService logger = null)
+        {
+            if (logger == null)
+                Logger = new LoggerService();   //dummy that can't log to UI, not really needed bc we check later anyway. but hey
+            else
+                Logger = logger;
+
+            //await Read(file);
         }
         public CR2WFile(byte[] data, LoggerService logger)
         {
@@ -74,7 +95,7 @@ namespace WolvenKit.CR2W
         // misc
         private uint headerOffset = 0;
         private bool m_hasInternalBuffer;
-        private Stream m_stream; //handle this better?
+        //private Stream m_stream; //handle this better?
         // private string m_filePath;
         #endregion
 
@@ -130,34 +151,37 @@ namespace WolvenKit.CR2W
         #region Read
         public void Read(BinaryReader file)
         {
-            m_stream = file.BaseStream;
+            //m_stream = file.BaseStream;
+
+            Stopwatch stopwatch1 = new Stopwatch();
+            stopwatch1.Start();
 
             #region Read Headers
             if (Logger != null) Logger.LogProgress(1, "Reading headers...");
             // read file header
-            var id = ReadStruct<uint>();
+            var id = file.BaseStream.ReadStruct<uint>();
             if (id != MAGIC)
                 throw new FormatException($"Not a CR2W file, Magic read as 0x{id:X8}");
 
-            m_fileheader = ReadStruct<CR2WFileHeader>();
+            m_fileheader = file.BaseStream.ReadStruct<CR2WFileHeader>();
             if (m_fileheader.version > 163 || m_fileheader.version < 159)
                 throw new FormatException($"Unknown Version {m_fileheader.version}. Supported versions: 159 - 163.");
 
             var dt = new CDateTime(m_fileheader.timeStamp, null, "");
 
-            m_tableheaders = ReadStructs<CR2WTable>(10);
+            m_tableheaders = file.BaseStream.ReadStructs<CR2WTable>(10);
             m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
 
             // read strings
-            m_strings = ReadStringsBuffer();
+            m_strings = ReadStringsBuffer(file.BaseStream);
             
             // read tables
-            names = ReadTable<CR2WName>(1).Select(_ => new CR2WNameWrapper(_, this)).ToList();
-            imports = ReadTable<CR2WImport>(2).Select(_ => new CR2WImportWrapper(_, this)).ToList();
-            properties = ReadTable<CR2WProperty>(3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
-            chunks = ReadTable<CR2WExport>(4).Select(_ => new CR2WExportWrapper(_, this)).ToList();
-            buffers = ReadTable<CR2WBuffer>(5).Select(_ => new CR2WBufferWrapper(_)).ToList();
-            embedded = ReadTable<CR2WEmbedded>(6).Select(_ => new CR2WEmbeddedWrapper(_)
+            names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this)).ToList();
+            imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this)).ToList();
+            properties = ReadTable<CR2WProperty>(file.BaseStream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
+            chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this)).ToList();
+            buffers = ReadTable<CR2WBuffer>(file.BaseStream, 5).Select(_ => new CR2WBufferWrapper(_)).ToList();
+            embedded = ReadTable<CR2WEmbedded>(file.BaseStream, 6).Select(_ => new CR2WEmbeddedWrapper(_)
             {
                 ParentFile = this,
                 ParentImports = imports,
@@ -173,7 +197,15 @@ namespace WolvenKit.CR2W
             for (int i = 0; i < chunks.Count; i++)
             {
                 CR2WExportWrapper chunk = chunks[i];
+
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+
                 chunk.ReadData(file);
+
+                if (Logger != null) Logger.LogString($"{stopwatch.Elapsed} CHUNK {chunk.REDName}\n");
+                stopwatch.Stop();
+
 
                 int percentprogress = (int)((float)i / (float)chunks.Count * 100.0);
                 if (Logger != null) Logger.LogProgress(percentprogress, $"Reading chunk {chunk.REDName}...");
@@ -203,6 +235,176 @@ namespace WolvenKit.CR2W
 
             // dbg
             // check self
+            //(var nameslist, var importslist) = GenerateStringtable();
+
+            //for (int i = 0; i < nameslist.Count; i++)
+            //{
+            //    if (nameslist[i] != this.StringDictionary.Values.ToList()[i])
+            //    {
+            //        throw new NotImplementedException();
+            //    }
+            //}
+
+            if (Logger != null) Logger.LogString($"File {FileName} loaded in: {stopwatch1.Elapsed}\n");
+            stopwatch1.Stop();
+
+            //m_stream = null;
+        }
+
+
+        public CR2WFile Read(MemoryMappedFile mmf)
+        {
+            Stopwatch stopwatch1 = new Stopwatch();
+            stopwatch1.Start();
+            long offset = 0;
+
+            #region Magic
+            long curviewstreamsize = MAGIC_SIZE;
+            using (MemoryMappedViewStream viewstream = mmf.CreateViewStream(offset, curviewstreamsize, MemoryMappedFileAccess.Read))
+            {
+                if (Logger != null) Logger.LogProgress(1, "Reading headers...");
+                // read file header
+                var id = viewstream.ReadStruct<uint>();
+                if (id != MAGIC)
+                    throw new FormatException($"Not a CR2W file, Magic read as 0x{id:X8}");
+                offset += curviewstreamsize;
+            }
+            #endregion
+
+            #region FileHeader
+            curviewstreamsize = FILEHEADER_SIZE;
+            using (MemoryMappedViewStream viewstream = mmf.CreateViewStream(offset, curviewstreamsize, MemoryMappedFileAccess.Read))
+            {
+                m_fileheader = viewstream.ReadStruct<CR2WFileHeader>();
+                if (m_fileheader.version > 163 || m_fileheader.version < 159)
+                    throw new FormatException($"Unknown Version {m_fileheader.version}. Supported versions: 159 - 163.");
+
+                offset += curviewstreamsize;
+            }
+            #endregion
+
+            #region Read tableheaders
+            curviewstreamsize = TABLEHEADER_SIZE;
+            using (MemoryMappedViewStream viewstream = mmf.CreateViewStream(offset, curviewstreamsize, MemoryMappedFileAccess.Read))
+            {
+                var dt = new CDateTime(m_fileheader.timeStamp, null, "");
+
+                m_tableheaders = viewstream.ReadStructs<CR2WTable>(10);
+                m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
+
+                offset += curviewstreamsize;
+            }
+            #endregion
+
+            #region Read StringsBuffer
+            curviewstreamsize = (long)m_tableheaders[0].size;
+            using (MemoryMappedViewStream viewstream = mmf.CreateViewStream(offset, curviewstreamsize, MemoryMappedFileAccess.Read))
+            {
+                // read strings
+                m_strings = ReadStringsBuffer(viewstream);
+
+                offset += curviewstreamsize;
+            }
+            #endregion
+
+            #region Read tables
+            int totalsize = 0;
+            for (int i = 0; i < 6; i++)
+            {
+                totalsize += ((int)m_tableheaders[i + 1].size * TABLES_SIZES[i]);
+            }
+
+            curviewstreamsize = (long)totalsize;
+            using (MemoryMappedViewStream viewstream = mmf.CreateViewStream(offset, curviewstreamsize, MemoryMappedFileAccess.Read))
+            {
+                // read tables
+                names = ReadTable<CR2WName>(viewstream, 1).Select(_ => new CR2WNameWrapper(_, this)).ToList();
+                imports = ReadTable<CR2WImport>(viewstream, 2).Select(_ => new CR2WImportWrapper(_, this)).ToList();
+                properties = ReadTable<CR2WProperty>(viewstream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
+                chunks = ReadTable<CR2WExport>(viewstream, 4).Select(_ => new CR2WExportWrapper(_, this)).ToList();
+                buffers = ReadTable<CR2WBuffer>(viewstream, 5).Select(_ => new CR2WBufferWrapper(_)).ToList();
+                embedded = ReadTable<CR2WEmbedded>(viewstream, 6).Select(_ => new CR2WEmbeddedWrapper(_)
+                {
+                    ParentFile = this,
+                    ParentImports = imports,
+                    Handle = StringDictionary[_.path],
+                }).ToList();
+
+                offset += curviewstreamsize;
+            }
+            #endregion
+
+            if (Logger != null) Logger.LogProgress(25);
+
+            #region Read Chunks
+            
+
+            var tasks = new List<Task>();
+
+            if (Logger != null) Logger.LogProgress(1, "Reading chunks...");
+            // Read object data //block 5
+            for (int i = 0; i < chunks.Count; i++)
+            {
+                CR2WExportWrapper chunk = chunks[i];
+
+                tasks.Add(Task.Run(() =>
+                chunk.ReadData(mmf)
+                    ))
+                    ;
+            }
+
+
+            Task.WaitAll(tasks.ToArray());
+
+            if (Logger != null) Logger.LogProgress(50);
+            //if (Logger != null) Logger.LogString($"{stopwatch1.Elapsed} CHUNKS\n");
+
+
+            #endregion
+
+
+
+
+            #region Read Buffers
+            // Read buffer data //block 6
+            if (m_hasInternalBuffer)
+            {
+                for (int i = 0; i < buffers.Count; i++)
+                {
+                    CR2WBufferWrapper buffer = buffers[i];
+                    buffer.ReadData(mmf);
+
+                    int percentprogress = (int)((float)i / (float)buffers.Count * 100.0);
+                    if (Logger != null) Logger.LogProgress(percentprogress);
+                }
+            }
+
+            if (Logger != null) Logger.LogProgress(75);
+            //if (Logger != null) Logger.LogString($"{stopwatch1.Elapsed} BUFFERS\n");
+            #endregion
+
+
+
+            #region Read embedded files
+            // Read embedded files //block 7
+            for (int i = 0; i < embedded.Count; i++)
+            {
+                CR2WEmbeddedWrapper emb = embedded[i];
+                emb.ReadData(mmf);
+
+                int percentprogress = (int)((float)i / (float)embedded.Count * 100.0);
+                if (Logger != null) Logger.LogProgress(percentprogress, $"Reading embedded file {emb.ClassName}...");
+            }
+
+            if (Logger != null) Logger.LogProgress(100);
+            //if (Logger != null) Logger.LogString($"{stopwatch1.Elapsed} EMBEDDED\n");
+            #endregion
+
+
+            stopwatch1.Stop();
+
+            // dbg
+            // check self
             (var nameslist, var importslist) = GenerateStringtable();
 
             for (int i = 0; i < nameslist.Count; i++)
@@ -213,40 +415,22 @@ namespace WolvenKit.CR2W
                 }
             }
 
-            m_stream = null;
+            if (Logger != null) Logger.LogString($"File {FileName} loaded in: {stopwatch1.Elapsed}\n");
+            stopwatch1.Stop();
+
+
+            return this;
         }
-
-
-
 
         #endregion
 
 
-        public static void WriteVariable(BinaryWriter file, IEditableVariable ivar)
-        {
-            if (ivar is CVariable cvar)
-            {
-                file.Write(cvar.GetnameId());
-                file.Write(cvar.GettypeId());
-
-                var pos = file.BaseStream.Position;
-                file.Write((uint)0); // size placeholder
-
-
-                cvar.Write(file);
-                var endpos = file.BaseStream.Position;
-
-                file.Seek((int)pos, SeekOrigin.Begin);
-                var actualsize = (uint)(endpos - pos);
-                file.Write(actualsize); // Write size
-                file.Seek((int)endpos, SeekOrigin.Begin);
-            }
-            else
-                throw new SerializationException();
-        }
 
         public CVariable ReadVariable(BinaryReader file, CVariable parent)
         {
+            //Stopwatch stopwatch = new Stopwatch();
+            //stopwatch.Start();
+
             // Read Name
             var nameId = file.ReadUInt16();
             if (nameId == 0)
@@ -280,14 +464,40 @@ namespace WolvenKit.CR2W
                 throw new InvalidParsingException("Parsing Variable read too far.");
             }
 
+            //if (Logger != null) Logger.LogString($"{stopwatch.Elapsed} CVariable <{typename}>{varname}");
+            //stopwatch.Stop();
+
             return parsedvar;
+        }
+
+        public static void WriteVariable(BinaryWriter file, IEditableVariable ivar)
+        {
+            if (ivar is CVariable cvar)
+            {
+                file.Write(cvar.GetnameId());
+                file.Write(cvar.GettypeId());
+
+                var pos = file.BaseStream.Position;
+                file.Write((uint)0); // size placeholder
+
+
+                cvar.Write(file);
+                var endpos = file.BaseStream.Position;
+
+                file.Seek((int)pos, SeekOrigin.Begin);
+                var actualsize = (uint)(endpos - pos);
+                file.Write(actualsize); // Write size
+                file.Seek((int)endpos, SeekOrigin.Begin);
+            }
+            else
+                throw new SerializationException();
         }
 
 
         #region Write
         public void Write(BinaryWriter file)
         {
-            m_stream = file.BaseStream;
+            //m_stream = file.BaseStream;
 
             // update data
             //m_fileheader.timeStamp = CDateTime.Now.ToUInt64();    //this will change any vanilla assets simply by opening and saving in wkit
@@ -474,13 +684,13 @@ namespace WolvenKit.CR2W
             m_fileheader.crc32 = CalculateHeaderCRC32();
             WriteFileHeader(file);
 
-            m_stream = null;
+            //m_stream = null;
 
             void FixExportCRC32(CR2WExport export) //FIXME do I wanna keep the ref?
             {
-                m_stream.Seek(export.dataOffset, SeekOrigin.Begin);
+                file.BaseStream.Seek(export.dataOffset, SeekOrigin.Begin);
                 var m_temp = new byte[export.dataSize];
-                m_stream.Read(m_temp, 0, m_temp.Length);
+                file.BaseStream.Read(m_temp, 0, m_temp.Length);
                 export.crc32 = Crc32Algorithm.Compute(m_temp);
             }
 
@@ -492,9 +702,9 @@ namespace WolvenKit.CR2W
                 //For now this is a crude workaround.
                 if (m_hasInternalBuffer)
                 {
-                    m_stream.Seek(buffer.offset, SeekOrigin.Begin);
+                    file.BaseStream.Seek(buffer.offset, SeekOrigin.Begin);
                     var m_temp = new byte[buffer.diskSize];
-                    m_stream.Read(m_temp, 0, m_temp.Length);
+                    file.BaseStream.Read(m_temp, 0, m_temp.Length);
                     buffer.crc32 = Crc32Algorithm.Compute(m_temp);
                 }
                 else
@@ -578,10 +788,7 @@ namespace WolvenKit.CR2W
             }
 
 
-
-
-
-
+            
             List<Tuple<string, IEditableVariable>> GetVariables(IEditableVariable ivar)
             {
                 //check for looping references
@@ -806,10 +1013,8 @@ namespace WolvenKit.CR2W
                 if (var is SFoliageInstance)
                     return;
                 if (!(var is CBufferVLQ<CName> ||
-                    var is CBufferUInt32<CVariable> ||
                     var is IdHandle ||
                     var is SEntityBufferType1 ||
-                    //var is IEnumAccessor ||
                     var is SUmbraSceneData)
                     )
                 {
@@ -919,22 +1124,26 @@ namespace WolvenKit.CR2W
                         }
                     }
                 }
-                else if (var is CBufferUInt32<IHandleAccessor> buffer)
+                else if (var is /*CBufferUInt32<IHandleAccessor>*/ IBufferAccessor buffer)
                 {
-                    foreach (var h2 in buffer.elements)
+                    foreach (IEditableVariable ivar in buffer.GetEditableVariables())
                     {
-                        if (!h2.ChunkHandle)
+                        if (ivar is IHandleAccessor ha)
                         {
-                            AddUniqueToTable(h2.ClassName);
-                            var flags = EImportFlags.Default;
-                            if (h2.REDName == "template")
-                                flags = EImportFlags.Template;
-                            var importtuple = new Tuple<string, string, EImportFlags>(h2.ClassName, h2.DepotPath, flags);
-                            if (!newimportslist.Contains(importtuple))
+                            if (!ha.ChunkHandle)
                             {
-                                newimportslist.Add(importtuple);
+                                AddUniqueToTable(ha.ClassName);
+                                var flags = EImportFlags.Default;
+                                if (ha.REDName == "template")
+                                    flags = EImportFlags.Template;
+                                var importtuple = new Tuple<string, string, EImportFlags>(ha.ClassName, ha.DepotPath, flags);
+                                if (!newimportslist.Contains(importtuple))
+                                {
+                                    newimportslist.Add(importtuple);
+                                }
                             }
                         }
+                        
                     }
                 }
                 else if (var is IPtrAccessor)
@@ -996,32 +1205,32 @@ namespace WolvenKit.CR2W
             #region Write Tables
             m_tableheaders[1].size = (uint)names.Count;
             m_tableheaders[1].offset = (uint) file.BaseStream.Position;
-            WriteTable<CR2WName>(names.Select(_ => _.Name).ToArray(), 1);
+            WriteTable<CR2WName>(file.BaseStream, names.Select(_ => _.Name).ToArray(), 1);
             
             m_tableheaders[2].size = (uint)imports.Count;
             m_tableheaders[2].offset = imports.Count > 0 ? (uint) file.BaseStream.Position : 0;
-            WriteTable<CR2WImport>(imports.Select(_ => _.Import).ToArray(), 2);
+            WriteTable<CR2WImport>(file.BaseStream, imports.Select(_ => _.Import).ToArray(), 2);
 
             m_tableheaders[3].size = (uint)properties.Count;
             m_tableheaders[3].offset = (uint) file.BaseStream.Position;
-            WriteTable<CR2WProperty>(properties.Select(_ => _.Property).ToArray(), 3);
+            WriteTable<CR2WProperty>(file.BaseStream, properties.Select(_ => _.Property).ToArray(), 3);
 
             m_tableheaders[4].size = (uint)chunks.Count;
             m_tableheaders[4].offset = (uint) file.BaseStream.Position;
-            WriteTable<CR2WExport>(chunks.Select(_ => _.Export).ToArray(), 4);
+            WriteTable<CR2WExport>(file.BaseStream, chunks.Select(_ => _.Export).ToArray(), 4);
 
             if (buffers.Count > 0)
             {
                 m_tableheaders[5].size = (uint)buffers.Count;
                 m_tableheaders[5].offset = (uint)file.BaseStream.Position;
-                WriteTable<CR2WBuffer>(buffers.Select(_ => _.Buffer).ToArray(), 5);
+                WriteTable<CR2WBuffer>(file.BaseStream, buffers.Select(_ => _.Buffer).ToArray(), 5);
             }
 
             if (embedded.Count > 0)
             {
                 m_tableheaders[6].size = (uint)embedded.Count;
                 m_tableheaders[6].offset = (uint)file.BaseStream.Position;
-                WriteTable<CR2WEmbedded>(embedded.Select(_ => _.Embedded).ToArray(), 6);
+                WriteTable<CR2WEmbedded>(file.BaseStream, embedded.Select(_ => _.Embedded).ToArray(), 6);
             }
             #endregion
         }
@@ -1030,10 +1239,10 @@ namespace WolvenKit.CR2W
         {
             file.BaseStream.Seek(0, SeekOrigin.Begin);
 
-            WriteStruct<uint>(MAGIC);
-            WriteStruct<CR2WFileHeader>(m_fileheader);
-            WriteStructs<CR2WTable>(m_tableheaders); // offsets change if stringtable changes
-            WriteStringBuffer();
+            file.BaseStream.WriteStruct<uint>(MAGIC);
+            file.BaseStream.WriteStruct<CR2WFileHeader>(m_fileheader);
+            file.BaseStream.WriteStructs<CR2WTable>(m_tableheaders); // offsets change if stringtable changes
+            WriteStringBuffer(file.BaseStream);
         }
 
         private void WriteData(BinaryWriter bw)
@@ -1067,14 +1276,14 @@ namespace WolvenKit.CR2W
         #endregion
 
         #region Table Reading
-        private byte[] ReadStringsBuffer()
+        private byte[] ReadStringsBuffer(Stream stream)
         {
             var start = m_tableheaders[0].offset;
             var size = m_tableheaders[0].size;
             var crc = m_tableheaders[0].crc32;
 
             var m_temp = new byte[size];
-            m_stream.Read(m_temp, 0, m_temp.Length);
+            stream.Read(m_temp, 0, m_temp.Length);
 
             StringDictionary = new Dictionary<uint, string>();
             StringBuilder sb = new StringBuilder();
@@ -1101,28 +1310,28 @@ namespace WolvenKit.CR2W
 
             return m_temp;
         }
-        private void WriteStringBuffer()
+        private void WriteStringBuffer(Stream stream)
         {
             m_tableheaders[0].crc32 = Crc32Algorithm.Compute(m_strings);
-            m_stream.Write(m_strings, 0, m_strings.Length);
+            stream.Write(m_strings, 0, m_strings.Length);
         }
 
-        private T[] ReadTable<T>(int index) where T : struct
+        private T[] ReadTable<T>(Stream stream, int index) where T : struct
         {
-            m_stream.Seek(m_tableheaders[index].offset, SeekOrigin.Begin);
+            //stream.Seek(m_tableheaders[index].offset, SeekOrigin.Begin);
 
             var hash = new Crc32Algorithm(false);
-            var table = ReadStructs<T>(m_tableheaders[index].size, hash);
+            var table = stream.ReadStructs<T>(m_tableheaders[index].size, hash);
 
             return table;
         }
-        private void WriteTable<T>(T[] array, int index) where T : struct
+        private void WriteTable<T>(Stream stream, T[] array, int index) where T : struct
         {
             if (array.Length == 0)
                 return;
 
             var crc = new Crc32Algorithm(false);
-            WriteStructs<T>(array, crc);
+            stream.WriteStructs<T>(array, crc);
             m_tableheaders[index].crc32 = crc.HashUInt32;
         }
         #endregion
@@ -1185,74 +1394,74 @@ namespace WolvenKit.CR2W
             }
         }
 
-        private T ReadStruct<T>(Crc32Algorithm crc32 = null) where T : struct
-        {
-            var size = Marshal.SizeOf<T>();
+        //private T ReadStruct<T>(Crc32Algorithm crc32 = null) where T : struct
+        //{
+        //    var size = Marshal.SizeOf<T>();
 
-            var m_temp = new byte[size];
-            m_stream.Read(m_temp, 0, size);
+        //    var m_temp = new byte[size];
+        //    m_stream.Read(m_temp, 0, size);
 
-            var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
-            var item = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
+        //    var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
+        //    var item = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
 
-            if (crc32 != null)
-                crc32.Append(m_temp);
+        //    if (crc32 != null)
+        //        crc32.Append(m_temp);
 
-            handle.Free();
+        //    handle.Free();
 
-            return item;
-        }
-        private T[] ReadStructs<T>(uint count, Crc32Algorithm crc32 = null) where T : struct
-        {
-            var size = Marshal.SizeOf<T>();
-            var items = new T[count];
+        //    return item;
+        //}
+        //private T[] ReadStructs<T>(uint count, Crc32Algorithm crc32 = null) where T : struct
+        //{
+        //    var size = Marshal.SizeOf<T>();
+        //    var items = new T[count];
 
-            var m_temp = new byte[size];
-            for (uint i = 0; i < count; i++)
-            {
-                m_stream.Read(m_temp, 0, size);
+        //    var m_temp = new byte[size];
+        //    for (uint i = 0; i < count; i++)
+        //    {
+        //        m_stream.Read(m_temp, 0, size);
 
-                var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
-                items[i] = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
+        //        var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
+        //        items[i] = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
 
-                if (crc32 != null)
-                    crc32.Append(m_temp);
+        //        if (crc32 != null)
+        //            crc32.Append(m_temp);
 
-                handle.Free();
-            }
+        //        handle.Free();
+        //    }
 
-            return items;
-        }
-        private void WriteStruct<T>(T value, Crc32Algorithm crc32 = null) where T : struct
-        {
-            var m_temp = new byte[Marshal.SizeOf<T>()];
-            var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
+        //    return items;
+        //}
+        //private void WriteStruct<T>(T value, Crc32Algorithm crc32 = null) where T : struct
+        //{
+        //    var m_temp = new byte[Marshal.SizeOf<T>()];
+        //    var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
 
-            Marshal.StructureToPtr(value, handle.AddrOfPinnedObject(), true);
-            m_stream.Write(m_temp, 0, m_temp.Length);
+        //    Marshal.StructureToPtr(value, handle.AddrOfPinnedObject(), true);
+        //    m_stream.Write(m_temp, 0, m_temp.Length);
 
-            if (crc32 != null)
-                crc32.Append(m_temp);
+        //    if (crc32 != null)
+        //        crc32.Append(m_temp);
 
-            handle.Free();
-        }
-        private void WriteStructs<T>(T[] array, Crc32Algorithm crc32 = null) where T : struct
-        {
-            var size = Marshal.SizeOf<T>();
-            var m_temp = new byte[size];
-            for (int i = 0; i < array.Length; i++)
-            {
-                var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
+        //    handle.Free();
+        //}
+        //private void WriteStructs<T>(T[] array, Crc32Algorithm crc32 = null) where T : struct
+        //{
+        //    var size = Marshal.SizeOf<T>();
+        //    var m_temp = new byte[size];
+        //    for (int i = 0; i < array.Length; i++)
+        //    {
+        //        var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
 
-                Marshal.StructureToPtr(array[i], handle.AddrOfPinnedObject(), true);
-                m_stream.Write(m_temp, 0, m_temp.Length);
+        //        Marshal.StructureToPtr(array[i], handle.AddrOfPinnedObject(), true);
+        //        m_stream.Write(m_temp, 0, m_temp.Length);
 
-                if (crc32 != null)
-                    crc32.Append(m_temp);
+        //        if (crc32 != null)
+        //            crc32.Append(m_temp);
 
-                handle.Free();
-            }
-        }
+        //        handle.Free();
+        //    }
+        //}
         #endregion
 
         #region Create

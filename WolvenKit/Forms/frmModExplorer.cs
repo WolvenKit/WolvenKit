@@ -553,7 +553,7 @@ namespace WolvenKit
                     }
                     Logger.LogString("Dumping XML successful.", Logtype.Success);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     Logger.LogString("Dumping XML failed.", Logtype.Error);
                 }

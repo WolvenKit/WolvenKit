@@ -191,7 +191,7 @@ namespace WolvenKit.Wwise.Player
                     }
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 MessageBox.Show("Bad file! Please only select files converted from the supplied url!", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);

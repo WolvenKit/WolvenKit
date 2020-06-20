@@ -34,7 +34,7 @@ namespace WolvenKit.CR2W.Types
             handle.Write(file);
         }
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             return new IdHandle(cr2w, parent, name);
         }

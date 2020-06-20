@@ -236,20 +236,15 @@ namespace WolvenKit.CR2W.Reflection
 
 
 
-        public static IEnumerable<PropertyInfo> GetREDPropertiesinternal<T>(Type type, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public) where T : Attribute
+        private static IEnumerable<PropertyInfo> GetREDPropertiesinternal<T>(Type type, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public) where T : Attribute
         {
             return type
                 .GetProperties(bindingFlags)
                 .Where(prop => prop.IsDefined(typeof(T))).ToList();
         }
 
-        public static IEnumerable<PropertyInfo> GetREDProperties<T>(Type type, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public) where T : Attribute
-        {
-            return GetOrderedREDProperties<T>(type, bindingFlags).ToList();
-        }
-
         /// https://stackoverflow.com/questions/14734374/c-sharp-reflection-property-order
-        public static IEnumerable<PropertyInfo> GetOrderedREDProperties<T>(Type type, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance) where T : Attribute
+        private static IEnumerable<PropertyInfo> GetOrderedREDProperties<T>(Type type, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance) where T : Attribute
         {
             Dictionary<Type, int> lookup = new Dictionary<Type, int>();
 
@@ -265,6 +260,11 @@ namespace WolvenKit.CR2W.Reflection
 
             return REDReflection.GetREDPropertiesinternal<T>(type, bindingFlags)
                 .OrderByDescending(prop => lookup[prop.DeclaringType]);
+        }
+
+        public static IEnumerable<PropertyInfo> GetREDProperties<T>(Type type, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public) where T : Attribute
+        {
+            return GetOrderedREDProperties<T>(type, bindingFlags).ToList();
         }
 
         //public static PropertyInfo GetREDProperty<T>(Type classType, string name, string type) where T : Attribute

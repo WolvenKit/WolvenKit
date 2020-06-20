@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		public CCrowClue_SpawnTreeDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCrowClue_SpawnTreeDecorator(cr2w, parent, name);
+		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCrowClue_SpawnTreeDecorator(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

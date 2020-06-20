@@ -25,11 +25,11 @@ namespace WolvenKit.CR2W.Types.Utils
         {
             componentName = new CName(cr2w, this, nameof(componentName));
             sizeofdata = new CUInt32(cr2w, this, nameof(sizeofdata));
-            variables = new CBufferUInt32<CVariantSizeTypeName>(cr2w, this, nameof(variables), _ => new CVariantSizeTypeName(_, variables, ""));
+            variables = new CBufferUInt32<CVariantSizeTypeName>(cr2w, this, nameof(variables));
 
         }
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             return new SEntityBufferType2(cr2w, parent, name);
         }

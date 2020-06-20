@@ -23,7 +23,7 @@ namespace WolvenKit.CR2W.Types
 
 		public CBehaviorGraphLookAtNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphLookAtNode(cr2w, parent, name);
+		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphLookAtNode(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

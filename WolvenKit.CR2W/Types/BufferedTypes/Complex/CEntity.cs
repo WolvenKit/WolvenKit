@@ -21,8 +21,8 @@ namespace WolvenKit.CR2W.Types
             
         public CEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            buffer_v1 = new CCompressedBuffer<SEntityBufferType1>(cr2w, this, nameof(buffer_v1), _ => new SEntityBufferType1(_, buffer_v1, ""));
-            buffer_v2 = new CBufferUInt32<SEntityBufferType2>(cr2w, this, nameof(buffer_v1), _ => new SEntityBufferType2(_, buffer_v2, ""));
+            buffer_v1 = new CCompressedBuffer<SEntityBufferType1>(cr2w, this, nameof(buffer_v1));
+            buffer_v2 = new CBufferUInt32<SEntityBufferType2>(cr2w, this, nameof(buffer_v1));
         }
 
         public override void Read(BinaryReader file, uint size)

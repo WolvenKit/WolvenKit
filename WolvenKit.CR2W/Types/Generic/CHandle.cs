@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using WolvenKit.CR2W.Editors;
 using System.Linq;
 using WolvenKit.CR2W.Reflection;
-
+using System.Runtime.InteropServices;
 
 namespace WolvenKit.CR2W.Types
 {
@@ -121,7 +121,7 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             return new CHandle<T>(cr2w, parent, name);
         }

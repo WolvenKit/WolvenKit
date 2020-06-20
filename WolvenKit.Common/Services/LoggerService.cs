@@ -45,8 +45,8 @@ namespace WolvenKit.Common.Services
         }
         #endregion
         #region progress
-        private Tuple<int, string> _progress;
-        public Tuple<int,string> Progress
+        private Tuple<float, string> _progress;
+        public Tuple<float,string> Progress
         {
             get => _progress;
             set
@@ -81,18 +81,28 @@ namespace WolvenKit.Common.Services
         /// Log progress value
         /// </summary>
         /// <param name="value"></param>
-        public void LogProgress(int value)
+        public void LogProgress(float value)
         {
-            Progress = new Tuple<int, string>(value, "");
+            Progress = new Tuple<float, string>(value, "");
         }
         /// <summary>
         /// Log progress value
         /// </summary>
         /// <param name="value"></param>
-        public void LogProgress(int value, string str)
+        public void LogProgress(float value, string str)
         {
-            Progress = new Tuple<int, string>(value, str);
+            Progress = new Tuple<float, string>(value, str);
         }
+        /// <summary>
+        /// Log progress incrementally
+        /// </summary>
+        /// <param name="value"></param>
+        public void LogProgressInc(float value, string str)
+        {
+            Progress = new Tuple<float, string>(Progress.Item1 + value, str);
+        }
+
+
         /// <summary>
         /// Log an Interpretable LogMessage
         /// </summary>

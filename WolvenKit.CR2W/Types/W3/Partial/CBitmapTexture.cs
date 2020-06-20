@@ -31,7 +31,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("textureCacheKey")] 		public CUInt32 TextureCacheKey { get; set;}
 
-		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBitmapTexture(cr2w, parent, name);
+		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBitmapTexture(cr2w, parent, name);
 
 	}
 }

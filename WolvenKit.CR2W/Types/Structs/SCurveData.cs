@@ -26,7 +26,7 @@ namespace WolvenKit.CR2W.Types
     //    }
 
 
-    //    public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+    //    public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
     //    {
     //        return new SCurveData(cr2w);
     //    }
@@ -52,7 +52,7 @@ namespace WolvenKit.CR2W.Types
 
         public override void Write(BinaryWriter file) => base.Write(file);
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SCurveData(cr2w, parent, name);
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SCurveData(cr2w, parent, name);
 
     }
 }

@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
         {
             someName = new CName(cr2w, this, nameof(someName));
             someByte = new CUInt8(cr2w, this, nameof(someByte));
-            pieces = new CCompressedBuffer<CurvePiece>(cr2w, this, nameof(pieces), _ => new CurvePiece(_, pieces, ""));
+            pieces = new CCompressedBuffer<CurvePiece>(cr2w, this, nameof(pieces));
         }
 
         public override CVariable Copy(CR2WCopyAction context)
@@ -38,7 +38,7 @@ namespace WolvenKit.CR2W.Types
             return copy;
         }
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             return new CurveInfo(cr2w, parent, name);
         }

@@ -96,7 +96,7 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public override CVariable Create(CR2WFile cr2w)
+        public static new CVariable Create(CR2WFile cr2w)
         {
             return new CVLQArray(cr2w);
         }

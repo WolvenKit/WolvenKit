@@ -9,7 +9,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CCubeTexture : CResource
 	{
-		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCubeTexture(cr2w, parent, name);
+		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCubeTexture(cr2w, parent, name);
 
 	}
 }

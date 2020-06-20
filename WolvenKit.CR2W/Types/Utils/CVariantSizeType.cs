@@ -70,7 +70,7 @@ namespace WolvenKit.CR2W.Types
             return Variable.ToString();
         }
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             return new CVariantSizeType(cr2w, parent, name);
         }

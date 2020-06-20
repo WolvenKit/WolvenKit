@@ -57,19 +57,19 @@ namespace CR2WTests
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            //mmfs = new Dictionary<string, MemoryMappedFile>();
+            mmfs = new Dictionary<string, MemoryMappedFile>();
             mc = new BundleManager();
             //mc.LoadAll("D:\\SteamLibrary\\steamapps\\common\\The Witcher 3\\bin\\x64");
             mc.LoadAll("C:\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
 
-            //// Load MemoryMapped Bundles
-            //foreach (var b in mc.Bundles.Values)
-            //{
-            //    var e = b.FileName.GetHashMD5();
+            // Load MemoryMapped Bundles
+            foreach (var b in mc.Bundles.Values)
+            {
+                var e = b.FileName.GetHashMD5();
 
-            //    mmfs.Add(e, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, e, 0, MemoryMappedFileAccess.Read));
+                mmfs.Add(e, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, e, 0, MemoryMappedFileAccess.Read));
 
-            //}
+            }
         }
 
         // Methods to test for the different file types
@@ -499,49 +499,45 @@ namespace CR2WTests
             Dictionary<string, Tuple<long, long>> chunkstate = new Dictionary<string, Tuple<long, long>>();
             List<Dictionary<string, Tuple<long, long>>> chunkstateList = new List<Dictionary<string, Tuple<long, long>>>();
             List<string> unparsedfiles = new List<string>();
-            
 
-            var files = mc.FileList.Where(x => x.Name.EndsWith(ext)).ToList();
+
+            List<IWitcherFile> files = mc.FileList.Where(x => x.Name.EndsWith(ext)).ToList();
             var processedfiles = new List<string>();
             rigcount = files.Count();
 
             var tasks = new List<Task>();
-            foreach (var f in files)
+            foreach (IWitcherFile f in files)
             {
-
-                totalbytes += f.Size;
-                tasks.Add(Task.Run(async () => await StressTestFileAsync(f, unknownclasses))
-                    .ContinueWith(t =>
+                if (f is BundleItem bi)
                 {
-                    if (t.IsCompleted)
-                    {
-                        try
+                    totalbytes += f.Size;
+                    tasks.Add(Task.Run(async () => await StressTestFileAsync(bi, unknownclasses))
+                        .ContinueWith(t =>
                         {
-                            totalbytes += t.Result.Item1;
-                            unknownbytes += t.Result.Item2;
-                            chunkstateList.Add(t.Result.Item3);
-                            processedfiles.Add(f.Name);
-                        }
-                        catch (Exception ex)
-                        {
-                            unparsedfiles.Add(f.Name);
-                            //throw;
-                        }
-                        
-                    }
-                    else
-                    {
-                        unparsedfiles.Add(f.Name);
-                    }
-                    //Debug.WriteLine($"{t.Id} Status: {t.Status}, {chunkstateList.Count} / {tasks.Count} tests completed.");
-                }
-                ));
-                //var r = await Task.Run(() => StressTestFileAsync(f, unknownclasses));
-                //totalbytes += r.Item1;
-                //unknownbytes += r.Item2;
-                //chunkstateList.Add(r.Item3);
-                //processedfiles.Add(f.Name);
+                            if (t.IsCompleted)
+                            {
+                                try
+                                {
+                                    totalbytes += t.Result.Item1;
+                                    unknownbytes += t.Result.Item2;
+                                    chunkstateList.Add(t.Result.Item3);
+                                    processedfiles.Add(f.Name);
+                                }
+                                catch (Exception)
+                                {
+                                    unparsedfiles.Add(f.Name);
+                                    //throw;
+                                }
 
+                            }
+                            else
+                            {
+                                unparsedfiles.Add(f.Name);
+                            }
+                        //Debug.WriteLine($"{t.Id} Status: {t.Status}, {chunkstateList.Count} / {tasks.Count} tests completed.");
+                    }
+                    ));
+                }
             }
 
             Task.WaitAll(tasks.ToArray());
@@ -612,7 +608,7 @@ namespace CR2WTests
             return new Tuple<long, int>(unknownbytes, unparsedfiles.Count);
         }
 
-        private async static Task<Tuple<long, long, Dictionary<string, Tuple<long, long>>>> StressTestFileAsync(IWitcherFile f, List<string> unknownclasses)
+        private async static Task<Tuple<long, long, Dictionary<string, Tuple<long, long>>>> StressTestFileAsync(BundleItem f, List<string> unknownclasses)
         {
             Dictionary<string, Tuple<long, long>> chunkstate = new Dictionary<string, Tuple<long, long>>();
             long totalbytes = 0;
@@ -623,10 +619,10 @@ namespace CR2WTests
             using (var ms = new MemoryStream())
             using (var br = new BinaryReader(ms))
             {
-                f.Extract(ms);
+                f.ExtractExistingMMF(ms);
                 ms.Seek(0, SeekOrigin.Begin);
 
-                crw.Read(br);
+                crw.Read(br); // make this async?
             }
 
             unknownclasses.AddRange(crw.UnknownTypes);
@@ -648,11 +644,6 @@ namespace CR2WTests
                 unknownbytes += ubsl;
 
             }
-
-            //if (!originalFile.SequenceEqual(reconstructedFile))
-            //{
-            //    throw new NotImplementedException();
-            //}
 
             return new Tuple<long, long, Dictionary<string, Tuple<long, long>>>(totalbytes, unknownbytes, chunkstate);
 

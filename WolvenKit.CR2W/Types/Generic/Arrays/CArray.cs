@@ -48,25 +48,12 @@ namespace WolvenKit.CR2W.Types
             };
             count.Write(file);
 
-            foreach (var element in elements)
-            {
-                element.Write(file);
-            }
+            base.Write(file);
         }
 
-        public override CVariable Copy(CR2WCopyAction context)
-        {
-            var copy = base.Copy(context) as CArray<T>;
+        
 
-            foreach (var element in elements)
-            {
-                copy.elements.Add(element.Copy(context) as T);
-            }
-
-            return copy;
-        }
-
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             return new CArray<T>(cr2w, parent, name);
         }

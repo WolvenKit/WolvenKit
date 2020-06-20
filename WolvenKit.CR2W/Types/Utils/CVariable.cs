@@ -159,6 +159,9 @@ namespace WolvenKit.CR2W.Types
                         // instantiate
                         var redname = REDReflection.GetREDNameString(pi);                           // get redname from attribute
                         var redtype = REDReflection.GetREDTypeString(pi.PropertyType);              // get redtype from type
+
+                        
+
                         var newvar = CR2WTypeManager.Create(redtype, redname, this.cr2w, this);     // create new variable and parent to this 
 
                         if (newvar != null)
@@ -225,8 +228,10 @@ namespace WolvenKit.CR2W.Types
             // fixed class/struct (no leading null byte), read all properties in order
             if (tags.Contains(EREDMetaInfo.REDStruct))
             {
-                fields.AddRange(ReadAllRedVariables<REDAttribute>(file));
+                //fields.AddRange(ReadAllRedVariables<REDAttribute>(file));
+                ReadAllRedVariables<REDAttribute>(file);
             }
+            // CVectors
             else
             {
                 var zero = file.ReadByte();
@@ -254,23 +259,23 @@ namespace WolvenKit.CR2W.Types
 
                     cvar.IsSerialized = true;
 
-                    fields.Add(cvar);
+                    //fields.Add(cvar);
+                    TryAddVariable(cvar);
                 }
 
                 // parse buffers
-                fields.AddRange(ReadAllRedVariables<REDBufferAttribute>(file));
+                //fields.AddRange(ReadAllRedVariables<REDBufferAttribute>(file));
+                ReadAllRedVariables<REDBufferAttribute>(file);
             }
-
-
 
             // Set all variables in the class
-            foreach (var cvar in fields)
-            {
-                if (!TryAddVariable(cvar))
-                {
+            //foreach (var cvar in fields)
+            //{
+            //    if (!TryAddVariable(cvar))
+            //    {
 
-                }
-            }
+            //    }
+            //}
         }
 
         /// <summary>
@@ -290,6 +295,7 @@ namespace WolvenKit.CR2W.Types
                     && bufferAttribute.IsIgnored)
                         continue;
 
+                // Get
                 // get redname from attribute
                 var redname = REDReflection.GetREDNameString(pi);
                 // get redtype from type
@@ -299,9 +305,14 @@ namespace WolvenKit.CR2W.Types
                 if (parsedvar == null)
                     throw new InvalidParsingException($"Variable {redtype}:{redname} was not read in class {this.GetType().Name}");
 
+                // Read
                 parsedvar.Read(br, 0); //FIXME size?
                 parsedvar.IsSerialized = true;
-                parsedvars.Add(parsedvar);
+
+                // add in class
+                TryAddVariable(parsedvar);
+
+                //parsedvars.Add(parsedvar);
             }
 
             return parsedvars;
@@ -337,18 +348,20 @@ namespace WolvenKit.CR2W.Types
             
             string varname = value.REDName.FirstCharToUpper();
             varname = NormalizeName(varname);
+            //if!((this is SBufferWaypoints || this is SWayPointsCollectionsSetData))
+            
             try
             {
                 accessor[this, varname] = value;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 try
                 {
                     varname = varname.FirstCharToLower();
                     accessor[this, varname] = value;
                 }
-                catch (Exception ex2)
+                catch (Exception)
                 {
                     Debug.WriteLine($"({value.REDType}){varname} not found in ({this.REDType}){this.REDName}");
                     return false;
@@ -487,11 +500,6 @@ namespace WolvenKit.CR2W.Types
             return this;
         }
 
-        public virtual CVariable CreateDefaultVariable()
-        {
-            return null;
-        }
-
         public virtual Control GetEditor()
         {
             return null;
@@ -499,7 +507,10 @@ namespace WolvenKit.CR2W.Types
         #endregion
 
         #region Abstract
-        public abstract CVariable Create(CR2WFile cr2w, CVariable parent, string name);
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        {
+            throw new NotImplementedException();
+        }
 
 
 

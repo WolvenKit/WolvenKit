@@ -11,35 +11,23 @@ using WolvenKit.CR2W.Reflection;
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta()]
-    public class CPaddedBuffer<T> : CVariable where T : CVariable
+    public class CPaddedBuffer<T> : CBufferBase<T> where T : CVariable
     {
-        public List<T> elements = new List<T>();
-        public Func<CR2WFile, T> elementFactory;
         public CFloat padding;
 
-        public CPaddedBuffer(CR2WFile cr2w, CVariable parent, string name, Func<CR2WFile, T> elementFactory) : base(cr2w, parent, name)
+        public CPaddedBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            this.elementFactory = elementFactory;
             padding = new CFloat(cr2w, this, "padding" );
         }
 
-        public override CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CPaddedBuffer<T>(cr2w, parent, name, elementFactory);
-        }
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPaddedBuffer<T>(cr2w, parent, name);
 
         public override void Read(BinaryReader file, uint size)
         {
             CDynamicInt count = new CDynamicInt(cr2w, null, "");
             count.Read(file, size);
 
-            for (int i = 0; i < count.val; i++)
-            {
-                T element = elementFactory.Invoke(cr2w);
-
-                element.Read(file, size);
-                elements.Add(element);
-            }
+            base.Read(file, size, count.val);
 
             padding.Read(file, 4);
         }
@@ -54,14 +42,13 @@ namespace WolvenKit.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            CDynamicInt count = new CDynamicInt(cr2w, null, "");
-            count.val = elements.Count;
+            CDynamicInt count = new CDynamicInt(cr2w, null, "")
+            {
+                val = elements.Count
+            };
             count.Write(file);
 
-            foreach (var element in elements)
-            {
-                element.Write(file);
-            }
+            base.Write(file);
 
             padding.Write(file);
         }
@@ -78,72 +65,6 @@ namespace WolvenKit.CR2W.Types
             copy.padding = (CFloat)padding.Copy(context);
 
             return copy;
-        }
-
-        public override CVariable CreateDefaultVariable()
-        {
-            return elementFactory.Invoke(cr2w);
-        }
-
-        public override bool CanAddVariable(IEditableVariable newvar)
-        {
-            return newvar == null || newvar is T;
-        }
-
-        public override string ToString()
-        {
-            var builder = new StringBuilder().Append(elements.Count);
-
-            if (elements.Count > 0)
-            {
-                builder.Append(":");
-
-                foreach (var element in elements)
-                {
-                    builder.Append(" <").Append(element.ToString()).Append(">");
-
-                    if (builder.Length > 100)
-                    {
-                        builder.Remove(100, builder.Length - 100);
-                        break;
-                    }
-                }
-            }
-
-            return builder.ToString();
-        }
-
-        public override bool CanRemoveVariable(IEditableVariable child)
-        {
-            return true;
-        }
-
-        public override bool RemoveVariable(IEditableVariable child)
-        {
-            if (child is T)
-            {
-                elements.Remove(child as T);
-                UpdateNames();
-                return true;
-            }
-            return false;
-        }
-
-        public override void AddVariable(CVariable variable)
-        {
-            if (variable is T)
-            {
-                variable.SetREDName(elements.Count.ToString());
-                elements.Add(variable as T);
-            }
-        }
-
-        private void UpdateNames()
-        {
-            for (int i = 0; i < elements.Count; i++)
-            {
-                elements[i].SetREDName(i.ToString());
-            }
         }
     }
 

@@ -288,7 +288,7 @@ namespace WolvenKit
                 try {
                     conns = c.GetConnections();
                 }
-                catch (Exception exception) {
+                catch (Exception) {
                     // eat the exception, allready logging the exception when creating the node editor
                 }
 

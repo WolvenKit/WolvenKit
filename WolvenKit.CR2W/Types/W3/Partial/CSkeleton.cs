@@ -49,7 +49,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("parentIndices", 2,0)] 		public CArray<CInt16> ParentIndices { get; set;}
 
-		public override CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSkeleton(cr2w, parent, name);
+		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSkeleton(cr2w, parent, name);
 
 	}
 }

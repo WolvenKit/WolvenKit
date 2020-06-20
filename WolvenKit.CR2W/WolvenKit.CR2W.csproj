@@ -153,6 +153,7 @@
     <Compile Include="Reflection\REDAttribute.cs" />
     <Compile Include="Reflection\REDReflection.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Types\Generic\Arrays\CBufferBase.cs" />
     <Compile Include="Types\Generic\Arrays\CArrayBase.cs" />
     <Compile Include="Types\Generic\Arrays\CArrayFixedSize.cs" />
     <Compile Include="Types\Generic\Arrays\CBufferVLQInt32.cs" />
