@@ -11,7 +11,7 @@ using WolvenKit.CR2W.Reflection;
 namespace WolvenKit.CR2W.Types
 {
     [REDMeta()]
-    public class CBufferUInt32<T> : CVariable where T : CVariable
+    public class CBufferUInt32<T> : CVariable where T : IEditableVariable
     {
         public List<T> elements = new List<T>();
         public Func<CR2WFile, T> elementFactory;
@@ -41,7 +41,9 @@ namespace WolvenKit.CR2W.Types
 
         public override List<IEditableVariable> GetEditableVariables()
         {
-            return new List<IEditableVariable>(elements);
+            var ret = new List<IEditableVariable>();
+            ret.AddRange(elements.Cast<IEditableVariable>());
+            return ret;
         }
 
         public override void Write(BinaryWriter file)
@@ -62,7 +64,9 @@ namespace WolvenKit.CR2W.Types
 
             foreach (var element in elements)
             {
-                copy.elements.Add(element.Copy(context) as T);
+                var ccopy = element.Copy(context);
+                if (ccopy is T copye)
+                    copy.elements.Add(copye);
             }
 
             return copy;
@@ -70,7 +74,7 @@ namespace WolvenKit.CR2W.Types
 
         public override CVariable CreateDefaultVariable()
         {
-            return elementFactory.Invoke(cr2w);
+            return elementFactory.Invoke(cr2w) as CVariable;
         }
 
         public override bool CanAddVariable(IEditableVariable newvar)
@@ -108,9 +112,9 @@ namespace WolvenKit.CR2W.Types
 
         public override bool RemoveVariable(IEditableVariable child)
         {
-            if (child is T)
+            if (child is T tchild)
             {
-                elements.Remove(child as T);
+                elements.Remove(tchild);
                 UpdateNames();
                 return true;
             }
@@ -119,10 +123,10 @@ namespace WolvenKit.CR2W.Types
 
         public override void AddVariable(CVariable variable)
         {
-            if (variable is T)
+            if (variable is T tvar)
             {
                 variable.SetREDName(elements.Count.ToString());
-                elements.Add(variable as T);
+                elements.Add(tvar);
             }
         }
 

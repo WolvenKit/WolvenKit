@@ -33,19 +33,18 @@ namespace WolvenKit.CR2W
             m_fileheader = new CR2WFileHeader(){
                 version = 162,
             };
+
+            Logger = new LoggerService();       //dummy that can't log to UI, not really needed bc we check later anyway. but hey
         }
 
-        public CR2WFile(BinaryReader file)
+        public CR2WFile(BinaryReader file, LoggerService logger = null)
         {
-            Logger = new LoggerService(); //dummy
+            if (logger == null)
+                Logger = new LoggerService();   //dummy that can't log to UI, not really needed bc we check later anyway. but hey
+            else
+                Logger = logger;
+
             Read(file);
-            //m_filePath = 
-        }
-        public CR2WFile(BinaryReader file, LoggerService logger)
-        {
-            Logger = logger;
-            Read(file);
-            //m_filePath = 
         }
         public CR2WFile(byte[] data, LoggerService logger)
         {
@@ -134,7 +133,7 @@ namespace WolvenKit.CR2W
             m_stream = file.BaseStream;
 
             #region Read Headers
-            Logger.LogProgress(1, "Reading headers...");
+            if (Logger != null) Logger.LogProgress(1, "Reading headers...");
             // read file header
             var id = ReadStruct<uint>();
             if (id != MAGIC)
@@ -165,11 +164,11 @@ namespace WolvenKit.CR2W
                 Handle = StringDictionary[_.path],
             }).ToList();
 
-            Logger.LogProgress(100);
+            if (Logger != null) Logger.LogProgress(100);
             #endregion
 
             #region Read Data
-            Logger.LogProgress(1, "Reading chunks...");
+            if (Logger != null) Logger.LogProgress(1, "Reading chunks...");
             // Read object data //block 5
             for (int i = 0; i < chunks.Count; i++)
             {
@@ -177,7 +176,7 @@ namespace WolvenKit.CR2W
                 chunk.ReadData(file);
 
                 int percentprogress = (int)((float)i / (float)chunks.Count * 100.0);
-                Logger.LogProgress(percentprogress, $"Reading chunk {chunk.REDName}...");
+                if (Logger != null) Logger.LogProgress(percentprogress, $"Reading chunk {chunk.REDName}...");
             }
             // Read buffer data //block 6
             if (m_hasInternalBuffer)
@@ -188,7 +187,7 @@ namespace WolvenKit.CR2W
                     buffer.ReadData(file);
 
                     int percentprogress = (int)((float)i / (float)buffers.Count * 100.0);
-                    Logger.LogProgress(percentprogress);
+                    if (Logger != null) Logger.LogProgress(percentprogress);
                 }
             }
             // Read embedded files //block 7
@@ -198,9 +197,21 @@ namespace WolvenKit.CR2W
                 emb.ReadData(file);
 
                 int percentprogress = (int)((float)i / (float)embedded.Count * 100.0);
-                Logger.LogProgress(percentprogress, $"Reading embedded file {emb.ClassName}...");
+                if (Logger != null) Logger.LogProgress(percentprogress, $"Reading embedded file {emb.ClassName}...");
             }
             #endregion
+
+            // dbg
+            // check self
+            (var nameslist, var importslist) = GenerateStringtable();
+
+            for (int i = 0; i < nameslist.Count; i++)
+            {
+                if (nameslist[i] != this.StringDictionary.Values.ToList()[i])
+                {
+                    throw new NotImplementedException();
+                }
+            }
 
             m_stream = null;
         }
@@ -535,15 +546,11 @@ namespace WolvenKit.CR2W
 
             var guidlist = new List<Guid>();
             var chunkguidlist = new List<Guid>();
-            var collection = new List<Tuple<string, IEditableVariable>>();
+
             foreach (var c in chunks)
             {
                 chunkguidlist.Add(c.data.InternalGuid);
                 LoopWrapper(new Tuple<string, IEditableVariable>("skipName", c.data));
-            }
-            foreach (var storedvar in collection)
-            {
-                AddStrings(storedvar);
             }
             
             newimportslist.AddRange(newsoftlist);
@@ -552,7 +559,14 @@ namespace WolvenKit.CR2W
 
             void LoopWrapper(Tuple<string, IEditableVariable> var)
             {
-                collection.Add(var);
+                if (guidlist.Contains(var.Item2.InternalGuid))
+                {
+                    return;
+                }
+
+                //collection.Add(var);
+                AddStrings(var);
+
                 List<Tuple<string, IEditableVariable>> nextl = GetVariables(var.Item2);
                 if (nextl == null)
                     return;
@@ -563,116 +577,156 @@ namespace WolvenKit.CR2W
                 }
             }
 
-            List<Tuple<string, IEditableVariable>> GetVariables(IEditableVariable var)
+
+
+
+
+
+            List<Tuple<string, IEditableVariable>> GetVariables(IEditableVariable ivar)
             {
                 //check for looping references
-                if (guidlist.Contains(var.InternalGuid))
+                if (guidlist.Contains(ivar.InternalGuid))
                     return null;
                 else
-                    guidlist.Add(var.InternalGuid);
+                    guidlist.Add(ivar.InternalGuid);
 
                 var returnedVariables = new List<Tuple<string, IEditableVariable>>();
 
-                if (var is CVariable)
+                // if variable is array
+                if (ivar is IArrayAccessor a)
+                {
+                    if (a is CArray<CBool>
+                        || a is CArray<CName>
+                        || a is CArray<CUInt16>
+                        || a is CArray<CInt16>
+                        || a is CArray<CUInt32>
+                        || a is CArray<CInt32>
+                        || a is CArray<CUInt64>
+                        || a is CArray<CInt64>
+                        )
+                    {
+                        if (a is CArray<CName>)
+                            returnedVariables.Add(new Tuple<string, IEditableVariable>("", a)); ///???
+                    }
+                    else
+                    {
+                        var elements = a.GetEditableVariables();
+                        foreach (var item in elements)
+                        {
+                            returnedVariables.Add(new Tuple<string, IEditableVariable>("skipName,skipType", item));
+                        }
+                    }
+
+                }
+                else if (ivar is IPtrAccessor p)
+                {
+                    if (p.Reference != null)
+                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", p.Reference.data));
+                }
+                else if (ivar is IHandleAccessor h)
+                {
+                    if (h.ChunkHandle)
+                    {
+                        if (h.Reference != null)
+                            returnedVariables.Add(new Tuple<string, IEditableVariable>("", h.Reference.data));
+                    }
+                }
+                else if (ivar is ISoftAccessor s)
+                {
+                }
+                else if (ivar is IdHandle i)
+                {
+                    returnedVariables.Add(new Tuple<string, IEditableVariable>("", i));
+                    returnedVariables.Add(new Tuple<string, IEditableVariable>("", i.handle.Reference?.data));
+                }
+                else if (ivar is CVariant cVariant)
+                {
+                    returnedVariables.Add(new Tuple<string, IEditableVariable>("", cVariant.Variant));
+                }
+                else if (ivar is CVariable cvar)
                 {
                     #region Buffer Hacks Before Variables
-                    if (var is CEntity ent)
+                    if (cvar is CEntity ent)
                     {
                         var t = ent.Template;
                         if (t != null)
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("skipName,skipType", t));
                     }
-                    // always checks for the variable parent first
-                    //else if (var is CBehaviorGraphStateMachineNode)
-                    //    returnedVariables.Add(new Tuple<string, CVariable>("", (var.cr2w.chunks.First().data as CBehaviorGraph).Toplevelnode.Reference.data));
-                    //else if (var.Type != null && (
-                    //    var.Type.Contains("CBehaviorGraphMimicSlotNode") ||
-                    //    var.Type.Contains("CBehaviorGraphPoseSlotNode") ||
-                    //    var.Type.Contains("CBehaviorGraphAnimationSlotNode") ||
-                    //    var.Type.Contains("CBehaviorGraphAnimationBaseSlotNode")
-                    //    ))
-                    //    returnedVariables.Add(new Tuple<string, CVariable>("", (var.cr2w.chunks.First().data as CBehaviorGraph).Toplevelnode.Reference.data));
-
-                    //else if (var.Type != null && 
-                    //    (var.Type.Contains("CMeshSkinningAttachment") ||
-                    //    var.Type.Contains("CHardAttachment") ||
-                    //    var.Type.Contains("CAnimatedAttachment")
-                    //    ))
-                    //{
-                    //    if ((var as CVector).variables != null && (var as CVector).variables.Count > 0)
-                    //    {
-                    //        if ((var as CVector).variables.First().Name == "parent")
-                    //            returnedVariables.Add(new Tuple<string, CVariable>("skipName,skipType", (var as CVector).variables.First()));
-                    //    }
-                    //}
-                    else if (var.Parent != null)
-                    {
-                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", var.Parent));
-                    }
                     #endregion
 
+                    // add parent
+                    // don't add array type parents
+                    // we can check for generc type here
+                    if (cvar.Parent != null && !cvar.Parent.GetType().IsGenericType)
+                    {
+                        //check for looping references
+                        if (!guidlist.Contains(cvar.Parent.InternalGuid))
+                            returnedVariables.Add(new Tuple<string, IEditableVariable>("", cvar.Parent));
+                    }
+
                     // for all other variables 
-                    foreach (var item in var.GetEditableVariables())
+                    var existingvars = cvar.GetExistingVariables(false, true);
+                    foreach (var item in existingvars)
                     {
                         returnedVariables.Add(new Tuple<string, IEditableVariable>("", (item)));
                     }
 
                     #region Buffer Hacks After Variables
                     // hack for CUmbraScene *sigh*
-                    if (var is CFoliageResource)
+                    if (cvar is CFoliageResource)
                     {
-                        foreach (CVariable item in (var as CFoliageResource).Trees)
+                        foreach (SFoliageResourceData item in (cvar as CFoliageResource).Trees)
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("", (item)));
-                        foreach (CVariable item in (var as CFoliageResource).Grasses)
+                        foreach (SFoliageResourceData item in (cvar as CFoliageResource).Grasses)
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("", item));
                     }
                     // hack for CClipMap *sigh*
-                    else if (var is CClipMap)
-                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", (var as CClipMap).tiles));
+                    if (cvar is CClipMap)
+                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", (cvar as CClipMap).tiles));
                     // hack for CUmbraScene *sigh*
-                    else if (var is CUmbraScene)
-                        foreach (SUmbraSceneData item in (var as CUmbraScene).tiles.elements) //handled in GetStrings
+                    if (cvar is CUmbraScene)
+                        foreach (SUmbraSceneData item in (cvar as CUmbraScene).tiles.elements) //handled in GetStrings
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("", item));
 
                     // hack for CSkeletalAnimationSetEntry *sigh*
-                    else if (var is CSkeletalAnimationSetEntry)
-                        foreach (CVariantSizeType item in (var as CSkeletalAnimationSetEntry).Entries)
+                    if (cvar is CSkeletalAnimationSetEntry)
+                        foreach (CVariantSizeType item in (cvar as CSkeletalAnimationSetEntry).Entries)
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("", item));
                     // hack for CLayerInfo *sigh*
-                    else if (var is CLayerInfo)
-                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", (var as CLayerInfo).ParentGroup.Reference?.data));
+                    if (cvar is CLayerInfo)
+                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", (cvar as CLayerInfo).ParentGroup.Reference?.data));
                     // hack for CMaterialInstance *sigh*
-                    else if (var is CMaterialInstance)
-                        foreach (CVariable iparam in (var as CMaterialInstance).InstanceParameters)
+                    if (cvar is CMaterialInstance)
+                        foreach (CVariantSizeNameType iparam in (cvar as CMaterialInstance).InstanceParameters)
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("", iparam));
                     // hack for CMesh *sigh*
-                    else if (var is CMesh)
-                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", (var as CMesh).BoneNames));
+                    if (cvar is CMesh)
+                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", (cvar as CMesh).BoneNames));
                     // hack for CBehaviorGraphContainerNode *sigh*
-                    else if (var is CBehaviorGraphContainerNode)
+                    if (cvar is CBehaviorGraphContainerNode)
                     {
-                        foreach (var item in (var as CBehaviorGraphContainerNode).Inputnodes)
+                        foreach (var item in (cvar as CBehaviorGraphContainerNode).Inputnodes)
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("", (item.Reference?.data)));
-                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", (var as CBehaviorGraphContainerNode).Unk1));
-                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", (var as CBehaviorGraphContainerNode).Unk2));
-                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", (var as CBehaviorGraphContainerNode).Outputnode.Reference?.data));
+                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", (cvar as CBehaviorGraphContainerNode).Unk1));
+                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", (cvar as CBehaviorGraphContainerNode).Unk2));
+                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", (cvar as CBehaviorGraphContainerNode).Outputnode.Reference?.data));
                     }
                     // hack for CBehaviorGraphStateMachineNode *sigh*
-                    else if (var is CBehaviorGraphStateMachineNode)
+                    if (cvar is CBehaviorGraphStateMachineNode)
                     {
-                        foreach (var item in (var as CBehaviorGraphStateMachineNode).Inputnodes)
+                        foreach (var item in (cvar as CBehaviorGraphStateMachineNode).Inputnodes)
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("", item.Reference?.data));
-                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", (var as CBehaviorGraphStateMachineNode).Unk1));
-                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", (var as CBehaviorGraphStateMachineNode).Unk2));
+                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", (cvar as CBehaviorGraphStateMachineNode).Unk1));
+                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", (cvar as CBehaviorGraphStateMachineNode).Unk2));
                     }
                     // hack for CBehaviorGraphStateMachineNode *sigh*
-                    else if (var is CBehaviorGraph)
+                    if (cvar is CBehaviorGraph)
                     {
-                        var b = var as CBehaviorGraph;
+                        var b = cvar as CBehaviorGraph;
                         returnedVariables.Add(new Tuple<string, IEditableVariable>("", b.Toplevelnode.Reference?.data));
                         foreach (IdHandle item in b.Variables1)
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("", item));
-                        foreach (var item in b.Descriptions)
+                        foreach (CHandle<CBehaviorVariable> item in b.Descriptions)
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("", item.Reference?.data));
                         foreach (IdHandle item in b.Vectorvariables1)
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("", item));
@@ -682,117 +736,60 @@ namespace WolvenKit.CR2W
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("", item));
                     }
                     // hack for CComponent *sigh*
-                    if (var is CNode)
+                    if (cvar is CNode)
                     {
-                        foreach (CVariable att in (var as CNode).AttachmentsChild)
-                            returnedVariables.Add(new Tuple<string, IEditableVariable>("", att));
-                        foreach (CVariable att in (var as CNode).AttachmentsReference)
-                            returnedVariables.Add(new Tuple<string, IEditableVariable>("", att));
+                        foreach (CHandle<IAttachment> att in (cvar as CNode).AttachmentsChild)
+                            returnedVariables.Add(new Tuple<string, IEditableVariable>("skipName,skipType", att));
+                        foreach (CHandle<IAttachment> att in (cvar as CNode).AttachmentsReference)
+                            returnedVariables.Add(new Tuple<string, IEditableVariable>("skipName,skipType", att));
                     }
                     // hack for CEntity *sigh*
-                    if (var is CEntity)
+                    if (cvar is CEntity e)
                     {
-                        var e = var as CEntity;
-                        foreach (CVariable component in e.Components)
-                            returnedVariables.Add(new Tuple<string, IEditableVariable>("", component));
+                        foreach (CPtr<CComponent> component in e.Components)
+                            returnedVariables.Add(new Tuple<string, IEditableVariable>("skipName,skipType", component));
                         foreach (SEntityBufferType1 buffer in e.buffer_v1)
-                            returnedVariables.Add(new Tuple<string, IEditableVariable>("", buffer));
+                            returnedVariables.Add(new Tuple<string, IEditableVariable>("skipName,skipType", buffer));
                         foreach (SEntityBufferType2 item in e.buffer_v2.elements)
                         {
                             returnedVariables.Add(new Tuple<string, IEditableVariable>("skipName,skipType", item.componentName));
-                            foreach (var el in item.variables.elements)
+                            foreach (CVariantSizeTypeName el in item.variables.elements)
                             {
                                 returnedVariables.Add(new Tuple<string, IEditableVariable>("Typefirst", el.Variable));
                             }
                         }
                     }
                     // hack for SAppearanceAttachment *sigh*
-                    else if (var is SAppearanceAttachment)
-                        foreach (CVariable item in (var as SAppearanceAttachment).Data.elements)
-                            returnedVariables.Add(new Tuple<string, IEditableVariable>("", item));
+                    if (cvar is SAppearanceAttachment aa)
+                        foreach (CVariable item in aa.Data.elements)
+                            returnedVariables.Add(new Tuple<string, IEditableVariable>("skipName", item));
                     // hack for CSkeletalAnimationSetEntry *sigh*
-                    else if (var is CSkeletalAnimationSetEntry)
-                        foreach (CVariantSizeType item in (var as CSkeletalAnimationSetEntry).Entries)
-                            returnedVariables.Add(new Tuple<string, IEditableVariable>("", item));
+                    if (cvar is CSkeletalAnimationSetEntry)
+                        foreach (CVariantSizeType item in (cvar as CSkeletalAnimationSetEntry).Entries)
+                            returnedVariables.Add(new Tuple<string, IEditableVariable>("skipName,skipType", item));
                     // hack for SAppearanceAttachment *sigh*
-                    else if (var is CCutsceneTemplate)
-                        foreach (CVariantSizeType item in (var as CCutsceneTemplate).animevents.elements)
-                            returnedVariables.Add(new Tuple<string, IEditableVariable>("", item.Variable));
+                    if (cvar is CCutsceneTemplate)
+                        foreach (CVariantSizeType item in (cvar as CCutsceneTemplate).animevents.elements)
+                            returnedVariables.Add(new Tuple<string, IEditableVariable>("skipName,skipType", item.Variable));
                     // hack for CStorySceneSection *sigh*
-                    else if (var is CStorySceneSection)
-                        foreach (CVariable item in (var as CStorySceneSection).sceneEventElements)
-                            returnedVariables.Add(new Tuple<string, IEditableVariable>("", item));
+                    if (cvar is CStorySceneSection)
+                        foreach (var item in (cvar as CStorySceneSection).sceneEventElements)
+                            returnedVariables.Add(new Tuple<string, IEditableVariable>("skipName,skipType", item));
                     // hack for CStorySceneScript *sigh*
-                    else if (var is CStorySceneScript)
-                        foreach (CVariable item in (var as CStorySceneScript).parameters)
-                            returnedVariables.Add(new Tuple<string, IEditableVariable>("", item));
+                    if (cvar is CStorySceneScript)
+                        foreach (CVariant item in (cvar as CStorySceneScript).parameters)
+                            returnedVariables.Add(new Tuple<string, IEditableVariable>("skipName,skipType", item));
                     // hack for CFXTrackItem *sigh*
-                    else if (var is CFXTrackItem)
-                        returnedVariables.Add(new Tuple<string, IEditableVariable>("skipName,skipType", (var as CFXTrackItem).buffername));
+                    if (cvar is CFXTrackItem)
+                        returnedVariables.Add(new Tuple<string, IEditableVariable>("skipName,skipType", (cvar as CFXTrackItem).buffername));
+                    // hack for CPhysicalCollision *sigh*
+                    if (cvar is CPhysicalCollision)
+                    {
+                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", (cvar as CPhysicalCollision).Collisiontypes));
+                    }
                     #endregion
                 }
-                // hack for CPhysicalCollision *sigh*
-                else if (var is CPhysicalCollision)
-                {
-                    returnedVariables.Add(new Tuple<string, IEditableVariable>("", (var as CPhysicalCollision).Collisiontypes));
-                }
-                else if (var is CArray<CVariable> a)
-                {
-                    if (a.Count > 0 )
-                    {
-                        foreach (var element in a)
-                        {
-                            if (
-                                element is CBool || element is CName ||
-                                element is CUInt16 || element is CInt16 ||
-                                element is CUInt32 || element is CInt32 ||
-                                element is CUInt64 || element is CInt64
-                                )
-                            {
-
-                            }
-                            else
-                                returnedVariables.Add(new Tuple<string, IEditableVariable>("", element));
-                        }
-                        if (a.First() is CName)
-                            returnedVariables.Add(new Tuple<string, IEditableVariable>("", var));
-                    }
-                }
-                else if (var is IPtrAccessor p)
-                {
-                    if (p.Reference != null)
-                        returnedVariables.Add(new Tuple<string, IEditableVariable>("", p.Reference.data));
-                }
-                else if (var is IHandleAccessor h)
-                {
-                    if (h.ChunkHandle)
-                    {
-                        if (h.Reference != null)
-                            returnedVariables.Add(new Tuple<string, IEditableVariable>("", h.Reference.data));
-                    }
-                }
-                else if (var is ISoftAccessor s)
-                {
-                    //var s = var as CSoft;
-                    //if (!(string.IsNullOrEmpty(s.ClassName) && string.IsNullOrEmpty(s.DepotPath)))
-                    //{
-                    //    var stuple = new Tuple<string, string, EImportFlags>(s.ClassName, s.DepotPath, EImportFlags.Soft);
-                    //    if (!newimportslist.Contains(stuple))
-                    //    {
-                    //        newimportslist.Add(stuple);
-                    //    }
-                    //}
-                }
-                else if (var is IdHandle)
-                {
-                    var i = var as IdHandle;
-                    returnedVariables.Add(new Tuple<string, IEditableVariable>("", i));
-                    returnedVariables.Add(new Tuple<string, IEditableVariable>("", i.handle.Reference?.data));
-                }
-                else if (var is CVariant)
-                {
-                    returnedVariables.Add(new Tuple<string, IEditableVariable>("", (var as CVariant).Variant));
-                }
+                
 
                 return returnedVariables;
             }
@@ -800,24 +797,34 @@ namespace WolvenKit.CR2W
             void AddStrings(Tuple<string, IEditableVariable> tvar)
             {
                 var var = tvar.Item2;
+
+                if (var.REDType.StartsWith("CEnum"))
+                {
+
+                }
+
                 if (var is SFoliageInstance)
                     return;
                 if (!(var is CBufferVLQ<CName> ||
                     var is CBufferUInt32<CVariable> ||
                     var is IdHandle ||
                     var is SEntityBufferType1 ||
-                    var is SUmbraSceneData
-                    ))
+                    //var is IEnumAccessor ||
+                    var is SUmbraSceneData)
+                    )
                 {
                     if (tvar.Item1.Contains("Typefirst"))
                     {
                         AddUniqueToTable(var.REDType);
                         AddUniqueToTable(var.REDName);
                     }
-                    // I'm sorry
                     else if (tvar.Item1 == "skipName" || chunkguidlist.Contains(tvar.Item2.InternalGuid))
                     {
                         AddUniqueToTable(var.REDType);
+                    }
+                    else if (tvar.Item1 == "skipType")
+                    {
+                        AddUniqueToTable(var.REDName);
                     }
                     else if (!tvar.Item1.Contains("skipName,skipType"))
                     {
@@ -825,14 +832,6 @@ namespace WolvenKit.CR2W
                         AddUniqueToTable(var.REDType);
                     }
                 }
-
-                //if (var is CVector<T>)
-                //{
-                //    //AddUniqueToTable(var.Name);
-                //    //AddUniqueToTable(var.Type);
-                //}
-
-                
 
                 if (var is SUmbraSceneData)
                 {
@@ -896,17 +895,19 @@ namespace WolvenKit.CR2W
                     var n = var as CName;
                     AddUniqueToTable(n.Value);
                 }
-                else if (var is CArray<CVariable> a)
+                else if (var is IArrayAccessor a)
                 {
-                    AddUniqueToTable(var.REDName);
+                    AddUniqueToTable(a.REDName);
                     AddUniqueToTable(a.REDType);
-                    foreach (var element in a)
+
+                    if (var is CArray<CName> aa)
                     {
-                        if (element is CName )
+                        foreach (var element in aa)
                         {
-                            AddUniqueToTable((element as CName).Value);
+                            AddUniqueToTable(element.Value);
                         }
                     }
+                    
                 }
                 else if (var is CBufferVLQ<CName>)
                 {
@@ -918,9 +919,9 @@ namespace WolvenKit.CR2W
                         }
                     }
                 }
-                else if (var is CBufferUInt32<CHandle<CVariable>>)
+                else if (var is CBufferUInt32<IHandleAccessor> buffer)
                 {
-                    foreach (CHandle<CVariable> h2 in (var as CBufferUInt32<CHandle<CVariable>>).elements)
+                    foreach (var h2 in buffer.elements)
                     {
                         if (!h2.ChunkHandle)
                         {
@@ -952,9 +953,14 @@ namespace WolvenKit.CR2W
                 {
                     AddUniqueToTable((var as SEntityBufferType1).ComponentName.Value);
                 }
+                else if (var is IEnumAccessor enumAccessor)
+                {
+                    AddUniqueToTable(enumAccessor.Value);
+                }
                 else
                 {
-                    AddUniqueToTable(var.REDType);
+                    if (!tvar.Item1.Contains("skipName,skipType"))
+                        AddUniqueToTable(var.REDType);
                 }
             }
 

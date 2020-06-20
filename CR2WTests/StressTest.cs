@@ -522,7 +522,7 @@ namespace CR2WTests
                             chunkstateList.Add(t.Result.Item3);
                             processedfiles.Add(f.Name);
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
                             unparsedfiles.Add(f.Name);
                             //throw;
@@ -545,6 +545,8 @@ namespace CR2WTests
             }
 
             Task.WaitAll(tasks.ToArray());
+
+
             var leftoutfiles = new List<string>();
             if (chunkstateList.Count != files.Count)
             {
@@ -618,20 +620,13 @@ namespace CR2WTests
 
             var crw = new CR2WFile();
 
-
-            //byte[] originalFile;
-            //byte[] reconstructedFile;
             using (var ms = new MemoryStream())
             using (var br = new BinaryReader(ms))
-            //using (var bw = new BinaryWriter(ms))
             {
                 f.Extract(ms);
-                //originalFile = ms.ToArray();
-                
                 ms.Seek(0, SeekOrigin.Begin);
+
                 crw.Read(br);
-                //crw.Write(bw);
-                //reconstructedFile = ms.ToArray();
             }
 
             unknownclasses.AddRange(crw.UnknownTypes);

@@ -8,9 +8,15 @@ using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
+    public interface IEnumAccessor
+    {
+        string Value { get; set; }
+    }
+
+
     [DataContract(Namespace = "")]
     [REDMeta()]
-    public class CEnum<T> : CVariable where T : Enum
+    public class CEnum<T> : CVariable, IEnumAccessor where T : Enum
     {
         #region Properties
         public T WrappedEnum { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 using WolvenKit.Common;
@@ -20,6 +21,8 @@ namespace WolvenKit.CR2W.Editors
         CR2WFile cr2w { get; set; }
 
 
+        void SetREDName(string val);
+
         Control GetEditor();
         List<IEditableVariable> GetEditableVariables();
         bool CanRemoveVariable(IEditableVariable child);
@@ -29,6 +32,8 @@ namespace WolvenKit.CR2W.Editors
         bool RemoveVariable(IEditableVariable child);
         void SerializeToXml(XmlWriter xw);
 
-
+        void Read(BinaryReader file, uint size);
+        void Write(BinaryWriter file);
+        CVariable Copy(CR2WCopyAction context);
     }
 }

@@ -95,7 +95,7 @@ namespace WolvenKit.CR2W.Types
             
             context.ptrs.Add(copy);
 
-            copy.Reference = this.Reference ?? this.Reference.Copy(context);
+            copy.Reference = this.Reference ?? this.Reference.CopyChunk(context);
 
             return copy;
         }

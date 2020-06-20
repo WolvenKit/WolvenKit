@@ -6,7 +6,7 @@ using static WolvenKit.CR2W.Types.Enums;
 namespace WolvenKit.CR2W.Types
 {
 	[DataContract(Namespace = "")]
-	[REDMeta(EREDMetaInfo.REDStruct)]
+	[REDMeta()]
 	public class CParticleSystem : CResource
 	{
 		[RED("previewBackgroundColor")] 		public CColor PreviewBackgroundColor { get; set;}

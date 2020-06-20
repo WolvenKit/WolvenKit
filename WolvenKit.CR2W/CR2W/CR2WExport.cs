@@ -159,8 +159,7 @@ namespace WolvenKit.CR2W
             }
         }
 
-        public Guid InternalGuid { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        IEditableVariable IEditableVariable.Parent { get => throw new NotImplementedException();}
+        
 
         public string REDValue => this.ToString();
 
@@ -300,7 +299,7 @@ namespace WolvenKit.CR2W
             data.IsSerialized = true;
         }
 
-        public CR2WExportWrapper Copy(CR2WCopyAction context)
+        public CR2WExportWrapper CopyChunk(CR2WCopyAction context)
         {
             // this one was already copied
             if (context.chunkTranslation.ContainsKey(ChunkIndex))
@@ -344,6 +343,29 @@ namespace WolvenKit.CR2W
         public override string ToString()
         {
             return REDName;
+        }
+
+        public void SetREDName(string val)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Read(BinaryReader file, uint size)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Write(BinaryWriter file)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Guid InternalGuid { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        IEditableVariable IEditableVariable.Parent { get => throw new NotImplementedException(); }
+
+        public CVariable Copy(CR2WCopyAction context)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

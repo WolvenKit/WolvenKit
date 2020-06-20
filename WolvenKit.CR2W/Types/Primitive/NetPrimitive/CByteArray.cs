@@ -10,6 +10,9 @@ namespace WolvenKit.CR2W.Types
     [REDMeta()]
     public class CByteArray : CVariable, IByteSource
     {
+        public string InternalType { get; set; }
+        public override string REDType => string.IsNullOrEmpty(InternalType) ? base.REDType : InternalType;
+
         public CByteArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public byte[] Bytes { get; set; }

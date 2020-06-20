@@ -13,17 +13,20 @@ using System.Text.RegularExpressions;
 
 namespace WolvenKit.CR2W.Types
 {
-    public interface IArrayAccessor
+    public interface IArrayAccessor : IEditableVariable
     {
         List<int> Flags { get; set; }
-        string REDType { get; }
 
         string GetElementType();
+    }
 
+    public interface IArrayAccessor<T> : IArrayAccessor
+    {
+        List<T> elements { get; set; }
     }
 
     [REDMeta()]
-    public class CArray<T> : CArrayBase<T>, IArrayAccessor where T : CVariable
+    public class CArray<T> : CArrayBase<T>, IArrayAccessor<T> where T : CVariable
     {
 
         public CArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)

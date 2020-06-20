@@ -121,7 +121,7 @@ namespace WolvenKit.CR2W.Types
                                 if (matchArrayType.Groups[3].Value == "Uint8" || matchArrayType.Groups[3].Value == "Int8")
                                 {
                                     var bytearray = new CByteArray(cr2w, parentVariable, varname);
-                                    //bytearray.Type = fullname;
+                                    bytearray.InternalType = fullname;
                                     return bytearray;
                                 }
 

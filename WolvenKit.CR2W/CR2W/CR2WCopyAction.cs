@@ -181,7 +181,7 @@ namespace WolvenKit.CR2W
                 && ExcludeChunks.Contains(chunk.REDType))
                 return null;
 
-            var chunkcopy = chunk.Copy(this);
+            var chunkcopy = chunk.CopyChunk(this);
 
             if (chunkcopy != null)
             {
@@ -368,7 +368,7 @@ namespace WolvenKit.CR2W
                         CStoryScene CStoryScene = DestinationFile.GetChunkByType("CStoryScene").data as CStoryScene;
                         CArray<CPtr<CStorySceneDialogsetInstance>> dialogsetInstances = CStoryScene.DialogsetInstances;
 
-                        var copieddialogsetchunk = srcdlgset.Copy(this);
+                        var copieddialogsetchunk = srcdlgset.CopyChunk(this);
                         CStorySceneDialogsetInstance copieddialogset = (CStorySceneDialogsetInstance)copieddialogsetchunk.data;
 
                         //DestinationFile.CreatePtr(dialogsetInstances, copieddialogset);

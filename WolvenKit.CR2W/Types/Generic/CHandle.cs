@@ -10,12 +10,12 @@ using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
-    public interface IHandleAccessor
+    public interface IHandleAccessor : IEditableVariable
     {
         bool ChunkHandle { get; set; }
         string DepotPath { get; set; }
         string ClassName { get; set; }
-        string REDName { get; }
+        //string REDName { get; }
 
         CR2WExportWrapper Reference { get; set; }
     }

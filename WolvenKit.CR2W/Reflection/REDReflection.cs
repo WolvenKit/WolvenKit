@@ -236,19 +236,42 @@ namespace WolvenKit.CR2W.Reflection
 
 
 
-
-
-        public static IEnumerable<PropertyInfo> GetREDProperties<T>(Type type) where T : Attribute
+        public static IEnumerable<PropertyInfo> GetREDPropertiesinternal<T>(Type type, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public) where T : Attribute
         {
             return type
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .GetProperties(bindingFlags)
                 .Where(prop => prop.IsDefined(typeof(T))).ToList();
         }
-        public static PropertyInfo GetREDProperty<T>(Type classType, string name, string type) where T : Attribute
+
+        public static IEnumerable<PropertyInfo> GetREDProperties<T>(Type type, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public) where T : Attribute
         {
-            return GetREDProperties<T>(classType)
-                .Where(prop => prop.Name == name && GetREDTypeString(prop.PropertyType) == type)
-                .FirstOrDefault();
+            return GetOrderedREDProperties<T>(type, bindingFlags).ToList();
         }
+
+        /// https://stackoverflow.com/questions/14734374/c-sharp-reflection-property-order
+        public static IEnumerable<PropertyInfo> GetOrderedREDProperties<T>(Type type, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance) where T : Attribute
+        {
+            Dictionary<Type, int> lookup = new Dictionary<Type, int>();
+
+            int count = 0;
+            lookup[type] = count++;
+            Type parent = type.BaseType;
+            while (parent != null)
+            {
+                lookup[parent] = count;
+                count++;
+                parent = parent.BaseType;
+            }
+
+            return REDReflection.GetREDPropertiesinternal<T>(type, bindingFlags)
+                .OrderByDescending(prop => lookup[prop.DeclaringType]);
+        }
+
+        //public static PropertyInfo GetREDProperty<T>(Type classType, string name, string type) where T : Attribute
+        //{
+        //    return GetREDProperties<T>(classType)
+        //        .Where(prop => prop.Name == name && GetREDTypeString(prop.PropertyType) == type)
+        //        .FirstOrDefault();
+        //}
     }
 }

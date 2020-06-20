@@ -176,6 +176,39 @@ namespace WolvenKit.CR2W.Types
             return redvariables;
         }
 
+        public List<IEditableVariable> GetExistingVariables(bool includeBuffers = true, bool includeInherited = true)
+        {
+            List<IEditableVariable> redvariables = new List<IEditableVariable>();
+            var bindingFlags = BindingFlags.Public | BindingFlags.Instance;
+            if (!includeInherited)
+                bindingFlags |= BindingFlags.DeclaredOnly;
+
+
+            /// From msdn:
+            /// The GetProperties method does not return properties in a particular order, such as alphabetical or declaration order. 
+            /// Your code must not depend on the order in which properties are returned, because that order varies.
+            /// solutions: an order attribute, or built-in into REDAttribute
+            List<PropertyInfo> redprops = REDReflection.GetREDProperties<REDAttribute>(this.GetType(), bindingFlags).ToList();
+
+            foreach (PropertyInfo pi in redprops)
+            {
+                if (pi.GetCustomAttribute<REDAttribute>() is REDBufferAttribute && !includeBuffers )
+                    continue;
+
+                // gets instantiated variables
+                if (pi.GetValue(this) is CVariable cvar)
+                {
+                    if (cvar.IsSerialized)
+                        redvariables.Add(cvar);
+                }
+            }
+
+            return redvariables;
+        }
+
+
+        
+
         /// <summary>
         /// Reads a Cvariable from a binaryreader stream
         /// Can be overwritten by child classes
@@ -474,6 +507,10 @@ namespace WolvenKit.CR2W.Types
         #endregion
 
         #region Override
+        public override string ToString()
+        {
+            return $"<{REDType}>{REDName}";
+        }
 
         public override int GetHashCode()
         {
