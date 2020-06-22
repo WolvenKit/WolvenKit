@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,6 +13,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("remove")] 		public CBool Remove { get; set;}
 
 		[RED("abulities", 2,0)] 		public CArray<CName> Abulities { get; set;}
+
+		[RED("abilityName")] 		public CName AbilityName { get; set;}
+
+		[RED("i")] 		public CInt32 I { get; set;}
 
 		public ISpawnAddAbilityInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

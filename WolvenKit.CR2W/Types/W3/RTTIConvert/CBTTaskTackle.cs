@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,18 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskTackle : IBehTreeTask
 	{
+		[RED("dealDamage")] 		public CBool DealDamage { get; set;}
+
+		[RED("activeOnAnimEvent")] 		public CBool ActiveOnAnimEvent { get; set;}
+
+		[RED("bCollisionWithActor")] 		public CBool BCollisionWithActor { get; set;}
+
+		[RED("activated")] 		public CBool Activated { get; set;}
+
+		[RED("xmlDamageName")] 		public CName XmlDamageName { get; set;}
+
+		[RED("collidedActor")] 		public CHandle<CActor> CollidedActor { get; set;}
+
 		public CBTTaskTackle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskTackle(cr2w, parent, name);

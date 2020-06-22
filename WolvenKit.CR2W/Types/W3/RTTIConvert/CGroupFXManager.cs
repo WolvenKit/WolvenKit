@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -16,6 +17,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("randomDropMax")] 		public CFloat RandomDropMax { get; set;}
 
 		[RED("effectName")] 		public CName EffectName { get; set;}
+
+		[RED("ntities", 2,0)] 		public CArray<CHandle<CEntity>> Ntities { get; set;}
+
+		[RED("randomDrop")] 		public CFloat RandomDrop { get; set;}
 
 		public CGroupFXManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

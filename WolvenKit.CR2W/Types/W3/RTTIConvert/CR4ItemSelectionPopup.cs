@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,16 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4ItemSelectionPopup : CR4PopupBase
 	{
+		[RED("m_DataObject")] 		public CHandle<W3ItemSelectionPopupData> M_DataObject { get; set;}
+
+		[RED("m_playerInv")] 		public CHandle<W3GuiSelectItemComponent> M_playerInv { get; set;}
+
+		[RED("m_containerInv")] 		public CHandle<W3GuiContainerInventoryComponent> M_containerInv { get; set;}
+
+		[RED("m_containerOwner")] 		public CHandle<CGameplayEntity> M_containerOwner { get; set;}
+
+		[RED("m_selectedItemCategory")] 		public CInt32 M_selectedItemCategory { get; set;}
+
 		public CR4ItemSelectionPopup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4ItemSelectionPopup(cr2w, parent, name);

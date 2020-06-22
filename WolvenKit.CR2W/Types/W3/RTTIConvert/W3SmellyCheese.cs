@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -16,6 +17,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("aardedEffectName")] 		public CName AardedEffectName { get; set;}
 
 		[RED("reactivateTimer")] 		public CFloat ReactivateTimer { get; set;}
+
+		[RED("deactivated")] 		public CBool Deactivated { get; set;}
 
 		public W3SmellyCheese(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

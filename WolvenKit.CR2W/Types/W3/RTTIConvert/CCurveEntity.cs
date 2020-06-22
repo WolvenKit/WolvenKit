@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,8 +13,6 @@ namespace WolvenKit.CR2W.Types
 		[RED("curveComponent")] 		public CPtr<CCurveComponent> CurveComponent { get; set;}
 
 		[RED("controlPointEntities", 2,0)] 		public CArray<CPtr<CCurveControlPointEntity>> ControlPointEntities { get; set;}
-
-		[RED("curveEntitySpawner")] 		public CPtr<CCurveEntitySpawner> CurveEntitySpawner { get; set;}
 
 		public CCurveEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -24,6 +25,14 @@ namespace WolvenKit.CR2W.Types
 		[RED("persistFxAfterCollision")] 		public CBool PersistFxAfterCollision { get; set;}
 
 		[RED("dealDamageEvenIfDodging")] 		public CBool DealDamageEvenIfDodging { get; set;}
+
+		[RED("ignore")] 		public CBool Ignore { get; set;}
+
+		[RED("isActive")] 		public CBool IsActive { get; set;}
+
+		[RED("collidedEntities", 2,0)] 		public CArray<CHandle<CGameplayEntity>> CollidedEntities { get; set;}
+
+		[RED("lifeSpan")] 		public CFloat LifeSpan { get; set;}
 
 		public W3AdvancedProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

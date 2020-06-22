@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,10 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SummonedEntityComponent : CScriptedComponent
 	{
+		[RED("m_Summoner")] 		public CHandle<CActor> M_Summoner { get; set;}
+
+		[RED("m_SummonedTime")] 		public CFloat M_SummonedTime { get; set;}
+
 		[RED("shouldUseSummonerGuardArea")] 		public CBool ShouldUseSummonerGuardArea { get; set;}
 
 		[RED("killOnSummonersDeath")] 		public CBool KillOnSummonersDeath { get; set;}

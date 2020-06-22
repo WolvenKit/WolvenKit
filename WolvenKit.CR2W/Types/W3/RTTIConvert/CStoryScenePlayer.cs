@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -16,6 +17,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("isPaused")] 		public CUInt16 IsPaused { get; set;}
 
 		[RED("isGameplay")] 		public CBool IsGameplay { get; set;}
+
+		[RED("m_isFinalboard")] 		public CBool M_isFinalboard { get; set;}
 
 		public CStoryScenePlayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

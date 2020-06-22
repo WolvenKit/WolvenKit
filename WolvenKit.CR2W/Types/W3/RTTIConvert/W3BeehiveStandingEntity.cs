@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -10,6 +11,10 @@ namespace WolvenKit.CR2W.Types
 	public class W3BeehiveStandingEntity : W3AnimatedContainer
 	{
 		[RED("damageVal")] 		public SAbilityAttributeValue DamageVal { get; set;}
+
+		[RED("actorsInRange", 2,0)] 		public CArray<CHandle<CActor>> ActorsInRange { get; set;}
+
+		[RED("wasInteracted")] 		public CBool WasInteracted { get; set;}
 
 		public W3BeehiveStandingEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

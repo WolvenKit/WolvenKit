@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,22 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDettlaffConstruct : CNewNPC
 	{
+		[RED("numberOfHits")] 		public CInt32 NumberOfHits { get; set;}
+
+		[RED("destroyCalled")] 		public CBool DestroyCalled { get; set;}
+
+		[RED("percLife")] 		public CFloat PercLife { get; set;}
+
+		[RED("chunkLife")] 		public CFloat ChunkLife { get; set;}
+
+		[RED("healthBarPerc")] 		public CFloat HealthBarPerc { get; set;}
+
+		[RED("lastHitTimestamp")] 		public CFloat LastHitTimestamp { get; set;}
+
+		[RED("testedHitTimestamp")] 		public CFloat TestedHitTimestamp { get; set;}
+
+		[RED("l_temp")] 		public CFloat L_temp { get; set;}
+
 		[RED("timeBetweenHits")] 		public CFloat TimeBetweenHits { get; set;}
 
 		[RED("timeBetweenFireDamage")] 		public CFloat TimeBetweenFireDamage { get; set;}

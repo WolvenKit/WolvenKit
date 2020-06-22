@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -14,18 +15,6 @@ namespace WolvenKit.CR2W.Types
 		[RED("name")] 		public CName Name { get; set;}
 
 		[RED("connections", 2,0)] 		public CArray<CPtr<CGraphConnection>> Connections { get; set;}
-
-		[RED("flags")] 		public CUInt32 Flags { get; set;}
-
-		[RED("placement")] 		public CEnum<ELinkedSocketPlacement> Placement { get; set;}
-
-		[RED("caption")] 		public CString Caption { get; set;}
-
-		[RED("color")] 		public CColor Color { get; set;}
-
-		[RED("direction")] 		public CEnum<ELinkedSocketDirection> Direction { get; set;}
-
-		[RED("drawStyle")] 		public CEnum<ELinkedSocketDrawStyle> DrawStyle { get; set;}
 
 		public CGraphSocket(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

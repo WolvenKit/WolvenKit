@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,20 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSendInfo : IBehTreeTask
 	{
+		[RED("onIsAvailable")] 		public CBool OnIsAvailable { get; set;}
+
+		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+
+		[RED("onDectivate")] 		public CBool OnDectivate { get; set;}
+
+		[RED("infoType")] 		public CEnum<EActionInfoType> InfoType { get; set;}
+
+		[RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+
+		[RED("distanceToBecomeUnawareOfOldTarget")] 		public CFloat DistanceToBecomeUnawareOfOldTarget { get; set;}
+
+		[RED("lastTarget")] 		public CHandle<CNode> LastTarget { get; set;}
+
 		public CBTTaskSendInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskSendInfo(cr2w, parent, name);

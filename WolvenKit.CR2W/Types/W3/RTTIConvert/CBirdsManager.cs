@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -24,6 +25,18 @@ namespace WolvenKit.CR2W.Types
 		[RED("spawnOnlyInsideBirdsArea")] 		public CBool SpawnOnlyInsideBirdsArea { get; set;}
 
 		[RED("disableSnapToCollisions")] 		public CBool DisableSnapToCollisions { get; set;}
+
+		[RED("birdSpawnpoints", 2,0)] 		public CArray<SBirdSpawnpoint> BirdSpawnpoints { get; set;}
+
+		[RED("shouldBirdsFly")] 		public CBool ShouldBirdsFly { get; set;}
+
+		[RED("despawnTime")] 		public CFloat DespawnTime { get; set;}
+
+		[RED("wasEverVisible")] 		public CBool WasEverVisible { get; set;}
+
+		[RED("birdArea")] 		public CHandle<CTriggerAreaComponent> BirdArea { get; set;}
+
+		[RED("birdTemplate")] 		public CHandle<CEntityTemplate> BirdTemplate { get; set;}
 
 		public CBirdsManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

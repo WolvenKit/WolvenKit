@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -18,6 +19,14 @@ namespace WolvenKit.CR2W.Types
 		[RED("pursueDistance")] 		public CFloat PursueDistance { get; set;}
 
 		[RED("ignoreTag")] 		public CName IgnoreTag { get; set;}
+
+		[RED("m_Target")] 		public CHandle<CNode> M_Target { get; set;}
+
+		[RED("m_StartPos")] 		public Vector M_StartPos { get; set;}
+
+		[RED("m_SummonedCmp")] 		public CHandle<W3SummonedEntityComponent> M_SummonedCmp { get; set;}
+
+		[RED("m_SlideCmp")] 		public CHandle<W3SlideToTargetComponent> M_SlideCmp { get; set;}
 
 		public W3SummonedFlies(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

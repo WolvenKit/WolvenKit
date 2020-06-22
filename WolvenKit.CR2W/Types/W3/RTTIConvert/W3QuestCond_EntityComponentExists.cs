@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,6 +13,12 @@ namespace WolvenKit.CR2W.Types
 		[RED("tag")] 		public CName Tag { get; set;}
 
 		[RED("componentName")] 		public CName ComponentName { get; set;}
+
+		[RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
+
+		[RED("component")] 		public CHandle<CComponent> Component { get; set;}
+
+		[RED("listener")] 		public CHandle<W3QuestCond_EntityComponentExists_Listener> Listener { get; set;}
 
 		public W3QuestCond_EntityComponentExists(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

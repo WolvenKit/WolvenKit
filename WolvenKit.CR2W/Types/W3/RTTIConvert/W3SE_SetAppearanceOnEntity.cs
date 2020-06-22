@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,6 +13,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("entityHandle")] 		public EntityHandle EntityHandle { get; set;}
 
 		[RED("appearanceName")] 		public CString AppearanceName { get; set;}
+
+		[RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
 
 		public W3SE_SetAppearanceOnEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

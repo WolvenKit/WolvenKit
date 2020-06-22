@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -18,6 +19,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("soundOnStart")] 		public CName SoundOnStart { get; set;}
 
 		[RED("soundOnStop")] 		public CName SoundOnStop { get; set;}
+
+		[RED("envID")] 		public CInt32 EnvID { get; set;}
+
+		[RED("active")] 		public CBool Active { get; set;}
 
 		public W3EyeOfLoki(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -28,6 +29,24 @@ namespace WolvenKit.CR2W.Types
 		[RED("excludedEntitiesTags", 2,0)] 		public CArray<CName> ExcludedEntitiesTags { get; set;}
 
 		[RED("factOnDestruction")] 		public CString FactOnDestruction { get; set;}
+
+		[RED("originEntity")] 		public CHandle<CGameplayEntity> OriginEntity { get; set;}
+
+		[RED("originPoint")] 		public Vector OriginPoint { get; set;}
+
+		[RED("victims", 2,0)] 		public CArray<SSwarmVictim> Victims { get; set;}
+
+		[RED("buffParams")] 		public SCustomEffectParams BuffParams { get; set;}
+
+		[RED("targets", 2,0)] 		public CArray<CHandle<CGameplayEntity>> Targets { get; set;}
+
+		[RED("activeDistanceSquared")] 		public CFloat ActiveDistanceSquared { get; set;}
+
+		[RED("PLAYER_PRESENCE_CHECK_DISTANCE")] 		public CFloat PLAYER_PRESENCE_CHECK_DISTANCE { get; set;}
+
+		[RED("PRESENCE_CHECK_DT")] 		public CFloat PRESENCE_CHECK_DT { get; set;}
+
+		[RED("TARGETS_CHECK_DT")] 		public CFloat TARGETS_CHECK_DT { get; set;}
 
 		public W3BeeSwarm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

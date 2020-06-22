@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -22,6 +23,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("randomHeight")] 		public CBehTreeValInt RandomHeight { get; set;}
 
 		[RED("flightMaxDuration")] 		public CBehTreeValFloat FlightMaxDuration { get; set;}
+
+		[RED("anchorPoint")] 		public CHandle<CEncounter> AnchorPoint { get; set;}
+
+		[RED("anchorPointAC")] 		public CHandle<CComponent> AnchorPointAC { get; set;}
 
 		public CBTTaskFlyAroundDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

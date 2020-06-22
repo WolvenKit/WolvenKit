@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -10,6 +11,16 @@ namespace WolvenKit.CR2W.Types
 	public class W3Boat : CGameplayEntity
 	{
 		[RED("teleportedFromOtherHUB")] 		public CBool TeleportedFromOtherHUB { get; set;}
+
+		[RED("boatComp")] 		public CHandle<CBoatComponent> BoatComp { get; set;}
+
+		[RED("mountInteractionComp")] 		public CHandle<CInteractionComponent> MountInteractionComp { get; set;}
+
+		[RED("mountInteractionCompPassenger")] 		public CHandle<CInteractionComponent> MountInteractionCompPassenger { get; set;}
+
+		[RED("canBeDestroyed")] 		public CBool CanBeDestroyed { get; set;}
+
+		[RED("needEnableInteractions")] 		public CBool NeedEnableInteractions { get; set;}
 
 		public W3Boat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

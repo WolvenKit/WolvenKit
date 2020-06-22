@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,6 +13,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("actionPointSelector")] 		public CHandle<CActionPointSelector> ActionPointSelector { get; set;}
 
 		[RED("spawnToWork")] 		public CBool SpawnToWork { get; set;}
+
+		[RED("params")] 		public CHandle<CAINpcWorkParams> Params { get; set;}
 
 		public CAINpcWork(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

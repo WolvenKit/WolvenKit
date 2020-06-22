@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -7,21 +8,17 @@ namespace WolvenKit.CR2W.Types
 {
 	[DataContract(Namespace = "")]
 	[REDMeta]
-	public class STimeScaleSource : CVariable
+	public class STimescaleSource : CVariable
 	{
-		[RED("timeScale")] 		public CFloat TimeScale { get; set;}
+		[RED("sourceName")] 		public CName SourceName { get; set;}
 
-		[RED("name")] 		public CName Name { get; set;}
+		[RED("sourceType")] 		public CEnum<ETimescaleSource> SourceType { get; set;}
 
-		[RED("affectCamera")] 		public CBool AffectCamera { get; set;}
+		[RED("sourcePriority")] 		public CInt32 SourcePriority { get; set;}
 
-		[RED("dontSave")] 		public CBool DontSave { get; set;}
+		public STimescaleSource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		[RED("priorityIndex")] 		public CUInt32 PriorityIndex { get; set;}
-
-		public STimeScaleSource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
-
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new STimeScaleSource(cr2w, parent, name);
+		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new STimescaleSource(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -10,6 +11,18 @@ namespace WolvenKit.CR2W.Types
 	public class W3MonsterElementalArm : CGameplayEntity
 	{
 		[RED("physcialComponent")] 		public CHandle<CComponent> PhyscialComponent { get; set;}
+
+		[RED("victims", 2,0)] 		public CArray<CHandle<CActor>> Victims { get; set;}
+
+		[RED("victim")] 		public CHandle<CActor> Victim { get; set;}
+
+		[RED("isActive")] 		public CBool IsActive { get; set;}
+
+		[RED("action")] 		public CHandle<W3DamageAction> Action { get; set;}
+
+		[RED("owner")] 		public CHandle<CActor> Owner { get; set;}
+
+		[RED("component")] 		public CHandle<CMeshComponent> Component { get; set;}
 
 		public W3MonsterElementalArm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

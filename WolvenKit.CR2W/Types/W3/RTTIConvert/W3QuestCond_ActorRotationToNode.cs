@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -14,6 +15,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("degrees")] 		public CFloat Degrees { get; set;}
 
 		[RED("targetTag")] 		public CName TargetTag { get; set;}
+
+		[RED("targetNode")] 		public CHandle<CNode> TargetNode { get; set;}
+
+		[RED("listener")] 		public CHandle<W3QuestCond_ActorRotationToNode_Listener> Listener { get; set;}
 
 		public W3QuestCond_ActorRotationToNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

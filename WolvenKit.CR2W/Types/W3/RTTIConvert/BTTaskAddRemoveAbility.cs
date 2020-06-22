@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,20 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskAddRemoveAbility : IBehTreeTask
 	{
+		[RED("abilityName")] 		public CName AbilityName { get; set;}
+
+		[RED("allowMultiple")] 		public CBool AllowMultiple { get; set;}
+
+		[RED("removeAbility")] 		public CBool RemoveAbility { get; set;}
+
+		[RED("delayUntilInCameraFrame")] 		public CBool DelayUntilInCameraFrame { get; set;}
+
+		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+
+		[RED("onAnimEventName")] 		public CName OnAnimEventName { get; set;}
+
+		[RED("eventReceived")] 		public CBool EventReceived { get; set;}
+
 		public BTTaskAddRemoveAbility(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskAddRemoveAbility(cr2w, parent, name);

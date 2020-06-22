@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -14,6 +15,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("addScentToCollidedActors")] 		public CBool AddScentToCollidedActors { get; set;}
 
 		[RED("attractionDuration")] 		public CFloat AttractionDuration { get; set;}
+
+		[RED("m_BaitEntity")] 		public CHandle<CEntity> M_BaitEntity { get; set;}
 
 		public W3BaitProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

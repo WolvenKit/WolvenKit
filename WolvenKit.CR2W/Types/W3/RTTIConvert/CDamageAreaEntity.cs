@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -26,6 +27,14 @@ namespace WolvenKit.CR2W.Types
 		[RED("dealDamagePerc")] 		public CInt32 DealDamagePerc { get; set;}
 
 		[RED("range")] 		public CFloat Range { get; set;}
+
+		[RED("isActive")] 		public CBool IsActive { get; set;}
+
+		[RED("actorsInRange", 2,0)] 		public CArray<CHandle<CActor>> ActorsInRange { get; set;}
+
+		[RED("buffParams")] 		public SCustomEffectParams BuffParams { get; set;}
+
+		[RED("interaction")] 		public CHandle<CInteractionComponent> Interaction { get; set;}
 
 		public CDamageAreaEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

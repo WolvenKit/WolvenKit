@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,8 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Poster : CGameplayEntity
 	{
+		[RED("descriptionGenerated")] 		public CBool DescriptionGenerated { get; set;}
+
 		[RED("description")] 		public CString Description { get; set;}
 
 		[RED("camera")] 		public CHandle<CEntityTemplate> Camera { get; set;}
@@ -28,6 +31,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("focusModeHighlight")] 		public CEnum<EFocusModeVisibility> FocusModeHighlight { get; set;}
 
 		[RED("alignLeft")] 		public CBool AlignLeft { get; set;}
+
+		[RED("restoreUsableItemAtEnd")] 		public CBool RestoreUsableItemAtEnd { get; set;}
+
+		[RED("spawnedCamera")] 		public CHandle<CStaticCamera> SpawnedCamera { get; set;}
 
 		public W3Poster(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

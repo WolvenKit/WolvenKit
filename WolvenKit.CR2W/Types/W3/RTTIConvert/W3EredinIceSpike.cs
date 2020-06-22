@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -16,6 +17,12 @@ namespace WolvenKit.CR2W.Types
 		[RED("damageVal")] 		public CFloat DamageVal { get; set;}
 
 		[RED("effectDuration")] 		public CFloat EffectDuration { get; set;}
+
+		[RED("meshComp")] 		public CHandle<CMeshComponent> MeshComp { get; set;}
+
+		[RED("destructionComp")] 		public CHandle<CDestructionSystemComponent> DestructionComp { get; set;}
+
+		[RED("entitiesInRange", 2,0)] 		public CArray<CHandle<CGameplayEntity>> EntitiesInRange { get; set;}
 
 		public W3EredinIceSpike(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

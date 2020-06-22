@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,8 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMajorPlaceOfPowerEntity : CInteractiveEntity
 	{
+		[RED("interactionComponent")] 		public CHandle<CInteractionComponent> InteractionComponent { get; set;}
+
 		[RED("buffType")] 		public CEnum<EShrineBuffs> BuffType { get; set;}
 
 		[RED("buffUniqueName")] 		public CString BuffUniqueName { get; set;}
@@ -18,6 +21,24 @@ namespace WolvenKit.CR2W.Types
 		[RED("fxOnChannel")] 		public CName FxOnChannel { get; set;}
 
 		[RED("fxOnSuccess")] 		public CName FxOnSuccess { get; set;}
+
+		[RED("channelingTime")] 		public CFloat ChannelingTime { get; set;}
+
+		[RED("buffDuration")] 		public CFloat BuffDuration { get; set;}
+
+		[RED("buffCooldown")] 		public GameTime BuffCooldown { get; set;}
+
+		[RED("skillPointGranted")] 		public CBool SkillPointGranted { get; set;}
+
+		[RED("isRecharging")] 		public CBool IsRecharging { get; set;}
+
+		[RED("lastUsed")] 		public GameTime LastUsed { get; set;}
+
+		[RED("isPlaceOfPowerInIdle")] 		public CBool IsPlaceOfPowerInIdle { get; set;}
+
+		[RED("voicesetTimestamp")] 		public GameTime VoicesetTimestamp { get; set;}
+
+		[RED("initialVoicesetPlayed")] 		public CBool InitialVoicesetPlayed { get; set;}
 
 		public CMajorPlaceOfPowerEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

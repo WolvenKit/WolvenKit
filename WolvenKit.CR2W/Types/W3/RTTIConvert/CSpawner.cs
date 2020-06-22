@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -30,6 +31,12 @@ namespace WolvenKit.CR2W.Types
 		[RED("initialHealth")] 		public CInt32 InitialHealth { get; set;}
 
 		[RED("spawnAnimation")] 		public CEnum<EExplorationMode> SpawnAnimation { get; set;}
+
+		[RED("spawnedNPCs", 2,0)] 		public CArray<CHandle<CNewNPC>> SpawnedNPCs { get; set;}
+
+		[RED("respawnTime", 2,0)] 		public CArray<EngineTime> RespawnTime { get; set;}
+
+		[RED("respawnNeeded", 2,0)] 		public CArray<CBool> RespawnNeeded { get; set;}
 
 		public CSpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

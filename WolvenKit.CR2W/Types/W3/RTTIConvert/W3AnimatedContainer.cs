@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -32,6 +33,12 @@ namespace WolvenKit.CR2W.Types
 		[RED("attachAnimName")] 		public CName AttachAnimName { get; set;}
 
 		[RED("detachAnimName")] 		public CName DetachAnimName { get; set;}
+
+		[RED("objectAttached")] 		public CBool ObjectAttached { get; set;}
+
+		[RED("objectCachedPos")] 		public Vector ObjectCachedPos { get; set;}
+
+		[RED("objectCachedRot")] 		public EulerAngles ObjectCachedRot { get; set;}
 
 		public W3AnimatedContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

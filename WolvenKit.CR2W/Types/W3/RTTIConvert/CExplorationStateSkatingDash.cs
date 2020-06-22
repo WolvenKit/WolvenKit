@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,8 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateSkatingDash : CExplorationStateAbstract
 	{
+		[RED("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
+
 		[RED("impulse")] 		public CFloat Impulse { get; set;}
 
 		[RED("timeMax")] 		public CFloat TimeMax { get; set;}
@@ -19,11 +22,21 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("holdTurnSpeed")] 		public CFloat HoldTurnSpeed { get; set;}
 
+		[RED("sharpTurn")] 		public CBool SharpTurn { get; set;}
+
 		[RED("sharpTurnTime")] 		public CFloat SharpTurnTime { get; set;}
 
 		[RED("behAttackEvent")] 		public CName BehAttackEvent { get; set;}
 
 		[RED("behLeftFootParam")] 		public CName BehLeftFootParam { get; set;}
+
+		[RED("boneRightFoot")] 		public CName BoneRightFoot { get; set;}
+
+		[RED("boneLeftFoot")] 		public CName BoneLeftFoot { get; set;}
+
+		[RED("boneIndexRightFoot")] 		public CInt32 BoneIndexRightFoot { get; set;}
+
+		[RED("boneIndexLeftFoot")] 		public CInt32 BoneIndexLeftFoot { get; set;}
 
 		[RED("behEventEnd")] 		public CName BehEventEnd { get; set;}
 

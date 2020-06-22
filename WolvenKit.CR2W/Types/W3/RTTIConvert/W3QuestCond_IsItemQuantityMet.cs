@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -23,18 +24,17 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("includeHorseInventory")] 		public CBool IncludeHorseInventory { get; set;}
 
-		[RED("ignoreTags", 2,0)] 		public CArray<CName> IgnoreTags { get; set; }
+		[RED("ignoreTags", 2,0)] 		public CArray<CName> IgnoreTags { get; set;}
 
+		[RED("inventory")] 		public CHandle<CInventoryComponent> Inventory { get; set;}
 
+		[RED("isFulfilled")] 		public CBool IsFulfilled { get; set;}
 
-		[RED("inventory", 2, 0)] public CHandle<CInventoryComponent> Inventory { get; set; }
-		[RED("isFulfilled", 2, 0)] public CBool IsFulfilled { get; set; }
-		[RED("isTrophy", 2, 0)] public CBool IsTrophy { get; set; }
-		[RED("globalListener", 2, 0)] public CHandle<W3QuestCond_IsItemQuantityMet_GlobalListener> GlobalListener { get; set; }
-		[RED("inventoryListener", 2, 0)] public CHandle<W3QuestCond_IsItemQuantityMet_InventoryListener> InventoryListener { get; set; }
+		[RED("isTrophy")] 		public CBool IsTrophy { get; set;}
 
+		[RED("globalListener")] 		public CHandle<W3QuestCond_IsItemQuantityMet_GlobalListener> GlobalListener { get; set;}
 
-		
+		[RED("inventoryListener")] 		public CHandle<W3QuestCond_IsItemQuantityMet_InventoryListener> InventoryListener { get; set;}
 
 		public W3QuestCond_IsItemQuantityMet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,8 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIDynamicWander : CAIWanderTree
 	{
+		[RED("params")] 		public CHandle<CAIDynamicWanderParams> Params { get; set;}
+
 		[RED("dynamicWanderArea")] 		public EntityHandle DynamicWanderArea { get; set;}
 
 		[RED("dynamicWanderUseGuardArea")] 		public CBool DynamicWanderUseGuardArea { get; set;}

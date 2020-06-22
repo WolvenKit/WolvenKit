@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -11,11 +12,19 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("jumpEnabled")] 		public CBool JumpEnabled { get; set;}
 
+		[RED("m_SubstateE")] 		public CEnum<EJumpSubState> M_SubstateE { get; set;}
+
+		[RED("m_OrientationInitialF")] 		public CFloat M_OrientationInitialF { get; set;}
+
+		[RED("m_MaxHeightReachedF")] 		public CFloat M_MaxHeightReachedF { get; set;}
+
 		[RED("m_SlopeAngleMaxToJump")] 		public CFloat M_SlopeAngleMaxToJump { get; set;}
 
 		[RED("m_UseGenericJumpB")] 		public CBool M_UseGenericJumpB { get; set;}
 
 		[RED("m_AllowSprintJumpB")] 		public CBool M_AllowSprintJumpB { get; set;}
+
+		[RED("m_JumpParmsS")] 		public SJumpParams M_JumpParmsS { get; set;}
 
 		[RED("m_JumpParmsGenericS")] 		public SJumpParams M_JumpParmsGenericS { get; set;}
 
@@ -69,6 +78,8 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("m_ReactToHitCeilingB")] 		public CBool M_ReactToHitCeilingB { get; set;}
 
+		[RED("m_HitCeilingB")] 		public CBool M_HitCeilingB { get; set;}
+
 		[RED("m_BehEventPredictLandN")] 		public CName M_BehEventPredictLandN { get; set;}
 
 		[RED("m_BehListenInertialJumpN")] 		public CName M_BehListenInertialJumpN { get; set;}
@@ -121,11 +132,15 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("m_FallRecoverMaxDistF")] 		public CFloat M_FallRecoverMaxDistF { get; set;}
 
+		[RED("m_CanSetVelocityB")] 		public CBool M_CanSetVelocityB { get; set;}
+
 		[RED("m_ForceIdleJumpOnColliisonB")] 		public CBool M_ForceIdleJumpOnColliisonB { get; set;}
 
 		[RED("m_ForceIdleJumpHeightFreeF")] 		public CFloat M_ForceIdleJumpHeightFreeF { get; set;}
 
 		[RED("m_ForceIdleJumpDistFreeF")] 		public CFloat M_ForceIdleJumpDistFreeF { get; set;}
+
+		[RED("m_InteractionLastLockingF")] 		public CFloat M_InteractionLastLockingF { get; set;}
 
 		[RED("m_LandPredictedB")] 		public CBool M_LandPredictedB { get; set;}
 
@@ -137,11 +152,25 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("m_LandPredictionTimeF")] 		public CFloat M_LandPredictionTimeF { get; set;}
 
+		[RED("m_CollisionGroupsNamesNArr", 2,0)] 		public CArray<CName> M_CollisionGroupsNamesNArr { get; set;}
+
+		[RED("m_LandPredicedTypeE")] 		public CEnum<ELandPredictionType> M_LandPredicedTypeE { get; set;}
+
+		[RED("m_LandPredicedCoefF")] 		public CFloat M_LandPredicedCoefF { get; set;}
+
 		[RED("m_LandPredicedBlendF")] 		public CFloat M_LandPredicedBlendF { get; set;}
 
 		[RED("m_SlopedLandZF")] 		public CFloat M_SlopedLandZF { get; set;}
 
+		[RED("m_JumpOriginalPositionV")] 		public Vector M_JumpOriginalPositionV { get; set;}
+
 		[RED("m_CameraDebugB")] 		public CBool M_CameraDebugB { get; set;}
+
+		[RED("m_CameraStartB")] 		public CBool M_CameraStartB { get; set;}
+
+		[RED("m_CameraPositionV")] 		public Vector M_CameraPositionV { get; set;}
+
+		[RED("m_CameraRotationEA")] 		public EulerAngles M_CameraRotationEA { get; set;}
 
 		[RED("m_CameraTimeToEndF")] 		public CFloat M_CameraTimeToEndF { get; set;}
 
@@ -149,9 +178,25 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("cameraToFallHeightNeed")] 		public CFloat CameraToFallHeightNeed { get; set;}
 
+		[RED("cameraFallIsSet")] 		public CBool CameraFallIsSet { get; set;}
+
 		[RED("m_CollideBehGraphSideNameS")] 		public CName M_CollideBehGraphSideNameS { get; set;}
 
+		[RED("m_CollidingSideE")] 		public CEnum<ESideSelected> M_CollidingSideE { get; set;}
+
 		[RED("m_CooldownTotalF")] 		public CFloat M_CooldownTotalF { get; set;}
+
+		[RED("m_CooldownCurF")] 		public CFloat M_CooldownCurF { get; set;}
+
+		[RED("useWalkJump")] 		public CBool UseWalkJump { get; set;}
+
+		[RED("useIdleWalkJump")] 		public CBool UseIdleWalkJump { get; set;}
+
+		[RED("useHighJump")] 		public CBool UseHighJump { get; set;}
+
+		[RED("jumpingOnIdleIsForward")] 		public CBool JumpingOnIdleIsForward { get; set;}
+
+		[RED("jumpIdleWhenObstructed")] 		public CBool JumpIdleWhenObstructed { get; set;}
 
 		public CExplorationStateJump(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

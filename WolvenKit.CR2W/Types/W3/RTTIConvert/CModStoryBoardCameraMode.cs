@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,10 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardCameraMode : CModStoryBoardWorkMode
 	{
+		[RED("theCam")] 		public CHandle<CStoryBoardInteractiveCamera> TheCam { get; set;}
+
+		[RED("assetManager")] 		public CHandle<CModStoryBoardAssetManager> AssetManager { get; set;}
+
 		public CModStoryBoardCameraMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModStoryBoardCameraMode(cr2w, parent, name);

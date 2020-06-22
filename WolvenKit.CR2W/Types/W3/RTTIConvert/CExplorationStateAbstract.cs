@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -10,6 +11,20 @@ namespace WolvenKit.CR2W.Types
 	public class CExplorationStateAbstract : CScriptedComponent
 	{
 		[RED("m_StateNameN")] 		public CName M_StateNameN { get; set;}
+
+		[RED("m_StateTypeE")] 		public CEnum<EExplorationStateType> M_StateTypeE { get; set;}
+
+		[RED("m_UpdatesWhileInactiveB")] 		public CBool M_UpdatesWhileInactiveB { get; set;}
+
+		[RED("m_ExplorationO")] 		public CHandle<CExplorationStateManager> M_ExplorationO { get; set;}
+
+		[RED("m_LockedB")] 		public CBool M_LockedB { get; set;}
+
+		[RED("m_ActiveB")] 		public CBool M_ActiveB { get; set;}
+
+		[RED("m_StateNextN")] 		public CName M_StateNextN { get; set;}
+
+		[RED("m_DefaultStateChangesArr", 2,0)] 		public CArray<SDefaultStateTransition> M_DefaultStateChangesArr { get; set;}
 
 		[RED("m_BehaviorNeedsConfirmB")] 		public CBool M_BehaviorNeedsConfirmB { get; set;}
 
@@ -32,6 +47,14 @@ namespace WolvenKit.CR2W.Types
 		[RED("m_InputContextE")] 		public CEnum<EGameplayContextInput> M_InputContextE { get; set;}
 
 		[RED("m_TurnAdjustTimeF")] 		public CFloat M_TurnAdjustTimeF { get; set;}
+
+		[RED("m_ActionsToBlockEArr", 2,0)] 		public CArray<CEnum<EInputActionBlock>> M_ActionsToBlockEArr { get; set;}
+
+		[RED("m_ActionsToBlockCountI")] 		public CInt32 M_ActionsToBlockCountI { get; set;}
+
+		[RED("m_HolsterIsFastB")] 		public CBool M_HolsterIsFastB { get; set;}
+
+		[RED("m_CanSaveB")] 		public CBool M_CanSaveB { get; set;}
 
 		public CExplorationStateAbstract(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

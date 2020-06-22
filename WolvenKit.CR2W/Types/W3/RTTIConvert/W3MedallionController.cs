@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,20 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MedallionController : CObject
 	{
+		[RED("deactivateTimer")] 		public CFloat DeactivateTimer { get; set;}
+
+		[RED("instantIntensity")] 		public CFloat InstantIntensity { get; set;}
+
+		[RED("isBlocked")] 		public CBool IsBlocked { get; set;}
+
+		[RED("focusModeFactor")] 		public CFloat FocusModeFactor { get; set;}
+
+		[RED("defaultDuration")] 		public CFloat DefaultDuration { get; set;}
+
+		[RED("defaultTreshold")] 		public CFloat DefaultTreshold { get; set;}
+
+		[RED("maxTreshold")] 		public CFloat MaxTreshold { get; set;}
+
 		public W3MedallionController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3MedallionController(cr2w, parent, name);

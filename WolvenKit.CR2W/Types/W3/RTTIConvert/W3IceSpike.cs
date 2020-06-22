@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,6 +13,12 @@ namespace WolvenKit.CR2W.Types
 		[RED("damageValue")] 		public CFloat DamageValue { get; set;}
 
 		[RED("weaponSlot")] 		public CName WeaponSlot { get; set;}
+
+		[RED("canBeDestroyed")] 		public CBool CanBeDestroyed { get; set;}
+
+		[RED("destroyAfterTime")] 		public CFloat DestroyAfterTime { get; set;}
+
+		[RED("delayToDealDamage")] 		public CFloat DelayToDealDamage { get; set;}
 
 		public W3IceSpike(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

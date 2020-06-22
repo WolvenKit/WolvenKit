@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -22,6 +23,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("minDelayBetweenSpawns")] 		public CFloat MinDelayBetweenSpawns { get; set;}
 
 		[RED("spawnSnapToGround")] 		public CBool SpawnSnapToGround { get; set;}
+
+		[RED("m_spawnedEntities", 2,0)] 		public CArray<CHandle<CEntity>> M_spawnedEntities { get; set;}
 
 		public W3SE_SpawnEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,8 +13,6 @@ namespace WolvenKit.CR2W.Types
 		[RED("tag")] 		public CName Tag { get; set;}
 
 		[RED("iconType")] 		public CName IconType { get; set;}
-
-		[RED("comment")] 		public CString Comment { get; set;}
 
 		[RED("posX")] 		public CInt32 PosX { get; set;}
 

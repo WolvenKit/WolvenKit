@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,12 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4MenuItemSelect : CR4OverlayMenu
 	{
+		[RED("_itemsInv")] 		public CHandle<W3GuiItemSelectComponent> _itemsInv { get; set;}
+
+		[RED("_invComponent")] 		public CHandle<CInventoryComponent> _invComponent { get; set;}
+
+		[RED("_initData")] 		public CHandle<W3ItemSelectMenuInitData> _initData { get; set;}
+
 		public CR4MenuItemSelect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4MenuItemSelect(cr2w, parent, name);

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,8 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateSkatingIdle : CExplorationStateAbstract
 	{
+		[RED("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
+
 		[RED("turnSpeed")] 		public CFloat TurnSpeed { get; set;}
 
 		[RED("turnStartTolerance")] 		public CFloat TurnStartTolerance { get; set;}

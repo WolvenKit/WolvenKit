@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -11,11 +12,15 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("enabled")] 		public CBool Enabled { get; set;}
 
+		[RED("transitionReadyToEnd")] 		public CBool TransitionReadyToEnd { get; set;}
+
 		[RED("timeToTransition")] 		public CFloat TimeToTransition { get; set;}
 
 		[RED("requireAngle")] 		public CBool RequireAngle { get; set;}
 
 		[RED("timeToStopTrying")] 		public CFloat TimeToStopTrying { get; set;}
+
+		[RED("locomotionSegment")] 		public CHandle<CR4LocomotionSwimToStop> LocomotionSegment { get; set;}
 
 		[RED("animEventToBeReady")] 		public CName AnimEventToBeReady { get; set;}
 

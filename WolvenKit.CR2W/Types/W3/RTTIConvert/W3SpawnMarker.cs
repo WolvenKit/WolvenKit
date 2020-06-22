@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -16,6 +17,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("entitiesToSpawn", 2,0)] 		public CArray<CHandle<CEntityTemplate>> EntitiesToSpawn { get; set;}
 
 		[RED("spawnOnGround")] 		public CBool SpawnOnGround { get; set;}
+
+		[RED("m_summonedEntityCmp")] 		public CHandle<W3SummonedEntityComponent> M_summonedEntityCmp { get; set;}
 
 		public W3SpawnMarker(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

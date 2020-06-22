@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -18,6 +19,16 @@ namespace WolvenKit.CR2W.Types
 		[RED("exterior")] 		public CBool Exterior { get; set;}
 
 		[RED("minimalNumberOfMusicions")] 		public CInt32 MinimalNumberOfMusicions { get; set;}
+
+		[RED("activeSoundEmitter")] 		public CHandle<CEntity> ActiveSoundEmitter { get; set;}
+
+		[RED("activeMusician")] 		public CHandle<CEntity> ActiveMusician { get; set;}
+
+		[RED("activeMusicians", 2,0)] 		public CArray<CHandle<CEntity>> ActiveMusicians { get; set;}
+
+		[RED("activeArea")] 		public CHandle<CTriggerAreaComponent> ActiveArea { get; set;}
+
+		[RED("jobTreeType")] 		public CEnum<EJobTreeType> JobTreeType { get; set;}
 
 		public W3MusicBandActivatorArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

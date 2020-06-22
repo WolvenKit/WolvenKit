@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,8 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateSlide : CExplorationStateAbstract
 	{
+		[RED("subState")] 		public CEnum<ESlidingSubState> SubState { get; set;}
+
 		[RED("enableWallSlide")] 		public CBool EnableWallSlide { get; set;}
 
 		[RED("useSmothedCoefOnIdle")] 		public CBool UseSmothedCoefOnIdle { get; set;}
@@ -31,17 +34,29 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("useWideTerrainCheckToEnter")] 		public CBool UseWideTerrainCheckToEnter { get; set;}
 
+		[RED("updateMaterials")] 		public CBool UpdateMaterials { get; set;}
+
 		[RED("materialParams", 2,0)] 		public CArray<SSlidingMaterialPresetParams> MaterialParams { get; set;}
 
 		[RED("materialNamesToPresets", 2,0)] 		public CArray<SSlidingMaterialNamesToPresets> MaterialNamesToPresets { get; set;}
 
 		[RED("materialParamsDefaultN")] 		public CName MaterialParamsDefaultN { get; set;}
 
+		[RED("materialDefault")] 		public CInt32 MaterialDefault { get; set;}
+
+		[RED("materialCurId")] 		public CInt32 MaterialCurId { get; set;}
+
+		[RED("materialNameCur")] 		public CName MaterialNameCur { get; set;}
+
 		[RED("minTimeToIdle")] 		public CFloat MinTimeToIdle { get; set;}
 
 		[RED("orientingInitial")] 		public CFloat OrientingInitial { get; set;}
 
 		[RED("initialImpulse")] 		public CFloat InitialImpulse { get; set;}
+
+		[RED("startedFromJump")] 		public CBool StartedFromJump { get; set;}
+
+		[RED("startedFromRoll")] 		public CBool StartedFromRoll { get; set;}
 
 		[RED("orientingSpeedMin")] 		public CFloat OrientingSpeedMin { get; set;}
 
@@ -63,11 +78,19 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("exitingTimeMinSoft")] 		public CFloat ExitingTimeMinSoft { get; set;}
 
+		[RED("exitingTimeCur")] 		public CFloat ExitingTimeCur { get; set;}
+
 		[RED("exitingTimeTotal")] 		public CFloat ExitingTimeTotal { get; set;}
 
 		[RED("exitingTimeTotalInput")] 		public CFloat ExitingTimeTotalInput { get; set;}
 
+		[RED("stoppingFriction")] 		public CBool StoppingFriction { get; set;}
+
 		[RED("cooldownMax")] 		public CFloat CooldownMax { get; set;}
+
+		[RED("cooldownCur")] 		public CFloat CooldownCur { get; set;}
+
+		[RED("landCoolingDown")] 		public CBool LandCoolingDown { get; set;}
 
 		[RED("landCoolDownTime")] 		public CFloat LandCoolDownTime { get; set;}
 
@@ -97,11 +120,17 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("usePhysics")] 		public CBool UsePhysics { get; set;}
 
+		[RED("slideDirectionDamped")] 		public Vector SlideDirectionDamped { get; set;}
+
 		[RED("smoothedDirBlendCoef")] 		public CFloat SmoothedDirBlendCoef { get; set;}
 
 		[RED("slideKills")] 		public CBool SlideKills { get; set;}
 
+		[RED("m_DeadB")] 		public CBool M_DeadB { get; set;}
+
 		[RED("toFallEnabled")] 		public CBool ToFallEnabled { get; set;}
+
+		[RED("toFallTimeCur")] 		public CFloat ToFallTimeCur { get; set;}
 
 		[RED("toConsiderFallTimeTotal")] 		public CFloat ToConsiderFallTimeTotal { get; set;}
 
@@ -118,6 +147,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("toFallRecoverCoef")] 		public CFloat ToFallRecoverCoef { get; set;}
 
 		[RED("toFallCameraLevel")] 		public CInt32 ToFallCameraLevel { get; set;}
+
+		[RED("cameraShakeState")] 		public CEnum<ESlideCameraShakeState> CameraShakeState { get; set;}
 
 		[RED("cameraAnimName")] 		public CName CameraAnimName { get; set;}
 
@@ -145,6 +176,10 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("inclinationEnterTimeMax")] 		public CFloat InclinationEnterTimeMax { get; set;}
 
+		[RED("inclinationEnterTimeCur")] 		public CFloat InclinationEnterTimeCur { get; set;}
+
+		[RED("inclination")] 		public CFloat Inclination { get; set;}
+
 		[RED("behForwardVar")] 		public CName BehForwardVar { get; set;}
 
 		[RED("behSlideRestart")] 		public CName BehSlideRestart { get; set;}
@@ -157,7 +192,11 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("boneToStickName")] 		public CName BoneToStickName { get; set;}
 
+		[RED("boneToStickId")] 		public CInt32 BoneToStickId { get; set;}
+
 		[RED("animEventHardSliding")] 		public CName AnimEventHardSliding { get; set;}
+
+		[RED("lockedOnHardSliding")] 		public CBool LockedOnHardSliding { get; set;}
 
 		[RED("particlesEnabled")] 		public CBool ParticlesEnabled { get; set;}
 
@@ -166,6 +205,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("boneLeftFoot")] 		public CName BoneLeftFoot { get; set;}
 
 		[RED("boneRightFoot")] 		public CName BoneRightFoot { get; set;}
+
+		[RED("timeToRespawnParticlesCur")] 		public CFloat TimeToRespawnParticlesCur { get; set;}
 
 		[RED("timeToRespawnParticlesMax")] 		public CFloat TimeToRespawnParticlesMax { get; set;}
 

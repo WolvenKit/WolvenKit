@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,6 +13,14 @@ namespace WolvenKit.CR2W.Types
 		[RED("lightList", 2,0)] 		public CArray<CName> LightList { get; set;}
 
 		[RED("lightsToTurnOn", 2,0)] 		public CArray<CInt32> LightsToTurnOn { get; set;}
+
+		[RED("componentList", 2,0)] 		public CArray<CHandle<CComponent>> ComponentList { get; set;}
+
+		[RED("expectedState", 2,0)] 		public CArray<CBool> ExpectedState { get; set;}
+
+		[RED("componentsFound")] 		public CBool ComponentsFound { get; set;}
+
+		[RED("statesDefined")] 		public CBool StatesDefined { get; set;}
 
 		public W3QuestCond_CheckBrazierPuzzleState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

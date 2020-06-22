@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -18,6 +19,12 @@ namespace WolvenKit.CR2W.Types
 		[RED("contactDestroyDelay")] 		public CFloat ContactDestroyDelay { get; set;}
 
 		[RED("destroyAtTime")] 		public CFloat DestroyAtTime { get; set;}
+
+		[RED("m_state")] 		public CEnum<EScriptedDetroyableComponentState> M_state { get; set;}
+
+		[RED("entryTime")] 		public CFloat EntryTime { get; set;}
+
+		[RED("timerInterval")] 		public CFloat TimerInterval { get; set;}
 
 		public CScriptedDestroyableComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

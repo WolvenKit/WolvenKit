@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -28,12 +29,6 @@ namespace WolvenKit.CR2W.Types
 		[RED("linkParentGUID")] 		public CGUID LinkParentGUID { get; set;}
 
 		[RED("linkParentTimeOffset")] 		public CFloat LinkParentTimeOffset { get; set;}
-
-		[RED("linkChildrenGUID", 2,0)] 		public CArray<CGUID> LinkChildrenGUID { get; set;}
-
-		[RED("trackName")] 		public CString TrackName { get; set;}
-
-		[RED("debugString")] 		public CString DebugString { get; set;}
 
 		public CStorySceneEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

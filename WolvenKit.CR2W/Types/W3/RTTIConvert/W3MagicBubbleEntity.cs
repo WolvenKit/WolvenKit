@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -10,6 +11,8 @@ namespace WolvenKit.CR2W.Types
 	public class W3MagicBubbleEntity : W3BuffImmunityEntity
 	{
 		[RED("activeFxName")] 		public CName ActiveFxName { get; set;}
+
+		[RED("damper")] 		public CHandle<VectorSpringDamper> Damper { get; set;}
 
 		public W3MagicBubbleEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

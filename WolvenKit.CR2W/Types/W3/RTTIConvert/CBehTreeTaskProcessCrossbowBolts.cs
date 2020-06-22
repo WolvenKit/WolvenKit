@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,8 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeTaskProcessCrossbowBolts : IBehTreeTaskProcessProjectile
 	{
+		[RED("bolt")] 		public CHandle<W3AdvancedProjectile> Bolt { get; set;}
+
 		public CBehTreeTaskProcessCrossbowBolts(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeTaskProcessCrossbowBolts(cr2w, parent, name);

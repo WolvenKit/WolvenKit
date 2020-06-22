@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -34,6 +35,14 @@ namespace WolvenKit.CR2W.Types
 		[RED("m_ProjectileLifeSpan")] 		public CFloat M_ProjectileLifeSpan { get; set;}
 
 		[RED("m_ProjectileFollowTarget")] 		public CBool M_ProjectileFollowTarget { get; set;}
+
+		[RED("m_DelayUntilNextProjectile")] 		public CFloat M_DelayUntilNextProjectile { get; set;}
+
+		[RED("m_ShotsLeft")] 		public CFloat M_ShotsLeft { get; set;}
+
+		[RED("m_CockedProjectile")] 		public CHandle<W3AdvancedProjectile> M_CockedProjectile { get; set;}
+
+		[RED("m_DelayToNextSorting")] 		public CFloat M_DelayToNextSorting { get; set;}
 
 		public W3TrapProjectileStatue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

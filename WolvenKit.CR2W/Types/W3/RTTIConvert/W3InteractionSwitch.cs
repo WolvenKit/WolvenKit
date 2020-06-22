@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,8 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3InteractionSwitch : W3PhysicalSwitch
 	{
+		[RED("isActivatedByPlayer")] 		public CBool IsActivatedByPlayer { get; set;}
+
 		[RED("focusModeHighlight")] 		public CEnum<EFocusModeVisibility> FocusModeHighlight { get; set;}
 
 		[RED("interactionActiveInState")] 		public CEnum<ESwitchState> InteractionActiveInState { get; set;}

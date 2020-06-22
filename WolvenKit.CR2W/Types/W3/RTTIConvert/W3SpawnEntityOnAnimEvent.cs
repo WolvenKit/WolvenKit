@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,6 +13,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("animEvent")] 		public CName AnimEvent { get; set;}
 
 		[RED("entityName")] 		public CName EntityName { get; set;}
+
+		[RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
 		public W3SpawnEntityOnAnimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

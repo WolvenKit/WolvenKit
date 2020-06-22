@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,16 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIStorageReactionData : IScriptable
 	{
+		[RED("TAUNTS_TO_BE_ALARMED")] 		public CInt32 TAUNTS_TO_BE_ALARMED { get; set;}
+
+		[RED("alarmedTimeStamp")] 		public CFloat AlarmedTimeStamp { get; set;}
+
+		[RED("tauntCounter")] 		public CInt32 TauntCounter { get; set;}
+
+		[RED("lastTauntTimeStamp")] 		public CFloat LastTauntTimeStamp { get; set;}
+
+		[RED("temporaryHostileActors", 2,0)] 		public CArray<CHandle<CActor>> TemporaryHostileActors { get; set;}
+
 		public CAIStorageReactionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIStorageReactionData(cr2w, parent, name);

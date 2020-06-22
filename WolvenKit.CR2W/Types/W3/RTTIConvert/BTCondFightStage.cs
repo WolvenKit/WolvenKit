@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,8 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondFightStage : IBehTreeTask
 	{
+		[RED("currentFightStageIs")] 		public CEnum<ENPCFightStage> CurrentFightStageIs { get; set;}
+
 		public BTCondFightStage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTCondFightStage(cr2w, parent, name);

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -36,6 +37,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("playFXonCollisionEnter")] 		public CName PlayFXonCollisionEnter { get; set;}
 
 		[RED("stopFXonCollisionExit")] 		public CBool StopFXonCollisionExit { get; set;}
+
+		[RED("objectAttached")] 		public CBool ObjectAttached { get; set;}
 
 		public W3ApplyEffectPhantomComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

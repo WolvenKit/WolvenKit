@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,6 +13,12 @@ namespace WolvenKit.CR2W.Types
 		[RED("affectedFX")] 		public CName AffectedFX { get; set;}
 
 		[RED("affectedFXCluster")] 		public CName AffectedFXCluster { get; set;}
+
+		[RED("disableTimerCalled")] 		public CBool DisableTimerCalled { get; set;}
+
+		[RED("DISABLED_FX_CHECK_DELAY")] 		public CFloat DISABLED_FX_CHECK_DELAY { get; set;}
+
+		[RED("disabledFxDT")] 		public CFloat DisabledFxDT { get; set;}
 
 		public W3Dimeritium(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

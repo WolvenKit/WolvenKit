@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -22,6 +23,14 @@ namespace WolvenKit.CR2W.Types
 		[RED("priceRepair")] 		public CFloat PriceRepair { get; set;}
 
 		[RED("fundsType")] 		public CEnum<EInventoryFundsType> FundsType { get; set;}
+
+		[RED("recentlyAddedItems", 2,0)] 		public CArray<SItemUniqueId> RecentlyAddedItems { get; set;}
+
+		[RED("fundsMax")] 		public CInt32 FundsMax { get; set;}
+
+		[RED("daysToIncreaseFunds")] 		public CInt32 DaysToIncreaseFunds { get; set;}
+
+		[RED("listeners", 2,0)] 		public CArray<CHandle<IInventoryScriptedListener>> Listeners { get; set;}
 
 		public CInventoryComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

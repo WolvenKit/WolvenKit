@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -14,6 +15,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("factValue")] 		public CInt32 FactValue { get; set;}
 
 		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
+
+		[RED("queryFactVal")] 		public CInt32 QueryFactVal { get; set;}
 
 		public W3FactCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

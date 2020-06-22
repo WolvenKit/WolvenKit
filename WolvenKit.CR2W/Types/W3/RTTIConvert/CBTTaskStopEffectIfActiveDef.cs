@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,8 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskStopEffectIfActiveDef : IBehTreeTaskDefinition
 	{
+		[RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
+
 		[RED("effectName")] 		public CName EffectName { get; set;}
 
 		[RED("onActivate")] 		public CBool OnActivate { get; set;}

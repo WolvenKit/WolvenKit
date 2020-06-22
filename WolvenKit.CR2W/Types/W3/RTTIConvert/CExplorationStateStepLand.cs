@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,7 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateStepLand : CExplorationStateAbstract
 	{
+		[RED("enabled")] 		public CBool Enabled { get; set;}
+
+		[RED("fallCancelled")] 		public CBool FallCancelled { get; set;}
+
+		[RED("ended")] 		public CBool Ended { get; set;}
+
 		[RED("timeSafetyEnd")] 		public CFloat TimeSafetyEnd { get; set;}
+
+		[RED("directionToLand")] 		public CFloat DirectionToLand { get; set;}
 
 		[RED("timeToChainJump")] 		public CFloat TimeToChainJump { get; set;}
 

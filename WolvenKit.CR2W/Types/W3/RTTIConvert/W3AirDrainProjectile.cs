@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -20,6 +21,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("onCollisionFxName")] 		public CName OnCollisionFxName { get; set;}
 
 		[RED("onCollisionFxName2")] 		public CName OnCollisionFxName2 { get; set;}
+
+		[RED("markerEntity")] 		public CHandle<CEntity> MarkerEntity { get; set;}
+
+		[RED("projectileHitGround")] 		public CBool ProjectileHitGround { get; set;}
 
 		public W3AirDrainProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

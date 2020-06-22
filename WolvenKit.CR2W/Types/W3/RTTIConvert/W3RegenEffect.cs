@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,12 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3RegenEffect : CBaseGameplayEffect
 	{
+		[RED("regenStat")] 		public CEnum<ECharacterRegenStats> RegenStat { get; set;}
+
+		[RED("stat")] 		public CEnum<EBaseCharacterStats> Stat { get; set;}
+
+		[RED("isOnMonster")] 		public CBool IsOnMonster { get; set;}
+
 		public W3RegenEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3RegenEffect(cr2w, parent, name);

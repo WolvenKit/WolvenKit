@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,10 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateForcedAlchemy : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
+		[RED("ALCHEMY_GO_TO")] 		public CName ALCHEMY_GO_TO { get; set;}
+
+		[RED("OPEN_MENU")] 		public CName OPEN_MENU { get; set;}
+
 		public W3TutorialManagerUIHandlerStateForcedAlchemy(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3TutorialManagerUIHandlerStateForcedAlchemy(cr2w, parent, name);

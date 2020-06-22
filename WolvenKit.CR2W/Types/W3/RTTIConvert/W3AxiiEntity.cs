@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -16,6 +17,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("distance")] 		public CFloat Distance { get; set;}
 
 		[RED("projSpeed")] 		public CFloat ProjSpeed { get; set;}
+
+		[RED("targets", 2,0)] 		public CArray<CHandle<CActor>> Targets { get; set;}
+
+		[RED("orientationTarget")] 		public CHandle<CActor> OrientationTarget { get; set;}
 
 		public W3AxiiEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,9 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateSkatingBackwards : CExplorationStateAbstract
 	{
+		[RED("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
+
 		[RED("impulse")] 		public CFloat Impulse { get; set;}
 
 		[RED("impulseSpeedMax")] 		public CFloat ImpulseSpeedMax { get; set;}
+
+		[RED("sharpTurn")] 		public CBool SharpTurn { get; set;}
 
 		[RED("sharpTurnTime")] 		public CFloat SharpTurnTime { get; set;}
 
@@ -21,7 +26,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("chainTimeToDrift")] 		public CFloat ChainTimeToDrift { get; set;}
 
+		[RED("exiting")] 		public CBool Exiting { get; set;}
+
 		[RED("timeEndingMax")] 		public CFloat TimeEndingMax { get; set;}
+
+		[RED("timeEndingFlow")] 		public CBool TimeEndingFlow { get; set;}
+
+		[RED("timeEndingCur")] 		public CFloat TimeEndingCur { get; set;}
 
 		[RED("behDriftRestart")] 		public CName BehDriftRestart { get; set;}
 

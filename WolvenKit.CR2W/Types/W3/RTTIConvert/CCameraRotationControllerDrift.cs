@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -17,9 +18,13 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("yawTotal")] 		public CFloat YawTotal { get; set;}
 
+		[RED("timeCur")] 		public CFloat TimeCur { get; set;}
+
 		[RED("blendSpeedRoll")] 		public CFloat BlendSpeedRoll { get; set;}
 
 		[RED("blendSpeedYaw")] 		public CFloat BlendSpeedYaw { get; set;}
+
+		[RED("turnLast")] 		public CFloat TurnLast { get; set;}
 
 		public CCameraRotationControllerDrift(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

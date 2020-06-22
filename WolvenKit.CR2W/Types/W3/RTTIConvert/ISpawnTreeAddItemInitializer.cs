@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -16,6 +17,20 @@ namespace WolvenKit.CR2W.Types
 		[RED("equip")] 		public CBool Equip { get; set;}
 
 		[RED("checkIfItemsAlreadyAdded")] 		public CBool CheckIfItemsAlreadyAdded { get; set;}
+
+		[RED("inventory")] 		public CHandle<CInventoryComponent> Inventory { get; set;}
+
+		[RED("i")] 		public CInt32 I { get; set;}
+
+		[RED("rand")] 		public CInt32 Rand { get; set;}
+
+		[RED("randRange")] 		public CInt32 RandRange { get; set;}
+
+		[RED("itemsIDs", 2,0)] 		public CArray<SItemUniqueId> ItemsIDs { get; set;}
+
+		[RED("possesedItemsCount")] 		public CInt32 PossesedItemsCount { get; set;}
+
+		[RED("itemsToAddCount")] 		public CInt32 ItemsToAddCount { get; set;}
 
 		public ISpawnTreeAddItemInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

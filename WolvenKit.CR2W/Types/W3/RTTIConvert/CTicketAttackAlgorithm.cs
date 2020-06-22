@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,16 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CTicketAttackAlgorithm : CTicketBaseAlgorithm
 	{
+		[RED("invertDistanceImportance")] 		public CBool InvertDistanceImportance { get; set;}
+
+		[RED("overrideDefaultTicketCount")] 		public CBool OverrideDefaultTicketCount { get; set;}
+
+		[RED("overridenValueWhenInFront")] 		public CInt32 OverridenValueWhenInFront { get; set;}
+
+		[RED("overridenValueWhenInBack")] 		public CInt32 OverridenValueWhenInBack { get; set;}
+
+		[RED("denyTicketWhenNotInFrame")] 		public CBool DenyTicketWhenNotInFrame { get; set;}
+
 		public CTicketAttackAlgorithm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CTicketAttackAlgorithm(cr2w, parent, name);

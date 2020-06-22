@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -13,6 +14,10 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("m_factOnDispelOverride")] 		public CString M_factOnDispelOverride { get; set;}
 
+		[RED("l_illusion")] 		public CHandle<CEntity> L_illusion { get; set;}
+
+		[RED("spawnedIllusion")] 		public CHandle<W3IllusionaryObstacle> SpawnedIllusion { get; set;}
+
 		[RED("m_discoveryOneliner")] 		public CEnum<EIllusionDiscoveredOneliner> M_discoveryOneliner { get; set;}
 
 		[RED("m_factOnDiscoveryOverride")] 		public CString M_factOnDiscoveryOverride { get; set;}
@@ -20,6 +25,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("discoveryOnelinerTag")] 		public CString DiscoveryOnelinerTag { get; set;}
 
 		[RED("spawnedObstacleTags", 2,0)] 		public CArray<CName> SpawnedObstacleTags { get; set;}
+
+		[RED("m_wasDestroyed")] 		public CBool M_wasDestroyed { get; set;}
 
 		public W3IllusionSpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

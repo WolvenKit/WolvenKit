@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -10,6 +11,12 @@ namespace WolvenKit.CR2W.Types
 	public class W3TripwireSwitch : W3PhysicalSwitch
 	{
 		[RED("autoSwitchOnLeave")] 		public CBool AutoSwitchOnLeave { get; set;}
+
+		[RED("entities", 2,0)] 		public CArray<CHandle<CEntity>> Entities { get; set;}
+
+		[RED("delayedTurnOffEntity")] 		public CHandle<CEntity> DelayedTurnOffEntity { get; set;}
+
+		[RED("delayedTurnOnEntity")] 		public CHandle<CEntity> DelayedTurnOnEntity { get; set;}
 
 		[RED("connectedTrapClueTag")] 		public CName ConnectedTrapClueTag { get; set;}
 

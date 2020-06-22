@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,14 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardPlacementDirector : CObject
 	{
+		[RED("assets", 2,0)] 		public CArray<CHandle<CModStoryBoardAsset>> Assets { get; set;}
+
+		[RED("originPos")] 		public Vector OriginPos { get; set;}
+
+		[RED("originRot")] 		public EulerAngles OriginRot { get; set;}
+
+		[RED("originAssetId")] 		public CString OriginAssetId { get; set;}
+
 		public CModStoryBoardPlacementDirector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModStoryBoardPlacementDirector(cr2w, parent, name);

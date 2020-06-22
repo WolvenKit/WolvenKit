@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -24,6 +25,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("hasDrinkingMinigame")] 		public CBool HasDrinkingMinigame { get; set;}
 
 		[RED("morphInCombat")] 		public CBool MorphInCombat { get; set;}
+
+		[RED("tempNpcGroupType")] 		public CEnum<ENPCGroupType> TempNpcGroupType { get; set;}
 
 		public CAINpcDefaults(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

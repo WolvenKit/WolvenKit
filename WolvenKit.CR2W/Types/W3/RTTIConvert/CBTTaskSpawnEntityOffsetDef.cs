@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,8 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSpawnEntityOffsetDef : CBTTaskPlayAnimationEventDecoratorDef
 	{
+		[RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+
 		[RED("resourceName")] 		public CBehTreeValCName ResourceName { get; set;}
 
 		[RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
@@ -16,6 +19,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("positionOffset")] 		public Vector PositionOffset { get; set;}
 
 		[RED("completeAfterSpawn")] 		public CBool CompleteAfterSpawn { get; set;}
+
+		[RED("complete")] 		public CBool Complete { get; set;}
 
 		[RED("spawnEntityOnAnimEvent")] 		public CBool SpawnEntityOnAnimEvent { get; set;}
 
@@ -34,6 +39,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("destroyTaggedEntitiesOnDeactivate")] 		public CBool DestroyTaggedEntitiesOnDeactivate { get; set;}
 
 		[RED("destroyEntityAfter")] 		public CFloat DestroyEntityAfter { get; set;}
+
+		[RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
+
+		[RED("entities", 2,0)] 		public CArray<CHandle<CEntity>> Entities { get; set;}
 
 		[RED("spawnEntityAtNode")] 		public CBool SpawnEntityAtNode { get; set;}
 

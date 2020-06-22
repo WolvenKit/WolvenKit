@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,18 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskDealDamageToOwnerDef : CBTTaskPlayAnimationEventDecoratorDef
 	{
+		[RED("owner")] 		public CHandle<CNewNPC> Owner { get; set;}
+
+		[RED("attacker")] 		public CHandle<CActor> Attacker { get; set;}
+
+		[RED("damageValue")] 		public CFloat DamageValue { get; set;}
+
+		[RED("action")] 		public CHandle<W3Action_Attack> Action { get; set;}
+
+		[RED("attackName")] 		public CName AttackName { get; set;}
+
+		[RED("skillName")] 		public CName SkillName { get; set;}
+
 		[RED("onAnimEventName")] 		public CName OnAnimEventName { get; set;}
 
 		public CBTTaskDealDamageToOwnerDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }

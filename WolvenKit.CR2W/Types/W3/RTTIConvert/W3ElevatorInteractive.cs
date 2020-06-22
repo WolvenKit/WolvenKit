@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -16,6 +17,20 @@ namespace WolvenKit.CR2W.Types
 		[RED("maxHeight")] 		public CFloat MaxHeight { get; set;}
 
 		[RED("mechanismEntityHandle")] 		public EntityHandle MechanismEntityHandle { get; set;}
+
+		[RED("interactionComponent")] 		public CHandle<CInteractionComponent> InteractionComponent { get; set;}
+
+		[RED("activated")] 		public CBool Activated { get; set;}
+
+		[RED("explorationComponents", 2,0)] 		public CArray<CHandle<CComponent>> ExplorationComponents { get; set;}
+
+		[RED("switches", 2,0)] 		public CArray<CHandle<W3ElevatorSwitch>> Switches { get; set;}
+
+		[RED("i")] 		public CInt32 I { get; set;}
+
+		[RED("size")] 		public CInt32 Size { get; set;}
+
+		[RED("elevatorSaveLockInt")] 		public CInt32 ElevatorSaveLockInt { get; set;}
 
 		public W3ElevatorInteractive(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

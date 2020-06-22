@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,24 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4MenuPopup : CR4OverlayMenu
 	{
+		[RED("m_DataObject")] 		public CHandle<W3PopupData> M_DataObject { get; set;}
+
+		[RED("m_initialized")] 		public CBool M_initialized { get; set;}
+
+		[RED("m_HideTutorial")] 		public CBool M_HideTutorial { get; set;}
+
+		[RED("m_fxSetBarValueSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetBarValueSFF { get; set;}
+
+		[RED("rttItemLoaded")] 		public CBool RttItemLoaded { get; set;}
+
+		[RED("itemRotation")] 		public EulerAngles ItemRotation { get; set;}
+
+		[RED("itemPosition")] 		public Vector ItemPosition { get; set;}
+
+		[RED("itemScale")] 		public Vector ItemScale { get; set;}
+
+		[RED("itemCat")] 		public CName ItemCat { get; set;}
+
 		public CR4MenuPopup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4MenuPopup(cr2w, parent, name);

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,10 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3InventoryInitData : W3MenuInitData
 	{
+		[RED("containerNPC")] 		public CHandle<CGameplayEntity> ContainerNPC { get; set;}
+
+		[RED("filterTagsList", 2,0)] 		public CArray<CName> FilterTagsList { get; set;}
+
 		public W3InventoryInitData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3InventoryInitData(cr2w, parent, name);

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -11,11 +12,25 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("user")] 		public CHandle<CActor> User { get; set;}
 
+		[RED("isCameraActivated")] 		public CBool IsCameraActivated { get; set;}
+
+		[RED("isPlayingSyncAnimation")] 		public CBool IsPlayingSyncAnimation { get; set;}
+
 		[RED("slots", 2,0)] 		public CArray<Vector> Slots { get; set;}
 
 		[RED("mainStateName")] 		public CName MainStateName { get; set;}
 
 		[RED("passengerStateName")] 		public CName PassengerStateName { get; set;}
+
+		[RED("userCombatManager")] 		public CHandle<W3VehicleCombatManager> UserCombatManager { get; set;}
+
+		[RED("canBoardTheBoat")] 		public CBool CanBoardTheBoat { get; set;}
+
+		[RED("commandToMountActorToMount")] 		public CHandle<CActor> CommandToMountActorToMount { get; set;}
+
+		[RED("commandToMountMountType")] 		public CEnum<EMountType> CommandToMountMountType { get; set;}
+
+		[RED("commandToMountVehicleSlot")] 		public CEnum<EVehicleSlot> CommandToMountVehicleSlot { get; set;}
 
 		public CVehicleComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

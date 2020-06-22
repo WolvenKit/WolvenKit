@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -24,6 +25,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("includeQuestNPCs")] 		public CBool IncludeQuestNPCs { get; set;}
 
 		[RED("sceneDelay")] 		public CFloat SceneDelay { get; set;}
+
+		[RED("firstPlaySceneDelay")] 		public CFloat FirstPlaySceneDelay { get; set;}
+
+		[RED("currentSceneDelay")] 		public CFloat CurrentSceneDelay { get; set;}
 
 		public W3GenericSceneArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -33,11 +34,29 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("medallionVibrationBehavior")] 		public CEnum<EFocusClueMedallionReaction> MedallionVibrationBehavior { get; set;}
 
+		[RED("medallionVibratedEver")] 		public CBool MedallionVibratedEver { get; set;}
+
+		[RED("medallionVibratedInSession")] 		public CBool MedallionVibratedInSession { get; set;}
+
+		[RED("accuracyTreshold")] 		public CFloat AccuracyTreshold { get; set;}
+
 		[RED("eventOnDetected", 2,0)] 		public CArray<CHandle<IPerformableAction>> EventOnDetected { get; set;}
 
 		[RED("detectionDelay")] 		public CFloat DetectionDelay { get; set;}
 
+		[RED("wasDetected")] 		public CBool WasDetected { get; set;}
+
+		[RED("wasSeen")] 		public CBool WasSeen { get; set;}
+
 		[RED("isVisibleAsClue")] 		public CBool IsVisibleAsClue { get; set;}
+
+		[RED("linkedFocusArea")] 		public CHandle<W3FocusAreaTrigger> LinkedFocusArea { get; set;}
+
+		[RED("dimmingStarted")] 		public CBool DimmingStarted { get; set;}
+
+		[RED("focusModeController")] 		public CHandle<CFocusModeController> FocusModeController { get; set;}
+
+		[RED("INTERACTION_COMPONENT_NAME")] 		public CString INTERACTION_COMPONENT_NAME { get; set;}
 
 		public W3MonsterClue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

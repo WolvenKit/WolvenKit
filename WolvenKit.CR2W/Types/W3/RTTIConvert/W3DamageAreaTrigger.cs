@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -48,6 +49,22 @@ namespace WolvenKit.CR2W.Types
 		[RED("immunityFact")] 		public CString ImmunityFact { get; set;}
 
 		[RED("damageType")] 		public CEnum<ETriggeredDamageType> DamageType { get; set;}
+
+		[RED("action")] 		public CHandle<W3DamageAction> Action { get; set;}
+
+		[RED("affectedEntity")] 		public CHandle<CEntity> AffectedEntity { get; set;}
+
+		[RED("fxEntity")] 		public CHandle<CEntity> FxEntity { get; set;}
+
+		[RED("activated")] 		public CBool Activated { get; set;}
+
+		[RED("dummyGameplayEntity")] 		public CHandle<CGameplayEntity> DummyGameplayEntity { get; set;}
+
+		[RED("victim")] 		public CHandle<CActor> Victim { get; set;}
+
+		[RED("externalFXEntity")] 		public CHandle<CEntity> ExternalFXEntity { get; set;}
+
+		[RED("pos")] 		public Vector Pos { get; set;}
 
 		public W3DamageAreaTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

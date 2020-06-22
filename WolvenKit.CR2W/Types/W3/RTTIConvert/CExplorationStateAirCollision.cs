@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -18,6 +19,16 @@ namespace WolvenKit.CR2W.Types
 		[RED("heightMaxToStop")] 		public CFloat HeightMaxToStop { get; set;}
 
 		[RED("dotToHardHit")] 		public CFloat DotToHardHit { get; set;}
+
+		[RED("collisionAngle")] 		public CFloat CollisionAngle { get; set;}
+
+		[RED("collisionSide")] 		public CEnum<EAirCollisionSide> CollisionSide { get; set;}
+
+		[RED("m_NormalMaxZToHitF")] 		public CFloat M_NormalMaxZToHitF { get; set;}
+
+		[RED("angleMinToCollide")] 		public CFloat AngleMinToCollide { get; set;}
+
+		[RED("angleMinToCollideFront")] 		public CFloat AngleMinToCollideFront { get; set;}
 
 		[RED("swipeDistance")] 		public CFloat SwipeDistance { get; set;}
 
@@ -40,6 +51,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("exitAngleExtra")] 		public CFloat ExitAngleExtra { get; set;}
 
 		[RED("orientingSpeed")] 		public CFloat OrientingSpeed { get; set;}
+
+		[RED("targetYaw")] 		public CFloat TargetYaw { get; set;}
 
 		[RED("verticalSpeedConserveCoef")] 		public CFloat VerticalSpeedConserveCoef { get; set;}
 

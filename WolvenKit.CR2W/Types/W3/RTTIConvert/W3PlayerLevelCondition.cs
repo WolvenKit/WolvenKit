@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,6 +13,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("level")] 		public CInt32 Level { get; set;}
 
 		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
+
+		[RED("queryVal")] 		public CInt32 QueryVal { get; set;}
 
 		public W3PlayerLevelCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

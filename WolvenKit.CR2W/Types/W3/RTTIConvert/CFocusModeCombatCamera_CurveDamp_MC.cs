@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -20,6 +21,26 @@ namespace WolvenKit.CR2W.Types
 		[RED("desiredPitch")] 		public CFloat DesiredPitch { get; set;}
 
 		[RED("autoTimeUpdate")] 		public CBool AutoTimeUpdate { get; set;}
+
+		[RED("distanceDamper")] 		public CHandle<CurveDamper> DistanceDamper { get; set;}
+
+		[RED("yawDamper")] 		public CHandle<AngleCurveDamper> YawDamper { get; set;}
+
+		[RED("pitchDamper")] 		public CHandle<AngleCurveDamper> PitchDamper { get; set;}
+
+		[RED("fovDamper")] 		public CHandle<CurveDamper> FovDamper { get; set;}
+
+		[RED("distanceStart")] 		public CFloat DistanceStart { get; set;}
+
+		[RED("pitchStart")] 		public CFloat PitchStart { get; set;}
+
+		[RED("yawStart")] 		public CFloat YawStart { get; set;}
+
+		[RED("position")] 		public Vector Position { get; set;}
+
+		[RED("rotation")] 		public EulerAngles Rotation { get; set;}
+
+		[RED("timeScale")] 		public CFloat TimeScale { get; set;}
 
 		public CFocusModeCombatCamera_CurveDamp_MC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -42,6 +43,14 @@ namespace WolvenKit.CR2W.Types
 		[RED("onAttackEffectCameraShakeStrength")] 		public CFloat OnAttackEffectCameraShakeStrength { get; set;}
 
 		[RED("onHitCameraShakeStrength")] 		public CFloat OnHitCameraShakeStrength { get; set;}
+
+		[RED("fxEntity")] 		public CHandle<CEntity> FxEntity { get; set;}
+
+		[RED("summoner")] 		public CHandle<CActor> Summoner { get; set;}
+
+		[RED("params")] 		public SCustomEffectParams Params { get; set;}
+
+		[RED("effectComponent")] 		public CHandle<CComponent> EffectComponent { get; set;}
 
 		public W3WitchBoilingWaterObstacle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

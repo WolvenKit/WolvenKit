@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -29,6 +30,16 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("iconOffset")] 		public Vector IconOffset { get; set;}
 
+		[RED("highlighted")] 		public CBool Highlighted { get; set;}
+
+		[RED("focusModeSoundEffectType")] 		public CEnum<EFocusModeSoundEffectType> FocusModeSoundEffectType { get; set;}
+
+		[RED("isPlayingFocusSound")] 		public CBool IsPlayingFocusSound { get; set;}
+
+		[RED("isColorBlindMode")] 		public CBool IsColorBlindMode { get; set;}
+
+		[RED("focusSoundVisualEffectBoneName")] 		public CName FocusSoundVisualEffectBoneName { get; set;}
+
 		[RED("isHighlightedByMedallion")] 		public CBool IsHighlightedByMedallion { get; set;}
 
 		[RED("isMagicalObject")] 		public CBool IsMagicalObject { get; set;}
@@ -38,6 +49,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("soundEntityGender")] 		public CString SoundEntityGender { get; set;}
 
 		[RED("soundEntitySet")] 		public CString SoundEntitySet { get; set;}
+
+		[RED("cutsceneForbiddenFXs", 2,0)] 		public CArray<CName> CutsceneForbiddenFXs { get; set;}
 
 		public CGameplayEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

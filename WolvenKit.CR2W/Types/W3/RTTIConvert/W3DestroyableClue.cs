@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -34,6 +35,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("onDestroyedFact", 2,0)] 		public CArray<CString> OnDestroyedFact { get; set;}
 
 		[RED("performDestructionSystemCheck")] 		public CBool PerformDestructionSystemCheck { get; set;}
+
+		[RED("isBurning")] 		public CBool IsBurning { get; set;}
+
+		[RED("destroyed")] 		public CBool Destroyed { get; set;}
 
 		public W3DestroyableClue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

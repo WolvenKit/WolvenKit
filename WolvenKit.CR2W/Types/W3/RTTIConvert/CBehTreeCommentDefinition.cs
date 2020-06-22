@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -10,8 +11,6 @@ namespace WolvenKit.CR2W.Types
 	public class CBehTreeCommentDefinition : IBehTreeMetanodeDefinition
 	{
 		[RED("child")] 		public CPtr<IBehTreeNodeDefinition> Child { get; set;}
-
-		[RED("commentDescription")] 		public CString CommentDescription { get; set;}
 
 		public CBehTreeCommentDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

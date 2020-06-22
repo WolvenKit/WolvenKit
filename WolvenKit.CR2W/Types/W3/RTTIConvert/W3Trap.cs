@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,20 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Trap : W3MonsterClue
 	{
+		[RED("ARM_INTERACTION_COMPONENT_NAME")] 		public CString ARM_INTERACTION_COMPONENT_NAME { get; set;}
+
+		[RED("DISARM_INTERACTION_COMPONENT_NAME")] 		public CString DISARM_INTERACTION_COMPONENT_NAME { get; set;}
+
+		[RED("m_IsActive")] 		public CBool M_IsActive { get; set;}
+
+		[RED("m_Targets", 2,0)] 		public CArray<CHandle<CNode>> M_Targets { get; set;}
+
+		[RED("m_isArmed")] 		public CBool M_isArmed { get; set;}
+
+		[RED("m_wasSprung")] 		public CBool M_wasSprung { get; set;}
+
+		[RED("m_isPlayingAnimation")] 		public CBool M_isPlayingAnimation { get; set;}
+
 		[RED("activeByDefault")] 		public CBool ActiveByDefault { get; set;}
 
 		[RED("factOnArm")] 		public SFactParameters FactOnArm { get; set;}

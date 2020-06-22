@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -11,9 +12,13 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("pitchTotal")] 		public CFloat PitchTotal { get; set;}
 
+		[RED("pitchBase")] 		public CFloat PitchBase { get; set;}
+
 		[RED("yawAcceleration")] 		public CFloat YawAcceleration { get; set;}
 
 		[RED("yawMaxSpeed")] 		public CFloat YawMaxSpeed { get; set;}
+
+		[RED("timeCur")] 		public CFloat TimeCur { get; set;}
 
 		[RED("timeStart")] 		public CFloat TimeStart { get; set;}
 

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -23,7 +24,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("firstIndex")] 		public CUInt32 FirstIndex { get; set;}
 
-		[RED("renderMask")] 		public EMeshChunkRenderMask RenderMask { get; set;}
+		[RED("renderMask")] 		public CEnum<EMeshChunkRenderMask> RenderMask { get; set;}
 
 		[RED("useForShadowmesh")] 		public CBool UseForShadowmesh { get; set;}
 

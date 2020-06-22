@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -10,6 +11,10 @@ namespace WolvenKit.CR2W.Types
 	public class W3CreaturesGroupEnabledCondition : ISpawnScriptCondition
 	{
 		[RED("groupName")] 		public CName GroupName { get; set;}
+
+		[RED("disabledBySources")] 		public CInt32 DisabledBySources { get; set;}
+
+		[RED("dataManager")] 		public CHandle<CEncounterDataManager> DataManager { get; set;}
 
 		public W3CreaturesGroupEnabledCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,8 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3KillTrigger : CEntity
 	{
+		[RED("postponedTillOnGroundMPAC", 2,0)] 		public CArray<CHandle<CMovingPhysicalAgentComponent>> PostponedTillOnGroundMPAC { get; set;}
+
 		[RED("postponeTillOnGround")] 		public CBool PostponeTillOnGround { get; set;}
 
 		[RED("postponeTillStoppedFalling")] 		public CBool PostponeTillStoppedFalling { get; set;}

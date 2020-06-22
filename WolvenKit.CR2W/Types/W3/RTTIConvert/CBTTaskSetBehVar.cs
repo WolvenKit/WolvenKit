@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,16 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSetBehVar : IBehTreeTask
 	{
+		[RED("behVarName")] 		public CName BehVarName { get; set;}
+
+		[RED("behVarValue")] 		public CFloat BehVarValue { get; set;}
+
+		[RED("inAllBehGraphs")] 		public CBool InAllBehGraphs { get; set;}
+
+		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+
+		[RED("onSuccess")] 		public CBool OnSuccess { get; set;}
+
 		public CBTTaskSetBehVar(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskSetBehVar(cr2w, parent, name);

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,12 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_WitchHypnotized : W3CriticalEffect
 	{
+		[RED("customCameraStackIndex")] 		public CInt32 CustomCameraStackIndex { get; set;}
+
+		[RED("fxEntity")] 		public CHandle<CEntity> FxEntity { get; set;}
+
+		[RED("envID")] 		public CInt32 EnvID { get; set;}
+
 		public W3Effect_WitchHypnotized(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3Effect_WitchHypnotized(cr2w, parent, name);

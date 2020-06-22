@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,10 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateIdle : CExplorationStateAbstract
 	{
+		[RED("m_SubStateLasE")] 		public CEnum<EPlayerIdleSubstate> M_SubStateLasE { get; set;}
+
+		[RED("m_SubStateE")] 		public CEnum<EPlayerIdleSubstate> M_SubStateE { get; set;}
+
 		[RED("m_SpeedMaxConsideredSprintF")] 		public CFloat M_SpeedMaxConsideredSprintF { get; set;}
 
 		[RED("m_SpeedMaxConsideredRunF")] 		public CFloat M_SpeedMaxConsideredRunF { get; set;}
@@ -34,6 +39,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("m_CameraOffsetExtraVertHighF")] 		public CFloat M_CameraOffsetExtraVertHighF { get; set;}
 
 		[RED("m_CameraOffsetBlend")] 		public CFloat M_CameraOffsetBlend { get; set;}
+
+		[RED("m_CameraOffsetVertF")] 		public CFloat M_CameraOffsetVertF { get; set;}
+
+		[RED("m_CurentCameraAnimationN")] 		public CName M_CurentCameraAnimationN { get; set;}
 
 		[RED("m_CameraAnimIdleS")] 		public SCameraAnimationData M_CameraAnimIdleS { get; set;}
 

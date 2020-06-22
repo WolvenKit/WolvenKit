@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,16 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3DamageOverTimeEffect : CBaseGameplayEffect
 	{
+		[RED("damages", 2,0)] 		public CArray<SDoTDamage> Damages { get; set;}
+
+		[RED("powerStatType")] 		public CEnum<ECharacterPowerStats> PowerStatType { get; set;}
+
+		[RED("isEnvironment")] 		public CBool IsEnvironment { get; set;}
+
+		[RED("hpRegenPauseStrength")] 		public SAbilityAttributeValue HpRegenPauseStrength { get; set;}
+
+		[RED("hpRegenPauseExtraDuration")] 		public CFloat HpRegenPauseExtraDuration { get; set;}
+
 		public W3DamageOverTimeEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3DamageOverTimeEffect(cr2w, parent, name);

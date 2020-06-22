@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,6 +13,12 @@ namespace WolvenKit.CR2W.Types
 		[RED("nextGate")] 		public EntityHandle NextGate { get; set;}
 
 		[RED("factOnReaching")] 		public CString FactOnReaching { get; set;}
+
+		[RED("nextGateEntity")] 		public CHandle<CBoatRacingGateEntity> NextGateEntity { get; set;}
+
+		[RED("isActive")] 		public CBool IsActive { get; set;}
+
+		[RED("isReached")] 		public CBool IsReached { get; set;}
 
 		public CBoatRacingGateEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

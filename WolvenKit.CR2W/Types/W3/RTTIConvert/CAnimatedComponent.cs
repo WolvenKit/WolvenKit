@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -40,6 +41,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("overrideDisableTickDistance")] 		public CFloat OverrideDisableTickDistance { get; set;}
 
 		[RED("runtimeBehaviorInstanceSlots", 2,0)] 		public CArray<SBehaviorGraphInstanceSlot> RuntimeBehaviorInstanceSlots { get; set;}
+
+		[RED("nextFreeAnimMultCauserId")] 		public CInt32 NextFreeAnimMultCauserId { get; set;}
+
+		[RED("animationMultiplierCausers", 2,0)] 		public CArray<SAnimMultiplyCauser> AnimationMultiplierCausers { get; set;}
 
 		public CAnimatedComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

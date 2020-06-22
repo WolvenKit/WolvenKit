@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -14,6 +15,12 @@ namespace WolvenKit.CR2W.Types
 		[RED("ammoQuantity")] 		public CInt32 AmmoQuantity { get; set;}
 
 		[RED("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
+
+		[RED("isFulfilled")] 		public CBool IsFulfilled { get; set;}
+
+		[RED("ammoListener")] 		public CHandle<W3QuestCond_ItemAmmo_AmmoListener> AmmoListener { get; set;}
+
+		[RED("inventoryListener")] 		public CHandle<W3QuestCond_ItemAmmo_InventoryListener> InventoryListener { get; set;}
 
 		public W3QuestCond_ItemAmmo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

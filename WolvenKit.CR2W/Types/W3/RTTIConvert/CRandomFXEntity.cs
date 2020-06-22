@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -20,6 +21,12 @@ namespace WolvenKit.CR2W.Types
 		[RED("soundEvent")] 		public CString SoundEvent { get; set;}
 
 		[RED("soundDelay")] 		public CFloat SoundDelay { get; set;}
+
+		[RED("fxIndex")] 		public CInt32 FxIndex { get; set;}
+
+		[RED("size")] 		public CInt32 Size { get; set;}
+
+		[RED("interval")] 		public CFloat Interval { get; set;}
 
 		public CRandomFXEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

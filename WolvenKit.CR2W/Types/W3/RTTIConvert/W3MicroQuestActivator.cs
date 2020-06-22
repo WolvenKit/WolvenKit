@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -10,6 +11,12 @@ namespace WolvenKit.CR2W.Types
 	public class W3MicroQuestActivator : CGameplayEntity
 	{
 		[RED("microQuestEntries", 2,0)] 		public CArray<EncounterEntryDetails> MicroQuestEntries { get; set;}
+
+		[RED("selectedEntriesList", 2,0)] 		public CArray<EncounterEntryDetails> SelectedEntriesList { get; set;}
+
+		[RED("chosenMicroQuestTag")] 		public CName ChosenMicroQuestTag { get; set;}
+
+		[RED("isPlayerInArea")] 		public CBool IsPlayerInArea { get; set;}
 
 		public W3MicroQuestActivator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

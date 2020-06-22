@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -14,6 +15,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("clueTag")] 		public CName ClueTag { get; set;}
 
 		[RED("operations", 2,0)] 		public CArray<CEnum<EClueOperation>> Operations { get; set;}
+
+		[RED("myTags", 2,0)] 		public CArray<CName> MyTags { get; set;}
 
 		public W3SE_ManageClue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,6 +13,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("effectImmunity")] 		public CEnum<EEffectType> EffectImmunity { get; set;}
 
 		[RED("duration")] 		public CFloat Duration { get; set;}
+
+		[RED("areaComponent")] 		public CHandle<CTriggerAreaComponent> AreaComponent { get; set;}
 
 		public CLightEntitySimpleWithEffectImmunity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

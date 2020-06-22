@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,10 +13,6 @@ namespace WolvenKit.CR2W.Types
 		[RED("controlParts", 2,0)] 		public CArray<CPtr<CStorySceneControlPart>> ControlParts { get; set;}
 
 		[RED("sections", 2,0)] 		public CArray<CPtr<CStorySceneSection>> Sections { get; set;}
-
-		[RED("graph")] 		public CPtr<CStorySceneGraph> Graph { get; set;}
-
-		[RED("layerPreset")] 		public CString LayerPreset { get; set;}
 
 		[RED("elementIDCounter")] 		public CUInt32 ElementIDCounter { get; set;}
 

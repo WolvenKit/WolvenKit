@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -22,6 +23,14 @@ namespace WolvenKit.CR2W.Types
 		[RED("stashSpawnOffset")] 		public Vector StashSpawnOffset { get; set;}
 
 		[RED("lootEntityTag")] 		public CName LootEntityTag { get; set;}
+
+		[RED("currentAppearance")] 		public CName CurrentAppearance { get; set;}
+
+		[RED("lootEntity")] 		public CHandle<W3Container> LootEntity { get; set;}
+
+		[RED("lootWasOfferedToPlayer")] 		public CBool LootWasOfferedToPlayer { get; set;}
+
+		[RED("stashWasLooted")] 		public CBool StashWasLooted { get; set;}
 
 		public W3ClueStash(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

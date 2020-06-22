@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,7 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FocusAreaTrigger : CGameplayEntity
 	{
+		[RED("rumbleIntensityModifier")] 		public CFloat RumbleIntensityModifier { get; set;}
+
+		[RED("isDisabled")] 		public CBool IsDisabled { get; set;}
+
 		[RED("intensity")] 		public CFloat Intensity { get; set;}
+
+		[RED("isActive")] 		public CBool IsActive { get; set;}
 
 		[RED("linkedClues", 2,0)] 		public CArray<EntityHandle> LinkedClues { get; set;}
 

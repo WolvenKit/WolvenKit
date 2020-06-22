@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -28,6 +29,16 @@ namespace WolvenKit.CR2W.Types
 		[RED("factOnActivate")] 		public CString FactOnActivate { get; set;}
 
 		[RED("factOnTeleport")] 		public CString FactOnTeleport { get; set;}
+
+		[RED("factOnActivateValidFor")] 		public CInt32 FactOnActivateValidFor { get; set;}
+
+		[RED("factOnTeleportValidFor")] 		public CInt32 FactOnTeleportValidFor { get; set;}
+
+		[RED("isActivated")] 		public CBool IsActivated { get; set;}
+
+		[RED("destinationNode")] 		public CHandle<CNode> DestinationNode { get; set;}
+
+		[RED("currentlyTeleporting")] 		public CBool CurrentlyTeleporting { get; set;}
 
 		public CTeleportEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

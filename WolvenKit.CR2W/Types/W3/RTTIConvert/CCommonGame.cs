@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,6 +13,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("player")] 		public CHandle<CPlayer> Player { get; set;}
 
 		[RED("dlcManager")] 		public CPtr<CDLCManager> DlcManager { get; set;}
+
+		[RED("tooltipSettings")] 		public CHandle<C2dArray> TooltipSettings { get; set;}
 
 		public CCommonGame(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,22 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSetAppearance : IBehTreeTask
 	{
+		[RED("appearanceName")] 		public CName AppearanceName { get; set;}
+
+		[RED("previousAppearance")] 		public CName PreviousAppearance { get; set;}
+
+		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+
+		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+
+		[RED("onSuccess")] 		public CBool OnSuccess { get; set;}
+
+		[RED("onAnimEvent")] 		public CBool OnAnimEvent { get; set;}
+
+		[RED("overrideForTask")] 		public CBool OverrideForTask { get; set;}
+
+		[RED("eventName")] 		public CName EventName { get; set;}
+
 		public CBTTaskSetAppearance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskSetAppearance(cr2w, parent, name);

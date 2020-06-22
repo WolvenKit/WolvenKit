@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,86 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class TaskTeleportAction : IBehTreeTask
 	{
+		[RED("teleportType")] 		public CEnum<ETeleportType> TeleportType { get; set;}
+
+		[RED("teleportToActorHeading")] 		public CBool TeleportToActorHeading { get; set;}
+
+		[RED("teleportAwayFromActorHeading")] 		public CBool TeleportAwayFromActorHeading { get; set;}
+
+		[RED("teleportInFrontOfTarget")] 		public CBool TeleportInFrontOfTarget { get; set;}
+
+		[RED("teleportInFrontOfOwner")] 		public CBool TeleportInFrontOfOwner { get; set;}
+
+		[RED("teleportOutsidePlayerFOV")] 		public CBool TeleportOutsidePlayerFOV { get; set;}
+
+		[RED("teleportWithinPlayerFOV")] 		public CBool TeleportWithinPlayerFOV { get; set;}
+
+		[RED("teleportBehindTarget")] 		public CBool TeleportBehindTarget { get; set;}
+
+		[RED("requestedFacingDirectionNoiseAngle")] 		public CFloat RequestedFacingDirectionNoiseAngle { get; set;}
+
+		[RED("minDistance")] 		public CFloat MinDistance { get; set;}
+
+		[RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+
+		[RED("minDistanceFromLastPosition")] 		public CFloat MinDistanceFromLastPosition { get; set;}
+
+		[RED("setIsTeleportingFlag")] 		public CBool SetIsTeleportingFlag { get; set;}
+
+		[RED("minWaterDepthToAppear")] 		public CFloat MinWaterDepthToAppear { get; set;}
+
+		[RED("maxWaterDepthToAppear")] 		public CFloat MaxWaterDepthToAppear { get; set;}
+
+		[RED("zTolerance")] 		public CFloat ZTolerance { get; set;}
+
+		[RED("rotateToTarget")] 		public CBool RotateToTarget { get; set;}
+
+		[RED("testLOSforNewPosition")] 		public CBool TestLOSforNewPosition { get; set;}
+
+		[RED("testNavigationBetweenCombatTargetAndNewPosition")] 		public CBool TestNavigationBetweenCombatTargetAndNewPosition { get; set;}
+
+		[RED("overrideActorRadiusForNavigationTests")] 		public CBool OverrideActorRadiusForNavigationTests { get; set;}
+
+		[RED("actorRadiusForNavigationTests")] 		public CFloat ActorRadiusForNavigationTests { get; set;}
+
+		[RED("checkWaterLevel")] 		public CBool CheckWaterLevel { get; set;}
+
+		[RED("searchingTimeout")] 		public CFloat SearchingTimeout { get; set;}
+
+		[RED("nodeTag")] 		public CName NodeTag { get; set;}
+
+		[RED("shouldSpawnMarkers")] 		public CBool ShouldSpawnMarkers { get; set;}
+
+		[RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+
+		[RED("paramsOverriden")] 		public CBool ParamsOverriden { get; set;}
+
+		[RED("cashedBool")] 		public CBool CashedBool { get; set;}
+
+		[RED("setInvulnerable")] 		public CBool SetInvulnerable { get; set;}
+
+		[RED("dontTeleportOutsideGuardArea")] 		public CBool DontTeleportOutsideGuardArea { get; set;}
+
+		[RED("minDistanceFromEnititesWithTag")] 		public CName MinDistanceFromEnititesWithTag { get; set;}
+
+		[RED("minDistanceFromTaggedEntities")] 		public CFloat MinDistanceFromTaggedEntities { get; set;}
+
+		[RED("alreadyTeleported")] 		public CBool AlreadyTeleported { get; set;}
+
+		[RED("isTeleporting")] 		public CBool IsTeleporting { get; set;}
+
+		[RED("distFromLastTelePos")] 		public CFloat DistFromLastTelePos { get; set;}
+
+		[RED("dangerZone")] 		public CFloat DangerZone { get; set;}
+
+		[RED("angle")] 		public CFloat Angle { get; set;}
+
+		[RED("lastTelePos")] 		public Vector LastTelePos { get; set;}
+
+		[RED("lastPos")] 		public Vector LastPos { get; set;}
+
+		[RED("guardArea")] 		public CHandle<CAreaComponent> GuardArea { get; set;}
+
 		public TaskTeleportAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new TaskTeleportAction(cr2w, parent, name);

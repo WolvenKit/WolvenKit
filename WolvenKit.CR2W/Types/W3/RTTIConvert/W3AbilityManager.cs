@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -26,6 +27,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("difficultyAbilities", 2,0)] 		public CArray<CArray<CName>> DifficultyAbilities { get; set;}
 
 		[RED("ignoresDifficultySettings")] 		public CBool IgnoresDifficultySettings { get; set;}
+
+		[RED("overhealBonus")] 		public CFloat OverhealBonus { get; set;}
+
+		[RED("isInitialized")] 		public CBool IsInitialized { get; set;}
 
 		public W3AbilityManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

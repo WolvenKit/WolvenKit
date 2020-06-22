@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,6 +13,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("valueOnEnter")] 		public CBool ValueOnEnter { get; set;}
 
 		[RED("valueOnExit")] 		public CBool ValueOnExit { get; set;}
+
+		[RED("horse")] 		public CHandle<CGameplayEntity> Horse { get; set;}
+
+		[RED("horseComp")] 		public CHandle<W3HorseComponent> HorseComp { get; set;}
 
 		public CHorseCorrectionTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

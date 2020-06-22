@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,14 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskActivateOnlyOnce : IBehTreeTask
 	{
+		[RED("successOnly")] 		public CBool SuccessOnly { get; set;}
+
+		[RED("resetWhenReattachFromPool")] 		public CBool ResetWhenReattachFromPool { get; set;}
+
+		[RED("resetOnGameplayEvent")] 		public CName ResetOnGameplayEvent { get; set;}
+
+		[RED("wasActivated")] 		public CBool WasActivated { get; set;}
+
 		public CBTTaskActivateOnlyOnce(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskActivateOnlyOnce(cr2w, parent, name);

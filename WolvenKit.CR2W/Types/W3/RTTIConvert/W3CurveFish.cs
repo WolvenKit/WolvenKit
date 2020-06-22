@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -20,6 +21,16 @@ namespace WolvenKit.CR2W.Types
 		[RED("maxSpeed")] 		public CFloat MaxSpeed { get; set;}
 
 		[RED("randomizedAppearances", 2,0)] 		public CArray<CString> RandomizedAppearances { get; set;}
+
+		[RED("manager")] 		public CHandle<W3CurveFishManager> Manager { get; set;}
+
+		[RED("baseSpeed")] 		public CFloat BaseSpeed { get; set;}
+
+		[RED("selectedSwimCurve")] 		public CName SelectedSwimCurve { get; set;}
+
+		[RED("currentSpeed")] 		public CFloat CurrentSpeed { get; set;}
+
+		[RED("accelerate")] 		public CBool Accelerate { get; set;}
 
 		public W3CurveFish(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

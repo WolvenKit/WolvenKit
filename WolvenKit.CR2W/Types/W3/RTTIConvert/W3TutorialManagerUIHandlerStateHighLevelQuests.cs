@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,10 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateHighLevelQuests : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
+		[RED("DESCRIPTION")] 		public CName DESCRIPTION { get; set;}
+
+		[RED("isClosing")] 		public CBool IsClosing { get; set;}
+
 		public W3TutorialManagerUIHandlerStateHighLevelQuests(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3TutorialManagerUIHandlerStateHighLevelQuests(cr2w, parent, name);

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -22,6 +23,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("spawnFrequencyMax")] 		public CFloat SpawnFrequencyMax { get; set;}
 
 		[RED("movementPatern")] 		public CEnum<EWhaleMovementPatern> MovementPatern { get; set;}
+
+		[RED("whaleTemplate")] 		public CHandle<CEntityTemplate> WhaleTemplate { get; set;}
 
 		public W3WhaleArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

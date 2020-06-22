@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -16,6 +17,14 @@ namespace WolvenKit.CR2W.Types
 		[RED("startAngleToEat")] 		public CFloat StartAngleToEat { get; set;}
 
 		[RED("arcWidthToEat")] 		public CFloat ArcWidthToEat { get; set;}
+
+		[RED("m_Eaters", 2,0)] 		public CArray<CHandle<CActor>> M_Eaters { get; set;}
+
+		[RED("m_LockDistance")] 		public CFloat M_LockDistance { get; set;}
+
+		[RED("m_EatSlots", 2,0)] 		public CArray<Vector> M_EatSlots { get; set;}
+
+		[RED("m_LastTimeEaten")] 		public CFloat M_LastTimeEaten { get; set;}
 
 		public W3FoodComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

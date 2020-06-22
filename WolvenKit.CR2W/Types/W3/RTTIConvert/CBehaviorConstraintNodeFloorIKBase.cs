@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -18,10 +19,6 @@ namespace WolvenKit.CR2W.Types
 		[RED("useFixedVersion")] 		public CBool UseFixedVersion { get; set;}
 
 		[RED("slopeAngleDamp")] 		public CFloat SlopeAngleDamp { get; set;}
-
-		[RED("generateEditorFragmentsForIKSolvers")] 		public CBool GenerateEditorFragmentsForIKSolvers { get; set;}
-
-		[RED("generateEditorFragmentsForLegIndex")] 		public CInt32 GenerateEditorFragmentsForLegIndex { get; set;}
 
 		[RED("common")] 		public SBehaviorConstraintNodeFloorIKCommonData Common { get; set;}
 

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -50,8 +51,6 @@ namespace WolvenKit.CR2W.Types
 		[RED("mtlHardStretchLimitation")] 		public CFloat MtlHardStretchLimitation { get; set;}
 
 		[RED("mtlComDamping")] 		public CBool MtlComDamping { get; set;}
-
-		[RED("materialPresetName")] 		public CString MaterialPresetName { get; set;}
 
 		[RED("graphicalLodLevelInfo", 2,0)] 		public CArray<SMeshTypeResourceLODLevel> GraphicalLodLevelInfo { get; set;}
 

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,32 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskWraithSummonDoppelganger : CBTTaskPlayAnimationEventDecorator
 	{
+		[RED("splitEffectEntityTemplate")] 		public CHandle<CEntityTemplate> SplitEffectEntityTemplate { get; set;}
+
+		[RED("numberToSummon")] 		public CInt32 NumberToSummon { get; set;}
+
+		[RED("summonOnAnimEvent")] 		public CName SummonOnAnimEvent { get; set;}
+
+		[RED("summonPositionPattern")] 		public CEnum<ESpawnPositionPattern> SummonPositionPattern { get; set;}
+
+		[RED("summonMaxDistance")] 		public CFloat SummonMaxDistance { get; set;}
+
+		[RED("summonMinDistance")] 		public CFloat SummonMinDistance { get; set;}
+
+		[RED("entityToSummonName")] 		public CName EntityToSummonName { get; set;}
+
+		[RED("splitEffectEntity")] 		public CName SplitEffectEntity { get; set;}
+
+		[RED("applyBlindnessRange")] 		public CFloat ApplyBlindnessRange { get; set;}
+
+		[RED("entityToSummon")] 		public CHandle<CEntityTemplate> EntityToSummon { get; set;}
+
+		[RED("m_shouldSummon")] 		public CBool M_shouldSummon { get; set;}
+
+		[RED("m_hasSummoned")] 		public CBool M_hasSummoned { get; set;}
+
+		[RED("m_createEntityHelper")] 		public CHandle<CCreateEntityHelper> M_createEntityHelper { get; set;}
+
 		public CBTTaskWraithSummonDoppelganger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskWraithSummonDoppelganger(cr2w, parent, name);

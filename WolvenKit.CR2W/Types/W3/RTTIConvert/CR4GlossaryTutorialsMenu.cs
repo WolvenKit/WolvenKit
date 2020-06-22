@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,16 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4GlossaryTutorialsMenu : CR4ListBaseMenu
 	{
+		[RED("allEntries", 2,0)] 		public CArray<CHandle<CJournalTutorialGroup>> AllEntries { get; set;}
+
+		[RED("m_fxSetTitle")] 		public CHandle<CScriptedFlashFunction> M_fxSetTitle { get; set;}
+
+		[RED("m_fxSetText")] 		public CHandle<CScriptedFlashFunction> M_fxSetText { get; set;}
+
+		[RED("m_fxSetImage")] 		public CHandle<CScriptedFlashFunction> M_fxSetImage { get; set;}
+
+		[RED("resetSelection")] 		public CBool ResetSelection { get; set;}
+
 		public CR4GlossaryTutorialsMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4GlossaryTutorialsMenu(cr2w, parent, name);

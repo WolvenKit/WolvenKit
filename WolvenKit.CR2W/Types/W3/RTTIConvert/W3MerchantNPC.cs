@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -11,9 +12,15 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("embeddedScenes", 2,0)] 		public CArray<MerchantNPCEmbeddedScenes> EmbeddedScenes { get; set;}
 
+		[RED("lastDayOfInteraction")] 		public CInt32 LastDayOfInteraction { get; set;}
+
+		[RED("questBonus")] 		public CBool QuestBonus { get; set;}
+
 		[RED("cacheMerchantMappin")] 		public CBool CacheMerchantMappin { get; set;}
 
 		[RED("craftingDisabled")] 		public CBool CraftingDisabled { get; set;}
+
+		[RED("invComp")] 		public CHandle<CInventoryComponent> InvComp { get; set;}
 
 		public W3MerchantNPC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

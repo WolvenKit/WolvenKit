@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -30,6 +31,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("radius")] 		public CFloat Radius { get; set;}
 
 		[RED("alarmRadius")] 		public CFloat AlarmRadius { get; set;}
+
+		[RED("victim")] 		public CHandle<CGameplayEntity> Victim { get; set;}
+
+		[RED("yrdenAlternate")] 		public CHandle<W3YrdenEntity> YrdenAlternate { get; set;}
 
 		public CProjectileTrajectory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

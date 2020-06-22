@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,14 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SailDamper : CObject
 	{
+		[RED("destValue")] 		public CFloat DestValue { get; set;}
+
+		[RED("currValue")] 		public CFloat CurrValue { get; set;}
+
+		[RED("dampFactor")] 		public CFloat DampFactor { get; set;}
+
+		[RED("edgeValue")] 		public CFloat EdgeValue { get; set;}
+
 		public SailDamper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SailDamper(cr2w, parent, name);

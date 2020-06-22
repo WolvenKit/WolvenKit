@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,8 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateInteraction : CExplorationStateAbstract
 	{
+		[RED("explorationType")] 		public CEnum<ExplorationInteractionType> ExplorationType { get; set;}
+
 		[RED("autointeract")] 		public CBool Autointeract { get; set;}
 
 		[RED("safetyTimeToExit")] 		public CFloat SafetyTimeToExit { get; set;}
@@ -38,6 +41,14 @@ namespace WolvenKit.CR2W.Types
 		[RED("cameraBlendSpeedYaw")] 		public CFloat CameraBlendSpeedYaw { get; set;}
 
 		[RED("cameraBlendSpeedPitch")] 		public CFloat CameraBlendSpeedPitch { get; set;}
+
+		[RED("camPosOriginal")] 		public Vector CamPosOriginal { get; set;}
+
+		[RED("camInitialized")] 		public CBool CamInitialized { get; set;}
+
+		[RED("cachedWeapon")] 		public CEnum<EPlayerWeapon> CachedWeapon { get; set;}
+
+		[RED("restoreUsableItemLAtEnd")] 		public CBool RestoreUsableItemLAtEnd { get; set;}
 
 		public CExplorationStateInteraction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

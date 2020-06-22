@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -22,6 +23,14 @@ namespace WolvenKit.CR2W.Types
 		[RED("factOnLockedAttempt")] 		public CString FactOnLockedAttempt { get; set;}
 
 		[RED("factOnUnlockedByKey")] 		public CString FactOnUnlockedByKey { get; set;}
+
+		[RED("mainInteractionComponent")] 		public CHandle<CDoorComponent> MainInteractionComponent { get; set;}
+
+		[RED("isEnabled")] 		public CBool IsEnabled { get; set;}
+
+		[RED("isPlayerInActivationRange")] 		public CBool IsPlayerInActivationRange { get; set;}
+
+		[RED("isInteractionBlocked")] 		public CBool IsInteractionBlocked { get; set;}
 
 		public W3LockableEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

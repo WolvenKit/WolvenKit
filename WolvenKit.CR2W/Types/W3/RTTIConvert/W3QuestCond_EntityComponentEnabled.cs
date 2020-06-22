@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -14,6 +15,12 @@ namespace WolvenKit.CR2W.Types
 		[RED("componentName")] 		public CName ComponentName { get; set;}
 
 		[RED("inverted")] 		public CBool Inverted { get; set;}
+
+		[RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
+
+		[RED("component")] 		public CHandle<CComponent> Component { get; set;}
+
+		[RED("listener")] 		public CHandle<W3QuestCond_EntityComponentEnabled_Listener> Listener { get; set;}
 
 		public W3QuestCond_EntityComponentEnabled(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

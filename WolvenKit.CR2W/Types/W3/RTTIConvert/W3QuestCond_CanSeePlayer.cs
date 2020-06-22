@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -10,6 +11,10 @@ namespace WolvenKit.CR2W.Types
 	public class W3QuestCond_CanSeePlayer : CQuestScriptedCondition
 	{
 		[RED("actorTag")] 		public CName ActorTag { get; set;}
+
+		[RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+
+		[RED("listener")] 		public CHandle<W3QuestCond_CanSeePlayer_Listener> Listener { get; set;}
 
 		public W3QuestCond_CanSeePlayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

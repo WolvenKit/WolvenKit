@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,8 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FairytaleWitchFluid : CGameplayEntity
 	{
+		[RED("entitiesInRange", 2,0)] 		public CArray<CHandle<CGameplayEntity>> EntitiesInRange { get; set;}
+
 		[RED("damageRadius")] 		public CFloat DamageRadius { get; set;}
 
 		[RED("damageVal")] 		public CFloat DamageVal { get; set;}

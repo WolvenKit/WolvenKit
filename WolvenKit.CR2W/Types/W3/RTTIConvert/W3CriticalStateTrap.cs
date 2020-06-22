@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -16,6 +17,26 @@ namespace WolvenKit.CR2W.Types
 		[RED("durationFrom")] 		public CInt32 DurationFrom { get; set;}
 
 		[RED("durationTo")] 		public CInt32 DurationTo { get; set;}
+
+		[RED("areasActive")] 		public CBool AreasActive { get; set;}
+
+		[RED("movementAdjustorActive")] 		public CBool MovementAdjustorActive { get; set;}
+
+		[RED("params")] 		public SCustomEffectParams Params { get; set;}
+
+		[RED("movementAdjustor")] 		public CHandle<CMovementAdjustor> MovementAdjustor { get; set;}
+
+		[RED("ticket")] 		public SMovementAdjustmentRequestTicket Ticket { get; set;}
+
+		[RED("ticketRot")] 		public SMovementAdjustmentRequestTicket TicketRot { get; set;}
+
+		[RED("lifeTime")] 		public CInt32 LifeTime { get; set;}
+
+		[RED("l_effectDuration")] 		public CInt32 L_effectDuration { get; set;}
+
+		[RED("startTimestamp")] 		public CFloat StartTimestamp { get; set;}
+
+		[RED("enterTimestamp")] 		public CFloat EnterTimestamp { get; set;}
 
 		public W3CriticalStateTrap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,6 +13,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("killedValue")] 		public CInt32 KilledValue { get; set;}
 
 		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
+
+		[RED("killedCreatures")] 		public CInt32 KilledCreatures { get; set;}
+
+		[RED("dataManager")] 		public CHandle<CEncounterDataManager> DataManager { get; set;}
 
 		public W3KilledCounterCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

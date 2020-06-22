@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -26,8 +27,6 @@ namespace WolvenKit.CR2W.Types
 		[RED("cachedPostAllNodeA")] 		public CPtr<CBehaviorGraphNode> CachedPostAllNodeA { get; set;}
 
 		[RED("cachedPostAllNodeB")] 		public CPtr<CBehaviorGraphNode> CachedPostAllNodeB { get; set;}
-
-		[RED("debugOverride")] 		public CBool DebugOverride { get; set;}
 
 		public CBehaviorGraphAnimationMixerSlotNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

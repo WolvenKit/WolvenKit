@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -48,6 +49,30 @@ namespace WolvenKit.CR2W.Types
 		[RED("stayAboveNavigableSpace")] 		public CBool StayAboveNavigableSpace { get; set;}
 
 		[RED("considerSuccesAfterDelay")] 		public CFloat ConsiderSuccesAfterDelay { get; set;}
+
+		[RED("m_NodeTarget")] 		public CHandle<CNode> M_NodeTarget { get; set;}
+
+		[RED("m_VectorTarget")] 		public Vector M_VectorTarget { get; set;}
+
+		[RED("m_IsFallingBack")] 		public CBool M_IsFallingBack { get; set;}
+
+		[RED("m_Entity")] 		public CHandle<CEntity> M_Entity { get; set;}
+
+		[RED("m_CanSendEvent")] 		public CBool M_CanSendEvent { get; set;}
+
+		[RED("m_TimeBeforeSuccess")] 		public CFloat M_TimeBeforeSuccess { get; set;}
+
+		[RED("m_speedTarget")] 		public CFloat M_speedTarget { get; set;}
+
+		[RED("m_normalSpeedTarget")] 		public CFloat M_normalSpeedTarget { get; set;}
+
+		[RED("m_verticalOffsetTarget")] 		public CFloat M_verticalOffsetTarget { get; set;}
+
+		[RED("m_currentSpeedOsc")] 		public CFloat M_currentSpeedOsc { get; set;}
+
+		[RED("m_currentNormalSpeedOsc")] 		public CFloat M_currentNormalSpeedOsc { get; set;}
+
+		[RED("m_currentVertOffest")] 		public CFloat M_currentVertOffest { get; set;}
 
 		public W3SlideToTargetComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

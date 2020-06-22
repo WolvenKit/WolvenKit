@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,12 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CollisionTrajectoryPart : CPhantomComponent
 	{
+		[RED("triggeredCollisions")] 		public CInt32 TriggeredCollisions { get; set;}
+
+		[RED("waterCollisions")] 		public CInt32 WaterCollisions { get; set;}
+
+		[RED("ownerTrajectory")] 		public CHandle<CollisionTrajectory> OwnerTrajectory { get; set;}
+
 		[RED("part")] 		public CEnum<ECollisionTrajectoryPart> Part { get; set;}
 
 		[RED("waterUpPosCheckSlotName")] 		public CName WaterUpPosCheckSlotName { get; set;}

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -46,6 +47,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("useCustomTargetWithTag")] 		public CBool UseCustomTargetWithTag { get; set;}
 
 		[RED("tagToFind")] 		public CName TagToFind { get; set;}
+
+		[RED("projEntity")] 		public CHandle<CEntityTemplate> ProjEntity { get; set;}
 
 		public CBTTaskProjectileAttackDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

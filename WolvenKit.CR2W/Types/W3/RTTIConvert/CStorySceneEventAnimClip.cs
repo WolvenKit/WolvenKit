@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -24,8 +25,6 @@ namespace WolvenKit.CR2W.Types
 		[RED("allowLookatsLevel")] 		public CEnum<ELookAtLevel> AllowLookatsLevel { get; set;}
 
 		[RED("weight")] 		public CFloat Weight { get; set;}
-
-		[RED("cachedAnimationDuration")] 		public CFloat CachedAnimationDuration { get; set;}
 
 		[RED("forceAnimationTimeFlag")] 		public CBool ForceAnimationTimeFlag { get; set;}
 

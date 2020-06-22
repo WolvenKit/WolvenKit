@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,12 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3AlchemyManager : CObject
 	{
+		[RED("recipes", 2,0)] 		public CArray<SAlchemyRecipe> Recipes { get; set;}
+
+		[RED("isPlayerMounted")] 		public CBool IsPlayerMounted { get; set;}
+
+		[RED("isPlayerInCombat")] 		public CBool IsPlayerInCombat { get; set;}
+
 		public W3AlchemyManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3AlchemyManager(cr2w, parent, name);

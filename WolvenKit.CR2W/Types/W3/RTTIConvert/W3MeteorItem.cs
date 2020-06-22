@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,7 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MeteorItem : W3QuestUsableItem
 	{
+		[RED("collisionGroups", 2,0)] 		public CArray<CName> CollisionGroups { get; set;}
+
 		[RED("meteorResourceName")] 		public CName MeteorResourceName { get; set;}
+
+		[RED("meteorEntityTemplate")] 		public CHandle<CEntityTemplate> MeteorEntityTemplate { get; set;}
 
 		public W3MeteorItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

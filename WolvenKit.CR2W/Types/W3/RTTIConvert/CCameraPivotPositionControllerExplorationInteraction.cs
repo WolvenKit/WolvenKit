@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -10,6 +11,10 @@ namespace WolvenKit.CR2W.Types
 	public class CCameraPivotPositionControllerExplorationInteraction : CCameraPivotPositionControllerJump
 	{
 		[RED("collisionOffsetF")] 		public CFloat CollisionOffsetF { get; set;}
+
+		[RED("explorationDirection")] 		public Vector ExplorationDirection { get; set;}
+
+		[RED("collisionOffset")] 		public Vector CollisionOffset { get; set;}
 
 		public CCameraPivotPositionControllerExplorationInteraction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

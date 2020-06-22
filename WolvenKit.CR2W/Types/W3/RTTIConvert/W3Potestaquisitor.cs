@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -20,6 +21,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("soundEffectType")] 		public CEnum<EFocusModeSoundEffectType> SoundEffectType { get; set;}
 
 		[RED("effect")] 		public CName Effect { get; set;}
+
+		[RED("registeredAnomalies", 2,0)] 		public CArray<CHandle<CGameplayEntity>> RegisteredAnomalies { get; set;}
+
+		[RED("previousClosestAnomaly")] 		public CHandle<CGameplayEntity> PreviousClosestAnomaly { get; set;}
 
 		public W3Potestaquisitor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

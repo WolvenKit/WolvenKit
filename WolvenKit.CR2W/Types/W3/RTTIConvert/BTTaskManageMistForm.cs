@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,36 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskManageMistForm : CBTTaskPlayAnimationEventDecorator
 	{
+		[RED("manageMistFormOnAnimEvents")] 		public CBool ManageMistFormOnAnimEvents { get; set;}
+
+		[RED("enableOnActivate")] 		public CBool EnableOnActivate { get; set;}
+
+		[RED("enableOnMain")] 		public CBool EnableOnMain { get; set;}
+
+		[RED("disableOnDeactivate")] 		public CBool DisableOnDeactivate { get; set;}
+
+		[RED("affectVisibility")] 		public CBool AffectVisibility { get; set;}
+
+		[RED("affectGameplayVisibility")] 		public CBool AffectGameplayVisibility { get; set;}
+
+		[RED("affectCollision")] 		public CBool AffectCollision { get; set;}
+
+		[RED("affectHitAnims")] 		public CBool AffectHitAnims { get; set;}
+
+		[RED("affectImmortality")] 		public CBool AffectImmortality { get; set;}
+
+		[RED("delayExecutionInMain")] 		public CFloat DelayExecutionInMain { get; set;}
+
+		[RED("appearanceOnActivate")] 		public CName AppearanceOnActivate { get; set;}
+
+		[RED("appearanceOnMain")] 		public CName AppearanceOnMain { get; set;}
+
+		[RED("restoreAppearanceOnDeactivate")] 		public CBool RestoreAppearanceOnDeactivate { get; set;}
+
+		[RED("appearanceOnDeactivate")] 		public CName AppearanceOnDeactivate { get; set;}
+
+		[RED("previousAppearanceName")] 		public CName PreviousAppearanceName { get; set;}
+
 		public BTTaskManageMistForm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskManageMistForm(cr2w, parent, name);

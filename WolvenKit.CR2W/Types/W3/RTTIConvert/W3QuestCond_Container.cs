@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,6 +13,14 @@ namespace WolvenKit.CR2W.Types
 		[RED("containerTag")] 		public CName ContainerTag { get; set;}
 
 		[RED("contents")] 		public CEnum<EContainerMode> Contents { get; set;}
+
+		[RED("inventory")] 		public CHandle<CInventoryComponent> Inventory { get; set;}
+
+		[RED("isFulfilled")] 		public CBool IsFulfilled { get; set;}
+
+		[RED("globalListener")] 		public CHandle<W3QuestCond_Container_GlobalListener> GlobalListener { get; set;}
+
+		[RED("inventoryListener")] 		public CHandle<W3QuestCond_Container_InventoryListener> InventoryListener { get; set;}
 
 		public W3QuestCond_Container(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

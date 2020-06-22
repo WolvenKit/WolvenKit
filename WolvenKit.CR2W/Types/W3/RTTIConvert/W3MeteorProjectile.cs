@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -14,6 +15,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("markerEntityTemplate")] 		public CHandle<CEntityTemplate> MarkerEntityTemplate { get; set;}
 
 		[RED("destroyMarkerAfter")] 		public CFloat DestroyMarkerAfter { get; set;}
+
+		[RED("markerEntity")] 		public CHandle<CEntity> MarkerEntity { get; set;}
 
 		public W3MeteorProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

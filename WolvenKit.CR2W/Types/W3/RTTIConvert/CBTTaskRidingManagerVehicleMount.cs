@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,12 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskRidingManagerVehicleMount : IBehTreeTask
 	{
+		[RED("mountType")] 		public CName MountType { get; set;}
+
+		[RED("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
+
+		[RED("attachSlot")] 		public CName AttachSlot { get; set;}
+
 		public CBTTaskRidingManagerVehicleMount(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskRidingManagerVehicleMount(cr2w, parent, name);

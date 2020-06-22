@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,6 +13,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("itemType")] 		public CEnum<EUsableItemType> ItemType { get; set;}
 
 		[RED("blockedActions", 2,0)] 		public CArray<CEnum<EInputActionBlock>> BlockedActions { get; set;}
+
+		[RED("wasOnHiddenCalled")] 		public CBool WasOnHiddenCalled { get; set;}
 
 		public W3UsableItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

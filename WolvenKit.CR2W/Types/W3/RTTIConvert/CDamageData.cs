@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -16,6 +17,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("customHitReactionRequested")] 		public CBool CustomHitReactionRequested { get; set;}
 
 		[RED("isDoTDamage")] 		public CBool IsDoTDamage { get; set;}
+
+		[RED("isActionMelee")] 		public CBool IsActionMelee { get; set;}
 
 		public CDamageData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

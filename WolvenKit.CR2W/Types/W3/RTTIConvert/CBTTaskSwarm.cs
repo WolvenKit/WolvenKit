@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,12 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSwarm : CBTTaskAttack
 	{
+		[RED("lair")] 		public CHandle<CFlyingSwarmMasterLair> Lair { get; set;}
+
+		[RED("entities", 2,0)] 		public CArray<CHandle<CGameplayEntity>> Entities { get; set;}
+
+		[RED("i")] 		public CInt32 I { get; set;}
+
 		public CBTTaskSwarm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskSwarm(cr2w, parent, name);

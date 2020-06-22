@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -20,6 +21,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("immunityFact")] 		public CString ImmunityFact { get; set;}
 
 		[RED("customParams")] 		public CHandle<W3BuffCustomParams> CustomParams { get; set;}
+
+		[RED("entitiesInRange", 2,0)] 		public CArray<CHandle<CActor>> EntitiesInRange { get; set;}
 
 		public W3EffectAreaTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

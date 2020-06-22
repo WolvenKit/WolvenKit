@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -14,6 +15,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("spawnRadiousMAx")] 		public CFloat SpawnRadiousMAx { get; set;}
 
 		[RED("spawnNodeTag")] 		public CName SpawnNodeTag { get; set;}
+
+		[RED("spawnNode")] 		public CHandle<CNode> SpawnNode { get; set;}
 
 		public ISpawnTreeSpawnAroundNodeInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -10,6 +11,8 @@ namespace WolvenKit.CR2W.Types
 	public class CCameraPivotPositionControllerDrift : ICustomCameraScriptedPivotPositionController
 	{
 		[RED("zOffset")] 		public CFloat ZOffset { get; set;}
+
+		[RED("originalPosition")] 		public Vector OriginalPosition { get; set;}
 
 		[RED("blendSpeed")] 		public CFloat BlendSpeed { get; set;}
 
@@ -34,6 +37,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("upDistanceBlendSpeed")] 		public CFloat UpDistanceBlendSpeed { get; set;}
 
 		[RED("timeToDispMax")] 		public CFloat TimeToDispMax { get; set;}
+
+		[RED("timeOfsetCur")] 		public CFloat TimeOfsetCur { get; set;}
+
+		[RED("timeCur")] 		public CFloat TimeCur { get; set;}
 
 		public CCameraPivotPositionControllerDrift(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -16,6 +17,24 @@ namespace WolvenKit.CR2W.Types
 		[RED("factOnPlayerDoorOpen")] 		public CName FactOnPlayerDoorOpen { get; set;}
 
 		[RED("openedByHorse")] 		public CBool OpenedByHorse { get; set;}
+
+		[RED("doorsCmp")] 		public CHandle<CDoorComponent> DoorsCmp { get; set;}
+
+		[RED("lockedCmp")] 		public CHandle<CInteractionComponent> LockedCmp { get; set;}
+
+		[RED("unlockCmp")] 		public CHandle<CInteractionComponent> UnlockCmp { get; set;}
+
+		[RED("lockedDA")] 		public CHandle<CDeniedAreaComponent> LockedDA { get; set;}
+
+		[RED("rigidMeshCmp")] 		public CHandle<CRigidMeshComponent> RigidMeshCmp { get; set;}
+
+		[RED("updateDuration")] 		public CFloat UpdateDuration { get; set;}
+
+		[RED("updateTimeLeft")] 		public CFloat UpdateTimeLeft { get; set;}
+
+		[RED("playerInsideTrapdoorTrigger")] 		public CBool PlayerInsideTrapdoorTrigger { get; set;}
+
+		[RED("enableDeniedAreaInCombat")] 		public CBool EnableDeniedAreaInCombat { get; set;}
 
 		public W3NewDoor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

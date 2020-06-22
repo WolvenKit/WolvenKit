@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -10,6 +11,22 @@ namespace WolvenKit.CR2W.Types
 	public class W3ArrowProjectile : W3AdvancedProjectile
 	{
 		[RED("defaultTrail")] 		public CName DefaultTrail { get; set;}
+
+		[RED("underwaterTrail")] 		public CName UnderwaterTrail { get; set;}
+
+		[RED("boneName")] 		public CName BoneName { get; set;}
+
+		[RED("activeTrail")] 		public CName ActiveTrail { get; set;}
+
+		[RED("shouldBeAttachedToVictim")] 		public CBool ShouldBeAttachedToVictim { get; set;}
+
+		[RED("isOnFire")] 		public CBool IsOnFire { get; set;}
+
+		[RED("isUnderwater")] 		public CBool IsUnderwater { get; set;}
+
+		[RED("isBouncedArrow")] 		public CBool IsBouncedArrow { get; set;}
+
+		[RED("isScheduledForDestruction")] 		public CBool IsScheduledForDestruction { get; set;}
 
 		public W3ArrowProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

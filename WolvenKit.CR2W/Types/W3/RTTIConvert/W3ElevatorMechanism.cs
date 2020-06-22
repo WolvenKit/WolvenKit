@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,6 +13,14 @@ namespace WolvenKit.CR2W.Types
 		[RED("radius")] 		public CFloat Radius { get; set;}
 
 		[RED("clockwiseRotation")] 		public CBool ClockwiseRotation { get; set;}
+
+		[RED("rotationSpeed")] 		public CFloat RotationSpeed { get; set;}
+
+		[RED("forwardDirection")] 		public CBool ForwardDirection { get; set;}
+
+		[RED("transformMatrix")] 		public CMatrix TransformMatrix { get; set;}
+
+		[RED("localRotation")] 		public EulerAngles LocalRotation { get; set;}
 
 		public W3ElevatorMechanism(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

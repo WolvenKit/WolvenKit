@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -52,6 +53,52 @@ namespace WolvenKit.CR2W.Types
 		[RED("regionType")] 		public CEnum<EEP2PoiType> RegionType { get; set;}
 
 		[RED("entityType")] 		public CEnum<EMonsterNestType> EntityType { get; set;}
+
+		[RED("explodeAfter")] 		public CFloat ExplodeAfter { get; set;}
+
+		[RED("nestBurnedAfter")] 		public CFloat NestBurnedAfter { get; set;}
+
+		[RED("playerInventory")] 		public CHandle<CInventoryComponent> PlayerInventory { get; set;}
+
+		[RED("usedBomb")] 		public SItemUniqueId UsedBomb { get; set;}
+
+		[RED("encounter")] 		public CHandle<CEncounter> Encounter { get; set;}
+
+		[RED("nestFound")] 		public CBool NestFound { get; set;}
+
+		[RED("messageTimestamp")] 		public CFloat MessageTimestamp { get; set;}
+
+		[RED("bossKilled")] 		public CBool BossKilled { get; set;}
+
+		[RED("container")] 		public CHandle<W3Container> Container { get; set;}
+
+		[RED("bossKilledCounter")] 		public CInt32 BossKilledCounter { get; set;}
+
+		[RED("expWasAdded")] 		public CBool ExpWasAdded { get; set;}
+
+		[RED("bombEntity")] 		public CHandle<CEntity> BombEntity { get; set;}
+
+		[RED("bombEntityTemplate")] 		public CHandle<CEntityTemplate> BombEntityTemplate { get; set;}
+
+		[RED("bombName")] 		public CName BombName { get; set;}
+
+		[RED("actionBlockingExceptions", 2,0)] 		public CArray<CEnum<EInputActionBlock>> ActionBlockingExceptions { get; set;}
+
+		[RED("saveLockIdx")] 		public CInt32 SaveLockIdx { get; set;}
+
+		[RED("voicesetTime")] 		public CFloat VoicesetTime { get; set;}
+
+		[RED("voicesetPlayed")] 		public CBool VoicesetPlayed { get; set;}
+
+		[RED("canPlayVset")] 		public CBool CanPlayVset { get; set;}
+
+		[RED("l_enginetime")] 		public CFloat L_enginetime { get; set;}
+
+		[RED("airDmg")] 		public CBool AirDmg { get; set;}
+
+		[RED("interactionComponent")] 		public CHandle<CInteractionComponent> InteractionComponent { get; set;}
+
+		[RED("wasExploded")] 		public CBool WasExploded { get; set;}
 
 		public CMonsterNestEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

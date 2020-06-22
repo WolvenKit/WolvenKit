@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,14 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskChangePriorityTillAnimEvent : IBehTreeTask
 	{
+		[RED("highPriority")] 		public CInt32 HighPriority { get; set;}
+
+		[RED("defaultPriority")] 		public CInt32 DefaultPriority { get; set;}
+
+		[RED("animEventName")] 		public CName AnimEventName { get; set;}
+
+		[RED("allowBlend")] 		public CBool AllowBlend { get; set;}
+
 		public CBTTaskChangePriorityTillAnimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskChangePriorityTillAnimEvent(cr2w, parent, name);

@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -14,6 +15,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("destroyDistance")] 		public CFloat DestroyDistance { get; set;}
 
 		[RED("flyCurves", 2,0)] 		public CArray<CName> FlyCurves { get; set;}
+
+		[RED("manager")] 		public CHandle<CBirdsManager> Manager { get; set;}
 
 		public W3Bird(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

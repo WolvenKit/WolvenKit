@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,8 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationSkateLand : CExplorationStateAbstract
 	{
+		[RED("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
+
 		[RED("behLandCancel")] 		public CName BehLandCancel { get; set;}
 
 		[RED("timePrevToChain")] 		public CFloat TimePrevToChain { get; set;}
@@ -16,6 +19,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("timeToChainJump")] 		public CFloat TimeToChainJump { get; set;}
 
 		[RED("timeSafetyEnd")] 		public CFloat TimeSafetyEnd { get; set;}
+
+		[RED("actionChained")] 		public CBool ActionChained { get; set;}
 
 		public CExplorationSkateLand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

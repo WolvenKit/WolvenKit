@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,12 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MonsterHuntNPC : CNewNPC
 	{
+		[RED("MONSTER_HUNT_TARGET_TAG")] 		public CName MONSTER_HUNT_TARGET_TAG { get; set;}
+
+		[RED("bossBarOn")] 		public CBool BossBarOn { get; set;}
+
+		[RED("musicOn")] 		public CBool MusicOn { get; set;}
+
 		[RED("displayBossBar")] 		public CBool DisplayBossBar { get; set;}
 
 		[RED("switchMusic")] 		public CBool SwitchMusic { get; set;}
@@ -24,6 +31,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("combatMusicStopEvent")] 		public CString CombatMusicStopEvent { get; set;}
 
 		[RED("associatedInvestigationAreasTag")] 		public CName AssociatedInvestigationAreasTag { get; set;}
+
+		[RED("investigationAreasProcessed")] 		public CBool InvestigationAreasProcessed { get; set;}
 
 		public W3MonsterHuntNPC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

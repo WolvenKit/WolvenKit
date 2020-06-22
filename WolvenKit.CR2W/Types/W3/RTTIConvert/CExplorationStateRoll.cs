@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -19,6 +20,10 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("m_RollTimeAfterF")] 		public CFloat M_RollTimeAfterF { get; set;}
 
+		[RED("m_ReadyToEndB")] 		public CBool M_ReadyToEndB { get; set;}
+
+		[RED("m_ReadyToFallB")] 		public CBool M_ReadyToFallB { get; set;}
+
 		[RED("m_BehLandRunS")] 		public CName M_BehLandRunS { get; set;}
 
 		[RED("m_BehLandCancelN")] 		public CName M_BehLandCancelN { get; set;}
@@ -27,9 +32,15 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("m_BehLandCanFallN")] 		public CName M_BehLandCanFallN { get; set;}
 
+		[RED("m_SlidingB")] 		public CBool M_SlidingB { get; set;}
+
 		[RED("m_SlideTimeToDecideF")] 		public CFloat M_SlideTimeToDecideF { get; set;}
 
+		[RED("m_ToFallB")] 		public CBool M_ToFallB { get; set;}
+
 		[RED("verticalMovementParams")] 		public SVerticalMovementParams VerticalMovementParams { get; set;}
+
+		[RED("m_ToSlideB")] 		public CBool M_ToSlideB { get; set;}
 
 		[RED("m_TimeBeforeChainJumpF")] 		public CFloat M_TimeBeforeChainJumpF { get; set;}
 

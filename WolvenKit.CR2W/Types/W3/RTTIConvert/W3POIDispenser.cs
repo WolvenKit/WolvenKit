@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -18,6 +19,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("respawnInterval")] 		public CFloat RespawnInterval { get; set;}
 
 		[RED("poiEntity")] 		public W3POIEntities PoiEntity { get; set;}
+
+		[RED("spawnedPOIs", 2,0)] 		public CArray<CHandle<W3PointOfInterestEntity>> SpawnedPOIs { get; set;}
+
+		[RED("activatorArea")] 		public CHandle<CTriggerAreaComponent> ActivatorArea { get; set;}
 
 		public W3POIDispenser(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

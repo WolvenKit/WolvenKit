@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -12,6 +13,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("effectName")] 		public CName EffectName { get; set;}
 
 		[RED("destroyEffectTime")] 		public CFloat DestroyEffectTime { get; set;}
+
+		[RED("timedFxDestroyName")] 		public CName TimedFxDestroyName { get; set;}
+
+		[RED("parentActorHandle")] 		public EntityHandle ParentActorHandle { get; set;}
 
 		public W3VisualFx(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

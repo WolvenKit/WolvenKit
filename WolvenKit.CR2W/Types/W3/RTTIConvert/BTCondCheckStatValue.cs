@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,18 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondCheckStatValue : IBehTreeTask
 	{
+		[RED("checkedActor")] 		public CEnum<EStatOwner> CheckedActor { get; set;}
+
+		[RED("baseStatType")] 		public CEnum<EBaseCharacterStats> BaseStatType { get; set;}
+
+		[RED("autoCheckHPType")] 		public CBool AutoCheckHPType { get; set;}
+
+		[RED("statValue")] 		public CFloat StatValue { get; set;}
+
+		[RED("percentage")] 		public CBool Percentage { get; set;}
+
+		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
+
 		public BTCondCheckStatValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTCondCheckStatValue(cr2w, parent, name);
