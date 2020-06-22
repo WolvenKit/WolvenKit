@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -34,6 +35,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("entToHideTags", 2,0)] 		public CArray<CName> EntToHideTags { get; set;}
 
 		[RED("usedInFiles", 2,0)] 		public CArray<CString> UsedInFiles { get; set;}
+
+		[RED("resourcesToPreloadManually", 2,0)] 		public CArray<CHandle<CResource>> ResourcesToPreloadManually { get; set;}
 
 		[RED("resourcesToPreloadManuallyPaths", 2,0)] 		public CArray<CString> ResourcesToPreloadManuallyPaths { get; set;}
 

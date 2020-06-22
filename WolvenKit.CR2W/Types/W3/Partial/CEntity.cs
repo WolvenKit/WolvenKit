@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -22,6 +23,10 @@ namespace WolvenKit.CR2W.Types
 		[RED("autoPlayEffectName")] 		public CName AutoPlayEffectName { get; set;}
 
 		[RED("entityFlags")] 		public CUInt8 EntityFlags { get; set;}
+
+		[RED("name")] 		public CString Name { get; set;}
+
+		[RED("forceAutoHideDistance")] 		public CUInt16 ForceAutoHideDistance { get; set;}
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEntity(cr2w, parent, name);
 

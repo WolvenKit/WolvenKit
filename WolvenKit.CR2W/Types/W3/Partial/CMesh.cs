@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -9,6 +10,10 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CMesh : CMeshTypeResource
 	{
+		[RED("baseResourceFilePath")] 		public CString BaseResourceFilePath { get; set;}
+
+		[RED("navigationObstacle")] 		public CNavigationObstacle NavigationObstacle { get; set;}
+
 		[RED("collisionMesh")] 		public CHandle<CCollisionMesh> CollisionMesh { get; set;}
 
 		[RED("useExtraStreams")] 		public CBool UseExtraStreams { get; set;}

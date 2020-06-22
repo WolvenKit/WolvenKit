@@ -1,4 +1,5 @@
-using System.IO;using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
 using static WolvenKit.CR2W.Types.Enums;
 
@@ -14,6 +15,8 @@ namespace WolvenKit.CR2W.Types
 		[RED("nextVariantId")] 		public CUInt32 NextVariantId { get; set;}
 
 		[RED("defaultVariantId")] 		public CUInt32 DefaultVariantId { get; set;}
+
+		[RED("variantIdForcedInEditor")] 		public CUInt32 VariantIdForcedInEditor { get; set;}
 
 		[RED("variants", 2,0)] 		public CArray<CPtr<CStorySceneSectionVariant>> Variants { get; set;}
 
