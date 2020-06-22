@@ -21,7 +21,7 @@ namespace WolvenKit.FlowTreeEditors
             CArray<CPtr<CStorySceneLinkElement>> outputs = resource.Outputs;
             if (outputs != null)
             {
-                foreach (CPtr<CStorySceneLinkElement> choice in outputs.elements)
+                foreach (CPtr<CStorySceneLinkElement> choice in outputs.Elements)
                 {
                     if (choice != null)
                     {
@@ -58,7 +58,7 @@ namespace WolvenKit.FlowTreeEditors
             CArray<CPtr<CStorySceneLinkElement>> outputs = resource.Outputs;
             if (outputs != null)
             {
-                foreach (var element in outputs.elements)
+                foreach (var element in outputs.Elements)
                 {
                     if (element != null)
                     {

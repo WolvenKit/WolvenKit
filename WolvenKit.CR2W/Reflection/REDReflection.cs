@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Text;
 using WolvenKit.Common;
 using WolvenKit.CR2W.Types;
@@ -137,6 +138,10 @@ namespace WolvenKit.CR2W.Reflection
                     var v1 = flags.MoveNext() ? flags.Current : 0;
                     return $"static:{v1},{GetREDTypeString(genprop, flags)}";
                 }*/
+                if (gentype == typeof(CEnum<>))
+                {
+                    
+                }
 
                 return type.GetPrettyGenericTypes();
             }

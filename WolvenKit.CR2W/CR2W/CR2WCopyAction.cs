@@ -280,7 +280,7 @@ namespace WolvenKit.CR2W
         private static void removeStorySceneAddFacts(CStorySceneSection storysection)
         {
             var factevents =
-                storysection.sceneEventElements.elements.FindAll(
+                storysection.sceneEventElements.Elements.FindAll(
                     delegate(CVariantSizeType sectionitem) { return sectionitem.REDType == "CStorySceneAddFactEvent"; });
 
             foreach (var factevent in factevents)
@@ -326,7 +326,7 @@ namespace WolvenKit.CR2W
         {
             try
             {
-                return cameraInstances.elements.FirstOrDefault(_ => _.CameraName.Value == findCameraName);
+                return cameraInstances.Elements.FirstOrDefault(_ => _.CameraName.Value == findCameraName);
             }
             catch (Exception)
             {
@@ -391,7 +391,7 @@ namespace WolvenKit.CR2W
             var placement_x = 0.0f;
             var placement_y = 0.0f;
             var placement_z = 0.0f;
-            storysection.sceneEventElements.elements.ForEach(delegate (CVariantSizeType sectionvar)
+            storysection.sceneEventElements.Elements.ForEach(delegate (CVariantSizeType sectionvar)
             {
                 if (sectionvar.REDType == "CStorySceneEventOverridePlacement")
                 {
@@ -407,7 +407,7 @@ namespace WolvenKit.CR2W
             });
 
             // Remove Unnessasary teleportation
-            storysection.sceneEventElements.elements.ForEach(delegate (CVariantSizeType sectionvar)
+            storysection.sceneEventElements.Elements.ForEach(delegate (CVariantSizeType sectionvar)
             {
                 if (sectionvar.REDType == "CStorySceneEventOverridePlacement")
                 {

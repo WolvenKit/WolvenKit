@@ -38,7 +38,7 @@ namespace WolvenKit.FlowTreeEditors
             CArray<CPtr<CStorySceneElement>> sceneElements = sceneSection.SceneElements;
             if (sceneElements != null)
             {
-                foreach (CPtr<CStorySceneElement> element in sceneElements.elements)
+                foreach (CPtr<CStorySceneElement> element in sceneElements.Elements)
                 {
                     if (element != null)
                     {

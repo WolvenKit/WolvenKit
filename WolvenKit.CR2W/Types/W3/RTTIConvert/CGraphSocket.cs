@@ -17,15 +17,15 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("flags")] 		public CUInt32 Flags { get; set;}
 
-		[RED("placement")] 		public ELinkedSocketPlacement Placement { get; set;}
+		[RED("placement")] 		public CEnum<ELinkedSocketPlacement> Placement { get; set;}
 
 		[RED("caption")] 		public CString Caption { get; set;}
 
 		[RED("color")] 		public CColor Color { get; set;}
 
-		[RED("direction")] 		public ELinkedSocketDirection Direction { get; set;}
+		[RED("direction")] 		public CEnum<ELinkedSocketDirection> Direction { get; set;}
 
-		[RED("drawStyle")] 		public ELinkedSocketDrawStyle DrawStyle { get; set;}
+		[RED("drawStyle")] 		public CEnum<ELinkedSocketDrawStyle> DrawStyle { get; set;}
 
 		public CGraphSocket(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

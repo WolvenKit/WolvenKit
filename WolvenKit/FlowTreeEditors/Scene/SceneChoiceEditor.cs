@@ -21,7 +21,7 @@ namespace WolvenKit.FlowTreeEditors
             CArray<CPtr<CStorySceneChoiceLine>> choiceLines = sceneChoice.ChoiceLines;
             if (choiceLines != null)
             {
-                foreach (var choice in choiceLines.elements)
+                foreach (var choice in choiceLines.Elements)
                 {
                     if (choice != null)
                     {
@@ -52,7 +52,7 @@ namespace WolvenKit.FlowTreeEditors
             CArray<CPtr<CStorySceneChoiceLine>> sceneElements = (Chunk.data as CStorySceneChoice).ChoiceLines;
             if (sceneElements != null)
             {
-                foreach (var element in sceneElements.elements)
+                foreach (var element in sceneElements.Elements)
                 {
                     if (element != null)
                     {

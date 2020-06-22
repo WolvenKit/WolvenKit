@@ -8,12 +8,12 @@ using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.CR2W.Types
 {
-    public partial class CStorySceneScript : CStorySceneControlPart
+    public partial class CQuestScriptBlock : CQuestGraphBlock
     {
 
         [REDBuffer(true)] public CCompressedBuffer<CVariant> BufferParameters { get; set; }
 
-        public CStorySceneScript(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CQuestScriptBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             BufferParameters = new CCompressedBuffer<CVariant>(cr2w, this, nameof(BufferParameters));
         }
@@ -42,7 +42,7 @@ namespace WolvenKit.CR2W.Types
         {
             base.Write(file);
 
-            for (var i = 0; i < BufferParameters.Count; i++)
+            for (var i = 0; i < Parameters.Count; i++)
             {
                 CVariant variable = BufferParameters[i];
 

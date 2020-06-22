@@ -22,7 +22,7 @@ namespace WolvenKit.CR2W.Types
 
     public interface IArrayAccessor<T> : IArrayAccessor
     {
-        List<T> elements { get; set; }
+        List<T> Elements { get; set; }
     }
 
     [REDMeta()]
@@ -44,7 +44,7 @@ namespace WolvenKit.CR2W.Types
         {
             CUInt32 count = new CUInt32(cr2w, null, "")
             {
-                val = (uint)elements.Count
+                val = (uint)Elements.Count
             };
             count.Write(file);
 

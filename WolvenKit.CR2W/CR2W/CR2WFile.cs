@@ -1009,8 +1009,12 @@ namespace WolvenKit.CR2W
                         foreach (CVariantSizeType item in (cvar as CStorySceneSection).sceneEventElements)
                             returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipNameAndType, item));
                     // hack for CStorySceneScript *sigh*
-                    if (cvar is CStorySceneScript)
-                        foreach (CVariant item in (cvar as CStorySceneScript).Parameters)
+                    if (cvar is CStorySceneScript sss)
+                        foreach (CVariant item in sss.BufferParameters)
+                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipType, item));
+                    // hack for CQuestScriptBlock *sigh*
+                    if (cvar is CQuestScriptBlock qsb)
+                        foreach (CVariant item in qsb.BufferParameters)
                             returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipType, item));
                     // hack for CFXTrackItem *sigh*
                     if (cvar is CFXTrackItem)

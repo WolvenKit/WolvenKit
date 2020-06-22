@@ -211,7 +211,7 @@ namespace WolvenKit
             CArray<CPtr<CStorySceneControlPart>> controlParts = resource.ControlParts;
             if (controlParts != null)
             {
-                rootNodes.AddRange(from part in controlParts.elements.OfType<CPtr<CStorySceneControlPart>>() where part != null && part.GetPtrTargetType() == "CStorySceneInput" select part.Reference); ;
+                rootNodes.AddRange(from part in controlParts.Elements.OfType<CPtr<CStorySceneControlPart>>() where part != null && part.GetPtrTargetType() == "CStorySceneInput" select part.Reference); ;
             }
         }
 
@@ -224,7 +224,7 @@ namespace WolvenKit
                 var graphBlocks = (graphObj.Reference.data as CQuestGraph).GraphBlocks;
                 if (graphBlocks != null)
                 {
-                    rootNodes.AddRange(from part in graphBlocks.elements.OfType<CPtr<CGraphBlock>>() where part != null && part.GetPtrTargetType() == "CQuestPhaseInputBlock" select part.Reference);
+                    rootNodes.AddRange(from part in graphBlocks.Elements.OfType<CPtr<CGraphBlock>>() where part != null && part.GetPtrTargetType() == "CQuestPhaseInputBlock" select part.Reference);
                 }
             }
         }
@@ -238,7 +238,7 @@ namespace WolvenKit
                 CArray<CPtr<CGraphBlock>> graphBlocks = (graphObj.Reference.data as CQuestGraph).GraphBlocks;
                 if (graphBlocks != null)
                 {
-                    rootNodes.AddRange(from part in graphBlocks.elements.OfType<CPtr<CGraphBlock>>() where part != null && part.GetPtrTargetType() == "CQuestStartBlock" select part.Reference);
+                    rootNodes.AddRange(from part in graphBlocks.Elements.OfType<CPtr<CGraphBlock>>() where part != null && part.GetPtrTargetType() == "CQuestStartBlock" select part.Reference);
                 }
             }
 

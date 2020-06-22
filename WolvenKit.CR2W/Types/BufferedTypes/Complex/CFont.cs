@@ -106,7 +106,7 @@ namespace WolvenKit.CR2W.Types
 
             for(int i = 0; i < Glyphs.Count; i++)
             {
-               foreach(var subelement in (Glyphs[i]).elements)
+               foreach(var subelement in (Glyphs[i]).Elements)
                {
                     subelement.Write(file);
                }

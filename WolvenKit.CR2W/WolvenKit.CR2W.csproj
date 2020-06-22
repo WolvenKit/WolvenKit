@@ -156,6 +156,7 @@
     <Compile Include="Reflection\REDReflection.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SVector4D.cs" />
+    <Compile Include="Types\BufferedTypes\Complex\CQuestScriptBlock.cs" />
     <Compile Include="Types\Generic\Arrays\CBufferBase.cs" />
     <Compile Include="Types\Generic\Arrays\CArrayBase.cs" />
     <Compile Include="Types\Generic\Arrays\CArrayFixedSize.cs" />
@@ -4300,7 +4301,7 @@
     <Compile Include="Types\W3\RTTIConvert\CQuestSceneBlock.cs" />
     <Compile Include="Types\W3\RTTIConvert\CQuestScenePrepareBlock.cs" />
     <Compile Include="Types\W3\RTTIConvert\CQuestScopeBlock.cs" />
-    <Compile Include="Types\W3\RTTIConvert\CQuestScriptBlock.cs" />
+    <Compile Include="Types\W3\Partial\CQuestScriptBlock.cs" />
     <Compile Include="Types\W3\RTTIConvert\CQuestScriptedActionsBlock.cs" />
     <Compile Include="Types\W3\RTTIConvert\CQuestScriptedCondition.cs" />
     <Compile Include="Types\W3\RTTIConvert\CQuestScriptedDialogBlock.cs" />

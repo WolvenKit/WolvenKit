@@ -25,14 +25,14 @@ namespace WolvenKit
                 CArray<SCachedConnections> cachedConnections = graphBlock.CachedConnections;
                 if (cachedConnections != null)
                 {
-                    foreach (SCachedConnections conn in cachedConnections.elements)
+                    foreach (SCachedConnections conn in cachedConnections.Elements)
                     {
                         CName socketId = conn.SocketId;
                         CArray<SBlockDesc> blocks = conn.Blocks;
 
                         if (blocks != null)
                         {
-                            foreach (SBlockDesc block in blocks.elements)
+                            foreach (SBlockDesc block in blocks.Elements)
                             {
                                 CPtr<CQuestGraphBlock> graphpointer = block.Ock;
                                 if (graphpointer.Reference != null)

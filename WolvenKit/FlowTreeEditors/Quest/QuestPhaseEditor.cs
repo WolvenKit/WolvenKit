@@ -17,7 +17,7 @@ namespace WolvenKit {
                 CArray<CPtr<CGraphBlock>> graphBlocks = (graphObj.Reference.data as CQuestGraph).GraphBlocks;
                 if (graphBlocks != null)
                 {
-                    connections.AddRange(graphBlocks.elements.Where(_ => _.GetPtrTargetType() == "CQuestPhaseInputBlock"));
+                    connections.AddRange(graphBlocks.Elements.Where(_ => _.GetPtrTargetType() == "CQuestPhaseInputBlock"));
                 }
             }
 

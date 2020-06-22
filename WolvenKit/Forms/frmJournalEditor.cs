@@ -170,7 +170,7 @@ namespace WolvenKit
         #region CJournalCreature
         public void ParseUsedAgainst<T>(CArray<T> infos) where T : CVariable
         {
-            foreach (var info in infos.elements)
+            foreach (var info in infos.Elements)
             {
                 vulnerable_treview.Nodes.Add(info.ToString());
             }
@@ -178,7 +178,7 @@ namespace WolvenKit
 
         public void ParseCJournalCreatureChildren(CArray<CPtr<CJournalContainerEntry>> childs)
         {
-            foreach (CPtr<CJournalContainerEntry> child in childs.elements)
+            foreach (CPtr<CJournalContainerEntry> child in childs.Elements)
             {
                 if (child.Reference.data is CJournalCreatureDescriptionGroup)
                 {
@@ -189,7 +189,7 @@ namespace WolvenKit
 
         public void ParseCJournalCreatureDescriptionGroupChildren(CArray<CPtr<CJournalContainerEntry>> childs)
         {
-            foreach (CPtr<CJournalContainerEntry> child in childs.elements)
+            foreach (CPtr<CJournalContainerEntry> child in childs.Elements)
             {
 
                 if (child.Reference.data is CJournalCreatureDescriptionEntry)
@@ -204,7 +204,7 @@ namespace WolvenKit
 
         public void ParseChildDescription(CArray<CPtr<CJournalContainerEntry>> childs)
         {
-            foreach (var child in childs.elements)
+            foreach (var child in childs.Elements)
             {
                 switch (child.Reference.REDType)
                 {
@@ -232,7 +232,7 @@ namespace WolvenKit
 
         public void ParseCJournalQuestChild(CArray<CPtr<CJournalContainerEntry>> childs)
         {
-            foreach (var child in childs.elements)
+            foreach (var child in childs.Elements)
             {
                 switch (child.Reference.REDType)
                 {
@@ -252,7 +252,7 @@ namespace WolvenKit
 
         public void ParseCJournalQuestDescriptionGroupChild<T>(CArray<CPtr<T>> childs) where T : CVariable
         {
-            foreach (var child in childs.elements)
+            foreach (var child in childs.Elements)
             {
                 switch (child.Reference.REDType)
                 {
@@ -269,7 +269,7 @@ namespace WolvenKit
 
         public void ParseCJournalQuestPhaseChild<T>(CArray<CPtr<T>> childs) where T : CVariable
         {
-            foreach (var child in childs.elements)
+            foreach (var child in childs.Elements)
             {
                 switch (child.Reference.REDType)
                 {
@@ -279,7 +279,7 @@ namespace WolvenKit
                             questnode.Nodes.Add(new TreeNode((child.Reference.data as CJournalQuestObjective).Title.ToString()));
                             if ((child.Reference.data as CJournalQuestObjective).Children != null)
                             {
-                                if ((child.Reference.data as CJournalQuestObjective).Children.elements.Count > 0)
+                                if ((child.Reference.data as CJournalQuestObjective).Children.Elements.Count > 0)
                                 {
                                     var detailnode = ParseCJournalQuestObjectiveChild((child.Reference.data as CJournalQuestObjective).Children);
                                     if (detailnode.Nodes.Count != 0)
@@ -298,7 +298,7 @@ namespace WolvenKit
         public TreeNode ParseCJournalQuestObjectiveChild<T>(CArray<CPtr<T>> childs) where T : CVariable
         {
             var result = new TreeNode("Details");
-            foreach (var child in childs.elements)
+            foreach (var child in childs.Elements)
             {
                 switch (child.Reference.REDType)
                 {

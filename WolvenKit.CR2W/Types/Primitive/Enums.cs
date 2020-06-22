@@ -66,19 +66,17 @@ namespace WolvenKit.CR2W.Types
         #region Testing Area
         public enum EApertureValue
         {
-            /*
-             f/1.0 0
-             f/1.4 1
-             f/2.0 2
-             f/2.8 3
-             f/4.0 4
-             f/5.6 5
-             f/8.0 6
-             f/11.0 7
-             f/16.0 8
-             f/22.0 9
-             f/32.0 10
-             */
+            f10,
+            f14,
+            f20,
+            f28, //f/2.8
+            f40,
+            f56,
+            f80,
+            f110,
+            f160,
+            f220,
+            f320
         }
         public enum EStorySceneForcingMode
         {
@@ -167,7 +165,18 @@ namespace WolvenKit.CR2W.Types
 
 
         #region Not in Ghidra
+        public enum ELinkedSocketPlacement
+        {
 
+        }
+        public enum ELinkedSocketDirection
+        {
+
+        }
+        public enum ELinkedSocketDrawStyle
+        {
+
+        }
         public enum EModLogLevel
         {
 

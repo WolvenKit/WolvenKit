@@ -92,7 +92,7 @@ namespace WolvenKit.Render
 
                     bufferInfos.verticesBuffer = vertexBufferInfos;
                     CArray<SMeshChunkPacked> meshChunks = cmesh.Chunks;
-                    foreach (SMeshChunkPacked meshChunk in meshChunks.elements)
+                    foreach (SMeshChunkPacked meshChunk in meshChunks.Elements)
                     {
                         SMeshInfos meshInfo = new SMeshInfos();
 

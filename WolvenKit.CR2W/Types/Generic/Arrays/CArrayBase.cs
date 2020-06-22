@@ -21,7 +21,7 @@ namespace WolvenKit.CR2W.Types
         public CArrayBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         #region Properties
-        public List<T> elements { get; set; } = new List<T>();
+        public List<T> Elements { get; set; } = new List<T>();
 
 
         [Browsable(false)]
@@ -36,15 +36,23 @@ namespace WolvenKit.CR2W.Types
         {
             get
             {
-                return Flags != null
-                    ? REDReflection.GetREDTypeString(this.GetType(), Flags.ToArray())
-                    : REDReflection.GetREDTypeString(this.GetType());
+                return BuildTypeName(Elementtype, Flags.AsEnumerable().GetEnumerator());
+                //return Flags != null
+                //    ? REDReflection.GetREDTypeString(this.GetType(), Flags.ToArray())
+                //    : REDReflection.GetREDTypeString(this.GetType());
             }
+        }
+
+        private string BuildTypeName(string elementtype, IEnumerator<int> flags)
+        {
+            var v1 = flags.MoveNext() ? flags.Current : 0;
+            var v2 = flags.MoveNext() ? flags.Current : 0;
+            return $"array:{v1},{v2},{elementtype}";
         }
 
         public override List<IEditableVariable> GetEditableVariables()
         {
-            return elements.Cast<IEditableVariable>().ToList();
+            return Elements.Cast<IEditableVariable>().ToList();
         }
 
 
@@ -62,13 +70,13 @@ namespace WolvenKit.CR2W.Types
 
                 element.Read(file, 0);
                 if (element is T te)
-                    elements.Add(te);
+                    Elements.Add(te);
             }
         }
 
         public override void Write(BinaryWriter file)
         {
-            foreach (var element in elements)
+            foreach (var element in Elements)
             {
                 element.Write(file);
             }
@@ -83,20 +91,20 @@ namespace WolvenKit.CR2W.Types
         {
             if (variable is T tvar)
             {
-                variable.SetREDName(elements.Count.ToString());
-                elements.Add(tvar);
+                variable.SetREDName(Elements.Count.ToString());
+                Elements.Add(tvar);
             }
         }
         public override bool CanRemoveVariable(IEditableVariable child)
         {
-            return child is T && elements.Count > 0;
+            return child is T && Elements.Count > 0;
         }
 
         public override bool RemoveVariable(IEditableVariable child)
         {
             if (child is T tvar)
             {
-                elements.Remove(tvar);
+                Elements.Remove(tvar);
                 UpdateNames();
                 return true;
             }
@@ -105,13 +113,13 @@ namespace WolvenKit.CR2W.Types
 
         public override string ToString()
         {
-            var builder = new StringBuilder().Append(elements.Count);
+            var builder = new StringBuilder().Append(Elements.Count);
 
-            if (elements.Count > 0)
+            if (Elements.Count > 0)
             {
                 builder.Append(":");
 
-                foreach (var element in elements)
+                foreach (var element in Elements)
                 {
                     builder.Append(" <").Append(element.ToString()).Append(">");
 
@@ -128,9 +136,9 @@ namespace WolvenKit.CR2W.Types
 
         private void UpdateNames()
         {
-            for (int i = 0; i < elements.Count; i++)
+            for (int i = 0; i < Elements.Count; i++)
             {
-                elements[i].SetREDName(i.ToString());
+                Elements[i].SetREDName(i.ToString());
             }
         }
 
@@ -138,11 +146,11 @@ namespace WolvenKit.CR2W.Types
         {
             var copy = base.Copy(context) as CArrayBase<T>;
 
-            foreach (var element in elements)
+            foreach (var element in Elements)
             {
                 var ccopy = element.Copy(context);
                 if (ccopy is T copye)
-                    copy.elements.Add(copye);
+                    copy.Elements.Add(copye);
             }
 
             return copy;
@@ -151,23 +159,23 @@ namespace WolvenKit.CR2W.Types
         #region interface implements
 
         [Browsable(false)]
-        public T this[int index] { get => ((IList<T>)elements)[index]; set => ((IList<T>)elements)[index] = value; }
+        public T this[int index] { get => ((IList<T>)Elements)[index]; set => ((IList<T>)Elements)[index] = value; }
 
-        public int Count => ((IList<T>)elements).Count;
+        public int Count => ((IList<T>)Elements).Count;
 
-        public bool IsReadOnly => ((IList<T>)elements).IsReadOnly;
+        public bool IsReadOnly => ((IList<T>)Elements).IsReadOnly;
 
-        public bool IsFixedSize => ((IList)elements).IsFixedSize;
+        public bool IsFixedSize => ((IList)Elements).IsFixedSize;
 
-        public object SyncRoot => ((IList)elements).SyncRoot;
+        public object SyncRoot => ((IList)Elements).SyncRoot;
 
-        public bool IsSynchronized => ((IList)elements).IsSynchronized;
+        public bool IsSynchronized => ((IList)Elements).IsSynchronized;
 
-        object IList.this[int index] { get => ((IList)elements)[index]; set => ((IList)elements)[index] = value; }
+        object IList.this[int index] { get => ((IList)Elements)[index]; set => ((IList)Elements)[index] = value; }
 
         public IEnumerator<T> GetEnumerator()
         {
-            return elements.GetEnumerator();
+            return Elements.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -177,7 +185,7 @@ namespace WolvenKit.CR2W.Types
 
         public int IndexOf(T item)
         {
-            return ((IList<T>)elements).IndexOf(item);
+            return ((IList<T>)Elements).IndexOf(item);
         }
 
         public void Insert(int index, T item)
@@ -199,17 +207,17 @@ namespace WolvenKit.CR2W.Types
 
         public void Clear()
         {
-            ((IList<T>)elements).Clear();
+            ((IList<T>)Elements).Clear();
         }
 
         public bool Contains(T item)
         {
-            return ((IList<T>)elements).Contains(item);
+            return ((IList<T>)Elements).Contains(item);
         }
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            ((IList<T>)elements).CopyTo(array, arrayIndex);
+            ((IList<T>)Elements).CopyTo(array, arrayIndex);
         }
 
         public bool Remove(T item)
@@ -222,19 +230,19 @@ namespace WolvenKit.CR2W.Types
             if (value is T tvar)
             {
                 AddVariable(tvar as CVariable);
-                return elements.Count;
+                return Elements.Count;
             }
             return -1;
         }
 
         public bool Contains(object value)
         {
-            return ((IList)elements).Contains(value);
+            return ((IList)Elements).Contains(value);
         }
 
         public int IndexOf(object value)
         {
-            return ((IList)elements).IndexOf(value);
+            return ((IList)Elements).IndexOf(value);
         }
 
         public void Insert(int index, object value)
@@ -251,7 +259,7 @@ namespace WolvenKit.CR2W.Types
 
         public void CopyTo(Array array, int index)
         {
-            ((IList)elements).CopyTo(array, index);
+            ((IList)Elements).CopyTo(array, index);
         }
         #endregion
 
