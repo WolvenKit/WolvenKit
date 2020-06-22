@@ -11,42 +11,42 @@ namespace WolvenKit.CR2W.Types
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SVector3D : CVariable
     {
-        [RED] public CFloat x { get; set; }
-        [RED] public CFloat y { get; set; }
-        [RED] public CFloat z { get; set; }
+        [RED] public CFloat X { get; set; }
+        [RED] public CFloat Y { get; set; }
+        [RED] public CFloat Z { get; set; }
 
         public SVector3D(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            x = new CFloat(cr2w, this, nameof(x));
-            y = new CFloat(cr2w, this, nameof(y));
-            z = new CFloat(cr2w, this, nameof(z));
+            X = new CFloat(cr2w, this, nameof(X));
+            Y = new CFloat(cr2w, this, nameof(Y));
+            Z = new CFloat(cr2w, this, nameof(Z));
         }
 
         public void Read(BinaryReader file, int compression)
         {
             if (compression == 0)
             {
-                x.val = file.ReadSingle();
-                y.val = file.ReadSingle();
-                z.val = file.ReadSingle();
+                X.val = file.ReadSingle();
+                Y.val = file.ReadSingle();
+                Z.val = file.ReadSingle();
             }
             else if (compression == 1) //24 bit single
             {
                 var bitsx = ReadFloat24(file);
                 var bitsy = ReadFloat24(file);
                 var bitsz = ReadFloat24(file);
-                x.val = BitConverter.ToSingle(BitConverter.GetBytes(bitsx), 0);
-                y.val = BitConverter.ToSingle(BitConverter.GetBytes(bitsy), 0);
-                z.val = BitConverter.ToSingle(BitConverter.GetBytes(bitsz), 0);
+                X.val = BitConverter.ToSingle(BitConverter.GetBytes(bitsx), 0);
+                Y.val = BitConverter.ToSingle(BitConverter.GetBytes(bitsy), 0);
+                Z.val = BitConverter.ToSingle(BitConverter.GetBytes(bitsz), 0);
             }
             else if (compression == 2)
             {
                 var bitsx = file.ReadUInt16() << 16;
                 var bitsy = file.ReadUInt16() << 16;
                 var bitsz = file.ReadUInt16() << 16;
-                x.val = BitConverter.ToSingle(BitConverter.GetBytes(bitsx), 0);
-                y.val = BitConverter.ToSingle(BitConverter.GetBytes(bitsy), 0);
-                z.val = BitConverter.ToSingle(BitConverter.GetBytes(bitsz), 0);
+                X.val = BitConverter.ToSingle(BitConverter.GetBytes(bitsx), 0);
+                Y.val = BitConverter.ToSingle(BitConverter.GetBytes(bitsy), 0);
+                Z.val = BitConverter.ToSingle(BitConverter.GetBytes(bitsz), 0);
             }
         }
 
@@ -62,25 +62,25 @@ namespace WolvenKit.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
-            x.Read(file, size);
-            y.Read(file, size);
-            z.Read(file, size);
+            X.Read(file, size);
+            Y.Read(file, size);
+            Z.Read(file, size);
         }
 
         public override void Write(BinaryWriter file)
         {
-            x.Write(file);
-            y.Write(file);
-            z.Write(file);
+            X.Write(file);
+            Y.Write(file);
+            Z.Write(file);
         }
 
         public override CVariable SetValue(object val)
         {
             if (val is SVector3D v)
             {
-                this.x = v.x;
-                this.y = v.y;
-                this.z = v.z;
+                this.X = v.X;
+                this.Y = v.Y;
+                this.Z = v.Z;
             }
 
             return this;
@@ -93,7 +93,7 @@ namespace WolvenKit.CR2W.Types
 
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "V3[{0:0.00}, {1:0.00}, {2:0.00}]", x.val, y.val, z.val);
+            return String.Format(CultureInfo.InvariantCulture, "V3[{0:0.00}, {1:0.00}, {2:0.00}]", X.val, Y.val, Z.val);
         }
     }
 }

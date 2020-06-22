@@ -143,6 +143,8 @@
       <DependentUpon>PtrEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Exceptions\InvalidParsingException.cs" />
+    <Compile Include="Extensions\StreamExtensions.cs" />
+    <Compile Include="Extensions\W3WriterExtensions.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -153,6 +155,7 @@
     <Compile Include="Reflection\REDAttribute.cs" />
     <Compile Include="Reflection\REDReflection.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SVector4D.cs" />
     <Compile Include="Types\Generic\Arrays\CBufferBase.cs" />
     <Compile Include="Types\Generic\Arrays\CArrayBase.cs" />
     <Compile Include="Types\Generic\Arrays\CArrayFixedSize.cs" />
@@ -234,7 +237,7 @@
     <Compile Include="Types\W3\Partial\EmitterDurationSettings.cs" />
     <Compile Include="Types\Structs\Matrix.cs" />
     <Compile Include="Types\W3\Partial\SAppearanceAttachment.cs" />
-    <Compile Include="Types\W3\Partial\SBoneIndiceMapping.cs" />
+    <Compile Include="Types\W3\Missing in RTTTI\SBoneIndiceMapping.cs" />
     <Compile Include="Types\W3\Partial\SDynamicDecalMaterialInfo.cs" />
     <Compile Include="Types\W3\RTTIConvert\AACylinder.cs" />
     <Compile Include="Types\W3\RTTIConvert\actorNameType.cs" />
@@ -3227,7 +3230,7 @@
     <Compile Include="Types\W3\RTTIConvert\CCityLightManager.cs" />
     <Compile Include="Types\W3\RTTIConvert\CClimbProbe.cs" />
     <Compile Include="Types\W3\RTTIConvert\CClimbType.cs" />
-    <Compile Include="Types\W3\RTTIConvert\CClipMapCookedData.cs" />
+    <Compile Include="Types\W3\Missing in RTTTI\CClipMapCookedData.cs" />
     <Compile Include="Types\W3\RTTIConvert\CClothAttachment.cs" />
     <Compile Include="Types\W3\RTTIConvert\CClothComponent.cs" />
     <Compile Include="Types\W3\RTTIConvert\CCollisionMesh.cs" />
@@ -4518,7 +4521,7 @@
     <Compile Include="Types\W3\RTTIConvert\CR4UIRescaleMenu.cs" />
     <Compile Include="Types\W3\RTTIConvert\CR4VideoDLCMounter.cs" />
     <Compile Include="Types\W3\RTTIConvert\CR4VoicetagDLCMounter.cs" />
-    <Compile Include="Types\W3\RTTIConvert\CR4WorldDescriptionDLC.cs" />
+    <Compile Include="Types\W3\Missing in RTTTI\CR4WorldDescriptionDLC.cs" />
     <Compile Include="Types\W3\RTTIConvert\CR4WorldDLCExtender.cs" />
     <Compile Include="Types\W3\RTTIConvert\CR4WorldDLCMounter.cs" />
     <Compile Include="Types\W3\RTTIConvert\CRainActionPointSelector.cs" />
@@ -4752,7 +4755,7 @@
     <Compile Include="Types\W3\RTTIConvert\CStorySceneDisablePhysicsClothEvent.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEffect.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneElement.cs" />
-    <Compile Include="Types\W3\RTTIConvert\CStorySceneEvent.cs" />
+    <Compile Include="Types\W3\Missing in RTTTI\CStorySceneEvent.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventAdditiveAnimation.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventAnimation.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventAnimClip.cs" />
@@ -4802,7 +4805,7 @@
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventLookAtDuration.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventMimicLod.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventMimics.cs" />
-    <Compile Include="Types\W3\RTTIConvert\CStorySceneEventMimicsAnim.cs" />
+    <Compile Include="Types\W3\Missing in RTTTI\CStorySceneEventMimicsAnim.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventMimicsFilter.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventMimicsPose.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventModifyEnv.cs" />
@@ -4814,7 +4817,7 @@
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventOverridePlacementDuration.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventPlacementInterpolation.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventPlacementInterpolationKey.cs" />
-    <Compile Include="Types\W3\RTTIConvert\CStorySceneEventPoseKey.cs" />
+    <Compile Include="Types\W3\Missing in RTTTI\CStorySceneEventPoseKey.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventPropPlacementInterpolation.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventPropPlacementInterpolationKey.cs" />
     <Compile Include="Types\W3\RTTIConvert\CStorySceneEventPropVisibility.cs" />
@@ -5296,7 +5299,7 @@
     <Compile Include="Types\W3\RTTIConvert\SAnimatedComponentSlotAnimationSettings.cs" />
     <Compile Include="Types\W3\RTTIConvert\SAnimatedComponentSyncSettings.cs" />
     <Compile Include="Types\W3\RTTIConvert\SAnimatedSlideSettings.cs" />
-    <Compile Include="Types\W3\SAnimationBufferBitwiseCompressedBoneTrack.cs" />
+    <Compile Include="Types\W3\Missing in RTTTI\SAnimationBufferBitwiseCompressedBoneTrack.cs" />
     <Compile Include="Types\W3\RTTIConvert\SAnimationBufferBitwiseCompressedData.cs" />
     <Compile Include="Types\W3\RTTIConvert\SAnimationBufferBitwiseCompressionSettings.cs" />
     <Compile Include="Types\W3\RTTIConvert\SAnimationEventAnimInfo.cs" />

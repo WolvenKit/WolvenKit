@@ -7,7 +7,7 @@ namespace WolvenKit.CR2W.Types
 {
 	[DataContract(Namespace = "")]
 	[REDMeta]
-	public class CR4WorldDescriptionDLC : CObject
+	public partial class CR4WorldDescriptionDLC : CObject
 	{
 		[RED("worldEnumAreaName")] 		public CName WorldEnumAreaName { get; set;}
 
@@ -22,6 +22,11 @@ namespace WolvenKit.CR2W.Types
 		[RED("worldMapLoactionNameStringKey")] 		public CName WorldMapLoactionNameStringKey { get; set;}
 
 		[RED("worldMapLoactionDescriptionStringKey")] 		public CName WorldMapLoactionDescriptionStringKey { get; set;}
+
+		/// <summary>
+		///  Missing in RTTI
+		/// </summary>
+		[RED("requiredChunk")] public CName RequiredChunk { get; set; }
 
 		[RED("worldMiniMapSize")] 		public CFloat WorldMiniMapSize { get; set;}
 

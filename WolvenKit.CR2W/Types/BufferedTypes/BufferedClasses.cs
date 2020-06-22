@@ -3,37 +3,63 @@ using WolvenKit.CR2W.Reflection;
 
 namespace WolvenKit.CR2W.Types
 {
+
+    // missing in RTTI
+
+    public partial class CClipMapCookedData : ISerializable
+    {
+        [REDBuffer] public CBytes Data { get; set; }
+
+        public CClipMapCookedData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        {
+            Data = new CBytes(cr2w, this, nameof(Data));
+        }
+
+
+        public override void Read(BinaryReader file, uint size)
+        {
+            base.Read(file, size);
+        }
+
+        public override void Write(BinaryWriter file)
+        {
+            base.Write(file);
+        }
+    }
+
+    // buffered classes
+
     public partial class CCameraCompressedPose : CDefaultCompressedPose2
     {
-        [REDBuffer] public CBytes bytes1 { get; set; }
-        [REDBuffer] public CFloat float1 { get; set; }
-        [REDBuffer] public CFloat float2 { get; set; }
-        [REDBuffer] public CBytes bytes2 { get; set; }
+        [REDBuffer] public CBytes Bytes1 { get; set; }
+        [REDBuffer] public CFloat Float1 { get; set; }
+        [REDBuffer] public CFloat Float2 { get; set; }
+        [REDBuffer] public CBytes Bytes2 { get; set; }
     }
 
     public partial class CClipMap : CObject
     {
-        [REDBuffer] public CArray<CHandle<CVariable>> tiles { get; set; }
+        [REDBuffer] public CArray<CHandle<CTerrainTile>> TerrainTiles { get; set; }
     }
 
     public partial class CCookedExplorations : CResource
     {
-        [REDBuffer] public CByteArray explfile { get; set; }
+        [REDBuffer] public CByteArray Explfile { get; set; }
     }
 
     public partial class CCurve : CObject
     {
-        [REDBuffer] public CBufferUInt32<SCurveData> curveData { get; set; }
+        [REDBuffer] public CBufferUInt32<SCurveData> CurveData { get; set; }
     }
 
     public partial class CAnimPointCloudLookAtParam : ISkeletalAnimationSetEntryParam
     {
-        [REDBuffer] public CBufferVLQ<SAnimPointCloudLookAtParamData> buffer { get; set; }
+        [REDBuffer] public CBufferVLQ<SAnimPointCloudLookAtParamData> Buffer { get; set; }
     }
 
     public partial class CAreaComponent : CBoundedComponent
     {
-        [REDBuffer] public CByteArray2 bufferdata { get; set; }
+        [REDBuffer] public CByteArray2 Bufferdata { get; set; }
     }
     public partial class CBehaviorGraph : CResource
     {
@@ -52,7 +78,7 @@ namespace WolvenKit.CR2W.Types
     }
     public partial class CBehaviorGraphBlendMultipleNode : CBehaviorGraphNode
     {
-        [REDBuffer] public CBufferVLQ<ShBlendMultipleNodeData> bufferinputvalues { get; set; }
+        [REDBuffer] public CBufferVLQ<ShBlendMultipleNodeData> Bufferinputvalues { get; set; }
 
     }
     public partial class CBehaviorGraphContainerNode : CBehaviorGraphNode
@@ -75,8 +101,8 @@ namespace WolvenKit.CR2W.Types
 
     public partial class CCutsceneTemplate : CSkeletalAnimationSet
     {
-        [REDBuffer] public CUInt32 unk11 { get; set; }
-        [REDBuffer] public CBufferUInt32<CVariantSizeType> animevents { get; set; }
+        [REDBuffer] public CUInt32 Unk11 { get; set; }
+        [REDBuffer] public CBufferUInt32<CVariantSizeType> Animevents { get; set; }
     }
     public partial class CEntityTemplate : CResource
     {
@@ -102,21 +128,22 @@ namespace WolvenKit.CR2W.Types
     }
     public partial class CGameWorld : CWorld
     {
-        [REDBuffer] public CHandle<CLayerGroup> firstlayer { get; set; }
+        [REDBuffer] public CHandle<CLayerGroup> Firstlayer { get; set; }
     }
 
     public partial class CLayerGroup : ISerializable
     {
-        [REDBuffer] public CHandle<CGameWorld> worldhandle { get; set; }
-        [REDBuffer] public CHandle<CLayerGroup> layergrouphandle { get; set; }
-        [REDBuffer] public CBufferVLQ<CHandle<CLayerGroup>> childrenGroups { get; set; }
-        [REDBuffer] public CBufferVLQ<CHandle<CLayerGroup>> childrenInfos { get; set; }
+        [REDBuffer] public CHandle<CGameWorld> Worldhandle { get; set; }
+        [REDBuffer] public CHandle<CLayerGroup> Layergrouphandle { get; set; }
+        [REDBuffer] public CBufferVLQ<CHandle<CLayerGroup>> ChildrenGroups { get; set; }
+        [REDBuffer] public CBufferVLQ<CHandle<CLayerGroup>> ChildrenInfos { get; set; }
     }
 
     public partial class CMaterialGraph : IMaterialDefinition
     {
-        [REDBuffer] public CBufferVLQ<SMaterialGraphParameter> pixelParameters { get; set; }
-        [REDBuffer] public CBufferVLQ<SMaterialGraphParameter> vertexParameters { get; set; }
+        [REDBuffer] public CBufferVLQ<SMaterialGraphParameter> PixelParameters { get; set; }
+        [REDBuffer] public CBufferVLQ<SMaterialGraphParameter> VertexParameters { get; set; }
+        [REDBuffer] public CUInt32 Unk1 { get; set; }
     }
 
     public partial class CMaterialInstance : IMaterial
@@ -144,11 +171,11 @@ namespace WolvenKit.CR2W.Types
 
     public partial class CParticleEmitter : IParticleModule
     {
-        [REDBuffer] public SParticleEmitterModuleData moduleData { get; set; }
+        [REDBuffer] public SParticleEmitterModuleData ModuleData { get; set; }
     }
     public partial class CPhysicsDestructionResource : CMesh
     {
-        [REDBuffer] public CArray<SMeshBlock5> block5 { get; set; }
+        [REDBuffer] public CArray<SMeshBlock5> Block5 { get; set; }
     }
 
     public partial class CRagdoll : CResource
@@ -173,7 +200,7 @@ namespace WolvenKit.CR2W.Types
 
     public partial class CStorySceneSection : CStorySceneControlPart
     {
-        [REDBuffer] public CArray<CVariantSizeTypeName> sceneEventElements { get; set; }
+        [REDBuffer] public CArray<CVariantSizeType> sceneEventElements { get; set; }
     }
 
     public partial class CSwarmCellMap : CResource
@@ -238,20 +265,20 @@ namespace WolvenKit.CR2W.Types
 
     public partial class CSwfResource : CResource
     {
-        [REDBuffer] public CByteArray swfResource { get; set; }
-        [REDBuffer] public CUInt32 unk1 { get; set; }
+        [REDBuffer] public CByteArray SwfResource { get; set; }
+        [REDBuffer] public CUInt32 Unk1 { get; set; }
     }
 
     public partial class CUmbraScene : CResource
     {
         [REDBuffer] public CUInt32 Unk1 { get; set; }
         [REDBuffer] public CFloat Unk2 { get; set; }
-        [REDBuffer] public CBufferUInt32<SUmbraSceneData> tiles { get; set; }
+        [REDBuffer] public CBufferUInt32<SUmbraSceneData> Tiles { get; set; }
     }
 
     public partial class CWayPointsCollectionsSet : CResource
     {
-        [REDBuffer] public CBufferUInt32<SWayPointsCollectionsSetData> waypointcollections { get; set; }
+        [REDBuffer] public CBufferUInt32<SWayPointsCollectionsSetData> Waypointcollections { get; set; }
     }
     public partial class CUmbraTile : CResource
     {

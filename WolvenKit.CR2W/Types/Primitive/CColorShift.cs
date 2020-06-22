@@ -8,7 +8,7 @@ using WolvenKit.CR2W.Reflection;
 namespace WolvenKit.CR2W.Types
 {
     [DataContract(Namespace = "")]
-    [REDMeta(EREDMetaInfo.REDStruct)]
+    [REDMeta()]
     public class CColorShift : CVariable
     {
         [RED("hue")] public CUInt16 Hue { get; set; }
@@ -21,12 +21,7 @@ namespace WolvenKit.CR2W.Types
 
         public HslColor Color = new HslColor(0, 0, 0);
 
-        public CColorShift(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
-        {
-            Hue = new CUInt16(cr2w, this, nameof(Hue));
-            Saturation = new CInt8(cr2w, this, nameof(Saturation));
-            Luminance = new CInt8(cr2w, this, nameof(Luminance));
-        }
+        public CColorShift(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
 
         public override void Read(BinaryReader file, uint size) => base.Read(file, size);

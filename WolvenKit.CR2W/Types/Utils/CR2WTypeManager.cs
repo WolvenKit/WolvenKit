@@ -128,7 +128,9 @@ namespace WolvenKit.CR2W.Types
                                     typename = match.Groups[1].Value;
 
                                     // match pattern e.g. 
-                                    // array:   (2),(0),(handle:CBitmapTexture)
+                                    // array:            Array: (2),(0),(handle:CBitmapTexture)
+                                    // array:            Array: (2),(0),(Int32)
+                                    // array of array:   Array: (2),(0),(Array:133,0,EngineQsTransform)
                                     var regArrayType = new Regex(@"(\d+),(\d+),(.+)");
                                     var matchArrayType = regArrayType.Match(fullname);
                                     if (matchArrayType.Success)
@@ -141,31 +143,29 @@ namespace WolvenKit.CR2W.Types
                                             return bytearray;
                                         }
 
+                                        
+
                                         CVariable innerobject = Create(matchArrayType.Groups[3].Value, "", cr2w, null);
-                                        var arrayacc = MakeArray(innerobject);
+                                        IArrayAccessor arrayacc = MakeArray(innerobject);
                                         arrayacc.Flags = new List<int>() { int.Parse(matchArrayType.Groups[1].Value), int.Parse(matchArrayType.Groups[2].Value) };
+                                        if (innerobject is IArrayAccessor accessor && accessor.Flags != null)
+                                        {
+                                            arrayacc.Flags.AddRange(accessor.Flags);
+                                        }
+
+
+                                        arrayacc.Elementtype = matchArrayType.Groups[3].Value;
+
                                         return arrayacc as CVariable;
                                     }
+                                    // for CArrays of other types
                                     else
                                     {
-                                        //#region FIXED SIZE ARRAYS
-                                        //// match pattern e.g. 
-                                        //// [(1)](Bezier2dHandle)
-                                        //var regFixedSizeArray = new Regex(@"^\[(\d+)\](.+)$");
-                                        //var matchFixedSizeArray = regFixedSizeArray.Match(typename);
-                                        //if (matchFixedSizeArray.Success)
-                                        //{
-                                        //    CVariable innerobject = Create(matchFixedSizeArray.Groups[2].Value, cr2w);
-                                        //    var arrayacc = MakeArray(innerobject);
-                                        //    arrayacc.Flags = new List<int>() { int.Parse(matchFixedSizeArray.Groups[1].Value) };
-                                        //    return arrayacc as CVariable;
-                                        //}
-                                        //#endregion
-
-
                                         //throw new InvalidParsingException($"Invalid array type format: typename: {typename}.");
                                         CVariable innerobject = Create(match.Groups[2].Value, "", cr2w, null);
-                                        return MakeGenericType(typeof(CArray<>), innerobject);
+                                        IArrayAccessor arrayacc = MakeArray(innerobject);
+                                        arrayacc.Elementtype = matchArrayType.Groups[3].Value;
+                                        return arrayacc as CVariable;
                                     }
                                 }
                             case "static":
@@ -251,13 +251,29 @@ namespace WolvenKit.CR2W.Types
                 }
 
             }
-            // this should never happen
             else
             {
-                
+                #region FIXED SIZE ARRAYS
+                // match pattern e.g. 
+                // [(1)](Bezier2dHandle)
+                var regFixedSizeArray = new Regex(@"^\[(\d+)\](.+)$");
+                var matchFixedSizeArray = regFixedSizeArray.Match(typename);
+                if (matchFixedSizeArray.Success)
+                {
+                    CVariable innerobject = Create(matchFixedSizeArray.Groups[2].Value, "", cr2w, null);
+                    var arrayacc = MakeArray(innerobject, true);
+                    arrayacc.Flags = new List<int>() { int.Parse(matchFixedSizeArray.Groups[1].Value) };
+                    arrayacc.Elementtype = matchFixedSizeArray.Groups[2].Value;
+                    return arrayacc as CVariable;
+                }
+                #endregion
+
+
                 if (!cr2w.UnknownTypes.Contains(fullname))
                     cr2w.UnknownTypes.Add(fullname);
 
+                // this should never happen
+                throw new NotImplementedException();
                 if (readUnknownAsBytes)
                 {
                     return new CBytes(cr2w, parentVariable, "unknown bytes");
@@ -268,13 +284,16 @@ namespace WolvenKit.CR2W.Types
                 
 
             #region LOCAL FUNCTIONS
-            IArrayAccessor MakeArray(CVariable innerobject)
+            IArrayAccessor MakeArray(CVariable innerobject, bool fixedsize = false)
             {
                 if (innerobject != null)
                 {
-                    Type elementType = typeof(CArray<>).MakeGenericType(innerobject.GetType());
+                    Type elementType = fixedsize 
+                        ? typeof(CArrayFixedSize<>).MakeGenericType(innerobject.GetType())
+                        : typeof(CArray<>).MakeGenericType(innerobject.GetType());
+
                     var array = Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
-                    //innerobject.Parent = array;
+
                     return array as IArrayAccessor;
                 }
                 else

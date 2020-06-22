@@ -6,7 +6,7 @@ using static WolvenKit.CR2W.Types.Enums;
 namespace WolvenKit.CR2W.Types
 {
 	[DataContract(Namespace = "")]
-	[REDMeta(EREDMetaInfo.REDStruct)]
+	[REDMeta()]
 	public class SDynamicDecalMaterialInfo : CVariable
 	{
 		[RED("diffuseTexture")] 		public CHandle<CBitmapTexture> DiffuseTexture { get; set;}

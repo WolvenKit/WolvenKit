@@ -223,7 +223,7 @@ namespace WolvenKit.CR2W.Types
             REDMetaAttribute meta = (REDMetaAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(REDMetaAttribute));
             EREDMetaInfo[] tags = meta?.Keywords;
 
-            List<CVariable> fields = new List<CVariable>();
+            var startpos = file.BaseStream.Position;
 
             // fixed class/struct (no leading null byte), read all properties in order
             if (tags.Contains(EREDMetaInfo.REDStruct))
@@ -234,7 +234,17 @@ namespace WolvenKit.CR2W.Types
             // CVectors
             else
             {
-                var zero = file.ReadByte();
+                // CClipmapcookeddata has no trailing 0 ???
+                if (this is CClipMapCookedData cClip)
+                {
+                    cClip.Data.Bytes = file.ReadBytes((int)size);
+                    return;
+                }
+                
+
+
+                sbyte zero = file.ReadSByte();
+                //var dzero = file.ReadBit6();
 
                 // quests\minor_quests\skellige\mq2008_lured_into_drowners.w2phase
                 // in a CVariant for class "@SItem"
@@ -245,12 +255,18 @@ namespace WolvenKit.CR2W.Types
                     {
                         int joke = file.ReadInt32();
                     }
+                    else if (zero == -128)
+                    {
+                        var dzero2 = file.ReadBit6();
+                        return;
+                    }
                     else
                     {
                         throw new InvalidParsingException($"Tried parsing a CVariable: zero read {zero}.");
                     }
                 }
 
+                List<string> dbg_varnames = new List<string>();
                 while (true)
                 {
                     var cvar = cr2w.ReadVariable(file, this);
@@ -259,23 +275,22 @@ namespace WolvenKit.CR2W.Types
 
                     cvar.IsSerialized = true;
 
-                    //fields.Add(cvar);
+                    // dbg
+                    dbg_varnames.Add($"[{cvar.REDType}] {cvar.REDName}");
+
                     TryAddVariable(cvar);
                 }
 
                 // parse buffers
-                //fields.AddRange(ReadAllRedVariables<REDBufferAttribute>(file));
                 ReadAllRedVariables<REDBufferAttribute>(file);
+
+                var endpos = file.BaseStream.Position;
+                var bytesread = endpos - startpos;
+                if (bytesread != size)
+                {
+
+                }
             }
-
-            // Set all variables in the class
-            //foreach (var cvar in fields)
-            //{
-            //    if (!TryAddVariable(cvar))
-            //    {
-
-            //    }
-            //}
         }
 
         /// <summary>
@@ -397,11 +412,13 @@ namespace WolvenKit.CR2W.Types
         /// <param name="file"></param>
         public virtual void Write(BinaryWriter file)
         {
-            REDMetaAttribute meta = (REDMetaAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(REDMetaAttribute));
-            EREDMetaInfo[] tags = meta?.Keywords;
+            //REDMetaAttribute meta = (REDMetaAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(REDMetaAttribute));
+            //EREDMetaInfo[] tags = meta?.Keywords;
 
+            // write leading null byte
             file.Write((byte)0);
 
+            // write all initialized CVariables
             List<PropertyInfo> redprops = REDReflection.GetREDProperties<REDAttribute>(this.GetType()).ToList();
             foreach (PropertyInfo pi in redprops)
             {
@@ -438,6 +455,7 @@ namespace WolvenKit.CR2W.Types
                 }
             }
 
+            // write trailing null byte
             file.Write((ushort)0);
         }
 

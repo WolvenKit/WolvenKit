@@ -10,9 +10,10 @@ namespace WolvenKit.CR2W.Types
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SMaterialGraphParameter : CVariable
     {
-        [RED] public CName nam { get; set; }
-        [RED] public CUInt8 unk1 { get; set; }
-        [RED] public CUInt8 unk2 { get; set; }
+        [RED] public CUInt8 Type { get; set; }
+        [RED] public CUInt8 Offset { get; set; }
+        [RED] public CName Name { get; set; }
+
 
         public SMaterialGraphParameter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 

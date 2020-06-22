@@ -11,11 +11,8 @@ namespace WolvenKit.CR2W.Types
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SUmbraSceneData : CVariable
     {
-        [RED] public CFloat positionX { get; set; }
-        [RED] public CFloat positionY { get; set; }
-        [RED] public CFloat positionZ { get; set; }
-        [RED] public CFloat positionW { get; set; }
-        [RED] public CHandle<CUmbraTile> umbratile { get; set; }
+        [REDBuffer] public SVector4D Position { get; set; }
+        [REDBuffer] public CHandle<CUmbraTile> Umbratile { get; set; }
 
         public SUmbraSceneData(CR2WFile cr2w, CVariable parent, string name) :
             base(cr2w, parent, name)

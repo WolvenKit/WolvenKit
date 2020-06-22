@@ -6,12 +6,13 @@ using static WolvenKit.CR2W.Types.Enums;
 namespace WolvenKit.CR2W.Types
 {
 	[DataContract(Namespace = "")]
-	[REDMeta(EREDMetaInfo.REDStruct)]
+	[REDMeta(/*EREDMetaInfo.REDStruct*/)]
 	public class SBoneIndiceMapping : CVariable
 	{
+
 		[RED("startingIndex")] 		public CUInt32 StartingIndex { get; set;}
 
-		[RED("endingIndex")] 		public CUInt32 EndingIndex { get; set;}
+		[RED("endingIndex")] public CUInt32 EndingIndex { get; set; }
 
 		[RED("chunkIndex")] 		public CUInt32 ChunkIndex { get; set;}
 

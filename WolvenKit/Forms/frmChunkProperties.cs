@@ -266,7 +266,7 @@ namespace WolvenKit
 
             if (node.Variable is IArrayAccessor array)
             {
-                newvar = CR2WTypeManager.Create(array.GetElementType(), "", Chunk.cr2w, node.Variable as CVariable, false);
+                newvar = CR2WTypeManager.Create(array.Elementtype, "", Chunk.cr2w, node.Variable as CVariable, false);
                 if (newvar == null)
                     return;
             }

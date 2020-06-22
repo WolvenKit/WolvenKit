@@ -20,8 +20,7 @@ namespace WolvenKit
         {
             var list = new List<IPtrAccessor>();
 
-            CQuestGraphBlock graphBlock = (CQuestGraphBlock)Chunk.data;
-            if (graphBlock != null)
+            if (Chunk.data is CQuestGraphBlock graphBlock)
             {
                 CArray<SCachedConnections> cachedConnections = graphBlock.CachedConnections;
                 if (cachedConnections != null)
@@ -45,16 +44,22 @@ namespace WolvenKit
                     }
                 }
             }
-
-            CStorySceneLinkElement linkElement = (CStorySceneLinkElement)Chunk.data;
-            CPtr<CStorySceneLinkElement> nextLinkElementPtr = linkElement.NextLinkElement;
-            if (nextLinkElementPtr != null)
+            else if (Chunk.data is CStorySceneLinkElement linkElement)
             {
-                if (nextLinkElementPtr.Reference != null)
+                CPtr<CStorySceneLinkElement> nextLinkElementPtr = linkElement.NextLinkElement;
+                if (nextLinkElementPtr != null)
                 {
-                    list.Add(nextLinkElementPtr);
+                    if (nextLinkElementPtr.Reference != null)
+                    {
+                        list.Add(nextLinkElementPtr);
+                    }
                 }
             }
+            else
+            {
+
+            }
+                       
 
             return list;
         }

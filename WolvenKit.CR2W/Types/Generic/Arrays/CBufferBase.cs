@@ -60,32 +60,19 @@ namespace WolvenKit.CR2W.Types
 
         public void Read(BinaryReader file, uint size, int elementcount)
         {
-            //System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
-            //stopwatch.Start();
-
-            // find some way to read LARGE collections of CVariables (e.g. CUInt16) fast
+            string redtype;
+            if (Flags == null)
+                redtype = REDReflection.GetREDTypeString(typeof(T));
+            else
+                redtype = REDReflection.GetREDTypeString(typeof(T), Flags.ToArray());
 
             for (int i = 0; i < elementcount; i++)
             {
-                try
-                {
-                    string redtype;
-                    if (Flags == null)
-                        redtype = REDReflection.GetREDTypeString(typeof(T));
-                    else
-                        redtype = REDReflection.GetREDTypeString(typeof(T), Flags.ToArray());
+                CVariable element = CR2WTypeManager.Create(redtype, i.ToString(), cr2w, this);
 
-                    // this is the slow part
-                    CVariable element = CR2WTypeManager.Create(redtype, i.ToString(), cr2w, this);
-
-                    element.Read(file, 0);
-                    if (element is T te)
-                        elements.Add(te);
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                element.Read(file, 0);
+                if (element is T te)
+                    elements.Add(te);
             }
         }
 
@@ -107,6 +94,13 @@ namespace WolvenKit.CR2W.Types
             if (variable is T tvar)
             {
                 variable.SetREDName(elements.Count.ToString());
+                elements.Add(tvar);
+            }
+        }
+        public void AddVariableWithName(CVariable variable)
+        {
+            if (variable is T tvar)
+            {
                 elements.Add(tvar);
             }
         }

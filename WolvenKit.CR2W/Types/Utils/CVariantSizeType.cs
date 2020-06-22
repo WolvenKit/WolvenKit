@@ -16,9 +16,9 @@ namespace WolvenKit.CR2W.Types
     /// </summary>
     [DataContract(Namespace = "")]
     [REDMeta()]
-    public class CVariantSizeType : CVariable
+    public class CVariantSizeType : CVariable, IVariantAccessor
     {
-        [RED] public CVariable Variable { get; set; }
+        public CVariable Variant { get; set; }
 
         public CVariantSizeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
@@ -37,11 +37,11 @@ namespace WolvenKit.CR2W.Types
                 var typeId = br.ReadUInt16();
                 var typename = cr2w.names[typeId].Str;
 
-                parsedvar = CR2WTypeManager.Create(typename, "", cr2w, this);
+                parsedvar = CR2WTypeManager.Create(typename, nameof(Variant), cr2w, this);
                 parsedvar.Read(br, size);
             }
 
-            Variable = parsedvar;
+            Variant = parsedvar;
         }
 
         public override void Write(BinaryWriter file)
@@ -54,22 +54,30 @@ namespace WolvenKit.CR2W.Types
             using (var ms = new MemoryStream())
             using (var bw = new BinaryWriter(ms))
             {
-                Variable.Write(bw);
+                Variant.Write(bw);
                 varsize += (UInt32)ms.Length;
                 varvalue = ms.ToArray();
             }
 
             // write variable
             file.Write(varsize);
-            file.Write(Variable.GettypeId());
+            file.Write(Variant.GettypeId());
             file.Write(varvalue);
         }
 
         public override string ToString()
         {
-            return Variable.ToString();
+            return Variant.ToString();
         }
 
+        public override List<IEditableVariable> GetEditableVariables()
+        {
+            var list = new List<IEditableVariable>
+            {
+                Variant
+            };
+            return list;
+        }
         public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
         {
             return new CVariantSizeType(cr2w, parent, name);

@@ -18,7 +18,7 @@ namespace WolvenKit.CR2W.Types
 
         public CLayerInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-
+            ParentGroup = new CHandle<CLayerGroup>(cr2w, this, nameof(ParentGroup));
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -27,8 +27,6 @@ namespace WolvenKit.CR2W.Types
 
             ParentGroup.ChunkHandle = true;
             ParentGroup.Read(file, 4);
-
-            //base.AddVariable(ParentGroup);
         }
 
         public override void Write(BinaryWriter file)

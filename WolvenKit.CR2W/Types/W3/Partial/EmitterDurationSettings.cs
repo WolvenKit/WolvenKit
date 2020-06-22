@@ -6,7 +6,7 @@ using static WolvenKit.CR2W.Types.Enums;
 namespace WolvenKit.CR2W.Types
 {
 	[DataContract(Namespace = "")]
-	[REDMeta(EREDMetaInfo.REDStruct)]
+	[REDMeta()]
 	public class EmitterDurationSettings : CVariable
 	{
 		[RED("emitterDuration")] 		public CFloat EmitterDuration { get; set;}

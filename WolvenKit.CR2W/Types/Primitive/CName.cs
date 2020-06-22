@@ -25,7 +25,8 @@ namespace WolvenKit.CR2W.Types
         #region Methods
         public override void Read(BinaryReader file, uint size)
         {
-            Value = cr2w.names[file.ReadUInt16()].Str;
+            var idx = file.ReadUInt16();
+            Value = cr2w.names[idx].Str;
         }
 
         /// <summary>

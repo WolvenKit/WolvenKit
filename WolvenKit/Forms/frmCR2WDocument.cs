@@ -175,13 +175,14 @@ namespace WolvenKit
 
         public void LoadFile(string filename)
         {
+            //using (var fs = MemoryMappedFile.CreateFromFile(filename, FileMode.Open))
+            //{
+            //    loadFile(fs, filename);
+            //}
 
-            using (var fs = MemoryMappedFile.CreateFromFile(filename, FileMode.Open))
-            //using (var fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
+            using (var fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
             {
                 loadFile(fs, filename);
-
-                //fs.Close();
             }
         }
 

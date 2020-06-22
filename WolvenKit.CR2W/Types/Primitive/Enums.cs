@@ -90,41 +90,52 @@ namespace WolvenKit.CR2W.Types
         }
 
         #region Flags
-        [Flags]
-        public enum ELightChannel
-        {
-            LC_Characters,
-            LC_Interactive,
-            LC_Custom0,
-            LC_FoliageOutline,
-            LC_VisibleThroughtWalls
-        }
-        [Flags]
-        public enum EDismembermentEffectTypeFlag
-        {
-            DETF_Base = 1,
-            DETF_Igni = 2,
-            DETF_Aaard = 4,
-            DETF_Yrden = 8,
-            DETF_Quen = 16,
-            DETF_Mutation6 = 32,
-        }
-        [Flags]
-        public enum ELightUsageMask
-        {
-            LUM_Custom0,
-            LUM_Custom1,
-            LUM_Custom2,
-            LUM_Custom3,
-            LUM_Custom4,
-            LUM_Custom5,
-            LUM_Custom6,
-            LUM_Custom7,
-            LUM_RenderToEnvProbe,
-            LUM_ExcludeFromSceneRender,
-            LUM_IsInteriorOnly,
-            LUM_IsExteriorOnly,
-        }
+        //[Flags]
+        //public enum EMeshChunkRenderMask
+        //{
+        //    MCR_Scene,
+        //    MCR_Cascade1,
+        //    MCR_Cascade2,
+        //    MCR_Cascade3,
+        //    MCR_Cascade4,
+        //    MCR_LocalShadows
+        //}
+
+        //[Flags]
+        //public enum ELightChannel
+        //{
+        //    LC_Characters,
+        //    LC_Interactive,
+        //    LC_Custom0,
+        //    LC_FoliageOutline,
+        //    LC_VisibleThroughtWalls
+        //}
+        //[Flags]
+        //public enum EDismembermentEffectTypeFlag
+        //{
+        //    DETF_Base = 1,
+        //    DETF_Igni = 2,
+        //    DETF_Aaard = 4,
+        //    DETF_Yrden = 8,
+        //    DETF_Quen = 16,
+        //    DETF_Mutation6 = 32,
+        //}
+        //[Flags]
+        //public enum ELightUsageMask
+        //{
+        //    LUM_Custom0,
+        //    LUM_Custom1,
+        //    LUM_Custom2,
+        //    LUM_Custom3,
+        //    LUM_Custom4,
+        //    LUM_Custom5,
+        //    LUM_Custom6,
+        //    LUM_Custom7,
+        //    LUM_RenderToEnvProbe,
+        //    LUM_ExcludeFromSceneRender,
+        //    LUM_IsInteriorOnly,
+        //    LUM_IsExteriorOnly,
+        //}
         public enum EMovementFlags
         {
             MM_CombatMode,
@@ -223,15 +234,7 @@ namespace WolvenKit.CR2W.Types
             QMFT_ShowOnly
         }
 
-        public enum EMeshChunkRenderMask
-        {
-            MCR_Scene,
-            MCR_Cascade1,
-            MCR_Cascade2,
-            MCR_Cascade3,
-            MCR_Cascade4,
-            MCR_LocalShadows
-        }
+        
         public enum ELightCubeSides
         {
             LCS_NegativeX,
@@ -4688,14 +4691,14 @@ namespace WolvenKit.CR2W.Types
             CSM_4,
             CSM_5
         }
-        public enum ETriggerChannels
-        {
-            TC_Default,
-            TC_Player,
-            TC_Camera,
-            TC_NPC,
-            TC_SoundReverbArea
-        }
+        //public enum ETriggerChannels
+        //{
+        //    TC_Default,
+        //    TC_Player,
+        //    TC_Camera,
+        //    TC_NPC,
+        //    TC_SoundReverbArea
+        //}
         public enum EGameplayMimicMode
         {
             GMM_Default,

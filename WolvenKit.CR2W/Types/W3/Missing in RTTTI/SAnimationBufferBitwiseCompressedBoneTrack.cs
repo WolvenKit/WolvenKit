@@ -13,6 +13,9 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("orientation")] 		public SAnimationBufferBitwiseCompressedData Orientation { get; set;}
 
+		/// <summary>
+		///  Missing in RTTI
+		/// </summary>
 		[RED("scale")] public SAnimationBufferBitwiseCompressedData Scale { get; set; }
 
 

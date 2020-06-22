@@ -17,7 +17,7 @@ namespace WolvenKit.CR2W.Types
     {
         List<int> Flags { get; set; }
 
-        string GetElementType();
+        string Elementtype { get; set; }
     }
 
     public interface IArrayAccessor<T> : IArrayAccessor
@@ -58,9 +58,6 @@ namespace WolvenKit.CR2W.Types
             return new CArray<T>(cr2w, parent, name);
         }
 
-        public string GetElementType()
-        {
-            return REDReflection.GetREDTypeString(typeof(T));
-        }
+        
     }
 }

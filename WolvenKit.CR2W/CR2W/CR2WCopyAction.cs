@@ -281,7 +281,7 @@ namespace WolvenKit.CR2W
         {
             var factevents =
                 storysection.sceneEventElements.elements.FindAll(
-                    delegate(CVariantSizeTypeName sectionitem) { return sectionitem.REDType == "CStorySceneAddFactEvent"; });
+                    delegate(CVariantSizeType sectionitem) { return sectionitem.REDType == "CStorySceneAddFactEvent"; });
 
             foreach (var factevent in factevents)
             {
@@ -297,11 +297,11 @@ namespace WolvenKit.CR2W
             CStoryScene CStorySceneSource = SourceFile.GetChunkByType("CStoryScene").data as CStoryScene;
             CArray<StorySceneCameraDefinition> cameraInstancesSource = CStorySceneSource.CameraDefinitions;
 
-            foreach (CVariantSizeTypeName e in storysection.sceneEventElements)
+            foreach (CVariantSizeType e in storysection.sceneEventElements)
             {
                 if (e != null && e.REDType == "CStorySceneEventCustomCameraInstance")
                 {
-                    var v = (CStorySceneEventCustomCameraInstance) e.Variable;
+                    var v = (CStorySceneEventCustomCameraInstance) e.Variant;
                     CName n = v.CustomCameraName;
                     if (n != null)
                     {
@@ -391,11 +391,11 @@ namespace WolvenKit.CR2W
             var placement_x = 0.0f;
             var placement_y = 0.0f;
             var placement_z = 0.0f;
-            storysection.sceneEventElements.elements.ForEach(delegate (CVariantSizeTypeName sectionvar)
+            storysection.sceneEventElements.elements.ForEach(delegate (CVariantSizeType sectionvar)
             {
                 if (sectionvar.REDType == "CStorySceneEventOverridePlacement")
                 {
-                    var placement = (sectionvar.Variable as CStorySceneEventOverridePlacement).Placement;
+                    var placement = (sectionvar.Variant as CStorySceneEventOverridePlacement).Placement;
 
                     if (placement_x == 0 || Math.Abs(placement.X.val) < Math.Abs(placement_x))
                         placement_x = placement.X.val;
@@ -407,11 +407,11 @@ namespace WolvenKit.CR2W
             });
 
             // Remove Unnessasary teleportation
-            storysection.sceneEventElements.elements.ForEach(delegate (CVariantSizeTypeName sectionvar)
+            storysection.sceneEventElements.elements.ForEach(delegate (CVariantSizeType sectionvar)
             {
                 if (sectionvar.REDType == "CStorySceneEventOverridePlacement")
                 {
-                    var placement = (sectionvar.Variable as CStorySceneEventOverridePlacement).Placement;
+                    var placement = (sectionvar.Variant as CStorySceneEventOverridePlacement).Placement;
                     if (placement != null)
                     {
                         placement.X.val -= placement_x;
@@ -421,14 +421,14 @@ namespace WolvenKit.CR2W
                 }
                 else if (sectionvar.REDType == "CStorySceneEventCustomCamera")
                 {
-                    var cameraDefinition = (sectionvar.Variable as CStorySceneEventCustomCamera).CameraDefinition;
+                    var cameraDefinition = (sectionvar.Variant as CStorySceneEventCustomCamera).CameraDefinition;
                     var cameraTransform = cameraDefinition.CameraTransform;
 
                     cameraTransform.X.val -= placement_x;
                     cameraTransform.Y.val -= placement_y;
                     cameraTransform.Z.val -= placement_z;
 
-                    var cameraTranslation = (sectionvar.Variable as CStorySceneEventCustomCamera).CameraTranslation;
+                    var cameraTranslation = (sectionvar.Variant as CStorySceneEventCustomCamera).CameraTranslation;
                     if (cameraTranslation != null)
                     {
                         cameraTranslation.X.val -= placement_x;
@@ -438,7 +438,7 @@ namespace WolvenKit.CR2W
                 }
                 else if (sectionvar.REDType == "CStorySceneEventCameraLight")
                 {
-                    SStorySceneCameraLightMod lightMod1 = (sectionvar.Variable as CStorySceneEventCameraLight).LightMod1;
+                    SStorySceneCameraLightMod lightMod1 = (sectionvar.Variant as CStorySceneEventCameraLight).LightMod1;
                     if (lightMod1 != null)
                     {
                         var lightOffset = lightMod1.LightOffset;

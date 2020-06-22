@@ -13,9 +13,9 @@ namespace WolvenKit.CR2W.Types
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SSkeletonRigData : CVariable
     {
-        [RED] public Vector position { get; set; }
-        [RED] public Vector rotation { get; set; }
-        [RED] public Vector scale { get; set; }
+        [RED] public SVector4D Position { get; set; }
+        [RED] public SVector4D Rotation { get; set; }
+        [RED] public SVector4D Scale { get; set; }
 
         public SSkeletonRigData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
@@ -32,7 +32,7 @@ namespace WolvenKit.CR2W.Types
 
         public override string ToString()
         {
-            return $"[{position.ToString()}, {rotation.ToString()}, {scale.ToString()}]";
+            return $"[{Position.ToString()}, {Rotation.ToString()}, {Scale.ToString()}]";
         }
     }
 }

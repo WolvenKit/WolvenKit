@@ -53,20 +53,20 @@ namespace WolvenKit.Render
                     {
 
                         Vector3Df position = new Vector3Df(
-                            rigdata[i].position.X.val,
-                            rigdata[i].position.Y.val,
-                            rigdata[i].position.Z.val);
+                            rigdata[i].Position.X.val,
+                            rigdata[i].Position.Y.val,
+                            rigdata[i].Position.Z.val);
 
                         Quaternion orientation = new Quaternion(
-                            rigdata[i].rotation.X.val,
-                            rigdata[i].rotation.Y.val,
-                            rigdata[i].rotation.Z.val,
-                            rigdata[i].rotation.W.val);
+                            rigdata[i].Rotation.X.val,
+                            rigdata[i].Rotation.Y.val,
+                            rigdata[i].Rotation.Z.val,
+                            rigdata[i].Rotation.W.val);
 
                         Vector3Df scale = new Vector3Df(
-                            rigdata[i].scale.X.val,
-                            rigdata[i].scale.Y.val,
-                            rigdata[i].scale.Z.val);
+                            rigdata[i].Scale.X.val,
+                            rigdata[i].Scale.Y.val,
+                            rigdata[i].Scale.Z.val);
 
                         Matrix posMat = new Matrix();
                         posMat.Translation = position;

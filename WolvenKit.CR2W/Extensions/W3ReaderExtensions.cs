@@ -9,7 +9,6 @@ namespace WolvenKit.CR2W
 {
     public static class W3ReaderExtensions
     {
-
         public static CVariable CopyViaBuffer(CVariable source, CVariable destination)
         {
             using (MemoryStream ms = new MemoryStream())
@@ -28,6 +27,9 @@ namespace WolvenKit.CR2W
 
             return destination;
         }
+
+
+
 
         public static float ReadHalfFloat(this BinaryReader stream)
         {
@@ -99,64 +101,6 @@ namespace WolvenKit.CR2W
             return result;
         }
 
-        public static void WriteBit6(this BinaryWriter stream, int c)
-        {
-            if (c == 0)
-            {
-                stream.Write((byte)128);
-                return;
-            }
-
-            //var str2 = Convert.ToString(c, 2);
-
-            var bytes = new List<int>();
-            var left = c;
-
-            for (var i = 0; (left > 0); i++)
-            {
-                if (i == 0)
-                {
-                    bytes.Add(left & 63);
-                    left = left >> 6;
-                }
-                else
-                {
-                    bytes.Add(left & 255);
-                    left = left >> 7;
-                }
-            }
-
-
-            for (var i = 0; i < bytes.Count; i++)
-            {
-                var last = (i == bytes.Count - 1);
-                var cleft = (bytes.Count - 1) - i;
-
-                if (!last)
-                {
-                    if (cleft >= 1 && i >= 1)
-                    {
-                        bytes[i] = bytes[i] | 128;
-                    }
-                    else if (bytes[i] < 64)
-                    {
-                        bytes[i] = bytes[i] | 64;
-                    }
-                    else
-                    {
-                        bytes[i] = bytes[i] | 128;
-                    }
-                }
-
-                if (bytes[i] == 128)
-                {
-                    throw new Exception("No clue what to do here, still need to think about it... :p");
-                }
-
-                stream.Write((byte)bytes[i]);
-            }
-        }
-
         public static int ReadVLQInt32(this BinaryReader br)
         {
             var b1 = br.ReadByte();
@@ -173,118 +117,5 @@ namespace WolvenKit.CR2W
             }
             return sign ? size * -1 : size;
         }
-
-        public static void WriteVLQInt32(this BinaryWriter bw, int value)
-        {
-            bool negative = value < 0;
-            value = Math.Abs(value);
-            byte b = (byte)(value & 0x3F);
-            value >>= 6;
-            if (negative)
-            {
-                b |= 0x80;
-            }
-            bool cont = value != 0;
-            if (cont)
-            {
-                b |= 0x40;
-            }
-            bw.Write(b);
-            while (cont)
-            {
-                b = (byte)(value & 0x7F);
-                value >>= 7;
-                cont = value != 0;
-                if (cont)
-                {
-                    b |= 0x80;
-                }
-                bw.Write(b);
-            }
-        }
-
-    }
-
-    public static class StreamExtensions
-    {
-        #region Supporting Functions
-        public static T ReadStruct<T>(this Stream m_stream, Crc32Algorithm crc32 = null) where T : struct
-        {
-            try
-            {
-                var size = Marshal.SizeOf<T>();
-
-                var m_temp = new byte[size];
-                m_stream.Read(m_temp, 0, size);
-
-                var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
-                var item = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
-
-                if (crc32 != null)
-                    crc32.Append(m_temp);
-
-                handle.Free();
-
-                return item;
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-            
-        }
-        public static T[] ReadStructs<T>(this Stream m_stream, uint count, Crc32Algorithm crc32 = null) where T : struct
-        {
-            var size = Marshal.SizeOf<T>();
-            var items = new T[count];
-
-            var m_temp = new byte[size];
-            for (uint i = 0; i < count; i++)
-            {
-                m_stream.Read(m_temp, 0, size);
-
-                var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
-                items[i] = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
-
-                if (crc32 != null)
-                    crc32.Append(m_temp);
-
-                handle.Free();
-            }
-
-            return items;
-        }
-        public static void WriteStruct<T>(this Stream m_stream, T value, Crc32Algorithm crc32 = null) where T : struct
-        {
-            var m_temp = new byte[Marshal.SizeOf<T>()];
-            var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
-
-            Marshal.StructureToPtr(value, handle.AddrOfPinnedObject(), true);
-            m_stream.Write(m_temp, 0, m_temp.Length);
-
-            if (crc32 != null)
-                crc32.Append(m_temp);
-
-            handle.Free();
-        }
-        public static void WriteStructs<T>(this Stream m_stream, T[] array, Crc32Algorithm crc32 = null) where T : struct
-        {
-            var size = Marshal.SizeOf<T>();
-            var m_temp = new byte[size];
-            for (int i = 0; i < array.Length; i++)
-            {
-                var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
-
-                Marshal.StructureToPtr(array[i], handle.AddrOfPinnedObject(), true);
-                m_stream.Write(m_temp, 0, m_temp.Length);
-
-                if (crc32 != null)
-                    crc32.Append(m_temp);
-
-                handle.Free();
-            }
-        }
-        #endregion
     }
 }

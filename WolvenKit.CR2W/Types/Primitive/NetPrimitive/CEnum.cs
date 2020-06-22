@@ -39,12 +39,12 @@ namespace WolvenKit.CR2W.Types
 
             //handle EnumValues with Spaces in them. facepalm
             string finalvalue = Value.Replace(" ", string.Empty);
+            finalvalue = finalvalue.Replace("'", string.Empty);
 
             try
             {
                 T e = (T)Enum.Parse(WrappedEnum.GetType(), finalvalue);
                 WrappedEnum = e;
-
             }
             catch (Exception)
             {

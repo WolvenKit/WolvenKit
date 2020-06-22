@@ -192,7 +192,7 @@ namespace WolvenKit.Render
                         currkeyframe.Add(keyFrame);
                         var vec = new SVector3D(null, null, "");
                         vec.Read(br, compression);
-                        Vector3Df pos = new Vector3Df(vec.x.val, vec.y.val, vec.z.val);
+                        Vector3Df pos = new Vector3Df(vec.X.val, vec.Y.val, vec.Z.val);
                         currposition.Add(pos);
                     }
                     positionsKeyframes.Add(currkeyframe);
@@ -217,7 +217,7 @@ namespace WolvenKit.Render
                         currkeyframe.Add(keyFrame);
                         var vec = new SVector3D(null, null, "");
                         vec.Read(br, compression);
-                        Vector3Df scale = new Vector3Df(vec.x.val, vec.y.val, vec.z.val);
+                        Vector3Df scale = new Vector3Df(vec.X.val, vec.Y.val, vec.Z.val);
                         currscale.Add(scale);
                     }
                     scalesKeyframes.Add(currkeyframe);

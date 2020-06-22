@@ -16,9 +16,9 @@ namespace WolvenKit.CR2W.Types
     /// </summary>
     [DataContract(Namespace = "")]
     [REDMeta()]
-    public class CVariantSizeTypeName : CVariable
+    public class CVariantSizeTypeName : CVariable, IVariantAccessor
     {
-        [RED] public CVariable Variable { get; set; }
+        public CVariable Variant { get; set; }
 
         public CVariantSizeTypeName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
@@ -47,7 +47,7 @@ namespace WolvenKit.CR2W.Types
                 parsedvar.Read(br, size);
             }
 
-            Variable = parsedvar;
+            Variant = parsedvar;
         }
 
         public override void Write(BinaryWriter file)
@@ -60,23 +60,31 @@ namespace WolvenKit.CR2W.Types
             using (var ms = new MemoryStream())
             using (var bw = new BinaryWriter(ms))
             {
-                Variable.Write(bw);
+                Variant.Write(bw);
                 varsize += (UInt32)ms.Length;
                 varvalue = ms.ToArray();
             }
 
             // write variable
             file.Write(varsize);
-            file.Write(Variable.GettypeId());
-            file.Write(Variable.GetnameId());
+            file.Write(Variant.GettypeId());
+            file.Write(Variant.GetnameId());
             file.Write(varvalue);
         }
 
         public override string ToString()
         {
-            return Variable.ToString();
+            return Variant.ToString();
         }
 
+        public override List<IEditableVariable> GetEditableVariables()
+        {
+            var list = new List<IEditableVariable>
+            {
+                Variant
+            };
+            return list;
+        }
         public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CVariantSizeTypeName(cr2w, parent, name);
     }
 }

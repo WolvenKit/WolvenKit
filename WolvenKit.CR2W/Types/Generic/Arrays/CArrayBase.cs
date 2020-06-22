@@ -26,6 +26,7 @@ namespace WolvenKit.CR2W.Types
 
         [Browsable(false)]
         public List<int> Flags { get; set; }
+        public string Elementtype { get; set; }
         #endregion
 
 
@@ -54,16 +55,10 @@ namespace WolvenKit.CR2W.Types
 
         public void Read(BinaryReader file, uint size, int elementcount)
         {
-            string redtype;
-            if (Flags == null)
-                redtype = REDReflection.GetREDTypeString(typeof(T));
-            else
-                redtype = REDReflection.GetREDTypeString(typeof(T), Flags.ToArray());
-
 
             for (int i = 0; i < elementcount; i++)
             {
-                CVariable element = CR2WTypeManager.Create(redtype, i.ToString(), cr2w, this);
+                CVariable element = CR2WTypeManager.Create(Elementtype, i.ToString(), cr2w, this);
 
                 element.Read(file, 0);
                 if (element is T te)

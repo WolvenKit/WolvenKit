@@ -9,9 +9,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventMimicsAnim : CStorySceneEventAnimClip
 	{
-		[RED("animationName")] 		public CName AnimationName { get; set;}
+		[RED("animationName")] public CName AnimationName { get; set; }
 
-		[RED("fullEyesWeight")] 		public CBool FullEyesWeight { get; set;}
+		[RED("fullEyesWeight")] public CBool FullEyesWeight { get; set; }
+
+		[RED("filterOption")] public CName FilterOption { get; set; }
+
+		[RED("friendlyName")] public CString FriendlyName { get; set; }
+
+
 
 		public CStorySceneEventMimicsAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -523,7 +523,7 @@ namespace CR2WTests
                                     chunkstateList.Add(t.Result.Item3);
                                     processedfiles.Add(f.Name);
                                 }
-                                catch (Exception)
+                                catch (Exception ex)
                                 {
                                     unparsedfiles.Add(f.Name);
                                     //throw;
