@@ -13,6 +13,10 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("sections", 2,0)] 		public CArray<CPtr<CStorySceneSection>> Sections { get; set;}
 
+		[RED("graph")] 		public CPtr<CStorySceneGraph> Graph { get; set;}
+
+		[RED("layerPreset")] 		public CString LayerPreset { get; set;}
+
 		[RED("elementIDCounter")] 		public CUInt32 ElementIDCounter { get; set;}
 
 		[RED("sectionIDCounter")] 		public CUInt32 SectionIDCounter { get; set;}

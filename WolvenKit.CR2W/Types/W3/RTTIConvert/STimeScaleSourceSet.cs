@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("priority")] 		public CInt32 Priority { get; set;}
 
-		[RED("entries", 2,0)] 		public CArray<STimescaleSource> Entries { get; set;}
+		[RED("entries", 2,0)] 		public CArray<STimeScaleSource> Entries { get; set;}
 
 		public STimeScaleSourceSet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

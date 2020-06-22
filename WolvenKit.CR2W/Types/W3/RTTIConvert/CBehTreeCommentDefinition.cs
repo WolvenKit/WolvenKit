@@ -11,6 +11,8 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("child")] 		public CPtr<IBehTreeNodeDefinition> Child { get; set;}
 
+		[RED("commentDescription")] 		public CString CommentDescription { get; set;}
+
 		public CBehTreeCommentDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeCommentDefinition(cr2w, parent, name);

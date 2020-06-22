@@ -51,6 +51,8 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("mtlComDamping")] 		public CBool MtlComDamping { get; set;}
 
+		[RED("materialPresetName")] 		public CString MaterialPresetName { get; set;}
+
 		[RED("graphicalLodLevelInfo", 2,0)] 		public CArray<SMeshTypeResourceLODLevel> GraphicalLodLevelInfo { get; set;}
 
 		public CApexClothResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }

@@ -23,7 +23,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("firstIndex")] 		public CUInt32 FirstIndex { get; set;}
 
-		[RED("renderMask")] 		public EMeshChunkRenderMask RenderMask { get; set;}
+		[RED("renderMask")] 		public CEnum<EMeshChunkRenderMask> RenderMask { get; set;}
 
 		[RED("useForShadowmesh")] 		public CBool UseForShadowmesh { get; set;}
 

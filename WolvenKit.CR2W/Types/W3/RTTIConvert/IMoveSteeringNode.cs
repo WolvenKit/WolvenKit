@@ -9,6 +9,12 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IMoveSteeringNode : CObject
 	{
+		[RED("comment")] 		public CString Comment { get; set;}
+
+		[RED("graphPosX")] 		public CInt32 GraphPosX { get; set;}
+
+		[RED("graphPosY")] 		public CInt32 GraphPosY { get; set;}
+
 		[RED("enabled")] 		public CBool Enabled { get; set;}
 
 		public IMoveSteeringNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }

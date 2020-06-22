@@ -11,6 +11,8 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("customValParameters", 2,0)] 		public CArray<CHandle<ICustomValAIParameters>> CustomValParameters { get; set;}
 
+		[RED("aiWizardAnswers")] 		public CEdWizardSavedAnswers AiWizardAnswers { get; set;}
+
 		public CAIPresetsTemplateParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIPresetsTemplateParam(cr2w, parent, name);

@@ -11,6 +11,8 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("rootNode")] 		public CHandle<IBehTreeNodeDefinition> RootNode { get; set;}
 
+		[RED("nodes", 2,0)] 		public CArray<CPtr<IBehTreeNodeDefinition>> Nodes { get; set;}
+
 		public CBehTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTree(cr2w, parent, name);

@@ -7,17 +7,21 @@ namespace WolvenKit.CR2W.Types
 {
 	[DataContract(Namespace = "")]
 	[REDMeta]
-	public class STimescaleSource : CVariable
+	public class STimeScaleSource : CVariable
 	{
-		[RED("sourceName")] 		public CName SourceName { get; set;}
+		[RED("timeScale")] 		public CFloat TimeScale { get; set;}
 
-		[RED("sourceType")] 		public CEnum<ETimescaleSource> SourceType { get; set;}
+		[RED("name")] 		public CName Name { get; set;}
 
-		[RED("sourcePriority")] 		public CInt32 SourcePriority { get; set;}
+		[RED("affectCamera")] 		public CBool AffectCamera { get; set;}
 
-		public STimescaleSource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		[RED("dontSave")] 		public CBool DontSave { get; set;}
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new STimescaleSource(cr2w, parent, name);
+		[RED("priorityIndex")] 		public CUInt32 PriorityIndex { get; set;}
+
+		public STimeScaleSource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new STimeScaleSource(cr2w, parent, name);
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

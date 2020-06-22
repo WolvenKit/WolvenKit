@@ -13,6 +13,8 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("iconType")] 		public CName IconType { get; set;}
 
+		[RED("comment")] 		public CString Comment { get; set;}
+
 		[RED("posX")] 		public CInt32 PosX { get; set;}
 
 		[RED("posY")] 		public CInt32 PosY { get; set;}

@@ -19,6 +19,10 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("slopeAngleDamp")] 		public CFloat SlopeAngleDamp { get; set;}
 
+		[RED("generateEditorFragmentsForIKSolvers")] 		public CBool GenerateEditorFragmentsForIKSolvers { get; set;}
+
+		[RED("generateEditorFragmentsForLegIndex")] 		public CInt32 GenerateEditorFragmentsForLegIndex { get; set;}
+
 		[RED("common")] 		public SBehaviorConstraintNodeFloorIKCommonData Common { get; set;}
 
 		public CBehaviorConstraintNodeFloorIKBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }

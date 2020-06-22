@@ -11,6 +11,8 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("radius")] 		public CFloat Radius { get; set;}
 
+		[RED("notUsedByCommunity")] 		public CBool NotUsedByCommunity { get; set;}
+
 		public CSpawnPointComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSpawnPointComponent(cr2w, parent, name);

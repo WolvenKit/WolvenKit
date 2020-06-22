@@ -15,6 +15,18 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("connections", 2,0)] 		public CArray<CPtr<CGraphConnection>> Connections { get; set;}
 
+		[RED("flags")] 		public CUInt32 Flags { get; set;}
+
+		[RED("placement")] 		public ELinkedSocketPlacement Placement { get; set;}
+
+		[RED("caption")] 		public CString Caption { get; set;}
+
+		[RED("color")] 		public CColor Color { get; set;}
+
+		[RED("direction")] 		public ELinkedSocketDirection Direction { get; set;}
+
+		[RED("drawStyle")] 		public ELinkedSocketDrawStyle DrawStyle { get; set;}
+
 		public CGraphSocket(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CGraphSocket(cr2w, parent, name);
