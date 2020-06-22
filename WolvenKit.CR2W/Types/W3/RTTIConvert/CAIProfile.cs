@@ -20,6 +20,8 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("minigameParams")] 		public SAIMinigameParams MinigameParams { get; set;}
 
+		[RED("aiWizardRes")] 		public CHandle<CResource> AiWizardRes { get; set;}
+
 		public CAIProfile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIProfile(cr2w, parent, name);

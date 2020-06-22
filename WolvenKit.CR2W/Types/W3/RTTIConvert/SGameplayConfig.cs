@@ -218,6 +218,8 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("doNotClickMe")] 		public CBool DoNotClickMe { get; set;}
 
+		[RED("disableResetInput")] 		public CBool DisableResetInput { get; set;}
+
 		[RED("enableMeshFlushInScenes")] 		public CBool EnableMeshFlushInScenes { get; set;}
 
 		[RED("enableSceneRewind")] 		public CBool EnableSceneRewind { get; set;}

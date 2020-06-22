@@ -12,6 +12,8 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("name")] 		public CString Name { get; set;}
 
+		[RED("color")] 		public CColor Color { get; set;}
+
 		[RED("activateNotification")] 		public CName ActivateNotification { get; set;}
 
 		[RED("deactivateNotification")] 		public CName DeactivateNotification { get; set;}
@@ -19,6 +21,14 @@ namespace WolvenKit.CR2W.Types
 		[RED("generateEditorFragments")] 		public CBool GenerateEditorFragments { get; set;}
 
 		[RED("id")] 		public CUInt32 Id { get; set;}
+
+		[RED("logOnActivation")] 		public CString LogOnActivation { get; set;}
+
+		[RED("debugCodeId")] 		public CInt32 DebugCodeId { get; set;}
+
+		[RED("debugCodeBreak_Act")] 		public CBool DebugCodeBreak_Act { get; set;}
+
+		[RED("debugCodeBreak_Deact")] 		public CBool DebugCodeBreak_Deact { get; set;}
 
 		public CBehaviorGraphNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

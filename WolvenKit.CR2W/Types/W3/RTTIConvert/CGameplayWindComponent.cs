@@ -12,6 +12,8 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("power")] 		public CFloat Power { get; set;}
 
+		[RED("color")] 		public CColor Color { get; set;}
+
 		public CGameplayWindComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CGameplayWindComponent(cr2w, parent, name);

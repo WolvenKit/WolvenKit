@@ -22,7 +22,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("Max 'Look at' speed")] 		public CFloat Max__Look_at__speed { get; set;}
 
-		[RED("Look at' blend time")] 		public CFloat Look_at__blend_time { get; set;}
+		[RED("'Look at' blend time")] 		public CFloat _Look_at__blend_time { get; set;}
 
 		[RED("On//Off blend time")] 		public CFloat On__Off_blend_time { get; set;}
 

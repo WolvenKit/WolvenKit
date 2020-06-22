@@ -30,6 +30,12 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("linkParentTimeOffset")] 		public CFloat LinkParentTimeOffset { get; set;}
 
+		[RED("linkChildrenGUID", 2,0)] 		public CArray<CGUID> LinkChildrenGUID { get; set;}
+
+		[RED("trackName")] 		public CString TrackName { get; set;}
+
+		[RED("debugString")] 		public CString DebugString { get; set;}
+
 		public CStorySceneEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CStorySceneEvent(cr2w, parent, name);

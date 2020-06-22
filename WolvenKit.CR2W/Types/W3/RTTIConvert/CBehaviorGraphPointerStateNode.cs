@@ -12,6 +12,8 @@ namespace WolvenKit.CR2W.Types
 	{
 		[RED("pointedStateName")] 		public CString PointedStateName { get; set;}
 
+		[RED("pointedState")] 		public CPtr<CBehaviorGraphStateNode> PointedState { get; set;}
+
 		public CBehaviorGraphPointerStateNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphPointerStateNode(cr2w, parent, name);

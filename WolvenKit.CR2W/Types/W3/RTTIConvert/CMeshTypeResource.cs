@@ -10,6 +10,10 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMeshTypeResource : CResource
 	{
+		[RED("materialNames", 2,0)] 		public CArray<CString> MaterialNames { get; set;}
+
+		[RED("authorName")] 		public CString AuthorName { get; set;}
+
 		[RED("materials", 2,0)] 		public CArray<CHandle<IMaterial>> Materials { get; set;}
 
 		[RED("boundingBox")] 		public Box BoundingBox { get; set;}

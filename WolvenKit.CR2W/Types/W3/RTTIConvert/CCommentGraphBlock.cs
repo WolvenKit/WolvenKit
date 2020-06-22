@@ -10,6 +10,12 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCommentGraphBlock : CGraphHelperBlock
 	{
+		[RED("size")] 		public Vector Size { get; set;}
+
+		[RED("commentGraphBlockText")] 		public CString CommentGraphBlockText { get; set;}
+
+		[RED("titleColor")] 		public CColor TitleColor { get; set;}
+
 		public CCommentGraphBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCommentGraphBlock(cr2w, parent, name);

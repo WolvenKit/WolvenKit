@@ -26,6 +26,8 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("weight")] 		public CFloat Weight { get; set;}
 
+		[RED("cachedAnimationDuration")] 		public CFloat CachedAnimationDuration { get; set;}
+
 		[RED("forceAnimationTimeFlag")] 		public CBool ForceAnimationTimeFlag { get; set;}
 
 		[RED("forceAnimationTime")] 		public CFloat ForceAnimationTime { get; set;}

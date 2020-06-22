@@ -10,6 +10,10 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CResource : CObject
 	{
+		[RED("importFile")] 		public CString ImportFile { get; set;}
+
+		[RED("importFileTimeStamp")] 		public CDateTime ImportFileTimeStamp { get; set;}
+
 		public CResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CResource(cr2w, parent, name);

@@ -28,6 +28,8 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("cachedPostAllNodeB")] 		public CPtr<CBehaviorGraphNode> CachedPostAllNodeB { get; set;}
 
+		[RED("debugOverride")] 		public CBool DebugOverride { get; set;}
+
 		public CBehaviorGraphAnimationMixerSlotNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphAnimationMixerSlotNode(cr2w, parent, name);

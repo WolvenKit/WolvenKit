@@ -10,6 +10,12 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimationBufferBitwiseCompressed : IAnimationBuffer
 	{
+		[RED("compressionPreset")] 		public CEnum<SAnimationBufferBitwiseCompressionPreset> CompressionPreset { get; set;}
+
+		[RED("compressionSettings")] 		public SAnimationBufferBitwiseCompressionSettings CompressionSettings { get; set;}
+
+		[RED("sourceDataSize")] 		public CUInt32 SourceDataSize { get; set;}
+
 		[RED("version")] 		public CUInt32 Version { get; set;}
 
 		[RED("bones", 129,0)] 		public CArray<SAnimationBufferBitwiseCompressedBoneTrack> Bones { get; set;}

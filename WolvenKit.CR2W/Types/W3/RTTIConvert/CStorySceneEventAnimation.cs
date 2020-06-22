@@ -26,15 +26,31 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("useLowerBodyPartsForLookAt")] 		public CBool UseLowerBodyPartsForLookAt { get; set;}
 
+		[RED("bonesGroupName")] 		public CString BonesGroupName { get; set;}
+
+		[RED("bones", 2,0)] 		public CArray<SBehaviorGraphBoneInfo> Bones { get; set;}
+
 		[RED("bonesIdx", 2,0)] 		public CArray<CInt32> BonesIdx { get; set;}
 
 		[RED("bonesWeight", 2,0)] 		public CArray<CFloat> BonesWeight { get; set;}
+
+		[RED("status")] 		public CName Status { get; set;}
+
+		[RED("emotionalState")] 		public CName EmotionalState { get; set;}
+
+		[RED("poseName")] 		public CName PoseName { get; set;}
+
+		[RED("typeName")] 		public CName TypeName { get; set;}
+
+		[RED("friendlyName")] 		public CString FriendlyName { get; set;}
 
 		[RED("animationType")] 		public CEnum<EStorySceneAnimationType> AnimationType { get; set;}
 
 		[RED("addConvertToAdditive")] 		public CBool AddConvertToAdditive { get; set;}
 
 		[RED("addAdditiveType")] 		public CEnum<EAdditiveType> AddAdditiveType { get; set;}
+
+		[RED("recacheWeightCurve")] 		public CBool RecacheWeightCurve { get; set;}
 
 		[RED("useWeightCurve")] 		public CBool UseWeightCurve { get; set;}
 

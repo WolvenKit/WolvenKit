@@ -14,6 +14,12 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("id")] 		public CUInt64 Id { get; set;}
 
+		[RED("graphPosX")] 		public CInt32 GraphPosX { get; set;}
+
+		[RED("graphPosY")] 		public CInt32 GraphPosY { get; set;}
+
+		[RED("comment")] 		public CString Comment { get; set;}
+
 		public ISpawnTreeBaseNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new ISpawnTreeBaseNode(cr2w, parent, name);
