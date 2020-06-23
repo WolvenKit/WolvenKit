@@ -49,7 +49,7 @@ namespace WolvenKit.CR2W.Types
 
     public partial class CCurve : CObject
     {
-        [REDBuffer] public CBufferUInt32<SCurveData> CurveData { get; set; }
+        [REDBuffer] public CBufferUInt32<SCurveBufferData> CurveData { get; set; }
     }
 
     public partial class CAnimPointCloudLookAtParam : ISkeletalAnimationSetEntryParam
@@ -86,40 +86,51 @@ namespace WolvenKit.CR2W.Types
         [REDBuffer] public CBufferVLQ<CHandle<CBehaviorVariable>> Inputnodes { get; set; }
         [REDBuffer] public CBufferVLQ<CName> Unk1 { get; set; }
         [REDBuffer] public CBufferVLQ<CName> Unk2 { get; set; }
-        [REDBuffer] public CHandle<CBehaviorVariable> Outputnode { get; set; }
+        //[REDBuffer] public CHandle<CBehaviorVariable> Outputnode { get; set; }
     }
     public partial class CBehaviorGraphStateMachineNode : CBehaviorGraphContainerNode
     {
-        [REDBuffer] public CBufferVLQ<CHandle<CBehaviorVariable>> _inputnodes { get; set; } //FIXME
-        [REDBuffer] public CBufferVLQ<CName> _unk1 { get; set; }
-        [REDBuffer] public CBufferVLQ<CName> _unk2 { get; set; }
-        [REDBuffer] public CBufferVLQ<CHandle<CBehaviorVariable>> unk3 { get; set; }
-        [REDBuffer] public CBufferVLQ<CHandle<CBehaviorVariable>> unk4 { get; set; }
-        [REDBuffer] public CHandle<CBehaviorVariable> handle1 { get; set; }
-        [REDBuffer] public CHandle<CBehaviorVariable> _outputnode { get; set; }
+        [REDBuffer] public CBufferVLQ<CHandle<CBehaviorVariable>> Unk3 { get; set; }
+        [REDBuffer] public CBufferVLQ<CHandle<CBehaviorVariable>> Unk4 { get; set; }
+        [REDBuffer] public CHandle<CBehaviorVariable> Handle1 { get; set; }
+        [REDBuffer] public CHandle<CBehaviorVariable> Outputnode { get; set; }
     }
 
+    public partial class CBehaviorGraphStateNode : CBehaviorGraphContainerNode
+    {
+        [REDBuffer] public CHandle<CBehaviorVariable> Outputnode { get; set; }
+    }
+    public partial class CBehaviorGraphTopLevelNode : CBehaviorGraphContainerNode
+    {
+        [REDBuffer] public CHandle<CBehaviorVariable> Outputnode { get; set; }
+    }
+    public partial class CBehaviorGraphStageNode : CBehaviorGraphContainerNode
+    {
+        [REDBuffer] public CHandle<CBehaviorVariable> Outputnode { get; set; }
+    }
+
+    
     public partial class CCutsceneTemplate : CSkeletalAnimationSet
     {
-        [REDBuffer] public CUInt32 Unk11 { get; set; }
+        //[REDBuffer] public CUInt32 Unk11 { get; set; }
         [REDBuffer] public CBufferUInt32<CVariantSizeType> Animevents { get; set; }
     }
     public partial class CEntityTemplate : CResource
     {
-        [REDBuffer] public CUInt32 unk1 { get; set; }
+        [REDBuffer] public CUInt32 Unk1 { get; set; }
     }
     public partial class CEnvProbeComponent : CComponent
     {
-        [REDBuffer] public CBufferUInt32<Vector> unk1 { get; set; }
+        [REDBuffer] public CBufferUInt32<SVector4D> Unk1 { get; set; }
     }
 
     public partial class CEvaluatorFloatCurve : IEvaluatorFloat
     {
-        [REDBuffer] public CurveInfo curveInfo { get; set; }
+        [REDBuffer] public CurveInfo CurveInfo { get; set; }
     }
     public partial class CExtAnimEventsFile : CResource
     {
-        [REDBuffer] public CUInt32 unk1 { get; set; }
+        [REDBuffer] public CUInt32 Unk1 { get; set; }
     }
     public partial class CFoliageResource : CResource
     {
@@ -191,6 +202,16 @@ namespace WolvenKit.CR2W.Types
 
             return this;
         }
+    }
+
+    public partial class CSkeletalAnimationSet : CExtAnimEventsFile
+    {
+        //[REDBuffer] public CUInt32 Unk1 { get; set; }
+    }
+
+    public partial class CSkeletalAnimation: ISerializable
+    {
+        [REDBuffer] public CUInt32 Unk1 { get; set; }
     }
 
     public partial class CSkeletalAnimationSetEntry : ISerializable

@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 {
 	[DataContract(Namespace = "")]
 	[REDMeta]
-	public class CSkeletalAnimationSet : CExtAnimEventsFile
+	public partial class CSkeletalAnimationSet : CExtAnimEventsFile
 	{
 		[RED("animations", 2,0)] 		public CArray<CPtr<CSkeletalAnimationSetEntry>> Animations { get; set;}
 

@@ -25,7 +25,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("genParams")] 		public SEnvProbeGenParams GenParams { get; set;}
 
-		[RED("textureCacheHashes")] 		public /*Static<UInt32>*/ CUInt32 TextureCacheHashes { get; set;}
+		[RED("textureCacheHashes", 4)] 		public CStatic<CUInt32> TextureCacheHashes { get; set;}
 
 		public CEnvProbeComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

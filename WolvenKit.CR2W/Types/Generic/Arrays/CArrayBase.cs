@@ -36,11 +36,15 @@ namespace WolvenKit.CR2W.Types
         {
             get
             {
-                return BuildTypeName(Elementtype, Flags.AsEnumerable().GetEnumerator());
-                //return Flags != null
-                //    ? REDReflection.GetREDTypeString(this.GetType(), Flags.ToArray())
-                //    : REDReflection.GetREDTypeString(this.GetType());
+                return Flags != null
+                    ? BuildTypeName(Elementtype, Flags.ToArray())
+                    : BuildTypeName(Elementtype);
             }
+        }
+
+        private string BuildTypeName(string type, params int[] flags)
+        {
+            return BuildTypeName(type, flags.AsEnumerable().GetEnumerator());
         }
 
         private string BuildTypeName(string elementtype, IEnumerator<int> flags)
@@ -68,7 +72,8 @@ namespace WolvenKit.CR2W.Types
             {
                 CVariable element = CR2WTypeManager.Create(Elementtype, i.ToString(), cr2w, this);
 
-                element.Read(file, 0);
+                var elementsize = (size - 4) / elementcount;
+                element.Read(file, (uint)elementsize);
                 if (element is T te)
                     Elements.Add(te);
             }

@@ -8,10 +8,11 @@ using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.CR2W.Types
 {
+    [REDMeta(EREDMetaInfo.REDStruct)]
     public class ShBlendMultipleNodeData : CVariable
     {
-        [RED] public CUInt32 index { get; set; }
-        [RED] public CFloat blendvalue { get; set; }
+        [RED] public CUInt32 Index { get; set; }
+        [RED] public CFloat Blendvalue { get; set; }
 
         public ShBlendMultipleNodeData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
         public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new ShBlendMultipleNodeData(cr2w, parent, name);

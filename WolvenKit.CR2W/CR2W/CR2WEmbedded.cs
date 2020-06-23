@@ -69,29 +69,21 @@ namespace WolvenKit.CR2W
             file.BaseStream.Seek(_embedded.dataOffset, SeekOrigin.Begin);
             Data = file.ReadBytes((int) _embedded.dataSize).ToList();
 
-            try
+            parsedFile = new CR2WFile(Data.ToArray(), ParentFile.Logger);
+            if (parsedFile != null)
             {
-                parsedFile = new CR2WFile(Data.ToArray(), ParentFile.Logger);
-                if (parsedFile != null)
-                {
-                    if (parsedFile.chunks != null && parsedFile.chunks.Any())
-                        ClassName = parsedFile.chunks.FirstOrDefault().REDType;
-                }
-
-                if (ParentImports != null && ParentImports.Any())
-                {
-                    if (ParentImports.Count > (int)Embedded.importIndex - 1)
-                    {
-                        var import = ParentImports[(int)Embedded.importIndex - 1];
-                        ImportClass = import.ClassNameStr;
-                        ImportPath = import.DepotPathStr;
-                    }
-                }
+                if (parsedFile.chunks != null && parsedFile.chunks.Any())
+                    ClassName = parsedFile.chunks.FirstOrDefault().REDType;
             }
-            catch (Exception)
+
+            if (ParentImports != null && ParentImports.Any())
             {
-                // FIXME handle exceptions
-                throw new NotImplementedException();
+                if (ParentImports.Count > (int)Embedded.importIndex - 1)
+                {
+                    var import = ParentImports[(int)Embedded.importIndex - 1];
+                    ImportClass = import.ClassNameStr;
+                    ImportPath = import.DepotPathStr;
+                }
             }
         }
 

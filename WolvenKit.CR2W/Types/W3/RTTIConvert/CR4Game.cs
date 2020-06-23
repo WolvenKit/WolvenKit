@@ -84,7 +84,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("effectMgr")] 		public CHandle<W3GameEffectManager> EffectMgr { get; set;}
 
-		[RED("timescaleSources", 2,0)] 		public CArray<STimescaleSource> TimescaleSources { get; set;}
+		[RED("timescaleSources", 2,0)] 		public CArray<STimeScaleSource> TimescaleSources { get; set;}
 
 		[RED("envMgr")] 		public CHandle<W3EnvironmentManager> EnvMgr { get; set;}
 

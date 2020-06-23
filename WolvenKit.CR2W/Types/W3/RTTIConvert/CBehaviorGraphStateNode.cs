@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 {
 	[DataContract(Namespace = "")]
 	[REDMeta]
-	public class CBehaviorGraphStateNode : CBehaviorGraphContainerNode
+	public partial class CBehaviorGraphStateNode : CBehaviorGraphContainerNode
 	{
 		[RED("groups")] 		public TagList Groups { get; set;}
 

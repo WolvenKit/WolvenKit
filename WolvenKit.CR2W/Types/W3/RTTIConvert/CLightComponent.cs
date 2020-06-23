@@ -38,7 +38,7 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("allowDistantFade")] 		public CBool AllowDistantFade { get; set;}
 
-		[RED("lightUsageMask")] 		public CEnum<ELightUsageMask> LightUsageMask { get; set;}
+		[RED("lightUsageMask")] 		public ELightUsageMask LightUsageMask { get; set;}
 
 		public CLightComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

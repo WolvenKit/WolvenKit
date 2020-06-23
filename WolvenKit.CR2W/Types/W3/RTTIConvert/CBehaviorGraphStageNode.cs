@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 {
 	[DataContract(Namespace = "")]
 	[REDMeta]
-	public class CBehaviorGraphStageNode : CBehaviorGraphContainerNode
+	public partial class CBehaviorGraphStageNode : CBehaviorGraphContainerNode
 	{
 		[RED("activeByDefault")] 		public CBool ActiveByDefault { get; set;}
 

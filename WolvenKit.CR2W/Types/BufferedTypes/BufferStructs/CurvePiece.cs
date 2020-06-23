@@ -52,7 +52,7 @@ namespace WolvenKit.CR2W.Types
         {
             valueCount.Read(file, size);
 
-            if (valueCount.val > values.Count)
+            if (valueCount.val > 16)
             {
                 Debug.Print("Read: curve piece value count " + valueCount.val + " exceeds limit " + values.Count);
             }

@@ -15,8 +15,8 @@ namespace WolvenKit.CR2W.Types
     public class SFoliageResourceData : CVariable
     {
 
-        [RED] public CHandle<CSRTBaseTree> Treetype { get; set; }
-        [RED] public CBufferVLQInt32<SFoliageInstanceData> TreeCollection { get; set; }
+        [REDBuffer] public CHandle<CSRTBaseTree> Treetype { get; set; }
+        [REDBuffer] public CBufferVLQInt32<SFoliageInstanceData> TreeCollection { get; set; }
 
         public SFoliageResourceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 

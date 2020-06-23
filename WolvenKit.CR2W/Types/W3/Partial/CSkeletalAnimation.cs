@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 {
 	[DataContract(Namespace = "")]
 	[REDMeta]
-	public class CSkeletalAnimation : ISerializable
+	public partial class CSkeletalAnimation : ISerializable
 	{
 		[RED("name")] 		public CName Name { get; set;}
 

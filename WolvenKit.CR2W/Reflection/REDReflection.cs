@@ -133,11 +133,11 @@ namespace WolvenKit.CR2W.Reflection
                 {
                     return $"handle:{GetREDTypeString(genprop, flags)}";
                 }
-                /*if (gentype == typeof(Static<>))
+                if (gentype == typeof(CStatic<>))
                 {
                     var v1 = flags.MoveNext() ? flags.Current : 0;
                     return $"static:{v1},{GetREDTypeString(genprop, flags)}";
-                }*/
+                }
                 if (gentype == typeof(CEnum<>))
                 {
                     

@@ -157,6 +157,7 @@
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\Complex\SVector4D.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CQuestScriptBlock.cs" />
+    <Compile Include="Types\Generic\Arrays\CStatic.cs" />
     <Compile Include="Types\Generic\Arrays\CBufferBase.cs" />
     <Compile Include="Types\Generic\Arrays\CArrayBase.cs" />
     <Compile Include="Types\Generic\Arrays\CArrayFixedSize.cs" />
@@ -3225,7 +3226,7 @@
     <Compile Include="Types\W3\RTTIConvert\CCharacterControllerParam.cs" />
     <Compile Include="Types\W3\RTTIConvert\CCharacterEntityTemplate.cs" />
     <Compile Include="Types\W3\RTTIConvert\CCharacterResource.cs" />
-    <Compile Include="Types\W3\RTTIConvert\CCharacterStats.cs" />
+    <Compile Include="Types\W3\Missing in RTTTI\CCharacterStats.cs" />
     <Compile Include="Types\W3\RTTIConvert\CCharacterStatsParam.cs" />
     <Compile Include="Types\W3\RTTIConvert\CCircularPotentialField.cs" />
     <Compile Include="Types\W3\RTTIConvert\CCityLightManager.cs" />
@@ -4054,6 +4055,7 @@
     <Compile Include="Types\W3\RTTIConvert\CMovingPhysicalAgentComponent.cs" />
     <Compile Include="Types\W3\RTTIConvert\CMultiRangeSpawnStrategy.cs" />
     <Compile Include="Types\W3\RTTIConvert\CMultiTransitionCondition.cs" />
+    <Compile Include="Types\W3\RTTIConvert\CNavigationObstacle.cs" />
     <Compile Include="Types\W3\RTTIConvert\CNavigationReachabilityQueryInterface.cs" />
     <Compile Include="Types\W3\RTTIConvert\CNavmesh.cs" />
     <Compile Include="Types\W3\RTTIConvert\CNavmeshBorderAreaComponent.cs" />
@@ -4601,11 +4603,11 @@
     <Compile Include="Types\W3\RTTIConvert\CSimpleSpawnStrategy.cs" />
     <Compile Include="Types\W3\RTTIConvert\CSingleAnimationController.cs" />
     <Compile Include="Types\W3\RTTIConvert\CSkeletalAnimatedComponent.cs" />
-    <Compile Include="Types\W3\RTTIConvert\CSkeletalAnimation.cs" />
+    <Compile Include="Types\W3\Partial\CSkeletalAnimation.cs" />
     <Compile Include="Types\W3\RTTIConvert\CSkeletalAnimationAttackTrajectoryParam.cs" />
     <Compile Include="Types\W3\RTTIConvert\CSkeletalAnimationContainer.cs" />
     <Compile Include="Types\W3\RTTIConvert\CSkeletalAnimationHitParam.cs" />
-    <Compile Include="Types\W3\RTTIConvert\CSkeletalAnimationSet.cs" />
+    <Compile Include="Types\W3\Partial\CSkeletalAnimationSet.cs" />
     <Compile Include="Types\W3\RTTIConvert\CSkeletalAnimationStepClipParam.cs" />
     <Compile Include="Types\W3\RTTIConvert\CSkeletalAnimationTrajectoryParam.cs" />
     <Compile Include="Types\W3\RTTIConvert\CSkeletalAnimationTrajectoryTrackParam.cs" />
@@ -5623,6 +5625,7 @@
     <Compile Include="Types\W3\RTTIConvert\SMutation.cs" />
     <Compile Include="Types\W3\RTTIConvert\SMutationProgress.cs" />
     <Compile Include="Types\W3\RTTIConvert\SNavigationCollectCollisionInCircleData.cs" />
+    <Compile Include="Types\W3\RTTIConvert\SNavigationObstacleShape.cs" />
     <Compile Include="Types\W3\RTTIConvert\SNavmeshParams.cs" />
     <Compile Include="Types\W3\RTTIConvert\SNoiseEntity.cs" />
     <Compile Include="Types\W3\RTTIConvert\SNotWorkingOutFunctionParametersHackStruct1.cs" />
@@ -6780,7 +6783,6 @@
     <Compile Include="Types\BufferedTypes\Complex\CSectorData.cs" />
     <Compile Include="Types\BufferedTypes\Complex\CSwfTexture.cs" />
     <Compile Include="Types\BufferedTypes\BufferStructs\SVector2D.cs" />
-    <Compile Include="Types\Structs\SFoliageInstance.cs" />
     <Compile Include="HslColor.cs" />
     <Compile Include="Editors\IVariableEditor.cs" />
     <Compile Include="ILocalizedStringSource.cs" />

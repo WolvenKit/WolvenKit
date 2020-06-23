@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTree : CResource
 	{
-		[RED("rootNode")] 		public CHandle<IBehTreeNodeDefinition> RootNode { get; set;}
+		[RED("rootNode")] 		public CHandle/*CPtr*/<IBehTreeNodeDefinition> RootNode { get; set;}
 
 		[RED("nodes", 2,0)] 		public CArray<CPtr<IBehTreeNodeDefinition>> Nodes { get; set;}
 

@@ -8,7 +8,7 @@ namespace WolvenKit.CR2W.Types
 {
 	[DataContract(Namespace = "")]
 	[REDMeta]
-	public class CBehaviorGraphTopLevelNode : CBehaviorGraphContainerNode
+	public partial class CBehaviorGraphTopLevelNode : CBehaviorGraphContainerNode
 	{
 		public CBehaviorGraphTopLevelNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

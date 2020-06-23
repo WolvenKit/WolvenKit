@@ -27,9 +27,15 @@ namespace WolvenKit.CR2W.Types
 
             var varsize = file.ReadUInt32() - 4;
 
-
-            Variant = CR2WTypeManager.Create(typename, nameof(Variant), cr2w, this);
-            Variant.Read(file, varsize);
+            if (varsize > 0)
+            {
+                Variant = CR2WTypeManager.Create(typename, nameof(Variant), cr2w, this);
+                Variant.Read(file, varsize);
+            }
+            else
+            {
+                // do nothing I guess?
+            }
         }
 
         public override void Write(BinaryWriter file)

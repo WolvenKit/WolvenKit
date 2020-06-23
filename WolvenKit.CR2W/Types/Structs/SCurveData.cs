@@ -8,31 +8,6 @@ using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.CR2W.Types
 {
-    //[REDMeta(EREDMetaInfo.REDStruct)]
-    //public class SCurveData : CVariable
-    //{
-    //    [RED] public CFloat time { get; set; }
-    //    [RED] public CFloat value { get; set; }
-    //    [RED] public Vector controlPoint1 { get; set; }
-    //    [RED] public Vector controlPoint2 { get; set; }
-    //    [RED] public CUInt32 curveTypeL { get; set; }
-    //    [RED] public CUInt32 curveTypeR { get; set; }
-    //    //public CUInt16 unk3;
-    //    //public CUInt16 unk4;
-
-
-    //    public SCurveData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
-    //    {
-    //    }
-
-
-    //    public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-    //    {
-    //        return new SCurveData(cr2w);
-    //    }
-    //}
-
-
 
     [DataContract(Namespace = "")]
     [REDMeta]
@@ -46,6 +21,7 @@ namespace WolvenKit.CR2W.Types
 
         [RED("is looped")] public CBool Is_looped { get; set; }
 
+
         public SCurveData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size) => base.Read(file, size);
@@ -53,6 +29,27 @@ namespace WolvenKit.CR2W.Types
         public override void Write(BinaryWriter file) => base.Write(file);
 
         public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SCurveData(cr2w, parent, name);
+
+    }
+
+    [DataContract(Namespace = "")]
+    [REDMeta(EREDMetaInfo.REDStruct)]
+    public class SCurveBufferData : CVariable
+    {
+
+        [REDBuffer] public CFloat time { get; set; }
+        [REDBuffer] public SVector4D controlPoint1 { get; set; }
+        [REDBuffer] public SVector4D controlPoint2 { get; set; }
+        [REDBuffer] public CFloat value { get; set; }
+        [REDBuffer] public CUInt16 curveTypeL { get; set; }
+        [REDBuffer] public CUInt16 curveTypeR { get; set; }
+        [REDBuffer] public CUInt32 unk1 { get; set; }
+
+
+        public SCurveBufferData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+
+        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SCurveBufferData(cr2w, parent, name);
 
     }
 }

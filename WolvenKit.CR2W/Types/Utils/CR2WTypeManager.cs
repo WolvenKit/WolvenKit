@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -146,7 +147,7 @@ namespace WolvenKit.CR2W.Types
                                         
 
                                         CVariable innerobject = Create(matchArrayType.Groups[3].Value, "", cr2w, null);
-                                        IArrayAccessor arrayacc = MakeArray(innerobject);
+                                        IArrayAccessor arrayacc = MakeArray(typeof(CArray<>), innerobject.GetType());
                                         arrayacc.Flags = new List<int>() { int.Parse(matchArrayType.Groups[1].Value), int.Parse(matchArrayType.Groups[2].Value) };
                                         if (innerobject is IArrayAccessor accessor && accessor.Flags != null)
                                         {
@@ -163,7 +164,7 @@ namespace WolvenKit.CR2W.Types
                                     {
                                         //throw new InvalidParsingException($"Invalid array type format: typename: {typename}.");
                                         CVariable innerobject = Create(match.Groups[2].Value, "", cr2w, null);
-                                        IArrayAccessor arrayacc = MakeArray(innerobject);
+                                        IArrayAccessor arrayacc = MakeArray(typeof(CArray<>), innerobject.GetType());
                                         arrayacc.Elementtype = matchArrayType.Groups[3].Value;
                                         return arrayacc as CVariable;
                                     }
@@ -178,16 +179,10 @@ namespace WolvenKit.CR2W.Types
                                     var matchArrayType = regArrayType.Match(fullname);
                                     if (matchArrayType.Success)
                                     {
-                                        // byte arrays, these can be huge, using ordinary arrays is just too slow.
-                                        if (matchArrayType.Groups[2].Value == "Uint8" || matchArrayType.Groups[2].Value == "Int8")
-                                        {
-                                            throw new NotImplementedException();
-                                            //return new CByteArray(cr2w);
-                                        }
-
                                         CVariable innerobject = Create(matchArrayType.Groups[2].Value, "", cr2w, null);
-                                        var arrayacc = MakeArray(innerobject);
+                                        var arrayacc = MakeArray(typeof(CStatic<>), innerobject.GetType());
                                         arrayacc.Flags = new List<int>() { int.Parse(matchArrayType.Groups[1].Value) };
+                                        arrayacc.Elementtype = matchArrayType.Groups[2].Value;
                                         return arrayacc as CVariable;
                                     }
                                     else
@@ -261,45 +256,65 @@ namespace WolvenKit.CR2W.Types
                 if (matchFixedSizeArray.Success)
                 {
                     CVariable innerobject = Create(matchFixedSizeArray.Groups[2].Value, "", cr2w, null);
-                    var arrayacc = MakeArray(innerobject, true);
+                    var arrayacc = MakeArray(typeof(CArrayFixedSize<>), innerobject.GetType());
                     arrayacc.Flags = new List<int>() { int.Parse(matchFixedSizeArray.Groups[1].Value) };
                     arrayacc.Elementtype = matchFixedSizeArray.Groups[2].Value;
                     return arrayacc as CVariable;
                 }
                 #endregion
-
-
-                if (!cr2w.UnknownTypes.Contains(fullname))
-                    cr2w.UnknownTypes.Add(fullname);
-
-                // this should never happen
-                throw new NotImplementedException();
-                if (readUnknownAsBytes)
+                
+                if (fullname.Contains("@SItem"))
                 {
-                    return new CBytes(cr2w, parentVariable, "unknown bytes");
+                    cr2w.UnknownTypes.Add($"Congratulations! You have found one of the hidden e3 files! These files are special." +
+                        $" If you edited this file and are experiencing errors, please contact a member of the Wkit Team. ErrorCode: {fullname}");
+                    return new SItem(cr2w, parentVariable, varname);
+                }
+                else if (fullname.Contains("#CEnvironmentDefinition"))
+                {
+                    cr2w.UnknownTypes.Add($"Congratulations! You have found one of the hidden e3 files! These files are special." +
+                        $" If you edited this file and are experiencing errors, please contact a member of the Wkit Team. ErrorCode: {fullname}");
+                    return new CHandle<CEnvironmentDefinition>(cr2w, parentVariable, varname);
                 }
                 else
-                    return null;
+                {
+                    if (!cr2w.UnknownTypes.Contains(fullname))
+                        cr2w.UnknownTypes.Add(fullname);
+
+                    // this should never happen
+
+                    if (readUnknownAsBytes)
+                    {
+                        return new CBytes(cr2w, parentVariable, "unknownBytes");
+                    }
+                    else
+                        return null;
+                }
+                
             }            
                 
 
             #region LOCAL FUNCTIONS
-            IArrayAccessor MakeArray(CVariable innerobject, bool fixedsize = false)
+
+
+            IArrayAccessor MakeArray(Type arraytype, Type generictype)
             {
-                if (innerobject != null)
-                {
-                    Type elementType = fixedsize 
-                        ? typeof(CArrayFixedSize<>).MakeGenericType(innerobject.GetType())
-                        : typeof(CArray<>).MakeGenericType(innerobject.GetType());
+                Type elementType = typeof(CArray<>);
 
-                    var array = Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
-
-                    return array as IArrayAccessor;
-                }
+                if (arraytype == typeof(CStatic<>))
+                    elementType = typeof(CStatic<>).MakeGenericType(generictype);
+                else if (arraytype == typeof(CArrayFixedSize<>))
+                    elementType = typeof(CArrayFixedSize<>).MakeGenericType(generictype);
+                else if (arraytype == typeof(CArray<>))
+                    elementType = typeof(CArray<>).MakeGenericType(generictype);
                 else
                 {
-                    throw new Exception();
+                    throw new NotImplementedException();
                 }
+                
+
+                var array = Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
+
+                return array as IArrayAccessor;
             }
 
 

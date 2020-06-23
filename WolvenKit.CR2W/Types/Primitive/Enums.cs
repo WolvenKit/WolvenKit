@@ -8,22 +8,6 @@ namespace WolvenKit.CR2W.Types
 {
     public static class Enums
     {
-        public enum EFactValueChangeMethod
-        {
-            FVCM_Add,
-            FVCM_Substract,
-            FVCM_Multiply,
-            FVCM_Divide,
-        }
-
-        public enum EQuestPadVibrationStrength
-        {
-            EQPVS_VeryLight,
-            EQPVS_Light,
-            EQPVS_Hard,
-            EQPVS_VeryHard
-        }
-
         public enum ETextureFormat
         {
             // x = 1 or param1
@@ -62,8 +46,34 @@ namespace WolvenKit.CR2W.Types
             //TEXFMT_Max = 0x20,
         };
 
-        //Testing Area
-        #region Testing Area
+        #region Not found in Ghidra
+        public enum ELinkedSocketPlacement
+        {
+
+        }
+        public enum ELinkedSocketDirection
+        {
+
+        }
+        public enum ELinkedSocketDrawStyle
+        {
+
+        }
+        public enum EModLogLevel
+        {
+
+        }
+        public enum EStoryBoardActorType
+        {
+
+        }
+        public enum WmkAreaPositionType
+        {
+
+        }
+        #endregion
+
+        #region Enums with shitty names
         public enum EApertureValue
         {
             f10,
@@ -86,8 +96,18 @@ namespace WolvenKit.CR2W.Types
             Spawnandforceposition, //Spawn and force position
             Spawnactorswhenneeded   //Spawn actors when needed
         }
+        #endregion
 
         #region Flags
+        //[Flags]
+        public enum EFoodGroup
+        {
+            FG_Corpse = 1,
+            FG_Meat = 2,
+            FG_Vegetable = 4,
+            FG_Water = 8,
+            FG_Monster = 16
+        }
         //[Flags]
         //public enum EMeshChunkRenderMask
         //{
@@ -162,33 +182,440 @@ namespace WolvenKit.CR2W.Types
         }
         #endregion
 
-
-
-        #region Not in Ghidra
-        public enum ELinkedSocketPlacement
+        #region Scripted Enums
+        public enum EPlayerPreviewInventory
         {
+            PPI_default,
+            PPI_Bear_1,
+            PPI_Bear_4,
+            PPI_Lynx_1,
+            PPI_Lynx_4,
+            PPI_Gryphon_1,
+            PPI_Gryphon_4,
+            PPI_Common_1,
+            PPI_Naked,
+            PPI_Viper,
+            PPI_Red_Wolf_1
+        }
+        public enum EStaticCameraAnimState
+        {
+            SCAS_Default,
+            SCAS_Collapsed,
+            SCAS_Window,
+            SCAS_ShakeTower
+        }
+        public enum EStaticCameraGuiEffect
+        {
+            SCGE_None,
+            SCGE_Hole
+        }
+        public enum EEncounterSpawnGroup
+        {
+            ESG_Quest,
+            ESG_Important,
+            ESG_CoreCommunity,
+            ESG_SecondaryCommunity,
+            ESG_OptionalCommunity
+        }
+        public enum EBehaviorGraph
+        {
+            EBG_None,
+            EBG_Combat_Undefined,
+            EBG_Combat_Shield,
+            EBG_Combat_1Handed_Sword,
+            EBG_Combat_1Handed_Axe,
+            EBG_Combat_1Handed_Blunt,
+            EBG_Combat_1Handed_Any,
+            EBG_Combat_2Handed_Any,
+            EBG_Combat_2Handed_Sword,
+            EBG_Combat_2Handed_Hammer,
+            EBG_Combat_2Handed_Axe,
+            EBG_Combat_2Handed_Halberd,
+            EBG_Combat_2Handed_Spear,
+            EBG_Combat_2Handed_Staff,
+            EBG_Combat_Fists,
+            EBG_Combat_Bow,
+            EBG_Combat_Crossbow,
+            EBG_Combat_Witcher,
+            EBG_Combat_Sorceress,
+            EBG_Combat_WildHunt_Imlerith,
+            EBG_Combat_WildHunt_Imlerith_Second_Stage,
+            EBG_Combat_WildHunt_Caranthir,
+            EBG_Combat_WildHunt_Caranthir_Second_Stage,
+            EBG_Combat_WildHunt_Eredin,
+            EBG_Combat_Olgierd,
+            EBG_Combat_Caretaker,
+            EBG_Combat_Dettlaff_Vampire,
+            EBG_Combat_Gregoire,
+            EBG_Combat_Dettlaff_Minion
 
         }
-        public enum ELinkedSocketDirection
+        public enum EStorySceneGameplayAction
         {
-
+            SSGA_None,
+            SSGA_Walk_2m,
+            SSGA_Walk_5m,
+            SSGA_Walk_8m,
+            SSGA_Walk_2m_GoTo_Combat,
+            SSGA_Walk_5m_GoTo_Combat,
+            SSGA_Walk_8m_GoTo_Combat,
+            SSGA_Walk_2m_GoTo_Combat_Silver,
+            SSGA_Walk_5m_GoTo_Combat_Silver,
+            SSGA_Walk_8m_GoTo_Combat_Silver,
+            SSGA_GoTo_Combat_Pose,
+            SSGA_GoTo_Combat_Pose_Silver,
+            SSGA_GoTo_Combat_Pose_Fists,
+            SSGA_EndInWork,
+            SSGA_DelayWork
         }
-        public enum ELinkedSocketDrawStyle
+        public enum EJobTreeType
         {
-
+            EJTT_NothingSpecial,
+            EJTT_Praying,
+            EJTT_InfantInHand,
+            EJTT_Sitting,
+            EJT_PlayingMusic,
+            EJTT_CatOnLap,
         }
-        public enum EModLogLevel
+        public enum EAchievement
         {
+            EA_Undefined,
 
+
+            EA_FoundYennefer,
+            EA_FreedDandelion,
+            EA_YenGetInfoAboutCiri,
+            EA_FindBaronsFamily,
+            EA_FindCiri,
+            EA_ConvinceGeelsToBetrayEredin,
+            EA_DefeatEredin,
+            EA_FinishTheGameEasy,
+            EA_FinishTheGameNormal,
+            EA_FinishTheGameHard,
+            EA_CompleteWitcherContracts,
+            EA_CompleteSkelligeRaceForCrown,
+            EA_CompleteWar,
+            EA_CompleteKeiraMetz,
+            EA_GetAllForKaerMorhenBattle,
+
+
+            EA_Dendrology,
+            EA_EnemyOfMyFriend,
+            EA_FusSthSth,
+            EA_EnvironmentUnfriendly,
+            EA_TrainedInKaerMorhen,
+            EA_TheEvilestThing,
+            EA_TechnoProgress,
+            EA_LearningTheRopes,
+            EA_FundamentalsFirst,
+            EA_TrialOfGrasses,
+            EA_BreakingBad,
+            EA_Bombardier,
+            EA_Swank,
+            EA_Rage,
+
+
+            EA_GwintMaster,
+            EA_Unused,
+            EA_MonsterHuntFogling,
+            EA_MonsterHuntEkimma,
+            EA_MonsterHuntLamia,
+            EA_MonsterHuntFiend,
+            EA_MonsterHuntDao,
+            EA_MonsterHuntDoppler,
+            EA_BrawlMaster,
+            EA_NeedForSpeed,
+            EA_Brawler,
+
+
+            EA_Finesse,
+            EA_PowerOverwhelming,
+            EA_Cerberus,
+            EA_Bookworm,
+            EA_Immortal,
+            EA_FistOfTheSouthStar,
+            EA_Explorer,
+            EA_PestControl,
+            EA_FireInTheHole,
+            EA_FullyArmed,
+            EA_GwintCollector,
+            EA_Allin,
+            EA_GeraltandFriends,
+
+
+
+            EA_ToadPrince,
+            EA_PartyAnimal,
+            EA_Auctioneer,
+            EA_TheCompletePicture,
+            EA_HeartsOfStone,
+            EA_KillEtherals,
+
+
+            EA_FeatherStrongerThanSword,
+            EA_Thirst,
+            EA_DivineWhip,
+            EA_LatestFashion,
+            EA_WantedDeadOrBovine,
+            EA_Slide,
+            EA_KilledIt,
+
+
+            EA_BeauclairWelcomeTo,
+            EA_HeroOfBeauclair,
+            EA_BeauclairMostWanted,
+            EA_ChampionOfBeauclair,
+            EA_LikeAVirgin,
+            EA_HomeSweetHome,
+            EA_TurnedEveryStone,
+            EA_GotToHaveThemAll,
+            EA_BloodAndWine,
+            EA_ReadyToRoll,
+            EA_SchoolOfTheMutant,
+            EA_HastaLaVista,
+            EA_Goliath
         }
-        public enum EStoryBoardActorType
+        public enum EEffectType
         {
+            EET_Undefined,
 
+
+            EET_AutoVitalityRegen,
+            EET_AutoStaminaRegen,
+            EET_AutoEssenceRegen,
+            EET_AutoMoraleRegen,
+
+
+            EET_Confusion,
+            EET_HeavyKnockdown,
+            EET_Hypnotized,
+            EET_Immobilized,
+            EET_Knockdown,
+            EET_KnockdownTypeApplicator,
+            EET_Frozen,
+            EET_Paralyzed,
+            EET_Stagger,
+            EET_Blindness,
+            EET_PoisonCritical,
+
+
+            EET_Bleeding,
+            EET_BleedingTracking,
+            EET_Burning,
+            EET_Poison,
+            EET_DoTHPRegenReduce,
+
+
+            EET_Toxicity,
+
+
+            EET_BlackBlood,
+            EET_Blizzard,
+            EET_Cat,
+            EET_FullMoon,
+            EET_GoldenOriole,
+            EET_MariborForest,
+            EET_PetriPhiltre,
+            EET_Swallow,
+            EET_TawnyOwl,
+            EET_Thunderbolt,
+            EET_Unused1,
+            EET_WhiteHoney,
+            EET_WhiteRaffardDecoction,
+            EET_KillerWhale,
+
+
+            EET_AxiiGuardMe,
+            EET_IgnorePain,
+
+
+            EET_StaggerAura,
+            EET_OverEncumbered,
+            EET_Edible,
+            EET_LowHealth,
+            EET_Slowdown,
+            EET_Fact,
+            EET_WellFed,
+            EET_SlowdownFrost,
+
+
+            EET_LongStagger,
+            EET_WellHydrated,
+            EET_BattleTrance,
+            EET_YrdenHealthDrain,
+            EET_AdrenalineDrain,
+            EET_WeatherBonus,
+            EET_Swarm,
+            EET_Pull,
+            EET_AbilityOnLowHealth,
+            EET_Oil,
+            EET_CounterStrikeHit,
+            EET_Drowning,
+            EET_Snowstorm,
+            EET_AutoAirRegen,
+
+
+            EET_ShrineAard,
+            EET_ShrineAxii,
+            EET_ShrineIgni,
+            EET_ShrineQuen,
+            EET_ShrineYrden,
+
+
+            EET_Ragdoll,
+            EET_AutoPanicRegen,
+            EET_VitalityDrain,
+            EET_DoppelgangerEssenceRegen,
+            EET_FireAura,
+            EET_BoostedEssenceRegen,
+            EET_AirDrain,
+            EET_SilverDust,
+
+
+            EET_Mutagen01,
+            EET_Mutagen02,
+            EET_Mutagen03,
+            EET_Mutagen04,
+            EET_Mutagen05,
+            EET_Mutagen06,
+            EET_Mutagen07,
+            EET_Mutagen08,
+            EET_Mutagen09,
+            EET_Mutagen10,
+            EET_Mutagen11,
+            EET_Mutagen12,
+            EET_Mutagen13,
+            EET_Mutagen14,
+            EET_Mutagen15,
+            EET_Mutagen16,
+            EET_Mutagen17,
+            EET_Mutagen18,
+            EET_Mutagen19,
+            EET_Mutagen20,
+            EET_Mutagen21,
+            EET_Mutagen22,
+            EET_Mutagen23,
+            EET_Mutagen24,
+            EET_Mutagen25,
+            EET_Mutagen26,
+            EET_Mutagen27,
+            EET_Mutagen28,
+
+
+            EET_AirDrainDive,
+            EET_BoostedStaminaRegen,
+            EET_WitchHypnotized,
+            EET_AirBoost,
+            EET_StaminaDrainSwimming,
+            EET_AutoSwimmingStaminaRegen,
+            EET_Drunkenness,
+            EET_WraithBlindness,
+            EET_Choking,
+            EET_StaminaDrain,
+            EET_EnhancedArmor,
+            EET_EnhancedWeapon,
+            EET_SnowstormQ403,
+            EET_SlowdownAxii,
+            EET_PheromoneNekker,
+            EET_PheromoneDrowner,
+            EET_PheromoneBear,
+            EET_Tornado,
+            EET_WolfHour,
+            EET_WeakeningAura,
+            EET_Weaken,
+
+            EET_Tangled,
+            EET_Runeword8,
+            EET_LynxSetBonus,
+            EET_GryphonSetBonus,
+            EET_GryphonSetBonusYrden,
+            EET_POIGorA10,
+            EET_Mutation7Buff,
+            EET_Mutation7Debuff,
+            EET_Mutation10,
+            EET_Perk21InternalCooldown,
+            EET_Mutation11Buff,
+            EET_Mutation11Debuff,
+            EET_Acid,
+            EET_WellRested,
+            EET_HorseStableBuff,
+            EET_BookshelfBuff,
+            EET_PolishedGenitals,
+            EET_Mutation12Cat,
+            EET_Mutation11Immortal,
+            EET_Aerondight,
+            EET_Trap,
+            EET_Mutation3,
+            EET_Mutation4,
+            EET_Mutation5,
+            EET_ToxicityVenom,
+            EET_BasicQuen,
+
+
+            EET_EffectTypesSize,
+            EET_ForceEnumTo16Bit = 10000
         }
-        public enum WmkAreaPositionType
+        public enum EMonsterCategory
         {
-
+            MC_NotSet,
+            MC_Relic,
+            MC_Necrophage,
+            MC_Cursed,
+            MC_Beast,
+            MC_Insectoid,
+            MC_Vampire,
+            MC_Specter,
+            MC_Draconide,
+            MC_Hybrid,
+            MC_Troll,
+            MC_Human,
+            MC_Unused,
+            MC_Magicals,
+            MC_Animal
         }
+        public enum EAreaName
+        {
+            AN_Undefined,
+            AN_NMLandNovigrad,
+            AN_Skellige_ArdSkellig,
+            AN_Kaer_Morhen,
+            AN_Prologue_Village,
+            AN_Wyzima,
+            AN_Island_of_Myst,
+            AN_Spiral,
+            AN_Prologue_Village_Winter,
+            AN_Velen,
+            AN_CombatTestLevel,
+            AN_Bob  //not in ghidra
+        }
+        public enum EHitReactionType
+        {
+            EHRT_None,
+            EHRT_Light,
+            EHRT_Heavy,
+            EHRT_Igni,
+            EHRT_Reflect,
+            EHRT_LightClose
+        }
+        public enum EAttackSwingType
+        {
+            AST_Horizontal,
+            AST_Vertical,
+            AST_DiagonalUp,
+            AST_DiagonalDown,
+            AST_Jab,
+            AST_NotSet
+        }
+        public enum EAttackSwingDirection
+        {
+            ASD_UpDown,
+            ASD_DownUp,
+            ASD_LeftRight,
+            ASD_RightLeft,
+            ASD_NotSet
+        }
+        #endregion
+
         public enum EDM_MappinType
         {
             EDM_QuestAvailable,
@@ -198,17 +625,28 @@ namespace WolvenKit.CR2W.Types
             EDM_NonQuestHorseRace,
             EDM_QuestAvailableFromNonActor,
             EDM_EP1QuestAvailable,
+            EDM_EP1QuestAvailableFromNonActor,
             EDM_EP2QuestAvailable,
-            EDM_Torch,
             EDM_EP2QuestAvailableFromNonActor,
-            EDM_HorseRaceDummy,
+            EDM_Torch,
             EDM_HorseRaceTarget,
+            EDM_HorseRaceDummy,
         }
-
-        #endregion
-
-
-
+        
+        public enum EFactValueChangeMethod
+        {
+            FVCM_Add,
+            FVCM_Substract,
+            FVCM_Multiply,
+            FVCM_Divide,
+        }
+        public enum EQuestPadVibrationStrength
+        {
+            EQPVS_VeryLight,
+            EQPVS_Light,
+            EQPVS_Hard,
+            EQPVS_VeryHard
+        }
         public enum ESoundAmbientDynamicParameter
         {
             ESADP_None
@@ -242,8 +680,6 @@ namespace WolvenKit.CR2W.Types
             QMFT_EnableOnly,
             QMFT_ShowOnly
         }
-
-        
         public enum ELightCubeSides
         {
             LCS_NegativeX,
@@ -295,9 +731,6 @@ namespace WolvenKit.CR2W.Types
             AAG_Monsters,
             AAG_Ghost
         }
-
-        #endregion
-
         public enum ESwitchOperation
         {
             SO_TurnOn,
@@ -314,7 +747,6 @@ namespace WolvenKit.CR2W.Types
             TCrEffector_HandL,
             TCrEffector_HandR
         }
-
         public enum eGwintEffect
         {
             GwintEffect_None,
@@ -344,7 +776,6 @@ namespace WolvenKit.CR2W.Types
             GwintEffect_Scorch,
             GwintEffect_ClearSky
         }
-
         public enum EQuestConditionDLCType
         {
             QCDT_Undefined,
@@ -479,7 +910,6 @@ namespace WolvenKit.CR2W.Types
             PET_Dodge,
             PET_Pirouette
         }
-
         public enum EPlayerEvadeDirection
         {
             PED_Forward,
@@ -537,19 +967,6 @@ namespace WolvenKit.CR2W.Types
             ASR_Short,
             ASR_Normal,
             ASR_Long
-        }
-        public enum EPlayerPreviewInventory
-        {
-            PPI_default,
-            PPI_Bear_1,
-            PPI_Bear_4,
-            PPI_Lynx_1,
-            PPI_Lynx_4,
-            PPI_Gryphon_1,
-            PPI_Gryphon_4,
-            PPI_Common_1,
-            PPI_Naked,
-            PPI_Viper
         }
         public enum EDismembermentWoundTypes
         {
@@ -776,24 +1193,6 @@ namespace WolvenKit.CR2W.Types
             EPRT_Undefined,
             EPRT_Geralt,
             EPRT_Ciri
-        }
-        public enum EStorySceneGameplayAction
-        {
-            SSGA_None,
-            SSGA_Walk_2m,
-            SSGA_Walk_5m,
-            SSGA_Walk_8m,
-            SSGA_Walk_2m_GoTo_Combat,
-            SSGA_Walk_5m_GoTo_Combat,
-            SSGA_Walk_8m_GoTo_Combat,
-            SSGA_Walk_2m_GoTo_Combat_Silver,
-            SSGA_Walk_5m_GoTo_Combat_Silver,
-            SSGA_Walk_8m_GoTo_Combat_Silver,
-            SSGA_GoTo_Combat_Pose,
-            SSGA_GoTo_Combat_Pose_Silver,
-            SSGA_GoTo_Combat_Pose_Fists,
-            SSGA_EndInWork,
-            SSGA_DelayWork
         }
         public enum ENegotiationResult
         {
@@ -2057,7 +2456,9 @@ namespace WolvenKit.CR2W.Types
             IP_Prio_11,
             IP_Prio_12,
             IP_Prio_13,
-            IP_Prio_14
+            IP_Prio_14,
+            IP_Max_Unpushable,
+            IP_NotSet
         }
         public enum ECameraSolver
         {
@@ -2296,7 +2697,8 @@ namespace WolvenKit.CR2W.Types
             BEVT_ActorAnimState,
             BEVT_ActorMoveDirToFacingDiff,
             BEVT_AnimationMultiplier,
-            BEVT_IsActorInScene
+            BEVT_IsActorInScene,
+            BEVT_CurrentBehaviorGraphInstanceTimeActive
         }
         public enum EBehaviorEngineVectorValueType
         {
@@ -2890,14 +3292,7 @@ namespace WolvenKit.CR2W.Types
             EAIASM_ByTagInEncounter,
             EAIASM_None
         }
-        public enum EEncounterSpawnGroup
-        {
-            ESG_Quest,
-            ESG_Important,
-            ESG_CoreCommunity,
-            ESG_SecondaryCommunity,
-            ESG_OptionalCommunity
-        }
+        
         public enum EEntryState
         {
             EES_ACTIVATED,
@@ -3523,33 +3918,7 @@ namespace WolvenKit.CR2W.Types
             OBO_Ignite,
             OBO_Explode
         }
-        public enum EBehaviorGraph
-        {
-            EBG_None,
-            EBG_Combat_Undefined,
-            EBG_Combat_Shield,
-            EBG_Combat_1Handed_Sword,
-            EBG_Combat_1Handed_Axe,
-            EBG_Combat_1Handed_Blunt,
-            EBG_Combat_1Handed_Any,
-            EBG_Combat_2Handed_Any,
-            EBG_Combat_2Handed_Sword,
-            EBG_Combat_2Handed_Hammer,
-            EBG_Combat_2Handed_Axe,
-            EBG_Combat_2Handed_Halberd,
-            EBG_Combat_2Handed_Spear,
-            EBG_Combat_2Handed_Staff,
-            EBG_Combat_Fists,
-            EBG_Combat_Bow,
-            EBG_Combat_Crossbow,
-            EBG_Combat_Witcher,
-            EBG_Combat_Sorceress,
-            EBG_Combat_WildHunt_Imlerith,
-            EBG_Combat_WildHunt_Imlerith_Second_Stage,
-            EBG_Combat_WildHunt_Caranthir,
-            EBG_Combat_WildHunt_Caranthir_Second_Stage,
-            EBG_Combat_WildHunt_Eredin
-        }
+        
         public enum ENPCFightStage
         {
             NFS_Stage1,
@@ -3644,7 +4013,8 @@ namespace WolvenKit.CR2W.Types
         {
             DT_normal,
             DT_shakeOff,
-            DT_ragdoll
+            DT_ragdoll,
+            DT_instant
         }
         public enum EVehicleSlot
         {
@@ -3983,21 +4353,7 @@ namespace WolvenKit.CR2W.Types
             IAT_Divide,
             IAT_Socket
         }
-        public enum EAreaName
-        {
-            AN_Undefined,
-            AN_NMLandNovigrad,
-            AN_Skellige_ArdSkellig,
-            AN_Kaer_Morhen,
-            AN_Prologue_Village,
-            AN_Wyzima,
-            AN_Island_of_Myst,
-            AN_Spiral,
-            AN_Prologue_Village_Winter,
-            AN_Velen,
-            AN_CombatTestLevel,
-            AN_Bob  //not in ghidra
-        }
+        
         public enum EDayPart
         {
             EDP_Undefined,
@@ -4056,63 +4412,6 @@ namespace WolvenKit.CR2W.Types
             ES_KnownBombRecipes,
             ES_ReadBooks,
             ES_HeadShotKills
-        }
-        public enum EAchievement
-        {
-            EA_Undefined,
-            EA_FoundYennefer,
-            EA_FreedDandelion,
-            EA_YenGetInfoAboutCiri,
-            EA_FindBaronsFamily,
-            EA_FindCiri,
-            EA_ConvinceGeelsToBetrayEredin,
-            EA_DefeatEredin,
-            EA_FinishTheGameEasy,
-            EA_FinishTheGameNormal,
-            EA_FinishTheGameHard,
-            EA_CompleteWitcherContracts,
-            EA_CompleteSkelligeRaceForCrown,
-            EA_CompleteWar,
-            EA_CompleteKeiraMetz,
-            EA_GetAllForKaerMorhenBattle,
-            EA_Dendrology,
-            EA_EnemyOfMyFriend,
-            EA_FusSthSth,
-            EA_EnvironmentUnfriendly,
-            EA_TrainedInKaerMorhen,
-            EA_TheEvilestThing,
-            EA_TechnoProgress,
-            EA_LearningTheRopes,
-            EA_FundamentalsFirst,
-            EA_TrialOfGrasses,
-            EA_BreakingBad,
-            EA_Bombardier,
-            EA_Swank,
-            EA_Rage,
-            EA_GwintMaster,
-            EA_Unused,
-            EA_MonsterHuntFogling,
-            EA_MonsterHuntEkimma,
-            EA_MonsterHuntLamia,
-            EA_MonsterHuntFiend,
-            EA_MonsterHuntDao,
-            EA_MonsterHuntDoppler,
-            EA_BrawlMaster,
-            EA_NeedForSpeed,
-            EA_Brawler,
-            EA_Finesse,
-            EA_PowerOverwhelming,
-            EA_Cerberus,
-            EA_Bookworm,
-            EA_Immortal,
-            EA_FistOfTheSouthStar,
-            EA_Explorer,
-            EA_PestControl,
-            EA_FireInTheHole,
-            EA_FullyArmed,
-            EA_GwintCollector,
-            EA_Allin,
-            EA_GeraltandFriends
         }
         public enum ETutorialMessageType
         {
@@ -4275,7 +4574,9 @@ namespace WolvenKit.CR2W.Types
             EES_HorseBlinders,
             EES_HorseSaddle,
             EES_HorseBag,
-            EES_HorseTrophy
+            EES_HorseTrophy,
+            EES_Potion3,
+            EES_Potion4
         }
         public enum ESkill
         {
@@ -4428,128 +4729,7 @@ namespace WolvenKit.CR2W.Types
             EACIT_Alcohol,
             EACIT_Quest
         }
-        public enum EEffectType
-        {
-            EET_Undefined,
-            EET_AutoVitalityRegen,
-            EET_AutoStaminaRegen,
-            EET_AutoEssenceRegen,
-            EET_AutoMoraleRegen,
-            EET_Confusion,
-            EET_HeavyKnockdown,
-            EET_Hypnotized,
-            EET_Immobilized,
-            EET_Knockdown,
-            EET_KnockdownTypeApplicator,
-            EET_Frozen,
-            EET_Paralyzed,
-            EET_Stagger,
-            EET_Blindness,
-            EET_PoisonCritical,
-            EET_Bleeding,
-            EET_BleedingTracking,
-            EET_Burning,
-            EET_Poison,
-            EET_DoTHPRegenReduce,
-            EET_Toxicity,
-            EET_BlackBlood,
-            EET_Blizzard,
-            EET_Cat,
-            EET_FullMoon,
-            EET_GoldenOriole,
-            EET_MariborForest,
-            EET_PetriPhiltre,
-            EET_Swallow,
-            EET_TawnyOwl,
-            EET_Thunderbolt,
-            EET_Unused1,
-            EET_WhiteHoney,
-            EET_WhiteRaffardDecoction,
-            EET_KillerWhale,
-            EET_AxiiGuardMe,
-            EET_IgnorePain,
-            EET_StaggerAura,
-            EET_OverEncumbered,
-            EET_Edible,
-            EET_LowHealth,
-            EET_Slowdown,
-            EET_Fact,
-            EET_WellFed,
-            EET_SlowdownFrost,
-            EET_LongStagger,
-            EET_WellHydrated,
-            EET_BattleTrance,
-            EET_YrdenHealthDrain,
-            EET_AdrenalineDrain,
-            EET_WeatherBonus,
-            EET_Swarm,
-            EET_Pull,
-            EET_AbilityOnLowHealth,
-            EET_Unused2,
-            EET_CounterStrikeHit,
-            EET_Drowning,
-            EET_Snowstorm,
-            EET_AutoAirRegen,
-            EET_ShrineAard,
-            EET_ShrineAxii,
-            EET_ShrineIgni,
-            EET_ShrineQuen,
-            EET_ShrineYrden,
-            EET_Ragdoll,
-            EET_AutoPanicRegen,
-            EET_VitalityDrain,
-            EET_DoppelgangerEssenceRegen,
-            EET_FireAura,
-            EET_BoostedEssenceRegen,
-            EET_AirDrain,
-            EET_SilverDust,
-            EET_Mutagen01,
-            EET_Mutagen02,
-            EET_Mutagen03,
-            EET_Mutagen04,
-            EET_Mutagen05,
-            EET_Mutagen06,
-            EET_Mutagen07,
-            EET_Mutagen08,
-            EET_Mutagen09,
-            EET_Mutagen10,
-            EET_Mutagen11,
-            EET_Mutagen12,
-            EET_Mutagen13,
-            EET_Mutagen14,
-            EET_Mutagen15,
-            EET_Mutagen16,
-            EET_Mutagen17,
-            EET_Mutagen18,
-            EET_Mutagen19,
-            EET_Mutagen20,
-            EET_Mutagen21,
-            EET_Mutagen22,
-            EET_Mutagen23,
-            EET_Mutagen24,
-            EET_Mutagen25,
-            EET_Mutagen26,
-            EET_Mutagen27,
-            EET_Mutagen28,
-            EET_AirDrainDive,
-            EET_BoostedStaminaRegen,
-            EET_WitchHypnotized,
-            EET_AirBoost,
-            EET_StaminaDrainSwimming,
-            EET_AutoSwimmingStaminaRegen,
-            EET_Drunkenness,
-            EET_WraithBlindness,
-            EET_Choking,
-            EET_StaminaDrain,
-            EET_EnhancedArmor,
-            EET_EnhancedWeapon,
-            EET_SnowstormQ403,
-            EET_SlowdownAxii,
-            EET_PheromoneNekker,
-            EET_PheromoneDrowner,
-            EET_PheromoneBear,
-            EET_POIGorA10
-        }
+        
         public enum ECharacterPowerStats
         {
             CPS_AttackPower,
@@ -4608,23 +4788,8 @@ namespace WolvenKit.CR2W.Types
             EBNPCT_Master,
             EBNPCT_Slave
         }
-        public enum EAttackSwingType
-        {
-            AST_Horizontal,
-            AST_Vertical,
-            AST_DiagonalUp,
-            AST_DiagonalDown,
-            AST_Jab,
-            AST_NotSet
-        }
-        public enum EAttackSwingDirection
-        {
-            ASD_UpDown,
-            ASD_DownUp,
-            ASD_LeftRight,
-            ASD_RightLeft,
-            ASD_NotSet
-        }
+        
+        
         public enum EQuestPlayerSkillCondition
         {
             EQPSC_Equipped,
@@ -4714,7 +4879,8 @@ namespace WolvenKit.CR2W.Types
             GMM_Combat,
             GMM_Work,
             GMM_Death,
-            PGMM_Sleep
+            PGMM_Sleep,
+            GMM_Tpose
         }
         public enum EPlayerGameplayMimicMode
         {
@@ -4729,18 +4895,8 @@ namespace WolvenKit.CR2W.Types
             SESB_DontSave,
             SESB_ClearSaved
         }
-        public enum EStaticCameraAnimState
-        {
-            SCAS_Default,
-            SCAS_Collapsed,
-            SCAS_Window,
-            SCAS_ShakeTower
-        }
-        public enum EStaticCameraGuiEffect
-        {
-            SCGE_None,
-            SCGE_Hole
-        }
+        
+        
         public enum ECharacterRegenStats
         {
             CRS_Undefined,
@@ -4772,15 +4928,16 @@ namespace WolvenKit.CR2W.Types
         }
         public enum EScriptedEventCategory
         {
-            SEC_Empty,
-            SEC_OnReusableClueUsed,
-            SEC_OnItemEquipped,
-            SEC_OnOilApplied,
-            SEC_OnAmmoChanged,
-            SEC_GameplayFact,
-            SEC_AlchemyRecipe,
-            SEC_CraftingSchematics,
-            SEC_OnMapPinChanged
+	        SEC_Empty,
+	        SEC_OnReusableClueUsed,		
+	        SEC_OnItemEquipped,			
+	        SEC_OnOilApplied,			
+	        SEC_OnAmmoChanged,			
+	        SEC_GameplayFact,			
+	        SEC_AlchemyRecipe,			
+	        SEC_CraftingSchematics,		
+	        SEC_OnMapPinChanged,		
+	        SEC_OnHudTimeOut,			
         }
         public enum EScriptedEventType
         {
@@ -4800,11 +4957,18 @@ namespace WolvenKit.CR2W.Types
             AIM_Invulnerable,
             AIM_Unconscious
         }
-        public enum EActorImmortalityChanel
+        enum EActorImmortalityChanel
         {
-            AIC_Default,
-            AIC_Combat,
-            AIC_Scene
+
+            AIC_Default = 1,
+            AIC_Combat = 2,
+            AIC_Scene = 4,
+            AIC_Mutation11 = 8,
+            AIC_Fistfight = 16,
+            AIC_SyncedAnim = 32,
+            AIC_WhiteRaffardsPotion = 64,
+            AIC_IsAttackableByPlayer = 128
+
         }
         public enum EZoneName
         {
@@ -4822,15 +4986,7 @@ namespace WolvenKit.CR2W.Types
             ZN_NML_Gustfields,
             ZN_NML_Oxenfurt
         }
-        public enum EHitReactionType
-        {
-            EHRT_None,
-            EHRT_Light,
-            EHRT_Heavy,
-            EHRT_Igni,
-            EHRT_Reflect,
-            EHRT_LightClose
-        }
+        
         public enum EFocusHitReaction
         {
             EFHR_None,
@@ -4851,24 +5007,7 @@ namespace WolvenKit.CR2W.Types
             CAS_Disabled,
             CAS_Enabled
         }
-        public enum EMonsterCategory
-        {
-            MC_NotSet,
-            MC_Relic,
-            MC_Necrophage,
-            MC_Cursed,
-            MC_Beast,
-            MC_Insectoid,
-            MC_Vampire,
-            MC_Specter,
-            MC_Draconide,
-            MC_Hybrid,
-            MC_Troll,
-            MC_Human,
-            MC_Unused,
-            MC_Magicals,
-            MC_Animal
-        }
+       
         public enum EButtonStage
         {
             BS_Released,
@@ -5040,7 +5179,9 @@ namespace WolvenKit.CR2W.Types
             TT_FromLastPosition,
             TT_Random,
             TT_ToSelf,
-            TT_ToNode
+            TT_ToNode,
+            TT_OnRightPlayerSide,
+            TT_OnLeftPlayerSide
         }
         public enum ECameraBlendSpeedMode
         {
@@ -5059,12 +5200,7 @@ namespace WolvenKit.CR2W.Types
             EMMPT_Alchemist,
             EMMPT_Innkeeper
         }
-        public enum EFoodGroup
-        {
-            FG_Corpse,
-            FG_Meat,
-            FG_Vegetable
-        }
+        
         public enum EClimbProbeUsed
         {
             ECPU_None,
@@ -5278,14 +5414,7 @@ namespace WolvenKit.CR2W.Types
             EWMP_towardsPlayer,
             EWMP_awayFromPlayer
         }
-        public enum EJobTreeType
-        {
-            EJTT_NothingSpecial,
-            EJTT_Praying,
-            EJTT_InfantInHand,
-            EJTT_Sitting,
-            EJT_PlayingMusic
-        }
+        
         public enum ECraftingException
         {
             ECE_NoException,

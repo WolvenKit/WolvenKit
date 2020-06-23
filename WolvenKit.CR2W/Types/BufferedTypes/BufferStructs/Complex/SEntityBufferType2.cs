@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Reflection;
 
-namespace WolvenKit.CR2W.Types.Utils
+namespace WolvenKit.CR2W.Types
 {
     /// <summary>
     /// 

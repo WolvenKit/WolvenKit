@@ -54,18 +54,22 @@ namespace WolvenKit.Bundles
         ///     Load a single bundle
         /// </summary>
         /// <param name="filename"></param>
-        public void LoadBundle(string filename)
+        public void LoadBundle(string filename, bool ispatch = false)
         {
             if (Bundles.ContainsKey(filename))
                 return;
 
             var bundle = new Bundle(filename);
-
-            foreach (var item in bundle.Items)
+            foreach (KeyValuePair<string, BundleItem> item in bundle.Items)
             {
+                // add new key if the file isn't already in another bundle
                 if (!Items.ContainsKey(item.Key))
                     Items.Add(item.Key, new List<IWitcherFile>());
 
+                if (ispatch && Items[item.Key].Count > 0)
+                {
+                    var tag = Items[item.Key];
+                }
                 Items[item.Key].Add(item.Value);
             }
 
@@ -91,7 +95,7 @@ namespace WolvenKit.Bundles
             patchdirs.Sort(new AlphanumComparator<string>());
             foreach (var file in patchdirs.SelectMany(dir => Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories)))
             {
-                LoadBundle(file);
+                LoadBundle(file, true);
             }
 
             var dlc = Path.Combine(exedir, @"..\..\DLC\");
@@ -104,6 +108,8 @@ namespace WolvenKit.Bundles
                     LoadBundle(file);
                 }
             }
+
+
             RebuildRootNode();
         }
 
