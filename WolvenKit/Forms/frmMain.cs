@@ -64,25 +64,6 @@ namespace WolvenKit
 
         #endregion
 
-
-
-        public LoggerService Logger { get; set; }
-
-
-
-
-        public frmCR2WDocument ActiveDocument
-        {
-            get => _activedocument;
-            set
-            {
-                _activedocument = value;
-                UpdateTitle();
-            }
-        }
-
-
-
         #region Fields
         private readonly string BaseTitle = "Wolven kit";
         private readonly bool COOKINPLACE = true;
@@ -101,6 +82,17 @@ namespace WolvenKit
         #endregion
 
         #region Properties
+        public frmCR2WDocument ActiveDocument
+        {
+            get => _activedocument;
+            set
+            {
+                _activedocument = value;
+                UpdateTitle();
+            }
+        }
+        public LoggerService Logger { get; set; }
+
         public W3Mod ActiveMod
         {
             get => MainController.Get().ActiveMod;
@@ -1211,13 +1203,17 @@ namespace WolvenKit
             {
                 if (manager.Items.Any(x => x.Value.Any(y => y.Name == item.FullPath)))
                 {
-                    var archives = manager.FileList.Where(x => x.Name == item.FullPath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
+                    var archives = manager.FileList
+                        .Where(x => x.Name == item.FullPath)
+                        .Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
+
+                    // create extracted file path
                     string filename;
                     if (archives.First().Value.Bundle.TypeName == MainController.Get().CollisionManager.TypeName 
                         || archives.First().Value.Bundle.TypeName == MainController.Get().TextureManager.TypeName)
                     {
                         // add pngs directly to TextureCache (not Raw, since pngs don't get imported)
-                        if (Path.GetExtension(item.FullPath) == ".png")
+                        if (Path.GetExtension(item.FullPath) == ".png" || Path.GetExtension(item.FullPath) == ".jpg")
                         {
                             filename = Path.Combine(ActiveMod.FileDirectory, AddAsDLC
                                 ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName, "dlc", ActiveMod.Name, item.FullPath)
@@ -1235,8 +1231,17 @@ namespace WolvenKit
                             ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName, "dlc", ActiveMod.Name, item.FullPath) 
                             : Path.Combine("Mod", archives.First().Value.Bundle.TypeName, item.FullPath));
                     }
+
+                    // skip archives that are patched
+                    // this is only needed if the user updated wkit and left the old serialized managercaches
+                    if (archives.Any(_ => _.Key.Contains("content0")) && archives.Any(_ => _.Key.Contains("patch1")))
+                    {
+                        archives = archives.Where(_ => !_.Key.Contains("content0"));
+                    }
+
                     if (archives.Count() > 1)
                     {
+                        
 
                         var dlg = new frmExtractAmbigious(archives.Select(x => x.Key).ToList());
                         if (!skip)

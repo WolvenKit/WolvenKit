@@ -115,10 +115,10 @@ namespace WolvenKit.CR2W
                             }
                         }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         // FIXME handle exceptions
-                        throw new NotImplementedException();
+                        throw ex;
                     }
 
                 }

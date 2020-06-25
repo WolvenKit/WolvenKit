@@ -99,14 +99,14 @@ namespace WolvenKit.CR2W.Types
             }
             else
             {
-                try
-                {
+                //try
+                //{
                     var import = cr2w.imports.FirstOrDefault(_ => _.DepotPathStr == DepotPath && _.ClassNameStr == ClassName);
                     val = - cr2w.imports.IndexOf(import) - 1;
-                }
-                catch (Exception)
-                {
-                }
+                //}
+                //catch (Exception)
+                //{
+                //}
             }
             file.Write(val);
         }

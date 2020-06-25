@@ -66,9 +66,16 @@ namespace WolvenKit.Bundles
                 if (!Items.ContainsKey(item.Key))
                     Items.Add(item.Key, new List<IWitcherFile>());
 
+                // if file is already in another bundle
                 if (ispatch && Items[item.Key].Count > 0)
                 {
-                    var tag = Items[item.Key];
+                    // if file is already in content0 remove file.
+                    List<IWitcherFile> filesInBundles = Items[item.Key];
+                    if (filesInBundles.First().Bundle.FileName.Contains("content0"))
+                    {
+                        bundle.Patchedfiles.Add(filesInBundles.First());
+                        filesInBundles.RemoveAt(0);
+                    }
                 }
                 Items[item.Key].Add(item.Value);
             }

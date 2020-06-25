@@ -3133,8 +3133,8 @@
     <Compile Include="Types\W3\RTTIConvert\CBTTaskTauntDef.cs" />
     <Compile Include="Types\W3\RTTIConvert\CBTTaskTeleport.cs" />
     <Compile Include="Types\W3\RTTIConvert\CBTTaskTeleportDecorator.cs" />
-    <Compile Include="Types\W3\RTTIConvert\CBTTaskTeleportDecoratorDef.cs" />
-    <Compile Include="Types\W3\RTTIConvert\CBTTaskTeleportDef.cs" />
+    <Compile Include="Types\W3\Missing in RTTTI\CBTTaskTeleportDecoratorDef.cs" />
+    <Compile Include="Types\W3\Missing in RTTTI\CBTTaskTeleportDef.cs" />
     <Compile Include="Types\W3\RTTIConvert\CBTTaskTeleportPlayerToNode.cs" />
     <Compile Include="Types\W3\RTTIConvert\CBTTaskTeleportPlayerToNodeDef.cs" />
     <Compile Include="Types\W3\RTTIConvert\CBTTaskTeleportToEntity.cs" />

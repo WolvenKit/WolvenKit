@@ -291,35 +291,6 @@ namespace WolvenKit.CR2W
             }
             #endregion
 
-            // dbg
-            // check self
-            if (!(chunks[0].data is CBehTree))
-            {
-                (var dict, var strings, var nameslist, var importslist) = GenerateStringtable();
-
-                var newdictvalues = dict.Values.ToList();
-                var dictvalues = StringDictionary.Values.ToList();
-
-                if (newdictvalues.Count != dictvalues.Count)
-                {
-                    throw new NotImplementedException();
-                }
-                else
-                {
-                    for (int i = 0; i < dictvalues.Count; i++)
-                    {
-                        if (newdictvalues[i] != dictvalues[i])
-                        {
-                            // CDPR changed the type of CPtr<IBehTreeNodeDefinition> RootNode
-                            // to CHandle<IBehTreeNodeDefinition> RootNode in CBehTree in patch1
-                            if (dictvalues[i] == "ptr:IBehTreeNodeDefinition" && newdictvalues[i] == "handle:IBehTreeNodeDefinition")
-                                continue;
-                        }
-                    }
-                }
-            }
-            
-
             if (Logger != null) Logger.LogString($"File {FileName} loaded in: {stopwatch1.Elapsed}\n");
             stopwatch1.Stop();
 
@@ -477,20 +448,7 @@ namespace WolvenKit.CR2W
 
             stopwatch1.Stop();
 
-            // dbg
-            // check self
-            (var dict, var strings, var nameslist, var importslist) = GenerateStringtable();
-
-            var newdictvalues = dict.Values.ToList();
-            var dictvalues = StringDictionary.Values.ToList();
-            for (int i = 0; i < dictvalues.Count; i++)
-            {
-                if (newdictvalues[i] != dictvalues[i])
-                {
-                    throw new NotImplementedException();
-                }
-            }
-
+           
             if (Logger != null) Logger.LogString($"File {FileName} loaded in: {stopwatch1.Elapsed}\n");
             stopwatch1.Stop();
 

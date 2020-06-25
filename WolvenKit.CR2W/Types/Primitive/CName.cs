@@ -37,14 +37,8 @@ namespace WolvenKit.CR2W.Types
         {
             ushort val = 0;
 
-            try
-            {
-                var nw = cr2w.names.First(_ => _.Str == Value);
-                val = (ushort)cr2w.names.IndexOf(nw);
-            }
-            catch (Exception)
-            {
-            }
+            var nw = cr2w.names.First(_ => _.Str == Value);
+            val = (ushort)cr2w.names.IndexOf(nw);
 
             file.Write(val);
         }

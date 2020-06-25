@@ -376,9 +376,10 @@ namespace WolvenKit.CR2W.Types
                     varname = varname.FirstCharToLower();
                     accessor[this, varname] = value;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     Debug.WriteLine($"({value.REDType}){varname} not found in ({this.REDType}){this.REDName}");
+                    throw ex;
                     return false;
                 }
             }

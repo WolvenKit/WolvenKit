@@ -70,15 +70,9 @@ namespace WolvenKit.CR2W.Types
         {
             ushort val = 0;
 
-            try
-            {
-                var import = cr2w.imports.FirstOrDefault(_ => _.DepotPathStr == DepotPath && _.ClassNameStr == ClassName && _.Flags == Flags);
-                val = (ushort)(cr2w.imports.IndexOf(import) + 1);
-            }
-            catch (Exception)
-            {
-            }
-            
+            var import = cr2w.imports.FirstOrDefault(_ => _.DepotPathStr == DepotPath && _.ClassNameStr == ClassName && _.Flags == Flags);
+            val = (ushort)(cr2w.imports.IndexOf(import) + 1);
+
 
             file.Write(val);
         }

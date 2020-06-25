@@ -48,10 +48,10 @@ namespace WolvenKit.CR2W.Types
                 T e = (T)Enum.Parse(WrappedEnum.GetType(), finalvalue);
                 WrappedEnum = e;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 Debug.WriteLine($"{Value} not found in {WrappedEnum.GetType().Name}");
-                throw;
+                throw ex;
             }
         }
 
@@ -63,14 +63,8 @@ namespace WolvenKit.CR2W.Types
         {
             ushort val = 0;
 
-            try
-            {
-                var nw = cr2w.names.First(_ => _.Str == Value);
-                val = (ushort)cr2w.names.IndexOf(nw);
-            }
-            catch (Exception)
-            {
-            }
+            var nw = cr2w.names.First(_ => _.Str == Value);
+            val = (ushort)cr2w.names.IndexOf(nw);
 
             file.Write(val);
         }

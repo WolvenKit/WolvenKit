@@ -131,29 +131,6 @@ namespace WolvenKit
             return node;
         }
 
-        private void treeView_CellEditStarting(object sender, CellEditEventArgs e)
-        {
-            //var variable = (e.RowObject as VariableListNode).Variable;
-            if (e.Column.AspectName == "Value")
-            {
-                e.Control = ((VariableListNode) e.RowObject).Variable.GetEditor();
-                if (e.Control != null)
-                {
-                    e.Control.Location = new Point(e.CellBounds.Location.X, e.CellBounds.Location.Y - 1);
-                    e.Control.Width = e.CellBounds.Width;
-                    //e.Control.ForeColor = Control.Tex
-                }                
-                e.Cancel = e.Control == null;
-            }
-            else if (e.Column.AspectName == "Name")
-            {
-                //Normal textbox is good for this.
-            }
-            else
-            {
-                e.Cancel = true;
-            }
-        }
 
         private void frmChunkProperties_Resize(object sender, EventArgs e)
         {
@@ -438,14 +415,43 @@ namespace WolvenKit
             MainController.Get().ProjectUnsaved = true;
         }
 
+        private void treeView_CellEditStarting(object sender, CellEditEventArgs e)
+        {
+            //var variable = (e.RowObject as VariableListNode).Variable;
+            if (e.Column.AspectName == "Value")
+            {
+                e.Control = ((VariableListNode)e.RowObject).Variable.GetEditor();
+                if (e.Control != null)
+                {
+                    e.Control.Location = new Point(e.CellBounds.Location.X, e.CellBounds.Location.Y - 1);
+                    e.Control.Width = e.CellBounds.Width;
+                    //e.Control.ForeColor = Control.Tex
+                }
+                e.Cancel = e.Control == null;
+            }
+            else if (e.Column.AspectName == "Name")
+            {
+                //Normal textbox is good for this.
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+        }
+
+
         private void treeView_CellEditFinished(object sender, CellEditEventArgs e)
         {
             if (chunk.ParentPtr.Reference != null)
                 chunk.SetParentChunkId((uint)chunk.ParentPtr.Reference.ChunkIndex + 1);
             OnItemsChanged(sender, e);
-            
+
+            // change the model's isserialized property to true when the user edits it,
+            // this is to make sure only user-edited properties will get serialized
+            var model = e.ListViewItem.RowObject as VariableListNode;
+            model.Variable.IsSerialized = true;
         }
-        
+
         public void ApplyCustomTheme()
         {
             var theme = UIController.Get().GetTheme();

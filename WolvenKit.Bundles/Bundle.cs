@@ -26,6 +26,8 @@ namespace WolvenKit.Bundles
         private uint dataoffset;
         private uint dummysize;
 
+        public List<IWitcherFile> Patchedfiles { get; set; } = new List<IWitcherFile>();
+
         public Bundle(string filename)
         {
             FileName = filename;

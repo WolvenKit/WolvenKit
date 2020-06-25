@@ -66,6 +66,15 @@ namespace WolvenKit.CR2W.Types
 
 		[RED("sendRotationEventAboveTeleportDist")] 		public CFloat SendRotationEventAboveTeleportDist { get; set;}
 
+		/// <summary>
+		/// Not in RTTI
+		/// </summary>
+		[RED("teleportToRequestedFacingDirection ")] 		public CFloat TeleportToRequestedFacingDirection { get; set;}
+		/// <summary>
+		/// Not in RTTI
+		/// </summary>
+		[RED("teleportAwayFromRequestedFacingDirection ")] 		public CFloat TeleportAwayFromRequestedFacingDirection { get; set;}
+
 		public CBTTaskTeleportDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskTeleportDef(cr2w, parent, name);

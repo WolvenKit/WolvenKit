@@ -180,6 +180,7 @@ namespace WolvenKit.Cache
         {
             var fullpath = e.FileName;
             var isPng = Path.GetExtension(fullpath) == ".png";
+            var isJpg = Path.GetExtension(fullpath) == ".jpg";
 
             fullpath = Path.ChangeExtension(fullpath, "dds");
 
@@ -196,14 +197,19 @@ namespace WolvenKit.Cache
 
             // convert all dds files to the extension specified in the settings
             // also convert "pngs" to pngs lol
-            if (e.Extension != EUncookExtension.dds || isPng)
+            if (e.Extension != EUncookExtension.dds || isPng || isJpg)
             {
                 //convert
                 var fi = new FileInfo(fullpath);
                 if (fi.Exists)
                 {
-                    // convert to png if file is a png, else convert to custom extension 
-                    Texconv.Convert(Path.GetDirectoryName(fullpath), fullpath, isPng ? EUncookExtension.png : e.Extension);
+                    // convert to png if file is a png, else convert to custom extension
+                    if (isPng)
+                        Texconv.Convert(Path.GetDirectoryName(fullpath), fullpath, EUncookExtension.png);
+                    else if (isJpg)
+                        Texconv.Convert(Path.GetDirectoryName(fullpath), fullpath, EUncookExtension.jpg);
+                    else
+                        Texconv.Convert(Path.GetDirectoryName(fullpath), fullpath, e.Extension);
                 }
 
                 // delete old DDS

@@ -412,9 +412,9 @@ namespace WolvenKit.App
                 fi = new FileInfo(Cr2wResourceManager.pathashespath);
                 if (!fi.Exists)
                 {
-                    foreach (IWitcherFile item in BundleManager.FileList)
+                    foreach (string item in BundleManager.FileList.Select(_ => _.Name).Distinct())
                     {
-                        Cr2wResourceManager.Get().RegisterVanillaPath(item.Name);
+                        Cr2wResourceManager.Get().RegisterVanillaPath(item);
                     }
                     Cr2wResourceManager.Get().WriteVanilla();
                 }

@@ -181,15 +181,14 @@ namespace WolvenKit.CR2W
 
         public CR2WExportWrapper GetParent()
         {
-            try
+            if ((int)ParentChunkId > 0)
             {
                 return cr2w.chunks[(int)ParentChunkId - 1];
             }
-            catch (Exception)
+            else
             {
                 return null;
             }
-
         }
         
         public virtual Control GetEditor()

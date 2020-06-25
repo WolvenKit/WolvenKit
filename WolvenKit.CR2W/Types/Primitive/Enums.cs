@@ -3090,7 +3090,11 @@ namespace WolvenKit.CR2W.Types
             UI_Mask,
             UI_FiendLure,
             UI_Meteor,
-            UI_None
+            UI_None,
+            UI_Censer,
+            UI_Apple,
+            UI_Cookie,
+            UI_Basket
         }
         public enum EInventoryEventType
         {
@@ -4333,7 +4337,9 @@ namespace WolvenKit.CR2W.Types
             EInventoryFunds_Unlimited,
             EInventoryFunds_Rich,
             EInventoryFunds_Avg,
-            EInventoryFunds_Poor
+            EInventoryFunds_Poor,
+            EInventoryFunds_RichQuickStart,
+            EInventoryFunds_Broke
         }
         public enum EInventoryActionType
         {
@@ -4479,7 +4485,8 @@ namespace WolvenKit.CR2W.Types
             ECL_Undefined,
             ECL_Journeyman,
             ECL_Master,
-            ECL_Grand_Master
+            ECL_Grand_Master,
+            ECL_Arch_Master
         }
         public enum EClimbRequirementType
         {
@@ -5198,9 +5205,13 @@ namespace WolvenKit.CR2W.Types
             EMMPT_Hairdresser,
             EMMPT_Herbalist,
             EMMPT_Alchemist,
-            EMMPT_Innkeeper
+            EMMPT_Innkeeper,
+            EMMPT_Enchanter,
+            EMMPT_DyeTrader,
+            EMMPT_WineTrader,
+            EMMPT_Cammerlengo
         }
-        
+
         public enum EClimbProbeUsed
         {
             ECPU_None,
@@ -5491,7 +5502,11 @@ namespace WolvenKit.CR2W.Types
             EN_Rotfiend,
             EN_Siren,
             EN_Wyvern,
-            EN_None
+            EN_None,
+            EN_BlackSpider,
+            EN_Kikimora,
+            EN_Archespore,
+            EN_Scolopendromorph
         }
         public enum EShrineBuffs
         {
