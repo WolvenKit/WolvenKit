@@ -39,7 +39,7 @@ This repository is created to demonstrate how **REDengine 3** reads and writes f
 - KNG
 - SkacikPL
 - Mezziaz
-- The modding discord (https://discord.gg/qBNgDEX)
+- The modding discord (https://discord.gg/tdSUQQe)
 
 ##### *Based on the code from "Sarcen's W3Edit" by Sarcen*.
 
