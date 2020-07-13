@@ -1198,8 +1198,10 @@ namespace WolvenKit
                     if (archives.First().Value.Bundle.TypeName == MainController.Get().CollisionManager.TypeName 
                         || archives.First().Value.Bundle.TypeName == MainController.Get().TextureManager.TypeName)
                     {
-                        // add pngs directly to TextureCache (not Raw, since pngs don't get imported)
-                        if (Path.GetExtension(item.FullPath) == ".png")
+                        // add pngs, jpgs and dds directly to TextureCache (not Raw, since they don't get imported)
+                        if (Path.GetExtension(item.FullPath) == ".png" 
+                            || Path.GetExtension(item.FullPath) == ".jpg" 
+                            || Path.GetExtension(item.FullPath) == ".dds" )
                         {
                             filename = Path.Combine(ActiveMod.FileDirectory, AddAsDLC
                                 ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName, "dlc", ActiveMod.Name, item.FullPath)
