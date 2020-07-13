@@ -8,12 +8,14 @@ using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.App;
 using WolvenKit.App.Model;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 using WolvenKit.CR2W;
+using WolvenKit.CR2W.SRT;
 using WolvenKit.Services;
 
 namespace WolvenKit
 {
-    public partial class frmCR2WDocument : DockContent, IThemedContent, INotifyPropertyChanged
+    public partial class frmCR2WDocument : DockContent, IThemedContent, INotifyPropertyChanged, IWolvenkitDocument
     {
         public frmChunkList chunkList;
         public frmChunkProperties propertyWindow;
@@ -135,10 +137,7 @@ namespace WolvenKit
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
-        public string FileName
-        {
-            get { return File.FileName; }
-        }
+        public string FileName => File.FileName;
 
         public object SaveTarget { get; set; }
         public event EventHandler<FileSavedEventArgs> OnFileSaved;
@@ -262,5 +261,7 @@ namespace WolvenKit
             dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath),
                 "cr2wdocument_layout.xml"));
         }
+
+        public new bool GetIsDisposed() => this.GetIsDisposed();
     }
 }

@@ -35,7 +35,9 @@ namespace WolvenKit
     using Forms;
     using System.CodeDom;
     using WolvenKit.App;
+    using WolvenKit.App.Model;
     using WolvenKit.Common.Model;
+    using WolvenKit.CR2W.SRT;
     using WolvenKit.Render;
     using WolvenKit.Scaleform;
     using Wwise.Player;
@@ -44,8 +46,8 @@ namespace WolvenKit
     public partial class frmMain : Form
     {
         #region Forms
-        private frmCR2WDocument _activedocument;
-        private List<frmCR2WDocument> OpenDocuments { get; set; } = new List<frmCR2WDocument>();
+        private IWolvenkitDocument _activedocument;
+        private List<IWolvenkitDocument> OpenDocuments { get; set; } = new List<IWolvenkitDocument>();
         private frmModExplorer ModExplorer { get; set; }
         private frmStringsGui stringsGui { get; set; }
         private frmOutput Output { get; set; }
@@ -71,7 +73,7 @@ namespace WolvenKit
 
 
 
-        public frmCR2WDocument ActiveDocument
+        public IWolvenkitDocument ActiveDocument
         {
             get => _activedocument;
             set
@@ -181,26 +183,7 @@ namespace WolvenKit
                 return GetOutput();
             else if (persistString == typeof(frmWelcome).ToString())
                 return GetWelcome();
-            //else
-            //{
-            //    // DummyDoc overrides GetPersistString to add extra information into persistString.
-            //    // Any DockContent may override this value to add any needed information for deserialization.
 
-            //    string[] parsedStrings = persistString.Split(new char[] { ',' });
-            //    if (parsedStrings.Length != 3)
-            //        return null;
-
-            //    if (parsedStrings[0] != typeof(DummyDoc).ToString())
-            //        return null;
-
-            //    DummyDoc dummyDoc = new DummyDoc();
-            //    if (parsedStrings[1] != string.Empty)
-            //        dummyDoc.FileName = parsedStrings[1];
-            //    if (parsedStrings[2] != string.Empty)
-            //        dummyDoc.Text = parsedStrings[2];
-
-            //    return dummyDoc;
-            //}
             else
                 return null;
         }
@@ -354,16 +337,17 @@ namespace WolvenKit
 
         private void HKCopy(HotKeyEventArgs e)
         {
-            if (ActiveDocument != null)
+            if (ActiveDocument != null && ActiveDocument is frmCR2WDocument)
             {
-                if (ActiveDocument.chunkList.IsActivated)
+                var doc = ActiveDocument as frmCR2WDocument;
+                if (doc.chunkList.IsActivated)
                 {
-                    ActiveDocument.chunkList.CopyChunks();
+                    doc.chunkList.CopyChunks();
                     AddOutput("Selected chunk(s) copied!\n");
                 }
-                else if (ActiveDocument.propertyWindow.IsActivated)
+                else if (doc.propertyWindow.IsActivated)
                 {
-                    ActiveDocument.propertyWindow.copyVariable();
+                    doc.propertyWindow.copyVariable();
                     AddOutput("Selected propertie(s) copied!\n");
                 }
             }
@@ -371,16 +355,17 @@ namespace WolvenKit
 
         private void HKPaste(HotKeyEventArgs e)
         {
-            if (ActiveDocument != null)
+            if (ActiveDocument != null && ActiveDocument is frmCR2WDocument)
             {
-                if (ActiveDocument.chunkList.IsActivated)
+                var doc = ActiveDocument as frmCR2WDocument;
+                if (doc.chunkList.IsActivated)
                 {
-                    ActiveDocument.chunkList.PasteChunks();
+                    doc.chunkList.PasteChunks();
                     AddOutput("Copied chunk(s) pasted!\n");
                 }
-                else if (ActiveDocument.propertyWindow.IsActivated)
+                else if (doc.propertyWindow.IsActivated)
                 {
-                    ActiveDocument.propertyWindow.pasteVariable();
+                    doc.propertyWindow.pasteVariable();
                     AddOutput("Copied propertie(s) pasted!\n");
                 }
             }
@@ -398,7 +383,7 @@ namespace WolvenKit
                 Text += " [" + ActiveMod.Name + "] ";
             }
 
-            if (ActiveDocument != null && !ActiveDocument.IsDisposed)
+            if (ActiveDocument != null /*&& !ActiveDocument.GetIsDisposed()*/)
             {
                 Text += Path.GetFileName(ActiveDocument.FileName);
             }
@@ -420,7 +405,7 @@ namespace WolvenKit
             MainController.Get().ProjectUnsaved = false;
         }
 
-        private void saveFile(frmCR2WDocument d)
+        private void saveFile(IWolvenkitDocument d)
         {
             d.SaveFile();
             AddOutput(d.FileName + " saved!\n", Logtype.Success);
@@ -1054,7 +1039,7 @@ namespace WolvenKit
             if (ActiveMod != null)
             {
                 if(ActiveMod.LastOpenedFiles != null)
-                    ActiveMod.LastOpenedFiles = OpenDocuments.Select(x => x.File.FileName).ToList();
+                    ActiveMod.LastOpenedFiles = OpenDocuments.Select(x => x.FileName).ToList();
                 var ser = new XmlSerializer(typeof(W3Mod));
                 var modfile = new FileStream(ActiveMod.FileName, FileMode.Create, FileAccess.Write);
                 ser.Serialize(modfile, ActiveMod);
@@ -1461,7 +1446,9 @@ namespace WolvenKit
             if (memoryStream == null && !File.Exists(filename))
                 return null;
 
-            foreach (var t in OpenDocuments.Where(t => t.FileName == filename))
+            foreach (var t in OpenDocuments
+                .Select(_ => _ as frmCR2WDocument)
+                .Where(t => t.FileName == filename))
             {
                 t.Activate();
                 return null;
@@ -1472,11 +1459,33 @@ namespace WolvenKit
             // todo: what do I do if the .ws file has been edited while the cr2w file is open?
             ScanAndRegisterCustomClasses();
 
+            //switch extension
+            if (Path.GetExtension(filename) == ".srt")
+            {
+                var doc = new frmOtherDocument();
+                OpenDocuments.Add(doc);
 
-            var doc = new frmCR2WDocument();
-            OpenDocuments.Add(doc);
-
-            WorkerLoadFileSetup(new LoadFileArgs(filename, doc, memoryStream, suppressErrors));
+                using (var fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                using (var reader = new BinaryReader(fs))
+                {
+                    var srt = new Srtfile()
+                    {
+                        FileName = filename
+                    };
+                    srt.Read(reader);
+                    doc.File = srt;
+                }
+                
+                doc.Activated += doc_Activated;
+                doc.Show(dockPanel, DockState.Document);
+                doc.FormClosed += doc_FormClosed;
+            }
+            else
+            {
+                var doc = new frmCR2WDocument();
+                OpenDocuments.Add(doc);
+                WorkerLoadFileSetup(new LoadFileArgs(filename, doc, memoryStream, suppressErrors));
+            }
 
             // wait for the backgroundworker to finish
             // this is not good practice since I am blocking
@@ -1717,9 +1726,13 @@ namespace WolvenKit
 
         public CR2WFile LoadDocumentAndGetFile(string filename)
         {
-            foreach (var t in OpenDocuments.Where(t => t.FileName == filename))
+            foreach (var t in OpenDocuments
+                .Select(_ => _ as frmCR2WDocument)
+                .Where(t => t.FileName == filename))
                 return t.File;
-            var activedoc = OpenDocuments.FirstOrDefault(d => d.IsActivated);
+            var activedoc = OpenDocuments
+                .Select(_ => _ as frmCR2WDocument)
+                .FirstOrDefault(d => d.IsActivated);
             var doc = LoadDocument(filename);
             activedoc.Activate();
             return doc != null ? doc.File : null;
@@ -1853,7 +1866,7 @@ namespace WolvenKit
 
         private void frmMain_MdiChildActivate(object sender, EventArgs e)
         {
-            if (sender is frmCR2WDocument)
+            if (sender is IWolvenkitDocument)
             {
                 doc_Activated(sender, e);
             }
@@ -1969,7 +1982,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
 
         private void dockPanel_ActiveDocumentChanged(object sender, EventArgs e)
         {
-            if (dockPanel.ActiveDocument is frmCR2WDocument)
+            if (dockPanel.ActiveDocument is IWolvenkitDocument)
             {
                 doc_Activated(dockPanel.ActiveDocument, e);
             }
@@ -1977,13 +1990,13 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
 
         private void doc_Activated(object sender, EventArgs e)
         {
-            ActiveDocument = (frmCR2WDocument)sender;
+            ActiveDocument = (IWolvenkitDocument)sender;
         }
 
         private void doc_FormClosed(object sender, FormClosedEventArgs e)
         {
-            _lastClosedTab.Enqueue(((frmCR2WDocument)sender).FileName);
-            var doc = (frmCR2WDocument)sender;
+            _lastClosedTab.Enqueue(((IWolvenkitDocument)sender).FileName);
+            var doc = (IWolvenkitDocument)sender;
             OpenDocuments.Remove(doc);
 
             if (doc == ActiveDocument)
@@ -2357,7 +2370,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             {
                 return;
             }
-            if (ActiveDocument != null && !ActiveDocument.IsDisposed)
+            if (ActiveDocument != null/* && !ActiveDocument.GetIsDisposed()*/)
             {
                 saveFile(ActiveDocument);
                 AddOutput("Saved!\n", Logtype.Success);
