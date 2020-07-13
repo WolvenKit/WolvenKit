@@ -21,7 +21,7 @@ namespace WolvenKit
         {
             IsDirectory = false;
             Node = new WitcherTreeNode();
-            Node.Name = Path.Combine("Root", wf.Bundle.TypeName, Path.GetDirectoryName(wf.Name));
+            Node.Name = Path.Combine("Root", wf.Bundle.TypeName.ToString(), Path.GetDirectoryName(wf.Name));
             FullPath = wf.Name;
             this.Text = wf.Name;
         }

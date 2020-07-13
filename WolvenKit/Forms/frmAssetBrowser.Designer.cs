@@ -78,6 +78,7 @@ namespace WolvenKit
             this.fileSplitContainer = new System.Windows.Forms.SplitContainer();
             this.limitCheckBox = new System.Windows.Forms.CheckBox();
             this.limitUpDown = new System.Windows.Forms.NumericUpDown();
+            this.checkBoxUncook = new System.Windows.Forms.CheckBox();
             this.filebrowserMenuStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fileSplitContainer)).BeginInit();
@@ -309,7 +310,7 @@ namespace WolvenKit
             // button2
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(472, 499);
+            this.button2.Location = new System.Drawing.Point(157, 3);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(105, 23);
             this.button2.TabIndex = 17;
@@ -323,15 +324,15 @@ namespace WolvenKit
             this.pathlistview.CausesValidation = false;
             this.pathlistview.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnPath});
-            this.pathlistview.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pathlistview.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pathlistview.FullRowSelect = true;
             this.pathlistview.GridLines = true;
             this.pathlistview.HideSelection = false;
             this.pathlistview.LargeImageList = this.treeImages;
-            this.pathlistview.Location = new System.Drawing.Point(0, 0);
+            this.pathlistview.Location = new System.Drawing.Point(0, 32);
             this.pathlistview.Name = "pathlistview";
             this.pathlistview.ShowItemToolTips = true;
-            this.pathlistview.Size = new System.Drawing.Size(265, 374);
+            this.pathlistview.Size = new System.Drawing.Size(265, 342);
             this.pathlistview.SmallImageList = this.treeImages;
             this.pathlistview.TabIndex = 14;
             this.pathlistview.UseCompatibleStateImageBehavior = false;
@@ -532,6 +533,7 @@ namespace WolvenKit
             // fileSplitContainer.Panel2
             // 
             this.fileSplitContainer.Panel2.Controls.Add(this.pathlistview);
+            this.fileSplitContainer.Panel2.Controls.Add(this.button2);
             this.fileSplitContainer.Size = new System.Drawing.Size(791, 374);
             this.fileSplitContainer.SplitterDistance = 523;
             this.fileSplitContainer.SplitterWidth = 3;
@@ -567,11 +569,22 @@ namespace WolvenKit
             0,
             0});
             // 
+            // checkBoxUncook
+            // 
+            this.checkBoxUncook.AutoSize = true;
+            this.checkBoxUncook.Location = new System.Drawing.Point(314, 503);
+            this.checkBoxUncook.Name = "checkBoxUncook";
+            this.checkBoxUncook.Size = new System.Drawing.Size(64, 17);
+            this.checkBoxUncook.TabIndex = 33;
+            this.checkBoxUncook.Text = "Uncook";
+            this.checkBoxUncook.UseVisualStyleBackColor = true;
+            // 
             // frmAssetBrowser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(811, 525);
+            this.Controls.Add(this.checkBoxUncook);
             this.Controls.Add(this.limitUpDown);
             this.Controls.Add(this.limitCheckBox);
             this.Controls.Add(this.label3);
@@ -585,7 +598,6 @@ namespace WolvenKit
             this.Controls.Add(this.currentfolderCheckBox);
             this.Controls.Add(this.regexCheckbox);
             this.Controls.Add(this.clearSearch);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.filetypeCB);
@@ -661,5 +673,6 @@ namespace WolvenKit
         private SplitContainer fileSplitContainer;
         private CheckBox limitCheckBox;
         private NumericUpDown limitUpDown;
+        private CheckBox checkBoxUncook;
     }
 }

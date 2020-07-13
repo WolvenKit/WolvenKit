@@ -433,15 +433,23 @@ namespace WolvenKit
             {
                 var fi = new FileInfo(selectedobject.FullName);
                 ext = fi.Extension.TrimStart('.');
-                bool isbundle = Path.Combine(ActiveMod.FileDirectory, fi.ToString()).Contains(Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName));
-                bool israw = Path.Combine(ActiveMod.FileDirectory, fi.ToString()).Contains(ActiveMod.RadishDirectory);
+                bool isbundle = Path.Combine(ActiveMod.FileDirectory, fi.ToString())
+                    .Contains(Path.Combine(ActiveMod.ModDirectory, EBundleType.Bundle.ToString()));
+                bool israw = Path.Combine(ActiveMod.FileDirectory, fi.ToString())
+                    .Contains(ActiveMod.RadishDirectory);
                 bool isToplevelDir = selectedobject.FullName == ActiveMod.ModDirectory
                         || selectedobject.FullName == ActiveMod.DlcDirectory
                         || selectedobject.FullName == ActiveMod.RawDirectory
                         || selectedobject.FullName == ActiveMod.RadishDirectory;
 
                 createW2animsToolStripMenuItem.Enabled = !isToplevelDir;
-                exportToolStripMenuItem.Enabled = !isToplevelDir;
+                exportToolStripMenuItem.Enabled = !isToplevelDir && (ext == ".w3fac" && ext == ".w2cutscene" && ext == ".w2anims" && ext == ".w2rig" 
+                    && ext == ".w2mesh");
+                exportW2animsjsonToolStripMenuItem.Visible = ext == ".w2anims";
+                exportW2cutscenejsonToolStripMenuItem.Visible = ext == ".w2cutscene";
+                exportw2rigjsonToolStripMenuItem.Visible = ext == ".w2rig";
+                exportW3facjsonToolStripMenuItem.Visible = ext == ".w3fac";
+                exportW2meshToFbxToolStripMenuItem.Visible = ext == ".w2mesh";
 
                 removeFileToolStripMenuItem.Enabled = !isToplevelDir;
                 renameToolStripMenuItem.Enabled = !isToplevelDir;
@@ -838,6 +846,14 @@ namespace WolvenKit
                 else
                     treeListView.ToggleExpansion(selectedobject);
             }
+        }
+
+        private void exportW2meshToFbxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+
+
+
         }
     }
 }

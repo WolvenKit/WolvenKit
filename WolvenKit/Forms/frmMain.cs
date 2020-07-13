@@ -1185,40 +1185,60 @@ namespace WolvenKit
         /// </summary>
         /// <param name="depotpath">Filename.</param>
         /// <param name="managers">The managers.</param>
-        private bool AddToMod(WitcherListViewItem item, bool skipping, List<IWitcherArchive> managers, bool AddAsDLC)
+        private async Task<bool> AddToMod(WitcherListViewItem item, bool skipping, List<IWitcherArchive> managers, bool addAsDLC, bool uncook)
         {
             bool skip = skipping;
+
+            
             var depotpath = item.ExplorerPath ?? item.FullPath ?? "";
-            foreach (var manager in managers.Where(manager => depotpath.StartsWith(Path.Combine("Root", manager.TypeName))))
+            foreach (var manager in managers.Where(manager => depotpath.StartsWith(Path.Combine("Root", manager.TypeName.ToString()))))
             {
                 if (manager.Items.Any(x => x.Value.Any(y => y.Name == item.FullPath)))
                 {
                     var archives = manager.FileList.Where(x => x.Name == item.FullPath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
                     string filename;
-                    if (archives.First().Value.Bundle.TypeName == MainController.Get().CollisionManager.TypeName 
-                        || archives.First().Value.Bundle.TypeName == MainController.Get().TextureManager.TypeName)
+                    string extension = Path.GetExtension(item.FullPath);
+
+                    // Texture and Collision Caches
+                    if (!uncook && (
+                        archives.First().Value.Bundle.TypeName == EBundleType.CollisionCache 
+                        || archives.First().Value.Bundle.TypeName == EBundleType.TextureCache))
                     {
                         // add pngs, jpgs and dds directly to TextureCache (not Raw, since they don't get imported)
-                        if (Path.GetExtension(item.FullPath) == ".png" 
-                            || Path.GetExtension(item.FullPath) == ".jpg" 
-                            || Path.GetExtension(item.FullPath) == ".dds" )
+                        if (extension == ".png"  || extension == ".jpg"  || extension == ".dds" )
                         {
-                            filename = Path.Combine(ActiveMod.FileDirectory, AddAsDLC
-                                ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName, "dlc", ActiveMod.Name, item.FullPath)
-                                : Path.Combine("Mod", archives.First().Value.Bundle.TypeName, item.FullPath));
+                            filename = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                                ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName.ToString(), "dlc", ActiveMod.Name, item.FullPath)
+                                : Path.Combine("Mod", archives.First().Value.Bundle.TypeName.ToString(), item.FullPath));
                         }
                         // all other textures go into Raw (since they have to be imported first)
                         else
-                            filename = Path.Combine(ActiveMod.RawDirectory, AddAsDLC 
-                                ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName, "dlc", ActiveMod.Name, item.FullPath) 
-                                : Path.Combine("Mod", archives.First().Value.Bundle.TypeName, item.FullPath));
+                            filename = Path.Combine(ActiveMod.RawDirectory, addAsDLC 
+                                ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName.ToString(), "dlc", ActiveMod.Name, item.FullPath) 
+                                : Path.Combine("Mod", archives.First().Value.Bundle.TypeName.ToString(), item.FullPath));
                     }
+                    // Bundles
                     else
                     {
-                        filename = Path.Combine(ActiveMod.FileDirectory, AddAsDLC 
-                            ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName, "dlc", ActiveMod.Name, item.FullPath) 
-                            : Path.Combine("Mod", archives.First().Value.Bundle.TypeName, item.FullPath));
+                        // Uncooked files go into the uncooked folders
+                        if (uncook )
+                        {
+                            var cacheDir = REDTypes.REDExtensionToCacheType(extension);
+
+                            filename = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                            ? Path.Combine("DLC", cacheDir, "dlc", ActiveMod.Name, item.FullPath)
+                            : Path.Combine("Mod", cacheDir, item.FullPath));
+                        }
+                        // everything else goes into Bundle and Speech etc
+                        else
+                        {
+                            filename = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                            ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName.ToString(), "dlc", ActiveMod.Name, item.FullPath)
+                            : Path.Combine("Mod", archives.First().Value.Bundle.TypeName.ToString(), item.FullPath));
+                        }
                     }
+
+                    // more than one archive
                     if (archives.Count() > 1)
                     {
 
@@ -1240,12 +1260,21 @@ namespace WolvenKit
                             {
                                 File.Delete(filename);
                             }
-                            selectedBundle.Extract(new BundleFileExtractArgs(filename, MainController.Get().Configuration.UncookExtension));
+
+                            if (uncook)
+                            {
+                                uncookInner(filename);
+                            }
+                            else
+                            {
+                                selectedBundle.Extract(new BundleFileExtractArgs(filename, MainController.Get().Configuration.UncookExtension));
+                            }
                         }
                         catch { }
                         return skip;
                     }
 
+                    // Extract
                     try
                     {
                         Directory.CreateDirectory(Path.GetDirectoryName(filename));
@@ -1254,16 +1283,84 @@ namespace WolvenKit
                             File.Delete(filename);
                         }
 
-                        archives.FirstOrDefault().Value.Extract(new BundleFileExtractArgs(filename, MainController.Get().Configuration.UncookExtension));
+
+                        if (uncook)
+                        {
+                            uncookInner(filename);
+                        }
+                        else
+                        {
+                            archives.FirstOrDefault().Value.Extract(new BundleFileExtractArgs(filename, MainController.Get().Configuration.UncookExtension));
+                        }
                     }
                     catch (Exception ex)
                     {
                         AddOutput(ex.ToString(),Logtype.Error);
                     }
+
+
+
                     return skip;
                 }
             }
+
+
             return skip;
+
+
+            async void uncookInner(string filename)
+            {
+                // create temporary uncooked directory
+                string outdir = Path.Combine(Directory.GetParent(ActiveMod.FileDirectory).FullName, "tmp_uncook");
+                if (!Directory.Exists(outdir))
+                    Directory.CreateDirectory(outdir);
+                var di = new DirectoryInfo(outdir);
+
+                // try get uncook extension from settings
+                imageformat imgfmt = imageformat.tga;
+                try
+                {
+                    imgfmt = (imageformat)Enum.Parse(typeof(imageformat), MainController.Get().Configuration.UncookExtension.ToString());
+                }
+                catch (Exception)
+                {
+                }
+
+                string relativeParentDir = Path.GetDirectoryName(item.FullPath);
+
+                // uncook the folder
+                var wccuncook = new Wcc_lite.uncook()
+                {
+                    InputDirectory = Path.GetFullPath(MainController.Get().Configuration.GameRootDir),
+                    OutputDirectory = outdir,
+                    TargetDirectory = relativeParentDir,
+                    Imgfmt = imgfmt,
+                    UncookExtensions = Path.GetExtension(filename).TrimStart('.'),
+                };
+                await Task.Run(() => WccHelper.RunCommand(wccuncook));
+
+                // move uncooked file to modproj/uncooked
+                // and delete all other files
+                int uncookedFilesCount = 0;
+                var fis = di.GetFiles("*", SearchOption.AllDirectories);
+                foreach (var f in fis)
+                {
+                    if (f.Name == Path.GetFileName(item.FullPath))
+                    {
+                        uncookedFilesCount++;
+                        f.MoveTo(Path.Combine(filename));
+                    }
+                    else
+                        f.Delete();
+                }
+
+                // Logging
+                if (uncookedFilesCount > 0)
+                    Logger.LogString($"Uncooked {uncookedFilesCount} files.", Logtype.Success);
+                else
+                    Logger.LogString($"Uncooked {uncookedFilesCount} files. Wcc_lite cannae de it.", Logtype.Error);
+            }
+
         }
 
         /// <summary>
@@ -2120,7 +2217,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             System.Diagnostics.Process.Start("https://www.patreon.com/bePatron?u=5458437");
         }
 
-        private void Assetbrowser_FileAdd(object sender, Tuple<List<IWitcherArchive>, List<WitcherListViewItem>,bool> Details)
+        private void Assetbrowser_FileAdd(object sender, AddFileArgs Details)
         {
             
             if (Process.GetProcessesByName("Witcher3").Length != 0)
@@ -2176,17 +2273,17 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
             MainController.Get().ProjectStatus = "Ready";
             
         }
-        protected object WorkerAssetBrowserAddFiles(object sender, DoWorkEventArgs e)
+        protected async Task<object> WorkerAssetBrowserAddFiles(object sender, DoWorkEventArgs e)
         {
             object arg = e.Argument;
-            if (!(arg is Tuple<List<IWitcherArchive>, List<WitcherListViewItem>, bool>))
+            if (!(arg is AddFileArgs))
                 throw new NotImplementedException();
-            var Details = (Tuple<List<IWitcherArchive>, List<WitcherListViewItem>, bool>)arg;
+            var Details = (AddFileArgs)arg;
             BackgroundWorker bwAsync = sender as BackgroundWorker;
 
 
             var skipping = false;
-            var count = Details.Item2.Count;
+            var count = Details.SelectedPaths.Count;
             for (int i = 0; i < count; i++)
             {
                 if (bwAsync.CancellationPending || m_frmProgress.Cancel)
@@ -2196,8 +2293,8 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                     return false;
                 }
 
-                WitcherListViewItem item = Details.Item2[i];
-                skipping = AddToMod(item, skipping, Details.Item1, Details.Item3);
+                WitcherListViewItem item = Details.SelectedPaths[i];
+                skipping = await AddToMod(item, skipping, Details.Managers, Details.AddAsDLC, Details.Uncook);
 
 
                 int percentprogress = (int)((float)i / (float)count * 100.0);
@@ -2242,7 +2339,7 @@ _col - for simple stuff like boxes and spheres","Information about importing mod
                 reldir = match.Groups[2].Value;
 
             // create cooked mod Dir
-            var cookedModDir = Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName, reldir);
+            var cookedModDir = Path.Combine(ActiveMod.ModDirectory, EBundleType.Bundle.ToString(), reldir);
             if (!Directory.Exists(cookedModDir))
             {
                 Directory.CreateDirectory(cookedModDir);
@@ -2745,7 +2842,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 {
                     foreach (var f in of.FileNames)
                     {
-                        var newfilepath = Path.Combine(ActiveMod.ModDirectory, new SoundManager().TypeName, Path.GetFileName(f));
+                        var newfilepath = Path.Combine(ActiveMod.ModDirectory, EBundleType.SoundCache.ToString(), Path.GetFileName(f));
                         //Create the directory because it will crash if it doesn't exist.
                         Directory.CreateDirectory(Path.GetDirectoryName(newfilepath));
                         File.Copy(f, newfilepath, true);
@@ -2765,7 +2862,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 {
                     foreach (var f in of.FileNames)
                     {
-                        var newfilepath = Path.Combine(ActiveMod.DlcDirectory, new SoundManager().TypeName, "dlc", ActiveMod.Name, Path.GetFileName(f));
+                        var newfilepath = Path.Combine(ActiveMod.DlcDirectory, EBundleType.SoundCache.ToString(), "dlc", ActiveMod.Name, Path.GetFileName(f));
                         //Create the directory because it will crash if it doesn't exist.
                         Directory.CreateDirectory(Path.GetDirectoryName(newfilepath));
                         File.Copy(f, newfilepath, true);
@@ -2972,7 +3069,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 if (packsettings.PackBundles)
                 {
                     // cooking
-                    var taskCookCol = Task.Run(() => Cook(MainController.Get().CollisionManager.TypeName));
+                    var taskCookCol = Task.Run(() => Cook(EBundleType.CollisionCache));
                     await taskCookCol.ContinueWith(antecedent =>
                     {
                         //Logger.LogString($"Cooking Collision ended with status: {antecedent.Result}", Logtype.Important);
@@ -2981,7 +3078,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                     if (statusCookCol == 0)
                         Logger.LogString("Cooking collision failed. \n", Logtype.Error);
 
-                    var taskCookTex = Task.Run(() => Cook(MainController.Get().TextureManager.TypeName));
+                    var taskCookTex = Task.Run(() => Cook(EBundleType.TextureCache));
                     await taskCookTex.ContinueWith(antecedent =>
                     {
                         //Logger.LogString($"Cooking Textures ended with status: {antecedent.Result}", Logtype.Important);
@@ -3046,7 +3143,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 //Handle texture caching
                 if (packsettings.GenTexCache)
                 {
-                    var t = Task.Run(() => GenerateCache(MainController.Get().TextureManager.TypeName));
+                    var t = Task.Run(() => GenerateCache(EBundleType.TextureCache));
                     await t.ContinueWith(antecedent =>
                     {
                         statusTex = antecedent.Result;
@@ -3061,7 +3158,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 if (packsettings.Sound)
                 {
 
-                    var soundmoddir = Path.Combine(ActiveMod.ModDirectory, MainController.Get().SoundManager.TypeName);
+                    var soundmoddir = Path.Combine(ActiveMod.ModDirectory, EBundleType.SoundCache.ToString());
 
                     foreach (var bnk in Directory.GetFiles(soundmoddir, "*.bnk", SearchOption.AllDirectories))
                     {
@@ -3093,7 +3190,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                         AddOutput("Mod soundcache wasn't generated!\n", Logtype.Important);
                     }
 
-                    var sounddlcdir = Path.Combine(ActiveMod.DlcDirectory, MainController.Get().SoundManager.TypeName);
+                    var sounddlcdir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.SoundCache.ToString());
 
                     //Create dlc soundspc.cache
                     if (Directory.Exists(sounddlcdir) && new DirectoryInfo(sounddlcdir)
@@ -3222,8 +3319,8 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
         {
             var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
             var dlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
-            var modDir = Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName);
-            var dlcDir = Path.Combine(ActiveMod.DlcDirectory, new Bundle().TypeName);
+            var modDir = Path.Combine(ActiveMod.ModDirectory, EBundleType.Bundle.ToString());
+            var dlcDir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.Bundle.ToString());
             int finished = 1;
 
             finished *= await Task.Run(() => PackBundleInternal(modDir, modpackDir));
@@ -3266,8 +3363,8 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
         {
             var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
             var dlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
-            var modDir = Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName);
-            var dlcDir = Path.Combine(ActiveMod.DlcDirectory, new Bundle().TypeName);
+            var modDir = Path.Combine(ActiveMod.ModDirectory, EBundleType.Bundle.ToString());
+            var dlcDir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.Bundle.ToString());
             int finished = 1;
 
             finished *= await Task.Run(() => CreateMetaDataInternal(modDir, modpackDir));
@@ -3309,17 +3406,17 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             }
         }
         
-        private async Task<int> Cook(string cachetype)    //IN: \TextureCache, OUT: \Bundle
+        private async Task<int> Cook(EBundleType cachetype)    //IN: \TextureCache, OUT: \Bundle
         {
             var cookedModDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\Mods\mod" + ActiveMod.Name + @"\content\");
             var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\dlc" + ActiveMod.Name + @"\content\");
             if (COOKINPLACE)
             {
-                cookedModDir = Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName);
-                cookedDLCDir = Path.Combine(ActiveMod.DlcDirectory, new Bundle().TypeName);
+                cookedModDir = Path.Combine(ActiveMod.ModDirectory, EBundleType.Bundle.ToString());
+                cookedDLCDir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.Bundle.ToString());
             }
-            var modcachedir = Path.Combine(ActiveMod.ModDirectory, cachetype);
-            var dlccachedir = Path.Combine(ActiveMod.DlcDirectory, cachetype);
+            var modcachedir = Path.Combine(ActiveMod.ModDirectory, cachetype.ToString());
+            var dlccachedir = Path.Combine(ActiveMod.DlcDirectory, cachetype.ToString());
 
             int finished = 1;
 
@@ -3380,31 +3477,31 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             }
         }
 
-        private async Task<int> GenerateCache(string cachetype) //IN: \CollisionCache, cooked\Mods\mod\cook.db, OUT: packed\Mods\mod
+        private async Task<int> GenerateCache(EBundleType cachetype) //IN: \CollisionCache, cooked\Mods\mod\cook.db, OUT: packed\Mods\mod
         {
             // cooked to \cooked
             var moddbfileDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\Mods\mod" + ActiveMod.Name + @"\content\");
             var dlcdbfileDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\dlc" + ActiveMod.Name + @"\content\");
             if (COOKINPLACE)
             {
-                moddbfileDir = Path.Combine(ActiveMod.ModDirectory, new Bundle().TypeName);
-                dlcdbfileDir = Path.Combine(ActiveMod.DlcDirectory, new Bundle().TypeName);
+                moddbfileDir = Path.Combine(ActiveMod.ModDirectory, EBundleType.Bundle.ToString());
+                dlcdbfileDir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.Bundle.ToString());
             }
 
             var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
             var dlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
-            var modcachedir = Path.Combine(ActiveMod.ModDirectory, cachetype);
-            var dlccachedir = Path.Combine(ActiveMod.DlcDirectory, cachetype);
+            var modcachedir = Path.Combine(ActiveMod.ModDirectory, cachetype.ToString());
+            var dlccachedir = Path.Combine(ActiveMod.DlcDirectory, cachetype.ToString());
 
             #region Buildcache settings
             cachebuilder cbuilder = cachebuilder.textures;
             string filename = "";
-            if (cachetype == MainController.Get().TextureManager.TypeName)
+            if (cachetype == EBundleType.TextureCache)
             {
                 cbuilder = cachebuilder.textures;
                 filename = "texture.cache";
             }
-            else if (cachetype == MainController.Get().CollisionManager.TypeName)
+            else if (cachetype == EBundleType.CollisionCache)
             {
                 cbuilder = cachebuilder.physics;
                 filename = "collision.cache";

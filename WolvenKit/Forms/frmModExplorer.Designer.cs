@@ -72,6 +72,7 @@ namespace WolvenKit
             this.modexplorerSlave = new System.IO.FileSystemWatcher();
             this.treeListView = new BrightIdeasSoftware.TreeListView();
             this.olvColumnName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.exportW2meshToFbxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenu.SuspendLayout();
             this.searchstrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.modexplorerSlave)).BeginInit();
@@ -102,7 +103,7 @@ namespace WolvenKit
             this.toolStripSeparator4,
             this.showFileInExplorerToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(197, 398);
+            this.contextMenu.Size = new System.Drawing.Size(197, 420);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             this.contextMenu.Opened += new System.EventHandler(this.contextMenu_Opened);
             // 
@@ -120,7 +121,8 @@ namespace WolvenKit
             this.exportW2animsjsonToolStripMenuItem,
             this.exportw2rigjsonToolStripMenuItem,
             this.exportW3facjsonToolStripMenuItem,
-            this.exportW3facposejsonToolStripMenuItem});
+            this.exportW3facposejsonToolStripMenuItem,
+            this.exportW2meshToFbxToolStripMenuItem});
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             this.exportToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
             this.exportToolStripMenuItem.Text = "Export";
@@ -414,6 +416,13 @@ namespace WolvenKit
             this.olvColumnName.FillsFreeSpace = true;
             this.olvColumnName.Text = "Name";
             // 
+            // exportW2meshToFbxToolStripMenuItem
+            // 
+            this.exportW2meshToFbxToolStripMenuItem.Name = "exportW2meshToFbxToolStripMenuItem";
+            this.exportW2meshToFbxToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.exportW2meshToFbxToolStripMenuItem.Text = "Export w2mesh to fbx";
+            this.exportW2meshToFbxToolStripMenuItem.Click += new System.EventHandler(this.exportW2meshToFbxToolStripMenuItem_Click);
+            // 
             // frmModExplorer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -481,5 +490,6 @@ namespace WolvenKit
         private ToolStripSeparator toolStripSeparator5;
         private BrightIdeasSoftware.TreeListView treeListView;
         private BrightIdeasSoftware.OLVColumn olvColumnName;
+        private ToolStripMenuItem exportW2meshToFbxToolStripMenuItem;
     }
 }

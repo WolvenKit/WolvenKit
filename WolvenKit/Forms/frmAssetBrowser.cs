@@ -9,6 +9,7 @@ using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Bundles;
 using WolvenKit.Cache;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit
 {
@@ -33,7 +34,7 @@ namespace WolvenKit
             }
         }
 
-        public event EventHandler<Tuple<List<IWitcherArchive>, List<WitcherListViewItem>, bool>> RequestFileAdd;
+        public event EventHandler<AddFileArgs> RequestFileAdd;
 
         public frmAssetBrowser(List<IWitcherArchive> archives)
         {
@@ -112,7 +113,7 @@ namespace WolvenKit
                     listItem.SubItems.Add(string.Format("{0}%",
                         (100 - (int)(lastItem.ZSize / (float)lastItem.Size * 100.0f))));
                     listItem.SubItems.Add(lastItem.CompressionType);
-                    listItem.SubItems.Add(lastItem.Bundle.TypeName);
+                    listItem.SubItems.Add(lastItem.Bundle.TypeName.ToString());
                     res.Add(listItem);
                 }
                 fileListView.Items.AddRange(res.ToArray());
@@ -304,7 +305,7 @@ namespace WolvenKit
         public void Search(string s, int bundleTypeIdx, int fileTypeIdx)
         {
             var extension = "";
-            var bundletype = "";
+            string bundletype = "";
             if (filetypeCB.SelectedIndex != -1)
                 extension = filetypeCB.Items[fileTypeIdx].ToString();
             if (extensionCB.SelectedIndex != -1)
@@ -324,7 +325,7 @@ namespace WolvenKit
                 listItem.SubItems.Add(file.Item2.Size.ToString());
                 listItem.SubItems.Add($"{(100 - (int) (file.Item2.ZSize/(float)file.Item2.Size*100.0f))}%");
                 listItem.SubItems.Add(file.Item2.CompressionType);
-                listItem.SubItems.Add(file.Item2.Bundle.TypeName);
+                listItem.SubItems.Add(file.Item2.Bundle.TypeName.ToString());
                 results.Add(listItem);
             }
             fileListView.Items.AddRange(results.ToArray());
@@ -344,8 +345,10 @@ namespace WolvenKit
             return bundfiles;
         }
 
-        public Tuple<WitcherListViewItem,IWitcherFile>[] SearchFiles(IWitcherFile[] files, string searchkeyword, string bundletype, string extension)
+        public Tuple<WitcherListViewItem,IWitcherFile>[] SearchFiles(IWitcherFile[] files, string searchkeyword, string bundletypestr, string extension)
         {
+            EBundleType bundletype = (EBundleType)Enum.Parse(typeof(EBundleType), bundletypestr);
+
             if (regexCheckbox.Checked)
             {
                 try
@@ -368,22 +371,22 @@ namespace WolvenKit
                     ? files.Where(item => item.Bundle.FileName.Contains(ActiveNode.Name)
                         && item.Name.ToUpper().Contains(searchkeyword.ToUpper())
                         && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")
-                        && (item.Bundle.TypeName == bundletype || bundletype.ToUpper() == "ANY"))
+                        && (item.Bundle.TypeName == bundletype || bundletype == EBundleType.ANY))
                     .Distinct().Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray()
                     : files.Where(item => item.Bundle.FileName.Contains(ActiveNode.Name)
                         && item.Name.Contains(searchkeyword)
                         && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")
-                        && (item.Bundle.TypeName == bundletype || bundletype.ToUpper() == "ANY"))
+                        && (item.Bundle.TypeName == bundletype || bundletype == EBundleType.ANY))
                     .Distinct().Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray();
             }
             return caseCheckBox.Checked
                 ? files.Where(item => item.Name.ToUpper().Contains(searchkeyword.ToUpper())
                     && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")
-                    && (item.Bundle.TypeName == bundletype || bundletype.ToUpper() == "ANY"))
+                    && (item.Bundle.TypeName == bundletype || bundletype == EBundleType.ANY))
                     .Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray()
                 : files.Where(item => item.Name.Contains(searchkeyword)
                     && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")
-                    && (item.Bundle.TypeName == bundletype || bundletype.ToUpper() == "ANY"))
+                    && (item.Bundle.TypeName == bundletype || bundletype == EBundleType.ANY))
                     .Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray();
         }
 
@@ -538,7 +541,7 @@ namespace WolvenKit
                     }
                 }
             }
-            RequestFileAdd.Invoke(this, new Tuple<List<IWitcherArchive>, List<WitcherListViewItem>,bool>(Managers, SelectedPaths,false));
+            RequestFileAdd.Invoke(this, new AddFileArgs(Managers, SelectedPaths, false, checkBoxUncook.Checked));
             pathlistview.Items.Clear();
         }
 
@@ -575,7 +578,7 @@ namespace WolvenKit
                     }
                 }
             }
-            RequestFileAdd.Invoke(this, new Tuple<List<IWitcherArchive>, List<WitcherListViewItem>,bool>(Managers, SelectedPaths,true));
+            RequestFileAdd.Invoke(this, new AddFileArgs(Managers, SelectedPaths, true, checkBoxUncook.Checked));
             pathlistview.Items.Clear();
         }
 

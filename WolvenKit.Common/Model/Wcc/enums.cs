@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common.Wcc
 {
@@ -34,16 +35,16 @@ namespace WolvenKit.Common.Wcc
             {
                 case ".apb": 
                 case ".nxs": 
-                    return "CollisionCache";
+                    return EBundleType.CollisionCache.ToString();
                 case ".png": 
                 case ".bmp": 
                 case ".jpg": 
                 case ".tga": 
                 case ".dds":
-                    return "TextureCache";
+                    return EBundleType.TextureCache.ToString();
                 case ".re": 
                 case ".fbx": 
-                    return "Uncooked";
+                    return EBundleType.Uncooked.ToString();
                 default: return "";
             }
         }
@@ -66,6 +67,23 @@ namespace WolvenKit.Common.Wcc
                     return new EMeshImports();
                 default:
                     throw new NotImplementedException();
+            }
+        }
+
+        public static string REDExtensionToCacheType(string ext)
+        {
+            ext = ext.ToLower();
+            switch (ext)
+            {
+                case ".redcloth":
+                case ".redapex":
+                    return EBundleType.CollisionCache.ToString();
+                case ".xbm":
+                case ".w2cube":
+                    return EBundleType.TextureCache.ToString();
+                case ".w2mesh":
+                    return EBundleType.Uncooked.ToString();
+                default: return EBundleType.Bundle.ToString();
             }
         }
     }

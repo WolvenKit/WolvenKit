@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.Cache
 {
@@ -25,7 +26,7 @@ namespace WolvenKit.Cache
         public Dictionary<string, TextureCache> Archives { get; set; }
         public WitcherTreeNode RootNode { get; set; }
         public List<IWitcherFile> FileList { get; set; }
-        public string TypeName { get { return new TextureCache().TypeName; } }
+        public EBundleType TypeName => EBundleType.TextureCache;
         public List<string> Extensions { get; set; }
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
 
@@ -154,7 +155,7 @@ namespace WolvenKit.Cache
         public void RebuildRootNode()
         {
             RootNode = new WitcherTreeNode();
-            RootNode.Name = new TextureCache().TypeName;
+            RootNode.Name = EBundleType.TextureCache.ToString();
 
             foreach (var item in Items)
             {

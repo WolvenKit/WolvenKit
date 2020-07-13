@@ -541,6 +541,7 @@
     <Compile Include="Services\IThemedContent.cs" />
     <Compile Include="UIConfiguration.cs" />
     <Compile Include="UIController.cs" />
+    <Compile Include="Utility\AddFileArgs.cs" />
     <Compile Include="Utility\LoadFileArgs.cs" />
     <Compile Include="WitcherListViewItem.cs" />
     <Compile Include="Utility\CommonUIFunctions.cs" />

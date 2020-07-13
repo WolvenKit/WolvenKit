@@ -218,7 +218,6 @@ namespace WolvenKit.Cache
                 {
                     File.Move(extractedPath, Path.ChangeExtension(extractedPath, extractext.ToString()));
                 }
-
             }
         }
 
