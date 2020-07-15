@@ -210,7 +210,7 @@ namespace WolvenKit.App.ViewModels
                 {
                     File = filepath,
                     Out = newpath,
-                    Depot = MainController.DepotDir,
+                    Depot = MainController.Get().Configuration.DepotPath,
                     texturegroup = file.TextureGroup
                 };
                 await Task.Run(() => MainController.Get().WccHelper.RunCommand(import));

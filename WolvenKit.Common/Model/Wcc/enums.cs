@@ -83,7 +83,7 @@ namespace WolvenKit.Common.Wcc
                     return EBundleType.TextureCache.ToString();
                 case ".w2mesh":
                     return EBundleType.Uncooked.ToString();
-                default: return EBundleType.Bundle.ToString();
+                default: /*return EBundleType.Bundle.ToString();*/ return EBundleType.Uncooked.ToString();
             }
         }
     }

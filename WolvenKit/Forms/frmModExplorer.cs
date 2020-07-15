@@ -17,9 +17,13 @@ namespace WolvenKit
     using Common;
     using System.Collections;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using System.Drawing;
+    using System.Threading.Tasks;
     using UsefulThings;
     using WolvenKit.App;
+    using WolvenKit.App.Commands;
+    using WolvenKit.App.ViewModels;
     using WolvenKit.Common.Extensions;
     using WolvenKit.Common.Model;
     using WolvenKit.CR2W;
@@ -28,18 +32,43 @@ namespace WolvenKit
 
     public partial class frmModExplorer : DockContent, IThemedContent
     {
+        private readonly ModExplorerViewModel vm;
+        private FileSystemWatcher modexplorerSlave;
+        private bool usecachedNodeList;
 
         public frmModExplorer(ILoggerService logger)
         {
+
+
+            // initialize Viewmodel
+            vm = MockKernel.Get().GetModExplorerModel();
+            vm.PropertyChanged += ViewModel_PropertyChanged;
+            vm.UpdateMonitoringRequest += (sender, e) => this.ViewModel_UpdateMonitoringRequest(e);
+
             InitializeComponent();
-            
-            LastChange = DateTime.Now;
             ApplyCustomTheme();
 
-            Logger = logger;
 
+            modexplorerSlave = new System.IO.FileSystemWatcher();
+            if (ActiveMod != null)
+            {
+                modexplorerSlave.Path = ActiveMod.FileDirectory;
+                this.modexplorerSlave.NotifyFilter = NotifyFilters.LastAccess
+                                     | NotifyFilters.LastWrite
+                                     | NotifyFilters.FileName
+                                     | NotifyFilters.DirectoryName;
+                this.modexplorerSlave.IncludeSubdirectories = true;
+                this.modexplorerSlave.SynchronizingObject = this;
+                this.modexplorerSlave.Created += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
+                this.modexplorerSlave.Deleted += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
+                this.modexplorerSlave.Renamed += new System.IO.RenamedEventHandler(this.FileChanges_Detected);
+
+                this.modexplorerSlave.EnableRaisingEvents = true;
+            }
+
+            // Init ObjectListView
             this.treeListView.CanExpandGetter = delegate (object x) {
-                return (x is DirectoryInfo) && IsTreeview && (x as DirectoryInfo).HasFilesOrFolders();
+                return (x is DirectoryInfo) && vm.IsTreeview && (x as DirectoryInfo).HasFilesOrFolders();
             };
             this.treeListView.ChildrenGetter = delegate (object x) {
                 DirectoryInfo dir = (DirectoryInfo)x;
@@ -59,13 +88,188 @@ namespace WolvenKit
                 return extension;
             };
 
-            // load saved collapsed dirs
-            ExpandedNodesDict = new Dictionary<string, List<string>>();
-            //if (ExpandedNodes == null)
-                RepopulateTreeView();
-            //else
-            //    UpdateTreeView();
+
+            // Update the TreeView
+            vm.RepopulateTreeView();
             treeListView.ExpandAll();
+        }
+
+        private void ViewModel_UpdateMonitoringRequest(UpdateMonitoringEventArgs e)
+        {
+            if (e.Monitor)
+                ResumeMonitoring();
+            else
+                PauseMonitoring();
+        }
+
+        #region Properties
+        public W3Mod ActiveMod
+        {
+            get => MainController.Get().ActiveMod;
+            set => MainController.Get().ActiveMod = value;
+        }
+
+        public event EventHandler<RequestFileArgs> RequestAssetBrowser;
+
+
+        public event EventHandler<RequestFileArgs> RequestFileOpen;
+        public event EventHandler<RequestFileArgs> RequestFileRename;
+
+        public event EventHandler<RequestFileArgs> RequestFastRender;
+        #endregion
+
+
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(vm.treenodes))
+            {
+                this.treeListView.SetObjects(vm.treenodes);
+                UpdateTreeView();
+            }
+        }
+        public void PauseMonitoring()
+        {
+            modexplorerSlave.EnableRaisingEvents = false;
+        }
+
+        public void ResumeMonitoring()
+        {
+            modexplorerSlave.EnableRaisingEvents = true;
+            usecachedNodeList = true;
+            UpdateTreeView();
+        }
+        public void StopMonitoringDirectory()
+        {
+            modexplorerSlave.Dispose();
+        }
+        private void FileChanges_Detected(object sender, FileSystemEventArgs e)
+        {
+            switch (e.ChangeType)
+            {
+                case WatcherChangeTypes.Created:
+                    {
+                        UpdateTreeView(e.FullPath);
+                        break;
+                    }
+                case WatcherChangeTypes.Deleted:
+                    {
+                        UpdateTreeView(e.FullPath);
+                        break;
+                    }
+                case WatcherChangeTypes.Renamed:
+                    {
+                        UpdateTreeView((e as RenamedEventArgs).OldFullPath);
+                        break;
+                    }
+                case WatcherChangeTypes.Changed:
+                case WatcherChangeTypes.All:
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+
+        #region Methods
+        public void ApplyCustomTheme()
+        {
+            var theme = UIController.Get().GetTheme();
+            UIController.Get().ToolStripExtender.SetStyle(searchstrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+
+            this.treeListView.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
+            this.treeListView.ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text;
+            HeaderFormatStyle hfs = new HeaderFormatStyle()
+            {
+                Normal = new HeaderStateStyle()
+                {
+                    BackColor = theme.ColorPalette.DockTarget.Background,
+                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
+                },
+                Hot = new HeaderStateStyle()
+                {
+                    BackColor = theme.ColorPalette.OverflowButtonHovered.Background,
+                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
+                },
+                Pressed = new HeaderStateStyle()
+                {
+                    BackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background,
+                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
+                }
+            };
+            this.treeListView.HeaderFormatStyle = hfs;
+            treeListView.UnfocusedSelectedBackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background;
+
+
+            this.searchBox.BackColor = theme.ColorPalette.ToolWindowCaptionButtonInactiveHovered.Background;
+        }
+
+        private void UpdateTreeView(params string[] nodesToUpdate)
+        {
+            if (MainController.Get().ActiveMod == null)
+                return;
+
+            // get branches to update
+            var rootNodesToUpdate = new List<FileSystemInfo>();
+            // if nodes are specified, update only these branches
+            if (nodesToUpdate.Length > 0)
+            {
+                foreach (var node in nodesToUpdate)
+                {
+                    var splits = node.Substring(MainController.Get().ActiveMod.FileDirectory.Length + 1).Split(Path.DirectorySeparatorChar);
+                    var rn = treeListView.TreeModel.RootObjects.OfType<FileSystemInfo>()
+                        .FirstOrDefault(_ => _.Name == splits.First());
+                    if (!rootNodesToUpdate.Contains(rn))
+                        rootNodesToUpdate.Add(rn);
+                }
+            }
+            // if nothing is specified, update all branches
+            else
+                rootNodesToUpdate = treeListView.TreeModel.RootObjects.OfType<FileSystemInfo>().ToList();
+
+
+            // rebuild the branches
+            foreach (var rootNode in rootNodesToUpdate)
+            {
+                if (rootNode == null)
+                    return;
+                // log expanded state
+                if (usecachedNodeList)
+                {
+                    usecachedNodeList = false;
+                }   
+                else
+                {
+                    var branch = treeListView.TreeModel.GetBranch(rootNode);
+                    var fbr = branch.Flatten();
+                    var expandedNodes = fbr.OfType<FileSystemInfo>()
+                        .Select(_ => _.GetParent().FullName)
+                        .Where(_ => _ != rootNode.FullName)
+                        .Distinct()
+                        .ToList();
+
+                    if (vm.ExpandedNodesDict.ContainsKey(rootNode.Name))
+                        vm.ExpandedNodesDict[rootNode.Name] = expandedNodes;
+                    else
+                        vm.ExpandedNodesDict.Add(rootNode.Name, expandedNodes);
+                }
+                
+
+                treeListView.RefreshObject(rootNode);
+
+                // rebuild branch
+                foreach (string fullpath in vm.ExpandedNodesDict[rootNode.Name])
+                {
+                    var count = treeListView.TreeModel.GetObjectCount();
+                    for (int i = 0; i < count; i++)
+                    {
+                        var nthobj = treeListView.TreeModel.GetNthObject(i);
+                        if ((nthobj as FileSystemInfo).FullName == fullpath)
+                        {
+                            treeListView.Expand(nthobj);
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         private const string openDirImageKey = "<ODIR>";
@@ -118,7 +322,6 @@ namespace WolvenKit
 
             }
         }
-
         private string GetFileExtension(FileSystemInfo node)
         {
             if (node.IsDirectory())
@@ -132,298 +335,54 @@ namespace WolvenKit
                 return (node as FileInfo).Extension;
         }
 
-        public W3Mod ActiveMod
-        {
-            get => MainController.Get().ActiveMod;
-            set => MainController.Get().ActiveMod = value;
-        }
-
-        public event EventHandler<RequestFileArgs> RequestFileOpen;
-        public event EventHandler<RequestFileArgs> RequestFileDelete;
-        public event EventHandler<RequestFileArgs> RequestAssetBrowser;
-        public event EventHandler<RequestFileArgs> RequestFileRename;
-        public event EventHandler<RequestFileArgs> RequestFileCook;
-        public event EventHandler<RequestFileArgs> RequestFileDumpfile;
-        public event EventHandler<RequestFileArgs> RequestFastRender;
-
-        public bool IsTreeview { get; set; } = true;
-        private ObservableCollection<FileSystemInfo> treenodes = new ObservableCollection<FileSystemInfo>();
-        public Dictionary<string, List<string>> ExpandedNodesDict { get; set; }
-
-        //private List<ModExplorerNode> treenodes = new List<ModExplorerNode>();
-        public static DateTime LastChange;
-        public static TimeSpan mindiff = TimeSpan.FromMilliseconds(500);
-        private readonly ILoggerService Logger;
-
-
-
-        public void PauseMonitoring()
-        {
-            modexplorerSlave.EnableRaisingEvents = false;
-        }
-
-        public void ResumeMonitoring()
-        {
-            modexplorerSlave.EnableRaisingEvents = true;
-            usecachedNodeList = true;
-            UpdateTreeView();
-        }
-
-        #region Methods
-        public void ApplyCustomTheme()
-        {
-            var theme = UIController.Get().GetTheme();
-            UIController.Get().ToolStripExtender.SetStyle(searchstrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
-
-            this.treeListView.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
-            this.treeListView.ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text;
-            HeaderFormatStyle hfs = new HeaderFormatStyle()
-            {
-                Normal = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.DockTarget.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                },
-                Hot = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.OverflowButtonHovered.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                },
-                Pressed = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                }
-            };
-            this.treeListView.HeaderFormatStyle = hfs;
-            treeListView.UnfocusedSelectedBackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background;
-
-
-            this.searchBox.BackColor = theme.ColorPalette.ToolWindowCaptionButtonInactiveHovered.Background;
-        }
-
-        private void RepopulateTreeView()
-        {
-            if (ActiveMod == null)
-                return;
-            var di = new DirectoryInfo(ActiveMod.FileDirectory);
-
-            if (IsTreeview)
-            {
-                treenodes = new ObservableCollection<FileSystemInfo>(di.GetFileSystemInfos("*", SearchOption.TopDirectoryOnly)
-                    .Where(_ => _.Extension != ".bat")
-                    .ToList());
-                treeListView.SetObjects(treenodes);
-                UpdateTreeView();
-            }
-            else
-            {
-                treenodes = new ObservableCollection<FileSystemInfo>(di.GetFiles("*", SearchOption.AllDirectories)
-                    .Where(_ => _.Extension != ".bat")
-                    .ToList());
-                treeListView.SetObjects(treenodes);
-            }
-        }
-
-        bool usecachedNodeList;
-        private void UpdateTreeView(params string[] nodesToUpdate)
-        {
-            if (ActiveMod == null)
-                return;
-
-            // get branches to update
-            var rootNodesToUpdate = new List<FileSystemInfo>();
-            // if nodes are specified, update only these branches
-            if (nodesToUpdate.Length > 0)
-            {
-                foreach (var node in nodesToUpdate)
-                {
-                    var splits = node.Substring(ActiveMod.FileDirectory.Length + 1).Split(Path.DirectorySeparatorChar);
-                    var rn = treeListView.TreeModel.RootObjects.OfType<FileSystemInfo>()
-                        .FirstOrDefault(_ => _.Name == splits.First());
-                    if (!rootNodesToUpdate.Contains(rn))
-                        rootNodesToUpdate.Add(rn);
-                }
-            }
-            // if nothing is specified, update all branches
-            else
-                rootNodesToUpdate = treeListView.TreeModel.RootObjects.OfType<FileSystemInfo>().ToList();
-
-
-            // rebuild the branches
-            foreach (var rootNode in rootNodesToUpdate)
-            {
-                if (rootNode == null)
-                    return;
-                // log expanded state
-                if (usecachedNodeList)
-                {
-                    usecachedNodeList = false;
-                }   
-                else
-                {
-                    var branch = treeListView.TreeModel.GetBranch(rootNode);
-                    var fbr = branch.Flatten();
-                    var expandedNodes = fbr.OfType<FileSystemInfo>()
-                        .Select(_ => _.GetParent().FullName)
-                        .Where(_ => _ != rootNode.FullName)
-                        .Distinct()
-                        .ToList();
-
-                    if (ExpandedNodesDict.ContainsKey(rootNode.Name))
-                        ExpandedNodesDict[rootNode.Name] = expandedNodes;
-                    else
-                        ExpandedNodesDict.Add(rootNode.Name, expandedNodes);
-                }
-                
-
-                treeListView.RefreshObject(rootNode);
-
-                // rebuild branch
-                foreach (string fullpath in ExpandedNodesDict[rootNode.Name])
-                {
-                    var count = treeListView.TreeModel.GetObjectCount();
-                    for (int i = 0; i < count; i++)
-                    {
-                        var nthobj = treeListView.TreeModel.GetNthObject(i);
-                        if ((nthobj as FileSystemInfo).FullName == fullpath)
-                        {
-                            treeListView.Expand(nthobj);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-
-        public static IEnumerable<string> FallbackPaths(string path)
-        {
-            yield return path;
-
-            var dir = Path.GetDirectoryName(path);
-            var file = Path.GetFileNameWithoutExtension(path);
-            var ext = Path.GetExtension(path);
-
-            yield return Path.Combine(dir, file + " - Copy" + ext);
-            for (var i = 2; ; i++)
-            {
-                yield return Path.Combine(dir, file + " - Copy " + i + ext);
-            }
-        }
-        public static void SafeCopy(string src, string dest)
-        {
-            foreach (var path in FallbackPaths(dest).Where(path => !File.Exists(path)))
-            {
-                File.Copy(src, path);
-                break;
-            }
-        }
         #endregion
-
 
         #region Control Events
 
-        private void cookToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (treeListView.SelectedObject is FileSystemInfo selectedobject)
-            {
-                RequestFileCook?.Invoke(this, new RequestFileArgs { File = selectedobject.FullName });
-            }
-        }
+        private void ExpandBTN_Click(object sender, EventArgs e) => treeListView.ExpandAll();
+        private void CollapseBTN_Click(object sender, EventArgs e) => treeListView.CollapseAll();
+        private void UpdatefilelistButtonClick(object sender, EventArgs e) => searchBox.Clear();
 
-        private void removeFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showhideButton_Click(object sender, EventArgs e)
         {
-            if (treeListView.SelectedObject is FileSystemInfo selectedobject)
+            vm.IsTreeview = !vm.IsTreeview;
+            vm.RepopulateTreeView();
+        }
+        private void modFileList_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F2 && treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
-                if (!(selectedobject.FullName == ActiveMod.ModDirectory 
-                    || selectedobject.FullName == ActiveMod.DlcDirectory
-                    || selectedobject.FullName == ActiveMod.RawDirectory
-                    || selectedobject.FullName == ActiveMod.RadishDirectory))
-                RequestFileDelete?.Invoke(this, new RequestFileArgs {File = selectedobject.FullName });
+                RequestFileRename?.Invoke(this, new RequestFileArgs { File = selectedobject.FullName });
             }
         }
-        private void addFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void treeListView_CellClick(object sender, CellClickEventArgs e)
         {
-            var dlg = new OpenFileDialog() { Title = "Add File to Project" };
-            dlg.InitialDirectory = MainController.Get().Configuration.InitialFileDirectory;
-            if (dlg.ShowDialog() == DialogResult.OK)
+            if (treeListView.SelectedObject is FileSystemInfo selectedobject && e.Item != null)
             {
-                MainController.Get().Configuration.InitialFileDirectory = Path.GetDirectoryName(dlg.FileName);
-                try
+                var node = (FileSystemInfo)e.Item.RowObject;
+
+                if (e.ClickCount == 1)
                 {
-                    FileInfo fi = new FileInfo(dlg.FileName);
-                    var newfilepath = Path.Combine(ActiveMod.FileDirectory, fi.Name);
-                    if (treeListView.SelectedObject is FileSystemInfo selectedobject)
-                    {
-                        newfilepath = Path.Combine(ActiveMod.FileDirectory, selectedobject.FullName);
-                        if (File.Exists(newfilepath))
-                            newfilepath = Path.GetDirectoryName(newfilepath);
-                        newfilepath = Path.Combine(newfilepath, fi.Name);
-                    }
-                    if (File.Exists(newfilepath))
-                        newfilepath = $"{newfilepath.TrimEnd(fi.Extension.ToCharArray())} - copy{fi.Extension}";
-                    fi.CopyTo(newfilepath, false);
-                }
-                catch (Exception)
-                {
+                    if (!selectedobject.IsDirectory())
+                        RequestFileOpen?.Invoke(this, new RequestFileArgs { File = node.FullName, Inspect = true });
                 }
             }
         }
 
-        private void openAssetBrowserToolStripMenuItem_Click(object sender, EventArgs e)
+        private void treeListView_ItemActivate(object sender, EventArgs e)
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
-                RequestAssetBrowser?.Invoke(this,new RequestFileArgs {File = GetExplorerString(selectedobject.FullName ?? "")});
-
-            string GetExplorerString(string s)
             {
-                s = s.Substring(ActiveMod.FileDirectory.Length + 1);
-                if (s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Length > 1)
-                {
-                    int skip = s.StartsWith("Raw") ? 2 : 1;
-
-                    var r = string
-                        .Join(Path.DirectorySeparatorChar.ToString(), new[] { "Root" }
-                        .Concat(s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Skip(skip)).ToArray());
-                    return r;
-                }
+                if (!selectedobject.IsDirectory())
+                    RequestFileOpen?.Invoke(this, new RequestFileArgs { File = selectedobject.FullName });
                 else
-                    return s;
+                    treeListView.ToggleExpansion(selectedobject);
             }
         }
 
-        private void renameToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (treeListView.SelectedObject is FileSystemInfo selectedobject)
-            {
-                RequestFileRename?.Invoke(this, new RequestFileArgs {File = selectedobject.FullName });
-            }
-        }
 
-        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (treeListView.SelectedObject is FileSystemInfo selectedobject)
-            {
-                Clipboard.SetText(selectedobject.FullName);
-            }
-        }
 
-        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (File.Exists(Clipboard.GetText()) && treeListView.SelectedObject is FileSystemInfo selectedobject)
-            {
-                FileAttributes attr = File.GetAttributes(selectedobject.FullName);
-                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
-                {
-                    SafeCopy(Clipboard.GetText(), selectedobject.FullName + "\\" + Path.GetFileName(Clipboard.GetText()));
-                }
-                else
-                {
-                    SafeCopy(Clipboard.GetText(), Path.GetDirectoryName(selectedobject.FullName) + "\\" + Path.GetFileName(Clipboard.GetText()));
-                }
-            }
-        }
+
 
         private void contextMenu_Opened(object sender, EventArgs e)
         {
@@ -443,13 +402,14 @@ namespace WolvenKit
                         || selectedobject.FullName == ActiveMod.RadishDirectory;
 
                 createW2animsToolStripMenuItem.Enabled = !isToplevelDir;
-                exportToolStripMenuItem.Enabled = !isToplevelDir && (ext == ".w3fac" && ext == ".w2cutscene" && ext == ".w2anims" && ext == ".w2rig" 
-                    && ext == ".w2mesh");
-                exportW2animsjsonToolStripMenuItem.Visible = ext == ".w2anims";
-                exportW2cutscenejsonToolStripMenuItem.Visible = ext == ".w2cutscene";
-                exportw2rigjsonToolStripMenuItem.Visible = ext == ".w2rig";
-                exportW3facjsonToolStripMenuItem.Visible = ext == ".w3fac";
-                exportW2meshToFbxToolStripMenuItem.Visible = ext == ".w2mesh";
+                exportToolStripMenuItem.Enabled = !isToplevelDir && (ext == "w3fac" || ext == "w2cutscene" || ext == "w2anims" || ext == "w2rig"
+                    || (ext == "w2mesh" && selectedobject.FullName.Contains($"Mod\\Uncooked")));
+
+                exportW2animsjsonToolStripMenuItem.Visible = ext == "w2anims";
+                exportW2cutscenejsonToolStripMenuItem.Visible = ext == "w2cutscene";
+                exportw2rigjsonToolStripMenuItem.Visible = ext == "w2rig";
+                exportW3facjsonToolStripMenuItem.Visible = ext == "w3fac";
+                exportW2meshToFbxToolStripMenuItem.Visible = ext == "w2mesh" && selectedobject.FullName.Contains($"Mod\\Uncooked");
 
                 removeFileToolStripMenuItem.Enabled = !isToplevelDir;
                 renameToolStripMenuItem.Enabled = !isToplevelDir;
@@ -464,25 +424,26 @@ namespace WolvenKit
             }
 
             showFileInExplorerToolStripMenuItem.Enabled = treeListView.SelectedObject != null;
-            dumpXMLToolStripMenuItem.Enabled = treeListView.SelectedObject != null && ext != "xml" && ext != "csv" && ext != "ws" && ext != "";
-            dumpChunksToXMLToolStripMenuItem.Enabled = treeListView.SelectedObject != null && ext != "xml" && ext != "csv" && ext != "ws" && ext != "";
+            
 
         }
 
-        private void showhideButton_Click(object sender, EventArgs e)
+        private void contextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            IsTreeview = !IsTreeview;
-            RepopulateTreeView();
-        }
-
-        private void UpdatefilelistButtonClick(object sender, EventArgs e)
-        {
-            searchBox.Clear();
+            if (treeListView.SelectedObject is FileSystemInfo selectedobject)
+            {
+                exportw2rigjsonToolStripMenuItem.Visible = Path.GetExtension(selectedobject.Name) == ".w2rig";
+                exportW2animsjsonToolStripMenuItem.Visible = Path.GetExtension(selectedobject.Name) == ".w2anims";
+                exportW2cutscenejsonToolStripMenuItem.Visible = Path.GetExtension(selectedobject.Name) == ".w2cutscene";
+                exportW3facjsonToolStripMenuItem.Visible = Path.GetExtension(selectedobject.Name) == ".w3fac";
+                exportW3facposejsonToolStripMenuItem.Visible = Path.GetExtension(selectedobject.Name) == ".w3fac";
+                fastRenderToolStripMenuItem.Enabled = Path.GetExtension(selectedobject.Name) == ".w2mesh";
+            }
         }
 
         private void searchBox_TextChanged(object sender, EventArgs e)
         {
-            if(ActiveMod == null)
+            if (ActiveMod == null)
                 return;
 
             if (!string.IsNullOrEmpty(searchBox.Text))
@@ -491,46 +452,68 @@ namespace WolvenKit
                 treeListView.ModelFilter = null;
         }
 
-        private void FileChanges_Detected(object sender, FileSystemEventArgs e)
+        private void treeListView_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (e.ChangeType)
+            var s = treeListView.SelectedObjects.Cast<FileSystemInfo>().ToList();
+            vm.SelectedItems = s;
+        }
+
+
+        #endregion
+
+        #region Context Menu
+        private void openAssetBrowserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
-                case WatcherChangeTypes.Created:
+                RequestAssetBrowser(this, new RequestFileArgs { File = GetExplorerString(selectedobject.FullName ?? "") });
+            }
+
+            string GetExplorerString(string s)
+            {
+                s = s.Substring(ActiveMod.FileDirectory.Length + 1);
+                if (s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Length > 1)
+                {
+                    int skip = s.StartsWith("Raw") ? 2 : 1;
+                    if (s.StartsWith("Mod\\Uncooked"))
                     {
-                        UpdateTreeView(e.FullPath);
-                        break;
+                        s = s.Substring("Mod\\Uncooked".Length);
+                        s = $"Mod\\Bundle{s}";
                     }
-                case WatcherChangeTypes.Deleted:
-                    {
-                        UpdateTreeView(e.FullPath);
-                        break;
-                    }
-                case WatcherChangeTypes.Renamed:
-                    {
-                        UpdateTreeView((e as RenamedEventArgs).OldFullPath);
-                        break;
-                    }
-                case WatcherChangeTypes.Changed:
-                case WatcherChangeTypes.All:
-                default:
-                    throw new NotImplementedException();
+
+                    var r = string
+                        .Join(Path.DirectorySeparatorChar.ToString(), new[] { "Root" }
+                        .Concat(s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Skip(skip)).ToArray());
+                    return r;
+                }
+                else
+                    return s;
             }
         }
 
-
-        private void frmModExplorer_Shown(object sender, EventArgs e)
+        private void renameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(ActiveMod != null)
-                modexplorerSlave.Path = ActiveMod.FileDirectory;
-        }
-
-        private void modFileList_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.F2 && treeListView.SelectedObject is FileSystemInfo selectedobject)
+            if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
                 RequestFileRename?.Invoke(this, new RequestFileArgs { File = selectedobject.FullName });
             }
         }
+
+        private void removeFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show(
+                     "Are you sure you want to permanently delete this?", "Confirmation", MessageBoxButtons.OKCancel
+                 ) == DialogResult.OK)
+            {
+                vm.DeleteFilesCommand.SafeExecute();
+            }
+        }
+
+        private void cookToolStripMenuItem_Click(object sender, EventArgs e) => vm.CookCommand.SafeExecute();
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e) => vm.CopyFileCommand.SafeExecute();
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e) => vm.PasteFileCommand.SafeExecute();
 
         private void showFileInExplorerToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -538,110 +521,6 @@ namespace WolvenKit
             {
                 Commonfunctions.ShowFileInExplorer(selectedobject.FullName);
             }
-        }
-
-        private void dumpXMLToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (treeListView.SelectedObject is FileSystemInfo selectedobject)
-            {
-                DumpXML(selectedobject.FullName);
-            }
-
-            void DumpXML(string filepath)
-            {
-                try
-                {
-                    string fileName = $"{filepath}.h.xml";
-                    using (var writer = new FileStream(fileName, FileMode.Create))
-                    using (var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read))
-                    using (var reader = new BinaryReader(fs))
-                    {
-                        var File = new CR2W.CR2WFile(reader);
-                        File.SerializeToXml(writer);
-                    }
-                    Logger.LogString("Dumping XML successful.", Logtype.Success);
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogString("Dumping XML failed.", Logtype.Error);
-                }
-            }
-        }
-
-        private void dumpChunksToXMLToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (treeListView.SelectedObject is FileSystemInfo selectedobject)
-            {
-                SaveFileDialog sFileDialog = new SaveFileDialog
-                {
-                    Filter = "XML File|*.xml",
-                    Title = "Save XML File",
-                    InitialDirectory = selectedobject.FullName,
-                    OverwritePrompt = true,
-                    FileName = selectedobject.FullName + ".chunk.xml"
-                };
-                
-                DialogResult result = sFileDialog.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    FileStream writer = new FileStream(sFileDialog.FileName, FileMode.Create);
-                    DumpChunkXML(writer);
-                }
-            }
-
-            void DumpChunkXML(FileStream writer)
-            {
-                try
-                {
-                    
-                    string filePath = selectedobject.FullName;
-                    string fileName = writer.Name;
-
-                    using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-                    using (var reader = new BinaryReader(fs))
-                    {
-                        var File = new CR2W.CR2WFile(reader);
-                        File.FileName = selectedobject.FullName;
-                        File.SerializeChunksToXml(writer);
-
-                        writer.Flush();
-                        writer.Close();
-                    }
-
-                    //vl: ugly way to suppress ugly xmlns
-                    string text = "";
-                    using (StreamReader streamReader = File.OpenText(fileName)) //vl: TODO: what about encoding??
-                    {
-                        text = streamReader.ReadToEnd();
-                        text = text.Replace(" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
-                    }
-                    File.WriteAllText(fileName, text);
-
-                    Logger.LogString("Dumping chunks XML successful.", Logtype.Success);
-                    
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogString(ex.Message, Logtype.Error);
-                    Logger.LogString(ex.StackTrace, Logtype.Error);
-                    Logger.LogString("Dumping chunks XML failed.", Logtype.Error);
-                }
-            }
-        }
-
-        private void ExpandBTN_Click(object sender, EventArgs e)
-        {
-            treeListView.ExpandAll();
-        }
-
-        private void CollapseBTN_Click(object sender, EventArgs e)
-        {
-            treeListView.CollapseAll();
-        }
-
-        public void StopMonitoringDirectory()
-        {
-            modexplorerSlave.Dispose();
         }
 
         private void copyRelativePathToolStripMenuItem_Click(object sender, EventArgs e)
@@ -685,6 +564,7 @@ namespace WolvenKit
             }
         }
 
+
         private void exportw2rigjsonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
@@ -713,7 +593,6 @@ namespace WolvenKit
                 }
             }   
         }
-
         private void exportW2animsjsonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
@@ -723,7 +602,6 @@ namespace WolvenKit
                 settings.ShowDialog();
             }
         }
-
         private void exportW2cutscenejsonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
@@ -733,7 +611,6 @@ namespace WolvenKit
                 settings.ShowDialog();
             }
         }
-
         private void exportW3facjsonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             exportw2rigjsonToolStripMenuItem_Click(sender, e);
@@ -742,20 +619,6 @@ namespace WolvenKit
         {
 
         }
-
-        private void contextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (treeListView.SelectedObject is FileSystemInfo selectedobject)
-            {
-                exportw2rigjsonToolStripMenuItem.Visible = Path.GetExtension(selectedobject.Name) == ".w2rig";
-                exportW2animsjsonToolStripMenuItem.Visible = Path.GetExtension(selectedobject.Name) == ".w2anims";
-                exportW2cutscenejsonToolStripMenuItem.Visible = Path.GetExtension(selectedobject.Name) == ".w2cutscene";
-                exportW3facjsonToolStripMenuItem.Visible = Path.GetExtension(selectedobject.Name) == ".w3fac";
-                exportW3facposejsonToolStripMenuItem.Visible = Path.GetExtension(selectedobject.Name) == ".w3fac";
-                fastRenderToolStripMenuItem.Enabled = Path.GetExtension(selectedobject.Name) == ".w2mesh";
-            }
-        }
-
         private void createW2animsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
@@ -772,10 +635,10 @@ namespace WolvenKit
                 var files = Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories).ToList();
                 var folderName = Path.GetFileName(fullpath);
                 ConvertAnimation anim = new ConvertAnimation();
-                if (File.Exists(fullpath+".w2anims"))
+                if (File.Exists(fullpath + ".w2anims"))
                 {
                     if (MessageBox.Show(
-                         folderName + ".w2anims already exists. This file will be overwritten. Are you sure you want to permanently overwrite "+ folderName +" w2anims?"
+                         folderName + ".w2anims already exists. This file will be overwritten. Are you sure you want to permanently overwrite " + folderName + " w2anims?"
                          , "Confirmation", MessageBoxButtons.YesNo
                      ) != DialogResult.Yes)
                     {
@@ -793,14 +656,94 @@ namespace WolvenKit
                 }
             }
         }
-
-        private async void dumpWccliteXMLToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void exportW2meshToFbxToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
-                RequestFileDumpfile?.Invoke(this, new RequestFileArgs { File = selectedobject.FullName });
+                var fullpath = Path.Combine(ActiveMod.FileDirectory, selectedobject.FullName);
+                if (!File.Exists(fullpath) && !Directory.Exists(fullpath))
+                    return;
+                var filename = Path.GetFileName(selectedobject.FullName);
+
+                // check imports
+                List<CR2WImportWrapper> importslist = new List<CR2WImportWrapper>();
+                using (var fs = new FileStream(fullpath, FileMode.Open, FileAccess.Read))
+                using (var reader = new BinaryReader(fs))
+                {
+                    var cr2w = new CR2WFile();
+                    importslist = cr2w.ReadImports(reader);
+                }
+                foreach (CR2WImportWrapper import in importslist)
+                {
+                    var depotpath = Path.Combine(MainController.Get().Configuration.DepotPath, import.DepotPathStr);
+                    // if import is not in depot, uncook to depot
+                    if (!File.Exists(depotpath))
+                    {
+                        await vm.UncookFile(import.DepotPathStr, depotpath);
+                    }
+                }
+
+                // get export paths
+                string relpath = "";
+                string exportpath = "";
+                if (selectedobject.FullName.Contains("\\Mod\\Uncooked\\"))
+                {
+                    relpath = selectedobject.FullName.Substring(Path.Combine(ActiveMod.FileDirectory, "Mod", "Uncooked").Length + 1);
+                    exportpath = Path.Combine(ActiveMod.RawDirectory, "Mod", EBundleType.Uncooked.ToString(), relpath);
+                }
+                else if (selectedobject.FullName.Contains("\\DLC\\Uncooked\\"))
+                {
+                    relpath = selectedobject.FullName.Substring(Path.Combine(ActiveMod.FileDirectory, "DLC", "Uncooked").Length + 1);
+                    exportpath = Path.Combine(ActiveMod.RawDirectory, "DLC", EBundleType.Uncooked.ToString(), relpath);
+                }
+                exportpath = Path.ChangeExtension(exportpath, "fbx");
+
+                // copy the w2mesh and all imports to the depot if it doesn't already exist
+                var depotInfo = new FileInfo(Path.Combine(MainController.Get().Configuration.DepotPath, relpath));
+                var uncookedInfo = new FileInfo(fullpath);
+
+                if (!depotInfo.Exists)
+                {
+                    uncookedInfo.CopyTo(depotInfo.FullName);
+                }
+                else
+                {
+                    // check if the file has the same size
+                    if (depotInfo.Length != uncookedInfo.Length)
+                    {
+                        var res = MessageBox.Show("The file in your project has a different size than the file in the uncooked depot. " +
+                            "Would you like to replace the depotfile with the project file?", "WolvenKit",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question);
+                        if (res == DialogResult.Yes)
+                        {
+                            depotInfo.Delete();
+                            uncookedInfo.CopyTo(depotInfo.FullName);
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                }
+
+                // uncook with wcc_lite
+                if (!string.IsNullOrEmpty(relpath) && !string.IsNullOrEmpty(exportpath))
+                {
+                    // uncook the folder
+                    var export = new Wcc_lite.export()
+                    {
+                        File = relpath,
+                        Out = exportpath,
+                        Depot = MainController.Get().Configuration.DepotPath
+                    };
+                    await Task.Run(() => MainController.Get().WccHelper.RunCommand(export));
+                }
             }
         }
+        private async void dumpWccliteXMLToolStripMenuItem_Click(object sender, EventArgs e) => vm.DumpXMLCommand.SafeExecute();
+
+
         private void fastRenderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
@@ -808,52 +751,12 @@ namespace WolvenKit
                 RequestFastRender?.Invoke(this, new RequestFileArgs { File = selectedobject.FullName });
             }
         }
+
         #endregion
 
-        private void treeListView_CellClick(object sender, CellClickEventArgs e)
-        {
-            if (treeListView.SelectedObject is FileSystemInfo selectedobject && e.Item != null)
-            {
-                var node = (FileSystemInfo)e.Item.RowObject;
-
-                if (e.ClickCount == 1)
-                {
-                    if (!selectedobject.IsDirectory())
-                        RequestFileOpen?.Invoke(this, new RequestFileArgs { File = node.FullName, Inspect = true });
-                }
-            }
-        }
-
-        private void treeListView_CellRightClick(object sender, CellRightClickEventArgs e)
-        {
-
-        }
-
-        private void treeListView_Expanded(object sender, TreeBranchExpandedEventArgs e)
-        {
-        }
-
-        private void treeListView_Collapsed(object sender, TreeBranchCollapsedEventArgs e)
-        {
-        }
-
-        private void treeListView_ItemActivate(object sender, EventArgs e)
-        {
-            if (treeListView.SelectedObject is FileSystemInfo selectedobject)
-            {
-                if (!selectedobject.IsDirectory())
-                    RequestFileOpen?.Invoke(this, new RequestFileArgs { File = selectedobject.FullName });
-                else
-                    treeListView.ToggleExpansion(selectedobject);
-            }
-        }
-
-        private void exportW2meshToFbxToolStripMenuItem_Click(object sender, EventArgs e)
-        {
 
 
 
-
-        }
+        
     }
 }

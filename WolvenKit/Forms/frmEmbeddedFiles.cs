@@ -5,6 +5,8 @@ using WolvenKit.CR2W;
 using WolvenKit.Services;
 using System.Linq;
 using WolvenKit.App.Model;
+using System.Windows.Controls;
+using WolvenKit.App.ViewModels;
 
 namespace WolvenKit
 {
@@ -49,16 +51,17 @@ namespace WolvenKit
                 var doc = UIController.Get().LoadDocument("Embedded file", mem);
                 if (doc != null)
                 {
-                    doc.OnFileSaved += OnFileSaved;
-                    doc.SaveTarget = (CR2WEmbeddedWrapper) e.Model;
+                    var vm = doc.GetViewModel();
+                    vm.OnFileSaved += OnFileSaved;
+                    vm.SaveTarget = (CR2WEmbeddedWrapper) e.Model;
                 }
             }
         }
 
         private void OnFileSaved(object sender, FileSavedEventArgs e)
         {
-            var doc = (frmCR2WDocument) sender;
-            var editvar = (CR2WEmbeddedWrapper) doc.SaveTarget;
+            var vm = (DocumentViewModel) sender;
+            var editvar = (CR2WEmbeddedWrapper) vm.SaveTarget;
             editvar.Data = ((MemoryStream) e.Stream).ToArray().ToList();
         }
 

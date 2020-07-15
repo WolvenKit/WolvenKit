@@ -79,6 +79,7 @@ namespace WolvenKit
             this.limitCheckBox = new System.Windows.Forms.CheckBox();
             this.limitUpDown = new System.Windows.Forms.NumericUpDown();
             this.checkBoxUncook = new System.Windows.Forms.CheckBox();
+            this.checkBoxExport = new System.Windows.Forms.CheckBox();
             this.filebrowserMenuStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fileSplitContainer)).BeginInit();
@@ -310,7 +311,7 @@ namespace WolvenKit
             // button2
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(157, 3);
+            this.button2.Location = new System.Drawing.Point(158, 3);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(105, 23);
             this.button2.TabIndex = 17;
@@ -579,11 +580,22 @@ namespace WolvenKit
             this.checkBoxUncook.Text = "Uncook";
             this.checkBoxUncook.UseVisualStyleBackColor = true;
             // 
+            // checkBoxExport
+            // 
+            this.checkBoxExport.AutoSize = true;
+            this.checkBoxExport.Location = new System.Drawing.Point(384, 503);
+            this.checkBoxExport.Name = "checkBoxExport";
+            this.checkBoxExport.Size = new System.Drawing.Size(56, 17);
+            this.checkBoxExport.TabIndex = 34;
+            this.checkBoxExport.Text = "Export";
+            this.checkBoxExport.UseVisualStyleBackColor = true;
+            // 
             // frmAssetBrowser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(811, 525);
+            this.Controls.Add(this.checkBoxExport);
             this.Controls.Add(this.checkBoxUncook);
             this.Controls.Add(this.limitUpDown);
             this.Controls.Add(this.limitCheckBox);
@@ -674,5 +686,6 @@ namespace WolvenKit
         private CheckBox limitCheckBox;
         private NumericUpDown limitUpDown;
         private CheckBox checkBoxUncook;
+        private CheckBox checkBoxExport;
     }
 }

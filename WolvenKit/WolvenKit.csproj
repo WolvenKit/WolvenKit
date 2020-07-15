@@ -401,6 +401,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MockKernel.cs" />
     <Compile Include="Utility\DDSUtility.cs" />
     <Compile Include="discord.cs" />
     <Compile Include="Extensions\CustomFloatWindow.cs">

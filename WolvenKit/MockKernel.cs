@@ -24,16 +24,29 @@ namespace WolvenKit.App
             return mainController;
         }
 
-
-        #region Properties
+        // Singletons
+        private ViewModel MainVM { get; set; }
         private ViewModel RadishVM { get; set; }
         private ViewModel ImportVM { get; set; }
+        private ViewModel ModExplorertVM { get; set; }
+
+
+        public MainViewModel GetMainViewModel() => (MainViewModel)MainVM ?? new MainViewModel();
+        public RadishViewModel GetRadishViewModel() => (RadishViewModel)RadishVM ?? new RadishViewModel();
+        public ImportViewModel GetImportViewModel() => (ImportViewModel)ImportVM ?? new ImportViewModel();
+        public ModExplorerViewModel GetModExplorerModel() => (ModExplorerViewModel)ModExplorertVM ?? new ModExplorerViewModel();
+
+
+
 
         private Dictionary<string, ViewModel> DocumentViewModels { get; set; } = new Dictionary<string, ViewModel>();
 
-        #endregion
 
-        public ViewModel GetRadishVM() => RadishVM ?? new RadishViewModel();
-        public ViewModel GetImportViewModel() => ImportVM ?? new ImportViewModel();
+
+        
+
+
+
+
     }
 }

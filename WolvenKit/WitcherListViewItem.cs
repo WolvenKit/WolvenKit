@@ -13,7 +13,7 @@ namespace WolvenKit
     {
         public bool IsDirectory { get; set; }
         public WitcherTreeNode Node { get; set; }
-        public string FullPath { get; set; }
+        public string RelativePath { get; set; }
 
         public WitcherListViewItem() { }
 
@@ -22,15 +22,23 @@ namespace WolvenKit
             IsDirectory = false;
             Node = new WitcherTreeNode();
             Node.Name = Path.Combine("Root", wf.Bundle.TypeName.ToString(), Path.GetDirectoryName(wf.Name));
-            FullPath = wf.Name;
+            RelativePath = wf.Name;
             this.Text = wf.Name;
         }
 
-        public string ExplorerPath
+        public string AssetBrowserPath
         {
             get
             {
-                return Path.Combine(Node.FullPath, Path.GetFileName(FullPath));
+                if (Node != null)
+                {
+                    return Path.Combine(Node.FullPath, Path.GetFileName(RelativePath));
+                }
+                else
+                {
+                    return "";
+                }
+                
             }
         }
 
@@ -39,7 +47,7 @@ namespace WolvenKit
             var c = (WitcherListViewItem)this.MemberwiseClone();
             c.IsDirectory = IsDirectory;
             c.Node = Node;
-            c.FullPath = FullPath;
+            c.RelativePath = RelativePath;
             return c;
         }
     }

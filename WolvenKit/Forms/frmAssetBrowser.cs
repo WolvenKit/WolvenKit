@@ -104,7 +104,7 @@ namespace WolvenKit
                     var listItem = new WitcherListViewItem
                     {
                         Node = node,
-                        FullPath = lastItem.Name,
+                        RelativePath = lastItem.Name,
                         Text = item.Key,
                         IsDirectory = false,
                         ImageKey = GetImageKey(item.Key)
@@ -182,19 +182,19 @@ namespace WolvenKit
                     var cont = false;
                     foreach (WitcherListViewItem i in pathlistview.Items)
                     {
-                        if (i.Text == item.FullPath)
+                        if (i.Text == item.RelativePath)
                             cont = true;
                     }
                     if (!cont)
                     {
                         var tempnode = new WitcherListViewItem
                         {
-                            ImageKey = GetImageKey(item.FullPath),
-                            Text = item.FullPath,
-                            ToolTipText = item.FullPath,
+                            ImageKey = GetImageKey(item.RelativePath),
+                            Text = item.RelativePath,
+                            ToolTipText = item.RelativePath,
                             IsDirectory = item.IsDirectory,
                             Node = item.Node,
-                            FullPath = item.FullPath
+                            RelativePath = item.RelativePath
                         };
                         pathlistview.Items.Add(tempnode);
                     }
@@ -436,19 +436,19 @@ namespace WolvenKit
                         var cont = false;
                         foreach (WitcherListViewItem i in pathlistview.Items)
                         {
-                            if (i.Text == item.FullPath)
+                            if (i.Text == item.RelativePath)
                                 cont = true;
                         }
                         if (!cont)
                         {
                             var tempnode = new WitcherListViewItem
                             {
-                                ImageKey = GetImageKey(item.FullPath),
-                                Text = item.FullPath,
-                                ToolTipText = item.FullPath,
+                                ImageKey = GetImageKey(item.RelativePath),
+                                Text = item.RelativePath,
+                                ToolTipText = item.RelativePath,
                                 IsDirectory = item.IsDirectory,
                                 Node = item.Node,
-                                FullPath = item.FullPath
+                                RelativePath = item.RelativePath
                             };
                             pathlistview.Items.Add(tempnode);
                         }
@@ -487,12 +487,12 @@ namespace WolvenKit
                     {
                         var tempnode = new WitcherListViewItem
                         {
-                            ImageKey = GetImageKey(item.FullPath),
-                            Text = item.FullPath,
-                            ToolTipText = item.FullPath,
+                            ImageKey = GetImageKey(item.RelativePath),
+                            Text = item.RelativePath,
+                            ToolTipText = item.RelativePath,
                             IsDirectory = item.IsDirectory,
                             Node = item.Node,
-                            FullPath = item.FullPath
+                            RelativePath = item.RelativePath
                         };
                         pathlistview.Items.Add(tempnode);
                     }
@@ -521,19 +521,19 @@ namespace WolvenKit
                             var cont = false;
                             foreach (WitcherListViewItem i in pathlistview.Items)
                             {
-                                if (i.Text == item.FullPath)
+                                if (i.Text == item.RelativePath)
                                     cont = true;
                             }
                             if (!cont)
                             {
                                 var tempnode = new WitcherListViewItem
                                 {
-                                    ImageKey = GetImageKey(item.FullPath),
-                                    Text = item.FullPath,
-                                    ToolTipText = item.FullPath,
+                                    ImageKey = GetImageKey(item.RelativePath),
+                                    Text = item.RelativePath,
+                                    ToolTipText = item.RelativePath,
                                     IsDirectory = item.IsDirectory,
                                     Node = item.Node,
-                                    FullPath = item.FullPath
+                                    RelativePath = item.RelativePath
                                 };
                                 pathlistview.Items.Add(tempnode);
                             }
@@ -541,7 +541,7 @@ namespace WolvenKit
                     }
                 }
             }
-            RequestFileAdd.Invoke(this, new AddFileArgs(Managers, SelectedPaths, false, checkBoxUncook.Checked));
+            RequestFileAdd.Invoke(this, new AddFileArgs(Managers, SelectedPaths, false, checkBoxUncook.Checked, checkBoxExport.Checked));
             pathlistview.Items.Clear();
         }
 
@@ -558,19 +558,19 @@ namespace WolvenKit
                             var cont = false;
                             foreach (WitcherListViewItem i in pathlistview.Items)
                             {
-                                if (i.Text == item.FullPath)
+                                if (i.Text == item.RelativePath)
                                     cont = true;
                             }
                             if (!cont)
                             {
                                 var tempnode = new WitcherListViewItem
                                 {
-                                    ImageKey = GetImageKey(item.FullPath),
-                                    Text = item.FullPath,
-                                    ToolTipText = item.FullPath,
+                                    ImageKey = GetImageKey(item.RelativePath),
+                                    Text = item.RelativePath,
+                                    ToolTipText = item.RelativePath,
                                     IsDirectory = item.IsDirectory,
                                     Node = item.Node,
-                                    FullPath = item.FullPath
+                                    RelativePath = item.RelativePath
                                 };
                                 pathlistview.Items.Add(tempnode);
                             }
@@ -578,7 +578,7 @@ namespace WolvenKit
                     }
                 }
             }
-            RequestFileAdd.Invoke(this, new AddFileArgs(Managers, SelectedPaths, true, checkBoxUncook.Checked));
+            RequestFileAdd.Invoke(this, new AddFileArgs(Managers, SelectedPaths, true, checkBoxUncook.Checked, checkBoxExport.Checked));
             pathlistview.Items.Clear();
         }
 
@@ -589,7 +589,7 @@ namespace WolvenKit
                 var item = ((WitcherListViewItem) fileListView.SelectedItems[0]);
                 if (item?.IsDirectory == false)
                 {
-                    Clipboard.SetText(item.FullPath);
+                    Clipboard.SetText(item.RelativePath);
                 }
             }
         }
@@ -605,19 +605,19 @@ namespace WolvenKit
                         var cont = false;
                         foreach (WitcherListViewItem i in pathlistview.Items)
                         {
-                            if (i.Text == item.FullPath)
+                            if (i.Text == item.RelativePath)
                                 cont = true;
                         }
                         if (!cont)
                         {
                             var tempnode = new WitcherListViewItem
                             {
-                                ImageKey = GetImageKey(item.FullPath),
-                                Text = item.FullPath,
-                                ToolTipText = item.FullPath,
+                                ImageKey = GetImageKey(item.RelativePath),
+                                Text = item.RelativePath,
+                                ToolTipText = item.RelativePath,
                                 IsDirectory = item.IsDirectory,
                                 Node = item.Node,
-                                FullPath = item.FullPath
+                                RelativePath = item.RelativePath
                             };
                             pathlistview.Items.Add(tempnode);
                         }
@@ -653,7 +653,7 @@ namespace WolvenKit
                     {
                         var files = CollectFiles(item.Node);
                         //Remove duplicates.
-                        var distinctFiles = files.GroupBy(x => x.FullPath).Select(x => x.First()).ToArray();
+                        var distinctFiles = files.GroupBy(x => x.RelativePath).Select(x => x.First()).ToArray();
                         if (files.Length > 1000)
                             pathlistview.Items.AddRange(distinctFiles.Take(1000).ToArray());
                         else
