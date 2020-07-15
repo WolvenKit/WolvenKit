@@ -39,6 +39,7 @@ namespace WolvenKit
 
 
             checkBoxDisableWelcomeForm.Checked = config.IsWelcomeFormDisabled;
+            checkBoxOverflow.Checked = config.OverflowEnabled;
             
             comboBoxTheme.Items.AddRange(Enum.GetValues(typeof(EColorThemes)).Cast<object>().ToArray());
             comboBoxTheme.SelectedItem = UIController.Get().Configuration.ColorTheme;
@@ -117,6 +118,7 @@ namespace WolvenKit
             config.VoiceLanguage = txVoiceLanguage.Text;
             config.UncookExtension = (EUncookExtension)comboBoxExtension.SelectedItem;
             config.IsWelcomeFormDisabled = checkBoxDisableWelcomeForm.Checked;
+            config.OverflowEnabled = checkBoxOverflow.Checked;
 
 
             uiconfig.ColorTheme = (EColorThemes)comboBoxTheme.SelectedItem;

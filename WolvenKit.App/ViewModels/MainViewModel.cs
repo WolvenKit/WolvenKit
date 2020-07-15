@@ -261,6 +261,7 @@ namespace WolvenKit.App.ViewModels
             if (Directory.Exists(outdir))
                 Directory.Delete(outdir, true);
             Directory.CreateDirectory(outdir);
+            
             var di = new DirectoryInfo(outdir);
 
             // try get uncook extension from settings
@@ -288,6 +289,7 @@ namespace WolvenKit.App.ViewModels
 
             // move uncooked file
             int uncookedFilesCount = 0;
+            int addedFilesCount = 0;
             var fis = di.GetFiles("*", SearchOption.AllDirectories);
             foreach (var f in fis)
             {
@@ -300,16 +302,22 @@ namespace WolvenKit.App.ViewModels
                         {
                             File.Delete(newpath);
                         }
-                        f.MoveTo(newpath);
+                        f.CopyTo(newpath);
                     }
                     catch (Exception ex)
                     {
                         Logger.LogString($"Unable to move uncooked file to ModProject, perhaps a file of that name is cuurrently open in Wkit.", Logtype.Error);
                     }
                 }
-                // delete all other files
-                else
-                    f.Delete();
+                
+                // delete or move all other files to depot
+                if (MainController.Get().Configuration.OverflowEnabled)
+                {
+                    string frelativePath = f.FullName.Substring(outdir.Length + 1);
+                    string depotdir = MainController.Get().Configuration.DepotPath;
+                    f.CopyTo(Path.Combine(depotdir, frelativePath), true);
+                    addedFilesCount++;
+                }
             }
 
             // Logging
@@ -317,6 +325,7 @@ namespace WolvenKit.App.ViewModels
                 Logger.LogString($"Uncooked {uncookedFilesCount} files.", Logtype.Success);
             else
                 Logger.LogString($"Uncooked {uncookedFilesCount} files. Wcc_lite is unable to uncook this file.", Logtype.Error);
+            Logger.LogString($"Moved {addedFilesCount} to depot.", Logtype.Important);
         }
         #endregion
 

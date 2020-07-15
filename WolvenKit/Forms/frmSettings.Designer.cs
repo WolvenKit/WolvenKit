@@ -55,6 +55,7 @@ namespace WolvenKit
             this.btBrowseDepot = new System.Windows.Forms.Button();
             this.lblDepot = new System.Windows.Forms.Label();
             this.txDepot = new System.Windows.Forms.TextBox();
+            this.checkBoxOverflow = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // txExecutablePath
@@ -229,7 +230,7 @@ namespace WolvenKit
             // 
             this.comboBoxExtension.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxExtension.FormattingEnabled = true;
-            this.comboBoxExtension.Location = new System.Drawing.Point(180, 239);
+            this.comboBoxExtension.Location = new System.Drawing.Point(180, 242);
             this.comboBoxExtension.Name = "comboBoxExtension";
             this.comboBoxExtension.Size = new System.Drawing.Size(135, 21);
             this.comboBoxExtension.TabIndex = 18;
@@ -238,7 +239,7 @@ namespace WolvenKit
             // 
             this.labelExtension.AutoSize = true;
             this.labelExtension.Enabled = false;
-            this.labelExtension.Location = new System.Drawing.Point(29, 242);
+            this.labelExtension.Location = new System.Drawing.Point(29, 245);
             this.labelExtension.Name = "labelExtension";
             this.labelExtension.Size = new System.Drawing.Size(106, 13);
             this.labelExtension.TabIndex = 17;
@@ -247,7 +248,7 @@ namespace WolvenKit
             // checkBoxDisableWelcomeForm
             // 
             this.checkBoxDisableWelcomeForm.AutoSize = true;
-            this.checkBoxDisableWelcomeForm.Location = new System.Drawing.Point(32, 278);
+            this.checkBoxDisableWelcomeForm.Location = new System.Drawing.Point(342, 211);
             this.checkBoxDisableWelcomeForm.Name = "checkBoxDisableWelcomeForm";
             this.checkBoxDisableWelcomeForm.Size = new System.Drawing.Size(135, 17);
             this.checkBoxDisableWelcomeForm.TabIndex = 19;
@@ -283,6 +284,18 @@ namespace WolvenKit
             this.txDepot.Size = new System.Drawing.Size(441, 20);
             this.txDepot.TabIndex = 20;
             // 
+            // checkBoxOverflow
+            // 
+            this.checkBoxOverflow.AutoSize = true;
+            this.checkBoxOverflow.Checked = true;
+            this.checkBoxOverflow.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxOverflow.Location = new System.Drawing.Point(341, 244);
+            this.checkBoxOverflow.Name = "checkBoxOverflow";
+            this.checkBoxOverflow.Size = new System.Drawing.Size(174, 17);
+            this.checkBoxOverflow.TabIndex = 23;
+            this.checkBoxOverflow.Text = "Move Uncooked Files to Depot";
+            this.checkBoxOverflow.UseVisualStyleBackColor = true;
+            // 
             // frmSettings
             // 
             this.AcceptButton = this.btSave;
@@ -290,6 +303,7 @@ namespace WolvenKit
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
             this.ClientSize = new System.Drawing.Size(588, 343);
+            this.Controls.Add(this.checkBoxOverflow);
             this.Controls.Add(this.btBrowseDepot);
             this.Controls.Add(this.lblDepot);
             this.Controls.Add(this.txDepot);
@@ -346,5 +360,6 @@ namespace WolvenKit
         private Button btBrowseDepot;
         private Label lblDepot;
         private TextBox txDepot;
+        private CheckBox checkBoxOverflow;
     }
 }

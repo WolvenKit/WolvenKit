@@ -38,6 +38,7 @@ namespace WolvenKit.App
 
         public EUncookExtension UncookExtension { get; set; }
         public bool IsWelcomeFormDisabled { get; set; }
+        public bool OverflowEnabled { get; set; }
 
 
         [XmlIgnore]
