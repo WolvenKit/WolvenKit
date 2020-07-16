@@ -36,7 +36,13 @@ namespace WolvenKit.App.ViewModels
             PasteFileCommand = new RelayCommand(PasteFile, CanPasteFile);
             DumpXMLCommand = new RelayCommand(DumpXML, CanDumpXML);
             ExportMeshCommand = new RelayCommand(ExportMesh, CanExportMesh);
+<<<<<<< HEAD
             AddAllImportsCommand = new RelayCommand(AddAllImports, CanAddAllImports);
+=======
+
+
+            Command2 = new RelayCommand(cmd2, Cancmd2);
+>>>>>>> master
 
 
             treenodes = new BindingList<FileSystemInfo>();
@@ -101,7 +107,11 @@ namespace WolvenKit.App.ViewModels
         public ICommand CopyFileCommand { get; }
         public ICommand PasteFileCommand { get; }
         public ICommand DumpXMLCommand { get; }
+<<<<<<< HEAD
         public ICommand AddAllImportsCommand { get; }
+=======
+        public ICommand Command2 { get; }
+>>>>>>> master
         
         #endregion
 
@@ -177,10 +187,17 @@ namespace WolvenKit.App.ViewModels
             RequestFileDumpfile(this, new RequestFileArgs { File = SelectedItems.First().FullName });
         }
 
+<<<<<<< HEAD
         protected bool CanAddAllImports() => SelectedItems != null;
         protected async void AddAllImports()
         {
             await AddAllImportsToDepot(SelectedItems.First().FullName, true);
+=======
+        protected bool Cancmd2() => SelectedItems != null;
+        protected void cmd2()
+        {
+
+>>>>>>> master
         }
 
 
