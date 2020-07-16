@@ -57,7 +57,7 @@ namespace WolvenKit.Common.Wcc
         [CategoryAttribute("Optional"),
         DescriptionAttribute("Relative inner path to be extracted.")]
         //[Editor(typeof(PropertyGridFolderPicker), typeof(PropertyGridFolderPicker))]
-        [REDTags("Path", "In")]
+        [REDTags("In")]
         [REDName("targetdir")]
         public string TargetDirectory { get; set; }
 

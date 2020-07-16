@@ -52,6 +52,10 @@ namespace WolvenKit
             this.comboBoxExtension = new System.Windows.Forms.ComboBox();
             this.labelExtension = new System.Windows.Forms.Label();
             this.checkBoxDisableWelcomeForm = new System.Windows.Forms.CheckBox();
+            this.btBrowseDepot = new System.Windows.Forms.Button();
+            this.lblDepot = new System.Windows.Forms.Label();
+            this.txDepot = new System.Windows.Forms.TextBox();
+            this.checkBoxOverflow = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // txExecutablePath
@@ -88,7 +92,7 @@ namespace WolvenKit
             // 
             this.btSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btSave.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSave.Location = new System.Drawing.Point(483, 237);
+            this.btSave.Location = new System.Drawing.Point(483, 308);
             this.btSave.Name = "btSave";
             this.btSave.Size = new System.Drawing.Size(75, 23);
             this.btSave.TabIndex = 3;
@@ -100,7 +104,7 @@ namespace WolvenKit
             // 
             this.lblLanguage.AutoSize = true;
             this.lblLanguage.Enabled = false;
-            this.lblLanguage.Location = new System.Drawing.Point(19, 116);
+            this.lblLanguage.Location = new System.Drawing.Point(29, 149);
             this.lblLanguage.Name = "lblLanguage";
             this.lblLanguage.Size = new System.Drawing.Size(124, 13);
             this.lblLanguage.TabIndex = 5;
@@ -110,7 +114,7 @@ namespace WolvenKit
             // 
             this.lblVoiceLanguage.AutoSize = true;
             this.lblVoiceLanguage.Enabled = false;
-            this.lblVoiceLanguage.Location = new System.Drawing.Point(19, 142);
+            this.lblVoiceLanguage.Location = new System.Drawing.Point(29, 175);
             this.lblVoiceLanguage.Name = "lblVoiceLanguage";
             this.lblVoiceLanguage.Size = new System.Drawing.Size(140, 13);
             this.lblVoiceLanguage.TabIndex = 7;
@@ -150,7 +154,7 @@ namespace WolvenKit
             // 
             this.btCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btCancel.Location = new System.Drawing.Point(402, 237);
+            this.btCancel.Location = new System.Drawing.Point(402, 308);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(75, 23);
             this.btCancel.TabIndex = 11;
@@ -160,7 +164,7 @@ namespace WolvenKit
             // txTextLanguage
             // 
             this.txTextLanguage.Enabled = false;
-            this.txTextLanguage.Location = new System.Drawing.Point(170, 109);
+            this.txTextLanguage.Location = new System.Drawing.Point(180, 142);
             this.txTextLanguage.Name = "txTextLanguage";
             this.txTextLanguage.Size = new System.Drawing.Size(135, 20);
             this.txTextLanguage.TabIndex = 4;
@@ -168,7 +172,7 @@ namespace WolvenKit
             // txVoiceLanguage
             // 
             this.txVoiceLanguage.Enabled = false;
-            this.txVoiceLanguage.Location = new System.Drawing.Point(170, 139);
+            this.txVoiceLanguage.Location = new System.Drawing.Point(180, 172);
             this.txVoiceLanguage.Name = "txVoiceLanguage";
             this.txVoiceLanguage.Size = new System.Drawing.Size(135, 20);
             this.txVoiceLanguage.TabIndex = 6;
@@ -207,7 +211,7 @@ namespace WolvenKit
             // 
             this.labelTheme.AutoSize = true;
             this.labelTheme.Enabled = false;
-            this.labelTheme.Location = new System.Drawing.Point(19, 179);
+            this.labelTheme.Location = new System.Drawing.Point(29, 212);
             this.labelTheme.Name = "labelTheme";
             this.labelTheme.Size = new System.Drawing.Size(67, 13);
             this.labelTheme.TabIndex = 15;
@@ -217,7 +221,7 @@ namespace WolvenKit
             // 
             this.comboBoxTheme.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxTheme.FormattingEnabled = true;
-            this.comboBoxTheme.Location = new System.Drawing.Point(170, 176);
+            this.comboBoxTheme.Location = new System.Drawing.Point(180, 209);
             this.comboBoxTheme.Name = "comboBoxTheme";
             this.comboBoxTheme.Size = new System.Drawing.Size(135, 21);
             this.comboBoxTheme.TabIndex = 16;
@@ -226,7 +230,7 @@ namespace WolvenKit
             // 
             this.comboBoxExtension.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxExtension.FormattingEnabled = true;
-            this.comboBoxExtension.Location = new System.Drawing.Point(170, 206);
+            this.comboBoxExtension.Location = new System.Drawing.Point(180, 242);
             this.comboBoxExtension.Name = "comboBoxExtension";
             this.comboBoxExtension.Size = new System.Drawing.Size(135, 21);
             this.comboBoxExtension.TabIndex = 18;
@@ -235,7 +239,7 @@ namespace WolvenKit
             // 
             this.labelExtension.AutoSize = true;
             this.labelExtension.Enabled = false;
-            this.labelExtension.Location = new System.Drawing.Point(19, 209);
+            this.labelExtension.Location = new System.Drawing.Point(29, 245);
             this.labelExtension.Name = "labelExtension";
             this.labelExtension.Size = new System.Drawing.Size(106, 13);
             this.labelExtension.TabIndex = 17;
@@ -244,12 +248,53 @@ namespace WolvenKit
             // checkBoxDisableWelcomeForm
             // 
             this.checkBoxDisableWelcomeForm.AutoSize = true;
-            this.checkBoxDisableWelcomeForm.Location = new System.Drawing.Point(423, 111);
+            this.checkBoxDisableWelcomeForm.Location = new System.Drawing.Point(342, 211);
             this.checkBoxDisableWelcomeForm.Name = "checkBoxDisableWelcomeForm";
             this.checkBoxDisableWelcomeForm.Size = new System.Drawing.Size(135, 17);
             this.checkBoxDisableWelcomeForm.TabIndex = 19;
             this.checkBoxDisableWelcomeForm.Text = "Disable Welcome Form";
             this.checkBoxDisableWelcomeForm.UseVisualStyleBackColor = true;
+            // 
+            // btBrowseDepot
+            // 
+            this.btBrowseDepot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btBrowseDepot.Location = new System.Drawing.Point(480, 106);
+            this.btBrowseDepot.Name = "btBrowseDepot";
+            this.btBrowseDepot.Size = new System.Drawing.Size(75, 23);
+            this.btBrowseDepot.TabIndex = 22;
+            this.btBrowseDepot.Text = "Browse...";
+            this.btBrowseDepot.UseVisualStyleBackColor = true;
+            this.btBrowseDepot.Click += new System.EventHandler(this.btBrowseDepot_Click);
+            // 
+            // lblDepot
+            // 
+            this.lblDepot.AutoSize = true;
+            this.lblDepot.Location = new System.Drawing.Point(32, 90);
+            this.lblDepot.Name = "lblDepot";
+            this.lblDepot.Size = new System.Drawing.Size(117, 13);
+            this.lblDepot.TabIndex = 21;
+            this.lblDepot.Text = "Uncooked Depot Path:";
+            // 
+            // txDepot
+            // 
+            this.txDepot.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txDepot.Location = new System.Drawing.Point(32, 107);
+            this.txDepot.Name = "txDepot";
+            this.txDepot.Size = new System.Drawing.Size(441, 20);
+            this.txDepot.TabIndex = 20;
+            // 
+            // checkBoxOverflow
+            // 
+            this.checkBoxOverflow.AutoSize = true;
+            this.checkBoxOverflow.Checked = true;
+            this.checkBoxOverflow.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxOverflow.Location = new System.Drawing.Point(341, 244);
+            this.checkBoxOverflow.Name = "checkBoxOverflow";
+            this.checkBoxOverflow.Size = new System.Drawing.Size(174, 17);
+            this.checkBoxOverflow.TabIndex = 23;
+            this.checkBoxOverflow.Text = "Move Uncooked Files to Depot";
+            this.checkBoxOverflow.UseVisualStyleBackColor = true;
             // 
             // frmSettings
             // 
@@ -257,7 +302,11 @@ namespace WolvenKit
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
-            this.ClientSize = new System.Drawing.Size(588, 272);
+            this.ClientSize = new System.Drawing.Size(588, 343);
+            this.Controls.Add(this.checkBoxOverflow);
+            this.Controls.Add(this.btBrowseDepot);
+            this.Controls.Add(this.lblDepot);
+            this.Controls.Add(this.txDepot);
             this.Controls.Add(this.checkBoxDisableWelcomeForm);
             this.Controls.Add(this.comboBoxExtension);
             this.Controls.Add(this.labelExtension);
@@ -308,5 +357,9 @@ namespace WolvenKit
         private ComboBox comboBoxExtension;
         private Label labelExtension;
         private CheckBox checkBoxDisableWelcomeForm;
+        private Button btBrowseDepot;
+        private Label lblDepot;
+        private TextBox txDepot;
+        private CheckBox checkBoxOverflow;
     }
 }

@@ -26,16 +26,19 @@ namespace WolvenKit.App
         ///     Configuration values
         /// </summary>
         public string ExecutablePath { get; set; }
-        public string DepotHash { get; set; }
+        // public string DepotHash { get; set; } //deprecated
         public string TextLanguage { get; set; }
         public string VoiceLanguage { get; set; }
         public string WccLite { get; set; }
+        public string DepotPath { get; set; }
+
         public string InitialModDirectory { get; set; }
         public string InitialFileDirectory { get; set; }
         public string InitialExportDirectory { get; set; }
 
         public EUncookExtension UncookExtension { get; set; }
         public bool IsWelcomeFormDisabled { get; set; }
+        public bool OverflowEnabled { get; set; }
 
 
         [XmlIgnore]

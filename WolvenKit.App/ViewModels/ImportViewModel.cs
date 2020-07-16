@@ -30,6 +30,11 @@ namespace WolvenKit.App.ViewModels
 
             Importableobjects = new BindingList<ImportableFile>();
             Importableobjects.ListChanged += new ListChangedEventHandler(Importableobjects_ListChanged);
+
+            // on start use mod files
+            UseLocalResourcesCommand.SafeExecute();
+            // and auto-gen texture groups
+            TryGetTextureGroupsCommand.SafeExecute();
         }
 
         #region Fields
@@ -173,7 +178,7 @@ namespace WolvenKit.App.ViewModels
                 var relPath = file.GetRelativePath();
                 string importext = $".{file.ImportType:G}";
                 string rawext = $".{file.GetImportableType():G}";
-                var filepath = Path.Combine(importdepot.FullName, file.GetRelativePath());
+                var filepath = Path.Combine(importdepot.FullName, relPath);
                 string type = REDTypes.RawExtensionToCacheType(rawext);
 
                 // make new path
@@ -195,7 +200,6 @@ namespace WolvenKit.App.ViewModels
                 // new path with new extension
                 relPath = Path.ChangeExtension(relPath, importext);
 
-                // check if directory starts with TextureCache or CollisionCache
                 var newpath = "";
                 if (relPath.Substring(0, type.Length) == type)
                 {
@@ -210,7 +214,7 @@ namespace WolvenKit.App.ViewModels
                 {
                     File = filepath,
                     Out = newpath,
-                    Depot = MainController.DepotDir,
+                    Depot = MainController.Get().Configuration.DepotPath,
                     texturegroup = file.TextureGroup
                 };
                 await Task.Run(() => MainController.Get().WccHelper.RunCommand(import));

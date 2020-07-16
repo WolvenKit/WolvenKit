@@ -89,6 +89,9 @@ ipch/
 *.vspx
 *.sap
 
+# VTunes Profiler
+WolvenKit/VTune Profiler Results
+
 # TFS 2012 Local Workspace
 $tf/
 

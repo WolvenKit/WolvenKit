@@ -128,6 +128,34 @@ namespace WolvenKit.CR2W
         }
 
         #region Read
+        public List<CR2WImportWrapper> ReadImports(BinaryReader file)
+        {
+            m_stream = file.BaseStream;
+
+            // read file header
+            var id = ReadStruct<uint>();
+            if (id != MAGIC)
+                throw new FormatException($"Not a CR2W file, Magic read as 0x{id:X8}");
+
+            m_fileheader = ReadStruct<CR2WFileHeader>();
+            if (m_fileheader.version > 163 || m_fileheader.version < 159)
+                throw new FormatException($"Unknown Version {m_fileheader.version}. Supported versions: 159 - 163.");
+
+            var dt = new CDateTime(m_fileheader.timeStamp);
+
+            m_tableheaders = ReadStructs<CR2WTable>(10);
+            m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
+
+            // read strings
+            m_strings = ReadStringsBuffer();
+
+            // read tables
+            names = ReadTable<CR2WName>(1).Select(_ => new CR2WNameWrapper(_, this)).ToList();
+            imports = ReadTable<CR2WImport>(2).Select(_ => new CR2WImportWrapper(_, this)).ToList();
+
+            return imports;
+        }
+
         public void Read(BinaryReader file)
         {
             m_stream = file.BaseStream;

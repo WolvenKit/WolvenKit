@@ -23,7 +23,7 @@ namespace WolvenKit.Forms
         public frmImportUtility()
         {
             // initialize Viewmodel
-            viewModel = MockKernel.Get().GetImportViewModel() as ImportViewModel;
+            viewModel = MockKernel.Get().GetImportViewModel();
 
             InitializeComponent();
             ApplyCustomTheme();

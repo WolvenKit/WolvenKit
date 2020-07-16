@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common
 {
@@ -14,6 +15,7 @@ namespace WolvenKit.Common
         [Browsable(false)]
         public string ProjectDirectory => Path.Combine(Path.GetDirectoryName(FileName), Name);
 
+        #region Directories
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -28,6 +30,7 @@ namespace WolvenKit.Common
             }
         }
 
+        #region Top-level Dirs
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -35,7 +38,7 @@ namespace WolvenKit.Common
         {
             get
             {
-                var dir = Path.Combine(ProjectDirectory, "files","Mod");
+                var dir = Path.Combine(FileDirectory, "Mod");
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
                 return dir;
@@ -49,7 +52,7 @@ namespace WolvenKit.Common
         {
             get
             {
-                var dir = Path.Combine(ProjectDirectory, "files","DLC");
+                var dir = Path.Combine(FileDirectory, "DLC");
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
                 return dir;
@@ -63,23 +66,10 @@ namespace WolvenKit.Common
         {
             get
             {
-                var dir = Path.Combine(ProjectDirectory, "files", "Raw");
+                var dir = Path.Combine(FileDirectory, "Raw");
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
                 return dir;
-            }
-        }
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string TextureDirectory
-        {
-            get
-            {
-                if (!Directory.Exists(Path.Combine(ModDirectory, "TextureCache")))
-                    Directory.CreateDirectory(Path.Combine(ModDirectory, "TextureCache"));
-                return Path.Combine(ModDirectory, "TextureCache");
             }
         }
 
@@ -96,7 +86,53 @@ namespace WolvenKit.Common
                 return dir;
             }
         }
+        #endregion
 
+        #region Mod-level Dirs
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string TextureCacheDirectory
+        {
+            get
+            {
+                if (!Directory.Exists(Path.Combine(ModDirectory, EBundleType.TextureCache.ToString())))
+                    Directory.CreateDirectory(Path.Combine(ModDirectory, EBundleType.TextureCache.ToString()));
+                return Path.Combine(ModDirectory, EBundleType.TextureCache.ToString());
+            }
+        }
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string CollisionCacheDirectory
+        {
+            get
+            {
+                if (!Directory.Exists(Path.Combine(ModDirectory, EBundleType.CollisionCache.ToString())))
+                    Directory.CreateDirectory(Path.Combine(ModDirectory, EBundleType.CollisionCache.ToString()));
+                return Path.Combine(ModDirectory, EBundleType.CollisionCache.ToString());
+            }
+        }
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string BundleDirectory
+        {
+            get
+            {
+                if (!Directory.Exists(Path.Combine(ModDirectory, EBundleType.Bundle.ToString())))
+                    Directory.CreateDirectory(Path.Combine(ModDirectory, EBundleType.Bundle.ToString()));
+                return Path.Combine(ModDirectory, EBundleType.Bundle.ToString());
+            }
+        }
+        #endregion
+
+
+        #endregion
+
+
+
+        #region Files
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -171,6 +207,8 @@ namespace WolvenKit.Common
                 return Directory.EnumerateFiles(RadishDirectory, "*", SearchOption.AllDirectories).Select(file => file.Substring(RadishDirectory.Length + 1)).ToList();
             }
         }
+        #endregion
+
 
         [Browsable(false)] 
         public List<string> LastOpenedFiles;
@@ -200,10 +238,16 @@ namespace WolvenKit.Common
 
         public void CreateDefaultDirectories()
         {
+            // create top-level directories
             _ = ModDirectory;
             _ = DlcDirectory;
             _ = RawDirectory;
             _ = RadishDirectory;
+
+            // create mod-level directories
+            _ = TextureCacheDirectory;
+            _ = CollisionCacheDirectory;
+            _ = BundleDirectory;
         }
     }
 }

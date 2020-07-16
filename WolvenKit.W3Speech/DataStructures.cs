@@ -138,7 +138,7 @@ namespace WolvenKit.W3Speech
             this.item_infos = item_infos;
         }
 
-        public string TypeName => "Speech";
+        public EBundleType TypeName => EBundleType.Speech;
 
         public string FileName { get; set; }
 

@@ -178,36 +178,46 @@ namespace WolvenKit.Cache
 
         public void Extract(BundleFileExtractArgs e)
         {
-            var fullpath = e.FileName;
-            var isPng = Path.GetExtension(fullpath) == ".png";
+            var newpath = Path.ChangeExtension(e.FileName, "dds");
 
-            fullpath = Path.ChangeExtension(fullpath, "dds");
+            // create new directory and delete existing file
+            Directory.CreateDirectory(Path.GetDirectoryName(newpath) ?? "");
+            if (File.Exists(newpath))
+                File.Delete(newpath);
 
-            Directory.CreateDirectory(Path.GetDirectoryName(fullpath) ?? "");
-            if (File.Exists(fullpath))
-            {
-                File.Delete(fullpath);
-            }
-
-            using (var output = new FileStream(fullpath, FileMode.CreateNew, FileAccess.Write))
+            // extract to dds
+            using (var output = new FileStream(newpath, FileMode.CreateNew, FileAccess.Write))
             {
                 Extract(output);
             }
 
-            // convert all dds files to the extension specified in the settings
-            // also convert "pngs" to pngs lol
-            if (e.Extension != EUncookExtension.dds || isPng)
+            var extractext = e.Extension;
+            // do not convert pngs, jpgs and dds
+            if (Path.GetExtension(e.FileName) != ".dds")
             {
+                if (Path.GetExtension(e.FileName) == ".png")
+                    extractext = EUncookExtension.png;
+                else if (Path.GetExtension(e.FileName) == ".jpg")
+                    extractext = EUncookExtension.jpg;
+
+
                 //convert
-                var fi = new FileInfo(fullpath);
+                var fi = new FileInfo(newpath);
                 if (fi.Exists)
                 {
-                    // convert to png if file is a png, else convert to custom extension 
-                    Texconv.Convert(Path.GetDirectoryName(fullpath), fullpath, isPng ? EUncookExtension.png : e.Extension);
+                    Texconv.Convert(Path.GetDirectoryName(newpath), newpath, extractext);
                 }
 
                 // delete old DDS
                 fi.Delete();
+
+                // lowercase new extension
+                var extractedPath = Path.ChangeExtension(fi.FullName, extractext.ToString());
+                fi = new FileInfo(extractedPath);
+                if (fi.Exists)
+                {
+                    File.Move(extractedPath, Path.ChangeExtension(extractedPath, extractext.ToString()));
+                }
             }
         }
 

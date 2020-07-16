@@ -22,6 +22,7 @@ namespace WolvenKit
     using Common;
     using App;
     using WolvenKit.App.Model;
+    using WolvenKit.App.ViewModels;
 
     public enum EColorThemes
     {
@@ -174,8 +175,9 @@ namespace WolvenKit
                 var doc = LoadDocument(editvar.cr2w.FileName + ":" + editvar.FullName, new MemoryStream(bytes), true);
                 if (doc != null)
                 {
-                    doc.OnFileSaved += OnVariableEditorSave;
-                    doc.SaveTarget = editvar;
+                    var vm = doc.GetViewModel();
+                    vm.OnFileSaved += OnVariableEditorSave;
+                    vm.SaveTarget = editvar;
                 }
                 else
                 {
@@ -188,8 +190,8 @@ namespace WolvenKit
         {
             if (args.Stream is MemoryStream)
             {
-                var doc = (frmCR2WDocument)sender;
-                var editvar = (CVariable)doc.SaveTarget;
+                var vm = (DocumentViewModel)sender;
+                var editvar = (CVariable)vm.SaveTarget;
                 editvar.SetValue(((MemoryStream)args.Stream).ToArray());
             }
         }

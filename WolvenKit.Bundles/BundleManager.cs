@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.Bundles
 {
@@ -22,7 +23,7 @@ namespace WolvenKit.Bundles
         public Dictionary<string, Bundle> Bundles { get; set; }
         public WitcherTreeNode RootNode { get; set; }
         public List<IWitcherFile> FileList { get; set; }
-        public string TypeName { get { return new Bundle().TypeName; } }
+        public EBundleType TypeName => EBundleType.Bundle;
         public List<string> Extensions { get; set; }
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
 
@@ -152,8 +153,10 @@ namespace WolvenKit.Bundles
         /// </summary>
         public void RebuildRootNode()
         {
-            RootNode = new WitcherTreeNode();
-            RootNode.Name = new Bundle().TypeName;
+            RootNode = new WitcherTreeNode(EBundleType.Bundle)
+            {
+                Name = EBundleType.Bundle.ToString()
+            };
             foreach (var item in Items)
             {
                 var currentNode = RootNode;
