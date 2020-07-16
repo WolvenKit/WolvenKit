@@ -159,7 +159,7 @@ namespace WolvenKit.Cache
         /// </summary>
         public void RebuildRootNode()
         {
-            RootNode = new WitcherTreeNode();
+            RootNode = new WitcherTreeNode(EBundleType.SoundCache);
             RootNode.Name = EBundleType.SoundCache.ToString();
 
             foreach (var item in Items)

@@ -153,8 +153,10 @@ namespace WolvenKit.Bundles
         /// </summary>
         public void RebuildRootNode()
         {
-            RootNode = new WitcherTreeNode();
-            RootNode.Name = EBundleType.Bundle.ToString();
+            RootNode = new WitcherTreeNode(EBundleType.Bundle)
+            {
+                Name = EBundleType.Bundle.ToString()
+            };
             foreach (var item in Items)
             {
                 var currentNode = RootNode;

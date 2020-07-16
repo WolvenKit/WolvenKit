@@ -164,7 +164,7 @@ namespace WolvenKit.W3Speech
         /// </summary>
         public void RebuildRootNode()
         {
-            RootNode = new WitcherTreeNode();
+            RootNode = new WitcherTreeNode(EBundleType.Speech);
             RootNode.Name = EBundleType.Speech.ToString();
             foreach (var item in Items)
             {

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common
 {
@@ -14,6 +15,22 @@ namespace WolvenKit.Common
             Directories = new Dictionary<string, WitcherTreeNode>();
             Files = new Dictionary<string, List<IWitcherFile>>();
             Name = "";
+        }
+
+        public WitcherTreeNode(EBundleType bundleType)
+        {
+            Directories = new Dictionary<string, WitcherTreeNode>();
+            Files = new Dictionary<string, List<IWitcherFile>>();
+            Name = "";
+        }
+
+        public EBundleType BundleType
+        {
+            get
+            {
+                string bundlename = FullPath.Split(Path.DirectorySeparatorChar).Skip(1).First();
+                return (EBundleType)Enum.Parse(typeof(EBundleType), bundlename);
+            }
         }
 
         public string FullPath

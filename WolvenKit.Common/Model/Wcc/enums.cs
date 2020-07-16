@@ -85,6 +85,24 @@ namespace WolvenKit.Common.Wcc
                 default: return EBundleType.Bundle.ToString();
             }
         }
+
+        public static EImportable ExportExtensionToRawExtension(EExportable ext)
+        {
+            switch (ext)
+            {
+                case EExportable.w2mesh: 
+                    return EImportable.fbx;
+                case EExportable.reddest:
+                    return EImportable.nxs;
+                case EExportable.redcloth:
+                case EExportable.redapex:
+                    return EImportable.apb;
+                case EExportable.xbm:
+                    return EImportable.tga;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
     }
 
     public enum ETextureImports
@@ -123,6 +141,15 @@ namespace WolvenKit.Common.Wcc
         fbx,
         nxs,
         //re
+    };
+
+    public enum EExportable
+    {
+        w2mesh,
+        reddest,
+        redcloth,
+        redapex,
+        xbm
     };
 
     public enum EWccStatus

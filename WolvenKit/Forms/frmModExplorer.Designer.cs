@@ -42,7 +42,7 @@ namespace WolvenKit
             this.exportw2rigjsonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportW3facjsonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportW3facposejsonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportW2meshToFbxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportWithWccToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cookToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.fastRenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -116,7 +116,7 @@ namespace WolvenKit
             this.exportw2rigjsonToolStripMenuItem,
             this.exportW3facjsonToolStripMenuItem,
             this.exportW3facposejsonToolStripMenuItem,
-            this.exportW2meshToFbxToolStripMenuItem});
+            this.exportWithWccToolStripMenuItem});
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             this.exportToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
             this.exportToolStripMenuItem.Text = "Export";
@@ -158,12 +158,12 @@ namespace WolvenKit
             this.exportW3facposejsonToolStripMenuItem.Text = "Export w3fac.pose.json";
             this.exportW3facposejsonToolStripMenuItem.Click += new System.EventHandler(this.exportW3facposejsonToolStripMenuItem_Click);
             // 
-            // exportW2meshToFbxToolStripMenuItem
+            // exportWithWccToolStripMenuItem
             // 
-            this.exportW2meshToFbxToolStripMenuItem.Name = "exportW2meshToFbxToolStripMenuItem";
-            this.exportW2meshToFbxToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
-            this.exportW2meshToFbxToolStripMenuItem.Text = "Export w2mesh to fbx";
-            this.exportW2meshToFbxToolStripMenuItem.Click += new System.EventHandler(this.exportW2meshToFbxToolStripMenuItem_Click);
+            this.exportWithWccToolStripMenuItem.Name = "exportWithWccToolStripMenuItem";
+            this.exportWithWccToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.exportWithWccToolStripMenuItem.Text = "Export with wcc_lite";
+            this.exportWithWccToolStripMenuItem.Click += new System.EventHandler(this.exportW2meshToFbxToolStripMenuItem_Click);
             // 
             // cookToolStripMenuItem
             // 
@@ -443,6 +443,6 @@ namespace WolvenKit
         private ToolStripSeparator toolStripSeparator5;
         private BrightIdeasSoftware.TreeListView treeListView;
         private BrightIdeasSoftware.OLVColumn olvColumnName;
-        private ToolStripMenuItem exportW2meshToFbxToolStripMenuItem;
+        private ToolStripMenuItem exportWithWccToolStripMenuItem;
     }
 }

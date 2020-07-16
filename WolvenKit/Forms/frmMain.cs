@@ -891,14 +891,9 @@ namespace WolvenKit
                 }
 
                 WitcherListViewItem item = Details.SelectedPaths[i];
-                string relativePath = item.RelativePath;
-                string depotpath = string.IsNullOrEmpty(item.AssetBrowserPath)
-                    ? string.IsNullOrEmpty(relativePath)
-                        ? ""
-                        : relativePath
-                    : item.AssetBrowserPath;
+                IWitcherArchive manager = Details.Managers.First(_ => _.TypeName == item.BundleType);
 
-                skipping = AddToMod(relativePath, depotpath, skipping, Details.Managers, Details.AddAsDLC, Details.Uncook, Details.Export);
+                skipping = AddToMod(item.RelativePath, manager, skipping, Details.AddAsDLC, Details.Uncook, Details.Export);
 
                 int percentprogress = (int)((float)i / (float)count * 100.0);
                 MainBackgroundWorker.ReportProgress(percentprogress, item.Text);
@@ -1946,36 +1941,37 @@ namespace WolvenKit
         /// <param name="uncook"></param>
         /// <param name="export"></param>
         /// <returns></returns>
-        private bool AddToMod(string relativePath, string depotpath, bool skipping, List<IWitcherArchive> managers, bool addAsDLC, bool uncook = false, bool export = false)
+        private bool AddToMod(string relativePath, IWitcherArchive manager, bool skipping, bool addAsDLC, bool uncook = false, bool export = false)
         {
             bool skip = skipping;
             string extension = Path.GetExtension(relativePath);
-            
+            string filename = Path.GetFileName(relativePath);
 
-            // always uncook xbms in Bundle
-            if (extension == ".xbm" && depotpath.Contains(EBundleType.Bundle.ToString()))
+            // always uncook xbms, w2mesh, redcloth and redapex in Bundle
+            if ((extension == ".xbm" || Enum.GetNames(typeof(EExportable)).Contains(extension.TrimStart('.'))) && manager.TypeName == EBundleType.Bundle)
                 uncook = true;
 
             #region Check Existing Files in Depot
             // if uncooking or exporting, check first if the file isn't already in the working depot or the r4depot
             if (uncook)
             {
-                var filename = "";
+                var newpath = "";
                 // Working Depot
                 var fi = new FileInfo(Path.Combine(Path.GetFullPath(MainController.WorkDir), relativePath));
                 if (fi.Exists)
                 {
                     var cacheDir = REDTypes.REDExtensionToCacheType(extension);
-                    filename = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                    newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
                             ? Path.Combine("DLC", cacheDir, "dlc", ActiveMod.Name, relativePath)
                             : Path.Combine("Mod", cacheDir, relativePath));
 
-                    fi.CopyToAndCreate(filename, true);
+                    fi.CopyToAndCreate(newpath, true);
+                    Logger.LogString($"Added {filename} from depot.", Logtype.Success);
 
                     // Optionally Export 
-                    if (export && File.Exists(filename))
+                    if (export && File.Exists(newpath))
                     {
-                        var task = Task.Run(() => vm.ExportFileToMod(filename));
+                        var task = Task.Run(() => vm.ExportFileToMod(newpath));
                         Task.WaitAll(task);
                     }
 
@@ -1989,16 +1985,17 @@ namespace WolvenKit
                     {
                         var cacheDir = REDTypes.REDExtensionToCacheType(extension);
 
-                        filename = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                        newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
                             ? Path.Combine("DLC", cacheDir, "dlc", ActiveMod.Name, relativePath)
                             : Path.Combine("Mod", cacheDir, relativePath));
 
-                        fi.CopyToAndCreate(filename, true);
+                        fi.CopyToAndCreate(newpath, true);
+                        Logger.LogString($"Added {filename} from depot.", Logtype.Success);
 
                         // Optionally Export 
-                        if (export && File.Exists(filename))
+                        if (export && File.Exists(newpath))
                         {
-                            var task = Task.Run(() => vm.ExportFileToMod(filename));
+                            var task = Task.Run(() => vm.ExportFileToMod(newpath));
                             Task.WaitAll(task);
                         }
 
@@ -2009,127 +2006,122 @@ namespace WolvenKit
                 
             }
             #endregion
-            
-            foreach (var manager in managers.Where(manager => depotpath.StartsWith(Path.Combine("Root", manager.TypeName.ToString()))))
-            {
-                if (manager.Items.Any(x => x.Value.Any(y => y.Name == relativePath)))
-                {
-                    var archives = manager.FileList.Where(x => x.Name == relativePath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
-                    string filename;
-                    
-                    // Generte filepaths
-                    // Texture and Collision Caches go into Raw (except for pngs, jpgs, and dds)
-                    if (!uncook && (archives.First().Value.Bundle.TypeName == EBundleType.CollisionCache 
-                        || archives.First().Value.Bundle.TypeName == EBundleType.TextureCache))
-                    {
-                        // add pngs, jpgs and dds directly to TextureCache (not Raw, since they don't get imported)
-                        if (extension == ".png"  || extension == ".jpg"  || extension == ".dds" )
-                        {
-                            filename = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                                ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName.ToString(), "dlc", ActiveMod.Name, relativePath)
-                                : Path.Combine("Mod", archives.First().Value.Bundle.TypeName.ToString(), relativePath));
-                        }
-                        // all other textures and collision stuff goes into Raw (since they have to be imported first)
-                        else
-                            filename = Path.Combine(ActiveMod.RawDirectory, addAsDLC 
-                                ? Path.Combine("DLC", /*archives.First().Value.Bundle.TypeName.ToString(),*/ "dlc", ActiveMod.Name, relativePath) 
-                                : Path.Combine("Mod", /*archives.First().Value.Bundle.TypeName.ToString(),*/ relativePath));
-                    }
-                    // Bundles
-                    else
-                    {
-                        // Uncooked files go into the uncooked folders
-                        if (uncook )
-                        {
-                            var cacheDir = REDTypes.REDExtensionToCacheType(extension);
 
-                            filename = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                            ? Path.Combine("DLC", cacheDir, "dlc", ActiveMod.Name, relativePath)
-                            : Path.Combine("Mod", cacheDir, relativePath));
-                        }
-                        // everything else goes into Bundle and Speech etc
-                        else
+            if (manager != null && manager.Items.Any(x => x.Value.Any(y => y.Name == relativePath)))
+            {
+                var archives = manager.FileList.Where(x => x.Name == relativePath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
+                string newpath;
+
+
+                #region Uncooking
+                // Uncooked files go into the uncooked folders
+                if (uncook)
+                {
+                    var cacheDir = REDTypes.REDExtensionToCacheType(extension);
+
+                    newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                    ? Path.Combine("DLC", cacheDir, "dlc", ActiveMod.Name, relativePath)
+                    : Path.Combine("Mod", cacheDir, relativePath));
+                
+                    var indir = Path.GetFullPath(MainController.Get().Configuration.GameRootDir);
+
+                    var uncookTask = Task.Run(() => vm.UncookFileToMod(relativePath, newpath, indir));
+
+                    Task.WaitAll(uncookTask);
+
+                    var uncookedFilesCount = uncookTask.Result;
+
+                    // return if any files have been uncooked, continue to extract otherwise
+                    if (uncookedFilesCount > 0)
+                    {
+                        // Optionally Export 
+                        if (export && File.Exists(newpath))
                         {
-                            filename = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                            var exportTask = Task.Run(() => vm.ExportFileToMod(newpath));
+                            Task.WaitAll(exportTask);
+                        }
+
+                        return skip;
+                    }
+                    else
+                        Logger.LogString($"Could not uncook {filename}, trying to extract file instead of uncooking.", Logtype.Important);
+                }
+                #endregion
+
+                #region Unbundling
+                // Texture and Collision Caches go into Raw (except for pngs, jpgs, and dds)
+                if ((archives.First().Value.Bundle.TypeName == EBundleType.CollisionCache
+                    || archives.First().Value.Bundle.TypeName == EBundleType.TextureCache))
+                {
+                    // add pngs, jpgs and dds directly to TextureCache (not Raw, since they don't get imported)
+                    if (extension == ".png" || extension == ".jpg" || extension == ".dds")
+                    {
+                        newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
                             ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName.ToString(), "dlc", ActiveMod.Name, relativePath)
                             : Path.Combine("Mod", archives.First().Value.Bundle.TypeName.ToString(), relativePath));
-                        }
                     }
+                    // all other textures and collision stuff goes into Raw (since they have to be imported first)
+                    else
+                        newpath = Path.Combine(ActiveMod.RawDirectory, addAsDLC
+                            ? Path.Combine("DLC", /*archives.First().Value.Bundle.TypeName.ToString(),*/ "dlc", ActiveMod.Name, relativePath)
+                            : Path.Combine("Mod", /*archives.First().Value.Bundle.TypeName.ToString(),*/ relativePath));
+                }
+                else
+                {
+                    newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                    ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName.ToString(), "dlc", ActiveMod.Name, relativePath)
+                    : Path.Combine("Mod", archives.First().Value.Bundle.TypeName.ToString(), relativePath));
+                }
+                // more than one archive
+                if (archives.Count() > 1)
+                {
 
-                    // uncooking
-                    if (uncook)
+                    var dlg = new frmExtractAmbigious(archives.Select(x => x.Key).ToList());
+                    if (!skip)
                     {
-                        //Task.Run(() => vm.UncookFile(relativePath, filename));
-                        var uncookTask = Task.Run(() => vm.UncookFileToMod(relativePath, filename));
-                        
-                        Task.WaitAll(uncookTask);
-
-                        var uncookedFilesCount = uncookTask.Result;
-
-                        // return if any files have been uncooked, continue to extract otherwise
-                        if (uncookedFilesCount > 0)
+                        var res = dlg.ShowDialog();
+                        skip = dlg.Skip;
+                        if (res == DialogResult.Cancel)
                         {
-                            // Optionally Export 
-                            if (export && File.Exists(filename))
-                            {
-                                var exportTask = Task.Run(() => vm.ExportFileToMod(filename));
-                                Task.WaitAll(exportTask);
-                            }
-
                             return skip;
                         }
                     }
-
-
-                    // more than one archive
-                    if (archives.Count() > 1)
-                    {
-
-                        var dlg = new frmExtractAmbigious(archives.Select(x => x.Key).ToList());
-                        if (!skip)
-                        {
-                            var res = dlg.ShowDialog();
-                            skip = dlg.Skip;
-                            if (res == DialogResult.Cancel)
-                            {
-                                return skip;
-                            }
-                        }
-                        var selectedBundle = archives.FirstOrDefault(x => x.Key == dlg.SelectedBundle).Value;
-                        try
-                        {
-                            Directory.CreateDirectory(Path.GetDirectoryName(filename));
-                            if (File.Exists(filename))
-                            {
-                                File.Delete(filename);
-                            }
-
-                            selectedBundle.Extract(new BundleFileExtractArgs(filename, MainController.Get().Configuration.UncookExtension));
-                        }
-                        catch { }
-                        return skip;
-                    }
-
-                    // Extract
+                    var selectedBundle = archives.FirstOrDefault(x => x.Key == dlg.SelectedBundle).Value;
                     try
                     {
-                        Directory.CreateDirectory(Path.GetDirectoryName(filename));
-                        if (File.Exists(filename))
+                        Directory.CreateDirectory(Path.GetDirectoryName(newpath));
+                        if (File.Exists(newpath))
                         {
-                            File.Delete(filename);
+                            File.Delete(newpath);
                         }
 
-                        archives.FirstOrDefault().Value.Extract(new BundleFileExtractArgs(filename, MainController.Get().Configuration.UncookExtension));
+                        selectedBundle.Extract(new BundleFileExtractArgs(newpath, MainController.Get().Configuration.UncookExtension));
                     }
-                    catch (Exception ex)
-                    {
-                        Logger.LogString(ex.ToString(),Logtype.Error);
-                    }
-
+                    catch { }
                     return skip;
                 }
-            }
 
+                // Extract
+                try
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(newpath));
+                    if (File.Exists(newpath))
+                    {
+                        File.Delete(newpath);
+                    }
+
+                    archives.FirstOrDefault().Value.Extract(new BundleFileExtractArgs(newpath, MainController.Get().Configuration.UncookExtension));
+
+                    Logger.LogString($"Succesfully extracted {filename}.", Logtype.Success);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogString(ex.ToString(), Logtype.Error);
+                }
+                #endregion
+
+                return skip;
+            }
 
             return skip;
         }

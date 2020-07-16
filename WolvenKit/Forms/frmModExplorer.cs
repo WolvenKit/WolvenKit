@@ -406,14 +406,14 @@ namespace WolvenKit
                         ;
 
                 createW2animsToolStripMenuItem.Enabled = !isToplevelDir;
-                exportToolStripMenuItem.Enabled = !isToplevelDir && (ext == "w3fac" || ext == "w2cutscene" || ext == "w2anims" || ext == "w2rig"
-                    || (ext == "w2mesh"));
+                exportToolStripMenuItem.Enabled = !isToplevelDir && (ext == "w3fac" || ext == "w2cutscene" || ext == "w2anims" || ext == "w2rig" || ext == "xbm"
+                    || Enum.GetNames(typeof(EExportable)).Contains(ext));
 
                 exportW2animsjsonToolStripMenuItem.Visible = ext == "w2anims";
                 exportW2cutscenejsonToolStripMenuItem.Visible = ext == "w2cutscene";
                 exportw2rigjsonToolStripMenuItem.Visible = ext == "w2rig";
                 exportW3facjsonToolStripMenuItem.Visible = ext == "w3fac";
-                exportW2meshToFbxToolStripMenuItem.Visible = ext == "w2mesh";
+                exportWithWccToolStripMenuItem.Visible = Enum.GetNames(typeof(EExportable)).Contains(ext) || ext == "xbm";
 
                 removeFileToolStripMenuItem.Enabled = !isToplevelDir;
                 renameToolStripMenuItem.Enabled = !isToplevelDir;

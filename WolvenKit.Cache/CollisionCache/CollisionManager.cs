@@ -154,7 +154,7 @@ namespace WolvenKit.Cache
         /// </summary>
         public void RebuildRootNode()
         {
-            RootNode = new WitcherTreeNode();
+            RootNode = new WitcherTreeNode(EBundleType.CollisionCache);
             RootNode.Name = EBundleType.CollisionCache.ToString();
 
             foreach (var item in Items)

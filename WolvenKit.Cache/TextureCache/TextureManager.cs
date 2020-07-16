@@ -154,7 +154,7 @@ namespace WolvenKit.Cache
         /// </summary>
         public void RebuildRootNode()
         {
-            RootNode = new WitcherTreeNode();
+            RootNode = new WitcherTreeNode(EBundleType.TextureCache);
             RootNode.Name = EBundleType.TextureCache.ToString();
 
             foreach (var item in Items)

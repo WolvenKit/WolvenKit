@@ -225,6 +225,14 @@ namespace WolvenKit.App.ViewModels
             MainController.Get().ProjectStatus = "File dumped succesfully!";
 
         }
+
+        /// <summary>
+        /// Deprecated. Use ImportUtility instead.
+        /// Imports a given file (w2mesh or redcloth to the mod project.
+        /// </summary>
+        /// <param name="infile"></param>
+        /// <param name="outfile"></param>
+        /// <returns></returns>
         public async Task ImportFile(string infile, string outfile)
         {
             try
@@ -258,7 +266,14 @@ namespace WolvenKit.App.ViewModels
             MainController.Get().ProjectStatus = "File imported succesfully!";
 
         }
-        public async Task<int> UncookFileToMod(string relativePath, string newpath)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="relativePath"></param>
+        /// <param name="newpath"></param>
+        /// <returns></returns>
+        public async Task<int> UncookFileToMod(string relativePath, string newpath, string indir)
         {
             // create temporary uncooked directory
             string outdir = Path.GetFullPath(MainController.WorkDir);
@@ -283,7 +298,7 @@ namespace WolvenKit.App.ViewModels
             // uncook the folder with wcc
             var wccuncook = new Wcc_lite.uncook()
             {
-                InputDirectory = Path.GetFullPath(MainController.Get().Configuration.GameRootDir),
+                InputDirectory = indir,
                 OutputDirectory = outdir,
                 TargetDirectory = relativeParentDir,
                 Imgfmt = imgfmt,
@@ -329,47 +344,144 @@ namespace WolvenKit.App.ViewModels
             }
 
             // Logging
-            if (uncookedFilesCount > 0)
-                Logger.LogString($"Uncooked {uncookedFilesCount} files.", Logtype.Success);
-            else
-                Logger.LogString($"Uncooked {uncookedFilesCount} files. Wcc_lite is unable to uncook this file.", Logtype.Error);
             Logger.LogString($"Moved {addedFilesCount} files to depot.", Logtype.Important);
+            if (uncookedFilesCount > 0)
+                Logger.LogString($"Successfully uncooked {uncookedFilesCount} files.", Logtype.Success);
+            else
+                Logger.LogString($"Wcc_lite is unable to uncook this file.", Logtype.Error);
+            
 
             return uncookedFilesCount;
         }
-        public async Task ExportFileToMod(string fullpath)
-        {
-            string relativePath = "";
-            string exportpath = "";
-            if (fullpath.Contains("\\Mod\\Bundle\\"))
-            {
-                relativePath = fullpath.Substring(Path.Combine(ActiveMod.FileDirectory, "Mod", EBundleType.Bundle.ToString()).Length + 1);
-                exportpath = Path.Combine(ActiveMod.RawDirectory, "Mod", /*EBundleType.Bundle.ToString(),*/ relativePath);
-            }
-            else if (fullpath.Contains("\\DLC\\Bundle\\"))
-            {
-                relativePath = fullpath.Substring(Path.Combine(ActiveMod.FileDirectory, "DLC", EBundleType.Bundle.ToString()).Length + 1);
-                exportpath = Path.Combine(ActiveMod.RawDirectory, "DLC", /*EBundleType.Bundle.ToString(),*/ relativePath);
-            }
-            exportpath = Path.ChangeExtension(exportpath, "fbx");
 
-            // check imports
-            List<CR2WImportWrapper> importslist = new List<CR2WImportWrapper>();
-            using (var fs = new FileStream(fullpath, FileMode.Open, FileAccess.Read))
-            using (var reader = new BinaryReader(fs))
+        /// <summary>
+        /// Unbundles a file with the given relativepath from either the Game or the Mod BundleManager
+        /// </summary>
+        /// <param name="relativePath"></param>
+        /// <param name="addAsDLC"></param>
+        /// <param name="loadmods"></param>
+        /// <returns></returns>
+        public int UnbundleFileToMod(string relativePath, bool addAsDLC, bool loadmods = false)
+        {
+            string extension = Path.GetExtension(relativePath);
+            string filename = Path.GetFileName(relativePath);
+            IWitcherArchive manager = MainController.Get().GetManagers(loadmods).FirstOrDefault(_ => _.TypeName == EBundleType.Bundle);
+
+            if (manager != null && manager.Items.Any(x => x.Value.Any(y => y.Name == relativePath)))
             {
-                var cr2w = new CR2WFile();
-                importslist = cr2w.ReadImports(reader);
-            }
-            foreach (CR2WImportWrapper import in importslist)
-            {
-                var depotpath = Path.Combine(MainController.Get().Configuration.DepotPath, import.DepotPathStr);
-                // if import is not in depot, uncook to depot
-                if (!File.Exists(depotpath))
+                var archives = manager.FileList.Where(x => x.Name == relativePath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
+                string newpath;
+
+                // Generte filepaths
+                // Texture and Collision Caches go into Raw (except for pngs, jpgs, and dds)
+                if (archives.First().Value.Bundle.TypeName == EBundleType.CollisionCache
+                    || archives.First().Value.Bundle.TypeName == EBundleType.TextureCache)
                 {
-                    await Task.Run(() => UncookFileToMod(import.DepotPathStr, depotpath));
+                    // add pngs, jpgs and dds directly to TextureCache (not Raw, since they don't get imported)
+                    if (extension == ".png" || extension == ".jpg" || extension == ".dds")
+                    {
+                        newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                            ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName.ToString(), "dlc", ActiveMod.Name, relativePath)
+                            : Path.Combine("Mod", archives.First().Value.Bundle.TypeName.ToString(), relativePath));
+                    }
+                    // all other textures and collision stuff goes into Raw (since they have to be imported first)
+                    else
+                        newpath = Path.Combine(ActiveMod.RawDirectory, addAsDLC
+                            ? Path.Combine("DLC", /*archives.First().Value.Bundle.TypeName.ToString(),*/ "dlc", ActiveMod.Name, relativePath)
+                            : Path.Combine("Mod", /*archives.First().Value.Bundle.TypeName.ToString(),*/ relativePath));
+                }
+                // Bundles
+                else
+                {
+                    newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                        ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName.ToString(), "dlc", ActiveMod.Name, relativePath)
+                        : Path.Combine("Mod", archives.First().Value.Bundle.TypeName.ToString(), relativePath));
+                }
+
+                // Extract
+                try
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(newpath));
+                    if (File.Exists(newpath))
+                    {
+                        File.Delete(newpath);
+                    }
+
+                    // if more than one archive get the last
+                    archives.LastOrDefault().Value.Extract(new BundleFileExtractArgs(newpath, MainController.Get().Configuration.UncookExtension));
+
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogString(ex.ToString(), Logtype.Error);
+
+                    return 0;
                 }
             }
+
+            return 0;
+        }
+
+        /// <summary>
+        /// Exports and existing file in the ModProject (w2mesh, redcloth) to the modProject
+        /// </summary>
+        /// <param name="fullpath"></param>
+        /// <returns></returns>
+        public async Task ExportFileToMod(string fullpath)
+        {
+            // check if physical file exists
+            if (!File.Exists(fullpath))
+            {
+                Logger.LogString($"File to export does not exist {fullpath}.", Logtype.Error);
+                return;
+            }
+
+            // check if the extension matches an exportable format
+            string importedExtension = Path.GetExtension(fullpath).TrimStart('.');
+            EImportable exportedExtension;
+            try
+            {
+                exportedExtension = REDTypes.ExportExtensionToRawExtension((EExportable)Enum.Parse(typeof(EExportable), importedExtension));
+            }
+            catch (Exception ex)
+            {
+                Logger.LogString($"Not an exportable filetype: {importedExtension}.", Logtype.Error);
+                return;
+            }
+            
+            // get relative path
+            var relativePath = fullpath.Substring(ActiveMod.FileDirectory.Length + 1);
+            bool isDLC = false;
+            if (relativePath.StartsWith("DLC\\"))
+                isDLC = true;
+            else if (relativePath.StartsWith("Mod\\"))
+                isDLC = false;
+            else
+            {
+                Logger.LogString($"File can only be exported from the Uncooked Directories.", Logtype.Error);
+                return;
+            }
+
+
+            relativePath = relativePath.Substring(4);
+            if (relativePath.StartsWith(EBundleType.Bundle.ToString()))
+                relativePath = relativePath.Substring(EBundleType.Bundle.ToString().Length + 1);
+            else if (relativePath.StartsWith(EBundleType.TextureCache.ToString()))
+                relativePath = relativePath.Substring(EBundleType.TextureCache.ToString().Length + 1);
+            else if (relativePath.StartsWith(EBundleType.CollisionCache.ToString()))
+                relativePath = relativePath.Substring(EBundleType.CollisionCache.ToString().Length + 1);
+            else if (relativePath.StartsWith(EBundleType.SoundCache.ToString()))
+                relativePath = relativePath.Substring(EBundleType.SoundCache.ToString().Length + 1);
+            else if (relativePath.StartsWith(EBundleType.Speech.ToString()))
+                relativePath = relativePath.Substring(EBundleType.Speech.ToString().Length + 1);
+
+
+            var exportpath = isDLC ? Path.Combine(ActiveMod.RawDirectory, "DLC", relativePath) : Path.Combine(ActiveMod.RawDirectory, "Mod", relativePath);
+            exportpath = Path.ChangeExtension(exportpath, exportedExtension.ToString());
+
+            // check imports
+            await AddAllImportsToMod(fullpath);
 
             // copy the w2mesh and all imports to the depot if it doesn't already exist
             var depotInfo = new FileInfo(Path.Combine(MainController.Get().Configuration.DepotPath, relativePath));
@@ -377,7 +489,7 @@ namespace WolvenKit.App.ViewModels
 
             uncookedInfo.CopyToAndCreate(depotInfo.FullName, true);
 
-            // uncook with wcc_lite
+            // export with wcc_lite
             if (!string.IsNullOrEmpty(relativePath) && !string.IsNullOrEmpty(exportpath))
             {
                 // uncook the folder
@@ -388,8 +500,52 @@ namespace WolvenKit.App.ViewModels
                     Depot = MainController.Get().Configuration.DepotPath
                 };
                 await Task.Run(() => MainController.Get().WccHelper.RunCommand(export));
+
+                if (File.Exists(exportpath))
+                    Logger.LogString($"Successfully exported {relativePath}.", Logtype.Success);
+                else
+                    Logger.LogString($"Did not export {relativePath}.", Logtype.Error);
             }
         }
+
+        public async Task AddAllImportsToMod(string fullpath)
+        {
+            if (!File.Exists(fullpath))
+                return;
+
+            List<CR2WImportWrapper> importslist = new List<CR2WImportWrapper>();
+            using (var fs = new FileStream(fullpath, FileMode.Open, FileAccess.Read))
+            using (var reader = new BinaryReader(fs))
+            {
+                var cr2w = new CR2WFile();
+                importslist = cr2w.ReadImports(reader);
+            }
+            foreach (CR2WImportWrapper import in importslist)
+            {
+                var relativepath = import.DepotPathStr;
+                var depotpath = Path.Combine(MainController.Get().Configuration.DepotPath, relativepath);
+
+                // if import is not in depot, uncook to depot
+                if (!File.Exists(depotpath))
+                {
+                    //Logger.LogString($"Missing import {depotpath}! ", Logtype.Error);
+                    Logger.LogString($"Uncooking missing import {relativepath} and adding to depot ...", Logtype.Important);
+                    bool success = await Task.Run(() => UncookFileToMod(relativepath, depotpath, Path.GetFullPath(MainController.Get().Configuration.GameRootDir))) > 0;
+
+                    if (!success)
+                    {
+                        Logger.LogString($"Did not uncook file, trying to extract file instead of uncooking.", Logtype.Important);
+
+                        success = UnbundleFileToMod(relativepath, false) > 0;
+                        if (!success)
+                        {
+                            Logger.LogString($"Did not unbundle file, import is missing.", Logtype.Error);
+                        }
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region Mod
