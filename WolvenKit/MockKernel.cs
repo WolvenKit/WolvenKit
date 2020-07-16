@@ -31,13 +31,33 @@ namespace WolvenKit.App
         private ViewModel ModExplorertVM { get; set; }
 
 
-        public MainViewModel GetMainViewModel() => (MainViewModel)MainVM ?? new MainViewModel();
-        public RadishViewModel GetRadishViewModel() => (RadishViewModel)RadishVM ?? new RadishViewModel();
-        public ImportViewModel GetImportViewModel() => (ImportViewModel)ImportVM ?? new ImportViewModel();
-        public ModExplorerViewModel GetModExplorerModel() => (ModExplorerViewModel)ModExplorertVM ?? new ModExplorerViewModel();
+        public MainViewModel GetMainViewModel()
+        {
+            if ((MainViewModel)MainVM == null)
+                MainVM = new MainViewModel();
+            return (MainViewModel)MainVM;
+        }
 
+        public RadishViewModel GetRadishViewModel()
+        {
+            if ((RadishViewModel)RadishVM == null)
+                RadishVM = new RadishViewModel();
+            return (RadishViewModel)RadishVM;
+        }
 
+        public ImportViewModel GetImportViewModel()
+        {
+            if ((ImportViewModel)ImportVM == null)
+                ImportVM = new ImportViewModel();
+            return (ImportViewModel)ImportVM;
+        }
 
+        public ModExplorerViewModel GetModExplorerModel()
+        {
+            if ((ModExplorerViewModel)ModExplorertVM == null)
+                ModExplorertVM = new ModExplorerViewModel(GetMainViewModel());
+            return (ModExplorerViewModel)ModExplorertVM;
+        }
 
         private Dictionary<string, ViewModel> DocumentViewModels { get; set; } = new Dictionary<string, ViewModel>();
 

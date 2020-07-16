@@ -24,7 +24,7 @@ namespace WolvenKit.App.ViewModels
 
         #region Properties
         public object SaveTarget { get; set; }
-        #region Active Document
+        #region File
         private CR2WFile _file;
         public CR2WFile File
         {
@@ -40,19 +40,7 @@ namespace WolvenKit.App.ViewModels
         }
         #endregion
         #region FileName
-        private string _fileName;
-        public virtual string FileName
-        {
-            get => _fileName;
-            set
-            {
-                if (_fileName != value)
-                {
-                    _fileName = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        public virtual string FileName => File.FileName;
         #endregion
         #region FormText
         private string _formText;
@@ -154,7 +142,6 @@ namespace WolvenKit.App.ViewModels
 
         private void loadFile(Stream stream, string filename, IVariableEditor variableEditor)
         {
-            //Text = Path.GetFileName(filename) + " [" + filename + "]";
             FormText = Path.GetFileName(filename) + " [" + filename + "]";
 
             using (var reader = new BinaryReader(stream))

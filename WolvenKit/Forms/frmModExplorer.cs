@@ -15,6 +15,7 @@ namespace WolvenKit
 {
     using BrightIdeasSoftware;
     using Common;
+    using IrrlichtLime;
     using System.Collections;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
@@ -499,12 +500,27 @@ namespace WolvenKit
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
+                if (MockKernel.Get().GetMainViewModel().OpenDocuments.Any(_ => _.FileName == selectedobject.FullName))
+                {
+                    MainController.LogString("Please close the file in WolvenKit before renaming.", Logtype.Error);
+                    return;
+                }
                 RequestFileRename?.Invoke(this, new RequestFileArgs { File = selectedobject.FullName });
             }
         }
 
         private void removeFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (treeListView.SelectedObject is FileSystemInfo selectedobject)
+            {
+                var vm = MockKernel.Get().GetMainViewModel();
+                if (vm.OpenDocuments.Any(_ => _.FileName == selectedobject.FullName))
+                {
+                    MainController.LogString("Please close the file in WolvenKit before deleting.", Logtype.Error);
+                    return;
+                }
+            }
+
             if (MessageBox.Show(
                      "Are you sure you want to permanently delete this?", "Confirmation", MessageBoxButtons.OKCancel
                  ) == DialogResult.OK)
