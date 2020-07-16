@@ -39,5 +39,12 @@ namespace WolvenKit.Common.Extensions
             else
                 return (fsi as FileInfo).Directory;
         }
+
+        public static void CopyToAndCreate(this FileInfo fi, string destinationpath, bool overwrite = false)
+        {
+            var did = Path.GetDirectoryName(destinationpath);
+            Directory.CreateDirectory(did);
+            fi.CopyTo(destinationpath, overwrite);
+        }
     }
 }

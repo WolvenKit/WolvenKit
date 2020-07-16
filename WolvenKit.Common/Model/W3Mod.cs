@@ -116,18 +116,18 @@ namespace WolvenKit.Common
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
-        public string UncookedDirectory
+        public string BundleDirectory
         {
             get
             {
-                if (!Directory.Exists(Path.Combine(ModDirectory, EBundleType.Uncooked.ToString())))
-                    Directory.CreateDirectory(Path.Combine(ModDirectory, EBundleType.Uncooked.ToString()));
-                return Path.Combine(ModDirectory, EBundleType.Uncooked.ToString());
+                if (!Directory.Exists(Path.Combine(ModDirectory, EBundleType.Bundle.ToString())))
+                    Directory.CreateDirectory(Path.Combine(ModDirectory, EBundleType.Bundle.ToString()));
+                return Path.Combine(ModDirectory, EBundleType.Bundle.ToString());
             }
         }
         #endregion
 
-       
+
         #endregion
 
 
@@ -247,7 +247,7 @@ namespace WolvenKit.Common
             // create mod-level directories
             _ = TextureCacheDirectory;
             _ = CollisionCacheDirectory;
-            _ = UncookedDirectory;
+            _ = BundleDirectory;
         }
     }
 }

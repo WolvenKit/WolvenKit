@@ -399,17 +399,21 @@ namespace WolvenKit
                 bool isToplevelDir = selectedobject.FullName == ActiveMod.ModDirectory
                         || selectedobject.FullName == ActiveMod.DlcDirectory
                         || selectedobject.FullName == ActiveMod.RawDirectory
-                        || selectedobject.FullName == ActiveMod.RadishDirectory;
+                        || selectedobject.FullName == ActiveMod.RadishDirectory
+                        || selectedobject.FullName == ActiveMod.TextureCacheDirectory
+                        || selectedobject.FullName == ActiveMod.CollisionCacheDirectory
+                        || selectedobject.FullName == ActiveMod.BundleDirectory
+                        ;
 
                 createW2animsToolStripMenuItem.Enabled = !isToplevelDir;
                 exportToolStripMenuItem.Enabled = !isToplevelDir && (ext == "w3fac" || ext == "w2cutscene" || ext == "w2anims" || ext == "w2rig"
-                    || (ext == "w2mesh" && selectedobject.FullName.Contains($"Mod\\Uncooked")));
+                    || (ext == "w2mesh"));
 
                 exportW2animsjsonToolStripMenuItem.Visible = ext == "w2anims";
                 exportW2cutscenejsonToolStripMenuItem.Visible = ext == "w2cutscene";
                 exportw2rigjsonToolStripMenuItem.Visible = ext == "w2rig";
                 exportW3facjsonToolStripMenuItem.Visible = ext == "w3fac";
-                exportW2meshToFbxToolStripMenuItem.Visible = ext == "w2mesh" && selectedobject.FullName.Contains($"Mod\\Uncooked");
+                exportW2meshToFbxToolStripMenuItem.Visible = ext == "w2mesh";
 
                 removeFileToolStripMenuItem.Enabled = !isToplevelDir;
                 renameToolStripMenuItem.Enabled = !isToplevelDir;
@@ -656,91 +660,8 @@ namespace WolvenKit
                 }
             }
         }
-        private async void exportW2meshToFbxToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (treeListView.SelectedObject is FileSystemInfo selectedobject)
-            {
-                var fullpath = Path.Combine(ActiveMod.FileDirectory, selectedobject.FullName);
-                if (!File.Exists(fullpath) && !Directory.Exists(fullpath))
-                    return;
-                var filename = Path.GetFileName(selectedobject.FullName);
-
-                // check imports
-                List<CR2WImportWrapper> importslist = new List<CR2WImportWrapper>();
-                using (var fs = new FileStream(fullpath, FileMode.Open, FileAccess.Read))
-                using (var reader = new BinaryReader(fs))
-                {
-                    var cr2w = new CR2WFile();
-                    importslist = cr2w.ReadImports(reader);
-                }
-                foreach (CR2WImportWrapper import in importslist)
-                {
-                    var depotpath = Path.Combine(MainController.Get().Configuration.DepotPath, import.DepotPathStr);
-                    // if import is not in depot, uncook to depot
-                    if (!File.Exists(depotpath))
-                    {
-                        await vm.UncookFile(import.DepotPathStr, depotpath);
-                    }
-                }
-
-                // get export paths
-                string relpath = "";
-                string exportpath = "";
-                if (selectedobject.FullName.Contains("\\Mod\\Uncooked\\"))
-                {
-                    relpath = selectedobject.FullName.Substring(Path.Combine(ActiveMod.FileDirectory, "Mod", "Uncooked").Length + 1);
-                    exportpath = Path.Combine(ActiveMod.RawDirectory, "Mod", EBundleType.Uncooked.ToString(), relpath);
-                }
-                else if (selectedobject.FullName.Contains("\\DLC\\Uncooked\\"))
-                {
-                    relpath = selectedobject.FullName.Substring(Path.Combine(ActiveMod.FileDirectory, "DLC", "Uncooked").Length + 1);
-                    exportpath = Path.Combine(ActiveMod.RawDirectory, "DLC", EBundleType.Uncooked.ToString(), relpath);
-                }
-                exportpath = Path.ChangeExtension(exportpath, "fbx");
-
-                // copy the w2mesh and all imports to the depot if it doesn't already exist
-                var depotInfo = new FileInfo(Path.Combine(MainController.Get().Configuration.DepotPath, relpath));
-                var uncookedInfo = new FileInfo(fullpath);
-
-                if (!depotInfo.Exists)
-                {
-                    uncookedInfo.CopyTo(depotInfo.FullName);
-                }
-                else
-                {
-                    // check if the file has the same size
-                    if (depotInfo.Length != uncookedInfo.Length)
-                    {
-                        var res = MessageBox.Show("The file in your project has a different size than the file in the uncooked depot. " +
-                            "Would you like to replace the depotfile with the project file?", "WolvenKit",
-                            MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Question);
-                        if (res == DialogResult.Yes)
-                        {
-                            depotInfo.Delete();
-                            uncookedInfo.CopyTo(depotInfo.FullName);
-                        }
-                        else
-                        {
-
-                        }
-                    }
-                }
-
-                // uncook with wcc_lite
-                if (!string.IsNullOrEmpty(relpath) && !string.IsNullOrEmpty(exportpath))
-                {
-                    // uncook the folder
-                    var export = new Wcc_lite.export()
-                    {
-                        File = relpath,
-                        Out = exportpath,
-                        Depot = MainController.Get().Configuration.DepotPath
-                    };
-                    await Task.Run(() => MainController.Get().WccHelper.RunCommand(export));
-                }
-            }
-        }
+        private async void exportW2meshToFbxToolStripMenuItem_Click(object sender, EventArgs e) => vm.ExportMeshCommand.SafeExecute();
+        
         private async void dumpWccliteXMLToolStripMenuItem_Click(object sender, EventArgs e) => vm.DumpXMLCommand.SafeExecute();
 
 

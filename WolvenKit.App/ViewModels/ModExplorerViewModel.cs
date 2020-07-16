@@ -13,9 +13,11 @@ using System.Windows.Input;
 using WolvenKit.App.Commands;
 using WolvenKit.App.Model;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
+using WolvenKit.CR2W;
 
 namespace WolvenKit.App.ViewModels
 {
@@ -33,10 +35,10 @@ namespace WolvenKit.App.ViewModels
             CopyFileCommand = new RelayCommand(CopyFile, CanCopyFile);
             PasteFileCommand = new RelayCommand(PasteFile, CanPasteFile);
             DumpXMLCommand = new RelayCommand(DumpXML, CanDumpXML);
+            ExportMeshCommand = new RelayCommand(ExportMesh, CanExportMesh);
 
 
             Command2 = new RelayCommand(cmd2, Cancmd2);
-            AddFileCommand = new RelayCommand(AddFile, CanAddFile);
 
 
             treenodes = new BindingList<FileSystemInfo>();
@@ -97,7 +99,7 @@ namespace WolvenKit.App.ViewModels
         #region Commands
         public ICommand CookCommand { get; }
         public ICommand DeleteFilesCommand { get; }
-        public ICommand AddFileCommand { get; }
+        public ICommand ExportMeshCommand { get; }
         public ICommand CopyFileCommand { get; }
         public ICommand PasteFileCommand { get; }
         public ICommand DumpXMLCommand { get; }
@@ -125,7 +127,11 @@ namespace WolvenKit.App.ViewModels
                 if (!(item.FullName == ActiveMod.ModDirectory
                     || item.FullName == ActiveMod.DlcDirectory
                     || item.FullName == ActiveMod.RawDirectory
-                    || item.FullName == ActiveMod.RadishDirectory))
+                    || item.FullName == ActiveMod.RadishDirectory
+                    || item.FullName == ActiveMod.BundleDirectory
+                    || item.FullName == ActiveMod.TextureCacheDirectory
+                    || item.FullName == ActiveMod.CollisionCacheDirectory
+                    ))
                 {
                     deletablefiles.Add(item.FullName);
                 }
@@ -137,10 +143,12 @@ namespace WolvenKit.App.ViewModels
             });
         }
 
-        protected bool CanAddFile() => SelectedItems != null;
-        protected void AddFile()
+        protected bool CanExportMesh() => SelectedItems != null;
+        protected async void ExportMesh()
         {
-           
+            var fullpath = SelectedItems.First().FullName;
+            await Task.Run(() => ExportFileToMod(fullpath));
+
         }
 
         protected bool CanCopyFile() => SelectedItems != null;
@@ -261,10 +269,7 @@ namespace WolvenKit.App.ViewModels
             {
                 reldir = reldir.Substring(EBundleType.TextureCache.ToString().Length);
             }
-            if (reldir.StartsWith(EBundleType.Uncooked.ToString()))
-            {
-                reldir = reldir.Substring(EBundleType.Uncooked.ToString().Length);
-            }
+            
             reldir = reldir.TrimStart(Path.DirectorySeparatorChar);
 
             // create cooked mod Dir

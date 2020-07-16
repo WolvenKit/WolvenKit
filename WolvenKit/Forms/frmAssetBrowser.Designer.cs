@@ -93,7 +93,7 @@ namespace WolvenKit
             // 
             this.btOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btOpen.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btOpen.Location = new System.Drawing.Point(12, 499);
+            this.btOpen.Location = new System.Drawing.Point(9, 499);
             this.btOpen.Name = "btOpen";
             this.btOpen.Size = new System.Drawing.Size(145, 23);
             this.btOpen.TabIndex = 3;
@@ -310,8 +310,7 @@ namespace WolvenKit
             // 
             // button2
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(158, 3);
+            this.button2.Location = new System.Drawing.Point(623, 96);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(105, 23);
             this.button2.TabIndex = 17;
@@ -325,15 +324,15 @@ namespace WolvenKit
             this.pathlistview.CausesValidation = false;
             this.pathlistview.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnPath});
-            this.pathlistview.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pathlistview.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pathlistview.FullRowSelect = true;
             this.pathlistview.GridLines = true;
             this.pathlistview.HideSelection = false;
             this.pathlistview.LargeImageList = this.treeImages;
-            this.pathlistview.Location = new System.Drawing.Point(0, 32);
+            this.pathlistview.Location = new System.Drawing.Point(0, 0);
             this.pathlistview.Name = "pathlistview";
             this.pathlistview.ShowItemToolTips = true;
-            this.pathlistview.Size = new System.Drawing.Size(265, 342);
+            this.pathlistview.Size = new System.Drawing.Size(265, 374);
             this.pathlistview.SmallImageList = this.treeImages;
             this.pathlistview.TabIndex = 14;
             this.pathlistview.UseCompatibleStateImageBehavior = false;
@@ -498,7 +497,7 @@ namespace WolvenKit
             // 
             this.addDLCFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.addDLCFile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.addDLCFile.Location = new System.Drawing.Point(163, 499);
+            this.addDLCFile.Location = new System.Drawing.Point(160, 499);
             this.addDLCFile.Name = "addDLCFile";
             this.addDLCFile.Size = new System.Drawing.Size(145, 23);
             this.addDLCFile.TabIndex = 27;
@@ -534,7 +533,6 @@ namespace WolvenKit
             // fileSplitContainer.Panel2
             // 
             this.fileSplitContainer.Panel2.Controls.Add(this.pathlistview);
-            this.fileSplitContainer.Panel2.Controls.Add(this.button2);
             this.fileSplitContainer.Size = new System.Drawing.Size(791, 374);
             this.fileSplitContainer.SplitterDistance = 523;
             this.fileSplitContainer.SplitterWidth = 3;
@@ -572,6 +570,7 @@ namespace WolvenKit
             // 
             // checkBoxUncook
             // 
+            this.checkBoxUncook.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBoxUncook.AutoSize = true;
             this.checkBoxUncook.Location = new System.Drawing.Point(314, 503);
             this.checkBoxUncook.Name = "checkBoxUncook";
@@ -582,6 +581,7 @@ namespace WolvenKit
             // 
             // checkBoxExport
             // 
+            this.checkBoxExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBoxExport.AutoSize = true;
             this.checkBoxExport.Location = new System.Drawing.Point(384, 503);
             this.checkBoxExport.Name = "checkBoxExport";
@@ -589,12 +589,14 @@ namespace WolvenKit
             this.checkBoxExport.TabIndex = 34;
             this.checkBoxExport.Text = "Export";
             this.checkBoxExport.UseVisualStyleBackColor = true;
+            this.checkBoxExport.CheckedChanged += new System.EventHandler(this.checkBoxExport_CheckedChanged);
             // 
             // frmAssetBrowser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(811, 525);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.checkBoxExport);
             this.Controls.Add(this.checkBoxUncook);
             this.Controls.Add(this.limitUpDown);

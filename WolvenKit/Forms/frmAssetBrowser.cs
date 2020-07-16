@@ -693,7 +693,10 @@ namespace WolvenKit
             OpenPath("Root");
         }
 
-
-
+        private void checkBoxExport_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxExport.Checked)
+                checkBoxUncook.Checked = true;
+        }
     }
 }

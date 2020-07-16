@@ -44,7 +44,7 @@ namespace WolvenKit.Common.Wcc
                     return EBundleType.TextureCache.ToString();
                 case ".re": 
                 case ".fbx": 
-                    return EBundleType.Uncooked.ToString();
+                    return EBundleType.Bundle.ToString();
                 default: return "";
             }
         }
@@ -82,8 +82,7 @@ namespace WolvenKit.Common.Wcc
                 case ".w2cube":
                     return EBundleType.TextureCache.ToString();
                 case ".w2mesh":
-                    return EBundleType.Uncooked.ToString();
-                default: /*return EBundleType.Bundle.ToString();*/ return EBundleType.Uncooked.ToString();
+                default: return EBundleType.Bundle.ToString();
             }
         }
     }
