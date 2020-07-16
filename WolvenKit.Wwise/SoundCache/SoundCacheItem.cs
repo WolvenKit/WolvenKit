@@ -41,13 +41,15 @@ namespace WolvenKit.Wwise.SoundCache
             }
         }
 
-        public void Extract(BundleFileExtractArgs e)
+        public string Extract(BundleFileExtractArgs e)
         {
-            using (var output = new FileStream(e.FileName, FileMode.CreateNew, FileAccess.Write))
+            using (var output = new FileStream(e.FileName, FileMode.Create, FileAccess.Write))
             {
                 Extract(output);
                 output.Close();
             }
+
+            return e.FileName;
         }
     }
 }

@@ -128,7 +128,7 @@ namespace WolvenKit.CR2W
         }
 
         #region Read
-        public List<CR2WImportWrapper> ReadImports(BinaryReader file)
+        public (List<CR2WImportWrapper>, bool, List<CR2WBufferWrapper>) ReadImportsAndBuffers(BinaryReader file)
         {
             m_stream = file.BaseStream;
 
@@ -152,8 +152,11 @@ namespace WolvenKit.CR2W
             // read tables
             names = ReadTable<CR2WName>(1).Select(_ => new CR2WNameWrapper(_, this)).ToList();
             imports = ReadTable<CR2WImport>(2).Select(_ => new CR2WImportWrapper(_, this)).ToList();
+            properties = ReadTable<CR2WProperty>(3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
+            chunks = ReadTable<CR2WExport>(4).Select(_ => new CR2WExportWrapper(_, this)).ToList();
+            buffers = ReadTable<CR2WBuffer>(5).Select(_ => new CR2WBufferWrapper(_)).ToList();
 
-            return imports;
+            return (imports, m_hasInternalBuffer, buffers);
         }
 
         public void Read(BinaryReader file)

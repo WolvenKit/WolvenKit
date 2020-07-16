@@ -176,7 +176,7 @@ namespace WolvenKit.Cache
             }
         }
 
-        public void Extract(BundleFileExtractArgs e)
+        public string Extract(BundleFileExtractArgs e)
         {
             var newpath = Path.ChangeExtension(e.FileName, "dds");
 
@@ -186,7 +186,7 @@ namespace WolvenKit.Cache
                 File.Delete(newpath);
 
             // extract to dds
-            using (var output = new FileStream(newpath, FileMode.CreateNew, FileAccess.Write))
+            using (var output = new FileStream(newpath, FileMode.Create, FileAccess.Write))
             {
                 Extract(output);
             }
@@ -212,13 +212,15 @@ namespace WolvenKit.Cache
                 fi.Delete();
 
                 // lowercase new extension
-                var extractedPath = Path.ChangeExtension(fi.FullName, extractext.ToString());
-                fi = new FileInfo(extractedPath);
+                newpath = Path.ChangeExtension(fi.FullName, extractext.ToString());
+                fi = new FileInfo(newpath);
                 if (fi.Exists)
                 {
-                    File.Move(extractedPath, Path.ChangeExtension(extractedPath, extractext.ToString()));
+                    File.Move(newpath, Path.ChangeExtension(newpath, extractext.ToString()));
                 }
             }
+
+            return newpath;
         }
 
         void p_Exited(object sender, EventArgs e)

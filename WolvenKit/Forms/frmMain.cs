@@ -592,6 +592,9 @@ namespace WolvenKit
                         {
                             try
                             {
+                                // add all dependencies
+                                vm.AddAllImportsToDepot(filename, true);
+
                                 doc.RenderViewer = new Render.frmRender
                                 {
                                     LoadDocument = LoadDocumentAndGetFile,
@@ -1948,11 +1951,11 @@ namespace WolvenKit
             string filename = Path.GetFileName(relativePath);
 
             // always uncook xbms, w2mesh, redcloth and redapex in Bundle
-            if ((extension == ".xbm" || Enum.GetNames(typeof(EExportable)).Contains(extension.TrimStart('.'))) && manager.TypeName == EBundleType.Bundle)
+            if ((extension == ".xbm" /*|| Enum.GetNames(typeof(EExportable)).Contains(extension.TrimStart('.'))*/) && manager.TypeName == EBundleType.Bundle)
                 uncook = true;
 
             #region Check Existing Files in Depot
-            // if uncooking or exporting, check first if the file isn't already in the working depot or the r4depot
+            // if uncooking check first if the file isn't already in the working depot or the r4depot
             if (uncook)
             {
                 var newpath = "";
@@ -2072,6 +2075,7 @@ namespace WolvenKit
                     ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName.ToString(), "dlc", ActiveMod.Name, relativePath)
                     : Path.Combine("Mod", archives.First().Value.Bundle.TypeName.ToString(), relativePath));
                 }
+
                 // more than one archive
                 if (archives.Count() > 1)
                 {

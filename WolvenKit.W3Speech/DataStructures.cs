@@ -81,7 +81,7 @@ namespace WolvenKit.W3Speech
             }
         }
 
-        public void Extract(BundleFileExtractArgs e)
+        public string Extract(BundleFileExtractArgs e)
         {
             PageOFfset = cr2w_offs;
             ZSize = cr2w_size;
@@ -89,6 +89,8 @@ namespace WolvenKit.W3Speech
             PageOFfset = wem_offs;
             ZSize = wem_size;
             Extract(new FileStream(Path.ChangeExtension(e.FileName, ".wem"), FileMode.Create));
+
+            return Path.ChangeExtension(e.FileName, ".wem");
         }
 
         public override string ToString()

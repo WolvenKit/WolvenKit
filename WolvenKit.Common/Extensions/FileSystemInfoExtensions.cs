@@ -42,9 +42,19 @@ namespace WolvenKit.Common.Extensions
 
         public static void CopyToAndCreate(this FileInfo fi, string destinationpath, bool overwrite = false)
         {
-            var did = Path.GetDirectoryName(destinationpath);
-            Directory.CreateDirectory(did);
-            fi.CopyTo(destinationpath, overwrite);
+            try
+            {
+                var did = Path.GetDirectoryName(destinationpath);
+                Directory.CreateDirectory(did);
+                fi.CopyTo(destinationpath, overwrite);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
         }
     }
 }

@@ -513,6 +513,8 @@ namespace WolvenKit
             }
         }
 
+        private void addAllDependenciesToolStripMenuItem_Click(object sender, EventArgs e) => vm.AddAllImportsCommand.SafeExecute();
+
         private void cookToolStripMenuItem_Click(object sender, EventArgs e) => vm.CookCommand.SafeExecute();
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e) => vm.CopyFileCommand.SafeExecute();
@@ -669,14 +671,16 @@ namespace WolvenKit
         {
             if (treeListView.SelectedObject is FileSystemInfo selectedobject)
             {
+                vm.AddAllImportsCommand.SafeExecute();
                 RequestFastRender?.Invoke(this, new RequestFileArgs { File = selectedobject.FullName });
             }
         }
 
+
+
+
+
         #endregion
-
-
-
 
         
     }

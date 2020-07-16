@@ -332,7 +332,7 @@ namespace WolvenKit.App.ViewModels
                     }
                 }
                 
-                // move all other files to depot
+                // move all files to depot
                 if (MainController.Get().Configuration.OverflowEnabled)
                 {
                     string frelativePath = f.FullName.Substring(outdir.Length + 1);
@@ -360,55 +360,65 @@ namespace WolvenKit.App.ViewModels
         /// <param name="relativePath"></param>
         /// <param name="addAsDLC"></param>
         /// <param name="loadmods"></param>
+        /// <param name="copyToMod"></param>
         /// <returns></returns>
-        public int UnbundleFileToMod(string relativePath, bool addAsDLC, bool loadmods = false)
+        public int UnbundleFileToDepot(string relativePath, bool addAsDLC, bool loadmods = false, bool copyToMod = false, EBundleType bundleType = EBundleType.Bundle)
         {
             string extension = Path.GetExtension(relativePath);
             string filename = Path.GetFileName(relativePath);
-            IWitcherArchive manager = MainController.Get().GetManagers(loadmods).FirstOrDefault(_ => _.TypeName == EBundleType.Bundle);
+            IWitcherArchive manager = MainController.Get().GetManagers(loadmods).FirstOrDefault(_ => _.TypeName == bundleType);
 
             if (manager != null && manager.Items.Any(x => x.Value.Any(y => y.Name == relativePath)))
             {
-                var archives = manager.FileList.Where(x => x.Name == relativePath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
-                string newpath;
+                var archives = manager.FileList
+                    .Where(x => x.Name == relativePath)
+                    .Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y))
+                    .ToList();
 
-                // Generte filepaths
-                // Texture and Collision Caches go into Raw (except for pngs, jpgs, and dds)
-                if (archives.First().Value.Bundle.TypeName == EBundleType.CollisionCache
-                    || archives.First().Value.Bundle.TypeName == EBundleType.TextureCache)
-                {
-                    // add pngs, jpgs and dds directly to TextureCache (not Raw, since they don't get imported)
-                    if (extension == ".png" || extension == ".jpg" || extension == ".dds")
-                    {
-                        newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                            ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName.ToString(), "dlc", ActiveMod.Name, relativePath)
-                            : Path.Combine("Mod", archives.First().Value.Bundle.TypeName.ToString(), relativePath));
-                    }
-                    // all other textures and collision stuff goes into Raw (since they have to be imported first)
-                    else
-                        newpath = Path.Combine(ActiveMod.RawDirectory, addAsDLC
-                            ? Path.Combine("DLC", /*archives.First().Value.Bundle.TypeName.ToString(),*/ "dlc", ActiveMod.Name, relativePath)
-                            : Path.Combine("Mod", /*archives.First().Value.Bundle.TypeName.ToString(),*/ relativePath));
-                }
-                // Bundles
-                else
-                {
-                    newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                        ? Path.Combine("DLC", archives.First().Value.Bundle.TypeName.ToString(), "dlc", ActiveMod.Name, relativePath)
-                        : Path.Combine("Mod", archives.First().Value.Bundle.TypeName.ToString(), relativePath));
-                }
+                string depotpath = Path.Combine(MainController.Get().Configuration.DepotPath, relativePath);
 
                 // Extract
                 try
                 {
-                    Directory.CreateDirectory(Path.GetDirectoryName(newpath));
-                    if (File.Exists(newpath))
-                    {
-                        File.Delete(newpath);
-                    }
-
                     // if more than one archive get the last
-                    archives.LastOrDefault().Value.Extract(new BundleFileExtractArgs(newpath, MainController.Get().Configuration.UncookExtension));
+                    var archive = archives.Last().Value;
+                    string extractedfile = archive.Extract(new BundleFileExtractArgs(depotpath, MainController.Get().Configuration.UncookExtension));
+                    var newrelativePath = extractedfile.Substring(MainController.Get().Configuration.DepotPath.Length + 1);
+                    Logger.LogString($"Succesfully unbundled {filename}.", Logtype.Success);
+
+                    if (copyToMod)
+                    {
+                        string newpath;
+                        // Texture and Collision Caches go into Raw (except for pngs, jpgs, and dds)
+                        if ((archive.Bundle.TypeName == EBundleType.CollisionCache
+                            || archive.Bundle.TypeName == EBundleType.TextureCache))
+                        {
+                            // add pngs, jpgs and dds directly to TextureCache (not Raw, since they don't get imported)
+                            if (extension == ".png" || extension == ".jpg" || extension == ".dds")
+                            {
+                                newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                                    ? Path.Combine("DLC", archive.Bundle.TypeName.ToString(), "dlc", ActiveMod.Name, newrelativePath)
+                                    : Path.Combine("Mod", archive.Bundle.TypeName.ToString(), newrelativePath));
+                            }
+                            // all other textures and collision stuff goes into Raw (since they have to be imported first)
+                            else
+                                newpath = Path.Combine(ActiveMod.RawDirectory, addAsDLC
+                                    ? Path.Combine("DLC", "dlc", ActiveMod.Name, newrelativePath)
+                                    : Path.Combine("Mod", newrelativePath));
+                        }
+                        else
+                        {
+                            newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                            ? Path.Combine("DLC", archive.Bundle.TypeName.ToString(), "dlc", ActiveMod.Name, newrelativePath)
+                            : Path.Combine("Mod", archive.Bundle.TypeName.ToString(), newrelativePath));
+                        }
+
+                        var fi = new FileInfo(extractedfile);
+                        if (fi.Exists && !File.Exists(newpath))
+                        {
+                            fi.CopyToAndCreate(newpath);
+                        }
+                    }
 
                     return 1;
                 }
@@ -422,9 +432,9 @@ namespace WolvenKit.App.ViewModels
 
             return 0;
         }
-
+        
         /// <summary>
-        /// Exports and existing file in the ModProject (w2mesh, redcloth) to the modProject
+        /// Exports an existing file in the ModProject (w2mesh, redcloth) to the modProject
         /// </summary>
         /// <param name="fullpath"></param>
         /// <returns></returns>
@@ -449,39 +459,16 @@ namespace WolvenKit.App.ViewModels
                 Logger.LogString($"Not an exportable filetype: {importedExtension}.", Logtype.Error);
                 return;
             }
-            
+
             // get relative path
-            var relativePath = fullpath.Substring(ActiveMod.FileDirectory.Length + 1);
-            bool isDLC = false;
-            if (relativePath.StartsWith("DLC\\"))
-                isDLC = true;
-            else if (relativePath.StartsWith("Mod\\"))
-                isDLC = false;
-            else
-            {
-                Logger.LogString($"File can only be exported from the Uncooked Directories.", Logtype.Error);
-                return;
-            }
-
-
-            relativePath = relativePath.Substring(4);
-            if (relativePath.StartsWith(EBundleType.Bundle.ToString()))
-                relativePath = relativePath.Substring(EBundleType.Bundle.ToString().Length + 1);
-            else if (relativePath.StartsWith(EBundleType.TextureCache.ToString()))
-                relativePath = relativePath.Substring(EBundleType.TextureCache.ToString().Length + 1);
-            else if (relativePath.StartsWith(EBundleType.CollisionCache.ToString()))
-                relativePath = relativePath.Substring(EBundleType.CollisionCache.ToString().Length + 1);
-            else if (relativePath.StartsWith(EBundleType.SoundCache.ToString()))
-                relativePath = relativePath.Substring(EBundleType.SoundCache.ToString().Length + 1);
-            else if (relativePath.StartsWith(EBundleType.Speech.ToString()))
-                relativePath = relativePath.Substring(EBundleType.Speech.ToString().Length + 1);
+            (string relativePath, bool isDLC) = fullpath.GetModRelativePath(ActiveMod.FileDirectory);
 
 
             var exportpath = isDLC ? Path.Combine(ActiveMod.RawDirectory, "DLC", relativePath) : Path.Combine(ActiveMod.RawDirectory, "Mod", relativePath);
             exportpath = Path.ChangeExtension(exportpath, exportedExtension.ToString());
 
             // check imports
-            await AddAllImportsToMod(fullpath);
+            await AddAllImportsToDepot(fullpath);
 
             // copy the w2mesh and all imports to the depot if it doesn't already exist
             var depotInfo = new FileInfo(Path.Combine(MainController.Get().Configuration.DepotPath, relativePath));
@@ -508,25 +495,38 @@ namespace WolvenKit.App.ViewModels
             }
         }
 
-        public async Task AddAllImportsToMod(string fullpath)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fullpath"></param>
+        /// <param name="copyToMod"></param>
+        /// <returns></returns>
+        public async Task AddAllImportsToDepot(string fullpath, bool copyToMod = false)
         {
             if (!File.Exists(fullpath))
                 return;
 
             List<CR2WImportWrapper> importslist = new List<CR2WImportWrapper>();
+            List<CR2WBufferWrapper> bufferlist = new List<CR2WBufferWrapper>();
+            bool hasinternalBuffer;
+
             using (var fs = new FileStream(fullpath, FileMode.Open, FileAccess.Read))
             using (var reader = new BinaryReader(fs))
             {
                 var cr2w = new CR2WFile();
-                importslist = cr2w.ReadImports(reader);
+                (importslist, hasinternalBuffer, bufferlist) = cr2w.ReadImportsAndBuffers(reader);
             }
+
+            // add imports
             foreach (CR2WImportWrapper import in importslist)
             {
                 var relativepath = import.DepotPathStr;
+                var filename = Path.GetFileName(import.DepotPathStr);
                 var depotpath = Path.Combine(MainController.Get().Configuration.DepotPath, relativepath);
+                var fi = new FileInfo(depotpath);
 
                 // if import is not in depot, uncook to depot
-                if (!File.Exists(depotpath))
+                if (!fi.Exists)
                 {
                     //Logger.LogString($"Missing import {depotpath}! ", Logtype.Error);
                     Logger.LogString($"Uncooking missing import {relativepath} and adding to depot ...", Logtype.Important);
@@ -534,16 +534,68 @@ namespace WolvenKit.App.ViewModels
 
                     if (!success)
                     {
-                        Logger.LogString($"Did not uncook file, trying to extract file instead of uncooking.", Logtype.Important);
+                        Logger.LogString($"Did not uncook {filename}, trying to extract file instead of uncooking.", Logtype.Important);
 
-                        success = UnbundleFileToMod(relativepath, false) > 0;
+                        success = UnbundleFileToDepot(relativepath, false, false, copyToMod) > 0;
                         if (!success)
                         {
-                            Logger.LogString($"Did not unbundle file, import is missing.", Logtype.Error);
+                            Logger.LogString($"Did not unbundle {filename}, import is missing.", Logtype.Error);
                         }
                     }
                 }
+
+                // for xbms add tgas etc to Raw
+                if (fi.Extension == "xbm" || fi.Extension == ".xbm")
+                {
+                    var success = UnbundleFileToDepot(relativepath, false, false, copyToMod, EBundleType.TextureCache) > 0;
+                    if (!success)
+                        Logger.LogString($"Did not unbundle {filename}, import is missing.", Logtype.Error);
+                    else
+                        Logger.LogString($"Succesfully unbundled {filename}.", Logtype.Success);
+                }
+
+                // add to mod
+                if (copyToMod)
+                {
+                    if (fi.Exists)
+                    {
+                        string destinationpath = Path.Combine(ActiveMod.BundleDirectory, relativepath);
+                        if (!File.Exists(destinationpath))
+                        {
+                            fi.CopyToAndCreate(destinationpath);
+                            Logger.LogString($"Succesfully added {filename} to mod project.", Logtype.Success);
+                        }
+                    }
+                    else
+                        Logger.LogString($"Could not find {filename} to import.", Logtype.Error);
+                }
             }
+
+            // add buffers
+            if (hasinternalBuffer)
+            {
+                Logger.LogString($"{Path.GetFileName(fullpath)} has internal buffers. Unbundle external buffers manually.", Logtype.Error);
+            }
+            else
+            {
+                // unbundle external buffers
+                foreach (CR2WBufferWrapper buffer in bufferlist)
+                {
+                    (string relativepath, bool isDLC) = fullpath.GetModRelativePath(ActiveMod.FileDirectory);
+                    
+                    var index = buffer.Buffer.index;
+                    string bufferpath = $"{relativepath}.{index}.buffer";
+                    var bufferName = $"{Path.GetFileName(relativepath)}.{index}.buffer";
+
+                    var success = UnbundleFileToDepot(bufferpath, false, false, copyToMod, EBundleType.Bundle) > 0;
+                    if (!success)
+                        Logger.LogString($"Did not unbundle {bufferName}, import is missing.", Logtype.Error);
+                    else
+                        Logger.LogString($"Succesfully unbundled {bufferName}.", Logtype.Success);
+                }
+            }
+            
+
         }
 
         #endregion
