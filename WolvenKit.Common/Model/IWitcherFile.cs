@@ -18,7 +18,7 @@ namespace WolvenKit.Common
         string CompressionType { get; }
 
         void Extract(Stream output);
-        void Extract(BundleFileExtractArgs e);
+        string Extract(BundleFileExtractArgs e);
     }
 
 

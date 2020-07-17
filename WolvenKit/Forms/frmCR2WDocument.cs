@@ -31,9 +31,9 @@ namespace WolvenKit
         public CR2WFile File => vm.File;
         public string FileName => vm.FileName;
 
-        public frmCR2WDocument(DocumentViewModel viewModel)
+        public frmCR2WDocument(DocumentViewModel documentViewModel)
         {
-            vm = viewModel;
+            vm = documentViewModel;
             vm.ClosingRequest += (sender, e) => this.Close();
             vm.ActivateRequest += (sender, e) => this.Activate();
             vm.PropertyChanged += ViewModel_PropertyChanged;
@@ -61,6 +61,9 @@ namespace WolvenKit
             propertyWindow.OnItemsChanged += PropertyWindow_OnItemsChanged;
 
             chunkList.Activate();
+
+            // kinda stupid because the viewmodel lives before the form exists derp
+            UpdateFormText(vm.FormText);
         }
 
 

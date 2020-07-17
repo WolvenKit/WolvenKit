@@ -111,7 +111,7 @@ namespace WolvenKit.Cache
             }
         }
 
-        public void Extract(BundleFileExtractArgs e)
+        public string Extract(BundleFileExtractArgs e)
         {
             var filename = e.FileName;
             switch (Comtype)
@@ -133,6 +133,8 @@ namespace WolvenKit.Cache
             {
                 Extract(output);
             }
+
+            return filename;
         }
     }
 }

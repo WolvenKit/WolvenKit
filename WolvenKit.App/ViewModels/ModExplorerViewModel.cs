@@ -21,12 +21,13 @@ using WolvenKit.CR2W;
 
 namespace WolvenKit.App.ViewModels
 {
-    public class ModExplorerViewModel : MainViewModel
+    public class ModExplorerViewModel : ViewModel
     {
-        
+        private readonly MainViewModel MainVM;
 
-        public ModExplorerViewModel()
+        public ModExplorerViewModel(MainViewModel mainViewModel)
         {
+            MainVM = mainViewModel;
             LastChange = DateTime.Now;
 
 
@@ -36,9 +37,7 @@ namespace WolvenKit.App.ViewModels
             PasteFileCommand = new RelayCommand(PasteFile, CanPasteFile);
             DumpXMLCommand = new RelayCommand(DumpXML, CanDumpXML);
             ExportMeshCommand = new RelayCommand(ExportMesh, CanExportMesh);
-
-
-            Command2 = new RelayCommand(cmd2, Cancmd2);
+            AddAllImportsCommand = new RelayCommand(AddAllImports, CanAddAllImports);
 
 
             treenodes = new BindingList<FileSystemInfo>();
@@ -62,8 +61,12 @@ namespace WolvenKit.App.ViewModels
         #endregion
 
         #region Properties
-        
 
+        public W3Mod ActiveMod
+        {
+            get => MainController.Get().ActiveMod;
+            set => MainController.Get().ActiveMod = value;
+        }
         #region ModelList
         private BindingList<FileSystemInfo> _treenodes = null;
         public BindingList<FileSystemInfo> treenodes
@@ -103,7 +106,7 @@ namespace WolvenKit.App.ViewModels
         public ICommand CopyFileCommand { get; }
         public ICommand PasteFileCommand { get; }
         public ICommand DumpXMLCommand { get; }
-        public ICommand Command2 { get; }
+        public ICommand AddAllImportsCommand { get; }
         
         #endregion
 
@@ -147,7 +150,7 @@ namespace WolvenKit.App.ViewModels
         protected async void ExportMesh()
         {
             var fullpath = SelectedItems.First().FullName;
-            await Task.Run(() => ExportFileToMod(fullpath));
+            await Task.Run(() => MainVM.ExportFileToMod(fullpath));
 
         }
 
@@ -179,10 +182,10 @@ namespace WolvenKit.App.ViewModels
             RequestFileDumpfile(this, new RequestFileArgs { File = SelectedItems.First().FullName });
         }
 
-        protected bool Cancmd2() => SelectedItems != null;
-        protected void cmd2()
+        protected bool CanAddAllImports() => SelectedItems != null;
+        protected async void AddAllImports()
         {
-
+            await MainVM.AddAllImportsToDepot(SelectedItems.First().FullName, true);
         }
 
 
@@ -309,7 +312,7 @@ namespace WolvenKit.App.ViewModels
             }
             catch (Exception ex)
             {
-                Logger.LogString("Error cooking files.", Logtype.Error);
+                MainController.LogString("Error cooking files.", Logtype.Error);
             }
         }
         private void RequestFileDelete(object sender, RequestFileDeleteArgs e)
@@ -319,7 +322,7 @@ namespace WolvenKit.App.ViewModels
             foreach (var filename in e.Files)
             {
                 // Close open documents
-                foreach (var t in OpenDocuments.Where(t => t.FileName == filename))
+                foreach (var t in MainVM.OpenDocuments.Where(t => t.FileName == filename))
                 {
                     t.Close();
                     break;
@@ -340,13 +343,13 @@ namespace WolvenKit.App.ViewModels
                 }
                 catch (Exception)
                 {
-                    Logger.LogString("Failed to delete " + fullpath + "!\r\n", Logtype.Error);
+                    MainController.LogString("Failed to delete " + fullpath + "!\r\n", Logtype.Error);
                 }
             }
 
 
             ResumeMonitoring();
-            SaveMod();
+            MainVM.SaveMod();
         }
         private async void RequestFileDumpfile(object sender, RequestFileArgs e)
         {
@@ -361,7 +364,7 @@ namespace WolvenKit.App.ViewModels
                 dir = fullpath;
 
 
-            await DumpFile(dir, dir);
+            await MainVM.DumpFile(dir, dir);
 
         }
         #endregion
