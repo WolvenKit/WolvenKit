@@ -100,58 +100,59 @@ namespace WolvenKit.App.ViewModels
         }
 
         #region Helper Methods
-        public void ScanAndRegisterCustomClasses()
-        {
-            if (ActiveMod == null)
-                return;
+        // Deprecated
+        //public void ScanAndRegisterCustomClasses()
+        //{
+        //    if (ActiveMod == null)
+        //        return;
 
-            foreach (var wsfile in ActiveMod.ModFiles.Where(_ => Path.GetExtension(_) == ".ws"))
-            {
-                string fullpath = Path.Combine(ActiveMod.ModDirectory, wsfile);
-                var lines = File.ReadAllLines(fullpath);
-                foreach (var line in lines)
-                {
-                    var reg = new Regex(@"^.*(?:class)\s+(\w+)\s*(.*)");
-                    var match = reg.Match(line);
-                    if (match.Success)
-                    {
-                        // check for extends
-                        string classname = match.Groups[1].Value;
-                        string extends = match.Groups[2].Value;
-                        if (!string.IsNullOrEmpty(extends))
-                        {
-                            var ireg = new Regex(@"^.*(?:extends)\s+(\w+)");
-                            var imatch = ireg.Match(extends);
-                            if (imatch.Success)
-                            {
-                                string parent = imatch.Groups[1].Value;
-                                if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
-                                {
-                                    CR2WTypeManager.Get().RegisterAs(classname, parent);
-                                    Logger.LogString($"Registering custom class {classname} as {parent}.\r\n", Logtype.Success);
-                                }
-                            }
-                            else
-                            {
-                                if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
-                                {
-                                    CR2WTypeManager.Get().Register(classname, new CVector(null));
-                                    Logger.LogString($"Registering custom class {classname} as CVector.\r\n", Logtype.Success);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
-                            {
-                                CR2WTypeManager.Get().Register(classname, new CVector(null));
-                                Logger.LogString($"Registering custom class {classname} as CVector.\r\n", Logtype.Success);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        //    foreach (var wsfile in ActiveMod.ModFiles.Where(_ => Path.GetExtension(_) == ".ws"))
+        //    {
+        //        string fullpath = Path.Combine(ActiveMod.ModDirectory, wsfile);
+        //        var lines = File.ReadAllLines(fullpath);
+        //        foreach (var line in lines)
+        //        {
+        //            var reg = new Regex(@"^.*(?:class)\s+(\w+)\s*(.*)");
+        //            var match = reg.Match(line);
+        //            if (match.Success)
+        //            {
+        //                // check for extends
+        //                string classname = match.Groups[1].Value;
+        //                string extends = match.Groups[2].Value;
+        //                if (!string.IsNullOrEmpty(extends))
+        //                {
+        //                    var ireg = new Regex(@"^.*(?:extends)\s+(\w+)");
+        //                    var imatch = ireg.Match(extends);
+        //                    if (imatch.Success)
+        //                    {
+        //                        string parent = imatch.Groups[1].Value;
+        //                        if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
+        //                        {
+        //                            CR2WTypeManager.Get().RegisterAs(classname, parent);
+        //                            Logger.LogString($"Registering custom class {classname} as {parent}.\r\n", Logtype.Success);
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
+        //                        {
+        //                            CR2WTypeManager.Get().Register(classname, new CVector(null));
+        //                            Logger.LogString($"Registering custom class {classname} as CVector.\r\n", Logtype.Success);
+        //                        }
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
+        //                    {
+        //                        CR2WTypeManager.Get().Register(classname, new CVector(null));
+        //                        Logger.LogString($"Registering custom class {classname} as CVector.\r\n", Logtype.Success);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
         public async void executeGame(string args = "")
         {
             if (ActiveMod == null)

@@ -13,10 +13,11 @@ namespace WolvenKit.CR2W.Types
     {
 
         [REDBuffer] public CUInt32 unk { get; set; }
-        [REDBuffer] public CUInt32 MipsCount { get; set; }
+        [REDBuffer(true)] public CUInt32 MipsCount { get; set; }
+
         [REDBuffer(true)] public CCompressedBuffer<SMipData> Mipdata { get; set; }
         [REDBuffer(true)] public CUInt32 unk2 { get; set; }
-        // Imported Textures
+        // Uncooked Textures
         [REDBuffer(true)] public CCompressedBuffer<CByteArray> Mips { get; set; }
         // Cooked Textures
         [REDBuffer(true)] public CUInt32 ResidentmipSize { get; set; }
@@ -27,6 +28,7 @@ namespace WolvenKit.CR2W.Types
         {
 
 
+            MipsCount = new CUInt32(cr2w, this, nameof(MipsCount));
             Mipdata = new CCompressedBuffer<SMipData>(cr2w, this, nameof(Mipdata));
             unk2 = new CUInt32(cr2w, this, nameof(unk2));
             Mips = new CCompressedBuffer<CByteArray>(cr2w, this, nameof(Mips));
@@ -38,10 +40,13 @@ namespace WolvenKit.CR2W.Types
         {
             base.Read(file, size);
 
-            // Imported and Cooked xbms have a different file structure. 
-            // Imported xbms can be identified by their Sourcedata being not null
+            MipsCount.Read(file, 4);
 
-            if (SourceData != null)
+            // Uncooked and Cooked xbms have a different file structure. 
+            // Uncooked xbms have Sourcedata == null
+            // Cooked xbms have sourceData
+
+            if (SourceData == null)
             {
                 //dbg
                 if (ResidentMipIndex != null)
@@ -58,12 +63,15 @@ namespace WolvenKit.CR2W.Types
                     img.Read(file, 0);
                     Mips.AddVariable(img);
                 }
+
+                ResidentmipSize.Read(file, 4);
                 unk2.Read(file, 4);
+                Residentmip.Bytes = file.ReadBytes((int)ResidentmipSize.val);
             }
             else
             {
-                //if (ResidentMipIndex == null)
-                //throw new NotImplementedException();
+                if (ResidentMipIndex == null)
+                    throw new NotImplementedException();
 
 
                 Mipdata.Read(file, size, (int)MipsCount.val);
@@ -72,7 +80,6 @@ namespace WolvenKit.CR2W.Types
 
                 unk2.Read(file, 4);
 
-                //Residentmip.SetParent(this);
                 Residentmip.Read(file, ResidentmipSize.val);
             }
         }
@@ -81,7 +88,8 @@ namespace WolvenKit.CR2W.Types
         {
             base.Write(file);
 
-
+            MipsCount.val = (uint)Mips.Count;
+            MipsCount.Write(file);
             Mips.Write(file);
 
             ResidentmipSize.Write(file);

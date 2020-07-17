@@ -141,8 +141,8 @@ namespace WolvenKit.Cache
 
             int residentMipIndex = xbm.ResidentMipIndex == null ? 0 : xbm.ResidentMipIndex.val;
             byte[] bytesource;
-            // handle cooked xbms
 
+            // handle cooked xbms
             if (xbm.SourceData != null && xbm.Residentmip != null)
             {
                 bytesource = xbm.Residentmip.Bytes;
@@ -233,21 +233,20 @@ namespace WolvenKit.Cache
 
                 int mipcount;
                 // handle cooked xbms
-                if (xbm.SourceData == null)
+                if (xbm.SourceData != null)
                 {
                     mipcount = xbm.Mipdata.elements.Count - residentMipIndex;
                 }
-                // handle imported xbms
+                // handle uncooked xbms
                 else
                 {
-                    mipcount = 0;
+                    mipcount = 0; 
                 }
 
                 uint width = xbm.Mipdata.elements[residentMipIndex].Width.val;
                 uint height = xbm.Mipdata.elements[residentMipIndex].Height.val;
 
                 ETextureCompression compression = xbm.Compression.WrappedEnum;
-                ETextureRawFormat format = xbm.Format.WrappedEnum;
 
                 var ddsformat = ETextureFormat.TEXFMT_R8G8B8A8;
                 switch (compression)
@@ -280,20 +279,23 @@ namespace WolvenKit.Cache
                     case ETextureCompression.TCM_DXTAlphaLinear:
                     case ETextureCompression.TCM_RGBE:
                     case ETextureCompression.TCM_None:
-                        switch (format)
                         {
-                            case ETextureRawFormat.TRF_TrueColor:
-                                ddsformat = ETextureFormat.TEXFMT_R8G8B8A8;
-                                break;
-                            case ETextureRawFormat.TRF_Grayscale:
-                                break;
-                            case ETextureRawFormat.TRF_HDR:
-                            case ETextureRawFormat.TRF_AlphaGrayscale:
-                            case ETextureRawFormat.TRF_HDRGrayscale:
-                            default:
-                                throw new Exception("Invalid compression type! [" + compression + "]");
+                            ETextureRawFormat format = xbm.Format.WrappedEnum;
+                            switch (format)
+                            {
+                                case ETextureRawFormat.TRF_TrueColor:
+                                    ddsformat = ETextureFormat.TEXFMT_R8G8B8A8;
+                                    break;
+                                case ETextureRawFormat.TRF_Grayscale:
+                                    break;
+                                case ETextureRawFormat.TRF_HDR:
+                                case ETextureRawFormat.TRF_AlphaGrayscale:
+                                case ETextureRawFormat.TRF_HDRGrayscale:
+                                default:
+                                    throw new Exception("Invalid compression type! [" + compression + "]");
+                            }
+                            break;
                         }
-                        break;
                     default:
                         throw new Exception("Invalid compression type! [" + compression + "]");
                 }

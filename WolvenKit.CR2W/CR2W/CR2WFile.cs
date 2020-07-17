@@ -216,31 +216,38 @@ namespace WolvenKit.CR2W
         #region Read
         public (List<CR2WImportWrapper>, bool, List<CR2WBufferWrapper>) ReadImportsAndBuffers(BinaryReader file)
         {
-            m_stream = file.BaseStream;
-
+            #region Read Headers
             // read file header
-            var id = ReadStruct<uint>();
+            var id = file.BaseStream.ReadStruct<uint>();
             if (id != MAGIC)
                 throw new FormatException($"Not a CR2W file, Magic read as 0x{id:X8}");
 
-            m_fileheader = ReadStruct<CR2WFileHeader>();
+            m_fileheader = file.BaseStream.ReadStruct<CR2WFileHeader>();
             if (m_fileheader.version > 163 || m_fileheader.version < 159)
                 throw new FormatException($"Unknown Version {m_fileheader.version}. Supported versions: 159 - 163.");
 
-            var dt = new CDateTime(m_fileheader.timeStamp);
+            var dt = new CDateTime(m_fileheader.timeStamp, null, "");
 
-            m_tableheaders = ReadStructs<CR2WTable>(10);
+            m_tableheaders = file.BaseStream.ReadStructs<CR2WTable>(10);
             m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
 
             // read strings
-            m_strings = ReadStringsBuffer();
+            m_strings = ReadStringsBuffer(file.BaseStream);
 
             // read tables
-            names = ReadTable<CR2WName>(1).Select(_ => new CR2WNameWrapper(_, this)).ToList();
-            imports = ReadTable<CR2WImport>(2).Select(_ => new CR2WImportWrapper(_, this)).ToList();
-            properties = ReadTable<CR2WProperty>(3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
-            chunks = ReadTable<CR2WExport>(4).Select(_ => new CR2WExportWrapper(_, this)).ToList();
-            buffers = ReadTable<CR2WBuffer>(5).Select(_ => new CR2WBufferWrapper(_)).ToList();
+            names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this)).ToList();
+            imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this)).ToList();
+            properties = ReadTable<CR2WProperty>(file.BaseStream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
+            chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this)).ToList();
+            buffers = ReadTable<CR2WBuffer>(file.BaseStream, 5).Select(_ => new CR2WBufferWrapper(_)).ToList();
+            embedded = ReadTable<CR2WEmbedded>(file.BaseStream, 6).Select(_ => new CR2WEmbeddedWrapper(_)
+            {
+                ParentFile = this,
+                ParentImports = imports,
+                Handle = StringDictionary[_.path],
+            }).ToList();
+
+            #endregion
 
             return (imports, m_hasInternalBuffer, buffers);
         }

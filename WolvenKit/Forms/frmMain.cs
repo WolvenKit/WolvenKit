@@ -223,7 +223,7 @@ namespace WolvenKit
                     return;
                 case DialogResult.Yes:
                     {
-                        CloseWindows(false);
+                        CloseWindows();
 
                         this.ApplyCustomTheme();
 
@@ -601,7 +601,7 @@ namespace WolvenKit
                             DockAreas = DockAreas.Document
                         };
                         doc.ImageViewer.Show(doc.FormPanel, DockState.Document);
-                        CR2WExportWrapper imagechunk = doc.File?.chunks?.FirstOrDefault(_ => _.data.Type.Contains("CBitmapTexture"));
+                        CR2WExportWrapper imagechunk = doc.File?.chunks?.FirstOrDefault(_ => _.data is CBitmapTexture);
                         doc.ImageViewer.SetImage(imagechunk);
                         break;
                     }
@@ -668,7 +668,7 @@ namespace WolvenKit
 
             foreach (var t in doc.File.chunks.Where(t => t.unknownBytes?.Bytes != null && t.unknownBytes.Bytes.Length > 0))
             {
-                output.Append(t.Name + " contains " + t.unknownBytes.Bytes.Length + " unknown bytes. \n");
+                output.Append(t.REDName + " contains " + t.unknownBytes.Bytes.Length + " unknown bytes. \n");
                 hasUnknownBytes = true;
             }
 
@@ -754,7 +754,7 @@ namespace WolvenKit
                 }
                 else if (ActiveDocument.propertyWindow.IsActivated)
                 {
-                    ActiveDocument.propertyWindow.copyVariable();
+                    ActiveDocument.propertyWindow.CopyVariable();
                     Logger.LogString("Selected propertie(s) copied!\n");
                 }
             }
@@ -770,7 +770,7 @@ namespace WolvenKit
                 }
                 else if (ActiveDocument.propertyWindow.IsActivated)
                 {
-                    ActiveDocument.propertyWindow.pasteVariable();
+                    ActiveDocument.propertyWindow.PasteVariable();
                     Logger.LogString("Copied propertie(s) pasted!\n");
                 }
             }
@@ -804,9 +804,9 @@ namespace WolvenKit
                 if (MainBackgroundWorker != null)
                 {
                     if (string.IsNullOrEmpty(Logger.Progress.Item2))
-                        MainBackgroundWorker.ReportProgress(Logger.Progress.Item1);
+                        MainBackgroundWorker.ReportProgress((int)Logger.Progress.Item1);
                     else
-                        MainBackgroundWorker.ReportProgress(Logger.Progress.Item1, Logger.Progress.Item2);
+                        MainBackgroundWorker.ReportProgress((int)Logger.Progress.Item1, Logger.Progress.Item2);
                 }
             }
         }
@@ -1209,7 +1209,7 @@ namespace WolvenKit
             // check and register custom classes
             // we do it here because people might edit the .ws files at any time
             // todo: what do I do if the .ws file has been edited while the cr2w file is open?
-            vm.ScanAndRegisterCustomClasses();
+            //vm.ScanAndRegisterCustomClasses();
 
             var doc = new DocumentViewModel();
             vm.OpenDocuments.Add(doc);

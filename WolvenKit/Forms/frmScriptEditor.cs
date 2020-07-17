@@ -189,7 +189,7 @@ namespace WolvenKit.Forms
             MainController.LogString(FilePath + " saved!", Common.Services.Logtype.Normal);
 
             // register all new classes
-            MockKernel.Get().GetMainViewModel().ScanAndRegisterCustomClasses();
+            //MockKernel.Get().GetMainViewModel().ScanAndRegisterCustomClasses();
 
             IsUnsaved = false;
             this.Text = Path.GetFileName(FilePath);
