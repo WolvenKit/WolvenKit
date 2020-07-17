@@ -9,6 +9,7 @@ using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.Bundles;
 using WolvenKit.Cache;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit
 {
@@ -33,7 +34,7 @@ namespace WolvenKit
             }
         }
 
-        public event EventHandler<Tuple<List<IWitcherArchive>, List<WitcherListViewItem>, bool>> RequestFileAdd;
+        public event EventHandler<AddFileArgs> RequestFileAdd;
 
         public frmAssetBrowser(List<IWitcherArchive> archives)
         {
@@ -103,7 +104,7 @@ namespace WolvenKit
                     var listItem = new WitcherListViewItem
                     {
                         Node = node,
-                        FullPath = lastItem.Name,
+                        RelativePath = lastItem.Name,
                         Text = item.Key,
                         IsDirectory = false,
                         ImageKey = GetImageKey(item.Key)
@@ -112,7 +113,7 @@ namespace WolvenKit
                     listItem.SubItems.Add(string.Format("{0}%",
                         (100 - (int)(lastItem.ZSize / (float)lastItem.Size * 100.0f))));
                     listItem.SubItems.Add(lastItem.CompressionType);
-                    listItem.SubItems.Add(lastItem.Bundle.TypeName);
+                    listItem.SubItems.Add(lastItem.Bundle.TypeName.ToString());
                     res.Add(listItem);
                 }
                 fileListView.Items.AddRange(res.ToArray());
@@ -181,19 +182,19 @@ namespace WolvenKit
                     var cont = false;
                     foreach (WitcherListViewItem i in pathlistview.Items)
                     {
-                        if (i.Text == item.FullPath)
+                        if (i.Text == item.RelativePath)
                             cont = true;
                     }
                     if (!cont)
                     {
                         var tempnode = new WitcherListViewItem
                         {
-                            ImageKey = GetImageKey(item.FullPath),
-                            Text = item.FullPath,
-                            ToolTipText = item.FullPath,
+                            ImageKey = GetImageKey(item.RelativePath),
+                            Text = item.RelativePath,
+                            ToolTipText = item.RelativePath,
                             IsDirectory = item.IsDirectory,
                             Node = item.Node,
-                            FullPath = item.FullPath
+                            RelativePath = item.RelativePath
                         };
                         pathlistview.Items.Add(tempnode);
                     }
@@ -304,7 +305,7 @@ namespace WolvenKit
         public void Search(string s, int bundleTypeIdx, int fileTypeIdx)
         {
             var extension = "";
-            var bundletype = "";
+            string bundletype = "";
             if (filetypeCB.SelectedIndex != -1)
                 extension = filetypeCB.Items[fileTypeIdx].ToString();
             if (extensionCB.SelectedIndex != -1)
@@ -324,7 +325,7 @@ namespace WolvenKit
                 listItem.SubItems.Add(file.Item2.Size.ToString());
                 listItem.SubItems.Add($"{(100 - (int) (file.Item2.ZSize/(float)file.Item2.Size*100.0f))}%");
                 listItem.SubItems.Add(file.Item2.CompressionType);
-                listItem.SubItems.Add(file.Item2.Bundle.TypeName);
+                listItem.SubItems.Add(file.Item2.Bundle.TypeName.ToString());
                 results.Add(listItem);
             }
             fileListView.Items.AddRange(results.ToArray());
@@ -344,8 +345,10 @@ namespace WolvenKit
             return bundfiles;
         }
 
-        public Tuple<WitcherListViewItem,IWitcherFile>[] SearchFiles(IWitcherFile[] files, string searchkeyword, string bundletype, string extension)
+        public Tuple<WitcherListViewItem,IWitcherFile>[] SearchFiles(IWitcherFile[] files, string searchkeyword, string bundletypestr, string extension)
         {
+            EBundleType bundletype = (EBundleType)Enum.Parse(typeof(EBundleType), bundletypestr);
+
             if (regexCheckbox.Checked)
             {
                 try
@@ -368,22 +371,22 @@ namespace WolvenKit
                     ? files.Where(item => item.Bundle.FileName.Contains(ActiveNode.Name)
                         && item.Name.ToUpper().Contains(searchkeyword.ToUpper())
                         && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")
-                        && (item.Bundle.TypeName == bundletype || bundletype.ToUpper() == "ANY"))
+                        && (item.Bundle.TypeName == bundletype || bundletype == EBundleType.ANY))
                     .Distinct().Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray()
                     : files.Where(item => item.Bundle.FileName.Contains(ActiveNode.Name)
                         && item.Name.Contains(searchkeyword)
                         && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")
-                        && (item.Bundle.TypeName == bundletype || bundletype.ToUpper() == "ANY"))
+                        && (item.Bundle.TypeName == bundletype || bundletype == EBundleType.ANY))
                     .Distinct().Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray();
             }
             return caseCheckBox.Checked
                 ? files.Where(item => item.Name.ToUpper().Contains(searchkeyword.ToUpper())
                     && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")
-                    && (item.Bundle.TypeName == bundletype || bundletype.ToUpper() == "ANY"))
+                    && (item.Bundle.TypeName == bundletype || bundletype == EBundleType.ANY))
                     .Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray()
                 : files.Where(item => item.Name.Contains(searchkeyword)
                     && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")
-                    && (item.Bundle.TypeName == bundletype || bundletype.ToUpper() == "ANY"))
+                    && (item.Bundle.TypeName == bundletype || bundletype == EBundleType.ANY))
                     .Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray();
         }
 
@@ -433,19 +436,19 @@ namespace WolvenKit
                         var cont = false;
                         foreach (WitcherListViewItem i in pathlistview.Items)
                         {
-                            if (i.Text == item.FullPath)
+                            if (i.Text == item.RelativePath)
                                 cont = true;
                         }
                         if (!cont)
                         {
                             var tempnode = new WitcherListViewItem
                             {
-                                ImageKey = GetImageKey(item.FullPath),
-                                Text = item.FullPath,
-                                ToolTipText = item.FullPath,
+                                ImageKey = GetImageKey(item.RelativePath),
+                                Text = item.RelativePath,
+                                ToolTipText = item.RelativePath,
                                 IsDirectory = item.IsDirectory,
                                 Node = item.Node,
-                                FullPath = item.FullPath
+                                RelativePath = item.RelativePath
                             };
                             pathlistview.Items.Add(tempnode);
                         }
@@ -484,12 +487,12 @@ namespace WolvenKit
                     {
                         var tempnode = new WitcherListViewItem
                         {
-                            ImageKey = GetImageKey(item.FullPath),
-                            Text = item.FullPath,
-                            ToolTipText = item.FullPath,
+                            ImageKey = GetImageKey(item.RelativePath),
+                            Text = item.RelativePath,
+                            ToolTipText = item.RelativePath,
                             IsDirectory = item.IsDirectory,
                             Node = item.Node,
-                            FullPath = item.FullPath
+                            RelativePath = item.RelativePath
                         };
                         pathlistview.Items.Add(tempnode);
                     }
@@ -518,19 +521,19 @@ namespace WolvenKit
                             var cont = false;
                             foreach (WitcherListViewItem i in pathlistview.Items)
                             {
-                                if (i.Text == item.FullPath)
+                                if (i.Text == item.RelativePath)
                                     cont = true;
                             }
                             if (!cont)
                             {
                                 var tempnode = new WitcherListViewItem
                                 {
-                                    ImageKey = GetImageKey(item.FullPath),
-                                    Text = item.FullPath,
-                                    ToolTipText = item.FullPath,
+                                    ImageKey = GetImageKey(item.RelativePath),
+                                    Text = item.RelativePath,
+                                    ToolTipText = item.RelativePath,
                                     IsDirectory = item.IsDirectory,
                                     Node = item.Node,
-                                    FullPath = item.FullPath
+                                    RelativePath = item.RelativePath
                                 };
                                 pathlistview.Items.Add(tempnode);
                             }
@@ -538,7 +541,7 @@ namespace WolvenKit
                     }
                 }
             }
-            RequestFileAdd.Invoke(this, new Tuple<List<IWitcherArchive>, List<WitcherListViewItem>,bool>(Managers, SelectedPaths,false));
+            RequestFileAdd.Invoke(this, new AddFileArgs(Managers, SelectedPaths, false, checkBoxUncook.Checked, checkBoxExport.Checked));
             pathlistview.Items.Clear();
         }
 
@@ -555,19 +558,19 @@ namespace WolvenKit
                             var cont = false;
                             foreach (WitcherListViewItem i in pathlistview.Items)
                             {
-                                if (i.Text == item.FullPath)
+                                if (i.Text == item.RelativePath)
                                     cont = true;
                             }
                             if (!cont)
                             {
                                 var tempnode = new WitcherListViewItem
                                 {
-                                    ImageKey = GetImageKey(item.FullPath),
-                                    Text = item.FullPath,
-                                    ToolTipText = item.FullPath,
+                                    ImageKey = GetImageKey(item.RelativePath),
+                                    Text = item.RelativePath,
+                                    ToolTipText = item.RelativePath,
                                     IsDirectory = item.IsDirectory,
                                     Node = item.Node,
-                                    FullPath = item.FullPath
+                                    RelativePath = item.RelativePath
                                 };
                                 pathlistview.Items.Add(tempnode);
                             }
@@ -575,7 +578,7 @@ namespace WolvenKit
                     }
                 }
             }
-            RequestFileAdd.Invoke(this, new Tuple<List<IWitcherArchive>, List<WitcherListViewItem>,bool>(Managers, SelectedPaths,true));
+            RequestFileAdd.Invoke(this, new AddFileArgs(Managers, SelectedPaths, true, checkBoxUncook.Checked, checkBoxExport.Checked));
             pathlistview.Items.Clear();
         }
 
@@ -586,7 +589,7 @@ namespace WolvenKit
                 var item = ((WitcherListViewItem) fileListView.SelectedItems[0]);
                 if (item?.IsDirectory == false)
                 {
-                    Clipboard.SetText(item.FullPath);
+                    Clipboard.SetText(item.RelativePath);
                 }
             }
         }
@@ -602,19 +605,19 @@ namespace WolvenKit
                         var cont = false;
                         foreach (WitcherListViewItem i in pathlistview.Items)
                         {
-                            if (i.Text == item.FullPath)
+                            if (i.Text == item.RelativePath)
                                 cont = true;
                         }
                         if (!cont)
                         {
                             var tempnode = new WitcherListViewItem
                             {
-                                ImageKey = GetImageKey(item.FullPath),
-                                Text = item.FullPath,
-                                ToolTipText = item.FullPath,
+                                ImageKey = GetImageKey(item.RelativePath),
+                                Text = item.RelativePath,
+                                ToolTipText = item.RelativePath,
                                 IsDirectory = item.IsDirectory,
                                 Node = item.Node,
-                                FullPath = item.FullPath
+                                RelativePath = item.RelativePath
                             };
                             pathlistview.Items.Add(tempnode);
                         }
@@ -650,7 +653,7 @@ namespace WolvenKit
                     {
                         var files = CollectFiles(item.Node);
                         //Remove duplicates.
-                        var distinctFiles = files.GroupBy(x => x.FullPath).Select(x => x.First()).ToArray();
+                        var distinctFiles = files.GroupBy(x => x.RelativePath).Select(x => x.First()).ToArray();
                         if (files.Length > 1000)
                             pathlistview.Items.AddRange(distinctFiles.Take(1000).ToArray());
                         else
@@ -690,7 +693,10 @@ namespace WolvenKit
             OpenPath("Root");
         }
 
-
-
+        private void checkBoxExport_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxExport.Checked)
+                checkBoxUncook.Checked = true;
+        }
     }
 }

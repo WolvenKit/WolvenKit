@@ -127,7 +127,7 @@ namespace WolvenKit.Forms
 
         private void newProjectBtn_Click(object sender, EventArgs e)
         {
-            main.createNewMod();
+            main.CreateNewMod();
             this.Close();
         }
 
@@ -150,7 +150,7 @@ namespace WolvenKit.Forms
 
         private void OpenProjectButton_Click(object sender, EventArgs e)
         {
-            main.openMod();
+            main.OpenMod();
             this.Close();
         }
 
@@ -173,7 +173,7 @@ namespace WolvenKit.Forms
         {
             if (((BrightIdeasSoftware.ObjectListView)sender).SelectedObject != null)
             {
-                main.openMod((((BrightIdeasSoftware.ObjectListView)sender).SelectedObject as RecentFileObject).Fullpath);
+                main.OpenMod((((BrightIdeasSoftware.ObjectListView)sender).SelectedObject as RecentFileObject).Fullpath);
                 this.Close();
             }
         }

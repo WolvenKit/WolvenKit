@@ -176,45 +176,51 @@ namespace WolvenKit.Cache
             }
         }
 
-        public void Extract(BundleFileExtractArgs e)
+        public string Extract(BundleFileExtractArgs e)
         {
-            var fullpath = e.FileName;
-            var isPng = Path.GetExtension(fullpath) == ".png";
-            var isJpg = Path.GetExtension(fullpath) == ".jpg";
+            var newpath = Path.ChangeExtension(e.FileName, "dds");
 
-            fullpath = Path.ChangeExtension(fullpath, "dds");
+            // create new directory and delete existing file
+            Directory.CreateDirectory(Path.GetDirectoryName(newpath) ?? "");
+            if (File.Exists(newpath))
+                File.Delete(newpath);
 
-            Directory.CreateDirectory(Path.GetDirectoryName(fullpath) ?? "");
-            if (File.Exists(fullpath))
-            {
-                File.Delete(fullpath);
-            }
-
-            using (var output = new FileStream(fullpath, FileMode.CreateNew, FileAccess.Write))
+            // extract to dds
+            using (var output = new FileStream(newpath, FileMode.Create, FileAccess.Write))
             {
                 Extract(output);
             }
 
-            // convert all dds files to the extension specified in the settings
-            // also convert "pngs" to pngs lol
-            if (e.Extension != EUncookExtension.dds || isPng || isJpg)
+            var extractext = e.Extension;
+            // do not convert pngs, jpgs and dds
+            if (Path.GetExtension(e.FileName) != ".dds")
             {
+                if (Path.GetExtension(e.FileName) == ".png")
+                    extractext = EUncookExtension.png;
+                else if (Path.GetExtension(e.FileName) == ".jpg")
+                    extractext = EUncookExtension.jpg;
+
+
                 //convert
-                var fi = new FileInfo(fullpath);
+                var fi = new FileInfo(newpath);
                 if (fi.Exists)
                 {
-                    // convert to png if file is a png, else convert to custom extension
-                    if (isPng)
-                        Texconv.Convert(Path.GetDirectoryName(fullpath), fullpath, EUncookExtension.png);
-                    else if (isJpg)
-                        Texconv.Convert(Path.GetDirectoryName(fullpath), fullpath, EUncookExtension.jpg);
-                    else
-                        Texconv.Convert(Path.GetDirectoryName(fullpath), fullpath, e.Extension);
+                    Texconv.Convert(Path.GetDirectoryName(newpath), newpath, extractext);
                 }
 
                 // delete old DDS
                 fi.Delete();
+
+                // lowercase new extension
+                newpath = Path.ChangeExtension(fi.FullName, extractext.ToString());
+                fi = new FileInfo(newpath);
+                if (fi.Exists)
+                {
+                    File.Move(newpath, Path.ChangeExtension(newpath, extractext.ToString()));
+                }
             }
+
+            return newpath;
         }
 
         void p_Exited(object sender, EventArgs e)

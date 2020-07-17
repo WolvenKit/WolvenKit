@@ -15,7 +15,7 @@ namespace WolvenKit.Forms
         private readonly FindReplace ScintillaFindReplace;
 
         public string autocompletelist = "array< PushBack string int integer bool float name range event function abstract const final private protected public theGame theInput thePlayer theSound enum struct state array false NULL true out inlined autobind editable entry exec hint import latent optional out quest saved statemachine timer break case continue else for if return switch while";
-        public bool IsUnsafed { get; set; }
+        public bool IsUnsaved { get; set; }
 
 
         public frmScriptEditor()
@@ -68,7 +68,7 @@ namespace WolvenKit.Forms
             }
 
             // notify unsaved
-            IsUnsafed = true;
+            IsUnsaved = true;
             this.Text = $"{Path.GetFileName(FilePath)}*";
             UIController.Get().Window.AddToOpenScripts(this);
         }
@@ -181,6 +181,7 @@ namespace WolvenKit.Forms
             Encoding enc = Encoding.Unicode;
 
             File.WriteAllText(FilePath, "", enc);
+
             using (var streamWriter = File.AppendText(FilePath))
             {
                 streamWriter.Write(scintillaControl.Text);
@@ -188,9 +189,9 @@ namespace WolvenKit.Forms
             MainController.LogString(FilePath + " saved!", Common.Services.Logtype.Normal);
 
             // register all new classes
-            UIController.Get().Window.ScanAndRegisterCustomClasses();
+            MockKernel.Get().GetMainViewModel().ScanAndRegisterCustomClasses();
 
-            IsUnsafed = false;
+            IsUnsaved = false;
             this.Text = Path.GetFileName(FilePath);
         }
 
@@ -255,7 +256,7 @@ namespace WolvenKit.Forms
 
         private void frmScriptEditor_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (IsUnsafed)
+            if (IsUnsaved)
             {
                 var res = MessageBox.Show($"{FileName} has been modified, save changes?", "Save Changes?",
                     MessageBoxButtons.YesNoCancel,

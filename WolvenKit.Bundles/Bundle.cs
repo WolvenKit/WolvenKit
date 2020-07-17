@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.Bundles
 {
@@ -39,7 +40,7 @@ namespace WolvenKit.Bundles
 
         }
 
-        public string TypeName { get { return "Bundle"; } }
+        public EBundleType TypeName { get { return EBundleType.Bundle; } }
         public string FileName { get; set; }
         public Dictionary<string, BundleItem> Items { get; set; }
         

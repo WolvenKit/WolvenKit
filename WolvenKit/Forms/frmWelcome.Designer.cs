@@ -183,6 +183,8 @@
             // 
             this.objectListView1.AllColumns.Add(this.olvColumn1);
             this.objectListView1.AllColumns.Add(this.olvColumn2);
+            this.objectListView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.objectListView1.BackColor = System.Drawing.SystemColors.Control;
             this.objectListView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.objectListView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {

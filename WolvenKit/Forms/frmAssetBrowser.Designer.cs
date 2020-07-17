@@ -78,6 +78,8 @@ namespace WolvenKit
             this.fileSplitContainer = new System.Windows.Forms.SplitContainer();
             this.limitCheckBox = new System.Windows.Forms.CheckBox();
             this.limitUpDown = new System.Windows.Forms.NumericUpDown();
+            this.checkBoxUncook = new System.Windows.Forms.CheckBox();
+            this.checkBoxExport = new System.Windows.Forms.CheckBox();
             this.filebrowserMenuStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fileSplitContainer)).BeginInit();
@@ -91,7 +93,7 @@ namespace WolvenKit
             // 
             this.btOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btOpen.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btOpen.Location = new System.Drawing.Point(12, 499);
+            this.btOpen.Location = new System.Drawing.Point(9, 499);
             this.btOpen.Name = "btOpen";
             this.btOpen.Size = new System.Drawing.Size(145, 23);
             this.btOpen.TabIndex = 3;
@@ -308,8 +310,9 @@ namespace WolvenKit
             // 
             // button2
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(472, 499);
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.Location = new System.Drawing.Point(623, 96);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(105, 23);
             this.button2.TabIndex = 17;
@@ -496,7 +499,7 @@ namespace WolvenKit
             // 
             this.addDLCFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.addDLCFile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.addDLCFile.Location = new System.Drawing.Point(163, 499);
+            this.addDLCFile.Location = new System.Drawing.Point(160, 499);
             this.addDLCFile.Name = "addDLCFile";
             this.addDLCFile.Size = new System.Drawing.Size(145, 23);
             this.addDLCFile.TabIndex = 27;
@@ -567,11 +570,37 @@ namespace WolvenKit
             0,
             0});
             // 
+            // checkBoxUncook
+            // 
+            this.checkBoxUncook.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkBoxUncook.AutoSize = true;
+            this.checkBoxUncook.Location = new System.Drawing.Point(314, 503);
+            this.checkBoxUncook.Name = "checkBoxUncook";
+            this.checkBoxUncook.Size = new System.Drawing.Size(64, 17);
+            this.checkBoxUncook.TabIndex = 33;
+            this.checkBoxUncook.Text = "Uncook";
+            this.checkBoxUncook.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxExport
+            // 
+            this.checkBoxExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkBoxExport.AutoSize = true;
+            this.checkBoxExport.Location = new System.Drawing.Point(384, 503);
+            this.checkBoxExport.Name = "checkBoxExport";
+            this.checkBoxExport.Size = new System.Drawing.Size(56, 17);
+            this.checkBoxExport.TabIndex = 34;
+            this.checkBoxExport.Text = "Export";
+            this.checkBoxExport.UseVisualStyleBackColor = true;
+            this.checkBoxExport.CheckedChanged += new System.EventHandler(this.checkBoxExport_CheckedChanged);
+            // 
             // frmAssetBrowser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(811, 525);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.checkBoxExport);
+            this.Controls.Add(this.checkBoxUncook);
             this.Controls.Add(this.limitUpDown);
             this.Controls.Add(this.limitCheckBox);
             this.Controls.Add(this.label3);
@@ -585,7 +614,6 @@ namespace WolvenKit
             this.Controls.Add(this.currentfolderCheckBox);
             this.Controls.Add(this.regexCheckbox);
             this.Controls.Add(this.clearSearch);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.filetypeCB);
@@ -661,5 +689,7 @@ namespace WolvenKit
         private SplitContainer fileSplitContainer;
         private CheckBox limitCheckBox;
         private NumericUpDown limitUpDown;
+        private CheckBox checkBoxUncook;
+        private CheckBox checkBoxExport;
     }
 }

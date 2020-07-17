@@ -142,12 +142,12 @@ namespace WolvenKit.Cache
             int residentMipIndex = xbm.ResidentMipIndex == null ? 0 : xbm.ResidentMipIndex.val;
             byte[] bytesource;
             // handle cooked xbms
-            if (xbm.SourceData == null && xbm.Residentmip != null)
+
+            if (xbm.SourceData != null && xbm.Residentmip != null)
             {
                 bytesource = xbm.Residentmip.Bytes;
-
             }
-            // handle imported xbms
+            // handle uncooked xbms
             else if (xbm.Mips != null)
             {
                 bytesource = xbm.Mips.elements[residentMipIndex].Bytes;

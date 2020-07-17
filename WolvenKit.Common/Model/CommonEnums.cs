@@ -21,4 +21,16 @@ namespace WolvenKit.Common.Model
         //HDP,
         //JXR
     }
+
+
+    public enum EBundleType
+    {
+        ANY,
+        Bundle,
+        CollisionCache,
+        TextureCache,
+        SoundCache,
+        Speech,
+        //Uncooked
+    }
 }

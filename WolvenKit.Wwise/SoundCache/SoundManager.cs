@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using WolvenKit.Common;
 using WolvenKit.Cache;
 using WolvenKit.Wwise;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.Cache
 {
@@ -28,7 +29,7 @@ namespace WolvenKit.Cache
         public Dictionary<string, SoundCache> Archives { get; set; }
         public WitcherTreeNode RootNode { get; set; }
         public List<IWitcherFile> FileList { get; set; }
-        public string TypeName { get { return new SoundCache().TypeName; } }
+        public EBundleType TypeName => EBundleType.SoundCache;
         public List<string> Extensions { get; set; }
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
 
@@ -158,8 +159,8 @@ namespace WolvenKit.Cache
         /// </summary>
         public void RebuildRootNode()
         {
-            RootNode = new WitcherTreeNode();
-            RootNode.Name = new SoundCache().TypeName;
+            RootNode = new WitcherTreeNode(EBundleType.SoundCache);
+            RootNode.Name = EBundleType.SoundCache.ToString();
 
             foreach (var item in Items)
             {

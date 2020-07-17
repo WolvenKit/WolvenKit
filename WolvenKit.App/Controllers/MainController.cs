@@ -42,7 +42,7 @@ namespace WolvenKit.App
 
         #region Fields
         public const string ManagerCacheDir = "ManagerCache";
-        public const string DepotDir = "Depot";
+        public const string WorkDir = "tmp_workdir";
         public const string DepotZipPath = "ManagerCache\\Depot.zip";
         public const string XBMDumpPath = "ManagerCache\\__xbmdump_3768555366.csv";
         public string InitialModProject = "";
@@ -107,6 +107,42 @@ namespace WolvenKit.App
         public SpeechManager SpeechManager => speechManager;
 
         //public Dictionary<string, MemoryMappedFile> mmfs = new Dictionary<string, MemoryMappedFile>();
+
+        public List<IWitcherArchive> GetManagers(bool loadmods)
+        {
+            var managers = new List<IWitcherArchive>();
+            var exeDir = Path.GetDirectoryName(Configuration.ExecutablePath);
+
+            if (loadmods)
+            {
+                if (MainController.Get().ModBundleManager != null)
+                {
+                    MainController.Get().ModBundleManager.LoadModsBundles(exeDir); // load mods added after WK was started
+                    managers.Add(MainController.Get().ModBundleManager);
+                }
+                if (MainController.Get().ModSoundManager != null)
+                {
+                    MainController.Get().ModSoundManager.LoadModsBundles(exeDir);
+                    managers.Add(MainController.Get().ModSoundManager);
+                }
+                if (MainController.Get().ModTextureManager != null)
+                {
+                    MainController.Get().ModTextureManager.LoadModsBundles(exeDir);
+                    managers.Add(MainController.Get().ModTextureManager);
+                }
+            }
+            else
+            {
+                if (MainController.Get().BundleManager != null) managers.Add(MainController.Get().BundleManager);
+                if (MainController.Get().SoundManager != null) managers.Add(MainController.Get().SoundManager);
+                if (MainController.Get().TextureManager != null) managers.Add(MainController.Get().TextureManager);
+                if (MainController.Get().CollisionManager != null) managers.Add(MainController.Get().CollisionManager);
+                if (MainController.Get().SpeechManager != null) managers.Add(MainController.Get().SpeechManager);
+            }
+
+            return managers;
+        }
+
         #endregion
 
         #region Logging
@@ -389,25 +425,46 @@ namespace WolvenKit.App
 
                 loadStatus = "Loading depot manager!";
                 #region Load depot manager
+                // check if r4depot exists
+                if (!Directory.Exists(Configuration.DepotPath))
+                {
+                    DirectoryInfo wccDir = new FileInfo(Configuration.WccLite).Directory.Parent.Parent;
+                    if (!wccDir.Exists)
+                        throw new Exception("Wcc_lite is not specified.");
+
+                    string wcc_r4data = Path.Combine(wccDir.FullName, "r4data");
+                    if (!Directory.Exists(wcc_r4data))
+                        Directory.CreateDirectory(wcc_r4data);  //create an empty depot
+                    Configuration.DepotPath = wcc_r4data;
+                    Configuration.Save();
+                }
+
                 var fi = new FileInfo(DepotZipPath);
                 if (!fi.Exists)
                     throw new Exception("Shipped Depot not found: Depot.zip");
 
-                using (MD5 md5 = MD5.Create())
-                using (var stream = File.OpenRead(fi.FullName))
+                // check if any new files are in the shipped zip that aren't in the r4depot
+                // and extract if yes
+                List<ZipArchiveEntry> entries = ZipFile.OpenRead(DepotZipPath).Entries.ToList();
+                foreach (ZipArchiveEntry entry in entries)
                 {
-                    var shash = BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLower();
-                    // check if not same as in config
-                    if (Configuration.DepotHash != shash || !Directory.Exists(DepotDir))
+                    var filepath = Path.Combine(Configuration.DepotPath, entry.FullName);
+                    // if directory
+                    if (string.IsNullOrEmpty(entry.Name))
                     {
-                        Configuration.DepotHash = shash;
-
-                        if (Directory.Exists(DepotDir))
-                            Directory.Delete(DepotDir, true);
-                        Directory.CreateDirectory(DepotDir);
-                        ZipFile.ExtractToDirectory(DepotZipPath, DepotDir);
+                        if (!Directory.Exists(filepath))
+                            Directory.CreateDirectory(filepath);
+                    }
+                    else
+                    {
+                        if (!File.Exists(filepath))
+                            entry.ExtractToFile(filepath);
                     }
                 }
+                #endregion
+
+                loadStatus = "Loading path hashes!";
+                #region PathHasManager
                 // create pathhashes if they don't already exist
                 fi = new FileInfo(Cr2wResourceManager.pathashespath);
                 if (!fi.Exists)
@@ -420,6 +477,8 @@ namespace WolvenKit.App
                 }
 
                 #endregion
+
+
 
                 loadStatus = "Loaded";
 

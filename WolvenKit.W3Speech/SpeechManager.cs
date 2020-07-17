@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.W3Speech
 {
@@ -26,7 +27,7 @@ namespace WolvenKit.W3Speech
         public Dictionary<string, W3Speech> Speeches { get; set; }
         public WitcherTreeNode RootNode { get; set; }
         public List<IWitcherFile> FileList { get; set; }
-        public string TypeName { get { return "Speech"; } }
+        public EBundleType TypeName => EBundleType.Speech;
         public List<string> Extensions { get; set; }
         public AutoCompleteStringCollection AutocompleteSource { get; set; }
 
@@ -163,8 +164,8 @@ namespace WolvenKit.W3Speech
         /// </summary>
         public void RebuildRootNode()
         {
-            RootNode = new WitcherTreeNode();
-            RootNode.Name = new W3Speech().TypeName;
+            RootNode = new WitcherTreeNode(EBundleType.Speech);
+            RootNode.Name = EBundleType.Speech.ToString();
             foreach (var item in Items)
             {
                 var currentNode = RootNode;

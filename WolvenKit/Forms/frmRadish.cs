@@ -28,7 +28,7 @@ namespace WolvenKit.Forms
         public frmRadish()
         {
             // initialize Viewmodel
-            viewModel = MockKernel.Get().GetRadishVM() as RadishViewModel;
+            viewModel = MockKernel.Get().GetRadishViewModel();
             if (viewModel.IsCorrupt)
                 this.Close();
 
