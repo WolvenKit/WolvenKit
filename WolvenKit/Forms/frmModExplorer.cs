@@ -34,13 +34,10 @@ namespace WolvenKit
     public partial class frmModExplorer : DockContent, IThemedContent
     {
         private readonly ModExplorerViewModel vm;
-        private FileSystemWatcher modexplorerSlave;
         private bool usecachedNodeList;
 
         public frmModExplorer(ILoggerService logger)
         {
-
-
             // initialize Viewmodel
             vm = MockKernel.Get().GetModExplorerModel();
             vm.PropertyChanged += ViewModel_PropertyChanged;
@@ -48,24 +45,6 @@ namespace WolvenKit
 
             InitializeComponent();
             ApplyCustomTheme();
-
-
-            modexplorerSlave = new System.IO.FileSystemWatcher();
-            if (ActiveMod != null)
-            {
-                modexplorerSlave.Path = ActiveMod.FileDirectory;
-                this.modexplorerSlave.NotifyFilter = NotifyFilters.LastAccess
-                                     | NotifyFilters.LastWrite
-                                     | NotifyFilters.FileName
-                                     | NotifyFilters.DirectoryName;
-                this.modexplorerSlave.IncludeSubdirectories = true;
-                this.modexplorerSlave.SynchronizingObject = this;
-                this.modexplorerSlave.Created += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
-                this.modexplorerSlave.Deleted += new System.IO.FileSystemEventHandler(this.FileChanges_Detected);
-                this.modexplorerSlave.Renamed += new System.IO.RenamedEventHandler(this.FileChanges_Detected);
-
-                this.modexplorerSlave.EnableRaisingEvents = true;
-            }
 
             // Init ObjectListView
             this.treeListView.CanExpandGetter = delegate (object x) {
@@ -128,6 +107,14 @@ namespace WolvenKit
                 UpdateTreeView();
             }
         }
+
+        private void frmModExplorer_Shown(object sender, EventArgs e)
+        {
+            if (ActiveMod != null)
+                modexplorerSlave.Path = ActiveMod.FileDirectory;
+        }
+
+        #region FileSystemWatcher
         public void PauseMonitoring()
         {
             modexplorerSlave.EnableRaisingEvents = false;
@@ -135,13 +122,21 @@ namespace WolvenKit
 
         public void ResumeMonitoring()
         {
-            modexplorerSlave.EnableRaisingEvents = true;
-            usecachedNodeList = true;
-            UpdateTreeView();
+            if (ActiveMod != null)
+            {
+                modexplorerSlave.Path = ActiveMod.FileDirectory;
+                modexplorerSlave.EnableRaisingEvents = true;
+                usecachedNodeList = true;
+                UpdateTreeView();
+            }
         }
         public void StopMonitoringDirectory()
         {
             modexplorerSlave.Dispose();
+        }
+        private void FileChanges_Detected(object sender, RenamedEventArgs e)
+        {
+
         }
         private void FileChanges_Detected(object sender, FileSystemEventArgs e)
         {
@@ -168,7 +163,7 @@ namespace WolvenKit
                     throw new NotImplementedException();
             }
         }
-
+        #endregion
 
         #region Methods
         public void ApplyCustomTheme()
@@ -696,8 +691,10 @@ namespace WolvenKit
 
 
 
+
+
         #endregion
 
-        
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using WolvenKit.CR2W.Editors;
 
 namespace WolvenKit.CR2W.Types
@@ -12,7 +13,7 @@ namespace WolvenKit.CR2W.Types
         public CUInt32 MipsCount;
         public CCompressedBuffer<SMipData> Mipdata;
         public CUInt32 unk2;
-        // Imported Textures
+        // Uncooked Textures
         public CCompressedBuffer<CByteArray> Mips;
         // Cooked Textures
         public CUInt32 ResidentmipSize;
@@ -25,10 +26,10 @@ namespace WolvenKit.CR2W.Types
             unk = new CUInt32(cr2w) { Name = "unk" };
             MipsCount = new CUInt32(cr2w) { Name = "MipsCount" };
             Mipdata = new CCompressedBuffer<SMipData>(cr2w, _ => new SMipData(_)) { Name = "Mipdata" };
-            unk2 = new CUInt32(cr2w) { Name = "unk2" };
             Mips = new CCompressedBuffer<CByteArray>(cr2w, _ => new CByteArray(_)) { Name = "mips" };
             ResidentmipSize = new CUInt32(cr2w) { Name = "filesize" };
-            Residentmip = new CBytes(cr2w) { Name = "Image" };
+            unk2 = new CUInt32(cr2w) { Name = "unk2" };
+            Residentmip = new CBytes(cr2w) { Name = "ResidentMip" };
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -38,11 +39,11 @@ namespace WolvenKit.CR2W.Types
             unk.Read(file, 4);
             MipsCount.Read(file, 4);
 
-            // Imported and Cooked xbms have a different file structure. 
-            // Imported xbms can be identified by their Sourcedata being not null
+            // Uncooked and Cooked xbms have a different file structure. 
+            // Uncooked xbms can be identified by their Sourcedata being null
             var SourceData = this.GetVariableByName("sourceData");
 
-            if (SourceData != null)
+            if (SourceData == null)
             {
                 //dbg
                 var ResidentMipIndex = this.GetVariableByName("residentMipIndex");
@@ -60,14 +61,15 @@ namespace WolvenKit.CR2W.Types
                     img.Read(file, 0);
                     Mips.AddVariable(img);
                 }
+                ResidentmipSize.Read(file, 4);
+
                 unk2.Read(file, 4);
+
+                Residentmip.Bytes = file.ReadBytes((int)ResidentmipSize.val);
+
             }
             else
             {
-                //if (ResidentMipIndex == null)
-                //throw new NotImplementedException();
-
-
                 Mipdata.Read(file, size, (int)MipsCount.val);
 
                 ResidentmipSize.Read(file, 4);
@@ -77,16 +79,6 @@ namespace WolvenKit.CR2W.Types
                 //Residentmip.SetParent(this);
                 Residentmip.Read(file, ResidentmipSize.val);
             }
-
-            //if (MipsCount.val > 0)
-            //    mips.Read(file, size, (int)MipsCount.val);
-            //else
-            //    mips.Read(file, size, 1);
-
-            //ResidentmipSize.Read(file, 4);
-            //unk2.Read(file, 4);
-
-            //Residentmip.Bytes = file.ReadBytes((int)ResidentmipSize.val);
         }
 
         public override void Write(BinaryWriter file)
@@ -94,8 +86,10 @@ namespace WolvenKit.CR2W.Types
             base.Write(file);
 
             unk.Write(file);
-            MipsCount.Write(file);
+            file.Write((int)Mips.Count);
+            //MipsCount.Write(file);
 
+            Mipdata.Write(file);
             Mips.Write(file);
 
             ResidentmipSize.Write(file);
@@ -130,6 +124,8 @@ namespace WolvenKit.CR2W.Types
             var list = new List<IEditableVariable>(variables)
             {
                 unk,
+                //MipsCount,
+                Mipdata,
                 Mips,
                 ResidentmipSize,
                 unk2,

@@ -826,7 +826,7 @@ namespace WolvenKit
             // Backgroundworker
             if (!MainBackgroundWorker.IsBusy)
             {
-                MockKernel.Get().GetModExplorerModel().PauseMonitoring();
+                ModExplorer.PauseMonitoring();
 
                 // progress bar
                 m_frmProgress = new frmProgress()
@@ -859,7 +859,7 @@ namespace WolvenKit
                     default:
                         break;
                 }
-                MockKernel.Get().GetModExplorerModel().ResumeMonitoring();
+                ModExplorer.ResumeMonitoring();
                 vm.SaveMod();
             }
             else
