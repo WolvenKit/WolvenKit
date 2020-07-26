@@ -12,6 +12,9 @@ using WolvenKit.Common.Services;
 
 namespace WolvenKit.App
 {
+    /// <summary>
+    /// Radish-modding-community-tools handler
+    /// </summary>
     public class RadishController : ObservableObject
     {
         public enum ERadishStatus

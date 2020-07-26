@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using WolvenKit.CR2W.Types;
 
+/// <summary>
+/// Where most of the parsing and handling of atomic game files happens.
+/// Three layers of hashes (FNV1a for a big part, Cyclic redundancy check CRC32, custom,...) on
+/// header, data blocks, and atomic data.
+/// Hashes are checked and their compliance is enforced by wcc_lite.exe, (and other? design history?)
+/// </summary>
 namespace WolvenKit.CR2W
 {
     public static class W3ReaderExtensions

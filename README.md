@@ -12,7 +12,7 @@ This repository is created to demonstrate how **REDengine 3** reads and writes f
 ***Copyright Disclaimer:*** Under Section 107 of the Copyright Act 1976, allowance is made for "fair use" for purposes such as criticism, comment, news reporting, teaching, scholarship, and research. Fair use is a use permitted by copyright statute that might otherwise be infringing. Non-profit, educational or personal use tips the balance in favor of fair use.".This project is solely made for research and in no way made to generate any revenue.
 ***
 
-### Team:
+## Team:
 **Project lead: Traderain**
 
 - George Tziotis
@@ -33,7 +33,7 @@ This repository is created to demonstrate how **REDengine 3** reads and writes f
 - Anras573
 - rmemr
 
-### Other people who helped the project:
+## Other people who helped the project:
 - CAPA
 - DJ_Kovrik
 - KNG
@@ -43,7 +43,7 @@ This repository is created to demonstrate how **REDengine 3** reads and writes f
 
 ##### *Based on the code from "Sarcen's W3Edit" by Sarcen*.
 
-### Credits:
+## Credits:
 
 - https://xentax.com
 - https://zenhax.com

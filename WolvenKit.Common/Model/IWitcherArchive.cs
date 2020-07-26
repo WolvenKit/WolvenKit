@@ -9,6 +9,10 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common
 {
+    /// <summary>
+    /// Top-level game file, holds archived game assets. Types :
+    /// .bundle, .cache (collision, texture, sound) .w3speech
+    /// </summary>
     public interface IWitcherArchive
     {
         WitcherTreeNode RootNode { get; set; }

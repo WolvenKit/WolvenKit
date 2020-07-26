@@ -27,6 +27,9 @@ using WolvenKit.Wwise.Wwise;
 
 namespace WolvenKit.App.ViewModels
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class MainViewModel : ViewModel
     {
         #region Properties
@@ -724,7 +727,7 @@ namespace WolvenKit.App.ViewModels
 
         /// <summary>
         /// Cooks Files in the ModProject's folders (Bunde, TextureCache etc...)
-        /// IN: \TextureCache, OUT: \Bundle OR \cooked
+        /// IN: \\TextureCache, OUT: \\Bundle OR \\cooked
         /// </summary>
         /// <param name="cachetype"></param>
         /// <returns></returns>
@@ -791,7 +794,7 @@ namespace WolvenKit.App.ViewModels
 
         /// <summary>
         /// Packs the bundles for the DLC and the Mod. 
-        /// IN: \Bundles, OUT: packed\Mods\mod
+        /// IN: \\Bundles, OUT: packed\\Mods\\mod
         /// </summary>
         public async Task<int> Pack()
         {
@@ -845,7 +848,7 @@ namespace WolvenKit.App.ViewModels
 
         /// <summary>
         /// Create Metadata
-        /// IN: packed\Mods\mod, OUT: same dir
+        /// IN: packed\\Mods\\mod, OUT: same dir
         /// </summary>
         /// <returns></returns>
         public async Task<int> CreateMetaData()
@@ -897,7 +900,7 @@ namespace WolvenKit.App.ViewModels
 
         /// <summary>
         /// Call wcc buildcache over the uncooked directories 
-        /// IN: \CollisionCache, cooked\Mods\mod\cook.db, OUT: packed\Mods\mod
+        /// IN: \\CollisionCache, cooked\\Mods\\mod\\cook.db, OUT: packed\\Mods\\mod
         /// </summary>
         /// <param name="cachetype"></param>
         /// <returns></returns>

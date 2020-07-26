@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using static WolvenKit.CR2W.Types.Enums;
 
+/// <summary>
+/// DDS aka DirectDraw Surface is an obsolete image file format, property Microsoft
+/// </summary>
 namespace WolvenKit.Cache.DDS
 {
     public struct DDSMetadata
