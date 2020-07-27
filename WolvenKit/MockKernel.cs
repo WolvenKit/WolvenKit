@@ -10,6 +10,9 @@ using WolvenKit.Common;
 
 namespace WolvenKit.App
 {
+    /// <summary>
+    /// View models
+    /// </summary>
     public class MockKernel : ObservableObject
     {
         private static MockKernel mainController;

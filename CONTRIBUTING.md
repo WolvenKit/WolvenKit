@@ -1,3 +1,5 @@
+# Contributing
+
 ## Basics
 When you work on anything please create an issue for it or comment on the appropriate issue thus people won't work on the same issues voiding their works.
 Please make your issue very descriptive and describe what you are trying to achieve with it.
