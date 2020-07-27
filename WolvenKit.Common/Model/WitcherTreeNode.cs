@@ -28,7 +28,19 @@ namespace WolvenKit.Common
         {
             get
             {
-                string bundlename = FullPath.Split(Path.DirectorySeparatorChar).Skip(1).First();
+                // Getting the type of the archive by its path
+                string[] bundlenodenames = FullPath.Split(Path.DirectorySeparatorChar);
+                string bundlename;
+                //At app startup there will be no Root prefixed, but after it will
+                if (bundlenodenames.First() == "Root")
+                {
+                    bundlename = bundlenodenames.Skip(1).First();
+                }
+                else
+                {
+                    bundlename = bundlenodenames.First();
+                }
+
                 return (EBundleType)Enum.Parse(typeof(EBundleType), bundlename);
             }
         }
