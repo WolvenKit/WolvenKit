@@ -1,13 +1,2 @@
-*.resx	text eof=crlf
-*.md	text eof=crlf
-*.txt	text eof=crlf
-*.cs	text eof=crlf
-*.yml	text eof=crlf
-*.config	text eof=crlf
-*.csproj	text eof=crlf
-*.csv	text eof=crlf
-*.xml	text eof=crlf
-.gitignore	text eof=crlf
-LICENSE	text eof=crlf
-.editorconfig	text eof=crlf
-
+* -text
+* whitespace=cr-at-eol
