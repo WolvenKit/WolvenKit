@@ -11,7 +11,7 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.Cache
 {
-    public class TextureManager : IWitcherArchive
+    public class TextureManager : IInternalWitcherArchive
     {
         public TextureManager()
         {

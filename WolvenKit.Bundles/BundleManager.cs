@@ -8,7 +8,7 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.Bundles
 {
-    public class BundleManager : IWitcherArchive
+    public class BundleManager : IInternalWitcherArchive
     {
         public BundleManager()
         {

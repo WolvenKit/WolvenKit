@@ -894,7 +894,7 @@ namespace WolvenKit
                 }
 
                 WitcherListViewItem item = Details.SelectedPaths[i];
-                IWitcherArchive manager = Details.Managers.First(_ => _.TypeName == item.BundleType);
+                IInternalWitcherArchive manager = Details.Managers.First(_ => _.TypeName == item.BundleType);
 
                 skipping = AddToMod(item.RelativePath, manager, skipping, Details.AddAsDLC, Details.Uncook, Details.Export);
 
@@ -1944,7 +1944,7 @@ namespace WolvenKit
         /// <param name="uncook"></param>
         /// <param name="export"></param>
         /// <returns></returns>
-        private bool AddToMod(string relativePath, IWitcherArchive manager, bool skipping, bool addAsDLC, bool uncook = false, bool export = false)
+        private bool AddToMod(string relativePath, IInternalWitcherArchive manager, bool skipping, bool addAsDLC, bool uncook = false, bool export = false)
         {
             bool skip = skipping;
             string extension = Path.GetExtension(relativePath);

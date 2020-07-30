@@ -17,7 +17,7 @@ namespace WolvenKit
     {
         public List<string> Autocompletelist;
         public List<IWitcherFile> FileList = new List<IWitcherFile>();
-        public List<IWitcherArchive> Managers;
+        public List<IInternalWitcherArchive> Managers;
 
         public List<string> Files { get; set; }
         public WitcherTreeNode ActiveNode { get; set; }
@@ -36,7 +36,7 @@ namespace WolvenKit
 
         public event EventHandler<AddFileArgs> RequestFileAdd;
 
-        public frmAssetBrowser(List<IWitcherArchive> archives)
+        public frmAssetBrowser(List<IInternalWitcherArchive> archives)
         {
             InitializeComponent();
             pathlistview.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);

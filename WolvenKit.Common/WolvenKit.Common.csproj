@@ -112,7 +112,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Tools\FNV1A\FNV1A32HashAlgorithm.cs" />
     <Compile Include="Tools\FNV1A\FNV1A64HashAlgorithm.cs" />
-    <Compile Include="Model\IWitcherArchive.cs" />
+    <Compile Include="Model\IInternalWitcherArchive.cs" />
     <Compile Include="Model\IExternalWitcherArchive.cs" />
     <Compile Include="Model\IWitcherFile.cs" />
     <Compile Include="Model\CommonEnums.cs" />

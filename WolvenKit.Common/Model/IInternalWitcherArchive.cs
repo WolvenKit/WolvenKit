@@ -10,10 +10,12 @@ using WolvenKit.Common.Model;
 namespace WolvenKit.Common
 {
     /// <summary>
+    /// Implemented by BundleManager, CollisionManager, TextureManagers, SpeechManager, SoundManager.
     /// Top-level game file, holds archived game assets. Types :
     /// .bundle, .cache (collision, texture, sound) .w3speech
+    /// An interface for eyeing into the archive.
     /// </summary>
-    public interface IWitcherArchive
+    public interface IInternalWitcherArchive
     {
         WitcherTreeNode RootNode { get; set; }
         List<IWitcherFile> FileList { get; set; }
