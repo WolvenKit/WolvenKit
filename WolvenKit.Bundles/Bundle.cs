@@ -10,7 +10,7 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.Bundles
 {
-    public class Bundle : IWitcherArchiveType
+    public class Bundle : IExternalWitcherArchive
     {
         private static readonly byte[] IDString =
         {
@@ -29,7 +29,7 @@ namespace WolvenKit.Bundles
 
         public Bundle(string filename)
         {
-            FileName = filename;
+            ExternalAbsoluteArchivePath = filename;
             Read();
         }
 
@@ -39,7 +39,7 @@ namespace WolvenKit.Bundles
         }
 
         public EBundleType TypeName { get { return EBundleType.Bundle; } }
-        public string FileName { get; set; }
+        public string ExternalAbsoluteArchivePath { get; set; }
         public Dictionary<string, BundleItem> Items { get; set; }
         
         /// <summary>
@@ -49,7 +49,7 @@ namespace WolvenKit.Bundles
         {
             Items = new Dictionary<string, BundleItem>();
 
-            using (var reader = new BinaryReader(new FileStream(FileName, FileMode.Open, FileAccess.Read)))
+            using (var reader = new BinaryReader(new FileStream(ExternalAbsoluteArchivePath, FileMode.Open, FileAccess.Read)))
             {
                 var idstring = reader.ReadBytes(IDString.Length);
 
@@ -102,7 +102,7 @@ namespace WolvenKit.Bundles
                     }
                     else
                     {
-                        Console.WriteLine("Warning: Bundle '" + FileName + "' could not be fully loaded as resource '" + item.Name + "' is defined more than once. Thus, only the first definition was loaded.");
+                        Console.WriteLine("Warning: Bundle '" + ExternalAbsoluteArchivePath + "' could not be fully loaded as resource '" + item.Name + "' is defined more than once. Thus, only the first definition was loaded.");
                     }
                 }
 

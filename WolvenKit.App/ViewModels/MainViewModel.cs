@@ -375,7 +375,7 @@ namespace WolvenKit.App.ViewModels
             {
                 var archives = manager.FileList
                     .Where(x => x.Name == relativePath)
-                    .Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y))
+                    .Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.ExternalAbsoluteArchivePath, y))
                     .ToList();
 
                 string depotpath = Path.Combine(MainController.Get().Configuration.DepotPath, relativePath);

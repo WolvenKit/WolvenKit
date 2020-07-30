@@ -16,7 +16,7 @@ namespace WolvenKit.Cache
     /// </summary>
     public class CollisionCacheItem : IWitcherFile
     {
-        public IWitcherArchiveType Bundle { get; set; }
+        public IExternalWitcherArchive Bundle { get; set; }
         public string Name { get; set; }
         public long Size { get; set; }
         public uint ZSize { get; set; }
@@ -46,7 +46,7 @@ namespace WolvenKit.Cache
 
         public void Extract(Stream output)
         {
-            using (var file = MemoryMappedFile.CreateFromFile(Bundle.FileName, FileMode.Open))
+            using (var file = MemoryMappedFile.CreateFromFile(Bundle.ExternalAbsoluteArchivePath, FileMode.Open))
             using (var viewstream = file.CreateViewStream(PageOFfset, ZSize, MemoryMappedFileAccess.Read))
             {
                 var zlib = new ZlibStream(viewstream, CompressionMode.Decompress);

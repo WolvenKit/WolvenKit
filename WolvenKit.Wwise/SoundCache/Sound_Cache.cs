@@ -16,7 +16,7 @@ namespace WolvenKit.Cache
     /// <summary>
     /// The soud archives of Witcher 3. Contains .wem and .bnk sound files.
     /// </summary>
-    public class SoundCache : IWitcherArchiveType
+    public class SoundCache : IExternalWitcherArchive
     {
         public const long BIT_LENGTH_32 = 1;
         public const long BIT_LENGTH_64 = 2;
@@ -36,7 +36,7 @@ namespace WolvenKit.Cache
         public long checksum;
 
         public EBundleType TypeName => EBundleType.SoundCache;
-        public string FileName { get; set; }
+        public string ExternalAbsoluteArchivePath { get; set; }
 
         public static SoundBanksInfoXML info = new SoundBanksInfoXML("SoundCache\\soundbanksinfo.xml");
 
@@ -51,7 +51,7 @@ namespace WolvenKit.Cache
         /// <param name="fileName"></param>
         public SoundCache(string fileName)
         {
-            FileName = fileName;
+            ExternalAbsoluteArchivePath = fileName;
             using (var br = new BinaryReader(new FileStream(fileName, FileMode.Open)))
                 Read(br);
         }
@@ -203,7 +203,7 @@ namespace WolvenKit.Cache
                 {
                     f.Name = info.StreamedFiles.First(x => x.Id == (f.Name.Split('.')[0])).Path;
                 }
-                f.ParentFile = this.FileName;
+                f.ParentFile = this.ExternalAbsoluteArchivePath;
             }
         }
 

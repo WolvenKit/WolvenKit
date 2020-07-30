@@ -12,7 +12,7 @@ namespace WolvenKit.Bundles
 {
     public class BundleItem : IWitcherFile
     {
-        public IWitcherArchiveType Bundle { get; set; }
+        public IExternalWitcherArchive Bundle { get; set; }
         public string Name { get; set; }
         public byte[] Hash { get; set; }
         public uint Empty { get; set; }
@@ -51,7 +51,7 @@ namespace WolvenKit.Bundles
 
         public void Extract(Stream output)
         {
-            using (var file = MemoryMappedFile.CreateFromFile(Bundle.FileName, FileMode.Open))
+            using (var file = MemoryMappedFile.CreateFromFile(Bundle.ExternalAbsoluteArchivePath, FileMode.Open))
             using (var viewstream = file.CreateViewStream(PageOFfset, ZSize, MemoryMappedFileAccess.Read))
             {
                 switch (CompressionType)

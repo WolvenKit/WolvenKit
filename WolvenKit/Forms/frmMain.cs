@@ -2012,7 +2012,7 @@ namespace WolvenKit
 
             if (manager != null && manager.Items.Any(x => x.Value.Any(y => y.Name == relativePath)))
             {
-                var archives = manager.FileList.Where(x => x.Name == relativePath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y));
+                var archives = manager.FileList.Where(x => x.Name == relativePath).Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.ExternalAbsoluteArchivePath, y));
                 string newpath;
 
 

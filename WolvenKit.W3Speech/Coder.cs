@@ -40,7 +40,7 @@ namespace WolvenKit.W3Speech
         /// <param name="br">The stream containing the w3speech format to read from.</param>
         /// <returns>All information found inside the stream.</returns>
         /// <exception cref="Exception">Something happened.</exception>
-        public static W3Speech Decode(IWitcherArchiveType parent, BinaryReader br)
+        public static W3Speech Decode(IExternalWitcherArchive parent, BinaryReader br)
         {
             var str = System.Text.Encoding.Default.GetString(br.ReadBytes(4));
             var version = br.ReadUInt32();
@@ -77,7 +77,7 @@ namespace WolvenKit.W3Speech
                     })
                     .ToList()
                     .AsReadOnly();
-            return new W3Speech(parent.FileName, str, version, key, item_infos);
+            return new W3Speech(parent.ExternalAbsoluteArchivePath, str, version, key, item_infos);
         }
 
         /// <summary>

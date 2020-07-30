@@ -356,7 +356,7 @@ namespace WolvenKit
                 {
                     if (currentfolderCheckBox.Checked)
                     {
-                        return files.Where(item => item.Bundle.FileName.Contains(ActiveNode.Name) && new Regex(searchkeyword).IsMatch(item.Name)).Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray();
+                        return files.Where(item => item.Bundle.ExternalAbsoluteArchivePath.Contains(ActiveNode.Name) && new Regex(searchkeyword).IsMatch(item.Name)).Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray();
                     }
 
                     return files.Where(item => new Regex(searchkeyword).IsMatch(item.Name)).Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray();
@@ -369,12 +369,12 @@ namespace WolvenKit
             if (currentfolderCheckBox.Checked)
             {
                 return caseCheckBox.Checked
-                    ? files.Where(item => item.Bundle.FileName.Contains(ActiveNode.Name)
+                    ? files.Where(item => item.Bundle.ExternalAbsoluteArchivePath.Contains(ActiveNode.Name)
                         && item.Name.ToUpper().Contains(searchkeyword.ToUpper())
                         && (item.Name.ToUpper().EndsWith(extension.ToUpper()) || extension.ToUpper() == "ANY")
                         && (item.Bundle.TypeName == bundletype || bundletype == EBundleType.ANY))
                     .Distinct().Select(x => new Tuple<WitcherListViewItem, IWitcherFile>(new WitcherListViewItem(x), x)).ToArray()
-                    : files.Where(item => item.Bundle.FileName.Contains(ActiveNode.Name)
+                    : files.Where(item => item.Bundle.ExternalAbsoluteArchivePath.Contains(ActiveNode.Name)
                         && item.Name.Contains(searchkeyword)
                         && (item.Name.EndsWith(extension) || extension.ToUpper() == "ANY")
                         && (item.Bundle.TypeName == bundletype || bundletype == EBundleType.ANY))

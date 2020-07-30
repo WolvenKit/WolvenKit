@@ -17,7 +17,7 @@ namespace WolvenKit.Cache
 
     public class TextureCacheItem : IWitcherFile
     {
-        public IWitcherArchiveType Bundle { get; set; }
+        public IExternalWitcherArchive Bundle { get; set; }
         public string DateString { get; set; }
 
         public string CompressionType => "Zlib";
@@ -79,7 +79,7 @@ namespace WolvenKit.Cache
             
         };
 
-        public TextureCacheItem(IWitcherArchiveType parent)
+        public TextureCacheItem(IExternalWitcherArchive parent)
         {
             Bundle = parent;
         }

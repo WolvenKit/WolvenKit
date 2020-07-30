@@ -7,7 +7,7 @@ namespace WolvenKit.Wwise.SoundCache
 {
     public class SoundCacheItem : IWitcherFile
     {
-        public IWitcherArchiveType Bundle { get; set; }
+        public IExternalWitcherArchive Bundle { get; set; }
         /// <summary>
         /// Name of the bundled item in the archive.
         /// </summary>
@@ -23,7 +23,7 @@ namespace WolvenKit.Wwise.SoundCache
         public long Size { get; set; }
         public uint ZSize { get; set; }
 
-        public SoundCacheItem(IWitcherArchiveType Parent)
+        public SoundCacheItem(IExternalWitcherArchive Parent)
         {
             this.Bundle = Parent;
         }

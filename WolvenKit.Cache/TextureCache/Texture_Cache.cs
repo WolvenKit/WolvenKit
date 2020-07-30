@@ -12,13 +12,13 @@ using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.Cache
 {
-    public class TextureCache : IWitcherArchiveType
+    public class TextureCache : IExternalWitcherArchive
     {
         //The images packed into this Texture cache file
         public List<TextureCacheItem> Files;
 
         public EBundleType TypeName => EBundleType.TextureCache;
-        public string FileName { get; set; }
+        public string ExternalAbsoluteArchivePath { get; set; }
         public List<uint> Chunkoffsets;
         public UInt64 Crc;
         public UInt32 UsedPages;
@@ -46,7 +46,7 @@ namespace WolvenKit.Cache
         {
             try
             {
-                FileName = filepath;
+                ExternalAbsoluteArchivePath = filepath;
                 Chunkoffsets = new List<uint>();
                 using (var br = new BinaryReader(new FileStream(filepath, FileMode.Open)))
                 {
@@ -81,7 +81,7 @@ namespace WolvenKit.Cache
                         var ti = new TextureCacheItem(this)
                         {
                             Name = Names[i],
-                            ParentFile = FileName,
+                            ParentFile = ExternalAbsoluteArchivePath,
                             Hash = br.ReadUInt32(),
                             /*-------------TextureCacheEntryBase---------------*/
                             PathStringIndex = br.ReadInt32(),

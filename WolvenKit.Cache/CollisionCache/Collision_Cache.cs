@@ -14,7 +14,7 @@ using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.Cache
 {
-    public class CollisionCache : IWitcherArchiveType
+    public class CollisionCache : IExternalWitcherArchive
     {
         public const long BIT_LENGTH_32 = 1;
         public const long BIT_LENGTH_64 = 2;
@@ -36,11 +36,11 @@ namespace WolvenKit.Cache
         public List<CollisionCacheItem> Files = new List<CollisionCacheItem>(); 
 
         public EBundleType TypeName => EBundleType.CollisionCache;
-        public string FileName { get; set; }
+        public string ExternalAbsoluteArchivePath { get; set; }
 
         public CollisionCache(string filename)
         {
-            this.FileName = filename;
+            this.ExternalAbsoluteArchivePath = filename;
             using (var br = new BinaryReader(new FileStream(filename, FileMode.Open)))
                 this.Read(br);
         }

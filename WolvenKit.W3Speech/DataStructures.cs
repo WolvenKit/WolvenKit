@@ -45,7 +45,7 @@ namespace WolvenKit.W3Speech
 
         }
 
-        public SpeechEntry(IWitcherArchiveType bundle, LanguageSpecificID id, UInt32 id_high, UInt32 wem_offs, UInt32 wem_size, UInt32 cr2w_offs, UInt32 cr2w_size, Single duration)
+        public SpeechEntry(IExternalWitcherArchive bundle, LanguageSpecificID id, UInt32 id_high, UInt32 wem_offs, UInt32 wem_size, UInt32 cr2w_offs, UInt32 cr2w_size, Single duration)
         {
             this.Bundle = bundle;
             this.id = id;
@@ -61,7 +61,7 @@ namespace WolvenKit.W3Speech
             this.PageOFfset = cr2w_offs;
         }
 
-        public IWitcherArchiveType Bundle { get; set; }
+        public IExternalWitcherArchive Bundle { get; set; }
         public string Name { get; set; }
         public long Size { get; set; }
         public uint ZSize { get; set; }
@@ -72,7 +72,7 @@ namespace WolvenKit.W3Speech
 
         public void Extract(Stream output)
         {
-            using (var file = MemoryMappedFile.CreateFromFile(Bundle.FileName, FileMode.Open))
+            using (var file = MemoryMappedFile.CreateFromFile(Bundle.ExternalAbsoluteArchivePath, FileMode.Open))
             {
                 using (var viewstream = file.CreateViewStream(PageOFfset, ZSize, MemoryMappedFileAccess.Read))
                 {
@@ -102,7 +102,7 @@ namespace WolvenKit.W3Speech
     /// <summary>
     /// Describes the w3speech format.
     /// </summary>
-    public class W3Speech : IWitcherArchiveType
+    public class W3Speech : IExternalWitcherArchive
     {
         /// <summary>
         /// Usually CPSW.
@@ -128,12 +128,12 @@ namespace WolvenKit.W3Speech
 
         public W3Speech(string name)
         {
-            FileName = name;
+            ExternalAbsoluteArchivePath = name;
         }
 
         public W3Speech(String filename, String id, UInt32 version, W3LanguageKey language_key, IEnumerable<SpeechEntry> item_infos)
         {
-            this.FileName = filename;
+            this.ExternalAbsoluteArchivePath = filename;
             this.id = id;
             this.version = version;
             this.language_key = language_key;
@@ -142,7 +142,7 @@ namespace WolvenKit.W3Speech
 
         public EBundleType TypeName => EBundleType.Speech;
 
-        public string FileName { get; set; }
+        public string ExternalAbsoluteArchivePath { get; set; }
 
         public override string ToString()
         {

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -113,7 +113,7 @@
     <Compile Include="Tools\FNV1A\FNV1A32HashAlgorithm.cs" />
     <Compile Include="Tools\FNV1A\FNV1A64HashAlgorithm.cs" />
     <Compile Include="Model\IWitcherArchive.cs" />
-    <Compile Include="Model\IWitcherArchiveType.cs" />
+    <Compile Include="Model\IExternalWitcherArchive.cs" />
     <Compile Include="Model\IWitcherFile.cs" />
     <Compile Include="Model\CommonEnums.cs" />
     <Compile Include="Model\HashDump.cs" />
