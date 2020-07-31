@@ -1,4 +1,6 @@
-# <PULL REQUEST TITLE>
+# Pull request template
+
+<PULL REQUEST TITLE>
 
 Implemented:
 - <Features implemented>

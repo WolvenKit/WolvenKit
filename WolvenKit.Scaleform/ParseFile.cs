@@ -6,6 +6,9 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
+/// <summary>
+/// .usm video file format
+/// </summary>
 namespace WolvenKit.Scaleform
 {
     /// <summary>
