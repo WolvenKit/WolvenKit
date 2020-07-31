@@ -1977,8 +1977,8 @@ namespace WolvenKit
             string filename = Path.GetFileName(relativePath);
 
             // always uncook xbms, w2mesh, redcloth and redapex in Bundle
-            if ((extension == ".xbm" /*|| Enum.GetNames(typeof(EExportable)).Contains(extension.TrimStart('.'))*/) && manager.TypeName == EBundleType.Bundle)
-                uncook = true;
+            //if ((extension == ".xbm" /*|| Enum.GetNames(typeof(EExportable)).Contains(extension.TrimStart('.'))*/) && manager.TypeName == EBundleType.Bundle)
+            //    uncook = true;
 
             #region Check Existing Files in Depot
             // if uncooking check first if the file isn't already in the working depot or the r4depot
