@@ -97,7 +97,7 @@ namespace WolvenKit
 
         public frmCR2WDocument LoadDocument(string filename, MemoryStream memoryStream, bool suppressErrors = false)
         {
-            return Window.LoadDocument(filename, memoryStream, suppressErrors);
+            return Window.LoadDocument(filename, memoryStream, suppressErrors) as frmCR2WDocument;
         }
 
 

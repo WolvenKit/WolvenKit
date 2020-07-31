@@ -9,12 +9,14 @@ using WolvenKit.App;
 using WolvenKit.App.Model;
 using WolvenKit.App.ViewModels;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 using WolvenKit.CR2W;
+using WolvenKit.CR2W.SRT;
 using WolvenKit.Services;
 
 namespace WolvenKit
 {
-    public partial class frmCR2WDocument : DockContent, IThemedContent
+    public partial class frmCR2WDocument : DockContent, IThemedContent, IWolvenkitDocument
     {
         private readonly DocumentViewModel vm;
 
@@ -28,7 +30,7 @@ namespace WolvenKit
         
 
         public DockPanel FormPanel => dockPanel;
-        public CR2WFile File => vm.File;
+        public CR2WFile File => (CR2WFile)vm.File;
         public string FileName => vm.FileName;
 
         public frmCR2WDocument(DocumentViewModel documentViewModel)
@@ -51,7 +53,7 @@ namespace WolvenKit
 
             chunkList = new frmChunkList
             {
-                File = vm.File,
+                File = (CR2WFile)vm.File,
                 DockAreas = DockAreas.Document
             };
             chunkList.Show(dockPanel, DockState.Document);
@@ -124,14 +126,6 @@ namespace WolvenKit
         //        {
         //            embeddedFiles.File = file;
 
-        //            if (file.embedded.Count > 0)
-        //            {
-        //                embeddedFiles.Show(dockPanel, DockState.Document);
-        //            }
-        //        }
-        //    }
-        //}
-
         public DocumentViewModel GetViewModel() => vm;
 
         public void frmCR2WDocument_FormClosed(object sender, FormClosedEventArgs e)
@@ -169,5 +163,7 @@ namespace WolvenKit
             dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath),
                 "cr2wdocument_layout.xml"));
         }
+
+        public bool GetIsDisposed() => this.GetIsDisposed();
     }
 }

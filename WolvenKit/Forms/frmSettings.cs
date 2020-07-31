@@ -33,6 +33,7 @@ namespace WolvenKit
             txTextLanguage.Text = config.TextLanguage;
             txVoiceLanguage.Text = config.VoiceLanguage;
             txWCC_Lite.Text = config.WccLite;
+            checkBoxDisableWelcomeForm.Checked = config.IsWelcomeFormDisabled;
             
             
 
@@ -119,7 +120,6 @@ namespace WolvenKit
             config.UncookExtension = (EUncookExtension)comboBoxExtension.SelectedItem;
             config.IsWelcomeFormDisabled = checkBoxDisableWelcomeForm.Checked;
             config.OverflowEnabled = checkBoxOverflow.Checked;
-
 
             uiconfig.ColorTheme = (EColorThemes)comboBoxTheme.SelectedItem;
 

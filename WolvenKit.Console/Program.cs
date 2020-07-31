@@ -71,8 +71,6 @@ namespace WolvenKit.Console
             string idx = RED.CRC32.Crc32Algorithm.Compute(Encoding.ASCII.GetBytes($"{dt.Year}{dt.Month}{dt.Day}{dt.Hour}{dt.Minute}{dt.Second}")).ToString();
             var outDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "DDSTest", $"ExtractedFiles_{idx}");
 
-            var txcc = new TextureCache("C:\\Steam\\steamapps\\common\\The Witcher 3\\DLC\\DLC6\\content\\texture.cache");
-
             using (var pb = new ProgressBar())
             {
                 if (!Directory.Exists(outDir))
@@ -80,7 +78,7 @@ namespace WolvenKit.Console
                 var txc = new TextureManager();
                 //using (var p11 = pb.Progress.Fork(0.25, "Loading TextureManager"))
                 {
-                    //txc.LoadAll("C:\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
+                    txc.LoadAll("C:\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
                 }
                 System.Console.WriteLine($"Loaded TextureManager");
 
