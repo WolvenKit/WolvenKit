@@ -34,6 +34,8 @@ namespace WolvenKit.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
+            bool isCooked = false;
+
             base.Read(file, size);
 
             unk.Read(file, 4);
@@ -41,15 +43,19 @@ namespace WolvenKit.CR2W.Types
 
             // Uncooked and Cooked xbms have a different file structure. 
             // Uncooked xbms can be identified by their Sourcedata being null
+            // and the residentmipindex being not null
             var SourceData = this.GetVariableByName("sourceData");
 
-            if (SourceData == null)
-            {
-                //dbg
-                var ResidentMipIndex = this.GetVariableByName("residentMipIndex");
-                if (ResidentMipIndex != null)
-                    throw new NotImplementedException();
+            //dbg
+            var ResidentMipIndex = this.GetVariableByName("residentMipIndex");
+            //if (ResidentMipIndex != null)
+            //    throw new NotImplementedException();
 
+            isCooked = /*SourceData == null &&*/ ResidentMipIndex != null;
+
+            // is uncooked
+            if (isCooked)
+            {
                 for (int i = 0; i < MipsCount.val; i++)
                 {
                     var mipdata = new SMipData(cr2w);
