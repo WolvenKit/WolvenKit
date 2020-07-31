@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W.Types;
 using WolvenKit.CR2W.Types.Utils;
@@ -17,7 +18,7 @@ using WolvenKit.Utils;
 namespace WolvenKit.CR2W
 {
     [ DataContract(Namespace = "") ]
-    public class CR2WFile
+    public class CR2WFile : IWolvenkitFile
     {
         #region Constructor
         public CR2WFile()

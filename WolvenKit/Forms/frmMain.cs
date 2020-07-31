@@ -35,9 +35,11 @@ namespace WolvenKit
     using Forms;
     using System.CodeDom;
     using WolvenKit.App;
+    using WolvenKit.App.Model;
     using WolvenKit.App.ViewModels;
     using WolvenKit.Common.Extensions;
     using WolvenKit.Common.Model;
+    using WolvenKit.CR2W.SRT;
     using WolvenKit.Render;
     using WolvenKit.Scaleform;
     using Wwise.Player;
@@ -50,7 +52,7 @@ namespace WolvenKit
         #region Fields
 
         #region Forms
-        //private List<frmCR2WDocument> OpenDocuments { get; set; } = new List<frmCR2WDocument>();
+        //private List<IWolvenkitDocument> OpenDocuments { get; set; } = new List<IWolvenkitDocument>();
         private frmModExplorer ModExplorer { get; set; }
         private frmStringsGui stringsGui { get; set; }
         private frmOutput Output { get; set; }
@@ -89,9 +91,8 @@ namespace WolvenKit
 
         public LoggerService Logger { get; set; }
 
-
-        private frmCR2WDocument _activedocument;
-        public frmCR2WDocument ActiveDocument
+        private IWolvenkitDocument _activedocument;
+        public IWolvenkitDocument ActiveDocument
         {
             get => _activedocument;
             set
@@ -100,7 +101,6 @@ namespace WolvenKit
                 UpdateTitle();
             }
         }
-
         public W3Mod ActiveMod
         {
             get => MainController.Get().ActiveMod;
@@ -155,7 +155,6 @@ namespace WolvenKit
 
             hotkeys.RegisterHotkey(Keys.F5, HKRun, "Run");
             hotkeys.RegisterHotkey(Keys.Control | Keys.F5, HKRunAndLaunch, "RunAndLaunch");
-
             hotkeys.RegisterHotkey(Keys.Control | Keys.W, HKCloseTab, "CloseTab");
             hotkeys.RegisterHotkey(Keys.Control | Keys.Shift | Keys.T, HKReopenTab, "ReopenTab");
 
@@ -170,7 +169,6 @@ namespace WolvenKit
             ToolStripManager.LoadSettings(this);
             m_deserializeDockContent = new DeserializeDockContent(GetContentFromPersistString);
         }
-
 
         #endregion
 
@@ -208,6 +206,7 @@ namespace WolvenKit
             else
                 return null;
         }
+
         public void GlobalApplyTheme()
         {
             dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath), "main_layout.xml"));
@@ -419,7 +418,7 @@ namespace WolvenKit
         {
             m_frmProgress?.SetProgressBarValue(e.ProgressPercentage, e.UserState);
         }
-        frmCR2WDocument HACK_bwform = null;
+        IWolvenkitDocument HACK_bwform = null;
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // has errors
@@ -431,7 +430,7 @@ namespace WolvenKit
             {
                 if (workerCompletedAction != null)
                 {
-                    HACK_bwform = (frmCR2WDocument)workerCompletedAction(e.Result);
+                    HACK_bwform = (IWolvenkitDocument)workerCompletedAction(e.Result);
                 }
                 workerCompletedAction = null;
             }
@@ -539,137 +538,154 @@ namespace WolvenKit
                 throw new NotImplementedException();
             var Args = (LoadFileArgs)arg;
 
-            //var doc = Args.Doc;
-            frmCR2WDocument doc = new frmCR2WDocument(Args.ViewModel);
-
+            // switch between cr2w files and non-cr2w files (e.g. srt)
             var filename = Args.Filename;
 
-            #region SetupFile
-            // Backgroundwork Start
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            switch (Path.GetExtension(filename))
+            //switch extension
+            if (Path.GetExtension(filename) == ".srt")
             {
-                case ".w2scene":
-                case ".w2quest":
-                case ".w2phase":
-                    {
-                        doc.flowDiagram = new frmChunkFlowDiagram();
-                        doc.flowDiagram.OnOutput += OnOutput;
-                        doc.flowDiagram.File = doc.File;
-                        doc.flowDiagram.DockAreas = DockAreas.Document;
+                var doc = new frmOtherDocument(Args.ViewModel);
 
-                        doc.flowDiagram.OnSelectChunk += doc.frmCR2WDocument_OnSelectChunk;
-                        doc.flowDiagram.Show(doc.FormPanel, DockState.Document);
-                        break;
-                    }
+                
 
-                case ".journal":
-                    {
-                        doc.JournalEditor = new frmJournalEditor
-                        {
-                            File = doc.File,
-                            DockAreas = DockAreas.Document
-                        };
-                        doc.JournalEditor.Show(doc.FormPanel, DockState.Document);
-                        break;
-                    }
-                case ".xbm":
-                    {
-                        doc.ImageViewer = new frmImagePreview
-                        {
-                            DockAreas = DockAreas.Document
-                        };
-                        doc.ImageViewer.Show(doc.FormPanel, DockState.Document);
-                        CR2WExportWrapper imagechunk = doc.File?.chunks?.FirstOrDefault(_ => _.data.Type.Contains("CBitmapTexture"));
-                        doc.ImageViewer.SetImage(imagechunk);
-                        break;
-                    }
-                case ".w2mesh":
-                    {
-                        if (bool.Parse(renderW2meshToolStripMenuItem.Tag.ToString()))
-                        {
-                            try
-                            {
-                                // add all dependencies
-                                vm.AddAllImportsToDepot(filename, true);
+                doc.Activated += doc_Activated;
+                doc.Show(dockPanel, DockState.Document);
+                doc.FormClosed += doc_FormClosed;
 
-                                doc.RenderViewer = new Render.frmRender
-                                {
-                                    LoadDocument = LoadDocumentAndGetFile,
-                                    MeshFile = doc.File,
-                                    DockAreas = DockAreas.Document,
-                                    renderHelper = new Render.RenderHelper(MainController.Get().ActiveMod, MainController.Get().Logger)
-                                };
-                                doc.RenderViewer.Show(doc.FormPanel, DockState.Document);
-                            }
-                            catch (Exception ex)
-                            {
-                                AddOutput(ex.ToString());
-                            }
+                return doc;
+            }
+            else
+            {
+                //var doc = Args.Doc;
+                frmCR2WDocument doc = new frmCR2WDocument(Args.ViewModel);
+
+
+                #region SetupFile
+                // Backgroundwork Start
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                switch (Path.GetExtension(filename))
+                {
+                    case ".w2scene":
+                    case ".w2quest":
+                    case ".w2phase":
+                        {
+                            doc.flowDiagram = new frmChunkFlowDiagram();
+                            doc.flowDiagram.OnOutput += OnOutput;
+                            doc.flowDiagram.File = doc.File;
+                            doc.flowDiagram.DockAreas = DockAreas.Document;
+                            doc.flowDiagram.OnSelectChunk += doc.frmCR2WDocument_OnSelectChunk;
+                            doc.flowDiagram.Show(doc.FormPanel, DockState.Document);
+                            break;
                         }
-                        break;
-                    }
-                default:
+
+                    case ".journal":
+                        {
+                            doc.JournalEditor = new frmJournalEditor
+                            {
+                                File = doc.File,
+                                DockAreas = DockAreas.Document
+                            };
+                            doc.JournalEditor.Show(doc.FormPanel, DockState.Document);
+                            break;
+                        }
+                    case ".xbm":
+                        {
+                            doc.ImageViewer = new frmImagePreview
+                            {
+                                DockAreas = DockAreas.Document
+                            };
+                            doc.ImageViewer.Show(doc.FormPanel, DockState.Document);
+                            CR2WExportWrapper imagechunk = doc.File?.chunks?.FirstOrDefault(_ => _.data.Type.Contains("CBitmapTexture"));
+                            doc.ImageViewer.SetImage(imagechunk);
+                            break;
+                        }
+                    case ".w2mesh":
+                        {
+                            if (bool.Parse(renderW2meshToolStripMenuItem.Tag.ToString()))
+                            {
+                                try
+                                {
+                                    // add all dependencies
+                                    vm.AddAllImportsToDepot(filename, true);
+
+                                    doc.RenderViewer = new Render.frmRender
+                                    {
+                                        LoadDocument = LoadDocumentAndGetFile,
+                                        MeshFile = doc.File,
+                                        DockAreas = DockAreas.Document,
+                                        renderHelper = new Render.RenderHelper(MainController.Get().ActiveMod, MainController.Get().Logger)
+                                    };
+                                    doc.RenderViewer.Show(doc.FormPanel, DockState.Document);
+                                }
+                                catch (Exception ex)
+                                {
+                                    AddOutput(ex.ToString());
+                                }
+                            }
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
+                }
+                if (doc.File.embedded.Count > 0)
+                {
+                    doc.embeddedFiles = new frmEmbeddedFiles
                     {
-                        break;
+                        File = doc.File,
+                        DockAreas = DockAreas.Document
+                    };
+                    doc.embeddedFiles.Show(doc.FormPanel, DockState.Document);
+                }
+                doc.Activated += doc_Activated;
+                doc.Show(dockPanel, DockState.Document);
+                doc.FormClosed += doc_FormClosed;
+
+                var output = new StringBuilder();
+
+                if (doc.File.UnknownTypes.Any())
+                {
+                    ShowConsole();
+                    ShowOutput();
+
+                    output.Append(doc.FileName + ": contains " + doc.File.UnknownTypes.Count + " unknown type(s):\n");
+                    foreach (var unk in doc.File.UnknownTypes)
+                    {
+                        output.Append("\"" + unk + "\", \n");
                     }
-            }
-            if (doc.File.embedded.Count > 0)
-            {
-                doc.embeddedFiles = new frmEmbeddedFiles
-                {
-                    File = doc.File,
-                    DockAreas = DockAreas.Document
-                };
-                doc.embeddedFiles.Show(doc.FormPanel, DockState.Document);
-            }
-            doc.Activated += doc_Activated;
-            doc.Show(dockPanel, DockState.Document);
-            doc.FormClosed += doc_FormClosed;
 
-            var output = new StringBuilder();
-
-            if (doc.File.UnknownTypes.Any())
-            {
-                ShowConsole();
-                ShowOutput();
-
-                output.Append(doc.FileName + ": contains " + doc.File.UnknownTypes.Count + " unknown type(s):\n");
-                foreach (var unk in doc.File.UnknownTypes)
-                {
-                    output.Append("\"" + unk + "\", \n");
+                    output.Append("-------\n\n");
                 }
 
-                output.Append("-------\n\n");
+                var hasUnknownBytes = false;
+
+                foreach (var t in doc.File.chunks.Where(t => t.unknownBytes?.Bytes != null && t.unknownBytes.Bytes.Length > 0))
+                {
+                    output.Append(t.Name + " contains " + t.unknownBytes.Bytes.Length + " unknown bytes. \n");
+                    hasUnknownBytes = true;
+                }
+
+                if (hasUnknownBytes)
+                    output.Append("-------\n\n");
+
+                output.Append($"File {filename} loaded in: {stopwatch.Elapsed}\n\n");
+                stopwatch.Stop();
+
+                AddOutput(output.ToString(), Logtype.Important);
+                return doc;
+                #endregion
             }
-
-            var hasUnknownBytes = false;
-
-            foreach (var t in doc.File.chunks.Where(t => t.unknownBytes?.Bytes != null && t.unknownBytes.Bytes.Length > 0))
-            {
-                output.Append(t.Name + " contains " + t.unknownBytes.Bytes.Length + " unknown bytes. \n");
-                hasUnknownBytes = true;
-            }
-
-            if (hasUnknownBytes)
-                output.Append("-------\n\n");
-
-            output.Append($"File {filename} loaded in: {stopwatch.Elapsed}\n\n");
-            stopwatch.Stop();
-
-            AddOutput(output.ToString(), Logtype.Important);
-            return doc;
-            #endregion
 
             CR2WFile LoadDocumentAndGetFile(string path)
             {
-                foreach (var t in vm.OpenDocuments.Where(t => t.FileName == path))
-                    return t.File;
+                foreach (var t in vm.OpenDocuments.Where(_ => _.File is CR2WFile).Where(t => t.FileName == path))
+                    return t.File as CR2WFile;
 
                 //var activedoc = vm.OpenDocuments.FirstOrDefault(d => d.IsActivated);
-                var doc2 = LoadDocument(path);
+                var doc2 = LoadDocument(path) as frmCR2WDocument;
                 //activedoc.Activate();
                 return doc2?.File;
             }
@@ -728,15 +744,18 @@ namespace WolvenKit
         {
             if (ActiveDocument != null)
             {
-                if (ActiveDocument.chunkList.IsActivated)
+                if (ActiveDocument is frmCR2WDocument cr2wdoc)
                 {
-                    ActiveDocument.chunkList.CopyChunks();
-                    Logger.LogString("Selected chunk(s) copied!\n");
-                }
-                else if (ActiveDocument.propertyWindow.IsActivated)
-                {
-                    ActiveDocument.propertyWindow.copyVariable();
-                    Logger.LogString("Selected propertie(s) copied!\n");
+                    if (cr2wdoc.chunkList.IsActivated)
+                    {
+                        cr2wdoc.chunkList.CopyChunks();
+                        Logger.LogString("Selected chunk(s) copied!\n");
+                    }
+                    else if (cr2wdoc.propertyWindow.IsActivated)
+                    {
+                        cr2wdoc.propertyWindow.copyVariable();
+                        Logger.LogString("Selected propertie(s) copied!\n");
+                    }
                 }
             }
         }
@@ -744,15 +763,18 @@ namespace WolvenKit
         {
             if (ActiveDocument != null)
             {
-                if (ActiveDocument.chunkList.IsActivated)
+                if (ActiveDocument is frmCR2WDocument cr2wdoc)
                 {
-                    ActiveDocument.chunkList.PasteChunks();
-                    Logger.LogString("Copied chunk(s) pasted!\n");
-                }
-                else if (ActiveDocument.propertyWindow.IsActivated)
-                {
-                    ActiveDocument.propertyWindow.pasteVariable();
-                    Logger.LogString("Copied propertie(s) pasted!\n");
+                    if (cr2wdoc.chunkList.IsActivated)
+                    {
+                        cr2wdoc.chunkList.PasteChunks();
+                        Logger.LogString("Copied chunk(s) pasted!\n");
+                    }
+                    else if (cr2wdoc.propertyWindow.IsActivated)
+                    {
+                        cr2wdoc.propertyWindow.pasteVariable();
+                        Logger.LogString("Copied propertie(s) pasted!\n");
+                    }
                 }
             }
         }
@@ -1144,7 +1166,7 @@ namespace WolvenKit
             {
                 return;
             }
-            if (ActiveDocument != null && !ActiveDocument.IsDisposed)
+            if (ActiveDocument != null && !ActiveDocument.GetIsDisposed())
             {
                 vm.SaveFile(ActiveDocument.GetViewModel());
                 Logger.LogString("Saved!\n", Logtype.Success);
@@ -1177,7 +1199,7 @@ namespace WolvenKit
         /// <param name="filename"></param>
         /// <param name="memoryStream"></param>
         /// <param name="suppressErrors"></param>
-        public frmCR2WDocument LoadDocument(string filename, MemoryStream memoryStream = null, bool suppressErrors = false)
+        public IWolvenkitDocument LoadDocument(string filename, MemoryStream memoryStream = null, bool suppressErrors = false)
         {
             if (memoryStream == null && !File.Exists(filename))
                 return null;
@@ -1326,7 +1348,6 @@ namespace WolvenKit
                 Logger.LogString("ERROR! No radish mod directory found.\r\n", Logtype.Error);
                 return;
             }
-
 
             if (RadishUtility == null || RadishUtility.IsDisposed)
             {
@@ -1546,6 +1567,11 @@ namespace WolvenKit
                 });
                 if (statusCookBundle == 0)
                     Logger.LogString("Cooking bundle files failed. \n", Logtype.Error);
+
+                //------------------------- POST COOKING -------------------------------------//
+
+
+
 
 
                 //------------------------- PACKING -------------------------------------//
@@ -1951,8 +1977,8 @@ namespace WolvenKit
             string filename = Path.GetFileName(relativePath);
 
             // always uncook xbms, w2mesh, redcloth and redapex in Bundle
-            if ((extension == ".xbm" /*|| Enum.GetNames(typeof(EExportable)).Contains(extension.TrimStart('.'))*/) && manager.TypeName == EBundleType.Bundle)
-                uncook = true;
+            //if ((extension == ".xbm" /*|| Enum.GetNames(typeof(EExportable)).Contains(extension.TrimStart('.'))*/) && manager.TypeName == EBundleType.Bundle)
+            //    uncook = true;
 
             #region Check Existing Files in Depot
             // if uncooking check first if the file isn't already in the working depot or the r4depot
@@ -2005,7 +2031,6 @@ namespace WolvenKit
                         return skip;
                     }
                 }
-
                 
             }
             #endregion
@@ -2291,7 +2316,7 @@ namespace WolvenKit
 
         private void frmMain_MdiChildActivate(object sender, EventArgs e)
         {
-            if (sender is frmCR2WDocument)
+            if (sender is IWolvenkitDocument)
             {
                 doc_Activated(sender, e);
             }
@@ -2299,7 +2324,7 @@ namespace WolvenKit
 
         private void dockPanel_ActiveDocumentChanged(object sender, EventArgs e)
         {
-            if (dockPanel.ActiveDocument is frmCR2WDocument)
+            if (dockPanel.ActiveDocument is IWolvenkitDocument)
             {
                 doc_Activated(dockPanel.ActiveDocument, e);
             }
@@ -2361,13 +2386,13 @@ namespace WolvenKit
 
         private void doc_Activated(object sender, EventArgs e)
         {
-            ActiveDocument = (frmCR2WDocument)sender;
+            ActiveDocument = (IWolvenkitDocument)sender;
         }
 
         private void doc_FormClosed(object sender, FormClosedEventArgs e)
         {
-            _lastClosedTab.Enqueue(((frmCR2WDocument)sender).FileName);
-            var doc = (frmCR2WDocument)sender;
+            _lastClosedTab.Enqueue(((IWolvenkitDocument)sender).FileName);
+            var doc = (IWolvenkitDocument)sender;
             vm.OpenDocuments.Remove(doc.GetViewModel());
 
             if (doc == ActiveDocument)
@@ -3113,6 +3138,5 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             vm.executeGame();
         }
         #endregion
-
     }
 }

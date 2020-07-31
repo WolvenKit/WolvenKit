@@ -145,6 +145,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SRT\CExtents.cs" />
+    <Compile Include="SRT\CWind.cs" />
+    <Compile Include="SRT\SLodProfile.cs" />
+    <Compile Include="SRT\Srtfile.cs" />
+    <Compile Include="SRT\SRTStructs.cs" />
+    <Compile Include="SRT\BinaryReaderExtensions.cs" />
     <Compile Include="Types\Basic\CByteArray2.cs" />
     <Compile Include="Types\Basic\CMatrix3x3.cs" />
     <Compile Include="Types\Basic\CVector3.cs" />

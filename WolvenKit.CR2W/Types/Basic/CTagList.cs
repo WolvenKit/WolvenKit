@@ -81,9 +81,8 @@ namespace WolvenKit.CR2W.Types
 
         public override bool CanRemoveVariable(IEditableVariable child)
         {
-            if (child is CName)
+            if (child is CName tag)
             {
-                var tag = (CName) child;
                 return tags.Contains(tag);
             }
 
