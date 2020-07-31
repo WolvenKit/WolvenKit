@@ -407,6 +407,7 @@
     <Compile Include="Forms\frmOtherDocument.Designer.cs">
       <DependentUpon>frmOtherDocument.cs</DependentUpon>
     </Compile>
+    <Compile Include="MockKernel.cs" />
     <Compile Include="Utility\DDSUtility.cs" />
     <Compile Include="discord.cs" />
     <Compile Include="Extensions\CustomFloatWindow.cs">
@@ -547,6 +548,7 @@
     <Compile Include="Services\IThemedContent.cs" />
     <Compile Include="UIConfiguration.cs" />
     <Compile Include="UIController.cs" />
+    <Compile Include="Utility\AddFileArgs.cs" />
     <Compile Include="Utility\LoadFileArgs.cs" />
     <Compile Include="WitcherListViewItem.cs" />
     <Compile Include="Utility\CommonUIFunctions.cs" />

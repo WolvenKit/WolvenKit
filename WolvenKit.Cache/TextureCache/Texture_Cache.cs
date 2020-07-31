@@ -6,6 +6,7 @@ using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 
@@ -16,7 +17,7 @@ namespace WolvenKit.Cache
         //The images packed into this Texture cache file
         public List<TextureCacheItem> Files;
 
-        public string TypeName => "TextureCache";
+        public EBundleType TypeName => EBundleType.TextureCache;
         public string FileName { get; set; }
         public List<uint> Chunkoffsets;
         public UInt64 Crc;

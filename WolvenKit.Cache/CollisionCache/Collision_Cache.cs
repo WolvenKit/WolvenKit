@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Ionic.Zlib;
 using LZ4;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 
@@ -34,7 +35,7 @@ namespace WolvenKit.Cache
         public List<string> FileNames = new List<string>();
         public List<CollisionCacheItem> Files = new List<CollisionCacheItem>(); 
 
-        public string TypeName => "CollisionCache";
+        public EBundleType TypeName => EBundleType.CollisionCache;
         public string FileName { get; set; }
 
         public CollisionCache(string filename)

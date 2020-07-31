@@ -6,8 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.Common.Model;
 
+/// <summary>
+/// Various enums, mod default filesystem structure, atomic-file compression service manager (Cr2wResourceManager class),
+/// FNV1A hash functions, logger service...
+/// </summary>
 namespace WolvenKit.Common
 {
+    /// <summary>
+    /// Any game file
+    /// </summary>
     public interface IWitcherFile
     {
         IWitcherArchiveType Bundle { get; set; }
@@ -18,7 +25,7 @@ namespace WolvenKit.Common
         string CompressionType { get; }
 
         void Extract(Stream output);
-        void Extract(BundleFileExtractArgs e);
+        string Extract(BundleFileExtractArgs e);
     }
 
 

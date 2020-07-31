@@ -60,7 +60,7 @@
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
             this.webBrowser1.ScrollBarsEnabled = false;
-            this.webBrowser1.Size = new System.Drawing.Size(381, 90);
+            this.webBrowser1.Size = new System.Drawing.Size(369, 95);
             this.webBrowser1.TabIndex = 1;
             this.webBrowser1.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
             this.webBrowser1.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowser1_Navigating);
@@ -137,16 +137,17 @@
             this.checkBoxDisable.BackColor = System.Drawing.SystemColors.Control;
             this.checkBoxDisable.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.checkBoxDisable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxDisable.Location = new System.Drawing.Point(0, 622);
+            this.checkBoxDisable.Location = new System.Drawing.Point(0, 627);
             this.checkBoxDisable.Name = "checkBoxDisable";
             this.checkBoxDisable.Padding = new System.Windows.Forms.Padding(45, 10, 10, 10);
-            this.checkBoxDisable.Size = new System.Drawing.Size(920, 37);
+            this.checkBoxDisable.Size = new System.Drawing.Size(908, 37);
             this.checkBoxDisable.TabIndex = 5;
             this.checkBoxDisable.Text = "Don\'t show this form again";
             this.checkBoxDisable.UseVisualStyleBackColor = false;
             // 
             // visualButton1
             // 
+            this.visualButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.visualButton1.BackColor = System.Drawing.SystemColors.Control;
             this.visualButton1.BackColorState.Disabled = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.visualButton1.BackColorState.Enabled = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
@@ -162,10 +163,10 @@
             this.visualButton1.Font = new System.Drawing.Font("Segoe UI Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.visualButton1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.visualButton1.Image = null;
-            this.visualButton1.Location = new System.Drawing.Point(514, 159);
+            this.visualButton1.Location = new System.Drawing.Point(502, 159);
             this.visualButton1.MouseState = VisualPlus.Enumerators.MouseStates.Normal;
             this.visualButton1.Name = "visualButton1";
-            this.visualButton1.Size = new System.Drawing.Size(200, 33);
+            this.visualButton1.Size = new System.Drawing.Size(200, 38);
             this.visualButton1.TabIndex = 12;
             this.visualButton1.Text = "Settings";
             this.visualButton1.TextAlignment = System.Drawing.StringAlignment.Center;
@@ -182,6 +183,8 @@
             // 
             this.objectListView1.AllColumns.Add(this.olvColumn1);
             this.objectListView1.AllColumns.Add(this.olvColumn2);
+            this.objectListView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.objectListView1.BackColor = System.Drawing.SystemColors.Control;
             this.objectListView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.objectListView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -247,6 +250,8 @@
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.Highlight;
             this.label3.Location = new System.Drawing.Point(510, 129);
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(107, 24);
             this.label3.TabIndex = 16;
@@ -254,10 +259,11 @@
             // 
             // label4
             // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.label4.Location = new System.Drawing.Point(510, 258);
+            this.label4.Location = new System.Drawing.Point(498, 263);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(63, 24);
             this.label4.TabIndex = 17;
@@ -287,10 +293,8 @@
             // 
             // webBrowser2
             // 
-            this.webBrowser2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.webBrowser2.Location = new System.Drawing.Point(514, 285);
+            this.webBrowser2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.webBrowser2.Location = new System.Drawing.Point(502, 290);
             this.webBrowser2.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser2.Name = "webBrowser2";
             this.webBrowser2.ScrollBarsEnabled = false;
@@ -313,7 +317,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(920, 659);
+            this.ClientSize = new System.Drawing.Size(908, 664);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.webBrowser2);
             this.Controls.Add(this.label6);

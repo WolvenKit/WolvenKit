@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 using WolvenKit.CR2W;
 using WolvenKit.Wwise;
 using WolvenKit.Wwise.SoundCache;
@@ -34,7 +35,7 @@ namespace WolvenKit.Cache
         public long buffsize;
         public long checksum;
 
-        public string TypeName { get { return "SoundCache"; } }
+        public EBundleType TypeName => EBundleType.SoundCache;
         public string FileName { get; set; }
 
         public static SoundBanksInfoXML info = new SoundBanksInfoXML("SoundCache\\soundbanksinfo.xml");
@@ -209,7 +210,7 @@ namespace WolvenKit.Cache
         public static string GetIDFromPath(string path)
         {
             var split = path.Split(Path.DirectorySeparatorChar);
-            var actualpath = split.SkipWhile(x => x != "SoundCache").Skip(1).Aggregate("", (c, n) => c += Path.DirectorySeparatorChar + n).Trim().Trim(Path.DirectorySeparatorChar);
+            var actualpath = split.SkipWhile(x => x != EBundleType.SoundCache.ToString()).Skip(1).Aggregate("", (c, n) => c += Path.DirectorySeparatorChar + n).Trim().Trim(Path.DirectorySeparatorChar);
             if (actualpath.EndsWith(".wem"))
             {
                 if (info.StreamedFiles.Any(x => x.Path == actualpath))

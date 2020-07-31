@@ -3,10 +3,10 @@ using System.IO;
 
 namespace WolvenKit
 {
-    /// <DDSUtility>
+    /// <summary>
     /// Class responsible for importing and exporting .dds images in and out of CSwfTexture variable
     /// Probably could be better :P But works.
-    /// </DDSUtility>
+    /// </summary>
     class DDSUtility
     {
         #region DDS Structs
@@ -68,7 +68,7 @@ namespace WolvenKit
         }
         #endregion
         
-        /// <ExportAsDDS>
+        /// <summary>
         /// This method converts a byte array from the CR2W to a dds format byte array
         /// This should only be used when exporting from a CSwfTexture var (swfTexture).
         /// </summary>
@@ -117,7 +117,7 @@ namespace WolvenKit
             return memout.ToArray();
         }
 
-        /// <ImportFromDDS>
+        /// <summary>
         /// This method takes a dds file, as a binary reader, and converts
         /// it into a compatible byte array for importing in a CSwfTexture var
         /// </summary>
@@ -200,7 +200,7 @@ namespace WolvenKit
             return memout.ToArray();
         }
 
-        /// <ReadDDSHeader>
+        /// <summary>
         /// This reads the binary stream from the import file and 
         /// creates the DDSHeader object from it.
         /// </summary>

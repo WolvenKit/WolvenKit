@@ -260,3 +260,9 @@ W3Edit.Render/Models/**
 
 # Ignore nuget packages
 packages/**
+
+#Ignore doxygen doc
+docs/html/*
+
+#Local git wiki repository - preferred to not delve into git submodules/subtree horrors
+Wolven-kit.wiki

@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.App;
 using WolvenKit.App.Model;
+using WolvenKit.App.ViewModels;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.CR2W;
@@ -17,6 +18,8 @@ namespace WolvenKit
 {
     public partial class frmCR2WDocument : DockContent, IThemedContent, INotifyPropertyChanged, IWolvenkitDocument
     {
+        private readonly DocumentViewModel vm;
+
         public frmChunkList chunkList;
         public frmChunkProperties propertyWindow;
         public frmEmbeddedFiles embeddedFiles;
@@ -24,12 +27,19 @@ namespace WolvenKit
         public frmJournalEditor JournalEditor;
         public frmImagePreview ImageViewer;
         public Render.frmRender RenderViewer;
-        private CR2WFile file;
+        
 
         public DockPanel FormPanel => dockPanel;
+        public CR2WFile File => vm.File;
+        public string FileName => vm.FileName;
 
-        public frmCR2WDocument()
+        public frmCR2WDocument(DocumentViewModel documentViewModel)
         {
+            vm = documentViewModel;
+            vm.ClosingRequest += (sender, e) => this.Close();
+            vm.ActivateRequest += (sender, e) => this.Activate();
+            vm.PropertyChanged += ViewModel_PropertyChanged;
+
             InitializeComponent();
             
             try
@@ -43,7 +53,7 @@ namespace WolvenKit
 
             chunkList = new frmChunkList
             {
-                File = File,
+                File = vm.File,
                 DockAreas = DockAreas.Document
             };
             chunkList.Show(dockPanel, DockState.Document);
@@ -52,18 +62,23 @@ namespace WolvenKit
             propertyWindow.Show(dockPanel, DockState.DockBottom);
             propertyWindow.OnItemsChanged += PropertyWindow_OnItemsChanged;
 
-            this.PropertyChanged += FormUpdated;
-
             chunkList.Activate();
+
+            // kinda stupid because the viewmodel lives before the form exists derp
+            UpdateFormText(vm.FormText);
         }
 
-        private delegate void strDelegate(string t);
-        private void FormUpdated(object sender, PropertyChangedEventArgs e)
+
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "FormText")
-                Invoke(new strDelegate(UpdateFormText), (FormText));
+            if (e.PropertyName == nameof(vm.FormText))
+            {
+                Invoke(new strDelegate(UpdateFormText), (vm.FormText));
+            }
         }
+        private delegate void strDelegate(string t);
         protected void UpdateFormText(string val) => this.Text = val;
+
         private void PropertyWindow_OnItemsChanged(object sender, EventArgs e)
         {
             var args = (e as BrightIdeasSoftware.CellEditEventArgs);
@@ -74,49 +89,42 @@ namespace WolvenKit
             }
         }
 
-        public CR2WFile File
-        {
-            get { return file; }
-            set
-            {
-                file = value;
+        //private CR2WFile file;
+        //public CR2WFile File
+        //{
+        //    get { return file; }
+        //    set
+        //    {
+        //        file = value;
 
-                if (chunkList != null && !chunkList.IsDisposed)
-                {
-                    chunkList.File = file;
-                }
+        //        if (chunkList != null && !chunkList.IsDisposed)
+        //        {
+        //            chunkList.File = file;
+        //        }
 
-                if (flowDiagram != null && !flowDiagram.IsDisposed)
-                {
-                    flowDiagram.File = file;
-                }
+        //        if (flowDiagram != null && !flowDiagram.IsDisposed)
+        //        {
+        //            flowDiagram.File = file;
+        //        }
 
-                if (JournalEditor != null && !JournalEditor.IsDisposed)
-                {
-                    JournalEditor.File = file;
-                }
+        //        if (JournalEditor != null && !JournalEditor.IsDisposed)
+        //        {
+        //            JournalEditor.File = file;
+        //        }
 
-                if (ImageViewer != null && !ImageViewer.IsDisposed)
-                {
-                }
+        //        if (ImageViewer != null && !ImageViewer.IsDisposed)
+        //        {
+        //        }
 
-                if (RenderViewer != null && !RenderViewer.IsDisposed)
-                {
-                    RenderViewer.MeshFile = file;
-                }
-                
+        //        if (RenderViewer != null && !RenderViewer.IsDisposed)
+        //        {
+        //            RenderViewer.MeshFile = file;
+        //        }
 
-                if (embeddedFiles != null && !embeddedFiles.IsDisposed)
-                {
-                    embeddedFiles.File = file;
 
-                    if (file.embedded.Count > 0)
-                    {
-                        embeddedFiles.Show(dockPanel, DockState.Document);
-                    }
-                }
-            }
-        }
+        //        if (embeddedFiles != null && !embeddedFiles.IsDisposed)
+        //        {
+        //            embeddedFiles.File = file;
 
         #region FormText
         private string _formText;
@@ -139,9 +147,7 @@ namespace WolvenKit
         #endregion
         public string FileName => File.FileName;
 
-        public object SaveTarget { get; set; }
-        public event EventHandler<FileSavedEventArgs> OnFileSaved;
-        public event PropertyChangedEventHandler PropertyChanged;
+        public DocumentViewModel GetViewModel() => vm;
 
         public void frmCR2WDocument_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -170,89 +176,6 @@ namespace WolvenKit
             propertyWindow.Chunk = e.Chunk;
         }
 
-        public void LoadFile(string filename)
-        {
-            using (var fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
-            {
-                loadFile(fs, filename);
-
-                fs.Close();
-            }
-        }
-
-        public void LoadFile(string filename, Stream stream)
-        {
-            loadFile(stream, filename);
-        }
-
-        private void loadFile(Stream stream, string filename)
-        {
-            //Text = Path.GetFileName(filename) + " [" + filename + "]";
-            FormText = Path.GetFileName(filename) + " [" + filename + "]";
-
-            using (var reader = new BinaryReader(stream))
-            {
-                File = new CR2WFile(reader, MainController.Get().Logger)
-                {
-                    FileName = filename,
-                    EditorController = UIController.Get(),
-                    LocalizedStringSource = MainController.Get()
-                };
-            }
-        }
-
-        public void SaveFile()
-        {
-            if (SaveTarget == null)
-            {
-                saveToFileName();
-            }
-            else
-            {
-                saveToMemoryStream();
-            }
-        }
-
-        private void saveToMemoryStream()
-        {
-            using (var mem = new MemoryStream())
-            {
-                using (var writer = new BinaryWriter(mem))
-                {
-                    File.Write(writer);
-
-                    if (OnFileSaved != null)
-                    {
-                        OnFileSaved(this, new FileSavedEventArgs {FileName = FileName, Stream = mem, File = File});
-                    }
-                }
-            }
-        }
-
-        private void saveToFileName()
-        {
-            //try
-            //{
-                using (var mem = new MemoryStream())
-                using (var writer = new BinaryWriter(mem))
-                {
-                    File.Write(writer);
-                    mem.Seek(0, SeekOrigin.Begin);
-
-                    using (var fs = new FileStream(FileName, FileMode.Create, FileAccess.Write))
-                    {
-                        mem.WriteTo(fs);
-
-                        OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = fs, File = File });
-                        fs.Close();
-                    }
-                }
-            //}
-            //catch (Exception e)
-            //{
-            //    MainController.Get().QueueLog("Failed to save the file(s)! They are probably in use.\n" + e.ToString());
-            //}
-        }
 
         public void ApplyCustomTheme()
         {
