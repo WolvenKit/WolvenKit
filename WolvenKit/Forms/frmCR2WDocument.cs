@@ -16,7 +16,7 @@ using WolvenKit.Services;
 
 namespace WolvenKit
 {
-    public partial class frmCR2WDocument : DockContent, IThemedContent, INotifyPropertyChanged, IWolvenkitDocument
+    public partial class frmCR2WDocument : DockContent, IThemedContent, IWolvenkitDocument
     {
         private readonly DocumentViewModel vm;
 
@@ -30,7 +30,7 @@ namespace WolvenKit
         
 
         public DockPanel FormPanel => dockPanel;
-        public CR2WFile File => vm.File;
+        public CR2WFile File => (CR2WFile)vm.File;
         public string FileName => vm.FileName;
 
         public frmCR2WDocument(DocumentViewModel documentViewModel)
@@ -53,7 +53,7 @@ namespace WolvenKit
 
             chunkList = new frmChunkList
             {
-                File = vm.File,
+                File = (CR2WFile)vm.File,
                 DockAreas = DockAreas.Document
             };
             chunkList.Show(dockPanel, DockState.Document);
@@ -126,27 +126,6 @@ namespace WolvenKit
         //        {
         //            embeddedFiles.File = file;
 
-        #region FormText
-        private string _formText;
-        public string FormText
-        {
-            get => _formText;
-            set
-            {
-                if (_formText != value)
-                {
-                    _formText = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
-        public string FileName => File.FileName;
-
         public DocumentViewModel GetViewModel() => vm;
 
         public void frmCR2WDocument_FormClosed(object sender, FormClosedEventArgs e)
@@ -185,6 +164,6 @@ namespace WolvenKit
                 "cr2wdocument_layout.xml"));
         }
 
-        public new bool GetIsDisposed() => this.GetIsDisposed();
+        public bool GetIsDisposed() => this.GetIsDisposed();
     }
 }

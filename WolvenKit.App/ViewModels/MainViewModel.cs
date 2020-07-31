@@ -85,7 +85,7 @@ namespace WolvenKit.App.ViewModels
 
         #region Fields
 
-        private const bool COOKINPLACE = false;
+        public bool COOKINPLACE { get; set; } = false;
         public readonly LoggerService Logger;
         public W3Mod ActiveMod
         {
@@ -750,6 +750,20 @@ namespace WolvenKit.App.ViewModels
 
             finished *= await Task.Run(() => CookInternal(modcachedir, cookedModDir));
             finished *= await Task.Run(() => CookInternal(dlccachedir, cookedDLCDir, true));
+
+            // if !COOKINPLACE copy all files from Bundle folder to cooked folder
+            // because wcc doesn't copy all files by itself
+            if (!COOKINPLACE)
+            {
+                var di = new DirectoryInfo(modcachedir);
+                foreach (FileInfo fi in di.GetFiles("*", SearchOption.AllDirectories))
+                {
+                    string relpath = fi.FullName.Substring(modcachedir.Length + 1);
+                    string newpath = Path.Combine(cookedModDir, relpath);
+                    if (!File.Exists(newpath))
+                        fi.CopyTo(newpath);
+                }
+            }
 
             return finished == 0 ? 0 : 1;
 

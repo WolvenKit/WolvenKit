@@ -222,6 +222,7 @@
     <Compile Include="Model\Arguments\SelectChunkArgs.cs" />
     <Compile Include="Model\Commonfunctions.cs" />
     <Compile Include="Model\ImportModel.cs" />
+    <Compile Include="Model\IWolvenkitDocument.cs" />
     <Compile Include="Model\SearchParameters.cs" />
     <Compile Include="Model\WKPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

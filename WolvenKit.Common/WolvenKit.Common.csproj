@@ -108,7 +108,6 @@
     <Compile Include="Extensions\FileSystemInfoExtensions.cs" />
     <Compile Include="Model\Arguments\BundleFileExtractArgs.cs" />
     <Compile Include="Model\Arguments\RequestFileOpenArgs.cs" />
-    <Compile Include="Model\IWolvenkitDocument.cs" />
     <Compile Include="Model\IWolvenkitFile.cs" />
     <Compile Include="Tools\AlphanumComparator.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
