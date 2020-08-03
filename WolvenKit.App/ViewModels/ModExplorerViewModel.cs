@@ -1,25 +1,19 @@
-﻿using CsvHelper;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using WolvenKit.App.Commands;
-using WolvenKit.App.Model;
 using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.CR2W;
-using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.App.ViewModels
 {
@@ -37,7 +31,8 @@ namespace WolvenKit.App.ViewModels
             DeleteFilesCommand = new RelayCommand(DeleteFiles, CanDeleteFiles);
             CopyFileCommand = new RelayCommand(CopyFile, CanCopyFile);
             PasteFileCommand = new RelayCommand(PasteFile, CanPasteFile);
-            DumpXMLCommand = new RelayCommand(DumpXML, CanDumpXML);
+            DumpWccliteXMLCommand = new RelayCommand(DumpWccliteXML, CanDumpWccliteXML);
+            DumpWkitXMLCommand = new RelayCommand(DumpWkitXML, CanDumpWkitXML);
             ExportMeshCommand = new RelayCommand(ExportMesh, CanExportMesh);
             AddAllImportsCommand = new RelayCommand(AddAllImports, CanAddAllImports);
 
@@ -107,7 +102,8 @@ namespace WolvenKit.App.ViewModels
         public ICommand ExportMeshCommand { get; }
         public ICommand CopyFileCommand { get; }
         public ICommand PasteFileCommand { get; }
-        public ICommand DumpXMLCommand { get; }
+        public ICommand DumpWccliteXMLCommand { get; }
+        public ICommand DumpWkitXMLCommand { get; }
         public ICommand AddAllImportsCommand { get; }
         
         #endregion
@@ -178,10 +174,16 @@ namespace WolvenKit.App.ViewModels
             }
         }
 
-        protected bool CanDumpXML() => SelectedItems != null;
-        protected void DumpXML()
+        protected bool CanDumpWccliteXML() => SelectedItems != null;
+        protected void DumpWccliteXML()
         {
-            RequestFileDumpfile(this, new RequestFileArgs { File = SelectedItems.First().FullName });
+            RequestWccliteFileDumpfile(this, new RequestFileArgs { File = SelectedItems.First().FullName });
+        }
+
+        protected bool CanDumpWkitXML() => SelectedItems != null;
+        protected void DumpWkitXML()
+        {
+            RequestWkitFileDumpfile(this, new RequestFileArgs { File = SelectedItems.First().FullName});
         }
 
         protected bool CanAddAllImports() => SelectedItems != null;
@@ -353,7 +355,7 @@ namespace WolvenKit.App.ViewModels
             ResumeMonitoring();
             MainVM.SaveMod();
         }
-        private async void RequestFileDumpfile(object sender, RequestFileArgs e)
+        private async void RequestWccliteFileDumpfile(object sender, RequestFileArgs e)
         {
             var filename = e.File;
             if (!File.Exists(filename) && !Directory.Exists(filename))
@@ -372,6 +374,19 @@ namespace WolvenKit.App.ViewModels
                 string dir = filename;
                 await MainVM.DumpFile(dir, dir);
             }
+        }
+
+        private async void RequestWkitFileDumpfile(object sender, RequestFileArgs e)
+        {
+/*            var wkitcr2wfile = MainVM.OpenDocuments.Where(_ => _.File is CR2WFile).Where(t => t.FileName == e.File);
+            var ser = new DataContractSerializer(typeof(CR2WFile));
+            FileStream writer = new FileStream(e.File + ".xml", FileMode.Create);
+            ser.WriteObject(writer, wkitcr2wfile);
+            writer.Close();*/
+            var wkitcr2wdvm = MainVM.OpenDocuments.Where(_ => _.File is CR2WFile).Where(t => t.FileName == e.File);
+            FileStream writer = new FileStream(e.File + ".xml", FileMode.Create);
+            wkitcr2wdvm.First().File.SerializeToXml(writer);
+            writer.Close();
         }
         #endregion
     }
