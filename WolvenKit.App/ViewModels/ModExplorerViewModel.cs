@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,6 +19,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.App.ViewModels
 {
@@ -354,20 +356,23 @@ namespace WolvenKit.App.ViewModels
         private async void RequestFileDumpfile(object sender, RequestFileArgs e)
         {
             var filename = e.File;
-            var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
-            if (!File.Exists(fullpath) && !Directory.Exists(fullpath))
+            if (!File.Exists(filename) && !Directory.Exists(filename))
                 return;
-            string dir;
-            if (File.Exists(fullpath))
-                dir = Path.GetDirectoryName(fullpath);
-            else
-                dir = fullpath;
-
-
-            await MainVM.DumpFile(dir, dir);
-
+            // We dump an individual file with wcclite dumpfile
+            if (File.Exists(filename))
+            {
+                // '\\?\' is a neutral win32 path prefix. It hacks wcc_lite into dumping individual files.
+                // This string will get input again, further down the line, in wcc_command.GetVariables
+                // Windows paths and string management... This one is more than stupid, it is an horror. \\FIXME if you can.
+                await MainVM.DumpFile("", @"\\?\", filename);
+            }
+            //Wcclite recursively dumps CR2Ws in a directory.
+            else if (Directory.Exists(filename))
+            {
+                string dir = filename;
+                await MainVM.DumpFile(dir, dir);
+            }
         }
         #endregion
-
     }
 }

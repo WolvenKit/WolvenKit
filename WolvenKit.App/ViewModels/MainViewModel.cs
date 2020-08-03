@@ -209,15 +209,27 @@ namespace WolvenKit.App.ViewModels
         #endregion
 
         #region WCC TASKS
-        public async Task DumpFile(string folder, string outfolder)
+        public async Task DumpFile(string folder, string outfolder, string file="")
         {
+            WCC_Command cmd = null;
             try
             {
-                var cmd = new Wcc_lite.dumpfile()
+                if (file=="")
                 {
-                    Dir = folder,
-                    Out = outfolder
-                };
+                    cmd = new Wcc_lite.dumpfile()
+                    {
+                        Dir = folder,
+                        Out = outfolder
+                    };
+                }
+                else
+                {
+                    cmd = new Wcc_lite.dumpfile()
+                    {
+                        File = file,
+                        Out = outfolder
+                    };
+                }
                 await Task.Run(() => MainController.Get().WccHelper.RunCommand(cmd));
             }
             catch (Exception ex)

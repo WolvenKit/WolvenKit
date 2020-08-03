@@ -67,7 +67,7 @@ namespace WolvenKit
                 }
                 return extension;
             };
-
+            treeListView.RevealAfterExpand=false;
 
             // Update the TreeView
             vm.RepopulateTreeView();
