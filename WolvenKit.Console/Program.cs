@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
+/// <summary>
+/// Well, you know, command-line interface (CLI)
+/// </summary>
 namespace WolvenKit.Console
 {
     using CR2W;

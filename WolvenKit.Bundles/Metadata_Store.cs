@@ -8,6 +8,10 @@ using WolvenKit.W3Strings;
 
 namespace WolvenKit.Bundles
 {
+    /// <summary>
+    /// This game file at the root of the witcher3 content/ folder is used extensively by wcc_lite.
+    /// It is used to keep track of archived files and to control their integrity.
+    /// </summary>
     public class Metadata_Store : ICsvSerializable
     {
         #region Info
