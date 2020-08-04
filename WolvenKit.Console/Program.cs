@@ -6,20 +6,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-
 namespace WolvenKit.Console
 {
     using CR2W;
     using System.IO;
     using CR2W.Types;
-    using System.Collections;
-    using System.Reflection;
     using Cache;
     using Bundles;
     using Common;
     using static WolvenKit.CR2W.Types.Enums;
     using ConsoleProgressBar;
     using WolvenKit.Common.Model;
+    using W3Speech;
+    using Wwise;
 
     public class WolvenKitConsole
     {
@@ -32,24 +31,26 @@ namespace WolvenKit.Console
                 while (true)
                 {
                     string line = System.Console.ReadLine();
-                    Parse(line.Split(' '));
+                    await Parse(line.Split(' '));
                 }
 
             }
             else
             {
-                Parse(args);
+                await Parse(args);
             }
         }
 
         internal static async Task Parse(string[] _args)
         {
-            var result = Parser.Default.ParseArguments<CacheOptions, BundleOptions, DumpXbmsOptions, DumpDDSOptions>(_args)
+            var result = Parser.Default.ParseArguments<CacheOptions, BundleOptions, DumpXbmsOptions, DumpDDSOptions, DumpArchivedFileInfosOptions, DumpMetadataStoreOptions>(_args)
                         .MapResult(
                           async (CacheOptions opts) => await DumpCache(opts),
                           async (BundleOptions opts) => await RunBundle(opts),
                           async (DumpXbmsOptions opts) => await DumpXbmInfo(opts),
                           async (DumpDDSOptions opts) => await DumpDDSInfo(opts),
+                          async (DumpArchivedFileInfosOptions opts) => await DumpArchivedFileInfos(opts),
+                          async (DumpMetadataStoreOptions opts) => await DumpMetadataStore(opts),
                           //errs => 1,
                           _ => Task.FromResult(1));
         }
@@ -426,6 +427,47 @@ namespace WolvenKit.Console
             return 1;
         }
 
+        private static async Task<int> DumpArchivedFileInfos(DumpArchivedFileInfosOptions options)
+        {
+            /*Doesn't work for some reason
+             * var mc = MainController.Get();
+                        mc.Initialize();
+                        List<IWitcherArchive> managers = MainController.Get().GetManagers(false);
+            */
+            uint cnt = 1;
+
+            var bm = new BundleManager();
+            bm.LoadAll("C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
+            var tm = new TextureManager();
+            tm.LoadAll("C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
+            var cm = new CollisionManager();
+            cm.LoadAll("C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
+            var em = new SpeechManager();
+            em.LoadAll("C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
+            var sm = new SoundManager();
+            sm.LoadAll("C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
+
+            var managers = new List<IWitcherArchive>() { bm, tm, cm, em, sm };
+
+            using (StreamWriter writer = File.CreateText("C:\\Users\\Maxim\\Desktop\\wk\\cons_wk_unbundled_file_namesv2.txt"))
+            {
+                foreach (var manager in managers)
+                {
+                    foreach (var file in manager.FileList)
+                    {
+                        writer.WriteLine(cnt++ + ";" + file.Bundle.FileName + ";" + file.Name + ";" +
+                            file.Bundle.TypeName + ";" + file.Size + ";" + file.CompressionType
+                             + ";" + file.ZSize + ";" + file.PageOFfset);
+                    }
+                    writer.WriteLine(Environment.NewLine);
+                    //System.Console.WriteLine(cnt);
+                }
+            }
+            System.Console.WriteLine($"Finished extracting " + cnt + " files.");
+            System.Console.ReadLine();
+            return 1;
+        }
+
         public static void IntenseTest(List<string> Files2Test)
         {
             var xdoc = new XDocument(new XElement("CollisionCacheTest",
@@ -489,8 +531,14 @@ namespace WolvenKit.Console
             return 0;
         }
 
-
-
-
+        private static async Task<int> DumpMetadataStore(DumpMetadataStoreOptions options)
+        {
+            var ms = new Metadata_Store("C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Witcher 3\\content\\metadata.store");
+            using (StreamWriter writer = File.CreateText("C:\\Users\\maxim\\Desktop\\wk\\dump_metadatastore.csv"))
+            {
+                ms.SerializeToCsv(writer);
+            }
+                return 1;
+        }
     }
 }
