@@ -8,13 +8,19 @@ using WolvenKit.W3Strings;
 
 namespace WolvenKit.Bundles
 {
-    public class Metadata_Store
+    /// <summary>
+    /// This game file at the root of the witcher3 content/ folder is used extensively by wcc_lite.
+    /// It is used to keep track of archived files and to control their integrity.
+    /// </summary>
+    public class Metadata_Store : ICsvSerializable
     {
         #region Info
         public byte[] IDString = { 0x03, 0x56, 0x54, 0x4D }; // ".VTM"
         public Int32 Version = 6;
         public Int32 MaxFileSizeInBundle;
-        public Int32 MaxFileSIzeInMemory;
+        public Int32 MaxFileSizeInMemory;
+        public Int32 StringTableSize;
+
         #endregion
 
         public byte[] FileStringTable;
@@ -68,8 +74,8 @@ namespace WolvenKit.Bundles
                     throw new InvalidDataException("Wrong Magic when reading the metadata.store file!");
                 Version = br.ReadInt32();
                 MaxFileSizeInBundle = br.ReadInt32();
-                MaxFileSIzeInMemory = br.ReadInt32();
-                var StringTableSize = br.ReadVLQInt32();
+                MaxFileSizeInMemory = br.ReadInt32();
+                StringTableSize = br.ReadVLQInt32();
                 //Read the string table
                 /*
                  empty line => ""
@@ -132,13 +138,122 @@ namespace WolvenKit.Bundles
                 hashes.Deserialize(br);
 
                 if(br.BaseStream.Position == br.BaseStream.Length)
+                {
                     Console.WriteLine("Succesfully read everything!");
+
+                }
                 else
                 {
                     Console.WriteLine($"Reader is at {br.BaseStream.Position} bytes. The length of the file is { br.BaseStream.Length} bytes.\n{ br.BaseStream.Length-br.BaseStream.Position} bytes wasn't read.");
                 }
             }
         }
+
+        public void SerializeToCsv(StreamWriter writer)
+        {
+            //Header
+            writer.WriteLine("Header :");
+            writer.WriteLine(new string('-', 80));
+            writer.WriteLine("\"Version\";\"MaxFileSizeInBundle\";\"MaxFileSizeInMemory\";\"StringTableSize\"");
+            writer.WriteLine(Version + ";" + MaxFileSizeInBundle + ";" + MaxFileSizeInMemory + ";" + StringTableSize);
+            writer.WriteLine(new string('-', 80));
+            writer.WriteLine(Environment.NewLine);
+            writer.WriteLine(Environment.NewLine);
+
+            //FileStringTable
+            writer.WriteLine("FileStringTable :");
+            writer.WriteLine(new string('-', 80));
+            writer.WriteLine("\"StringTableNameByteOffset\";\"AbsolutePhysicalPath(archive)/AbsoluteVirtualPath(archived file)\"");
+            StringBuilder filepathbuffer = new StringBuilder();
+            UInt32 bytecount = 0;
+            UInt32 offsetbuffer = 0;
+            foreach (var abyte in FileStringTable)
+            {
+                if (abyte.Equals(0x00))
+                {
+                    writer.WriteLine(offsetbuffer + ";\"" + filepathbuffer.ToString() + "\"");
+                    filepathbuffer.Clear();
+                    offsetbuffer = bytecount + 1;
+                }
+                else
+                {
+                    filepathbuffer.Append(Encoding.ASCII.GetString(new[] { abyte }));
+                }
+                bytecount++;
+            }
+            writer.WriteLine(new string('-', 80));
+            writer.WriteLine(Environment.NewLine);
+            writer.WriteLine(Environment.NewLine);
+
+            //FileInfoList
+            writer.WriteLine("FileInfoList :");
+            writer.WriteLine(new string('-', 80));
+            writer.WriteLine("\"StringTableNameByteOffset\";\"PathHash\";\"SizeInBundle\";\"SizeInMemory\";\"FirstEntry\";\"CompressionType\";\"BufferID\";\"HasBuffer\"");
+
+            foreach(var ufi in fileInfoList)
+                writer.WriteLine(ufi.StringTableNameOffset + ";" + ufi.PathHash + ";" + ufi.SizeInBundle + ";" + ufi.SizeInMemory + ";" + ufi.FirstEntry + ";" + ufi.CompressionType + ";" + ufi.bufferid + ";" + ufi.hasbuffer);
+
+            writer.WriteLine(new string('-', 80));
+            writer.WriteLine(Environment.NewLine);
+            writer.WriteLine(Environment.NewLine);
+
+            //FileEntryInfoList
+            writer.WriteLine("FileEntryInfoList :");
+            writer.WriteLine(new string('-', 80));
+            writer.WriteLine("\"FileID\";\"BundleID\";\"OffsetInBundle\";\"SizeInBundle\";\"NextEntry\"");
+            foreach (var feil in fileEntryInfoList)
+                writer.WriteLine(feil.FileID + ";" + feil.BundleID + ";" + feil.OffsetInBundle + ";" + feil.SizeInBundle + ";" + feil.NextEntry);
+            writer.WriteLine(new string('-', 80));
+            writer.WriteLine(Environment.NewLine);
+            writer.WriteLine(Environment.NewLine);
+
+
+            //BundleInfoList
+            writer.WriteLine("BundleInfoList :");
+            writer.WriteLine(new string('-', 80));
+            writer.WriteLine("\"Name\";\"FirstFileEntry\";\"NumBundleEntries\";\"DataBlockSize\";\"DataBlockOffset\";\"BurstDataBlockSize\"");
+            foreach (var bil in bundleInfoList)
+                writer.WriteLine(bil.Name + ";" + bil.FirstFileEntry + ";" + bil.NumBundleEntries + ";" + bil.DataBlockSize + ";" + bil.DataBlockOffset + ";" + bil.BurstDataBlockSize);
+            writer.WriteLine(new string('-', 80));
+            writer.WriteLine(Environment.NewLine);
+            writer.WriteLine(Environment.NewLine);
+
+            //Buffers
+            writer.WriteLine("Buffers :");
+            writer.WriteLine(new string('-', 80));
+            writer.WriteLine("\"Buffers\"");
+            foreach (var b in Buffers)
+                writer.WriteLine(b);
+            writer.WriteLine(new string('-', 80));
+            writer.WriteLine(Environment.NewLine);
+            writer.WriteLine(Environment.NewLine);
+
+            //DirInitInfoList
+            writer.WriteLine("DirInitInfoList :");
+            writer.WriteLine(new string('-', 80));
+            writer.WriteLine("\"Name\";\"Parent\"");
+            foreach (var diil in dirInitInfoList)
+                writer.WriteLine(diil.Name + ";" + diil.Parent);
+            writer.WriteLine(new string('-', 80));
+            writer.WriteLine(Environment.NewLine);
+            writer.WriteLine(Environment.NewLine);
+
+            //Hashes
+            writer.WriteLine("Hashes :");
+            writer.WriteLine(new string('-', 80));
+            writer.WriteLine("\"Hash\";\"Unk2\"");
+            foreach (var h in hashes)
+                writer.WriteLine(h.Hash+ ";" + h.Unk2);
+
+
+            Console.WriteLine("Succesfully wrote csv dump!");
+        }
+
+        public void DeserializeFromCsv(StreamReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public void Write(string OutPutPath, params Bundle[] Bundles)
         {
@@ -198,7 +313,7 @@ namespace WolvenKit.Bundles
 
         public void Serialize(BinaryWriter writer)
         {
-            
+            throw new NotImplementedException();
         }
     }
 

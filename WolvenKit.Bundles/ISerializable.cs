@@ -12,4 +12,10 @@ namespace WolvenKit.Bundles
         void Deserialize(BinaryReader reader);
         void Serialize(BinaryWriter writer);
     }
+
+    interface ICsvSerializable
+    {
+        void DeserializeFromCsv(StreamReader reader);
+        void SerializeToCsv(StreamWriter writer);
+    }
 }

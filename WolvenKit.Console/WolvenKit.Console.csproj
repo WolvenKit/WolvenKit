@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -96,6 +96,14 @@
     <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj">
       <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>
       <Name>WolvenKit.CR2W</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WolvenKit.W3Speech\WolvenKit.W3Speech.csproj">
+      <Project>{c025f253-c78b-4a3b-87e7-1b2a1a453b97}</Project>
+      <Name>WolvenKit.W3Speech</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WolvenKit.Wwise\WolvenKit.Wwise.csproj">
+      <Project>{dcbbe807-cd6e-493e-8c04-db976a1591ea}</Project>
+      <Name>WolvenKit.Wwise</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

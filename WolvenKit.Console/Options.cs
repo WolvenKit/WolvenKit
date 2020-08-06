@@ -14,20 +14,36 @@ namespace WolvenKit.Console
         [Option(HelpText = "Specify the cache path.", Required = true)]
         public string path { get; set; }
     }
+
     [Verb("bundle", HelpText = "Witcher 3 Bundle IO.")]
     class BundleOptions
     {
         [Option(HelpText = "Specify the bundle path.", Required = true)]
         public string path { get; set; }
     }
+
     [Verb("dumpXBM", HelpText = "Dumps xbm info from bundles.")]
     class DumpXbmsOptions
     {
 
     }
+
     [Verb("dumpDDS", HelpText = "Dumps dds info from texture caches.")]
     class DumpDDSOptions
     {
 
     }
+
+    [Verb("dumpFileNames1", HelpText = "Dumps all file names found in the archives.")]
+    class DumpArchivedFileInfosOptions
+    {
+
+    }
+
+    [Verb("dumpMetadataStore", HelpText = "Dumps the content of metadata.store.")]
+    class DumpMetadataStoreOptions
+    {
+
+    }
+
 }
