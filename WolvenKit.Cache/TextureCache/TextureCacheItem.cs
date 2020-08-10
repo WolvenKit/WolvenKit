@@ -88,6 +88,8 @@ namespace WolvenKit.Cache
         {
             using (var file = MemoryMappedFile.CreateFromFile(this.ParentFile, FileMode.Open))
             {
+                
+
                 // generate header
                 ETextureFormat format = formats[Type1];
                 var metadata = new DDSMetadata(
@@ -96,14 +98,14 @@ namespace WolvenKit.Cache
                     (uint)Mipcount,
                     format,
                     BaseAlignment,
-                    IsCube == 1,
+                    (Path.GetExtension(Name).Contains("w2l") && SliceCount == 6) || IsCube == 1, // hack for env probes:
                     SliceCount,
                     false
                     );
                 DDSUtils.GenerateAndWriteHeader(output, metadata);
 
 
-                if (IsCube == 0)
+                if (IsCube == 0 && !(Path.GetExtension(Name).Contains("w2l") && SliceCount == 6))
                 {
                     using (var viewstream = file.CreateViewStream((PageOFfset * 4096) + 9, ZSize, MemoryMappedFileAccess.Read))
                     {
@@ -193,7 +195,7 @@ namespace WolvenKit.Cache
 
             var extractext = e.Extension;
             // do not convert pngs, jpgs and dds
-            if (Path.GetExtension(e.FileName) != ".dds")
+            if (!(Path.GetExtension(e.FileName) == ".dds" || Path.GetExtension(e.FileName) == ".w2l"))
             {
                 if (Path.GetExtension(e.FileName) == ".png")
                     extractext = EUncookExtension.png;
