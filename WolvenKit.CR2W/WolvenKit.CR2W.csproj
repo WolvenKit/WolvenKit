@@ -156,11 +156,6 @@
     <Compile Include="SRT\Srtfile.cs" />
     <Compile Include="SRT\SRTStructs.cs" />
     <Compile Include="SRT\BinaryReaderExtensions.cs" />
-    <Compile Include="Types\Basic\CByteArray2.cs" />
-    <Compile Include="Types\Basic\CMatrix3x3.cs" />
-    <Compile Include="Types\Basic\CVector3.cs" />
-    <Compile Include="Types\Basic\IdHandle.cs" />
-    <Compile Include="Types\Basic\EntityHandle.cs" />
     <Compile Include="Reflection\AssemblyDictionary.cs" />
     <Compile Include="Reflection\EnumExtensions.cs" />
     <Compile Include="Reflection\REDAttribute.cs" />
