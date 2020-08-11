@@ -27,7 +27,7 @@ namespace WolvenKit.Cache
         public string Name { get; set; }
         public UInt32 Hash;
         public Int32 PathStringIndex;
-        public long PageOFfset { get; set; }
+        public long PageOffset { get; set; }
         public Int32 CompressedSize;
         public Int32 UncompressedSize;
         public UInt32 BaseAlignment;
@@ -105,7 +105,7 @@ namespace WolvenKit.Cache
 
                 if (IsCube == 0)
                 {
-                    using (var viewstream = file.CreateViewStream((PageOFfset * 4096) + 9, ZSize, MemoryMappedFileAccess.Read))
+                    using (var viewstream = file.CreateViewStream((PageOffset * 4096) + 9, ZSize, MemoryMappedFileAccess.Read))
                     {
                         //if ( format != ETextureFormat.TEXFMT_R8G8B8A8)
                         new ZlibStream(viewstream, CompressionMode.Decompress).CopyTo(output);
@@ -132,7 +132,7 @@ namespace WolvenKit.Cache
                     {
                         // extract to memory
                         // image
-                        using (var vs = file.CreateViewStream((PageOFfset * 4096) + 9, ZSize, MemoryMappedFileAccess.Read))
+                        using (var vs = file.CreateViewStream((PageOffset * 4096) + 9, ZSize, MemoryMappedFileAccess.Read))
                         {
                             //if ( format != ETextureFormat.TEXFMT_R8G8B8A8)
                             new ZlibStream(vs, CompressionMode.Decompress).CopyTo(imagestream);
@@ -191,34 +191,21 @@ namespace WolvenKit.Cache
                 Extract(output);
             }
 
-            var extractext = e.Extension;
-            // do not convert pngs, jpgs and dds
-            if (Path.GetExtension(e.FileName) != ".dds")
+            //convert
+            var fi = new FileInfo(newpath);
+            if (fi.Exists)
             {
-                if (Path.GetExtension(e.FileName) == ".png")
-                    extractext = EUncookExtension.png;
-                else if (Path.GetExtension(e.FileName) == ".jpg")
-                    extractext = EUncookExtension.jpg;
-
-
-                //convert
-                var fi = new FileInfo(newpath);
-                if (fi.Exists)
-                {
-                    Texconv.Convert(Path.GetDirectoryName(newpath), newpath, extractext);
-                }
-
-                // delete old DDS
-                fi.Delete();
-
-                // lowercase new extension
-                newpath = Path.ChangeExtension(fi.FullName, extractext.ToString());
-                fi = new FileInfo(newpath);
-                if (fi.Exists)
-                {
-                    File.Move(newpath, Path.ChangeExtension(newpath, extractext.ToString()));
-                }
+                Texconv.Convert(Path.GetDirectoryName(newpath), newpath, e.Extension);
             }
+
+            // lowercase new extension
+            newpath = Path.ChangeExtension(fi.FullName, e.Extension.ToString());
+            fi = new FileInfo(newpath);
+            if (fi.Exists)
+            {
+                File.Move(newpath, Path.ChangeExtension(newpath, e.Extension.ToString()));
+            }
+
 
             return newpath;
         }

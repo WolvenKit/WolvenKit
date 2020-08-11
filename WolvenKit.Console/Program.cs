@@ -22,6 +22,7 @@ namespace WolvenKit.Console
     using WolvenKit.Common.Model;
     using W3Speech;
     using Wwise;
+    using System.Text.RegularExpressions;
 
     public class WolvenKitConsole
     {
@@ -34,7 +35,8 @@ namespace WolvenKit.Console
                 while (true)
                 {
                     string line = System.Console.ReadLine();
-                    await Parse(line.Split(' '));
+                    var parsed = ParseText(line, ' ', '"');
+                    await Parse(parsed.ToArray());
                 }
 
             }
@@ -329,7 +331,8 @@ namespace WolvenKit.Console
             bool WHITELIST = true;
             var whitelistExt = new[]
             {
-                "w2cube",
+                //"w2cube"
+                "w2l"
             };
             bool EXTRACT = true;
 
@@ -339,16 +342,16 @@ namespace WolvenKit.Console
             {
                 //if (of.ShowDialog() == DialogResult.OK)
                 {
-                    var dt = DateTime.Now;
-                    string idx = RED.CRC32.Crc32Algorithm.Compute(Encoding.ASCII.GetBytes($"{dt.Year}{dt.Month}{dt.Day}{dt.Hour}{dt.Minute}{dt.Second}")).ToString();
                     //var txc = new TextureCache(of.FileName);
                     var txc = new TextureCache(options.path);
-                    var outDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "TXTTest", $"ExtractedFiles_{idx}");
+                    var outDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "TXTTest", $"ExtractedFiles3");
                     if (!Directory.Exists(outDir))
                         Directory.CreateDirectory(outDir);
 
                     // Dump
-                    using (StreamWriter writer = File.CreateText(Path.Combine(outDir, $"__txtdump_{idx}.txt")))
+                    /*                    using (StreamWriter writer = File.CreateText(Path.Combine(outDir, $"__txtdump.txt")))
+                    */
+                    using (StreamWriter writer = File.CreateText(Path.Combine(outDir, $"seed_trial.txt")))
                     {
                         string head = "Format\t" +
                             "Format2\t" +
@@ -356,14 +359,25 @@ namespace WolvenKit.Console
                             "Width\t" +
                             "Height\t" +
                             "Size\t" +
+                            "PageOffset\t" +
+                            "CompressedSize\t" +
+                            "UncompressedSize\t" +
+                            "MipOffsetIndex\t" +
+                            "NumMipOffsets\t" +
+                            "TimeStamp\t" +
                             "Mips\t" +
                             "Slices\t" +
                             "Cube\t" +
                             "Unk1\t" +
-                            //"Hash\t" +
-                            "Name";
+                            "Hash\t" +
+                            "Name\t" +
+                            "Extension\t" +
+                            "MipmapCount\t" +
+                            "Mipmaps"
+                            ;
                         writer.WriteLine(head);
 
+                        short i = 1;
                         foreach (var x in txc.Files)
                         {
                             string ext = x.Name.Split('.').Last();
@@ -376,14 +390,21 @@ namespace WolvenKit.Console
                                 $"{x.BaseWidth}\t" +
                                 $"{x.BaseHeight}\t" +
                                 $"{x.Size}\t" +
+                                $"{x.PageOffset}\t" +
+                                $"{x.CompressedSize}\t" +
+                                $"{x.UncompressedSize}\t" +
+                                $"{x.MipOffsetIndex}\t" +
+                                $"{x.NumMipOffsets}\t" +
+                                $"{x.TimeStamp}\t" +
                                 $"{x.Mipcount}\t" +
                                 $"{x.SliceCount}\t" +
                                 $"{x.IsCube.ToString("X2")}\t" +
                                 $"{x.Unk1.ToString()}/{x.Unk1.ToString("X2")}\t" +
-                                //$"{x.Hash}\t" +
+                                $"{x.Hash}\t" +
                                 $"{x.Name}\t"
                                 ;
-
+                            info += $"{x.Name.Split('.').Last()}\t";
+                            info += $"{x.MipMapInfo.Count()}\t";
                             info += "<";
                             foreach (var y in x.MipMapInfo)
                             {
@@ -398,10 +419,17 @@ namespace WolvenKit.Console
                             {
                                 string fullpath = Path.Combine(outDir, x.Name);
                                 string filename = Path.GetFileName(fullpath);
-                                string newpath = Path.Combine(outDir, filename);
-                                x.Extract(new BundleFileExtractArgs(newpath));
+                                string padir = Path.GetDirectoryName(fullpath).Split('\\').Last();
+                                string newpath = Path.Combine(outDir, padir + i++.ToString() + filename);
+                                x.Extract(new BundleFileExtractArgs(newpath, EUncookExtension.jpg));
                                 System.Console.WriteLine($"Finished extracting {x.Name}");
                             }
+                            writer.WriteLine("\t\t{");
+                            writer.WriteLine($"\t\t\"path\": \"" + x.Name + "\",");
+                            writer.WriteLine("\t\t\"cache\": \"texture\"");
+                            writer.WriteLine("\t\t},");
+
+
                         }
                         System.Console.WriteLine($"Finished dumping texture cache. {options.path}");
                     }
@@ -460,7 +488,7 @@ namespace WolvenKit.Console
                     {
                         writer.WriteLine(cnt++ + ";" + file.Bundle.FileName + ";" + file.Name + ";" +
                             file.Bundle.TypeName + ";" + file.Size + ";" + file.CompressionType
-                             + ";" + file.ZSize + ";" + file.PageOFfset);
+                             + ";" + file.ZSize + ";" + file.PageOffset);
                     }
                     writer.WriteLine(Environment.NewLine);
                     //System.Console.WriteLine(cnt);
@@ -543,5 +571,64 @@ namespace WolvenKit.Console
             }
                 return 1;
         }
+
+        public static IEnumerable<String> ParseText(String line, Char delimiter, Char textQualifier)
+        {
+
+            if (line == null)
+                yield break;
+
+            else
+            {
+                Char prevChar = '\0';
+                Char nextChar = '\0';
+                Char currentChar = '\0';
+
+                Boolean inString = false;
+
+                StringBuilder token = new StringBuilder();
+
+                for (int i = 0; i < line.Length; i++)
+                {
+                    currentChar = line[i];
+
+                    if (i > 0)
+                        prevChar = line[i - 1];
+                    else
+                        prevChar = '\0';
+
+                    if (i + 1 < line.Length)
+                        nextChar = line[i + 1];
+                    else
+                        nextChar = '\0';
+
+                    if (currentChar == textQualifier && prevChar != 0x5c && !inString)
+                    {
+                        inString = true;
+                        continue;
+                    }
+
+                    if (currentChar == textQualifier && inString)
+                    {
+                        inString = false;
+                        continue;
+                    }
+
+                    if (currentChar == delimiter && !inString)
+                    {
+                        yield return token.ToString();
+                        token = token.Remove(0, token.Length);
+                        continue;
+                    }
+
+                    token = token.Append(currentChar);
+
+                }
+
+                yield return token.ToString();
+
+            }
+        }
     }
 }
+

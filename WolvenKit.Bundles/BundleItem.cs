@@ -18,7 +18,7 @@ namespace WolvenKit.Bundles
         public uint Empty { get; set; }
         public long Size { get; set; }
         public uint ZSize { get; set; }
-        public long PageOFfset { get; set; }
+        public long PageOffset { get; set; }
         public ulong TimeStamp { get; set; }
         public byte[] Zero { get; set; }
         public uint CRC { get; set; }
@@ -52,7 +52,7 @@ namespace WolvenKit.Bundles
         public void Extract(Stream output)
         {
             using (var file = MemoryMappedFile.CreateFromFile(Bundle.FileName, FileMode.Open))
-            using (var viewstream = file.CreateViewStream(PageOFfset, ZSize, MemoryMappedFileAccess.Read))
+            using (var viewstream = file.CreateViewStream(PageOffset, ZSize, MemoryMappedFileAccess.Read))
             {
                 switch (CompressionType)
                 {

@@ -58,7 +58,7 @@ namespace WolvenKit.W3Speech
             this.Size = wem_size + cr2w_size;
             this.ZSize = wem_size + cr2w_size;
             this.Name = id.ToString() + ".cr2w_wem_pair";
-            this.PageOFfset = cr2w_offs;
+            this.PageOffset = cr2w_offs;
         }
 
         public IWitcherArchiveType Bundle { get; set; }
@@ -66,7 +66,7 @@ namespace WolvenKit.W3Speech
         public long Size { get; set; }
         public uint ZSize { get; set; }
 
-        public long PageOFfset { get; set; }
+        public long PageOffset { get; set; }
 
         public string CompressionType => "None";
 
@@ -74,7 +74,7 @@ namespace WolvenKit.W3Speech
         {
             using (var file = MemoryMappedFile.CreateFromFile(Bundle.FileName, FileMode.Open))
             {
-                using (var viewstream = file.CreateViewStream(PageOFfset, ZSize, MemoryMappedFileAccess.Read))
+                using (var viewstream = file.CreateViewStream(PageOffset, ZSize, MemoryMappedFileAccess.Read))
                 {
                     viewstream.CopyTo(output);
                 }
@@ -83,10 +83,10 @@ namespace WolvenKit.W3Speech
 
         public string Extract(BundleFileExtractArgs e)
         {
-            PageOFfset = cr2w_offs;
+            PageOffset = cr2w_offs;
             ZSize = cr2w_size;
             Extract(new FileStream(Path.ChangeExtension(e.FileName, ".cr2w"), FileMode.Create));
-            PageOFfset = wem_offs;
+            PageOffset = wem_offs;
             ZSize = wem_size;
             Extract(new FileStream(Path.ChangeExtension(e.FileName, ".wem"), FileMode.Create));
 

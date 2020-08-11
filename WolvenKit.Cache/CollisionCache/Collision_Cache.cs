@@ -159,7 +159,7 @@ namespace WolvenKit.Cache
                 NameOffset = br.ReadUInt32(),
                 Unk1 = br.ReadUInt32(),
                 Unk2 = br.ReadUInt64(), //null
-                PageOFfset = br.ReadUInt32(),
+                PageOffset = br.ReadUInt32(),
                 ZSize = br.ReadUInt32(),
                 Size = (long)br.ReadUInt32(),
                 Unk3 = br.ReadUInt32(),
@@ -187,7 +187,7 @@ namespace WolvenKit.Cache
                     Version = 2;
                     DataOffset += 0x10;
                     for (int i = 0; i < data_array.Count; i++)
-                        data_array[i].PageOFfset = -1;
+                        data_array[i].PageOffset = -1;
                 }
 
                 if (buffersize <= CACHE_BUFFER_SIZE)
@@ -223,7 +223,7 @@ namespace WolvenKit.Cache
                 bw.Write((CalculateChecksum(FileList)));
                 //Write the actual contents of the files.
                 for (int i = 0; i < FileList.Count; i++)
-                    if (data_array[i].PageOFfset != -1)
+                    if (data_array[i].PageOffset != -1)
                     {
                         using (var ms = new MemoryStream())
                         {
