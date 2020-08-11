@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using WolvenKit.Common.Model;
 using WolvenKit.CR2W;
 
 namespace WolvenKit.App.Model
@@ -7,6 +8,6 @@ namespace WolvenKit.App.Model
     {
         public Stream Stream { get; set; }
         public string FileName { get; set; }
-        public CR2WFile File { get; set; }
+        public IWolvenkitFile File { get; set; }
     }
 }

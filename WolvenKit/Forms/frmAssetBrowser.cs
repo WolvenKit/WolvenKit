@@ -347,6 +347,7 @@ namespace WolvenKit
 
         public Tuple<WitcherListViewItem,IWitcherFile>[] SearchFiles(IWitcherFile[] files, string searchkeyword, string bundletypestr, string extension)
         {
+            if(bundletypestr=="Any") bundletypestr="ANY";
             EBundleType bundletype = (EBundleType)Enum.Parse(typeof(EBundleType), bundletypestr);
 
             if (regexCheckbox.Checked)

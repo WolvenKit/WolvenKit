@@ -48,6 +48,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6E63DB95-528E-4816-BE98-7F339599C512}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		doxygen.conf = doxygen.conf
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Console", "WolvenKit.Console\WolvenKit.Console.csproj", "{B4343A73-9BF6-4F82-9CCE-F2D5F6BCC9E8}"
