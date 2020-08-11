@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Types;
@@ -20,7 +21,7 @@ using WolvenKit.Utils;
 namespace WolvenKit.CR2W
 {
     [ DataContract(Namespace = "") ]
-    public class CR2WFile
+    public class CR2WFile : IWolvenkitFile
     {
         #region Constants
         private const long MAGIC_SIZE = 4;
@@ -235,19 +236,11 @@ namespace WolvenKit.CR2W
             m_strings = ReadStringsBuffer(file.BaseStream);
 
             // read tables
-            names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this)).ToList();
-            imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this)).ToList();
-            properties = ReadTable<CR2WProperty>(file.BaseStream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
-            chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this)).ToList();
-            buffers = ReadTable<CR2WBuffer>(file.BaseStream, 5).Select(_ => new CR2WBufferWrapper(_)).ToList();
-            embedded = ReadTable<CR2WEmbedded>(file.BaseStream, 6).Select(_ => new CR2WEmbeddedWrapper(_)
-            {
-                ParentFile = this,
-                ParentImports = imports,
-                Handle = StringDictionary[_.path],
-            }).ToList();
-
-            #endregion
+            names = ReadTable<CR2WName>(1).Select(_ => new CR2WNameWrapper(_, this)).ToList();
+            imports = ReadTable<CR2WImport>(2).Select(_ => new CR2WImportWrapper(_, this)).ToList();
+            properties = ReadTable<CR2WProperty>(3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
+            chunks = ReadTable<CR2WExport>(4).Select(_ => new CR2WExportWrapper(_, this)).ToList();
+            buffers = ReadTable<CR2WBuffer>(5).Select(_ => new CR2WBufferWrapper(_)).ToList();
 
             return (imports, m_hasInternalBuffer, buffers);
         }

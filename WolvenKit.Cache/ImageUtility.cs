@@ -141,21 +141,21 @@ namespace WolvenKit.Cache
 
             int residentMipIndex = xbm.ResidentMipIndex == null ? 0 : xbm.ResidentMipIndex.val;
             byte[] bytesource;
-
+            bytesource = xbm.Residentmip.Bytes;
             // handle cooked xbms
-            if (xbm.SourceData != null && xbm.Residentmip != null)
-            {
-                bytesource = xbm.Residentmip.Bytes;
-            }
-            // handle uncooked xbms
-            else if (xbm.Mips != null)
-            {
-                bytesource = xbm.Mips.elements[residentMipIndex].Bytes;
-            }
-            else
-            {
-                return null;
-            }
+            //if (xbm.GetVariableByName("sourceData") != null && xbm.Residentmip != null)
+            //{
+            //    bytesource = xbm.Residentmip.Bytes;
+            //}
+            //// handle uncooked xbms
+            //else if (xbm.Mips != null)
+            //{
+            //    bytesource = xbm.Mips.elements[residentMipIndex].Bytes;
+            //}
+            //else
+            //{
+            //    return null;
+            //}
 
             using (var ms = new MemoryStream(Xbm2DdsBytes(xbm, bytesource)))
             {

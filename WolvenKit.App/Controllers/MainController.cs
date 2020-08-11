@@ -21,6 +21,9 @@ namespace WolvenKit.App
     using WolvenKit.Common.Wcc;
     using WolvenKit.W3Speech;
 
+    /// <summary>
+    /// Supervisor of all subsystem managers. Singleton.
+    /// </summary>
     public class MainController : ObservableObject, ILocalizedStringSource
     {
         private static MainController mainController;

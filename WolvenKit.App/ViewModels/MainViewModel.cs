@@ -27,6 +27,9 @@ using WolvenKit.Wwise.Wwise;
 
 namespace WolvenKit.App.ViewModels
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class MainViewModel : ViewModel
     {
         #region Properties
@@ -78,11 +81,11 @@ namespace WolvenKit.App.ViewModels
         //}
         //#endregion
 
-
         #endregion
 
         #region Fields
-        private const bool COOKINPLACE = false;
+
+        public bool COOKINPLACE { get; set; } = false;
         public readonly LoggerService Logger;
         public W3Mod ActiveMod
         {
@@ -725,7 +728,7 @@ namespace WolvenKit.App.ViewModels
 
         /// <summary>
         /// Cooks Files in the ModProject's folders (Bunde, TextureCache etc...)
-        /// IN: \TextureCache, OUT: \Bundle OR \cooked
+        /// IN: \\TextureCache, OUT: \\Bundle OR \\cooked
         /// </summary>
         /// <param name="cachetype"></param>
         /// <returns></returns>
@@ -747,7 +750,21 @@ namespace WolvenKit.App.ViewModels
             int finished = 1;
 
             finished *= await Task.Run(() => CookInternal(modcachedir, cookedModDir));
-            finished *= await Task.Run(() => CookInternal(dlccachedir, cookedDLCDir, true));
+            finished *= await Task.Run(() => CookInternal(dlccachedir, cookedDLCDir, true));
+
+            // if !COOKINPLACE copy all files from Bundle folder to cooked folder
+            // because wcc doesn't copy all files by itself
+            if (!COOKINPLACE)
+            {
+                var di = new DirectoryInfo(modcachedir);
+                foreach (FileInfo fi in di.GetFiles("*", SearchOption.AllDirectories))
+                {
+                    string relpath = fi.FullName.Substring(modcachedir.Length + 1);
+                    string newpath = Path.Combine(cookedModDir, relpath);
+                    if (!File.Exists(newpath))
+                        fi.CopyTo(newpath);
+                }
+            }
 
             return finished == 0 ? 0 : 1;
 
@@ -792,7 +809,7 @@ namespace WolvenKit.App.ViewModels
 
         /// <summary>
         /// Packs the bundles for the DLC and the Mod. 
-        /// IN: \Bundles, OUT: packed\Mods\mod
+        /// IN: \\Bundles, OUT: packed\\Mods\\mod
         /// </summary>
         public async Task<int> Pack()
         {
@@ -846,7 +863,7 @@ namespace WolvenKit.App.ViewModels
 
         /// <summary>
         /// Create Metadata
-        /// IN: packed\Mods\mod, OUT: same dir
+        /// IN: packed\\Mods\\mod, OUT: same dir
         /// </summary>
         /// <returns></returns>
         public async Task<int> CreateMetaData()
@@ -898,7 +915,7 @@ namespace WolvenKit.App.ViewModels
 
         /// <summary>
         /// Call wcc buildcache over the uncooked directories 
-        /// IN: \CollisionCache, cooked\Mods\mod\cook.db, OUT: packed\Mods\mod
+        /// IN: \\CollisionCache, cooked\\Mods\\mod\\cook.db, OUT: packed\\Mods\\mod
         /// </summary>
         /// <param name="cachetype"></param>
         /// <returns></returns>
