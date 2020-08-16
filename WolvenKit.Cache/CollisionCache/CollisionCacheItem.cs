@@ -20,7 +20,7 @@ namespace WolvenKit.Cache
         public string Name { get; set; }
         public long Size { get; set; }
         public uint ZSize { get; set; }
-        public long PageOFfset { get; set; }
+        public long PageOffset { get; set; }
         public string CompressionType => "Zlib";
         public uint NameOffset;
         public uint Unk1; //?
@@ -47,7 +47,7 @@ namespace WolvenKit.Cache
         public void Extract(Stream output)
         {
             using (var file = MemoryMappedFile.CreateFromFile(Bundle.FileName, FileMode.Open))
-            using (var viewstream = file.CreateViewStream(PageOFfset, ZSize, MemoryMappedFileAccess.Read))
+            using (var viewstream = file.CreateViewStream(PageOffset, ZSize, MemoryMappedFileAccess.Read))
             {
                 var zlib = new ZlibStream(viewstream, CompressionMode.Decompress);
 

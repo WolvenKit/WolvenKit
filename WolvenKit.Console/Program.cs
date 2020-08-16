@@ -6,20 +6,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-
+/// <summary>
+/// Well, you know, command-line interface (CLI)
+/// </summary>
 namespace WolvenKit.Console
 {
     using CR2W;
     using System.IO;
     using CR2W.Types;
-    using System.Collections;
-    using System.Reflection;
     using Cache;
     using Bundles;
     using Common;
     using static WolvenKit.CR2W.Types.Enums;
     using ConsoleProgressBar;
     using WolvenKit.Common.Model;
+    using W3Speech;
+    using Wwise;
+    using System.Text.RegularExpressions;
 
     public class WolvenKitConsole
     {
@@ -32,24 +35,27 @@ namespace WolvenKit.Console
                 while (true)
                 {
                     string line = System.Console.ReadLine();
-                    Parse(line.Split(' '));
+                    var parsed = ParseText(line, ' ', '"');
+                    await Parse(parsed.ToArray());
                 }
 
             }
             else
             {
-                Parse(args);
+                await Parse(args);
             }
         }
 
         internal static async Task Parse(string[] _args)
         {
-            var result = Parser.Default.ParseArguments<CacheOptions, BundleOptions, DumpXbmsOptions, DumpDDSOptions>(_args)
+            var result = Parser.Default.ParseArguments<CacheOptions, BundleOptions, DumpXbmsOptions, DumpDDSOptions, DumpArchivedFileInfosOptions, DumpMetadataStoreOptions>(_args)
                         .MapResult(
                           async (CacheOptions opts) => await DumpCache(opts),
                           async (BundleOptions opts) => await RunBundle(opts),
                           async (DumpXbmsOptions opts) => await DumpXbmInfo(opts),
                           async (DumpDDSOptions opts) => await DumpDDSInfo(opts),
+                          async (DumpArchivedFileInfosOptions opts) => await DumpArchivedFileInfos(opts),
+                          async (DumpMetadataStoreOptions opts) => await DumpMetadataStore(opts),
                           //errs => 1,
                           _ => Task.FromResult(1));
         }
@@ -323,7 +329,8 @@ namespace WolvenKit.Console
             bool WHITELIST = true;
             var whitelistExt = new[]
             {
-                "w2cube",
+                //"w2cube"
+                "w2l"
             };
             bool EXTRACT = true;
 
@@ -333,16 +340,16 @@ namespace WolvenKit.Console
             {
                 //if (of.ShowDialog() == DialogResult.OK)
                 {
-                    var dt = DateTime.Now;
-                    string idx = RED.CRC32.Crc32Algorithm.Compute(Encoding.ASCII.GetBytes($"{dt.Year}{dt.Month}{dt.Day}{dt.Hour}{dt.Minute}{dt.Second}")).ToString();
                     //var txc = new TextureCache(of.FileName);
                     var txc = new TextureCache(options.path);
-                    var outDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "TXTTest", $"ExtractedFiles_{idx}");
+                    var outDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "TXTTest", $"ExtractedFiles3");
                     if (!Directory.Exists(outDir))
                         Directory.CreateDirectory(outDir);
 
                     // Dump
-                    using (StreamWriter writer = File.CreateText(Path.Combine(outDir, $"__txtdump_{idx}.txt")))
+                    /*                    using (StreamWriter writer = File.CreateText(Path.Combine(outDir, $"__txtdump.txt")))
+                    */
+                    using (StreamWriter writer = File.CreateText(Path.Combine(outDir, $"seed_trial.txt")))
                     {
                         string head = "Format\t" +
                             "Format2\t" +
@@ -350,14 +357,25 @@ namespace WolvenKit.Console
                             "Width\t" +
                             "Height\t" +
                             "Size\t" +
+                            "PageOffset\t" +
+                            "CompressedSize\t" +
+                            "UncompressedSize\t" +
+                            "MipOffsetIndex\t" +
+                            "NumMipOffsets\t" +
+                            "TimeStamp\t" +
                             "Mips\t" +
                             "Slices\t" +
                             "Cube\t" +
                             "Unk1\t" +
-                            //"Hash\t" +
-                            "Name";
+                            "Hash\t" +
+                            "Name\t" +
+                            "Extension\t" +
+                            "MipmapCount\t" +
+                            "Mipmaps"
+                            ;
                         writer.WriteLine(head);
 
+                        short i = 1;
                         foreach (var x in txc.Files)
                         {
                             string ext = x.Name.Split('.').Last();
@@ -370,14 +388,21 @@ namespace WolvenKit.Console
                                 $"{x.BaseWidth}\t" +
                                 $"{x.BaseHeight}\t" +
                                 $"{x.Size}\t" +
+                                $"{x.PageOffset}\t" +
+                                $"{x.CompressedSize}\t" +
+                                $"{x.UncompressedSize}\t" +
+                                $"{x.MipOffsetIndex}\t" +
+                                $"{x.NumMipOffsets}\t" +
+                                $"{x.TimeStamp}\t" +
                                 $"{x.Mipcount}\t" +
                                 $"{x.SliceCount}\t" +
                                 $"{x.IsCube.ToString("X2")}\t" +
                                 $"{x.Unk1.ToString()}/{x.Unk1.ToString("X2")}\t" +
-                                //$"{x.Hash}\t" +
+                                $"{x.Hash}\t" +
                                 $"{x.Name}\t"
                                 ;
-
+                            info += $"{x.Name.Split('.').Last()}\t";
+                            info += $"{x.MipMapInfo.Count()}\t";
                             info += "<";
                             foreach (var y in x.MipMapInfo)
                             {
@@ -392,10 +417,17 @@ namespace WolvenKit.Console
                             {
                                 string fullpath = Path.Combine(outDir, x.Name);
                                 string filename = Path.GetFileName(fullpath);
-                                string newpath = Path.Combine(outDir, filename);
-                                x.Extract(new BundleFileExtractArgs(newpath));
+                                string padir = Path.GetDirectoryName(fullpath).Split('\\').Last();
+                                string newpath = Path.Combine(outDir, padir + i++.ToString() + filename);
+                                x.Extract(new BundleFileExtractArgs(newpath, EUncookExtension.jpg));
                                 System.Console.WriteLine($"Finished extracting {x.Name}");
                             }
+                            writer.WriteLine("\t\t{");
+                            writer.WriteLine($"\t\t\"path\": \"" + x.Name + "\",");
+                            writer.WriteLine("\t\t\"cache\": \"texture\"");
+                            writer.WriteLine("\t\t},");
+
+
                         }
                         System.Console.WriteLine($"Finished dumping texture cache. {options.path}");
                     }
@@ -421,6 +453,47 @@ namespace WolvenKit.Console
             }
             */
 
+            return 1;
+        }
+
+        private static async Task<int> DumpArchivedFileInfos(DumpArchivedFileInfosOptions options)
+        {
+            /*Doesn't work for some reason
+             * var mc = MainController.Get();
+                        mc.Initialize();
+                        List<IWitcherArchive> managers = MainController.Get().GetManagers(false);
+            */
+            uint cnt = 1;
+
+            var bm = new BundleManager();
+            bm.LoadAll("C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
+            var tm = new TextureManager();
+            tm.LoadAll("C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
+            var cm = new CollisionManager();
+            cm.LoadAll("C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
+            var em = new SpeechManager();
+            em.LoadAll("C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
+            var sm = new SoundManager();
+            sm.LoadAll("C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
+
+            var managers = new List<IWitcherArchive>() { bm, tm, cm, em, sm };
+
+            using (StreamWriter writer = File.CreateText("C:\\Users\\Maxim\\Desktop\\wk\\cons_wk_unbundled_file_namesv2.txt"))
+            {
+                foreach (var manager in managers)
+                {
+                    foreach (var file in manager.FileList)
+                    {
+                        writer.WriteLine(cnt++ + ";" + file.Bundle.FileName + ";" + file.Name + ";" +
+                            file.Bundle.TypeName + ";" + file.Size + ";" + file.CompressionType
+                             + ";" + file.ZSize + ";" + file.PageOffset);
+                    }
+                    writer.WriteLine(Environment.NewLine);
+                    //System.Console.WriteLine(cnt);
+                }
+            }
+            System.Console.WriteLine($"Finished extracting " + cnt + " files.");
+            System.Console.ReadLine();
             return 1;
         }
 
@@ -487,8 +560,73 @@ namespace WolvenKit.Console
             return 0;
         }
 
+        private static async Task<int> DumpMetadataStore(DumpMetadataStoreOptions options)
+        {
+            var ms = new Metadata_Store("C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Witcher 3\\content\\metadata.store");
+            using (StreamWriter writer = File.CreateText("C:\\Users\\maxim\\Desktop\\wk\\dump_metadatastore.csv"))
+            {
+                ms.SerializeToCsv(writer);
+            }
+                return 1;
+        }
 
+        public static IEnumerable<String> ParseText(String line, Char delimiter, Char textQualifier)
+        {
 
+            if (line == null)
+                yield break;
 
+            else
+            {
+                Char prevChar = '\0';
+                Char nextChar = '\0';
+                Char currentChar = '\0';
+
+                Boolean inString = false;
+
+                StringBuilder token = new StringBuilder();
+
+                for (int i = 0; i < line.Length; i++)
+                {
+                    currentChar = line[i];
+
+                    if (i > 0)
+                        prevChar = line[i - 1];
+                    else
+                        prevChar = '\0';
+
+                    if (i + 1 < line.Length)
+                        nextChar = line[i + 1];
+                    else
+                        nextChar = '\0';
+
+                    if (currentChar == textQualifier && prevChar != 0x5c && !inString)
+                    {
+                        inString = true;
+                        continue;
+                    }
+
+                    if (currentChar == textQualifier && inString)
+                    {
+                        inString = false;
+                        continue;
+                    }
+
+                    if (currentChar == delimiter && !inString)
+                    {
+                        yield return token.ToString();
+                        token = token.Remove(0, token.Length);
+                        continue;
+                    }
+
+                    token = token.Append(currentChar);
+
+                }
+
+                yield return token.ToString();
+
+            }
+        }
     }
 }
+

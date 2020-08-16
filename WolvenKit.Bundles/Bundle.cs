@@ -80,7 +80,7 @@ namespace WolvenKit.Bundles
                     item.Empty = reader.ReadUInt32();
                     item.Size = reader.ReadUInt32();
                     item.ZSize = reader.ReadUInt32();
-                    item.PageOFfset = reader.ReadUInt32();
+                    item.PageOffset = reader.ReadUInt32();
 
                     var date = reader.ReadUInt32();
                     var y = date >> 20;

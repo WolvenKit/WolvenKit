@@ -120,11 +120,12 @@ namespace WolvenKit.Cache
             {
 
             }
+            var argsss = $" -o '{outDir}' -y -f {convertF}  -ft {convertFt} '{filepath}'";
 
             var proc = new ProcessStartInfo(textconvpath)
             {
                 WorkingDirectory = Path.GetDirectoryName(textconvpath),
-                Arguments = $" -o {outDir} -y -f {convertF}  -ft {convertFt} {filepath}",
+                Arguments = $" -o \"{outDir}\" -y -f {convertF}  -ft {convertFt} \"{filepath}\"",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 CreateNoWindow = true,

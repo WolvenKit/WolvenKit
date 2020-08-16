@@ -252,13 +252,6 @@ namespace WolvenKit.Common.Wcc
         [REDName("dir")]
         public string Dir { get; set; }
 
-        [CategoryAttribute("Is Required"),
-        DescriptionAttribute("absolute path to the output file")]
-        //[Editor(typeof(PropertyGridFolderPicker), typeof(PropertyGridFolderPicker))]
-        [REDTags("Path", "Out")]
-        [REDName("out")]
-        public string Out { get; set; }
-
         /// <summary>
         /// Optional
         /// </summary>
@@ -268,6 +261,13 @@ namespace WolvenKit.Common.Wcc
         [REDTags("Path", "In")]
         [REDName("file")]
         public string File { get; set; }
+
+        [CategoryAttribute("Is Required"),
+        DescriptionAttribute("absolute path to the output file")]
+        //[Editor(typeof(PropertyGridFolderPicker), typeof(PropertyGridFolderPicker))]
+        [REDTags("Path", "Out")]
+        [REDName("out")]
+        public string Out { get; set; }
 
         [CategoryAttribute("Optional"),
         DescriptionAttribute("exclude given file extensions")]

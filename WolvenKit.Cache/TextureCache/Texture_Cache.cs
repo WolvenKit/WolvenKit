@@ -85,7 +85,7 @@ namespace WolvenKit.Cache
                             Hash = br.ReadUInt32(),
                             /*-------------TextureCacheEntryBase---------------*/
                             PathStringIndex = br.ReadInt32(),
-                            PageOFfset = br.ReadInt32(),
+                            PageOffset = br.ReadInt32(),
                             CompressedSize = br.ReadInt32(),
                             UncompressedSize = br.ReadInt32(),
                             BaseAlignment = br.ReadUInt32(),
@@ -103,11 +103,15 @@ namespace WolvenKit.Cache
                             Unk1 = br.ReadByte()
                         };
                         Files.Add(ti);
-                    }
+/*                        if (ti.Name.Contains("area"))
+                            {
+                                Console.WriteLine("found one");
+                            }
+*/                    }
                     //BUG: "C:\\Users\\bence.hambalko\\Documents\\The Witcher 3\\bin\\x64\\..\\..\\Mods\\modW3EE\\content\\texture.cache" dies here! Investigate!!!!!!!!!!!!!
                     foreach (var t in Files)
                     {
-                        br.BaseStream.Seek(t.PageOFfset * 4096, SeekOrigin.Begin);
+                        br.BaseStream.Seek(t.PageOffset * 4096, SeekOrigin.Begin);
                         t.ZSize = br.ReadUInt32(); //Compressed size
                         t.Size = br.ReadInt32(); //Uncompressed size
                         t.SliceIdx = br.ReadByte(); //maybe the 48bit part of OFFSET
