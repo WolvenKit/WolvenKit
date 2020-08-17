@@ -780,10 +780,8 @@ namespace WolvenKit.CR2W
         private (List<string>, List<Tuple<string, string, EImportFlags>>) GenerateStringtableInner()
         {
             var dbg_trace = new List<string>();
-            var newnameslist = new List<string>
-            {
-                ""
-            };
+            var newnameslist = new Dictionary<string, string>();
+            newnameslist.Add("", "");
             var newimportslist = new List<Tuple<string,string, EImportFlags>>();
             var newsoftlist = new List<Tuple<string,string, EImportFlags>>();
             var guidlist = new HashSet<Guid>();
@@ -801,7 +799,7 @@ namespace WolvenKit.CR2W
             
             newimportslist.AddRange(newsoftlist);
 
-            return (newnameslist, newimportslist);
+            return (newnameslist.Values.ToList(), newimportslist);
 
             void LoopWrapper(Tuple<EStringTableMod, IEditableVariable> var)
             {
@@ -816,7 +814,7 @@ namespace WolvenKit.CR2W
 
                 if (!skipnamecheck)
                 {
-                    if (newnameslist.Last() != StringDictionary.Values.ToList()[newnameslist.Count - 1])
+                    if (newnameslist.Last().Value != StringDictionary.Values.ToList()[newnameslist.Count - 1])
                     {
 
 
@@ -1268,18 +1266,18 @@ namespace WolvenKit.CR2W
                 else
                 {
 
-                    if (!newnameslist.Contains(str))
+                    if (!newnameslist.ContainsKey(str))
                     {
                         // hack for CApexClothResource *sigh*
                         if (str == "apexMaterialNames")
                         {
-                            if (!newnameslist.Contains("apexBinaryAsset"))
-                                newnameslist.Add("apexBinaryAsset");
-                            if (!newnameslist.Contains("array: 95, 0, Uint8"))
-                                newnameslist.Add("array:95,0,Uint8");
+                            if (!newnameslist.ContainsKey("apexBinaryAsset"))
+                                newnameslist.Add("apexBinaryAsset", "apexBinaryAsset");
+                            if (!newnameslist.ContainsKey("array: 95, 0, Uint8"))
+                                newnameslist.Add("array:95,0,Uint8", "array:95,0,Uint8");
                         }
 
-                        newnameslist.Add(str);
+                        newnameslist.Add(str, str);
                     }
                 }
             }
