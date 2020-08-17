@@ -81,7 +81,7 @@ namespace WolvenKit.CR2W
         #region Fields
         
         // constants
-        private const uint MAGIC = 0x57325243;
+        private const uint MAGIC = 0x57325243; // "W2RC"
         private const uint DEADBEEF = 0xDEADBEEF;
 
         // IO
@@ -150,6 +150,7 @@ namespace WolvenKit.CR2W
 
         public CVariable ReadVariable(BinaryReader file, CVariable parent)
         {
+
             // Read Name
             var nameId = file.ReadUInt16();
             if (nameId == 0)
@@ -273,24 +274,25 @@ namespace WolvenKit.CR2W
 
             var dt = new CDateTime(m_fileheader.timeStamp, null, "");
 
+            // Tables [7-9] are not used in cr2w so far.
             m_tableheaders = file.BaseStream.ReadStructs<CR2WTable>(10);
             m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
 
-            // read strings
+            // read strings - block 1 (index 0)
             m_strings = ReadStringsBuffer(file.BaseStream);
             
-            // read tables
-            names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this)).ToList();
-            imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this)).ToList();
-            properties = ReadTable<CR2WProperty>(file.BaseStream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
-            chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this)).ToList();
-            buffers = ReadTable<CR2WBuffer>(file.BaseStream, 5).Select(_ => new CR2WBufferWrapper(_)).ToList();
+            // read the other tables
+            names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this)).ToList(); // block 2
+            imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this)).ToList(); // block 3
+            properties = ReadTable<CR2WProperty>(file.BaseStream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList(); // block 4
+            chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this)).ToList(); // block 5
+            buffers = ReadTable<CR2WBuffer>(file.BaseStream, 5).Select(_ => new CR2WBufferWrapper(_)).ToList(); // block 6
             embedded = ReadTable<CR2WEmbedded>(file.BaseStream, 6).Select(_ => new CR2WEmbeddedWrapper(_)
             {
                 ParentFile = this,
                 ParentImports = imports,
                 Handle = StringDictionary[_.path],
-            }).ToList();
+            }).ToList(); // block 7
 
             if (Logger != null) Logger.LogProgress(100);
             #endregion
@@ -381,7 +383,7 @@ namespace WolvenKit.CR2W
             #endregion
 
             #region Read StringsBuffer
-            curviewstreamsize = (long)m_tableheaders[0].size;
+            curviewstreamsize = (long)m_tableheaders[0].itemCount;
             using (MemoryMappedViewStream viewstream = mmf.CreateViewStream(offset, curviewstreamsize, MemoryMappedFileAccess.Read))
             {
                 // read strings
@@ -395,7 +397,7 @@ namespace WolvenKit.CR2W
             int totalsize = 0;
             for (int i = 0; i < 6; i++)
             {
-                totalsize += ((int)m_tableheaders[i + 1].size * TABLES_SIZES[i]);
+                totalsize += ((int)m_tableheaders[i + 1].itemCount * TABLES_SIZES[i]);
             }
 
             curviewstreamsize = (long)totalsize;
@@ -515,14 +517,14 @@ namespace WolvenKit.CR2W
 
             List<byte> newstrings = new List<byte>();
             List<string> nameslist = new List<string>();
-            List<Tuple<string, string, EImportFlags>> importslist = new List<Tuple<string, string, EImportFlags>>();
+            List<SImportEntry> importslist = new List<SImportEntry>();
             (StringDictionary, newstrings, nameslist, importslist) = GenerateStringtable();
 
             uint stringbuffer_offset = 160; // always 160
             m_tableheaders[0].offset = stringbuffer_offset;
             m_strings = newstrings.ToArray();
 
-            m_tableheaders[0].size = (uint)m_strings.Length;
+            m_tableheaders[0].itemCount = (uint)m_strings.Length;
             m_tableheaders[0].crc32 = Crc32Algorithm.Compute(m_strings);
 
             
@@ -540,6 +542,7 @@ namespace WolvenKit.CR2W
                 var hash = FNV1A32HashAlgorithm.HashString(name, Encoding.GetEncoding("iso-8859-1"), true);
                 names.Add(new CR2WNameWrapper(new CR2WName()
                 {
+                    //me: Why hash and not name??
                     hash = hash,
                     value = newoffset
                 }, this));
@@ -691,14 +694,14 @@ namespace WolvenKit.CR2W
                 foreach (var h in m_tableheaders)
                 {
                     hash.Append(BitConverter.GetBytes(h.offset));
-                    hash.Append(BitConverter.GetBytes(h.size));
+                    hash.Append(BitConverter.GetBytes(h.itemCount));
                     hash.Append(BitConverter.GetBytes(h.crc32));
                 }
                 return hash.HashUInt32;
             }
         }
 
-        enum EStringTableMod
+        public enum EStringTableMod
         {
             None,
             SkipType,
@@ -707,12 +710,37 @@ namespace WolvenKit.CR2W
             TypeFirst
         }
 
-        public (Dictionary<uint, string>, List<byte>, List<string>, List<Tuple<string, string, EImportFlags>>) GenerateStringtable()
+        public struct SNameArg
+        {
+            public EStringTableMod Item1;
+            public IEditableVariable Item2;
+
+            public SNameArg(EStringTableMod i1, IEditableVariable i2)
+            {
+                Item1 = i1;
+                Item2 = i2;
+            }
+        };
+        public struct SImportEntry
+        {
+            public string Item1;
+            public string Item2;
+            public EImportFlags Item3;
+
+            public SImportEntry(string i1, string i2, EImportFlags i3)
+            {
+                Item1 = i1;
+                Item2 = i2;
+                Item3 = i3;
+            }
+        };
+
+        public (Dictionary<uint, string>, List<byte>, List<string>, List<SImportEntry>) GenerateStringtable()
         {
             Dictionary<uint, string> newstringtable = new Dictionary<uint, string>();
 
             // Get lists
-            (var nameslist, List<Tuple<string, string, EImportFlags>> importslist) = GenerateStringtableInner();
+            (var nameslist, List<SImportEntry> importslist) = GenerateStringtableInner();
             var stringlist = new List<string>(nameslist);
             foreach (var import in importslist)
             {
@@ -774,16 +802,14 @@ namespace WolvenKit.CR2W
             return (newstringtable, newstrings, nameslist, importslist);
         }
 
-        private (List<string>, List<Tuple<string, string, EImportFlags>>) GenerateStringtableInner()
+        private (List<string>, List<SImportEntry>) GenerateStringtableInner()
         {
             var dbg_trace = new List<string>();
-            var newnameslist = new List<string>
-            {
-                ""
-            };
-            var newimportslist = new List<Tuple<string,string, EImportFlags>>();
-            var newsoftlist = new List<Tuple<string,string, EImportFlags>>();
-            var guidlist = new List<Guid>();
+            var newnameslist = new Dictionary<string, string>();
+            newnameslist.Add("", "");
+            var newimportslist = new List<SImportEntry>();
+            var newsoftlist = new List<SImportEntry>();
+            var guidlist = new HashSet<Guid>();
             var chunkguidlist = new List<Guid>();
 
             // CDPR changed the type of CPtr<IBehTreeNodeDefinition> RootNode
@@ -793,14 +819,14 @@ namespace WolvenKit.CR2W
             foreach (var c in chunks)
             {
                 chunkguidlist.Add(c.data.InternalGuid);
-                LoopWrapper(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipName, c.data));
+                LoopWrapper(new SNameArg(EStringTableMod.SkipName, c.data));
             }
             
             newimportslist.AddRange(newsoftlist);
 
-            return (newnameslist, newimportslist);
+            return (newnameslist.Values.ToList(), newimportslist);
 
-            void LoopWrapper(Tuple<EStringTableMod, IEditableVariable> var)
+            void LoopWrapper(SNameArg var)
             {
                 if (guidlist.Contains(var.Item2.InternalGuid))
                 {
@@ -813,14 +839,14 @@ namespace WolvenKit.CR2W
 
                 if (!skipnamecheck)
                 {
-                    if (newnameslist.Last() != StringDictionary.Values.ToList()[newnameslist.Count - 1])
+                    if (newnameslist.Last().Value != StringDictionary.Values.ToList()[newnameslist.Count - 1])
                     {
 
 
                     }
                 }
 
-                List<Tuple<EStringTableMod, IEditableVariable>> nextl = GetVariables(var.Item2);
+                List<SNameArg> nextl = GetVariables(var.Item2);
                 if (nextl == null)
                     return;
                 foreach (var l in nextl)
@@ -831,251 +857,221 @@ namespace WolvenKit.CR2W
             }
 
 
-            
-            List<Tuple<EStringTableMod, IEditableVariable>> GetVariables(IEditableVariable ivar)
+
+        //struct SNameArg zobi ;
+        List<SNameArg> GetVariables(IEditableVariable ivar)
+        {
+            //check for looping references
+            if (guidlist.Contains(ivar.InternalGuid))
+                return null;
+            else
+                guidlist.Add(ivar.InternalGuid);
+
+            var returnedVariables = new List<SNameArg>();
+
+            // if variable is generic type or some special case 
+            switch(ivar)
             {
-                //check for looping references
-                if (guidlist.Contains(ivar.InternalGuid))
-                    return null;
-                else
-                    guidlist.Add(ivar.InternalGuid);
-
-                var returnedVariables = new List<Tuple<EStringTableMod, IEditableVariable>>();
-
-                // if variable is generic type or some special case 
-                if (ivar is IArrayAccessor a)
-                {
-                    if (a is CArray<CBool>
-                        || a is CArray<CName>
-                        || a is CArray<CUInt16>
-                        || a is CArray<CInt16>
-                        || a is CArray<CUInt32>
-                        || a is CArray<CInt32>
-                        || a is CArray<CUInt64>
-                        || a is CArray<CInt64>
-                        )
+                case IArrayAccessor a:
+                    switch(a)
                     {
-                        if (a is CArray<CName>)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, a)); ///???
+                        case CArray<CName> cacn:
+                            returnedVariables.Add(new SNameArg(EStringTableMod.None, a)); ///???
+                            break;
+                        case CArray<CBool> cacb:
+                        case CArray<CUInt16> cacu16:
+                        case CArray<CInt16> caci16:
+                        case CArray<CUInt32> cacu32:
+                        case CArray<CInt32> caci32:
+                        case CArray<CUInt64> cacu64:
+                        case CArray<CInt64> caci64:
+                            var elements = a.GetEditableVariables();
+                            foreach (var item in elements)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, item));
+                            break;
+                        default:
+                            break;
                     }
-                    else
-                    {
-                        var elements = a.GetEditableVariables();
-                        foreach (var item in elements)
-                        {
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipNameAndType, item));
-                        }
-                    }
-
-                }
-                else if (ivar is IPtrAccessor p)
-                {
+                    break;
+                case IPtrAccessor p:
                     if (p.Reference != null)
-                        returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, p.Reference.data));
-                }
-                else if (ivar is IHandleAccessor h)
-                {
+                        returnedVariables.Add(new SNameArg(EStringTableMod.None, p.Reference.data));
+                    break;
+                case IHandleAccessor h:
                     if (h.ChunkHandle)
-                    {
                         if (h.Reference != null)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, h.Reference.data));
-                    }
-                }
-                else if (ivar is ISoftAccessor s)
-                {
-                }
-                else if (ivar is IVariantAccessor ivariant)
-                {
+                            returnedVariables.Add(new SNameArg(EStringTableMod.None, h.Reference.data));
+                    break;
+                case ISoftAccessor s:
+                    break;
+                case IVariantAccessor ivariant:
                     EStringTableMod mod = EStringTableMod.None;
                     if (ivariant is CVariantSizeType)
                         mod = EStringTableMod.SkipName;
-                    returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(mod, ivariant.Variant));
-                }
-                else if (ivar is CVariant cVariant)
-                {
-                    returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipName, cVariant.Variant));
-                }
-                else if (ivar is IdHandle i)
-                {
-                    returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, i));
-                    returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, i.handle.Reference?.data));
-                }
+                    returnedVariables.Add(new SNameArg(mod, ivariant.Variant));
+                    break;
+                case CVariant cVariant:
+                    returnedVariables.Add(new SNameArg(EStringTableMod.SkipName, cVariant.Variant));
+                    break;
+                case IdHandle i:
+                    returnedVariables.Add(new SNameArg(EStringTableMod.None, i));
+                    returnedVariables.Add(new SNameArg(EStringTableMod.None, i.handle.Reference?.data));
+                    break;
                 // check all other CVariables
-                else if (ivar is CVariable cvar)
+                case CVariable cvar:
                 {
                     // add parent if not already in guidlist
                     // don't add array type parents, don't add IVariantAccessor type parents
                     if (cvar.Parent != null
                         && !cvar.Parent.GetType().IsGenericType
-                        && !(cvar.Parent is IVariantAccessor) 
-                        && !(cvar.Parent is SEntityBufferType2) 
+                        && !(cvar.Parent is IVariantAccessor)
+                        && !(cvar.Parent is SEntityBufferType2)
                         && !guidlist.Contains(cvar.Parent.InternalGuid))
                     {
-                        returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, cvar.Parent));
+                        returnedVariables.Add(new SNameArg(EStringTableMod.None, cvar.Parent));
                     }
 
                     // add all normal REDProperties
                     returnedVariables.AddRange(cvar.GetExistingVariables(false, true)
-                        .Select(_ => new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, _)));
+                        .Select(_ => new SNameArg(EStringTableMod.None, _)));
 
                     // for all buffers
                     #region Buffer Hacks After Variables
-                    if (cvar is CFoliageResource)
+                    switch (cvar)
                     {
-                        foreach (SFoliageResourceData item in (cvar as CFoliageResource).Trees)
-                        {
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipNameAndType, item.Treetype));
-                        }  
-                        foreach (SFoliageResourceData item in (cvar as CFoliageResource).Grasses)
-                        {
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipNameAndType, item.Treetype));
-                        }
-                            
-                    }
-                    if (cvar is CClipMap cm)
-                    {
-                        returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipNameAndType, cm.TerrainTiles));
-                    }
-                    if (cvar is CUmbraScene)
-                    {
-                        foreach (SUmbraSceneData item in (cvar as CUmbraScene).Tiles.elements) //handled in GetStrings
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipNameAndType, item));
-                    }
-                    if (cvar is CSkeletalAnimationSetEntry)
-                    {
-                        foreach (CVariantSizeType item in (cvar as CSkeletalAnimationSetEntry).Entries)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipNameAndType, item));
-                    }
-                    if (cvar is CLayerInfo)
-                    {
-                        returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, (cvar as CLayerInfo).ParentGroup.Reference?.data));
-                    }
-                    if (cvar is CMaterialInstance)
-                    {
-                        foreach (CVariantSizeNameType iparam in (cvar as CMaterialInstance).InstanceParameters)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipNameAndType, iparam));
-                    }
-                    if (cvar is CMesh)
-                    {
-                        returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, (cvar as CMesh).BoneNames));
-                    }
-                    if (cvar is CBehaviorGraphContainerNode bgcn)
-                    {
-                        foreach (var item in bgcn.Inputnodes)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, (item.Reference?.data)));
-                        returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, bgcn.Unk1));
-                        returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, bgcn.Unk2));
-                    }
-                    if (cvar is CBehaviorGraphStageNode bgsn)
-                    {
-                        returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, bgsn.Outputnode.Reference?.data));
-                    }
-                    if (cvar is CBehaviorGraphTopLevelNode bgtln)
-                    {
-                        returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, bgtln.Outputnode.Reference?.data));
-                    }
-                    if (cvar is CBehaviorGraphStateNode bgstn)
-                    {
-                        returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, bgstn.Outputnode.Reference?.data));
-                    }
-                    if (cvar is CBehaviorGraphStateMachineNode bgsmn)
-                    {
-                        foreach (var item in bgsmn.Unk3)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, (item.Reference?.data)));
-                        foreach (var item in bgsmn.Unk4)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, (item.Reference?.data)));
-                        returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, bgsmn.Handle1.Reference?.data));
-                        returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, bgsmn.Outputnode.Reference?.data));
-                    }
-                    if (cvar is CBehaviorGraphStateMachineNode)
-                    {
-                        foreach (var item in (cvar as CBehaviorGraphStateMachineNode).Inputnodes)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, item.Reference?.data));
-                        returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, (cvar as CBehaviorGraphStateMachineNode).Unk1));
-                        returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, (cvar as CBehaviorGraphStateMachineNode).Unk2));
-                    }
-                    if (cvar is CBehaviorGraph)
-                    {
-                        var b = cvar as CBehaviorGraph;
-                        returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, b.Toplevelnode.Reference?.data));
-                        foreach (IdHandle item in b.Variables1)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, item));
-                        foreach (CHandle<CBehaviorVariable> item in b.Descriptions)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, item.Reference?.data));
-                        foreach (IdHandle item in b.Vectorvariables1)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, item));
-                        foreach (IdHandle item in b.Variables2)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, item));
-                        foreach (IdHandle item in b.Vectorvariables2)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, item));
-                    }
-                    if (cvar is CNode)
-                    {
-                        foreach (CHandle<IAttachment> att in (cvar as CNode).AttachmentsChild)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipNameAndType, att));
-                        foreach (CHandle<IAttachment> att in (cvar as CNode).AttachmentsReference)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipNameAndType, att));
-                    }
-                    if (cvar is CEntity e)
-                    {
-                        foreach (CPtr<CComponent> component in e.Components)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipNameAndType, component));
-                        foreach (SEntityBufferType1 buffer in e.buffer_v1)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipNameAndType, buffer));
-                        foreach (SEntityBufferType2 item in e.buffer_v2.elements)
-                        {
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipNameAndType, item.componentName));
-                            foreach (CVariantSizeTypeName el in item.variables.elements)
+                        case CFoliageResource cfr:
+                            foreach (SFoliageResourceData item in cfr.Trees)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, item.Treetype));
+                            foreach (SFoliageResourceData item in cfr.Grasses)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, item.Treetype));
+                            break;
+                        case CClipMap cm:
+                            returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, cm.TerrainTiles));
+                            break;
+                        case CUmbraScene cus:
+                            foreach (SUmbraSceneData item in cus.Tiles.elements) //handled in GetStrings
+                                returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, item));
+                            break;
+                        case CSkeletalAnimationSetEntry csase:
+                            foreach (CVariantSizeType item in csase.Entries)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, item));
+                            break;
+                        case CLayerInfo cli:
+                            returnedVariables.Add(new SNameArg(EStringTableMod.None, cli.ParentGroup.Reference?.data));
+                            break;
+                        case CMaterialInstance cmi:
+                            foreach (CVariantSizeNameType iparam in cmi.InstanceParameters)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, iparam));
+                            break;
+                        case CMesh cm:
+                            returnedVariables.Add(new SNameArg(EStringTableMod.None, (cvar as CMesh).BoneNames));
+                            break;
+                        case CBehaviorGraphContainerNode bgcn:
+                            foreach (var item in bgcn.Inputnodes)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, (item.Reference?.data)));
+                            returnedVariables.Add(new SNameArg(EStringTableMod.None, bgcn.Unk1));
+                            returnedVariables.Add(new SNameArg(EStringTableMod.None, bgcn.Unk2));
+                            switch (bgcn)
                             {
-                                returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.TypeFirst, el.Variant));
+                                case CBehaviorGraphStageNode bgsn:
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsn.Outputnode.Reference?.data));
+                                    break;
+                                case CBehaviorGraphTopLevelNode bgtln:
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, bgtln.Outputnode.Reference?.data));
+                                    break;
+                                case CBehaviorGraphStateNode bgstn:
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, bgstn.Outputnode.Reference?.data));
+                                    break;
+                                case CBehaviorGraphStateMachineNode bgsmn:
+                                    foreach (var item in bgsmn.Unk3)
+                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, (item.Reference?.data)));
+                                    foreach (var item in bgsmn.Unk4)
+                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, (item.Reference?.data)));
+
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Handle1.Reference?.data));
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Outputnode.Reference?.data));
+
+                                    foreach (var item in bgsmn.Inputnodes)
+                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, item.Reference?.data));
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Unk1));
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Unk2));
+                                    break;
+                                default:
+                                    break;
                             }
-                        }
-                    }
-                    if (cvar is SAppearanceAttachment aa)
-                    {
-                        foreach (CVariable item in aa.Data.elements)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipName, item));
-                    }
-                    if (cvar is CSkeletalAnimationSetEntry)
-                    {
-                        foreach (CVariantSizeType item in (cvar as CSkeletalAnimationSetEntry).Entries)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipNameAndType, item));
-                    }
-                    if (cvar is CCutsceneTemplate)
-                    {
-                        foreach (CVariantSizeType item in (cvar as CCutsceneTemplate).Animevents.elements)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipName, item.Variant));
-                    }
-                    if (cvar is CStorySceneSection)
-                    {
-                        foreach (CVariantSizeType item in (cvar as CStorySceneSection).sceneEventElements)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipNameAndType, item));
-                    }
-                    if (cvar is CStorySceneScript sss)
-                    {
-                        foreach (CVariant item in sss.BufferParameters)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipType, item));
-                    }
-                    if (cvar is CQuestScriptBlock qsb)
-                    {
-                        foreach (CVariant item in qsb.BufferParameters)
-                            returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipType, item));
-                    }
-                    if (cvar is CFXTrackItem)
-                    {
-                        returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.SkipNameAndType, (cvar as CFXTrackItem).buffername));
-                    }
-                    if (cvar is CPhysicalCollision)
-                    {
-                        returnedVariables.Add(new Tuple<EStringTableMod, IEditableVariable>(EStringTableMod.None, (cvar as CPhysicalCollision).Collisiontypes));
+                            break;
+                        case CBehaviorGraph cbg:
+                            returnedVariables.Add(new SNameArg(EStringTableMod.None, cbg.Toplevelnode.Reference?.data));
+                            foreach (IdHandle item in cbg.Variables1)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, item));
+                            foreach (CHandle<CBehaviorVariable> item in cbg.Descriptions)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, item.Reference?.data));
+                            foreach (IdHandle item in cbg.Vectorvariables1)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, item));
+                            foreach (IdHandle item in cbg.Variables2)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, item));
+                            foreach (IdHandle item in cbg.Vectorvariables2)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, item));
+                            break;
+                        case CNode cn:
+                            foreach (CHandle<IAttachment> att in cn.AttachmentsChild)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, att));
+                            foreach (CHandle<IAttachment> att in cn.AttachmentsReference)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, att));
+                            if (cn is CEntity e)
+                            {
+                                foreach (CPtr<CComponent> component in e.Components)
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, component));
+                                foreach (SEntityBufferType1 buffer in e.buffer_v1)
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, buffer));
+                                foreach (SEntityBufferType2 item in e.buffer_v2.elements)
+                                {
+                                    returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, item.componentName));
+                                    foreach (CVariantSizeTypeName el in item.variables.elements)
+                                        returnedVariables.Add(new SNameArg(EStringTableMod.TypeFirst, el.Variant));
+                                }
+                            }
+                            break;
+                        case SAppearanceAttachment aa:
+                            foreach (CVariable item in aa.Data.elements)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.SkipName, item));
+                            break;
+                        case CCutsceneTemplate cct:
+                            foreach (CVariantSizeType item in cct.Animevents.elements)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.SkipName, item.Variant));
+                            break;
+                        case CStorySceneSection csss:
+                            foreach (CVariantSizeType item in csss.sceneEventElements)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, item));
+                            break;
+                        case CStorySceneScript cssscpt:
+                            foreach (CVariant item in cssscpt.BufferParameters)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.SkipType, item));
+                            break;
+                        case CQuestScriptBlock qsb:
+                            foreach (CVariant item in qsb.BufferParameters)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.SkipType, item));
+                            break;
+                        case CFXTrackItem cfxti:
+                            returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, cfxti.buffername));
+                            break;
+                        case CPhysicalCollision cpc:
+                            returnedVariables.Add(new SNameArg(EStringTableMod.None, cpc.Collisiontypes));
+                            break;
+                        default:
+                            break;
                     }
                     #endregion
+                    break;
                 }
-
-                return returnedVariables;
+                default:
+                    break;
             }
 
-            void AddStrings(Tuple<EStringTableMod, IEditableVariable> tvar)
+            return returnedVariables;
+            }
+
+            void AddStrings(SNameArg tvar)
             {
                 var var = tvar.Item2;
 
@@ -1099,7 +1095,7 @@ namespace WolvenKit.CR2W
                     if (!h.ChunkHandle)
                     {
                         AddUniqueToTable(h.ClassName);
-                        var importtuple = new Tuple<string, string, EImportFlags>(h.ClassName, h.DepotPath, EImportFlags.Default);
+                        var importtuple = new SImportEntry(h.ClassName, h.DepotPath, EImportFlags.Default);
                         if (!newimportslist.Contains(importtuple))
                         {
                             newimportslist.Add(importtuple);
@@ -1131,7 +1127,7 @@ namespace WolvenKit.CR2W
                         if (var.cr2w.embedded.Any(_ => _.ImportPath == h.DepotPath && _.ImportClass == h.ClassName))
                             flags = EImportFlags.Inplace;
 
-                        var importtuple = new Tuple<string, string, EImportFlags>(h.ClassName, h.DepotPath, flags);
+                        var importtuple = new SImportEntry(h.ClassName, h.DepotPath, flags);
                         if (!newimportslist.Contains(importtuple))
                         {
                             newimportslist.Add(importtuple);
@@ -1143,7 +1139,7 @@ namespace WolvenKit.CR2W
                     if (!(string.IsNullOrEmpty(s.ClassName) && string.IsNullOrEmpty(s.DepotPath)))
                     {
                         AddUniqueToTable(s.REDType);
-                        var stuple = new Tuple<string, string, EImportFlags>(s.ClassName, s.DepotPath, EImportFlags.Soft);
+                        var stuple = new SImportEntry(s.ClassName, s.DepotPath, EImportFlags.Soft);
                         if (!newsoftlist.Contains(stuple))
                         {
                             newsoftlist.Add(stuple);
@@ -1190,7 +1186,7 @@ namespace WolvenKit.CR2W
                                 var flags = EImportFlags.Default;
                                 if (ha.REDName == "template")
                                     flags = EImportFlags.Template;
-                                var importtuple = new Tuple<string, string, EImportFlags>(ha.ClassName, ha.DepotPath, flags);
+                                var importtuple = new SImportEntry(ha.ClassName, ha.DepotPath, flags);
                                 if (!newimportslist.Contains(importtuple))
                                 {
                                     newimportslist.Add(importtuple);
@@ -1230,7 +1226,6 @@ namespace WolvenKit.CR2W
                 }
 
 
-
                 void CheckVarNameAndTypes()
                 {
                     switch (tvar.Item1)
@@ -1265,18 +1260,18 @@ namespace WolvenKit.CR2W
                 else
                 {
 
-                    if (!newnameslist.Contains(str))
+                    if (!newnameslist.ContainsKey(str))
                     {
                         // hack for CApexClothResource *sigh*
                         if (str == "apexMaterialNames")
                         {
-                            if (!newnameslist.Contains("apexBinaryAsset"))
-                                newnameslist.Add("apexBinaryAsset");
-                            if (!newnameslist.Contains("array: 95, 0, Uint8"))
-                                newnameslist.Add("array:95,0,Uint8");
+                            if (!newnameslist.ContainsKey("apexBinaryAsset"))
+                                newnameslist.Add("apexBinaryAsset", "apexBinaryAsset");
+                            if (!newnameslist.ContainsKey("array: 95, 0, Uint8"))
+                                newnameslist.Add("array:95,0,Uint8", "array:95,0,Uint8");
                         }
 
-                        newnameslist.Add(str);
+                        newnameslist.Add(str, str);
                     }
                 }
             }
@@ -1287,32 +1282,32 @@ namespace WolvenKit.CR2W
             WriteFileHeader(file);
 
             #region Write Tables
-            m_tableheaders[1].size = (uint)names.Count;
+            m_tableheaders[1].itemCount = (uint)names.Count;
             m_tableheaders[1].offset = (uint) file.BaseStream.Position;
             WriteTable<CR2WName>(file.BaseStream, names.Select(_ => _.Name).ToArray(), 1);
             
-            m_tableheaders[2].size = (uint)imports.Count;
+            m_tableheaders[2].itemCount = (uint)imports.Count;
             m_tableheaders[2].offset = imports.Count > 0 ? (uint) file.BaseStream.Position : 0;
             WriteTable<CR2WImport>(file.BaseStream, imports.Select(_ => _.Import).ToArray(), 2);
 
-            m_tableheaders[3].size = (uint)properties.Count;
+            m_tableheaders[3].itemCount = (uint)properties.Count;
             m_tableheaders[3].offset = (uint) file.BaseStream.Position;
             WriteTable<CR2WProperty>(file.BaseStream, properties.Select(_ => _.Property).ToArray(), 3);
 
-            m_tableheaders[4].size = (uint)chunks.Count;
+            m_tableheaders[4].itemCount = (uint)chunks.Count;
             m_tableheaders[4].offset = (uint) file.BaseStream.Position;
             WriteTable<CR2WExport>(file.BaseStream, chunks.Select(_ => _.Export).ToArray(), 4);
 
             if (buffers.Count > 0)
             {
-                m_tableheaders[5].size = (uint)buffers.Count;
+                m_tableheaders[5].itemCount = (uint)buffers.Count;
                 m_tableheaders[5].offset = (uint)file.BaseStream.Position;
                 WriteTable<CR2WBuffer>(file.BaseStream, buffers.Select(_ => _.Buffer).ToArray(), 5);
             }
 
             if (embedded.Count > 0)
             {
-                m_tableheaders[6].size = (uint)embedded.Count;
+                m_tableheaders[6].itemCount = (uint)embedded.Count;
                 m_tableheaders[6].offset = (uint)file.BaseStream.Position;
                 WriteTable<CR2WEmbedded>(file.BaseStream, embedded.Select(_ => _.Embedded).ToArray(), 6);
             }
@@ -1363,17 +1358,17 @@ namespace WolvenKit.CR2W
         private byte[] ReadStringsBuffer(Stream stream)
         {
             var start = m_tableheaders[0].offset;
-            var size = m_tableheaders[0].size;
+            var m_strings_size = m_tableheaders[0].itemCount;
             var crc = m_tableheaders[0].crc32;
 
-            var m_temp = new byte[size];
+            var m_temp = new byte[m_strings_size];
             stream.Read(m_temp, 0, m_temp.Length);
 
             StringDictionary = new Dictionary<uint, string>();
             StringBuilder sb = new StringBuilder();
             uint offset = 0;
             var tempstring = new List<byte>();
-            for (uint i = 0; i < size; i++)
+            for (uint i = 0; i < m_strings_size; i++)
             {
                 byte b = m_temp[i];
                 if (b == 0)
@@ -1406,7 +1401,7 @@ namespace WolvenKit.CR2W
             //stream.Seek(m_tableheaders[index].offset, SeekOrigin.Begin);
 
             var hash = new Crc32Algorithm(false);
-            var table = stream.ReadStructs<T>(m_tableheaders[index].size, hash);
+            var table = stream.ReadStructs<T>(m_tableheaders[index].itemCount, hash);
 
             return table;
         }

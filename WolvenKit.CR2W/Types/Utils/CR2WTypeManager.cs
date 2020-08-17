@@ -20,6 +20,11 @@ namespace WolvenKit.CR2W.Types
         }
     }
 
+    /// <summary>
+    /// The reflection magic happens mostly here, with System.Activator.
+    /// A class is instantiated from its type and the properties are deserialized from 
+    /// cr2w later, in CVariable.Read and CR2WFile.ReadVariable
+    /// </summary>
     public static class CR2WTypeManager
     {
         public static List<string> AvailableTypes
@@ -46,6 +51,16 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
+        /// <summary>
+        /// The instantiation step of the RedEngine-3 reflection.
+        /// </summary>
+        /// <param name="typename">Can be either a generic type such as CUint32 - then converted with GetWKitTypeFromREDType, or a complex type like a
+        /// pointer to a class, a handle to an import file, an array, a soft reference, a static reference, various buffers, an enum.</param>
+        /// <param name="varname">The variable name</param>
+        /// <param name="cr2w">The cr2w base file</param>
+        /// <param name="parentVariable">The class owning this attribute</param>
+        /// <param name="readUnknownAsBytes"></param>
+        /// <returns></returns>
         public static CVariable Create(string typename, string varname, CR2WFile cr2w, CVariable parentVariable, bool readUnknownAsBytes = true)
         {
             

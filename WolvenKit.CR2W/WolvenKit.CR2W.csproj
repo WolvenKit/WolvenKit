@@ -109,6 +109,7 @@
     <Compile Include="CR2W\CR2WEmbedded.cs" />
     <Compile Include="CR2W\CR2WExport.cs" />
     <Compile Include="CR2W\CR2WFile.cs" />
+    <Compile Include="CR2W\CR2WFileHelpers.cs" />
     <Compile Include="CR2W\CR2WHeaderData.cs" />
     <Compile Include="CR2W\CR2WHeaderStructs.cs" />
     <Compile Include="CR2W\CR2WImport.cs" />
