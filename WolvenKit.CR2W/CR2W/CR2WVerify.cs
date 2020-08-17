@@ -111,7 +111,7 @@ namespace WolvenKit.CR2W
         private byte[] ReadStringsBuffer()
         {
             var start = m_tableheaders[0].offset;
-            var size = m_tableheaders[0].size;
+            var size = m_tableheaders[0].itemCount;
             var crc = m_tableheaders[0].crc32;
 
             m_temp = new byte[size];
@@ -148,7 +148,7 @@ namespace WolvenKit.CR2W
             m_stream.Seek(m_tableheaders[index].offset, SeekOrigin.Begin);
 
             var hash = new Crc32Algorithm(false);
-            var table = ReadStructs<T>(m_tableheaders[index].size, hash);
+            var table = ReadStructs<T>(m_tableheaders[index].itemCount, hash);
 
             return table;
         }
@@ -216,7 +216,7 @@ namespace WolvenKit.CR2W
             foreach (var h in m_tableheaders)
             {
                 hash.Append(BitConverter.GetBytes(h.offset));
-                hash.Append(BitConverter.GetBytes(h.size));
+                hash.Append(BitConverter.GetBytes(h.itemCount));
                 hash.Append(BitConverter.GetBytes(h.crc32));
             }
             return hash.HashUInt32;

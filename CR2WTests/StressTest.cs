@@ -60,7 +60,7 @@ namespace CR2WTests
             memorymappedbundles = new Dictionary<string, MemoryMappedFile>();
             mc = new BundleManager();
             //mc.LoadAll("D:\\SteamLibrary\\steamapps\\common\\The Witcher 3\\bin\\x64");
-            mc.LoadAll("E:\\GAMES\\The Witcher 3\\bin\\x64");
+            mc.LoadAll("C:\\w3mod\\The Witcher 3\\bin\\x64");
 
             //Load MemoryMapped Bundles
             foreach (var b in mc.Bundles.Values)
@@ -502,6 +502,8 @@ namespace CR2WTests
 
             using (var frm = new frmUnitTest(ext, bundletag, mc))
             {
+                //https://stackoverflow.com/questions/17797670/form-showdialog-does-not-display-window-with-debugging-enabled
+                frm.Load += (sender, e) => (sender as frmUnitTest).Visible = true;
                 frm.ShowDialog();
 
                 var result = frm.GetResult();
@@ -520,7 +522,7 @@ namespace CR2WTests
         }
         
 
-        private async static Task<Tuple<long, long, Dictionary<string, Tuple<long, long>>>> StressTestFileAsync(BundleItem f, List<string> unknownclasses)
+/*        private async static Task<Tuple<long, long, Dictionary<string, Tuple<long, long>>>> StressTestFileAsync(BundleItem f, List<string> unknownclasses)
         {
             Dictionary<string, Tuple<long, long>> chunkstate = new Dictionary<string, Tuple<long, long>>();
             long totalbytes = 0;
@@ -559,6 +561,6 @@ namespace CR2WTests
 
             return new Tuple<long, long, Dictionary<string, Tuple<long, long>>>(totalbytes, unknownbytes, chunkstate);
 
-        }
+        }*/
     }
 }

@@ -104,6 +104,7 @@ namespace CR2WTests
                     return antecedent.Result;
                 }
                 );
+            //StressTestExtAsync();
 
             //var r = StressTestExtAsync();
             //return r;
@@ -123,7 +124,7 @@ namespace CR2WTests
 
 
             //List<IWitcherFile> files = mc.FileList.Where(x => x.Name.EndsWith(ext)).ToList();
-            var content = Path.Combine("E:\\GAMES\\The Witcher 3\\content\\");
+            var content = Path.Combine("C:\\w3mod\\The Witcher 3\\content\\");
 
             //var patchdirs = new List<string>();
 

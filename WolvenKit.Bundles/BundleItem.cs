@@ -54,7 +54,7 @@ namespace WolvenKit.Bundles
         {
             var hash = Bundle.FileName.GetHashMD5();
             using (MemoryMappedFile mmf = MemoryMappedFile.OpenExisting(hash, MemoryMappedFileRights.Read))
-            using (var viewstream = mmf.CreateViewStream(PageOFfset, ZSize, MemoryMappedFileAccess.Read))
+            using (var viewstream = mmf.CreateViewStream(PageOffset, ZSize, MemoryMappedFileAccess.Read))
             {
                 switch (CompressionType)
                 {

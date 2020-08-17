@@ -269,6 +269,7 @@ namespace WolvenKit.CR2W.Types
                 List<string> dbg_varnames = new List<string>();
                 while (true)
                 {
+                    //cvar is a "children variable" : a property of a class.
                     var cvar = cr2w.ReadVariable(file, this);
                     if (cvar == null)
                         break;
@@ -276,7 +277,9 @@ namespace WolvenKit.CR2W.Types
                     cvar.IsSerialized = true;
 
                     // dbg
+#if DEBUG
                     dbg_varnames.Add($"[{cvar.REDType}] {cvar.REDName}");
+#endif
 
                     TryAddVariable(cvar);
                 }

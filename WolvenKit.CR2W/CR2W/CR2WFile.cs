@@ -81,7 +81,7 @@ namespace WolvenKit.CR2W
         #region Fields
         
         // constants
-        private const uint MAGIC = 0x57325243;
+        private const uint MAGIC = 0x57325243; // "W2RC"
         private const uint DEADBEEF = 0xDEADBEEF;
 
         // IO
@@ -150,6 +150,7 @@ namespace WolvenKit.CR2W
 
         public CVariable ReadVariable(BinaryReader file, CVariable parent)
         {
+
             // Read Name
             var nameId = file.ReadUInt16();
             if (nameId == 0)
@@ -273,24 +274,25 @@ namespace WolvenKit.CR2W
 
             var dt = new CDateTime(m_fileheader.timeStamp, null, "");
 
+            // Tables [7-9] are not used in cr2w so far.
             m_tableheaders = file.BaseStream.ReadStructs<CR2WTable>(10);
             m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
 
-            // read strings
+            // read strings - block 1 (index 0)
             m_strings = ReadStringsBuffer(file.BaseStream);
             
-            // read tables
-            names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this)).ToList();
-            imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this)).ToList();
-            properties = ReadTable<CR2WProperty>(file.BaseStream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
-            chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this)).ToList();
-            buffers = ReadTable<CR2WBuffer>(file.BaseStream, 5).Select(_ => new CR2WBufferWrapper(_)).ToList();
+            // read the other tables
+            names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this)).ToList(); // block 2
+            imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this)).ToList(); // block 3
+            properties = ReadTable<CR2WProperty>(file.BaseStream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList(); // block 4
+            chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this)).ToList(); // block 5
+            buffers = ReadTable<CR2WBuffer>(file.BaseStream, 5).Select(_ => new CR2WBufferWrapper(_)).ToList(); // block 6
             embedded = ReadTable<CR2WEmbedded>(file.BaseStream, 6).Select(_ => new CR2WEmbeddedWrapper(_)
             {
                 ParentFile = this,
                 ParentImports = imports,
                 Handle = StringDictionary[_.path],
-            }).ToList();
+            }).ToList(); // block 7
 
             if (Logger != null) Logger.LogProgress(100);
             #endregion
@@ -381,7 +383,7 @@ namespace WolvenKit.CR2W
             #endregion
 
             #region Read StringsBuffer
-            curviewstreamsize = (long)m_tableheaders[0].size;
+            curviewstreamsize = (long)m_tableheaders[0].itemCount;
             using (MemoryMappedViewStream viewstream = mmf.CreateViewStream(offset, curviewstreamsize, MemoryMappedFileAccess.Read))
             {
                 // read strings
@@ -395,7 +397,7 @@ namespace WolvenKit.CR2W
             int totalsize = 0;
             for (int i = 0; i < 6; i++)
             {
-                totalsize += ((int)m_tableheaders[i + 1].size * TABLES_SIZES[i]);
+                totalsize += ((int)m_tableheaders[i + 1].itemCount * TABLES_SIZES[i]);
             }
 
             curviewstreamsize = (long)totalsize;
@@ -522,7 +524,7 @@ namespace WolvenKit.CR2W
             m_tableheaders[0].offset = stringbuffer_offset;
             m_strings = newstrings.ToArray();
 
-            m_tableheaders[0].size = (uint)m_strings.Length;
+            m_tableheaders[0].itemCount = (uint)m_strings.Length;
             m_tableheaders[0].crc32 = Crc32Algorithm.Compute(m_strings);
 
             
@@ -540,6 +542,7 @@ namespace WolvenKit.CR2W
                 var hash = FNV1A32HashAlgorithm.HashString(name, Encoding.GetEncoding("iso-8859-1"), true);
                 names.Add(new CR2WNameWrapper(new CR2WName()
                 {
+                    //me: Why hash and not name??
                     hash = hash,
                     value = newoffset
                 }, this));
@@ -691,7 +694,7 @@ namespace WolvenKit.CR2W
                 foreach (var h in m_tableheaders)
                 {
                     hash.Append(BitConverter.GetBytes(h.offset));
-                    hash.Append(BitConverter.GetBytes(h.size));
+                    hash.Append(BitConverter.GetBytes(h.itemCount));
                     hash.Append(BitConverter.GetBytes(h.crc32));
                 }
                 return hash.HashUInt32;
@@ -783,7 +786,7 @@ namespace WolvenKit.CR2W
             };
             var newimportslist = new List<Tuple<string,string, EImportFlags>>();
             var newsoftlist = new List<Tuple<string,string, EImportFlags>>();
-            var guidlist = new List<Guid>();
+            var guidlist = new HashSet<Guid>();
             var chunkguidlist = new List<Guid>();
 
             // CDPR changed the type of CPtr<IBehTreeNodeDefinition> RootNode
@@ -1287,32 +1290,32 @@ namespace WolvenKit.CR2W
             WriteFileHeader(file);
 
             #region Write Tables
-            m_tableheaders[1].size = (uint)names.Count;
+            m_tableheaders[1].itemCount = (uint)names.Count;
             m_tableheaders[1].offset = (uint) file.BaseStream.Position;
             WriteTable<CR2WName>(file.BaseStream, names.Select(_ => _.Name).ToArray(), 1);
             
-            m_tableheaders[2].size = (uint)imports.Count;
+            m_tableheaders[2].itemCount = (uint)imports.Count;
             m_tableheaders[2].offset = imports.Count > 0 ? (uint) file.BaseStream.Position : 0;
             WriteTable<CR2WImport>(file.BaseStream, imports.Select(_ => _.Import).ToArray(), 2);
 
-            m_tableheaders[3].size = (uint)properties.Count;
+            m_tableheaders[3].itemCount = (uint)properties.Count;
             m_tableheaders[3].offset = (uint) file.BaseStream.Position;
             WriteTable<CR2WProperty>(file.BaseStream, properties.Select(_ => _.Property).ToArray(), 3);
 
-            m_tableheaders[4].size = (uint)chunks.Count;
+            m_tableheaders[4].itemCount = (uint)chunks.Count;
             m_tableheaders[4].offset = (uint) file.BaseStream.Position;
             WriteTable<CR2WExport>(file.BaseStream, chunks.Select(_ => _.Export).ToArray(), 4);
 
             if (buffers.Count > 0)
             {
-                m_tableheaders[5].size = (uint)buffers.Count;
+                m_tableheaders[5].itemCount = (uint)buffers.Count;
                 m_tableheaders[5].offset = (uint)file.BaseStream.Position;
                 WriteTable<CR2WBuffer>(file.BaseStream, buffers.Select(_ => _.Buffer).ToArray(), 5);
             }
 
             if (embedded.Count > 0)
             {
-                m_tableheaders[6].size = (uint)embedded.Count;
+                m_tableheaders[6].itemCount = (uint)embedded.Count;
                 m_tableheaders[6].offset = (uint)file.BaseStream.Position;
                 WriteTable<CR2WEmbedded>(file.BaseStream, embedded.Select(_ => _.Embedded).ToArray(), 6);
             }
@@ -1363,17 +1366,17 @@ namespace WolvenKit.CR2W
         private byte[] ReadStringsBuffer(Stream stream)
         {
             var start = m_tableheaders[0].offset;
-            var size = m_tableheaders[0].size;
+            var m_strings_size = m_tableheaders[0].itemCount;
             var crc = m_tableheaders[0].crc32;
 
-            var m_temp = new byte[size];
+            var m_temp = new byte[m_strings_size];
             stream.Read(m_temp, 0, m_temp.Length);
 
             StringDictionary = new Dictionary<uint, string>();
             StringBuilder sb = new StringBuilder();
             uint offset = 0;
             var tempstring = new List<byte>();
-            for (uint i = 0; i < size; i++)
+            for (uint i = 0; i < m_strings_size; i++)
             {
                 byte b = m_temp[i];
                 if (b == 0)
@@ -1406,7 +1409,7 @@ namespace WolvenKit.CR2W
             //stream.Seek(m_tableheaders[index].offset, SeekOrigin.Begin);
 
             var hash = new Crc32Algorithm(false);
-            var table = stream.ReadStructs<T>(m_tableheaders[index].size, hash);
+            var table = stream.ReadStructs<T>(m_tableheaders[index].itemCount, hash);
 
             return table;
         }
