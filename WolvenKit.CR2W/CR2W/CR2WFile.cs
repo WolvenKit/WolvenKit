@@ -885,11 +885,11 @@ namespace WolvenKit.CR2W
                         case CArray<CInt32> caci32:
                         case CArray<CUInt64> cacu64:
                         case CArray<CInt64> caci64:
+                            break;
+                        default:
                             var elements = a.GetEditableVariables();
                             foreach (var item in elements)
                                 returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, item));
-                            break;
-                        default:
                             break;
                     }
                     break;

@@ -329,9 +329,34 @@ namespace CR2WTests
                 (var dict, var strings, var nameslist, var importslist) = crw.GenerateStringtable();
                 var newdictvalues = dict.Values.ToList();
                 var dictvalues = crw.StringDictionary.Values.ToList();
-                if (!newdictvalues.SequenceEqual(dictvalues))
+                var diffDictList = dictvalues.Except(newdictvalues).ToList();
+                if (diffDictList.Count != 0)
                 {
-                    throw new InvalidBundleException("Generated dictionary not equal actual dictionary.");
+                    bool isclassicalinconsistentw2anims=true;
+                    foreach (string str in diffDictList)
+                    {
+                        if (str == "extAnimEvents" ||
+                            str == "array:2,0,handle:CExtAnimEventsFile" ||
+                            str == "CExtAnimEventsFile" ||
+                            str.StartsWith("sounds\\"))
+                        {
+                        }
+                        else
+                            isclassicalinconsistentw2anims = false;
+
+                        if (isclassicalinconsistentw2anims == false)
+                            break;
+                    }
+
+                    if (isclassicalinconsistentw2anims)
+                    {
+                        //throw new InvalidBundleException("Classical inconsistent .w2anims - " +
+                        //    ".w2animev sound handles left behind in string lists, but actual data is empty");
+                    }
+                    else
+                    {
+                        throw new InvalidBundleException("Generated dictionary not equal actual dictionary.");
+                    }
                 }
 
             }
