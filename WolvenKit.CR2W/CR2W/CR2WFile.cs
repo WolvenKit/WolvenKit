@@ -1002,17 +1002,16 @@ namespace WolvenKit.CR2W
                                 }
                                 break;
                             case CBehaviorGraph cbg:
-                                var b = cvar as CBehaviorGraph;
-                                returnedVariables.Add(new SNameArg(EStringTableMod.None, b.Toplevelnode.Reference?.data));
-                                foreach (IdHandle item in b.Variables1)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, cbg.Toplevelnode.Reference?.data));
+                                foreach (IdHandle item in cbg.Variables1)
                                     returnedVariables.Add(new SNameArg(EStringTableMod.None, item));
-                                foreach (CHandle<CBehaviorVariable> item in b.Descriptions)
+                                foreach (CHandle<CBehaviorVariable> item in cbg.Descriptions)
                                     returnedVariables.Add(new SNameArg(EStringTableMod.None, item.Reference?.data));
-                                foreach (IdHandle item in b.Vectorvariables1)
+                                foreach (IdHandle item in cbg.Vectorvariables1)
                                     returnedVariables.Add(new SNameArg(EStringTableMod.None, item));
-                                foreach (IdHandle item in b.Variables2)
+                                foreach (IdHandle item in cbg.Variables2)
                                     returnedVariables.Add(new SNameArg(EStringTableMod.None, item));
-                                foreach (IdHandle item in b.Vectorvariables2)
+                                foreach (IdHandle item in cbg.Vectorvariables2)
                                     returnedVariables.Add(new SNameArg(EStringTableMod.None, item));
                                 break;
                             case CNode cn:
