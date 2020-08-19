@@ -701,6 +701,9 @@ namespace WolvenKit.CR2W
             }
         }
 
+        /// <summary>
+        /// How a REDEngine entity is to be serialized
+        /// </summary>
         public enum EStringTableMod
         {
             None,
@@ -710,6 +713,8 @@ namespace WolvenKit.CR2W
             TypeFirst
         }
 
+        // Those where before tuples, passed between functions. Got sick of them and made structs.
+        // Got lazy and did not rewrite elements in code, hence ItemN attributes. //FIXME unimportant
         public struct SNameArg
         {
             public EStringTableMod Item1;
@@ -721,6 +726,9 @@ namespace WolvenKit.CR2W
                 Item2 = i2;
             }
         };
+
+        // Those where before tuples, passed between functions. Got sick of them and made structs.
+        // Got lazy and did not rewrite elements in code, hence ItemN attributes. //FIXME unimportant
         public struct SImportEntry
         {
             public string Item1;

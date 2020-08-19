@@ -52,23 +52,21 @@ namespace CR2WTests
     {
         static string bundletag = "*";
         static Dictionary<string, MemoryMappedFile> memorymappedbundles;
-        static BundleManager mc;
-        private int CurrentFileIndex = 0;
-        private int LastTaskCompletedIndex = 0;
+        static BundleManager bm;
 
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
             memorymappedbundles = new Dictionary<string, MemoryMappedFile>();
-            mc = new BundleManager();
-            //mc.LoadAll("D:\\SteamLibrary\\steamapps\\common\\The Witcher 3\\bin\\x64");
-            mc.LoadAll("C:\\w3mod\\The Witcher 3\\bin\\x64");
+            bm = new BundleManager();
+            //bm.LoadAll("D:\\SteamLibrary\\steamapps\\common\\The Witcher 3\\bin\\x64");
+            bm.LoadAll("C:\\w3mod\\The Witcher 3\\bin\\x64");
 
             //Load MemoryMapped Bundles
-            foreach (var b in mc.Bundles.Values)
+            foreach (var b in bm.Bundles.Values)
             {
                 var e = b.FileName.GetHashMD5();
-
+            
                 memorymappedbundles.Add(e, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, e, 0, MemoryMappedFileAccess.Read));
 
             }
@@ -502,67 +500,19 @@ namespace CR2WTests
         public async Task StressTestExt(string ext)
         {
 
-            using (var frm = new frmUnitTest(ext, bundletag, mc))
+            using (var frm = new frmUnitTest(ext, bundletag, bm))
             {
                 //https://stackoverflow.com/questions/17797670/form-showdialog-does-not-display-window-with-debugging-enabled
                 frm.Load += (sender, e) => (sender as frmUnitTest).Visible = true;
                 frm.ShowDialog();
 
                 var result = frm.GetResult();
-
+                
                 Assert.AreEqual(0, result.Item1, $"Unknown bytes remained -> {result.Item1}bytes");
                 Assert.AreEqual(0, result.Item2, $"Unparsed files -> {result.Item2}");
-
-                //await Task.Run(() => frm.StressTestExtAsync(ext, bundletag)).ContinueWith(
-                //antecedent =>
-                //{
-                //    Assert.AreEqual(0, antecedent.Result.Item1, $"Unknown bytes remained -> {antecedent.Result.Item1}bytes");
-                //    Assert.AreEqual(0, antecedent.Result.Item2, $"Unparsed files -> {antecedent.Result.Item2}");
-                //}
-                //);
             }
         }
         
 
-/*        private async static Task<Tuple<long, long, Dictionary<string, Tuple<long, long>>>> StressTestFileAsync(BundleItem f, List<string> unknownclasses)
-        {
-            Dictionary<string, Tuple<long, long>> chunkstate = new Dictionary<string, Tuple<long, long>>();
-            long totalbytes = 0;
-            long unknownbytes = 0;
-
-            var crw = new CR2WFile();
-
-            using (var ms = new MemoryStream())
-            using (var br = new BinaryReader(ms))
-            {
-                f.ExtractExistingMMF(ms);
-                ms.Seek(0, SeekOrigin.Begin);
-
-                crw.Read(br); // make this async?
-            }
-
-            unknownclasses.AddRange(crw.UnknownTypes);
-            foreach (var c in crw.chunks)
-            {
-                var ubsl = c.unknownBytes?.Bytes != null ? c.unknownBytes.Bytes.Length : 0;
-
-                if (!chunkstate.ContainsKey(c.REDType))
-                {
-                    chunkstate.Add(c.REDType, new Tuple<long, long>(0, 0));
-                }
-                var already = chunkstate[c.REDType];
-                chunkstate[c.REDType] = new Tuple<long, long>(
-                        already.Item1 + c.Export.dataSize,
-                        already.Item2 + ubsl
-                    );
-
-                totalbytes += c.Export.dataSize;
-                unknownbytes += ubsl;
-
-            }
-
-            return new Tuple<long, long, Dictionary<string, Tuple<long, long>>>(totalbytes, unknownbytes, chunkstate);
-
-        }*/
     }
 }

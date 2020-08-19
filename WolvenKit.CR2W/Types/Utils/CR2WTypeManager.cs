@@ -73,7 +73,7 @@ namespace WolvenKit.CR2W.Types
             {
 
 
-                var type = Type.GetType($"WolvenKit.CR2W.Types.{typename}");
+                var type = Type.GetType($"WolvenKit.CR2W.Types.{typename}", false);
                 // if succesful return as CVariable
                 if (type != null)
                 {

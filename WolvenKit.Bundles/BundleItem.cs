@@ -49,7 +49,11 @@ namespace WolvenKit.Bundles
             }
         }
 
-
+        /// <summary>
+        /// Extract existing memory-mapped-file,
+        /// decompress with the proper algorithm.
+        /// </summary>
+        /// <param name="output"></param>
         public void ExtractExistingMMF(Stream output)
         {
             var hash = Bundle.FileName.GetHashMD5();
