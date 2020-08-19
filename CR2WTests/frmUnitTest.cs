@@ -112,7 +112,7 @@ namespace CR2WTests
             return null;
         }
 
-        public /*static async Task<*/Tuple<long, int> StressTestExtAsync()
+        public async Task<Tuple<long, int>> StressTestExtAsync()
         {
             long unknownbytes = 0;
             long totalbytes = 0;
@@ -168,7 +168,7 @@ namespace CR2WTests
                 UpdateProgress();
                 //this.Text = $"{ext} - {i + 1}/{files.Count}\r\n\r\n";
 
-                if (f is BundleItem bi)
+                if (f is BundleItem bi && bi.Name== "dlc\\dlc16\\data\\animations\\interaction\\finishers\\geralt_finishers.w2anims")
                 {
                     totalbytes += f.Size;
 
@@ -338,8 +338,8 @@ namespace CR2WTests
                         if (str == "extAnimEvents" ||
                             str == "array:2,0,handle:CExtAnimEventsFile" ||
                             str == "CExtAnimEventsFile" ||
-                            str.StartsWith("sounds\\") ||
-                            str.StartsWith("dlc\\bob\\data\\sounds\\"))
+                            str.Contains("sounds\\") ||
+                            str.Contains("sound\\"))
                         {
                             
                         }
