@@ -158,7 +158,7 @@ namespace CR2WTests
             // Set Maximum to the total number of files to copy.
             UpdateMaxProgress(files.Count);
 
-            for (int i = 0; i < files.Count; i++)
+            Parallel.For (0, files.Count, i =>
             {
                 IWitcherFile f = (IWitcherFile)files[i];
                 //log
@@ -168,7 +168,7 @@ namespace CR2WTests
                 UpdateProgress();
                 //this.Text = $"{ext} - {i + 1}/{files.Count}\r\n\r\n";
 
-                if (f is BundleItem bi && bi.Name== "dlc\\dlc16\\data\\animations\\interaction\\finishers\\geralt_finishers.w2anims")
+                if (f is BundleItem bi)
                 {
                     totalbytes += f.Size;
 
@@ -216,7 +216,7 @@ namespace CR2WTests
                     //}
                     //));
                 }
-            }
+            });
 
             //Task.WaitAll(tasks.ToArray());
 

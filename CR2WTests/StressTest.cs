@@ -53,6 +53,8 @@ namespace CR2WTests
         static string bundletag = "*";
         static Dictionary<string, MemoryMappedFile> memorymappedbundles;
         static BundleManager mc;
+        private int CurrentFileIndex = 0;
+        private int LastTaskCompletedIndex = 0;
 
         [ClassInitialize]
         public static void Setup(TestContext context)
