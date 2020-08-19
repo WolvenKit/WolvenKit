@@ -338,8 +338,10 @@ namespace CR2WTests
                         if (str == "extAnimEvents" ||
                             str == "array:2,0,handle:CExtAnimEventsFile" ||
                             str == "CExtAnimEventsFile" ||
-                            str.StartsWith("sounds\\"))
+                            str.StartsWith("sounds\\") ||
+                            str.StartsWith("dlc\\bob\\data\\sounds\\"))
                         {
+                            
                         }
                         else
                             isclassicalinconsistentw2anims = false;
