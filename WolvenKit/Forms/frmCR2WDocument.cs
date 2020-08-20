@@ -14,6 +14,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.SRT;
+using WolvenKit.CR2W.Types;
 using WolvenKit.Services;
 
 namespace WolvenKit
@@ -154,7 +155,18 @@ namespace WolvenKit
                 propertyWindow.Show(dockPanel, DockState.DockBottom);
             }
 
+            if (ImageViewer == null || ImageViewer.IsDisposed)
+            {
+                ImageViewer = new frmImagePreview();
+                ImageViewer.Show(dockPanel, DockState.Document);
+            }
+
             propertyWindow.Chunk = e.Chunk;
+
+            if (e.Chunk.data is CBitmapTexture xbm)
+            {
+                ImageViewer.SetImage(e.Chunk);
+            }
         }
 
         public void ApplyCustomTheme()
@@ -165,6 +177,6 @@ namespace WolvenKit
                 "cr2wdocument_layout.xml"));
         }
 
-        public bool GetIsDisposed() => this.GetIsDisposed();
+        public bool GetIsDisposed() => this.IsDisposed;
     }
 }

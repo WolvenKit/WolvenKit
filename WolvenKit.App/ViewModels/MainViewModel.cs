@@ -767,30 +767,24 @@ namespace WolvenKit.App.ViewModels
 
 
             // if !COOKINPLACE copy all files from Bundle folder to cooked folder
-
             // because wcc doesn't copy all files by itself
+            //if (!COOKINPLACE)
+            //{
 
-            if (!COOKINPLACE)
+            //    var di = new DirectoryInfo(modcachedir);
+            //    foreach (FileInfo fi in di.GetFiles("*", SearchOption.AllDirectories))
+            //    {
 
-            {
+            //        string relpath = fi.FullName.Substring(modcachedir.Length + 1);
+            //        string newpath = Path.Combine(cookedModDir, relpath);
 
-                var di = new DirectoryInfo(modcachedir);
+            //        if (!File.Exists(newpath))
 
-                foreach (FileInfo fi in di.GetFiles("*", SearchOption.AllDirectories))
+            //            fi.CopyTo(newpath);
 
-                {
+            //    }
 
-                    string relpath = fi.FullName.Substring(modcachedir.Length + 1);
-
-                    string newpath = Path.Combine(cookedModDir, relpath);
-
-                    if (!File.Exists(newpath))
-
-                        fi.CopyTo(newpath);
-
-                }
-
-            }
+            //}
 
             return finished == 0 ? 0 : 1;
 

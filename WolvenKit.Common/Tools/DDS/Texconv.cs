@@ -5,7 +5,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using WolvenKit.Common.Model;
 
-namespace WolvenKit.Cache
+namespace WolvenKit.DDS
 {
     public static class Texconv
     {
@@ -104,7 +104,7 @@ namespace WolvenKit.Cache
         #endregion
 
 
-        private const string textconvpath = @"DDS/texconv.exe";
+        private const string textconvpath = @"Tools/DDS/texconv.exe";
 
 
         public static int Convert(string outDir,

@@ -1,5 +1,6 @@
 ﻿using FastMember;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -426,9 +427,23 @@ namespace WolvenKit.CR2W.Types
             List<PropertyInfo> redprops = REDReflection.GetREDProperties<REDAttribute>(this.GetType()).ToList();
             foreach (PropertyInfo pi in redprops)
             {
-                if (pi.GetCustomAttribute<REDAttribute>() is REDBufferAttribute bufferAttribute
-                    && bufferAttribute.IsIgnored)
-                    continue;
+                // ignore some RedBuffers (formerly unknown bytes)
+                if (pi.GetCustomAttribute<REDAttribute>() is REDBufferAttribute bufferAttribute)
+                {
+                    if (bufferAttribute.IsIgnored)
+                        continue;
+                    else
+                    {
+                        // just write the RedBuffer without variable id
+                        if (pi?.GetValue(this) is CVariable cbuf)
+                        {
+                            cbuf.Write(file);
+                        }
+
+                        continue;
+                        //throw new NotImplementedException();
+                    }
+                }                    
 
                 // try get value
                 if (pi?.GetValue(this) is CVariable cvar)

@@ -130,7 +130,7 @@ namespace WolvenKit
                 bytes = ((IByteSource)editvar).Bytes;
             }
 
-            dlg.Filter = string.Join("|", ImportExportUtility.GetPossibleExtensions(bytes, editvar.REDName));
+            dlg.Filter = string.Join("|", ImportExportUtility.GetPossibleExtensions(bytes, (CVariable)editvar.Parent));
             dlg.InitialDirectory = MainController.Get().Configuration.InitialExportDirectory;
 
             if (dlg.ShowDialog() == DialogResult.OK)
@@ -141,7 +141,7 @@ namespace WolvenKit
                 {
                     using (var writer = new BinaryWriter(fs))
                     {
-                        bytes = ImportExportUtility.GetExportBytes(bytes, Path.GetExtension(dlg.FileName));
+                        bytes = ImportExportUtility.GetExportBytes(bytes, Path.GetExtension(dlg.FileName), (CVariable)editvar.Parent);
                         writer.Write(bytes);
                     }
                 }

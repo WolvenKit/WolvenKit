@@ -13,11 +13,11 @@ namespace WolvenKit.CR2W.Types
     public partial class CSwfTexture : CBitmapTexture
     {
 
-        [REDBuffer(true)] public CBytes swfTexture { get; set; }
+        //[REDBuffer(true)] public CBytes swfTexture { get; set; }
 
         public CSwfTexture(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            swfTexture = new CBytes(cr2w, this, nameof(swfTexture));
+            //swfTexture = new CBytes(cr2w, this, nameof(swfTexture));
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -26,16 +26,16 @@ namespace WolvenKit.CR2W.Types
 
             base.Read(file, size);
 
-            var textureSize = Convert.ToInt32( size - (file.BaseStream.Position - pos) );
+            //var textureSize = Convert.ToInt32( size - (file.BaseStream.Position - pos) );
 
-            swfTexture.Read(file, (uint)textureSize);
+            //swfTexture.Read(file, (uint)textureSize);
         }
 
         public override void Write(BinaryWriter file)
         {
             base.Write(file);
 
-            swfTexture.Write(file);
+            //swfTexture.Write(file);
         }
 
     }

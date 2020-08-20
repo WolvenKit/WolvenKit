@@ -7,6 +7,7 @@ using WolvenKit.Cache;
 using WolvenKit.CR2W.Types;
 using System.IO;
 using System.Linq;
+using WolvenKit.App.Model;
 
 namespace WolvenKit
 {

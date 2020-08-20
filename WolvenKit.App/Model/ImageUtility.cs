@@ -2,20 +2,24 @@
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
-using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using static WolvenKit.CR2W.Types.Enums;
 
-namespace WolvenKit.Cache
+namespace WolvenKit.App.Model
 {
     using DDS;
+    using WolvenKit.Common;
     using ImageFormat = Pfim.ImageFormat;
 
     public static class ImageUtility
     {
+        /// <summary>
+        /// Create a System.Drawing.Bitmap from a physical file with Pfim
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static Bitmap FromFile(string path)
         {
             using (var image = Pfim.Pfim.FromFile(path))
@@ -53,8 +57,8 @@ namespace WolvenKit.Cache
                         var msg = $"{image.Format} is not recognized for Bitmap on Windows Forms. " +
                                    "You'd need to write a conversion function to convert the data to known format";
                         var caption = "Unrecognized format";
-                        MessageBox.Show(msg, caption, MessageBoxButtons.OK);
-                        return null;
+                        //MessageBox.Show(msg, caption, MessageBoxButtons.OK);
+                        throw new NotImplementedException(msg);
                 }
 
                 // Pin pfim's data array so that it doesn't get reaped by GC
@@ -71,6 +75,11 @@ namespace WolvenKit.Cache
             }
         }
 
+        /// <summary>
+        /// Create a System.Drawing.Bitmap from a byte array with Pfim
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
         public static Bitmap FromBytes(byte[] bytes)
         {
             using (var ms = new MemoryStream(bytes))
@@ -79,6 +88,11 @@ namespace WolvenKit.Cache
             }
         }
 
+        /// <summary>
+        /// Create a System.Drawing.Bitmap from a stream with Pfim
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
         public static Bitmap FromStream(Stream stream)
         {
             using (var image = Pfim.Pfim.FromStream(stream))
@@ -116,8 +130,8 @@ namespace WolvenKit.Cache
                         var msg = $"{image.Format} is not recognized for Bitmap on Windows Forms. " +
                                    "You'd need to write a conversion function to convert the data to known format";
                         var caption = "Unrecognized format";
-                        MessageBox.Show(msg, caption, MessageBoxButtons.OK);
-                        return null;
+                        //MessageBox.Show(msg, caption, MessageBoxButtons.OK);
+                        throw new NotImplementedException(msg);
                 }
 
                 // Pin pfim's data array so that it doesn't get reaped by GC
@@ -134,66 +148,46 @@ namespace WolvenKit.Cache
             }
         }
 
+        /// <summary>
+        /// Create a System.Drawing.Bitmap from a Redengine CBitmapTexture with Wkit DDS Utility
+        /// </summary>
+        /// <param name="xbm"></param>
+        /// <returns></returns>
         public static Bitmap Xbm2Bmp(CBitmapTexture xbm)
         {
             if (xbm == null)
                 return null;
 
-            int residentMipIndex = xbm.ResidentMipIndex == null ? 0 : xbm.ResidentMipIndex.val;
-            byte[] bytesource;
-            bytesource = xbm.Residentmip.Bytes;
-            // handle cooked xbms
-            //if (xbm.GetVariableByName("sourceData") != null && xbm.Residentmip != null)
-            //{
-            //    bytesource = xbm.Residentmip.Bytes;
-            //}
-            //// handle uncooked xbms
-            //else if (xbm.Mips != null)
-            //{
-            //    bytesource = xbm.Mips.elements[residentMipIndex].Bytes;
-            //}
-            //else
-            //{
-            //    return null;
-            //}
-
-            using (var ms = new MemoryStream(Xbm2DdsBytes(xbm, bytesource)))
+            using (var ms = new MemoryStream(Xbm2DdsBytes(xbm)))
             {
                 return FromStream(ms);
             }
         }
 
-        //public static DdsImage Xbm2Dds(CBitmapTexture xbm, byte[] rawimage)
-        //{
-        //    if (xbm == null || rawimage == null)
-        //        return null;
-        //    return new DdsImage(Xbm2DdsBytes(xbm, rawimage));
-        //}
-
-
-
+        /// <summary>
+        /// Create a byte array from a Redengine CBitmapTexture with Wkit DDS Utility
+        /// </summary>
+        /// <param name="xbm"></param>
+        /// <returns></returns>
         public static byte[] Xbm2DdsBytes(CBitmapTexture xbm)
         {
             if (xbm == null)
                 return null;
 
-            int residentMipIndex = xbm.ResidentMipIndex == null ? 0 : xbm.ResidentMipIndex.val;
             byte[] bytesource;
-            // handle cooked xbms
-            if (xbm.SourceData == null)
+            if (xbm.Residentmip != null && xbm.Residentmip.Bytes != null)
             {
                 bytesource = xbm.Residentmip.Bytes;
             }
-            // handle imported xbms
             else
             {
-                bytesource = xbm.Mips.elements[residentMipIndex].Bytes;
+                throw new NotImplementedException();
             }
 
             using (var ms = new MemoryStream())
             using (var bw = new BinaryWriter(ms))
             {
-                DDSUtils.GenerateAndWriteHeader(bw.BaseStream, Xbm2Ddsheader(xbm));
+                DDSUtils.GenerateAndWriteHeader(bw.BaseStream, GetDDSMetadata(xbm));
 
                 bw.Write(bytesource);
 
@@ -203,45 +197,18 @@ namespace WolvenKit.Cache
             }
         }
 
-        public static byte[] Xbm2DdsBytes(CBitmapTexture xbm, byte[] bytesource)
-        {
-            if (xbm == null)
-                return null;
-
-            using (var ms = new MemoryStream())
-            using (var bw = new BinaryWriter(ms))
-            {
-                DDSUtils.GenerateAndWriteHeader(bw.BaseStream, Xbm2Ddsheader(xbm));
-
-                bw.Write(bytesource);
-
-                ms.Flush();
-
-                return ms.ToArray();
-            }
-        }
-
-
-
-
-
-        private static DDSMetadata Xbm2Ddsheader(CBitmapTexture xbm)
+        /// <summary>
+        /// Generate DDSMetadata from a Redengine CBitmapTexture
+        /// </summary>
+        /// <param name="xbm"></param>
+        /// <returns></returns>
+        private static DDSMetadata GetDDSMetadata(CBitmapTexture xbm)
         {
             try
             {
                 int residentMipIndex = xbm.ResidentMipIndex == null ? 0 : xbm.ResidentMipIndex.val;
-
-                int mipcount;
-                // handle cooked xbms
-                if (xbm.SourceData != null)
-                {
-                    mipcount = xbm.Mipdata.elements.Count - residentMipIndex;
-                }
-                // handle uncooked xbms
-                else
-                {
-                    mipcount = 0; 
-                }
+                
+                int mipcount = xbm.Mipdata.elements.Count - residentMipIndex;
 
                 uint width = xbm.Mipdata.elements[residentMipIndex].Width.val;
                 uint height = xbm.Mipdata.elements[residentMipIndex].Height.val;
@@ -316,11 +283,11 @@ namespace WolvenKit.Cache
         }
 
         /// <summary>
-        /// Convert a DDS image to a CBitmapTexture style image
+        /// Gets the image bytes from a dds byte array, trims the first 128 bytes
         /// </summary>
-        /// <param name="ddsImage">The buffer to remove the header from</param>
-        /// <returns>CBitmapTexture style image</returns>
-        public static byte[] Dds2Xbm(byte[] ddsImage)
+        /// <param name="ddsImage"></param>
+        /// <returns></returns>
+        public static byte[] Dds2Bytes(byte[] ddsImage)
         {
             return ddsImage.Length > 128 ? ddsImage.Skip(128).ToArray() : new byte[0];
         }

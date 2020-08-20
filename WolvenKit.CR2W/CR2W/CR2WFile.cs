@@ -847,11 +847,11 @@ namespace WolvenKit.CR2W
 
                 if (!skipnamecheck)
                 {
-                    if (newnameslist.Last().Value != StringDictionary.Values.ToList()[newnameslist.Count - 1])
-                    {
+                    //if (newnameslist.Last().Value != StringDictionary.Values.ToList()[newnameslist.Count - 1])
+                    //{
 
 
-                    }
+                    //}
                 }
 
                 List<SNameArg> nextl = GetVariables(var.Item2);

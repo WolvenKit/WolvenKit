@@ -11,8 +11,8 @@ using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.Cache
 {
-    using DDS;
     using WolvenKit.Common.Model;
+    using WolvenKit.DDS;
     using static WolvenKit.CR2W.Types.Enums;
 
     public class TextureCacheItem : IWitcherFile

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static WolvenKit.CR2W.Types.Enums;
+using WolvenKit.Common;
 
 /// <summary>
 /// DDS aka DirectDraw Surface is an obsolete image file format, property Microsoft
 /// </summary>
-namespace WolvenKit.Cache.DDS
+namespace WolvenKit.DDS
 {
     public struct DDSMetadata
     {

@@ -43,15 +43,13 @@ namespace WolvenKit.CR2W.Types
             MipsCount.Read(file, 4);
 
             // Uncooked and Cooked xbms have a different file structure. 
-            // Uncooked xbms have Sourcedata == null
-            // Cooked xbms have sourceData
+            // Uncooked xbms can be identified by their Sourcedata being null
+            // and the residentmipindex being not null
 
-            if (SourceData == null)
+            var isCooked = /*SourceData == null &&*/ ResidentMipIndex != null;
+
+            if (isCooked)
             {
-                //dbg
-                if (ResidentMipIndex != null)
-                    throw new NotImplementedException();
-
                 for (int i = 0; i < MipsCount.val; i++)
                 {
                     var mipdata = new SMipData(cr2w, Mipdata, "");
@@ -59,29 +57,18 @@ namespace WolvenKit.CR2W.Types
                     Mipdata.AddVariable(mipdata);
 
                     var img = new CByteArray(cr2w, Mips, "");
-                    //img.SetParent(this);
                     img.Read(file, 0);
                     Mips.AddVariable(img);
                 }
-
-                ResidentmipSize.Read(file, 4);
-                unk2.Read(file, 4);
-                Residentmip.Bytes = file.ReadBytes((int)ResidentmipSize.val);
             }
             else
             {
-                if (ResidentMipIndex == null)
-                    throw new NotImplementedException();
-
-
                 Mipdata.Read(file, size, (int)MipsCount.val);
-
-                ResidentmipSize.Read(file, 4);
-
-                unk2.Read(file, 4);
-
-                Residentmip.Read(file, ResidentmipSize.val);
             }
+
+            ResidentmipSize.Read(file, 4);
+            unk2.Read(file, 4);
+            Residentmip.Read(file, ResidentmipSize.val);
         }
 
         public override void Write(BinaryWriter file)

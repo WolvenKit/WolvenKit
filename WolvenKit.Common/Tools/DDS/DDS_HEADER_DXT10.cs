@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WolvenKit.Cache.DDS
+namespace WolvenKit.DDS
 {
     [StructLayout(LayoutKind.Explicit, Size = 20)]
     public struct DDS_HEADER_DXT10

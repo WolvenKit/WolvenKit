@@ -620,6 +620,17 @@ namespace WolvenKit
                             doc.ImageViewer.SetImage(imagechunk);
                             break;
                         }
+                    case ".redswf":
+                        {
+                            doc.ImageViewer = new frmImagePreview
+                            {
+                                DockAreas = DockAreas.Document
+                            };
+                            doc.ImageViewer.Show(doc.FormPanel, DockState.Document);
+                            CR2WExportWrapper imagechunk = doc.File?.chunks?.FirstOrDefault(_ => _.data is CBitmapTexture);
+                            doc.ImageViewer.SetImage(imagechunk);
+                            break;
+                        }
                     case ".w2mesh":
                         {
                             if (bool.Parse(renderW2meshToolStripMenuItem.Tag.ToString()))

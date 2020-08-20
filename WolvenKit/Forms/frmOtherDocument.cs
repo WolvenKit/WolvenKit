@@ -61,7 +61,7 @@ namespace WolvenKit.Forms
         public event PropertyChangedEventHandler PropertyChanged;
 
 
-        public bool GetIsDisposed() => this.GetIsDisposed();
+        public bool GetIsDisposed() => this.IsDisposed;
 
         public DocumentViewModel GetViewModel() => vm;
 
