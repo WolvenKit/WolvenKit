@@ -1,4 +1,4 @@
-﻿using BrightIdeasSoftware;
+using BrightIdeasSoftware;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

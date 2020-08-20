@@ -1,4 +1,4 @@
-﻿using Wolvenkit.CR2W.Types;
+using Wolvenkit.CR2W.Types;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

@@ -1,4 +1,4 @@
-﻿using System.Windows.Forms;
+using System.Windows.Forms;
 using WolvenKit.CR2W.Types;
 
 namespace WolvenKit

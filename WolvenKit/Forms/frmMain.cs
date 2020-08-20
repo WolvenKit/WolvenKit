@@ -1,4 +1,4 @@
-﻿using AutoUpdaterDotNET;
+using AutoUpdaterDotNET;
 using Dfust.Hotkeys;
 using SharpPresence;
 using System;

@@ -1,4 +1,4 @@
-﻿namespace WolvenKit
+namespace WolvenKit
 {
     partial class frmImagePreview
     {

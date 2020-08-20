@@ -1,4 +1,4 @@
-﻿using BrightIdeasSoftware;
+using BrightIdeasSoftware;
 using ScintillaNET;
 using ScintillaNET_FindReplaceDialog;
 using System;

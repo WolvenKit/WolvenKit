@@ -1,4 +1,4 @@
-﻿//using RED.CRC32;
+//using RED.CRC32;
 using System;
 using System.Collections.Generic;
 using System.IO;

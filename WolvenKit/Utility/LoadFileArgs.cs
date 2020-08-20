@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using WolvenKit.App.ViewModels;
 using WolvenKit.CR2W;
 

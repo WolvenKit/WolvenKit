@@ -1,4 +1,4 @@
-﻿ using System.Collections.Generic;
+ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using WolvenKit.CR2W.Types.Utils;

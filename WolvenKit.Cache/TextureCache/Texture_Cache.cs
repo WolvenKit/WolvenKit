@@ -1,4 +1,4 @@
-﻿using Ionic.Zlib;
+using Ionic.Zlib;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

@@ -1,4 +1,4 @@
-﻿using WolvenKit.CR2W.Types;
+using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.CR2W
 {

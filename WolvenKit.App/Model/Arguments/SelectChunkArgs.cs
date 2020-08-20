@@ -1,4 +1,4 @@
-﻿using WolvenKit.CR2W;
+using WolvenKit.CR2W;
 
 namespace WolvenKit.App.Model
 {

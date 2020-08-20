@@ -1,4 +1,4 @@
-﻿namespace WolvenKit.Forms
+namespace WolvenKit.Forms
 {
     partial class frmOtherDocument
     {

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using WolvenKit.Common;
 using WolvenKit.CR2W;

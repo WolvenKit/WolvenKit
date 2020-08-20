@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using BrightIdeasSoftware;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.CR2W;

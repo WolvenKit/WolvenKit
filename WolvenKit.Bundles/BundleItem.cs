@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.IO.MemoryMappedFiles;
 using Doboz;
 using Ionic.Zlib;
