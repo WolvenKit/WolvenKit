@@ -238,7 +238,7 @@ namespace WolvenKit
             this.toolStripBtnAssetbrowser.Size = new System.Drawing.Size(32, 24);
             this.toolStripBtnAssetbrowser.Text = "toolStripButton7";
             this.toolStripBtnAssetbrowser.ToolTipText = "Add file from bundle";
-            this.toolStripBtnAssetbrowser.Click += new System.EventHandler(this.addFileFromBundleToolStripMenuItem_Click);
+            this.toolStripBtnAssetbrowser.Click += new System.EventHandler(this.OpenDepotAssetBrowserToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -565,7 +565,7 @@ namespace WolvenKit
             this.addFileFromBundleToolStripMenuItem.Name = "addFileFromBundleToolStripMenuItem";
             this.addFileFromBundleToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
             this.addFileFromBundleToolStripMenuItem.Text = "Asset browser";
-            this.addFileFromBundleToolStripMenuItem.Click += new System.EventHandler(this.addFileFromBundleToolStripMenuItem_Click);
+            this.addFileFromBundleToolStripMenuItem.Click += new System.EventHandler(this.OpenDepotAssetBrowserToolStripMenuItem_Click);
             // 
             // addFileFromOtherModToolStripMenuItem
             // 
@@ -573,7 +573,7 @@ namespace WolvenKit
             this.addFileFromOtherModToolStripMenuItem.Name = "addFileFromOtherModToolStripMenuItem";
             this.addFileFromOtherModToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
             this.addFileFromOtherModToolStripMenuItem.Text = "Add file from other mod";
-            this.addFileFromOtherModToolStripMenuItem.Click += new System.EventHandler(this.AddFileFromOtherModToolStripMenuItem_Click_1);
+            this.addFileFromOtherModToolStripMenuItem.Click += new System.EventHandler(this.OpenModAssetBrowserToolStripMenuItem_Click_1);
             // 
             // addFileToolStripMenuItem
             // 

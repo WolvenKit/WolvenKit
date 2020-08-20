@@ -11,7 +11,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -24,7 +23,6 @@ using SearchOption = System.IO.SearchOption;
 
 namespace WolvenKit
 {
-    using Bundles;
     using Cache;
     using Common;
     using Common.Services;
@@ -33,13 +31,10 @@ namespace WolvenKit
     using CR2W.Types;
     using Extensions;
     using Forms;
-    using System.CodeDom;
     using WolvenKit.App;
-    using WolvenKit.App.Model;
     using WolvenKit.App.ViewModels;
     using WolvenKit.Common.Extensions;
     using WolvenKit.Common.Model;
-    using WolvenKit.CR2W.SRT;
     using WolvenKit.Render;
     using WolvenKit.Scaleform;
     using Wwise.Player;
@@ -168,6 +163,8 @@ namespace WolvenKit
 
             ToolStripManager.LoadSettings(this);
             m_deserializeDockContent = new DeserializeDockContent(GetContentFromPersistString);
+
+            this.FormBorderStyle=FormBorderStyle.Sizable;
         }
 
         #endregion
@@ -883,6 +880,7 @@ namespace WolvenKit
                 }
                 ModExplorer.ResumeMonitoring();
                 vm.SaveMod();
+                this.BringToFront();
             }
             else
                 Logger.LogString("The background worker is currently busy.\r\n", Logtype.Error);
@@ -962,7 +960,7 @@ namespace WolvenKit
             ren.Show(this.dockPanel, DockState.Document);
         }
 
-        private void ModExplorer_RequestAssetBrowser(object sender, RequestFileArgs e) => AddModFile(false, e.File);
+        private void ModExplorer_RequestAssetBrowser(object sender, RequestFileArgs e) => OpenAssetBrowser(false, e.File);
 
         private void ModExplorer_RequestFileOpen(object sender, RequestFileArgs e)
         {
@@ -2160,7 +2158,7 @@ namespace WolvenKit
         /// </summary>
         /// <param name="loadmods">Load the mod files</param>
         /// <param name="browseToPath">The path to browse to</param>
-        private void AddModFile(bool loadmods, string browseToPath = "")
+        private void OpenAssetBrowser(bool loadmods, string browseToPath = "")
         {
             if (ActiveMod == null)
             {
@@ -2192,11 +2190,10 @@ namespace WolvenKit
             location.Y += (dockPanel.Size.Height / 2 - explorer.Size.Height / 2);
             Rectangle floatWindowBounds = new Rectangle() { Location=location, Width = 827, Height = 564 };
             explorer.Show(dockPanel, floatWindowBounds);
-            
+
         }
 
         #endregion
-
 
         #endregion
 
@@ -2723,14 +2720,14 @@ _col - for simple stuff like boxes and spheres", "Information about importing mo
             }
         }
 
-        private void addFileFromBundleToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenDepotAssetBrowserToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddModFile(false);
+            OpenAssetBrowser(false);
         }
 
-        private void AddFileFromOtherModToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void OpenModAssetBrowserToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            AddModFile(true);
+            OpenAssetBrowser(true);
         }
 
         private void addFileToolStripMenuItem_Click(object sender, EventArgs e)
