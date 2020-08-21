@@ -136,7 +136,18 @@ namespace WolvenKit
         }
         private void FileChanges_Detected(object sender, RenamedEventArgs e)
         {
-
+            switch (e.ChangeType)
+            {
+                case WatcherChangeTypes.Renamed:
+                    {
+                        UpdateTreeView((e as RenamedEventArgs).OldFullPath);
+                        break;
+                    }
+                case WatcherChangeTypes.Changed:
+                case WatcherChangeTypes.All:
+                default:
+                    throw new NotImplementedException();
+            }
         }
         private void FileChanges_Detected(object sender, FileSystemEventArgs e)
         {

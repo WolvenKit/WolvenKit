@@ -46,7 +46,14 @@ namespace WolvenKit.CR2W.Types
             // Uncooked xbms can be identified by their Sourcedata being null
             // and the residentmipindex being not null
 
-            var isCooked = /*SourceData == null &&*/ ResidentMipIndex != null;
+            var isCooked =  Flags == 0 ;
+            if (isCooked)
+            {
+                if (SourceData == null && ResidentMipIndex == null)
+                {
+
+                }
+            }
 
             if (isCooked)
             {
@@ -75,10 +82,20 @@ namespace WolvenKit.CR2W.Types
         {
             base.Write(file);
 
-            MipsCount.val = (uint)Mips.Count;
-            MipsCount.Write(file);
-            Mips.Write(file);
+            var isCooked = Flags == 0;
+            if (isCooked)
+            {
+                MipsCount.val = (uint)Mips.Count;
+                MipsCount.Write(file);
+                Mips.Write(file);
+            }
+            else
+            {
+                MipsCount.Write(file);
+            }
 
+
+            Mipdata.Write(file);
             ResidentmipSize.Write(file);
             unk2.Write(file);
 

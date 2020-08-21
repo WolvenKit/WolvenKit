@@ -54,6 +54,14 @@ namespace WolvenKit.CR2W.Types
         /// </summary>
         public bool IsSerialized { get; set; }
 
+        /// <summary>
+        /// Flags inherited from cr2w export (aka chunk)
+        /// 0 means chunk is uncooked (usefull for some file types that have 
+        /// a different layout in the uncooked and cooked state, e.g. CBitmapTexture)
+        /// Is set on file read and should not be modified
+        /// </summary>
+        public ushort Flags { get; set; }
+
 
         /// <summary>
         /// an internal guid that is used to track cvariables 
@@ -312,7 +320,10 @@ namespace WolvenKit.CR2W.Types
             {
                 if (pi.GetCustomAttribute<REDAttribute>() is REDBufferAttribute bufferAttribute
                     && bufferAttribute.IsIgnored)
-                        continue;
+                {
+                    // add IsSerialized?
+                    continue;
+                }
 
                 // Get
                 // get redname from attribute
@@ -417,65 +428,89 @@ namespace WolvenKit.CR2W.Types
         /// <param name="file"></param>
         public virtual void Write(BinaryWriter file)
         {
-            //REDMetaAttribute meta = (REDMetaAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(REDMetaAttribute));
-            //EREDMetaInfo[] tags = meta?.Keywords;
+            REDMetaAttribute meta = (REDMetaAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(REDMetaAttribute));
+            EREDMetaInfo[] tags = meta?.Keywords;
 
-            // write leading null byte
-            file.Write((byte)0);
-
-            // write all initialized CVariables
-            List<PropertyInfo> redprops = REDReflection.GetREDProperties<REDAttribute>(this.GetType()).ToList();
-            foreach (PropertyInfo pi in redprops)
+            // fixed class/struct (no leading null byte), write all properties in order
+            if (tags.Contains(EREDMetaInfo.REDStruct))
             {
-                // ignore some RedBuffers (formerly unknown bytes)
-                if (pi.GetCustomAttribute<REDAttribute>() is REDBufferAttribute bufferAttribute)
+                // write all CVariables
+                List<PropertyInfo> redprops = REDReflection.GetREDProperties<REDAttribute>(this.GetType()).ToList();
+                foreach (PropertyInfo pi in redprops)
                 {
-                    if (bufferAttribute.IsIgnored)
-                        continue;
-                    else
+                    // just write the RedBuffer without variable id
+                    if (pi?.GetValue(this) is CVariable cbuf)
                     {
-                        // just write the RedBuffer without variable id
-                        if (pi?.GetValue(this) is CVariable cbuf)
-                        {
-                            cbuf.Write(file);
-                        }
-
-                        continue;
-                        //throw new NotImplementedException();
+                        cbuf.Write(file);
                     }
-                }                    
-
-                // try get value
-                if (pi?.GetValue(this) is CVariable cvar)
-                {
-                    if (cvar != null)
-                    {
-                        // only write values that are instantiated AND edited
-                        if (cvar.IsSerialized)
-                        {
-                            // check if healthy? don't know how
-
-                            // finally: write to stream
-                            CR2WFile.WriteVariable(file, cvar);
-                        }
-                        else
-                        {
-
-                        }
-                    }
-                    else
-                        throw new SerializationException();
-
-                }
-                // proper enums
-                else if (pi?.GetValue(this) is Enum @enum)
-                {
-
                 }
             }
+            // CVectors
+            else
+            {
+                // write leading null byte
+                file.Write((byte)0);
 
-            // write trailing null byte
-            file.Write((ushort)0);
+                // write all initialized CVariables
+                List<PropertyInfo> redprops = REDReflection.GetREDProperties<REDAttribute>(this.GetType())
+                    .Where(_ => !(_.GetCustomAttribute<REDAttribute>() is REDBufferAttribute)).ToList();
+                foreach (PropertyInfo pi in redprops)
+                {
+                    // try get value
+                    if (pi?.GetValue(this) is CVariable cvar)
+                    {
+                        if (cvar != null)
+                        {
+                            // only write values that are instantiated AND edited
+                            if (cvar.IsSerialized)
+                            {
+                                // check if healthy? don't know how
+
+                                // finally: write to stream
+                                CR2WFile.WriteVariable(file, cvar);
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        else
+                            throw new SerializationException();
+
+                    }
+                    // proper enums
+                    else if (pi?.GetValue(this) is Enum @enum)
+                    {
+
+                    }
+                }
+
+                // write trailing null bytes
+                file.Write((ushort)0);
+
+                // write all Buffers
+                List<PropertyInfo> redbuffers = REDReflection.GetREDProperties<REDBufferAttribute>(this.GetType()).ToList();
+                foreach (PropertyInfo pi in redbuffers)
+                {
+                    // ignore some RedBuffers (formerly unknown bytes)
+                    if (pi.GetCustomAttribute<REDAttribute>() is REDBufferAttribute bufferAttribute)
+                    {
+                        if (bufferAttribute.IsIgnored)
+                            continue;
+                        else
+                        {
+                            // just write the RedBuffer without variable id
+                            if (pi?.GetValue(this) is CVariable cbuf)
+                            {
+                                cbuf.Write(file);
+                            }
+
+                            continue;
+                            //throw new NotImplementedException();
+                        }
+                    }
+                }
+            }
         }
 
 

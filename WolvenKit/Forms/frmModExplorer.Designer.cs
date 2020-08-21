@@ -216,7 +216,8 @@ namespace WolvenKit
             this.dumpWkitXMLToolStripMenuItem.Name = "dumpWkitXMLToolStripMenuItem";
             this.dumpWkitXMLToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.dumpWkitXMLToolStripMenuItem.Text = "Dump wkit xml";
-            this.dumpWkitXMLToolStripMenuItem.Click += new System.EventHandler(this.dumpWkitXMLToolStripMenuItem_Click);            // 
+            this.dumpWkitXMLToolStripMenuItem.Click += new System.EventHandler(this.dumpWkitXMLToolStripMenuItem_Click);
+            // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
