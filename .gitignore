@@ -254,9 +254,6 @@ paket-files/
 .idea/
 *.sln.iml
 
-# Ignore VTune Profiler
-WolvenKit/VTune Profiler Results/
-
 # Ignore folders
 W3Edit.Render/Models/**
 !W3Edit.Render/Models/**
@@ -266,6 +263,7 @@ packages/**
 
 #Ignore doxygen doc
 docs/html/*
+docs/doxygen.warnings
 
 #Local git wiki repository - preferred to not delve into git submodules/subtree horrors
 Wolven-kit.wiki
