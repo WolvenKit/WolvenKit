@@ -48,7 +48,7 @@ namespace WolvenKit.CR2W
         public uint offset;
 
         [FieldOffset(4)]
-        public uint size;
+        public uint itemCount;
 
         [FieldOffset(8)]
         public uint crc32;

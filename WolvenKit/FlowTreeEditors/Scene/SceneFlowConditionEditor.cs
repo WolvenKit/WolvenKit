@@ -20,56 +20,60 @@ namespace WolvenKit.FlowTreeEditors
 
             lblCondition.Text = "";
 
-            var questConditionObj = Chunk.GetVariableByName("questCondition");
-            if (questConditionObj != null && questConditionObj is CPtr)
+            CStorySceneFlowCondition resource = (CStorySceneFlowCondition)Chunk.data;
+
+            CPtr<IQuestCondition> questCondition = resource.QuestCondition;
+            if (questCondition != null)
             {
-                var questCondition = (CPtr) questConditionObj;
                 if (questCondition.Reference != null)
                 {
                     lblCondition.Click += delegate { FireSelectEvent(questCondition.Reference); };
 
-                    var factIdObj = questCondition.Reference.GetVariableByName("factId");
-                    if (factIdObj != null && factIdObj is CString)
+                    //var factIdObj = (questCondition.PtrTarget.data as IQuestCondition).factId;
+                    dynamic IQuestCondition = questCondition.Reference.data; //FIXME dynamic 
+                    var factIdObj = IQuestCondition.FactId;
+
+
+                    if (factIdObj != null && factIdObj is string)
                     {
-                        lblCondition.Text = ((CString) factIdObj).val;
+                        lblCondition.Text = ((CString)factIdObj).val;
                     }
                     else
                     {
-                        lblCondition.Text = questCondition.Reference.Name;
+                        lblCondition.Text = questCondition.Reference.REDName;
                     }
                 }
             }
 
-            var commentObj = Chunk.GetVariableByName("comment");
+            var commentObj = resource.Comment;
             if (commentObj != null && commentObj is CString)
             {
-                lblCondition.Text = ((CString) commentObj).val;
+                lblCondition.Text = ((CString)commentObj).val;
             }
         }
 
-        public override List<CPtr> GetConnections()
+        public override List<IPtrAccessor> GetConnections()
         {
-            var list = new List<CPtr>();
+            var list = new List<IPtrAccessor>();
+            CStorySceneFlowCondition resource = (CStorySceneFlowCondition)Chunk.data;
 
             if (Chunk != null)
             {
-                var trueLinkObj = Chunk.GetVariableByName("trueLink");
-                if (trueLinkObj != null && trueLinkObj is CPtr)
+                CPtr<CStorySceneLinkElement> trueLink = resource.TrueLink;
+                if (trueLink != null)
                 {
-                    var nextLinkElementPtr = ((CPtr) trueLinkObj);
-                    if (nextLinkElementPtr.Reference != null)
+                    if (trueLink.Reference != null)
                     {
-                        list.Add(nextLinkElementPtr);
+                        list.Add(trueLink);
                     }
                 }
 
-                var falseLinkObj = Chunk.GetVariableByName("falseLink");
-                if (falseLinkObj != null && falseLinkObj is CPtr)
+                CPtr<CStorySceneLinkElement> falseLink = resource.FalseLink;
+                if (falseLink != null)
                 {
-                    var nextLinkElementPtr = ((CPtr) falseLinkObj);
-                    if (nextLinkElementPtr.Reference != null)
+                    if (falseLink.Reference != null)
                     {
-                        list.Add(nextLinkElementPtr);
+                        list.Add(falseLink);
                     }
                 }
             }
@@ -80,11 +84,11 @@ namespace WolvenKit.FlowTreeEditors
         public override Point GetConnectionLocation(int i)
         {
             if (i == 0)
-                return new Point(0, lblTrue.Top + lblTrue.Height/2);
+                return new Point(0, lblTrue.Top + lblTrue.Height / 2);
             if (i == 1)
-                return new Point(0, lblFalse.Top + lblFalse.Height/2);
+                return new Point(0, lblFalse.Top + lblFalse.Height / 2);
 
-            return new Point(0, i*20 + 21 + 10);
+            return new Point(0, i * 20 + 21 + 10);
         }
     }
 }

@@ -1,0 +1,30 @@
+using System.IO;
+using System.Runtime.Serialization;
+using WolvenKit.CR2W.Reflection;
+using static WolvenKit.CR2W.Types.Enums;
+
+
+namespace WolvenKit.CR2W.Types
+{
+	[DataContract(Namespace = "")]
+	[REDMeta]
+	public class CCollisionShapeBox : ICollisionShape
+	{
+		[RED("physicalMaterialName")] 		public CName PhysicalMaterialName { get; set;}
+
+		[RED("halfExtendsX")] 		public CFloat HalfExtendsX { get; set;}
+
+		[RED("halfExtendsY")] 		public CFloat HalfExtendsY { get; set;}
+
+		[RED("halfExtendsZ")] 		public CFloat HalfExtendsZ { get; set;}
+
+		public CCollisionShapeBox(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCollisionShapeBox(cr2w, parent, name);
+
+		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
+
+		public override void Write(BinaryWriter file) => base.Write(file);
+
+	}
+}

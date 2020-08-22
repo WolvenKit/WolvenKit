@@ -4,58 +4,62 @@ using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 using WolvenKit.FlowTreeEditors;
 
-namespace WolvenKit {
-    public class QuestLinkEditor : ChunkEditor {
-        public override void UpdateView() {
+namespace WolvenKit
+{
+    public class QuestLinkEditor : ChunkEditor
+    {
+        public override void UpdateView()
+        {
             base.UpdateView();
 
-            lblTitle.Text = Chunk.Name + " : " + Chunk.Preview;
+            lblTitle.Text = Chunk.REDName + " : " + Chunk.Preview;
             Size = TextRenderer.MeasureText(lblTitle.Text, lblTitle.Font) + Margin.Size;
-        }        
+        }
 
-        public override List<CPtr> GetConnections() {
-            var list = new List<CPtr>();
+        public override List<IPtrAccessor> GetConnections()
+        {
+            var list = new List<IPtrAccessor>();
 
-              if (Chunk != null) {
-                var cachedConnections = Chunk.GetVariableByName("cachedConnections");
-                if (cachedConnections != null && cachedConnections is CArray) {
-                    var cachedConnectionsArray = ((CArray) cachedConnections);
-                    foreach (CVariable conn in cachedConnectionsArray) {
-                         if (conn is CVector) {
-                            CVector connection = (CVector) conn;
-                            CName socketId = (CName) connection.GetVariableByName("socketId");
-                            CArray blocks = (CArray) connection.GetVariableByName("blocks");
-                             
-                            if (blocks != null && blocks is CArray) {
-                                foreach (CVariable block in blocks) {
-                                    if (block is CVector) {
-                                     
-                                         foreach (CVariable blockVectorVariable in ((CVector)block).variables) {
-                                             if (blockVectorVariable is CPtr) {
-                                                 var nextLinkElementPtr = ((CPtr) blockVectorVariable);
-                                                 if (nextLinkElementPtr.Reference != null) {
-                                                     list.Add(nextLinkElementPtr);
-                                                 }
-                                             }
-                                         }
-                                        
-                                    }
+            if (Chunk.data is CQuestGraphBlock graphBlock)
+            {
+                CArray<SCachedConnections> cachedConnections = graphBlock.CachedConnections;
+                if (cachedConnections != null)
+                {
+                    foreach (SCachedConnections conn in cachedConnections.Elements)
+                    {
+                        CName socketId = conn.SocketId;
+                        CArray<SBlockDesc> blocks = conn.Blocks;
+
+                        if (blocks != null)
+                        {
+                            foreach (SBlockDesc block in blocks.Elements)
+                            {
+                                CPtr<CQuestGraphBlock> graphpointer = block.Ock;
+                                if (graphpointer.Reference != null)
+                                {
+                                    list.Add(graphpointer);
                                 }
                             }
                         }
                     }
                 }
-                  
-              var nextLinkElementObj = Chunk.GetVariableByName("nextLinkElement");
-              if (nextLinkElementObj != null && nextLinkElementObj is CPtr)
-              {
-                  var nextLinkElementPtr = ((CPtr) nextLinkElementObj);
-                  if (nextLinkElementPtr.Reference != null)
-                  {
-                      list.Add(nextLinkElementPtr);
-                  }
-              }
             }
+            else if (Chunk.data is CStorySceneLinkElement linkElement)
+            {
+                CPtr<CStorySceneLinkElement> nextLinkElementPtr = linkElement.NextLinkElement;
+                if (nextLinkElementPtr != null)
+                {
+                    if (nextLinkElementPtr.Reference != null)
+                    {
+                        list.Add(nextLinkElementPtr);
+                    }
+                }
+            }
+            else
+            {
+
+            }
+                       
 
             return list;
         }

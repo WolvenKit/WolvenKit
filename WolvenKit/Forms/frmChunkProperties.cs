@@ -17,13 +17,19 @@ namespace WolvenKit
     public partial class frmChunkProperties : DockContent, IThemedContent
     {
         private CR2WExportWrapper chunk;
+        private bool showOnlySerialized;
 
         public frmChunkProperties()
         {
             InitializeComponent();
             ApplyCustomTheme();
+
             treeView.CanExpandGetter = x => ((VariableListNode) x).ChildCount > 0;
             treeView.ChildrenGetter = x => ((VariableListNode) x).Children;
+
+            toolStripButtonShowSerialized.Text = showOnlySerialized
+                ? "Show all variables"
+                : "Show edited variables";
         }
 
         public CR2WExportWrapper Chunk
@@ -32,35 +38,42 @@ namespace WolvenKit
             set
             {
                 chunk = value;
-                CreatePropertyLayout(chunk);
+                UpdateTreeListView();
             }
         }
 
-        public IEditableVariable EditObject { get; set; }
         public object Source { get; set; }
 
-        public void CreatePropertyLayout(IEditableVariable v)
+        public void UpdateTreeListView()
         {
-            if (EditObject != v)
+            if (chunk == null)
             {
-                EditObject = v;
-
-
-                if (v == null)
-                {
-                    treeView.Roots = null;
-                    return;
-                }
-
-                var root = AddListViewItems(v);
-
-                treeView.Roots = root.Children;
-                treeView.RefreshObjects(root.Children);
-
-                for (var depth = 0; ExpandOneLevel(depth, root.Children); depth++)
-                {
-                }
+                treeView.Roots = null;
+                return;
             }
+
+            var root = AddListViewItems(chunk, showOnlySerialized);
+
+            treeView.Roots = root.Children;
+            //treeView.RefreshObjects(root.Children);
+
+
+
+            // filter
+            if (!string.IsNullOrEmpty(toolStripSearchBox.Text.ToUpper()))
+            {
+                this.treeView.ModelFilter = TextMatchFilter.Contains(treeView, toolStripSearchBox.Text.ToUpper());
+            }
+            else
+            {
+                this.treeView.ModelFilter = null;
+                
+            }
+
+            for (var depth = 0; ExpandOneLevel(depth, root.Children); depth++)
+            {
+            }
+
         }
 
         private bool ExpandOneLevel(int depth, List<VariableListNode> children, int currentLevel = 0)
@@ -91,8 +104,11 @@ namespace WolvenKit
             return expandedSomething;
         }
 
-        internal static VariableListNode AddListViewItems(IEditableVariable v, VariableListNode parent = null,
-            int arrayindex = 0)
+        internal static VariableListNode AddListViewItems(IEditableVariable v
+            , bool showOnlySerialized = false
+            , VariableListNode parent = null
+            , int arrayindex = 0
+            )
         {
             var node = new VariableListNode()
             {
@@ -100,41 +116,21 @@ namespace WolvenKit
                 Children = new List<VariableListNode>(),
                 Parent = parent
             };
-            var vars = v.GetEditableVariables();
+            List<IEditableVariable> vars = showOnlySerialized 
+                ? v.GetEditableVariables().Where(_ => _.IsSerialized).ToList() 
+                : v.GetEditableVariables();
+
             if (vars != null)
             {
                 for (var i = 0; i < vars.Count; i++)
                 {
-                    node.Children.Add(AddListViewItems(vars[i], node, i));
+                    node.Children.Add(AddListViewItems(vars[i], showOnlySerialized, node, i));
                 }
             }
 
             return node;
         }
 
-        private void treeView_CellEditStarting(object sender, CellEditEventArgs e)
-        {
-            var variable = (e.RowObject as VariableListNode).Variable;
-            if (e.Column.AspectName == "Value")
-            {
-                e.Control = ((VariableListNode) e.RowObject).Variable.GetEditor();
-                if (e.Control != null)
-                {
-                    e.Control.Location = new Point(e.CellBounds.Location.X, e.CellBounds.Location.Y - 1);
-                    e.Control.Width = e.CellBounds.Width;
-                    //e.Control.ForeColor = Control.Tex
-                }                
-                e.Cancel = e.Control == null;
-            }
-            else if (e.Column.AspectName == "Name")
-            {
-                //Normal textbox is good for this.
-            }
-            else
-            {
-                e.Cancel = true;
-            }
-        }
 
         private void frmChunkProperties_Resize(object sender, EventArgs e)
         {
@@ -154,12 +150,18 @@ namespace WolvenKit
             }
 
             addVariableToolStripMenuItem.Enabled = sNodes.All(x => x.Variable.CanAddVariable(null));
-            removeVariableToolStripMenuItem.Enabled = sNodes.All(x => x.Parent != null && x.Parent.Variable.CanRemoveVariable(x.Variable));
-            pasteToolStripMenuItem.Enabled = CopyController.VariableTargets != null && sNodes.All(x => x.Variable != null && CopyController.VariableTargets.Any(z => x.Variable.CanAddVariable(z)));
-            ptrPropertiesToolStripMenuItem.Visible = sNodes.All(x => x.Variable is CPtr) && sNodes.Count == 1;
+
+            // deprecated
+            //removeVariableToolStripMenuItem.Enabled = sNodes.All(x => x.Parent != null && x.Parent.Variable.CanRemoveVariable(x.Variable));
+
+
+            pasteToolStripMenuItem.Enabled = CopyController.VariableTargets != null 
+                && sNodes.All(x => x.Variable != null 
+                && CopyController.VariableTargets.Any(z => x.Variable.CanAddVariable(z)));
+            ptrPropertiesToolStripMenuItem.Visible = sNodes.All(x => x.Variable is IPtrAccessor) && sNodes.Count == 1;
         }
 
-        public void copyVariable()
+        public void CopyVariable()
         {
             var tocopynodes = (from VariableListNode item in treeView.SelectedObjects where item?.Variable != null select item.Variable).ToList();
             if (tocopynodes.Count > 0)
@@ -168,7 +170,7 @@ namespace WolvenKit
             }
         }
 
-        public void pasteVariable()
+        public void PasteVariable()
         {
             var node = (VariableListNode) treeView.SelectedObject;
             if (CopyController.VariableTargets == null || node?.Variable == null || !node.Variable.CanAddVariable(null))
@@ -176,24 +178,57 @@ namespace WolvenKit
                 return;
             }
 
-            if (CopyController.VariableTargets.All(x => x is CVariable))
+            // replace node with new node
+            if (CopyController.VariableTargets.Count == 1
+                && CopyController.VariableTargets.First() is CVariable cvar
+                && cvar.REDType == node.Variable.REDType
+                && node.Variable is CVariable targetvar
+                )
             {
-                foreach (var newvar in from v in CopyController.VariableTargets.Select(x => (CVariable) x) let context = new CR2WCopyAction
-                {
-                    SourceFile = v.cr2w,
-                    DestinationFile = node.Variable.CR2WOwner,
-                    MaxIterationDepth = 0
-                } select v.Copy(context))
-                {
-                    node.Variable.AddVariable(newvar);
+                var context = new CR2WCopyAction();
+                targetvar.SetValue(cvar.Copy(context));
 
-                    var subnode = AddListViewItems(newvar, node);
-                    node.Children.Add(subnode);
+                UpdateTreeListView();
 
-                    treeView.RefreshObject(node);
-                    treeView.RefreshObject(subnode);
-                }
+                //var newnode = AddListViewItems(targetvar, node.Parent);
+                //node = newnode;
+
+                //treeView.RefreshObject(node);
+                //foreach (var item in node.Children)
+                //{
+                //    treeView.RefreshObject(item);
+                //}
+                //var root = AddListViewItems(EditObject);
+
+                //treeView.Roots = root.Children;
+                //treeView.RefreshObjects(root.Children);
+                //treeView.RebuildAll(true);
+
+                return;
             }
+
+            // deprecated
+            // you can't paste new variables anymore because all are exposed and immutable
+
+            // add subitems
+            //if (CopyController.VariableTargets.All(x => x is CVariable))
+            //{
+            //    foreach (var newvar in from v in CopyController.VariableTargets.Select(x => (CVariable) x) let context = new CR2WCopyAction
+            //    {
+            //        SourceFile = v.cr2w,
+            //        DestinationFile = node.Variable.cr2w,
+            //        MaxIterationDepth = 0
+            //    } select v.Copy(context))
+            //    {
+            //        node.Variable.AddVariable(newvar);
+
+            //        var subnode = AddListViewItems(newvar, node);
+            //        node.Children.Add(subnode);
+
+            //        treeView.RefreshObject(node);
+            //        treeView.RefreshObject(subnode);
+            //    }
+            //}
         }
 
         private void addVariableToolStripMenuItem_Click(object sender, EventArgs e)
@@ -206,42 +241,42 @@ namespace WolvenKit
 
             CVariable newvar = null;
 
-            if (node.Variable is CArray)
+            if (node.Variable is IArrayAccessor array)
             {
-                var nodearray = (CArray) node.Variable;
-                newvar = CR2WTypeManager.Get().GetByName(nodearray.elementtype, "", Chunk.cr2w, false);
+                newvar = CR2WTypeManager.Create(array.Elementtype, "", Chunk.cr2w, node.Variable as CVariable, false);
                 if (newvar == null)
                     return;
             }
-            else
-            {
-                var frm = new frmAddVariable();
-                if (frm.ShowDialog() != DialogResult.OK)
-                {
-                    return;
-                }
 
-                newvar = CR2WTypeManager.Get().GetByName(frm.VariableType, frm.VariableName, Chunk.cr2w, false);
-                if (newvar == null)
-                    return;
+            // deprecated 
+            // adding new vars is no longer possible for non-array types
 
-                newvar.Name = frm.VariableName;
-                newvar.Type = frm.VariableType;
-            }
+            //else
+            //{
+            //    var frm = new frmAddVariable();
+            //    if (frm.ShowDialog() != DialogResult.OK)
+            //    {
+            //        return;
+            //    }
 
-            if (newvar is CHandle)
-            {
-                var result = MessageBox.Show("Add as chunk handle? (Yes for chunk handle, No for normal handle)",
-                    "Adding handle.", MessageBoxButtons.YesNoCancel);
-                if (result == DialogResult.Cancel)
-                    return;
+            //    newvar = CR2WTypeManager.Create(frm.VariableType, frm.VariableName, Chunk.cr2w, node.Variable as CVariable, false);
+            //    if (newvar == null)
+            //        return;
+            //}
 
-                ((CHandle) newvar).ChunkHandle = result == DialogResult.Yes;
-            }
+            //if (newvar is IHandleAccessor h)
+            //{
+            //    var result = MessageBox.Show("Add as chunk handle? (Yes for chunk handle, No for normal handle)",
+            //        "Adding handle.", MessageBoxButtons.YesNoCancel);
+            //    if (result == DialogResult.Cancel)
+            //        return;
+
+            //    h.ChunkHandle = result == DialogResult.Yes;
+            //}
 
             node.Variable.AddVariable(newvar);
 
-            var subnode = AddListViewItems(newvar, node);
+            var subnode = AddListViewItems(newvar, showOnlySerialized, node);
             node.Children.Add(subnode);
 
             treeView.RefreshObject(node);
@@ -302,12 +337,12 @@ namespace WolvenKit
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            copyVariable();
+            CopyVariable();
         }
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            pasteVariable();
+            PasteVariable();
         }
 
         private void treeView_CellClick(object sender, CellClickEventArgs e)
@@ -315,23 +350,24 @@ namespace WolvenKit
             if (e.Column == null || e.Item == null)
                 return;
 
-            if (e.ClickCount == 2 && e.Column.AspectName == "Name")
+            //if (e.ClickCount == 2 && e.Column.AspectName == nameof(VariableListNode.Name))
+            //{
+            //    treeView.StartCellEdit(e.Item, 0);
+            //}
+            //else 
+            if (e.Column.AspectName == nameof(VariableListNode.Value))
             {
-                treeView.StartCellEdit(e.Item, 0);
-            }
-            else if (e.Column.AspectName == "Value")
-            {
-                treeView.StartCellEdit(e.Item, 1);
+                treeView.StartCellEdit(e.Item, olvColumn4.Index);
             }
         }
 
         private void ptrPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var node = (VariableListNode) treeView.SelectedObject;
-            if ((node?.Variable as CPtr)?.Reference == null)
+            if ((node?.Variable as IPtrAccessor)?.Reference == null)
                 return;
 
-            Chunk = ((CPtr) node.Variable).Reference;
+            Chunk = ((IPtrAccessor) node.Variable).Reference;
         }
 
         private void copyTextToolStripMenuItem_Click(object sender, EventArgs e)
@@ -355,23 +391,16 @@ namespace WolvenKit
             {
                 get
                 {
-                    if (Variable.Name != null)
-                        return Variable.Name;
-
-                    return Parent?.Children.IndexOf(this).ToString() ?? "";
-                }
-                set
-                {
-                    if (Variable.Name != null)
-                    {
-                        Variable.Name = value;
-                    }
+                    if (Variable.REDName != null)
+                        return Variable.REDName;
+                    else
+                        return Parent?.Children.IndexOf(this).ToString() ?? "";
                 }
             }
 
-            public string Value => Variable.ToString();
-
-            public string Type => Variable.Type;
+            public string Value => Variable.REDValue;
+            public string Type => Variable.REDType;
+            public bool IsSerialized => Variable.IsSerialized;
 
             public int ChildCount => Children.Count;
 
@@ -386,17 +415,48 @@ namespace WolvenKit
             MainController.Get().ProjectUnsaved = true;
         }
 
+        private void treeView_CellEditStarting(object sender, CellEditEventArgs e)
+        {
+            //var variable = (e.RowObject as VariableListNode).Variable;
+            if (e.Column.AspectName == "Value")
+            {
+                e.Control = ((VariableListNode)e.RowObject).Variable.GetEditor();
+                if (e.Control != null)
+                {
+                    e.Control.Location = new Point(e.CellBounds.Location.X, e.CellBounds.Location.Y - 1);
+                    e.Control.Width = e.CellBounds.Width;
+                    //e.Control.ForeColor = Control.Tex
+                }
+                e.Cancel = e.Control == null;
+            }
+            else if (e.Column.AspectName == "Name")
+            {
+                //Normal textbox is good for this.
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+        }
+
+
         private void treeView_CellEditFinished(object sender, CellEditEventArgs e)
         {
             if (chunk.ParentPtr.Reference != null)
                 chunk.SetParentChunkId((uint)chunk.ParentPtr.Reference.ChunkIndex + 1);
             OnItemsChanged(sender, e);
-            
+
+            // change the model's isserialized property to true when the user edits it,
+            // this is to make sure only user-edited properties will get serialized
+            var model = e.ListViewItem.RowObject as VariableListNode;
+            model.Variable.IsSerialized = true;
         }
-        
+
         public void ApplyCustomTheme()
         {
             var theme = UIController.Get().GetTheme();
+            UIController.Get().ToolStripExtender.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+            toolStripSearchBox.BackColor = theme.ColorPalette.ToolWindowCaptionButtonInactiveHovered.Background;
 
             this.treeView.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
             this.treeView.AlternateRowBackColor = theme.ColorPalette.OverflowButtonHovered.Background;
@@ -422,6 +482,43 @@ namespace WolvenKit
             };
             this.treeView.HeaderFormatStyle = hfs;
             treeView.UnfocusedSelectedBackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background;
+        }
+
+        private void treeView_FormatRow(object sender, FormatRowEventArgs e)
+        {
+            VariableListNode model = (VariableListNode)e.Model;
+            if (model != null && model.IsSerialized)
+            {
+                if (!showOnlySerialized)
+                    e.Item.ForeColor = Color.Green;
+            }
+            else
+            {
+
+            }
+        }
+
+        private void toolStripClearButton_Click(object sender, EventArgs e)
+        {
+            toolStripSearchBox.Clear();
+            UpdateTreeListView();
+        }
+
+        private void toolStripSearchBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            UpdateTreeListView();
+        }
+
+        private void toolStripButtonShowSerialized_Click(object sender, EventArgs e)
+        {
+            // toggle
+            showOnlySerialized = !showOnlySerialized;
+
+            toolStripButtonShowSerialized.Text = showOnlySerialized
+                ? "Show all variables"
+                : "Show edited variables";
+
+            UpdateTreeListView();
         }
     }
 }

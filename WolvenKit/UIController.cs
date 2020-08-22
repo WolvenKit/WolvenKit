@@ -130,7 +130,7 @@ namespace WolvenKit
                 bytes = ((IByteSource)editvar).Bytes;
             }
 
-            dlg.Filter = string.Join("|", ImportExportUtility.GetPossibleExtensions(bytes, editvar.Name));
+            dlg.Filter = string.Join("|", ImportExportUtility.GetPossibleExtensions(bytes, (CVariable)editvar.Parent));
             dlg.InitialDirectory = MainController.Get().Configuration.InitialExportDirectory;
 
             if (dlg.ShowDialog() == DialogResult.OK)
@@ -141,7 +141,7 @@ namespace WolvenKit
                 {
                     using (var writer = new BinaryWriter(fs))
                     {
-                        bytes = ImportExportUtility.GetExportBytes(bytes, Path.GetExtension(dlg.FileName));
+                        bytes = ImportExportUtility.GetExportBytes(bytes, Path.GetExtension(dlg.FileName), (CVariable)editvar.Parent);
                         writer.Write(bytes);
                     }
                 }
@@ -157,7 +157,7 @@ namespace WolvenKit
                 editor.Bytes = ((IByteSource)editvar).Bytes;
             }
 
-            editor.Text = "Hex Viewer [" + editvar.FullName + "]";
+            editor.Text = "Hex Viewer [" + editvar.GetFullName() + "]";
             editor.Show();
         }
 
@@ -172,7 +172,7 @@ namespace WolvenKit
 
             if (bytes != null)
             {
-                var doc = LoadDocument(editvar.cr2w.FileName + ":" + editvar.FullName, new MemoryStream(bytes), true);
+                var doc = LoadDocument(editvar.cr2w.FileName + ":" + editvar.GetFullName(), new MemoryStream(bytes), true);
                 if (doc != null)
                 {
                     var vm = doc.GetViewModel();

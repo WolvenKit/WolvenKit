@@ -10,6 +10,10 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Xml;
 using WolvenKit.Utils;
+using System.Linq;
+using System.IO.MemoryMappedFiles;
+using System.Threading.Tasks;
+using System.Diagnostics;
 
 [assembly: ContractNamespaceAttribute("",    ClrNamespace = "WolvenKit.CR2W")]
 
@@ -67,7 +71,7 @@ namespace WolvenKit.CR2W
             this.cr2w = file;
             _export = export;
 
-            Type = cr2w.names[export.className].Str;
+            REDType = cr2w.names[export.className].Str;
         }
         #endregion
 
@@ -79,19 +83,19 @@ namespace WolvenKit.CR2W
         }
 
         #region Fields
-        [NonSerialized]
-        public CR2WFile cr2w;
 
         [NonSerialized]
         public CBytes unknownBytes;
         #endregion
 
         #region Properties
+        public CR2WFile cr2w { get; set; }
+
         public CVariable data { get; set; }
 
         // editable variables
-        private CPtr _parentPtr;
-        public CPtr ParentPtr
+        private CPtr<CVariable> _parentPtr;
+        public CPtr<CVariable> ParentPtr
         {
             get
             {
@@ -113,7 +117,7 @@ namespace WolvenKit.CR2W
         public uint ParentChunkId => this.Export.parentID;
 
         private string _type;
-        public string Type
+        public string REDType
         {
             get { return _type; }
             set
@@ -126,30 +130,28 @@ namespace WolvenKit.CR2W
 
 
         [DataMember]
-        public string Name
+        public string REDName
         {
-            get { return Type + " #" + (ChunkIndex); }
+            get { return REDType + " #" + (ChunkIndex); }
             set { }
         }
 
-        /// <summary>
-        /// Deprecated
-        /// </summary>
-        public CR2WFile CR2WOwner => cr2w;
+
         public int ChunkIndex => cr2w.chunks.IndexOf(this);
         public string Preview
         {
             get
             {
-                if (data is CVector)
+                if (data is CVariable)
                 {
-                    var firstString = ((CVector)data).GetVariableByType("String");
+                    var vars = data.GetEditableVariables();
+                    var firstString = vars.FirstOrDefault(_ => _.REDType == "String");
                     if (firstString != null)
                     {
                         return ((CString)firstString).val;
                     }
 
-                    var firstName = ((CVector)data).GetVariableByType("CName");
+                    var firstName = vars.FirstOrDefault(_ => _.REDType == "CName");
                     if (firstName != null)
                     {
                         return ((CName)firstName).Value;
@@ -159,6 +161,12 @@ namespace WolvenKit.CR2W
                 return "";
             }
         }
+
+        
+
+        public string REDValue => this.ToString();
+
+        public bool IsSerialized { get => true; set => throw new NotImplementedException(); }
         #endregion
 
         #region Methods
@@ -171,23 +179,16 @@ namespace WolvenKit.CR2W
         }
         public void SetOffset(uint offset) => _export.dataOffset = offset;
 
-
-        public CVariable CreateDefaultVariable()
-        {
-            throw new NotImplementedException();
-        }
-
         public CR2WExportWrapper GetParent()
         {
-            try
+            if ((int)ParentChunkId > 0)
             {
                 return cr2w.chunks[(int)ParentChunkId - 1];
             }
-            catch (Exception)
+            else
             {
                 return null;
             }
-
         }
         
         public virtual Control GetEditor()
@@ -197,14 +198,12 @@ namespace WolvenKit.CR2W
 
         public virtual List<IEditableVariable> GetEditableVariables()
         {
-            data.Name = Name;
-
             var vars = new List<IEditableVariable>
             {
                 ParentPtr,
                 data
             };
-            if (unknownBytes != null)
+            if (unknownBytes != null && unknownBytes.Bytes != null && unknownBytes.Bytes.Length != 0)
             {
                 vars.Add(unknownBytes);
             }
@@ -225,8 +224,9 @@ namespace WolvenKit.CR2W
         {
         }
 
-        public virtual void RemoveVariable(IEditableVariable child)
+        public virtual bool RemoveVariable(IEditableVariable child)
         {
+            return false;
         }
 
         public void ReadData(BinaryReader file)
@@ -236,14 +236,10 @@ namespace WolvenKit.CR2W
             CreateDefaultData();
 
             data.Read(file, _export.dataSize);
+
+            // Unknown bytes
             var bytesLeft = _export.dataSize - (file.BaseStream.Position - _export.dataOffset);
-
-            unknownBytes = new CBytes(cr2w)
-            {
-                Name = "unknownBytes",
-                Type = "byte[]"
-            };
-
+            unknownBytes = new CBytes(cr2w, data, "unknownBytes");
             if (bytesLeft > 0)
             {
                 unknownBytes.Read(file, (uint) bytesLeft);
@@ -257,6 +253,88 @@ namespace WolvenKit.CR2W
                 unknownBytes.Bytes = new byte[0];
             }
         }
+
+        public /*async Task*/ void ReadData(MemoryMappedFile mmf)
+        {
+            //await Task.Run(() =>
+            //{
+                using (MemoryMappedViewStream vs = mmf.CreateViewStream(_export.dataOffset, _export.dataSize, MemoryMappedFileAccess.Read))
+                using (BinaryReader br = new BinaryReader(vs))
+                {
+                    CreateDefaultData();
+
+                    data.Read(br, _export.dataSize);
+
+                    // Unknown bytes
+                    var bytesLeft = _export.dataSize - (br.BaseStream.Position - _export.dataOffset);
+                    unknownBytes = new CBytes(cr2w, data, "unknownBytes");
+                    if (bytesLeft > 0)
+                    {
+                        unknownBytes.Read(br, (uint)bytesLeft);
+                    }
+                    else if (bytesLeft < 0)
+                    {
+                        //throw new InvalidParsingException("File read too far.");
+                    }
+                    else
+                    {
+                        unknownBytes.Bytes = new byte[0];
+                    }
+
+                    if (cr2w.Logger!= null)
+                    {
+                        float percentprogress = (float)((float)1 / (float)cr2w.chunks.Count * 100.0);
+                        cr2w.Logger.LogProgressInc(percentprogress, $"Reading chunk {REDName}...");
+                    }
+                    
+                }
+            //}
+            //);
+        }
+
+
+        public /*async Task*/ void ReadData(MemoryMappedViewStream vs)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            //await Task.Run(() =>
+            //{
+            using (BinaryReader br = new BinaryReader(vs))
+            {
+                CreateDefaultData();
+
+                data.Read(br, _export.dataSize);
+
+                // Unknown bytes
+                var bytesLeft = _export.dataSize - (br.BaseStream.Position - _export.dataOffset);
+                unknownBytes = new CBytes(cr2w, data, "unknownBytes");
+                if (bytesLeft > 0)
+                {
+                    unknownBytes.Read(br, (uint)bytesLeft);
+                }
+                else if (bytesLeft < 0)
+                {
+                    //throw new InvalidParsingException("File read too far.");
+                }
+                else
+                {
+                    unknownBytes.Bytes = new byte[0];
+                }
+
+                stopwatch.Stop();
+                if (cr2w.Logger != null)
+                {
+                    float percentprogress = (float)((float)1 / (float)cr2w.chunks.Count * 100.0);
+                    cr2w.Logger.LogProgressInc(percentprogress, $"Reading chunk {REDName}...");
+                    //cr2w.Logger.LogString($"{stopwatch.Elapsed} CHUNK {REDName}\n");
+                }
+
+            }
+            //}
+            //);
+        }
+
 
         public void WriteData(BinaryWriter file)
         {
@@ -285,37 +363,34 @@ namespace WolvenKit.CR2W
 
         public void CreateDefaultData()
         {
-            data = CR2WTypeManager.Get().GetByName(Type, "", cr2w, false);
+            data = CR2WTypeManager.Create(REDType, REDType, cr2w, GetParent()?.data);
             if (data == null)
             {
-                // default chunks to vector type
-                data = new CVector(cr2w);
+                throw new NotImplementedException();
             }
-            //data.Name = Name;
-            data.Type = Type;
-            if (ParentChunkId != 0)
-                data.ParentVariable = GetParent().data;
 
-            ParentPtr = new CPtr(cr2w)
+            ParentPtr = new CPtr<CVariable>(cr2w, data, "Parent")
             {
-                Name = "Parent",
                 Reference = GetParent()
             };
+
+            data.IsSerialized = true;
+            data.Flags = Export.objectFlags;
         }
 
-        public CR2WExportWrapper Copy(CR2WCopyAction context)
+        public CR2WExportWrapper CopyChunk(CR2WCopyAction context)
         {
             // this one was already copied
             if (context.chunkTranslation.ContainsKey(ChunkIndex))
                 return null;
 
 
-            var copy = context.DestinationFile.CreateChunk(Type);
+            var copy = context.DestinationFile.CreateChunk(REDType);
 
             context.chunks.Add(copy);
             context.chunkTranslation.Add(ChunkIndex, copy.ChunkIndex);
 
-            copy.Type = Type;
+            copy.REDType = REDType;
             copy._export.template = _export.template;
             copy._export.crc32 = _export.crc32;
 
@@ -325,7 +400,7 @@ namespace WolvenKit.CR2W
 
             if (data != null)
             {
-                copy.data = (CVector) data.Copy(context);
+                copy.data = data.Copy(context);
             }
             if (unknownBytes != null)
             {
@@ -346,7 +421,30 @@ namespace WolvenKit.CR2W
 
         public override string ToString()
         {
-            return Name;
+            return REDName;
+        }
+
+        public void SetREDName(string val)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Read(BinaryReader file, uint size)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Write(BinaryWriter file)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Guid InternalGuid { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        IEditableVariable IEditableVariable.Parent { get => throw new NotImplementedException(); }
+
+        public CVariable Copy(CR2WCopyAction context)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

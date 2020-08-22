@@ -76,6 +76,19 @@ namespace WolvenKit.Common
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
+        public string TextureDirectory
+        {
+            get
+            {
+                if (!Directory.Exists(Path.Combine(ModDirectory, "TextureCache")))
+                    Directory.CreateDirectory(Path.Combine(ModDirectory, "TextureCache"));
+                return Path.Combine(ModDirectory, "TextureCache");
+            }
+        }
+
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
         public string RadishDirectory
         {
             get

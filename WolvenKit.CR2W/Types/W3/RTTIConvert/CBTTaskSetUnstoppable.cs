@@ -1,0 +1,36 @@
+using System.IO;
+using System.Runtime.Serialization;
+using WolvenKit.CR2W.Reflection;
+using static WolvenKit.CR2W.Types.Enums;
+
+
+namespace WolvenKit.CR2W.Types
+{
+	[DataContract(Namespace = "")]
+	[REDMeta]
+	public class CBTTaskSetUnstoppable : IBehTreeTask
+	{
+		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+
+		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+
+		[RED("onSuccess")] 		public CBool OnSuccess { get; set;}
+
+		[RED("overrideForThisTask")] 		public CBool OverrideForThisTask { get; set;}
+
+		[RED("makeUnpushable")] 		public CBool MakeUnpushable { get; set;}
+
+		[RED("enable")] 		public CBool Enable { get; set;}
+
+		[RED("m_savedPriority")] 		public CEnum<EInteractionPriority> M_savedPriority { get; set;}
+
+		public CBTTaskSetUnstoppable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+
+		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskSetUnstoppable(cr2w, parent, name);
+
+		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
+
+		public override void Write(BinaryWriter file) => base.Write(file);
+
+	}
+}

@@ -40,22 +40,19 @@ namespace WolvenKit.Render
                 using (BinaryReader br = new BinaryReader(ms))
                 {
                     W2RigFile = new CR2WFile(br);
-                    var chunk = W2RigFile.chunks[0];
+                    CSkeleton skel = W2RigFile.chunks[0].data as CSkeleton;
 
-                    CArray bonesorig = (chunk.GetVariableByName("bones") as CArray);
+                    CArray<SSkeletonBone> bonesorig = skel.Bones;
                     for (int i = 0; i < skeleton.names.Count; i++)
                     {
-                        CVariable newBone = new CVector(W2RigFile);
-                        CStringAnsi newName = new CStringAnsi(W2RigFile).SetValue(skeleton.names[i]+"\0") as CStringAnsi;
-                        newName.Name = "name";
-                        newName.Type = "StringAnsi";
-                        newBone.AddVariable(newName);
-                        CName newCName = new CName(W2RigFile).SetValue(skeleton.names[i]) as CName;
-                        newCName.Name = "nameAsCName";
-                        newCName.Type = "CName";
-                        newBone.AddVariable(newCName);
-                        (chunk.GetVariableByName("bones") as CArray).AddVariable(newBone);
-                        (chunk.GetVariableByName("parentIndices") as CArray).AddVariable(new CInt16(W2RigFile).SetValue(skeleton.parentIdx[i]));
+                        SSkeletonBone newBone = new SSkeletonBone(W2RigFile, bonesorig, "");
+                        newBone.Name = new StringAnsi(w2rigFile, newBone, "name").SetValue(skeleton.names[i] + "\0") as StringAnsi;
+
+                        newBone.NameAsCName = new CName(W2RigFile, newBone, "nameAsCName").SetValue(skeleton.names[i]) as CName;
+
+                        bonesorig.AddVariable(newBone);
+
+                        skel.ParentIndices.AddVariable(new CInt16(W2RigFile, skel.ParentIndices, "").SetValue(skeleton.parentIdx[i]));
                     }
 
                     using (var stream = new MemoryStream())
@@ -78,7 +75,7 @@ namespace WolvenKit.Render
                                 bw.Write(1f); // the w component
                             }
                         }
-                        chunk.unknownBytes.SetValue(stream.ToArray());
+                        W2RigFile.chunks[0].unknownBytes.SetValue(stream.ToArray());
                         //saveToFile();
                     }
                 }

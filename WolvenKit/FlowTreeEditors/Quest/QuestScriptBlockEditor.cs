@@ -30,7 +30,7 @@ namespace WolvenKit {
         public override void UpdateView() {
             base.UpdateView();
 
-            lblTitle.Text = Chunk.Name + " : " + Chunk.Preview;
+            lblTitle.Text = Chunk.REDName + " : " + Chunk.Preview;
             script.Text = getScript();
             script.Location = Location + new Size(0, lblTitle.Height);
             Size measureText = TextRenderer.MeasureText(lblTitle.Text, lblTitle.Font);
@@ -40,24 +40,33 @@ namespace WolvenKit {
 
         private string getScript() {
             string ret = "";
-            CName functionName = (CName) Chunk.GetVariableByName("functionName");
 
-            ret += functionName + "(";
-            CArray parameters = (CArray) Chunk.GetVariableByName("parameters");
+            if (Chunk.data is CQuestScriptBlock block)
+            {
+                CName functionName = block.FunctionName;
 
-            CVector last = (CVector) parameters.Last();
+                ret += functionName.Value + "(";
+                CArray<QuestScriptParam> parameters = block.Parameters;
 
-            foreach (CVector parameter in parameters) {
-                CName name = (CName) parameter.GetVariableByType("CName");
-                CVariant variant = (CVariant) parameter.GetVariableByType("CVariant");
-                ret += name + ":" + variant;
-                if (parameter != last) {
-                    ret += ", ";
+                QuestScriptParam last = parameters.LastOrDefault();
+
+                foreach (var parameter in parameters)
+                {
+                    CName name = parameter.Name;
+                    CVariant variant = parameter.Value;
+                    ret += name + ":" + variant;
+                    if (parameter != last)
+                    {
+                        ret += ", ";
+                    }
+
                 }
+
+                ret += ")";
 
             }
 
-            ret += ")";
+            
 
             return ret;
         }

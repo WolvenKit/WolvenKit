@@ -29,10 +29,10 @@ namespace WolvenKit.Render
             if (animFile != null)
             foreach (var chunk in animFile.chunks)
             {
-                if (chunk.Type == "CSkeletalAnimation")
+                if (chunk.REDType == "CSkeletalAnimation" && chunk.data is CSkeletalAnimation anim)
                 {
-                    var name = chunk.GetVariableByName("name");
-                    var chunkIdx = (chunk.GetVariableByName("animBuffer") as CPtr).Reference.ChunkIndex;
+                    var name = anim.Name;
+                    var chunkIdx = anim.AnimBuffer.Reference.ChunkIndex;
                     AnimationNames.Add(new KeyValuePair<string, int>((name as CName).Value, chunkIdx));
                 }
             }
@@ -55,40 +55,41 @@ namespace WolvenKit.Render
                 scalesKeyframes.Clear();
                 foreach (var chunk in animFile.chunks)
                 {
-                    if (chunk.Type == "CAnimationBufferBitwiseCompressed" && chunk.ChunkIndex == AnimationNames[selectedAnimIdx].Value)
+                    if (chunk.REDType == "CAnimationBufferBitwiseCompressed" && chunk.ChunkIndex == AnimationNames[selectedAnimIdx].Value
+                        && chunk.data is CAnimationBufferBitwiseCompressed buffer)
                     {
-                        uint numFrames = (chunk.GetVariableByName("numFrames") as CUInt32).val;
-                        float animDuration = (chunk.GetVariableByName("duration") as CFloat)?.val ?? 1.0f;
+                        uint numFrames = buffer.NumFrames.val;
+                        float animDuration = buffer.Duration?.val ?? 1.0f;
                         animationSpeed = numFrames / animDuration;
                         uint keyFrame = 0;
                         byte[] data;
-                        var deferredData = chunk.GetVariableByName("deferredData") as CInt16;
-                        var streamingOption = (chunk.GetVariableByName("streamingOption") as CVariable);
-                        if (deferredData != null && deferredData.val != 0)
+                        var deferredData = buffer.DeferredData;
+                        var streamingOption = buffer.StreamingOption;
+                        if (deferredData != null && deferredData.Bufferdata.val != 0)
                             if (streamingOption != null && streamingOption.ToString() == "ABSO_PartiallyStreamable")
-                                data = ConvertAnimation.Combine((chunk.GetVariableByName("data") as CByteArray).Bytes,
-                                File.ReadAllBytes(animFile.FileName + "." + deferredData.val + ".buffer"));
+                                data = ConvertAnimation.Combine(buffer.Data.Bytes,
+                                File.ReadAllBytes(animFile.FileName + "." + deferredData.Bufferdata.val + ".buffer"));
                             else
-                                data = File.ReadAllBytes(animFile.FileName + "." + deferredData.val + ".buffer");
+                                data = File.ReadAllBytes(animFile.FileName + "." + deferredData.Bufferdata.val + ".buffer");
                         else
-                            data = (chunk.GetVariableByName("data") as CByteArray).Bytes;
+                            data = buffer.Data.Bytes;
                         using (MemoryStream ms = new MemoryStream(data))
                         using (BinaryReader br = new BinaryReader(ms))
                         {
-                            foreach (CVector bone in (chunk.GetVariableByName("bones") as CArray).array)
+                            foreach (var bone in buffer.Bones)
                             {
                                 List<uint> currkeyframe = new List<uint>();
                                 List<Quaternion> currorient = new List<Quaternion>();
 
-                                br.BaseStream.Position = ((bone.GetVariableByName("orientation") as CVector).GetVariableByName("dataAddr") as CUInt32).val;
-                                int orientNumFrames = ((bone.GetVariableByName("orientation") as CVector).GetVariableByName("numFrames") as CUInt16).val;
+                                br.BaseStream.Position = bone.Orientation.DataAddr.val;
+                                int orientNumFrames = bone.Orientation.NumFrames.val;
                                 for (uint idx = 0; idx < orientNumFrames; idx++)
                                 {
                                     keyFrame = idx;
                                     //keyFrame += numFrames;
                                     currkeyframe.Add(keyFrame);
                                     //bone.GetVariableByName("position");
-                                    string cm = chunk.GetVariableByName("orientationCompressionMethod")?.ToString() ?? "";
+                                    string cm = buffer.OrientationCompressionMethod.ToString() ?? "";
                                     if (cm.Contains("ABOCM_PackIn48bitsW"))
                                     {
                                         byte[] odata = br.ReadBytes(6);
@@ -140,23 +141,23 @@ namespace WolvenKit.Render
                                 List<Vector3Df> currposition = new List<Vector3Df>();
                                 currkeyframe = new List<uint>();
                                 int compression = 0;
-                                var compr = (bone.GetVariableByName("position") as CVector).GetVariableByName("compression") as CInt8;
+                                var compr = bone.Position.Compression;
                                 if (compr != null)
                                     compression = compr.val;
-                                var addr = (bone.GetVariableByName("position") as CVector).GetVariableByName("dataAddr") as CUInt32;
+                                var addr = bone.Position.DataAddr;
                                 if (addr != null)
                                     br.BaseStream.Position = addr.val;
                                 else
                                     br.BaseStream.Position = 0;
-                                var posNumFrames = ((bone.GetVariableByName("position") as CVector).GetVariableByName("numFrames") as CUInt16).val;
+                                var posNumFrames = bone.Position.NumFrames.val;
                                 for (uint idx = 0; idx < posNumFrames; idx++)
                                 {
                                     keyFrame = idx;
                                     //keyFrame += numFrames;
                                     currkeyframe.Add(keyFrame);
-                                    var vec = new CVector3D();
+                                    var vec = new SVector3D(null, null, "");
                                     vec.Read(br, compression);
-                                    Vector3Df pos = new Vector3Df(vec.x.val, vec.y.val, vec.z.val);
+                                    Vector3Df pos = new Vector3Df(vec.X.val, vec.Y.val, vec.Z.val);
                                     currposition.Add(pos);
                                 }
                                 positionsKeyframes.Add(currkeyframe);
@@ -165,23 +166,23 @@ namespace WolvenKit.Render
                                 List<Vector3Df> currscale = new List<Vector3Df>();
                                 currkeyframe = new List<uint>();
                                 compression = 0;
-                                compr = (bone.GetVariableByName("scale") as CVector).GetVariableByName("compression") as CInt8;
+                                compr = bone.Scale.Compression;
                                 if (compr != null)
                                     compression = compr.val;
-                                addr = (bone.GetVariableByName("scale") as CVector).GetVariableByName("dataAddr") as CUInt32;
+                                addr = bone.Scale.DataAddr;
                                 if (addr != null)
                                     br.BaseStream.Position = addr.val;
                                 else
                                     br.BaseStream.Position = 0;
-                                var scaleNumFrames = ((bone.GetVariableByName("scale") as CVector).GetVariableByName("numFrames") as CUInt16).val;
-                                for (uint idx = 0; idx < scaleNumFrames; idx++)
+                                var scaleNumFrames = bone.Scale.NumFrames;
+                                for (uint idx = 0; idx < scaleNumFrames.val; idx++)
                                 {
                                     keyFrame = idx;
                                     //keyFrame += numFrames;
                                     currkeyframe.Add(keyFrame);
-                                    var vec = new CVector3D();
+                                    var vec = new SVector3D(null, null, "");
                                     vec.Read(br, compression);
-                                    Vector3Df scale = new Vector3Df(vec.x.val, vec.y.val, vec.z.val);
+                                    Vector3Df scale = new Vector3Df(vec.X.val, vec.Y.val, vec.Z.val);
                                     currscale.Add(scale);
                                 }
                                 scalesKeyframes.Add(currkeyframe);

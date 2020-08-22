@@ -1,19 +1,15 @@
-﻿using CsvHelper;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using WolvenKit.App.Commands;
-using WolvenKit.App.Model;
 using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
@@ -35,7 +31,8 @@ namespace WolvenKit.App.ViewModels
             DeleteFilesCommand = new RelayCommand(DeleteFiles, CanDeleteFiles);
             CopyFileCommand = new RelayCommand(CopyFile, CanCopyFile);
             PasteFileCommand = new RelayCommand(PasteFile, CanPasteFile);
-            DumpXMLCommand = new RelayCommand(DumpXML, CanDumpXML);
+            DumpWccliteXMLCommand = new RelayCommand(DumpWccliteXML, CanDumpWccliteXML);
+            DumpWkitXMLCommand = new RelayCommand(DumpWkitXML, CanDumpWkitXML);
             ExportMeshCommand = new RelayCommand(ExportMesh, CanExportMesh);
             AddAllImportsCommand = new RelayCommand(AddAllImports, CanAddAllImports);
 
@@ -105,7 +102,8 @@ namespace WolvenKit.App.ViewModels
         public ICommand ExportMeshCommand { get; }
         public ICommand CopyFileCommand { get; }
         public ICommand PasteFileCommand { get; }
-        public ICommand DumpXMLCommand { get; }
+        public ICommand DumpWccliteXMLCommand { get; }
+        public ICommand DumpWkitXMLCommand { get; }
         public ICommand AddAllImportsCommand { get; }
         
         #endregion
@@ -176,10 +174,16 @@ namespace WolvenKit.App.ViewModels
             }
         }
 
-        protected bool CanDumpXML() => SelectedItems != null;
-        protected void DumpXML()
+        protected bool CanDumpWccliteXML() => SelectedItems != null;
+        protected void DumpWccliteXML()
         {
-            RequestFileDumpfile(this, new RequestFileArgs { File = SelectedItems.First().FullName });
+            RequestWccliteFileDumpfile(this, new RequestFileArgs { File = SelectedItems.First().FullName });
+        }
+
+        protected bool CanDumpWkitXML() => SelectedItems != null;
+        protected void DumpWkitXML()
+        {
+            RequestWkitFileDumpfile(this, new RequestFileArgs { File = SelectedItems.First().FullName});
         }
 
         protected bool CanAddAllImports() => SelectedItems != null;
@@ -351,23 +355,39 @@ namespace WolvenKit.App.ViewModels
             ResumeMonitoring();
             MainVM.SaveMod();
         }
-        private async void RequestFileDumpfile(object sender, RequestFileArgs e)
+        private async void RequestWccliteFileDumpfile(object sender, RequestFileArgs e)
         {
             var filename = e.File;
-            var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
-            if (!File.Exists(fullpath) && !Directory.Exists(fullpath))
+            if (!File.Exists(filename) && !Directory.Exists(filename))
                 return;
-            string dir;
-            if (File.Exists(fullpath))
-                dir = Path.GetDirectoryName(fullpath);
-            else
-                dir = fullpath;
+            // We dump an individual file with wcclite dumpfile
+            if (File.Exists(filename))
+            {
+                // '\\?\' is a neutral win32 path prefix. It hacks wcc_lite into dumping individual files.
+                // This string will get input again, further down the line, in wcc_command.GetVariables
+                // Windows paths and string management... This one is more than stupid, it is an horror. \\FIXME if you can.
+                await MainVM.DumpFile("", @"\\?\", filename);
+            }
+            //Wcclite recursively dumps CR2Ws in a directory.
+            else if (Directory.Exists(filename))
+            {
+                string dir = filename;
+                await MainVM.DumpFile(dir, dir);
+            }
+        }
 
-
-            await MainVM.DumpFile(dir, dir);
-
+        private async void RequestWkitFileDumpfile(object sender, RequestFileArgs e)
+        {
+/*            var wkitcr2wfile = MainVM.OpenDocuments.Where(_ => _.File is CR2WFile).Where(t => t.FileName == e.File);
+            var ser = new DataContractSerializer(typeof(CR2WFile));
+            FileStream writer = new FileStream(e.File + ".xml", FileMode.Create);
+            ser.WriteObject(writer, wkitcr2wfile);
+            writer.Close();*/
+            var wkitcr2wdvm = MainVM.OpenDocuments.Where(_ => _.File is CR2WFile).Where(t => t.FileName == e.File);
+            FileStream writer = new FileStream(e.File + ".xml", FileMode.Create);
+            wkitcr2wdvm.First().File.SerializeToXml(writer);
+            writer.Close();
         }
         #endregion
-
     }
 }

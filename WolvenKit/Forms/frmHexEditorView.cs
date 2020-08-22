@@ -191,24 +191,24 @@ namespace WolvenKit
         {
             reader.BaseStream.Seek(bytestart, SeekOrigin.Begin);
 
+            //try
+            //{
+            //    var obj = new CVariable(File, null, "obj");
+            //    obj.Read(reader, (uint) (bytes.Length - bytestart));
+            //    var v = CreatePropertyLayout(obj);
+            //    v.Endpos = (int) reader.BaseStream.Position;
+            //    v.HexValue = bytes[bytestart].ToString("X2");
+            //    v.Method = "CVector";
+            //}
+            //catch
+            //{
+            //}
+
+            //reader.BaseStream.Seek(bytestart, SeekOrigin.Begin);
+
             try
             {
-                var obj = new CVector(File);
-                obj.Read(reader, (uint) (bytes.Length - bytestart));
-                var v = CreatePropertyLayout(obj);
-                v.Endpos = (int) reader.BaseStream.Position;
-                v.HexValue = bytes[bytestart].ToString("X2");
-                v.Method = "CVector";
-            }
-            catch
-            {
-            }
-
-            reader.BaseStream.Seek(bytestart, SeekOrigin.Begin);
-
-            try
-            {
-                var obj = new CUInt64(File);
+                var obj = new CUInt64(File, null, "obj");
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
                 v.Endpos = (int) reader.BaseStream.Position;
@@ -223,7 +223,7 @@ namespace WolvenKit
 
             try
             {
-                var obj = new CUInt32(File);
+                var obj = new CUInt32(File, null, "obj");
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
                 v.Endpos = (int) reader.BaseStream.Position;
@@ -239,7 +239,7 @@ namespace WolvenKit
 
             try
             {
-                var obj = new CUInt16(File);
+                var obj = new CUInt16(File, null, "obj");
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
                 v.Endpos = (int) reader.BaseStream.Position;
@@ -254,7 +254,7 @@ namespace WolvenKit
 
             try
             {
-                var obj = new CUInt8(File);
+                var obj = new CUInt8(File, null, "obj");
 
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
@@ -270,7 +270,7 @@ namespace WolvenKit
 
             try
             {
-                var obj = new CVLQInt32(File);
+                var obj = new CVLQInt32(File, null, "obj");
                 obj.Read(reader, (uint)(bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
                 v.Endpos = (int)reader.BaseStream.Position;
@@ -285,7 +285,7 @@ namespace WolvenKit
 
             try
             {
-                var obj = new CDynamicInt(File);
+                var obj = new CDynamicInt(File, null, "obj");
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
                 v.Endpos = (int) reader.BaseStream.Position;
@@ -300,7 +300,7 @@ namespace WolvenKit
 
             try
             {
-                var obj = new CFloat(File);
+                var obj = new CFloat(File, null, "obj");
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
                 v.Endpos = (int) reader.BaseStream.Position;
@@ -315,7 +315,7 @@ namespace WolvenKit
 
             try
             {
-                var obj = new CName(File);
+                var obj = new CName(File, null, "obj");
 
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
@@ -333,7 +333,7 @@ namespace WolvenKit
 
             try
             {
-                var obj = new CHandle(File);
+                var obj = new CHandle<CVariable>(File, null, "obj");
 
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
@@ -351,7 +351,7 @@ namespace WolvenKit
 
             try
             {
-                var obj = new CSoft(File);
+                var obj = new CSoft<CVariable>(File, null, "obj");
 
                 obj.Read(reader, (uint) (bytes.Length - bytestart));
                 var v = CreatePropertyLayout(obj);
@@ -369,7 +369,7 @@ namespace WolvenKit
 
             try
             {
-                var obj = File.ReadVariable(reader);
+                var obj = File.ReadVariable(reader, null);
 
                 if (obj != null)
                 {
@@ -597,8 +597,8 @@ namespace WolvenKit
             {
                 get
                 {
-                    if (Variable?.Name != null)
-                        return Variable.Name;
+                    if (Variable?.REDName != null)
+                        return Variable.REDName;
 
                     if (Parent == null)
                         return "";
@@ -609,7 +609,7 @@ namespace WolvenKit
 
             public string Value => Variable.ToString();
 
-            public string Type => Variable.Type;
+            public string Type => Variable.REDType;
 
             public int Endpos { get; set; }
 

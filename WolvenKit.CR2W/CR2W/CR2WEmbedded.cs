@@ -3,6 +3,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Linq;
 using System;
+using System.IO.MemoryMappedFiles;
+using System.Threading.Tasks;
 
 namespace WolvenKit.CR2W
 {
@@ -67,30 +69,61 @@ namespace WolvenKit.CR2W
             file.BaseStream.Seek(_embedded.dataOffset, SeekOrigin.Begin);
             Data = file.ReadBytes((int) _embedded.dataSize).ToList();
 
-            try
+            parsedFile = new CR2WFile(Data.ToArray(), ParentFile.Logger);
+            if (parsedFile != null)
             {
-                parsedFile = new CR2WFile(Data.ToArray(), ParentFile.Logger);
-                if (parsedFile != null)
-                {
-                    if (parsedFile.chunks != null && parsedFile.chunks.Any())
-                        ClassName = parsedFile.chunks.FirstOrDefault().Type;
-                }
+                if (parsedFile.chunks != null && parsedFile.chunks.Any())
+                    ClassName = parsedFile.chunks.FirstOrDefault().REDType;
+            }
 
-                if (ParentImports != null && ParentImports.Any())
+            if (ParentImports != null && ParentImports.Any())
+            {
+                if (ParentImports.Count > (int)Embedded.importIndex - 1)
                 {
-                    if (ParentImports.Count > (int)Embedded.importIndex - 1)
-                    {
-                        var import = ParentImports[(int)Embedded.importIndex - 1];
-                        ImportClass = import.ClassNameStr;
-                        ImportPath = import.DepotPathStr;
-                    }
+                    var import = ParentImports[(int)Embedded.importIndex - 1];
+                    ImportClass = import.ClassNameStr;
+                    ImportPath = import.DepotPathStr;
                 }
             }
-            catch (Exception ex)
-            {
-                // FIXME handle exceptions
-                throw new NotImplementedException();
-            }
+        }
+
+        public /*async Task*/ void ReadData(MemoryMappedFile mmf)
+        {
+            //await Task.Run(() =>
+            //{
+                using (MemoryMappedViewStream vs = mmf.CreateViewStream(_embedded.dataOffset, _embedded.dataSize, MemoryMappedFileAccess.Read))
+                using (BinaryReader br = new BinaryReader(vs))
+                {
+                    Data = br.ReadBytes((int)_embedded.dataSize).ToList();
+
+                    try
+                    {
+                        parsedFile = new CR2WFile(Data.ToArray(), ParentFile.Logger);
+                        if (parsedFile != null)
+                        {
+                            if (parsedFile.chunks != null && parsedFile.chunks.Any())
+                                ClassName = parsedFile.chunks.FirstOrDefault().REDType;
+                        }
+
+                        if (ParentImports != null && ParentImports.Any())
+                        {
+                            if (ParentImports.Count > (int)Embedded.importIndex - 1)
+                            {
+                                var import = ParentImports[(int)Embedded.importIndex - 1];
+                                ImportClass = import.ClassNameStr;
+                                ImportPath = import.DepotPathStr;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // FIXME handle exceptions
+                        throw ex;
+                    }
+
+                }
+            //}
+            //);
         }
 
         public void WriteData(BinaryWriter file)

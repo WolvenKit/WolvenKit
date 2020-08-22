@@ -67,7 +67,7 @@ namespace WolvenKit
                 }
                 return extension;
             };
-
+            treeListView.RevealAfterExpand=false;
 
             // Update the TreeView
             vm.RepopulateTreeView();
@@ -136,7 +136,18 @@ namespace WolvenKit
         }
         private void FileChanges_Detected(object sender, RenamedEventArgs e)
         {
-
+            switch (e.ChangeType)
+            {
+                case WatcherChangeTypes.Renamed:
+                    {
+                        UpdateTreeView((e as RenamedEventArgs).OldFullPath);
+                        break;
+                    }
+                case WatcherChangeTypes.Changed:
+                case WatcherChangeTypes.All:
+                default:
+                    throw new NotImplementedException();
+            }
         }
         private void FileChanges_Detected(object sender, FileSystemEventArgs e)
         {
@@ -675,7 +686,9 @@ namespace WolvenKit
         }
         private async void exportW2meshToFbxToolStripMenuItem_Click(object sender, EventArgs e) => vm.ExportMeshCommand.SafeExecute();
         
-        private async void dumpWccliteXMLToolStripMenuItem_Click(object sender, EventArgs e) => vm.DumpXMLCommand.SafeExecute();
+        private async void dumpWccliteXMLToolStripMenuItem_Click(object sender, EventArgs e) => vm.DumpWccliteXMLCommand.SafeExecute();
+
+        private async void dumpWkitXMLToolStripMenuItem_Click(object sender, EventArgs e) => vm.DumpWkitXMLCommand.SafeExecute();
 
 
         private void fastRenderToolStripMenuItem_Click(object sender, EventArgs e)

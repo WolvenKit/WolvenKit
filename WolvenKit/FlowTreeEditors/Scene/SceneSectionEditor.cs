@@ -33,16 +33,16 @@ namespace WolvenKit.FlowTreeEditors
             var y = 21;
             var line = 0;
 
-            var sceneElementsObj = Chunk.GetVariableByName("sceneElements");
-            if (sceneElementsObj != null && sceneElementsObj is CArray)
+            CStorySceneSection sceneSection = (CStorySceneSection)Chunk.data;
+
+            CArray<CPtr<CStorySceneElement>> sceneElements = sceneSection.SceneElements;
+            if (sceneElements != null)
             {
-                var sceneElements = (CArray) sceneElementsObj;
-                foreach (var element in sceneElements)
+                foreach (CPtr<CStorySceneElement> element in sceneElements.Elements)
                 {
-                    if (element != null && element is CPtr)
+                    if (element != null)
                     {
-                        var ptr = (CPtr) element;
-                        switch (ptr.GetPtrTargetType())
+                        switch (element.GetPtrTargetType())
                         {
                             case "CStorySceneLine":
                                 line++;
@@ -52,7 +52,7 @@ namespace WolvenKit.FlowTreeEditors
                                     Height = 20,
                                     Location = new Point(0, y),
                                     AutoSize = false,
-                                    Text = GetDisplayString(ptr.Reference)
+                                    Text = GetDisplayString((CStorySceneLine)element.Reference.data)
                                 };
                                 lines.Add(label);
                                 Controls.Add(label);
@@ -60,9 +60,9 @@ namespace WolvenKit.FlowTreeEditors
                                 var texts = TextRenderer.MeasureText(label.Text, label.Font, new Size(Width - 6, 100),
                                     TextFormatFlags.WordBreak);
                                 label.Height = texts.Height + 5;
-                                label.BackColor = (line%2) == 0 ? Color.LightBlue : Color.Transparent;
+                                label.BackColor = (line % 2) == 0 ? Color.LightBlue : Color.Transparent;
 
-                                label.Click += delegate { FireSelectEvent(ptr.Reference); };
+                                label.Click += delegate { FireSelectEvent(element.Reference); };
 
                                 y += label.Height;
 
@@ -77,49 +77,47 @@ namespace WolvenKit.FlowTreeEditors
             Height = y;
         }
 
-        private string GetDisplayString(CR2WExportWrapper c)
+        private string GetDisplayString(CStorySceneLine storySceneLine)
         {
             var str = "";
-            if (c != null)
+            if (storySceneLine != null)
             {
-                var speaker = c.GetVariableByName("voicetag");
+                var speaker = storySceneLine.Voicetag;
                 if (speaker != null && speaker is CName)
                 {
-                    str += ((CName) speaker).Value + ": ";
+                    str += ((CName)speaker).Value + ": ";
                 }
 
-                var line = c.GetVariableByName("dialogLine");
-                if (line != null && line is CLocalizedString)
+                var line = storySceneLine.DialogLine;
+                if (line != null && line is LocalizedString)
                 {
-                    str += ((CLocalizedString) line).Text;
+                    str += ((LocalizedString)line).Text;
                 }
             }
 
             return str;
         }
 
-        public override List<CPtr> GetConnections()
+        public override List<IPtrAccessor> GetConnections()
         {
-            var list = new List<CPtr>();
+            var list = new List<IPtrAccessor>();
+            CStorySceneSection sceneSection = (CStorySceneSection)Chunk.data;
 
-            var choiceObj = Chunk.GetVariableByName("choice");
-            if (choiceObj != null && choiceObj is CPtr)
+            CPtr<CStorySceneChoice> choiceObj = sceneSection.Choice;
+            if (choiceObj != null)
             {
-                var choicePtr = ((CPtr) choiceObj);
-                if (choicePtr.Reference != null)
+                if (choiceObj.Reference != null)
                 {
-                    list.Add(choicePtr);
+                    list.Add(choiceObj);
                 }
             }
 
-
-            var nextLinkElementObj = Chunk.GetVariableByName("nextLinkElement");
-            if (nextLinkElementObj != null && nextLinkElementObj is CPtr)
+            CPtr<CStorySceneLinkElement> nextLinkElementObj = sceneSection.NextLinkElement;
+            if (nextLinkElementObj != null)
             {
-                var nextLinkElementPtr = ((CPtr) nextLinkElementObj);
-                if (nextLinkElementPtr.Reference != null)
+                if (nextLinkElementObj.Reference != null)
                 {
-                    list.Add(nextLinkElementPtr);
+                    list.Add(nextLinkElementObj);
                 }
             }
 

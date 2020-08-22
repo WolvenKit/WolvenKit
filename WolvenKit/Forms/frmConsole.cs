@@ -176,11 +176,11 @@ namespace WolvenKit
         {
             if (file == null)
                 return;
-            if (opts.chunk != null && !file.chunks.Any(_ => opts.chunk.Contains(_.Type)))
+            if (opts.chunk != null && !file.chunks.Any(_ => opts.chunk.Contains(_.REDType)))
                 return;
 
             // get chunks that match chunkname
-            List<CR2WExportWrapper> chunks = opts.chunk != null ? file.chunks.Where(_ => opts.chunk.Contains(_.Type)).ToList() : file.chunks;
+            List<CR2WExportWrapper> chunks = opts.chunk != null ? file.chunks.Where(_ => opts.chunk.Contains(_.REDType)).ToList() : file.chunks;
 
             foreach (CR2WExportWrapper c in chunks)
             {
@@ -194,7 +194,7 @@ namespace WolvenKit
                 if (vec == null)
                     return;
 
-                TryEditVariable(vec, vec.Name);
+                TryEditVariable(vec, vec.REDName);
 
                 //check children
                 FieldInfo[] fields = vec.GetType().GetFields();
@@ -216,7 +216,7 @@ namespace WolvenKit
                     }
                     if (v is CVariable variable)
                     {
-                        if (!TryEditVariable(v as CVariable, vec.Name))
+                        if (!TryEditVariable(v as CVariable, vec.REDName))
                             EditVariables(variable);      // check if variable has more children
                     }
                 }
@@ -227,10 +227,10 @@ namespace WolvenKit
                 if (v == null)
                     return false;
                 // is a match for name
-                if (v.Name == opts.var)
+                if (v.REDName == opts.var)
                 {
                     // is not of type
-                    if (opts.type != null && v.Type != opts.type)
+                    if (opts.type != null && v.REDType != opts.type)
                         return false;
                     // exclude values
                     if (opts.exc != null && opts.exc.Count() > 0 && opts.exc.Contains(v.ToString()))

@@ -103,6 +103,8 @@ namespace WolvenKit.Common.Wcc
                             val = val.Replace(@"\", @"\\"); //FIXME? it's stupid but seems to work
                         }
                         val = $"=\"{val}\"";
+                        //The end of the atomic dumpfile horror :
+                        if (val == "=\"\\\\\\\\?\\\\\\\\\"") val = "=" + @"\\?\";
                     }
                     // other strings
                     else

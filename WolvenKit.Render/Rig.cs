@@ -13,7 +13,7 @@ namespace WolvenKit.Render
     {
         public CommonData CData { get; set; }
 
-        public CSkeleton meshSkeleton = new CSkeleton();
+        public RenderSkeleton meshSkeleton = new RenderSkeleton();
 
         public Rig(CommonData cdata)
         {
@@ -31,42 +31,42 @@ namespace WolvenKit.Render
             if (rigFile != null)
             foreach (var chunk in rigFile.chunks)
             {
-                if (chunk.Type == "CSkeleton")
+                if (chunk.REDType == "CSkeleton" && chunk.data is CSkeleton cSkeleton)
                 {
-                    var bones = chunk.GetVariableByName("bones") as CArray;
-                    meshSkeleton.nbBones = (uint)bones.array.Count;
-                    foreach (CVector bone in bones)
+                    var bones = cSkeleton.Bones;
+                    meshSkeleton.nbBones = (uint)bones.Count;
+                    foreach (var bone in bones)
                     {
-                        var boneName = bone.variables.GetVariableByName("nameAsCName") as CName;
+                        var boneName = bone.NameAsCName;
                         meshSkeleton.names.Add(boneName.Value);
                     }
-                    var parentIndices = chunk.GetVariableByName("parentIndices") as CArray;
-                    foreach (CVariable parentIndex in parentIndices)
+                    var parentIndices = cSkeleton.ParentIndices;
+                    foreach (var parentIndex in parentIndices)
                     {
-                        meshSkeleton.parentIdx.Add(short.Parse(parentIndex.ToString()));
+                        meshSkeleton.parentIdx.Add(parentIndex.val);
                     }
 
-                    var rigdata = (chunk.GetVariableByName("rigdata") as CCompressedBuffer<SSkeletonRigData>).elements;
+                    CCompressedBuffer<SSkeletonRigData> rigdata = cSkeleton.rigdata;
 
 
                     for (int i = 0; i < meshSkeleton.nbBones; i++)
                     {
 
                         Vector3Df position = new Vector3Df(
-                            rigdata[i].position.x.val,
-                            rigdata[i].position.y.val,
-                            rigdata[i].position.z.val);
+                            rigdata[i].Position.X.val,
+                            rigdata[i].Position.Y.val,
+                            rigdata[i].Position.Z.val);
 
                         Quaternion orientation = new Quaternion(
-                            rigdata[i].rotation.x.val,
-                            rigdata[i].rotation.y.val,
-                            rigdata[i].rotation.z.val,
-                            rigdata[i].rotation.w.val);
+                            rigdata[i].Rotation.X.val,
+                            rigdata[i].Rotation.Y.val,
+                            rigdata[i].Rotation.Z.val,
+                            rigdata[i].Rotation.W.val);
 
                         Vector3Df scale = new Vector3Df(
-                            rigdata[i].scale.x.val,
-                            rigdata[i].scale.y.val,
-                            rigdata[i].scale.z.val);
+                            rigdata[i].Scale.X.val,
+                            rigdata[i].Scale.Y.val,
+                            rigdata[i].Scale.Z.val);
 
                         Matrix posMat = new Matrix();
                         posMat.Translation = position;
@@ -127,7 +127,7 @@ namespace WolvenKit.Render
                 short parent = meshSkeleton.parentIdx[i];
                 if (parent != -1) // root
                 {
-                    var parentJoint = CSkeleton.GetJointByName(skinnedMesh, meshSkeleton.names[parent]);
+                    var parentJoint = RenderSkeleton.GetJointByName(skinnedMesh, meshSkeleton.names[parent]);
                     if (parentJoint != null)
                         parentJoint.AddChildren(skinnedMesh.GetAllJoints()[i]);
                 }
@@ -138,7 +138,7 @@ namespace WolvenKit.Render
             {
                 string boneName = meshSkeleton.names[i];
 
-                var joint = CSkeleton.GetJointByName(skinnedMesh, boneName);
+                var joint = RenderSkeleton.GetJointByName(skinnedMesh, boneName);
                 if (joint == null)
                     continue;
 
@@ -150,10 +150,10 @@ namespace WolvenKit.Render
             }
 
             // Compute the global matrix
-            List<SJoint> roots = CSkeleton.GetRootJoints(skinnedMesh);
+            List<SJoint> roots = RenderSkeleton.GetRootJoints(skinnedMesh);
             for (int i = 0; i < roots.Count; ++i)
             {
-                CSkeleton.ComputeGlobal(skinnedMesh, roots[i]);
+                RenderSkeleton.ComputeGlobal(skinnedMesh, roots[i]);
             }
 
             // The matrix of the bones

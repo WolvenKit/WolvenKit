@@ -675,9 +675,12 @@ namespace WolvenKit.Forms
             Writer.Write("Chunks:", level);
             foreach (var chunk in Chunks)
             {
-                Writer.Write(chunk.Name + " (" + chunk.Type + ") : " + chunk.Preview, level);
-                var node = GetNodes(chunk);
-                ProcessNode(node, level + 1);
+                Writer.Write(chunk.REDName + " (" + chunk.REDType + ") : " + chunk.Preview, level);
+                //var node = GetNodes(chunk);
+                foreach (var item in chunk.GetEditableVariables())
+                {
+                    ProcessNode(item, level + 1);
+                }
             }
         }
         private void ProcessEmbedded(int level)
@@ -695,37 +698,37 @@ namespace WolvenKit.Forms
                 Writer.Write("Handle: " + embed.Handle, level + 1);
             }
         }
-        private void ProcessNode(VariableListNode node, int level)
+        private void ProcessNode(IEditableVariable node, int level)
         {
-            if (node.Name == "unknownBytes" && node.Value == "0 bytes"
-                || node.Name == "unk1" && node.Value == "0")
+            if (node.REDName == "unknownBytes" && node.ToString() == "0 bytes"
+                || node.REDName == "unk1" && node.ToString() == "0")
                 return;
 
-            if (node.Name == "Parent" && node.Value == "NULL")
+            if (node.REDName == "Parent" && node.ToString() == "NULL")
                 return;
 
-            if (node.Name != node.Value) // Chunk node is already printed in processCR2W, so don't print it again.
+            if (node.REDName != node.ToString()) // Chunk node is already printed in processCR2W, so don't print it again.
             {
-                Writer.Write(node.Name + " (" + node.Type + ") : " + node.Value, level);
+                Writer.Write(node.REDName + " (" + node.REDType + ") : " + node.ToString(), level);
                 level++;
             }
 
-            if (node.ChildCount > 0)
-                foreach (var child in node.Children)
+            if (node.GetEditableVariables().Count > 0)
+                foreach (var child in node.GetEditableVariables())
                     ProcessNode(child, level);
 
-            if (   (node.Type == "SharedDataBuffer" && Options.DumpSDB) 
-                || (node.Type == "array:2,0,Uint8" && node.Name != "deltaTimes") ) 
+            if (   (node.REDType == "SharedDataBuffer" && Options.DumpSDB) 
+                || (node.REDType == "array:2,0,Uint8" && node.REDName != "deltaTimes") ) 
             {   // Embedded CR2W dump:
                 // Dump SharedDataBuffer if option is set.
                 // Dump "array:2,0,Uint8", unless it's called "deltaTimes" (not CR2W)
                 // And dump FCD only if options.dumpFCD is set.
-                if (node.Name != "flatCompiledData" || Options.DumpFCD)
+                if (node.REDName != "flatCompiledData" || Options.DumpFCD)
                 {
                     try
                     {
                         var ls = new LoggerService();
-                        CR2WFile embedcr2w = new CR2WFile( ((IByteSource)node.Variable).Bytes, ls );
+                        CR2WFile embedcr2w = new CR2WFile( ((IByteSource)node).Bytes, ls );
                         var lc = new LoggerCR2W(embedcr2w, Writer, Options);
                         lc.processCR2W(level);
                     }
@@ -735,7 +738,7 @@ namespace WolvenKit.Forms
                     }
                     catch (Exception e)
                     {
-                        string msg = node.Name + ":" + node.Type + ": ";
+                        string msg = node.REDName + ":" + node.REDType + ": ";
                         string logMsg = msg + ": Buffer or 'array:2,0,Uint8' caught exception: ";
                         Writer.Write(logMsg + e, level);
                         Console.WriteLine(logMsg + e);
@@ -745,9 +748,9 @@ namespace WolvenKit.Forms
                 }
             }
         }
-        private VariableListNode GetNodes(CR2WExportWrapper chunk)
-        {
-            return frmChunkProperties.AddListViewItems(chunk);
-        }
+        //private VariableListNode GetNodes(CR2WExportWrapper chunk)
+        //{
+        //    return frmChunkProperties.AddListViewItems(chunk);
+        //}
     }
 }

@@ -34,6 +34,11 @@ namespace WolvenKit
         {
             this.components = new System.ComponentModel.Container();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.expandAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.expandAllChildrenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.collapseAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.collapseAllChildrenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.addChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyChunkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,11 +51,6 @@ namespace WolvenKit
             this.toolStripSearchBox = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripClearButton = new System.Windows.Forms.ToolStripButton();
             this.showTreetoolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.expandAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.expandAllChildrenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.collapseAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.collapseAllChildrenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.treeListView)).BeginInit();
             this.toolStrip1.SuspendLayout();
@@ -70,34 +70,67 @@ namespace WolvenKit
             this.copyChunkToolStripMenuItem,
             this.pasteChunkToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(185, 208);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(185, 186);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
+            // 
+            // expandAllToolStripMenuItem
+            // 
+            this.expandAllToolStripMenuItem.Name = "expandAllToolStripMenuItem";
+            this.expandAllToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.expandAllToolStripMenuItem.Text = "Expand All";
+            this.expandAllToolStripMenuItem.Click += new System.EventHandler(this.expandAllToolStripMenuItem_Click);
+            // 
+            // expandAllChildrenToolStripMenuItem
+            // 
+            this.expandAllChildrenToolStripMenuItem.Name = "expandAllChildrenToolStripMenuItem";
+            this.expandAllChildrenToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.expandAllChildrenToolStripMenuItem.Text = "Expand All Children";
+            this.expandAllChildrenToolStripMenuItem.Click += new System.EventHandler(this.expandAllChildrenToolStripMenuItem_Click);
+            // 
+            // collapseAllToolStripMenuItem
+            // 
+            this.collapseAllToolStripMenuItem.Name = "collapseAllToolStripMenuItem";
+            this.collapseAllToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.collapseAllToolStripMenuItem.Text = "Collapse All";
+            this.collapseAllToolStripMenuItem.Click += new System.EventHandler(this.collapseAllToolStripMenuItem_Click);
+            // 
+            // collapseAllChildrenToolStripMenuItem
+            // 
+            this.collapseAllChildrenToolStripMenuItem.Name = "collapseAllChildrenToolStripMenuItem";
+            this.collapseAllChildrenToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.collapseAllChildrenToolStripMenuItem.Text = "Collapse All Children";
+            this.collapseAllChildrenToolStripMenuItem.Click += new System.EventHandler(this.collapseAllChildrenToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(181, 6);
             // 
             // addChunkToolStripMenuItem
             // 
             this.addChunkToolStripMenuItem.Name = "addChunkToolStripMenuItem";
-            this.addChunkToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addChunkToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.addChunkToolStripMenuItem.Text = "Add Chunk";
             this.addChunkToolStripMenuItem.Click += new System.EventHandler(this.addChunkToolStripMenuItem_Click);
             // 
             // deleteChunkToolStripMenuItem
             // 
             this.deleteChunkToolStripMenuItem.Name = "deleteChunkToolStripMenuItem";
-            this.deleteChunkToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.deleteChunkToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.deleteChunkToolStripMenuItem.Text = "Delete Chunk";
             this.deleteChunkToolStripMenuItem.Click += new System.EventHandler(this.deleteChunkToolStripMenuItem_Click);
             // 
             // copyChunkToolStripMenuItem
             // 
             this.copyChunkToolStripMenuItem.Name = "copyChunkToolStripMenuItem";
-            this.copyChunkToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.copyChunkToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.copyChunkToolStripMenuItem.Text = "Copy Chunk";
             this.copyChunkToolStripMenuItem.Click += new System.EventHandler(this.copyChunkToolStripMenuItem_Click);
             // 
             // pasteChunkToolStripMenuItem
             // 
             this.pasteChunkToolStripMenuItem.Name = "pasteChunkToolStripMenuItem";
-            this.pasteChunkToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pasteChunkToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.pasteChunkToolStripMenuItem.Text = "Paste Chunk";
             this.pasteChunkToolStripMenuItem.Click += new System.EventHandler(this.pasteChunkToolStripMenuItem_Click);
             // 
@@ -129,7 +162,7 @@ namespace WolvenKit
             // 
             // olvcolName
             // 
-            this.olvcolName.AspectName = "Name";
+            this.olvcolName.AspectName = "REDName";
             this.olvcolName.Text = "Name";
             this.olvcolName.Width = 300;
             // 
@@ -187,39 +220,6 @@ namespace WolvenKit
             this.showTreetoolStripButton.Size = new System.Drawing.Size(28, 28);
             this.showTreetoolStripButton.Text = "Show/Hide Tree";
             this.showTreetoolStripButton.Click += new System.EventHandler(this.showTreetoolStripButton_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
-            // 
-            // expandAllToolStripMenuItem
-            // 
-            this.expandAllToolStripMenuItem.Name = "expandAllToolStripMenuItem";
-            this.expandAllToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.expandAllToolStripMenuItem.Text = "Expand All";
-            this.expandAllToolStripMenuItem.Click += new System.EventHandler(this.expandAllToolStripMenuItem_Click);
-            // 
-            // expandAllChildrenToolStripMenuItem
-            // 
-            this.expandAllChildrenToolStripMenuItem.Name = "expandAllChildrenToolStripMenuItem";
-            this.expandAllChildrenToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.expandAllChildrenToolStripMenuItem.Text = "Expand All Children";
-            this.expandAllChildrenToolStripMenuItem.Click += new System.EventHandler(this.expandAllChildrenToolStripMenuItem_Click);
-            // 
-            // collapseAllToolStripMenuItem
-            // 
-            this.collapseAllToolStripMenuItem.Name = "collapseAllToolStripMenuItem";
-            this.collapseAllToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.collapseAllToolStripMenuItem.Text = "Collapse All";
-            this.collapseAllToolStripMenuItem.Click += new System.EventHandler(this.collapseAllToolStripMenuItem_Click);
-            // 
-            // collapseAllChildrenToolStripMenuItem
-            // 
-            this.collapseAllChildrenToolStripMenuItem.Name = "collapseAllChildrenToolStripMenuItem";
-            this.collapseAllChildrenToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.collapseAllChildrenToolStripMenuItem.Text = "Collapse All Children";
-            this.collapseAllChildrenToolStripMenuItem.Click += new System.EventHandler(this.collapseAllChildrenToolStripMenuItem_Click);
             // 
             // frmChunkList
             // 

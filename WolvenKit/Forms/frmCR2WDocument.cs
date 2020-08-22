@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using WolvenKit.App;
@@ -12,6 +14,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.SRT;
+using WolvenKit.CR2W.Types;
 using WolvenKit.Services;
 
 namespace WolvenKit
@@ -153,8 +156,18 @@ namespace WolvenKit
             }
 
             propertyWindow.Chunk = e.Chunk;
-        }
 
+            if (e.Chunk.data is CBitmapTexture xbm)
+            {
+                if (ImageViewer == null || ImageViewer.IsDisposed)
+                {
+                    ImageViewer = new frmImagePreview();
+                    ImageViewer.Show(dockPanel, DockState.Document);
+                }
+
+                ImageViewer.SetImage(e.Chunk);
+            }
+        }
 
         public void ApplyCustomTheme()
         {
@@ -164,6 +177,6 @@ namespace WolvenKit
                 "cr2wdocument_layout.xml"));
         }
 
-        public bool GetIsDisposed() => this.GetIsDisposed();
+        public bool GetIsDisposed() => this.IsDisposed;
     }
 }

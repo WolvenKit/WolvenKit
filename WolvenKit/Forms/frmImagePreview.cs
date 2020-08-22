@@ -7,6 +7,7 @@ using WolvenKit.Cache;
 using WolvenKit.CR2W.Types;
 using System.IO;
 using System.Linq;
+using WolvenKit.App.Model;
 
 namespace WolvenKit
 {
@@ -29,34 +30,19 @@ namespace WolvenKit
 
         public void SetImage(string path)
         {
-            try
-            {
-                if (Enum.GetNames(typeof(EGDIFormats)).Contains(Path.GetExtension(path).TrimStart('.').ToUpper()))
-                    ImagePreviewControl.Image = Image.FromFile(path) ?? SystemIcons.Warning.ToBitmap();
-                else if (Path.GetExtension(path).ToUpper().Contains("TGA") || Path.GetExtension(path).ToUpper().Contains("DDS"))
-                    ImagePreviewControl.Image = ImageUtility.FromFile(path) ?? SystemIcons.Warning.ToBitmap();
-                else
-                    ImagePreviewControl.Image = SystemIcons.Warning.ToBitmap();
-                this.Text = Path.GetFileName(path);
-            }
-            catch (Exception)
-            {
-
-            }
+            if (Enum.GetNames(typeof(EGDIFormats)).Contains(Path.GetExtension(path).TrimStart('.').ToUpper()))
+                ImagePreviewControl.Image = Image.FromFile(path) ?? SystemIcons.Warning.ToBitmap();
+            else if (Path.GetExtension(path).ToUpper().Contains("TGA") || Path.GetExtension(path).ToUpper().Contains("DDS"))
+                ImagePreviewControl.Image = ImageUtility.FromFile(path) ?? SystemIcons.Warning.ToBitmap();
+            else
+                ImagePreviewControl.Image = SystemIcons.Warning.ToBitmap();
+            this.Text = Path.GetFileName(path);
         }
 
         public void SetImage(CR2WExportWrapper chunk)
         {
-            try
-            {
-                CBitmapTexture xbm = chunk.data as CBitmapTexture;
-                ImagePreviewControl.Image = ImageUtility.Xbm2Bmp(xbm) ?? SystemIcons.Warning.ToBitmap();
-                //this.Text = Path.GetFileName(path);
-            }
-            catch (Exception)
-            {
-
-            }
+            CBitmapTexture xbm = chunk.data as CBitmapTexture;
+            ImagePreviewControl.Image = ImageUtility.Xbm2Bmp(xbm) ?? SystemIcons.Warning.ToBitmap();
         }
 
 

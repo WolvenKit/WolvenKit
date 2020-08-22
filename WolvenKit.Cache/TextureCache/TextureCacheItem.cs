@@ -11,8 +11,8 @@ using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.Cache
 {
-    using DDS;
     using WolvenKit.Common.Model;
+    using WolvenKit.DDS;
     using static WolvenKit.CR2W.Types.Enums;
 
     public class TextureCacheItem : IWitcherFile
@@ -27,7 +27,7 @@ namespace WolvenKit.Cache
         public string Name { get; set; }
         public UInt32 Hash;
         public Int32 PathStringIndex;
-        public long PageOFfset { get; set; }
+        public long PageOffset { get; set; }
         public Int32 CompressedSize;
         public Int32 UncompressedSize;
         public UInt32 BaseAlignment;
@@ -105,7 +105,7 @@ namespace WolvenKit.Cache
 
                 if (IsCube == 0)
                 {
-                    using (var viewstream = file.CreateViewStream((PageOFfset * 4096) + 9, ZSize, MemoryMappedFileAccess.Read))
+                    using (var viewstream = file.CreateViewStream((PageOffset * 4096) + 9, ZSize, MemoryMappedFileAccess.Read))
                     {
                         //if ( format != ETextureFormat.TEXFMT_R8G8B8A8)
                         new ZlibStream(viewstream, CompressionMode.Decompress).CopyTo(output);
@@ -132,7 +132,7 @@ namespace WolvenKit.Cache
                     {
                         // extract to memory
                         // image
-                        using (var vs = file.CreateViewStream((PageOFfset * 4096) + 9, ZSize, MemoryMappedFileAccess.Read))
+                        using (var vs = file.CreateViewStream((PageOffset * 4096) + 9, ZSize, MemoryMappedFileAccess.Read))
                         {
                             //if ( format != ETextureFormat.TEXFMT_R8G8B8A8)
                             new ZlibStream(vs, CompressionMode.Decompress).CopyTo(imagestream);
@@ -193,7 +193,7 @@ namespace WolvenKit.Cache
 
             var extractext = e.Extension;
             // do not convert pngs, jpgs and dds
-            if (Path.GetExtension(e.FileName) != ".dds")
+            if (!(Path.GetExtension(e.FileName) == ".dds" || Path.GetExtension(e.FileName) == ".w2l"))
             {
                 if (Path.GetExtension(e.FileName) == ".png")
                     extractext = EUncookExtension.png;

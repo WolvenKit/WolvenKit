@@ -49,55 +49,54 @@ namespace WolvenKit.Render
             {
                 W3FaceFile = new CR2WFile(br);
                 //int count = Read(br, 0);
-                var chunkMimicFace = W3FaceFile.chunks[0];
-                var mimicSkeleton = W3FaceFile.chunks[1];
-                var floatTrackSkeleton = W3FaceFile.chunks[2];
+                CMimicFace chunkMimicFace = W3FaceFile.chunks[0].data as CMimicFace;
+                CSkeleton mimicSkeleton = W3FaceFile.chunks[1].data as CSkeleton;
+                CSkeleton floatTrackSkeleton = W3FaceFile.chunks[2].data as CSkeleton;
 
-                var mimicSkeletonBones = mimicSkeleton.GetVariableByName("bones") as CArray;
-                uint nbBones = (uint)mimicSkeletonBones.array.Count;
-                foreach (CVector bone in mimicSkeletonBones)
+                CArray<SSkeletonBone> mimicSkeletonBones = mimicSkeleton.Bones;
+                uint nbBones = (uint)mimicSkeletonBones.Count;
+                foreach (SSkeletonBone bone in mimicSkeletonBones)
                 {
-                    var boneName = bone.variables.GetVariableByName("nameAsCName") as CName;
+                    CName boneName = bone.NameAsCName;
                     //meshSkeleton.names.Add(boneName.Value);
                 }
 
                 //convert mapping into bone array
-                var mimicMapping = (chunkMimicFace.GetVariableByName("mapping") as CArray).array;
+                CArray<CInt32> mimicMapping = chunkMimicFace.Mapping;
                 //ie. mimicMapping[0] = "uv_center_slide2"
 
                 //give each mapping a name
-                var tracks = (floatTrackSkeleton.GetVariableByName("tracks") as CArray).array;
+                CArray<SSkeletonTrack> tracks = floatTrackSkeleton.Tracks;
 
-
-                var mimicPoses = (chunkMimicFace.GetVariableByName("mimicPoses") as CArray).array;
+                CArray<CArray<EngineQsTransform>> mimicPoses = chunkMimicFace.MimicPoses;
                 //save poses into
 
                 for (int i = 0; i < mimicPoses.Count(); i++)
                 {
                     AnimExportData pose = new AnimExportData();
-                    string trackanme = ((tracks[i] as CVector).GetVariableByName("nameAsCName") as CName).Value;
+                    string trackanme = tracks[i].NameAsCName.Value;
                     pose.name = trackanme;
                     pose.numFrames = 1;
-                    var mimicbones = (mimicPoses[i] as CArray).array;
+                    CArray<EngineQsTransform> mimicbones = mimicPoses[i];
                     List<Bone> exportBones = new List<Bone>();
                     for (int j = 0; j < mimicbones.Count(); j++)
                     {
                         Bone myBone = new Bone();
                         //finde the bone name using mapping
                         int map = (mimicMapping[j] as CInt32).val;
-                        var BoneName = (mimicSkeletonBones.array[map] as CVector).GetVariableByName("nameAsCName") as CName;
+                        var BoneName = mimicSkeletonBones[map].NameAsCName;
 
                         myBone.BoneName = BoneName.Value; // find the mapping
-                        float x =  ((mimicbones[j] as CEngineQsTransform).x as CFloat).val;
-                        float y = ((mimicbones[j] as CEngineQsTransform).y as CFloat).val;
-                        float z = ((mimicbones[j] as CEngineQsTransform).z as CFloat).val;
-                        float pitch = ((mimicbones[j] as CEngineQsTransform).pitch as CFloat).val;
-                        float yaw = ((mimicbones[j] as CEngineQsTransform).yaw as CFloat).val;
-                        float roll = ((mimicbones[j] as CEngineQsTransform).roll as CFloat).val;
-                        float w = ((mimicbones[j] as CEngineQsTransform).w as CFloat).val;
-                        float scale_x = ((mimicbones[j] as CEngineQsTransform).scale_x as CFloat).val;
-                        float scale_y = ((mimicbones[j] as CEngineQsTransform).scale_y as CFloat).val;
-                        float scale_z = ((mimicbones[j] as CEngineQsTransform).scale_z as CFloat).val;
+                        float x =  mimicbones[j].X.val;
+                        float y = mimicbones[j].Y.val;
+                        float z = mimicbones[j].Z.val;
+                        float pitch = mimicbones[j].Pitch.val;
+                        float yaw = mimicbones[j].Yaw.val;
+                        float roll = mimicbones[j].Roll.val;
+                        float w = mimicbones[j].W.val;
+                        float scale_x = mimicbones[j].Scale_x.val;
+                        float scale_y = mimicbones[j].Scale_y.val;
+                        float scale_z = mimicbones[j].Scale_z.val;
                         myBone.positionFrames.Add(new Vector(x, y, z));
                         myBone.rotationFrames.Add(new Quaternion(pitch, yaw, roll, w));
                         myBone.scaleFrames.Add(new Vector(scale_x, scale_y, scale_z));

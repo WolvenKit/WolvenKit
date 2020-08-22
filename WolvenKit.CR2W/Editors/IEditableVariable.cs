@@ -1,22 +1,40 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 using System.Xml;
+using WolvenKit.Common;
 using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.CR2W.Editors
 {
     public interface IEditableVariable
     {
-        string Name { get; set; }
-        string Type { get; set; }
-        CR2WFile CR2WOwner { get; }
+        string REDName { get; }
+        string REDType { get; }
+        string REDValue { get; }
+
+        Guid InternalGuid { get; set; }
+        IEditableVariable Parent { get; }
+        bool IsSerialized { get; set; }
+
+        CR2WFile cr2w { get; set; }
+
+
+        void SetREDName(string val);
+
         Control GetEditor();
         List<IEditableVariable> GetEditableVariables();
+
         bool CanRemoveVariable(IEditableVariable child);
-        CVariable CreateDefaultVariable();
         bool CanAddVariable(IEditableVariable newvar);
         void AddVariable(CVariable var);
-        void RemoveVariable(IEditableVariable child);
+        bool RemoveVariable(IEditableVariable child);
+
         void SerializeToXml(XmlWriter xw);
+
+        void Read(BinaryReader file, uint size);
+        void Write(BinaryWriter file);
+        CVariable Copy(CR2WCopyAction context);
     }
 }

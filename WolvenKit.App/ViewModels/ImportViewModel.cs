@@ -78,13 +78,17 @@ namespace WolvenKit.App.ViewModels
             var importablefiles = new List<string>();
             foreach (var file in MainController.Get().ActiveMod.Files)
             {
-                var lowerExt = Path.GetExtension(file).ToLower();
+                var originalExt = Path.GetExtension(file);
+                var lowerExt = originalExt.ToLower();
                 if (importableexts.Contains(lowerExt))
                 {
-                    // rename file first because wcc can't handle uppercase file extensions
-                    var oldpath = Path.Combine(MainController.Get().ActiveMod.FileDirectory, file);
-                    var newpath = Path.ChangeExtension(oldpath, lowerExt);
-                    File.Move(oldpath, newpath);
+                    if (originalExt != lowerExt)
+                    {
+                        // rename file first because wcc can't handle uppercase file extensions
+                        var oldpath = Path.Combine(MainController.Get().ActiveMod.FileDirectory, file);
+                        var newpath = Path.ChangeExtension(oldpath, lowerExt);
+                        File.Move(oldpath, newpath);
+                    }
 
                     importablefiles.Add(Path.ChangeExtension(file, lowerExt));
                 }

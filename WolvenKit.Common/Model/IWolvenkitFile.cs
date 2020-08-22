@@ -15,6 +15,6 @@ namespace WolvenKit.Common.Model
         void Read(BinaryReader file);
         void Write(BinaryWriter writer);
 
-
+        void SerializeToXml(Stream writer);
     }
 }

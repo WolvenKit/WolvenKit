@@ -103,58 +103,59 @@ namespace WolvenKit.App.ViewModels
         }
 
         #region Helper Methods
-        public void ScanAndRegisterCustomClasses()
-        {
-            if (ActiveMod == null)
-                return;
+        // Deprecated
+        //public void ScanAndRegisterCustomClasses()
+        //{
+        //    if (ActiveMod == null)
+        //        return;
 
-            foreach (var wsfile in ActiveMod.ModFiles.Where(_ => Path.GetExtension(_) == ".ws"))
-            {
-                string fullpath = Path.Combine(ActiveMod.ModDirectory, wsfile);
-                var lines = File.ReadAllLines(fullpath);
-                foreach (var line in lines)
-                {
-                    var reg = new Regex(@"^.*(?:class)\s+(\w+)\s*(.*)");
-                    var match = reg.Match(line);
-                    if (match.Success)
-                    {
-                        // check for extends
-                        string classname = match.Groups[1].Value;
-                        string extends = match.Groups[2].Value;
-                        if (!string.IsNullOrEmpty(extends))
-                        {
-                            var ireg = new Regex(@"^.*(?:extends)\s+(\w+)");
-                            var imatch = ireg.Match(extends);
-                            if (imatch.Success)
-                            {
-                                string parent = imatch.Groups[1].Value;
-                                if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
-                                {
-                                    CR2WTypeManager.Get().RegisterAs(classname, parent);
-                                    Logger.LogString($"Registering custom class {classname} as {parent}.\r\n", Logtype.Success);
-                                }
-                            }
-                            else
-                            {
-                                if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
-                                {
-                                    CR2WTypeManager.Get().Register(classname, new CVector(null));
-                                    Logger.LogString($"Registering custom class {classname} as CVector.\r\n", Logtype.Success);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
-                            {
-                                CR2WTypeManager.Get().Register(classname, new CVector(null));
-                                Logger.LogString($"Registering custom class {classname} as CVector.\r\n", Logtype.Success);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        //    foreach (var wsfile in ActiveMod.ModFiles.Where(_ => Path.GetExtension(_) == ".ws"))
+        //    {
+        //        string fullpath = Path.Combine(ActiveMod.ModDirectory, wsfile);
+        //        var lines = File.ReadAllLines(fullpath);
+        //        foreach (var line in lines)
+        //        {
+        //            var reg = new Regex(@"^.*(?:class)\s+(\w+)\s*(.*)");
+        //            var match = reg.Match(line);
+        //            if (match.Success)
+        //            {
+        //                // check for extends
+        //                string classname = match.Groups[1].Value;
+        //                string extends = match.Groups[2].Value;
+        //                if (!string.IsNullOrEmpty(extends))
+        //                {
+        //                    var ireg = new Regex(@"^.*(?:extends)\s+(\w+)");
+        //                    var imatch = ireg.Match(extends);
+        //                    if (imatch.Success)
+        //                    {
+        //                        string parent = imatch.Groups[1].Value;
+        //                        if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
+        //                        {
+        //                            CR2WTypeManager.Get().RegisterAs(classname, parent);
+        //                            Logger.LogString($"Registering custom class {classname} as {parent}.\r\n", Logtype.Success);
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
+        //                        {
+        //                            CR2WTypeManager.Get().Register(classname, new CVector(null));
+        //                            Logger.LogString($"Registering custom class {classname} as CVector.\r\n", Logtype.Success);
+        //                        }
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    if (!CR2WTypeManager.Get().AvailableTypes.Contains(classname))
+        //                    {
+        //                        CR2WTypeManager.Get().Register(classname, new CVector(null));
+        //                        Logger.LogString($"Registering custom class {classname} as CVector.\r\n", Logtype.Success);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
         public async void executeGame(string args = "")
         {
             if (ActiveMod == null)
@@ -209,15 +210,27 @@ namespace WolvenKit.App.ViewModels
         #endregion
 
         #region WCC TASKS
-        public async Task DumpFile(string folder, string outfolder)
+        public async Task DumpFile(string folder, string outfolder, string file="")
         {
+            WCC_Command cmd = null;
             try
             {
-                var cmd = new Wcc_lite.dumpfile()
+                if (file=="")
                 {
-                    Dir = folder,
-                    Out = outfolder
-                };
+                    cmd = new Wcc_lite.dumpfile()
+                    {
+                        Dir = folder,
+                        Out = outfolder
+                    };
+                }
+                else
+                {
+                    cmd = new Wcc_lite.dumpfile()
+                    {
+                        File = file,
+                        Out = outfolder
+                    };
+                }
                 await Task.Run(() => MainController.Get().WccHelper.RunCommand(cmd));
             }
             catch (Exception ex)
@@ -751,19 +764,27 @@ namespace WolvenKit.App.ViewModels
             finished *= await Task.Run(() => CookInternal(modcachedir, cookedModDir));
             finished *= await Task.Run(() => CookInternal(dlccachedir, cookedDLCDir, true));
 
+
+
             // if !COOKINPLACE copy all files from Bundle folder to cooked folder
             // because wcc doesn't copy all files by itself
-            if (!COOKINPLACE)
-            {
-                var di = new DirectoryInfo(modcachedir);
-                foreach (FileInfo fi in di.GetFiles("*", SearchOption.AllDirectories))
-                {
-                    string relpath = fi.FullName.Substring(modcachedir.Length + 1);
-                    string newpath = Path.Combine(cookedModDir, relpath);
-                    if (!File.Exists(newpath))
-                        fi.CopyTo(newpath);
-                }
-            }
+            //if (!COOKINPLACE)
+            //{
+
+            //    var di = new DirectoryInfo(modcachedir);
+            //    foreach (FileInfo fi in di.GetFiles("*", SearchOption.AllDirectories))
+            //    {
+
+            //        string relpath = fi.FullName.Substring(modcachedir.Length + 1);
+            //        string newpath = Path.Combine(cookedModDir, relpath);
+
+            //        if (!File.Exists(newpath))
+
+            //            fi.CopyTo(newpath);
+
+            //    }
+
+            //}
 
             return finished == 0 ? 0 : 1;
 

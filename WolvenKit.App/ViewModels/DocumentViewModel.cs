@@ -3,9 +3,9 @@ using System.IO;
 using System.Windows.Input;
 using WolvenKit.App.Commands;
 using WolvenKit.App.Model;
-using WolvenKit.Common.Model;
+using WolvenKit.Common.Model;
 using WolvenKit.CR2W;
-using WolvenKit.CR2W.SRT;
+using WolvenKit.CR2W.SRT;
 using WolvenKit.Radish.Model;
 
 namespace WolvenKit.App.ViewModels
@@ -149,22 +149,22 @@ namespace WolvenKit.App.ViewModels
             using (var reader = new BinaryReader(stream))
             {
                 // switch between cr2wfiles and others (e.g. srt)
-                if (Path.GetExtension(filename) == ".srt")
-                {
-                    File = new Srtfile()
-                    {
-                        FileName = filename
-                    };
-                    File.Read(reader);
-                }
-                else
-                {
-                    File = new CR2WFile(reader, MainController.Get().Logger)
-                    {
-                        FileName = filename,
-                        EditorController = variableEditor/*UIController.Get()*/,
-                        LocalizedStringSource = MainController.Get()
-                    };
+                if (Path.GetExtension(filename) == ".srt")
+                {
+                    File = new Srtfile()
+                    {
+                        FileName = filename
+                    };
+                    File.Read(reader);
+                }
+                else
+                {
+                    File = new CR2WFile(reader, MainController.Get().Logger)
+                    {
+                        FileName = filename,
+                        EditorController = variableEditor/*UIController.Get()*/,
+                        LocalizedStringSource = MainController.Get()
+                    };
                 }
             }
         }

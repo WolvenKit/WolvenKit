@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Security.Cryptography;
 using WolvenKit.Common.Extensions;
+using Microsoft.Win32;
 
 namespace CR2WTests
 {
@@ -47,34 +48,82 @@ namespace CR2WTests
         }
     }
 
-
     [TestClass]
     public class StressTest
     {
-        static BundleManager mc;
-        static Dictionary<string, MemoryMappedFile> mmfs;
+        static string bundletag = "*";
+        static Dictionary<string, MemoryMappedFile> memorymappedbundles;
+        static BundleManager bm;
 
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            //mmfs = new Dictionary<string, MemoryMappedFile>();
-            mc = new BundleManager();
-            //mc.LoadAll("D:\\SteamLibrary\\steamapps\\common\\The Witcher 3\\bin\\x64");
-            mc.LoadAll("C:\\Steam\\steamapps\\common\\The Witcher 3\\bin\\x64");
+            var exedir = Path.GetDirectoryName(LookUpW3exe());
 
-            //// Load MemoryMapped Bundles
-            //foreach (var b in mc.Bundles.Values)
-            //{
-            //    var e = b.FileName.GetHashMD5();
+            memorymappedbundles = new Dictionary<string, MemoryMappedFile>();
+            bm = new BundleManager();
+            bm.LoadAll(exedir);
 
-            //    mmfs.Add(e, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, e, 0, MemoryMappedFileAccess.Read));
+            //Load MemoryMapped Bundles
+            foreach (var b in bm.Bundles.Values)
+            {
+                var e = b.FileName.GetHashMD5();
+            
+                memorymappedbundles.Add(e, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, e, 0, MemoryMappedFileAccess.Read));
 
-            //}
+            }
+        }
+
+        private static string LookUpW3exe()
+        {
+            const string uninstallkey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
+            const string uninstallkey2 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
+            var w3 = "";
+            try
+            {
+                Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
+                {
+                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey + item)
+                        ?.GetValue("DisplayName");
+                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey + item)
+                        ?.GetValue("InstallLocation");
+                    if (programName != null && installLocation != null)
+                    {
+                        if (programName.ToString().Contains("The Witcher 3 - Wild Hunt") ||
+                            programName.ToString().Contains("The Witcher 3: Wild Hunt"))
+                        {
+                            w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe",
+                                SearchOption.AllDirectories).First();
+                        }
+                    }
+                });
+                Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
+                {
+                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
+                        ?.GetValue("DisplayName");
+                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
+                        ?.GetValue("InstallLocation");
+                    if (programName != null && installLocation != null)
+                    {
+                        if (programName.ToString().Contains("The Witcher 3 - Wild Hunt") ||
+                            programName.ToString().Contains("The Witcher 3: Wild Hunt"))
+                        {
+                            if (Directory.Exists(installLocation.ToString()))
+                                w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe",
+                                SearchOption.AllDirectories).First();
+                        }
+                    }
+                });
+                return w3;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         // Methods to test for the different file types
-
-
+        #region Methods
         [TestMethod]
         public async Task Cellmap()
         {
@@ -286,6 +335,24 @@ namespace CR2WTests
         {
             await Task.Run(() => StressTestExt("w2ent"));
         }
+        //[TestMethod]
+        //public async Task w2entPatch()
+        //{
+        //    bundletag = "patch1*";
+        //    await Task.Run(() => StressTestExt("w2ent"));
+        //}
+        //[TestMethod]
+        //public async Task w2entContent0()
+        //{
+        //    bundletag = "content0*";
+        //    await Task.Run(() => StressTestExt("w2ent"));
+        //}
+        //[TestMethod]
+        //public async Task w2entContents()
+        //{
+        //    bundletag = "sanscontent0";
+        //    await Task.Run(() => StressTestExt("w2ent"));
+        //}
 
         [TestMethod]
         public async Task w2fnt()
@@ -477,190 +544,25 @@ namespace CR2WTests
             await Task.Run(() => StressTestExt("navtile");
         }
         */
+        #endregion
 
         // Actually do the test
         public async Task StressTestExt(string ext)
         {
-            await Task.Run(() => StressTestExtAsync(ext)).ContinueWith(
-                antecedent =>
-                {
-                    Assert.AreEqual(0, antecedent.Result.Item1, $"Unknown bytes remained -> {antecedent.Result.Item1}bytes");
-                    Assert.AreEqual(0, antecedent.Result.Item2, $"Unparsed files -> {antecedent.Result.Item2}");
-                }
-                );
-        }
 
-        public static async Task<Tuple<long, int>> StressTestExtAsync(string ext)
-        {
-            long unknownbytes = 0;
-            long totalbytes = 0;
-            List<string> unknownclasses = new List<string>();
-            long rigcount = 0;
-            Dictionary<string, Tuple<long, long>> chunkstate = new Dictionary<string, Tuple<long, long>>();
-            List<Dictionary<string, Tuple<long, long>>> chunkstateList = new List<Dictionary<string, Tuple<long, long>>>();
-            List<string> unparsedfiles = new List<string>();
-            
-
-            var files = mc.FileList.Where(x => x.Name.EndsWith(ext)).ToList();
-            var processedfiles = new List<string>();
-            rigcount = files.Count();
-
-            var tasks = new List<Task>();
-            foreach (var f in files)
+            using (var frm = new frmUnitTest(ext, bundletag, bm))
             {
+                //https://stackoverflow.com/questions/17797670/form-showdialog-does-not-display-window-with-debugging-enabled
+                frm.Load += (sender, e) => (sender as frmUnitTest).Visible = true;
+                frm.ShowDialog();
 
-                totalbytes += f.Size;
-                tasks.Add(Task.Run(async () => await StressTestFileAsync(f, unknownclasses))
-                    .ContinueWith(t =>
-                {
-                    if (t.IsCompleted)
-                    {
-                        try
-                        {
-                            totalbytes += t.Result.Item1;
-                            unknownbytes += t.Result.Item2;
-                            chunkstateList.Add(t.Result.Item3);
-                            processedfiles.Add(f.Name);
-                        }
-                        catch (Exception)
-                        {
-                            unparsedfiles.Add(f.Name);
-                            //throw;
-                        }
-                        
-                    }
-                    else
-                    {
-                        unparsedfiles.Add(f.Name);
-                    }
-                    //Debug.WriteLine($"{t.Id} Status: {t.Status}, {chunkstateList.Count} / {tasks.Count} tests completed.");
-                }
-                ));
-                //var r = await Task.Run(() => StressTestFileAsync(f, unknownclasses));
-                //totalbytes += r.Item1;
-                //unknownbytes += r.Item2;
-                //chunkstateList.Add(r.Item3);
-                //processedfiles.Add(f.Name);
-
-            }
-
-            Task.WaitAll(tasks.ToArray());
-            var leftoutfiles = new List<string>();
-            if (chunkstateList.Count != files.Count)
-            {
-                foreach (var file in files.Select(_ => _.Name))
-                {
-                    if (!processedfiles.Contains(file))
-                    {
-                        leftoutfiles.Add(file);
-                    }
-                }
-            }
-
-            // concat dictionaries
-            foreach (var dict in chunkstateList)
-            {
-                if (dict == null)
-                    continue;
-                foreach (string key in dict.Keys)
-                {
-                    var val = dict[key];
-
-                    if (!chunkstate.ContainsKey(key))
-                    {
-                        chunkstate.Add(key, new Tuple<long, long>(0, 0));
-                    }
-                    var already = chunkstate[key];
-                    chunkstate[key] = new Tuple<long, long>(
-                            already.Item1 + val.Item1,
-                            already.Item2 + val.Item2
-                        );
-                }
-            }
-
-            Console.WriteLine($"{ext} test completed...");
-            Console.WriteLine("Results:");
-            Console.WriteLine($"\t- Parsed {rigcount} {ext} files");
-            Console.WriteLine($"\t- Parsing percentage => {((double)totalbytes - (double)unknownbytes) / (double)totalbytes:0.00%}" +
-                $" | Couldn't parse: {unparsedfiles.Count} files!");
-            Console.WriteLine($"Classes: ");
-            foreach (var c in chunkstate)
-            {
-                var percentage = (((double)c.Value.Item2 - (double)c.Value.Item1) / (double)c.Value.Item1);
-                if (percentage != (double)-1)
-                    Console.WriteLine($"\t- {c.Key} {percentage:0.000000%}");
-            }
-            Console.WriteLine("Files unparsed:");
-            foreach (var f in unparsedfiles)
-            {
-                Console.WriteLine($"\t-{f}");
-            }
-            Console.WriteLine("Files left out:");
-            foreach (var f in leftoutfiles)
-            {
-                Console.WriteLine($"\t-{f}");
-            }
-            Console.WriteLine("Types unparsed:");
-            unknownclasses = unknownclasses.Distinct().ToList();
-            foreach (var f in unknownclasses)
-            {
-                Console.WriteLine($"\t-{f}");
-            }
-
-            return new Tuple<long, int>(unknownbytes, unparsedfiles.Count);
-        }
-
-        private async static Task<Tuple<long, long, Dictionary<string, Tuple<long, long>>>> StressTestFileAsync(IWitcherFile f, List<string> unknownclasses)
-        {
-            Dictionary<string, Tuple<long, long>> chunkstate = new Dictionary<string, Tuple<long, long>>();
-            long totalbytes = 0;
-            long unknownbytes = 0;
-
-            var crw = new CR2WFile();
-
-
-            //byte[] originalFile;
-            //byte[] reconstructedFile;
-            using (var ms = new MemoryStream())
-            using (var br = new BinaryReader(ms))
-            //using (var bw = new BinaryWriter(ms))
-            {
-                f.Extract(ms);
-                //originalFile = ms.ToArray();
+                var result = frm.GetResult();
                 
-                ms.Seek(0, SeekOrigin.Begin);
-                crw.Read(br);
-                //crw.Write(bw);
-                //reconstructedFile = ms.ToArray();
+                Assert.AreEqual(0, result.Item1, $"Unknown bytes remained -> {result.Item1}bytes");
+                Assert.AreEqual(0, result.Item2, $"Unparsed files -> {result.Item2}");
             }
-
-            unknownclasses.AddRange(crw.UnknownTypes);
-            foreach (var c in crw.chunks)
-            {
-                var ubsl = c.unknownBytes?.Bytes != null ? c.unknownBytes.Bytes.Length : 0;
-
-                if (!chunkstate.ContainsKey(c.Type))
-                {
-                    chunkstate.Add(c.Type, new Tuple<long, long>(0, 0));
-                }
-                var already = chunkstate[c.Type];
-                chunkstate[c.Type] = new Tuple<long, long>(
-                        already.Item1 + c.Export.dataSize,
-                        already.Item2 + ubsl
-                    );
-
-                totalbytes += c.Export.dataSize;
-                unknownbytes += ubsl;
-
-            }
-
-            //if (!originalFile.SequenceEqual(reconstructedFile))
-            //{
-            //    throw new NotImplementedException();
-            //}
-
-            return new Tuple<long, long, Dictionary<string, Tuple<long, long>>>(totalbytes, unknownbytes, chunkstate);
-
         }
+        
+
     }
 }

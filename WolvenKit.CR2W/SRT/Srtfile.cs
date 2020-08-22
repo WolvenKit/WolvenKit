@@ -1115,6 +1115,10 @@ namespace WolvenKit.CR2W.SRT
             handle.Free();
         }
 
+        public void SerializeToXml(Stream writer)
+        {
+
+        }
 
         
 

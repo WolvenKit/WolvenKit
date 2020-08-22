@@ -329,16 +329,16 @@ namespace WolvenKit.Render
             foreach (var materialInstance in cdata.materialInstances)
             {
                 Material mat = new Material();
-                foreach (var material in materialInstance.instanceParameters)
+                foreach (var material in materialInstance.InstanceParameters)
                 {
-                    switch (material.Name)
+                    switch (material.REDName)
                     {
                         case "Diffuse":
-                            Texture diffTexture = GetTexture(driver, (material as CHandle).DepotPath);
+                            Texture diffTexture = GetTexture(driver, (material as IHandleAccessor).DepotPath);
                             mat.SetTexture(0, diffTexture);
                             break;
                         case "Normal":
-                            Texture normTexture = GetTexture(driver, (material as CHandle).DepotPath);
+                            Texture normTexture = GetTexture(driver, (material as IHandleAccessor).DepotPath);
                             mat.SetTexture(1, normTexture);
                             //mat.Type = MaterialType.NormalMapSolid;
                             break;
