@@ -56,7 +56,7 @@ namespace WolvenKit.CR2W.Types
 
         /// <summary>
         /// Flags inherited from cr2w export (aka chunk)
-        /// 0 means chunk is uncooked (usefull for some file types that have 
+        /// 0 means chunk is uncooked (useful for some file types that have 
         /// a different layout in the uncooked and cooked state, e.g. CBitmapTexture)
         /// Is set on file read and should not be modified
         /// </summary>
@@ -237,21 +237,20 @@ namespace WolvenKit.CR2W.Types
             // fixed class/struct (no leading null byte), read all properties in order
             if (tags.Contains(EREDMetaInfo.REDStruct))
             {
-                //fields.AddRange(ReadAllRedVariables<REDAttribute>(file));
-                ReadAllRedVariables<REDAttribute>(file);
-            }
-            // CVectors
-            else
-            {
                 // CClipmapcookeddata has no trailing 0 ???
                 if (this is CClipMapCookedData cClip)
                 {
                     cClip.Data.Bytes = file.ReadBytes((int)size);
                     return;
                 }
-                
 
-
+                //fields.AddRange(ReadAllRedVariables<REDAttribute>(file));
+                ReadAllRedVariables<REDAttribute>(file);
+            }
+            // CVectors
+            else
+            {
+                #region initial checks
                 sbyte zero = file.ReadSByte();
                 //var dzero = file.ReadBit6();
 
@@ -274,7 +273,9 @@ namespace WolvenKit.CR2W.Types
                         throw new InvalidParsingException($"Tried parsing a CVariable: zero read {zero}.");
                     }
                 }
+                #endregion
 
+                #region parse sequential variables
                 List<string> dbg_varnames = new List<string>();
                 while (true)
                 {
@@ -292,15 +293,25 @@ namespace WolvenKit.CR2W.Types
 
                     TryAddVariable(cvar);
                 }
+                #endregion
 
                 // parse buffers
                 ReadAllRedVariables<REDBufferAttribute>(file);
 
+                // checks
                 var endpos = file.BaseStream.Position;
                 var bytesread = endpos - startpos;
-                if (bytesread != size)
+                if (bytesread > size)
                 {
-
+                    // parsed to far: possible file corruption
+                    // BUT: this check is impossible for elements of an array.
+                    // in this case, passed size is 0, so we can check for that
+                    if (size != 0)
+                        throw new InvalidParsingException($"Read bytes not equal to expected bytes. Difference: {bytesread - size}");
+                }
+                else if (bytesread < size)
+                {
+                    // parsed too few bytes: add to unknown bytes later
                 }
             }
         }
@@ -438,6 +449,15 @@ namespace WolvenKit.CR2W.Types
                 List<PropertyInfo> redprops = REDReflection.GetREDProperties<REDAttribute>(this.GetType()).ToList();
                 foreach (PropertyInfo pi in redprops)
                 {
+                    // don't write ignored buffers, they get written in the class
+                    if (pi.GetCustomAttribute<REDAttribute>() is REDBufferAttribute bufferAttribute
+                        && bufferAttribute.IsIgnored)
+                    {
+                        // add IsSerialized?
+                        continue;
+                    }
+
+
                     // just write the RedBuffer without variable id
                     if (pi?.GetValue(this) is CVariable cbuf)
                     {

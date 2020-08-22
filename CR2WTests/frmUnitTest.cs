@@ -148,11 +148,8 @@ namespace CR2WTests
                 if (f is BundleItem bi /*&& bi.Name.StartsWith("quests\\minor_quests\\skellige\\mq20")*/)
                 {
                     //log
-                    //richTextBox1.AppendText($"{i + 1}/{files.Count}: {f.Name}\r\n");
                     UpdateRichTextBox1($"{i + 1}/{files.Count}: {f.Name}\r\n");
-                    //progressBar1.PerformStep();
                     UpdateProgress();
-                    //this.Text = $"{ext} - {i + 1}/{files.Count}\r\n\r\n";
                     try
                     {
                         var fileresult = StressTestFile(bi, ref unknownclasses, ref totalbytes, ref unknownbytes, ref chunkstate);
@@ -162,12 +159,11 @@ namespace CR2WTests
                     {
                         unparsedfiles.Add(f.Name);
                         //throw ex;
+                        Console.WriteLine($"{f.Name}:{ex.Message}\r\n");
                         UpdateRichTextBox2($"{f.Name}:{ex.Message}\r\n");
                     }
                 }
             });
-
-            //richTextBox2.Clear();
 
             Console.WriteLine($"{ext} test completed...");
             Console.WriteLine("Results:");
@@ -185,7 +181,7 @@ namespace CR2WTests
             foreach (var c in chunkstate)
             {
                 var percentage = (((double)c.Value.Item1 - (double)c.Value.Item2) / (double)c.Value.Item1);
-                if (percentage != (double)-1)
+                if (percentage != (double)1)
                 {
                     Console.WriteLine($"\t- {c.Key} {percentage:0.00%}");
                     UpdateRichTextBox2($"\t- {c.Key} {percentage:0.00%}\r\n");
@@ -221,10 +217,12 @@ namespace CR2WTests
                 f.ExtractExistingMMF(ms);
                 ms.Seek(0, SeekOrigin.Begin);
 
-
+                #region Reading Test A
                 // reading test
                 crw.Read(br);
+                #endregion
 
+                #region StringTableTest A.1
                 // additional tests
                 (var dict, var strings, var nameslist, var importslist) = crw.GenerateStringtable();
                 var newdictvalues = dict.Values.ToList();
@@ -307,6 +305,30 @@ namespace CR2WTests
                         throw new InvalidBundleException("Generated dictionary not equal actual dictionary.");
                     }
                 }
+                #endregion
+
+                #region Writing Test B
+                byte[] buffer_testB;
+                byte[] buffer_testB_original;
+
+                using (var ms_testB = new MemoryStream())
+                using (var bw_testB = new BinaryWriter(ms_testB))
+                {
+                    crw.Write(bw_testB);
+                    buffer_testB = ms_testB.ToArray();
+                }
+
+                // compare
+                ms.Seek(0, SeekOrigin.Begin);
+                buffer_testB_original = ms.ToArray();
+
+                if (!Enumerable.SequenceEqual(buffer_testB_original, buffer_testB))
+                {
+                    throw new InvalidBundleException("Generated cr2w file not equal to original file.");
+                }
+
+                #endregion
+
             }
             foreach (var ut in crw.UnknownTypes)
             {

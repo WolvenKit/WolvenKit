@@ -22,18 +22,31 @@ namespace WolvenKit.CR2W.Types
 
         public XDocument Data { get; set; }
 
+        private byte[] dbg_original_data;
+
         public override void Read(BinaryReader file, uint size)
         {
             var len = file.ReadInt32();
             var byteso = file.ReadBytes(len);
+
+
             using (var ms = new MemoryStream(byteso))
             {
                 Data = new XDocument(XDocument.Load(ms));
             }
+
+            dbg_original_data = byteso;
+
+            var dbg_written_data1 = Encoding.ASCII.GetBytes(Data.ToString());
+            var dbg_written_data2 = Encoding.Default.GetBytes(Data.ToString());
+            var dbg_written_data3 = Encoding.UTF8.GetBytes(Data.ToString());
+            var dbg_written_data4 = Encoding.Unicode.GetBytes(Data.ToString());
         }
 
         public override void Write(BinaryWriter file)
         {
+
+
             file.Write(Data.ToString().Length);
             file.Write(Encoding.ASCII.GetBytes(Data.ToString()));
         }

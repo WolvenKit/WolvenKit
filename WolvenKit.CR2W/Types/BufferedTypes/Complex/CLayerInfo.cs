@@ -23,17 +23,26 @@ namespace WolvenKit.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
+            var startpos = file.BaseStream.Position;
+
             base.Read(file, size);
 
-            ParentGroup.ChunkHandle = true;
-            ParentGroup.Read(file, 4);
+            var endpos = file.BaseStream.Position;
+            var bytesread = endpos - startpos;
+            if (bytesread != size)
+            {
+                ParentGroup.ChunkHandle = true;
+                ParentGroup.Read(file, 4);
+            }
         }
 
         public override void Write(BinaryWriter file)
         {
             base.Write(file);
 
-            ParentGroup.Write(file);
+            // HACK check if it has been set in Read()
+            if (ParentGroup != null && ParentGroup.ChunkHandle == true)
+                ParentGroup.Write(file);
         }
 
 

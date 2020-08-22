@@ -57,7 +57,7 @@ namespace WolvenKit.CR2W.Types
                 Debug.Print("Read: curve piece value count " + valueCount.val + " exceeds limit " + values.Count);
             }
 
-            values.Read(file, size, Math.Min(valueCount.val, values.Count));
+            values.Read(file, size, valueCount.val);
         }
 
         public override void Write(BinaryWriter file)

@@ -6,7 +6,7 @@ using static WolvenKit.CR2W.Types.Enums;
 namespace WolvenKit.CR2W.Types
 {
 	[DataContract(Namespace = "")]
-	[REDMeta]
+	[REDMeta(EREDMetaInfo.REDStruct)]
 	public partial class CClipMapCookedData : ISerializable
 	{
 

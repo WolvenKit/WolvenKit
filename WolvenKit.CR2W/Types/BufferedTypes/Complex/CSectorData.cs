@@ -9,12 +9,10 @@ using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.CR2W.Types
 {
-
     public partial class CSectorData : ISerializable
     {
 
-        [REDBuffer] public CUInt32 Unknown1 { get; set; }
-        [REDBuffer] public CUInt32 Unknown2 { get; set; }
+        [REDBuffer] public CUInt64 Unknown1 { get; set; }
 
         [REDBuffer] public CBufferVLQ<CSectorDataResource> Resources { get; set; }
         [REDBuffer] public CBufferVLQ<CSectorDataObject> Objects { get; set; }

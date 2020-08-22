@@ -155,16 +155,16 @@ namespace WolvenKit
                 propertyWindow.Show(dockPanel, DockState.DockBottom);
             }
 
-            if (ImageViewer == null || ImageViewer.IsDisposed)
-            {
-                ImageViewer = new frmImagePreview();
-                ImageViewer.Show(dockPanel, DockState.Document);
-            }
-
             propertyWindow.Chunk = e.Chunk;
 
             if (e.Chunk.data is CBitmapTexture xbm)
             {
+                if (ImageViewer == null || ImageViewer.IsDisposed)
+                {
+                    ImageViewer = new frmImagePreview();
+                    ImageViewer.Show(dockPanel, DockState.Document);
+                }
+
                 ImageViewer.SetImage(e.Chunk);
             }
         }

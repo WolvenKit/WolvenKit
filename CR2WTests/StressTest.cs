@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Security.Cryptography;
 using WolvenKit.Common.Extensions;
+using Microsoft.Win32;
 
 namespace CR2WTests
 {
@@ -57,10 +58,11 @@ namespace CR2WTests
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
+            var exedir = Path.GetDirectoryName(LookUpW3exe());
+
             memorymappedbundles = new Dictionary<string, MemoryMappedFile>();
             bm = new BundleManager();
-            //bm.LoadAll("D:\\SteamLibrary\\steamapps\\common\\The Witcher 3\\bin\\x64");
-            bm.LoadAll("C:\\w3mod\\The Witcher 3\\bin\\x64");
+            bm.LoadAll(exedir);
 
             //Load MemoryMapped Bundles
             foreach (var b in bm.Bundles.Values)
@@ -69,6 +71,54 @@ namespace CR2WTests
             
                 memorymappedbundles.Add(e, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, e, 0, MemoryMappedFileAccess.Read));
 
+            }
+        }
+
+        private static string LookUpW3exe()
+        {
+            const string uninstallkey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
+            const string uninstallkey2 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
+            var w3 = "";
+            try
+            {
+                Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
+                {
+                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey + item)
+                        ?.GetValue("DisplayName");
+                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey + item)
+                        ?.GetValue("InstallLocation");
+                    if (programName != null && installLocation != null)
+                    {
+                        if (programName.ToString().Contains("The Witcher 3 - Wild Hunt") ||
+                            programName.ToString().Contains("The Witcher 3: Wild Hunt"))
+                        {
+                            w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe",
+                                SearchOption.AllDirectories).First();
+                        }
+                    }
+                });
+                Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
+                {
+                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
+                        ?.GetValue("DisplayName");
+                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
+                        ?.GetValue("InstallLocation");
+                    if (programName != null && installLocation != null)
+                    {
+                        if (programName.ToString().Contains("The Witcher 3 - Wild Hunt") ||
+                            programName.ToString().Contains("The Witcher 3: Wild Hunt"))
+                        {
+                            if (Directory.Exists(installLocation.ToString()))
+                                w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe",
+                                SearchOption.AllDirectories).First();
+                        }
+                    }
+                });
+                return w3;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 

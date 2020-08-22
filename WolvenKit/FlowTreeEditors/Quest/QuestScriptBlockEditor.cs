@@ -48,7 +48,7 @@ namespace WolvenKit {
                 ret += functionName.Value + "(";
                 CArray<QuestScriptParam> parameters = block.Parameters;
 
-                QuestScriptParam last = parameters.Last();
+                QuestScriptParam last = parameters.LastOrDefault();
 
                 foreach (var parameter in parameters)
                 {

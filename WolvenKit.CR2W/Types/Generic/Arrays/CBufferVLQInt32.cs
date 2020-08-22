@@ -24,9 +24,16 @@ namespace WolvenKit.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            CVLQInt32 count = new CVLQInt32(cr2w, null, "");
-            count.val = elements.Count;
-            count.Write(file);
+            if (elements.Count == 0)
+            {
+                file.Write((byte)0x80);
+            }
+            else
+            {
+                CVLQInt32 count = new CVLQInt32(cr2w, null, "");
+                count.val = elements.Count;
+                count.Write(file);
+            }
 
             base.Write(file);
         }

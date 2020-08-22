@@ -5,7 +5,10 @@ namespace WolvenKit.CR2W.Types
 {
 
     // missing in RTTI
-
+    /// <summary>
+    /// this class is special \o/
+    /// see CVariable.cs.Read
+    /// </summary>
     public partial class CClipMapCookedData : ISerializable
     {
         [REDBuffer] public CBytes Data { get; set; }
@@ -112,7 +115,7 @@ namespace WolvenKit.CR2W.Types
     
     public partial class CCutsceneTemplate : CSkeletalAnimationSet
     {
-        //[REDBuffer] public CUInt32 Unk11 { get; set; }
+        [REDBuffer] public CUInt32 Unk11 { get; set; }
         [REDBuffer] public CBufferUInt32<CVariantSizeType> Animevents { get; set; }
     }
     public partial class CEntityTemplate : CResource
@@ -130,7 +133,7 @@ namespace WolvenKit.CR2W.Types
     }
     public partial class CExtAnimEventsFile : CResource
     {
-        [REDBuffer] public CUInt32 Unk1 { get; set; }
+        //[REDBuffer] public CUInt32 Unk1 { get; set; }
     }
     public partial class CFoliageResource : CResource
     {
@@ -147,7 +150,7 @@ namespace WolvenKit.CR2W.Types
         [REDBuffer] public CHandle<CGameWorld> Worldhandle { get; set; }
         [REDBuffer] public CHandle<CLayerGroup> Layergrouphandle { get; set; }
         [REDBuffer] public CBufferVLQ<CHandle<CLayerGroup>> ChildrenGroups { get; set; }
-        [REDBuffer] public CBufferVLQ<CHandle<CLayerGroup>> ChildrenInfos { get; set; }
+        [REDBuffer] public CBufferVLQ<CHandle<CLayerInfo>> ChildrenInfos { get; set; }
     }
 
     public partial class CMaterialGraph : IMaterialDefinition
@@ -304,7 +307,7 @@ namespace WolvenKit.CR2W.Types
     public partial class CUmbraTile : CResource
     {
 
-        //public CBufferUInt32<CHandle<>> tiles;
+        //[REDBuffer] public CBufferUInt32<CHandle<>> Tiles { get; set; }
 
 
     }

@@ -40,28 +40,25 @@ namespace WolvenKit.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            file.Write(Variant.GettypeId());
-
-            byte[] buffer = System.Array.Empty<byte>();
-            using (var ms = new MemoryStream())
-            using (var bw = new BinaryWriter(ms))
+            if (Variant == null)
             {
-                Variant.Write(bw);
-                buffer = ms.ToArray();
+                file.Write((ushort)0);
+                file.Write((uint)4);
             }
-            file.Write(buffer.Length + 4);
-            file.Write(buffer);
+            else
+            {
+                file.Write(Variant.GettypeId());
 
-            //var pos = file.BaseStream.Position;
-            //file.Write((uint) 0); // size placeholder
-
-            //Variant.Write(file);
-            //var endpos = file.BaseStream.Position;
-
-            //file.Seek((int) pos, SeekOrigin.Begin);
-            //var actualsize = (uint) (endpos - pos);
-            //file.Write(actualsize); // Write size
-            //file.Seek((int) endpos, SeekOrigin.Begin);
+                byte[] buffer = System.Array.Empty<byte>();
+                using (var ms = new MemoryStream())
+                using (var bw = new BinaryWriter(ms))
+                {
+                    Variant.Write(bw);
+                    buffer = ms.ToArray();
+                }
+                file.Write(buffer.Length + 4);
+                file.Write(buffer);
+            }
         }
 
         public override CVariable SetValue(object val)
@@ -88,9 +85,10 @@ namespace WolvenKit.CR2W.Types
 
         public override List<IEditableVariable> GetEditableVariables()
         {
-            var list = new List<IEditableVariable>
+            var list = new List<IEditableVariable>();
+            if (Variant != null)
             {
-                Variant
+                list.Add(Variant);
             };
             return list;
         }

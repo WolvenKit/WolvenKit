@@ -186,7 +186,7 @@ namespace WolvenKit.CR2W
             }
             else if (bytesleft < 0)
             {
-                throw new InvalidParsingException("Parsing Variable read too far.");
+                throw new InvalidParsingException($"Parsing Variable read too far. Difference: {bytesleft}");
             }
 
             return parsedvar;

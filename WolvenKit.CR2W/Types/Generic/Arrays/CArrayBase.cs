@@ -72,8 +72,10 @@ namespace WolvenKit.CR2W.Types
             {
                 CVariable element = CR2WTypeManager.Create(Elementtype, i.ToString(), cr2w, this);
 
-                var elementsize = (size - 4) / elementcount;
-                element.Read(file, (uint)elementsize);
+                // no actual way to find out the elementsize of an array element
+                // bacause cdpr classes are serialized sequentially
+                // solution? not sure: pass 0 and disable checks?
+                element.Read(file, (uint)0);
                 if (element is T te)
                     Elements.Add(te);
             }

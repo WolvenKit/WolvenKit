@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
@@ -22,7 +23,14 @@ namespace WolvenKit.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            file.Write(Bytes);
+            if (Bytes != null && Bytes.Length != 0)
+            {
+                file.Write(Bytes);
+            }
+            else
+            {
+
+            }
         }
 
         public override CVariable SetValue(object val)

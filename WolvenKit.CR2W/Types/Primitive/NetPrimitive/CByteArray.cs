@@ -62,7 +62,10 @@ namespace WolvenKit.CR2W.Types
 
         public override string ToString()
         {
-            return Bytes.Length + " bytes";
+            if (Bytes == null)
+                return "0 bytes";
+            else
+                return  Bytes.Length + " bytes";
         }
 
         public override void SerializeToXml(XmlWriter xw)

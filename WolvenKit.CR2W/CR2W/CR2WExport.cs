@@ -203,7 +203,7 @@ namespace WolvenKit.CR2W
                 ParentPtr,
                 data
             };
-            if (unknownBytes != null)
+            if (unknownBytes != null && unknownBytes.Bytes != null && unknownBytes.Bytes.Length != 0)
             {
                 vars.Add(unknownBytes);
             }
