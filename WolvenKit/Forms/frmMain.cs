@@ -31,6 +31,7 @@ namespace WolvenKit
     using CR2W.Types;
     using Extensions;
     using Forms;
+    using System.Web.UI.Design;
     using WolvenKit.App;
     using WolvenKit.App.ViewModels;
     using WolvenKit.Common.Extensions;
@@ -1556,13 +1557,38 @@ namespace WolvenKit
 
                 //------------------------ PRE ------------------------------------//
 
-                //Cleanup Directories
+                // Cleanup Directories
                 vm.CleanupDirectories();
 
                 //------------------------- COOKING -------------------------------------//
                 int statusCookCol = -1;
                 int statusCookTex = -1;
                 int statusCookBundle = -1;
+
+                // cook Textures
+                // cook -platform=pc -mod="%DIR_UNCOOKED_TEXTURES%" -basedir="%DIR_UNCOOKED_TEXTURES%" -outdir="%DIR_COOKED_DLC%"
+                // make sure to move the generated cook.db to a temp folder, it is used later in wcc_buildcache texture
+                var taskCookTex = Task.Run(() => vm.Cook(EBundleType.TextureCache));
+                await taskCookTex.ContinueWith(antecedent =>
+                {
+                    //Logger.LogString($"Cooking Textures ended with status: {antecedent.Result}", Logtype.Important);
+                    statusCookTex = antecedent.Result;
+                });
+                if (statusCookTex == 0)
+                    Logger.LogString("Cooking textures finished with errors. \n", Logtype.Error);
+
+                //// cook Uncooked files
+                //// cook -platform=pc -trimdir="dlc\dlc%MODNAME_LC%" %WCC_SEEDFILES% -outdir="%DIR_COOKED_DLC%"
+                //// make sure to move the generated cook.db to a temp folder, it is used later in wcc_buildcache collision
+                //var taskCookBundle = Task.Run(() => vm.Cook(EBundleType.Bundle));
+                //await taskCookBundle.ContinueWith(antecedent =>
+                //{
+                //    //Logger.LogString($"Cooking bundled files ended with status: {antecedent.Result}", Logtype.Important);
+                //    statusCookBundle = antecedent.Result;
+                //});
+                //if (statusCookBundle == 0)
+                //    Logger.LogString("Cooking bundle files finished with errors. \n", Logtype.Error);
+
 
                 // cook Collision
                 var taskCookCol = Task.Run(() => vm.Cook(EBundleType.CollisionCache));
@@ -1572,32 +1598,62 @@ namespace WolvenKit
                     statusCookCol = antecedent.Result;
                 });
                 if (statusCookCol == 0)
-                    Logger.LogString("Cooking collision failed. \n", Logtype.Error);
+                    Logger.LogString("Cooking collision finished with errors. \n", Logtype.Error);
 
-                // cook Textures
-                var taskCookTex = Task.Run(() => vm.Cook(EBundleType.TextureCache));
-                await taskCookTex.ContinueWith(antecedent =>
-                {
-                    //Logger.LogString($"Cooking Textures ended with status: {antecedent.Result}", Logtype.Important);
-                    statusCookTex = antecedent.Result;
-                });
-                if (statusCookTex == 0)
-                    Logger.LogString("Cooking textures failed. \n", Logtype.Error);
 
-                // cook Bundle
-                var taskCookBundle = Task.Run(() => vm.Cook(EBundleType.Bundle));
-                await taskCookBundle.ContinueWith(antecedent =>
-                {
-                    //Logger.LogString($"Cooking bundled files ended with status: {antecedent.Result}", Logtype.Important);
-                    statusCookBundle = antecedent.Result;
-                });
-                if (statusCookBundle == 0)
-                    Logger.LogString("Cooking bundle files failed. \n", Logtype.Error);
 
                 //------------------------- POST COOKING -------------------------------------//
 
 
+                // copy mod files from Bundle (cooked files) to \cooked
+                Logger.LogString($"======== ADDING COOKED MOD FILES ======== \n", Logtype.Important);
+                try
+                {
+                    var cookedModDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\Mods\mod" + ActiveMod.Name + @"\content\");
+                    string uncookedmoddir = Path.Combine(ActiveMod.ModDirectory, EBundleType.Bundle.ToString());
+                    var di = new DirectoryInfo(uncookedmoddir);
+                    var files = di.GetFiles("*", SearchOption.AllDirectories);
+                    Logger.LogString($"Found {files.Length} files in {di.FullName}. \n");
+                    foreach (var fi in files)
+                    {
+                        string relpath = fi.FullName.Substring(uncookedmoddir.Length + 1);
+                        string newpath = Path.Combine(cookedModDir, relpath);
+                        fi.CopyToAndCreate(newpath);
+                    }
+                }
+                catch (Exception)
+                {
+                    Logger.LogString("Copying cooked mod files finished with errors. \n", Logtype.Error);
+                }
+                finally
+                {
+                    Logger.LogString("Finished succesfully. \n", Logtype.Success);
+                }
 
+                // copy dlc files from Bundle (cooked files) to \cooked
+                Logger.LogString($"======== ADDING COOKED DLC FILES ======== \n", Logtype.Important);
+                try
+                {
+                    var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\dlc" + ActiveMod.Name + @"\content\");
+                    var uncookeddlcdir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.Bundle.ToString());
+                    var di = new DirectoryInfo(uncookeddlcdir);
+                    var files = di.GetFiles("*", SearchOption.AllDirectories);
+                    Logger.LogString($"Found {files.Length} files in {di.FullName}. \n");
+                    foreach (var fi in files)
+                    {
+                        string relpath = fi.FullName.Substring(uncookeddlcdir.Length + 1);
+                        string newpath = Path.Combine(cookedDLCDir, relpath);
+                        fi.CopyToAndCreate(newpath);
+                    }
+                }
+                catch (Exception)
+                {
+                    Logger.LogString("Copying cooked dlc files finished with errors. \n", Logtype.Error);
+                }
+                finally
+                {
+                    Logger.LogString("Finished succesfully. \n", Logtype.Success);
+                }
 
 
                 //------------------------- PACKING -------------------------------------//
@@ -1619,7 +1675,7 @@ namespace WolvenKit
                             statusPack = antecedent.Result;
                         });
                         if (statusPack == 0)
-                            Logger.LogString("Packing bundles failed. \n", Logtype.Error);
+                            Logger.LogString("Packing bundles finished with errors. \n", Logtype.Error);
                     }
                     else
                         Logger.LogString("Cooking assets failed. No bundles will be packed!\n", Logtype.Error);
@@ -1639,19 +1695,24 @@ namespace WolvenKit
                             //Logger.LogString($"Creating metadata ended with status: {statusMetaData}", Logtype.Important);
                         });
                         if (statusMetaData == 0)
-                            Logger.LogString("Creating metadata failed. \n", Logtype.Error);
+                            Logger.LogString("Creating metadata finished with errors. \n", Logtype.Error);
                     }
                     else
                         Logger.LogString("Packing bundles failed. No metadata will be created!\n", Logtype.Error);
                 }
 
 
-                //------------------------POST COOKING------------------------------------//
+                //------------------------ POST COOKING --------------------------------//
+
+
+
+                //---------------------------- CACHES -----------------------------------//
+                // always call wcc buildcache
+                // checks are in GenerateCache()
 
                 //Generate collision cache
-                if (packsettings.GenCollCache)
+                //if (packsettings.GenCollCache)
                 {
-                    //statusCol = await Task.Run(() => GenerateCache(MainController.Get().CollisionManager.TypeName));
                     var t = Task.Run(() => vm.GenerateCache(MainController.Get().CollisionManager.TypeName));
                     await t.ContinueWith(antecedent =>
                     {
@@ -1659,11 +1720,11 @@ namespace WolvenKit
                         //Logger.LogString($"Building collision cache ended with status: {statusCol}", Logtype.Important);
                     });
                     if (statusCol == 0)
-                        Logger.LogString("Building collision cache failed. \n", Logtype.Error);
+                        Logger.LogString("Building collision cache finished with errors. \n", Logtype.Error);
                 }
 
                 //Handle texture caching
-                if (packsettings.GenTexCache)
+                //if (packsettings.GenTexCache)
                 {
                     var t = Task.Run(() => vm.GenerateCache(EBundleType.TextureCache));
                     await t.ContinueWith(antecedent =>
@@ -1672,7 +1733,7 @@ namespace WolvenKit
                         //Logger.LogString($"Building texture cache ended with status: {statusTex}", Logtype.Important);
                     });
                     if (statusTex == 0)
-                        Logger.LogString("Building texture cache failed. \n", Logtype.Error);
+                        Logger.LogString("Building texture cache finished with errors. \n", Logtype.Error);
                 }
 
 
@@ -1732,6 +1793,7 @@ namespace WolvenKit
                     }
                 }
 
+                //---------------------------- SCRIPTS -----------------------------------//
                 #region Scripts
                 //Handle mod scripts
                 if (Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Any())
@@ -1766,6 +1828,8 @@ namespace WolvenKit
                 }
                 #endregion
 
+                //---------------------------- STRINGS -----------------------------------//
+                #region Strings
                 //Copy the generated w3strings
                 if (packsettings.Strings)
                 {
@@ -1774,6 +1838,10 @@ namespace WolvenKit
                     files.ForEach(x => File.Copy(x, Path.Combine(DlcpackDir + Path.GetFileName(x))));
                     files.ForEach(x => File.Copy(x, Path.Combine(modpackDir, Path.GetFileName(x))));
                 }
+                #endregion
+
+                //---------------------------- FINALIZE -----------------------------------//
+
 
                 //Install the mod
                 if (install)
@@ -1789,6 +1857,7 @@ namespace WolvenKit
                 return false;
             }
         }
+
         public void CreateNewMod()
         {
             var dlg = new SaveFileDialog
@@ -1940,7 +2009,7 @@ namespace WolvenKit
                 MainController.Get().Configuration.InitialModDirectory = Path.GetDirectoryName(file);
                 
 
-                //Loading the project
+                // Loading the project
                 var ser = new XmlSerializer(typeof(W3Mod));
                 var modfile = new FileStream(file, FileMode.Open, FileAccess.Read);
                 ActiveMod = (W3Mod)ser.Deserialize(modfile);
@@ -1951,13 +2020,16 @@ namespace WolvenKit
                 Logger.LogString("\"" + ActiveMod.Name + "\" loaded successfully!\n", Logtype.Success);
                 MainController.Get().ProjectStatus = "Ready";
 
-                //Hash all filepaths
+                // Hash all filepaths
                 var relativepaths = ActiveMod.ModFiles
                     .Select(_ => _.Substring(_.IndexOf(Path.DirectorySeparatorChar) + 1))
                     .ToList();
                 Cr2wResourceManager.Get().RegisterAndWriteCustomPaths(relativepaths);
 
-                //Update the recent files.
+                // Create Virtial Links
+                CreateVirtualLinks();
+
+                // Update the recent files.
                 var files = new List<string>();
                 if (File.Exists("recent_files.xml"))
                 {
@@ -1983,6 +2055,37 @@ namespace WolvenKit
                 }
             }
         }
+
+        /// <summary>
+        /// Creates virtual links (mklink junction) between the project dlc folder
+        /// and the modkit r4Data/dlc folder
+        /// </summary>
+        private void CreateVirtualLinks()
+        {
+            string modname = ActiveMod.Name;
+            var uncookeddlcdir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.Bundle.ToString());
+
+            string r4link = $"{MainController.Get().Configuration.DepotPath}\\dlc\\{modname}";
+            string projlink = $"{uncookeddlcdir}\\dlc\\{modname}";
+
+
+            if (Directory.Exists(r4link))
+            {
+                Directory.Delete(r4link);
+            }
+            if (!Directory.Exists(r4link))
+            {
+                string args = $"/c mklink /J \"{r4link}\" \"{projlink}\"";
+                ProcessStartInfo startInfo = new ProcessStartInfo("cmd.exe", args)
+                {
+                    WindowStyle = ProcessWindowStyle.Minimized
+                };
+                Process.Start(startInfo);
+
+                Logger.LogString($"Links {r4link} <<==>> {projlink} succesfully created.", Logtype.Success);
+            }
+        }
+
 
         /// <summary>
         /// Scans the depot and the given archivemanagers for a file. If found, extracts it to the project.
