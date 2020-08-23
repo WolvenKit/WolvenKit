@@ -31,6 +31,7 @@ namespace WolvenKit.Common.Model
         TextureCache,
         SoundCache,
         Speech,
-        //Uncooked
+        Shader,
+        Uncooked
     }
 }
