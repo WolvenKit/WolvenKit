@@ -842,15 +842,39 @@ namespace WolvenKit.App.ViewModels
                             outdir = dir_cooked,
                         };
 
-                        // dlc bundle files can be cooked oppan-rmemr-style with trimdir
-                        if (cachetype == EBundleType.Bundle && dlc)
+
+                        switch (cachetype)
                         {
-                            cook.trimdir = $"dlc\\dlc{MainController.Get().ActiveMod.Name}";
-                        }
-                        else
-                        {
-                            cook.mod = dir_uncooked;
-                            cook.basedir = cfg.DepotPath;
+                            
+                            case EBundleType.CollisionCache: // legacy name, should be called Uncooked
+                                {
+                                    if (dlc)
+                                    {
+                                        // actually look up the trimdir
+                                        cook.trimdir = $"dlc\\dlc{MainController.Get().ActiveMod.Name}";
+                                        var seeddir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC", $"seed.dlc{ActiveMod.Name}.files");
+                                        cook.seed = seeddir;
+                                    }
+                                    else
+                                    {
+                                        cook.mod = dir_uncooked;
+                                        cook.basedir = dir_uncooked; //cfg.DepotPath?
+                                    }
+                                }
+                                break;
+                            case EBundleType.TextureCache:
+                                {
+                                    cook.mod = dir_uncooked;
+                                    cook.basedir = dir_uncooked; //cfg.DepotPath?
+                                }
+                                break;
+                            case EBundleType.Bundle:
+                            case EBundleType.SoundCache:
+                            case EBundleType.Speech:
+                            case EBundleType.Shader:
+                            case EBundleType.ANY:
+                            default:
+                                break;
                         }
                         
                         return await Task.Run(() => MainController.Get().WccHelper.RunCommand(cook));
@@ -983,7 +1007,10 @@ namespace WolvenKit.App.ViewModels
         public async Task<int> GenerateCache(EBundleType cachetype)
         {
             string moddbfile = ""; 
-            string dlcdbfile = ""; 
+            string dlcdbfile = "";
+            string modbasedir = "";
+            string dlcbasedir = "";
+
 
             cachebuilder cbuilder = cachebuilder.textures;
             string filename = "";
@@ -996,6 +1023,8 @@ namespace WolvenKit.App.ViewModels
                         filename = "collision.cache";
                         moddbfile = Path.Combine(mod_files_db, "cook.db");
                         dlcdbfile = Path.Combine(dlc_files_db, "cook.db");
+                        modbasedir = Path.Combine(ActiveMod.ModDirectory, cachetype.ToString());
+                        dlcbasedir = MainController.Get().Configuration.DepotPath;
                     }
                     break;
                 case EBundleType.TextureCache:
@@ -1004,6 +1033,8 @@ namespace WolvenKit.App.ViewModels
                         filename = "texture.cache";
                         moddbfile = Path.Combine(mod_tex_db, "cook.db");
                         dlcdbfile = Path.Combine(dlc_tex_db, "cook.db");
+                        modbasedir = Path.Combine(ActiveMod.ModDirectory, cachetype.ToString());
+                        dlcbasedir = MainController.Get().Configuration.DepotPath; //Path.Combine(ActiveMod.DlcDirectory, cachetype.ToString());
                     }
                     break;
                 //case EBundleType.Shader:
@@ -1020,17 +1051,15 @@ namespace WolvenKit.App.ViewModels
             string modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
             string dlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
 
-            string modcachedir = Path.Combine(ActiveMod.ModDirectory, cachetype.ToString());
-            string dlccachedir = Path.Combine(ActiveMod.DlcDirectory, cachetype.ToString());
-
+            
             int finished = 1;
 
-            finished *= await Task.Run(() => GenerateCacheInternal(modpackDir, moddbfile, modcachedir));
-            finished *= await Task.Run(() => GenerateCacheInternal(dlcpackDir, dlcdbfile, dlccachedir, true));
+            finished *= await Task.Run(() => GenerateCacheInternal(modpackDir, moddbfile, modbasedir));
+            finished *= await Task.Run(() => GenerateCacheInternal(dlcpackDir, dlcdbfile, dlcbasedir, true));
 
             return finished == 0 ? 0 : 1;
 
-            async Task<int> GenerateCacheInternal(string packDir, string dbfile, string cachedir, bool dlc = false)
+            async Task<int> GenerateCacheInternal(string packDir, string dbfile, string basedir, bool dlc = false)
             {
                 string type = dlc ? "Dlc" : "Mod";
                 try
@@ -1045,7 +1074,7 @@ namespace WolvenKit.App.ViewModels
                         {
                             Platform = platform.pc,
                             builder = cbuilder,
-                            basedir = cachedir,
+                            basedir = basedir,
                             DataBase = dbfile,
                             Out = $"{packDir}\\{filename}"
                         };
@@ -1064,6 +1093,40 @@ namespace WolvenKit.App.ViewModels
                     return 0;
                 }
             }
+        }
+
+        public void CreateFallBackSeedFile(string seedfile)
+        {
+
+            if (File.Exists(seedfile))
+                File.Delete(seedfile);
+
+            using (var fs = new FileStream(seedfile, FileMode.Create, FileAccess.Write))
+            using (var sr = new StreamWriter(fs, Encoding.Default))
+            {
+                sr.WriteLine("{");
+                sr.WriteLine("\t\"files\": [");
+
+                var uncookeddlcdir = new DirectoryInfo(Path.Combine(ActiveMod.DlcDirectory, EBundleType.CollisionCache.ToString()));
+                FileInfo[] files = uncookeddlcdir.GetFiles("*", SearchOption.AllDirectories);
+                for (int i = 0; i < files.Length; i++)
+                {
+                    FileInfo file = files[i];
+                    var relpath = file.FullName.Substring(uncookeddlcdir.FullName.Length + 1);
+                    relpath = relpath.Replace("\\", "\\\\");
+                    sr.WriteLine("\t\t{");
+                    sr.WriteLine($"\t\t\t\"path\": \"{relpath}\",");
+                    sr.WriteLine($"\t\t\t\"bundle\": \"blob\"");
+                    if (i < files.Length -1)
+                        sr.WriteLine("\t\t},");
+                    else
+                        sr.WriteLine("\t\t}");
+                }
+
+                sr.WriteLine("\t]");
+                sr.WriteLine("}");
+            }
+            Logger.LogString($"Fallback seedfile created: {seedfile}. \n", Logtype.Success);
         }
 
         #endregion

@@ -84,7 +84,7 @@ namespace WolvenKit.Common.Wcc
                 case ".w2mesh":
                     return EBundleType.CollisionCache.ToString();
                 default: 
-                    return EBundleType.Uncooked.ToString();
+                    return EBundleType.CollisionCache.ToString();
             }
         }
 
