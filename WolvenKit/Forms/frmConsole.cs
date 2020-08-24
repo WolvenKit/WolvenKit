@@ -15,6 +15,7 @@ using System.Collections;
 using System.Threading.Tasks;
 using CommandLine;
 using WolvenKit.App;
+using System.ComponentModel;
 
 namespace WolvenKit
 {
@@ -22,6 +23,10 @@ namespace WolvenKit
     {
         private delegate void logDelegate(string t, Logtype type);
         private string lastCommand;
+
+        private readonly List<Type> supportedTypes = new List<Type>() { typeof(CUInt64), typeof(CUInt32), typeof(CUInt16), typeof(CUInt8),
+            typeof(CInt64), typeof(CInt32), typeof(CInt16), typeof(CInt8),
+            typeof(CBool), typeof(CString) };
 
         public frmConsole()
         {
@@ -131,21 +136,21 @@ namespace WolvenKit
         private async Task<int> /*int*/ RunBulkEdit(BulkEditOptions opts)
         {
             return await Task.Run(() => RunBulkEditInternal(opts));
-            //return RunBulkEdit(opts.ext, opts.chunk, opts.var, opts.type, opts.val);
         }
 
 
         private async Task<int> /*int*/ RunBulkEditInternal(BulkEditOptions opts)
         {
-
+            if (MainController.Get().ActiveMod == null)
+                return 0;
             List<string> files = MainController.Get().ActiveMod.Files;
+            if (opts.ext != null)
+                files = MainController.Get().ActiveMod.Files.Where(_ => Path.GetExtension(_).Contains(opts.ext)).ToList();
+            AddTextStatic($"Starting Bulk edit. Found {files.Count} files to edit. \r\n", Logtype.Success);
 
             foreach (var path in files)
             {
                 var fullpath = Path.Combine(MainController.Get().ActiveMod.FileDirectory, path);
-                if (opts.ext != null && !Path.GetExtension(fullpath).Contains(opts.ext))
-                    continue;
-
 
                 CR2WFile cr2w;
                 using (var fs = new FileStream(fullpath, FileMode.Open, FileAccess.Read))
@@ -169,165 +174,92 @@ namespace WolvenKit
             return 0;
         }
 
-        private void EditVariablesInFile(string path,
-            CR2WFile file,
-            BulkEditOptions opts
-            )
+        private void EditVariablesInFile(string path, CR2WFile file, BulkEditOptions opts)
         {
             if (file == null)
                 return;
             if (opts.chunk != null && !file.chunks.Any(_ => opts.chunk.Contains(_.REDType)))
                 return;
 
-            // get chunks that match chunkname
-            List<CR2WExportWrapper> chunks = opts.chunk != null ? file.chunks.Where(_ => opts.chunk.Contains(_.REDType)).ToList() : file.chunks;
+            var excludedvalues = opts.exc.ToList();
+            var includedvalues = opts.inc.ToList();
 
-            foreach (CR2WExportWrapper c in chunks)
+            // get chunks that match chunkname
+            List<CR2WExportWrapper> chunks = opts.chunk != null ? file.chunks.Where(_ => _.data.GetType().Name == opts.chunk).ToList() : file.chunks;
+            //AddTextStatic($"Starting {path}... \r\n", Logtype.Success);
+            foreach (var chunk in chunks.Select(_ => _.data))
             {
-                EditVariables(c.data);
+                CheckProperties(chunk);
             }
             AddTextStatic($"Finished {path}.\r\n", Logtype.Success);
 
-            // local 
-            void EditVariables(CVariable vec)
+
+            void CheckProperties(CVariable cvar)
             {
-                if (vec == null)
-                    return;
-
-                TryEditVariable(vec, vec.REDName);
-
-                //check children
-                FieldInfo[] fields = vec.GetType().GetFields();
-                foreach (var f in fields)
+                // edit lists
+                if (cvar is IList && cvar.GetType().IsGenericType)
                 {
-                    // exclude the cr2w parent variable 
-                    if (f.Name == "cr2w")
-                        continue;
-
-                    // edit lists
-                    var v = f.GetValue(vec);
-                    if (v is IList && v.GetType().IsGenericType)
+                    foreach (var listitem in (cvar as IList))
                     {
-                        foreach (var listitem in (v as IList))
-                        {
-                            if (listitem is CVariable)
-                                EditVariables(listitem as CVariable);
-                        }
+                        if (listitem is CVariable clistitem)
+                            CheckProperties(clistitem);
                     }
-                    if (v is CVariable variable)
+                }
+                else
+                {
+                    // try to set the value in the class
+                    TrySetValue(cvar);
+
+                    // goes through all properties
+                    var props = cvar.GetEditableVariables();
+                    foreach (var prop in props)
                     {
-                        if (!TryEditVariable(v as CVariable, vec.REDName))
-                            EditVariables(variable);      // check if variable has more children
+                        if (prop is CVariable cprop)
+                        {
+                            CheckProperties(cprop);
+                        }
                     }
                 }
             }
-
-            bool TryEditVariable(CVariable v, string parentname)
+            
+            void TrySetValue(CVariable cvar)
             {
-                if (v == null)
-                    return false;
-                // is a match for name
-                if (v.REDName == opts.var)
+                var propnameslist = cvar.accessor.GetMembers().Select(_ => _.Name).ToList();
+                if (propnameslist.Contains(opts.varname))
                 {
-                    // is not of type
-                    if (opts.type != null && v.REDType != opts.type)
-                        return false;
-                    // exclude values
-                    if (opts.exc != null && opts.exc.Count() > 0 && opts.exc.Contains(v.ToString()))
-                        return false;
-                    if (opts.inc != null && opts.inc.Count() > 0 && !opts.inc.Contains(v.ToString()))
-                        return false;
-                    // edit value
                     try
                     {
-                        // check option 
-                        switch (opts.option)
+                        // check if type is supported
+                        var proptoedit = cvar.GetEditableVariables().First(_ => _.REDName == opts.varname) as CVariable;
+                        if (supportedTypes.Contains(proptoedit.GetType()))
                         {
-                            case "*":
-                                {
-                                    switch (opts.type)
-                                    {
-                                        case "Uint64": ((CUInt64)v).val *= ulong.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Int64": ((CInt64)v).val *= long.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Uint32": ((CUInt32)v).val *= uint.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Int32": ((CInt32)v).val *= int.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Uint16": ((CUInt16)v).val *= ushort.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Int16": ((CInt16)v).val *= short.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Uint8": ((CUInt8)v).val *= byte.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Int8": ((CInt8)v).val *= sbyte.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        default: break;
-                                    }
-                                    break;
-                                }
-                            case "/":
-                                {
-                                    switch (opts.type)
-                                    {
-                                        case "Uint64": ((CUInt64)v).val /= ulong.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Int64": ((CInt64)v).val /= long.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Uint32": ((CUInt32)v).val /= uint.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Int32": ((CInt32)v).val /= int.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Uint16": ((CUInt16)v).val /= ushort.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Int16": ((CInt16)v).val /= short.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Uint8": ((CUInt8)v).val /= byte.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Int8": ((CInt8)v).val /= sbyte.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        default: break;
-                                    }
-                                    break;
-                                }
-                            case "+":
-                                {
-                                    switch (opts.type)
-                                    {
-                                        case "Uint64": ((CUInt64)v).val += ulong.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Int64": ((CInt64)v).val += long.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Uint32": ((CUInt32)v).val += uint.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Int32": ((CInt32)v).val += int.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Uint16": ((CUInt16)v).val += ushort.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Int16": ((CInt16)v).val += short.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Uint8": ((CUInt8)v).val += byte.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "Int8": ((CInt8)v).val += sbyte.Parse(opts.val); AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal); break;
-                                        case "String": ((CString)v).val += opts.val; break;
+                            // check the value 
+                            dynamic dyn = proptoedit;
+                            var x = dyn.val as string;
+                            if (x == opts.val)
+                                return;
+                            if (excludedvalues.Count != 0 && excludedvalues.Contains(x))
+                                return;
+                            if (includedvalues.Count != 0 && !includedvalues.Contains(x))
+                                return;
 
-                                        default: break;
-                                    }
-                                    break;
-                                }
-                            case "-":
-                                {
-                                    switch (opts.type)
-                                    {
-                                        case "Uint64": ((CUInt64)v).val -= ulong.Parse(opts.val); break;
-                                        case "Int64": ((CInt64)v).val -= long.Parse(opts.val); break;
-                                        case "Uint32": ((CUInt32)v).val -= uint.Parse(opts.val); break;
-                                        case "Int32": ((CInt32)v).val -= int.Parse(opts.val); break;
-                                        case "Uint16": ((CUInt16)v).val -= ushort.Parse(opts.val); break;
-                                        case "Int16": ((CInt16)v).val -= short.Parse(opts.val); break;
-                                        case "Uint8": ((CUInt8)v).val -= byte.Parse(opts.val); break;
-                                        case "Int8": ((CInt8)v).val -= sbyte.Parse(opts.val); break;
+                            // access the val property of the CVariable baecause there's typecopnverters from string available
+                            var value = proptoedit.accessor.GetMembers().First(_ => _.Name == "val");
+                            var converter = TypeDescriptor.GetConverter(value.Type);
+                            var result = converter.ConvertFrom(opts.val);
 
-                                        default: break;
-                                    }
-                                    break;
-                                }
-                            default:
-                                v.SetValue(opts.val);
-                                AddTextStatic($"Succesfully edited a variable in {parentname}: {path}.\r\n", Logtype.Normal);
-                                break;
+                            // set via reflection
+                            proptoedit.accessor[proptoedit, "val"] = result;
+                            AddTextStatic($"Succesfully edited a variable in {cvar.REDName}: {path}.\r\n", Logtype.Normal);
                         }
-                        return true;
+                        else
+                            AddTextStatic($"{proptoedit.GetType()} not supported in {cvar.REDName}: {path}.\r\n", Logtype.Normal);
                     }
                     catch (Exception ex)
                     {
-                        bool errors;
-                        bool.TryParse(opts.err, out errors);
-                        if (errors)
-                            AddTextStatic($"Some parsing error: {ex.Message}.\r\n", Logtype.Error);
-                        return false;
+                        AddTextStatic($"Some error occored: {ex.Message}.\r\n", Logtype.Error);
                     }
-                    
                 }
-                return false;
             }
 
         }
@@ -340,7 +272,7 @@ namespace WolvenKit
         // Required
         [Option('n', HelpText = "Specify the variable name. \n\r" +
             "Example: -n autohidedistance", Required = true)]
-        public string var { get; set; }
+        public string varname { get; set; }
 
         [Option('v', HelpText = "Specify the new variable value. \n\r" +
             "Example: -v 9999", Required = true)]
@@ -355,25 +287,25 @@ namespace WolvenKit
             "Example: -c CMesh", Required = false)]
         public string chunk { get; set; }
 
-        [Option('t', HelpText = "Specify the variable type. \n\r" +
-            "Available types are Bool, Uint64, Int64, Uint32, Int32, Uint16, Int16, Uint8, Int8\n\r" +
-            "Example: -t Uint16"
-            , Required = false)]
-        public string type { get; set; }
+        //[Option('t', HelpText = "Specify the variable type. \n\r" +
+        //    "Available types are Bool, Uint64, Int64, Uint32, Int32, Uint16, Int16, Uint8, Int8\n\r" +
+        //    "Example: -t Uint16"
+        //    , Required = false)]
+        //public string type { get; set; }
 
-        [Option('o', HelpText = "Specify the option type. Default is replace. This option requires a valid type to be set with -t !!\n\r" +
-           "Available types are Multiplication (*), Division (/), Addition (+), Subtraction (-),\n\r" +
-            "Example: -o + -t Uint16\n\r" +
-            "Example: -o / -t Int32"
-           , Required = false)]
-        public string option { get; set; }
+        //[Option('o', HelpText = "Specify the option type. Default is replace. This option requires a valid type to be set with -t !!\n\r" +
+        //   "Available types are Multiplication (*), Division (/), Addition (+), Subtraction (-),\n\r" +
+        //    "Example: -o + -t Uint16\n\r" +
+        //    "Example: -o / -t Int32"
+        //   , Required = false)]
+        //public string option { get; set; }
 
         //[Option('p', HelpText = "Specify the parent name of the variable you want to edit.", Required = false)]
         //public string parent { get; set; }
 
-        [Option(HelpText = "Verbose errors.\n\r" +
-            "Example: --err=true", Required = false)]
-        public string err { get; set; }
+        //[Option(HelpText = "Verbose errors.\n\r" +
+        //    "Example: --err=true", Required = false)]
+        //public string err { get; set; }
 
         // Optional lists
         [Option(Separator = ',', HelpText = "Exclude the following values.\n\r" +

@@ -1534,7 +1534,7 @@ namespace WolvenKit
                 ClearOutput();
                 vm.SaveAllFiles();
                 var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
-                var DlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
+                var DlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\" + ActiveMod.GetDLCName() + @"\content\");
 
                 //Create the dirs. So script only mods don't die.
                 Directory.CreateDirectory(modpackDir);
@@ -1671,7 +1671,7 @@ namespace WolvenKit
                     Logger.LogString($"======== ADDING COOKED DLC FILES ======== \n", Logtype.Important);
                     try
                     {
-                        var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\dlc" + ActiveMod.Name + @"\content\");
+                        var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\" + ActiveMod.GetDLCName() + @"\content\");
                         var uncookeddlcdir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.Bundle.ToString());
                         var di = new DirectoryInfo(uncookeddlcdir);
                         var files = di.GetFiles("*", SearchOption.AllDirectories);

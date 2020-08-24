@@ -261,6 +261,41 @@ namespace WolvenKit.Common
             _ = BundleDirectory;
         }
 
+
+        /// <summary>
+        /// Returns the first folder name in the ActiveMod/dlc directory
+        /// Does not support multiple DLC
+        /// </summary>
+        /// <returns></returns>
+        public string GetDLCName()
+        {
+            string dlcname = "";
+            try
+            {
+                if (Directory.Exists(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString(), "dlc")))
+                {
+                    if (Directory.GetDirectories(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString(), "dlc")).Any())
+                    {
+                        return (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString(), "dlc")).First())).Name;
+
+                    }
+
+                }
+                else if (Directory.Exists(Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString(), "dlc")))
+                {
+                    if (Directory.GetDirectories(Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString(), "dlc")).Any())
+                    {
+                        return (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString(), "dlc")).First())).Name;
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return dlcname;
+        }
+
         /// <summary>
         /// Returns the first raltive folder path in the ActiveMod/dlc directory
         /// Does not support multiple DLC
