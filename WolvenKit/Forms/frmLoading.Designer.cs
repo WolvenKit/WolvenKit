@@ -30,18 +30,19 @@
         {
             this.VersionLbl = new System.Windows.Forms.Label();
             this.LoadLbl = new System.Windows.Forms.Label();
-            this.copyrightLbl = new System.Windows.Forms.Label();
+            this.labelTitle = new System.Windows.Forms.Label();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // VersionLbl
             // 
             this.VersionLbl.AutoSize = true;
             this.VersionLbl.BackColor = System.Drawing.Color.Transparent;
-            this.VersionLbl.Font = new System.Drawing.Font("PF Transport Light", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.VersionLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.VersionLbl.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.VersionLbl.Location = new System.Drawing.Point(28, 275);
+            this.VersionLbl.Location = new System.Drawing.Point(28, 313);
             this.VersionLbl.Name = "VersionLbl";
-            this.VersionLbl.Size = new System.Drawing.Size(140, 22);
+            this.VersionLbl.Size = new System.Drawing.Size(153, 24);
             this.VersionLbl.TabIndex = 0;
             this.VersionLbl.Text = "Version {version}";
             // 
@@ -49,35 +50,50 @@
             // 
             this.LoadLbl.AutoSize = true;
             this.LoadLbl.BackColor = System.Drawing.Color.Transparent;
-            this.LoadLbl.Font = new System.Drawing.Font("PF Transport Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LoadLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LoadLbl.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.LoadLbl.Location = new System.Drawing.Point(29, 297);
+            this.LoadLbl.Location = new System.Drawing.Point(29, 335);
             this.LoadLbl.Name = "LoadLbl";
-            this.LoadLbl.Size = new System.Drawing.Size(71, 18);
+            this.LoadLbl.Size = new System.Drawing.Size(78, 20);
             this.LoadLbl.TabIndex = 1;
             this.LoadLbl.Text = "Loading...";
             // 
-            // copyrightLbl
+            // labelTitle
             // 
-            this.copyrightLbl.AutoSize = true;
-            this.copyrightLbl.BackColor = System.Drawing.Color.Transparent;
-            this.copyrightLbl.Font = new System.Drawing.Font("PF Transport Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.copyrightLbl.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.copyrightLbl.Location = new System.Drawing.Point(29, 337);
-            this.copyrightLbl.Name = "copyrightLbl";
-            this.copyrightLbl.Size = new System.Drawing.Size(79, 18);
-            this.copyrightLbl.TabIndex = 2;
-            this.copyrightLbl.Text = "{copyright}";
+            this.labelTitle.AutoSize = true;
+            this.labelTitle.BackColor = System.Drawing.Color.Transparent;
+            this.labelTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTitle.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.labelTitle.Location = new System.Drawing.Point(20, 184);
+            this.labelTitle.Name = "labelTitle";
+            this.labelTitle.Size = new System.Drawing.Size(321, 73);
+            this.labelTitle.TabIndex = 3;
+            this.labelTitle.Text = "WolvenKit";
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.BackColor = System.Drawing.Color.Transparent;
+            this.linkLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabel1.LinkColor = System.Drawing.Color.White;
+            this.linkLabel1.Location = new System.Drawing.Point(29, 437);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(283, 20);
+            this.linkLabel1.TabIndex = 4;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "https://github.com/Traderain/Wolven-kit";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // frmLoading
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.BackgroundImage = global::WolvenKit.Properties.Resources.loading_black;
+            this.BackgroundImage = global::WolvenKit.Properties.Resources.wkit_splash;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(962, 574);
-            this.Controls.Add(this.copyrightLbl);
+            this.Controls.Add(this.linkLabel1);
+            this.Controls.Add(this.labelTitle);
             this.Controls.Add(this.LoadLbl);
             this.Controls.Add(this.VersionLbl);
             this.DoubleBuffered = true;
@@ -96,6 +112,7 @@
 
         private System.Windows.Forms.Label VersionLbl;
         private System.Windows.Forms.Label LoadLbl;
-        private System.Windows.Forms.Label copyrightLbl;
+        private System.Windows.Forms.Label labelTitle;
+        private System.Windows.Forms.LinkLabel linkLabel1;
     }
 }

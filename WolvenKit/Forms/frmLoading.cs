@@ -9,12 +9,20 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VGMToolbox.format.iso;
 using WolvenKit.App;
 
 namespace WolvenKit.Forms
 {
     public partial class frmLoading : Form
     {
+        private List<Bitmap> splashscreens = new List<Bitmap>() {
+            WolvenKit.Properties.Resources.loading_black,
+            WolvenKit.Properties.Resources.wkit_splash,
+            WolvenKit.Properties.Resources.wkit_splash2
+        }; 
+
+
         public frmLoading()
         {            
             InitializeComponent();
@@ -25,8 +33,16 @@ namespace WolvenKit.Forms
             this.CenterToScreen();
             MainController.Get().PropertyChanged += MainControllerUpdated;
             UIController.InitForm(this);
+
+            Random rnd = new Random();
+            int i = rnd.Next(0, splashscreens.Count);
+            this.BackgroundImage = splashscreens[i];
+
+            if (i == 0 || i == 1)
+                this.labelTitle.Visible = false;
+
             this.VersionLbl.Text = "Version " + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
-            this.copyrightLbl.Text = "https://github.com/Traderain/Wolven-kit";
+            this.linkLabel1.Text = "https://github.com/Traderain/Wolven-kit";
         }
 
         private void frmLoading_Shown(object sender, EventArgs e)
@@ -82,6 +98,11 @@ namespace WolvenKit.Forms
         private void SetStatusLabelText(string text)
         {
             LoadLbl.Text = text;
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/Traderain/Wolven-kit");
         }
     }
 }

@@ -143,8 +143,6 @@ namespace WolvenKit.Common
 
         #endregion
 
-
-
         #region Files
         [XmlIgnore]
         [ReadOnly(true)]
@@ -262,5 +260,42 @@ namespace WolvenKit.Common
             _ = CollisionCacheDirectory;
             _ = BundleDirectory;
         }
+
+        /// <summary>
+        /// Returns the first raltive folder path in the ActiveMod/dlc directory
+        /// Does not support multiple DLC
+        /// </summary>
+        /// <returns></returns>
+        public string GetDLCRelativePath()
+        {
+            string relpath = "";
+            try
+            {
+                if (Directory.Exists(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString(), "dlc")))
+                {
+                    if (Directory.GetDirectories(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString(), "dlc")).Any())
+                    {
+                        relpath = (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString(), "dlc")).First())).FullName;
+                        return relpath.Substring(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString()).Length + 1);
+
+                    }
+
+                }
+                else if (Directory.Exists(Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString(), "dlc")))
+                {
+                    if (Directory.GetDirectories(Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString(), "dlc")).Any())
+                    {
+                        relpath = (new DirectoryInfo(Directory.GetDirectories(Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString(), "dlc")).First())).FullName;
+                        return relpath.Substring(Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString()).Length + 1);
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return relpath;
+        }
+
     }
 }

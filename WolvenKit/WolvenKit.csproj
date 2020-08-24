@@ -67,7 +67,7 @@
     <DocumentationFile>bin\Release\WolvenKit.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>wolven_kit_icon.ico</ApplicationIcon>
+    <ApplicationIcon>wolven_kit_icon2.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>56D600A08C1A75A7D44B3384AB83B913576E5024</ManifestCertificateThumbprint>
@@ -973,6 +973,10 @@
     <None Include="Resources\Pictures\geralt.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Pictures\wkit_splash.png" />
+    <Content Include="Resources\Pictures\wkit_splash2.png" />
+    <Content Include="Resources\Pictures\WK_Logo2_32.png" />
+    <Content Include="wolven_kit_icon2.ico" />
     <None Include="Resources\CustomImages\mail.png" />
     <None Include="Resources\CustomImages\player_record.png" />
     <Content Include="..\Libs\Irrlicht.dll">
@@ -1015,6 +1019,8 @@
     <Content Include="Resources\Icons\Clock.ico" />
     <Content Include="Resources\CustomImages\Clock.png" />
     <Content Include="Resources\CustomImages\close.png" />
+    <Content Include="Resources\Icons\wolven_kit_icon.ico" />
+    <Content Include="Resources\Pictures\WK_Logo.svg" />
     <Content Include="Resources\RedEngine\bird.png" />
     <Content Include="Resources\RedEngine\csv.png" />
     <Content Include="Resources\RedEngine\detail.png" />

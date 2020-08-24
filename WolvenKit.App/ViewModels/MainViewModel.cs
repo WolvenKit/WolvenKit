@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SymbolicLinkSupport;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -851,7 +852,9 @@ namespace WolvenKit.App.ViewModels
                                     if (dlc)
                                     {
                                         // actually look up the trimdir
-                                        cook.trimdir = $"dlc\\dlc{MainController.Get().ActiveMod.Name}";
+
+
+                                        cook.trimdir = ActiveMod.GetDLCRelativePath();
                                         var seeddir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC", $"seed.dlc{ActiveMod.Name}.files");
                                         cook.seed = seeddir;
                                     }
@@ -893,7 +896,6 @@ namespace WolvenKit.App.ViewModels
                 }
             }
         }
-
 
         /// <summary>
         /// Packs the bundles for the DLC and the Mod. 
@@ -1034,7 +1036,7 @@ namespace WolvenKit.App.ViewModels
                         moddbfile = Path.Combine(mod_tex_db, "cook.db");
                         dlcdbfile = Path.Combine(dlc_tex_db, "cook.db");
                         modbasedir = Path.Combine(ActiveMod.ModDirectory, cachetype.ToString());
-                        dlcbasedir = MainController.Get().Configuration.DepotPath; //Path.Combine(ActiveMod.DlcDirectory, cachetype.ToString());
+                        dlcbasedir = Path.Combine(ActiveMod.DlcDirectory, cachetype.ToString());
                     }
                     break;
                 //case EBundleType.Shader:
@@ -1095,6 +1097,10 @@ namespace WolvenKit.App.ViewModels
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="seedfile"></param>
         public void CreateFallBackSeedFile(string seedfile)
         {
 
@@ -1129,6 +1135,37 @@ namespace WolvenKit.App.ViewModels
             Logger.LogString($"Fallback seedfile created: {seedfile}. \n", Logtype.Success);
         }
 
+        /// <summary>
+        /// Creates virtual links (mklink junction) between the project dlc folder
+        /// and the modkit r4Data/dlc folder
+        /// </summary>
+        public void CreateVirtualLinks()
+        {
+            string modname = ActiveMod.Name;
+            var uncookeddlcdir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.CollisionCache.ToString());
+
+            string r4link = $"{MainController.Get().Configuration.DepotPath}\\dlc\\dlc{modname}";
+            string projlink = $"{uncookeddlcdir}\\dlc\\dlc{modname}";
+
+
+            if (Directory.Exists(r4link))
+            {
+                var dbg = new DirectoryInfo(r4link);
+
+                Directory.Delete(r4link);
+            }
+            if (!Directory.Exists(r4link))
+            {
+                string args = $"/c mklink /J \"{r4link}\" \"{projlink}\"";
+                ProcessStartInfo startInfo = new ProcessStartInfo("cmd.exe", args)
+                {
+                    WindowStyle = ProcessWindowStyle.Minimized
+                };
+                Process.Start(startInfo);
+
+                Logger.LogString($"Links {r4link} <<==>> {projlink} succesfully created.", Logtype.Success);
+            }
+        }
         #endregion
 
         #region Documents
