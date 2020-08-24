@@ -35,7 +35,7 @@ namespace WolvenKit.CR2W.Types
 
 
         #region Fields
-        private TypeAccessor accessor;
+        public TypeAccessor accessor;
         #endregion
 
         #region Properties
@@ -365,31 +365,8 @@ namespace WolvenKit.CR2W.Types
         /// <param name="value"></param>
         private bool TryAddVariable(CVariable value)
         {
-            #region RedReflection
-            //List<PropertyInfo> redprops = REDReflection.GetREDProperties<REDAttribute>(this.GetType()).ToList();
-            //foreach (var p in redprops)
-            //{
-            //    if (p.GetCustomAttribute<REDAttribute>().Name == value.Name)
-            //    {
-            //        if (value is CEnum cenum)
-            //        {
-            //            p.SetValue(this, cenum.Enum);
-            //        }
-            //        else
-            //        {
-            //            p.SetValue(this, value);
-            //        }
-            //        break;
-            //    }
-            //}
-            #endregion
-
-            // not sure which is faster
-            #region FastAccessor
-            
             string varname = value.REDName.FirstCharToUpper();
             varname = NormalizeName(varname);
-            //if!((this is SBufferWaypoints || this is SWayPointsCollectionsSetData))
             
             try
             {
@@ -428,8 +405,6 @@ namespace WolvenKit.CR2W.Types
                     nname = $"_{nname}";
                 return nname;
             }
-            #endregion
-
         }
 
         /// <summary>

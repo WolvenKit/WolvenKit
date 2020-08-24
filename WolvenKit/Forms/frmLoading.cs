@@ -17,9 +17,8 @@ namespace WolvenKit.Forms
     public partial class frmLoading : Form
     {
         private List<Bitmap> splashscreens = new List<Bitmap>() {
-            WolvenKit.Properties.Resources.loading_black,
-            WolvenKit.Properties.Resources.wkit_splash,
-            WolvenKit.Properties.Resources.wkit_splash2
+            WolvenKit.Properties.Resources.wkit_splash, //Jato
+            WolvenKit.Properties.Resources.wkit_splash2 //Munchfly
         }; 
 
 
@@ -36,13 +35,24 @@ namespace WolvenKit.Forms
 
             Random rnd = new Random();
             int i = rnd.Next(0, splashscreens.Count);
+
+            i = 0;
+
             this.BackgroundImage = splashscreens[i];
 
-            if (i == 0 || i == 1)
+           if (i == 0)
+            {
                 this.labelTitle.Visible = false;
+                this.labelVersion.Visible = false;
+                this.labelLoading.Visible = false;
+                this.labelLoadingJato.Visible = true;
+                this.labelVersionJato.Visible = true;
+            }
 
-            this.VersionLbl.Text = "Version " + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
-            this.linkLabel1.Text = "https://github.com/Traderain/Wolven-kit";
+            this.labelVersion.Text = "Version " + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
+            this.labelGit.Text = "https://github.com/Traderain/Wolven-kit";
+            this.labelVersionJato.Text = "Version " + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
+
         }
 
         private void frmLoading_Shown(object sender, EventArgs e)
@@ -77,6 +87,7 @@ namespace WolvenKit.Forms
         {
             if (e.PropertyName == "loadStatus")
                 Invoke(new strDelegate(SetStatusLabelText), ((MainController)sender).loadStatus);
+
             if (e.PropertyName == "Loaded")
                 Invoke(new boolDelegate(Finish), ((MainController) sender).Loaded);
 
@@ -88,7 +99,8 @@ namespace WolvenKit.Forms
                 this.Close();
             else
             {
-                LoadLbl.Text = "Failed to initialize!";
+                labelLoading.Text = "Failed to initialize!";
+                labelLoadingJato.Text = "Failed to initialize!";
                 Application.DoEvents();
                 System.Threading.Thread.Sleep(3000);
                 this.Close();
@@ -97,7 +109,8 @@ namespace WolvenKit.Forms
 
         private void SetStatusLabelText(string text)
         {
-            LoadLbl.Text = text;
+            labelLoading.Text = text;
+            labelLoadingJato.Text = text;
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

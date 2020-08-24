@@ -709,9 +709,9 @@ namespace WolvenKit.App.ViewModels
         public void CleanupDirectories()
         {
             var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
-            var DlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
+            var DlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\" + ActiveMod.GetDLCName() + @"\content\");
             var cookedModDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\Mods\mod" + ActiveMod.Name + @"\content\");
-            var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\dlc" + ActiveMod.Name + @"\content\");
+            var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\" + ActiveMod.GetDLCName() + @"\content\");
 
             CleanupInner(modpackDir);
             CleanupInner(DlcpackDir);
@@ -771,7 +771,7 @@ namespace WolvenKit.App.ViewModels
             var cfg = MainController.Get().Configuration;
 
             var cookedModDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\Mods\mod" + ActiveMod.Name + @"\content\");
-            var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\dlc" + ActiveMod.Name + @"\content\");
+            var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\" + ActiveMod.GetDLCName() + @"\content\");
 
             var uncookedmoddir = Path.Combine(ActiveMod.ModDirectory, cachetype.ToString());
             var uncookeddlcdir = Path.Combine(ActiveMod.DlcDirectory, cachetype.ToString());
@@ -904,9 +904,9 @@ namespace WolvenKit.App.ViewModels
         public async Task<int> Pack()
         {
             var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
-            var dlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
+            var dlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\" + ActiveMod.GetDLCName() + @"\content\");
             var cookedModDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\Mods\mod" + ActiveMod.Name + @"\content\");
-            var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\dlc" + ActiveMod.Name + @"\content\");
+            var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\" + ActiveMod.GetDLCName() + @"\content\");
             
             int finished = 1;
 
@@ -955,7 +955,7 @@ namespace WolvenKit.App.ViewModels
         public async Task<int> CreateMetaData()
         {
             var modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
-            var dlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
+            var dlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\" + ActiveMod.GetDLCName() + @"\content\");
             
             int finished = 1;
 
@@ -1051,7 +1051,7 @@ namespace WolvenKit.App.ViewModels
 
 
             string modpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\Mods\mod" + ActiveMod.Name + @"\content\");
-            string dlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\dlc" + ActiveMod.Name + @"\content\");
+            string dlcpackDir = Path.Combine(ActiveMod.ProjectDirectory, @"packed\DLC\" + ActiveMod.GetDLCName() + @"\content\");
 
             
             int finished = 1;
@@ -1144,8 +1144,8 @@ namespace WolvenKit.App.ViewModels
             string modname = ActiveMod.Name;
             var uncookeddlcdir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.CollisionCache.ToString());
 
-            string r4link = $"{MainController.Get().Configuration.DepotPath}\\dlc\\dlc{modname}";
-            string projlink = $"{uncookeddlcdir}\\dlc\\dlc{modname}";
+            string r4link = $"{MainController.Get().Configuration.DepotPath}\\dlc\\{ActiveMod.GetDLCName()}";
+            string projlink = $"{uncookeddlcdir}\\dlc\\{ActiveMod.GetDLCName()}";
 
 
             if (Directory.Exists(r4link))
