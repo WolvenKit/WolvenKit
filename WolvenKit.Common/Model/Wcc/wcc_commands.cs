@@ -475,7 +475,7 @@ namespace WolvenKit.Common.Wcc
         [CategoryAttribute("Optional"),
         DescriptionAttribute("Cook resources only from one directory.")]
         //[Editor(typeof(PropertyGridFolderPicker), typeof(PropertyGridFolderPicker))]
-        [REDTags("Path", "In")]
+        [REDTags(/*"Path",*/ "In")]
         [REDName("trimdir")]
         public string trimdir { get; set; }
 

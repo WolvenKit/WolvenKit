@@ -1560,6 +1560,26 @@ namespace WolvenKit
                 // Cleanup Directories
                 vm.CleanupDirectories();
 
+                // analyze files in dlc
+                int statusanalyzedlc = -1;
+
+               
+
+                var seedfile = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC", $"seed.dlc{ActiveMod.Name}.files");
+                var reddlcfile = Path.Combine(ActiveMod.DlcDirectory, EBundleType.Bundle.ToString(), "dlc", $"dlc{ActiveMod.Name}.reddlc");
+                var analyze = new Wcc_lite.analyze()
+                {
+                    Analyzer = analyzers.r4dlc,
+                    Out = seedfile,
+                    reddlc = reddlcfile
+                };
+                statusanalyzedlc *= await Task.Run(() => MainController.Get().WccHelper.RunCommand(analyze));
+                if (statusanalyzedlc == 0)
+                {
+                    Logger.LogString("Analyzing dlc failed, creating fallback seedfiles. \n", Logtype.Error);
+                    vm.CreateFallBackSeedFile(seedfile);
+                }
+
                 //------------------------- COOKING -------------------------------------//
                 int statusCookCol = -1;
                 int statusCookTex = -1;
@@ -1666,7 +1686,7 @@ namespace WolvenKit
                 if (packsettings.PackBundles)
                 {
                     // packing
-                    if (statusCookCol * statusCookTex != 0)
+                    //if (statusCookCol * statusCookTex != 0)
                     {
                         var t = Task.Run(() => vm.Pack());
                         await t.ContinueWith(antecedent =>
@@ -1677,8 +1697,8 @@ namespace WolvenKit
                         if (statusPack == 0)
                             Logger.LogString("Packing bundles finished with errors. \n", Logtype.Error);
                     }
-                    else
-                        Logger.LogString("Cooking assets failed. No bundles will be packed!\n", Logtype.Error);
+                    //else
+                    //    Logger.LogString("Cooking assets failed. No bundles will be packed!\n", Logtype.Error);
                 }
 
                 //------------------------ METADATA ------------------------------------//
@@ -2063,10 +2083,10 @@ namespace WolvenKit
         private void CreateVirtualLinks()
         {
             string modname = ActiveMod.Name;
-            var uncookeddlcdir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.Bundle.ToString());
+            var uncookeddlcdir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.CollisionCache.ToString());
 
-            string r4link = $"{MainController.Get().Configuration.DepotPath}\\dlc\\{modname}";
-            string projlink = $"{uncookeddlcdir}\\dlc\\{modname}";
+            string r4link = $"{MainController.Get().Configuration.DepotPath}\\dlc\\dlc{modname}";
+            string projlink = $"{uncookeddlcdir}\\dlc\\dlc{modname}";
 
 
             if (Directory.Exists(r4link))
@@ -2120,7 +2140,7 @@ namespace WolvenKit
                 {
                     var cacheDir = REDTypes.REDExtensionToCacheType(extension);
                     newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                            ? Path.Combine("DLC", cacheDir, "dlc", ActiveMod.Name, relativePath)
+                            ? Path.Combine("DLC", cacheDir, "dlc", $"dlc{ActiveMod.Name}", relativePath)
                             : Path.Combine("Mod", cacheDir, relativePath));
 
                     fi.CopyToAndCreate(newpath, true);
@@ -2144,7 +2164,7 @@ namespace WolvenKit
                         var cacheDir = REDTypes.REDExtensionToCacheType(extension);
 
                         newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                            ? Path.Combine("DLC", cacheDir, "dlc", ActiveMod.Name, relativePath)
+                            ? Path.Combine("DLC", cacheDir, "dlc", $"dlc{ActiveMod.Name}", relativePath)
                             : Path.Combine("Mod", cacheDir, relativePath));
 
                         fi.CopyToAndCreate(newpath, true);
@@ -2177,7 +2197,7 @@ namespace WolvenKit
                     var cacheDir = REDTypes.REDExtensionToCacheType(extension);
 
                     newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                    ? Path.Combine("DLC", cacheDir, "dlc", ActiveMod.Name, relativePath)
+                    ? Path.Combine("DLC", cacheDir, "dlc", $"dlc{ActiveMod.Name}", relativePath)
                     : Path.Combine("Mod", cacheDir, relativePath));
                 
                     var indir = Path.GetFullPath(MainController.Get().Configuration.GameRootDir);
