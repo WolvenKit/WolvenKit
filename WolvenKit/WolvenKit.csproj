@@ -404,13 +404,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\frmBulkEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmBulkEditor.Designer.cs">
+      <DependentUpon>frmBulkEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmOtherDocument.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmOtherDocument.Designer.cs">
       <DependentUpon>frmOtherDocument.cs</DependentUpon>
     </Compile>
-    <Compile Include="MockKernel.cs" />
     <None Include="Utility\DDSUtility.cs.deprecated" />
     <Compile Include="discord.cs" />
     <Compile Include="Extensions\CustomFloatWindow.cs">
@@ -755,6 +760,9 @@
     <EmbeddedResource Include="Forms\frmAddVariable.resx">
       <DependentUpon>frmAddVariable.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmBulkEditor.resx">
+      <DependentUpon>frmBulkEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmOtherDocument.resx">
       <DependentUpon>frmOtherDocument.cs</DependentUpon>

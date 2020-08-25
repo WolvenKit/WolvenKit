@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using WolvenKit.App.ViewModels;
 using WolvenKit.Common;
 
@@ -30,6 +24,7 @@ namespace WolvenKit.App
         // Singletons
         private ViewModel MainVM { get; set; }
         private ViewModel RadishVM { get; set; }
+        private BulkEditorViewModel BulkEditVM { get; set; }
         private ViewModel ImportVM { get; set; }
         private ViewModel ModExplorertVM { get; set; }
 
@@ -39,6 +34,13 @@ namespace WolvenKit.App
             if ((MainViewModel)MainVM == null)
                 MainVM = new MainViewModel();
             return (MainViewModel)MainVM;
+        }
+
+        public BulkEditorViewModel GetBulkEditorViewModel()
+        {
+            if ((BulkEditorViewModel)BulkEditVM == null)
+                BulkEditVM = new BulkEditorViewModel();
+            return (BulkEditorViewModel)BulkEditVM;
         }
 
         public RadishViewModel GetRadishViewModel()
