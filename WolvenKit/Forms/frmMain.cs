@@ -2576,6 +2576,7 @@ namespace WolvenKit
             stringsEncoderGUIToolStripMenuItem.Enabled = ActiveMod != null;
             menuCreatorToolStripMenuItem.Enabled = ActiveMod != null;
             renderW2meshToolStripMenuItem.Enabled = ActiveMod != null;
+            bulkEditorToolStripMenuItem.Enabled = ActiveMod != null;
 
             advancedToolStripMenuItem.Enabled = ActiveMod != null;
             experimentalToolStripMenuItem.Enabled = ActiveMod != null;
@@ -3080,6 +3081,12 @@ _col - for simple stuff like boxes and spheres", "Information about importing mo
             var settings = new frmSettings();
             settings.ShowDialog();
         }
+
+        private void bulkEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var be = new frmBulkEditor();
+            be.ShowDialog();
+        }
         #endregion
 
         #region View
@@ -3275,5 +3282,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
             vm.executeGame();
         }
         #endregion
+
+
     }
 }

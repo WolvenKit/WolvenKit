@@ -36,6 +36,9 @@
     <Reference Include="CsvHelper, Version=15.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.15.0.5\lib\net47\CsvHelper.dll</HintPath>
     </Reference>
+    <Reference Include="FastMember, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.1.5.0\lib\net461\FastMember.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=1.2.0.246, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.1.2.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
@@ -224,6 +227,7 @@
     <Compile Include="Controllers\Configuration.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\RadishController.cs" />
+    <Compile Include="MockKernel.cs" />
     <Compile Include="Model\Arguments\FileSavedEventArgs.cs" />
     <Compile Include="Model\Arguments\SelectChunkArgs.cs" />
     <Compile Include="Model\Commonfunctions.cs" />
@@ -240,6 +244,7 @@
     <Compile Include="ViewModels\IViewModel.cs" />
     <Compile Include="ViewModels\DocumentViewModel.cs" />
     <Compile Include="ViewModels\ImportViewModel.cs" />
+    <Compile Include="ViewModels\BulkEditorViewModel.cs" />
     <Compile Include="ViewModels\RadishViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
   </ItemGroup>

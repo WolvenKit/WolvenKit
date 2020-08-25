@@ -36,8 +36,6 @@ namespace WolvenKit.Forms
             Random rnd = new Random();
             int i = rnd.Next(0, splashscreens.Count);
 
-            i = 0;
-
             this.BackgroundImage = splashscreens[i];
 
            if (i == 0)
