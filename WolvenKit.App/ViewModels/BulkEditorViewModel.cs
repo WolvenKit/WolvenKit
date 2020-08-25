@@ -165,7 +165,7 @@ namespace WolvenKit.App.ViewModels
         protected void OnResetRequest() => this.PerformStep?.Invoke(this, new EventArgs());
 
         #region Fields
-        private readonly LoggerService Logger;
+        private /*readonly*/ LoggerService Logger;
 
         #endregion
 
@@ -218,8 +218,11 @@ namespace WolvenKit.App.ViewModels
         #endregion
 
         #region Methods
-        private async Task<int> RunBulkEditInternal(BulkEditOptions opts)
+        public async Task<int> RunBulkEditInternal(BulkEditOptions opts)
         {
+            if (Logger == null)
+                Logger = MainController.Get().Logger;
+
             if (MainController.Get().ActiveMod == null)
                 return 0;
             List<string> files = MainController.Get().ActiveMod.Files;
@@ -328,7 +331,9 @@ namespace WolvenKit.App.ViewModels
 
                             // check the value 
                             dynamic dyn = proptoedit;
-                            var x = dyn.val as string;
+                            if (!(dyn.val is string x))
+                                x = dyn.val.ToString();
+
                             if (x == opts.Value)
                                 return;
                             if (excludedvalues.Count != 0 && excludedvalues.Contains(x))

@@ -264,6 +264,7 @@ namespace WolvenKit
             this.btBrowseDepot.TabIndex = 22;
             this.btBrowseDepot.Text = "Browse...";
             this.btBrowseDepot.UseVisualStyleBackColor = true;
+            this.btBrowseDepot.Visible = false;
             this.btBrowseDepot.Click += new System.EventHandler(this.btBrowseDepot_Click);
             // 
             // lblDepot
@@ -279,6 +280,7 @@ namespace WolvenKit
             // 
             this.txDepot.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.txDepot.Enabled = false;
             this.txDepot.Location = new System.Drawing.Point(32, 107);
             this.txDepot.Name = "txDepot";
             this.txDepot.Size = new System.Drawing.Size(441, 20);
