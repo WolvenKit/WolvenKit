@@ -404,16 +404,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\frmBulkEditor.cs">
+    <Compile Include="Forms\MVVM\frmBulkEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmBulkEditor.Designer.cs">
+    <Compile Include="Forms\MVVM\frmBulkEditor.Designer.cs">
       <DependentUpon>frmBulkEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmOtherDocument.cs">
+    <Compile Include="Forms\MVVM\frmOtherDocument.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmOtherDocument.Designer.cs">
+    <Compile Include="Forms\MVVM\frmOtherDocument.Designer.cs">
       <DependentUpon>frmOtherDocument.cs</DependentUpon>
     </Compile>
     <None Include="Utility\DDSUtility.cs.deprecated" />
@@ -464,16 +464,16 @@
     <Compile Include="FlowTreeEditors\Scene\SceneSectionEditor.Designer.cs">
       <DependentUpon>SceneSectionEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmProgress.cs">
+    <Compile Include="Forms\UserControl\frmProgress.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmProgress.Designer.cs">
+    <Compile Include="Forms\UserControl\frmProgress.Designer.cs">
       <DependentUpon>frmProgress.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmRadish.cs">
+    <Compile Include="Forms\MVVM\frmRadish.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmRadish.Designer.cs">
+    <Compile Include="Forms\MVVM\frmRadish.Designer.cs">
       <DependentUpon>frmRadish.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmCR2WtoText.cs">
@@ -482,10 +482,10 @@
     <Compile Include="Forms\frmCR2WtoText.Designer.cs">
       <DependentUpon>frmCR2WtoText.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmImportUtility.cs">
+    <Compile Include="Forms\MVVM\frmImportUtility.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmImportUtility.Designer.cs">
+    <Compile Include="Forms\MVVM\frmImportUtility.Designer.cs">
       <DependentUpon>frmImportUtility.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmMimics.cs">
@@ -494,10 +494,10 @@
     <Compile Include="Forms\frmMimics.Designer.cs">
       <DependentUpon>frmMimics.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmLoading.cs">
+    <Compile Include="Forms\UserControl\frmLoading.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmLoading.Designer.cs">
+    <Compile Include="Forms\UserControl\frmLoading.Designer.cs">
       <DependentUpon>frmLoading.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmChunkFlowDiagram.cs">
@@ -530,10 +530,10 @@
     <Compile Include="Forms\frmAnims.Designer.cs">
       <DependentUpon>frmAnims.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmStringsGuiImporterIDDialog.cs">
+    <Compile Include="Forms\Dialog\frmStringsGuiImporterIDDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmStringsGuiImporterIDDialog.Designer.cs">
+    <Compile Include="Forms\Dialog\frmStringsGuiImporterIDDialog.Designer.cs">
       <DependentUpon>frmStringsGuiImporterIDDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmCreateInstaller.cs">
@@ -560,10 +560,10 @@
     <Compile Include="Utility\LoadFileArgs.cs" />
     <Compile Include="WitcherListViewItem.cs" />
     <Compile Include="Utility\CommonUIFunctions.cs" />
-    <Compile Include="Forms\frmAbout.cs">
+    <Compile Include="Forms\UserControl\frmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmAbout.Designer.cs">
+    <Compile Include="Forms\UserControl\frmAbout.Designer.cs">
       <DependentUpon>frmAbout.cs</DependentUpon>
     </Compile>
     <Compile Include="Utility\CopyController.cs" />
@@ -573,10 +573,10 @@
     <Compile Include="Forms\frmDebug.Designer.cs">
       <DependentUpon>frmDebug.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmImagePreview.cs">
+    <Compile Include="Forms\UserControl\frmImagePreview.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmImagePreview.Designer.cs">
+    <Compile Include="Forms\UserControl\frmImagePreview.Designer.cs">
       <DependentUpon>frmImagePreview.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmInstallPackage.cs">
@@ -597,10 +597,10 @@
     <Compile Include="Forms\frmMenuCreator.Designer.cs">
       <DependentUpon>frmMenuCreator.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmPackSettings.cs">
+    <Compile Include="Forms\UserControl\frmPackSettings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmPackSettings.Designer.cs">
+    <Compile Include="Forms\UserControl\frmPackSettings.Designer.cs">
       <DependentUpon>frmPackSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmSaveEditor.cs">
@@ -621,22 +621,22 @@
     <Compile Include="Forms\frmStringsGuiImporter.Designer.cs">
       <DependentUpon>frmStringsGuiImporter.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmStringsGuiScriptsPrefixDialog.cs">
+    <Compile Include="Forms\Dialog\frmStringsGuiScriptsPrefixDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmStringsGuiScriptsPrefixDialog.Designer.cs">
+    <Compile Include="Forms\Dialog\frmStringsGuiScriptsPrefixDialog.Designer.cs">
       <DependentUpon>frmStringsGuiScriptsPrefixDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmTextInput.cs">
+    <Compile Include="Forms\Dialog\frmTextInput.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmTextInput.Designer.cs">
+    <Compile Include="Forms\Dialog\frmTextInput.Designer.cs">
       <DependentUpon>frmTextInput.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmWCCLicense.cs">
+    <Compile Include="Forms\UserControl\frmWCCLicense.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmWCCLicense.Designer.cs">
+    <Compile Include="Forms\UserControl\frmWCCLicense.Designer.cs">
       <DependentUpon>frmWCCLicense.cs</DependentUpon>
     </Compile>
     <Compile Include="Utility\ImportExportUtility.cs" />
@@ -647,16 +647,16 @@
       <DependentUpon>ChunkEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="FlowTreeEditors\MoveEditorArgs.cs" />
-    <Compile Include="Forms\frmAddChunk.cs">
+    <Compile Include="Forms\Dialog\frmAddChunk.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmAddChunk.Designer.cs">
+    <Compile Include="Forms\Dialog\frmAddChunk.Designer.cs">
       <DependentUpon>frmAddChunk.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmAddVariable.cs">
+    <Compile Include="Forms\Dialog\frmAddVariable.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmAddVariable.Designer.cs">
+    <Compile Include="Forms\Dialog\frmAddVariable.Designer.cs">
       <DependentUpon>frmAddVariable.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmAssetBrowser.cs">
@@ -677,10 +677,10 @@
     <Compile Include="Forms\frmChunkProperties.Designer.cs">
       <DependentUpon>frmChunkProperties.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmCR2WDocument.cs">
+    <Compile Include="Forms\MVVM\frmCR2WDocument.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmCR2WDocument.Designer.cs">
+    <Compile Include="Forms\MVVM\frmCR2WDocument.Designer.cs">
       <DependentUpon>frmCR2WDocument.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmEmbeddedFiles.cs">
@@ -689,10 +689,10 @@
     <Compile Include="Forms\frmEmbeddedFiles.Designer.cs">
       <DependentUpon>frmEmbeddedFiles.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmExtractAmbigious.cs">
+    <Compile Include="Forms\Dialog\frmExtractAmbigious.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmExtractAmbigious.Designer.cs">
+    <Compile Include="Forms\Dialog\frmExtractAmbigious.Designer.cs">
       <DependentUpon>frmExtractAmbigious.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmHexEditorView.cs">
@@ -701,34 +701,34 @@
     <Compile Include="Forms\frmHexEditorView.Designer.cs">
       <DependentUpon>frmHexEditorView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmMain.cs">
+    <Compile Include="Forms\MVVM\frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmMain.Designer.cs">
+    <Compile Include="Forms\MVVM\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmModExplorer.cs">
+    <Compile Include="Forms\MVVM\frmModExplorer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmModExplorer.Designer.cs">
+    <Compile Include="Forms\MVVM\frmModExplorer.Designer.cs">
       <DependentUpon>frmModExplorer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmModSettings.cs">
+    <Compile Include="Forms\UserControl\frmModSettings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmModSettings.Designer.cs">
+    <Compile Include="Forms\UserControl\frmModSettings.Designer.cs">
       <DependentUpon>frmModSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmOutput.cs">
+    <Compile Include="Forms\UserControl\frmOutput.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmOutput.Designer.cs">
+    <Compile Include="Forms\UserControl\frmOutput.Designer.cs">
       <DependentUpon>frmOutput.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmRenameDialog.cs">
+    <Compile Include="Forms\Dialog\frmRenameDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmRenameDialog.Designer.cs">
+    <Compile Include="Forms\Dialog\frmRenameDialog.Designer.cs">
       <DependentUpon>frmRenameDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmSettings.cs">
@@ -746,37 +746,37 @@
     <EmbeddedResource Include="FlowTreeEditors\Scene\SceneLinkEditor.resx">
       <DependentUpon>SceneLinkEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmAbout.resx">
+    <EmbeddedResource Include="Forms\UserControl\frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FlowTreeEditors\ChunkEditor.resx">
       <DependentUpon>ChunkEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmAddChunk.resx">
+    <EmbeddedResource Include="Forms\Dialog\frmAddChunk.resx">
       <DependentUpon>frmAddChunk.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmAddVariable.resx">
+    <EmbeddedResource Include="Forms\Dialog\frmAddVariable.resx">
       <DependentUpon>frmAddVariable.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmBulkEditor.resx">
+    <EmbeddedResource Include="Forms\MVVM\frmBulkEditor.resx">
       <DependentUpon>frmBulkEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmOtherDocument.resx">
+    <EmbeddedResource Include="Forms\MVVM\frmOtherDocument.resx">
       <DependentUpon>frmOtherDocument.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmProgress.resx">
+    <EmbeddedResource Include="Forms\UserControl\frmProgress.resx">
       <DependentUpon>frmProgress.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmRadish.resx">
+    <EmbeddedResource Include="Forms\MVVM\frmRadish.resx">
       <DependentUpon>frmRadish.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmCR2WtoText.resx">
       <DependentUpon>frmCR2WtoText.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmImportUtility.resx">
+    <EmbeddedResource Include="Forms\MVVM\frmImportUtility.resx">
       <DependentUpon>frmImportUtility.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmMimics.resx">
@@ -792,7 +792,7 @@
     <EmbeddedResource Include="Forms\frmChunkProperties.resx">
       <DependentUpon>frmChunkProperties.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmCR2WDocument.resx">
+    <EmbeddedResource Include="Forms\MVVM\frmCR2WDocument.resx">
       <DependentUpon>frmCR2WDocument.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmDebug.resx">
@@ -801,13 +801,13 @@
     <EmbeddedResource Include="Forms\frmEmbeddedFiles.resx">
       <DependentUpon>frmEmbeddedFiles.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmExtractAmbigious.resx">
+    <EmbeddedResource Include="Forms\Dialog\frmExtractAmbigious.resx">
       <DependentUpon>frmExtractAmbigious.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmHexEditorView.resx">
       <DependentUpon>frmHexEditorView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmImagePreview.resx">
+    <EmbeddedResource Include="Forms\UserControl\frmImagePreview.resx">
       <DependentUpon>frmImagePreview.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmInstallPackage.resx">
@@ -816,19 +816,19 @@
     <EmbeddedResource Include="Forms\frmJournalEditor.resx">
       <DependentUpon>frmJournalEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmLoading.resx">
+    <EmbeddedResource Include="Forms\UserControl\frmLoading.resx">
       <DependentUpon>frmLoading.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmMain.resx">
+    <EmbeddedResource Include="Forms\MVVM\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmMenuCreator.resx">
       <DependentUpon>frmMenuCreator.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmModExplorer.resx">
+    <EmbeddedResource Include="Forms\MVVM\frmModExplorer.resx">
       <DependentUpon>frmModExplorer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmModSettings.resx">
+    <EmbeddedResource Include="Forms\UserControl\frmModSettings.resx">
       <DependentUpon>frmModSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmMusicPlayer.resx">
@@ -837,16 +837,16 @@
     <EmbeddedResource Include="Forms\frmConsole.resx">
       <DependentUpon>frmConsole.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmOutput.resx">
+    <EmbeddedResource Include="Forms\UserControl\frmOutput.resx">
       <DependentUpon>frmOutput.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmPackSettings.resx">
+    <EmbeddedResource Include="Forms\UserControl\frmPackSettings.resx">
       <DependentUpon>frmPackSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmChunkFlowDiagram.resx">
       <DependentUpon>frmChunkFlowDiagram.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmRenameDialog.resx">
+    <EmbeddedResource Include="Forms\Dialog\frmRenameDialog.resx">
       <DependentUpon>frmRenameDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmSaveEditor.resx">
@@ -867,16 +867,16 @@
     <EmbeddedResource Include="Forms\frmStringsGuiImporter.resx">
       <DependentUpon>frmStringsGuiImporter.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmStringsGuiImporterIDDialog.resx">
+    <EmbeddedResource Include="Forms\Dialog\frmStringsGuiImporterIDDialog.resx">
       <DependentUpon>frmStringsGuiImporterIDDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmStringsGuiScriptsPrefixDialog.resx">
+    <EmbeddedResource Include="Forms\Dialog\frmStringsGuiScriptsPrefixDialog.resx">
       <DependentUpon>frmStringsGuiScriptsPrefixDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmTextInput.resx">
+    <EmbeddedResource Include="Forms\Dialog\frmTextInput.resx">
       <DependentUpon>frmTextInput.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmWCCLicense.resx">
+    <EmbeddedResource Include="Forms\UserControl\frmWCCLicense.resx">
       <DependentUpon>frmWCCLicense.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmCreateInstaller.resx">
