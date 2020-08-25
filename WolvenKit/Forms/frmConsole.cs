@@ -21,7 +21,7 @@ namespace WolvenKit
 {
     public partial class frmConsole : DockContent, IThemedContent
     {
-        
+
         private string lastCommand;
 
         private readonly List<Type> supportedTypes = new List<Type>() { typeof(CUInt64), typeof(CUInt32), typeof(CUInt16), typeof(CUInt8),
@@ -44,7 +44,7 @@ namespace WolvenKit
             switch (type)
             {
                 case Logtype.Error:
-                    txOutput.AppendText(text,Color.Red, false);
+                    txOutput.AppendText(text, Color.Red, false);
                     break;
                 case Logtype.Important:
                     txOutput.AppendText(text, Color.Orange, false);
@@ -80,7 +80,7 @@ namespace WolvenKit
                 sf.Filter = "Text file (.txt) | *.txt";
                 if (sf.ShowDialog() == DialogResult.OK)
                 {
-                    File.WriteAllLines(sf.FileName,txOutput.Lines);
+                    File.WriteAllLines(sf.FileName, txOutput.Lines);
                 }
             }
         }
@@ -89,7 +89,7 @@ namespace WolvenKit
         {
             Clear();
         }
-        
+
         public void ApplyCustomTheme()
         {
             this.txOutput.BackColor = UIController.Get().GetTheme().ColorPalette.ToolWindowTabSelectedInactive.Background;
@@ -130,5 +130,5 @@ namespace WolvenKit
             //    AddTextStatic(sw.ToString(), Logtype.Important);
             //}
         }
-
+    }
 }
