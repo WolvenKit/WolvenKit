@@ -449,7 +449,9 @@ namespace WolvenKit
             // change the model's isserialized property to true when the user edits it,
             // this is to make sure only user-edited properties will get serialized
             var model = e.ListViewItem.RowObject as VariableListNode;
-            model.Variable.IsSerialized = true;
+            if (model.Variable is CVariable cvar)
+                cvar.SetIsSerialized();
+
         }
 
         public void ApplyCustomTheme()

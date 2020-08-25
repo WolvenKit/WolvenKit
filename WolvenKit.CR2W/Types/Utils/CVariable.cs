@@ -53,6 +53,14 @@ namespace WolvenKit.CR2W.Types
         /// Must also be set when a variable is edited in the editor
         /// </summary>
         public bool IsSerialized { get; set; }
+        public void SetIsSerialized()
+        {
+            IsSerialized = true;
+
+            if (Parent != null)
+                if (Parent is CVariable cparent)
+                    cparent.SetIsSerialized();
+        }
 
         /// <summary>
         /// Flags inherited from cr2w export (aka chunk)
@@ -590,27 +598,27 @@ namespace WolvenKit.CR2W.Types
             return $"<{REDType}>{REDName}";
         }
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hash = 17;
-                hash = REDType == null ? hash : hash * 29 + REDType.GetHashCode();
-                hash = REDName == null ? hash : hash * 29 + REDName.GetHashCode();
-                hash = GetFullName() == null ? hash : hash * 29 + GetFullName().GetHashCode();
-                var tos = ToString();
-                hash = hash * 29 + tos.GetHashCode();
-                var evars = GetEditableVariables();
-                if (evars != null)
-                {
-                    foreach (var item in evars)
-                    {
-                        hash = hash * 29 + item.GetHashCode();
-                    }
-                }
-                return hash;
-            }
-        }
+        //public override int GetHashCode()
+        //{
+        //    unchecked
+        //    {
+        //        int hash = 17;
+        //        hash = REDType == null ? hash : hash * 29 + REDType.GetHashCode();
+        //        hash = REDName == null ? hash : hash * 29 + REDName.GetHashCode();
+        //        hash = GetFullName() == null ? hash : hash * 29 + GetFullName().GetHashCode();
+        //        var tos = ToString();
+        //        hash = hash * 29 + tos.GetHashCode();
+        //        var evars = GetEditableVariables();
+        //        if (evars != null)
+        //        {
+        //            foreach (var item in evars)
+        //            {
+        //                hash = hash * 29 + item.GetHashCode();
+        //            }
+        //        }
+        //        return hash;
+        //    }
+        //}
 
         #endregion
 
