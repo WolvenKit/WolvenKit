@@ -1353,7 +1353,7 @@ namespace WolvenKit
             if (ImportUtility == null || ImportUtility.IsDisposed)
             {
                 ImportUtility = new frmImportUtility();
-                ImportUtility.Show(dockPanel, DockState.Document);
+                ImportUtility.Show(dockPanel, DockState.DockRight);
             }
 
             ImportUtility.Activate();
@@ -2550,6 +2550,7 @@ namespace WolvenKit
         #region Context menus
         private void modToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
+            packAndInstallModToolStripMenuItem.Enabled = ActiveMod != null;
             createPackedInstallerToolStripMenuItem.Enabled = ActiveMod != null;
             reloadProjectToolStripMenuItem.Enabled = ActiveMod != null;
             settingsToolStripMenuItem.Enabled = ActiveMod != null;
@@ -2569,17 +2570,22 @@ namespace WolvenKit
             saveAllToolStripMenuItem.Enabled = ActiveMod != null;
         }
 
+        private void editToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        {
+            verifyFileToolStripMenuItem.Enabled = ActiveMod != null;
+            renderW2meshToolStripMenuItem.Enabled = ActiveMod != null;
+        }
+
         private void toolsToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
             packageInstallerToolStripMenuItem.Enabled = ActiveMod != null;
             saveExplorerToolStripMenuItem.Enabled = ActiveMod != null;
             stringsEncoderGUIToolStripMenuItem.Enabled = ActiveMod != null;
             menuCreatorToolStripMenuItem.Enabled = ActiveMod != null;
-            renderW2meshToolStripMenuItem.Enabled = ActiveMod != null;
             bulkEditorToolStripMenuItem.Enabled = ActiveMod != null;
-
-            advancedToolStripMenuItem.Enabled = ActiveMod != null;
             experimentalToolStripMenuItem.Enabled = ActiveMod != null;
+            cR2WToTextToolStripMenuItem.Enabled = ActiveMod != null;
+            dumpGameAssetsToolStripMenuItem.Enabled = ActiveMod != null;
         }
 
         private void viewToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
@@ -3281,8 +3287,8 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 return;
             vm.executeGame();
         }
-        #endregion
 
+        #endregion
 
     }
 }

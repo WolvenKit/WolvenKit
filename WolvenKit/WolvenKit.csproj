@@ -984,6 +984,7 @@
     <None Include="Resources\Pictures\geralt.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Icons\GUI\Asset_Browser_16x.png" />
     <Content Include="Resources\Pictures\wkit_splash.png" />
     <Content Include="Resources\Pictures\wkit_splash2.png" />
     <Content Include="Resources\Pictures\WK_Logo2_32.png" />
