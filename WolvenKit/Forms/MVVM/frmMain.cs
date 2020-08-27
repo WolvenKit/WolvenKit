@@ -167,6 +167,7 @@ namespace WolvenKit
 
             ToolStripManager.LoadSettings(this);
             m_deserializeDockContent = new DeserializeDockContent(GetContentFromPersistString);
+            this.FormBorderStyle = FormBorderStyle.None;
         }
 
         #endregion
