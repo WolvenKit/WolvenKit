@@ -23,6 +23,8 @@ namespace WolvenKit.Console
     using W3Speech;
     using Wwise;
     using System.Text.RegularExpressions;
+    using System.IO.MemoryMappedFiles;
+    using WolvenKit.Common.Extensions;
 
     public class WolvenKitConsole
     {
@@ -48,10 +50,18 @@ namespace WolvenKit.Console
 
         internal static async Task Parse(string[] _args)
         {
-            var result = Parser.Default.ParseArguments<CacheOptions, BundleOptions, DumpXbmsOptions, DumpDDSOptions, DumpArchivedFileInfosOptions, DumpMetadataStoreOptions>(_args)
+            var result = Parser.Default.ParseArguments<
+                CacheOptions,
+                BundleOptions,
+                DumpCookedEffectsOptions,
+                DumpXbmsOptions,
+                DumpDDSOptions,
+                DumpArchivedFileInfosOptions,
+                DumpMetadataStoreOptions>(_args)
                         .MapResult(
                           async (CacheOptions opts) => await DumpCache(opts),
                           async (BundleOptions opts) => await RunBundle(opts),
+                          async (DumpCookedEffectsOptions opts) => await DumpCookedEffects(opts),
                           async (DumpXbmsOptions opts) => await DumpXbmInfo(opts),
                           async (DumpDDSOptions opts) => await DumpDDSInfo(opts),
                           async (DumpArchivedFileInfosOptions opts) => await DumpArchivedFileInfos(opts),
@@ -70,6 +80,104 @@ namespace WolvenKit.Console
             public string TextureGroup { get; set; }
         }
 
+        private static async Task<int> DumpCookedEffects(DumpCookedEffectsOptions options)
+        {
+            var dt = DateTime.Now;
+            string idx = RED.CRC32.Crc32Algorithm.Compute(Encoding.ASCII.GetBytes($"{dt.Year}{dt.Month}{dt.Day}{dt.Hour}{dt.Minute}{dt.Second}")).ToString();
+            var outDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "CookedEffectsDump", $"ExtractedFiles_{idx}");
+            if (!Directory.Exists(outDir))
+                Directory.CreateDirectory(outDir);
+
+            var memorymappedbundles = new Dictionary<string, MemoryMappedFile>();
+            var bm = new BundleManager();
+            bm.LoadAll(options.path);
+
+            //Load MemoryMapped Bundles
+            foreach (var b in bm.Bundles.Values)
+            {
+                var e = b.FileName.GetHashMD5();
+
+                memorymappedbundles.Add(e, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, e, 0, MemoryMappedFileAccess.Read));
+
+            }
+
+            using (StreamWriter writer = File.CreateText(Path.Combine(outDir, $"__effectsdump_{idx}.txt")))
+            {
+
+                string head = "RedName\t" +
+                            "EffectNames\t"
+                            ;
+                writer.WriteLine(head);
+                System.Console.WriteLine(head);
+
+                var files = bm.FileList
+                    .Where(x => x.Name.EndsWith("w2ent"))
+                    .GroupBy(p => p.Name)
+                    .Select(g => g.First())
+                    .ToList();
+                using (var pb = new ProgressBar())
+                using (var p1 = pb.Progress.Fork())
+                {
+                    int progress = 0;
+
+                    Parallel.For(0, files.Count, new ParallelOptions { MaxDegreeOfParallelism = 8 }, i =>
+                    {
+                        IWitcherFile f = (IWitcherFile)files[i];
+                        if (f is BundleItem bi)
+                        {
+                            var buff = new byte[f.Size];
+                            using (var s = new MemoryStream())
+                            {
+                                bi.ExtractExistingMMF(s);
+                                s.Seek(0, SeekOrigin.Begin);
+
+                                using (var ms = new MemoryStream(s.ToArray()))
+                                using (var br = new BinaryReader(ms))
+                                {
+                                    var crw = new CR2WFile();
+                                    crw.Read(br);
+
+                                    foreach (var c in crw.chunks)
+                                    {
+                                        if (c.data is CEntityTemplate)
+                                        {
+                                            var x = c.data as CEntityTemplate;
+                                            if (x.CookedEffects != null)
+                                            {
+                                                string effectnames = "";
+                                                //string animnames = "";
+                                                foreach (CEntityTemplateCookedEffect effect in x.CookedEffects)
+                                                {
+                                                    effectnames += effect.Name == null ? "NULL" : effect.Name.Value + ";";
+                                                    //animnames += effect.AnimName == null ? "NULL" : effect.AnimName.Value + ";";
+                                                }
+
+                                                string info = $"{f.Name}\t" +
+                                                    $"{effectnames}\t"
+                                                    //$"{animnames}\t"
+                                                    ;
+
+                                                //System.Console.WriteLine(info);
+                                                writer.WriteLine(info);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        progress += 1;
+                        var perc = progress / (double)files.Count;
+                        p1.Report(perc, $"Loading bundle entries: {progress}/{files.Count}");
+                    });
+                }
+            }
+
+            System.Console.WriteLine($"Finished extracting.");
+            System.Console.ReadLine();
+
+            return 1;
+        }
 
         private static async Task<int> DumpDDSInfo(DumpDDSOptions options)
         {
@@ -505,6 +613,7 @@ namespace WolvenKit.Console
                                                    new XElement("NewFileHash", CloneCollisionCache(x))))));
             xdoc.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\result.xml");
         }
+
         public static string CloneCollisionCache(string old)
         {
             if (Cache.GetCacheTypeOfFile(old) == Cache.Cachetype.Collision)

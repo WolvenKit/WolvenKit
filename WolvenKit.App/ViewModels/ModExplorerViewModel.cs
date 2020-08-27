@@ -129,9 +129,9 @@ namespace WolvenKit.App.ViewModels
                     || item.FullName == ActiveMod.DlcDirectory
                     || item.FullName == ActiveMod.RawDirectory
                     || item.FullName == ActiveMod.RadishDirectory
-                    || item.FullName == ActiveMod.BundleDirectory
+                    || item.FullName == ActiveMod.CookedDirectory
                     || item.FullName == ActiveMod.TextureCacheDirectory
-                    || item.FullName == ActiveMod.CollisionCacheDirectory
+                    || item.FullName == ActiveMod.UncookedDirectory
                     ))
                 {
                     deletablefiles.Add(item.FullName);

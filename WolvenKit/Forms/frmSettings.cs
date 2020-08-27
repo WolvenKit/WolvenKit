@@ -33,7 +33,7 @@ namespace WolvenKit
             txTextLanguage.Text = config.TextLanguage;
             txVoiceLanguage.Text = config.VoiceLanguage;
             txWCC_Lite.Text = config.WccLite;
-            checkBoxDisableWelcomeForm.Checked = config.IsWelcomeFormDisabled;
+
             
             
 
@@ -50,21 +50,7 @@ namespace WolvenKit
 
             exeSearcherSlave.RunWorkerAsync();
 
-            // get the depot path
-            // if depot path is empty, get the r4data from wcc_lite
-            if (string.IsNullOrEmpty(config.DepotPath) || !Directory.Exists(config.DepotPath))
-            {
-                if (File.Exists(txWCC_Lite.Text) && Path.GetExtension(txWCC_Lite.Text) == ".exe" && txWCC_Lite.Text.Contains("wcc_lite.exe"))
-                {
-                    DirectoryInfo wccDir = new FileInfo(txWCC_Lite.Text).Directory.Parent.Parent;
-                    string wcc_r4data = Path.Combine(wccDir.FullName, "r4data");
-                    if (Directory.Exists(wcc_r4data))
-                    {
-                        config.DepotPath = wcc_r4data;
-                    }
-                }
-            }
-            txDepot.Text = config.DepotPath;
+            
 
             btSave.Enabled =
                 (File.Exists(txWCC_Lite.Text) && Path.GetExtension(txWCC_Lite.Text) == ".exe" && txWCC_Lite.Text.Contains("wcc_lite.exe")) &&
@@ -343,6 +329,24 @@ Would you like to perform this patch?", "wcc_lite faster patch", MessageBoxButto
             {
                 txWCC_Lite.Text = wccLiteexe;
             }
+
+
+            // get the depot path
+            // if depot path is empty, get the r4data from wcc_lite
+            var config = MainController.Get().Configuration;
+            if (string.IsNullOrEmpty(config.DepotPath) || !Directory.Exists(config.DepotPath))
+            {
+                if (File.Exists(txWCC_Lite.Text) && Path.GetExtension(txWCC_Lite.Text) == ".exe" && txWCC_Lite.Text.Contains("wcc_lite.exe"))
+                {
+                    DirectoryInfo wccDir = new FileInfo(txWCC_Lite.Text).Directory.Parent.Parent;
+                    string wcc_r4data = Path.Combine(wccDir.FullName, "r4data");
+                    if (Directory.Exists(wcc_r4data))
+                    {
+                        config.DepotPath = wcc_r4data;
+                    }
+                }
+            }
+            txDepot.Text = config.DepotPath;
         }
 
         private void exeSearcherSlave_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
@@ -369,6 +373,25 @@ Would you like to perform this patch?", "wcc_lite faster patch", MessageBoxButto
             btSave.Enabled =
                 (File.Exists(txWCC_Lite.Text) && Path.GetExtension(txWCC_Lite.Text) == ".exe" && txWCC_Lite.Text.Contains("wcc_lite.exe")) &&
                 (File.Exists(txExecutablePath.Text) && Path.GetExtension(txExecutablePath.Text) == ".exe" && txExecutablePath.Text.Contains("witcher3.exe"));
+
+
+            // get the depot path
+            // if depot path is empty, get the r4data from wcc_lite
+            var config = MainController.Get().Configuration;
+            if (string.IsNullOrEmpty(config.DepotPath) || !Directory.Exists(config.DepotPath))
+            {
+                if (File.Exists(txWCC_Lite.Text) && Path.GetExtension(txWCC_Lite.Text) == ".exe" && txWCC_Lite.Text.Contains("wcc_lite.exe"))
+                {
+                    DirectoryInfo wccDir = new FileInfo(txWCC_Lite.Text).Directory.Parent.Parent;
+                    string wcc_r4data = Path.Combine(wccDir.FullName, "r4data");
+                    if (Directory.Exists(wcc_r4data))
+                    {
+                        config.DepotPath = wcc_r4data;
+                    }
+                }
+            }
+            txDepot.Text = config.DepotPath;
+
         }
 
         private void txExecutablePath_TextChanged(object sender, EventArgs e)

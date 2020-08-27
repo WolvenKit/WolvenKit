@@ -28,6 +28,13 @@ namespace WolvenKit.Console
 
     }
 
+    [Verb("dumpeffects", HelpText = "Dumps cookedEffect names info from bundles.")]
+    class DumpCookedEffectsOptions
+    {
+        [Option(HelpText = "Specify the game path.", Required = true)]
+        public string path { get; set; }
+    }
+
     [Verb("dumpDDS", HelpText = "Dumps dds info from texture caches.")]
     class DumpDDSOptions
     {

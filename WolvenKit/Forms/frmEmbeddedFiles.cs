@@ -67,32 +67,13 @@ namespace WolvenKit
 
         public void ApplyCustomTheme()
         {
-            var theme = UIController.Get().GetTheme();
+            this.listView.BackColor = UIController.GetBackColor();
+            this.listView.AlternateRowBackColor = UIController.GetPalette().OverflowButtonHovered.Background;
 
-            this.listView.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
-            this.listView.AlternateRowBackColor = theme.ColorPalette.OverflowButtonHovered.Background;
+            this.listView.ForeColor = UIController.GetForeColor();
 
-            this.listView.ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text;
-            HeaderFormatStyle hfs = new HeaderFormatStyle()
-            {
-                Normal = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.DockTarget.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                },
-                Hot = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.OverflowButtonHovered.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                },
-                Pressed = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                }
-            };
-            this.listView.HeaderFormatStyle = hfs;
-            listView.UnfocusedSelectedBackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background;
+            this.listView.HeaderFormatStyle = UIController.GetHeaderFormatStyle();
+            listView.UnfocusedSelectedBackColor = UIController.GetPalette().CommandBarToolbarButtonPressed.Background;
         }
     }
 }

@@ -35,7 +35,7 @@ namespace WolvenKit.CR2W.Types
 
 
         #region Fields
-        private TypeAccessor accessor;
+        public TypeAccessor accessor;
         #endregion
 
         #region Properties
@@ -53,6 +53,14 @@ namespace WolvenKit.CR2W.Types
         /// Must also be set when a variable is edited in the editor
         /// </summary>
         public bool IsSerialized { get; set; }
+        public void SetIsSerialized()
+        {
+            IsSerialized = true;
+
+            if (Parent != null)
+                if (Parent is CVariable cparent)
+                    cparent.SetIsSerialized();
+        }
 
         /// <summary>
         /// Flags inherited from cr2w export (aka chunk)
@@ -218,9 +226,6 @@ namespace WolvenKit.CR2W.Types
             return redvariables;
         }
 
-
-        
-
         /// <summary>
         /// Reads a Cvariable from a binaryreader stream
         /// Can be overwritten by child classes
@@ -365,31 +370,8 @@ namespace WolvenKit.CR2W.Types
         /// <param name="value"></param>
         private bool TryAddVariable(CVariable value)
         {
-            #region RedReflection
-            //List<PropertyInfo> redprops = REDReflection.GetREDProperties<REDAttribute>(this.GetType()).ToList();
-            //foreach (var p in redprops)
-            //{
-            //    if (p.GetCustomAttribute<REDAttribute>().Name == value.Name)
-            //    {
-            //        if (value is CEnum cenum)
-            //        {
-            //            p.SetValue(this, cenum.Enum);
-            //        }
-            //        else
-            //        {
-            //            p.SetValue(this, value);
-            //        }
-            //        break;
-            //    }
-            //}
-            #endregion
-
-            // not sure which is faster
-            #region FastAccessor
-            
             string varname = value.REDName.FirstCharToUpper();
             varname = NormalizeName(varname);
-            //if!((this is SBufferWaypoints || this is SWayPointsCollectionsSetData))
             
             try
             {
@@ -428,8 +410,6 @@ namespace WolvenKit.CR2W.Types
                     nname = $"_{nname}";
                 return nname;
             }
-            #endregion
-
         }
 
         /// <summary>
@@ -533,12 +513,6 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
-
-
-
-
-
-
         /// <summary>
         /// Copies this CVariable
         /// Can be overwritten by child classes
@@ -615,27 +589,27 @@ namespace WolvenKit.CR2W.Types
             return $"<{REDType}>{REDName}";
         }
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hash = 17;
-                hash = REDType == null ? hash : hash * 29 + REDType.GetHashCode();
-                hash = REDName == null ? hash : hash * 29 + REDName.GetHashCode();
-                hash = GetFullName() == null ? hash : hash * 29 + GetFullName().GetHashCode();
-                var tos = ToString();
-                hash = hash * 29 + tos.GetHashCode();
-                var evars = GetEditableVariables();
-                if (evars != null)
-                {
-                    foreach (var item in evars)
-                    {
-                        hash = hash * 29 + item.GetHashCode();
-                    }
-                }
-                return hash;
-            }
-        }
+        //public override int GetHashCode()
+        //{
+        //    unchecked
+        //    {
+        //        int hash = 17;
+        //        hash = REDType == null ? hash : hash * 29 + REDType.GetHashCode();
+        //        hash = REDName == null ? hash : hash * 29 + REDName.GetHashCode();
+        //        hash = GetFullName() == null ? hash : hash * 29 + GetFullName().GetHashCode();
+        //        var tos = ToString();
+        //        hash = hash * 29 + tos.GetHashCode();
+        //        var evars = GetEditableVariables();
+        //        if (evars != null)
+        //        {
+        //            foreach (var item in evars)
+        //            {
+        //                hash = hash * 29 + item.GetHashCode();
+        //            }
+        //        }
+        //        return hash;
+        //    }
+        //}
 
         #endregion
 

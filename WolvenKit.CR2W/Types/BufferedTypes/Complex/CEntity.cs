@@ -32,7 +32,7 @@ namespace WolvenKit.CR2W.Types
             base.Read(file, size);
 
             // check if created from template
-            isCreatedFromTemplate = this.Template != null;
+            isCreatedFromTemplate = this.Template != null && this.Template.Reference != null;
 
             // Read Component Array (should only be present if NOT created from template)
             #region Componentsarray
@@ -110,7 +110,7 @@ namespace WolvenKit.CR2W.Types
             base.Write(file);
 
             // check if created from template
-            isCreatedFromTemplate = this.Template != null;
+            isCreatedFromTemplate = this.Template != null && this.Template.Reference != null;
 
             // Write componentsarray (if not created from template)
             if (!isCreatedFromTemplate)

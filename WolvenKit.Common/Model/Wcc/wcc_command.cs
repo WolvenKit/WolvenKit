@@ -10,7 +10,7 @@ using System.Configuration;
 namespace WolvenKit.Common.Wcc
 {
     #region Wcc_lite Command class
-    public abstract class WCC_Command//: WorkflowItem
+    public abstract class WCC_Command
     {
         [Browsable(false)]
         public string Name { get; set; }
@@ -19,6 +19,7 @@ namespace WolvenKit.Common.Wcc
 
         [CategoryAttribute("0 INFO")]
         [ReadOnly(true)]
+        [Browsable(false)]
         public string Arguments => ConstructArgs();
 
         #endregion

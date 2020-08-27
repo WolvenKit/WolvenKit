@@ -56,6 +56,9 @@
     <Reference Include="CsvHelper, Version=15.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.15.0.5\lib\net47\CsvHelper.dll</HintPath>
     </Reference>
+    <Reference Include="FastMember, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.1.5.0\lib\net461\FastMember.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=1.2.0.246, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.1.2.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
@@ -76,6 +79,9 @@
     <Reference Include="PresentationCore" />
     <Reference Include="protobuf-net, Version=2.4.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <HintPath>..\packages\protobuf-net.2.4.6\lib\net40\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="SymbolicLinkSupport, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SymbolicLinkSupport.1.2.0\lib\net35\SymbolicLinkSupport.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -241,6 +247,7 @@
     <Compile Include="Controllers\Configuration.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\RadishController.cs" />
+    <Compile Include="MockKernel.cs" />
     <Compile Include="Model\Arguments\FileSavedEventArgs.cs" />
     <Compile Include="Model\Arguments\SelectChunkArgs.cs" />
     <Compile Include="Model\Commonfunctions.cs" />
@@ -251,12 +258,14 @@
     <Compile Include="Model\WKPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\RadishConfiguration.cs" />
+    <Compile Include="ViewModels\BulkEditViewModel.cs" />
     <Compile Include="ViewModels\CloseableViewModel.cs" />
     <Compile Include="ViewModels\ModExplorerViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\IViewModel.cs" />
     <Compile Include="ViewModels\DocumentViewModel.cs" />
     <Compile Include="ViewModels\ImportViewModel.cs" />
+    <Compile Include="ViewModels\ModKitViewModel.cs" />
     <Compile Include="ViewModels\RadishViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
   </ItemGroup>

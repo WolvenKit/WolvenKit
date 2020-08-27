@@ -23,6 +23,7 @@ namespace WolvenKit
     using App;
     using WolvenKit.App.Model;
     using WolvenKit.App.ViewModels;
+    using BrightIdeasSoftware;
 
     public enum EColorThemes
     {
@@ -45,8 +46,59 @@ namespace WolvenKit
         // Color Themes
         public VisualStudioToolStripExtender ToolStripExtender { get; set; }
         private readonly List<ThemeBase> _themesList = new List<ThemeBase>() { new VS2015LightTheme(), new VS2015DarkTheme(), new VS2015BlueTheme() };
-        public ThemeBase GetTheme() => _themesList[(int)Configuration.ColorTheme];
-       
+        public static ThemeBase GetTheme() => Get()._themesList[(int)Get().Configuration.ColorTheme];
+        public static DockPanelColorPalette GetPalette() => GetTheme().ColorPalette;
+
+        /// <summary>
+        /// Light | Dark | Blue
+        /// black | white | 27.41.62
+        /// </summary>
+        /// <returns></returns>
+        public static Color GetForeColor() => GetPalette().CommandBarMenuDefault.Text;
+
+        /// <summary>
+        /// Light | Dark | Blue
+        /// White Smoke | dark grey | faint blue
+        /// </summary>
+        /// <returns></returns>
+        public static Color GetBackColor() => GetPalette().DockTarget.ButtonBackground;
+
+        /// <summary>
+        /// Light | Dark | Blue
+        /// light blue | medium grey | yellow
+        /// </summary>
+        /// <returns></returns>
+        public static Color GetHighlightColor()
+        {
+            return GetPalette().CommandBarMenuPopupHovered.ItemBackground;
+            // boring but good
+            //return GetPalette().CommandBarMenuDefault.Background;
+        }
+
+        public static HeaderFormatStyle GetHeaderFormatStyle()
+        {
+            HeaderFormatStyle hfs = new HeaderFormatStyle()
+            {
+                Normal = new HeaderStateStyle()
+                {
+                    BackColor = GetPalette().DockTarget.Background,
+                    ForeColor = GetPalette().CommandBarMenuDefault.Text,
+                },
+                Hot = new HeaderStateStyle()
+                {
+                    BackColor = GetPalette().OverflowButtonHovered.Background,
+                    ForeColor = GetPalette().CommandBarMenuDefault.Text,
+                },
+                Pressed = new HeaderStateStyle()
+                {
+                    BackColor = GetPalette().CommandBarToolbarButtonPressed.Background,
+                    ForeColor = GetPalette().CommandBarMenuDefault.Text,
+                }
+            };
+            return hfs;
+        }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private UIController()  {  }
