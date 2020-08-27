@@ -180,12 +180,12 @@ namespace WolvenKit.Forms
             // encode in UTF-16LE
             Encoding enc = Encoding.Unicode;
 
-            File.WriteAllText(FilePath, "", enc);
+            File.WriteAllText(FilePath, scintillaControl.Text, enc);
 
-            using (var streamWriter = File.AppendText(FilePath))
-            {
-                streamWriter.Write(scintillaControl.Text);
-            }
+            //using (var streamWriter = File.AppendText(FilePath))
+            //{
+            //    streamWriter.Write(scintillaControl.Text);
+            //}
             MainController.LogString(FilePath + " saved!", Common.Services.Logtype.Normal);
 
             // register all new classes
