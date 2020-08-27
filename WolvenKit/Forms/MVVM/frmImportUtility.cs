@@ -43,33 +43,13 @@ namespace WolvenKit.Forms
         #region Methods
         public void ApplyCustomTheme()
         {
-            var theme = UIController.Get().GetTheme();
-            UIController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+            UIController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
 
-            HeaderFormatStyle hfs = new HeaderFormatStyle()
-            {
-                Normal = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.DockTarget.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                },
-                Hot = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.OverflowButtonHovered.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                },
-                Pressed = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                }
-            };
-
-            this.objectListView.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
-            this.objectListView.AlternateRowBackColor = theme.ColorPalette.OverflowButtonHovered.Background;
+            this.objectListView.BackColor = UIController.GetBackColor();
+            this.objectListView.AlternateRowBackColor = UIController.GetPalette().OverflowButtonHovered.Background;
             this.objectListView.ForeColor = Color.Black;
-            this.objectListView.HeaderFormatStyle = hfs;
-            objectListView.UnfocusedSelectedBackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background;
+            this.objectListView.HeaderFormatStyle = UIController.GetHeaderFormatStyle();
+            objectListView.UnfocusedSelectedBackColor = UIController.GetPalette().CommandBarToolbarButtonPressed.Background;
         }
 
         #endregion

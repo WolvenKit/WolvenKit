@@ -575,7 +575,7 @@ namespace WolvenKit.App.ViewModels
                 {
                     if (fi.Exists)
                     {
-                        string destinationpath = Path.Combine(ActiveMod.BundleDirectory, relativepath);
+                        string destinationpath = Path.Combine(ActiveMod.CookedDirectory, relativepath);
                         if (!File.Exists(destinationpath))
                         {
                             fi.CopyToAndCreate(destinationpath);
@@ -1107,32 +1107,35 @@ namespace WolvenKit.App.ViewModels
             if (File.Exists(seedfile))
                 File.Delete(seedfile);
 
-            using (var fs = new FileStream(seedfile, FileMode.Create, FileAccess.Write))
-            using (var sr = new StreamWriter(fs, Encoding.Default))
+            var uncookeddlcdir = new DirectoryInfo(Path.Combine(ActiveMod.DlcDirectory, EBundleType.CollisionCache.ToString()));
+            if (uncookeddlcdir.Exists)
             {
-                sr.WriteLine("{");
-                sr.WriteLine("\t\"files\": [");
-
-                var uncookeddlcdir = new DirectoryInfo(Path.Combine(ActiveMod.DlcDirectory, EBundleType.CollisionCache.ToString()));
-                FileInfo[] files = uncookeddlcdir.GetFiles("*", SearchOption.AllDirectories);
-                for (int i = 0; i < files.Length; i++)
+                using (var fs = new FileStream(seedfile, FileMode.Create, FileAccess.Write))
+                using (var sr = new StreamWriter(fs, Encoding.Default))
                 {
-                    FileInfo file = files[i];
-                    var relpath = file.FullName.Substring(uncookeddlcdir.FullName.Length + 1);
-                    relpath = relpath.Replace("\\", "\\\\");
-                    sr.WriteLine("\t\t{");
-                    sr.WriteLine($"\t\t\t\"path\": \"{relpath}\",");
-                    sr.WriteLine($"\t\t\t\"bundle\": \"blob\"");
-                    if (i < files.Length -1)
-                        sr.WriteLine("\t\t},");
-                    else
-                        sr.WriteLine("\t\t}");
-                }
+                    sr.WriteLine("{");
+                    sr.WriteLine("\t\"files\": [");
 
-                sr.WriteLine("\t]");
-                sr.WriteLine("}");
+                    FileInfo[] files = uncookeddlcdir.GetFiles("*", SearchOption.AllDirectories);
+                    for (int i = 0; i < files.Length; i++)
+                    {
+                        FileInfo file = files[i];
+                        var relpath = file.FullName.Substring(uncookeddlcdir.FullName.Length + 1);
+                        relpath = relpath.Replace("\\", "\\\\");
+                        sr.WriteLine("\t\t{");
+                        sr.WriteLine($"\t\t\t\"path\": \"{relpath}\",");
+                        sr.WriteLine($"\t\t\t\"bundle\": \"blob\"");
+                        if (i < files.Length - 1)
+                            sr.WriteLine("\t\t},");
+                        else
+                            sr.WriteLine("\t\t}");
+                    }
+
+                    sr.WriteLine("\t]");
+                    sr.WriteLine("}");
+                }
+                Logger.LogString($"Fallback seedfile created: {seedfile}. \n", Logtype.Success);
             }
-            Logger.LogString($"Fallback seedfile created: {seedfile}. \n", Logtype.Success);
         }
 
         /// <summary>

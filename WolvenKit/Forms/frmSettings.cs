@@ -33,7 +33,7 @@ namespace WolvenKit
             txTextLanguage.Text = config.TextLanguage;
             txVoiceLanguage.Text = config.VoiceLanguage;
             txWCC_Lite.Text = config.WccLite;
-            checkBoxDisableWelcomeForm.Checked = config.IsWelcomeFormDisabled;
+
             
             
 

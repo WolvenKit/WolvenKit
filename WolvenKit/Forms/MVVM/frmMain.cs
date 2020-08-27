@@ -36,6 +36,7 @@ namespace WolvenKit
     using WolvenKit.App.ViewModels;
     using WolvenKit.Common.Extensions;
     using WolvenKit.Common.Model;
+    using WolvenKit.Forms.MVVM;
     using WolvenKit.Render;
     using WolvenKit.Scaleform;
     using Wwise.Player;
@@ -58,6 +59,7 @@ namespace WolvenKit
         private frmImportUtility ImportUtility { get; set; }
         private frmRadish RadishUtility { get; set; }
         private frmProgress m_frmProgress { get; set; }
+        private frmWcc FormModKit { get; set; }
 
 
         private frmScriptEditor ScriptPreview { get; set; }
@@ -236,7 +238,7 @@ namespace WolvenKit
         }
         private void ApplyCustomTheme()
         {
-            var theme = UIController.Get().GetTheme();
+            var theme = UIController.GetTheme();
             this.dockPanel.Theme = theme;
             visualStudioToolStripExtender1.SetStyle(menuStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
             visualStudioToolStripExtender1.SetStyle(toolbarToolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
@@ -1338,6 +1340,16 @@ namespace WolvenKit
 
             Welcome.Activate();
         }
+        private void ShowModKit()
+        {
+            if (FormModKit == null || FormModKit.IsDisposed)
+            {
+                FormModKit = new frmWcc();
+                FormModKit.Show(dockPanel, DockState.Document);
+            }
+
+            FormModKit.Activate();
+        }
         private void ShowImportUtility()
         {
             if (ActiveMod == null)
@@ -1447,7 +1459,8 @@ namespace WolvenKit
             ScriptPreview = null;
             ImagePreview?.Close();
             ImagePreview = null;
-
+            FormModKit?.Close();
+            FormModKit = null;
 
             foreach (var t in OpenScripts.ToList())
             {
@@ -2371,6 +2384,13 @@ namespace WolvenKit
             //Update check should be after we are all set up. It goes on in the background.
             AutoUpdater.Start("https://raw.githubusercontent.com/Traderain/Wolven-kit/master/Update.xml");
             richpresenceworker.RunWorkerAsync();
+
+            if (!MainController.Get().Configuration.IsWelcomeFormDisabled)
+            {
+                var frmwelcome = new frmWelcome(this);
+                frmwelcome.ShowDialog();
+            }
+
         }
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -2440,12 +2460,12 @@ namespace WolvenKit
             }
             else
             {
-                if (!MainController.Get().Configuration.IsWelcomeFormDisabled)
-                {
-                    Welcome = new frmWelcome(this);
-                    Welcome.Show(dockPanel, DockState.Document);
-                    Welcome.FormClosed += Welcome_FormClosed;
-                }
+                //if (!MainController.Get().Configuration.IsWelcomeFormDisabled)
+                //{
+                //    Welcome = new frmWelcome(this);
+                //    Welcome.Show(dockPanel, DockState.Document);
+                //    Welcome.FormClosed += Welcome_FormClosed;
+                //}
             }
         }
 
@@ -3080,6 +3100,11 @@ _col - for simple stuff like boxes and spheres", "Information about importing mo
             settings.ShowDialog();
         }
 
+        private void witcher3ModkitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowModKit();
+        }
+
         private void bulkEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var be = new frmBulkEditor();
@@ -3279,8 +3304,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
                 return;
             vm.executeGame();
         }
+
         #endregion
-
-
     }
 }

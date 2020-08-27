@@ -375,6 +375,7 @@ namespace WolvenKit
             this.treeListView.Cursor = System.Windows.Forms.Cursors.Default;
             this.treeListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeListView.HideSelection = false;
+            this.treeListView.IsSimpleDragSource = true;
             this.treeListView.Location = new System.Drawing.Point(0, 27);
             this.treeListView.Name = "treeListView";
             this.treeListView.ShowGroups = false;

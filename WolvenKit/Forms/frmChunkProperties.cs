@@ -150,9 +150,7 @@ namespace WolvenKit
             }
 
             addVariableToolStripMenuItem.Enabled = sNodes.All(x => x.Variable.CanAddVariable(null));
-
-            // deprecated
-            //removeVariableToolStripMenuItem.Enabled = sNodes.All(x => x.Parent != null && x.Parent.Variable.CanRemoveVariable(x.Variable));
+            removeVariableToolStripMenuItem.Enabled = sNodes.All(x => x.Parent != null && x.Parent.Variable.CanRemoveVariable(x.Variable));
 
 
             pasteToolStripMenuItem.Enabled = CopyController.VariableTargets != null 
@@ -285,6 +283,7 @@ namespace WolvenKit
 
         private void removeVariableToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // removing variables from arrays
             foreach (VariableListNode node in treeView.SelectedObjects)
             {
                 if (node?.Parent != null && node.Parent.Variable.CanRemoveVariable(node.Variable))
@@ -295,9 +294,27 @@ namespace WolvenKit
                     {
                         treeView.RefreshObject(node.Parent);
                     }
-                    catch  {  } //TODO: Do this better, works now but it shouldn't be done like this. :p
+                    catch { } //TODO: Do this better, works now but it shouldn't be done like this. :p
                 }
             }
+
+            // TODO
+            // if parent.elements.Count == 0
+            // parent.isserialized = false
+        }
+
+        private void clearVariableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var node = (VariableListNode)treeView.SelectedObject;
+            if (node?.Variable == null)
+            {
+                return;
+            }
+            else
+            {
+                node.Variable = null;
+            }
+
         }
 
         private void expandAllToolStripMenuItem_Click(object sender, EventArgs e)
@@ -456,34 +473,16 @@ namespace WolvenKit
 
         public void ApplyCustomTheme()
         {
-            var theme = UIController.Get().GetTheme();
-            UIController.Get().ToolStripExtender.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
-            toolStripSearchBox.BackColor = theme.ColorPalette.ToolWindowCaptionButtonInactiveHovered.Background;
+            UIController.Get().ToolStripExtender.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
+            toolStripSearchBox.BackColor = UIController.GetPalette().ToolWindowCaptionButtonInactiveHovered.Background;
 
-            this.treeView.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
-            this.treeView.AlternateRowBackColor = theme.ColorPalette.OverflowButtonHovered.Background;
+            this.treeView.BackColor = UIController.GetBackColor();
+            this.treeView.AlternateRowBackColor = UIController.GetPalette().OverflowButtonHovered.Background;
 
-            this.treeView.ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text;
-            HeaderFormatStyle hfs = new HeaderFormatStyle()
-            {
-                Normal = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.DockTarget.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                },
-                Hot = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.OverflowButtonHovered.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                },
-                Pressed = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                }
-            };
-            this.treeView.HeaderFormatStyle = hfs;
-            treeView.UnfocusedSelectedBackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background;
+            this.treeView.ForeColor = UIController.GetForeColor();
+            
+            this.treeView.HeaderFormatStyle = UIController.GetHeaderFormatStyle();
+            treeView.UnfocusedSelectedBackColor = UIController.GetPalette().CommandBarToolbarButtonPressed.Background;
         }
 
         private void treeView_FormatRow(object sender, FormatRowEventArgs e)
@@ -522,5 +521,7 @@ namespace WolvenKit
 
             UpdateTreeListView();
         }
+
+        
     }
 }

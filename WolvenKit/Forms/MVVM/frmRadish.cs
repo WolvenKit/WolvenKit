@@ -38,42 +38,50 @@ namespace WolvenKit.Forms
             // Set control objects
             WorkflowobjectListView.SetObjects(RadishController.Get().Configuration.Workflows);
             
-            PropertyGrid.SelectedObject = viewModel.CurrentWorkflow;
+            propertyGrid.SelectedObject = viewModel.CurrentWorkflow;
             PropertyGridSettings.SelectedObject = RadishController.GetConfig();
         }
 
         #region Methods
         public void ApplyCustomTheme()
         {
-            var theme = UIController.Get().GetTheme();
-            UIController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+            UIController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
 
-            // objectListView
-            HeaderFormatStyle hfs = new HeaderFormatStyle()
-            {
-                Normal = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.DockTarget.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                },
-                Hot = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.OverflowButtonHovered.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                },
-                Pressed = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                }
-            };
+            Color background = UIController.GetBackColor();
+            Color highlight = UIController.GetHighlightColor();
+            Color textStyle = UIController.GetForeColor();
+
+
+            // propertygrid 1
+            // backgrounds
+            propertyGrid.HelpBackColor = background;
+            propertyGrid.ViewBackColor = background;
+            propertyGrid.HelpForeColor = textStyle;
+            propertyGrid.ViewForeColor = textStyle;
+            propertyGrid.CategoryForeColor = textStyle;
+            // highlighted
+            propertyGrid.BackColor = highlight;
+            propertyGrid.CategorySplitterColor = highlight;
+            propertyGrid.LineColor = highlight;
+
+            // propertygrid 2
+            // backgrounds
+            PropertyGridSettings.HelpBackColor = background;
+            PropertyGridSettings.ViewBackColor = background;
+            PropertyGridSettings.HelpForeColor = textStyle;
+            PropertyGridSettings.ViewForeColor = textStyle;
+            PropertyGridSettings.CategoryForeColor = textStyle;
+            // highlighted
+            PropertyGridSettings.BackColor = highlight;
+            PropertyGridSettings.CategorySplitterColor = highlight;
+            PropertyGridSettings.LineColor = highlight;
 
             // WorkflowobjectListView
-            this.WorkflowobjectListView.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
-            this.WorkflowobjectListView.AlternateRowBackColor = theme.ColorPalette.OverflowButtonHovered.Background;
-            this.WorkflowobjectListView.ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text;
-            this.WorkflowobjectListView.HeaderFormatStyle = hfs;
-            WorkflowobjectListView.UnfocusedSelectedBackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background;
+            this.WorkflowobjectListView.BackColor = UIController.GetBackColor();
+            this.WorkflowobjectListView.AlternateRowBackColor = UIController.GetPalette().OverflowButtonHovered.Background;
+            this.WorkflowobjectListView.ForeColor = UIController.GetForeColor();
+            this.WorkflowobjectListView.HeaderFormatStyle = UIController.GetHeaderFormatStyle();
+            WorkflowobjectListView.UnfocusedSelectedBackColor = UIController.GetPalette().CommandBarToolbarButtonPressed.Background;
         }
         #endregion  
 
@@ -93,7 +101,7 @@ namespace WolvenKit.Forms
 
             WorkflowobjectListView.SelectedObject = newworkflow;
             viewModel.CurrentWorkflow = newworkflow;
-            PropertyGrid.SelectedObject = newworkflow;
+            propertyGrid.SelectedObject = newworkflow;
         }
 
         private void RemovetoolStripMenuItem_Click(object sender, EventArgs e)
@@ -129,7 +137,7 @@ namespace WolvenKit.Forms
             if (selectedItem != null)
             {
                 viewModel.CurrentWorkflow = selectedItem;
-                PropertyGrid.SelectedObject = viewModel.CurrentWorkflow;
+                propertyGrid.SelectedObject = viewModel.CurrentWorkflow;
             }
         }
 

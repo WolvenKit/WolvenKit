@@ -258,13 +258,14 @@
     <Compile Include="Model\WKPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\RadishConfiguration.cs" />
+    <Compile Include="ViewModels\BulkEditViewModel.cs" />
     <Compile Include="ViewModels\CloseableViewModel.cs" />
     <Compile Include="ViewModels\ModExplorerViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\IViewModel.cs" />
     <Compile Include="ViewModels\DocumentViewModel.cs" />
     <Compile Include="ViewModels\ImportViewModel.cs" />
-    <Compile Include="ViewModels\BulkEditorViewModel.cs" />
+    <Compile Include="ViewModels\ModKitViewModel.cs" />
     <Compile Include="ViewModels\RadishViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
   </ItemGroup>

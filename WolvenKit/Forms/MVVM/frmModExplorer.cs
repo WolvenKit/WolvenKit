@@ -179,34 +179,15 @@ namespace WolvenKit
         #region Methods
         public void ApplyCustomTheme()
         {
-            var theme = UIController.Get().GetTheme();
-            UIController.Get().ToolStripExtender.SetStyle(searchstrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
+            UIController.Get().ToolStripExtender.SetStyle(searchstrip, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
 
-            this.treeListView.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
-            this.treeListView.ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text;
-            HeaderFormatStyle hfs = new HeaderFormatStyle()
-            {
-                Normal = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.DockTarget.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                },
-                Hot = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.OverflowButtonHovered.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                },
-                Pressed = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                }
-            };
-            this.treeListView.HeaderFormatStyle = hfs;
-            treeListView.UnfocusedSelectedBackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background;
+            this.treeListView.BackColor = UIController.GetBackColor();
+            this.treeListView.ForeColor = UIController.GetForeColor();
 
+            this.treeListView.HeaderFormatStyle = UIController.GetHeaderFormatStyle();
+            treeListView.UnfocusedSelectedBackColor = UIController.GetPalette().CommandBarToolbarButtonPressed.Background;
 
-            this.searchBox.BackColor = theme.ColorPalette.ToolWindowCaptionButtonInactiveHovered.Background;
+            this.searchBox.BackColor = UIController.GetPalette().ToolWindowCaptionButtonInactiveHovered.Background;
         }
 
         private void UpdateTreeView(params string[] nodesToUpdate)
@@ -408,8 +389,8 @@ namespace WolvenKit
                         || selectedobject.FullName == ActiveMod.RawDirectory
                         || selectedobject.FullName == ActiveMod.RadishDirectory
                         || selectedobject.FullName == ActiveMod.TextureCacheDirectory
-                        || selectedobject.FullName == ActiveMod.CollisionCacheDirectory
-                        || selectedobject.FullName == ActiveMod.BundleDirectory
+                        || selectedobject.FullName == ActiveMod.UncookedDirectory
+                        || selectedobject.FullName == ActiveMod.CookedDirectory
                         ;
 
                 createW2animsToolStripMenuItem.Enabled = !isToplevelDir;

@@ -117,7 +117,7 @@ namespace WolvenKit.Common
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
-        public string CollisionCacheDirectory
+        public string UncookedDirectory
         {
             get
             {
@@ -129,7 +129,7 @@ namespace WolvenKit.Common
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
-        public string BundleDirectory
+        public string CookedDirectory
         {
             get
             {
@@ -140,7 +140,44 @@ namespace WolvenKit.Common
         }
         #endregion
 
-
+        #region DLC-level Dirs
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string DlcTextureCacheDirectory
+        {
+            get
+            {
+                if (!Directory.Exists(Path.Combine(DlcDirectory, EBundleType.TextureCache.ToString())))
+                    Directory.CreateDirectory(Path.Combine(DlcDirectory, EBundleType.TextureCache.ToString()));
+                return Path.Combine(DlcDirectory, EBundleType.TextureCache.ToString());
+            }
+        }
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string DlcUncookedDirectory
+        {
+            get
+            {
+                if (!Directory.Exists(Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString())))
+                    Directory.CreateDirectory(Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString()));
+                return Path.Combine(DlcDirectory, EBundleType.CollisionCache.ToString());
+            }
+        }
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string DlcCookedDirectory
+        {
+            get
+            {
+                if (!Directory.Exists(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString())))
+                    Directory.CreateDirectory(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString()));
+                return Path.Combine(DlcDirectory, EBundleType.Bundle.ToString());
+            }
+        }
+        #endregion
         #endregion
 
         #region Files
@@ -257,8 +294,13 @@ namespace WolvenKit.Common
 
             // create mod-level directories
             _ = TextureCacheDirectory;
-            _ = CollisionCacheDirectory;
-            _ = BundleDirectory;
+            _ = UncookedDirectory;
+            _ = CookedDirectory;
+
+            // create dlc-level directories
+            _ = DlcTextureCacheDirectory;
+            _ = DlcUncookedDirectory;
+            _ = DlcCookedDirectory;
         }
 
 

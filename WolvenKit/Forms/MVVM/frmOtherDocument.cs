@@ -53,7 +53,7 @@ namespace WolvenKit.Forms
         protected void UpdateFormText(string val) => this.Text = val;
 
         private delegate void wolvenkitFileDelegate(IWolvenkitFile f);
-        protected void UpdatePropertyGrid(IWolvenkitFile val) => this.propertyGrid1.SelectedObject = val;
+        protected void UpdatePropertyGrid(IWolvenkitFile val) => this.propertyGrid.SelectedObject = val;
 
         public string FileName => vm.FileName;
 
@@ -67,8 +67,21 @@ namespace WolvenKit.Forms
 
         public void ApplyCustomTheme()
         {
-            var theme = UIController.Get().GetTheme();
-            
+            Color background = UIController.GetBackColor();
+            Color highlight = UIController.GetHighlightColor();
+            Color textStyle = UIController.GetForeColor();
+
+            // propertygrid
+            // backgrounds
+            propertyGrid.HelpBackColor = background;
+            propertyGrid.ViewBackColor = background;
+            propertyGrid.HelpForeColor = textStyle;
+            propertyGrid.ViewForeColor = textStyle;
+            propertyGrid.CategoryForeColor = textStyle;
+            // highlighted
+            propertyGrid.BackColor = highlight;
+            propertyGrid.CategorySplitterColor = highlight;
+            propertyGrid.LineColor = highlight;
         }
     }
 }

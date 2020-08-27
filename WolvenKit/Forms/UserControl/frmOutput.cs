@@ -72,8 +72,8 @@ namespace WolvenKit
         
         public void ApplyCustomTheme()
         {
-            this.txOutput.BackColor = UIController.Get().GetTheme().ColorPalette.ToolWindowTabSelectedInactive.Background;
-            this.txOutput.ForeColor = UIController.Get().GetTheme().ColorPalette.CommandBarMenuDefault.Text;
+            this.txOutput.BackColor = UIController.GetBackColor();
+            this.txOutput.ForeColor = UIController.GetForeColor();
         }
 
         private void txOutput_KeyDown(object sender, KeyEventArgs e)

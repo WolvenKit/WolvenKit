@@ -226,9 +226,6 @@ namespace WolvenKit.CR2W.Types
             return redvariables;
         }
 
-
-        
-
         /// <summary>
         /// Reads a Cvariable from a binaryreader stream
         /// Can be overwritten by child classes
@@ -515,12 +512,6 @@ namespace WolvenKit.CR2W.Types
                 }
             }
         }
-
-
-
-
-
-
 
         /// <summary>
         /// Copies this CVariable
