@@ -984,13 +984,32 @@
     <None Include="Resources\Pictures\geralt.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Icons\GUI\Asset_Browser_16x.png" />
+    <Content Include="Resources\Icons\Files\apb_32x.png" />
+    <Content Include="Resources\Icons\Files\fbx_32x.png" />
+    <Content Include="Resources\Icons\Files\image_32x.png" />
+    <Content Include="Resources\Icons\Files\xbm_32x.png" />
+    <Content Include="Resources\Icons\Files\xml_32x.png" />
+    <Content Include="Resources\Icons\GUI\Asset_Browser_16x.png" />
+    <Content Include="Resources\Icons\GUI\Asset_Browser_Other_Mod_16x.png" />
+    <Content Include="Resources\Icons\GUI\Discord_32x.png" />
     <Content Include="Resources\Pictures\wkit_splash.png" />
     <Content Include="Resources\Pictures\wkit_splash2.png" />
     <Content Include="Resources\Pictures\WK_Logo2_32.png" />
+    <Content Include="Resources\VisualStudio\Compliant_16x.png" />
+    <Content Include="Resources\VisualStudio\FindInFile_16x.png" />
+    <Content Include="Resources\VisualStudio\MailOpen_16x.png" />
+    <Content Include="Resources\VisualStudio\StatusHelp_16x.png" />
+    <Content Include="Resources\VisualStudio\StatusHelp_grey_disabled_16x.png" />
+    <Content Include="Resources\VisualStudio\StatusInformation_exp_16x.png" />
+    <Content Include="Resources\VisualStudio\StatusInformation_grey_disabled_16x.png" />
+    <Content Include="Resources\VisualStudio\StatusNotStarted_red_16x.png" />
+    <Content Include="Resources\VisualStudio\StatusWarning_exp_16x.png" />
+    <Content Include="Resources\VisualStudio\StatusWarning_grey_16x.png" />
+    <Content Include="Resources\VisualStudio\Test_16x.png" />
+    <Content Include="Resources\VisualStudio\Test_StatusBarAni_05_16x.png" />
+    <Content Include="Resources\VisualStudio\UserCode_16x.png" />
+    <Content Include="Resources\VisualStudio\ValidateDocument_16x.png" />
     <Content Include="wolven_kit_icon2.ico" />
-    <None Include="Resources\CustomImages\mail.png" />
-    <None Include="Resources\CustomImages\player_record.png" />
     <Content Include="..\Libs\Irrlicht.dll">
       <Link>Irrlicht.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1003,7 +1022,6 @@
     <None Include="Resources\CustomImages\ui-menu-blue.png" />
     <None Include="Resources\CustomImages\home.png" />
     <None Include="Resources\CustomImages\stickman.png" />
-    <None Include="Resources\CustomImages\t-shirt-gray.png" />
     <None Include="Resources\CustomImages\arrow-circle-315.png" />
     <None Include="Resources\CustomImages\ui-check-box.png" />
     <None Include="Resources\CustomImages\ui-check-box-uncheck.png" />
@@ -1121,10 +1139,7 @@
     <None Include="Resources\wcc_eula.rtf" />
     <None Include="Resources\Icons\witcher3_102.ico" />
     <None Include="Resources\Icons\witcher3_101.ico" />
-    <None Include="Resources\Pictures\2c21aeda16de354ba5334551a883b481.png" />
-    <None Include="Resources\CustomImages\info-icon-23818.jpg" />
     <None Include="Resources\CustomImages\refresh.png" />
-    <None Include="Resources\Pictures\aERVQbx_460s.jpg" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

@@ -139,9 +139,6 @@
   <data name="witcher3_101" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\icons\witcher3_101.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="_2c21aeda16de354ba5334551a883b481" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\pictures\2c21aeda16de354ba5334551a883b481.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="AddNodefromFile_354" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\visualstudio\addnodefromfile_354.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -217,9 +214,6 @@
   <data name="ImportPackage_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\visualstudio\importpackage_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="info_icon_23818" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\customimages\info-icon-23818.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="journal" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\redengine\journal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -237,9 +231,6 @@
   </data>
   <data name="Logo_wkit" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\pictures\logo_wkit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="mail" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\customimages\mail.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="maximize1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\customimages\maximize.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -261,9 +252,6 @@
   </data>
   <data name="package_16xLG" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\visualstudio\package_16xlg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="player_record" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\customimages\player_record.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="PlayStep_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\visualstudio\playstep_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -291,9 +279,6 @@
   </data>
   <data name="RemoteServer_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\visualstudio\remoteserver_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TextFileIcon64px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\TextFileIcon64px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="RunPause_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\visualstudio\runpause_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -324,9 +309,6 @@
   </data>
   <data name="swf" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\redengine\swf.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="t_shirt_gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\customimages\t-shirt-gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ui_check_box" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\customimages\ui-check-box.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -495,5 +477,56 @@
   </data>
   <data name="WK_Logo2_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\pictures\wk_logo2_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Asset_Browser_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\gui\asset_browser_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Discord_32x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\gui\discord_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="apb" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\files\apb_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fbx" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\files\fbx_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="image" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\files\image_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="xbm" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\files\xbm_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="xml" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\files\xml_32x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Compliant_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\visualstudio\compliant_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StatusInformation_exp_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\visualstudio\statusinformation_exp_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StatusInformation_grey_disabled_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\visualstudio\statusinformation_grey_disabled_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Test_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\visualstudio\test_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="UserCode_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\visualstudio\usercode_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ValidateDocument_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\visualstudio\validatedocument_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MailOpen_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\visualstudio\mailopen_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StatusNotStarted_red_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\visualstudio\statusnotstarted_red_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Asset_Browser_Other_Mod_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\gui\asset_browser_other_mod_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FindInFile_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\visualstudio\findinfile_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

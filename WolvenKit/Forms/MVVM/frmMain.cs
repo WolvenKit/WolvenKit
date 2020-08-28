@@ -1080,6 +1080,7 @@ namespace WolvenKit
                 case ".TXT":
                 case ".WS":
                 // other
+                case ".FBX":
                 case ".APB":
                 case ".BAT":
                 case ".YML":
@@ -2585,14 +2586,13 @@ namespace WolvenKit
             bulkEditorToolStripMenuItem.Enabled = ActiveMod != null;
             experimentalToolStripMenuItem.Enabled = ActiveMod != null;
             cR2WToTextToolStripMenuItem.Enabled = ActiveMod != null;
-            dumpGameAssetsToolStripMenuItem.Enabled = ActiveMod != null;
+            GameDebuggerToolStripMenuItem.Enabled = ActiveMod != null;
         }
 
         private void viewToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
             radishUtilitytoolStripMenuItem.Enabled = ActiveMod != null;
             importUtilityToolStripMenuItem.Enabled = ActiveMod != null;
-            gameDebuggerToolStripMenuItem.Enabled = ActiveMod != null;
         }
         #endregion
 
