@@ -264,10 +264,20 @@ namespace WolvenKit.App.ViewModels
             string reldir = dir.Substring(ActiveMod.FileDirectory.Length + 1);
 
             // Trim working directories in path
-            var reg = new Regex(@"^(Raw|Mod)\\(.*)");
+            var reg = new Regex(@"^(Raw|Mod|DLC)\\(.*)");
             var match = reg.Match(reldir);
+            bool isDlc = false;
             if (match.Success)
+            {
                 reldir = match.Groups[2].Value;
+                if (match.Groups[1].Value == "Raw")
+                    return;
+                else if (match.Groups[1].Value == "DLC")
+                    isDlc = true;
+                else if (match.Groups[1].Value == "Mod")
+                    isDlc = false;
+            }
+
             if (reldir.StartsWith(EBundleType.CollisionCache.ToString()))
             {
                 reldir = reldir.Substring(EBundleType.CollisionCache.ToString().Length);
@@ -280,16 +290,18 @@ namespace WolvenKit.App.ViewModels
             reldir = reldir.TrimStart(Path.DirectorySeparatorChar);
 
             // create cooked mod Dir
-            var cookedModDir = Path.Combine(ActiveMod.ModDirectory, EBundleType.Bundle.ToString(), reldir);
-            if (!Directory.Exists(cookedModDir))
+            var cookedtargetDir = isDlc 
+                ? Path.Combine(ActiveMod.DlcCookedDirectory, reldir) 
+                : Path.Combine(ActiveMod.ModCookedDirectory, reldir);
+            if (!Directory.Exists(cookedtargetDir))
             {
-                Directory.CreateDirectory(cookedModDir);
+                Directory.CreateDirectory(cookedtargetDir);
             }
 
             // lazy check for existing files in Active Mod
             var filenames = Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories)
                 .Select(_ => Path.GetFileName(_));
-            var existingfiles = Directory.GetFiles(cookedModDir, "*.*", SearchOption.AllDirectories)
+            var existingfiles = Directory.GetFiles(cookedtargetDir, "*.*", SearchOption.AllDirectories)
                 .Select(_ => Path.GetFileName(_));
 
             if (existingfiles.Intersect(filenames).Any())
@@ -310,7 +322,7 @@ namespace WolvenKit.App.ViewModels
                     Platform = platform.pc,
                     mod = dir,
                     basedir = dir,
-                    outdir = cookedModDir
+                    outdir = cookedtargetDir
                 };
                 await Task.Run(() => MainController.Get().WccHelper.RunCommand(cook));
             }

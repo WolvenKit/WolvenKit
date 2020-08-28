@@ -1703,7 +1703,6 @@ namespace WolvenKit
                     Logger.LogString($"======== Adding cooked dlc files ======== \n", Logtype.Important);
                     try
                     {
-                        //var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\" + ActiveMod.GetDLCName() + @"\content\");
                         var uncookeddlcdir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.Bundle.ToString());
                         var di = new DirectoryInfo(uncookeddlcdir);
                         var files = di.GetFiles("*", SearchOption.AllDirectories);
@@ -1712,6 +1711,13 @@ namespace WolvenKit
                         {
                             string relpath = fi.FullName.Substring(uncookeddlcdir.Length + 1);
                             string newpath = Path.Combine(ActiveMod.CookedDlcDirectory, relpath);
+
+                            if (File.Exists(newpath))
+                            {
+                                Logger.LogString($"Duplicate cooked file found {newpath}. Overwriting. \n", Logtype.Important);
+                                File.Delete(newpath);
+                            }
+
                             fi.CopyToAndCreate(newpath);
                         }
                     }
@@ -1734,12 +1740,12 @@ namespace WolvenKit
                 int statusTex = -1;
 
                 //Handle bundle packing.
-                if (packsettings.PackBundles)
+                if (packsettings.PackBundles.Item1 || packsettings.PackBundles.Item2)
                 {
                     // packing
                     //if (statusCookCol * statusCookTex != 0)
                     {
-                        var t = Task.Run(() => vm.Pack());
+                        var t = Task.Run(() => vm.Pack(packsettings.PackBundles.Item1, packsettings.PackBundles.Item2));
                         await t.ContinueWith(antecedent =>
                         {
                             //Logger.LogString($"Packing Bundles ended with status: {antecedent.Result}", Logtype.Important);
@@ -1756,11 +1762,11 @@ namespace WolvenKit
                 //------------------------ METADATA -------------------------------------//
                 #region Metadata
                 //Handle metadata generation.
-                if (packsettings.GenMetadata)
+                if (packsettings.GenMetadata.Item1 || packsettings.GenMetadata.Item2)
                 {
                     if (statusPack == 1)
                     {
-                        var t = Task.Run(() => vm.CreateMetaData());
+                        var t = Task.Run(() => vm.CreateMetaData(packsettings.GenMetadata.Item1, packsettings.GenMetadata.Item2));
                         await t.ContinueWith(antecedent =>
                         {
                             statusMetaData = antecedent.Result;
@@ -1782,9 +1788,9 @@ namespace WolvenKit
                 // checks are in GenerateCache()
 
                 //Generate collision cache
-                if (packsettings.GenCollCache)
+                if (packsettings.GenCollCache.Item1 || packsettings.GenCollCache.Item2)
                 {
-                    var t = Task.Run(() => vm.GenerateCache(MainController.Get().CollisionManager.TypeName));
+                    var t = Task.Run(() => vm.GenerateCache(MainController.Get().CollisionManager.TypeName, packsettings.GenCollCache.Item1, packsettings.GenCollCache.Item2));
                     await t.ContinueWith(antecedent =>
                     {
                         statusCol = antecedent.Result;
@@ -1795,9 +1801,9 @@ namespace WolvenKit
                 }
 
                 //Handle texture caching
-                if (packsettings.GenTexCache)
+                if (packsettings.GenTexCache.Item1 || packsettings.GenTexCache.Item2)
                 {
-                    var t = Task.Run(() => vm.GenerateCache(EBundleType.TextureCache));
+                    var t = Task.Run(() => vm.GenerateCache(EBundleType.TextureCache, packsettings.GenTexCache.Item1, packsettings.GenTexCache.Item2));
                     await t.ContinueWith(antecedent =>
                     {
                         statusTex = antecedent.Result;
@@ -1809,58 +1815,63 @@ namespace WolvenKit
 
 
                 //Handle sound caching
-                if (packsettings.Sound)
+                if (packsettings.Sound.Item1 || packsettings.Sound.Item2)
                 {
-
-                    var soundmoddir = Path.Combine(ActiveMod.ModDirectory, EBundleType.SoundCache.ToString());
-
-                    foreach (var bnk in Directory.GetFiles(soundmoddir, "*.bnk", SearchOption.AllDirectories))
+                    if (packsettings.Sound.Item1)
                     {
-                        Soundbank bank = new Soundbank(bnk);
-                        bank.readFile();
-                        bank.read_wems(soundmoddir);
-                        bank.rebuild_data();
-                        File.Delete(bnk);
-                        bank.build_bnk(bnk);
-                        Logger.LogString("Rebuilt modded bnk " + bnk, Logtype.Success);
-                    }
+                        var soundmoddir = Path.Combine(ActiveMod.ModDirectory, EBundleType.SoundCache.ToString());
 
-                    //Create mod soundspc.cache
-                    if (Directory.Exists(soundmoddir) &&
+                        foreach (var bnk in Directory.GetFiles(soundmoddir, "*.bnk", SearchOption.AllDirectories))
+                        {
+                            Soundbank bank = new Soundbank(bnk);
+                            bank.readFile();
+                            bank.read_wems(soundmoddir);
+                            bank.rebuild_data();
+                            File.Delete(bnk);
+                            bank.build_bnk(bnk);
+                            Logger.LogString("Rebuilt modded bnk " + bnk, Logtype.Success);
+                        }
+                    
+                        //Create mod soundspc.cache
+                        if (Directory.Exists(soundmoddir) &&
                         new DirectoryInfo(soundmoddir)
                         .GetFiles("*.*", SearchOption.AllDirectories)
                         .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).Any())
-                    {
-                        SoundCache.Write(
-                            new DirectoryInfo(soundmoddir)
-                                .GetFiles("*.*", SearchOption.AllDirectories)
-                                .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk"))
-                                .ToList().Select(x => x.FullName).ToList(),
-                                Path.Combine(ActiveMod.PackedModDirectory, @"soundspc.cache"));
-                        Logger.LogString("Mod soundcache generated!\n", Logtype.Important);
-                    }
-                    else
-                    {
-                        Logger.LogString("Mod soundcache wasn't generated!\n", Logtype.Important);
+                        {
+                            SoundCache.Write(
+                                new DirectoryInfo(soundmoddir)
+                                    .GetFiles("*.*", SearchOption.AllDirectories)
+                                    .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk"))
+                                    .ToList().Select(x => x.FullName).ToList(),
+                                    Path.Combine(ActiveMod.PackedModDirectory, @"soundspc.cache"));
+                            Logger.LogString("Mod soundcache generated!\n", Logtype.Important);
+                        }
+                        else
+                        {
+                            Logger.LogString("Mod soundcache wasn't generated!\n", Logtype.Important);
+                        }
                     }
 
-                    var sounddlcdir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.SoundCache.ToString());
+                    if (packsettings.Sound.Item2)
+                    {
+                        var sounddlcdir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.SoundCache.ToString());
 
-                    //Create dlc soundspc.cache
-                    if (Directory.Exists(sounddlcdir) && new DirectoryInfo(sounddlcdir)
-                        .GetFiles("*.*", SearchOption.AllDirectories)
-                        .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).Any())
-                    {
-                        SoundCache.Write(
-                            new DirectoryInfo(sounddlcdir)
-                                .GetFiles("*.*", SearchOption.AllDirectories)
-                                .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).ToList().Select(x => x.FullName).ToList(),
-                            Path.Combine(ActiveMod.PackedDlcDirectory, @"soundspc.cache"));
-                        Logger.LogString("DLC soundcache generated!\n", Logtype.Important);
-                    }
-                    else
-                    {
-                        Logger.LogString("DLC soundcache wasn't generated!\n", Logtype.Important);
+                        //Create dlc soundspc.cache
+                        if (Directory.Exists(sounddlcdir) && new DirectoryInfo(sounddlcdir)
+                            .GetFiles("*.*", SearchOption.AllDirectories)
+                            .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).Any())
+                        {
+                            SoundCache.Write(
+                                new DirectoryInfo(sounddlcdir)
+                                    .GetFiles("*.*", SearchOption.AllDirectories)
+                                    .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).ToList().Select(x => x.FullName).ToList(),
+                                Path.Combine(ActiveMod.PackedDlcDirectory, @"soundspc.cache"));
+                            Logger.LogString("DLC soundcache generated!\n", Logtype.Important);
+                        }
+                        else
+                        {
+                            Logger.LogString("DLC soundcache wasn't generated!\n", Logtype.Important);
+                        }
                     }
                 }
                 #endregion

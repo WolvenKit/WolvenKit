@@ -912,14 +912,14 @@ namespace WolvenKit.App.ViewModels
         /// Packs the bundles for the DLC and the Mod. 
         /// IN: \\Bundles, OUT: packed\\Mods\\mod
         /// </summary>
-        public async Task<int> Pack()
+        public async Task<int> Pack(bool packmod, bool packdlc)
         {
             
             int finished = 1;
 
-            if(Directory.Exists(ActiveMod.CookedModDirectory) && Directory.Exists(ActiveMod.PackedModDirectory))
+            if(packmod && Directory.Exists(ActiveMod.CookedModDirectory) && Directory.Exists(ActiveMod.PackedModDirectory))
                 finished *= await Task.Run(() => PackBundleInternal(ActiveMod.CookedModDirectory, ActiveMod.PackedModDirectory));
-            if (Directory.Exists(ActiveMod.CookedDlcDirectory) && Directory.Exists(ActiveMod.PackedDlcDirectory))
+            if (packdlc && Directory.Exists(ActiveMod.CookedDlcDirectory) && Directory.Exists(ActiveMod.PackedDlcDirectory))
                 finished *= await Task.Run(() => PackBundleInternal(ActiveMod.CookedDlcDirectory, ActiveMod.PackedDlcDirectory, true));
 
             return finished == 0 ? 0 : 1;
@@ -961,13 +961,13 @@ namespace WolvenKit.App.ViewModels
         /// IN: packed\\Mods\\mod, OUT: same dir
         /// </summary>
         /// <returns></returns>
-        public async Task<int> CreateMetaData()
+        public async Task<int> CreateMetaData(bool packmod, bool dlcmod)
         {            
             int finished = 1;
 
-            if (Directory.Exists(ActiveMod.PackedModDirectory))
+            if (packmod && Directory.Exists(ActiveMod.PackedModDirectory))
                 finished *= await Task.Run(() => CreateMetaDataInternal(ActiveMod.PackedModDirectory));
-            if (Directory.Exists(ActiveMod.PackedDlcDirectory))
+            if (dlcmod && Directory.Exists(ActiveMod.PackedDlcDirectory))
                 finished *= await Task.Run(() => CreateMetaDataInternal(ActiveMod.PackedDlcDirectory, true));
 
             return finished == 0 ? 0 : 1;
@@ -1014,7 +1014,7 @@ namespace WolvenKit.App.ViewModels
         /// </summary>
         /// <param name="cachetype"></param>
         /// <returns></returns>
-        public async Task<int> GenerateCache(EBundleType cachetype)
+        public async Task<int> GenerateCache(EBundleType cachetype, bool packmod, bool packdlc)
         {
             string dlc_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "dlc.files.cook.db");
             string dlc_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "dlc.textures.cook.db");
@@ -1063,8 +1063,10 @@ namespace WolvenKit.App.ViewModels
             
             int finished = 1;
 
-            finished *= await Task.Run(() => GenerateCacheInternal(ActiveMod.PackedModDirectory, moddbfile, modbasedir));
-            finished *= await Task.Run(() => GenerateCacheInternal(ActiveMod.PackedDlcDirectory, dlcdbfile, dlcbasedir, true));
+            if (packmod)
+                finished *= await Task.Run(() => GenerateCacheInternal(ActiveMod.PackedModDirectory, moddbfile, modbasedir));
+            if (packdlc)
+                finished *= await Task.Run(() => GenerateCacheInternal(ActiveMod.PackedDlcDirectory, dlcdbfile, dlcbasedir, true));
 
             return finished == 0 ? 0 : 1;
 
