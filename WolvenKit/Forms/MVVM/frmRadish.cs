@@ -38,7 +38,7 @@ namespace WolvenKit.Forms
             // Set control objects
             WorkflowobjectListView.SetObjects(RadishController.Get().Configuration.Workflows);
             
-            propertyGrid.SelectedObject = viewModel.CurrentWorkflow;
+            PropertyGrid.SelectedObject = viewModel.CurrentWorkflow;
             PropertyGridSettings.SelectedObject = RadishController.GetConfig();
         }
 
@@ -54,15 +54,15 @@ namespace WolvenKit.Forms
 
             // propertygrid 1
             // backgrounds
-            propertyGrid.HelpBackColor = background;
-            propertyGrid.ViewBackColor = background;
-            propertyGrid.HelpForeColor = textStyle;
-            propertyGrid.ViewForeColor = textStyle;
-            propertyGrid.CategoryForeColor = textStyle;
+            PropertyGrid.HelpBackColor = background;
+            PropertyGrid.ViewBackColor = background;
+            PropertyGrid.HelpForeColor = textStyle;
+            PropertyGrid.ViewForeColor = textStyle;
+            PropertyGrid.CategoryForeColor = textStyle;
             // highlighted
-            propertyGrid.BackColor = highlight;
-            propertyGrid.CategorySplitterColor = highlight;
-            propertyGrid.LineColor = highlight;
+            PropertyGrid.BackColor = highlight;
+            PropertyGrid.CategorySplitterColor = highlight;
+            PropertyGrid.LineColor = highlight;
 
             // propertygrid 2
             // backgrounds
@@ -101,7 +101,7 @@ namespace WolvenKit.Forms
 
             WorkflowobjectListView.SelectedObject = newworkflow;
             viewModel.CurrentWorkflow = newworkflow;
-            propertyGrid.SelectedObject = newworkflow;
+            PropertyGrid.SelectedObject = newworkflow;
         }
 
         private void RemovetoolStripMenuItem_Click(object sender, EventArgs e)
@@ -137,7 +137,7 @@ namespace WolvenKit.Forms
             if (selectedItem != null)
             {
                 viewModel.CurrentWorkflow = selectedItem;
-                propertyGrid.SelectedObject = viewModel.CurrentWorkflow;
+                PropertyGrid.SelectedObject = viewModel.CurrentWorkflow;
             }
         }
 

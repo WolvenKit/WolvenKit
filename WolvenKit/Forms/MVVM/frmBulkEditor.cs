@@ -50,7 +50,7 @@ namespace WolvenKit.Forms
 
         public void ApplyCustomTheme()
         {
-            var theme = UIController.Get().GetTheme();
+            var theme = UIController.GetTheme();
             UIController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
 
         }

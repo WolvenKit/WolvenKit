@@ -2636,7 +2636,7 @@ namespace WolvenKit
             bulkEditorToolStripMenuItem.Enabled = ActiveMod != null;
             renderW2meshToolStripMenuItem.Enabled = ActiveMod != null;
 
-            advancedToolStripMenuItem.Enabled = ActiveMod != null;
+            //advancedToolStripMenuItem.Enabled = ActiveMod != null;
             experimentalToolStripMenuItem.Enabled = ActiveMod != null;
             cR2WToTextToolStripMenuItem.Enabled = ActiveMod != null;
             GameDebuggerToolStripMenuItem.Enabled = ActiveMod != null;
