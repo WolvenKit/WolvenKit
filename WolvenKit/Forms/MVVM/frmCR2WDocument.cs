@@ -171,8 +171,7 @@ namespace WolvenKit
 
         public void ApplyCustomTheme()
         {
-            var theme = UIController.Get().GetTheme();
-            this.dockPanel.Theme = theme;
+            this.dockPanel.Theme = UIController.GetTheme();
             dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath),
                 "cr2wdocument_layout.xml"));
         }

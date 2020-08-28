@@ -464,6 +464,12 @@
     <Compile Include="FlowTreeEditors\Scene\SceneSectionEditor.Designer.cs">
       <DependentUpon>SceneSectionEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\MVVM\frmWcc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MVVM\frmWcc.Designer.cs">
+      <DependentUpon>frmWcc.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\UserControl\frmProgress.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -745,6 +751,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FlowTreeEditors\Scene\SceneLinkEditor.resx">
       <DependentUpon>SceneLinkEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MVVM\frmWcc.resx">
+      <DependentUpon>frmWcc.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserControl\frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
@@ -1049,7 +1058,9 @@
     <Content Include="Resources\Icons\Clock.ico" />
     <Content Include="Resources\CustomImages\Clock.png" />
     <Content Include="Resources\CustomImages\close.png" />
-    <Content Include="Resources\Icons\wolven_kit_icon.ico" />
+    <Content Include="Resources\Icons\wolven_kit_icon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Pictures\WK_Logo.svg" />
     <Content Include="Resources\RedEngine\bird.png" />
     <Content Include="Resources\RedEngine\csv.png" />
@@ -1138,7 +1149,11 @@
     <None Include="Resources\RedEngine\LayerGroupVisibled.png" />
     <None Include="Resources\wcc_eula.rtf" />
     <None Include="Resources\Icons\witcher3_102.ico" />
-    <None Include="Resources\Icons\witcher3_101.ico" />
+    <Content Include="Resources\Icons\witcher3_101.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Resources\Pictures\2c21aeda16de354ba5334551a883b481.png" />
+    <None Include="Resources\CustomImages\info-icon-23818.jpg" />
     <None Include="Resources\CustomImages\refresh.png" />
   </ItemGroup>
   <ItemGroup>

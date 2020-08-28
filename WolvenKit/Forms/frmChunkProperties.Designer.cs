@@ -57,6 +57,8 @@ namespace WolvenKit
             this.toolStripSearchBox = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripClearButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonShowSerialized = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.clearVariableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.treeView)).BeginInit();
             this.contextMenu.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -124,6 +126,8 @@ namespace WolvenKit
             this.expandAllChildrenToolStripMenuItem,
             this.collapseAllToolStripMenuItem,
             this.collapseAllChildrenToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.clearVariableToolStripMenuItem,
             this.toolStripMenuItem1,
             this.addVariableToolStripMenuItem,
             this.removeVariableToolStripMenuItem,
@@ -134,7 +138,7 @@ namespace WolvenKit
             this.toolSplitPtr,
             this.ptrPropertiesToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(185, 242);
+            this.contextMenu.Size = new System.Drawing.Size(185, 292);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // expandAllToolStripMenuItem
@@ -174,15 +178,14 @@ namespace WolvenKit
             // 
             this.addVariableToolStripMenuItem.Name = "addVariableToolStripMenuItem";
             this.addVariableToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.addVariableToolStripMenuItem.Text = "Add Variable";
+            this.addVariableToolStripMenuItem.Text = "Add List Element";
             this.addVariableToolStripMenuItem.Click += new System.EventHandler(this.addVariableToolStripMenuItem_Click);
             // 
             // removeVariableToolStripMenuItem
             // 
-            this.removeVariableToolStripMenuItem.Enabled = false;
             this.removeVariableToolStripMenuItem.Name = "removeVariableToolStripMenuItem";
             this.removeVariableToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.removeVariableToolStripMenuItem.Text = "Remove Variable";
+            this.removeVariableToolStripMenuItem.Text = "Remove List Element";
             this.removeVariableToolStripMenuItem.Click += new System.EventHandler(this.removeVariableToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
@@ -270,6 +273,18 @@ namespace WolvenKit
             this.toolStripButtonShowSerialized.Text = "Show all editable variables";
             this.toolStripButtonShowSerialized.Click += new System.EventHandler(this.toolStripButtonShowSerialized_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(181, 6);
+            // 
+            // clearVariableToolStripMenuItem
+            // 
+            this.clearVariableToolStripMenuItem.Name = "clearVariableToolStripMenuItem";
+            this.clearVariableToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.clearVariableToolStripMenuItem.Text = "Clear Variable";
+            this.clearVariableToolStripMenuItem.Click += new System.EventHandler(this.clearVariableToolStripMenuItem_Click);
+            // 
             // frmChunkProperties
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -319,5 +334,7 @@ namespace WolvenKit
         private ToolStripTextBox toolStripSearchBox;
         private ToolStripButton toolStripClearButton;
         private ToolStripButton toolStripButtonShowSerialized;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem clearVariableToolStripMenuItem;
     }
 }

@@ -26,8 +26,8 @@ namespace WolvenKit.Common.Model
     public enum EBundleType
     {
         ANY,
-        Bundle,
-        CollisionCache,
+        Bundle,         // formerly Bundle
+        CollisionCache,       // formerly CollisionCache
         TextureCache,
         SoundCache,
         Speech,

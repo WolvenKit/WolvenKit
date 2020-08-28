@@ -81,7 +81,7 @@ namespace WolvenKit.Forms
             helplinks.Add(new LinkObject("WolvenKit wiki", "https://github.com/Traderain/Wolven-kit/wiki"));
 
             //populate tutorial links
-            var bgcolor = UIController.Get().GetTheme().ColorPalette.ToolWindowTabSelectedInactive.Background;
+            var bgcolor = UIController.GetPalette().ToolWindowTabSelectedInactive.Background;
             var bgcolorhtml = bgcolor.ToHTML();
 
             webBrowser1.DocumentText = $@"
@@ -106,18 +106,33 @@ namespace WolvenKit.Forms
 
         protected void ApplyCustomTheme()
         {
-            var theme = UIController.Get().GetTheme();
-
-            this.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
+            this.BackColor = UIController.GetBackColor();
 
             // recent file list
-            this.objectListView1.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
-            this.objectListView1.ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text;
-            objectListView1.UnfocusedSelectedBackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background;
+            this.objectListView1.BackColor = UIController.GetPalette().ToolWindowTabSelectedInactive.Background;
+            this.objectListView1.ForeColor = UIController.GetForeColor();
+            objectListView1.UnfocusedSelectedBackColor = UIController.GetPalette().CommandBarToolbarButtonPressed.Background;
 
-            checkBoxDisable.BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background;
-            checkBoxDisable.ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text;
+            checkBoxDisable.BackColor = UIController.GetPalette().ToolWindowTabSelectedInactive.Background;
+            checkBoxDisable.ForeColor = UIController.GetForeColor();
 
+        }
+
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HT_CAPTION = 0x2;
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern bool ReleaseCapture();
+
+        private void Form1_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
         }
 
         private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)

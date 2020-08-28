@@ -233,35 +233,14 @@ namespace WolvenKit
         
         public void ApplyCustomTheme()
         {
-            var theme = UIController.Get().GetTheme();
-            UIController.Get().ToolStripExtender.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
-            toolStripSearchBox.BackColor = theme.ColorPalette.ToolWindowCaptionButtonInactiveHovered.Background;
+            UIController.Get().ToolStripExtender.SetStyle(toolStrip1, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
+            toolStripSearchBox.BackColor = UIController.GetPalette().ToolWindowCaptionButtonInactiveHovered.Background;
 
-
-            this.treeListView.BackColor = theme.ColorPalette.TabButtonSelectedInactivePressed.Background; 
-            this.treeListView.ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text;
-            HeaderFormatStyle hfs = new HeaderFormatStyle()
-            {
-                Normal = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.ToolWindowTabSelectedInactive.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                },
-                Hot = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.OverflowButtonHovered.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                },
-                Pressed = new HeaderStateStyle()
-                {
-                    BackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background,
-                    ForeColor = theme.ColorPalette.CommandBarMenuDefault.Text,
-                }
-            };
-            this.treeListView.HeaderFormatStyle = hfs;
-            treeListView.UnfocusedSelectedBackColor = theme.ColorPalette.CommandBarToolbarButtonPressed.Background;
+            this.treeListView.BackColor = UIController.GetBackColor();
+            this.treeListView.ForeColor = UIController.GetForeColor();
             
-            
+            this.treeListView.HeaderFormatStyle = UIController.GetHeaderFormatStyle();
+            treeListView.UnfocusedSelectedBackColor = UIController.GetPalette().CommandBarToolbarButtonPressed.Background;
         }
 
         private void showTreetoolStripButton_Click(object sender, EventArgs e)

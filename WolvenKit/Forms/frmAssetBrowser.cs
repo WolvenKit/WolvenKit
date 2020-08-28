@@ -39,6 +39,9 @@ namespace WolvenKit
         public frmAssetBrowser(List<IWitcherArchive> archives)
         {
             InitializeComponent();
+
+            this.Icon = new Icon(@"Resources\Icons\wolven_kit_icon.ico");
+
             pathlistview.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             pathlistview.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
             Managers = archives;

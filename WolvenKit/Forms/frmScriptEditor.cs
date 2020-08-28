@@ -21,6 +21,7 @@ namespace WolvenKit.Forms
         public frmScriptEditor()
         {
             InitializeComponent();
+            ApplyCustomTheme();
 
             ScintillaFindReplace = new FindReplace(scintillaControl);
             ScintillaFindReplace.KeyPressed += ScintillaFindReplaceOnKeyPressed;
@@ -180,12 +181,12 @@ namespace WolvenKit.Forms
             // encode in UTF-16LE
             Encoding enc = Encoding.Unicode;
 
-            File.WriteAllText(FilePath, "", enc);
+            File.WriteAllText(FilePath, scintillaControl.Text, enc);
 
-            using (var streamWriter = File.AppendText(FilePath))
-            {
-                streamWriter.Write(scintillaControl.Text);
-            }
+            //using (var streamWriter = File.AppendText(FilePath))
+            //{
+            //    streamWriter.Write(scintillaControl.Text);
+            //}
             MainController.LogString(FilePath + " saved!", Common.Services.Logtype.Normal);
 
             // register all new classes
@@ -277,6 +278,16 @@ namespace WolvenKit.Forms
             }
             
 
+        }
+
+        private void toolStripButtonSave_Click(object sender, System.EventArgs e)
+        {
+            SaveFile();
+        }
+
+        public void ApplyCustomTheme()
+        {
+            UIController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
         }
     }
 }

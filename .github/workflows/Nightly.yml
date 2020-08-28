@@ -2,7 +2,10 @@ name: WolvenKit-Nightly
 on:
   schedule:
     - cron: "0 12 * * *"
- 
+  workflow_dispatch:
+    branches:
+      - master
+
 jobs:
   build:
     runs-on: windows-latest
@@ -26,7 +29,7 @@ jobs:
         cd
         dir
     - name: Deploy Nightly
-      uses: WebFreak001/deploy-nightly@v1.0.3
+      uses: Maxzor/deploy-nightly@v1.0.4
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -35,4 +38,3 @@ jobs:
         asset_path: WolvenKit\bin\WolvenKit.zip
         asset_name: WolvenKit-Nightly-$$.zip
         asset_content_type: application/zip
-        
