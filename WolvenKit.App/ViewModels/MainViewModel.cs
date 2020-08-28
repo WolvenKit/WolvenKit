@@ -775,7 +775,8 @@ namespace WolvenKit.App.ViewModels
             int finished = 1;
 
             // Run wcc_lite
-            if (Directory.Exists(uncookedmoddir) && Directory.GetFiles(uncookedmoddir, "*", SearchOption.AllDirectories).Any())
+            if (Directory.Exists(uncookedmoddir) && Directory.GetFiles(uncookedmoddir, "*", SearchOption.AllDirectories).Any() 
+                && !string.IsNullOrEmpty(ActiveMod.CookedModDirectory))
             {
                 finished *= await Task.Run(() => CookInternal(uncookedmoddir, ActiveMod.CookedModDirectory));
 
@@ -801,7 +802,8 @@ namespace WolvenKit.App.ViewModels
                 }
             }
 
-            if (Directory.Exists(uncookeddlcdir) && Directory.GetFiles(uncookeddlcdir, "*", SearchOption.AllDirectories).Any())
+            if (Directory.Exists(uncookeddlcdir) && Directory.GetFiles(uncookeddlcdir, "*", SearchOption.AllDirectories).Any() 
+                && !string.IsNullOrEmpty(ActiveMod.CookedDlcDirectory))
             {
                 finished *= await Task.Run(() => CookInternal(uncookeddlcdir, ActiveMod.CookedDlcDirectory, true));
                 
@@ -864,7 +866,7 @@ namespace WolvenKit.App.ViewModels
 
 
                                         cook.trimdir = ActiveMod.GetDLCRelativePath();
-                                        var seeddir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC", $"seed.dlc{ActiveMod.Name}.files");
+                                        var seeddir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked", $"seed.dlc{ActiveMod.Name}.files");
                                         cook.seed = seeddir;
                                     }
                                     else

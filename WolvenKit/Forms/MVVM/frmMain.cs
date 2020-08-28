@@ -1553,6 +1553,16 @@ namespace WolvenKit
 
 
                 //------------------------PRE COOKING------------------------------------//
+                // have a check if somehow users forget to add a dlc fodler in their dlc :(
+                // but have files inform them that it just not gonna work
+                bool initialDlcCheck = true;
+                if (ActiveMod.DLCFiles.Any() && string.IsNullOrEmpty(ActiveMod.GetDLCName()))
+                {
+                    Logger.LogString("Files in your dlc directory need to have the following structure: dlc\\DLCNAME\\files. Dlc will not be packed.", Logtype.Error);
+                    initialDlcCheck = false;
+                }
+
+
                 #region Pre Cooking
                 //Handle strings.
                 if (packsettings.Strings)
@@ -1575,36 +1585,37 @@ namespace WolvenKit
 
                 // analyze files in dlc
                 int statusanalyzedlc = -1;
-                var seedfile = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC", $"seed.dlc{ActiveMod.Name}.files");
+                var seedfile = Path.Combine(ActiveMod.ProjectDirectory, @"cooked", $"seed.dlc{ActiveMod.Name}.files");
 
-                if (Directory.GetFiles(ActiveMod.DlcDirectory, "*", SearchOption.AllDirectories).Any())
+                if (initialDlcCheck)
                 {
-                    Logger.LogString($"======== Analyzing dlc files ======== \n", Logtype.Important);
-                    if (Directory.GetFiles(ActiveMod.DlcDirectory, "*.reddlc", SearchOption.AllDirectories).Any())
+                    if (Directory.GetFiles(ActiveMod.DlcDirectory, "*", SearchOption.AllDirectories).Any())
                     {
-                        var reddlcfile = Directory.GetFiles(ActiveMod.DlcDirectory, "*.reddlc", SearchOption.AllDirectories).FirstOrDefault();
-                        var analyze = new Wcc_lite.analyze()
+                        Logger.LogString($"======== Analyzing dlc files ======== \n", Logtype.Important);
+                        if (Directory.GetFiles(ActiveMod.DlcDirectory, "*.reddlc", SearchOption.AllDirectories).Any())
                         {
-                            Analyzer = analyzers.r4dlc,
-                            Out = seedfile,
-                            reddlc = reddlcfile
-                        };
-                        statusanalyzedlc *= await Task.Run(() => MainController.Get().WccHelper.RunCommand(analyze));
+                            var reddlcfile = Directory.GetFiles(ActiveMod.DlcDirectory, "*.reddlc", SearchOption.AllDirectories).FirstOrDefault();
+                            var analyze = new Wcc_lite.analyze()
+                            {
+                                Analyzer = analyzers.r4dlc,
+                                Out = seedfile,
+                                reddlc = reddlcfile
+                            };
+                            statusanalyzedlc *= await Task.Run(() => MainController.Get().WccHelper.RunCommand(analyze));
 
-                        if (statusanalyzedlc == 0)
+                            if (statusanalyzedlc == 0)
+                            {
+                                Logger.LogString("Analyzing dlc failed, creating fallback seedfiles. \n", Logtype.Error);
+                                vm.CreateFallBackSeedFile(seedfile);
+                            }
+                        }
+                        else
                         {
-                            Logger.LogString("Analyzing dlc failed, creating fallback seedfiles. \n", Logtype.Error);
+                            Logger.LogString("No reddlc found, creating fallback seedfiles. \n", Logtype.Error);
                             vm.CreateFallBackSeedFile(seedfile);
                         }
                     }
-                    else
-                    {
-                        Logger.LogString("No reddlc found, creating fallback seedfiles. \n", Logtype.Error);
-                        vm.CreateFallBackSeedFile(seedfile);
-                    }
                 }
-                
-                
                 #endregion
 
                 //------------------------- COOKING -------------------------------------//
@@ -1666,6 +1677,13 @@ namespace WolvenKit
                         {
                             string relpath = fi.FullName.Substring(uncookedmoddir.Length + 1);
                             string newpath = Path.Combine(ActiveMod.CookedModDirectory, relpath);
+
+                            if (File.Exists(newpath))
+                            {
+                                Logger.LogString($"Duplicate cooked file found {newpath}. Overwriting. \n", Logtype.Important);
+                                File.Delete(newpath);
+                            }
+
                             fi.CopyToAndCreate(newpath);
                         }
                     }
