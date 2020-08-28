@@ -21,6 +21,7 @@ namespace WolvenKit.Forms
         public frmScriptEditor()
         {
             InitializeComponent();
+            ApplyCustomTheme();
 
             ScintillaFindReplace = new FindReplace(scintillaControl);
             ScintillaFindReplace.KeyPressed += ScintillaFindReplaceOnKeyPressed;
@@ -277,6 +278,16 @@ namespace WolvenKit.Forms
             }
             
 
+        }
+
+        private void toolStripButtonSave_Click(object sender, System.EventArgs e)
+        {
+            SaveFile();
+        }
+
+        public void ApplyCustomTheme()
+        {
+            UIController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
         }
     }
 }

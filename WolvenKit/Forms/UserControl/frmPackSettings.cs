@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 using System.IO;
+using WolvenKit.App;
 
 namespace WolvenKit
 {
@@ -17,16 +18,26 @@ namespace WolvenKit
 
         public frmPackSettings()
         {
+            var activemod = MainController.Get().ActiveMod;
+
             InitializeComponent();
-            if (UIController.Get().Window.ActiveMod.Files.Any(x => x.EndsWith(".xbm")))
+
+            if (Directory.GetFiles(activemod.ModTextureCacheDirectory,"*", SearchOption.AllDirectories).Any() ||
+                Directory.GetFiles(activemod.DlcTextureCacheDirectory, "*", SearchOption.AllDirectories).Any())
                 texturecachecCHB.Checked = true;
-            if (UIController.Get().Window.ActiveMod.Files.Any(x => x.EndsWith(".ws")))
+
+            if (Directory.GetFiles(activemod.ModCookedDirectory, "*", SearchOption.AllDirectories).Any() ||
+                Directory.GetFiles(activemod.DlcCookedDirectory, "*", SearchOption.AllDirectories).Any())
                 scriptsCHB.Checked = true;
-            if (UIController.Get().Window.ActiveMod.Files.Any(x => x.EndsWith(".wem") || x.EndsWith(".bnk")))
+
+            if (activemod.Files.Any(x => x.EndsWith(".wem") || x.EndsWith(".bnk")))
                 soundCHB.Checked = true;
+
             if (Directory.Exists((UIController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")) && Directory.GetFiles((UIController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")).Any(x => x.EndsWith(".w3strings")))
                 stringsCHB.Checked = true;
-            if (UIController.Get().Window.ActiveMod.Files.Any(x => x.EndsWith(".apx") || x.EndsWith(".apb")))
+
+            if (Directory.GetFiles(activemod.ModUncookedDirectory, "*", SearchOption.AllDirectories).Any() ||
+                Directory.GetFiles(activemod.DlcUncookedDirectory, "*", SearchOption.AllDirectories).Any())
                 collisionCacheCHB.Checked = true;
         }
 
