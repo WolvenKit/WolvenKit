@@ -388,9 +388,12 @@ namespace WolvenKit
                         || selectedobject.FullName == ActiveMod.DlcDirectory
                         || selectedobject.FullName == ActiveMod.RawDirectory
                         || selectedobject.FullName == ActiveMod.RadishDirectory
-                        || selectedobject.FullName == ActiveMod.TextureCacheDirectory
-                        || selectedobject.FullName == ActiveMod.UncookedDirectory
-                        || selectedobject.FullName == ActiveMod.CookedDirectory
+                        || selectedobject.FullName == ActiveMod.ModTextureCacheDirectory
+                        || selectedobject.FullName == ActiveMod.ModUncookedDirectory
+                        || selectedobject.FullName == ActiveMod.ModCookedDirectory
+                        || selectedobject.FullName == ActiveMod.DlcCookedDirectory
+                        || selectedobject.FullName == ActiveMod.DlcUncookedDirectory
+                        || selectedobject.FullName == ActiveMod.DlcTextureCacheDirectory
                         ;
 
                 createW2animsToolStripMenuItem.Enabled = !isToplevelDir;

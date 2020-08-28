@@ -105,7 +105,7 @@ namespace WolvenKit.Common
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
-        public string TextureCacheDirectory
+        public string ModTextureCacheDirectory
         {
             get
             {
@@ -117,7 +117,7 @@ namespace WolvenKit.Common
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
-        public string UncookedDirectory
+        public string ModUncookedDirectory
         {
             get
             {
@@ -129,7 +129,7 @@ namespace WolvenKit.Common
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
-        public string CookedDirectory
+        public string ModCookedDirectory
         {
             get
             {
@@ -175,6 +175,69 @@ namespace WolvenKit.Common
                 if (!Directory.Exists(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString())))
                     Directory.CreateDirectory(Path.Combine(DlcDirectory, EBundleType.Bundle.ToString()));
                 return Path.Combine(DlcDirectory, EBundleType.Bundle.ToString());
+            }
+        }
+        #endregion
+
+        #region Cooked and Packed Directories
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string CookedModDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "cooked", "Mods", $"mod{Name}", "content");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
+            }
+        }
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string PackedModDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "packed", "Mods", $"mod{Name}", "content");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
+            }
+        }
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string CookedDlcDirectory
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(GetDLCName()))
+                {
+                    return null;
+                }
+                var dir = Path.Combine(ProjectDirectory, "cooked", "DLC", GetDLCName(), "content");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
+            }
+        }
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string PackedDlcDirectory
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(GetDLCName()))
+                {
+                    return null;
+                }
+                var dir = Path.Combine(ProjectDirectory, "packed", "DLC", GetDLCName(), "content");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
             }
         }
         #endregion
@@ -286,6 +349,8 @@ namespace WolvenKit.Common
 
         public void CreateDefaultDirectories()
         {
+            
+
             // create top-level directories
             _ = ModDirectory;
             _ = DlcDirectory;
@@ -293,9 +358,9 @@ namespace WolvenKit.Common
             _ = RadishDirectory;
 
             // create mod-level directories
-            _ = TextureCacheDirectory;
-            _ = UncookedDirectory;
-            _ = CookedDirectory;
+            _ = ModTextureCacheDirectory;
+            _ = ModUncookedDirectory;
+            _ = ModCookedDirectory;
 
             // create dlc-level directories
             _ = DlcTextureCacheDirectory;
