@@ -145,13 +145,21 @@ namespace WolvenKit.CR2W
                 if (data is CVariable)
                 {
                     var vars = data.GetEditableVariables();
-                    var firstString = vars.FirstOrDefault(_ => _.REDType == "String");
+                    var firstString = vars
+                        .Where(_ => (_ is CString && _ != null))
+                        .Cast<CString>()
+                        .FirstOrDefault(_ => _.val != null)
+                        ;
                     if (firstString != null)
                     {
                         return ((CString)firstString).val;
                     }
 
-                    var firstName = vars.FirstOrDefault(_ => _.REDType == "CName");
+                    var firstName = vars
+                        .Where(_ => (_ is CName && _ != null))
+                        .Cast<CName>()
+                        .FirstOrDefault(_ => _.Value != null)
+                        ;
                     if (firstName != null)
                     {
                         return ((CName)firstName).Value;

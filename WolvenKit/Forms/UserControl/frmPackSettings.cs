@@ -14,7 +14,7 @@ namespace WolvenKit
         public (bool, bool) GenCollCache => (modCOL.Checked, dlcCOL.Checked);
         public (bool, bool) Scripts => (modSCR.Checked, dlcSCR.Checked);
         public (bool, bool) Sound => (modSND.Checked, dlcSND.Checked);
-        public bool Strings => (modSTR.Checked);
+        public (bool, bool) Strings => (modSTR.Checked, dlcSTR.Checked);
 
         public frmPackSettings()
         {

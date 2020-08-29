@@ -60,6 +60,7 @@
             this.dlcSHD = new System.Windows.Forms.CheckBox();
             this.dlcSND = new System.Windows.Forms.CheckBox();
             this.dlcSCR = new System.Windows.Forms.CheckBox();
+            this.dlcSTR = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // modMD
@@ -397,11 +398,23 @@
             this.dlcSCR.Text = "DLC";
             this.dlcSCR.UseVisualStyleBackColor = true;
             // 
+            // dlcSTR
+            // 
+            this.dlcSTR.AutoSize = true;
+            this.dlcSTR.Location = new System.Drawing.Point(220, 198);
+            this.dlcSTR.Margin = new System.Windows.Forms.Padding(2);
+            this.dlcSTR.Name = "dlcSTR";
+            this.dlcSTR.Size = new System.Drawing.Size(47, 17);
+            this.dlcSTR.TabIndex = 37;
+            this.dlcSTR.Text = "DLC";
+            this.dlcSTR.UseVisualStyleBackColor = true;
+            // 
             // frmPackSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(280, 270);
+            this.Controls.Add(this.dlcSTR);
             this.Controls.Add(this.dlcSCR);
             this.Controls.Add(this.dlcSPEECH);
             this.Controls.Add(this.dlcDEP);
@@ -475,5 +488,6 @@
         private System.Windows.Forms.CheckBox dlcSHD;
         private System.Windows.Forms.CheckBox dlcSND;
         private System.Windows.Forms.CheckBox dlcSCR;
+        private System.Windows.Forms.CheckBox dlcSTR;
     }
 }

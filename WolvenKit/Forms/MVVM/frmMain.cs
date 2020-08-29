@@ -31,9 +31,11 @@ namespace WolvenKit
     using CR2W.Types;
     using Extensions;
     using Forms;
+    using System.IO.MemoryMappedFiles;
     using System.Web.UI.Design;
     using WolvenKit.App;
     using WolvenKit.App.ViewModels;
+    using WolvenKit.Bundles;
     using WolvenKit.Common.Extensions;
     using WolvenKit.Common.Model;
     using WolvenKit.Forms.MVVM;
@@ -1565,7 +1567,7 @@ namespace WolvenKit
 
                 #region Pre Cooking
                 //Handle strings.
-                if (packsettings.Strings)
+                if (packsettings.Strings.Item1 || packsettings.Strings.Item2)
                 {
                     if (stringsGui == null)
                         stringsGui = new frmStringsGui();
@@ -1879,8 +1881,9 @@ namespace WolvenKit
 
                 //---------------------------- SCRIPTS ----------------------------------//
                 #region Scripts
+                (bool packscriptsMod, bool packscriptsdlc) = packsettings.Scripts;
                 //Handle mod scripts
-                if (Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Any())
+                if (packscriptsMod && Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Any())
                 {
                     if (!Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")))
                         Directory.CreateDirectory(Path.Combine(ActiveMod.ModDirectory, "scripts"));
@@ -1896,7 +1899,7 @@ namespace WolvenKit
                 }
 
                 //Handle the DLC scripts
-                if (Directory.Exists(Path.Combine(ActiveMod.DlcDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Any())
+                if (packscriptsdlc && Directory.Exists(Path.Combine(ActiveMod.DlcDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Any())
                 {
                     if (!Directory.Exists(Path.Combine(ActiveMod.DlcDirectory, "scripts")))
                         Directory.CreateDirectory(Path.Combine(ActiveMod.DlcDirectory, "scripts"));
@@ -1915,12 +1918,14 @@ namespace WolvenKit
                 //---------------------------- STRINGS ----------------------------------//
                 #region Strings
                 //Copy the generated w3strings
-                if (packsettings.Strings)
+                if(packsettings.Strings.Item1 || packsettings.Strings.Item2)
                 {
                     var files = Directory.GetFiles((ActiveMod.ProjectDirectory + "\\strings")).Where(s => Path.GetExtension(s) == ".w3strings").ToList();
 
-                    files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.PackedDlcDirectory + Path.GetFileName(x))));
-                    files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.PackedModDirectory, Path.GetFileName(x))));
+                    if (packsettings.Strings.Item1)
+                        files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.PackedDlcDirectory, Path.GetFileName(x))));
+                    if (packsettings.Strings.Item2)
+                        files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.PackedModDirectory, Path.GetFileName(x))));
                 }
                 #endregion
 
@@ -3192,6 +3197,236 @@ _col - for simple stuff like boxes and spheres", "Information about importing mo
         }
         #endregion
 
+        #region Game
+        private void unbundleGameToolStripMenuItem_Click(object sender, EventArgs e) => SetupUnbundling();
+
+        private void SetupUnbundling()
+        {
+            // Backgroundworker
+            if (MainBackgroundWorker.IsBusy)
+            {
+                return;
+            }
+
+                // query free disk space
+                DriveInfo drive = new DriveInfo(new DirectoryInfo(MainController.Get().Configuration.DepotPath).Root.FullName);
+            if (!drive.IsReady)
+                return;
+            var freespace = drive.AvailableFreeSpace / (1024 * 1024 * 1024);
+            var totalsize = drive.TotalSize / (1024 * 1024 * 1024);
+            switch (MessageBox.Show(
+                        $"Unbundling the game will take about {30}GB of space, available space: {freespace}GB on drive {drive.Name}.\n" +
+                        $"Depot directory: {MainController.Get().Configuration.DepotPath}\n\n" +
+                        $"Would you like to continue?",
+                        "Unbundle Game Files",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            {
+                default:
+                    return;
+                case DialogResult.Yes:
+                    {
+                        break;
+                    }
+                case DialogResult.No:
+                    {
+                        return;
+                    }
+            }
+
+
+            // Backgroundworker
+            if (!MainBackgroundWorker.IsBusy)
+            {
+                // progress bar
+                m_frmProgress = new frmProgress()
+                {
+                    Text = "Unbundling Game Assets",
+                    StartPosition = FormStartPosition.CenterParent,
+                };
+
+                // background worker action
+                workerAction = UnbundleGame;
+                MainBackgroundWorker.RunWorkerAsync();
+
+                // cancellation dialog
+                DialogResult dr = m_frmProgress.ShowDialog(this);
+                switch (dr)
+                {
+                    case DialogResult.Cancel:
+                        {
+                            MainBackgroundWorker.CancelAsync();
+                            m_frmProgress.Cancel = true;
+                            break;
+                        }
+                    case DialogResult.None:
+                    case DialogResult.OK:
+                    case DialogResult.Abort:
+                    case DialogResult.Retry:
+                    case DialogResult.Ignore:
+                    case DialogResult.Yes:
+                    case DialogResult.No:
+                    default:
+                        break;
+                }
+
+
+                this.BringToFront();
+            }
+            else
+                Logger.LogString("The background worker is currently busy.\r\n", Logtype.Error);
+        }
+
+        protected object UnbundleGame(object sender, DoWorkEventArgs e)
+        {
+            object arg = e.Argument;
+
+            BackgroundWorker bwAsync = sender as BackgroundWorker;
+
+            var memorymappedbundles = new Dictionary<string, MemoryMappedFile>();
+            var bm = new BundleManager();
+            bm.LoadAll(MainController.Get().Configuration.ExecutablePath);
+
+            //Load MemoryMapped Bundles
+            foreach (var b in bm.Bundles.Values)
+            {
+                var hash = b.FileName.GetHashMD5();
+                memorymappedbundles.Add(hash, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, hash, 0, MemoryMappedFileAccess.Read));
+            }
+
+            var files = bm.FileList
+                    .GroupBy(p => p.Name)
+                    .Select(g => g.Last())
+                    .ToList();
+            var count = files.Count;
+            int finished = 0;
+            Parallel.For(0, count, new ParallelOptions { MaxDegreeOfParallelism = (int)(Environment.ProcessorCount * 0.8) + 1 }, i =>
+            {
+                if (bwAsync.CancellationPending || m_frmProgress.Cancel)
+                {
+                    Logger.LogString("Background worker cancelled.\r\n", Logtype.Error);
+                    e.Cancel = true;
+                    //return false;
+                }
+
+                IWitcherFile f = files[i];
+                if (f is BundleItem bi)
+                {
+                    var newpath = Path.Combine(MainController.Get().Configuration.DepotPath, bi.Name);
+
+                    // overwrite existing files
+                    if (File.Exists(newpath))
+                        File.Delete(newpath);
+                    else
+                    {
+                        var fi = new FileInfo(newpath);
+                        var newdir = Path.GetDirectoryName(newpath);
+                        Directory.CreateDirectory(newdir);
+                    }
+
+                    using (var ms = new MemoryStream())
+                    using (FileStream file = new FileStream(newpath, FileMode.Create, System.IO.FileAccess.Write))
+                    {
+                        bi.ExtractExistingMMF(ms);
+                        ms.Seek(0, SeekOrigin.Begin);
+
+                        ms.CopyTo(file);
+                    }
+
+                    finished += 1;
+                    int percentprogress = (int)((float)finished / (float)count * 100.0);
+                    MainBackgroundWorker.ReportProgress(percentprogress, bi.Name);
+                }
+            });
+
+            return true;
+
+        }
+
+        private async void uncookGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // query free disk space
+            DriveInfo drive = new DriveInfo(new DirectoryInfo(MainController.Get().Configuration.DepotPath).Root.FullName);
+            if (!drive.IsReady)
+                return;
+            var freespace = drive.AvailableFreeSpace / (1024 * 1024 * 1024);
+            var totalsize = drive.TotalSize / (1024 * 1024 * 1024);
+            switch (MessageBox.Show(
+                        $"Uncooking the game takes a very long time and is usually not needed, consider unbundling the game instead.\n\n" +
+                        $"Uncooking the game will take about {60}GB of space, available space: {freespace}GB on drive {drive.Name}.\n" +
+                        $"Depot directory: {MainController.Get().Configuration.DepotPath}\n\n" +
+                        $"Click Yes to unbundle or click No to continue uncooking.",
+                        "Uncook Game Files",
+                        MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+            {
+                default:
+                    return;
+                case DialogResult.Yes:
+                    {
+                        SetupUnbundling();
+                        return;
+                    }
+                case DialogResult.No:
+                    {
+                        // Not implemented
+                        await SetupUncooking();
+                        return;
+                    }
+                case DialogResult.Cancel:
+                    {
+                        return;
+                    }
+            }
+        }
+
+        private async Task SetupUncooking()
+        {
+            var content = Path.Combine(new FileInfo(MainController.Get().Configuration.ExecutablePath).Directory.Parent.Parent.FullName, "content");
+            await UncookInternal(content).ContinueWith(antecedent =>
+            {
+
+            });
+            var dlc = Path.Combine(new FileInfo(MainController.Get().Configuration.ExecutablePath).Directory.Parent.Parent.FullName, "DLC");
+            string[] vanillaDLClist = new string[] { "DLC1", "DLC2", "DLC3", "DLC4", "DLC5", "DLC6", "DLC7", "DLC8", "DLC9", "DLC10", "DLC11", "DLC12", "DLC13", "DLC14", "DLC15", "DLC16", "bob", "ep1" };
+            foreach (var item in vanillaDLClist)
+            {
+                var dlcdir = Path.Combine(dlc, item);
+                await UncookInternal(dlcdir).ContinueWith(antecedent =>
+                {
+
+                });
+            }
+
+
+
+            async Task UncookInternal(string inputpath)
+            {
+                var depot = MainController.Get().Configuration.DepotPath;
+
+                var cmd = new Wcc_lite.uncook()
+                {
+                    InputDirectory = inputpath,
+                    OutputDirectory = depot,
+                    Imgfmt = imageformat.tga,
+                    Skiperrors = true,
+                    Dumpswf = true
+                };
+                //var cmd = new Wcc_lite.unbundle()
+                //{
+                //    InputDirectory = inputpath,
+                //    OutputDirectory = depot,
+                //};
+                await Task.Run(() => MainController.Get().WccHelper.RunCommand(cmd));
+            }
+
+
+        }
+
+        private void openUncookedFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Commonfunctions.ShowFileInExplorer(MainController.Get().Configuration.DepotPath);
+        }
+        #endregion
+
         #region Help
         private void donateToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -3348,5 +3583,6 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
 
         #endregion
 
+        
     }
 }

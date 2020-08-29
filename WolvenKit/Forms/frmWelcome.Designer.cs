@@ -32,6 +32,7 @@
             VisualPlus.Structure.TextStyle textStyle1 = new VisualPlus.Structure.TextStyle();
             VisualPlus.Structure.TextStyle textStyle2 = new VisualPlus.Structure.TextStyle();
             VisualPlus.Structure.TextStyle textStyle3 = new VisualPlus.Structure.TextStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmWelcome));
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.newProjectBtn = new VisualPlus.Toolkit.Controls.Interactivity.VisualButton();
             this.openProjectBtn = new VisualPlus.Toolkit.Controls.Interactivity.VisualButton();
@@ -333,6 +334,7 @@
             this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.newProjectBtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(600, 300);
             this.Name = "frmWelcome";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
