@@ -304,6 +304,17 @@ namespace WolvenKit
                 case "w2cube": return WolvenKit.Properties.Resources.w2cube;
                 case "w2cutscene": return WolvenKit.Properties.Resources.w2cutscene;
 
+                case "xbm": return WolvenKit.Properties.Resources.xbm;
+
+                case "fbx": return WolvenKit.Properties.Resources.fbx;
+                case "tga": return WolvenKit.Properties.Resources.image;
+                case "png": return WolvenKit.Properties.Resources.image;
+                case "dds": return WolvenKit.Properties.Resources.image;
+                case "jpg": return WolvenKit.Properties.Resources.image;
+                case "jpeg": return WolvenKit.Properties.Resources.image;
+                case "xml": return WolvenKit.Properties.Resources.xml;
+                case "apb": return WolvenKit.Properties.Resources.apb;
+
                 case closedDirImageKey: return WolvenKit.Properties.Resources.FolderClosed_16x;
                 case openDirImageKey: return WolvenKit.Properties.Resources.FolderOpened_16x;
                 default: return WolvenKit.Properties.Resources.BlankFile_16x;

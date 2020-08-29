@@ -31,9 +31,11 @@ namespace WolvenKit
     using CR2W.Types;
     using Extensions;
     using Forms;
+    using System.IO.MemoryMappedFiles;
     using System.Web.UI.Design;
     using WolvenKit.App;
     using WolvenKit.App.ViewModels;
+    using WolvenKit.Bundles;
     using WolvenKit.Common.Extensions;
     using WolvenKit.Common.Model;
     using WolvenKit.Forms.MVVM;
@@ -1081,6 +1083,7 @@ namespace WolvenKit
                 case ".TXT":
                 case ".WS":
                 // other
+                case ".FBX":
                 case ".APB":
                 case ".BAT":
                 case ".YML":
@@ -1364,7 +1367,7 @@ namespace WolvenKit
             if (ImportUtility == null || ImportUtility.IsDisposed)
             {
                 ImportUtility = new frmImportUtility();
-                ImportUtility.Show(dockPanel, DockState.Document);
+                ImportUtility.Show(dockPanel, DockState.DockRight);
             }
 
             ImportUtility.Activate();
@@ -1562,10 +1565,9 @@ namespace WolvenKit
                     initialDlcCheck = false;
                 }
 
-
                 #region Pre Cooking
                 //Handle strings.
-                if (packsettings.Strings)
+                if (packsettings.Strings.Item1 || packsettings.Strings.Item2)
                 {
                     if (stringsGui == null)
                         stringsGui = new frmStringsGui();
@@ -1585,6 +1587,7 @@ namespace WolvenKit
 
                 // analyze files in dlc
                 int statusanalyzedlc = -1;
+
                 var seedfile = Path.Combine(ActiveMod.ProjectDirectory, @"cooked", $"seed.dlc{ActiveMod.Name}.files");
 
                 if (initialDlcCheck)
@@ -1703,7 +1706,6 @@ namespace WolvenKit
                     Logger.LogString($"======== Adding cooked dlc files ======== \n", Logtype.Important);
                     try
                     {
-                        //var cookedDLCDir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked\DLC\" + ActiveMod.GetDLCName() + @"\content\");
                         var uncookeddlcdir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.Bundle.ToString());
                         var di = new DirectoryInfo(uncookeddlcdir);
                         var files = di.GetFiles("*", SearchOption.AllDirectories);
@@ -1712,6 +1714,13 @@ namespace WolvenKit
                         {
                             string relpath = fi.FullName.Substring(uncookeddlcdir.Length + 1);
                             string newpath = Path.Combine(ActiveMod.CookedDlcDirectory, relpath);
+
+                            if (File.Exists(newpath))
+                            {
+                                Logger.LogString($"Duplicate cooked file found {newpath}. Overwriting. \n", Logtype.Important);
+                                File.Delete(newpath);
+                            }
+
                             fi.CopyToAndCreate(newpath);
                         }
                     }
@@ -1734,12 +1743,12 @@ namespace WolvenKit
                 int statusTex = -1;
 
                 //Handle bundle packing.
-                if (packsettings.PackBundles)
+                if (packsettings.PackBundles.Item1 || packsettings.PackBundles.Item2)
                 {
                     // packing
                     //if (statusCookCol * statusCookTex != 0)
                     {
-                        var t = Task.Run(() => vm.Pack());
+                        var t = Task.Run(() => vm.Pack(packsettings.PackBundles.Item1, packsettings.PackBundles.Item2));
                         await t.ContinueWith(antecedent =>
                         {
                             //Logger.LogString($"Packing Bundles ended with status: {antecedent.Result}", Logtype.Important);
@@ -1756,11 +1765,11 @@ namespace WolvenKit
                 //------------------------ METADATA -------------------------------------//
                 #region Metadata
                 //Handle metadata generation.
-                if (packsettings.GenMetadata)
+                if (packsettings.GenMetadata.Item1 || packsettings.GenMetadata.Item2)
                 {
                     if (statusPack == 1)
                     {
-                        var t = Task.Run(() => vm.CreateMetaData());
+                        var t = Task.Run(() => vm.CreateMetaData(packsettings.GenMetadata.Item1, packsettings.GenMetadata.Item2));
                         await t.ContinueWith(antecedent =>
                         {
                             statusMetaData = antecedent.Result;
@@ -1782,9 +1791,9 @@ namespace WolvenKit
                 // checks are in GenerateCache()
 
                 //Generate collision cache
-                if (packsettings.GenCollCache)
+                if (packsettings.GenCollCache.Item1 || packsettings.GenCollCache.Item2)
                 {
-                    var t = Task.Run(() => vm.GenerateCache(MainController.Get().CollisionManager.TypeName));
+                    var t = Task.Run(() => vm.GenerateCache(MainController.Get().CollisionManager.TypeName, packsettings.GenCollCache.Item1, packsettings.GenCollCache.Item2));
                     await t.ContinueWith(antecedent =>
                     {
                         statusCol = antecedent.Result;
@@ -1795,9 +1804,9 @@ namespace WolvenKit
                 }
 
                 //Handle texture caching
-                if (packsettings.GenTexCache)
+                if (packsettings.GenTexCache.Item1 || packsettings.GenTexCache.Item2)
                 {
-                    var t = Task.Run(() => vm.GenerateCache(EBundleType.TextureCache));
+                    var t = Task.Run(() => vm.GenerateCache(EBundleType.TextureCache, packsettings.GenTexCache.Item1, packsettings.GenTexCache.Item2));
                     await t.ContinueWith(antecedent =>
                     {
                         statusTex = antecedent.Result;
@@ -1809,66 +1818,72 @@ namespace WolvenKit
 
 
                 //Handle sound caching
-                if (packsettings.Sound)
+                if (packsettings.Sound.Item1 || packsettings.Sound.Item2)
                 {
-
-                    var soundmoddir = Path.Combine(ActiveMod.ModDirectory, EBundleType.SoundCache.ToString());
-
-                    foreach (var bnk in Directory.GetFiles(soundmoddir, "*.bnk", SearchOption.AllDirectories))
+                    if (packsettings.Sound.Item1)
                     {
-                        Soundbank bank = new Soundbank(bnk);
-                        bank.readFile();
-                        bank.read_wems(soundmoddir);
-                        bank.rebuild_data();
-                        File.Delete(bnk);
-                        bank.build_bnk(bnk);
-                        Logger.LogString("Rebuilt modded bnk " + bnk, Logtype.Success);
-                    }
+                        var soundmoddir = Path.Combine(ActiveMod.ModDirectory, EBundleType.SoundCache.ToString());
 
-                    //Create mod soundspc.cache
-                    if (Directory.Exists(soundmoddir) &&
+                        foreach (var bnk in Directory.GetFiles(soundmoddir, "*.bnk", SearchOption.AllDirectories))
+                        {
+                            Soundbank bank = new Soundbank(bnk);
+                            bank.readFile();
+                            bank.read_wems(soundmoddir);
+                            bank.rebuild_data();
+                            File.Delete(bnk);
+                            bank.build_bnk(bnk);
+                            Logger.LogString("Rebuilt modded bnk " + bnk, Logtype.Success);
+                        }
+                    
+                        //Create mod soundspc.cache
+                        if (Directory.Exists(soundmoddir) &&
                         new DirectoryInfo(soundmoddir)
                         .GetFiles("*.*", SearchOption.AllDirectories)
                         .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).Any())
-                    {
-                        SoundCache.Write(
-                            new DirectoryInfo(soundmoddir)
-                                .GetFiles("*.*", SearchOption.AllDirectories)
-                                .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk"))
-                                .ToList().Select(x => x.FullName).ToList(),
-                                Path.Combine(ActiveMod.PackedModDirectory, @"soundspc.cache"));
-                        Logger.LogString("Mod soundcache generated!\n", Logtype.Important);
-                    }
-                    else
-                    {
-                        Logger.LogString("Mod soundcache wasn't generated!\n", Logtype.Important);
+                        {
+                            SoundCache.Write(
+                                new DirectoryInfo(soundmoddir)
+                                    .GetFiles("*.*", SearchOption.AllDirectories)
+                                    .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk"))
+                                    .ToList().Select(x => x.FullName).ToList(),
+                                    Path.Combine(ActiveMod.PackedModDirectory, @"soundspc.cache"));
+                            Logger.LogString("Mod soundcache generated!\n", Logtype.Important);
+                        }
+                        else
+                        {
+                            Logger.LogString("Mod soundcache wasn't generated!\n", Logtype.Important);
+                        }
                     }
 
-                    var sounddlcdir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.SoundCache.ToString());
+                    if (packsettings.Sound.Item2)
+                    {
+                        var sounddlcdir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.SoundCache.ToString());
 
-                    //Create dlc soundspc.cache
-                    if (Directory.Exists(sounddlcdir) && new DirectoryInfo(sounddlcdir)
-                        .GetFiles("*.*", SearchOption.AllDirectories)
-                        .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).Any())
-                    {
-                        SoundCache.Write(
-                            new DirectoryInfo(sounddlcdir)
-                                .GetFiles("*.*", SearchOption.AllDirectories)
-                                .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).ToList().Select(x => x.FullName).ToList(),
-                            Path.Combine(ActiveMod.PackedDlcDirectory, @"soundspc.cache"));
-                        Logger.LogString("DLC soundcache generated!\n", Logtype.Important);
-                    }
-                    else
-                    {
-                        Logger.LogString("DLC soundcache wasn't generated!\n", Logtype.Important);
+                        //Create dlc soundspc.cache
+                        if (Directory.Exists(sounddlcdir) && new DirectoryInfo(sounddlcdir)
+                            .GetFiles("*.*", SearchOption.AllDirectories)
+                            .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).Any())
+                        {
+                            SoundCache.Write(
+                                new DirectoryInfo(sounddlcdir)
+                                    .GetFiles("*.*", SearchOption.AllDirectories)
+                                    .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).ToList().Select(x => x.FullName).ToList(),
+                                Path.Combine(ActiveMod.PackedDlcDirectory, @"soundspc.cache"));
+                            Logger.LogString("DLC soundcache generated!\n", Logtype.Important);
+                        }
+                        else
+                        {
+                            Logger.LogString("DLC soundcache wasn't generated!\n", Logtype.Important);
+                        }
                     }
                 }
                 #endregion
 
                 //---------------------------- SCRIPTS ----------------------------------//
                 #region Scripts
+                (bool packscriptsMod, bool packscriptsdlc) = packsettings.Scripts;
                 //Handle mod scripts
-                if (Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Any())
+                if (packscriptsMod && Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Any())
                 {
                     if (!Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")))
                         Directory.CreateDirectory(Path.Combine(ActiveMod.ModDirectory, "scripts"));
@@ -1884,7 +1899,7 @@ namespace WolvenKit
                 }
 
                 //Handle the DLC scripts
-                if (Directory.Exists(Path.Combine(ActiveMod.DlcDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Any())
+                if (packscriptsdlc && Directory.Exists(Path.Combine(ActiveMod.DlcDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Any())
                 {
                     if (!Directory.Exists(Path.Combine(ActiveMod.DlcDirectory, "scripts")))
                         Directory.CreateDirectory(Path.Combine(ActiveMod.DlcDirectory, "scripts"));
@@ -1903,12 +1918,14 @@ namespace WolvenKit
                 //---------------------------- STRINGS ----------------------------------//
                 #region Strings
                 //Copy the generated w3strings
-                if (packsettings.Strings)
+                if(packsettings.Strings.Item1 || packsettings.Strings.Item2)
                 {
                     var files = Directory.GetFiles((ActiveMod.ProjectDirectory + "\\strings")).Where(s => Path.GetExtension(s) == ".w3strings").ToList();
 
-                    files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.PackedDlcDirectory + Path.GetFileName(x))));
-                    files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.PackedModDirectory, Path.GetFileName(x))));
+                    if (packsettings.Strings.Item1)
+                        files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.PackedDlcDirectory, Path.GetFileName(x))));
+                    if (packsettings.Strings.Item2)
+                        files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.PackedModDirectory, Path.GetFileName(x))));
                 }
                 #endregion
 
@@ -2589,6 +2606,7 @@ namespace WolvenKit
         #region Context menus
         private void modToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
+            packAndInstallModToolStripMenuItem.Enabled = ActiveMod != null;
             createPackedInstallerToolStripMenuItem.Enabled = ActiveMod != null;
             reloadProjectToolStripMenuItem.Enabled = ActiveMod != null;
             settingsToolStripMenuItem.Enabled = ActiveMod != null;
@@ -2608,24 +2626,31 @@ namespace WolvenKit
             saveAllToolStripMenuItem.Enabled = ActiveMod != null;
         }
 
+        private void editToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        {
+            verifyFileToolStripMenuItem.Enabled = ActiveMod != null;
+            renderW2meshToolStripMenuItem.Enabled = ActiveMod != null;
+        }
+
         private void toolsToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
             packageInstallerToolStripMenuItem.Enabled = ActiveMod != null;
             saveExplorerToolStripMenuItem.Enabled = ActiveMod != null;
             stringsEncoderGUIToolStripMenuItem.Enabled = ActiveMod != null;
             menuCreatorToolStripMenuItem.Enabled = ActiveMod != null;
-            renderW2meshToolStripMenuItem.Enabled = ActiveMod != null;
             bulkEditorToolStripMenuItem.Enabled = ActiveMod != null;
+            renderW2meshToolStripMenuItem.Enabled = ActiveMod != null;
 
-            advancedToolStripMenuItem.Enabled = ActiveMod != null;
+            //advancedToolStripMenuItem.Enabled = ActiveMod != null;
             experimentalToolStripMenuItem.Enabled = ActiveMod != null;
+            cR2WToTextToolStripMenuItem.Enabled = ActiveMod != null;
+            GameDebuggerToolStripMenuItem.Enabled = ActiveMod != null;
         }
 
         private void viewToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
             radishUtilitytoolStripMenuItem.Enabled = ActiveMod != null;
             importUtilityToolStripMenuItem.Enabled = ActiveMod != null;
-            gameDebuggerToolStripMenuItem.Enabled = ActiveMod != null;
         }
         #endregion
 
@@ -3172,6 +3197,236 @@ _col - for simple stuff like boxes and spheres", "Information about importing mo
         }
         #endregion
 
+        #region Game
+        private void unbundleGameToolStripMenuItem_Click(object sender, EventArgs e) => SetupUnbundling();
+
+        private void SetupUnbundling()
+        {
+            // Backgroundworker
+            if (MainBackgroundWorker.IsBusy)
+            {
+                return;
+            }
+
+                // query free disk space
+                DriveInfo drive = new DriveInfo(new DirectoryInfo(MainController.Get().Configuration.DepotPath).Root.FullName);
+            if (!drive.IsReady)
+                return;
+            var freespace = drive.AvailableFreeSpace / (1024 * 1024 * 1024);
+            var totalsize = drive.TotalSize / (1024 * 1024 * 1024);
+            switch (MessageBox.Show(
+                        $"Unbundling the game will take about {30}GB of space, available space: {freespace}GB on drive {drive.Name}.\n" +
+                        $"Depot directory: {MainController.Get().Configuration.DepotPath}\n\n" +
+                        $"Would you like to continue?",
+                        "Unbundle Game Files",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            {
+                default:
+                    return;
+                case DialogResult.Yes:
+                    {
+                        break;
+                    }
+                case DialogResult.No:
+                    {
+                        return;
+                    }
+            }
+
+
+            // Backgroundworker
+            if (!MainBackgroundWorker.IsBusy)
+            {
+                // progress bar
+                m_frmProgress = new frmProgress()
+                {
+                    Text = "Unbundling Game Assets",
+                    StartPosition = FormStartPosition.CenterParent,
+                };
+
+                // background worker action
+                workerAction = UnbundleGame;
+                MainBackgroundWorker.RunWorkerAsync();
+
+                // cancellation dialog
+                DialogResult dr = m_frmProgress.ShowDialog(this);
+                switch (dr)
+                {
+                    case DialogResult.Cancel:
+                        {
+                            MainBackgroundWorker.CancelAsync();
+                            m_frmProgress.Cancel = true;
+                            break;
+                        }
+                    case DialogResult.None:
+                    case DialogResult.OK:
+                    case DialogResult.Abort:
+                    case DialogResult.Retry:
+                    case DialogResult.Ignore:
+                    case DialogResult.Yes:
+                    case DialogResult.No:
+                    default:
+                        break;
+                }
+
+
+                this.BringToFront();
+            }
+            else
+                Logger.LogString("The background worker is currently busy.\r\n", Logtype.Error);
+        }
+
+        protected object UnbundleGame(object sender, DoWorkEventArgs e)
+        {
+            object arg = e.Argument;
+
+            BackgroundWorker bwAsync = sender as BackgroundWorker;
+
+            var memorymappedbundles = new Dictionary<string, MemoryMappedFile>();
+            var bm = new BundleManager();
+            bm.LoadAll(MainController.Get().Configuration.ExecutablePath);
+
+            //Load MemoryMapped Bundles
+            foreach (var b in bm.Bundles.Values)
+            {
+                var hash = b.FileName.GetHashMD5();
+                memorymappedbundles.Add(hash, MemoryMappedFile.CreateFromFile(b.FileName, FileMode.Open, hash, 0, MemoryMappedFileAccess.Read));
+            }
+
+            var files = bm.FileList
+                    .GroupBy(p => p.Name)
+                    .Select(g => g.Last())
+                    .ToList();
+            var count = files.Count;
+            int finished = 0;
+            Parallel.For(0, count, new ParallelOptions { MaxDegreeOfParallelism = (int)(Environment.ProcessorCount * 0.8) + 1 }, i =>
+            {
+                if (bwAsync.CancellationPending || m_frmProgress.Cancel)
+                {
+                    Logger.LogString("Background worker cancelled.\r\n", Logtype.Error);
+                    e.Cancel = true;
+                    //return false;
+                }
+
+                IWitcherFile f = files[i];
+                if (f is BundleItem bi)
+                {
+                    var newpath = Path.Combine(MainController.Get().Configuration.DepotPath, bi.Name);
+
+                    // overwrite existing files
+                    if (File.Exists(newpath))
+                        File.Delete(newpath);
+                    else
+                    {
+                        var fi = new FileInfo(newpath);
+                        var newdir = Path.GetDirectoryName(newpath);
+                        Directory.CreateDirectory(newdir);
+                    }
+
+                    using (var ms = new MemoryStream())
+                    using (FileStream file = new FileStream(newpath, FileMode.Create, System.IO.FileAccess.Write))
+                    {
+                        bi.ExtractExistingMMF(ms);
+                        ms.Seek(0, SeekOrigin.Begin);
+
+                        ms.CopyTo(file);
+                    }
+
+                    finished += 1;
+                    int percentprogress = (int)((float)finished / (float)count * 100.0);
+                    MainBackgroundWorker.ReportProgress(percentprogress, bi.Name);
+                }
+            });
+
+            return true;
+
+        }
+
+        private async void uncookGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // query free disk space
+            DriveInfo drive = new DriveInfo(new DirectoryInfo(MainController.Get().Configuration.DepotPath).Root.FullName);
+            if (!drive.IsReady)
+                return;
+            var freespace = drive.AvailableFreeSpace / (1024 * 1024 * 1024);
+            var totalsize = drive.TotalSize / (1024 * 1024 * 1024);
+            switch (MessageBox.Show(
+                        $"Uncooking the game takes a very long time and is usually not needed, consider unbundling the game instead.\n\n" +
+                        $"Uncooking the game will take about {60}GB of space, available space: {freespace}GB on drive {drive.Name}.\n" +
+                        $"Depot directory: {MainController.Get().Configuration.DepotPath}\n\n" +
+                        $"Click Yes to unbundle or click No to continue uncooking.",
+                        "Uncook Game Files",
+                        MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+            {
+                default:
+                    return;
+                case DialogResult.Yes:
+                    {
+                        SetupUnbundling();
+                        return;
+                    }
+                case DialogResult.No:
+                    {
+                        // Not implemented
+                        await SetupUncooking();
+                        return;
+                    }
+                case DialogResult.Cancel:
+                    {
+                        return;
+                    }
+            }
+        }
+
+        private async Task SetupUncooking()
+        {
+            var content = Path.Combine(new FileInfo(MainController.Get().Configuration.ExecutablePath).Directory.Parent.Parent.FullName, "content");
+            await UncookInternal(content).ContinueWith(antecedent =>
+            {
+
+            });
+            var dlc = Path.Combine(new FileInfo(MainController.Get().Configuration.ExecutablePath).Directory.Parent.Parent.FullName, "DLC");
+            string[] vanillaDLClist = new string[] { "DLC1", "DLC2", "DLC3", "DLC4", "DLC5", "DLC6", "DLC7", "DLC8", "DLC9", "DLC10", "DLC11", "DLC12", "DLC13", "DLC14", "DLC15", "DLC16", "bob", "ep1" };
+            foreach (var item in vanillaDLClist)
+            {
+                var dlcdir = Path.Combine(dlc, item);
+                await UncookInternal(dlcdir).ContinueWith(antecedent =>
+                {
+
+                });
+            }
+
+
+
+            async Task UncookInternal(string inputpath)
+            {
+                var depot = MainController.Get().Configuration.DepotPath;
+
+                var cmd = new Wcc_lite.uncook()
+                {
+                    InputDirectory = inputpath,
+                    OutputDirectory = depot,
+                    Imgfmt = imageformat.tga,
+                    Skiperrors = true,
+                    Dumpswf = true
+                };
+                //var cmd = new Wcc_lite.unbundle()
+                //{
+                //    InputDirectory = inputpath,
+                //    OutputDirectory = depot,
+                //};
+                await Task.Run(() => MainController.Get().WccHelper.RunCommand(cmd));
+            }
+
+
+        }
+
+        private void openUncookedFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Commonfunctions.ShowFileInExplorer(MainController.Get().Configuration.DepotPath);
+        }
+        #endregion
+
         #region Help
         private void donateToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -3327,5 +3582,7 @@ Would you like to open the problem steps recorder?", "Bug reporting", MessageBox
         }
 
         #endregion
+
+        
     }
 }

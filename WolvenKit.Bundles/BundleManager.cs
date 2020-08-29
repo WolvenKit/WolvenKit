@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using WolvenKit.Common;
@@ -92,7 +93,7 @@ namespace WolvenKit.Bundles
         /// <param name="exedir">Path to executable directory</param>
         public void LoadAll(string exedir)
         {
-            var content = Path.Combine(exedir, @"..\..\content\");
+            var content = Path.Combine(new FileInfo(exedir).Directory.Parent.Parent.FullName, "content");
 
             var contentdirs = new List<string>(Directory.GetDirectories(content, "content*"));
             contentdirs.Sort(new AlphanumComparator<string>());
@@ -108,7 +109,7 @@ namespace WolvenKit.Bundles
                 LoadBundle(file, true);
             }
 
-            var dlc = Path.Combine(exedir, @"..\..\DLC\");
+            var dlc = Path.Combine(new FileInfo(exedir).Directory.Parent.Parent.FullName, "DLC");
             if (Directory.Exists(dlc))
             {
                 var dlcdirs = new List<string>(Directory.GetDirectories(dlc));

@@ -24,6 +24,7 @@ namespace WolvenKit.Forms
 
         public frmBulkEditor()
         {
+            // initialize Viewmodel
             viewModel = MockKernel.Get().GetBulkEditorViewModel();
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
             viewModel.PerformStep += (sender, e) => this.PerformStep();
@@ -39,31 +40,18 @@ namespace WolvenKit.Forms
         {
             if (e.PropertyName == nameof(viewModel.ProgressReport))
             {
-                if (progressBar1.InvokeRequired)
-                {
-                    progressBar1.BeginInvoke(new intDelegate(SetMinProgressInternal), viewModel.ProgressReport.Min);
-                    progressBar1.BeginInvoke(new intDelegate(SetMaxProgressInternal), viewModel.ProgressReport.Max);
-                    progressBar1.BeginInvoke(new intDelegate(SetValProgressInternal), viewModel.ProgressReport.Value);
-                }
-                else
-                {
-                    progressBar1.Minimum = viewModel.ProgressReport.Min;
-                    progressBar1.Maximum = viewModel.ProgressReport.Max;
-                    progressBar1.Value = viewModel.ProgressReport.Value;
-                }
+                Invoke(new intDelegate(SetMinProgressInternal), viewModel.ProgressReport.Min);
+                Invoke(new intDelegate(SetMaxProgressInternal), viewModel.ProgressReport.Max);
+                Invoke(new intDelegate(SetValProgressInternal), viewModel.ProgressReport.Value);
             }
         }
-        private void PerformStep()
-        {
-            if (progressBar1.InvokeRequired)
-                Invoke(new voidDelegate(PerformStepInternal));
-            else
-                this.progressBar1.PerformStep();
-        }
+        private void PerformStep() => Invoke(new voidDelegate(PerformStepInternal));
+
 
         public void ApplyCustomTheme()
         {
-            UIController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, UIController.GetTheme());
+            var theme = UIController.GetTheme();
+            UIController.Get().ToolStripExtender.SetStyle(toolStrip, VisualStudioToolStripExtender.VsVersion.Vs2015, theme);
 
         }
 

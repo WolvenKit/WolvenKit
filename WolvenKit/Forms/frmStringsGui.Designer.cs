@@ -76,13 +76,15 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.generateStringsToolStripMenuItem,
             this.viewToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1184, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1776, 35);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -93,27 +95,27 @@
             this.openToolStripMenuItem,
             this.importToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(54, 29);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(169, 34);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(169, 34);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // importToolStripMenuItem
             // 
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(169, 34);
             this.importToolStripMenuItem.Text = "Import";
             this.importToolStripMenuItem.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
             // 
@@ -123,20 +125,20 @@
             this.fromXMLToolStripMenuItem,
             this.fromScriptsToolStripMenuItem});
             this.generateStringsToolStripMenuItem.Name = "generateStringsToolStripMenuItem";
-            this.generateStringsToolStripMenuItem.Size = new System.Drawing.Size(105, 20);
+            this.generateStringsToolStripMenuItem.Size = new System.Drawing.Size(157, 29);
             this.generateStringsToolStripMenuItem.Text = "Generate Strings";
             // 
             // fromXMLToolStripMenuItem
             // 
             this.fromXMLToolStripMenuItem.Name = "fromXMLToolStripMenuItem";
-            this.fromXMLToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.fromXMLToolStripMenuItem.Size = new System.Drawing.Size(214, 34);
             this.fromXMLToolStripMenuItem.Text = "From XML";
             this.fromXMLToolStripMenuItem.Click += new System.EventHandler(this.fromXMLToolStripMenuItem_Click);
             // 
             // fromScriptsToolStripMenuItem
             // 
             this.fromScriptsToolStripMenuItem.Name = "fromScriptsToolStripMenuItem";
-            this.fromScriptsToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.fromScriptsToolStripMenuItem.Size = new System.Drawing.Size(214, 34);
             this.fromScriptsToolStripMenuItem.Text = "From Scripts";
             this.fromScriptsToolStripMenuItem.Click += new System.EventHandler(this.fromScriptsToolStripMenuItem_Click);
             // 
@@ -147,7 +149,7 @@
             this.hexKeyToolStripMenuItem,
             this.stringKeyToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(65, 29);
             this.viewToolStripMenuItem.Text = "View";
             // 
             // idToolStripMenuItem
@@ -155,7 +157,7 @@
             this.idToolStripMenuItem.Checked = true;
             this.idToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.idToolStripMenuItem.Name = "idToolStripMenuItem";
-            this.idToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.idToolStripMenuItem.Size = new System.Drawing.Size(193, 34);
             this.idToolStripMenuItem.Text = "ID";
             this.idToolStripMenuItem.Click += new System.EventHandler(this.idToolStripMenuItem_Click);
             // 
@@ -164,7 +166,7 @@
             this.hexKeyToolStripMenuItem.Checked = true;
             this.hexKeyToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.hexKeyToolStripMenuItem.Name = "hexKeyToolStripMenuItem";
-            this.hexKeyToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.hexKeyToolStripMenuItem.Size = new System.Drawing.Size(193, 34);
             this.hexKeyToolStripMenuItem.Text = "Hex Key";
             this.hexKeyToolStripMenuItem.Click += new System.EventHandler(this.hexKeyToolStripMenuItem_Click);
             // 
@@ -173,12 +175,13 @@
             this.stringKeyToolStripMenuItem.Checked = true;
             this.stringKeyToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.stringKeyToolStripMenuItem.Name = "stringKeyToolStripMenuItem";
-            this.stringKeyToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.stringKeyToolStripMenuItem.Size = new System.Drawing.Size(193, 34);
             this.stringKeyToolStripMenuItem.Text = "String Key";
             this.stringKeyToolStripMenuItem.Click += new System.EventHandler(this.stringKeyToolStripMenuItem_Click);
             // 
             // toolStrip1
             // 
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonSave,
             this.toolStripButtonOpen,
@@ -186,9 +189,10 @@
             this.toolStripButtonGenerateXML,
             this.toolStripButtonGenerateScripts,
             this.toolStripButtonEncode});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
+            this.toolStrip1.Location = new System.Drawing.Point(0, 35);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1184, 25);
+            this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.toolStrip1.Size = new System.Drawing.Size(1776, 34);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -197,7 +201,7 @@
             this.toolStripButtonSave.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSave.Image")));
             this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSave.Name = "toolStripButtonSave";
-            this.toolStripButtonSave.Size = new System.Drawing.Size(51, 22);
+            this.toolStripButtonSave.Size = new System.Drawing.Size(77, 29);
             this.toolStripButtonSave.Text = "Save";
             this.toolStripButtonSave.ToolTipText = "Save to CSV file.";
             this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
@@ -207,7 +211,7 @@
             this.toolStripButtonOpen.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonOpen.Image")));
             this.toolStripButtonOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonOpen.Name = "toolStripButtonOpen";
-            this.toolStripButtonOpen.Size = new System.Drawing.Size(56, 22);
+            this.toolStripButtonOpen.Size = new System.Drawing.Size(84, 29);
             this.toolStripButtonOpen.Text = "Open";
             this.toolStripButtonOpen.ToolTipText = "Open CSV file.";
             this.toolStripButtonOpen.Click += new System.EventHandler(this.toolStripButtonOpen_Click);
@@ -217,7 +221,7 @@
             this.toolStripButtonImport.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonImport.Image")));
             this.toolStripButtonImport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonImport.Name = "toolStripButtonImport";
-            this.toolStripButtonImport.Size = new System.Drawing.Size(63, 22);
+            this.toolStripButtonImport.Size = new System.Drawing.Size(95, 29);
             this.toolStripButtonImport.Text = "Import";
             this.toolStripButtonImport.ToolTipText = "Import existing w3string file.";
             this.toolStripButtonImport.Click += new System.EventHandler(this.toolStripButtonImport_Click);
@@ -227,7 +231,7 @@
             this.toolStripButtonGenerateXML.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonGenerateXML.Image")));
             this.toolStripButtonGenerateXML.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonGenerateXML.Name = "toolStripButtonGenerateXML";
-            this.toolStripButtonGenerateXML.Size = new System.Drawing.Size(132, 22);
+            this.toolStripButtonGenerateXML.Size = new System.Drawing.Size(197, 29);
             this.toolStripButtonGenerateXML.Text = "Generate From XML";
             this.toolStripButtonGenerateXML.ToolTipText = "Generate strings from menu XML.";
             this.toolStripButtonGenerateXML.Click += new System.EventHandler(this.toolStripButtonGenerateXML_Click);
@@ -237,7 +241,7 @@
             this.toolStripButtonGenerateScripts.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonGenerateScripts.Image")));
             this.toolStripButtonGenerateScripts.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonGenerateScripts.Name = "toolStripButtonGenerateScripts";
-            this.toolStripButtonGenerateScripts.Size = new System.Drawing.Size(143, 22);
+            this.toolStripButtonGenerateScripts.Size = new System.Drawing.Size(215, 29);
             this.toolStripButtonGenerateScripts.Text = "Generate From Scripts";
             this.toolStripButtonGenerateScripts.ToolTipText = "Generate strings from scripts (strings with specified prefix in scripts).";
             this.toolStripButtonGenerateScripts.Click += new System.EventHandler(this.toolStripButtonGenerateScripts_Click);
@@ -247,7 +251,7 @@
             this.toolStripButtonEncode.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonEncode.Image")));
             this.toolStripButtonEncode.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonEncode.Name = "toolStripButtonEncode";
-            this.toolStripButtonEncode.Size = new System.Drawing.Size(66, 22);
+            this.toolStripButtonEncode.Size = new System.Drawing.Size(98, 29);
             this.toolStripButtonEncode.Text = "Encode";
             this.toolStripButtonEncode.ToolTipText = "Encode w3string files.";
             this.toolStripButtonEncode.Click += new System.EventHandler(this.toolStripButtonEncode_Click);
@@ -256,7 +260,8 @@
             // 
             this.splitContainerMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainerMain.IsSplitterFixed = true;
-            this.splitContainerMain.Location = new System.Drawing.Point(0, 49);
+            this.splitContainerMain.Location = new System.Drawing.Point(0, 69);
+            this.splitContainerMain.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.splitContainerMain.Name = "splitContainerMain";
             this.splitContainerMain.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -267,14 +272,16 @@
             // splitContainerMain.Panel2
             // 
             this.splitContainerMain.Panel2.Controls.Add(this.dataGridViewStrings);
-            this.splitContainerMain.Size = new System.Drawing.Size(1184, 488);
-            this.splitContainerMain.SplitterDistance = 25;
+            this.splitContainerMain.Size = new System.Drawing.Size(1776, 757);
+            this.splitContainerMain.SplitterDistance = 38;
+            this.splitContainerMain.SplitterWidth = 6;
             this.splitContainerMain.TabIndex = 2;
             // 
             // splitContainerTabs
             // 
             this.splitContainerTabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainerTabs.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerTabs.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.splitContainerTabs.Name = "splitContainerTabs";
             // 
             // splitContainerTabs.Panel1
@@ -284,8 +291,9 @@
             // splitContainerTabs.Panel2
             // 
             this.splitContainerTabs.Panel2.Controls.Add(this.comboBoxLanguagesMode);
-            this.splitContainerTabs.Size = new System.Drawing.Size(1184, 25);
-            this.splitContainerTabs.SplitterDistance = 1006;
+            this.splitContainerTabs.Size = new System.Drawing.Size(1776, 38);
+            this.splitContainerTabs.SplitterDistance = 1509;
+            this.splitContainerTabs.SplitterWidth = 6;
             this.splitContainerTabs.TabIndex = 0;
             // 
             // tabControlLanguages
@@ -293,18 +301,20 @@
             this.tabControlLanguages.Controls.Add(this.tabPageAllLanguages);
             this.tabControlLanguages.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlLanguages.Location = new System.Drawing.Point(0, 0);
+            this.tabControlLanguages.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabControlLanguages.Name = "tabControlLanguages";
             this.tabControlLanguages.SelectedIndex = 0;
-            this.tabControlLanguages.Size = new System.Drawing.Size(1006, 25);
+            this.tabControlLanguages.Size = new System.Drawing.Size(1509, 38);
             this.tabControlLanguages.TabIndex = 0;
             this.tabControlLanguages.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControlLanguages_Selected);
             // 
             // tabPageAllLanguages
             // 
-            this.tabPageAllLanguages.Location = new System.Drawing.Point(4, 22);
+            this.tabPageAllLanguages.Location = new System.Drawing.Point(4, 29);
+            this.tabPageAllLanguages.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabPageAllLanguages.Name = "tabPageAllLanguages";
-            this.tabPageAllLanguages.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageAllLanguages.Size = new System.Drawing.Size(998, 0);
+            this.tabPageAllLanguages.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabPageAllLanguages.Size = new System.Drawing.Size(1501, 5);
             this.tabPageAllLanguages.TabIndex = 0;
             this.tabPageAllLanguages.Text = "All Languages";
             this.tabPageAllLanguages.UseVisualStyleBackColor = true;
@@ -316,9 +326,10 @@
             this.comboBoxLanguagesMode.Items.AddRange(new object[] {
             "All Languages",
             "Separate Languages"});
-            this.comboBoxLanguagesMode.Location = new System.Drawing.Point(15, 0);
+            this.comboBoxLanguagesMode.Location = new System.Drawing.Point(22, 0);
+            this.comboBoxLanguagesMode.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.comboBoxLanguagesMode.Name = "comboBoxLanguagesMode";
-            this.comboBoxLanguagesMode.Size = new System.Drawing.Size(156, 21);
+            this.comboBoxLanguagesMode.Size = new System.Drawing.Size(232, 28);
             this.comboBoxLanguagesMode.TabIndex = 0;
             this.comboBoxLanguagesMode.SelectedIndexChanged += new System.EventHandler(this.comboBoxLanguagesMode_SelectedIndexChanged);
             // 
@@ -333,8 +344,10 @@
             this.ColumnLocalisation});
             this.dataGridViewStrings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewStrings.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewStrings.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataGridViewStrings.Name = "dataGridViewStrings";
-            this.dataGridViewStrings.Size = new System.Drawing.Size(1184, 459);
+            this.dataGridViewStrings.RowHeadersWidth = 62;
+            this.dataGridViewStrings.Size = new System.Drawing.Size(1776, 713);
             this.dataGridViewStrings.TabIndex = 0;
             this.dataGridViewStrings.Visible = false;
             this.dataGridViewStrings.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewStrings_CellValidated);
@@ -343,31 +356,36 @@
             // ColumnID
             // 
             this.ColumnID.HeaderText = "ID";
+            this.ColumnID.MinimumWidth = 8;
             this.ColumnID.Name = "ColumnID";
             // 
             // ColumnHexKey
             // 
             this.ColumnHexKey.HeaderText = "Hex key";
+            this.ColumnHexKey.MinimumWidth = 8;
             this.ColumnHexKey.Name = "ColumnHexKey";
             this.ColumnHexKey.Visible = false;
             // 
             // ColumnStringKey
             // 
             this.ColumnStringKey.HeaderText = "String Key";
+            this.ColumnStringKey.MinimumWidth = 8;
             this.ColumnStringKey.Name = "ColumnStringKey";
             // 
             // ColumnLocalisation
             // 
             this.ColumnLocalisation.HeaderText = "Localisation";
+            this.ColumnLocalisation.MinimumWidth = 8;
             this.ColumnLocalisation.Name = "ColumnLocalisation";
             // 
             // textBoxModID
             // 
             this.textBoxModID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxModID.Location = new System.Drawing.Point(1025, 25);
+            this.textBoxModID.Location = new System.Drawing.Point(1538, 38);
+            this.textBoxModID.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxModID.MaxLength = 0;
             this.textBoxModID.Name = "textBoxModID";
-            this.textBoxModID.Size = new System.Drawing.Size(100, 20);
+            this.textBoxModID.Size = new System.Drawing.Size(148, 26);
             this.textBoxModID.TabIndex = 3;
             this.textBoxModID.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxModID_KeyDown);
             this.textBoxModID.Leave += new System.EventHandler(this.textBoxModID_Leave);
@@ -376,17 +394,18 @@
             // 
             this.labelModID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelModID.AutoSize = true;
-            this.labelModID.Location = new System.Drawing.Point(832, 25);
+            this.labelModID.Location = new System.Drawing.Point(1248, 38);
+            this.labelModID.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelModID.Name = "labelModID";
-            this.labelModID.Size = new System.Drawing.Size(187, 13);
+            this.labelModID.Size = new System.Drawing.Size(277, 20);
             this.labelModID.TabIndex = 4;
             this.labelModID.Text = "Mod ID (separate multiple IDs with \";\")";
             // 
             // frmStringsGui
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1184, 537);
+            this.ClientSize = new System.Drawing.Size(1776, 826);
             this.Controls.Add(this.labelModID);
             this.Controls.Add(this.textBoxModID);
             this.Controls.Add(this.splitContainerMain);
@@ -394,9 +413,10 @@
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.MinimumSize = new System.Drawing.Size(1200, 39);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.MinimumSize = new System.Drawing.Size(1789, 56);
             this.Name = "frmStringsGui";
-            this.Text = "Automated Strings GUI";
+            this.Text = "Strings Encoder GUI";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);

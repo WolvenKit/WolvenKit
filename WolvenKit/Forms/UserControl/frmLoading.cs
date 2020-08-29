@@ -18,7 +18,7 @@ namespace WolvenKit.Forms
     {
         private List<Bitmap> splashscreens = new List<Bitmap>() {
             WolvenKit.Properties.Resources.wkit_splash, //Jato
-            WolvenKit.Properties.Resources.wkit_splash2 //Munchfly
+            WolvenKit.Properties.Resources.wkit_splash2 //Munchyfly
         }; 
 
 
@@ -33,12 +33,13 @@ namespace WolvenKit.Forms
             MainController.Get().PropertyChanged += MainControllerUpdated;
             UIController.InitForm(this);
 
-            Random rnd = new Random();
-            int i = rnd.Next(0, splashscreens.Count);
+            //Random rnd = new Random();
+            //int i = rnd.Next(0, splashscreens.Count);
+            int i = 1;  // fix splashscreen to 1 in 0.6.2
 
             this.BackgroundImage = splashscreens[i];
 
-           if (i == 0)
+            if (i == 0)
             {
                 this.labelTitle.Visible = false;
                 this.labelVersion.Visible = false;

@@ -8,13 +8,13 @@ namespace WolvenKit
 {
     public partial class frmPackSettings : Form
     {
-        public bool PackBundles => bundlesCHB.Checked;
-        public bool GenMetadata => metadatastoreCHB.Checked;
-        public bool GenTexCache => texturecachecCHB.Checked;
-        public bool GenCollCache => collisionCacheCHB.Checked;
-        public bool Scripts => scriptsCHB.Checked;
-        public bool Sound => soundCHB.Checked;
-        public bool Strings => stringsCHB.Checked;
+        public (bool, bool) PackBundles => (modBDL.Checked, dlcBDL.Checked);
+        public (bool, bool) GenMetadata => (modMD.Checked, dlcMD.Checked);
+        public (bool, bool) GenTexCache => (modTEX.Checked, dlcTEX.Checked);
+        public (bool, bool) GenCollCache => (modCOL.Checked, dlcCOL.Checked);
+        public (bool, bool) Scripts => (modSCR.Checked, dlcSCR.Checked);
+        public (bool, bool) Sound => (modSND.Checked, dlcSND.Checked);
+        public (bool, bool) Strings => (modSTR.Checked, dlcSTR.Checked);
 
         public frmPackSettings()
         {
@@ -22,23 +22,43 @@ namespace WolvenKit
 
             InitializeComponent();
 
-            if (Directory.GetFiles(activemod.ModTextureCacheDirectory,"*", SearchOption.AllDirectories).Any() ||
-                Directory.GetFiles(activemod.DlcTextureCacheDirectory, "*", SearchOption.AllDirectories).Any())
-                texturecachecCHB.Checked = true;
+            // Textures
+            if (Directory.GetFiles(activemod.ModTextureCacheDirectory, "*", SearchOption.AllDirectories).Any())
+                modTEX.Checked = true;
+            if (Directory.GetFiles(activemod.DlcTextureCacheDirectory, "*", SearchOption.AllDirectories).Any())
+                dlcTEX.Checked = true;
 
-            if (Directory.GetFiles(activemod.ModCookedDirectory, "*", SearchOption.AllDirectories).Any() ||
-                Directory.GetFiles(activemod.DlcCookedDirectory, "*", SearchOption.AllDirectories).Any())
-                scriptsCHB.Checked = true;
+            // Sound
+            var allowedExtensions = new[] { ".wem", ".bnk" };
+            if (Directory
+                .GetFiles(activemod.ModDirectory)
+                .Where(file => allowedExtensions.Any(file.ToLower().EndsWith))
+                .Any())
+                modSND.Checked = true;
+            if (Directory
+                .GetFiles(activemod.DlcDirectory)
+                .Where(file => allowedExtensions.Any(file.ToLower().EndsWith))
+                .Any())
+                dlcSPEECH.Checked = true;
 
-            if (activemod.Files.Any(x => x.EndsWith(".wem") || x.EndsWith(".bnk")))
-                soundCHB.Checked = true;
+            // Scripts  
+            // if (activemod.Files.Any(x => x.EndsWith(".ws")))
+            if (Directory.GetFiles(activemod.ModDirectory, "*.ws", SearchOption.AllDirectories).Any())
+                modSCR.Checked = true;
+            //if (Directory.GetFiles(activemod.DlcDirectory, "*.ws", SearchOption.AllDirectories).Any())
+            //    dlcSTR.Checked = true;
 
-            if (Directory.Exists((UIController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")) && Directory.GetFiles((UIController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")).Any(x => x.EndsWith(".w3strings")))
-                stringsCHB.Checked = true;
+            // Strings
+            if (Directory.Exists(UIController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")
+                && Directory.GetFiles(UIController.Get().Window.ActiveMod.ProjectDirectory + "\\strings")
+                .Any(x => x.EndsWith(".w3strings")))
+                modSTR.Checked = true;
 
-            if (Directory.GetFiles(activemod.ModUncookedDirectory, "*", SearchOption.AllDirectories).Any() ||
-                Directory.GetFiles(activemod.DlcUncookedDirectory, "*", SearchOption.AllDirectories).Any())
-                collisionCacheCHB.Checked = true;
+            // Collision
+            if (Directory.GetFiles(activemod.ModUncookedDirectory, "*", SearchOption.AllDirectories).Any())
+                modCOL.Checked = true;
+            if (Directory.GetFiles(activemod.DlcUncookedDirectory, "*", SearchOption.AllDirectories).Any())
+                dlcCOL.Checked = true;
         }
 
         private void button1_Click(object sender, EventArgs e)

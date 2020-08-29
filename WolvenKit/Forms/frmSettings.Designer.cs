@@ -241,9 +241,9 @@ namespace WolvenKit
             this.labelExtension.Enabled = false;
             this.labelExtension.Location = new System.Drawing.Point(29, 245);
             this.labelExtension.Name = "labelExtension";
-            this.labelExtension.Size = new System.Drawing.Size(106, 13);
+            this.labelExtension.Size = new System.Drawing.Size(138, 13);
             this.labelExtension.TabIndex = 17;
-            this.labelExtension.Text = "Uncooked Extension";
+            this.labelExtension.Text = "Uncooked Image Extension";
             // 
             // checkBoxDisableWelcomeForm
             // 
@@ -264,7 +264,6 @@ namespace WolvenKit
             this.btBrowseDepot.TabIndex = 22;
             this.btBrowseDepot.Text = "Browse...";
             this.btBrowseDepot.UseVisualStyleBackColor = true;
-            this.btBrowseDepot.Visible = false;
             this.btBrowseDepot.Click += new System.EventHandler(this.btBrowseDepot_Click);
             // 
             // lblDepot
@@ -329,9 +328,11 @@ namespace WolvenKit
             this.Controls.Add(this.lblExecutable);
             this.Controls.Add(this.txExecutablePath);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "frmSettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Settings";
+            this.Text = "Preferences";
             this.ResumeLayout(false);
             this.PerformLayout();
 
