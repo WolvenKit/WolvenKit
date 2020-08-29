@@ -933,8 +933,9 @@ namespace WolvenKit
             // 
             this.closeToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.closeToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.closeToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.window_close_24x;
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(16, 29);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(36, 29);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.ToolTipText = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
@@ -943,8 +944,9 @@ namespace WolvenKit
             // 
             this.maximizeToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.maximizeToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.maximizeToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.window_maximize_24x;
             this.maximizeToolStripMenuItem.Name = "maximizeToolStripMenuItem";
-            this.maximizeToolStripMenuItem.Size = new System.Drawing.Size(16, 29);
+            this.maximizeToolStripMenuItem.Size = new System.Drawing.Size(36, 29);
             this.maximizeToolStripMenuItem.Text = "Maximize";
             this.maximizeToolStripMenuItem.ToolTipText = "Restore";
             this.maximizeToolStripMenuItem.Click += new System.EventHandler(this.RestoreToolStripMenuItem_Click);
@@ -953,8 +955,9 @@ namespace WolvenKit
             // 
             this.minimizeToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.minimizeToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.minimizeToolStripMenuItem.Image = global::WolvenKit.Properties.Resources.window_minimize_24x;
             this.minimizeToolStripMenuItem.Name = "minimizeToolStripMenuItem";
-            this.minimizeToolStripMenuItem.Size = new System.Drawing.Size(16, 29);
+            this.minimizeToolStripMenuItem.Size = new System.Drawing.Size(36, 29);
             this.minimizeToolStripMenuItem.Text = "Minimize";
             this.minimizeToolStripMenuItem.ToolTipText = "Minimize";
             this.minimizeToolStripMenuItem.Click += new System.EventHandler(this.MinimizeToolStripMenuItem_Click);

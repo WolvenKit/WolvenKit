@@ -163,9 +163,6 @@
   <data name="Clock" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\customimages\clock.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="close" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\customimages\close.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="CollapseAll_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\visualstudio\collapseall_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -231,12 +228,6 @@
   </data>
   <data name="Logo_wkit" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\pictures\logo_wkit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="maximize1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\customimages\maximize.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="minimize" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\customimages\minimize.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="NewSolutionFolder_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\visualstudio\newsolutionfolder_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -528,5 +519,14 @@
   </data>
   <data name="FindInFile_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\visualstudio\findinfile_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="window_close_24x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\gui\window_close_24x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="window_maximize_24x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\gui\window_maximize_24x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="window_minimize_24x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\gui\window_minimize_24x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

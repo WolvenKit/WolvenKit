@@ -1001,6 +1001,9 @@
     <Content Include="Resources\Icons\GUI\Asset_Browser_16x.png" />
     <Content Include="Resources\Icons\GUI\Asset_Browser_Other_Mod_16x.png" />
     <Content Include="Resources\Icons\GUI\Discord_32x.png" />
+    <Content Include="Resources\Icons\GUI\window_close_24x.png" />
+    <Content Include="Resources\Icons\GUI\window_maximize_24x.png" />
+    <Content Include="Resources\Icons\GUI\window_minimize_24x.png" />
     <Content Include="Resources\Pictures\wkit_splash.png" />
     <Content Include="Resources\Pictures\wkit_splash2.png" />
     <Content Include="Resources\Pictures\WK_Logo2_32.png" />
@@ -1057,7 +1060,6 @@
     <None Include="Resources\VisualStudio\Settings_Inverse_16x.png" />
     <Content Include="Resources\Icons\Clock.ico" />
     <Content Include="Resources\CustomImages\Clock.png" />
-    <Content Include="Resources\CustomImages\close.png" />
     <Content Include="Resources\Icons\wolven_kit_icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1130,9 +1132,6 @@
     <Content Include="Resources\VisualStudio\FolderClosed_16x.png" />
     <Content Include="Resources\VisualStudio\ImportPackage_16x.png" />
     <Content Include="Resources\VisualStudio\LinkValidator_16x.png" />
-    <Content Include="Resources\CustomImages\maximize.jpg" />
-    <Content Include="Resources\CustomImages\maximize.png" />
-    <Content Include="Resources\CustomImages\minimize.png" />
     <Content Include="Resources\Icons\PictureResample_16x.ico" />
     <Content Include="Resources\Pictures\witcher3.png" />
     <Content Include="Resources\VisualStudio\PlayStep_16x.png" />
@@ -1142,8 +1141,6 @@
     <Content Include="Resources\VisualStudio\RunUpdate_16x.png" />
     <Content Include="Resources\VisualStudio\Run_16x.png" />
     <Content Include="Resources\CustomImages\UpButton.png" />
-    <Content Include="Resources\CustomImages\XToCloseButton.png" />
-    <None Include="Resources\TextFileIcon64px.png" />
     <Content Include="wolven_kit_icon.ico" />
     <None Include="Resources\RedEngine\ExitIcon.png" />
     <None Include="Resources\RedEngine\LayerGroupVisibled.png" />
@@ -1152,8 +1149,6 @@
     <Content Include="Resources\Icons\witcher3_101.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\Pictures\2c21aeda16de354ba5334551a883b481.png" />
-    <None Include="Resources\CustomImages\info-icon-23818.jpg" />
     <None Include="Resources\CustomImages\refresh.png" />
   </ItemGroup>
   <ItemGroup>
