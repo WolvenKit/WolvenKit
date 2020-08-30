@@ -130,7 +130,7 @@ namespace WolvenKit.App.ViewModels
                     || item.FullName == ActiveMod.RawDirectory
                     || item.FullName == ActiveMod.RadishDirectory
                     || item.FullName == ActiveMod.ModCookedDirectory
-                    || item.FullName == ActiveMod.ModTextureCacheDirectory
+                    //|| item.FullName == ActiveMod.ModTextureCacheDirectory
                     || item.FullName == ActiveMod.ModUncookedDirectory
                     ))
                 {
@@ -189,7 +189,7 @@ namespace WolvenKit.App.ViewModels
         protected bool CanAddAllImports() => SelectedItems != null;
         protected async void AddAllImports()
         {
-            await MainVM.AddAllImportsToDepot(SelectedItems.First().FullName, true);
+            await MainVM.AddAllImportsToProject(SelectedItems.First().FullName, true);
         }
 
 

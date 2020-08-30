@@ -26,12 +26,18 @@ namespace WolvenKit.Common.Model
     public enum EBundleType
     {
         ANY,
-        Bundle,         // formerly Bundle
-        CollisionCache,       // formerly CollisionCache
+        Bundle,
+        CollisionCache,
         TextureCache,
         SoundCache,
         Speech,
         Shader,
-        //Uncooked
+    }
+
+    public enum EProjectFolders
+    {
+        Cooked,
+        Uncooked,
+        Raw
     }
 }
