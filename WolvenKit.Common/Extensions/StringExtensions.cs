@@ -67,12 +67,13 @@ namespace WolvenKit.Common.Extensions
             }
 
             relativePath = relativePath.Substring(4);
-            if (relativePath.StartsWith(EBundleType.Bundle.ToString()))
-                relativePath = relativePath.Substring(EBundleType.Bundle.ToString().Length + 1);
-            else if (relativePath.StartsWith(EBundleType.TextureCache.ToString()))
-                relativePath = relativePath.Substring(EBundleType.TextureCache.ToString().Length + 1);
-            else if (relativePath.StartsWith(EBundleType.CollisionCache.ToString()))
-                relativePath = relativePath.Substring(EBundleType.CollisionCache.ToString().Length + 1);
+
+            if (relativePath.StartsWith(EProjectFolders.Cooked.ToString()))
+                relativePath = relativePath.Substring(EProjectFolders.Cooked.ToString().Length + 1);
+            if (relativePath.StartsWith(EProjectFolders.Uncooked.ToString()))
+                relativePath = relativePath.Substring(EProjectFolders.Uncooked.ToString().Length + 1);
+
+
             else if (relativePath.StartsWith(EBundleType.SoundCache.ToString()))
                 relativePath = relativePath.Substring(EBundleType.SoundCache.ToString().Length + 1);
             else if (relativePath.StartsWith(EBundleType.Speech.ToString()))

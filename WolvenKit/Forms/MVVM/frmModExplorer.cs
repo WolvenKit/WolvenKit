@@ -680,11 +680,6 @@ namespace WolvenKit
             }
         }
         private async void exportW2meshToFbxToolStripMenuItem_Click(object sender, EventArgs e) => vm.ExportMeshCommand.SafeExecute();
-        
-        private async void dumpWccliteXMLToolStripMenuItem_Click(object sender, EventArgs e) => vm.DumpWccliteXMLCommand.SafeExecute();
-
-        private async void dumpWkitXMLToolStripMenuItem_Click(object sender, EventArgs e) => vm.DumpWkitXMLCommand.SafeExecute();
-
 
         private void fastRenderToolStripMenuItem_Click(object sender, EventArgs e)
         {

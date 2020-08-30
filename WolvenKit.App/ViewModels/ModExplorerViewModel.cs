@@ -31,8 +31,7 @@ namespace WolvenKit.App.ViewModels
             DeleteFilesCommand = new RelayCommand(DeleteFiles, CanDeleteFiles);
             CopyFileCommand = new RelayCommand(CopyFile, CanCopyFile);
             PasteFileCommand = new RelayCommand(PasteFile, CanPasteFile);
-            DumpWccliteXMLCommand = new RelayCommand(DumpWccliteXML, CanDumpWccliteXML);
-            DumpWkitXMLCommand = new RelayCommand(DumpWkitXML, CanDumpWkitXML);
+
             ExportMeshCommand = new RelayCommand(ExportMesh, CanExportMesh);
             AddAllImportsCommand = new RelayCommand(AddAllImports, CanAddAllImports);
 
@@ -102,8 +101,6 @@ namespace WolvenKit.App.ViewModels
         public ICommand ExportMeshCommand { get; }
         public ICommand CopyFileCommand { get; }
         public ICommand PasteFileCommand { get; }
-        public ICommand DumpWccliteXMLCommand { get; }
-        public ICommand DumpWkitXMLCommand { get; }
         public ICommand AddAllImportsCommand { get; }
         
         #endregion
@@ -130,7 +127,6 @@ namespace WolvenKit.App.ViewModels
                     || item.FullName == ActiveMod.RawDirectory
                     || item.FullName == ActiveMod.RadishDirectory
                     || item.FullName == ActiveMod.ModCookedDirectory
-                    //|| item.FullName == ActiveMod.ModTextureCacheDirectory
                     || item.FullName == ActiveMod.ModUncookedDirectory
                     ))
                 {
@@ -174,17 +170,7 @@ namespace WolvenKit.App.ViewModels
             }
         }
 
-        protected bool CanDumpWccliteXML() => SelectedItems != null;
-        protected void DumpWccliteXML()
-        {
-            RequestWccliteFileDumpfile(this, new RequestFileArgs { File = SelectedItems.First().FullName });
-        }
 
-        protected bool CanDumpWkitXML() => SelectedItems != null;
-        protected void DumpWkitXML()
-        {
-            RequestWkitFileDumpfile(this, new RequestFileArgs { File = SelectedItems.First().FullName});
-        }
 
         protected bool CanAddAllImports() => SelectedItems != null;
         protected async void AddAllImports()
@@ -278,14 +264,10 @@ namespace WolvenKit.App.ViewModels
                     isDlc = false;
             }
 
-            if (reldir.StartsWith(EBundleType.CollisionCache.ToString()))
-            {
-                reldir = reldir.Substring(EBundleType.CollisionCache.ToString().Length);
-            }
-            if (reldir.StartsWith(EBundleType.TextureCache.ToString()))
-            {
-                reldir = reldir.Substring(EBundleType.TextureCache.ToString().Length);
-            }
+            if (reldir.StartsWith(EProjectFolders.Cooked.ToString()))
+                reldir = reldir.Substring(EProjectFolders.Cooked.ToString().Length);
+            if (reldir.StartsWith(EProjectFolders.Uncooked.ToString()))
+                reldir = reldir.Substring(EProjectFolders.Uncooked.ToString().Length);
             
             reldir = reldir.TrimStart(Path.DirectorySeparatorChar);
 
@@ -366,39 +348,6 @@ namespace WolvenKit.App.ViewModels
 
             ResumeMonitoring();
             MainVM.SaveMod();
-        }
-        private async void RequestWccliteFileDumpfile(object sender, RequestFileArgs e)
-        {
-            var filename = e.File;
-            if (!File.Exists(filename) && !Directory.Exists(filename))
-                return;
-            // We dump an individual file with wcclite dumpfile
-            if (File.Exists(filename))
-            {
-                // '\\?\' is a neutral win32 path prefix. It hacks wcc_lite into dumping individual files.
-                // This string will get input again, further down the line, in wcc_command.GetVariables
-                // Windows paths and string management... This one is more than stupid, it is an horror. \\FIXME if you can.
-                await MainVM.DumpFile("", @"\\?\", filename);
-            }
-            //Wcclite recursively dumps CR2Ws in a directory.
-            else if (Directory.Exists(filename))
-            {
-                string dir = filename;
-                await MainVM.DumpFile(dir, dir);
-            }
-        }
-
-        private async void RequestWkitFileDumpfile(object sender, RequestFileArgs e)
-        {
-/*            var wkitcr2wfile = MainVM.OpenDocuments.Where(_ => _.File is CR2WFile).Where(t => t.FileName == e.File);
-            var ser = new DataContractSerializer(typeof(CR2WFile));
-            FileStream writer = new FileStream(e.File + ".xml", FileMode.Create);
-            ser.WriteObject(writer, wkitcr2wfile);
-            writer.Close();*/
-            var wkitcr2wdvm = MainVM.OpenDocuments.Where(_ => _.File is CR2WFile).Where(t => t.FileName == e.File);
-            FileStream writer = new FileStream(e.File + ".xml", FileMode.Create);
-            wkitcr2wdvm.First().File.SerializeToXml(writer);
-            writer.Close();
         }
         #endregion
     }

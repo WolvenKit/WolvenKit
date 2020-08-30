@@ -389,9 +389,13 @@ namespace WolvenKit.App.ViewModels
                     var archive = archives.Last().Value;
 
                     string newpath = Path.Combine(isDLC ? ActiveMod.DlcCookedDirectory : ActiveMod.ModCookedDirectory, relativePath);
-                    string extractedfile = archive.Extract(new BundleFileExtractArgs(newpath, MainController.Get().Configuration.UncookExtension));
-                    Logger.LogString($"Succesfully unbundled {filename}.", Logtype.Success);
-
+                    if (!File.Exists(newpath))
+                    {
+                        string extractedfile = archive.Extract(new BundleFileExtractArgs(newpath, MainController.Get().Configuration.UncookExtension));
+                        Logger.LogString($"Succesfully unbundled {filename}.", Logtype.Success);
+                    }
+                    else
+                        Logger.LogString($"File already exists in mod project: {filename}.", Logtype.Success);
                     return 1;
                 }
                 catch (Exception ex)
@@ -490,12 +494,13 @@ namespace WolvenKit.App.ViewModels
                 (importslist, hasinternalBuffer, bufferlist) = cr2w.ReadImportsAndBuffers(reader);
             }
 
+            bool success = true;
             // add imports
             foreach (CR2WImportWrapper import in importslist)
             {
                 var filename = Path.GetFileName(import.DepotPathStr);
 
-                var success = UnbundleFileToProject(import.DepotPathStr, isDLC, false) > 0;
+                success &= UnbundleFileToProject(import.DepotPathStr, isDLC, false) > 0;
                 if (!success)
                     Logger.LogString($"Did not unbundle {filename}, import is missing.", Logtype.Error);
             }
@@ -514,13 +519,14 @@ namespace WolvenKit.App.ViewModels
                     string bufferpath = $"{relativepath}.{index}.buffer";
                     var bufferName = $"{Path.GetFileName(relativepath)}.{index}.buffer";
 
-                    var success = UnbundleFileToProject(bufferpath, isDLC, false, EBundleType.Bundle) > 0;
+                    success &= UnbundleFileToProject(bufferpath, isDLC, false, EBundleType.Bundle) > 0;
                     if (!success)
                         Logger.LogString($"Did not unbundle {bufferName}, import is missing.", Logtype.Error);
-                    else
-                        Logger.LogString($"Succesfully unbundled {bufferName}.", Logtype.Success);
                 }
             }
+
+            if (success)
+                Logger.LogString($"Succesfully imported all dependencies.", Logtype.Success);
         }
 
         #endregion
