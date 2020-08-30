@@ -93,6 +93,10 @@ namespace WolvenKit.CR2W.Types
             {
                 this.val = (string) val;
             }
+            else if (val is CString cvar)
+            {
+                this.val = cvar.val;
+            }
             return this;
         }
 

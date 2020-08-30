@@ -35,6 +35,10 @@ namespace WolvenKit.CR2W.Types
             {
                 Bytes = (byte[]) val;
             }
+            else if (val is CByteArray cvar)
+            {
+                this.Bytes = cvar.Bytes;
+            }
 
             return this;
         }

@@ -242,6 +242,27 @@ namespace WolvenKit.App.ViewModels
 
         }
 
+        private async void RequestWccliteFileDumpfile(object sender, RequestFileArgs e)
+        {
+            var filename = e.File;
+            if (!File.Exists(filename) && !Directory.Exists(filename))
+                return;
+            // We dump an individual file with wcclite dumpfile
+            if (File.Exists(filename))
+            {
+                // '\\?\' is a neutral win32 path prefix. It hacks wcc_lite into dumping individual files.
+                // This string will get input again, further down the line, in wcc_command.GetVariables
+                // Windows paths and string management... This one is more than stupid, it is an horror. \\FIXME if you can.
+                await DumpFile("", @"\\?\", filename);
+            }
+            //Wcclite recursively dumps CR2Ws in a directory.
+            else if (Directory.Exists(filename))
+            {
+                string dir = filename;
+                await DumpFile(dir, dir);
+            }
+        }
+
         /// <summary>
         /// Deprecated. Use ImportUtility instead.
         /// Imports a given file (w2mesh or redcloth to the mod project.

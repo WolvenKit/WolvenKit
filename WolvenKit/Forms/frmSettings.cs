@@ -34,10 +34,6 @@ namespace WolvenKit
             txVoiceLanguage.Text = config.VoiceLanguage;
             txWCC_Lite.Text = config.WccLite;
 
-            
-            
-
-
 
             checkBoxDisableWelcomeForm.Checked = config.IsWelcomeFormDisabled;
             
@@ -47,9 +43,10 @@ namespace WolvenKit
             comboBoxExtension.Items.AddRange(Enum.GetValues(typeof(EUncookExtension)).Cast<object>().ToArray());
             comboBoxExtension.SelectedItem = MainController.Get().Configuration.UncookExtension;
 
-            exeSearcherSlave.RunWorkerAsync();
-
-            
+            // automatically scan the registry for exe paths for wcc and tw3
+            // if either text field is empty
+            if (string.IsNullOrEmpty(txExecutablePath.Text) || string.IsNullOrEmpty(txWCC_Lite.Text))
+                exeSearcherSlave.RunWorkerAsync();
 
             btSave.Enabled =
                 (File.Exists(txWCC_Lite.Text) && Path.GetExtension(txWCC_Lite.Text) == ".exe" && txWCC_Lite.Text.Contains("wcc_lite.exe")) &&

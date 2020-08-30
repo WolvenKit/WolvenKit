@@ -52,7 +52,6 @@ namespace WolvenKit
             this.comboBoxExtension = new System.Windows.Forms.ComboBox();
             this.labelExtension = new System.Windows.Forms.Label();
             this.checkBoxDisableWelcomeForm = new System.Windows.Forms.CheckBox();
-            this.btBrowseDepot = new System.Windows.Forms.Button();
             this.lblDepot = new System.Windows.Forms.Label();
             this.txDepot = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
@@ -254,17 +253,6 @@ namespace WolvenKit
             this.checkBoxDisableWelcomeForm.Text = "Disable Welcome Form";
             this.checkBoxDisableWelcomeForm.UseVisualStyleBackColor = true;
             // 
-            // btBrowseDepot
-            // 
-            this.btBrowseDepot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btBrowseDepot.Location = new System.Drawing.Point(480, 106);
-            this.btBrowseDepot.Name = "btBrowseDepot";
-            this.btBrowseDepot.Size = new System.Drawing.Size(75, 23);
-            this.btBrowseDepot.TabIndex = 22;
-            this.btBrowseDepot.Text = "Browse...";
-            this.btBrowseDepot.UseVisualStyleBackColor = true;
-            this.btBrowseDepot.Click += new System.EventHandler(this.btBrowseDepot_Click);
-            // 
             // lblDepot
             // 
             this.lblDepot.AutoSize = true;
@@ -291,7 +279,6 @@ namespace WolvenKit
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
             this.ClientSize = new System.Drawing.Size(588, 343);
-            this.Controls.Add(this.btBrowseDepot);
             this.Controls.Add(this.lblDepot);
             this.Controls.Add(this.txDepot);
             this.Controls.Add(this.checkBoxDisableWelcomeForm);
@@ -346,7 +333,6 @@ namespace WolvenKit
         private ComboBox comboBoxExtension;
         private Label labelExtension;
         private CheckBox checkBoxDisableWelcomeForm;
-        private Button btBrowseDepot;
         private Label lblDepot;
         private TextBox txDepot;
     }
