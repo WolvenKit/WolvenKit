@@ -1623,28 +1623,16 @@ namespace WolvenKit
 
                 //------------------------- COOKING -------------------------------------//
                 #region Cooking
-                int statusCookCol = -1;
-                int statusCookTex = -1;
+                int statusCook = -1;
 
-                //// cook Textures
-                //var taskCookTex = Task.Run(() => vm.Cook(EBundleType.TextureCache));
-                //await taskCookTex.ContinueWith(antecedent =>
-                //{
-                //    //Logger.LogString($"Cooking Textures ended with status: {antecedent.Result}", Logtype.Important);
-                //    statusCookTex = antecedent.Result;
-                //});
-                //if (statusCookTex == 0)
-                //    Logger.LogString("Cooking textures finished with errors. \n", Logtype.Error);
-
-
-                // cook Collision
+                // cook uncooked files
                 var taskCookCol = Task.Run(() => vm.Cook());
                 await taskCookCol.ContinueWith(antecedent =>
                 {
                     //Logger.LogString($"Cooking Collision ended with status: {antecedent.Result}", Logtype.Important);
-                    statusCookCol = antecedent.Result;
+                    statusCook = antecedent.Result;
                 });
-                if (statusCookCol == 0)
+                if (statusCook == 0)
                     Logger.LogString("Cooking collision finished with errors. \n", Logtype.Error);
 
                 #endregion
@@ -1657,13 +1645,12 @@ namespace WolvenKit
                     Logger.LogString($"======== Adding cooked mod files ======== \n", Logtype.Important);
                     try
                     {
-                        string uncookedmoddir = Path.Combine(ActiveMod.ModDirectory, EBundleType.Bundle.ToString());
-                        var di = new DirectoryInfo(uncookedmoddir);
+                        var di = new DirectoryInfo(ActiveMod.ModCookedDirectory);
                         var files = di.GetFiles("*", SearchOption.AllDirectories);
                         Logger.LogString($"Found {files.Length} files in {di.FullName}. \n");
                         foreach (var fi in files)
                         {
-                            string relpath = fi.FullName.Substring(uncookedmoddir.Length + 1);
+                            string relpath = fi.FullName.Substring(ActiveMod.ModCookedDirectory.Length + 1);
                             string newpath = Path.Combine(ActiveMod.CookedModDirectory, relpath);
 
                             if (File.Exists(newpath))
@@ -1673,6 +1660,7 @@ namespace WolvenKit
                             }
 
                             fi.CopyToAndCreate(newpath);
+                            Logger.LogString($"Copied file to cooked directory: {fi.FullName}. \n", Logtype.Normal);
                         }
                     }
                     catch (Exception)
@@ -1691,13 +1679,12 @@ namespace WolvenKit
                     Logger.LogString($"======== Adding cooked dlc files ======== \n", Logtype.Important);
                     try
                     {
-                        var uncookeddlcdir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.Bundle.ToString());
-                        var di = new DirectoryInfo(uncookeddlcdir);
+                        var di = new DirectoryInfo(ActiveMod.DlcCookedDirectory);
                         var files = di.GetFiles("*", SearchOption.AllDirectories);
                         Logger.LogString($"Found {files.Length} files in {di.FullName}. \n");
                         foreach (var fi in files)
                         {
-                            string relpath = fi.FullName.Substring(uncookeddlcdir.Length + 1);
+                            string relpath = fi.FullName.Substring(ActiveMod.DlcCookedDirectory.Length + 1);
                             string newpath = Path.Combine(ActiveMod.CookedDlcDirectory, relpath);
 
                             if (File.Exists(newpath))
@@ -1707,6 +1694,7 @@ namespace WolvenKit
                             }
 
                             fi.CopyToAndCreate(newpath);
+                            Logger.LogString($"Copied file to cooked directory: {fi.FullName}. \n", Logtype.Normal);
                         }
                     }
                     catch (Exception)
@@ -1723,9 +1711,6 @@ namespace WolvenKit
                 //------------------------- PACKING -------------------------------------//
                 #region Packing
                 int statusPack = -1;
-                int statusMetaData = -1;
-                int statusCol = -1;
-                int statusTex = -1;
 
                 //Handle bundle packing.
                 if (packsettings.PackBundles.Item1 || packsettings.PackBundles.Item2)
@@ -1750,6 +1735,8 @@ namespace WolvenKit
                 //------------------------ METADATA -------------------------------------//
                 #region Metadata
                 //Handle metadata generation.
+                int statusMetaData = -1;
+
                 if (packsettings.GenMetadata.Item1 || packsettings.GenMetadata.Item2)
                 {
                     if (statusPack == 1)
@@ -1772,8 +1759,8 @@ namespace WolvenKit
 
                 //---------------------------- CACHES -----------------------------------//
                 #region Buildcache
-                // always call wcc buildcache
-                // checks are in GenerateCache()
+                int statusCol = -1;
+                int statusTex = -1;
 
                 //Generate collision cache
                 if (packsettings.GenCollCache.Item1 || packsettings.GenCollCache.Item2)

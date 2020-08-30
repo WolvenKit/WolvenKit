@@ -40,7 +40,6 @@ namespace WolvenKit
 
 
             checkBoxDisableWelcomeForm.Checked = config.IsWelcomeFormDisabled;
-            checkBoxOverflow.Checked = config.OverflowEnabled;
             
             comboBoxTheme.Items.AddRange(Enum.GetValues(typeof(EColorThemes)).Cast<object>().ToArray());
             comboBoxTheme.SelectedItem = UIController.Get().Configuration.ColorTheme;
@@ -105,7 +104,6 @@ namespace WolvenKit
             config.VoiceLanguage = txVoiceLanguage.Text;
             config.UncookExtension = (EUncookExtension)comboBoxExtension.SelectedItem;
             config.IsWelcomeFormDisabled = checkBoxDisableWelcomeForm.Checked;
-            config.OverflowEnabled = checkBoxOverflow.Checked;
 
             uiconfig.ColorTheme = (EColorThemes)comboBoxTheme.SelectedItem;
 
@@ -152,32 +150,34 @@ namespace WolvenKit
                     {
                         case wcc_sha256:
                         {
-                            if (MessageBox.Show(@"wcc_lite is a great tool by CD Projekt red but
-due to some internal problems they didn't really have time to properly develop it.
-Due to this the tool takes an age to start up since it is searching for a CD Projekt red mssql server.
-WolvenKit can patch this with a method figured out by blobbins on the witcher 3 forums.
-Would you like to perform this patch?", "wcc_lite faster patch", MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
+                            if (MessageBox.Show("wcc_lite is a great tool by CD Projekt red but" +
+                                        "due to some internal problems they didn't really have time to properly develop it, and is very slow " +
+                                        "because it is searching for a CD Projekt red mssql server.\n" +
+                                        "WolvenKit can patch this with a method figured out by blobbins on the witcher 3 forums." +
+                                        "Would you like to perform this patch?", "wcc_lite faster patch", MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
                                 DialogResult.Yes)
                             {
                                 //We perform the patch
                                 bw.BaseStream.Seek(0x00713CD0, SeekOrigin.Begin);
                                 bw.Write(new byte[0xDD].Select(x => x = 0x90).ToArray());
-                            }
 
-                            //Recompute hash
-                            fs.Seek(0, SeekOrigin.Begin);
-                            shawcc = SHA256.Create().ComputeHash(fs).Aggregate("", (c, n) => c += n.ToString("x2"));
-                            if (shawcc == wcc_sha256_patched)
-                            {
-                                MessageBox.Show("Succesfully patched!", "Patch completed", MessageBoxButtons.OK,
-                                    MessageBoxIcon.Information);
+                                //Recompute hash
+                                fs.Seek(0, SeekOrigin.Begin);
+                                shawcc = SHA256.Create().ComputeHash(fs).Aggregate("", (c, n) => c += n.ToString("x2"));
+                                if (shawcc == wcc_sha256_patched)
+                                {
+                                    MessageBox.Show("Succesfully patched!", "Patch completed", MessageBoxButtons.OK,
+                                        MessageBoxIcon.Information);
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Failed to patch! Please reinstall wcc_lite and try again",
+                                        "Patch completed", MessageBoxButtons.OK,
+                                        MessageBoxIcon.Error);
+                                }
                             }
-                            else
-                            {
-                                MessageBox.Show("Failed to patch! Please reinstall wcc_lite and try again",
-                                    "Patch completed", MessageBoxButtons.OK,
-                                    MessageBoxIcon.Error);
-                            }
+                            
+                            
 
                             break;
                         }

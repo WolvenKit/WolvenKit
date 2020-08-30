@@ -347,20 +347,10 @@ namespace WolvenKit.App.ViewModels
                         Logger.LogString($"Unable to move uncooked file to ModProject, perhaps a file of that name is cuurrently open in Wkit.", Logtype.Error);
                     }
                 }
-
-                // move all files to depot
-                if (MainController.Get().Configuration.OverflowEnabled)
-                {
-                    string frelativePath = f.FullName.Substring(outdir.Length + 1);
-                    string depotdir = MainController.Get().Configuration.DepotPath;
-
-                    f.CopyToAndCreate(Path.Combine(depotdir, frelativePath), true);
-                    addedFilesCount++;
-                }
             }
 
             // Logging
-            Logger.LogString($"Moved {addedFilesCount} files to depot.", Logtype.Important);
+            Logger.LogString($"Moved {addedFilesCount} files to project.", Logtype.Important);
             if (uncookedFilesCount > 0)
                 Logger.LogString($"Successfully uncooked {uncookedFilesCount} files.", Logtype.Success);
             else
