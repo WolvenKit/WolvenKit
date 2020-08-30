@@ -28,26 +28,26 @@ namespace WolvenKit.Common.Wcc
             }
         }
 
-        public static string RawExtensionToCacheType(string ext)
-        {
-            ext = ext.ToLower();
-            switch (ext)
-            {
-                case ".apb": 
-                case ".nxs": 
-                    return EBundleType.CollisionCache.ToString();
-                case ".png": 
-                case ".bmp": 
-                case ".jpg": 
-                case ".tga": 
-                case ".dds":
-                    return EBundleType.TextureCache.ToString();
-                case ".re": 
-                case ".fbx": 
-                    return EBundleType.Bundle.ToString();
-                default: return "";
-            }
-        }
+        //public static string RawExtensionToCacheType(string ext)
+        //{
+        //    ext = ext.ToLower();
+        //    switch (ext)
+        //    {
+        //        case ".apb": 
+        //        case ".nxs": 
+        //            return EBundleType.CollisionCache.ToString();
+        //        case ".png": 
+        //        case ".bmp": 
+        //        case ".jpg": 
+        //        case ".tga": 
+        //        case ".dds":
+        //            return EBundleType.TextureCache.ToString();
+        //        case ".re": 
+        //        case ".fbx": 
+        //            return EBundleType.Bundle.ToString();
+        //        default: return "";
+        //    }
+        //}
 
         public static Enum RawExtensionToEnum(string ext)
         {
@@ -70,23 +70,23 @@ namespace WolvenKit.Common.Wcc
             }
         }
 
-        public static string REDExtensionToCacheType(string ext)
-        {
-            ext = ext.ToLower();
-            switch (ext)
-            {
-                case ".redcloth":
-                case ".redapex":
-                    return EBundleType.CollisionCache.ToString();
-                case ".xbm":
-                case ".w2cube":
-                    return EBundleType.TextureCache.ToString();
-                case ".w2mesh":
-                    return EBundleType.CollisionCache.ToString();
-                default: 
-                    return EBundleType.CollisionCache.ToString();
-            }
-        }
+        //public static string REDExtensionToCacheType(string ext)
+        //{
+        //    ext = ext.ToLower();
+        //    switch (ext)
+        //    {
+        //        case ".redcloth":
+        //        case ".redapex":
+        //            return EBundleType.CollisionCache.ToString();
+        //        case ".xbm":
+        //        case ".w2cube":
+        //            return EBundleType.TextureCache.ToString();
+        //        case ".w2mesh":
+        //            return EBundleType.CollisionCache.ToString();
+        //        default: 
+        //            return EBundleType.CollisionCache.ToString();
+        //    }
+        //}
 
         public static EImportable ExportExtensionToRawExtension(EExportable ext)
         {

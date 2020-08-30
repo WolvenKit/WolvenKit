@@ -183,7 +183,6 @@ namespace WolvenKit.App.ViewModels
                 string importext = $".{file.ImportType:G}";
                 string rawext = $".{file.GetImportableType():G}";
                 var filepath = Path.Combine(importdepot.FullName, relPath);
-                string type = REDTypes.RawExtensionToCacheType(rawext);
 
                 // make new path
                 // first, trim Raw from the path
@@ -203,16 +202,7 @@ namespace WolvenKit.App.ViewModels
 
                 // new path with new extension
                 relPath = Path.ChangeExtension(relPath, importext);
-
-                var newpath = "";
-                if (relPath.Substring(0, type.Length) == type)
-                {
-                    newpath = isDLC ? Path.Combine(ActiveMod.DlcDirectory, relPath) : Path.Combine(ActiveMod.ModDirectory, relPath);
-                }
-                else
-                {
-                    newpath = isDLC ? Path.Combine(ActiveMod.DlcDirectory, type, relPath) : Path.Combine(ActiveMod.ModDirectory, type, relPath);
-                }
+                var newpath = isDLC ? Path.Combine(ActiveMod.DlcUncookedDirectory, relPath) : Path.Combine(ActiveMod.ModUncookedDirectory, relPath);
 
                 var import = new Wcc_lite.import()
                 {

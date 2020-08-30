@@ -46,7 +46,11 @@ namespace WolvenKit
         // Color Themes
         public VisualStudioToolStripExtender ToolStripExtender { get; set; }
         private readonly List<ThemeBase> _themesList = new List<ThemeBase>() { new VS2015LightTheme(), new VS2015DarkTheme(), new VS2015BlueTheme() };
-        public static ThemeBase GetTheme() => Get()._themesList[(int)Get().Configuration.ColorTheme];
+        public static ThemeBase GetTheme()
+        {
+            return Get()._themesList[(int)Get().Configuration.ColorTheme];
+        }
+
         public static DockPanelColorPalette GetPalette() => GetTheme().ColorPalette;
 
         /// <summary>

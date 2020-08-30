@@ -23,9 +23,9 @@ namespace WolvenKit
             InitializeComponent();
 
             // Textures
-            if (Directory.GetFiles(activemod.ModTextureCacheDirectory, "*", SearchOption.AllDirectories).Any())
+            if (Directory.GetFiles(activemod.ModUncookedDirectory, "*.xbm", SearchOption.AllDirectories).Any())
                 modTEX.Checked = true;
-            if (Directory.GetFiles(activemod.DlcTextureCacheDirectory, "*", SearchOption.AllDirectories).Any())
+            if (Directory.GetFiles(activemod.DlcUncookedDirectory, "*.xbm", SearchOption.AllDirectories).Any())
                 dlcTEX.Checked = true;
 
             // Sound

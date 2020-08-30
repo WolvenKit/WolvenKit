@@ -36,7 +36,12 @@ namespace WolvenKit.Forms
         {
             if (e.PropertyName == nameof(viewModel.Importableobjects))
             {
-                this.objectListView.SetObjects(viewModel.Importableobjects);
+                if (objectListView.IsDisposed)
+                {
+
+                }
+                else
+                    this.objectListView.SetObjects(viewModel.Importableobjects);
             }
         }
 

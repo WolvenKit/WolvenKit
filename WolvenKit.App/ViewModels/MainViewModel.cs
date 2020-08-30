@@ -210,12 +210,12 @@ namespace WolvenKit.App.ViewModels
         #endregion
 
         #region WCC TASKS
-        public async Task DumpFile(string folder, string outfolder, string file="")
+        public async Task DumpFile(string folder, string outfolder, string file = "")
         {
             WCC_Command cmd = null;
             try
             {
-                if (file=="")
+                if (file == "")
                 {
                     cmd = new Wcc_lite.dumpfile()
                     {
@@ -296,7 +296,7 @@ namespace WolvenKit.App.ViewModels
             if (Directory.Exists(outdir))
                 Directory.Delete(outdir, true);
             Directory.CreateDirectory(outdir);
-            
+
             var di = new DirectoryInfo(outdir);
 
             // try get uncook extension from settings
@@ -330,7 +330,7 @@ namespace WolvenKit.App.ViewModels
             {
                 if (f.Name.Contains(Path.GetFileName(relativePath)))
                 {
-                    
+
                     try
                     {
                         if (File.Exists(newpath))
@@ -347,7 +347,7 @@ namespace WolvenKit.App.ViewModels
                         Logger.LogString($"Unable to move uncooked file to ModProject, perhaps a file of that name is cuurrently open in Wkit.", Logtype.Error);
                     }
                 }
-                
+
                 // move all files to depot
                 if (MainController.Get().Configuration.OverflowEnabled)
                 {
@@ -365,20 +365,20 @@ namespace WolvenKit.App.ViewModels
                 Logger.LogString($"Successfully uncooked {uncookedFilesCount} files.", Logtype.Success);
             else
                 Logger.LogString($"Wcc_lite is unable to uncook this file.", Logtype.Error);
-            
+
 
             return uncookedFilesCount;
         }
 
         /// <summary>
         /// Unbundles a file with the given relativepath from either the Game or the Mod BundleManager
+        /// and adds it to the depot, optionally copying to the project
         /// </summary>
         /// <param name="relativePath"></param>
-        /// <param name="addAsDLC"></param>
         /// <param name="loadmods"></param>
         /// <param name="copyToMod"></param>
         /// <returns></returns>
-        public int UnbundleFileToDepot(string relativePath, bool addAsDLC, bool loadmods = false, bool copyToMod = false, EBundleType bundleType = EBundleType.Bundle)
+        public int UnbundleFileToProject(string relativePath, bool isDLC, bool loadmods = false, EBundleType bundleType = EBundleType.Bundle)
         {
             string extension = Path.GetExtension(relativePath);
             string filename = Path.GetFileName(relativePath);
@@ -391,50 +391,16 @@ namespace WolvenKit.App.ViewModels
                     .Select(y => new KeyValuePair<string, IWitcherFile>(y.Bundle.FileName, y))
                     .ToList();
 
-                string depotpath = Path.Combine(MainController.Get().Configuration.DepotPath, relativePath);
 
                 // Extract
                 try
                 {
                     // if more than one archive get the last
                     var archive = archives.Last().Value;
-                    string extractedfile = archive.Extract(new BundleFileExtractArgs(depotpath, MainController.Get().Configuration.UncookExtension));
-                    var newrelativePath = extractedfile.Substring(MainController.Get().Configuration.DepotPath.Length + 1);
+
+                    string newpath = Path.Combine(isDLC ? ActiveMod.DlcCookedDirectory : ActiveMod.ModCookedDirectory, relativePath);
+                    string extractedfile = archive.Extract(new BundleFileExtractArgs(newpath, MainController.Get().Configuration.UncookExtension));
                     Logger.LogString($"Succesfully unbundled {filename}.", Logtype.Success);
-
-                    if (copyToMod)
-                    {
-                        string newpath;
-                        // Texture and Collision Caches go into Raw (except for pngs, jpgs, and dds)
-                        if ((archive.Bundle.TypeName == EBundleType.CollisionCache
-                            || archive.Bundle.TypeName == EBundleType.TextureCache))
-                        {
-                            // add pngs, jpgs and dds directly to TextureCache (not Raw, since they don't get imported)
-                            if (extension == ".png" || extension == ".jpg" || extension == ".dds")
-                            {
-                                newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                                    ? Path.Combine("DLC", archive.Bundle.TypeName.ToString(), "dlc", ActiveMod.Name, newrelativePath)
-                                    : Path.Combine("Mod", archive.Bundle.TypeName.ToString(), newrelativePath));
-                            }
-                            // all other textures and collision stuff goes into Raw (since they have to be imported first)
-                            else
-                                newpath = Path.Combine(ActiveMod.RawDirectory, addAsDLC
-                                    ? Path.Combine("DLC", "dlc", ActiveMod.Name, newrelativePath)
-                                    : Path.Combine("Mod", newrelativePath));
-                        }
-                        else
-                        {
-                            newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                            ? Path.Combine("DLC", archive.Bundle.TypeName.ToString(), "dlc", ActiveMod.Name, newrelativePath)
-                            : Path.Combine("Mod", archive.Bundle.TypeName.ToString(), newrelativePath));
-                        }
-
-                        var fi = new FileInfo(extractedfile);
-                        if (fi.Exists && !File.Exists(newpath))
-                        {
-                            fi.CopyToAndCreate(newpath);
-                        }
-                    }
 
                     return 1;
                 }
@@ -448,7 +414,7 @@ namespace WolvenKit.App.ViewModels
 
             return 0;
         }
-        
+
         /// <summary>
         /// Exports an existing file in the ModProject (w2mesh, redcloth) to the modProject
         /// </summary>
@@ -484,7 +450,7 @@ namespace WolvenKit.App.ViewModels
             exportpath = Path.ChangeExtension(exportpath, exportedExtension.ToString());
 
             // check imports
-            await AddAllImportsToDepot(fullpath);
+            AddAllImportsToProject(fullpath);
 
             // copy the w2mesh and all imports to the depot if it doesn't already exist
             var depotInfo = new FileInfo(Path.Combine(MainController.Get().Configuration.DepotPath, relativePath));
@@ -517,11 +483,12 @@ namespace WolvenKit.App.ViewModels
         /// <param name="fullpath"></param>
         /// <param name="copyToMod"></param>
         /// <returns></returns>
-        public async Task AddAllImportsToDepot(string fullpath, bool copyToMod = false)
+        public async Task AddAllImportsToProject(string fullpath, bool copyToMod = false)
         {
             if (!File.Exists(fullpath))
                 return;
 
+            (string relativepath, bool isDLC) = fullpath.GetModRelativePath(ActiveMod.FileDirectory);
             List<CR2WImportWrapper> importslist = new List<CR2WImportWrapper>();
             List<CR2WBufferWrapper> bufferlist = new List<CR2WBufferWrapper>();
             bool hasinternalBuffer;
@@ -536,55 +503,11 @@ namespace WolvenKit.App.ViewModels
             // add imports
             foreach (CR2WImportWrapper import in importslist)
             {
-                var relativepath = import.DepotPathStr;
                 var filename = Path.GetFileName(import.DepotPathStr);
-                var depotpath = Path.Combine(MainController.Get().Configuration.DepotPath, relativepath);
-                var fi = new FileInfo(depotpath);
 
-                // if import is not in depot, uncook to depot
-                if (!fi.Exists)
-                {
-                    //Logger.LogString($"Missing import {depotpath}! ", Logtype.Error);
-                    Logger.LogString($"Uncooking missing import {relativepath} and adding to depot ...", Logtype.Important);
-                    bool success = await Task.Run(() => UncookFileToMod(relativepath, depotpath, Path.GetFullPath(MainController.Get().Configuration.GameRootDir))) > 0;
-
-                    if (!success)
-                    {
-                        Logger.LogString($"Did not uncook {filename}, trying to extract file instead of uncooking.", Logtype.Important);
-
-                        success = UnbundleFileToDepot(relativepath, false, false, copyToMod) > 0;
-                        if (!success)
-                        {
-                            Logger.LogString($"Did not unbundle {filename}, import is missing.", Logtype.Error);
-                        }
-                    }
-                }
-
-                // for xbms add tgas etc to Raw
-                if (fi.Extension == "xbm" || fi.Extension == ".xbm")
-                {
-                    var success = UnbundleFileToDepot(relativepath, false, false, copyToMod, EBundleType.TextureCache) > 0;
-                    if (!success)
-                        Logger.LogString($"Did not unbundle {filename}, import is missing.", Logtype.Error);
-                    else
-                        Logger.LogString($"Succesfully unbundled {filename}.", Logtype.Success);
-                }
-
-                // add to mod
-                if (copyToMod)
-                {
-                    if (fi.Exists)
-                    {
-                        string destinationpath = Path.Combine(ActiveMod.ModCookedDirectory, relativepath);
-                        if (!File.Exists(destinationpath))
-                        {
-                            fi.CopyToAndCreate(destinationpath);
-                            Logger.LogString($"Succesfully added {filename} to mod project.", Logtype.Success);
-                        }
-                    }
-                    else
-                        Logger.LogString($"Could not find {filename} to import.", Logtype.Error);
-                }
+                var success = UnbundleFileToProject(import.DepotPathStr, isDLC, false) > 0;
+                if (!success)
+                    Logger.LogString($"Did not unbundle {filename}, import is missing.", Logtype.Error);
             }
 
             // add buffers
@@ -597,21 +520,17 @@ namespace WolvenKit.App.ViewModels
                 // unbundle external buffers
                 foreach (CR2WBufferWrapper buffer in bufferlist)
                 {
-                    (string relativepath, bool isDLC) = fullpath.GetModRelativePath(ActiveMod.FileDirectory);
-                    
                     var index = buffer.Buffer.index;
                     string bufferpath = $"{relativepath}.{index}.buffer";
                     var bufferName = $"{Path.GetFileName(relativepath)}.{index}.buffer";
 
-                    var success = UnbundleFileToDepot(bufferpath, false, false, copyToMod, EBundleType.Bundle) > 0;
+                    var success = UnbundleFileToProject(bufferpath, isDLC, false, EBundleType.Bundle) > 0;
                     if (!success)
                         Logger.LogString($"Did not unbundle {bufferName}, import is missing.", Logtype.Error);
                     else
                         Logger.LogString($"Succesfully unbundled {bufferName}.", Logtype.Success);
                 }
             }
-            
-
         }
 
         #endregion
@@ -751,7 +670,7 @@ namespace WolvenKit.App.ViewModels
                     }
                 }
             }
-            
+
             #endregion
         }
 
@@ -761,7 +680,7 @@ namespace WolvenKit.App.ViewModels
         /// </summary>
         /// <param name="cachetype"></param>
         /// <returns></returns>
-        public async Task<int> Cook(EBundleType cachetype)
+        public async Task<int> Cook()
         {
             var cfg = MainController.Get().Configuration;
             string dlc_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "dlc.files.cook.db");
@@ -769,66 +688,40 @@ namespace WolvenKit.App.ViewModels
             string mod_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "mod.files.cook.db");
             string mod_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "mod.textures.cook.db");
 
-            var uncookedmoddir = Path.Combine(ActiveMod.ModDirectory, cachetype.ToString());
-            var uncookeddlcdir = Path.Combine(ActiveMod.DlcDirectory, cachetype.ToString());
-
             int finished = 1;
 
-            // Run wcc_lite
-            if (Directory.Exists(uncookedmoddir) && Directory.GetFiles(uncookedmoddir, "*", SearchOption.AllDirectories).Any() 
+            // Cook Mod files
+            if (Directory.Exists(ActiveMod.ModUncookedDirectory) && Directory.GetFiles(ActiveMod.ModUncookedDirectory, "*", SearchOption.AllDirectories).Any()
                 && !string.IsNullOrEmpty(ActiveMod.CookedModDirectory))
             {
-                finished *= await Task.Run(() => CookInternal(uncookedmoddir, ActiveMod.CookedModDirectory));
+                finished *= await Task.Run(() => CookInternal(ActiveMod.ModUncookedDirectory, ActiveMod.CookedModDirectory));
 
                 if (!string.IsNullOrEmpty(ActiveMod.CookedModDirectory))
                 {
                     var moddb = new FileInfo(Path.Combine(ActiveMod.CookedModDirectory, "cook.db"));
                     if (moddb.Exists)
                     {
-                        switch (cachetype)
-                        {
-                            case EBundleType.Bundle:
-                                break;
-                            case EBundleType.CollisionCache:
-                                moddb.MoveTo(Path.Combine(mod_files_db, "cook.db"));
-                                break;
-                            case EBundleType.TextureCache:
-                                moddb.MoveTo(Path.Combine(mod_tex_db, "cook.db"));
-                                break;
-                            default:
-                                break;
-                        }
+                        moddb.MoveTo(Path.Combine(mod_files_db, "cook.db"));
                     }
                 }
             }
 
-            if (Directory.Exists(uncookeddlcdir) && Directory.GetFiles(uncookeddlcdir, "*", SearchOption.AllDirectories).Any() 
+            // Cook DLC files
+            if (Directory.Exists(ActiveMod.DlcUncookedDirectory) && Directory.GetFiles(ActiveMod.DlcUncookedDirectory, "*", SearchOption.AllDirectories).Any()
                 && !string.IsNullOrEmpty(ActiveMod.CookedDlcDirectory))
             {
-                finished *= await Task.Run(() => CookInternal(uncookeddlcdir, ActiveMod.CookedDlcDirectory, true));
-                
+                finished *= await Task.Run(() => CookInternal(ActiveMod.DlcUncookedDirectory, ActiveMod.CookedDlcDirectory, true));
+
                 if (!string.IsNullOrEmpty(ActiveMod.CookedDlcDirectory))
                 {
                     var dlcdb = new FileInfo(Path.Combine(ActiveMod.CookedDlcDirectory, "cook.db"));
                     if (dlcdb.Exists)
                     {
-                        switch (cachetype)
-                        {
-                            case EBundleType.Bundle:
-                                break;
-                            case EBundleType.CollisionCache:
-                                dlcdb.MoveTo(Path.Combine(dlc_files_db, "cook.db"));
-                                break;
-                            case EBundleType.TextureCache:
-                                dlcdb.MoveTo(Path.Combine(dlc_tex_db, "cook.db"));
-                                break;
-                            default:
-                                break;
-                        }
+                        dlcdb.MoveTo(Path.Combine(dlc_files_db, "cook.db"));
                     }
                 }
             }
-            
+
 
             return finished == 0 ? 0 : 1;
 
@@ -840,8 +733,8 @@ namespace WolvenKit.App.ViewModels
                 {
                     if (Directory.Exists(dir_uncooked) && Directory.GetFiles(dir_uncooked, "*", SearchOption.AllDirectories).Any())
                     {
-                        Logger.LogString($"======== Cooking {type} {cachetype} ======== \n", Logtype.Important);
-                        MainController.Get().ProjectStatus = $"Cooking {type} {cachetype}";
+                        Logger.LogString($"======== Cooking {type} ======== \n", Logtype.Important);
+                        MainController.Get().ProjectStatus = $"Cooking {type}";
 
                         if (!Directory.Exists(dir_cooked))
                         {
@@ -855,49 +748,25 @@ namespace WolvenKit.App.ViewModels
                         };
 
 
-                        switch (cachetype)
+                        if (dlc)
                         {
-                            
-                            case EBundleType.CollisionCache: // legacy name, should be called Uncooked
-                                {
-                                    if (dlc)
-                                    {
-                                        // actually look up the trimdir
-
-
-                                        cook.trimdir = ActiveMod.GetDLCRelativePath();
-                                        var seeddir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked", $"seed.dlc{ActiveMod.Name}.files");
-                                        cook.seed = seeddir;
-                                    }
-                                    else
-                                    {
-                                        cook.mod = dir_uncooked;
-                                        cook.basedir = dir_uncooked; //cfg.DepotPath?
-                                    }
-                                }
-                                break;
-                            case EBundleType.TextureCache:
-                                {
-                                    cook.mod = dir_uncooked;
-                                    cook.basedir = dir_uncooked; //cfg.DepotPath?
-                                }
-                                break;
-                            case EBundleType.Bundle:
-                            case EBundleType.SoundCache:
-                            case EBundleType.Speech:
-                            case EBundleType.Shader:
-                            case EBundleType.ANY:
-                            default:
-                                break;
+                            cook.trimdir = ActiveMod.GetDLCRelativePath();
+                            var seeddir = Path.Combine(ActiveMod.ProjectDirectory, @"cooked", $"seed.dlc{ActiveMod.Name}.files");
+                            cook.seed = seeddir;
                         }
-                        
+                        else
+                        {
+                            cook.mod = dir_uncooked;
+                            cook.basedir = dir_uncooked; //cfg.DepotPath?
+                        }
+
                         return await Task.Run(() => MainController.Get().WccHelper.RunCommand(cook));
                     }
                     else return -1;
                 }
                 catch (DirectoryNotFoundException)
                 {
-                    Logger.LogString($"{type} {cachetype} folder not found. {type} won't be cooked. \n", Logtype.Important);
+                    Logger.LogString($"{type} folder not found. {type} won't be cooked. \n", Logtype.Important);
                     return -1;
                 }
                 catch (Exception ex)
@@ -914,10 +783,10 @@ namespace WolvenKit.App.ViewModels
         /// </summary>
         public async Task<int> Pack(bool packmod, bool packdlc)
         {
-            
+
             int finished = 1;
 
-            if(packmod && Directory.Exists(ActiveMod.CookedModDirectory) && Directory.Exists(ActiveMod.PackedModDirectory))
+            if (packmod && Directory.Exists(ActiveMod.CookedModDirectory) && Directory.Exists(ActiveMod.PackedModDirectory))
                 finished *= await Task.Run(() => PackBundleInternal(ActiveMod.CookedModDirectory, ActiveMod.PackedModDirectory));
             if (packdlc && Directory.Exists(ActiveMod.CookedDlcDirectory) && Directory.Exists(ActiveMod.PackedDlcDirectory))
                 finished *= await Task.Run(() => PackBundleInternal(ActiveMod.CookedDlcDirectory, ActiveMod.PackedDlcDirectory, true));
@@ -962,7 +831,7 @@ namespace WolvenKit.App.ViewModels
         /// </summary>
         /// <returns></returns>
         public async Task<int> CreateMetaData(bool packmod, bool dlcmod)
-        {            
+        {
             int finished = 1;
 
             if (packmod && Directory.Exists(ActiveMod.PackedModDirectory))
@@ -1017,13 +886,11 @@ namespace WolvenKit.App.ViewModels
         public async Task<int> GenerateCache(EBundleType cachetype, bool packmod, bool packdlc)
         {
             string dlc_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "dlc.files.cook.db");
-            string dlc_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "dlc.textures.cook.db");
             string mod_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "mod.files.cook.db");
-            string mod_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "mod.textures.cook.db");
-            string moddbfile = ""; 
-            string dlcdbfile = "";
-            string modbasedir = "";
-            string dlcbasedir = "";
+            string moddbfile = Path.Combine(mod_files_db, "cook.db");
+            string dlcdbfile = Path.Combine(dlc_files_db, "cook.db");
+            string modbasedir = ActiveMod.ModUncookedDirectory;
+            string dlcbasedir = MainController.Get().Configuration.DepotPath;
 
 
             cachebuilder cbuilder = cachebuilder.textures;
@@ -1031,36 +898,22 @@ namespace WolvenKit.App.ViewModels
 
             switch (cachetype)
             {
-                case EBundleType.CollisionCache:
-                    {
-                        cbuilder = cachebuilder.physics;
-                        filename = "collision.cache";
-                        moddbfile = Path.Combine(mod_files_db, "cook.db");
-                        dlcdbfile = Path.Combine(dlc_files_db, "cook.db");
-                        modbasedir = Path.Combine(ActiveMod.ModDirectory, cachetype.ToString());
-                        dlcbasedir = MainController.Get().Configuration.DepotPath;
-                    }
-                    break;
                 case EBundleType.TextureCache:
                     {
                         cbuilder = cachebuilder.textures;
                         filename = "texture.cache";
-                        moddbfile = Path.Combine(mod_tex_db, "cook.db");
-                        dlcdbfile = Path.Combine(dlc_tex_db, "cook.db");
-                        modbasedir = Path.Combine(ActiveMod.ModDirectory, cachetype.ToString());
-                        dlcbasedir = Path.Combine(ActiveMod.DlcDirectory, cachetype.ToString());
                     }
                     break;
-                //case EBundleType.Shader:
-                //    {
-                //        cbuilder = cachebuilder.shaders;
-                //        filename = "shader.cache";
-                //    }
-                //    break;
-            default:
+                case EBundleType.CollisionCache:
+                    {
+                        cbuilder = cachebuilder.physics;
+                        filename = "collision.cache";
+                    }
+                    break;
+                default:
                     throw new NotImplementedException();
             }
-            
+
             int finished = 1;
 
             if (packmod)
@@ -1153,14 +1006,11 @@ namespace WolvenKit.App.ViewModels
         /// </summary>
         public void CreateVirtualLinks()
         {
-            string modname = ActiveMod.Name;
-            var uncookeddlcdir = Path.Combine(ActiveMod.DlcDirectory, EBundleType.CollisionCache.ToString());
-
             if (string.IsNullOrEmpty(ActiveMod.GetDLCName()))
                 return;
 
             string r4link = $"{MainController.Get().Configuration.DepotPath}\\dlc\\{ActiveMod.GetDLCName()}";
-            string projlink = $"{uncookeddlcdir}\\dlc\\{ActiveMod.GetDLCName()}";
+            string projlink = $"{ActiveMod.DlcUncookedDirectory}\\dlc\\{ActiveMod.GetDLCName()}";
 
 
             if (Directory.Exists(r4link))
