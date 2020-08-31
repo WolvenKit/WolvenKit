@@ -641,13 +641,12 @@ namespace WolvenKit.App.ViewModels
         /// </summary>
         public void CleanupDirectories()
         {
+            // cleanup packed folders
+            CleanupInner(Path.Combine(ActiveMod.ProjectDirectory, "packed"));
 
-            CleanupInner(ActiveMod.PackedModDirectory);
-            if (!string.IsNullOrEmpty(ActiveMod.GetDLCName()))
-                CleanupInner(ActiveMod.PackedDlcDirectory);
-            CleanupInner(ActiveMod.CookedModDirectory);
-            if (!string.IsNullOrEmpty(ActiveMod.GetDLCName()))
-                CleanupInner(ActiveMod.CookedDlcDirectory);
+            // cleanup cooked folders
+            CleanupInner(Path.Combine(ActiveMod.ProjectDirectory, "cooked"));
+
 
             // delete existing cook dbs
             string dlc_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "dlc.files.cook.db");

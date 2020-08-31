@@ -2897,7 +2897,11 @@ namespace WolvenKit.CR2W.Types
             MEVT_WindDirectionZ,
             MEVT_SkyboxWeatherBlend,
             MEVT_CloudsShadowIntensity,
-            MEVT_MorphBlendRatio
+            MEVT_MorphBlendRatio,
+            MEVT_LightUsageMask,
+            MEVT_TransparencyParams,
+            MEVT_SkeletalExtraData,
+            MEVT_ScreenVPOS
         }
         public enum EFieldType
         {
