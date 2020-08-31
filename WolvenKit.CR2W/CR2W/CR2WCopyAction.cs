@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WolvenKit.CR2W.Editors;
 using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.CR2W
@@ -19,6 +20,7 @@ namespace WolvenKit.CR2W
         }
 
         public CR2WFile DestinationFile { get; set; }
+        public CVariable Parent { get; set; }
 
         /// <summary>
         ///     List of excluded property names

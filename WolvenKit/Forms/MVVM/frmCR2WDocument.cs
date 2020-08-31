@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.IO.MemoryMappedFiles;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -137,6 +138,13 @@ namespace WolvenKit
 
         public void ApplyCustomTheme()
         {
+            // check for float windows
+            foreach (var window in dockPanel.FloatWindows.ToList())
+            {
+                window.Dispose();
+                window.Close();
+            }
+
             this.dockPanel.Theme = UIController.GetTheme();
             dockPanel.SaveAsXml(Path.Combine(Path.GetDirectoryName(Configuration.ConfigurationPath),
                 "cr2wdocument_layout.xml"));

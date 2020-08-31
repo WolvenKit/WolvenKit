@@ -522,7 +522,8 @@ namespace WolvenKit.CR2W.Types
         public virtual CVariable Copy(CR2WCopyAction context)
         {
             // creates a new instance of the CVariable
-            var copy = Create(context.DestinationFile, null , REDName); //FIXME
+            CVariable copy = CR2WTypeManager.Create(this.REDType, this.REDName, context.DestinationFile, context.Parent, false);
+            copy.Flags = this.Flags;
 
             // copy all REDProperties and REDBuffers
             foreach (IEditableVariable item in GetEditableVariables())
@@ -573,10 +574,10 @@ namespace WolvenKit.CR2W.Types
         #endregion
 
         #region Abstract
-        public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            throw new NotImplementedException();
-        }
+        //public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
 
 

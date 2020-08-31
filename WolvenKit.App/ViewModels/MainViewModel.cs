@@ -242,6 +242,27 @@ namespace WolvenKit.App.ViewModels
 
         }
 
+        private async void RequestWccliteFileDumpfile(object sender, RequestFileArgs e)
+        {
+            var filename = e.File;
+            if (!File.Exists(filename) && !Directory.Exists(filename))
+                return;
+            // We dump an individual file with wcclite dumpfile
+            if (File.Exists(filename))
+            {
+                // '\\?\' is a neutral win32 path prefix. It hacks wcc_lite into dumping individual files.
+                // This string will get input again, further down the line, in wcc_command.GetVariables
+                // Windows paths and string management... This one is more than stupid, it is an horror. \\FIXME if you can.
+                await DumpFile("", @"\\?\", filename);
+            }
+            //Wcclite recursively dumps CR2Ws in a directory.
+            else if (Directory.Exists(filename))
+            {
+                string dir = filename;
+                await DumpFile(dir, dir);
+            }
+        }
+
         /// <summary>
         /// Deprecated. Use ImportUtility instead.
         /// Imports a given file (w2mesh or redcloth to the mod project.
@@ -347,20 +368,10 @@ namespace WolvenKit.App.ViewModels
                         Logger.LogString($"Unable to move uncooked file to ModProject, perhaps a file of that name is cuurrently open in Wkit.", Logtype.Error);
                     }
                 }
-
-                // move all files to depot
-                if (MainController.Get().Configuration.OverflowEnabled)
-                {
-                    string frelativePath = f.FullName.Substring(outdir.Length + 1);
-                    string depotdir = MainController.Get().Configuration.DepotPath;
-
-                    f.CopyToAndCreate(Path.Combine(depotdir, frelativePath), true);
-                    addedFilesCount++;
-                }
             }
 
             // Logging
-            Logger.LogString($"Moved {addedFilesCount} files to depot.", Logtype.Important);
+            Logger.LogString($"Moved {addedFilesCount} files to project.", Logtype.Important);
             if (uncookedFilesCount > 0)
                 Logger.LogString($"Successfully uncooked {uncookedFilesCount} files.", Logtype.Success);
             else
@@ -399,9 +410,13 @@ namespace WolvenKit.App.ViewModels
                     var archive = archives.Last().Value;
 
                     string newpath = Path.Combine(isDLC ? ActiveMod.DlcCookedDirectory : ActiveMod.ModCookedDirectory, relativePath);
-                    string extractedfile = archive.Extract(new BundleFileExtractArgs(newpath, MainController.Get().Configuration.UncookExtension));
-                    Logger.LogString($"Succesfully unbundled {filename}.", Logtype.Success);
-
+                    if (!File.Exists(newpath))
+                    {
+                        string extractedfile = archive.Extract(new BundleFileExtractArgs(newpath, MainController.Get().Configuration.UncookExtension));
+                        Logger.LogString($"Succesfully unbundled {filename}.", Logtype.Success);
+                    }
+                    else
+                        Logger.LogString($"File already exists in mod project: {filename}.", Logtype.Success);
                     return 1;
                 }
                 catch (Exception ex)
@@ -500,12 +515,13 @@ namespace WolvenKit.App.ViewModels
                 (importslist, hasinternalBuffer, bufferlist) = cr2w.ReadImportsAndBuffers(reader);
             }
 
+            bool success = true;
             // add imports
             foreach (CR2WImportWrapper import in importslist)
             {
                 var filename = Path.GetFileName(import.DepotPathStr);
 
-                var success = UnbundleFileToProject(import.DepotPathStr, isDLC, false) > 0;
+                success &= UnbundleFileToProject(import.DepotPathStr, isDLC, false) > 0;
                 if (!success)
                     Logger.LogString($"Did not unbundle {filename}, import is missing.", Logtype.Error);
             }
@@ -524,13 +540,14 @@ namespace WolvenKit.App.ViewModels
                     string bufferpath = $"{relativepath}.{index}.buffer";
                     var bufferName = $"{Path.GetFileName(relativepath)}.{index}.buffer";
 
-                    var success = UnbundleFileToProject(bufferpath, isDLC, false, EBundleType.Bundle) > 0;
+                    success &= UnbundleFileToProject(bufferpath, isDLC, false, EBundleType.Bundle) > 0;
                     if (!success)
                         Logger.LogString($"Did not unbundle {bufferName}, import is missing.", Logtype.Error);
-                    else
-                        Logger.LogString($"Succesfully unbundled {bufferName}.", Logtype.Success);
                 }
             }
+
+            if (success)
+                Logger.LogString($"Succesfully imported all dependencies.", Logtype.Success);
         }
 
         #endregion

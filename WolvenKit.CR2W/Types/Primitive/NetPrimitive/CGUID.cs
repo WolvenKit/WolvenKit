@@ -49,6 +49,10 @@ namespace WolvenKit.CR2W.Types
             {
                 guid = (byte[]) val;
             }
+            else if (val is CGUID cvar)
+            {
+                this.guid = cvar.guid;
+            }
 
             return this;
         }
