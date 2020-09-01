@@ -40,7 +40,7 @@ namespace WolvenKit
         {
             InitializeComponent();
 
-            this.Icon = new Icon(@"Resources\Icons\wolven_kit_icon.ico");
+            this.Icon = new Icon(@"Resources\Icons\GUI\Wkit_dark_16x.ico", new Size(16, 16));
 
             pathlistview.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             pathlistview.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);

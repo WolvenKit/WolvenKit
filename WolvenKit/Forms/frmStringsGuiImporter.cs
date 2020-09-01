@@ -79,6 +79,9 @@ namespace WolvenKit
 
             stringsManager = MainController.Get().W3StringManager;
             comboBoxLanguage.Text = MainController.Get().Configuration.TextLanguage;
+
+            this.Icon = new Icon(@"Resources\Icons\GUI\Wkit_dark_16x.ico", new Size(16, 16));
+
         }
 
         public frmStringsGuiImporter()

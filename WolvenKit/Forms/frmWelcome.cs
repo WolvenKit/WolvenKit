@@ -116,6 +116,31 @@ namespace WolvenKit.Forms
             checkBoxDisable.BackColor = UIController.GetPalette().ToolWindowTabSelectedInactive.Background;
             checkBoxDisable.ForeColor = UIController.GetForeColor();
 
+            newProjectBtn.BackColorState.Disabled = UIController.GetPalette().ToolWindowTabSelectedInactive.Background;
+            newProjectBtn.BackColorState.Enabled = UIController.GetPalette().CommandBarMenuDefault.Background;
+            newProjectBtn.BackColorState.Hover = UIController.GetPalette().CommandBarToolbarButtonHovered.Separator;
+            newProjectBtn.BackColorState.Pressed = UIController.GetPalette().CommandBarMenuDefault.Background;
+            newProjectBtn.ForeColor = UIController.GetForeColor();
+
+            openProjectBtn.BackColorState.Disabled = UIController.GetPalette().ToolWindowTabSelectedInactive.Background;
+            openProjectBtn.BackColorState.Enabled = UIController.GetPalette().CommandBarMenuDefault.Background;
+            openProjectBtn.BackColorState.Hover = UIController.GetPalette().CommandBarToolbarButtonHovered.Separator;
+            openProjectBtn.BackColorState.Pressed = UIController.GetPalette().CommandBarMenuDefault.Background;
+            openProjectBtn.ForeColor = UIController.GetForeColor();
+
+            preferencesBtn.BackColorState.Disabled = UIController.GetPalette().ToolWindowTabSelectedInactive.Background;
+            preferencesBtn.BackColorState.Enabled = UIController.GetPalette().CommandBarMenuDefault.Background;
+            preferencesBtn.BackColorState.Hover = UIController.GetPalette().CommandBarToolbarButtonHovered.Separator;
+            preferencesBtn.BackColorState.Pressed = UIController.GetPalette().CommandBarMenuDefault.Background;
+            preferencesBtn.ForeColor = UIController.GetForeColor();
+
+            continueWithoutModBtn.BackColorState.Disabled = UIController.GetPalette().ToolWindowTabSelectedInactive.Background;
+            continueWithoutModBtn.BackColorState.Enabled = UIController.GetPalette().CommandBarMenuDefault.Background;
+            continueWithoutModBtn.BackColorState.Hover = UIController.GetPalette().CommandBarToolbarButtonHovered.Separator;
+            continueWithoutModBtn.BackColorState.Pressed = UIController.GetPalette().CommandBarMenuDefault.Background;
+            continueWithoutModBtn.ForeColor = UIController.GetForeColor();
+
+
         }
 
         public const int WM_NCLBUTTONDOWN = 0xA1;
@@ -146,6 +171,23 @@ namespace WolvenKit.Forms
             this.Close();
         }
 
+        private void openProjectBtn_Click(object sender, EventArgs e)
+        {
+            main.OpenMod();
+            this.Close();
+        }
+
+        private void preferencesBtn_Click(object sender, EventArgs e)
+        {
+            var settings = new frmSettings();
+            settings.ShowDialog();
+        }
+
+        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
         private void webBrowser1_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
             if(e.Url.AbsoluteUri.ToString().Length > 0 && !e.Url.AbsoluteUri.ToString().StartsWith("about:blank"))
@@ -161,18 +203,6 @@ namespace WolvenKit.Forms
             // save disable option
             MainController.Get().Configuration.IsWelcomeFormDisabled = checkBoxDisable.Checked;
             MainController.Get().Configuration.Save();
-        }
-
-        private void OpenProjectButton_Click(object sender, EventArgs e)
-        {
-            main.OpenMod();
-            this.Close();
-        }
-
-        private void visualButton1_Click_1(object sender, EventArgs e)
-        {
-            var settings = new frmSettings();
-            settings.ShowDialog();
         }
 
         private void objectListView1_FormatCell(object sender, FormatCellEventArgs e)
@@ -211,5 +241,21 @@ namespace WolvenKit.Forms
             if (e.ColumnIndex == this.olvColumn1.Index)
                 Cursor.Current = Cursors.Hand;
         }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

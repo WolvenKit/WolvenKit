@@ -643,10 +643,10 @@ namespace WolvenKit
             this.Controls.Add(this.SearchBox);
             this.Controls.Add(this.pathPanel);
             this.Controls.Add(this.btOpen);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "frmAssetBrowser";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Asset Browser";
             this.Load += new System.EventHandler(this.frmBundleExplorer_Load);

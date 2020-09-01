@@ -84,7 +84,7 @@
             this.viewToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1776, 35);
+            this.menuStrip1.Size = new System.Drawing.Size(1776, 33);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -189,7 +189,7 @@
             this.toolStripButtonGenerateXML,
             this.toolStripButtonGenerateScripts,
             this.toolStripButtonEncode});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 35);
+            this.toolStrip1.Location = new System.Drawing.Point(0, 33);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.toolStrip1.Size = new System.Drawing.Size(1776, 34);
@@ -260,7 +260,7 @@
             // 
             this.splitContainerMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainerMain.IsSplitterFixed = true;
-            this.splitContainerMain.Location = new System.Drawing.Point(0, 69);
+            this.splitContainerMain.Location = new System.Drawing.Point(0, 67);
             this.splitContainerMain.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.splitContainerMain.Name = "splitContainerMain";
             this.splitContainerMain.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -272,7 +272,7 @@
             // splitContainerMain.Panel2
             // 
             this.splitContainerMain.Panel2.Controls.Add(this.dataGridViewStrings);
-            this.splitContainerMain.Size = new System.Drawing.Size(1776, 757);
+            this.splitContainerMain.Size = new System.Drawing.Size(1776, 759);
             this.splitContainerMain.SplitterDistance = 38;
             this.splitContainerMain.SplitterWidth = 6;
             this.splitContainerMain.TabIndex = 2;
@@ -326,7 +326,7 @@
             this.comboBoxLanguagesMode.Items.AddRange(new object[] {
             "All Languages",
             "Separate Languages"});
-            this.comboBoxLanguagesMode.Location = new System.Drawing.Point(22, 0);
+            this.comboBoxLanguagesMode.Location = new System.Drawing.Point(20, 0);
             this.comboBoxLanguagesMode.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.comboBoxLanguagesMode.Name = "comboBoxLanguagesMode";
             this.comboBoxLanguagesMode.Size = new System.Drawing.Size(232, 28);
@@ -347,7 +347,7 @@
             this.dataGridViewStrings.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataGridViewStrings.Name = "dataGridViewStrings";
             this.dataGridViewStrings.RowHeadersWidth = 62;
-            this.dataGridViewStrings.Size = new System.Drawing.Size(1776, 713);
+            this.dataGridViewStrings.Size = new System.Drawing.Size(1776, 715);
             this.dataGridViewStrings.TabIndex = 0;
             this.dataGridViewStrings.Visible = false;
             this.dataGridViewStrings.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewStrings_CellValidated);
@@ -411,12 +411,11 @@
             this.Controls.Add(this.splitContainerMain);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MinimumSize = new System.Drawing.Size(1789, 56);
             this.Name = "frmStringsGui";
-            this.Text = "Strings Encoder GUI";
+            this.Text = "Strings Encoder";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);

@@ -39,7 +39,7 @@ namespace WolvenKit.Forms.MVVM
             objectListView.SetObjects(viewModel.Commands);
             propertyGrid.SelectedObject = viewModel.SelectedObject;
 
-            this.Icon = new Icon(@"Resources\Icons\witcher3_101.ico");
+            this.Icon = new Icon(@"Resources\Icons\GUI\WCC_32x.ico", new Size(16,16));
         }
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)

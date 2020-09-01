@@ -1159,7 +1159,7 @@ namespace WolvenKit
 
             modNameToolStripLabel.Text = ActiveMod != null ? ActiveMod.Name : "No Mod Loaded!";
 
-            Text = BaseTitle + " v" + Version;
+            Text = BaseTitle;
             if (ActiveMod != null)
             {
                 Text += " [" + ActiveMod.Name + "] ";
@@ -3130,12 +3130,6 @@ _col - for simple stuff like boxes and spheres", "Information about importing mo
             }
         }
 
-        private void saveExplorerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (var sef = new frmSaveEditor())
-                sef.ShowDialog();
-        }
-
         private void StringsGUIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (stringsGui == null)
@@ -3192,27 +3186,6 @@ _col - for simple stuff like boxes and spheres", "Information about importing mo
             }
         }
 
-        private async void dumpFileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(@"This will generate a file which will show what wcc_lite sees from a file. Please keep in mind this doesn't always work", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            using (var of = new FolderBrowserDialog())
-            {
-                of.Description = "Select the folder to dump";
-                if (of.ShowDialog() == DialogResult.OK)
-                {
-                    using (var sf = new FolderBrowserDialog())
-                    {
-                        sf.Description = "Please specify a location to save the dumped file";
-                        if (sf.ShowDialog() == DialogResult.OK)
-                        {
-                            await vm.DumpFile(of.SelectedPath.EndsWith("\\") ? of.SelectedPath : of.SelectedPath + "\\",
-                                sf.SelectedPath.EndsWith("\\") ? sf.SelectedPath : sf.SelectedPath + "\\");
-                        }
-                    }
-                }
-            }
-        }
-
         private void terrainViewerToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             Render.frmTerrain ter = new Render.frmTerrain();
@@ -3251,13 +3224,6 @@ _col - for simple stuff like boxes and spheres", "Information about importing mo
         private void consoleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowConsole();
-        }
-
-        private void GameDebuggerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var gdb = new frmDebug();
-            Rectangle floatWindowBounds = new Rectangle() { Width = 827, Height = 564 };
-            gdb.Show(dockPanel, floatWindowBounds);
         }
 
         private void importUtilityToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3504,6 +3470,20 @@ _col - for simple stuff like boxes and spheres", "Information about importing mo
         {
             Commonfunctions.ShowFileInExplorer(MainController.Get().Configuration.DepotPath);
         }
+
+        private void saveExplorerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var sef = new frmSaveEditor())
+                sef.ShowDialog();
+        }
+
+        private void GameDebuggerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var gdb = new frmDebug();
+            Rectangle floatWindowBounds = new Rectangle() { Width = 827, Height = 564 };
+            gdb.Show(dockPanel, floatWindowBounds);
+        }
+
         #endregion
 
         #region Help
