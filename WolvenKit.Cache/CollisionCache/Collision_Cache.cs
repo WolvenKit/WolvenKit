@@ -151,6 +151,7 @@ namespace WolvenKit.Cache
             {
                 this.FileNames.Add(br.ReadCR2WString());
             }
+            // go to info table
             foreach (var ci in FileNames.Select(fileName => new CollisionCacheItem
             {
                 Name = fileName,
@@ -163,13 +164,13 @@ namespace WolvenKit.Cache
                 ZSize = br.ReadUInt32(),
                 Size = (long)br.ReadUInt32(),
                 Unk3 = br.ReadUInt32(),
-                guid = br.ReadBytes(16),
-                guid2 = br.ReadBytes(16),
+                unk4 = br.ReadBytes(16),
+                unk5 = br.ReadBytes(16),
                 Comtype = br.ReadByte(),
                 Tail = br.ReadBytes(7)
             }))
             {
-                Console.WriteLine("Filename: " + ci.Name);
+                //Console.WriteLine("Filename: " + ci.Name);
                 Files.Add(ci);
             }
         }

@@ -51,7 +51,7 @@ namespace WolvenKit.CR2W.Types
             catch (Exception ex)
             {
                 Debug.WriteLine($"{Value} not found in {WrappedEnum.GetType().Name}");
-                throw ex;
+                //throw ex;
             }
         }
 

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.CR2W
@@ -116,6 +117,27 @@ namespace WolvenKit.CR2W
                 offset += 7;
             }
             return sign ? size * -1 : size;
+        }
+
+        /// <summary>
+        /// Read a single string from the current stream, where the first bytes indicate the length.
+        /// </summary>
+        /// <returns>string value read</returns>
+        public static string ReadStringDefaultSingle(this BinaryReader br)
+        {
+            var b = br.ReadByte();
+            var nxt = (b & (1 << 6)) != 0;
+            var utf = (b & (1 << 7)) == 0;
+            int len = b & ((1 << 6) - 1);
+            if (nxt)
+            {
+                len += 64 * br.ReadByte();
+            }
+            if (utf)
+            {
+                return Encoding.Unicode.GetString(br.ReadBytes(len * 2));
+            }
+            return Encoding.ASCII.GetString(br.ReadBytes(len));
         }
     }
 }
