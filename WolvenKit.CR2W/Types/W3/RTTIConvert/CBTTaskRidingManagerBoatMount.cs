@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskRidingManagerBoatMount : CBTTaskRidingManagerVehicleMount
 	{
-		[RED("behGraphAlias")] 		public CName BehGraphAlias { get; set;}
+		[Ordinal(0)] [RED("("behGraphAlias")] 		public CName BehGraphAlias { get; set;}
 
 		public CBTTaskRidingManagerBoatMount(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

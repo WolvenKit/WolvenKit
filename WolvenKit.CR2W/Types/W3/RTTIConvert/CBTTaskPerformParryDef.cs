@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPerformParryDef : CBTTaskPlayAnimationEventDecoratorDef
 	{
-		[RED("activationTimeLimitBonusHeavy")] 		public CBehTreeValFloat ActivationTimeLimitBonusHeavy { get; set;}
+		[Ordinal(0)] [RED("activationTimeLimitBonusHeavy")] 		public CBehTreeValFloat ActivationTimeLimitBonusHeavy { get; set;}
 
-		[RED("activationTimeLimitBonusLight")] 		public CBehTreeValFloat ActivationTimeLimitBonusLight { get; set;}
+		[Ordinal(0)] [RED("activationTimeLimitBonusLight")] 		public CBehTreeValFloat ActivationTimeLimitBonusLight { get; set;}
 
-		[RED("checkParryChance")] 		public CBool CheckParryChance { get; set;}
+		[Ordinal(0)] [RED("checkParryChance")] 		public CBool CheckParryChance { get; set;}
 
-		[RED("interruptTaskToExecuteCounter")] 		public CBool InterruptTaskToExecuteCounter { get; set;}
+		[Ordinal(0)] [RED("interruptTaskToExecuteCounter")] 		public CBool InterruptTaskToExecuteCounter { get; set;}
 
-		[RED("allowParryOverlap")] 		public CBool AllowParryOverlap { get; set;}
+		[Ordinal(0)] [RED("allowParryOverlap")] 		public CBool AllowParryOverlap { get; set;}
 
 		public CBTTaskPerformParryDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

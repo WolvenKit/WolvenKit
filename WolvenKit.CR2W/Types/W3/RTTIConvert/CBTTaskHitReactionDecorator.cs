@@ -10,29 +10,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskHitReactionDecorator : CBTTaskPlayAnimationEventDecorator
 	{
-		[RED("createHitReactionEvent")] 		public CName CreateHitReactionEvent { get; set;}
+		[Ordinal(0)] [RED("("createHitReactionEvent")] 		public CName CreateHitReactionEvent { get; set;}
 
-		[RED("increaseHitCounterOnlyOnMeleeDmg")] 		public CBool IncreaseHitCounterOnlyOnMeleeDmg { get; set;}
+		[Ordinal(0)] [RED("("increaseHitCounterOnlyOnMeleeDmg")] 		public CBool IncreaseHitCounterOnlyOnMeleeDmg { get; set;}
 
-		[RED("hitsToRaiseGuard")] 		public CInt32 HitsToRaiseGuard { get; set;}
+		[Ordinal(0)] [RED("("hitsToRaiseGuard")] 		public CInt32 HitsToRaiseGuard { get; set;}
 
-		[RED("raiseGuardChance")] 		public CInt32 RaiseGuardChance { get; set;}
+		[Ordinal(0)] [RED("("raiseGuardChance")] 		public CInt32 RaiseGuardChance { get; set;}
 
-		[RED("hitsToCounter")] 		public CInt32 HitsToCounter { get; set;}
+		[Ordinal(0)] [RED("("hitsToCounter")] 		public CInt32 HitsToCounter { get; set;}
 
-		[RED("counterChance")] 		public CInt32 CounterChance { get; set;}
+		[Ordinal(0)] [RED("("counterChance")] 		public CInt32 CounterChance { get; set;}
 
-		[RED("counterStaminaCost")] 		public CFloat CounterStaminaCost { get; set;}
+		[Ordinal(0)] [RED("("counterStaminaCost")] 		public CFloat CounterStaminaCost { get; set;}
 
-		[RED("damageData")] 		public CHandle<CDamageData> DamageData { get; set;}
+		[Ordinal(0)] [RED("("damageData")] 		public CHandle<CDamageData> DamageData { get; set;}
 
-		[RED("damageIsMelee")] 		public CBool DamageIsMelee { get; set;}
+		[Ordinal(0)] [RED("("damageIsMelee")] 		public CBool DamageIsMelee { get; set;}
 
-		[RED("rotateNode")] 		public CHandle<CNode> RotateNode { get; set;}
+		[Ordinal(0)] [RED("("rotateNode")] 		public CHandle<CNode> RotateNode { get; set;}
 
-		[RED("lastAttacker")] 		public CHandle<CGameplayEntity> LastAttacker { get; set;}
+		[Ordinal(0)] [RED("("lastAttacker")] 		public CHandle<CGameplayEntity> LastAttacker { get; set;}
 
-		[RED("reactionDataStorage")] 		public CHandle<CAIStorageReactionData> ReactionDataStorage { get; set;}
+		[Ordinal(0)] [RED("("reactionDataStorage")] 		public CHandle<CAIStorageReactionData> ReactionDataStorage { get; set;}
 
 		public CBTTaskHitReactionDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3WitcherHouseArea : CGameplayEntity
 	{
-		[RED("isInner")] 		public CBool IsInner { get; set;}
+		[Ordinal(0)] [RED("("isInner")] 		public CBool IsInner { get; set;}
 
 		public W3WitcherHouseArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CHorseJumpTrigger : CGameplayEntity
 	{
-		[RED("lastActivation")] 		public CFloat LastActivation { get; set;}
+		[Ordinal(0)] [RED("("lastActivation")] 		public CFloat LastActivation { get; set;}
 
-		[RED("triggerHeading")] 		public CFloat TriggerHeading { get; set;}
+		[Ordinal(0)] [RED("("triggerHeading")] 		public CFloat TriggerHeading { get; set;}
 
-		[RED("playerHeading")] 		public CFloat PlayerHeading { get; set;}
+		[Ordinal(0)] [RED("("playerHeading")] 		public CFloat PlayerHeading { get; set;}
 
-		[RED("angleDist")] 		public CFloat AngleDist { get; set;}
+		[Ordinal(0)] [RED("("angleDist")] 		public CFloat AngleDist { get; set;}
 
-		[RED("horse")] 		public CHandle<CGameplayEntity> Horse { get; set;}
+		[Ordinal(0)] [RED("("horse")] 		public CHandle<CGameplayEntity> Horse { get; set;}
 
-		[RED("horseComp")] 		public CHandle<W3HorseComponent> HorseComp { get; set;}
+		[Ordinal(0)] [RED("("horseComp")] 		public CHandle<W3HorseComponent> HorseComp { get; set;}
 
-		[RED("lastArea")] 		public CHandle<CTriggerAreaComponent> LastArea { get; set;}
+		[Ordinal(0)] [RED("("lastArea")] 		public CHandle<CTriggerAreaComponent> LastArea { get; set;}
 
 		public CHorseJumpTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

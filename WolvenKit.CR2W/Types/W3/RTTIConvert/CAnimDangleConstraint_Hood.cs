@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimDangleConstraint_Hood : CAnimSkeletalDangleConstraint
 	{
-		[RED("offset")] 		public Vector Offset { get; set;}
+		[Ordinal(0)] [RED("offset")] 		public Vector Offset { get; set;}
 
-		[RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(0)] [RED("radius")] 		public CFloat Radius { get; set;}
 
 		public CAnimDangleConstraint_Hood(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

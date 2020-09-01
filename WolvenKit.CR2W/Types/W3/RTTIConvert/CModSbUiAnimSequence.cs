@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModSbUiAnimSequence : CObject
 	{
-		[RED("sequenceId")] 		public CString SequenceId { get; set;}
+		[Ordinal(0)] [RED("("sequenceId")] 		public CString SequenceId { get; set;}
 
-		[RED("slotSyncInstance")] 		public CHandle<CAnimationManualSlotSyncInstance> SlotSyncInstance { get; set;}
+		[Ordinal(0)] [RED("("slotSyncInstance")] 		public CHandle<CAnimationManualSlotSyncInstance> SlotSyncInstance { get; set;}
 
 		public CModSbUiAnimSequence(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SVerticalMovementParams : CVariable
 	{
-		[RED("m_VertImpulseF")] 		public CFloat M_VertImpulseF { get; set;}
+		[Ordinal(0)] [RED("("m_VertImpulseF")] 		public CFloat M_VertImpulseF { get; set;}
 
-		[RED("m_VertMaxSpeedF")] 		public CFloat M_VertMaxSpeedF { get; set;}
+		[Ordinal(0)] [RED("("m_VertMaxSpeedF")] 		public CFloat M_VertMaxSpeedF { get; set;}
 
-		[RED("m_GravityUpF")] 		public CFloat M_GravityUpF { get; set;}
+		[Ordinal(0)] [RED("("m_GravityUpF")] 		public CFloat M_GravityUpF { get; set;}
 
-		[RED("m_GravityDownF")] 		public CFloat M_GravityDownF { get; set;}
+		[Ordinal(0)] [RED("("m_GravityDownF")] 		public CFloat M_GravityDownF { get; set;}
 
 		public SVerticalMovementParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

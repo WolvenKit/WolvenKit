@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAILeadFormationTree : IAIIdleFormationTree
 	{
-		[RED("leadFormationSteeringGraph")] 		public CHandle<CMoveSteeringBehavior> LeadFormationSteeringGraph { get; set;}
+		[Ordinal(0)] [RED("leadFormationSteeringGraph")] 		public CHandle<CMoveSteeringBehavior> LeadFormationSteeringGraph { get; set;}
 
-		[RED("leadSubtree")] 		public CHandle<CAIIdleTree> LeadSubtree { get; set;}
+		[Ordinal(0)] [RED("leadSubtree")] 		public CHandle<CAIIdleTree> LeadSubtree { get; set;}
 
 		public CAILeadFormationTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

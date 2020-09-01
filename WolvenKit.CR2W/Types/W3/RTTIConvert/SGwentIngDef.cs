@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SGwentIngDef : CVariable
 	{
-		[RED("itemName")] 		public CName ItemName { get; set;}
+		[Ordinal(0)] [RED("("itemName")] 		public CName ItemName { get; set;}
 
-		[RED("reqLevel")] 		public CInt32 ReqLevel { get; set;}
+		[Ordinal(0)] [RED("("reqLevel")] 		public CInt32 ReqLevel { get; set;}
 
-		[RED("quantityMin")] 		public CInt32 QuantityMin { get; set;}
+		[Ordinal(0)] [RED("("quantityMin")] 		public CInt32 QuantityMin { get; set;}
 
-		[RED("quantityMax")] 		public CInt32 QuantityMax { get; set;}
+		[Ordinal(0)] [RED("("quantityMax")] 		public CInt32 QuantityMax { get; set;}
 
 		public SGwentIngDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

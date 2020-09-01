@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskFlyingSwarmTeleportAttack : CBTTaskFlyingSwarmTeleport
 	{
-		[RED("boidRequestCompletedEvents")] 		public CInt32 BoidRequestCompletedEvents { get; set;}
+		[Ordinal(0)] [RED("("boidRequestCompletedEvents")] 		public CInt32 BoidRequestCompletedEvents { get; set;}
 
-		[RED("despawnAfterAttackTime")] 		public CFloat DespawnAfterAttackTime { get; set;}
+		[Ordinal(0)] [RED("("despawnAfterAttackTime")] 		public CFloat DespawnAfterAttackTime { get; set;}
 
-		[RED("attackCompleted")] 		public CBool AttackCompleted { get; set;}
+		[Ordinal(0)] [RED("("attackCompleted")] 		public CBool AttackCompleted { get; set;}
 
-		[RED("res2")] 		public CBool Res2 { get; set;}
+		[Ordinal(0)] [RED("("res2")] 		public CBool Res2 { get; set;}
 
-		[RED("attackTimeStamp")] 		public CFloat AttackTimeStamp { get; set;}
+		[Ordinal(0)] [RED("("attackTimeStamp")] 		public CFloat AttackTimeStamp { get; set;}
 
 		public CBTTaskFlyingSwarmTeleportAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

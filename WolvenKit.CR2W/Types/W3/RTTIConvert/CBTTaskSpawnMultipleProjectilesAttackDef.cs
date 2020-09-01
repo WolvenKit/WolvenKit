@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSpawnMultipleProjectilesAttackDef : CBTTaskSpawnMultipleEntitiesAttackDef
 	{
-		[RED("projectileAngle")] 		public CFloat ProjectileAngle { get; set;}
+		[Ordinal(0)] [RED("projectileAngle")] 		public CFloat ProjectileAngle { get; set;}
 
-		[RED("projectileAngleRandomness")] 		public CFloat ProjectileAngleRandomness { get; set;}
+		[Ordinal(0)] [RED("projectileAngleRandomness")] 		public CFloat ProjectileAngleRandomness { get; set;}
 
-		[RED("projectileSpeed")] 		public CFloat ProjectileSpeed { get; set;}
+		[Ordinal(0)] [RED("projectileSpeed")] 		public CFloat ProjectileSpeed { get; set;}
 
-		[RED("projectileSpeedRandomness")] 		public CFloat ProjectileSpeedRandomness { get; set;}
+		[Ordinal(0)] [RED("projectileSpeedRandomness")] 		public CFloat ProjectileSpeedRandomness { get; set;}
 
-		[RED("dodgeable")] 		public CBool Dodgeable { get; set;}
+		[Ordinal(0)] [RED("dodgeable")] 		public CBool Dodgeable { get; set;}
 
 		public CBTTaskSpawnMultipleProjectilesAttackDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

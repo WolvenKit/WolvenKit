@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeExplorationQueueRegisterDefinition : IBehTreeNodeExplorationQueueDecoratorDefinition
 	{
-		[RED("timePriority")] 		public CFloat TimePriority { get; set;}
+		[Ordinal(0)] [RED("timePriority")] 		public CFloat TimePriority { get; set;}
 
-		[RED("distancePriority")] 		public CFloat DistancePriority { get; set;}
+		[Ordinal(0)] [RED("distancePriority")] 		public CFloat DistancePriority { get; set;}
 
-		[RED("maxTime")] 		public CFloat MaxTime { get; set;}
+		[Ordinal(0)] [RED("maxTime")] 		public CFloat MaxTime { get; set;}
 
-		[RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(0)] [RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
 		public CBehTreeNodeExplorationQueueRegisterDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

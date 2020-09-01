@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3LeshyBirdProjectile : CProjectileTrajectory
 	{
-		[RED("fxEntityTemplate")] 		public CHandle<CEntityTemplate> FxEntityTemplate { get; set;}
+		[Ordinal(0)] [RED("("fxEntityTemplate")] 		public CHandle<CEntityTemplate> FxEntityTemplate { get; set;}
 
-		[RED("fxEntity")] 		public CHandle<CEntity> FxEntity { get; set;}
+		[Ordinal(0)] [RED("("fxEntity")] 		public CHandle<CEntity> FxEntity { get; set;}
 
-		[RED("action")] 		public CHandle<W3DamageAction> Action { get; set;}
+		[Ordinal(0)] [RED("("action")] 		public CHandle<W3DamageAction> Action { get; set;}
 
-		[RED("owner")] 		public CHandle<CActor> Owner { get; set;}
+		[Ordinal(0)] [RED("("owner")] 		public CHandle<CActor> Owner { get; set;}
 
-		[RED("projPos")] 		public Vector ProjPos { get; set;}
+		[Ordinal(0)] [RED("("projPos")] 		public Vector ProjPos { get; set;}
 
-		[RED("projRot")] 		public EulerAngles ProjRot { get; set;}
+		[Ordinal(0)] [RED("("projRot")] 		public EulerAngles ProjRot { get; set;}
 
-		[RED("projExpired")] 		public CBool ProjExpired { get; set;}
+		[Ordinal(0)] [RED("("projExpired")] 		public CBool ProjExpired { get; set;}
 
 		public W3LeshyBirdProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

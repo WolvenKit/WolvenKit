@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3IgniEntity : W3SignEntity
 	{
-		[RED("collisionFxEntity")] 		public CHandle<CEntity> CollisionFxEntity { get; set;}
+		[Ordinal(0)] [RED("("collisionFxEntity")] 		public CHandle<CEntity> CollisionFxEntity { get; set;}
 
-		[RED("rangeFxEntity")] 		public CHandle<CEntity> RangeFxEntity { get; set;}
+		[Ordinal(0)] [RED("("rangeFxEntity")] 		public CHandle<CEntity> RangeFxEntity { get; set;}
 
-		[RED("channelBurnTestDT", 2,0)] 		public CArray<SIgniChannelDT> ChannelBurnTestDT { get; set;}
+		[Ordinal(0)] [RED("("channelBurnTestDT", 2,0)] 		public CArray<SIgniChannelDT> ChannelBurnTestDT { get; set;}
 
-		[RED("lastCollisionFxPos")] 		public Vector LastCollisionFxPos { get; set;}
+		[Ordinal(0)] [RED("("lastCollisionFxPos")] 		public Vector LastCollisionFxPos { get; set;}
 
-		[RED("CHANNELLING_BURN_TEST_FREQUENCY")] 		public CFloat CHANNELLING_BURN_TEST_FREQUENCY { get; set;}
+		[Ordinal(0)] [RED("("CHANNELLING_BURN_TEST_FREQUENCY")] 		public CFloat CHANNELLING_BURN_TEST_FREQUENCY { get; set;}
 
-		[RED("aspects", 2,0)] 		public CArray<SIgniAspect> Aspects { get; set;}
+		[Ordinal(0)] [RED("("aspects", 2,0)] 		public CArray<SIgniAspect> Aspects { get; set;}
 
-		[RED("effects", 2,0)] 		public CArray<SIgniEffects> Effects { get; set;}
+		[Ordinal(0)] [RED("("effects", 2,0)] 		public CArray<SIgniEffects> Effects { get; set;}
 
-		[RED("forestTrigger")] 		public CHandle<W3ForestTrigger> ForestTrigger { get; set;}
+		[Ordinal(0)] [RED("("forestTrigger")] 		public CHandle<W3ForestTrigger> ForestTrigger { get; set;}
 
-		[RED("projectileCollision", 2,0)] 		public CArray<CName> ProjectileCollision { get; set;}
+		[Ordinal(0)] [RED("("projectileCollision", 2,0)] 		public CArray<CName> ProjectileCollision { get; set;}
 
-		[RED("hitEntities", 2,0)] 		public CArray<CHandle<CGameplayEntity>> HitEntities { get; set;}
+		[Ordinal(0)] [RED("("hitEntities", 2,0)] 		public CArray<CHandle<CGameplayEntity>> HitEntities { get; set;}
 
-		[RED("lastFxSpawnTime")] 		public CFloat LastFxSpawnTime { get; set;}
+		[Ordinal(0)] [RED("("lastFxSpawnTime")] 		public CFloat LastFxSpawnTime { get; set;}
 
 		public W3IgniEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

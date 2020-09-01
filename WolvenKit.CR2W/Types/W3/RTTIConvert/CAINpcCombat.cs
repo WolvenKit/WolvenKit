@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcCombat : CAICombatTree
 	{
-		[RED("params")] 		public CHandle<CAINpcCombatParams> Params { get; set;}
+		[Ordinal(0)] [RED("params")] 		public CHandle<CAINpcCombatParams> Params { get; set;}
 
 		public CAINpcCombat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

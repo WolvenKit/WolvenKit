@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcWork : CAISubTree
 	{
-		[RED("actionPointSelector")] 		public CHandle<CActionPointSelector> ActionPointSelector { get; set;}
+		[Ordinal(0)] [RED("actionPointSelector")] 		public CHandle<CActionPointSelector> ActionPointSelector { get; set;}
 
-		[RED("spawnToWork")] 		public CBool SpawnToWork { get; set;}
+		[Ordinal(0)] [RED("spawnToWork")] 		public CBool SpawnToWork { get; set;}
 
-		[RED("params")] 		public CHandle<CAINpcWorkParams> Params { get; set;}
+		[Ordinal(0)] [RED("params")] 		public CHandle<CAINpcWorkParams> Params { get; set;}
 
 		public CAINpcWork(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

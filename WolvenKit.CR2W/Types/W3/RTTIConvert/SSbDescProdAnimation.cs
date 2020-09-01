@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSbDescProdAnimation : CVariable
 	{
-		[RED("prodAnimId")] 		public CString ProdAnimId { get; set;}
+		[Ordinal(0)] [RED("("prodAnimId")] 		public CString ProdAnimId { get; set;}
 
-		[RED("prodActorId")] 		public CString ProdActorId { get; set;}
+		[Ordinal(0)] [RED("("prodActorId")] 		public CString ProdActorId { get; set;}
 
-		[RED("repoAnimId")] 		public CString RepoAnimId { get; set;}
+		[Ordinal(0)] [RED("("repoAnimId")] 		public CString RepoAnimId { get; set;}
 
 		public SSbDescProdAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

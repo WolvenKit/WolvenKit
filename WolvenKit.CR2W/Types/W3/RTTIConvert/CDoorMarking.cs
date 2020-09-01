@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDoorMarking : CScriptedComponent
 	{
-		[RED("changeCamera")] 		public CBool ChangeCamera { get; set;}
+		[Ordinal(0)] [RED("("changeCamera")] 		public CBool ChangeCamera { get; set;}
 
-		[RED("calculated")] 		public CBool Calculated { get; set;}
+		[Ordinal(0)] [RED("("calculated")] 		public CBool Calculated { get; set;}
 
-		[RED("pointA")] 		public Vector PointA { get; set;}
+		[Ordinal(0)] [RED("("pointA")] 		public Vector PointA { get; set;}
 
-		[RED("pointB")] 		public Vector PointB { get; set;}
+		[Ordinal(0)] [RED("("pointB")] 		public Vector PointB { get; set;}
 
-		[RED("middlePoint")] 		public Vector MiddlePoint { get; set;}
+		[Ordinal(0)] [RED("("middlePoint")] 		public Vector MiddlePoint { get; set;}
 
-		[RED("normal")] 		public Vector Normal { get; set;}
+		[Ordinal(0)] [RED("("normal")] 		public Vector Normal { get; set;}
 
-		[RED("checkState")] 		public CEnum<EDoorMarkingState> CheckState { get; set;}
+		[Ordinal(0)] [RED("("checkState")] 		public CEnum<EDoorMarkingState> CheckState { get; set;}
 
-		[RED("initialized")] 		public CBool Initialized { get; set;}
+		[Ordinal(0)] [RED("("initialized")] 		public CBool Initialized { get; set;}
 
 		public CDoorMarking(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

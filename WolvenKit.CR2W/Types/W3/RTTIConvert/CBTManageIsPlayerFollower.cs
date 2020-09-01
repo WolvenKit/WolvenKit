@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTManageIsPlayerFollower : IBehTreeTask
 	{
-		[RED("targetTagCondition")] 		public CName TargetTagCondition { get; set;}
+		[Ordinal(0)] [RED("("targetTagCondition")] 		public CName TargetTagCondition { get; set;}
 
-		[RED("overrideForThisTask")] 		public CBool OverrideForThisTask { get; set;}
+		[Ordinal(0)] [RED("("overrideForThisTask")] 		public CBool OverrideForThisTask { get; set;}
 
-		[RED("disable")] 		public CBool Disable { get; set;}
+		[Ordinal(0)] [RED("("disable")] 		public CBool Disable { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(0)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("targetTagCompare")] 		public CName TargetTagCompare { get; set;}
+		[Ordinal(0)] [RED("("targetTagCompare")] 		public CName TargetTagCompare { get; set;}
 
 		public CBTManageIsPlayerFollower(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

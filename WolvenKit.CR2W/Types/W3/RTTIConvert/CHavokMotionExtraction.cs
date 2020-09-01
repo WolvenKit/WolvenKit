@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CHavokMotionExtraction : IMotionExtraction
 	{
-		[RED("keys", 2,0)] 		public CArray<Vector> Keys { get; set;}
+		[Ordinal(0)] [RED("keys", 2,0)] 		public CArray<Vector> Keys { get; set;}
 
-		[RED("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(0)] [RED("duration")] 		public CFloat Duration { get; set;}
 
 		public CHavokMotionExtraction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

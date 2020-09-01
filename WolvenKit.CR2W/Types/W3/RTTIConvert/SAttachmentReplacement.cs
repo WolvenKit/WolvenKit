@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAttachmentReplacement : CVariable
 	{
-		[RED("oldName")] 		public CName OldName { get; set;}
+		[Ordinal(0)] [RED("oldName")] 		public CName OldName { get; set;}
 
-		[RED("oldClass")] 		public CName OldClass { get; set;}
+		[Ordinal(0)] [RED("oldClass")] 		public CName OldClass { get; set;}
 
-		[RED("newName")] 		public CName NewName { get; set;}
+		[Ordinal(0)] [RED("newName")] 		public CName NewName { get; set;}
 
-		[RED("newClass")] 		public CName NewClass { get; set;}
+		[Ordinal(0)] [RED("newClass")] 		public CName NewClass { get; set;}
 
 		public SAttachmentReplacement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SExternalRiddleEffectEntityDef : CVariable
 	{
-		[RED("entityTag")] 		public CName EntityTag { get; set;}
+		[Ordinal(0)] [RED("("entityTag")] 		public CName EntityTag { get; set;}
 
-		[RED("fxName")] 		public CName FxName { get; set;}
+		[Ordinal(0)] [RED("("fxName")] 		public CName FxName { get; set;}
 
-		[RED("isEffectOn")] 		public CBool IsEffectOn { get; set;}
+		[Ordinal(0)] [RED("("isEffectOn")] 		public CBool IsEffectOn { get; set;}
 
 		public SExternalRiddleEffectEntityDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

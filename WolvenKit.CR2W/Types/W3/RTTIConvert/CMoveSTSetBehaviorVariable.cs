@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTSetBehaviorVariable : IMoveSteeringTask
 	{
-		[RED("variableContext")] 		public CEnum<EBehaviorVarContext> VariableContext { get; set;}
+		[Ordinal(0)] [RED("variableContext")] 		public CEnum<EBehaviorVarContext> VariableContext { get; set;}
 
-		[RED("variableName")] 		public CName VariableName { get; set;}
+		[Ordinal(0)] [RED("variableName")] 		public CName VariableName { get; set;}
 
-		[RED("value")] 		public CFloat Value { get; set;}
+		[Ordinal(0)] [RED("value")] 		public CFloat Value { get; set;}
 
 		public CMoveSTSetBehaviorVariable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

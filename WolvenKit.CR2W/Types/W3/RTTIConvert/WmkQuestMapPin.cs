@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class WmkQuestMapPin : CVariable
 	{
-		[RED("tag")] 		public CName Tag { get; set;}
+		[Ordinal(0)] [RED("("tag")] 		public CName Tag { get; set;}
 
-		[RED("questArea")] 		public CEnum<EAreaName> QuestArea { get; set;}
+		[Ordinal(0)] [RED("("questArea")] 		public CEnum<EAreaName> QuestArea { get; set;}
 
-		[RED("questObjective")] 		public CHandle<CJournalQuestObjective> QuestObjective { get; set;}
+		[Ordinal(0)] [RED("("questObjective")] 		public CHandle<CJournalQuestObjective> QuestObjective { get; set;}
 
-		[RED("position")] 		public Vector Position { get; set;}
+		[Ordinal(0)] [RED("("position")] 		public Vector Position { get; set;}
 
-		[RED("areaPosType")] 		public CEnum<WmkAreaPositionType> AreaPosType { get; set;}
+		[Ordinal(0)] [RED("("areaPosType")] 		public CEnum<WmkAreaPositionType> AreaPosType { get; set;}
 
-		[RED("titleStringId")] 		public CInt32 TitleStringId { get; set;}
+		[Ordinal(0)] [RED("("titleStringId")] 		public CInt32 TitleStringId { get; set;}
 
-		[RED("descriptionStringId")] 		public CInt32 DescriptionStringId { get; set;}
+		[Ordinal(0)] [RED("("descriptionStringId")] 		public CInt32 DescriptionStringId { get; set;}
 
-		[RED("questLevel")] 		public CInt32 QuestLevel { get; set;}
+		[Ordinal(0)] [RED("("questLevel")] 		public CInt32 QuestLevel { get; set;}
 
 		public WmkQuestMapPin(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

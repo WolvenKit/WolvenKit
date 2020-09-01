@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CFXTrackItem : CFXBase
 	{
-		[RED("timeBegin")] 		public CFloat TimeBegin { get; set;}
+		[Ordinal(0)] [RED("timeBegin")] 		public CFloat TimeBegin { get; set;}
 
-		[RED("timeDuration")] 		public CFloat TimeDuration { get; set;}
+		[Ordinal(0)] [RED("timeDuration")] 		public CFloat TimeDuration { get; set;}
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CFXTrackItem(cr2w, parent, name);
 

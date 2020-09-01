@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFoliageScene : CObject
 	{
-		[RED("worldDimensions")] 		public Vector2 WorldDimensions { get; set;}
+		[Ordinal(0)] [RED("("worldDimensions")] 		public Vector2 WorldDimensions { get; set;}
 
-		[RED("cellDimensions")] 		public Vector2 CellDimensions { get; set;}
+		[Ordinal(0)] [RED("("cellDimensions")] 		public Vector2 CellDimensions { get; set;}
 
-		[RED("visibilityDepth")] 		public CInt32 VisibilityDepth { get; set;}
+		[Ordinal(0)] [RED("("visibilityDepth")] 		public CInt32 VisibilityDepth { get; set;}
 
-		[RED("editorVisibilityDepth")] 		public CInt32 EditorVisibilityDepth { get; set;}
+		[Ordinal(0)] [RED("("editorVisibilityDepth")] 		public CInt32 EditorVisibilityDepth { get; set;}
 
-		[RED("grassMask")] 		public CHandle<CGenericGrassMask> GrassMask { get; set;}
+		[Ordinal(0)] [RED("("grassMask")] 		public CHandle<CGenericGrassMask> GrassMask { get; set;}
 
-		[RED("grassOccurrenceMap")] 		public CPtr<CGrassOccurrenceMap> GrassOccurrenceMap { get; set;}
+		[Ordinal(0)] [RED("("grassOccurrenceMap")] 		public CPtr<CGrassOccurrenceMap> GrassOccurrenceMap { get; set;}
 
-		[RED("lodSetting")] 		public SFoliageLODSetting LodSetting { get; set;}
+		[Ordinal(0)] [RED("("lodSetting")] 		public SFoliageLODSetting LodSetting { get; set;}
 
 		public CFoliageScene(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

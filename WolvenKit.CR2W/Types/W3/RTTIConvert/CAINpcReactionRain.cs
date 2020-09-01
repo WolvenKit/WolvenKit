@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcReactionRain : CAINpcReaction
 	{
-		[RED("actionPointSelector")] 		public CHandle<CRainActionPointSelector> ActionPointSelector { get; set;}
+		[Ordinal(0)] [RED("actionPointSelector")] 		public CHandle<CRainActionPointSelector> ActionPointSelector { get; set;}
 
 		public CAINpcReactionRain(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphAnimationBaseSlotNode : CBehaviorGraphMimicsAnimationNode
 	{
-		[RED("slotName")] 		public CName SlotName { get; set;}
+		[Ordinal(0)] [RED("slotName")] 		public CName SlotName { get; set;}
 
-		[RED("animPrefix")] 		public CString AnimPrefix { get; set;}
+		[Ordinal(0)] [RED("animPrefix")] 		public CString AnimPrefix { get; set;}
 
-		[RED("animSufix")] 		public CString AnimSufix { get; set;}
+		[Ordinal(0)] [RED("animSufix")] 		public CString AnimSufix { get; set;}
 
 		public CBehaviorGraphAnimationBaseSlotNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

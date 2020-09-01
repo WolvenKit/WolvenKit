@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphStateTransitionBlendNode : CBehaviorGraphStateTransitionNode
 	{
-		[RED("transitionTime")] 		public CFloat TransitionTime { get; set;}
+		[Ordinal(0)] [RED("transitionTime")] 		public CFloat TransitionTime { get; set;}
 
-		[RED("synchronize")] 		public CBool Synchronize { get; set;}
+		[Ordinal(0)] [RED("synchronize")] 		public CBool Synchronize { get; set;}
 
-		[RED("syncMethod")] 		public CPtr<IBehaviorSyncMethod> SyncMethod { get; set;}
+		[Ordinal(0)] [RED("syncMethod")] 		public CPtr<IBehaviorSyncMethod> SyncMethod { get; set;}
 
-		[RED("motionBlendType")] 		public CEnum<EBehaviorTransitionBlendMotion> MotionBlendType { get; set;}
+		[Ordinal(0)] [RED("motionBlendType")] 		public CEnum<EBehaviorTransitionBlendMotion> MotionBlendType { get; set;}
 
 		public CBehaviorGraphStateTransitionBlendNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

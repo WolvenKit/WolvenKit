@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationInterceptorStateAbstract : CExplorationStateTransitionAbstract
 	{
-		[RED("m_InterceptStateN")] 		public CName M_InterceptStateN { get; set;}
+		[Ordinal(0)] [RED("("m_InterceptStateN")] 		public CName M_InterceptStateN { get; set;}
 
 		public CExplorationInterceptorStateAbstract(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

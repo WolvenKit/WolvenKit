@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneGraphSocket : CGraphSocket
 	{
-		[RED("linkElement")] 		public CPtr<CStorySceneLinkElement> LinkElement { get; set;}
+		[Ordinal(0)] [RED("linkElement")] 		public CPtr<CStorySceneLinkElement> LinkElement { get; set;}
 
 		public CStorySceneGraphSocket(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

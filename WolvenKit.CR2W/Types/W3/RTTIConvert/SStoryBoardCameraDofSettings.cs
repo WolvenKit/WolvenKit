@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStoryBoardCameraDofSettings : CVariable
 	{
-		[RED("strength")] 		public CFloat Strength { get; set;}
+		[Ordinal(0)] [RED("("strength")] 		public CFloat Strength { get; set;}
 
-		[RED("blurNear")] 		public CFloat BlurNear { get; set;}
+		[Ordinal(0)] [RED("("blurNear")] 		public CFloat BlurNear { get; set;}
 
-		[RED("blurFar")] 		public CFloat BlurFar { get; set;}
+		[Ordinal(0)] [RED("("blurFar")] 		public CFloat BlurFar { get; set;}
 
-		[RED("focusNear")] 		public CFloat FocusNear { get; set;}
+		[Ordinal(0)] [RED("("focusNear")] 		public CFloat FocusNear { get; set;}
 
-		[RED("focusFar")] 		public CFloat FocusFar { get; set;}
+		[Ordinal(0)] [RED("("focusFar")] 		public CFloat FocusFar { get; set;}
 
 		public SStoryBoardCameraDofSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

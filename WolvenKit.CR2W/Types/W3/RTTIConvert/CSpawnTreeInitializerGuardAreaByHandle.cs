@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeInitializerGuardAreaByHandle : ISpawnTreeInitializerGuardAreaBase
 	{
-		[RED("guardArea")] 		public EntityHandle GuardArea { get; set;}
+		[Ordinal(0)] [RED("("guardArea")] 		public EntityHandle GuardArea { get; set;}
 
-		[RED("pursuitArea")] 		public EntityHandle PursuitArea { get; set;}
+		[Ordinal(0)] [RED("("pursuitArea")] 		public EntityHandle PursuitArea { get; set;}
 
 		public CSpawnTreeInitializerGuardAreaByHandle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

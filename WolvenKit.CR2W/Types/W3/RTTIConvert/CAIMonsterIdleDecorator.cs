@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMonsterIdleDecorator : CAIIdleDecoratorTree
 	{
-		[RED("params")] 		public CHandle<CAIMonsterIdleDecoratorParams> Params { get; set;}
+		[Ordinal(0)] [RED("params")] 		public CHandle<CAIMonsterIdleDecoratorParams> Params { get; set;}
 
 		public CAIMonsterIdleDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

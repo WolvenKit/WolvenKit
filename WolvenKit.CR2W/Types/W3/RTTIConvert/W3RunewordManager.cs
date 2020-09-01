@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3RunewordManager : CObject
 	{
-		[RED("runewords", 2,0)] 		public CArray<Runeword> Runewords { get; set;}
+		[Ordinal(0)] [RED("("runewords", 2,0)] 		public CArray<Runeword> Runewords { get; set;}
 
 		public W3RunewordManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

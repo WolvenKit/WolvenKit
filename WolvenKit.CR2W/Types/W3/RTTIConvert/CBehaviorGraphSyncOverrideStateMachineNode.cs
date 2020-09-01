@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphSyncOverrideStateMachineNode : CBehaviorGraphSelfActivatingStateMachineNode
 	{
-		[RED("rootBoneName")] 		public CString RootBoneName { get; set;}
+		[Ordinal(0)] [RED("rootBoneName")] 		public CString RootBoneName { get; set;}
 
-		[RED("blendRootParent")] 		public CBool BlendRootParent { get; set;}
+		[Ordinal(0)] [RED("blendRootParent")] 		public CBool BlendRootParent { get; set;}
 
-		[RED("defaultWeight")] 		public CFloat DefaultWeight { get; set;}
+		[Ordinal(0)] [RED("defaultWeight")] 		public CFloat DefaultWeight { get; set;}
 
-		[RED("mergeEvents")] 		public CBool MergeEvents { get; set;}
+		[Ordinal(0)] [RED("mergeEvents")] 		public CBool MergeEvents { get; set;}
 
 		public CBehaviorGraphSyncOverrideStateMachineNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

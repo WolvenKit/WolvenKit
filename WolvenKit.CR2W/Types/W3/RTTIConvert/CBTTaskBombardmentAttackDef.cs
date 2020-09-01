@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskBombardmentAttackDef : IBehTreeTaskDefinition
 	{
-		[RED("initialDelay")] 		public CFloat InitialDelay { get; set;}
+		[Ordinal(0)] [RED("initialDelay")] 		public CFloat InitialDelay { get; set;}
 
-		[RED("afterSpawnDelay")] 		public CFloat AfterSpawnDelay { get; set;}
+		[Ordinal(0)] [RED("afterSpawnDelay")] 		public CFloat AfterSpawnDelay { get; set;}
 
-		[RED("yOffset")] 		public CFloat YOffset { get; set;}
+		[Ordinal(0)] [RED("yOffset")] 		public CFloat YOffset { get; set;}
 
-		[RED("fxName")] 		public CName FxName { get; set;}
+		[Ordinal(0)] [RED("fxName")] 		public CName FxName { get; set;}
 
 		public CBTTaskBombardmentAttackDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

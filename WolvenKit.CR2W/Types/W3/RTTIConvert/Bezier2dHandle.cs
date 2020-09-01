@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class Bezier2dHandle : CVariable
 	{
-		[RED("incomingTangent")] 		public Vector2 IncomingTangent { get; set;}
+		[Ordinal(0)] [RED("incomingTangent")] 		public Vector2 IncomingTangent { get; set;}
 
-		[RED("outgoingTangent")] 		public Vector2 OutgoingTangent { get; set;}
+		[Ordinal(0)] [RED("outgoingTangent")] 		public Vector2 OutgoingTangent { get; set;}
 
 		public Bezier2dHandle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

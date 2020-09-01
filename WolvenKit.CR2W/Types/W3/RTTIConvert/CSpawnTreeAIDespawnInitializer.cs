@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeAIDespawnInitializer : CSpawnTreeDespawnInitializer
 	{
-		[RED("aiDespawnConfiguration")] 		public SSpawnTreeAIDespawnConfiguration AiDespawnConfiguration { get; set;}
+		[Ordinal(0)] [RED("aiDespawnConfiguration")] 		public SSpawnTreeAIDespawnConfiguration AiDespawnConfiguration { get; set;}
 
-		[RED("ai")] 		public CHandle<CAIDespawnTree> Ai { get; set;}
+		[Ordinal(0)] [RED("ai")] 		public CHandle<CAIDespawnTree> Ai { get; set;}
 
-		[RED("aiPriority")] 		public CEnum<ETopLevelAIPriorities> AiPriority { get; set;}
+		[Ordinal(0)] [RED("aiPriority")] 		public CEnum<ETopLevelAIPriorities> AiPriority { get; set;}
 
 		public CSpawnTreeAIDespawnInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

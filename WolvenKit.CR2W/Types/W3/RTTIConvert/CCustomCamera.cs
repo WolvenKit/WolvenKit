@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCustomCamera : CEntity
 	{
-		[RED("pivotPositionControllers", 2,0)] 		public CArray<CPtr<ICustomCameraPivotPositionController>> PivotPositionControllers { get; set;}
+		[Ordinal(0)] [RED("("pivotPositionControllers", 2,0)] 		public CArray<CPtr<ICustomCameraPivotPositionController>> PivotPositionControllers { get; set;}
 
-		[RED("pivotRotationControllers", 2,0)] 		public CArray<CPtr<ICustomCameraPivotRotationController>> PivotRotationControllers { get; set;}
+		[Ordinal(0)] [RED("("pivotRotationControllers", 2,0)] 		public CArray<CPtr<ICustomCameraPivotRotationController>> PivotRotationControllers { get; set;}
 
-		[RED("pivotDistanceControllers", 2,0)] 		public CArray<CPtr<ICustomCameraPivotDistanceController>> PivotDistanceControllers { get; set;}
+		[Ordinal(0)] [RED("("pivotDistanceControllers", 2,0)] 		public CArray<CPtr<ICustomCameraPivotDistanceController>> PivotDistanceControllers { get; set;}
 
-		[RED("activeCameraPositionController")] 		public CPtr<ICustomCameraPositionController> ActiveCameraPositionController { get; set;}
+		[Ordinal(0)] [RED("("activeCameraPositionController")] 		public CPtr<ICustomCameraPositionController> ActiveCameraPositionController { get; set;}
 
-		[RED("blendPivotPositionController")] 		public CPtr<CCustomCameraBlendPPC> BlendPivotPositionController { get; set;}
+		[Ordinal(0)] [RED("("blendPivotPositionController")] 		public CPtr<CCustomCameraBlendPPC> BlendPivotPositionController { get; set;}
 
-		[RED("allowAutoRotation")] 		public CBool AllowAutoRotation { get; set;}
+		[Ordinal(0)] [RED("("allowAutoRotation")] 		public CBool AllowAutoRotation { get; set;}
 
-		[RED("manualRotationHorTimeout")] 		public CFloat ManualRotationHorTimeout { get; set;}
+		[Ordinal(0)] [RED("("manualRotationHorTimeout")] 		public CFloat ManualRotationHorTimeout { get; set;}
 
-		[RED("manualRotationVerTimeout")] 		public CFloat ManualRotationVerTimeout { get; set;}
+		[Ordinal(0)] [RED("("manualRotationVerTimeout")] 		public CFloat ManualRotationVerTimeout { get; set;}
 
-		[RED("fov")] 		public CFloat Fov { get; set;}
+		[Ordinal(0)] [RED("("fov")] 		public CFloat Fov { get; set;}
 
-		[RED("animSet")] 		public CHandle<CSkeletalAnimationSet> AnimSet { get; set;}
+		[Ordinal(0)] [RED("("animSet")] 		public CHandle<CSkeletalAnimationSet> AnimSet { get; set;}
 
-		[RED("presets", 2,0)] 		public CArray<SCustomCameraPreset> Presets { get; set;}
+		[Ordinal(0)] [RED("("presets", 2,0)] 		public CArray<SCustomCameraPreset> Presets { get; set;}
 
-		[RED("curveSet", 2,0)] 		public CArray<CPtr<CCurve>> CurveSet { get; set;}
+		[Ordinal(0)] [RED("("curveSet", 2,0)] 		public CArray<CPtr<CCurve>> CurveSet { get; set;}
 
-		[RED("curveNames", 2,0)] 		public CArray<CName> CurveNames { get; set;}
+		[Ordinal(0)] [RED("("curveNames", 2,0)] 		public CArray<CName> CurveNames { get; set;}
 
 		public CCustomCamera(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtForcedLogicalFootstepAnimEvent : CExtAnimEvent
 	{
-		[RED("side")] 		public CEnum<ESide> Side { get; set;}
+		[Ordinal(0)] [RED("("side")] 		public CEnum<ESide> Side { get; set;}
 
 		public CExtForcedLogicalFootstepAnimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSCAnimEvent : IMoveSteeringCondition
 	{
-		[RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(0)] [RED("eventName")] 		public CName EventName { get; set;}
 
-		[RED("eventType")] 		public CEnum<EAnimationEventType> EventType { get; set;}
+		[Ordinal(0)] [RED("eventType")] 		public CEnum<EAnimationEventType> EventType { get; set;}
 
 		public CMoveSCAnimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

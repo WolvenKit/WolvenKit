@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvBloomNewParameters : CVariable
 	{
-		[RED("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(0)] [RED("("activated")] 		public CBool Activated { get; set;}
 
-		[RED("brightPassWeights")] 		public SSimpleCurve BrightPassWeights { get; set;}
+		[Ordinal(0)] [RED("("brightPassWeights")] 		public SSimpleCurve BrightPassWeights { get; set;}
 
-		[RED("color")] 		public SSimpleCurve Color { get; set;}
+		[Ordinal(0)] [RED("("color")] 		public SSimpleCurve Color { get; set;}
 
-		[RED("dirtColor")] 		public SSimpleCurve DirtColor { get; set;}
+		[Ordinal(0)] [RED("("dirtColor")] 		public SSimpleCurve DirtColor { get; set;}
 
-		[RED("threshold")] 		public SSimpleCurve Threshold { get; set;}
+		[Ordinal(0)] [RED("("threshold")] 		public SSimpleCurve Threshold { get; set;}
 
-		[RED("thresholdRange")] 		public SSimpleCurve ThresholdRange { get; set;}
+		[Ordinal(0)] [RED("("thresholdRange")] 		public SSimpleCurve ThresholdRange { get; set;}
 
-		[RED("brightnessMax")] 		public SSimpleCurve BrightnessMax { get; set;}
+		[Ordinal(0)] [RED("("brightnessMax")] 		public SSimpleCurve BrightnessMax { get; set;}
 
-		[RED("shaftsColor")] 		public SSimpleCurve ShaftsColor { get; set;}
+		[Ordinal(0)] [RED("("shaftsColor")] 		public SSimpleCurve ShaftsColor { get; set;}
 
-		[RED("shaftsRadius")] 		public SSimpleCurve ShaftsRadius { get; set;}
+		[Ordinal(0)] [RED("("shaftsRadius")] 		public SSimpleCurve ShaftsRadius { get; set;}
 
-		[RED("shaftsShapeExp")] 		public SSimpleCurve ShaftsShapeExp { get; set;}
+		[Ordinal(0)] [RED("("shaftsShapeExp")] 		public SSimpleCurve ShaftsShapeExp { get; set;}
 
-		[RED("shaftsShapeInvSquare")] 		public SSimpleCurve ShaftsShapeInvSquare { get; set;}
+		[Ordinal(0)] [RED("("shaftsShapeInvSquare")] 		public SSimpleCurve ShaftsShapeInvSquare { get; set;}
 
-		[RED("shaftsThreshold")] 		public SSimpleCurve ShaftsThreshold { get; set;}
+		[Ordinal(0)] [RED("("shaftsThreshold")] 		public SSimpleCurve ShaftsThreshold { get; set;}
 
-		[RED("shaftsThresholdRange")] 		public SSimpleCurve ShaftsThresholdRange { get; set;}
+		[Ordinal(0)] [RED("("shaftsThresholdRange")] 		public SSimpleCurve ShaftsThresholdRange { get; set;}
 
 		public CEnvBloomNewParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

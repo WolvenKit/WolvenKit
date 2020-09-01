@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4PlayerStateUnconscious : CR4PlayerStateExtendedMovable
 	{
-		[RED("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(0)] [RED("duration")] 		public CFloat Duration { get; set;}
 
-		[RED("isUnconscious")] 		public CBool IsUnconscious { get; set;}
+		[Ordinal(0)] [RED("isUnconscious")] 		public CBool IsUnconscious { get; set;}
 
-		[RED("killedByGuard")] 		public CBool KilledByGuard { get; set;}
+		[Ordinal(0)] [RED("killedByGuard")] 		public CBool KilledByGuard { get; set;}
 
-		[RED("killedByElevator")] 		public CBool KilledByElevator { get; set;}
+		[Ordinal(0)] [RED("killedByElevator")] 		public CBool KilledByElevator { get; set;}
 
-		[RED("wasInFFMiniGame")] 		public CBool WasInFFMiniGame { get; set;}
+		[Ordinal(0)] [RED("wasInFFMiniGame")] 		public CBool WasInFFMiniGame { get; set;}
 
-		[RED("m_storedInteractionPri")] 		public CEnum<EInteractionPriority> M_storedInteractionPri { get; set;}
+		[Ordinal(0)] [RED("m_storedInteractionPri")] 		public CEnum<EInteractionPriority> M_storedInteractionPri { get; set;}
 
-		[RED("cachedID")] 		public SItemUniqueId CachedID { get; set;}
+		[Ordinal(0)] [RED("cachedID")] 		public SItemUniqueId CachedID { get; set;}
 
-		[RED("itemEnt1")] 		public CHandle<CEntity> ItemEnt1 { get; set;}
+		[Ordinal(0)] [RED("itemEnt1")] 		public CHandle<CEntity> ItemEnt1 { get; set;}
 
-		[RED("itemEnt2")] 		public CHandle<CEntity> ItemEnt2 { get; set;}
+		[Ordinal(0)] [RED("itemEnt2")] 		public CHandle<CEntity> ItemEnt2 { get; set;}
 
 		public CR4PlayerStateUnconscious(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

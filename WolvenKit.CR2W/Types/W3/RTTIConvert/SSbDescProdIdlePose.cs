@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSbDescProdIdlePose : CVariable
 	{
-		[RED("prodPoseId")] 		public CString ProdPoseId { get; set;}
+		[Ordinal(0)] [RED("("prodPoseId")] 		public CString ProdPoseId { get; set;}
 
-		[RED("prodActorId")] 		public CString ProdActorId { get; set;}
+		[Ordinal(0)] [RED("("prodActorId")] 		public CString ProdActorId { get; set;}
 
-		[RED("repoPoseId")] 		public CString RepoPoseId { get; set;}
+		[Ordinal(0)] [RED("("repoPoseId")] 		public CString RepoPoseId { get; set;}
 
 		public SSbDescProdIdlePose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CParticleInitializerRotationRate3D : IParticleInitializer
 	{
-		[RED("rotationRate")] 		public CPtr<IEvaluatorVector> RotationRate { get; set;}
+		[Ordinal(0)] [RED("("rotationRate")] 		public CPtr<IEvaluatorVector> RotationRate { get; set;}
 
 		public CParticleInitializerRotationRate3D(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

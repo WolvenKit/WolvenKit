@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockBlendByDistance : CMaterialBlock
 	{
-		[RED("BlendStartDistance")] 		public CFloat BlendStartDistance { get; set;}
+		[Ordinal(0)] [RED("BlendStartDistance")] 		public CFloat BlendStartDistance { get; set;}
 
-		[RED("BlendEndDistance")] 		public CFloat BlendEndDistance { get; set;}
+		[Ordinal(0)] [RED("BlendEndDistance")] 		public CFloat BlendEndDistance { get; set;}
 
 		public CMaterialBlockBlendByDistance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

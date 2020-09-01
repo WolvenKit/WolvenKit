@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphPositionControllerBaseNode : CBehaviorGraphBaseNode
 	{
-		[RED("useHeading")] 		public CBool UseHeading { get; set;}
+		[Ordinal(0)] [RED("("useHeading")] 		public CBool UseHeading { get; set;}
 
-		[RED("cachedWeightVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedWeightVariableNode { get; set;}
+		[Ordinal(0)] [RED("("cachedWeightVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedWeightVariableNode { get; set;}
 
-		[RED("cachedShiftVariableNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedShiftVariableNode { get; set;}
+		[Ordinal(0)] [RED("("cachedShiftVariableNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedShiftVariableNode { get; set;}
 
 		public CBehaviorGraphPositionControllerBaseNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

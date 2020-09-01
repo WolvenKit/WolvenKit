@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMathNode : CBehaviorGraphValueNode
 	{
-		[RED("operation")] 		public CEnum<EBehaviorMathOp> Operation { get; set;}
+		[Ordinal(0)] [RED("("operation")] 		public CEnum<EBehaviorMathOp> Operation { get; set;}
 
-		[RED("cachedFirstInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedFirstInputNode { get; set;}
+		[Ordinal(0)] [RED("("cachedFirstInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedFirstInputNode { get; set;}
 
-		[RED("cachedSecondInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedSecondInputNode { get; set;}
+		[Ordinal(0)] [RED("("cachedSecondInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedSecondInputNode { get; set;}
 
 		public CBehaviorGraphMathNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

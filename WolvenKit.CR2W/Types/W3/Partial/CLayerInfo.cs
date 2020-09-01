@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CLayerInfo : ISerializable
 	{
-		[RED("tags")] 		public TagList Tags { get; set;}
+		[Ordinal(0)] [RED("tags")] 		public TagList Tags { get; set;}
 
-		[RED("layerType")] 		public CEnum<ELayerType> LayerType { get; set;}
+		[Ordinal(0)] [RED("layerType")] 		public CEnum<ELayerType> LayerType { get; set;}
 
-		[RED("layerBuildTag")] 		public CEnum<ELayerBuildTag> LayerBuildTag { get; set;}
+		[Ordinal(0)] [RED("layerBuildTag")] 		public CEnum<ELayerBuildTag> LayerBuildTag { get; set;}
 
-		[RED("layerMergeContentMode")] 		public CEnum<ELayerMergedContent> LayerMergeContentMode { get; set;}
+		[Ordinal(0)] [RED("layerMergeContentMode")] 		public CEnum<ELayerMergedContent> LayerMergeContentMode { get; set;}
 
-		[RED("streamingLayer")] 		public CBool StreamingLayer { get; set;}
+		[Ordinal(0)] [RED("streamingLayer")] 		public CBool StreamingLayer { get; set;}
 
-		[RED("depotFilePath")] 		public CString DepotFilePath { get; set;}
+		[Ordinal(0)] [RED("depotFilePath")] 		public CString DepotFilePath { get; set;}
 
-		[RED("shortName")] 		public CString ShortName { get; set;}
+		[Ordinal(0)] [RED("shortName")] 		public CString ShortName { get; set;}
 
-		[RED("guid")] 		public CGUID Guid { get; set;}
+		[Ordinal(0)] [RED("guid")] 		public CGUID Guid { get; set;}
 
-		[RED("hasEmbeddedLayerInfo")] 		public CBool HasEmbeddedLayerInfo { get; set;}
+		[Ordinal(0)] [RED("hasEmbeddedLayerInfo")] 		public CBool HasEmbeddedLayerInfo { get; set;}
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CLayerInfo(cr2w, parent, name);
 

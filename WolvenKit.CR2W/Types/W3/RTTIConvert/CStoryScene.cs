@@ -10,47 +10,47 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStoryScene : CResource
 	{
-		[RED("controlParts", 2,0)] 		public CArray<CPtr<CStorySceneControlPart>> ControlParts { get; set;}
+		[Ordinal(0)] [RED("("controlParts", 2,0)] 		public CArray<CPtr<CStorySceneControlPart>> ControlParts { get; set;}
 
-		[RED("sections", 2,0)] 		public CArray<CPtr<CStorySceneSection>> Sections { get; set;}
+		[Ordinal(0)] [RED("("sections", 2,0)] 		public CArray<CPtr<CStorySceneSection>> Sections { get; set;}
 
-		[RED("graph")] 		public CPtr<CStorySceneGraph> Graph { get; set;}
+		[Ordinal(0)] [RED("("graph")] 		public CPtr<CStorySceneGraph> Graph { get; set;}
 
-		[RED("layerPreset")] 		public CString LayerPreset { get; set;}
+		[Ordinal(0)] [RED("("layerPreset")] 		public CString LayerPreset { get; set;}
 
-		[RED("elementIDCounter")] 		public CUInt32 ElementIDCounter { get; set;}
+		[Ordinal(0)] [RED("("elementIDCounter")] 		public CUInt32 ElementIDCounter { get; set;}
 
-		[RED("sectionIDCounter")] 		public CUInt32 SectionIDCounter { get; set;}
+		[Ordinal(0)] [RED("("sectionIDCounter")] 		public CUInt32 SectionIDCounter { get; set;}
 
-		[RED("sceneId")] 		public CUInt32 SceneId { get; set;}
+		[Ordinal(0)] [RED("("sceneId")] 		public CUInt32 SceneId { get; set;}
 
-		[RED("sceneTemplates", 2,0)] 		public CArray<CPtr<CStorySceneActor>> SceneTemplates { get; set;}
+		[Ordinal(0)] [RED("("sceneTemplates", 2,0)] 		public CArray<CPtr<CStorySceneActor>> SceneTemplates { get; set;}
 
-		[RED("sceneProps", 2,0)] 		public CArray<CPtr<CStorySceneProp>> SceneProps { get; set;}
+		[Ordinal(0)] [RED("("sceneProps", 2,0)] 		public CArray<CPtr<CStorySceneProp>> SceneProps { get; set;}
 
-		[RED("sceneEffects", 2,0)] 		public CArray<CPtr<CStorySceneEffect>> SceneEffects { get; set;}
+		[Ordinal(0)] [RED("("sceneEffects", 2,0)] 		public CArray<CPtr<CStorySceneEffect>> SceneEffects { get; set;}
 
-		[RED("sceneLights", 2,0)] 		public CArray<CPtr<CStorySceneLight>> SceneLights { get; set;}
+		[Ordinal(0)] [RED("("sceneLights", 2,0)] 		public CArray<CPtr<CStorySceneLight>> SceneLights { get; set;}
 
-		[RED("mayActorsStartWorking")] 		public CBool MayActorsStartWorking { get; set;}
+		[Ordinal(0)] [RED("("mayActorsStartWorking")] 		public CBool MayActorsStartWorking { get; set;}
 
-		[RED("surpassWaterRendering")] 		public CBool SurpassWaterRendering { get; set;}
+		[Ordinal(0)] [RED("("surpassWaterRendering")] 		public CBool SurpassWaterRendering { get; set;}
 
-		[RED("dialogsetInstances", 2,0)] 		public CArray<CPtr<CStorySceneDialogsetInstance>> DialogsetInstances { get; set;}
+		[Ordinal(0)] [RED("("dialogsetInstances", 2,0)] 		public CArray<CPtr<CStorySceneDialogsetInstance>> DialogsetInstances { get; set;}
 
-		[RED("cameraDefinitions", 2,0)] 		public CArray<StorySceneCameraDefinition> CameraDefinitions { get; set;}
+		[Ordinal(0)] [RED("("cameraDefinitions", 2,0)] 		public CArray<StorySceneCameraDefinition> CameraDefinitions { get; set;}
 
-		[RED("banksDependency", 2,0)] 		public CArray<CName> BanksDependency { get; set;}
+		[Ordinal(0)] [RED("("banksDependency", 2,0)] 		public CArray<CName> BanksDependency { get; set;}
 
-		[RED("blockMusicTriggers")] 		public CBool BlockMusicTriggers { get; set;}
+		[Ordinal(0)] [RED("("blockMusicTriggers")] 		public CBool BlockMusicTriggers { get; set;}
 
-		[RED("muteSpeechUnderWater")] 		public CBool MuteSpeechUnderWater { get; set;}
+		[Ordinal(0)] [RED("("muteSpeechUnderWater")] 		public CBool MuteSpeechUnderWater { get; set;}
 
-		[RED("soundListenerOverride")] 		public CString SoundListenerOverride { get; set;}
+		[Ordinal(0)] [RED("("soundListenerOverride")] 		public CString SoundListenerOverride { get; set;}
 
-		[RED("soundEventsOnEnd", 2,0)] 		public CArray<CName> SoundEventsOnEnd { get; set;}
+		[Ordinal(0)] [RED("("soundEventsOnEnd", 2,0)] 		public CArray<CName> SoundEventsOnEnd { get; set;}
 
-		[RED("soundEventsOnSkip", 2,0)] 		public CArray<CName> SoundEventsOnSkip { get; set;}
+		[Ordinal(0)] [RED("("soundEventsOnSkip", 2,0)] 		public CArray<CName> SoundEventsOnSkip { get; set;}
 
 		public CStoryScene(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

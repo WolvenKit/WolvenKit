@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4JournalEntriesDLCMounter : IGameplayDLCMounter
 	{
-		[RED("journalEntriesFilePath")] 		public CSoft<CJournalInitialEntriesResource> JournalEntriesFilePath { get; set;}
+		[Ordinal(0)] [RED("("journalEntriesFilePath")] 		public CSoft<CJournalInitialEntriesResource> JournalEntriesFilePath { get; set;}
 
 		public CR4JournalEntriesDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

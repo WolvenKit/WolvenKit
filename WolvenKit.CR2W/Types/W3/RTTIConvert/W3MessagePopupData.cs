@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MessagePopupData : CObject
 	{
-		[RED("actionsList", 2,0)] 		public CArray<UserMessageActionData> ActionsList { get; set;}
+		[Ordinal(0)] [RED("("actionsList", 2,0)] 		public CArray<UserMessageActionData> ActionsList { get; set;}
 
-		[RED("titleText")] 		public CString TitleText { get; set;}
+		[Ordinal(0)] [RED("("titleText")] 		public CString TitleText { get; set;}
 
-		[RED("messageText")] 		public CString MessageText { get; set;}
+		[Ordinal(0)] [RED("("messageText")] 		public CString MessageText { get; set;}
 
-		[RED("messageId")] 		public CInt32 MessageId { get; set;}
+		[Ordinal(0)] [RED("("messageId")] 		public CInt32 MessageId { get; set;}
 
-		[RED("autoLocalize")] 		public CBool AutoLocalize { get; set;}
+		[Ordinal(0)] [RED("("autoLocalize")] 		public CBool AutoLocalize { get; set;}
 
-		[RED("messageType")] 		public CEnum<EUserDialogButtons> MessageType { get; set;}
+		[Ordinal(0)] [RED("("messageType")] 		public CEnum<EUserDialogButtons> MessageType { get; set;}
 
-		[RED("priority")] 		public CInt32 Priority { get; set;}
+		[Ordinal(0)] [RED("("priority")] 		public CInt32 Priority { get; set;}
 
-		[RED("progress")] 		public CFloat Progress { get; set;}
+		[Ordinal(0)] [RED("("progress")] 		public CFloat Progress { get; set;}
 
-		[RED("progressType")] 		public CEnum<EUserMessageProgressType> ProgressType { get; set;}
+		[Ordinal(0)] [RED("("progressType")] 		public CEnum<EUserMessageProgressType> ProgressType { get; set;}
 
-		[RED("progressTag")] 		public CName ProgressTag { get; set;}
+		[Ordinal(0)] [RED("("progressTag")] 		public CName ProgressTag { get; set;}
 
 		public W3MessagePopupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalQuestObjective : CJournalContainer
 	{
-		[RED("title")] 		public LocalizedString Title { get; set;}
+		[Ordinal(0)] [RED("title")] 		public LocalizedString Title { get; set;}
 
-		[RED("image")] 		public CString Image { get; set;}
+		[Ordinal(0)] [RED("image")] 		public CString Image { get; set;}
 
-		[RED("world")] 		public CUInt32 World { get; set;}
+		[Ordinal(0)] [RED("world")] 		public CUInt32 World { get; set;}
 
-		[RED("counterType")] 		public CEnum<eQuestObjectiveType> CounterType { get; set;}
+		[Ordinal(0)] [RED("counterType")] 		public CEnum<eQuestObjectiveType> CounterType { get; set;}
 
-		[RED("count")] 		public CUInt32 Count { get; set;}
+		[Ordinal(0)] [RED("count")] 		public CUInt32 Count { get; set;}
 
-		[RED("mutuallyExclusive")] 		public CBool MutuallyExclusive { get; set;}
+		[Ordinal(0)] [RED("mutuallyExclusive")] 		public CBool MutuallyExclusive { get; set;}
 
-		[RED("bookShortcut")] 		public CName BookShortcut { get; set;}
+		[Ordinal(0)] [RED("bookShortcut")] 		public CName BookShortcut { get; set;}
 
-		[RED("itemShortcut")] 		public CName ItemShortcut { get; set;}
+		[Ordinal(0)] [RED("itemShortcut")] 		public CName ItemShortcut { get; set;}
 
-		[RED("recipeShortcut")] 		public CName RecipeShortcut { get; set;}
+		[Ordinal(0)] [RED("recipeShortcut")] 		public CName RecipeShortcut { get; set;}
 
-		[RED("monsterShortcut")] 		public CHandle<CJournalPath> MonsterShortcut { get; set;}
+		[Ordinal(0)] [RED("monsterShortcut")] 		public CHandle<CJournalPath> MonsterShortcut { get; set;}
 
 		public CJournalQuestObjective(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

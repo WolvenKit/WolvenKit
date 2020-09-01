@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SGlossaryImageOverride : CVariable
 	{
-		[RED("uniqueTag")] 		public CName UniqueTag { get; set;}
+		[Ordinal(0)] [RED("("uniqueTag")] 		public CName UniqueTag { get; set;}
 
-		[RED("imageFileName")] 		public CString ImageFileName { get; set;}
+		[Ordinal(0)] [RED("("imageFileName")] 		public CString ImageFileName { get; set;}
 
 		public SGlossaryImageOverride(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

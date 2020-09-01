@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCraftingSchematic : CVariable
 	{
-		[RED("craftedItemName")] 		public CName CraftedItemName { get; set;}
+		[Ordinal(0)] [RED("("craftedItemName")] 		public CName CraftedItemName { get; set;}
 
-		[RED("craftedItemCount")] 		public CInt32 CraftedItemCount { get; set;}
+		[Ordinal(0)] [RED("("craftedItemCount")] 		public CInt32 CraftedItemCount { get; set;}
 
-		[RED("requiredCraftsmanType")] 		public CEnum<ECraftsmanType> RequiredCraftsmanType { get; set;}
+		[Ordinal(0)] [RED("("requiredCraftsmanType")] 		public CEnum<ECraftsmanType> RequiredCraftsmanType { get; set;}
 
-		[RED("requiredCraftsmanLevel")] 		public CEnum<ECraftsmanLevel> RequiredCraftsmanLevel { get; set;}
+		[Ordinal(0)] [RED("("requiredCraftsmanLevel")] 		public CEnum<ECraftsmanLevel> RequiredCraftsmanLevel { get; set;}
 
-		[RED("baseCraftingPrice")] 		public CInt32 BaseCraftingPrice { get; set;}
+		[Ordinal(0)] [RED("("baseCraftingPrice")] 		public CInt32 BaseCraftingPrice { get; set;}
 
-		[RED("ingredients", 2,0)] 		public CArray<SItemParts> Ingredients { get; set;}
+		[Ordinal(0)] [RED("("ingredients", 2,0)] 		public CArray<SItemParts> Ingredients { get; set;}
 
-		[RED("schemName")] 		public CName SchemName { get; set;}
+		[Ordinal(0)] [RED("("schemName")] 		public CName SchemName { get; set;}
 
 		public SCraftingSchematic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

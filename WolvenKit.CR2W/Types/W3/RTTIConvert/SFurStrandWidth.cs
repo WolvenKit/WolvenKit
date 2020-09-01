@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFurStrandWidth : CVariable
 	{
-		[RED("width")] 		public CFloat Width { get; set;}
+		[Ordinal(0)] [RED("("width")] 		public CFloat Width { get; set;}
 
-		[RED("widthRootScale")] 		public CFloat WidthRootScale { get; set;}
+		[Ordinal(0)] [RED("("widthRootScale")] 		public CFloat WidthRootScale { get; set;}
 
-		[RED("widthTipScale")] 		public CFloat WidthTipScale { get; set;}
+		[Ordinal(0)] [RED("("widthTipScale")] 		public CFloat WidthTipScale { get; set;}
 
-		[RED("rootWidthTex")] 		public CHandle<CBitmapTexture> RootWidthTex { get; set;}
+		[Ordinal(0)] [RED("("rootWidthTex")] 		public CHandle<CBitmapTexture> RootWidthTex { get; set;}
 
-		[RED("rootWidthTexChannel")] 		public CEnum<EHairTextureChannel> RootWidthTexChannel { get; set;}
+		[Ordinal(0)] [RED("("rootWidthTexChannel")] 		public CEnum<EHairTextureChannel> RootWidthTexChannel { get; set;}
 
-		[RED("tipWidthTex")] 		public CHandle<CBitmapTexture> TipWidthTex { get; set;}
+		[Ordinal(0)] [RED("("tipWidthTex")] 		public CHandle<CBitmapTexture> TipWidthTex { get; set;}
 
-		[RED("tipWidthTexChannel")] 		public CEnum<EHairTextureChannel> TipWidthTexChannel { get; set;}
+		[Ordinal(0)] [RED("("tipWidthTexChannel")] 		public CEnum<EHairTextureChannel> TipWidthTexChannel { get; set;}
 
-		[RED("widthNoise")] 		public CFloat WidthNoise { get; set;}
+		[Ordinal(0)] [RED("("widthNoise")] 		public CFloat WidthNoise { get; set;}
 
 		public SFurStrandWidth(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

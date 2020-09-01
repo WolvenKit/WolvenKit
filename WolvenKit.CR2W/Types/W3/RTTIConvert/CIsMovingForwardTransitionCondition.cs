@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CIsMovingForwardTransitionCondition : IBehaviorStateTransitionCondition
 	{
-		[RED("maxOffAngle")] 		public CFloat MaxOffAngle { get; set;}
+		[Ordinal(0)] [RED("maxOffAngle")] 		public CFloat MaxOffAngle { get; set;}
 
-		[RED("notMovingForward")] 		public CBool NotMovingForward { get; set;}
+		[Ordinal(0)] [RED("notMovingForward")] 		public CBool NotMovingForward { get; set;}
 
 		public CIsMovingForwardTransitionCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

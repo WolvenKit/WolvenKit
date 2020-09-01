@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_BasicQuen : CBaseGameplayEffect
 	{
-		[RED("quenEntity")] 		public CHandle<W3QuenEntity> QuenEntity { get; set;}
+		[Ordinal(0)] [RED("("quenEntity")] 		public CHandle<W3QuenEntity> QuenEntity { get; set;}
 
 		public W3Effect_BasicQuen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

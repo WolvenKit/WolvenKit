@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeAtomicLookAtDefinition : CBehTreeNodeCompleteImmediatelyDefinition
 	{
-		[RED("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(0)] [RED("duration")] 		public CFloat Duration { get; set;}
 
-		[RED("player")] 		public CBool Player { get; set;}
+		[Ordinal(0)] [RED("player")] 		public CBool Player { get; set;}
 
-		[RED("actionTarget")] 		public CBool ActionTarget { get; set;}
+		[Ordinal(0)] [RED("actionTarget")] 		public CBool ActionTarget { get; set;}
 
-		[RED("combatTarget")] 		public CBool CombatTarget { get; set;}
+		[Ordinal(0)] [RED("combatTarget")] 		public CBool CombatTarget { get; set;}
 
-		[RED("reactionTarget")] 		public CBool ReactionTarget { get; set;}
+		[Ordinal(0)] [RED("reactionTarget")] 		public CBool ReactionTarget { get; set;}
 
-		[RED("namedTarget")] 		public CName NamedTarget { get; set;}
+		[Ordinal(0)] [RED("namedTarget")] 		public CName NamedTarget { get; set;}
 
 		public CBehTreeNodeAtomicLookAtDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

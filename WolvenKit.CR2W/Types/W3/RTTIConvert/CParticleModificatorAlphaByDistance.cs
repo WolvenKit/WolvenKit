@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CParticleModificatorAlphaByDistance : IParticleModificator
 	{
-		[RED("far")] 		public CFloat Far { get; set;}
+		[Ordinal(0)] [RED("("far")] 		public CFloat Far { get; set;}
 
-		[RED("near")] 		public CFloat Near { get; set;}
+		[Ordinal(0)] [RED("("near")] 		public CFloat Near { get; set;}
 
 		public CParticleModificatorAlphaByDistance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

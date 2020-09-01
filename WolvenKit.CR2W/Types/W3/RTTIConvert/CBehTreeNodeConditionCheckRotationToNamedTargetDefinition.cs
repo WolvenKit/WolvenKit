@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeConditionCheckRotationToNamedTargetDefinition : IBehTreeNodeConditionCheckRotationDefinition
 	{
-		[RED("targetName")] 		public CBehTreeValCName TargetName { get; set;}
+		[Ordinal(0)] [RED("("targetName")] 		public CBehTreeValCName TargetName { get; set;}
 
 		public CBehTreeNodeConditionCheckRotationToNamedTargetDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CHorseParkingActionPointSelector : CActionPointSelector
 	{
-		[RED("apTags")] 		public TagList ApTags { get; set;}
+		[Ordinal(0)] [RED("("apTags")] 		public TagList ApTags { get; set;}
 
-		[RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(0)] [RED("("radius")] 		public CFloat Radius { get; set;}
 
 		public CHorseParkingActionPointSelector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

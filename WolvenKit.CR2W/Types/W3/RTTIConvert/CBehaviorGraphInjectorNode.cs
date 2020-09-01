@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphInjectorNode : CBehaviorGraphBaseNode
 	{
-		[RED("cachedInjectorNode")] 		public CPtr<CBehaviorGraphNode> CachedInjectorNode { get; set;}
+		[Ordinal(0)] [RED("("cachedInjectorNode")] 		public CPtr<CBehaviorGraphNode> CachedInjectorNode { get; set;}
 
-		[RED("cachedControlNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlNode { get; set;}
+		[Ordinal(0)] [RED("("cachedControlNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlNode { get; set;}
 
 		public CBehaviorGraphInjectorNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

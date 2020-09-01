@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeDecoratorPriorityOnSemaphoreDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("counterName")] 		public CBehTreeValCName CounterName { get; set;}
+		[Ordinal(0)] [RED("counterName")] 		public CBehTreeValCName CounterName { get; set;}
 
-		[RED("counterValue")] 		public CBehTreeValInt CounterValue { get; set;}
+		[Ordinal(0)] [RED("counterValue")] 		public CBehTreeValInt CounterValue { get; set;}
 
-		[RED("comparison")] 		public CEnum<ECompareFunc> Comparison { get; set;}
+		[Ordinal(0)] [RED("comparison")] 		public CEnum<ECompareFunc> Comparison { get; set;}
 
 		public CBehTreeNodeDecoratorPriorityOnSemaphoreDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

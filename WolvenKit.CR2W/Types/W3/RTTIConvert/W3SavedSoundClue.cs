@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SavedSoundClue : CGameplayEntity
 	{
-		[RED("savedFocusModeSoundEffectType")] 		public CEnum<EFocusModeSoundEffectType> SavedFocusModeSoundEffectType { get; set;}
+		[Ordinal(0)] [RED("("savedFocusModeSoundEffectType")] 		public CEnum<EFocusModeSoundEffectType> SavedFocusModeSoundEffectType { get; set;}
 
 		public W3SavedSoundClue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

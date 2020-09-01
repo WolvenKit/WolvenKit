@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondStaminaLowerThan : IBehTreeTask
 	{
-		[RED("baseStatType")] 		public CEnum<EBaseCharacterStats> BaseStatType { get; set;}
+		[Ordinal(0)] [RED("baseStatType")] 		public CEnum<EBaseCharacterStats> BaseStatType { get; set;}
 
-		[RED("statName")] 		public CName StatName { get; set;}
+		[Ordinal(0)] [RED("statName")] 		public CName StatName { get; set;}
 
-		[RED("getStat")] 		public CBool GetStat { get; set;}
+		[Ordinal(0)] [RED("getStat")] 		public CBool GetStat { get; set;}
 
-		[RED("statValue")] 		public CFloat StatValue { get; set;}
+		[Ordinal(0)] [RED("statValue")] 		public CFloat StatValue { get; set;}
 
 		public BTCondStaminaLowerThan(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

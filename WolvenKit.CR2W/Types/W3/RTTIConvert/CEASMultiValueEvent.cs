@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEASMultiValueEvent : CExtAnimScriptDurationEvent
 	{
-		[RED("callback")] 		public CName Callback { get; set;}
+		[Ordinal(0)] [RED("("callback")] 		public CName Callback { get; set;}
 
-		[RED("properties")] 		public SMultiValue Properties { get; set;}
+		[Ordinal(0)] [RED("("properties")] 		public SMultiValue Properties { get; set;}
 
 		public CEASMultiValueEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

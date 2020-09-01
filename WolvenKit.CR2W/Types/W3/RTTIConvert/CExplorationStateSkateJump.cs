@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateSkateJump : CExplorationStateJump
 	{
-		[RED("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
+		[Ordinal(0)] [RED("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
 
-		[RED("attacked")] 		public CBool Attacked { get; set;}
+		[Ordinal(0)] [RED("attacked")] 		public CBool Attacked { get; set;}
 
-		[RED("attacktimeMin")] 		public CFloat AttacktimeMin { get; set;}
+		[Ordinal(0)] [RED("attacktimeMin")] 		public CFloat AttacktimeMin { get; set;}
 
-		[RED("attackVertSpeedMin")] 		public CFloat AttackVertSpeedMin { get; set;}
+		[Ordinal(0)] [RED("attackVertSpeedMin")] 		public CFloat AttackVertSpeedMin { get; set;}
 
-		[RED("attackVertSpeedImpulse")] 		public CFloat AttackVertSpeedImpulse { get; set;}
+		[Ordinal(0)] [RED("attackVertSpeedImpulse")] 		public CFloat AttackVertSpeedImpulse { get; set;}
 
 		public CExplorationStateSkateJump(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

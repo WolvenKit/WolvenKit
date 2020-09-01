@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestFactsDBExCondition : IQuestCondition
 	{
-		[RED("factId1")] 		public CString FactId1 { get; set;}
+		[Ordinal(0)] [RED("factId1")] 		public CString FactId1 { get; set;}
 
-		[RED("factId2")] 		public CString FactId2 { get; set;}
+		[Ordinal(0)] [RED("factId2")] 		public CString FactId2 { get; set;}
 
-		[RED("queryFact")] 		public CEnum<EQueryFact> QueryFact { get; set;}
+		[Ordinal(0)] [RED("queryFact")] 		public CEnum<EQueryFact> QueryFact { get; set;}
 
-		[RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
+		[Ordinal(0)] [RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
 
 		public CQuestFactsDBExCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

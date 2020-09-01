@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTAddTag : IBehTreeTask
 	{
-		[RED("tag")] 		public CName Tag { get; set;}
+		[Ordinal(0)] [RED("tag")] 		public CName Tag { get; set;}
 
-		[RED("toOwner")] 		public CBool ToOwner { get; set;}
+		[Ordinal(0)] [RED("toOwner")] 		public CBool ToOwner { get; set;}
 
-		[RED("toTarget")] 		public CBool ToTarget { get; set;}
+		[Ordinal(0)] [RED("toTarget")] 		public CBool ToTarget { get; set;}
 
-		[RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+		[Ordinal(0)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(0)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
 		public CBTAddTag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

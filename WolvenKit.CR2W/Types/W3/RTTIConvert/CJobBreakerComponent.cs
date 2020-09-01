@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJobBreakerComponent : CComponent
 	{
-		[RED("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(0)] [RED("distance")] 		public CFloat Distance { get; set;}
 
-		[RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(0)] [RED("radius")] 		public CFloat Radius { get; set;}
 
 		public CJobBreakerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

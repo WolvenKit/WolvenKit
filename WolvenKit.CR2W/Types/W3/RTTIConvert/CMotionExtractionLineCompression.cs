@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMotionExtractionLineCompression : IMotionExtractionCompression
 	{
-		[RED("eps")] 		public CFloat Eps { get; set;}
+		[Ordinal(0)] [RED("eps")] 		public CFloat Eps { get; set;}
 
-		[RED("minKnots")] 		public CUInt32 MinKnots { get; set;}
+		[Ordinal(0)] [RED("minKnots")] 		public CUInt32 MinKnots { get; set;}
 
 		public CMotionExtractionLineCompression(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

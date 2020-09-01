@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskChanceDef : IBehTreeTaskDefinition
 	{
-		[RED("chance")] 		public CBehTreeValInt Chance { get; set;}
+		[Ordinal(0)] [RED("chance")] 		public CBehTreeValInt Chance { get; set;}
 
-		[RED("frequency")] 		public CFloat Frequency { get; set;}
+		[Ordinal(0)] [RED("frequency")] 		public CFloat Frequency { get; set;}
 
-		[RED("scaleWithNumberOfOpponents")] 		public CBool ScaleWithNumberOfOpponents { get; set;}
+		[Ordinal(0)] [RED("scaleWithNumberOfOpponents")] 		public CBool ScaleWithNumberOfOpponents { get; set;}
 
-		[RED("chancePerOpponent")] 		public CInt32 ChancePerOpponent { get; set;}
+		[Ordinal(0)] [RED("chancePerOpponent")] 		public CInt32 ChancePerOpponent { get; set;}
 
 		public CBTTaskChanceDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ISpawnTreeSetLootInitializer : ISpawnTreeScriptedInitializer
 	{
-		[RED("lootDefinitions", 2,0)] 		public CArray<SR4LootNameProperty> LootDefinitions { get; set;}
+		[Ordinal(0)] [RED("lootDefinitions", 2,0)] 		public CArray<SR4LootNameProperty> LootDefinitions { get; set;}
 
-		[RED("overrideLoot")] 		public CBool OverrideLoot { get; set;}
+		[Ordinal(0)] [RED("overrideLoot")] 		public CBool OverrideLoot { get; set;}
 
-		[RED("randomize")] 		public CBool Randomize { get; set;}
+		[Ordinal(0)] [RED("randomize")] 		public CBool Randomize { get; set;}
 
-		[RED("inventory")] 		public CHandle<CInventoryComponent> Inventory { get; set;}
+		[Ordinal(0)] [RED("inventory")] 		public CHandle<CInventoryComponent> Inventory { get; set;}
 
-		[RED("i")] 		public CInt32 I { get; set;}
+		[Ordinal(0)] [RED("i")] 		public CInt32 I { get; set;}
 
-		[RED("rand")] 		public CInt32 Rand { get; set;}
+		[Ordinal(0)] [RED("rand")] 		public CInt32 Rand { get; set;}
 
-		[RED("randRange")] 		public CInt32 RandRange { get; set;}
+		[Ordinal(0)] [RED("randRange")] 		public CInt32 RandRange { get; set;}
 
 		public ISpawnTreeSetLootInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

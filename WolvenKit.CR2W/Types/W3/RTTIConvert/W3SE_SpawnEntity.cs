@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SE_SpawnEntity : W3SwitchEvent
 	{
-		[RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(0)] [RED("("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
-		[RED("positionOffset")] 		public Vector PositionOffset { get; set;}
+		[Ordinal(0)] [RED("("positionOffset")] 		public Vector PositionOffset { get; set;}
 
-		[RED("randomOffset")] 		public Vector RandomOffset { get; set;}
+		[Ordinal(0)] [RED("("randomOffset")] 		public Vector RandomOffset { get; set;}
 
-		[RED("lifeTime")] 		public CFloat LifeTime { get; set;}
+		[Ordinal(0)] [RED("("lifeTime")] 		public CFloat LifeTime { get; set;}
 
-		[RED("maxEntitiesAtATime")] 		public CInt32 MaxEntitiesAtATime { get; set;}
+		[Ordinal(0)] [RED("("maxEntitiesAtATime")] 		public CInt32 MaxEntitiesAtATime { get; set;}
 
-		[RED("minDelayBetweenSpawns")] 		public CFloat MinDelayBetweenSpawns { get; set;}
+		[Ordinal(0)] [RED("("minDelayBetweenSpawns")] 		public CFloat MinDelayBetweenSpawns { get; set;}
 
-		[RED("spawnSnapToGround")] 		public CBool SpawnSnapToGround { get; set;}
+		[Ordinal(0)] [RED("("spawnSnapToGround")] 		public CBool SpawnSnapToGround { get; set;}
 
-		[RED("m_spawnedEntities", 2,0)] 		public CArray<CHandle<CEntity>> M_spawnedEntities { get; set;}
+		[Ordinal(0)] [RED("("m_spawnedEntities", 2,0)] 		public CArray<CHandle<CEntity>> M_spawnedEntities { get; set;}
 
 		public W3SE_SpawnEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

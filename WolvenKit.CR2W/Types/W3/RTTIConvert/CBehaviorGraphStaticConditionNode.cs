@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphStaticConditionNode : CBehaviorGraphNode
 	{
-		[RED("condition")] 		public CPtr<IBehaviorGraphStaticCondition> Condition { get; set;}
+		[Ordinal(0)] [RED("condition")] 		public CPtr<IBehaviorGraphStaticCondition> Condition { get; set;}
 
-		[RED("cachedInputANode")] 		public CPtr<CBehaviorGraphNode> CachedInputANode { get; set;}
+		[Ordinal(0)] [RED("cachedInputANode")] 		public CPtr<CBehaviorGraphNode> CachedInputANode { get; set;}
 
-		[RED("cachedInputBNode")] 		public CPtr<CBehaviorGraphNode> CachedInputBNode { get; set;}
+		[Ordinal(0)] [RED("cachedInputBNode")] 		public CPtr<CBehaviorGraphNode> CachedInputBNode { get; set;}
 
 		public CBehaviorGraphStaticConditionNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

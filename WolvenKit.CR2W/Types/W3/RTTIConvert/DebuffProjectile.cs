@@ -10,33 +10,33 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class DebuffProjectile : W3AdvancedProjectile
 	{
-		[RED("debuffType")] 		public CEnum<EEffectType> DebuffType { get; set;}
+		[Ordinal(0)] [RED("debuffType")] 		public CEnum<EEffectType> DebuffType { get; set;}
 
-		[RED("hitReactionType")] 		public CEnum<EHitReactionType> HitReactionType { get; set;}
+		[Ordinal(0)] [RED("hitReactionType")] 		public CEnum<EHitReactionType> HitReactionType { get; set;}
 
-		[RED("damageTypeName")] 		public CName DamageTypeName { get; set;}
+		[Ordinal(0)] [RED("damageTypeName")] 		public CName DamageTypeName { get; set;}
 
-		[RED("destroyQuen")] 		public CBool DestroyQuen { get; set;}
+		[Ordinal(0)] [RED("destroyQuen")] 		public CBool DestroyQuen { get; set;}
 
-		[RED("customDuration")] 		public CFloat CustomDuration { get; set;}
+		[Ordinal(0)] [RED("customDuration")] 		public CFloat CustomDuration { get; set;}
 
-		[RED("initFxName")] 		public CName InitFxName { get; set;}
+		[Ordinal(0)] [RED("initFxName")] 		public CName InitFxName { get; set;}
 
-		[RED("onCollisionFxName")] 		public CName OnCollisionFxName { get; set;}
+		[Ordinal(0)] [RED("onCollisionFxName")] 		public CName OnCollisionFxName { get; set;}
 
-		[RED("specialFxOnVictimName")] 		public CName SpecialFxOnVictimName { get; set;}
+		[Ordinal(0)] [RED("specialFxOnVictimName")] 		public CName SpecialFxOnVictimName { get; set;}
 
-		[RED("applyDebuffIfNoDmgWasDealt")] 		public CBool ApplyDebuffIfNoDmgWasDealt { get; set;}
+		[Ordinal(0)] [RED("applyDebuffIfNoDmgWasDealt")] 		public CBool ApplyDebuffIfNoDmgWasDealt { get; set;}
 
-		[RED("bounceOnVictimHit")] 		public CBool BounceOnVictimHit { get; set;}
+		[Ordinal(0)] [RED("bounceOnVictimHit")] 		public CBool BounceOnVictimHit { get; set;}
 
-		[RED("signalDamageInstigatedEvent")] 		public CBool SignalDamageInstigatedEvent { get; set;}
+		[Ordinal(0)] [RED("signalDamageInstigatedEvent")] 		public CBool SignalDamageInstigatedEvent { get; set;}
 
-		[RED("destroyAfterFloat")] 		public CFloat DestroyAfterFloat { get; set;}
+		[Ordinal(0)] [RED("destroyAfterFloat")] 		public CFloat DestroyAfterFloat { get; set;}
 
-		[RED("stopProjectileAfterCollision")] 		public CBool StopProjectileAfterCollision { get; set;}
+		[Ordinal(0)] [RED("stopProjectileAfterCollision")] 		public CBool StopProjectileAfterCollision { get; set;}
 
-		[RED("sendGameplayEventToVicitm")] 		public CName SendGameplayEventToVicitm { get; set;}
+		[Ordinal(0)] [RED("sendGameplayEventToVicitm")] 		public CName SendGameplayEventToVicitm { get; set;}
 
 		public DebuffProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

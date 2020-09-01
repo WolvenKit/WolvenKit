@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_IsTargetOf : CQCActorScriptedCondition
 	{
-		[RED("attackerTag")] 		public CName AttackerTag { get; set;}
+		[Ordinal(0)] [RED("("attackerTag")] 		public CName AttackerTag { get; set;}
 
-		[RED("attacker")] 		public CHandle<CActor> Attacker { get; set;}
+		[Ordinal(0)] [RED("("attacker")] 		public CHandle<CActor> Attacker { get; set;}
 
-		[RED("listener")] 		public CHandle<W3QuestCond_IsTargetOf_Listener> Listener { get; set;}
+		[Ordinal(0)] [RED("("listener")] 		public CHandle<W3QuestCond_IsTargetOf_Listener> Listener { get; set;}
 
 		public W3QuestCond_IsTargetOf(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

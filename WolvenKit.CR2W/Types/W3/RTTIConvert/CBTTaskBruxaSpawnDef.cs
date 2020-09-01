@@ -10,67 +10,67 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskBruxaSpawnDef : IBehTreeTaskDefinition
 	{
-		[RED("useNodeWithTag")] 		public CBool UseNodeWithTag { get; set;}
+		[Ordinal(0)] [RED("useNodeWithTag")] 		public CBool UseNodeWithTag { get; set;}
 
-		[RED("referenceNodeTag")] 		public CName ReferenceNodeTag { get; set;}
+		[Ordinal(0)] [RED("referenceNodeTag")] 		public CName ReferenceNodeTag { get; set;}
 
-		[RED("useTargetInsteadOfOwner")] 		public CBool UseTargetInsteadOfOwner { get; set;}
+		[Ordinal(0)] [RED("useTargetInsteadOfOwner")] 		public CBool UseTargetInsteadOfOwner { get; set;}
 
-		[RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+		[Ordinal(0)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 
-		[RED("baseOffsetOnCasterRotation")] 		public CBool BaseOffsetOnCasterRotation { get; set;}
+		[Ordinal(0)] [RED("baseOffsetOnCasterRotation")] 		public CBool BaseOffsetOnCasterRotation { get; set;}
 
-		[RED("rotateEntityToTarget")] 		public CBool RotateEntityToTarget { get; set;}
+		[Ordinal(0)] [RED("rotateEntityToTarget")] 		public CBool RotateEntityToTarget { get; set;}
 
-		[RED("resourceName")] 		public CName ResourceName { get; set;}
+		[Ordinal(0)] [RED("resourceName")] 		public CName ResourceName { get; set;}
 
-		[RED("spawnEntityOnDeathName")] 		public CBehTreeValCName SpawnEntityOnDeathName { get; set;}
+		[Ordinal(0)] [RED("spawnEntityOnDeathName")] 		public CBehTreeValCName SpawnEntityOnDeathName { get; set;}
 
-		[RED("spawnAfter")] 		public CFloat SpawnAfter { get; set;}
+		[Ordinal(0)] [RED("spawnAfter")] 		public CFloat SpawnAfter { get; set;}
 
-		[RED("validateSpawnPosition")] 		public CBool ValidateSpawnPosition { get; set;}
+		[Ordinal(0)] [RED("validateSpawnPosition")] 		public CBool ValidateSpawnPosition { get; set;}
 
-		[RED("spawnOnAnimEvent")] 		public CName SpawnOnAnimEvent { get; set;}
+		[Ordinal(0)] [RED("spawnOnAnimEvent")] 		public CName SpawnOnAnimEvent { get; set;}
 
-		[RED("spawnOnGameplayEvent")] 		public CName SpawnOnGameplayEvent { get; set;}
+		[Ordinal(0)] [RED("spawnOnGameplayEvent")] 		public CName SpawnOnGameplayEvent { get; set;}
 
-		[RED("fxNameOnSpawnEntity")] 		public CName FxNameOnSpawnEntity { get; set;}
+		[Ordinal(0)] [RED("fxNameOnSpawnEntity")] 		public CName FxNameOnSpawnEntity { get; set;}
 
-		[RED("fxNameOnSpawnOwner")] 		public CName FxNameOnSpawnOwner { get; set;}
+		[Ordinal(0)] [RED("fxNameOnSpawnOwner")] 		public CName FxNameOnSpawnOwner { get; set;}
 
-		[RED("fxNameAfterSpawnOwner")] 		public CName FxNameAfterSpawnOwner { get; set;}
+		[Ordinal(0)] [RED("fxNameAfterSpawnOwner")] 		public CName FxNameAfterSpawnOwner { get; set;}
 
-		[RED("fxNameAfterSpawnDelay")] 		public CFloat FxNameAfterSpawnDelay { get; set;}
+		[Ordinal(0)] [RED("fxNameAfterSpawnDelay")] 		public CFloat FxNameAfterSpawnDelay { get; set;}
 
-		[RED("connectFxAfterSpawnWithEntity")] 		public CBool ConnectFxAfterSpawnWithEntity { get; set;}
+		[Ordinal(0)] [RED("connectFxAfterSpawnWithEntity")] 		public CBool ConnectFxAfterSpawnWithEntity { get; set;}
 
-		[RED("bruxaEntityTag")] 		public CName BruxaEntityTag { get; set;}
+		[Ordinal(0)] [RED("bruxaEntityTag")] 		public CName BruxaEntityTag { get; set;}
 
-		[RED("inheritTagsFromOwner")] 		public CBool InheritTagsFromOwner { get; set;}
+		[Ordinal(0)] [RED("inheritTagsFromOwner")] 		public CBool InheritTagsFromOwner { get; set;}
 
-		[RED("setBehVarOnSpawn")] 		public CName SetBehVarOnSpawn { get; set;}
+		[Ordinal(0)] [RED("setBehVarOnSpawn")] 		public CName SetBehVarOnSpawn { get; set;}
 
-		[RED("setBehVarValue")] 		public CFloat SetBehVarValue { get; set;}
+		[Ordinal(0)] [RED("setBehVarValue")] 		public CFloat SetBehVarValue { get; set;}
 
-		[RED("setAppearanceOnSpawn")] 		public CName SetAppearanceOnSpawn { get; set;}
+		[Ordinal(0)] [RED("setAppearanceOnSpawn")] 		public CName SetAppearanceOnSpawn { get; set;}
 
-		[RED("setEntityAsActionTarget")] 		public CBool SetEntityAsActionTarget { get; set;}
+		[Ordinal(0)] [RED("setEntityAsActionTarget")] 		public CBool SetEntityAsActionTarget { get; set;}
 
-		[RED("disableGameplayVisibility")] 		public CBool DisableGameplayVisibility { get; set;}
+		[Ordinal(0)] [RED("disableGameplayVisibility")] 		public CBool DisableGameplayVisibility { get; set;}
 
-		[RED("disableVisibility")] 		public CBool DisableVisibility { get; set;}
+		[Ordinal(0)] [RED("disableVisibility")] 		public CBool DisableVisibility { get; set;}
 
-		[RED("disableCollisionOnSpawn")] 		public CBool DisableCollisionOnSpawn { get; set;}
+		[Ordinal(0)] [RED("disableCollisionOnSpawn")] 		public CBool DisableCollisionOnSpawn { get; set;}
 
-		[RED("stopAllEffectsAfter")] 		public CFloat StopAllEffectsAfter { get; set;}
+		[Ordinal(0)] [RED("stopAllEffectsAfter")] 		public CFloat StopAllEffectsAfter { get; set;}
 
-		[RED("activeDuration")] 		public CFloat ActiveDuration { get; set;}
+		[Ordinal(0)] [RED("activeDuration")] 		public CFloat ActiveDuration { get; set;}
 
-		[RED("teleportInterval")] 		public CFloat TeleportInterval { get; set;}
+		[Ordinal(0)] [RED("teleportInterval")] 		public CFloat TeleportInterval { get; set;}
 
-		[RED("minTeleportDistFromTarget")] 		public CFloat MinTeleportDistFromTarget { get; set;}
+		[Ordinal(0)] [RED("minTeleportDistFromTarget")] 		public CFloat MinTeleportDistFromTarget { get; set;}
 
-		[RED("maxTeleportDistFromTarget")] 		public CFloat MaxTeleportDistFromTarget { get; set;}
+		[Ordinal(0)] [RED("maxTeleportDistFromTarget")] 		public CFloat MaxTeleportDistFromTarget { get; set;}
 
 		public CBTTaskBruxaSpawnDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

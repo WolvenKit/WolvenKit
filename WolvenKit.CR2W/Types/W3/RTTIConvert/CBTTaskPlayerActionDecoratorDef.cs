@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPlayerActionDecoratorDef : IBehTreePlayerTaskDefinition
 	{
-		[RED("completeOnInput")] 		public CBehTreeValBool CompleteOnInput { get; set;}
+		[Ordinal(0)] [RED("completeOnInput")] 		public CBehTreeValBool CompleteOnInput { get; set;}
 
 		public CBTTaskPlayerActionDecoratorDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

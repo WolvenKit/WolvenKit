@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphBlendNode : CBehaviorGraphNode
 	{
-		[RED("synchronize")] 		public CBool Synchronize { get; set;}
+		[Ordinal(0)] [RED("("synchronize")] 		public CBool Synchronize { get; set;}
 
-		[RED("syncMethod")] 		public CPtr<IBehaviorSyncMethod> SyncMethod { get; set;}
+		[Ordinal(0)] [RED("("syncMethod")] 		public CPtr<IBehaviorSyncMethod> SyncMethod { get; set;}
 
-		[RED("takeEventsFromMostImportantInput")] 		public CBool TakeEventsFromMostImportantInput { get; set;}
+		[Ordinal(0)] [RED("("takeEventsFromMostImportantInput")] 		public CBool TakeEventsFromMostImportantInput { get; set;}
 
-		[RED("firstInputValue")] 		public CFloat FirstInputValue { get; set;}
+		[Ordinal(0)] [RED("("firstInputValue")] 		public CFloat FirstInputValue { get; set;}
 
-		[RED("secondInputValue")] 		public CFloat SecondInputValue { get; set;}
+		[Ordinal(0)] [RED("("secondInputValue")] 		public CFloat SecondInputValue { get; set;}
 
-		[RED("cachedFirstInputNode")] 		public CPtr<CBehaviorGraphNode> CachedFirstInputNode { get; set;}
+		[Ordinal(0)] [RED("("cachedFirstInputNode")] 		public CPtr<CBehaviorGraphNode> CachedFirstInputNode { get; set;}
 
-		[RED("cachedSecondInputNode")] 		public CPtr<CBehaviorGraphNode> CachedSecondInputNode { get; set;}
+		[Ordinal(0)] [RED("("cachedSecondInputNode")] 		public CPtr<CBehaviorGraphNode> CachedSecondInputNode { get; set;}
 
-		[RED("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
+		[Ordinal(0)] [RED("("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
 
 		public CBehaviorGraphBlendNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

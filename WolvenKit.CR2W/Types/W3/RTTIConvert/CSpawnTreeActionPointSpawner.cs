@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeActionPointSpawner : CVariable
 	{
-		[RED("visibility")] 		public CEnum<ESpawnTreeSpawnVisibility> Visibility { get; set;}
+		[Ordinal(0)] [RED("visibility")] 		public CEnum<ESpawnTreeSpawnVisibility> Visibility { get; set;}
 
-		[RED("spawnpointDelay")] 		public CFloat SpawnpointDelay { get; set;}
+		[Ordinal(0)] [RED("spawnpointDelay")] 		public CFloat SpawnpointDelay { get; set;}
 
-		[RED("tags")] 		public TagList Tags { get; set;}
+		[Ordinal(0)] [RED("tags")] 		public TagList Tags { get; set;}
 
-		[RED("categories", 2,0)] 		public CArray<CName> Categories { get; set;}
+		[Ordinal(0)] [RED("categories", 2,0)] 		public CArray<CName> Categories { get; set;}
 
 		public CSpawnTreeActionPointSpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

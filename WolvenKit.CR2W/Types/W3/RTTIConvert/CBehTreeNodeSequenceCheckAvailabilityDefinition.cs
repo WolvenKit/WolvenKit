@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeSequenceCheckAvailabilityDefinition : CBehTreeNodeSequenceDefinition
 	{
-		[RED("continueSequenceOnChildFailure")] 		public CBool ContinueSequenceOnChildFailure { get; set;}
+		[Ordinal(0)] [RED("continueSequenceOnChildFailure")] 		public CBool ContinueSequenceOnChildFailure { get; set;}
 
-		[RED("updateCheckIsAvailable")] 		public CBool UpdateCheckIsAvailable { get; set;}
+		[Ordinal(0)] [RED("updateCheckIsAvailable")] 		public CBool UpdateCheckIsAvailable { get; set;}
 
-		[RED("updateCheckIsAvailFreq")] 		public CFloat UpdateCheckIsAvailFreq { get; set;}
+		[Ordinal(0)] [RED("updateCheckIsAvailFreq")] 		public CFloat UpdateCheckIsAvailFreq { get; set;}
 
 		public CBehTreeNodeSequenceCheckAvailabilityDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

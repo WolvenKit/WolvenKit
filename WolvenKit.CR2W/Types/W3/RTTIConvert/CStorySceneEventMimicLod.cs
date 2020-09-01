@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventMimicLod : CStorySceneEvent
 	{
-		[RED("actor")] 		public CName Actor { get; set;}
+		[Ordinal(0)] [RED("actor")] 		public CName Actor { get; set;}
 
-		[RED("setMimicOn")] 		public CBool SetMimicOn { get; set;}
+		[Ordinal(0)] [RED("setMimicOn")] 		public CBool SetMimicOn { get; set;}
 
 		public CStorySceneEventMimicLod(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeDynamicWanderingTargetDefinition : CBehTreeNodeSelectWanderingTargetDecoratorDefinition
 	{
-		[RED("dynamicWanderAreaName_var")] 		public CName DynamicWanderAreaName_var { get; set;}
+		[Ordinal(0)] [RED("dynamicWanderAreaName_var")] 		public CName DynamicWanderAreaName_var { get; set;}
 
-		[RED("minimalWanderDistance")] 		public CBehTreeValFloat MinimalWanderDistance { get; set;}
+		[Ordinal(0)] [RED("minimalWanderDistance")] 		public CBehTreeValFloat MinimalWanderDistance { get; set;}
 
-		[RED("useGuardArea")] 		public CBehTreeValBool UseGuardArea { get; set;}
+		[Ordinal(0)] [RED("useGuardArea")] 		public CBehTreeValBool UseGuardArea { get; set;}
 
 		public CBehTreeNodeDynamicWanderingTargetDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

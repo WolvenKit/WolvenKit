@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SInputActionLock : CVariable
 	{
-		[RED("sourceName")] 		public CName SourceName { get; set;}
+		[Ordinal(0)] [RED("("sourceName")] 		public CName SourceName { get; set;}
 
-		[RED("removedOnSpawn")] 		public CBool RemovedOnSpawn { get; set;}
+		[Ordinal(0)] [RED("("removedOnSpawn")] 		public CBool RemovedOnSpawn { get; set;}
 
-		[RED("isFromQuest")] 		public CBool IsFromQuest { get; set;}
+		[Ordinal(0)] [RED("("isFromQuest")] 		public CBool IsFromQuest { get; set;}
 
-		[RED("isFromPlace")] 		public CBool IsFromPlace { get; set;}
+		[Ordinal(0)] [RED("("isFromPlace")] 		public CBool IsFromPlace { get; set;}
 
 		public SInputActionLock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

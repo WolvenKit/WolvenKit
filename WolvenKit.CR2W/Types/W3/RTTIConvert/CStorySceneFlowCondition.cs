@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneFlowCondition : CStorySceneControlPart
 	{
-		[RED("trueLink")] 		public CPtr<CStorySceneLinkElement> TrueLink { get; set;}
+		[Ordinal(0)] [RED("trueLink")] 		public CPtr<CStorySceneLinkElement> TrueLink { get; set;}
 
-		[RED("falseLink")] 		public CPtr<CStorySceneLinkElement> FalseLink { get; set;}
+		[Ordinal(0)] [RED("falseLink")] 		public CPtr<CStorySceneLinkElement> FalseLink { get; set;}
 
-		[RED("questCondition")] 		public CPtr<IQuestCondition> QuestCondition { get; set;}
+		[Ordinal(0)] [RED("questCondition")] 		public CPtr<IQuestCondition> QuestCondition { get; set;}
 
 		public CStorySceneFlowCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

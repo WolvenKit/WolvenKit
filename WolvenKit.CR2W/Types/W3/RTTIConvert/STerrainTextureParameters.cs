@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class STerrainTextureParameters : CVariable
 	{
-		[RED("val")] 		public Vector Val { get; set;}
+		[Ordinal(0)] [RED("("val")] 		public Vector Val { get; set;}
 
-		[RED("val2")] 		public Vector Val2 { get; set;}
+		[Ordinal(0)] [RED("("val2")] 		public Vector Val2 { get; set;}
 
 		public STerrainTextureParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

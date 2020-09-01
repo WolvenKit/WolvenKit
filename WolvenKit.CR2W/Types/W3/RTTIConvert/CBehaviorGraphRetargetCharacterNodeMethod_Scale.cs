@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphRetargetCharacterNodeMethod_Scale : IBehaviorGraphRetargetCharacterNodeMethod
 	{
-		[RED("scaleFactor")] 		public CFloat ScaleFactor { get; set;}
+		[Ordinal(0)] [RED("scaleFactor")] 		public CFloat ScaleFactor { get; set;}
 
 		public CBehaviorGraphRetargetCharacterNodeMethod_Scale(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

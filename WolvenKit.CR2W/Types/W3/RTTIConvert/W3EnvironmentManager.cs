@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3EnvironmentManager : CObject
 	{
-		[RED("m_envId")] 		public CInt32 M_envId { get; set;}
+		[Ordinal(0)] [RED("("m_envId")] 		public CInt32 M_envId { get; set;}
 
-		[RED("lunation")] 		public CInt32 Lunation { get; set;}
+		[Ordinal(0)] [RED("("lunation")] 		public CInt32 Lunation { get; set;}
 
-		[RED("dayStart")] 		public CInt32 DayStart { get; set;}
+		[Ordinal(0)] [RED("("dayStart")] 		public CInt32 DayStart { get; set;}
 
-		[RED("nightStart")] 		public CInt32 NightStart { get; set;}
+		[Ordinal(0)] [RED("("nightStart")] 		public CInt32 NightStart { get; set;}
 
-		[RED("redMoonPeriod")] 		public CInt32 RedMoonPeriod { get; set;}
+		[Ordinal(0)] [RED("("redMoonPeriod")] 		public CInt32 RedMoonPeriod { get; set;}
 
-		[RED("hourToSwitchEnv")] 		public CInt32 HourToSwitchEnv { get; set;}
+		[Ordinal(0)] [RED("("hourToSwitchEnv")] 		public CInt32 HourToSwitchEnv { get; set;}
 
 		public W3EnvironmentManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

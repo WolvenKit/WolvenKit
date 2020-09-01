@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPoseCompressionCharacter : CPoseCompressionDefault
 	{
-		[RED("leftWeaponName")] 		public CString LeftWeaponName { get; set;}
+		[Ordinal(0)] [RED("leftWeaponName")] 		public CString LeftWeaponName { get; set;}
 
-		[RED("rightWeaponName")] 		public CString RightWeaponName { get; set;}
+		[Ordinal(0)] [RED("rightWeaponName")] 		public CString RightWeaponName { get; set;}
 
-		[RED("leftWeapon")] 		public CInt32 LeftWeapon { get; set;}
+		[Ordinal(0)] [RED("leftWeapon")] 		public CInt32 LeftWeapon { get; set;}
 
-		[RED("rightWeapon")] 		public CInt32 RightWeapon { get; set;}
+		[Ordinal(0)] [RED("rightWeapon")] 		public CInt32 RightWeapon { get; set;}
 
 		public CPoseCompressionCharacter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

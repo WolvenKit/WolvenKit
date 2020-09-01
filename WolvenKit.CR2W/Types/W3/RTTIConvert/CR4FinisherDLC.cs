@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4FinisherDLC : CObject
 	{
-		[RED("finisherAnimName")] 		public CName FinisherAnimName { get; set;}
+		[Ordinal(0)] [RED("("finisherAnimName")] 		public CName FinisherAnimName { get; set;}
 
-		[RED("woundName")] 		public CName WoundName { get; set;}
+		[Ordinal(0)] [RED("("woundName")] 		public CName WoundName { get; set;}
 
-		[RED("finisherSide")] 		public CEnum<EFinisherSide> FinisherSide { get; set;}
+		[Ordinal(0)] [RED("("finisherSide")] 		public CEnum<EFinisherSide> FinisherSide { get; set;}
 
-		[RED("leftCameraAnimName")] 		public CName LeftCameraAnimName { get; set;}
+		[Ordinal(0)] [RED("("leftCameraAnimName")] 		public CName LeftCameraAnimName { get; set;}
 
-		[RED("rightCameraAnimName")] 		public CName RightCameraAnimName { get; set;}
+		[Ordinal(0)] [RED("("rightCameraAnimName")] 		public CName RightCameraAnimName { get; set;}
 
-		[RED("frontCameraAnimName")] 		public CName FrontCameraAnimName { get; set;}
+		[Ordinal(0)] [RED("("frontCameraAnimName")] 		public CName FrontCameraAnimName { get; set;}
 
-		[RED("backCameraAnimName")] 		public CName BackCameraAnimName { get; set;}
+		[Ordinal(0)] [RED("("backCameraAnimName")] 		public CName BackCameraAnimName { get; set;}
 
 		public CR4FinisherDLC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

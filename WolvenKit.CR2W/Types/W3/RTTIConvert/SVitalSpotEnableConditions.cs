@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SVitalSpotEnableConditions : CVariable
 	{
-		[RED("animationEventName")] 		public CName AnimationEventName { get; set;}
+		[Ordinal(0)] [RED("("animationEventName")] 		public CName AnimationEventName { get; set;}
 
-		[RED("VSActivatorBehTreeNodeName")] 		public CName VSActivatorBehTreeNodeName { get; set;}
+		[Ordinal(0)] [RED("("VSActivatorBehTreeNodeName")] 		public CName VSActivatorBehTreeNodeName { get; set;}
 
-		[RED("enableByDefault")] 		public CBool EnableByDefault { get; set;}
+		[Ordinal(0)] [RED("("enableByDefault")] 		public CBool EnableByDefault { get; set;}
 
 		public SVitalSpotEnableConditions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

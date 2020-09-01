@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphWrapNode : CBehaviorGraphValueNode
 	{
-		[RED("minValue")] 		public CFloat MinValue { get; set;}
+		[Ordinal(0)] [RED("minValue")] 		public CFloat MinValue { get; set;}
 
-		[RED("maxValue")] 		public CFloat MaxValue { get; set;}
+		[Ordinal(0)] [RED("maxValue")] 		public CFloat MaxValue { get; set;}
 
 		public CBehaviorGraphWrapNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSwfHeaderInfo : CVariable
 	{
-		[RED("frameRate")] 		public CFloat FrameRate { get; set;}
+		[Ordinal(0)] [RED("("frameRate")] 		public CFloat FrameRate { get; set;}
 
-		[RED("frameHeight")] 		public CFloat FrameHeight { get; set;}
+		[Ordinal(0)] [RED("("frameHeight")] 		public CFloat FrameHeight { get; set;}
 
-		[RED("frameWidth")] 		public CFloat FrameWidth { get; set;}
+		[Ordinal(0)] [RED("("frameWidth")] 		public CFloat FrameWidth { get; set;}
 
-		[RED("frameCount")] 		public CUInt32 FrameCount { get; set;}
+		[Ordinal(0)] [RED("("frameCount")] 		public CUInt32 FrameCount { get; set;}
 
-		[RED("height")] 		public CFloat Height { get; set;}
+		[Ordinal(0)] [RED("("height")] 		public CFloat Height { get; set;}
 
-		[RED("width")] 		public CFloat Width { get; set;}
+		[Ordinal(0)] [RED("("width")] 		public CFloat Width { get; set;}
 
-		[RED("version")] 		public CUInt32 Version { get; set;}
+		[Ordinal(0)] [RED("("version")] 		public CUInt32 Version { get; set;}
 
-		[RED("compressed")] 		public CBool Compressed { get; set;}
+		[Ordinal(0)] [RED("("compressed")] 		public CBool Compressed { get; set;}
 
 		public SSwfHeaderInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

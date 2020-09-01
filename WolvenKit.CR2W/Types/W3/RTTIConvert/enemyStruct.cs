@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class enemyStruct : CVariable
 	{
-		[RED("enemyType")] 		public CEnum<EMonsterCategory> EnemyType { get; set;}
+		[Ordinal(0)] [RED("enemyType")] 		public CEnum<EMonsterCategory> EnemyType { get; set;}
 
-		[RED("enemyCount")] 		public CInt32 EnemyCount { get; set;}
+		[Ordinal(0)] [RED("enemyCount")] 		public CInt32 EnemyCount { get; set;}
 
-		[RED("enemyName")] 		public CName EnemyName { get; set;}
+		[Ordinal(0)] [RED("enemyName")] 		public CName EnemyName { get; set;}
 
 		public enemyStruct(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

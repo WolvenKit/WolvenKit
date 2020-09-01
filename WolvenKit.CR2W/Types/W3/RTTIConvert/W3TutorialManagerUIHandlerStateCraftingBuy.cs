@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateCraftingBuy : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("BUY")] 		public CName BUY { get; set;}
+		[Ordinal(0)] [RED("("BUY")] 		public CName BUY { get; set;}
 
-		[RED("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
 		public W3TutorialManagerUIHandlerStateCraftingBuy(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

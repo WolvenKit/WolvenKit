@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMoveToPoint : IAIBaseAction
 	{
-		[RED("params")] 		public CHandle<CAIMoveToPointParams> Params { get; set;}
+		[Ordinal(0)] [RED("params")] 		public CHandle<CAIMoveToPointParams> Params { get; set;}
 
 		public CAIMoveToPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

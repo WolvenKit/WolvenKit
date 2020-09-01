@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIFormationLeadActionTree : IAIFormationActionTree
 	{
-		[RED("leaderSteering")] 		public CHandle<CMoveSteeringBehavior> LeaderSteering { get; set;}
+		[Ordinal(0)] [RED("leaderSteering")] 		public CHandle<CMoveSteeringBehavior> LeaderSteering { get; set;}
 
-		[RED("reshapeOnMoveAction")] 		public CBool ReshapeOnMoveAction { get; set;}
+		[Ordinal(0)] [RED("reshapeOnMoveAction")] 		public CBool ReshapeOnMoveAction { get; set;}
 
-		[RED("leadSubtree")] 		public CHandle<IAIActionTree> LeadSubtree { get; set;}
+		[Ordinal(0)] [RED("leadSubtree")] 		public CHandle<IAIActionTree> LeadSubtree { get; set;}
 
 		public CAIFormationLeadActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

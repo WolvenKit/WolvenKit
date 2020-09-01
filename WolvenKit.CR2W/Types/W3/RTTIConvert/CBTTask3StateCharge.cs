@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTask3StateCharge : CBTTask3StateAttack
 	{
-		[RED("differentChargeEndings")] 		public CBool DifferentChargeEndings { get; set;}
+		[Ordinal(0)] [RED("("differentChargeEndings")] 		public CBool DifferentChargeEndings { get; set;}
 
-		[RED("bCollisionWithActor")] 		public CBool BCollisionWithActor { get; set;}
+		[Ordinal(0)] [RED("("bCollisionWithActor")] 		public CBool BCollisionWithActor { get; set;}
 
-		[RED("loopStart")] 		public CBool LoopStart { get; set;}
+		[Ordinal(0)] [RED("("loopStart")] 		public CBool LoopStart { get; set;}
 
-		[RED("isEnding")] 		public CBool IsEnding { get; set;}
+		[Ordinal(0)] [RED("("isEnding")] 		public CBool IsEnding { get; set;}
 
-		[RED("attached")] 		public CBool Attached { get; set;}
+		[Ordinal(0)] [RED("("attached")] 		public CBool Attached { get; set;}
 
-		[RED("cameraIndex")] 		public CInt32 CameraIndex { get; set;}
+		[Ordinal(0)] [RED("("cameraIndex")] 		public CInt32 CameraIndex { get; set;}
 
-		[RED("collidedActor")] 		public CHandle<CActor> CollidedActor { get; set;}
+		[Ordinal(0)] [RED("("collidedActor")] 		public CHandle<CActor> CollidedActor { get; set;}
 
 		public CBTTask3StateCharge(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

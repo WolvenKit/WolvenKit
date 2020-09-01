@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskDespawn : IBehTreeTask
 	{
-		[RED("callFromQuest")] 		public CBool CallFromQuest { get; set;}
+		[Ordinal(0)] [RED("callFromQuest")] 		public CBool CallFromQuest { get; set;}
 
-		[RED("destroyCooldown")] 		public CFloat DestroyCooldown { get; set;}
+		[Ordinal(0)] [RED("destroyCooldown")] 		public CFloat DestroyCooldown { get; set;}
 
-		[RED("despawn")] 		public CBool Despawn { get; set;}
+		[Ordinal(0)] [RED("despawn")] 		public CBool Despawn { get; set;}
 
-		[RED("disappearfxName")] 		public CName DisappearfxName { get; set;}
+		[Ordinal(0)] [RED("disappearfxName")] 		public CName DisappearfxName { get; set;}
 
-		[RED("emptyName")] 		public CName EmptyName { get; set;}
+		[Ordinal(0)] [RED("emptyName")] 		public CName EmptyName { get; set;}
 
-		[RED("despawnEventName")] 		public CName DespawnEventName { get; set;}
+		[Ordinal(0)] [RED("despawnEventName")] 		public CName DespawnEventName { get; set;}
 
-		[RED("raiseEventName")] 		public CName RaiseEventName { get; set;}
+		[Ordinal(0)] [RED("raiseEventName")] 		public CName RaiseEventName { get; set;}
 
 		public CBTTaskDespawn(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

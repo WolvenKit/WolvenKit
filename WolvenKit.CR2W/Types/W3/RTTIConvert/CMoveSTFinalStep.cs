@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTFinalStep : CMoveSTMove
 	{
-		[RED("ignoreGoalToleranceForFinalLocation")] 		public CBool IgnoreGoalToleranceForFinalLocation { get; set;}
+		[Ordinal(0)] [RED("ignoreGoalToleranceForFinalLocation")] 		public CBool IgnoreGoalToleranceForFinalLocation { get; set;}
 
-		[RED("finalStepPositionVar")] 		public CName FinalStepPositionVar { get; set;}
+		[Ordinal(0)] [RED("finalStepPositionVar")] 		public CName FinalStepPositionVar { get; set;}
 
-		[RED("finalStepDistanceVar")] 		public CName FinalStepDistanceVar { get; set;}
+		[Ordinal(0)] [RED("finalStepDistanceVar")] 		public CName FinalStepDistanceVar { get; set;}
 
-		[RED("finalStepActiveVar")] 		public CName FinalStepActiveVar { get; set;}
+		[Ordinal(0)] [RED("finalStepActiveVar")] 		public CName FinalStepActiveVar { get; set;}
 
-		[RED("finalStepEvent")] 		public CName FinalStepEvent { get; set;}
+		[Ordinal(0)] [RED("finalStepEvent")] 		public CName FinalStepEvent { get; set;}
 
-		[RED("finalStepActivationNotification")] 		public CName FinalStepActivationNotification { get; set;}
+		[Ordinal(0)] [RED("finalStepActivationNotification")] 		public CName FinalStepActivationNotification { get; set;}
 
-		[RED("finalStepDeactivationNotification")] 		public CName FinalStepDeactivationNotification { get; set;}
+		[Ordinal(0)] [RED("finalStepDeactivationNotification")] 		public CName FinalStepDeactivationNotification { get; set;}
 
-		[RED("finalStepDeactivationNotificationTimeOut")] 		public CFloat FinalStepDeactivationNotificationTimeOut { get; set;}
+		[Ordinal(0)] [RED("finalStepDeactivationNotificationTimeOut")] 		public CFloat FinalStepDeactivationNotificationTimeOut { get; set;}
 
-		[RED("finalStepDistanceLimit")] 		public CFloat FinalStepDistanceLimit { get; set;}
+		[Ordinal(0)] [RED("finalStepDistanceLimit")] 		public CFloat FinalStepDistanceLimit { get; set;}
 
 		public CMoveSTFinalStep(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

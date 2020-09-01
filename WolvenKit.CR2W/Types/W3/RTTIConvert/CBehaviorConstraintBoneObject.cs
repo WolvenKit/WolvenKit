@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorConstraintBoneObject : IBehaviorConstraintObject
 	{
-		[RED("Bone")] 		public CString Bone { get; set;}
+		[Ordinal(0)] [RED("Bone")] 		public CString Bone { get; set;}
 
 		public CBehaviorConstraintBoneObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

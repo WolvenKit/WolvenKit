@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SPartyWaypointHandle : CVariable
 	{
-		[RED("partyMemberName")] 		public CName PartyMemberName { get; set;}
+		[Ordinal(0)] [RED("("partyMemberName")] 		public CName PartyMemberName { get; set;}
 
-		[RED("entityHandle")] 		public EntityHandle EntityHandle { get; set;}
+		[Ordinal(0)] [RED("("entityHandle")] 		public EntityHandle EntityHandle { get; set;}
 
-		[RED("componentName")] 		public CString ComponentName { get; set;}
+		[Ordinal(0)] [RED("("componentName")] 		public CString ComponentName { get; set;}
 
 		public SPartyWaypointHandle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

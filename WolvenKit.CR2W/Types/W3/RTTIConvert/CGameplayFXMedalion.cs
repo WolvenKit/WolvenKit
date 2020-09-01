@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGameplayFXMedalion : CEntity
 	{
-		[RED("beginRadius")] 		public CFloat BeginRadius { get; set;}
+		[Ordinal(0)] [RED("("beginRadius")] 		public CFloat BeginRadius { get; set;}
 
-		[RED("endRadius")] 		public CFloat EndRadius { get; set;}
+		[Ordinal(0)] [RED("("endRadius")] 		public CFloat EndRadius { get; set;}
 
-		[RED("ringRadiusTolerance")] 		public CFloat RingRadiusTolerance { get; set;}
+		[Ordinal(0)] [RED("("ringRadiusTolerance")] 		public CFloat RingRadiusTolerance { get; set;}
 
-		[RED("debugLoop")] 		public CBool DebugLoop { get; set;}
+		[Ordinal(0)] [RED("("debugLoop")] 		public CBool DebugLoop { get; set;}
 
-		[RED("distPerSec")] 		public CFloat DistPerSec { get; set;}
+		[Ordinal(0)] [RED("("distPerSec")] 		public CFloat DistPerSec { get; set;}
 
-		[RED("sustainTime")] 		public CFloat SustainTime { get; set;}
+		[Ordinal(0)] [RED("("sustainTime")] 		public CFloat SustainTime { get; set;}
 
-		[RED("highlightTag")] 		public CName HighlightTag { get; set;}
+		[Ordinal(0)] [RED("("highlightTag")] 		public CName HighlightTag { get; set;}
 
 		public CGameplayFXMedalion(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

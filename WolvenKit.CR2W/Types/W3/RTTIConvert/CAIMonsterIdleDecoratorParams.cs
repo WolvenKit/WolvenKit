@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMonsterIdleDecoratorParams : CAIIdleParameters
 	{
-		[RED("reactionTree")] 		public CHandle<CAIMonsterReactionsTree> ReactionTree { get; set;}
+		[Ordinal(0)] [RED("reactionTree")] 		public CHandle<CAIMonsterReactionsTree> ReactionTree { get; set;}
 
-		[RED("searchFoodTree")] 		public CHandle<CAIMonsterSearchFoodTree> SearchFoodTree { get; set;}
+		[Ordinal(0)] [RED("searchFoodTree")] 		public CHandle<CAIMonsterSearchFoodTree> SearchFoodTree { get; set;}
 
-		[RED("actions", 2,0)] 		public CArray<CHandle<CAIMonsterIdleAction>> Actions { get; set;}
+		[Ordinal(0)] [RED("actions", 2,0)] 		public CArray<CHandle<CAIMonsterIdleAction>> Actions { get; set;}
 
-		[RED("nightActions", 2,0)] 		public CArray<CHandle<CAIMonsterIdleAction>> NightActions { get; set;}
+		[Ordinal(0)] [RED("nightActions", 2,0)] 		public CArray<CHandle<CAIMonsterIdleAction>> NightActions { get; set;}
 
-		[RED("actionCooldown")] 		public CFloat ActionCooldown { get; set;}
+		[Ordinal(0)] [RED("actionCooldown")] 		public CFloat ActionCooldown { get; set;}
 
-		[RED("chanceToHuntAtNight")] 		public CFloat ChanceToHuntAtNight { get; set;}
+		[Ordinal(0)] [RED("chanceToHuntAtNight")] 		public CFloat ChanceToHuntAtNight { get; set;}
 
 		public CAIMonsterIdleDecoratorParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

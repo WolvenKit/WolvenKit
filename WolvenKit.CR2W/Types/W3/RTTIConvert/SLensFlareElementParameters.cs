@@ -10,29 +10,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SLensFlareElementParameters : CVariable
 	{
-		[RED("material")] 		public CHandle<CMaterialInstance> Material { get; set;}
+		[Ordinal(0)] [RED("("material")] 		public CHandle<CMaterialInstance> Material { get; set;}
 
-		[RED("isConstRadius")] 		public CBool IsConstRadius { get; set;}
+		[Ordinal(0)] [RED("("isConstRadius")] 		public CBool IsConstRadius { get; set;}
 
-		[RED("isAligned")] 		public CBool IsAligned { get; set;}
+		[Ordinal(0)] [RED("("isAligned")] 		public CBool IsAligned { get; set;}
 
-		[RED("centerFadeStart")] 		public CFloat CenterFadeStart { get; set;}
+		[Ordinal(0)] [RED("("centerFadeStart")] 		public CFloat CenterFadeStart { get; set;}
 
-		[RED("centerFadeRange")] 		public CFloat CenterFadeRange { get; set;}
+		[Ordinal(0)] [RED("("centerFadeRange")] 		public CFloat CenterFadeRange { get; set;}
 
-		[RED("colorGroupParamsIndex")] 		public CUInt32 ColorGroupParamsIndex { get; set;}
+		[Ordinal(0)] [RED("("colorGroupParamsIndex")] 		public CUInt32 ColorGroupParamsIndex { get; set;}
 
-		[RED("alpha")] 		public CFloat Alpha { get; set;}
+		[Ordinal(0)] [RED("("alpha")] 		public CFloat Alpha { get; set;}
 
-		[RED("size")] 		public CFloat Size { get; set;}
+		[Ordinal(0)] [RED("("size")] 		public CFloat Size { get; set;}
 
-		[RED("aspect")] 		public CFloat Aspect { get; set;}
+		[Ordinal(0)] [RED("("aspect")] 		public CFloat Aspect { get; set;}
 
-		[RED("shift")] 		public CFloat Shift { get; set;}
+		[Ordinal(0)] [RED("("shift")] 		public CFloat Shift { get; set;}
 
-		[RED("pivot")] 		public CFloat Pivot { get; set;}
+		[Ordinal(0)] [RED("("pivot")] 		public CFloat Pivot { get; set;}
 
-		[RED("color")] 		public CColor Color { get; set;}
+		[Ordinal(0)] [RED("("color")] 		public CColor Color { get; set;}
 
 		public SLensFlareElementParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

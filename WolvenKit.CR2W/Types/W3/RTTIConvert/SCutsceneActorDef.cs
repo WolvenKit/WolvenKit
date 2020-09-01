@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCutsceneActorDef : CVariable
 	{
-		[RED("name")] 		public CString Name { get; set;}
+		[Ordinal(0)] [RED("("name")] 		public CString Name { get; set;}
 
-		[RED("tag")] 		public TagList Tag { get; set;}
+		[Ordinal(0)] [RED("("tag")] 		public TagList Tag { get; set;}
 
-		[RED("voiceTag")] 		public CName VoiceTag { get; set;}
+		[Ordinal(0)] [RED("("voiceTag")] 		public CName VoiceTag { get; set;}
 
-		[RED("template")] 		public CSoft<CEntityTemplate> Template { get; set;}
+		[Ordinal(0)] [RED("("template")] 		public CSoft<CEntityTemplate> Template { get; set;}
 
-		[RED("appearance")] 		public CName Appearance { get; set;}
+		[Ordinal(0)] [RED("("appearance")] 		public CName Appearance { get; set;}
 
-		[RED("type")] 		public CEnum<ECutsceneActorType> Type { get; set;}
+		[Ordinal(0)] [RED("("type")] 		public CEnum<ECutsceneActorType> Type { get; set;}
 
-		[RED("finalPosition")] 		public TagList FinalPosition { get; set;}
+		[Ordinal(0)] [RED("("finalPosition")] 		public TagList FinalPosition { get; set;}
 
-		[RED("killMe")] 		public CBool KillMe { get; set;}
+		[Ordinal(0)] [RED("("killMe")] 		public CBool KillMe { get; set;}
 
-		[RED("useMimic")] 		public CBool UseMimic { get; set;}
+		[Ordinal(0)] [RED("("useMimic")] 		public CBool UseMimic { get; set;}
 
-		[RED("animationAtFinalPosition")] 		public CName AnimationAtFinalPosition { get; set;}
+		[Ordinal(0)] [RED("("animationAtFinalPosition")] 		public CName AnimationAtFinalPosition { get; set;}
 
 		public SCutsceneActorDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

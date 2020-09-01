@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TrapDestructSelf : W3Trap
 	{
-		[RED("playEffectOnDestruct")] 		public CName PlayEffectOnDestruct { get; set;}
+		[Ordinal(0)] [RED("("playEffectOnDestruct")] 		public CName PlayEffectOnDestruct { get; set;}
 
-		[RED("onlyDestructOnAreaEnter")] 		public CBool OnlyDestructOnAreaEnter { get; set;}
+		[Ordinal(0)] [RED("("onlyDestructOnAreaEnter")] 		public CBool OnlyDestructOnAreaEnter { get; set;}
 
-		[RED("denyAreaAfterDestruction")] 		public CBool DenyAreaAfterDestruction { get; set;}
+		[Ordinal(0)] [RED("("denyAreaAfterDestruction")] 		public CBool DenyAreaAfterDestruction { get; set;}
 
-		[RED("excludedActorsTags", 2,0)] 		public CArray<CName> ExcludedActorsTags { get; set;}
+		[Ordinal(0)] [RED("("excludedActorsTags", 2,0)] 		public CArray<CName> ExcludedActorsTags { get; set;}
 
-		[RED("excludesblockDestruction")] 		public CBool ExcludesblockDestruction { get; set;}
+		[Ordinal(0)] [RED("("excludesblockDestruction")] 		public CBool ExcludesblockDestruction { get; set;}
 
-		[RED("m_actorsInTrigger", 2,0)] 		public CArray<CHandle<CActor>> M_actorsInTrigger { get; set;}
+		[Ordinal(0)] [RED("("m_actorsInTrigger", 2,0)] 		public CArray<CHandle<CActor>> M_actorsInTrigger { get; set;}
 
-		[RED("m_isDestroyed")] 		public CBool M_isDestroyed { get; set;}
+		[Ordinal(0)] [RED("("m_isDestroyed")] 		public CBool M_isDestroyed { get; set;}
 
 		public W3TrapDestructSelf(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

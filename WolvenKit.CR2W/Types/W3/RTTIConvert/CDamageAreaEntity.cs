@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDamageAreaEntity : CInteractiveEntity
 	{
-		[RED("owner")] 		public CHandle<CActor> Owner { get; set;}
+		[Ordinal(0)] [RED("("owner")] 		public CHandle<CActor> Owner { get; set;}
 
-		[RED("buff")] 		public CEnum<EEffectType> Buff { get; set;}
+		[Ordinal(0)] [RED("("buff")] 		public CEnum<EEffectType> Buff { get; set;}
 
-		[RED("buffDuration")] 		public CFloat BuffDuration { get; set;}
+		[Ordinal(0)] [RED("("buffDuration")] 		public CFloat BuffDuration { get; set;}
 
-		[RED("customDamageValuePerSec")] 		public SAbilityAttributeValue CustomDamageValuePerSec { get; set;}
+		[Ordinal(0)] [RED("("customDamageValuePerSec")] 		public SAbilityAttributeValue CustomDamageValuePerSec { get; set;}
 
-		[RED("effectOnSpawn")] 		public CName EffectOnSpawn { get; set;}
+		[Ordinal(0)] [RED("("effectOnSpawn")] 		public CName EffectOnSpawn { get; set;}
 
-		[RED("activeFor")] 		public CFloat ActiveFor { get; set;}
+		[Ordinal(0)] [RED("("activeFor")] 		public CFloat ActiveFor { get; set;}
 
-		[RED("stopSpawnEffectDelay")] 		public CFloat StopSpawnEffectDelay { get; set;}
+		[Ordinal(0)] [RED("("stopSpawnEffectDelay")] 		public CFloat StopSpawnEffectDelay { get; set;}
 
-		[RED("dealDamagePerc")] 		public CInt32 DealDamagePerc { get; set;}
+		[Ordinal(0)] [RED("("dealDamagePerc")] 		public CInt32 DealDamagePerc { get; set;}
 
-		[RED("range")] 		public CFloat Range { get; set;}
+		[Ordinal(0)] [RED("("range")] 		public CFloat Range { get; set;}
 
-		[RED("isActive")] 		public CBool IsActive { get; set;}
+		[Ordinal(0)] [RED("("isActive")] 		public CBool IsActive { get; set;}
 
-		[RED("actorsInRange", 2,0)] 		public CArray<CHandle<CActor>> ActorsInRange { get; set;}
+		[Ordinal(0)] [RED("("actorsInRange", 2,0)] 		public CArray<CHandle<CActor>> ActorsInRange { get; set;}
 
-		[RED("buffParams")] 		public SCustomEffectParams BuffParams { get; set;}
+		[Ordinal(0)] [RED("("buffParams")] 		public SCustomEffectParams BuffParams { get; set;}
 
-		[RED("interaction")] 		public CHandle<CInteractionComponent> Interaction { get; set;}
+		[Ordinal(0)] [RED("("interaction")] 		public CHandle<CInteractionComponent> Interaction { get; set;}
 
 		public CDamageAreaEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

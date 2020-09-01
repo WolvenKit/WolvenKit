@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStoryBoardIdlePoseInfo : CVariable
 	{
-		[RED("type")] 		public CInt32 Type { get; set;}
+		[Ordinal(0)] [RED("("type")] 		public CInt32 Type { get; set;}
 
-		[RED("cat1")] 		public CString Cat1 { get; set;}
+		[Ordinal(0)] [RED("("cat1")] 		public CString Cat1 { get; set;}
 
-		[RED("cat2")] 		public CString Cat2 { get; set;}
+		[Ordinal(0)] [RED("("cat2")] 		public CString Cat2 { get; set;}
 
-		[RED("cat3")] 		public CString Cat3 { get; set;}
+		[Ordinal(0)] [RED("("cat3")] 		public CString Cat3 { get; set;}
 
-		[RED("id")] 		public CName Id { get; set;}
+		[Ordinal(0)] [RED("("id")] 		public CName Id { get; set;}
 
-		[RED("caption")] 		public CString Caption { get; set;}
+		[Ordinal(0)] [RED("("caption")] 		public CString Caption { get; set;}
 
-		[RED("posename")] 		public CString Posename { get; set;}
+		[Ordinal(0)] [RED("("posename")] 		public CString Posename { get; set;}
 
-		[RED("emoState")] 		public CString EmoState { get; set;}
+		[Ordinal(0)] [RED("("emoState")] 		public CString EmoState { get; set;}
 
-		[RED("status")] 		public CString Status { get; set;}
+		[Ordinal(0)] [RED("("status")] 		public CString Status { get; set;}
 
 		public SStoryBoardIdlePoseInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

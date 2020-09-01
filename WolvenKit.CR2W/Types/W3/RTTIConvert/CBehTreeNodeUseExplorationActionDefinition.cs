@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeUseExplorationActionDefinition : CBehTreeNodeAtomicActionDefinition
 	{
-		[RED("explorationType")] 		public CBehTreeValEExplorationType ExplorationType { get; set;}
+		[Ordinal(0)] [RED("explorationType")] 		public CBehTreeValEExplorationType ExplorationType { get; set;}
 
-		[RED("entityTag")] 		public CBehTreeValCName EntityTag { get; set;}
+		[Ordinal(0)] [RED("entityTag")] 		public CBehTreeValCName EntityTag { get; set;}
 
 		public CBehTreeNodeUseExplorationActionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

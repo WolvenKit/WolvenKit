@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskMoveTRG : IBehTreeTask
 	{
-		[RED("activationDistance")] 		public CFloat ActivationDistance { get; set;}
+		[Ordinal(0)] [RED("activationDistance")] 		public CFloat ActivationDistance { get; set;}
 
-		[RED("fleeDistance")] 		public CFloat FleeDistance { get; set;}
+		[Ordinal(0)] [RED("fleeDistance")] 		public CFloat FleeDistance { get; set;}
 
-		[RED("ignoreEntityWithTag")] 		public CName IgnoreEntityWithTag { get; set;}
+		[Ordinal(0)] [RED("ignoreEntityWithTag")] 		public CName IgnoreEntityWithTag { get; set;}
 
-		[RED("dangerNode")] 		public CHandle<CNode> DangerNode { get; set;}
+		[Ordinal(0)] [RED("dangerNode")] 		public CHandle<CNode> DangerNode { get; set;}
 
-		[RED("flee")] 		public CBool Flee { get; set;}
+		[Ordinal(0)] [RED("flee")] 		public CBool Flee { get; set;}
 
 		public CBTTaskMoveTRG(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

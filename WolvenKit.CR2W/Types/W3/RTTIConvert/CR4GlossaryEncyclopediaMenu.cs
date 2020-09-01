@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4GlossaryEncyclopediaMenu : CR4ListBaseMenu
 	{
-		[RED("m_fxUpdateEntryInfo")] 		public CHandle<CScriptedFlashFunction> M_fxUpdateEntryInfo { get; set;}
+		[Ordinal(0)] [RED("("m_fxUpdateEntryInfo")] 		public CHandle<CScriptedFlashFunction> M_fxUpdateEntryInfo { get; set;}
 
-		[RED("m_fxUpdateEntryImage")] 		public CHandle<CScriptedFlashFunction> M_fxUpdateEntryImage { get; set;}
+		[Ordinal(0)] [RED("("m_fxUpdateEntryImage")] 		public CHandle<CScriptedFlashFunction> M_fxUpdateEntryImage { get; set;}
 
-		[RED("m_fxSetMovieData")] 		public CHandle<CScriptedFlashFunction> M_fxSetMovieData { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetMovieData")] 		public CHandle<CScriptedFlashFunction> M_fxSetMovieData { get; set;}
 
 		public CR4GlossaryEncyclopediaMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

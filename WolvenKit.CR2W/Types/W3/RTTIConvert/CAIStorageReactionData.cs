@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIStorageReactionData : IScriptable
 	{
-		[RED("TAUNTS_TO_BE_ALARMED")] 		public CInt32 TAUNTS_TO_BE_ALARMED { get; set;}
+		[Ordinal(0)] [RED("TAUNTS_TO_BE_ALARMED")] 		public CInt32 TAUNTS_TO_BE_ALARMED { get; set;}
 
-		[RED("alarmedTimeStamp")] 		public CFloat AlarmedTimeStamp { get; set;}
+		[Ordinal(0)] [RED("alarmedTimeStamp")] 		public CFloat AlarmedTimeStamp { get; set;}
 
-		[RED("tauntCounter")] 		public CInt32 TauntCounter { get; set;}
+		[Ordinal(0)] [RED("tauntCounter")] 		public CInt32 TauntCounter { get; set;}
 
-		[RED("lastTauntTimeStamp")] 		public CFloat LastTauntTimeStamp { get; set;}
+		[Ordinal(0)] [RED("lastTauntTimeStamp")] 		public CFloat LastTauntTimeStamp { get; set;}
 
-		[RED("temporaryHostileActors", 2,0)] 		public CArray<CHandle<CActor>> TemporaryHostileActors { get; set;}
+		[Ordinal(0)] [RED("temporaryHostileActors", 2,0)] 		public CArray<CHandle<CActor>> TemporaryHostileActors { get; set;}
 
 		public CAIStorageReactionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

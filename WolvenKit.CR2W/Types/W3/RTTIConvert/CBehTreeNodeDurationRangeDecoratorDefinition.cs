@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeDurationRangeDecoratorDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("durationMin")] 		public CBehTreeValFloat DurationMin { get; set;}
+		[Ordinal(0)] [RED("durationMin")] 		public CBehTreeValFloat DurationMin { get; set;}
 
-		[RED("durationMax")] 		public CBehTreeValFloat DurationMax { get; set;}
+		[Ordinal(0)] [RED("durationMax")] 		public CBehTreeValFloat DurationMax { get; set;}
 
-		[RED("endWithFailure")] 		public CBool EndWithFailure { get; set;}
+		[Ordinal(0)] [RED("endWithFailure")] 		public CBool EndWithFailure { get; set;}
 
 		public CBehTreeNodeDurationRangeDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

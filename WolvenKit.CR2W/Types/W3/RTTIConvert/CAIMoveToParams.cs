@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMoveToParams : IAIActionParameters
 	{
-		[RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(0)] [RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
+		[Ordinal(0)] [RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
 
-		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
+		[Ordinal(0)] [RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
-		[RED("targetTag")] 		public CName TargetTag { get; set;}
+		[Ordinal(0)] [RED("targetTag")] 		public CName TargetTag { get; set;}
 
-		[RED("rotateAfterwards")] 		public CBool RotateAfterwards { get; set;}
+		[Ordinal(0)] [RED("rotateAfterwards")] 		public CBool RotateAfterwards { get; set;}
 
-		[RED("tolerance")] 		public CFloat Tolerance { get; set;}
+		[Ordinal(0)] [RED("tolerance")] 		public CFloat Tolerance { get; set;}
 
 		public CAIMoveToParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

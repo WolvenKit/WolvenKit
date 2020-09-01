@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateSetItemsUnlocked : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("UNLOCKED")] 		public CName UNLOCKED { get; set;}
+		[Ordinal(0)] [RED("("UNLOCKED")] 		public CName UNLOCKED { get; set;}
 
-		[RED("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
 		public W3TutorialManagerUIHandlerStateSetItemsUnlocked(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

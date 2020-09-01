@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorScriptContext : CVariable
 	{
-		[RED("poseLS", 133,0)] 		public CArray<EngineQsTransform> PoseLS { get; set;}
+		[Ordinal(0)] [RED("("poseLS", 133,0)] 		public CArray<EngineQsTransform> PoseLS { get; set;}
 
-		[RED("poseMS", 133,0)] 		public CArray<EngineQsTransform> PoseMS { get; set;}
+		[Ordinal(0)] [RED("("poseMS", 133,0)] 		public CArray<EngineQsTransform> PoseMS { get; set;}
 
-		[RED("floatTracks", 2,0)] 		public CArray<CFloat> FloatTracks { get; set;}
+		[Ordinal(0)] [RED("("floatTracks", 2,0)] 		public CArray<CFloat> FloatTracks { get; set;}
 
-		[RED("inputParamsF", 2,0)] 		public CArray<CFloat> InputParamsF { get; set;}
+		[Ordinal(0)] [RED("("inputParamsF", 2,0)] 		public CArray<CFloat> InputParamsF { get; set;}
 
-		[RED("inputParamsV", 2,0)] 		public CArray<Vector> InputParamsV { get; set;}
+		[Ordinal(0)] [RED("("inputParamsV", 2,0)] 		public CArray<Vector> InputParamsV { get; set;}
 
-		[RED("localParamsF", 2,0)] 		public CArray<CFloat> LocalParamsF { get; set;}
+		[Ordinal(0)] [RED("("localParamsF", 2,0)] 		public CArray<CFloat> LocalParamsF { get; set;}
 
-		[RED("localParamsV", 2,0)] 		public CArray<Vector> LocalParamsV { get; set;}
+		[Ordinal(0)] [RED("("localParamsV", 2,0)] 		public CArray<Vector> LocalParamsV { get; set;}
 
-		[RED("localParamsM", 2,0)] 		public CArray<CMatrix> LocalParamsM { get; set;}
+		[Ordinal(0)] [RED("("localParamsM", 2,0)] 		public CArray<CMatrix> LocalParamsM { get; set;}
 
-		[RED("localParamsT", 133,0)] 		public CArray<EngineQsTransform> LocalParamsT { get; set;}
+		[Ordinal(0)] [RED("("localParamsT", 133,0)] 		public CArray<EngineQsTransform> LocalParamsT { get; set;}
 
-		[RED("timeDelta")] 		public CFloat TimeDelta { get; set;}
+		[Ordinal(0)] [RED("("timeDelta")] 		public CFloat TimeDelta { get; set;}
 
-		[RED("visualDebug")] 		public CPtr<CVisualDebug> VisualDebug { get; set;}
+		[Ordinal(0)] [RED("("visualDebug")] 		public CPtr<CVisualDebug> VisualDebug { get; set;}
 
 		public SBehaviorScriptContext(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

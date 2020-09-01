@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestCutsceneCondition : IQuestCondition
 	{
-		[RED("cutsceneName")] 		public CString CutsceneName { get; set;}
+		[Ordinal(0)] [RED("cutsceneName")] 		public CString CutsceneName { get; set;}
 
-		[RED("event")] 		public CName Event { get; set;}
+		[Ordinal(0)] [RED("event")] 		public CName Event { get; set;}
 
 		public CQuestCutsceneCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

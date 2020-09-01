@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FireSourceLifeRegen : W3FireSource
 	{
-		[RED("healthRegenOn")] 		public CBool HealthRegenOn { get; set;}
+		[Ordinal(0)] [RED("("healthRegenOn")] 		public CBool HealthRegenOn { get; set;}
 
 		public W3FireSourceLifeRegen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

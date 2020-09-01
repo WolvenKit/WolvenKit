@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIFugasCombatLogic : CAIMonsterCombatLogic
 	{
-		[RED("useFasterMovementToApproach")] 		public CBool UseFasterMovementToApproach { get; set;}
+		[Ordinal(0)] [RED("useFasterMovementToApproach")] 		public CBool UseFasterMovementToApproach { get; set;}
 
-		[RED("fireAttack")] 		public CBool FireAttack { get; set;}
+		[Ordinal(0)] [RED("fireAttack")] 		public CBool FireAttack { get; set;}
 
 		public CAIFugasCombatLogic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

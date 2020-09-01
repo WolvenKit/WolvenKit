@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SHeadingHistory : CVariable
 	{
-		[RED("time")] 		public EngineTime Time { get; set;}
+		[Ordinal(0)] [RED("("time")] 		public EngineTime Time { get; set;}
 
-		[RED("headValue")] 		public CFloat HeadValue { get; set;}
+		[Ordinal(0)] [RED("("headValue")] 		public CFloat HeadValue { get; set;}
 
-		[RED("speedValue")] 		public CFloat SpeedValue { get; set;}
+		[Ordinal(0)] [RED("("speedValue")] 		public CFloat SpeedValue { get; set;}
 
 		public SHeadingHistory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

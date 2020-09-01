@@ -10,55 +10,55 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventLookAtDuration : CStorySceneEventDuration
 	{
-		[RED("actor")] 		public CName Actor { get; set;}
+		[Ordinal(0)] [RED("actor")] 		public CName Actor { get; set;}
 
-		[RED("bodyTarget")] 		public CName BodyTarget { get; set;}
+		[Ordinal(0)] [RED("bodyTarget")] 		public CName BodyTarget { get; set;}
 
-		[RED("bodyEnabled")] 		public CBool BodyEnabled { get; set;}
+		[Ordinal(0)] [RED("bodyEnabled")] 		public CBool BodyEnabled { get; set;}
 
-		[RED("bodyInstant")] 		public CBool BodyInstant { get; set;}
+		[Ordinal(0)] [RED("bodyInstant")] 		public CBool BodyInstant { get; set;}
 
-		[RED("bodyWeight")] 		public CFloat BodyWeight { get; set;}
+		[Ordinal(0)] [RED("bodyWeight")] 		public CFloat BodyWeight { get; set;}
 
-		[RED("bodyStaticPointWS")] 		public Vector BodyStaticPointWS { get; set;}
+		[Ordinal(0)] [RED("bodyStaticPointWS")] 		public Vector BodyStaticPointWS { get; set;}
 
-		[RED("type")] 		public CEnum<EDialogLookAtType> Type { get; set;}
+		[Ordinal(0)] [RED("type")] 		public CEnum<EDialogLookAtType> Type { get; set;}
 
-		[RED("level")] 		public CEnum<ELookAtLevel> Level { get; set;}
+		[Ordinal(0)] [RED("level")] 		public CEnum<ELookAtLevel> Level { get; set;}
 
-		[RED("bodyTransitionWeight")] 		public CFloat BodyTransitionWeight { get; set;}
+		[Ordinal(0)] [RED("bodyTransitionWeight")] 		public CFloat BodyTransitionWeight { get; set;}
 
-		[RED("usesNewTransition")] 		public CBool UsesNewTransition { get; set;}
+		[Ordinal(0)] [RED("usesNewTransition")] 		public CBool UsesNewTransition { get; set;}
 
-		[RED("useTwoTargets")] 		public CBool UseTwoTargets { get; set;}
+		[Ordinal(0)] [RED("useTwoTargets")] 		public CBool UseTwoTargets { get; set;}
 
-		[RED("eyesTarget")] 		public CName EyesTarget { get; set;}
+		[Ordinal(0)] [RED("eyesTarget")] 		public CName EyesTarget { get; set;}
 
-		[RED("eyesEnabled")] 		public CBool EyesEnabled { get; set;}
+		[Ordinal(0)] [RED("eyesEnabled")] 		public CBool EyesEnabled { get; set;}
 
-		[RED("eyesInstant")] 		public CBool EyesInstant { get; set;}
+		[Ordinal(0)] [RED("eyesInstant")] 		public CBool EyesInstant { get; set;}
 
-		[RED("eyesWeight")] 		public CFloat EyesWeight { get; set;}
+		[Ordinal(0)] [RED("eyesWeight")] 		public CFloat EyesWeight { get; set;}
 
-		[RED("eyesStaticPointWS")] 		public Vector EyesStaticPointWS { get; set;}
+		[Ordinal(0)] [RED("eyesStaticPointWS")] 		public Vector EyesStaticPointWS { get; set;}
 
-		[RED("eyesLookAtConvergenceWeight")] 		public CFloat EyesLookAtConvergenceWeight { get; set;}
+		[Ordinal(0)] [RED("eyesLookAtConvergenceWeight")] 		public CFloat EyesLookAtConvergenceWeight { get; set;}
 
-		[RED("eyesLookAtIsAdditive")] 		public CBool EyesLookAtIsAdditive { get; set;}
+		[Ordinal(0)] [RED("eyesLookAtIsAdditive")] 		public CBool EyesLookAtIsAdditive { get; set;}
 
-		[RED("sceneRange")] 		public CFloat SceneRange { get; set;}
+		[Ordinal(0)] [RED("sceneRange")] 		public CFloat SceneRange { get; set;}
 
-		[RED("gameplayRange")] 		public CFloat GameplayRange { get; set;}
+		[Ordinal(0)] [RED("gameplayRange")] 		public CFloat GameplayRange { get; set;}
 
-		[RED("limitDeact")] 		public CBool LimitDeact { get; set;}
+		[Ordinal(0)] [RED("limitDeact")] 		public CBool LimitDeact { get; set;}
 
-		[RED("resetCloth")] 		public CEnum<EDialogResetClothAndDanglesType> ResetCloth { get; set;}
+		[Ordinal(0)] [RED("resetCloth")] 		public CEnum<EDialogResetClothAndDanglesType> ResetCloth { get; set;}
 
-		[RED("oldLookAtEyesSpeed")] 		public CFloat OldLookAtEyesSpeed { get; set;}
+		[Ordinal(0)] [RED("oldLookAtEyesSpeed")] 		public CFloat OldLookAtEyesSpeed { get; set;}
 
-		[RED("oldLookAtEyesDampScale")] 		public CFloat OldLookAtEyesDampScale { get; set;}
+		[Ordinal(0)] [RED("oldLookAtEyesDampScale")] 		public CFloat OldLookAtEyesDampScale { get; set;}
 
-		[RED("blinkSettings")] 		public SStorySceneEventLookAtBlinkSettings BlinkSettings { get; set;}
+		[Ordinal(0)] [RED("blinkSettings")] 		public SStorySceneEventLookAtBlinkSettings BlinkSettings { get; set;}
 
 		public CStorySceneEventLookAtDuration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

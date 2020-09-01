@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphSimpleDefensiveComboStateNode : CBehaviorGraphComboStateNode
 	{
-		[RED("varHitTime")] 		public CName VarHitTime { get; set;}
+		[Ordinal(0)] [RED("varHitTime")] 		public CName VarHitTime { get; set;}
 
-		[RED("varHitLevel")] 		public CName VarHitLevel { get; set;}
+		[Ordinal(0)] [RED("varHitLevel")] 		public CName VarHitLevel { get; set;}
 
-		[RED("varElemEnum")] 		public CName VarElemEnum { get; set;}
+		[Ordinal(0)] [RED("varElemEnum")] 		public CName VarElemEnum { get; set;}
 
-		[RED("varParry")] 		public CName VarParry { get; set;}
+		[Ordinal(0)] [RED("varParry")] 		public CName VarParry { get; set;}
 
-		[RED("enum")] 		public CName Enum { get; set;}
+		[Ordinal(0)] [RED("enum")] 		public CName Enum { get; set;}
 
-		[RED("animElems", 2,0)] 		public CArray<SBehaviorComboElem> AnimElems { get; set;}
+		[Ordinal(0)] [RED("animElems", 2,0)] 		public CArray<SBehaviorComboElem> AnimElems { get; set;}
 
 		public CBehaviorGraphSimpleDefensiveComboStateNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

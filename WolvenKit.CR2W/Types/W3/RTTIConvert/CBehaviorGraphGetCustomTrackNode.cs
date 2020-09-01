@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphGetCustomTrackNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("trackIndex")] 		public CInt32 TrackIndex { get; set;}
+		[Ordinal(0)] [RED("("trackIndex")] 		public CInt32 TrackIndex { get; set;}
 
-		[RED("defaultValue")] 		public CFloat DefaultValue { get; set;}
+		[Ordinal(0)] [RED("("defaultValue")] 		public CFloat DefaultValue { get; set;}
 
-		[RED("cachedAnimInputNode")] 		public CPtr<CBehaviorGraphNode> CachedAnimInputNode { get; set;}
+		[Ordinal(0)] [RED("("cachedAnimInputNode")] 		public CPtr<CBehaviorGraphNode> CachedAnimInputNode { get; set;}
 
 		public CBehaviorGraphGetCustomTrackNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

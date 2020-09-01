@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCustomClippingPlanes : CVariable
 	{
-		[RED("nearPlaneDistance")] 		public CFloat NearPlaneDistance { get; set;}
+		[Ordinal(0)] [RED("("nearPlaneDistance")] 		public CFloat NearPlaneDistance { get; set;}
 
-		[RED("farPlaneDistance")] 		public CFloat FarPlaneDistance { get; set;}
+		[Ordinal(0)] [RED("("farPlaneDistance")] 		public CFloat FarPlaneDistance { get; set;}
 
 		public SCustomClippingPlanes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSoundSwitch : CVariable
 	{
-		[RED("SoundSwitch")] 		public StringAnsi SoundSwitch { get; set;}
+		[Ordinal(0)] [RED("("SoundSwitch")] 		public StringAnsi SoundSwitch { get; set;}
 
-		[RED("value")] 		public StringAnsi Value { get; set;}
+		[Ordinal(0)] [RED("("value")] 		public StringAnsi Value { get; set;}
 
 		public SSoundSwitch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

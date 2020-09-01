@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4EntityTemplateParamDLCMounter : IGameplayDLCMounter
 	{
-		[RED("entityTemplatePaths", 2,0)] 		public CArray<CString> EntityTemplatePaths { get; set;}
+		[Ordinal(0)] [RED("("entityTemplatePaths", 2,0)] 		public CArray<CString> EntityTemplatePaths { get; set;}
 
-		[RED("entityTemplateParams", 2,0)] 		public CArray<CPtr<CEntityTemplateParam>> EntityTemplateParams { get; set;}
+		[Ordinal(0)] [RED("("entityTemplateParams", 2,0)] 		public CArray<CPtr<CEntityTemplateParam>> EntityTemplateParams { get; set;}
 
 		public CR4EntityTemplateParamDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

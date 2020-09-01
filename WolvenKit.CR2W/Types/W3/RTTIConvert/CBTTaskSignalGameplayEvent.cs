@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSignalGameplayEvent : IBehTreeTask
 	{
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(0)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("onSuccess")] 		public CBool OnSuccess { get; set;}
+		[Ordinal(0)] [RED("("onSuccess")] 		public CBool OnSuccess { get; set;}
 
-		[RED("onTaggedEntity")] 		public CBool OnTaggedEntity { get; set;}
+		[Ordinal(0)] [RED("("onTaggedEntity")] 		public CBool OnTaggedEntity { get; set;}
 
-		[RED("tagToFind")] 		public CName TagToFind { get; set;}
+		[Ordinal(0)] [RED("("tagToFind")] 		public CName TagToFind { get; set;}
 
-		[RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(0)] [RED("("eventName")] 		public CName EventName { get; set;}
 
 		public CBTTaskSignalGameplayEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

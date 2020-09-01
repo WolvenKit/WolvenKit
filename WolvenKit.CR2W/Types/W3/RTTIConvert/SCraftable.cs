@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCraftable : CVariable
 	{
-		[RED("type")] 		public CName Type { get; set;}
+		[Ordinal(0)] [RED("("type")] 		public CName Type { get; set;}
 
-		[RED("cnt")] 		public CInt32 Cnt { get; set;}
+		[Ordinal(0)] [RED("("cnt")] 		public CInt32 Cnt { get; set;}
 
 		public SCraftable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

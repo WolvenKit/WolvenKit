@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTArrive : IMoveSteeringTask
 	{
-		[RED("rotationVar")] 		public CName RotationVar { get; set;}
+		[Ordinal(0)] [RED("rotationVar")] 		public CName RotationVar { get; set;}
 
-		[RED("rotationEvent")] 		public CName RotationEvent { get; set;}
+		[Ordinal(0)] [RED("rotationEvent")] 		public CName RotationEvent { get; set;}
 
-		[RED("rotationNotification")] 		public CName RotationNotification { get; set;}
+		[Ordinal(0)] [RED("rotationNotification")] 		public CName RotationNotification { get; set;}
 
 		public CMoveSTArrive(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

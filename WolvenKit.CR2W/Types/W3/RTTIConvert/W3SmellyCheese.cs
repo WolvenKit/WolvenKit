@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SmellyCheese : W3AirDrainEntity
 	{
-		[RED("deactivatedByAard")] 		public CBool DeactivatedByAard { get; set;}
+		[Ordinal(0)] [RED("("deactivatedByAard")] 		public CBool DeactivatedByAard { get; set;}
 
-		[RED("smellEffectName")] 		public CName SmellEffectName { get; set;}
+		[Ordinal(0)] [RED("("smellEffectName")] 		public CName SmellEffectName { get; set;}
 
-		[RED("aardedEffectName")] 		public CName AardedEffectName { get; set;}
+		[Ordinal(0)] [RED("("aardedEffectName")] 		public CName AardedEffectName { get; set;}
 
-		[RED("reactivateTimer")] 		public CFloat ReactivateTimer { get; set;}
+		[Ordinal(0)] [RED("("reactivateTimer")] 		public CFloat ReactivateTimer { get; set;}
 
-		[RED("deactivated")] 		public CBool Deactivated { get; set;}
+		[Ordinal(0)] [RED("("deactivated")] 		public CBool Deactivated { get; set;}
 
 		public W3SmellyCheese(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

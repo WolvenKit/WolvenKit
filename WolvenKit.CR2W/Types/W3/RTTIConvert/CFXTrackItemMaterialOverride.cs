@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFXTrackItemMaterialOverride : CFXTrackItem
 	{
-		[RED("material")] 		public CHandle<IMaterial> Material { get; set;}
+		[Ordinal(0)] [RED("material")] 		public CHandle<IMaterial> Material { get; set;}
 
-		[RED("exclusionTag")] 		public CName ExclusionTag { get; set;}
+		[Ordinal(0)] [RED("exclusionTag")] 		public CName ExclusionTag { get; set;}
 
-		[RED("drawOriginal")] 		public CBool DrawOriginal { get; set;}
+		[Ordinal(0)] [RED("drawOriginal")] 		public CBool DrawOriginal { get; set;}
 
-		[RED("includeList", 2,0)] 		public CArray<CName> IncludeList { get; set;}
+		[Ordinal(0)] [RED("includeList", 2,0)] 		public CArray<CName> IncludeList { get; set;}
 
-		[RED("excludeList", 2,0)] 		public CArray<CName> ExcludeList { get; set;}
+		[Ordinal(0)] [RED("excludeList", 2,0)] 		public CArray<CName> ExcludeList { get; set;}
 
-		[RED("forceMeshAlternatives")] 		public CBool ForceMeshAlternatives { get; set;}
+		[Ordinal(0)] [RED("forceMeshAlternatives")] 		public CBool ForceMeshAlternatives { get; set;}
 
 		public CFXTrackItemMaterialOverride(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

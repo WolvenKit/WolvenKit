@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondCanLandAtPositionDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("localOffset")] 		public Vector LocalOffset { get; set;}
+		[Ordinal(0)] [RED("("localOffset")] 		public Vector LocalOffset { get; set;}
 
-		[RED("checkLineOfSight")] 		public CBool CheckLineOfSight { get; set;}
+		[Ordinal(0)] [RED("("checkLineOfSight")] 		public CBool CheckLineOfSight { get; set;}
 
-		[RED("maxDistanceFromGround")] 		public CBehTreeValFloat MaxDistanceFromGround { get; set;}
+		[Ordinal(0)] [RED("("maxDistanceFromGround")] 		public CBehTreeValFloat MaxDistanceFromGround { get; set;}
 
-		[RED("landOnlyInGuardArea")] 		public CBool LandOnlyInGuardArea { get; set;}
+		[Ordinal(0)] [RED("("landOnlyInGuardArea")] 		public CBool LandOnlyInGuardArea { get; set;}
 
 		public BTCondCanLandAtPositionDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

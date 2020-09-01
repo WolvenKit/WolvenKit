@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphControlRigNode : CBehaviorGraphBaseNode
 	{
-		[RED("eHandLeftW")] 		public CName EHandLeftW { get; set;}
+		[Ordinal(0)] [RED("("eHandLeftW")] 		public CName EHandLeftW { get; set;}
 
-		[RED("eHandLeftP")] 		public CName EHandLeftP { get; set;}
+		[Ordinal(0)] [RED("("eHandLeftP")] 		public CName EHandLeftP { get; set;}
 
-		[RED("eHandRightW")] 		public CName EHandRightW { get; set;}
+		[Ordinal(0)] [RED("("eHandRightW")] 		public CName EHandRightW { get; set;}
 
-		[RED("eHandRightP")] 		public CName EHandRightP { get; set;}
+		[Ordinal(0)] [RED("("eHandRightP")] 		public CName EHandRightP { get; set;}
 
-		[RED("offsetHandLeft")] 		public CBool OffsetHandLeft { get; set;}
+		[Ordinal(0)] [RED("("offsetHandLeft")] 		public CBool OffsetHandLeft { get; set;}
 
-		[RED("offsetHandRight")] 		public CBool OffsetHandRight { get; set;}
+		[Ordinal(0)] [RED("("offsetHandRight")] 		public CBool OffsetHandRight { get; set;}
 
-		[RED("eHandLeftWeaponOffset")] 		public CName EHandLeftWeaponOffset { get; set;}
+		[Ordinal(0)] [RED("("eHandLeftWeaponOffset")] 		public CName EHandLeftWeaponOffset { get; set;}
 
-		[RED("eHandRightWeaponOffset")] 		public CName EHandRightWeaponOffset { get; set;}
+		[Ordinal(0)] [RED("("eHandRightWeaponOffset")] 		public CName EHandRightWeaponOffset { get; set;}
 
 		public CBehaviorGraphControlRigNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

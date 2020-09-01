@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class Vector3 : CVariable
 	{
-		[RED("X")] 		public CFloat X { get; set;}
+		[Ordinal(0)] [RED("("X")] 		public CFloat X { get; set;}
 
-		[RED("Y")] 		public CFloat Y { get; set;}
+		[Ordinal(0)] [RED("("Y")] 		public CFloat Y { get; set;}
 
-		[RED("Z")] 		public CFloat Z { get; set;}
+		[Ordinal(0)] [RED("("Z")] 		public CFloat Z { get; set;}
 
 		public Vector3(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

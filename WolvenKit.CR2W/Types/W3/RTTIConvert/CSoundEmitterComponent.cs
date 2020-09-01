@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSoundEmitterComponent : CComponent
 	{
-		[RED("loopStart")] 		public StringAnsi LoopStart { get; set;}
+		[Ordinal(0)] [RED("loopStart")] 		public StringAnsi LoopStart { get; set;}
 
-		[RED("loopStop")] 		public StringAnsi LoopStop { get; set;}
+		[Ordinal(0)] [RED("loopStop")] 		public StringAnsi LoopStop { get; set;}
 
-		[RED("intensityParameter")] 		public StringAnsi IntensityParameter { get; set;}
+		[Ordinal(0)] [RED("intensityParameter")] 		public StringAnsi IntensityParameter { get; set;}
 
-		[RED("eventsOnAttach", 2,0)] 		public CArray<StringAnsi> EventsOnAttach { get; set;}
+		[Ordinal(0)] [RED("eventsOnAttach", 2,0)] 		public CArray<StringAnsi> EventsOnAttach { get; set;}
 
-		[RED("eventsOnDetach", 2,0)] 		public CArray<StringAnsi> EventsOnDetach { get; set;}
+		[Ordinal(0)] [RED("eventsOnDetach", 2,0)] 		public CArray<StringAnsi> EventsOnDetach { get; set;}
 
-		[RED("banksDependency", 2,0)] 		public CArray<CName> BanksDependency { get; set;}
+		[Ordinal(0)] [RED("banksDependency", 2,0)] 		public CArray<CName> BanksDependency { get; set;}
 
-		[RED("switchesOnAttach", 2,0)] 		public CArray<SSoundSwitch> SwitchesOnAttach { get; set;}
+		[Ordinal(0)] [RED("switchesOnAttach", 2,0)] 		public CArray<SSoundSwitch> SwitchesOnAttach { get; set;}
 
-		[RED("rtpcsOnAttach", 2,0)] 		public CArray<SSoundProperty> RtpcsOnAttach { get; set;}
+		[Ordinal(0)] [RED("rtpcsOnAttach", 2,0)] 		public CArray<SSoundProperty> RtpcsOnAttach { get; set;}
 
-		[RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(0)] [RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[RED("occlusionEnabled")] 		public CBool OcclusionEnabled { get; set;}
+		[Ordinal(0)] [RED("occlusionEnabled")] 		public CBool OcclusionEnabled { get; set;}
 
-		[RED("isInGameMusic")] 		public CBool IsInGameMusic { get; set;}
+		[Ordinal(0)] [RED("isInGameMusic")] 		public CBool IsInGameMusic { get; set;}
 
-		[RED("listenerOverride")] 		public CString ListenerOverride { get; set;}
+		[Ordinal(0)] [RED("listenerOverride")] 		public CString ListenerOverride { get; set;}
 
-		[RED("updateAzimuth")] 		public CBool UpdateAzimuth { get; set;}
+		[Ordinal(0)] [RED("updateAzimuth")] 		public CBool UpdateAzimuth { get; set;}
 
 		public CSoundEmitterComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

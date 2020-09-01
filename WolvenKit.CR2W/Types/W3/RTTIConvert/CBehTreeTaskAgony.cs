@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeTaskAgony : IBehTreeTask
 	{
-		[RED("agonyTime")] 		public CInt32 AgonyTime { get; set;}
+		[Ordinal(0)] [RED("agonyTime")] 		public CInt32 AgonyTime { get; set;}
 
-		[RED("syncInstance")] 		public CHandle<CAnimationManualSlotSyncInstance> SyncInstance { get; set;}
+		[Ordinal(0)] [RED("syncInstance")] 		public CHandle<CAnimationManualSlotSyncInstance> SyncInstance { get; set;}
 
-		[RED("disableAgony")] 		public CBool DisableAgony { get; set;}
+		[Ordinal(0)] [RED("disableAgony")] 		public CBool DisableAgony { get; set;}
 
-		[RED("chance")] 		public CInt32 Chance { get; set;}
+		[Ordinal(0)] [RED("chance")] 		public CInt32 Chance { get; set;}
 
-		[RED("forceAgony")] 		public CBool ForceAgony { get; set;}
+		[Ordinal(0)] [RED("forceAgony")] 		public CBool ForceAgony { get; set;}
 
 		public CBehTreeTaskAgony(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBoidPointOfInterestComponent : CComponent
 	{
-		[RED("params.m_type")] 		public CName Params_m_type { get; set;}
+		[Ordinal(0)] [RED("params.m_type")] 		public CName Params_m_type { get; set;}
 
-		[RED("params.m_scale")] 		public CFloat Params_m_scale { get; set;}
+		[Ordinal(0)] [RED("params.m_scale")] 		public CFloat Params_m_scale { get; set;}
 
-		[RED("params.m_gravityRangeMin")] 		public CFloat Params_m_gravityRangeMin { get; set;}
+		[Ordinal(0)] [RED("params.m_gravityRangeMin")] 		public CFloat Params_m_gravityRangeMin { get; set;}
 
-		[RED("params.m_gravityRangeMax")] 		public CFloat Params_m_gravityRangeMax { get; set;}
+		[Ordinal(0)] [RED("params.m_gravityRangeMax")] 		public CFloat Params_m_gravityRangeMax { get; set;}
 
-		[RED("params.m_effectorRadius")] 		public CFloat Params_m_effectorRadius { get; set;}
+		[Ordinal(0)] [RED("params.m_effectorRadius")] 		public CFloat Params_m_effectorRadius { get; set;}
 
-		[RED("acceptor")] 		public CEnum<EZoneAcceptor> Acceptor { get; set;}
+		[Ordinal(0)] [RED("acceptor")] 		public CEnum<EZoneAcceptor> Acceptor { get; set;}
 
-		[RED("params.m_shapeType")] 		public CName Params_m_shapeType { get; set;}
+		[Ordinal(0)] [RED("params.m_shapeType")] 		public CName Params_m_shapeType { get; set;}
 
-		[RED("params.m_useReachCallBack")] 		public CBool Params_m_useReachCallBack { get; set;}
+		[Ordinal(0)] [RED("params.m_useReachCallBack")] 		public CBool Params_m_useReachCallBack { get; set;}
 
-		[RED("params.m_closestOnly")] 		public CBool Params_m_closestOnly { get; set;}
+		[Ordinal(0)] [RED("params.m_closestOnly")] 		public CBool Params_m_closestOnly { get; set;}
 
-		[RED("params.m_coneMinOpeningAngle")] 		public CFloat Params_m_coneMinOpeningAngle { get; set;}
+		[Ordinal(0)] [RED("params.m_coneMinOpeningAngle")] 		public CFloat Params_m_coneMinOpeningAngle { get; set;}
 
-		[RED("params.m_coneMaxOpeningAngle")] 		public CFloat Params_m_coneMaxOpeningAngle { get; set;}
+		[Ordinal(0)] [RED("params.m_coneMaxOpeningAngle")] 		public CFloat Params_m_coneMaxOpeningAngle { get; set;}
 
-		[RED("params.m_coneEffectorOpeningAngle")] 		public CFloat Params_m_coneEffectorOpeningAngle { get; set;}
+		[Ordinal(0)] [RED("params.m_coneEffectorOpeningAngle")] 		public CFloat Params_m_coneEffectorOpeningAngle { get; set;}
 
-		[RED("crawlingSwarmDebug")] 		public CBool CrawlingSwarmDebug { get; set;}
+		[Ordinal(0)] [RED("crawlingSwarmDebug")] 		public CBool CrawlingSwarmDebug { get; set;}
 
 		public CBoidPointOfInterestComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

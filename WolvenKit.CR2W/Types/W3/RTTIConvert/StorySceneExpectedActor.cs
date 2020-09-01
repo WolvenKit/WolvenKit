@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class StorySceneExpectedActor : CVariable
 	{
-		[RED("voicetag")] 		public CName Voicetag { get; set;}
+		[Ordinal(0)] [RED("("voicetag")] 		public CName Voicetag { get; set;}
 
-		[RED("actorTags")] 		public TagList ActorTags { get; set;}
+		[Ordinal(0)] [RED("("actorTags")] 		public TagList ActorTags { get; set;}
 
-		[RED("entityTemplate")] 		public CSoft<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(0)] [RED("("entityTemplate")] 		public CSoft<CEntityTemplate> EntityTemplate { get; set;}
 
-		[RED("appearanceFilter", 2,0)] 		public CArray<CName> AppearanceFilter { get; set;}
+		[Ordinal(0)] [RED("("appearanceFilter", 2,0)] 		public CArray<CName> AppearanceFilter { get; set;}
 
-		[RED("dontSearchByVoicetag")] 		public CBool DontSearchByVoicetag { get; set;}
+		[Ordinal(0)] [RED("("dontSearchByVoicetag")] 		public CBool DontSearchByVoicetag { get; set;}
 
-		[RED("alias")] 		public CString Alias { get; set;}
+		[Ordinal(0)] [RED("("alias")] 		public CString Alias { get; set;}
 
 		public StorySceneExpectedActor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

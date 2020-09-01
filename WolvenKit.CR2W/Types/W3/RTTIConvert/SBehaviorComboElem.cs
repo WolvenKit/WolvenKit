@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorComboElem : CVariable
 	{
-		[RED("animations", 2,0)] 		public CArray<SBehaviorComboAnim> Animations { get; set;}
+		[Ordinal(0)] [RED("("animations", 2,0)] 		public CArray<SBehaviorComboAnim> Animations { get; set;}
 
-		[RED("enum")] 		public CName Enum { get; set;}
+		[Ordinal(0)] [RED("("enum")] 		public CName Enum { get; set;}
 
 		public SBehaviorComboElem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

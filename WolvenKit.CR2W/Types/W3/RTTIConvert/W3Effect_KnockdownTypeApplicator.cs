@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_KnockdownTypeApplicator : W3ApplicatorEffect
 	{
-		[RED("customEffectValue")] 		public SAbilityAttributeValue CustomEffectValue { get; set;}
+		[Ordinal(0)] [RED("("customEffectValue")] 		public SAbilityAttributeValue CustomEffectValue { get; set;}
 
-		[RED("customDuration")] 		public CFloat CustomDuration { get; set;}
+		[Ordinal(0)] [RED("("customDuration")] 		public CFloat CustomDuration { get; set;}
 
-		[RED("customAbilityName")] 		public CName CustomAbilityName { get; set;}
+		[Ordinal(0)] [RED("("customAbilityName")] 		public CName CustomAbilityName { get; set;}
 
 		public W3Effect_KnockdownTypeApplicator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

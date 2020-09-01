@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAICombatModeActionDecorator : IActionDecorator
 	{
-		[RED("drawWeaponOnStart")] 		public CBool DrawWeaponOnStart { get; set;}
+		[Ordinal(0)] [RED("drawWeaponOnStart")] 		public CBool DrawWeaponOnStart { get; set;}
 
-		[RED("LeftItemType")] 		public CName LeftItemType { get; set;}
+		[Ordinal(0)] [RED("LeftItemType")] 		public CName LeftItemType { get; set;}
 
-		[RED("RightItemType")] 		public CName RightItemType { get; set;}
+		[Ordinal(0)] [RED("RightItemType")] 		public CName RightItemType { get; set;}
 
-		[RED("changeBehaviorGraphOnStart")] 		public CBool ChangeBehaviorGraphOnStart { get; set;}
+		[Ordinal(0)] [RED("changeBehaviorGraphOnStart")] 		public CBool ChangeBehaviorGraphOnStart { get; set;}
 
-		[RED("behGraph")] 		public CEnum<EBehaviorGraph> BehGraph { get; set;}
+		[Ordinal(0)] [RED("behGraph")] 		public CEnum<EBehaviorGraph> BehGraph { get; set;}
 
-		[RED("changeBahviorGraphToExplorationOnDeacitvate")] 		public CBool ChangeBahviorGraphToExplorationOnDeacitvate { get; set;}
+		[Ordinal(0)] [RED("changeBahviorGraphToExplorationOnDeacitvate")] 		public CBool ChangeBahviorGraphToExplorationOnDeacitvate { get; set;}
 
-		[RED("forceCombatModeOnPLAYER")] 		public CBool ForceCombatModeOnPLAYER { get; set;}
+		[Ordinal(0)] [RED("forceCombatModeOnPLAYER")] 		public CBool ForceCombatModeOnPLAYER { get; set;}
 
 		public CAICombatModeActionDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

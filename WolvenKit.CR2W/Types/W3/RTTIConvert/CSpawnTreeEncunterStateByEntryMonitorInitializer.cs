@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeEncunterStateByEntryMonitorInitializer : ISpawnTreeSpawnMonitorInitializer
 	{
-		[RED("counterType")] 		public CEnum<EEncounterMonitorCounterType> CounterType { get; set;}
+		[Ordinal(0)] [RED("counterType")] 		public CEnum<EEncounterMonitorCounterType> CounterType { get; set;}
 
-		[RED("referenceValue")] 		public CInt32 ReferenceValue { get; set;}
+		[Ordinal(0)] [RED("referenceValue")] 		public CInt32 ReferenceValue { get; set;}
 
-		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
+		[Ordinal(0)] [RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
-		[RED("disableMonitorAfterTasksFinished")] 		public CBool DisableMonitorAfterTasksFinished { get; set;}
+		[Ordinal(0)] [RED("disableMonitorAfterTasksFinished")] 		public CBool DisableMonitorAfterTasksFinished { get; set;}
 
-		[RED("factOnConditionMet")] 		public CString FactOnConditionMet { get; set;}
+		[Ordinal(0)] [RED("factOnConditionMet")] 		public CString FactOnConditionMet { get; set;}
 
-		[RED("ownerEncounterTasks", 2,0)] 		public CArray<SOwnerEncounterTaskParams> OwnerEncounterTasks { get; set;}
+		[Ordinal(0)] [RED("ownerEncounterTasks", 2,0)] 		public CArray<SOwnerEncounterTaskParams> OwnerEncounterTasks { get; set;}
 
-		[RED("externalEncounterTasks", 2,0)] 		public CArray<SExternalEncounterTaskParams> ExternalEncounterTasks { get; set;}
+		[Ordinal(0)] [RED("externalEncounterTasks", 2,0)] 		public CArray<SExternalEncounterTaskParams> ExternalEncounterTasks { get; set;}
 
 		public CSpawnTreeEncunterStateByEntryMonitorInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

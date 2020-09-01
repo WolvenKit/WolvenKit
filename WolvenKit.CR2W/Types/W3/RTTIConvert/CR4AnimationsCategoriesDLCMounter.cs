@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4AnimationsCategoriesDLCMounter : IGameplayDLCMounter
 	{
-		[RED("animationsCategoriesTableFilePath")] 		public CString AnimationsCategoriesTableFilePath { get; set;}
+		[Ordinal(0)] [RED("animationsCategoriesTableFilePath")] 		public CString AnimationsCategoriesTableFilePath { get; set;}
 
 		public CR4AnimationsCategoriesDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3PlayerMode : CObject
 	{
-		[RED("player")] 		public CHandle<CPlayer> Player { get; set;}
+		[Ordinal(0)] [RED("("player")] 		public CHandle<CPlayer> Player { get; set;}
 
-		[RED("currentMode")] 		public CEnum<EPlayerMode> CurrentMode { get; set;}
+		[Ordinal(0)] [RED("("currentMode")] 		public CEnum<EPlayerMode> CurrentMode { get; set;}
 
-		[RED("safeMode")] 		public CBool SafeMode { get; set;}
+		[Ordinal(0)] [RED("("safeMode")] 		public CBool SafeMode { get; set;}
 
-		[RED("combatMode")] 		public CBool CombatMode { get; set;}
+		[Ordinal(0)] [RED("("combatMode")] 		public CBool CombatMode { get; set;}
 
-		[RED("combatDataComponent")] 		public CHandle<CCombatDataComponent> CombatDataComponent { get; set;}
+		[Ordinal(0)] [RED("("combatDataComponent")] 		public CHandle<CCombatDataComponent> CombatDataComponent { get; set;}
 
-		[RED("combatModeTimer")] 		public CFloat CombatModeTimer { get; set;}
+		[Ordinal(0)] [RED("("combatModeTimer")] 		public CFloat CombatModeTimer { get; set;}
 
-		[RED("combatModeDelay")] 		public CFloat CombatModeDelay { get; set;}
+		[Ordinal(0)] [RED("("combatModeDelay")] 		public CFloat CombatModeDelay { get; set;}
 
-		[RED("forceCombatMode")] 		public CInt32 ForceCombatMode { get; set;}
+		[Ordinal(0)] [RED("("forceCombatMode")] 		public CInt32 ForceCombatMode { get; set;}
 
-		[RED("combatModeBlockedActions", 2,0)] 		public CArray<CEnum<EInputActionBlock>> CombatModeBlockedActions { get; set;}
+		[Ordinal(0)] [RED("("combatModeBlockedActions", 2,0)] 		public CArray<CEnum<EInputActionBlock>> CombatModeBlockedActions { get; set;}
 
-		[RED("safeModeBlockedActions", 2,0)] 		public CArray<CEnum<EInputActionBlock>> SafeModeBlockedActions { get; set;}
+		[Ordinal(0)] [RED("("safeModeBlockedActions", 2,0)] 		public CArray<CEnum<EInputActionBlock>> SafeModeBlockedActions { get; set;}
 
 		public W3PlayerMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

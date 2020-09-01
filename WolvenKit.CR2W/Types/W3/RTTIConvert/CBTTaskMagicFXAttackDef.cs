@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskMagicFXAttackDef : CBTTaskMagicAttackDef
 	{
-		[RED("resourceName")] 		public CName ResourceName { get; set;}
+		[Ordinal(0)] [RED("("resourceName")] 		public CName ResourceName { get; set;}
 
 		public CBTTaskMagicFXAttackDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

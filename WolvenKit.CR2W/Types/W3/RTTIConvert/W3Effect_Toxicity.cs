@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_Toxicity : CBaseGameplayEffect
 	{
-		[RED("dmgTypeName")] 		public CName DmgTypeName { get; set;}
+		[Ordinal(0)] [RED("("dmgTypeName")] 		public CName DmgTypeName { get; set;}
 
-		[RED("toxThresholdEffect")] 		public CInt32 ToxThresholdEffect { get; set;}
+		[Ordinal(0)] [RED("("toxThresholdEffect")] 		public CInt32 ToxThresholdEffect { get; set;}
 
-		[RED("delayToNextVFXUpdate")] 		public CFloat DelayToNextVFXUpdate { get; set;}
+		[Ordinal(0)] [RED("("delayToNextVFXUpdate")] 		public CFloat DelayToNextVFXUpdate { get; set;}
 
 		public W3Effect_Toxicity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

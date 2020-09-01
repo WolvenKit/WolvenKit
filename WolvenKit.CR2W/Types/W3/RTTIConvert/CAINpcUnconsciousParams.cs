@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcUnconsciousParams : CAIDeathParameters
 	{
-		[RED("unconsciousDuration")] 		public CFloat UnconsciousDuration { get; set;}
+		[Ordinal(0)] [RED("unconsciousDuration")] 		public CFloat UnconsciousDuration { get; set;}
 
-		[RED("unconsciousGetUpDist")] 		public CFloat UnconsciousGetUpDist { get; set;}
+		[Ordinal(0)] [RED("unconsciousGetUpDist")] 		public CFloat UnconsciousGetUpDist { get; set;}
 
 		public CAINpcUnconsciousParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

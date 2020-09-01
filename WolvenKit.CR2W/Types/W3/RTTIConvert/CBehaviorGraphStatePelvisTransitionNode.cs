@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphStatePelvisTransitionNode : CBehaviorGraphStateTransitionBlendNode
 	{
-		[RED("pelvisBoneName")] 		public CString PelvisBoneName { get; set;}
+		[Ordinal(0)] [RED("pelvisBoneName")] 		public CString PelvisBoneName { get; set;}
 
-		[RED("pelvisDirectionFwdLS")] 		public CEnum<EAxis> PelvisDirectionFwdLS { get; set;}
+		[Ordinal(0)] [RED("pelvisDirectionFwdLS")] 		public CEnum<EAxis> PelvisDirectionFwdLS { get; set;}
 
-		[RED("usePelvisBlendMethod")] 		public CBool UsePelvisBlendMethod { get; set;}
+		[Ordinal(0)] [RED("usePelvisBlendMethod")] 		public CBool UsePelvisBlendMethod { get; set;}
 
 		public CBehaviorGraphStatePelvisTransitionNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

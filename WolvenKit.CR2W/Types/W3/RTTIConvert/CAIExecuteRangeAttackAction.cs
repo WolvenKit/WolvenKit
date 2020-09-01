@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIExecuteRangeAttackAction : IAIActionTree
 	{
-		[RED("attackParameter")] 		public CEnum<EAttackType> AttackParameter { get; set;}
+		[Ordinal(0)] [RED("attackParameter")] 		public CEnum<EAttackType> AttackParameter { get; set;}
 
-		[RED("targetTag")] 		public CName TargetTag { get; set;}
+		[Ordinal(0)] [RED("targetTag")] 		public CName TargetTag { get; set;}
 
-		[RED("projectileName")] 		public CName ProjectileName { get; set;}
+		[Ordinal(0)] [RED("projectileName")] 		public CName ProjectileName { get; set;}
 
 		public CAIExecuteRangeAttackAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

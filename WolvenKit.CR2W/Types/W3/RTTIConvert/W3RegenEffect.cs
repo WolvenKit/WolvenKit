@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3RegenEffect : CBaseGameplayEffect
 	{
-		[RED("regenStat")] 		public CEnum<ECharacterRegenStats> RegenStat { get; set;}
+		[Ordinal(0)] [RED("("regenStat")] 		public CEnum<ECharacterRegenStats> RegenStat { get; set;}
 
-		[RED("stat")] 		public CEnum<EBaseCharacterStats> Stat { get; set;}
+		[Ordinal(0)] [RED("("stat")] 		public CEnum<EBaseCharacterStats> Stat { get; set;}
 
-		[RED("isOnMonster")] 		public CBool IsOnMonster { get; set;}
+		[Ordinal(0)] [RED("("isOnMonster")] 		public CBool IsOnMonster { get; set;}
 
 		public W3RegenEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

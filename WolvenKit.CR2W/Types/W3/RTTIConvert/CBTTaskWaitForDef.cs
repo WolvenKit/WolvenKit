@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskWaitForDef : IBehTreeTaskDefinition
 	{
-		[RED("waitForTag")] 		public CBehTreeValCName WaitForTag { get; set;}
+		[Ordinal(0)] [RED("("waitForTag")] 		public CBehTreeValCName WaitForTag { get; set;}
 
-		[RED("timeout")] 		public CBehTreeValFloat Timeout { get; set;}
+		[Ordinal(0)] [RED("("timeout")] 		public CBehTreeValFloat Timeout { get; set;}
 
-		[RED("testDistance")] 		public CBehTreeValFloat TestDistance { get; set;}
+		[Ordinal(0)] [RED("("testDistance")] 		public CBehTreeValFloat TestDistance { get; set;}
 
 		public CBTTaskWaitForDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

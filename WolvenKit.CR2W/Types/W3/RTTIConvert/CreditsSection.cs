@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CreditsSection : CVariable
 	{
-		[RED("sectionName")] 		public CString SectionName { get; set;}
+		[Ordinal(0)] [RED("sectionName")] 		public CString SectionName { get; set;}
 
-		[RED("positionNames", 2,0)] 		public CArray<CString> PositionNames { get; set;}
+		[Ordinal(0)] [RED("positionNames", 2,0)] 		public CArray<CString> PositionNames { get; set;}
 
-		[RED("crewNames", 2,0)] 		public CArray<CString> CrewNames { get; set;}
+		[Ordinal(0)] [RED("crewNames", 2,0)] 		public CArray<CString> CrewNames { get; set;}
 
-		[RED("displayTime")] 		public CFloat DisplayTime { get; set;}
+		[Ordinal(0)] [RED("displayTime")] 		public CFloat DisplayTime { get; set;}
 
-		[RED("positionX")] 		public CInt32 PositionX { get; set;}
+		[Ordinal(0)] [RED("positionX")] 		public CInt32 PositionX { get; set;}
 
-		[RED("positionY")] 		public CInt32 PositionY { get; set;}
+		[Ordinal(0)] [RED("positionY")] 		public CInt32 PositionY { get; set;}
 
-		[RED("delay")] 		public CFloat Delay { get; set;}
+		[Ordinal(0)] [RED("delay")] 		public CFloat Delay { get; set;}
 
 		public CreditsSection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

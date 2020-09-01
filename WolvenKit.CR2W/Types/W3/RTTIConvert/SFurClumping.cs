@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFurClumping : CVariable
 	{
-		[RED("clumpScale")] 		public CFloat ClumpScale { get; set;}
+		[Ordinal(0)] [RED("("clumpScale")] 		public CFloat ClumpScale { get; set;}
 
-		[RED("clumpScaleTex")] 		public CHandle<CBitmapTexture> ClumpScaleTex { get; set;}
+		[Ordinal(0)] [RED("("clumpScaleTex")] 		public CHandle<CBitmapTexture> ClumpScaleTex { get; set;}
 
-		[RED("clumpScaleTexChannel")] 		public CEnum<EHairTextureChannel> ClumpScaleTexChannel { get; set;}
+		[Ordinal(0)] [RED("("clumpScaleTexChannel")] 		public CEnum<EHairTextureChannel> ClumpScaleTexChannel { get; set;}
 
-		[RED("clumpRoundness")] 		public CFloat ClumpRoundness { get; set;}
+		[Ordinal(0)] [RED("("clumpRoundness")] 		public CFloat ClumpRoundness { get; set;}
 
-		[RED("clumpRoundnessTex")] 		public CHandle<CBitmapTexture> ClumpRoundnessTex { get; set;}
+		[Ordinal(0)] [RED("("clumpRoundnessTex")] 		public CHandle<CBitmapTexture> ClumpRoundnessTex { get; set;}
 
-		[RED("clumpRoundnessTexChannel")] 		public CEnum<EHairTextureChannel> ClumpRoundnessTexChannel { get; set;}
+		[Ordinal(0)] [RED("("clumpRoundnessTexChannel")] 		public CEnum<EHairTextureChannel> ClumpRoundnessTexChannel { get; set;}
 
-		[RED("clumpNoise")] 		public CFloat ClumpNoise { get; set;}
+		[Ordinal(0)] [RED("("clumpNoise")] 		public CFloat ClumpNoise { get; set;}
 
-		[RED("clumpNoiseTex")] 		public CHandle<CBitmapTexture> ClumpNoiseTex { get; set;}
+		[Ordinal(0)] [RED("("clumpNoiseTex")] 		public CHandle<CBitmapTexture> ClumpNoiseTex { get; set;}
 
-		[RED("clumpNoiseTexChannel")] 		public CEnum<EHairTextureChannel> ClumpNoiseTexChannel { get; set;}
+		[Ordinal(0)] [RED("("clumpNoiseTexChannel")] 		public CEnum<EHairTextureChannel> ClumpNoiseTexChannel { get; set;}
 
-		[RED("clumpNumSubclumps")] 		public CUInt32 ClumpNumSubclumps { get; set;}
+		[Ordinal(0)] [RED("("clumpNumSubclumps")] 		public CUInt32 ClumpNumSubclumps { get; set;}
 
 		public SFurClumping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

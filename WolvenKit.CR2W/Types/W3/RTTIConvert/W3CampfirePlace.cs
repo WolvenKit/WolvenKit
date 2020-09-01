@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3CampfirePlace : W3CookingPlace
 	{
-		[RED("victims", 2,0)] 		public CArray<CHandle<CActor>> Victims { get; set;}
+		[Ordinal(0)] [RED("("victims", 2,0)] 		public CArray<CHandle<CActor>> Victims { get; set;}
 
-		[RED("bombs", 2,0)] 		public CArray<SItemUniqueId> Bombs { get; set;}
+		[Ordinal(0)] [RED("("bombs", 2,0)] 		public CArray<SItemUniqueId> Bombs { get; set;}
 
 		public W3CampfirePlace(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

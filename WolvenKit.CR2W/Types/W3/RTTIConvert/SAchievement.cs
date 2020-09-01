@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAchievement : CVariable
 	{
-		[RED("type")] 		public CEnum<EAchievement> Type { get; set;}
+		[Ordinal(0)] [RED("("type")] 		public CEnum<EAchievement> Type { get; set;}
 
-		[RED("requiredValue")] 		public CFloat RequiredValue { get; set;}
+		[Ordinal(0)] [RED("("requiredValue")] 		public CFloat RequiredValue { get; set;}
 
 		public SAchievement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

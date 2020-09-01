@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPayFactBasedStorySceneChoiceAction : CStorySceneChoiceLineActionScripted
 	{
-		[RED("valueFact")] 		public CString ValueFact { get; set;}
+		[Ordinal(0)] [RED("("valueFact")] 		public CString ValueFact { get; set;}
 
 		public CPayFactBasedStorySceneChoiceAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

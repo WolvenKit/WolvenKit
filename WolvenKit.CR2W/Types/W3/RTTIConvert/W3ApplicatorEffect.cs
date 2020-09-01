@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ApplicatorEffect : CBaseGameplayEffect
 	{
-		[RED("spawns", 2,0)] 		public CArray<SApplicatorSpawnEffect> Spawns { get; set;}
+		[Ordinal(0)] [RED("("spawns", 2,0)] 		public CArray<SApplicatorSpawnEffect> Spawns { get; set;}
 
 		public W3ApplicatorEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

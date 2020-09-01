@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ActorLatentActionMoveAlongPath : IPresetActorLatentAction
 	{
-		[RED("pathTag")] 		public CName PathTag { get; set;}
+		[Ordinal(0)] [RED("("pathTag")] 		public CName PathTag { get; set;}
 
-		[RED("upThePath")] 		public CBool UpThePath { get; set;}
+		[Ordinal(0)] [RED("("upThePath")] 		public CBool UpThePath { get; set;}
 
-		[RED("fromBeginning")] 		public CBool FromBeginning { get; set;}
+		[Ordinal(0)] [RED("("fromBeginning")] 		public CBool FromBeginning { get; set;}
 
-		[RED("pathMargin")] 		public CFloat PathMargin { get; set;}
+		[Ordinal(0)] [RED("("pathMargin")] 		public CFloat PathMargin { get; set;}
 
-		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
+		[Ordinal(0)] [RED("("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
-		[RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
+		[Ordinal(0)] [RED("("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
 
-		[RED("dontCareAboutNavigable")] 		public CBool DontCareAboutNavigable { get; set;}
+		[Ordinal(0)] [RED("("dontCareAboutNavigable")] 		public CBool DontCareAboutNavigable { get; set;}
 
 		public W3ActorLatentActionMoveAlongPath(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

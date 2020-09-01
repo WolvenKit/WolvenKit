@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCustomBehTreeActorLatentAction : IActorLatentAction
 	{
-		[RED("behTree")] 		public CPtr<IBehTreeNodeDefinition> BehTree { get; set;}
+		[Ordinal(0)] [RED("("behTree")] 		public CPtr<IBehTreeNodeDefinition> BehTree { get; set;}
 
 		public CCustomBehTreeActorLatentAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

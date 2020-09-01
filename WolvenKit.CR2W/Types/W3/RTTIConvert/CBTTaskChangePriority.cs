@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskChangePriority : IBehTreeTask
 	{
-		[RED("priorityWhileActive")] 		public CInt32 PriorityWhileActive { get; set;}
+		[Ordinal(0)] [RED("priorityWhileActive")] 		public CInt32 PriorityWhileActive { get; set;}
 
-		[RED("defaultPriority")] 		public CInt32 DefaultPriority { get; set;}
+		[Ordinal(0)] [RED("defaultPriority")] 		public CInt32 DefaultPriority { get; set;}
 
 		public CBTTaskChangePriority(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

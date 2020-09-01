@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMajorPlaceOfPowerEntityStatePlaceOfPower_Channeling : CScriptableState
 	{
-		[RED("channelingStartTime")] 		public CFloat ChannelingStartTime { get; set;}
+		[Ordinal(0)] [RED("channelingStartTime")] 		public CFloat ChannelingStartTime { get; set;}
 
 		public CMajorPlaceOfPowerEntityStatePlaceOfPower_Channeling(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

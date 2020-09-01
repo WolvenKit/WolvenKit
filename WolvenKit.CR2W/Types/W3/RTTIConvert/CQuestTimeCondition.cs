@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestTimeCondition : IQuestCondition
 	{
-		[RED("time")] 		public GameTime Time { get; set;}
+		[Ordinal(0)] [RED("time")] 		public GameTime Time { get; set;}
 
-		[RED("comparison")] 		public CEnum<ECompareFunc> Comparison { get; set;}
+		[Ordinal(0)] [RED("comparison")] 		public CEnum<ECompareFunc> Comparison { get; set;}
 
 		public CQuestTimeCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateMap : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("OPEN_MAP")] 		public CName OPEN_MAP { get; set;}
+		[Ordinal(0)] [RED("("OPEN_MAP")] 		public CName OPEN_MAP { get; set;}
 
-		[RED("DESCRIPTION")] 		public CName DESCRIPTION { get; set;}
+		[Ordinal(0)] [RED("("DESCRIPTION")] 		public CName DESCRIPTION { get; set;}
 
-		[RED("JUMP_TO_OBJECTIVE")] 		public CName JUMP_TO_OBJECTIVE { get; set;}
+		[Ordinal(0)] [RED("("JUMP_TO_OBJECTIVE")] 		public CName JUMP_TO_OBJECTIVE { get; set;}
 
-		[RED("NAVIGATE")] 		public CName NAVIGATE { get; set;}
+		[Ordinal(0)] [RED("("NAVIGATE")] 		public CName NAVIGATE { get; set;}
 
-		[RED("QUEST_PINS")] 		public CName QUEST_PINS { get; set;}
+		[Ordinal(0)] [RED("("QUEST_PINS")] 		public CName QUEST_PINS { get; set;}
 
-		[RED("OBJECTIVES")] 		public CName OBJECTIVES { get; set;}
+		[Ordinal(0)] [RED("("OBJECTIVES")] 		public CName OBJECTIVES { get; set;}
 
-		[RED("AREA_MAP")] 		public CName AREA_MAP { get; set;}
+		[Ordinal(0)] [RED("("AREA_MAP")] 		public CName AREA_MAP { get; set;}
 
-		[RED("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
 		public W3TutorialManagerUIHandlerStateMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

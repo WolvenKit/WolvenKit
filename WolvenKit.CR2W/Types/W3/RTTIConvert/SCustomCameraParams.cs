@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCustomCameraParams : CVariable
 	{
-		[RED("source")] 		public CHandle<CActor> Source { get; set;}
+		[Ordinal(0)] [RED("("source")] 		public CHandle<CActor> Source { get; set;}
 
-		[RED("useCustomCamera")] 		public CBool UseCustomCamera { get; set;}
+		[Ordinal(0)] [RED("("useCustomCamera")] 		public CBool UseCustomCamera { get; set;}
 
-		[RED("cameraParams")] 		public SMultiValue CameraParams { get; set;}
+		[Ordinal(0)] [RED("("cameraParams")] 		public SMultiValue CameraParams { get; set;}
 
 		public SCustomCameraParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

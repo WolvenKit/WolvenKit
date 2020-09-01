@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_Stagger : W3CriticalEffect
 	{
-		[RED("timeToEnableDodge")] 		public CFloat TimeToEnableDodge { get; set;}
+		[Ordinal(0)] [RED("("timeToEnableDodge")] 		public CFloat TimeToEnableDodge { get; set;}
 
 		public W3Effect_Stagger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

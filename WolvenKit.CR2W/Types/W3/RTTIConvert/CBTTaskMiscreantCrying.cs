@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskMiscreantCrying : IBehTreeTask
 	{
-		[RED("miscreantName")] 		public CName MiscreantName { get; set;}
+		[Ordinal(0)] [RED("miscreantName")] 		public CName MiscreantName { get; set;}
 
-		[RED("miscreant")] 		public CHandle<CActor> Miscreant { get; set;}
+		[Ordinal(0)] [RED("miscreant")] 		public CHandle<CActor> Miscreant { get; set;}
 
-		[RED("isAvailable")] 		public CBool IsAvailable { get; set;}
+		[Ordinal(0)] [RED("isAvailable")] 		public CBool IsAvailable { get; set;}
 
-		[RED("cryStartEventName")] 		public CName CryStartEventName { get; set;}
+		[Ordinal(0)] [RED("cryStartEventName")] 		public CName CryStartEventName { get; set;}
 
-		[RED("cryStopEventName")] 		public CName CryStopEventName { get; set;}
+		[Ordinal(0)] [RED("cryStopEventName")] 		public CName CryStopEventName { get; set;}
 
 		public CBTTaskMiscreantCrying(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

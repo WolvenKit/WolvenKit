@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimMimicParam : CEntityTemplateParam
 	{
-		[RED("animationSets", 2,0)] 		public CArray<CHandle<CSkeletalAnimationSet>> AnimationSets { get; set;}
+		[Ordinal(0)] [RED("animationSets", 2,0)] 		public CArray<CHandle<CSkeletalAnimationSet>> AnimationSets { get; set;}
 
-		[RED("behaviorInstanceSlots", 2,0)] 		public CArray<SBehaviorGraphInstanceSlot> BehaviorInstanceSlots { get; set;}
+		[Ordinal(0)] [RED("behaviorInstanceSlots", 2,0)] 		public CArray<SBehaviorGraphInstanceSlot> BehaviorInstanceSlots { get; set;}
 
 		public CAnimMimicParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

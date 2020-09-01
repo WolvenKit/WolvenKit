@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4WorldDLCMounter : IGameplayDLCMounter
 	{
-		[RED("worlds", 2,0)] 		public CArray<CHandle<CR4WorldDescriptionDLC>> Worlds { get; set;}
+		[Ordinal(0)] [RED("("worlds", 2,0)] 		public CArray<CHandle<CR4WorldDescriptionDLC>> Worlds { get; set;}
 
 		public CR4WorldDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

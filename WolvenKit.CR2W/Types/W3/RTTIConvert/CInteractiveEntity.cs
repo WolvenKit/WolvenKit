@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CInteractiveEntity : CR4MapPinEntity
 	{
-		[RED("bIsEnabled")] 		public CBool BIsEnabled { get; set;}
+		[Ordinal(0)] [RED("bIsEnabled")] 		public CBool BIsEnabled { get; set;}
 
-		[RED("bIsActive")] 		public CBool BIsActive { get; set;}
+		[Ordinal(0)] [RED("bIsActive")] 		public CBool BIsActive { get; set;}
 
 		public CInteractiveEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

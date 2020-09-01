@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskRemoveReactionEventDef : IBehTreeTaskDefinition
 	{
-		[RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(0)] [RED("eventName")] 		public CName EventName { get; set;}
 
 		public CBTTaskRemoveReactionEventDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

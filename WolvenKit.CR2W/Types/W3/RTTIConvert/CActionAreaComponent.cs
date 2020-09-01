@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CActionAreaComponent : CTriggerAreaComponent
 	{
-		[RED("walkToSideDistance")] 		public CFloat WalkToSideDistance { get; set;}
+		[Ordinal(0)] [RED("walkToSideDistance")] 		public CFloat WalkToSideDistance { get; set;}
 
-		[RED("walkToBackDistance")] 		public CFloat WalkToBackDistance { get; set;}
+		[Ordinal(0)] [RED("walkToBackDistance")] 		public CFloat WalkToBackDistance { get; set;}
 
-		[RED("walkToFrontDistance")] 		public CFloat WalkToFrontDistance { get; set;}
+		[Ordinal(0)] [RED("walkToFrontDistance")] 		public CFloat WalkToFrontDistance { get; set;}
 
-		[RED("allowedGroups")] 		public CEnum<EAllowedActorGroups> AllowedGroups { get; set;}
+		[Ordinal(0)] [RED("allowedGroups")] 		public CEnum<EAllowedActorGroups> AllowedGroups { get; set;}
 
-		[RED("animShiftStart", 2,0)] 		public CArray<Vector> AnimShiftStart { get; set;}
+		[Ordinal(0)] [RED("animShiftStart", 2,0)] 		public CArray<Vector> AnimShiftStart { get; set;}
 
-		[RED("animShiftLoop", 2,0)] 		public CArray<Vector> AnimShiftLoop { get; set;}
+		[Ordinal(0)] [RED("animShiftLoop", 2,0)] 		public CArray<Vector> AnimShiftLoop { get; set;}
 
-		[RED("animShiftStop", 2,0)] 		public CArray<Vector> AnimShiftStop { get; set;}
+		[Ordinal(0)] [RED("animShiftStop", 2,0)] 		public CArray<Vector> AnimShiftStop { get; set;}
 
-		[RED("totalTransformation")] 		public Vector TotalTransformation { get; set;}
+		[Ordinal(0)] [RED("totalTransformation")] 		public Vector TotalTransformation { get; set;}
 
-		[RED("fullTransformation")] 		public CMatrix FullTransformation { get; set;}
+		[Ordinal(0)] [RED("fullTransformation")] 		public CMatrix FullTransformation { get; set;}
 
-		[RED("animations", 2,0)] 		public CArray<CPtr<CAnimDef>> Animations { get; set;}
+		[Ordinal(0)] [RED("animations", 2,0)] 		public CArray<CPtr<CAnimDef>> Animations { get; set;}
 
 		public CActionAreaComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

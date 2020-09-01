@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorConstraintNodeFloorIKBipedLong : CBehaviorConstraintNodeFloorIKBase
 	{
-		[RED("speedForFullyPerpendicularLegs")] 		public CFloat SpeedForFullyPerpendicularLegs { get; set;}
+		[Ordinal(0)] [RED("speedForFullyPerpendicularLegs")] 		public CFloat SpeedForFullyPerpendicularLegs { get; set;}
 
-		[RED("upDirAdditionalWS")] 		public Vector UpDirAdditionalWS { get; set;}
+		[Ordinal(0)] [RED("upDirAdditionalWS")] 		public Vector UpDirAdditionalWS { get; set;}
 
-		[RED("pelvis")] 		public SBehaviorConstraintNodeFloorIKVerticalBoneData Pelvis { get; set;}
+		[Ordinal(0)] [RED("pelvis")] 		public SBehaviorConstraintNodeFloorIKVerticalBoneData Pelvis { get; set;}
 
-		[RED("legs")] 		public SBehaviorConstraintNodeFloorIKLegsData Legs { get; set;}
+		[Ordinal(0)] [RED("legs")] 		public SBehaviorConstraintNodeFloorIKLegsData Legs { get; set;}
 
-		[RED("leftLegIK")] 		public STwoBonesIKSolverData LeftLegIK { get; set;}
+		[Ordinal(0)] [RED("leftLegIK")] 		public STwoBonesIKSolverData LeftLegIK { get; set;}
 
-		[RED("rightLegIK")] 		public STwoBonesIKSolverData RightLegIK { get; set;}
+		[Ordinal(0)] [RED("rightLegIK")] 		public STwoBonesIKSolverData RightLegIK { get; set;}
 
-		[RED("leftShoulder")] 		public SBehaviorConstraintNodeFloorIKVerticalBoneData LeftShoulder { get; set;}
+		[Ordinal(0)] [RED("leftShoulder")] 		public SBehaviorConstraintNodeFloorIKVerticalBoneData LeftShoulder { get; set;}
 
-		[RED("rightShoulder")] 		public SBehaviorConstraintNodeFloorIKVerticalBoneData RightShoulder { get; set;}
+		[Ordinal(0)] [RED("rightShoulder")] 		public SBehaviorConstraintNodeFloorIKVerticalBoneData RightShoulder { get; set;}
 
-		[RED("neck1MaintainLook")] 		public SBehaviorConstraintNodeFloorIKMaintainLookBoneData Neck1MaintainLook { get; set;}
+		[Ordinal(0)] [RED("neck1MaintainLook")] 		public SBehaviorConstraintNodeFloorIKMaintainLookBoneData Neck1MaintainLook { get; set;}
 
-		[RED("neck2MaintainLook")] 		public SBehaviorConstraintNodeFloorIKMaintainLookBoneData Neck2MaintainLook { get; set;}
+		[Ordinal(0)] [RED("neck2MaintainLook")] 		public SBehaviorConstraintNodeFloorIKMaintainLookBoneData Neck2MaintainLook { get; set;}
 
-		[RED("headMaintainLook")] 		public SBehaviorConstraintNodeFloorIKMaintainLookBoneData HeadMaintainLook { get; set;}
+		[Ordinal(0)] [RED("headMaintainLook")] 		public SBehaviorConstraintNodeFloorIKMaintainLookBoneData HeadMaintainLook { get; set;}
 
 		public CBehaviorConstraintNodeFloorIKBipedLong(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

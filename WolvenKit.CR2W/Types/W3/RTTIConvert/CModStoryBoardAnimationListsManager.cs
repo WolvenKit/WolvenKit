@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardAnimationListsManager : CObject
 	{
-		[RED("compatibleAnimationCount")] 		public CInt32 CompatibleAnimationCount { get; set;}
+		[Ordinal(0)] [RED("("compatibleAnimationCount")] 		public CInt32 CompatibleAnimationCount { get; set;}
 
-		[RED("dataLoaded")] 		public CBool DataLoaded { get; set;}
+		[Ordinal(0)] [RED("("dataLoaded")] 		public CBool DataLoaded { get; set;}
 
-		[RED("animMeta")] 		public CHandle<CStoryBoardAnimationMetaInfo> AnimMeta { get; set;}
+		[Ordinal(0)] [RED("("animMeta")] 		public CHandle<CStoryBoardAnimationMetaInfo> AnimMeta { get; set;}
 
 		public CModStoryBoardAnimationListsManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

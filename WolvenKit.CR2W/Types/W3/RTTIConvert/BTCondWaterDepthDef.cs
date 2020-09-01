@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondWaterDepthDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("checkedActor")] 		public CEnum<EStatOwner> CheckedActor { get; set;}
+		[Ordinal(0)] [RED("checkedActor")] 		public CEnum<EStatOwner> CheckedActor { get; set;}
 
-		[RED("value")] 		public CFloat Value { get; set;}
+		[Ordinal(0)] [RED("value")] 		public CFloat Value { get; set;}
 
-		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
+		[Ordinal(0)] [RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
-		[RED("frontalOffset")] 		public CFloat FrontalOffset { get; set;}
+		[Ordinal(0)] [RED("frontalOffset")] 		public CFloat FrontalOffset { get; set;}
 
 		public BTCondWaterDepthDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStoryBoardCameraSettings : CVariable
 	{
-		[RED("pos")] 		public Vector Pos { get; set;}
+		[Ordinal(0)] [RED("("pos")] 		public Vector Pos { get; set;}
 
-		[RED("rot")] 		public EulerAngles Rot { get; set;}
+		[Ordinal(0)] [RED("("rot")] 		public EulerAngles Rot { get; set;}
 
-		[RED("fov")] 		public CFloat Fov { get; set;}
+		[Ordinal(0)] [RED("("fov")] 		public CFloat Fov { get; set;}
 
-		[RED("dof")] 		public SStoryBoardCameraDofSettings Dof { get; set;}
+		[Ordinal(0)] [RED("("dof")] 		public SStoryBoardCameraDofSettings Dof { get; set;}
 
 		public SStoryBoardCameraSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

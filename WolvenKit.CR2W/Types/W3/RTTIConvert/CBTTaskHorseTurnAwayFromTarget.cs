@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskHorseTurnAwayFromTarget : IBehTreeTask
 	{
-		[RED("direction")] 		public CFloat Direction { get; set;}
+		[Ordinal(0)] [RED("direction")] 		public CFloat Direction { get; set;}
 
-		[RED("init")] 		public CBool Init { get; set;}
+		[Ordinal(0)] [RED("init")] 		public CBool Init { get; set;}
 
 		public CBTTaskHorseTurnAwayFromTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

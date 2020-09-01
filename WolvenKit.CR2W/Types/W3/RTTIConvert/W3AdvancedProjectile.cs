@@ -10,29 +10,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3AdvancedProjectile : CThrowable
 	{
-		[RED("projSpeed")] 		public CFloat ProjSpeed { get; set;}
+		[Ordinal(0)] [RED("("projSpeed")] 		public CFloat ProjSpeed { get; set;}
 
-		[RED("projAngle")] 		public CFloat ProjAngle { get; set;}
+		[Ordinal(0)] [RED("("projAngle")] 		public CFloat ProjAngle { get; set;}
 
-		[RED("projDMG")] 		public CFloat ProjDMG { get; set;}
+		[Ordinal(0)] [RED("("projDMG")] 		public CFloat ProjDMG { get; set;}
 
-		[RED("projSilverDMG")] 		public CFloat ProjSilverDMG { get; set;}
+		[Ordinal(0)] [RED("("projSilverDMG")] 		public CFloat ProjSilverDMG { get; set;}
 
-		[RED("ignoreArmor")] 		public CBool IgnoreArmor { get; set;}
+		[Ordinal(0)] [RED("("ignoreArmor")] 		public CBool IgnoreArmor { get; set;}
 
-		[RED("projEfect")] 		public CEnum<EEffectType> ProjEfect { get; set;}
+		[Ordinal(0)] [RED("("projEfect")] 		public CEnum<EEffectType> ProjEfect { get; set;}
 
-		[RED("persistFxAfterCollision")] 		public CBool PersistFxAfterCollision { get; set;}
+		[Ordinal(0)] [RED("("persistFxAfterCollision")] 		public CBool PersistFxAfterCollision { get; set;}
 
-		[RED("dealDamageEvenIfDodging")] 		public CBool DealDamageEvenIfDodging { get; set;}
+		[Ordinal(0)] [RED("("dealDamageEvenIfDodging")] 		public CBool DealDamageEvenIfDodging { get; set;}
 
-		[RED("ignore")] 		public CBool Ignore { get; set;}
+		[Ordinal(0)] [RED("("ignore")] 		public CBool Ignore { get; set;}
 
-		[RED("isActive")] 		public CBool IsActive { get; set;}
+		[Ordinal(0)] [RED("("isActive")] 		public CBool IsActive { get; set;}
 
-		[RED("collidedEntities", 2,0)] 		public CArray<CHandle<CGameplayEntity>> CollidedEntities { get; set;}
+		[Ordinal(0)] [RED("("collidedEntities", 2,0)] 		public CArray<CHandle<CGameplayEntity>> CollidedEntities { get; set;}
 
-		[RED("lifeSpan")] 		public CFloat LifeSpan { get; set;}
+		[Ordinal(0)] [RED("("lifeSpan")] 		public CFloat LifeSpan { get; set;}
 
 		public W3AdvancedProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

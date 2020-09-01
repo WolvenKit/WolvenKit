@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMotionExBlendNode : CBehaviorGraphNode
 	{
-		[RED("cachedFirstInputNode")] 		public CPtr<CBehaviorGraphNode> CachedFirstInputNode { get; set;}
+		[Ordinal(0)] [RED("("cachedFirstInputNode")] 		public CPtr<CBehaviorGraphNode> CachedFirstInputNode { get; set;}
 
-		[RED("cachedSecondInputNode")] 		public CPtr<CBehaviorGraphNode> CachedSecondInputNode { get; set;}
+		[Ordinal(0)] [RED("("cachedSecondInputNode")] 		public CPtr<CBehaviorGraphNode> CachedSecondInputNode { get; set;}
 
-		[RED("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
+		[Ordinal(0)] [RED("("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
 
-		[RED("cachedSpeedVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedSpeedVariableNode { get; set;}
+		[Ordinal(0)] [RED("("cachedSpeedVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedSpeedVariableNode { get; set;}
 
-		[RED("threshold")] 		public CFloat Threshold { get; set;}
+		[Ordinal(0)] [RED("("threshold")] 		public CFloat Threshold { get; set;}
 
 		public CBehaviorGraphMotionExBlendNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

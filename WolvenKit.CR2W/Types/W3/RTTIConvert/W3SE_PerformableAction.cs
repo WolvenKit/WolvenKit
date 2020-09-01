@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SE_PerformableAction : W3SwitchEvent
 	{
-		[RED("performableAction")] 		public CHandle<IPerformableAction> PerformableAction { get; set;}
+		[Ordinal(0)] [RED("("performableAction")] 		public CHandle<IPerformableAction> PerformableAction { get; set;}
 
 		public W3SE_PerformableAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

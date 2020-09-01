@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphPoseConstraintNode : CBehaviorGraphBaseNode
 	{
-		[RED("cachedControlValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlValueNode { get; set;}
+		[Ordinal(0)] [RED("("cachedControlValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlValueNode { get; set;}
 
 		public CBehaviorGraphPoseConstraintNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

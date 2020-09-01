@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4PlayerStateDismountHorse : CPlayerStateDismountTheVehicle
 	{
-		[RED("horseComp")] 		public CHandle<W3HorseComponent> HorseComp { get; set;}
+		[Ordinal(0)] [RED("horseComp")] 		public CHandle<W3HorseComponent> HorseComp { get; set;}
 
 		public CR4PlayerStateDismountHorse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

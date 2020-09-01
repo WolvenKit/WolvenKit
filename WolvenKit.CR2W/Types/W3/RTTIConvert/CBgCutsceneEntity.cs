@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBgCutsceneEntity : CAnimatedEntity
 	{
-		[RED("csTemplate")] 		public CHandle<CCutsceneTemplate> CsTemplate { get; set;}
+		[Ordinal(0)] [RED("csTemplate")] 		public CHandle<CCutsceneTemplate> CsTemplate { get; set;}
 
 		public CBgCutsceneEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

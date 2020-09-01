@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAICiriSnowballFightActionTree : IAICustomActionTree
 	{
-		[RED("minDistFromTargetToPerformTeleport")] 		public CFloat MinDistFromTargetToPerformTeleport { get; set;}
+		[Ordinal(0)] [RED("minDistFromTargetToPerformTeleport")] 		public CFloat MinDistFromTargetToPerformTeleport { get; set;}
 
-		[RED("delayBetweenThrows")] 		public CFloat DelayBetweenThrows { get; set;}
+		[Ordinal(0)] [RED("delayBetweenThrows")] 		public CFloat DelayBetweenThrows { get; set;}
 
-		[RED("teleportPointTag")] 		public CName TeleportPointTag { get; set;}
+		[Ordinal(0)] [RED("teleportPointTag")] 		public CName TeleportPointTag { get; set;}
 
 		public CAICiriSnowballFightActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

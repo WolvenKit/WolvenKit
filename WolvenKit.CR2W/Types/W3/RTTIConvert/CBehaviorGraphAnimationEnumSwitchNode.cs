@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphAnimationEnumSwitchNode : CBehaviorGraphAnimationSwitchNode
 	{
-		[RED("enum")] 		public CName Enum { get; set;}
+		[Ordinal(0)] [RED("enum")] 		public CName Enum { get; set;}
 
-		[RED("firstInputNum")] 		public CInt32 FirstInputNum { get; set;}
+		[Ordinal(0)] [RED("firstInputNum")] 		public CInt32 FirstInputNum { get; set;}
 
 		public CBehaviorGraphAnimationEnumSwitchNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

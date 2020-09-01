@@ -10,49 +10,49 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCommonMapPinInstance : CVariable
 	{
-		[RED("id")] 		public CInt32 Id { get; set;}
+		[Ordinal(0)] [RED("("id")] 		public CInt32 Id { get; set;}
 
-		[RED("tag")] 		public CName Tag { get; set;}
+		[Ordinal(0)] [RED("("tag")] 		public CName Tag { get; set;}
 
-		[RED("customNameId")] 		public CInt32 CustomNameId { get; set;}
+		[Ordinal(0)] [RED("("customNameId")] 		public CInt32 CustomNameId { get; set;}
 
-		[RED("extraTag")] 		public CName ExtraTag { get; set;}
+		[Ordinal(0)] [RED("("extraTag")] 		public CName ExtraTag { get; set;}
 
-		[RED("type")] 		public CName Type { get; set;}
+		[Ordinal(0)] [RED("("type")] 		public CName Type { get; set;}
 
-		[RED("visibleType")] 		public CName VisibleType { get; set;}
+		[Ordinal(0)] [RED("("visibleType")] 		public CName VisibleType { get; set;}
 
-		[RED("alternateVersion")] 		public CInt32 AlternateVersion { get; set;}
+		[Ordinal(0)] [RED("("alternateVersion")] 		public CInt32 AlternateVersion { get; set;}
 
-		[RED("position")] 		public Vector Position { get; set;}
+		[Ordinal(0)] [RED("("position")] 		public Vector Position { get; set;}
 
-		[RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(0)] [RED("("radius")] 		public CFloat Radius { get; set;}
 
-		[RED("visibleRadius")] 		public CFloat VisibleRadius { get; set;}
+		[Ordinal(0)] [RED("("visibleRadius")] 		public CFloat VisibleRadius { get; set;}
 
-		[RED("guid")] 		public CGUID Guid { get; set;}
+		[Ordinal(0)] [RED("("guid")] 		public CGUID Guid { get; set;}
 
-		[RED("entities", 2,0)] 		public CArray<CHandle<CEntity>> Entities { get; set;}
+		[Ordinal(0)] [RED("("entities", 2,0)] 		public CArray<CHandle<CEntity>> Entities { get; set;}
 
-		[RED("isDynamic")] 		public CBool IsDynamic { get; set;}
+		[Ordinal(0)] [RED("("isDynamic")] 		public CBool IsDynamic { get; set;}
 
-		[RED("isKnown")] 		public CBool IsKnown { get; set;}
+		[Ordinal(0)] [RED("("isKnown")] 		public CBool IsKnown { get; set;}
 
-		[RED("isDiscovered")] 		public CBool IsDiscovered { get; set;}
+		[Ordinal(0)] [RED("("isDiscovered")] 		public CBool IsDiscovered { get; set;}
 
-		[RED("isDisabled")] 		public CBool IsDisabled { get; set;}
+		[Ordinal(0)] [RED("("isDisabled")] 		public CBool IsDisabled { get; set;}
 
-		[RED("isHighlightable")] 		public CBool IsHighlightable { get; set;}
+		[Ordinal(0)] [RED("("isHighlightable")] 		public CBool IsHighlightable { get; set;}
 
-		[RED("isHighlighted")] 		public CBool IsHighlighted { get; set;}
+		[Ordinal(0)] [RED("("isHighlighted")] 		public CBool IsHighlighted { get; set;}
 
-		[RED("canBePointedByArrow")] 		public CBool CanBePointedByArrow { get; set;}
+		[Ordinal(0)] [RED("("canBePointedByArrow")] 		public CBool CanBePointedByArrow { get; set;}
 
-		[RED("canBeAddedToMinimap")] 		public CBool CanBeAddedToMinimap { get; set;}
+		[Ordinal(0)] [RED("("canBeAddedToMinimap")] 		public CBool CanBeAddedToMinimap { get; set;}
 
-		[RED("isAddedToMinimap")] 		public CBool IsAddedToMinimap { get; set;}
+		[Ordinal(0)] [RED("("isAddedToMinimap")] 		public CBool IsAddedToMinimap { get; set;}
 
-		[RED("invalidated")] 		public CBool Invalidated { get; set;}
+		[Ordinal(0)] [RED("("invalidated")] 		public CBool Invalidated { get; set;}
 
 		public SCommonMapPinInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

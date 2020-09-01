@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Mutation7BaseEffect : CBaseGameplayEffect
 	{
-		[RED("actors", 2,0)] 		public CArray<CHandle<CActor>> Actors { get; set;}
+		[Ordinal(0)] [RED("("actors", 2,0)] 		public CArray<CHandle<CActor>> Actors { get; set;}
 
-		[RED("sonarEntity")] 		public CHandle<CEntity> SonarEntity { get; set;}
+		[Ordinal(0)] [RED("("sonarEntity")] 		public CHandle<CEntity> SonarEntity { get; set;}
 
-		[RED("meshComponent")] 		public CHandle<CMeshComponent> MeshComponent { get; set;}
+		[Ordinal(0)] [RED("("meshComponent")] 		public CHandle<CMeshComponent> MeshComponent { get; set;}
 
-		[RED("streamingHax")] 		public CBool StreamingHax { get; set;}
+		[Ordinal(0)] [RED("("streamingHax")] 		public CBool StreamingHax { get; set;}
 
-		[RED("scale")] 		public CFloat Scale { get; set;}
+		[Ordinal(0)] [RED("("scale")] 		public CFloat Scale { get; set;}
 
-		[RED("isSonarIncreasing")] 		public CBool IsSonarIncreasing { get; set;}
+		[Ordinal(0)] [RED("("isSonarIncreasing")] 		public CBool IsSonarIncreasing { get; set;}
 
-		[RED("enemyFlashFX")] 		public CName EnemyFlashFX { get; set;}
+		[Ordinal(0)] [RED("("enemyFlashFX")] 		public CName EnemyFlashFX { get; set;}
 
-		[RED("actorsCount")] 		public CInt32 ActorsCount { get; set;}
+		[Ordinal(0)] [RED("("actorsCount")] 		public CInt32 ActorsCount { get; set;}
 
-		[RED("apBonus")] 		public CFloat ApBonus { get; set;}
+		[Ordinal(0)] [RED("("apBonus")] 		public CFloat ApBonus { get; set;}
 
 		public W3Mutation7BaseEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

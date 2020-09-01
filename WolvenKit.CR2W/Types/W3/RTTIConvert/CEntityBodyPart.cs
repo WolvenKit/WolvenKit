@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEntityBodyPart : CVariable
 	{
-		[RED("name")] 		public CName Name { get; set;}
+		[Ordinal(0)] [RED("("name")] 		public CName Name { get; set;}
 
-		[RED("states", 2,0)] 		public CArray<CEntityBodyPartState> States { get; set;}
+		[Ordinal(0)] [RED("("states", 2,0)] 		public CArray<CEntityBodyPartState> States { get; set;}
 
-		[RED("wasIncluded")] 		public CBool WasIncluded { get; set;}
+		[Ordinal(0)] [RED("("wasIncluded")] 		public CBool WasIncluded { get; set;}
 
 		public CEntityBodyPart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

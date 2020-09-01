@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class TutorialBlockerData : TextPopupData
 	{
-		[RED("m_title")] 		public CString M_title { get; set;}
+		[Ordinal(0)] [RED("("m_title")] 		public CString M_title { get; set;}
 
-		[RED("m_description")] 		public CString M_description { get; set;}
+		[Ordinal(0)] [RED("("m_description")] 		public CString M_description { get; set;}
 
-		[RED("m_imagepath")] 		public CString M_imagepath { get; set;}
+		[Ordinal(0)] [RED("("m_imagepath")] 		public CString M_imagepath { get; set;}
 
-		[RED("scriptTag")] 		public CName ScriptTag { get; set;}
+		[Ordinal(0)] [RED("("scriptTag")] 		public CName ScriptTag { get; set;}
 
-		[RED("managerRef")] 		public CHandle<CR4TutorialSystem> ManagerRef { get; set;}
+		[Ordinal(0)] [RED("("managerRef")] 		public CHandle<CR4TutorialSystem> ManagerRef { get; set;}
 
 		public TutorialBlockerData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

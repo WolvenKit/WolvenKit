@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTree : CResource
 	{
-		[RED("rootNode")] 		public CPtr<ISpawnTreeBaseNode> RootNode { get; set;}
+		[Ordinal(0)] [RED("rootNode")] 		public CPtr<ISpawnTreeBaseNode> RootNode { get; set;}
 
-		[RED("creatureDefinition", 2,0)] 		public CArray<CPtr<CEncounterCreatureDefinition>> CreatureDefinition { get; set;}
+		[Ordinal(0)] [RED("creatureDefinition", 2,0)] 		public CArray<CPtr<CEncounterCreatureDefinition>> CreatureDefinition { get; set;}
 
-		[RED("spawnTreeType")] 		public CEnum<ESpawnTreeType> SpawnTreeType { get; set;}
+		[Ordinal(0)] [RED("spawnTreeType")] 		public CEnum<ESpawnTreeType> SpawnTreeType { get; set;}
 
 		public CSpawnTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimSlotsParam : CEntityTemplateParam
 	{
-		[RED("animationSlots", 2,0)] 		public CArray<CPtr<CAnimationSlots>> AnimationSlots { get; set;}
+		[Ordinal(0)] [RED("animationSlots", 2,0)] 		public CArray<CPtr<CAnimationSlots>> AnimationSlots { get; set;}
 
 		public CAnimSlotsParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

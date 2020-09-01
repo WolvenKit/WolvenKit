@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeDecoratorInitializersList : ISpawnTreeDecorator
 	{
-		[RED("topInitializers", 2,0)] 		public CArray<CPtr<ISpawnTreeInitializer>> TopInitializers { get; set;}
+		[Ordinal(0)] [RED("topInitializers", 2,0)] 		public CArray<CPtr<ISpawnTreeInitializer>> TopInitializers { get; set;}
 
 		public CSpawnTreeDecoratorInitializersList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

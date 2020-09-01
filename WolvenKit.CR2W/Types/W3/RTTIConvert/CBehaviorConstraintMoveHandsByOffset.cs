@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorConstraintMoveHandsByOffset : CBehaviorGraphPoseConstraintNode
 	{
-		[RED("leftHand")] 		public STwoBonesIKSolverData LeftHand { get; set;}
+		[Ordinal(0)] [RED("leftHand")] 		public STwoBonesIKSolverData LeftHand { get; set;}
 
-		[RED("rightHand")] 		public STwoBonesIKSolverData RightHand { get; set;}
+		[Ordinal(0)] [RED("rightHand")] 		public STwoBonesIKSolverData RightHand { get; set;}
 
 		public CBehaviorConstraintMoveHandsByOffset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

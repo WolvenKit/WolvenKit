@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateIngameMenuBestiary : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("OPEN_GLOSSARY")] 		public CName OPEN_GLOSSARY { get; set;}
+		[Ordinal(0)] [RED("("OPEN_GLOSSARY")] 		public CName OPEN_GLOSSARY { get; set;}
 
-		[RED("OPEN_GAME_MENU")] 		public CName OPEN_GAME_MENU { get; set;}
+		[Ordinal(0)] [RED("("OPEN_GAME_MENU")] 		public CName OPEN_GAME_MENU { get; set;}
 
 		public W3TutorialManagerUIHandlerStateIngameMenuBestiary(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

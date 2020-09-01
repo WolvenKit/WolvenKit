@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeDecoratorWalkableSpotRingQueryDefinition : IBehTreeNodeDecoratorWalkableSpotQueryDefinition
 	{
-		[RED("filter")] 		public SPositioningFilter Filter { get; set;}
+		[Ordinal(0)] [RED("filter")] 		public SPositioningFilter Filter { get; set;}
 
 		public CBehTreeNodeDecoratorWalkableSpotRingQueryDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

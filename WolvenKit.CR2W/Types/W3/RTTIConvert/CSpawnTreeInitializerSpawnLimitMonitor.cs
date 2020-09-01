@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeInitializerSpawnLimitMonitor : ISpawnTreeSpawnMonitorBaseInitializer
 	{
-		[RED("totalSpawnLimitMin")] 		public CUInt16 TotalSpawnLimitMin { get; set;}
+		[Ordinal(0)] [RED("("totalSpawnLimitMin")] 		public CUInt16 TotalSpawnLimitMin { get; set;}
 
-		[RED("totalSpawnLimitMax")] 		public CUInt16 TotalSpawnLimitMax { get; set;}
+		[Ordinal(0)] [RED("("totalSpawnLimitMax")] 		public CUInt16 TotalSpawnLimitMax { get; set;}
 
-		[RED("creatureDefinition")] 		public CName CreatureDefinition { get; set;}
+		[Ordinal(0)] [RED("("creatureDefinition")] 		public CName CreatureDefinition { get; set;}
 
-		[RED("resetOnFullRespawn")] 		public CBool ResetOnFullRespawn { get; set;}
+		[Ordinal(0)] [RED("("resetOnFullRespawn")] 		public CBool ResetOnFullRespawn { get; set;}
 
 		public CSpawnTreeInitializerSpawnLimitMonitor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

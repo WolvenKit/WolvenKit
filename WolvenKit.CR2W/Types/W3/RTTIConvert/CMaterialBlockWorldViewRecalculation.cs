@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockWorldViewRecalculation : CMaterialBlock
 	{
-		[RED("worldToView")] 		public CBool WorldToView { get; set;}
+		[Ordinal(0)] [RED("worldToView")] 		public CBool WorldToView { get; set;}
 
 		public CMaterialBlockWorldViewRecalculation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

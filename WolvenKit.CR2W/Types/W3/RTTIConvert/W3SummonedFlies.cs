@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SummonedFlies : CGameplayEntity
 	{
-		[RED("fleeDuration")] 		public CFloat FleeDuration { get; set;}
+		[Ordinal(0)] [RED("("fleeDuration")] 		public CFloat FleeDuration { get; set;}
 
-		[RED("lookForTarget")] 		public CBool LookForTarget { get; set;}
+		[Ordinal(0)] [RED("("lookForTarget")] 		public CBool LookForTarget { get; set;}
 
-		[RED("detectionDistance")] 		public CFloat DetectionDistance { get; set;}
+		[Ordinal(0)] [RED("("detectionDistance")] 		public CFloat DetectionDistance { get; set;}
 
-		[RED("pursueDistance")] 		public CFloat PursueDistance { get; set;}
+		[Ordinal(0)] [RED("("pursueDistance")] 		public CFloat PursueDistance { get; set;}
 
-		[RED("ignoreTag")] 		public CName IgnoreTag { get; set;}
+		[Ordinal(0)] [RED("("ignoreTag")] 		public CName IgnoreTag { get; set;}
 
-		[RED("m_Target")] 		public CHandle<CNode> M_Target { get; set;}
+		[Ordinal(0)] [RED("("m_Target")] 		public CHandle<CNode> M_Target { get; set;}
 
-		[RED("m_StartPos")] 		public Vector M_StartPos { get; set;}
+		[Ordinal(0)] [RED("("m_StartPos")] 		public Vector M_StartPos { get; set;}
 
-		[RED("m_SummonedCmp")] 		public CHandle<W3SummonedEntityComponent> M_SummonedCmp { get; set;}
+		[Ordinal(0)] [RED("("m_SummonedCmp")] 		public CHandle<W3SummonedEntityComponent> M_SummonedCmp { get; set;}
 
-		[RED("m_SlideCmp")] 		public CHandle<W3SlideToTargetComponent> M_SlideCmp { get; set;}
+		[Ordinal(0)] [RED("("m_SlideCmp")] 		public CHandle<W3SlideToTargetComponent> M_SlideCmp { get; set;}
 
 		public W3SummonedFlies(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

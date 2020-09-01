@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_Pull : W3ImmobilizeEffect
 	{
-		[RED("movementAdjustor")] 		public CHandle<CMovementAdjustor> MovementAdjustor { get; set;}
+		[Ordinal(0)] [RED("("movementAdjustor")] 		public CHandle<CMovementAdjustor> MovementAdjustor { get; set;}
 
-		[RED("ticket")] 		public SMovementAdjustmentRequestTicket Ticket { get; set;}
+		[Ordinal(0)] [RED("("ticket")] 		public SMovementAdjustmentRequestTicket Ticket { get; set;}
 
 		public W3Effect_Pull(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

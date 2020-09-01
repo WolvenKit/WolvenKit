@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateCombat : CExplorationStateAbstract
 	{
-		[RED("m_TimeToSlideNeededF")] 		public CFloat M_TimeToSlideNeededF { get; set;}
+		[Ordinal(0)] [RED("m_TimeToSlideNeededF")] 		public CFloat M_TimeToSlideNeededF { get; set;}
 
-		[RED("m_TimeToSlideCurF")] 		public CFloat M_TimeToSlideCurF { get; set;}
+		[Ordinal(0)] [RED("m_TimeToSlideCurF")] 		public CFloat M_TimeToSlideCurF { get; set;}
 
-		[RED("m_FallHasToWaitForCombatAction")] 		public CBool M_FallHasToWaitForCombatAction { get; set;}
+		[Ordinal(0)] [RED("m_FallHasToWaitForCombatAction")] 		public CBool M_FallHasToWaitForCombatAction { get; set;}
 
-		[RED("m_SlideHasToWaitForCombatAction")] 		public CBool M_SlideHasToWaitForCombatAction { get; set;}
+		[Ordinal(0)] [RED("m_SlideHasToWaitForCombatAction")] 		public CBool M_SlideHasToWaitForCombatAction { get; set;}
 
-		[RED("m_FallHorizontalImpulseCancelF")] 		public CFloat M_FallHorizontalImpulseCancelF { get; set;}
+		[Ordinal(0)] [RED("m_FallHorizontalImpulseCancelF")] 		public CFloat M_FallHorizontalImpulseCancelF { get; set;}
 
-		[RED("m_FallHorizontalImpulseF")] 		public CFloat M_FallHorizontalImpulseF { get; set;}
+		[Ordinal(0)] [RED("m_FallHorizontalImpulseF")] 		public CFloat M_FallHorizontalImpulseF { get; set;}
 
-		[RED("m_FallExtraVerticalImpulseF")] 		public CFloat M_FallExtraVerticalImpulseF { get; set;}
+		[Ordinal(0)] [RED("m_FallExtraVerticalImpulseF")] 		public CFloat M_FallExtraVerticalImpulseF { get; set;}
 
-		[RED("m_TurnAdjustTimeSprintF")] 		public CFloat M_TurnAdjustTimeSprintF { get; set;}
+		[Ordinal(0)] [RED("m_TurnAdjustTimeSprintF")] 		public CFloat M_TurnAdjustTimeSprintF { get; set;}
 
 		public CExplorationStateCombat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

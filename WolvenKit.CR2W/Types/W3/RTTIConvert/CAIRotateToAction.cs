@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIRotateToAction : IAIActionTree
 	{
-		[RED("targetTag")] 		public CName TargetTag { get; set;}
+		[Ordinal(0)] [RED("("targetTag")] 		public CName TargetTag { get; set;}
 
-		[RED("keepRotating")] 		public CBool KeepRotating { get; set;}
+		[Ordinal(0)] [RED("("keepRotating")] 		public CBool KeepRotating { get; set;}
 
 		public CAIRotateToAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_A_closerToTargetThan_B : CQuestScriptedCondition
 	{
-		[RED("object_A_tag")] 		public CName Object_A_tag { get; set;}
+		[Ordinal(0)] [RED("("object_A_tag")] 		public CName Object_A_tag { get; set;}
 
-		[RED("object_B_tag")] 		public CName Object_B_tag { get; set;}
+		[Ordinal(0)] [RED("("object_B_tag")] 		public CName Object_B_tag { get; set;}
 
-		[RED("targetTag")] 		public CName TargetTag { get; set;}
+		[Ordinal(0)] [RED("("targetTag")] 		public CName TargetTag { get; set;}
 
-		[RED("listener")] 		public CHandle<W3QuestCond_A_closerToTargetThan_B_Listener> Listener { get; set;}
+		[Ordinal(0)] [RED("("listener")] 		public CHandle<W3QuestCond_A_closerToTargetThan_B_Listener> Listener { get; set;}
 
-		[RED("object_A")] 		public CHandle<CNode> Object_A { get; set;}
+		[Ordinal(0)] [RED("("object_A")] 		public CHandle<CNode> Object_A { get; set;}
 
-		[RED("object_B")] 		public CHandle<CNode> Object_B { get; set;}
+		[Ordinal(0)] [RED("("object_B")] 		public CHandle<CNode> Object_B { get; set;}
 
-		[RED("target")] 		public CHandle<CNode> Target { get; set;}
+		[Ordinal(0)] [RED("("target")] 		public CHandle<CNode> Target { get; set;}
 
 		public W3QuestCond_A_closerToTargetThan_B(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

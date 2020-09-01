@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4LootItemDefinition : CR4LootDefinitionBase
 	{
-		[RED("name")] 		public CName Name { get; set;}
+		[Ordinal(0)] [RED("("name")] 		public CName Name { get; set;}
 
-		[RED("chance")] 		public CFloat Chance { get; set;}
+		[Ordinal(0)] [RED("("chance")] 		public CFloat Chance { get; set;}
 
 		public CR4LootItemDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIBaseMonsterDefaults : CAIDefaults
 	{
-		[RED("spawnTree")] 		public CHandle<CAIMonsterSpawn> SpawnTree { get; set;}
+		[Ordinal(0)] [RED("spawnTree")] 		public CHandle<CAIMonsterSpawn> SpawnTree { get; set;}
 
-		[RED("keepDistance")] 		public CHandle<CAIKeepDistanceTree> KeepDistance { get; set;}
+		[Ordinal(0)] [RED("keepDistance")] 		public CHandle<CAIKeepDistanceTree> KeepDistance { get; set;}
 
-		[RED("tauntTree")] 		public CHandle<CAIMonsterTaunt> TauntTree { get; set;}
+		[Ordinal(0)] [RED("tauntTree")] 		public CHandle<CAIMonsterTaunt> TauntTree { get; set;}
 
-		[RED("axiiTree")] 		public CHandle<CAIMonsterAxii> AxiiTree { get; set;}
+		[Ordinal(0)] [RED("axiiTree")] 		public CHandle<CAIMonsterAxii> AxiiTree { get; set;}
 
-		[RED("idleDecoratorTree")] 		public CHandle<CAIMonsterIdleDecorator> IdleDecoratorTree { get; set;}
+		[Ordinal(0)] [RED("idleDecoratorTree")] 		public CHandle<CAIMonsterIdleDecorator> IdleDecoratorTree { get; set;}
 
-		[RED("idleTree")] 		public CHandle<CAIIdleTree> IdleTree { get; set;}
+		[Ordinal(0)] [RED("idleTree")] 		public CHandle<CAIIdleTree> IdleTree { get; set;}
 
-		[RED("ignoreReachability")] 		public CBool IgnoreReachability { get; set;}
+		[Ordinal(0)] [RED("ignoreReachability")] 		public CBool IgnoreReachability { get; set;}
 
-		[RED("allowPursueDistance")] 		public CFloat AllowPursueDistance { get; set;}
+		[Ordinal(0)] [RED("allowPursueDistance")] 		public CFloat AllowPursueDistance { get; set;}
 
-		[RED("canSwim")] 		public CBool CanSwim { get; set;}
+		[Ordinal(0)] [RED("canSwim")] 		public CBool CanSwim { get; set;}
 
-		[RED("canBury")] 		public CBool CanBury { get; set;}
+		[Ordinal(0)] [RED("canBury")] 		public CBool CanBury { get; set;}
 
-		[RED("canKeepDistance")] 		public CBool CanKeepDistance { get; set;}
+		[Ordinal(0)] [RED("canKeepDistance")] 		public CBool CanKeepDistance { get; set;}
 
 		public CAIBaseMonsterDefaults(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

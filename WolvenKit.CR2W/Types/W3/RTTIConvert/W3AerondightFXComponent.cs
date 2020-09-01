@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3AerondightFXComponent : CScriptedComponent
 	{
-		[RED("m_visualEffects", 2,0)] 		public CArray<CName> M_visualEffects { get; set;}
+		[Ordinal(0)] [RED("("m_visualEffects", 2,0)] 		public CArray<CName> M_visualEffects { get; set;}
 
 		public W3AerondightFXComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

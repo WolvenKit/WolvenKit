@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSceneChoice : CVariable
 	{
-		[RED("description")] 		public CString Description { get; set;}
+		[Ordinal(0)] [RED("("description")] 		public CString Description { get; set;}
 
-		[RED("emphasised")] 		public CBool Emphasised { get; set;}
+		[Ordinal(0)] [RED("("emphasised")] 		public CBool Emphasised { get; set;}
 
-		[RED("previouslyChoosen")] 		public CBool PreviouslyChoosen { get; set;}
+		[Ordinal(0)] [RED("("previouslyChoosen")] 		public CBool PreviouslyChoosen { get; set;}
 
-		[RED("disabled")] 		public CBool Disabled { get; set;}
+		[Ordinal(0)] [RED("("disabled")] 		public CBool Disabled { get; set;}
 
-		[RED("dialogAction")] 		public CEnum<EDialogActionIcon> DialogAction { get; set;}
+		[Ordinal(0)] [RED("("dialogAction")] 		public CEnum<EDialogActionIcon> DialogAction { get; set;}
 
-		[RED("playGoChunk")] 		public CName PlayGoChunk { get; set;}
+		[Ordinal(0)] [RED("("playGoChunk")] 		public CName PlayGoChunk { get; set;}
 
 		public SSceneChoice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

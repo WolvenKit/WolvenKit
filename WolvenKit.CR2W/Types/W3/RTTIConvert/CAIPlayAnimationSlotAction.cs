@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIPlayAnimationSlotAction : IAIActionTree
 	{
-		[RED("animName")] 		public CName AnimName { get; set;}
+		[Ordinal(0)] [RED("animName")] 		public CName AnimName { get; set;}
 
-		[RED("slotName")] 		public CName SlotName { get; set;}
+		[Ordinal(0)] [RED("slotName")] 		public CName SlotName { get; set;}
 
-		[RED("blendInTime")] 		public CFloat BlendInTime { get; set;}
+		[Ordinal(0)] [RED("blendInTime")] 		public CFloat BlendInTime { get; set;}
 
-		[RED("blendOutTime")] 		public CFloat BlendOutTime { get; set;}
+		[Ordinal(0)] [RED("blendOutTime")] 		public CFloat BlendOutTime { get; set;}
 
 		public CAIPlayAnimationSlotAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

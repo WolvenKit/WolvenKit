@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SItemChangedData : CVariable
 	{
-		[RED("itemName")] 		public CName ItemName { get; set;}
+		[Ordinal(0)] [RED("("itemName")] 		public CName ItemName { get; set;}
 
-		[RED("quantity")] 		public CInt32 Quantity { get; set;}
+		[Ordinal(0)] [RED("("quantity")] 		public CInt32 Quantity { get; set;}
 
-		[RED("ids", 2,0)] 		public CArray<SItemUniqueId> Ids { get; set;}
+		[Ordinal(0)] [RED("("ids", 2,0)] 		public CArray<SItemUniqueId> Ids { get; set;}
 
-		[RED("informGui")] 		public CBool InformGui { get; set;}
+		[Ordinal(0)] [RED("("informGui")] 		public CBool InformGui { get; set;}
 
 		public SItemChangedData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

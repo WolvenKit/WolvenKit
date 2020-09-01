@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskTackle : IBehTreeTask
 	{
-		[RED("dealDamage")] 		public CBool DealDamage { get; set;}
+		[Ordinal(0)] [RED("("dealDamage")] 		public CBool DealDamage { get; set;}
 
-		[RED("activeOnAnimEvent")] 		public CBool ActiveOnAnimEvent { get; set;}
+		[Ordinal(0)] [RED("("activeOnAnimEvent")] 		public CBool ActiveOnAnimEvent { get; set;}
 
-		[RED("bCollisionWithActor")] 		public CBool BCollisionWithActor { get; set;}
+		[Ordinal(0)] [RED("("bCollisionWithActor")] 		public CBool BCollisionWithActor { get; set;}
 
-		[RED("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(0)] [RED("("activated")] 		public CBool Activated { get; set;}
 
-		[RED("xmlDamageName")] 		public CName XmlDamageName { get; set;}
+		[Ordinal(0)] [RED("("xmlDamageName")] 		public CName XmlDamageName { get; set;}
 
-		[RED("collidedActor")] 		public CHandle<CActor> CollidedActor { get; set;}
+		[Ordinal(0)] [RED("("collidedActor")] 		public CHandle<CActor> CollidedActor { get; set;}
 
 		public CBTTaskTackle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

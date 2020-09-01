@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class EntitySlot : CVariable
 	{
-		[RED("wasIncluded")] 		public CBool WasIncluded { get; set;}
+		[Ordinal(0)] [RED("wasIncluded")] 		public CBool WasIncluded { get; set;}
 
-		[RED("name")] 		public CName Name { get; set;}
+		[Ordinal(0)] [RED("name")] 		public CName Name { get; set;}
 
-		[RED("componentName")] 		public CName ComponentName { get; set;}
+		[Ordinal(0)] [RED("componentName")] 		public CName ComponentName { get; set;}
 
-		[RED("boneName")] 		public CName BoneName { get; set;}
+		[Ordinal(0)] [RED("boneName")] 		public CName BoneName { get; set;}
 
-		[RED("transform")] 		public EngineTransform Transform { get; set;}
+		[Ordinal(0)] [RED("transform")] 		public EngineTransform Transform { get; set;}
 
-		[RED("freePositionAxisX")] 		public CBool FreePositionAxisX { get; set;}
+		[Ordinal(0)] [RED("freePositionAxisX")] 		public CBool FreePositionAxisX { get; set;}
 
-		[RED("freePositionAxisY")] 		public CBool FreePositionAxisY { get; set;}
+		[Ordinal(0)] [RED("freePositionAxisY")] 		public CBool FreePositionAxisY { get; set;}
 
-		[RED("freePositionAxisZ")] 		public CBool FreePositionAxisZ { get; set;}
+		[Ordinal(0)] [RED("freePositionAxisZ")] 		public CBool FreePositionAxisZ { get; set;}
 
-		[RED("freeRotation")] 		public CBool FreeRotation { get; set;}
+		[Ordinal(0)] [RED("freeRotation")] 		public CBool FreeRotation { get; set;}
 
 		public EntitySlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvReflectionProbesGenParameters : CVariable
 	{
-		[RED("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(0)] [RED("("activated")] 		public CBool Activated { get; set;}
 
-		[RED("colorAmbient")] 		public SSimpleCurve ColorAmbient { get; set;}
+		[Ordinal(0)] [RED("("colorAmbient")] 		public SSimpleCurve ColorAmbient { get; set;}
 
-		[RED("colorSceneMul")] 		public SSimpleCurve ColorSceneMul { get; set;}
+		[Ordinal(0)] [RED("("colorSceneMul")] 		public SSimpleCurve ColorSceneMul { get; set;}
 
-		[RED("colorSceneAdd")] 		public SSimpleCurve ColorSceneAdd { get; set;}
+		[Ordinal(0)] [RED("("colorSceneAdd")] 		public SSimpleCurve ColorSceneAdd { get; set;}
 
-		[RED("colorSkyMul")] 		public SSimpleCurve ColorSkyMul { get; set;}
+		[Ordinal(0)] [RED("("colorSkyMul")] 		public SSimpleCurve ColorSkyMul { get; set;}
 
-		[RED("colorSkyAdd")] 		public SSimpleCurve ColorSkyAdd { get; set;}
+		[Ordinal(0)] [RED("("colorSkyAdd")] 		public SSimpleCurve ColorSkyAdd { get; set;}
 
-		[RED("remapOffset")] 		public SSimpleCurve RemapOffset { get; set;}
+		[Ordinal(0)] [RED("("remapOffset")] 		public SSimpleCurve RemapOffset { get; set;}
 
-		[RED("remapStrength")] 		public SSimpleCurve RemapStrength { get; set;}
+		[Ordinal(0)] [RED("("remapStrength")] 		public SSimpleCurve RemapStrength { get; set;}
 
-		[RED("remapClamp")] 		public SSimpleCurve RemapClamp { get; set;}
+		[Ordinal(0)] [RED("("remapClamp")] 		public SSimpleCurve RemapClamp { get; set;}
 
 		public CEnvReflectionProbesGenParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

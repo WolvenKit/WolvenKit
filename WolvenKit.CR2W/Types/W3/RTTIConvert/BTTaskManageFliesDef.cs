@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskManageFliesDef : IBehTreeTaskDefinition
 	{
-		[RED("entityToSummon")] 		public CHandle<CEntityTemplate> EntityToSummon { get; set;}
+		[Ordinal(0)] [RED("entityToSummon")] 		public CHandle<CEntityTemplate> EntityToSummon { get; set;}
 
-		[RED("maxFliesAlive")] 		public CInt32 MaxFliesAlive { get; set;}
+		[Ordinal(0)] [RED("maxFliesAlive")] 		public CInt32 MaxFliesAlive { get; set;}
 
-		[RED("delayBetweenSpawns")] 		public SRangeF DelayBetweenSpawns { get; set;}
+		[Ordinal(0)] [RED("delayBetweenSpawns")] 		public SRangeF DelayBetweenSpawns { get; set;}
 
-		[RED("delayToRespawn")] 		public SRangeF DelayToRespawn { get; set;}
+		[Ordinal(0)] [RED("delayToRespawn")] 		public SRangeF DelayToRespawn { get; set;}
 
 		public BTTaskManageFliesDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

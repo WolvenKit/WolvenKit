@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSpawnEntityAttack : CBTTaskAttack
 	{
-		[RED("offsetVector")] 		public Vector OffsetVector { get; set;}
+		[Ordinal(0)] [RED("("offsetVector")] 		public Vector OffsetVector { get; set;}
 
-		[RED("ressourceName")] 		public CName RessourceName { get; set;}
+		[Ordinal(0)] [RED("("ressourceName")] 		public CName RessourceName { get; set;}
 
-		[RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(0)] [RED("("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
-		[RED("spawnAnimEventName")] 		public CName SpawnAnimEventName { get; set;}
+		[Ordinal(0)] [RED("("spawnAnimEventName")] 		public CName SpawnAnimEventName { get; set;}
 
-		[RED("completeAfterSpawn")] 		public CBool CompleteAfterSpawn { get; set;}
+		[Ordinal(0)] [RED("("completeAfterSpawn")] 		public CBool CompleteAfterSpawn { get; set;}
 
-		[RED("m_summonerComponent")] 		public CHandle<W3SummonerComponent> M_summonerComponent { get; set;}
+		[Ordinal(0)] [RED("("m_summonerComponent")] 		public CHandle<W3SummonerComponent> M_summonerComponent { get; set;}
 
-		[RED("couldntLoadResource")] 		public CBool CouldntLoadResource { get; set;}
+		[Ordinal(0)] [RED("("couldntLoadResource")] 		public CBool CouldntLoadResource { get; set;}
 
 		public CBTTaskSpawnEntityAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskFlightStyleDef : IBehTreeTaskDefinition
 	{
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(0)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("onMain")] 		public CBool OnMain { get; set;}
+		[Ordinal(0)] [RED("("onMain")] 		public CBool OnMain { get; set;}
 
-		[RED("glideCheck")] 		public CBool GlideCheck { get; set;}
+		[Ordinal(0)] [RED("("glideCheck")] 		public CBool GlideCheck { get; set;}
 
-		[RED("backToRegularCheck")] 		public CBool BackToRegularCheck { get; set;}
+		[Ordinal(0)] [RED("("backToRegularCheck")] 		public CBool BackToRegularCheck { get; set;}
 
-		[RED("altitudeCheck")] 		public CBool AltitudeCheck { get; set;}
+		[Ordinal(0)] [RED("("altitudeCheck")] 		public CBool AltitudeCheck { get; set;}
 
-		[RED("GlideChance")] 		public CFloat GlideChance { get; set;}
+		[Ordinal(0)] [RED("("GlideChance")] 		public CFloat GlideChance { get; set;}
 
-		[RED("BackToRegularChance")] 		public CFloat BackToRegularChance { get; set;}
+		[Ordinal(0)] [RED("("BackToRegularChance")] 		public CFloat BackToRegularChance { get; set;}
 
-		[RED("altitude")] 		public CFloat Altitude { get; set;}
+		[Ordinal(0)] [RED("("altitude")] 		public CFloat Altitude { get; set;}
 
-		[RED("frequency")] 		public CFloat Frequency { get; set;}
+		[Ordinal(0)] [RED("("frequency")] 		public CFloat Frequency { get; set;}
 
 		public CBTTaskFlightStyleDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

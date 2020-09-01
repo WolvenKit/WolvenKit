@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskTeleportPlayerToNodeDef : IBehTreeTaskDefinition
 	{
-		[RED("nodeToFind")] 		public CName NodeToFind { get; set;}
+		[Ordinal(0)] [RED("("nodeToFind")] 		public CName NodeToFind { get; set;}
 
-		[RED("shouldComplete")] 		public CBool ShouldComplete { get; set;}
+		[Ordinal(0)] [RED("("shouldComplete")] 		public CBool ShouldComplete { get; set;}
 
-		[RED("node")] 		public CHandle<CNode> Node { get; set;}
+		[Ordinal(0)] [RED("("node")] 		public CHandle<CNode> Node { get; set;}
 
-		[RED("pos")] 		public Vector Pos { get; set;}
+		[Ordinal(0)] [RED("("pos")] 		public Vector Pos { get; set;}
 
-		[RED("rot")] 		public EulerAngles Rot { get; set;}
+		[Ordinal(0)] [RED("("rot")] 		public EulerAngles Rot { get; set;}
 
 		public CBTTaskTeleportPlayerToNodeDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

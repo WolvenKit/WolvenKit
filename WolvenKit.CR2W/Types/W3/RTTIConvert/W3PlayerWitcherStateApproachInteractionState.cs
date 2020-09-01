@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3PlayerWitcherStateApproachInteractionState : CR4PlayerStateExtendedMovable
 	{
-		[RED("objectPointHeading")] 		public CFloat ObjectPointHeading { get; set;}
+		[Ordinal(0)] [RED("("objectPointHeading")] 		public CFloat ObjectPointHeading { get; set;}
 
-		[RED("objectHeadingSet")] 		public CBool ObjectHeadingSet { get; set;}
+		[Ordinal(0)] [RED("("objectHeadingSet")] 		public CBool ObjectHeadingSet { get; set;}
 
-		[RED("stopRequested")] 		public CBool StopRequested { get; set;}
+		[Ordinal(0)] [RED("("stopRequested")] 		public CBool StopRequested { get; set;}
 
-		[RED("objectEntity")] 		public CHandle<CEntity> ObjectEntity { get; set;}
+		[Ordinal(0)] [RED("("objectEntity")] 		public CHandle<CEntity> ObjectEntity { get; set;}
 
-		[RED("switchOn")] 		public CBool SwitchOn { get; set;}
+		[Ordinal(0)] [RED("("switchOn")] 		public CBool SwitchOn { get; set;}
 
-		[RED("switchAnimationType")] 		public CEnum<PhysicalSwitchAnimationType> SwitchAnimationType { get; set;}
+		[Ordinal(0)] [RED("("switchAnimationType")] 		public CEnum<PhysicalSwitchAnimationType> SwitchAnimationType { get; set;}
 
 		public W3PlayerWitcherStateApproachInteractionState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

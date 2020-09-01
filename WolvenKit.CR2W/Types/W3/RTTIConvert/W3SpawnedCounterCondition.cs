@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SpawnedCounterCondition : ISpawnScriptCondition
 	{
-		[RED("spawnedValue")] 		public CInt32 SpawnedValue { get; set;}
+		[Ordinal(0)] [RED("("spawnedValue")] 		public CInt32 SpawnedValue { get; set;}
 
-		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
+		[Ordinal(0)] [RED("("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
-		[RED("spawnedCreatures")] 		public CInt32 SpawnedCreatures { get; set;}
+		[Ordinal(0)] [RED("("spawnedCreatures")] 		public CInt32 SpawnedCreatures { get; set;}
 
-		[RED("dataManager")] 		public CHandle<CEncounterDataManager> DataManager { get; set;}
+		[Ordinal(0)] [RED("("dataManager")] 		public CHandle<CEncounterDataManager> DataManager { get; set;}
 
 		public W3SpawnedCounterCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

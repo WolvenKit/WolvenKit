@@ -10,33 +10,33 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBirdsManager : CGameplayEntity
 	{
-		[RED("birdsSpawnPointsTag")] 		public CName BirdsSpawnPointsTag { get; set;}
+		[Ordinal(0)] [RED("birdsSpawnPointsTag")] 		public CName BirdsSpawnPointsTag { get; set;}
 
-		[RED("birdType")] 		public CEnum<EBirdType> BirdType { get; set;}
+		[Ordinal(0)] [RED("birdType")] 		public CEnum<EBirdType> BirdType { get; set;}
 
-		[RED("spawnRange")] 		public CFloat SpawnRange { get; set;}
+		[Ordinal(0)] [RED("spawnRange")] 		public CFloat SpawnRange { get; set;}
 
-		[RED("customBirdTemplate")] 		public CHandle<CEntityTemplate> CustomBirdTemplate { get; set;}
+		[Ordinal(0)] [RED("customBirdTemplate")] 		public CHandle<CEntityTemplate> CustomBirdTemplate { get; set;}
 
-		[RED("respawnDelay")] 		public CFloat RespawnDelay { get; set;}
+		[Ordinal(0)] [RED("respawnDelay")] 		public CFloat RespawnDelay { get; set;}
 
-		[RED("respawnMinDistance")] 		public CFloat RespawnMinDistance { get; set;}
+		[Ordinal(0)] [RED("respawnMinDistance")] 		public CFloat RespawnMinDistance { get; set;}
 
-		[RED("spawnOnlyInsideBirdsArea")] 		public CBool SpawnOnlyInsideBirdsArea { get; set;}
+		[Ordinal(0)] [RED("spawnOnlyInsideBirdsArea")] 		public CBool SpawnOnlyInsideBirdsArea { get; set;}
 
-		[RED("disableSnapToCollisions")] 		public CBool DisableSnapToCollisions { get; set;}
+		[Ordinal(0)] [RED("disableSnapToCollisions")] 		public CBool DisableSnapToCollisions { get; set;}
 
-		[RED("birdSpawnpoints", 2,0)] 		public CArray<SBirdSpawnpoint> BirdSpawnpoints { get; set;}
+		[Ordinal(0)] [RED("birdSpawnpoints", 2,0)] 		public CArray<SBirdSpawnpoint> BirdSpawnpoints { get; set;}
 
-		[RED("shouldBirdsFly")] 		public CBool ShouldBirdsFly { get; set;}
+		[Ordinal(0)] [RED("shouldBirdsFly")] 		public CBool ShouldBirdsFly { get; set;}
 
-		[RED("despawnTime")] 		public CFloat DespawnTime { get; set;}
+		[Ordinal(0)] [RED("despawnTime")] 		public CFloat DespawnTime { get; set;}
 
-		[RED("wasEverVisible")] 		public CBool WasEverVisible { get; set;}
+		[Ordinal(0)] [RED("wasEverVisible")] 		public CBool WasEverVisible { get; set;}
 
-		[RED("birdArea")] 		public CHandle<CTriggerAreaComponent> BirdArea { get; set;}
+		[Ordinal(0)] [RED("birdArea")] 		public CHandle<CTriggerAreaComponent> BirdArea { get; set;}
 
-		[RED("birdTemplate")] 		public CHandle<CEntityTemplate> BirdTemplate { get; set;}
+		[Ordinal(0)] [RED("birdTemplate")] 		public CHandle<CEntityTemplate> BirdTemplate { get; set;}
 
 		public CBirdsManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMeshTypeComponent : CDrawableComponent
 	{
-		[RED("forceLODLevel")] 		public CInt32 ForceLODLevel { get; set;}
+		[Ordinal(0)] [RED("forceLODLevel")] 		public CInt32 ForceLODLevel { get; set;}
 
-		[RED("forceAutoHideDistance")] 		public CUInt16 ForceAutoHideDistance { get; set;}
+		[Ordinal(0)] [RED("forceAutoHideDistance")] 		public CUInt16 ForceAutoHideDistance { get; set;}
 
-		[RED("shadowImportanceBias")] 		public CEnum<EMeshShadowImportanceBias> ShadowImportanceBias { get; set;}
+		[Ordinal(0)] [RED("shadowImportanceBias")] 		public CEnum<EMeshShadowImportanceBias> ShadowImportanceBias { get; set;}
 
-		[RED("defaultEffectParams")] 		public Vector DefaultEffectParams { get; set;}
+		[Ordinal(0)] [RED("defaultEffectParams")] 		public Vector DefaultEffectParams { get; set;}
 
-		[RED("defaultEffectColor")] 		public CColor DefaultEffectColor { get; set;}
+		[Ordinal(0)] [RED("defaultEffectColor")] 		public CColor DefaultEffectColor { get; set;}
 
 		public CMeshTypeComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

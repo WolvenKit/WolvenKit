@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskHitReactionDecoratorDef : CBTTaskPlayAnimationEventDecoratorDef
 	{
-		[RED("createHitReactionEvent")] 		public CBehTreeValCName CreateHitReactionEvent { get; set;}
+		[Ordinal(0)] [RED("("createHitReactionEvent")] 		public CBehTreeValCName CreateHitReactionEvent { get; set;}
 
-		[RED("increaseHitCounterOnlyOnMeleeDmg")] 		public CBehTreeValBool IncreaseHitCounterOnlyOnMeleeDmg { get; set;}
+		[Ordinal(0)] [RED("("increaseHitCounterOnlyOnMeleeDmg")] 		public CBehTreeValBool IncreaseHitCounterOnlyOnMeleeDmg { get; set;}
 
 		public CBTTaskHitReactionDecoratorDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

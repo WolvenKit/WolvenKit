@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAIMinigameParams : CVariable
 	{
-		[RED("wristWrestling")] 		public CPtr<CAIMinigameParamsWristWrestling> WristWrestling { get; set;}
+		[Ordinal(0)] [RED("wristWrestling")] 		public CPtr<CAIMinigameParamsWristWrestling> WristWrestling { get; set;}
 
 		public SAIMinigameParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

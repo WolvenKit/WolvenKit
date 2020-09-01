@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMaintainVelocityNode : CBehaviorGraphBaseNode
 	{
-		[RED("blendTime")] 		public CFloat BlendTime { get; set;}
+		[Ordinal(0)] [RED("("blendTime")] 		public CFloat BlendTime { get; set;}
 
-		[RED("stop")] 		public CBool Stop { get; set;}
+		[Ordinal(0)] [RED("("stop")] 		public CBool Stop { get; set;}
 
 		public CBehaviorGraphMaintainVelocityNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

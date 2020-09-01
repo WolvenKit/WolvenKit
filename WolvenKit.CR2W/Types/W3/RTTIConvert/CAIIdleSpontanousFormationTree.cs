@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIIdleSpontanousFormationTree : IAIIdleFormationTree
 	{
-		[RED("partyMemberName")] 		public CName PartyMemberName { get; set;}
+		[Ordinal(0)] [RED("partyMemberName")] 		public CName PartyMemberName { get; set;}
 
-		[RED("leaderSteering")] 		public CHandle<CMoveSteeringBehavior> LeaderSteering { get; set;}
+		[Ordinal(0)] [RED("leaderSteering")] 		public CHandle<CMoveSteeringBehavior> LeaderSteering { get; set;}
 
-		[RED("leadFormationTree")] 		public CHandle<CAIIdleTree> LeadFormationTree { get; set;}
+		[Ordinal(0)] [RED("leadFormationTree")] 		public CHandle<CAIIdleTree> LeadFormationTree { get; set;}
 
-		[RED("loneWolfTree")] 		public CHandle<CAIIdleTree> LoneWolfTree { get; set;}
+		[Ordinal(0)] [RED("loneWolfTree")] 		public CHandle<CAIIdleTree> LoneWolfTree { get; set;}
 
 		public CAIIdleSpontanousFormationTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

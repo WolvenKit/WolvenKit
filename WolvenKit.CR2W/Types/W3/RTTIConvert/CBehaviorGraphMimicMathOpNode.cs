@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMimicMathOpNode : CBehaviorGraphBaseMimicNode
 	{
-		[RED("cachedValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedValueNode { get; set;}
+		[Ordinal(0)] [RED("("cachedValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedValueNode { get; set;}
 
-		[RED("mathOp")] 		public CEnum<EBehaviorMimicMathOp> MathOp { get; set;}
+		[Ordinal(0)] [RED("("mathOp")] 		public CEnum<EBehaviorMimicMathOp> MathOp { get; set;}
 
-		[RED("value")] 		public CFloat Value { get; set;}
+		[Ordinal(0)] [RED("("value")] 		public CFloat Value { get; set;}
 
-		[RED("trackName")] 		public CString TrackName { get; set;}
+		[Ordinal(0)] [RED("("trackName")] 		public CString TrackName { get; set;}
 
 		public CBehaviorGraphMimicMathOpNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

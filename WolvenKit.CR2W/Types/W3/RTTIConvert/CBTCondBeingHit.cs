@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondBeingHit : IBehTreeTask
 	{
-		[RED("timeOnLastHit")] 		public CFloat TimeOnLastHit { get; set;}
+		[Ordinal(0)] [RED("timeOnLastHit")] 		public CFloat TimeOnLastHit { get; set;}
 
-		[RED("beingHit")] 		public CBool BeingHit { get; set;}
+		[Ordinal(0)] [RED("beingHit")] 		public CBool BeingHit { get; set;}
 
 		public CBTCondBeingHit(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

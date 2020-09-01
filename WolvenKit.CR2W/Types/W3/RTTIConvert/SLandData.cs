@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SLandData : CVariable
 	{
-		[RED("landType")] 		public CEnum<ELandType> LandType { get; set;}
+		[Ordinal(0)] [RED("("landType")] 		public CEnum<ELandType> LandType { get; set;}
 
-		[RED("timeBeforeChain")] 		public CFloat TimeBeforeChain { get; set;}
+		[Ordinal(0)] [RED("("timeBeforeChain")] 		public CFloat TimeBeforeChain { get; set;}
 
-		[RED("cameraShakeStrength")] 		public CFloat CameraShakeStrength { get; set;}
+		[Ordinal(0)] [RED("("cameraShakeStrength")] 		public CFloat CameraShakeStrength { get; set;}
 
-		[RED("orientationSpeed")] 		public CFloat OrientationSpeed { get; set;}
+		[Ordinal(0)] [RED("("orientationSpeed")] 		public CFloat OrientationSpeed { get; set;}
 
-		[RED("timeSafetyEnd")] 		public CFloat TimeSafetyEnd { get; set;}
+		[Ordinal(0)] [RED("("timeSafetyEnd")] 		public CFloat TimeSafetyEnd { get; set;}
 
-		[RED("landEndForcedMode")] 		public CEnum<ELandRunForcedMode> LandEndForcedMode { get; set;}
+		[Ordinal(0)] [RED("("landEndForcedMode")] 		public CEnum<ELandRunForcedMode> LandEndForcedMode { get; set;}
 
-		[RED("shouldFlipFoot")] 		public CBool ShouldFlipFoot { get; set;}
+		[Ordinal(0)] [RED("("shouldFlipFoot")] 		public CBool ShouldFlipFoot { get; set;}
 
 		public SLandData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

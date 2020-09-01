@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CParticleInitializerPosition : IParticleInitializer
 	{
-		[RED("offset")] 		public CFloat Offset { get; set;}
+		[Ordinal(0)] [RED("("offset")] 		public CFloat Offset { get; set;}
 
-		[RED("position")] 		public CPtr<IEvaluatorVector> Position { get; set;}
+		[Ordinal(0)] [RED("("position")] 		public CPtr<IEvaluatorVector> Position { get; set;}
 
 		public CParticleInitializerPosition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

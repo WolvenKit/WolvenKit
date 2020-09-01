@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodePlayVoicesetDecoratorDefinition : IBehTreeNodeSpeechDecoratorDefinition
 	{
-		[RED("voiceSet")] 		public CBehTreeValString VoiceSet { get; set;}
+		[Ordinal(0)] [RED("voiceSet")] 		public CBehTreeValString VoiceSet { get; set;}
 
-		[RED("voicePriority")] 		public CBehTreeValInt VoicePriority { get; set;}
+		[Ordinal(0)] [RED("voicePriority")] 		public CBehTreeValInt VoicePriority { get; set;}
 
-		[RED("minSpeechDelay")] 		public CFloat MinSpeechDelay { get; set;}
+		[Ordinal(0)] [RED("minSpeechDelay")] 		public CFloat MinSpeechDelay { get; set;}
 
-		[RED("maxSpeechDelay")] 		public CFloat MaxSpeechDelay { get; set;}
+		[Ordinal(0)] [RED("maxSpeechDelay")] 		public CFloat MaxSpeechDelay { get; set;}
 
-		[RED("waitUntilSpeechIsFinished")] 		public CBool WaitUntilSpeechIsFinished { get; set;}
+		[Ordinal(0)] [RED("waitUntilSpeechIsFinished")] 		public CBool WaitUntilSpeechIsFinished { get; set;}
 
-		[RED("dontActivateWhileSpeaking")] 		public CBool DontActivateWhileSpeaking { get; set;}
+		[Ordinal(0)] [RED("dontActivateWhileSpeaking")] 		public CBool DontActivateWhileSpeaking { get; set;}
 
 		public CBehTreeNodePlayVoicesetDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

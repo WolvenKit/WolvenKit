@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskAnimalFlee : IBehTreeTask
 	{
-		[RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(0)] [RED("("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[RED("heading")] 		public CFloat Heading { get; set;}
+		[Ordinal(0)] [RED("("heading")] 		public CFloat Heading { get; set;}
 
-		[RED("initialPosCheck")] 		public CBool InitialPosCheck { get; set;}
+		[Ordinal(0)] [RED("("initialPosCheck")] 		public CBool InitialPosCheck { get; set;}
 
-		[RED("isMoving")] 		public CBool IsMoving { get; set;}
+		[Ordinal(0)] [RED("("isMoving")] 		public CBool IsMoving { get; set;}
 
-		[RED("alertRadius")] 		public CFloat AlertRadius { get; set;}
+		[Ordinal(0)] [RED("("alertRadius")] 		public CFloat AlertRadius { get; set;}
 
-		[RED("ignoreEntitiesWithTag")] 		public CName IgnoreEntitiesWithTag { get; set;}
+		[Ordinal(0)] [RED("("ignoreEntitiesWithTag")] 		public CName IgnoreEntitiesWithTag { get; set;}
 
-		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
+		[Ordinal(0)] [RED("("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
-		[RED("initialPos")] 		public Vector InitialPos { get; set;}
+		[Ordinal(0)] [RED("("initialPos")] 		public Vector InitialPos { get; set;}
 
-		[RED("checkPos")] 		public Vector CheckPos { get; set;}
+		[Ordinal(0)] [RED("("checkPos")] 		public Vector CheckPos { get; set;}
 
 		public CBTTaskAnimalFlee(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

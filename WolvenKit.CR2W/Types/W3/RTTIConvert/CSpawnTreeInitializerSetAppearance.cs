@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeInitializerSetAppearance : ISpawnTreeInitializer
 	{
-		[RED("appearanceName")] 		public CName AppearanceName { get; set;}
+		[Ordinal(0)] [RED("("appearanceName")] 		public CName AppearanceName { get; set;}
 
-		[RED("onlySetOnSpawnAppearance")] 		public CBool OnlySetOnSpawnAppearance { get; set;}
+		[Ordinal(0)] [RED("("onlySetOnSpawnAppearance")] 		public CBool OnlySetOnSpawnAppearance { get; set;}
 
 		public CSpawnTreeInitializerSetAppearance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

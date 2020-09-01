@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SpawnEntityOnAnimEvent : CScriptedComponent
 	{
-		[RED("animEvent")] 		public CName AnimEvent { get; set;}
+		[Ordinal(0)] [RED("("animEvent")] 		public CName AnimEvent { get; set;}
 
-		[RED("entityName")] 		public CName EntityName { get; set;}
+		[Ordinal(0)] [RED("("entityName")] 		public CName EntityName { get; set;}
 
-		[RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(0)] [RED("("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
 		public W3SpawnEntityOnAnimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

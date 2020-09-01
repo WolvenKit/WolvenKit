@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventWorldEntityEffect : CStorySceneEvent
 	{
-		[RED("entityTag")] 		public CName EntityTag { get; set;}
+		[Ordinal(0)] [RED("entityTag")] 		public CName EntityTag { get; set;}
 
-		[RED("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(0)] [RED("effectName")] 		public CName EffectName { get; set;}
 
-		[RED("startStop")] 		public CBool StartStop { get; set;}
+		[Ordinal(0)] [RED("startStop")] 		public CBool StartStop { get; set;}
 
 		public CStorySceneEventWorldEntityEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

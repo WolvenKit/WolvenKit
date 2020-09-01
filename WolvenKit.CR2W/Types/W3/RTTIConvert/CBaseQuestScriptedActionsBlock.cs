@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBaseQuestScriptedActionsBlock : CQuestGraphBlock
 	{
-		[RED("npcTag")] 		public CName NpcTag { get; set;}
+		[Ordinal(0)] [RED("("npcTag")] 		public CName NpcTag { get; set;}
 
-		[RED("handleBehaviorOutcome")] 		public CBool HandleBehaviorOutcome { get; set;}
+		[Ordinal(0)] [RED("("handleBehaviorOutcome")] 		public CBool HandleBehaviorOutcome { get; set;}
 
-		[RED("actionsPriority")] 		public CEnum<ETopLevelAIPriorities> ActionsPriority { get; set;}
+		[Ordinal(0)] [RED("("actionsPriority")] 		public CEnum<ETopLevelAIPriorities> ActionsPriority { get; set;}
 
-		[RED("onlyOneActor")] 		public CBool OnlyOneActor { get; set;}
+		[Ordinal(0)] [RED("("onlyOneActor")] 		public CBool OnlyOneActor { get; set;}
 
 		public CBaseQuestScriptedActionsBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

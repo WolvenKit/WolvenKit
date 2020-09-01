@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFlyingCrittersLairEntity : CSwarmLairEntity
 	{
-		[RED("scriptInput")] 		public CPtr<CFlyingSwarmScriptInput> ScriptInput { get; set;}
+		[Ordinal(0)] [RED("("scriptInput")] 		public CPtr<CFlyingSwarmScriptInput> ScriptInput { get; set;}
 
-		[RED("cellMapResourceFile")] 		public CSoft<CSwarmCellMap> CellMapResourceFile { get; set;}
+		[Ordinal(0)] [RED("("cellMapResourceFile")] 		public CSoft<CSwarmCellMap> CellMapResourceFile { get; set;}
 
-		[RED("cellMapCellSize")] 		public CFloat CellMapCellSize { get; set;}
+		[Ordinal(0)] [RED("("cellMapCellSize")] 		public CFloat CellMapCellSize { get; set;}
 
 		public CFlyingCrittersLairEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

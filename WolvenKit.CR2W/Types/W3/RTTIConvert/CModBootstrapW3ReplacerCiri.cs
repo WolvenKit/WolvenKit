@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModBootstrapW3ReplacerCiri : W3ReplacerCiri
 	{
-		[RED("bootstrap")] 		public CHandle<CModBootstrap> Bootstrap { get; set;}
+		[Ordinal(0)] [RED("("bootstrap")] 		public CHandle<CModBootstrap> Bootstrap { get; set;}
 
 		public CModBootstrapW3ReplacerCiri(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

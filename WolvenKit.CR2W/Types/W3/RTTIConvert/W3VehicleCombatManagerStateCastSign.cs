@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3VehicleCombatManagerStateCastSign : CScriptableState
 	{
-		[RED("witcher")] 		public CHandle<W3PlayerWitcher> Witcher { get; set;}
+		[Ordinal(0)] [RED("("witcher")] 		public CHandle<W3PlayerWitcher> Witcher { get; set;}
 
-		[RED("horse")] 		public CHandle<CActor> Horse { get; set;}
+		[Ordinal(0)] [RED("("horse")] 		public CHandle<CActor> Horse { get; set;}
 
-		[RED("horseComp")] 		public CHandle<W3HorseComponent> HorseComp { get; set;}
+		[Ordinal(0)] [RED("("horseComp")] 		public CHandle<W3HorseComponent> HorseComp { get; set;}
 
 		public W3VehicleCombatManagerStateCastSign(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

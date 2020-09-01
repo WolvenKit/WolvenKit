@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTModifyAttackCount : IBehTreeTask
 	{
-		[RED("combatDataStorage")] 		public CHandle<CExtendedAICombatStorage> CombatDataStorage { get; set;}
+		[Ordinal(0)] [RED("("combatDataStorage")] 		public CHandle<CExtendedAICombatStorage> CombatDataStorage { get; set;}
 
-		[RED("attackName")] 		public CName AttackName { get; set;}
+		[Ordinal(0)] [RED("("attackName")] 		public CName AttackName { get; set;}
 
-		[RED("resetAttackCount")] 		public CBool ResetAttackCount { get; set;}
+		[Ordinal(0)] [RED("("resetAttackCount")] 		public CBool ResetAttackCount { get; set;}
 
-		[RED("incrementAttackCount")] 		public CBool IncrementAttackCount { get; set;}
+		[Ordinal(0)] [RED("("incrementAttackCount")] 		public CBool IncrementAttackCount { get; set;}
 
 		public CBTModifyAttackCount(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

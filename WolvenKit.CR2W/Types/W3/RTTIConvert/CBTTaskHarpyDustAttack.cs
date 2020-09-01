@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskHarpyDustAttack : CBTTaskAttack
 	{
-		[RED("addtionalFX")] 		public CName AddtionalFX { get; set;}
+		[Ordinal(0)] [RED("("addtionalFX")] 		public CName AddtionalFX { get; set;}
 
-		[RED("effectRange")] 		public CFloat EffectRange { get; set;}
+		[Ordinal(0)] [RED("("effectRange")] 		public CFloat EffectRange { get; set;}
 
-		[RED("effectAngle")] 		public CFloat EffectAngle { get; set;}
+		[Ordinal(0)] [RED("("effectAngle")] 		public CFloat EffectAngle { get; set;}
 
-		[RED("eventReceived")] 		public CBool EventReceived { get; set;}
+		[Ordinal(0)] [RED("("eventReceived")] 		public CBool EventReceived { get; set;}
 
 		public CBTTaskHarpyDustAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

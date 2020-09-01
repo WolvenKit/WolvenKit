@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIAnimalCombatHorse : CAIAnimalCombat
 	{
-		[RED("shakeRiderTree")] 		public CHandle<CAIHorseShakeRider> ShakeRiderTree { get; set;}
+		[Ordinal(0)] [RED("shakeRiderTree")] 		public CHandle<CAIHorseShakeRider> ShakeRiderTree { get; set;}
 
 		public CAIAnimalCombatHorse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

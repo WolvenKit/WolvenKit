@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class InterpCurveV : InterpCurve
 	{
-		[RED("points", 2,0)] 		public CArray<CHandle<InterpCurvePointV>> Points { get; set;}
+		[Ordinal(0)] [RED("("points", 2,0)] 		public CArray<CHandle<InterpCurvePointV>> Points { get; set;}
 
 		public InterpCurveV(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

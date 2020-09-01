@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3VehicleCombatManagerStateRangedAttack : CScriptableState
 	{
-		[RED("rider")] 		public CHandle<CR4Player> Rider { get; set;}
+		[Ordinal(0)] [RED("("rider")] 		public CHandle<CR4Player> Rider { get; set;}
 
-		[RED("aiming")] 		public CBool Aiming { get; set;}
+		[Ordinal(0)] [RED("("aiming")] 		public CBool Aiming { get; set;}
 
-		[RED("fire")] 		public CBool Fire { get; set;}
+		[Ordinal(0)] [RED("("fire")] 		public CBool Fire { get; set;}
 
-		[RED("wasAborted")] 		public CBool WasAborted { get; set;}
+		[Ordinal(0)] [RED("("wasAborted")] 		public CBool WasAborted { get; set;}
 
-		[RED("horizontalVal")] 		public CFloat HorizontalVal { get; set;}
+		[Ordinal(0)] [RED("("horizontalVal")] 		public CFloat HorizontalVal { get; set;}
 
 		public W3VehicleCombatManagerStateRangedAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

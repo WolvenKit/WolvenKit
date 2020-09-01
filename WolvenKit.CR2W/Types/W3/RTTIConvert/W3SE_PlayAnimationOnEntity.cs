@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SE_PlayAnimationOnEntity : W3SwitchEvent
 	{
-		[RED("entityTag")] 		public CName EntityTag { get; set;}
+		[Ordinal(0)] [RED("("entityTag")] 		public CName EntityTag { get; set;}
 
-		[RED("animationName")] 		public CName AnimationName { get; set;}
+		[Ordinal(0)] [RED("("animationName")] 		public CName AnimationName { get; set;}
 
-		[RED("operation")] 		public CEnum<EPropertyAnimationOperation> Operation { get; set;}
+		[Ordinal(0)] [RED("("operation")] 		public CEnum<EPropertyAnimationOperation> Operation { get; set;}
 
-		[RED("playCount")] 		public CInt32 PlayCount { get; set;}
+		[Ordinal(0)] [RED("("playCount")] 		public CInt32 PlayCount { get; set;}
 
-		[RED("playLengthScale")] 		public CFloat PlayLengthScale { get; set;}
+		[Ordinal(0)] [RED("("playLengthScale")] 		public CFloat PlayLengthScale { get; set;}
 
-		[RED("playMode")] 		public CEnum<EPropertyCurveMode> PlayMode { get; set;}
+		[Ordinal(0)] [RED("("playMode")] 		public CEnum<EPropertyCurveMode> PlayMode { get; set;}
 
-		[RED("rewindTime")] 		public CFloat RewindTime { get; set;}
+		[Ordinal(0)] [RED("("rewindTime")] 		public CFloat RewindTime { get; set;}
 
 		public W3SE_PlayAnimationOnEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

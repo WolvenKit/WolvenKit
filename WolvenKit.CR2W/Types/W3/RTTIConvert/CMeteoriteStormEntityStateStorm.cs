@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMeteoriteStormEntityStateStorm : CScriptableState
 	{
-		[RED("usedPos", 2,0)] 		public CArray<Vector> UsedPos { get; set;}
+		[Ordinal(0)] [RED("usedPos", 2,0)] 		public CArray<Vector> UsedPos { get; set;}
 
 		public CMeteoriteStormEntityStateStorm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

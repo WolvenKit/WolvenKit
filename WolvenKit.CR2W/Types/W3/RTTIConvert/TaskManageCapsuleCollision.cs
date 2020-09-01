@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class TaskManageCapsuleCollision : IBehTreeTask
 	{
-		[RED("collision")] 		public CBool Collision { get; set;}
+		[Ordinal(0)] [RED("("collision")] 		public CBool Collision { get; set;}
 
-		[RED("allCollisionTypes")] 		public CBool AllCollisionTypes { get; set;}
+		[Ordinal(0)] [RED("("allCollisionTypes")] 		public CBool AllCollisionTypes { get; set;}
 
-		[RED("overrideForThisTaskOnly")] 		public CBool OverrideForThisTaskOnly { get; set;}
+		[Ordinal(0)] [RED("("overrideForThisTaskOnly")] 		public CBool OverrideForThisTaskOnly { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(0)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("onAnimEvent")] 		public CBool OnAnimEvent { get; set;}
+		[Ordinal(0)] [RED("("onAnimEvent")] 		public CBool OnAnimEvent { get; set;}
 
-		[RED("switchVulnerability")] 		public CBool SwitchVulnerability { get; set;}
+		[Ordinal(0)] [RED("("switchVulnerability")] 		public CBool SwitchVulnerability { get; set;}
 
-		[RED("effectLinkedToCollision")] 		public CName EffectLinkedToCollision { get; set;}
+		[Ordinal(0)] [RED("("effectLinkedToCollision")] 		public CName EffectLinkedToCollision { get; set;}
 
 		public TaskManageCapsuleCollision(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

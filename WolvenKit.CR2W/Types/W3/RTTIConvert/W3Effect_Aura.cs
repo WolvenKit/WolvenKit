@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_Aura : W3ApplicatorEffect
 	{
-		[RED("isOneTimeOnly")] 		public CBool IsOneTimeOnly { get; set;}
+		[Ordinal(0)] [RED("("isOneTimeOnly")] 		public CBool IsOneTimeOnly { get; set;}
 
-		[RED("range")] 		public CFloat Range { get; set;}
+		[Ordinal(0)] [RED("("range")] 		public CFloat Range { get; set;}
 
-		[RED("flags")] 		public CInt32 Flags { get; set;}
+		[Ordinal(0)] [RED("("flags")] 		public CInt32 Flags { get; set;}
 
 		public W3Effect_Aura(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

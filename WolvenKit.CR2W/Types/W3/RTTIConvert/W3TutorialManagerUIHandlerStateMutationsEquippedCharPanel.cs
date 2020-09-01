@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateMutationsEquippedCharPanel : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("EQUIPPED")] 		public CName EQUIPPED { get; set;}
+		[Ordinal(0)] [RED("("EQUIPPED")] 		public CName EQUIPPED { get; set;}
 
-		[RED("MUTAGENS")] 		public CName MUTAGENS { get; set;}
+		[Ordinal(0)] [RED("("MUTAGENS")] 		public CName MUTAGENS { get; set;}
 
-		[RED("MASTER")] 		public CName MASTER { get; set;}
+		[Ordinal(0)] [RED("("MASTER")] 		public CName MASTER { get; set;}
 
-		[RED("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
 		public W3TutorialManagerUIHandlerStateMutationsEquippedCharPanel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

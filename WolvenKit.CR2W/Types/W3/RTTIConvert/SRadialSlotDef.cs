@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SRadialSlotDef : CVariable
 	{
-		[RED("slotName")] 		public CName SlotName { get; set;}
+		[Ordinal(0)] [RED("("slotName")] 		public CName SlotName { get; set;}
 
-		[RED("disabledBySources", 2,0)] 		public CArray<CName> DisabledBySources { get; set;}
+		[Ordinal(0)] [RED("("disabledBySources", 2,0)] 		public CArray<CName> DisabledBySources { get; set;}
 
 		public SRadialSlotDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

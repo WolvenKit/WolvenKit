@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSelfUpdatingComponent : CScriptedComponent
 	{
-		[RED("tickGroup")] 		public CEnum<ETickGroup> TickGroup { get; set;}
+		[Ordinal(0)] [RED("("tickGroup")] 		public CEnum<ETickGroup> TickGroup { get; set;}
 
-		[RED("tickedByDefault")] 		public CBool TickedByDefault { get; set;}
+		[Ordinal(0)] [RED("("tickedByDefault")] 		public CBool TickedByDefault { get; set;}
 
 		public CSelfUpdatingComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

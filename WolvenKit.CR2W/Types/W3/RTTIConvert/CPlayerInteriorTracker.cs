@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPlayerInteriorTracker : CObject
 	{
-		[RED("sprintLocker")] 		public CHandle<CActionLockerByCounter> SprintLocker { get; set;}
+		[Ordinal(0)] [RED("("sprintLocker")] 		public CHandle<CActionLockerByCounter> SprintLocker { get; set;}
 
-		[RED("runLocker")] 		public CHandle<CActionLockerByCounter> RunLocker { get; set;}
+		[Ordinal(0)] [RED("("runLocker")] 		public CHandle<CActionLockerByCounter> RunLocker { get; set;}
 
-		[RED("currentInterior")] 		public CHandle<CNode> CurrentInterior { get; set;}
+		[Ordinal(0)] [RED("("currentInterior")] 		public CHandle<CNode> CurrentInterior { get; set;}
 
 		public CPlayerInteriorTracker(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

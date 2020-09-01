@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CParticleModificatorColorOverLife : IParticleModificator
 	{
-		[RED("color")] 		public CPtr<IEvaluatorColor> Color { get; set;}
+		[Ordinal(0)] [RED("("color")] 		public CPtr<IEvaluatorColor> Color { get; set;}
 
-		[RED("modulate")] 		public CBool Modulate { get; set;}
+		[Ordinal(0)] [RED("("modulate")] 		public CBool Modulate { get; set;}
 
 		public CParticleModificatorColorOverLife(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

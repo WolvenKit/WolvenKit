@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFishSpawnpoint : CVariable
 	{
-		[RED("shouldBeErased")] 		public CBool ShouldBeErased { get; set;}
+		[Ordinal(0)] [RED("("shouldBeErased")] 		public CBool ShouldBeErased { get; set;}
 
-		[RED("isFishSpawned")] 		public CBool IsFishSpawned { get; set;}
+		[Ordinal(0)] [RED("("isFishSpawned")] 		public CBool IsFishSpawned { get; set;}
 
-		[RED("position")] 		public Vector Position { get; set;}
+		[Ordinal(0)] [RED("("position")] 		public Vector Position { get; set;}
 
-		[RED("rotation")] 		public EulerAngles Rotation { get; set;}
+		[Ordinal(0)] [RED("("rotation")] 		public EulerAngles Rotation { get; set;}
 
-		[RED("spawnHandler")] 		public CHandle<CCreateEntityHelper> SpawnHandler { get; set;}
+		[Ordinal(0)] [RED("("spawnHandler")] 		public CHandle<CCreateEntityHelper> SpawnHandler { get; set;}
 
 		public SFishSpawnpoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4GwintGameMenu : CR4GwintBaseMenu
 	{
-		[RED("chooseTurnPopup")] 		public CHandle<W3ChooseGwintTurnPopup> ChooseTurnPopup { get; set;}
+		[Ordinal(0)] [RED("("chooseTurnPopup")] 		public CHandle<W3ChooseGwintTurnPopup> ChooseTurnPopup { get; set;}
 
-		[RED("m_fxSetGwintResult")] 		public CHandle<CScriptedFlashFunction> M_fxSetGwintResult { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetGwintResult")] 		public CHandle<CScriptedFlashFunction> M_fxSetGwintResult { get; set;}
 
-		[RED("m_fxSetWhoStarts")] 		public CHandle<CScriptedFlashFunction> M_fxSetWhoStarts { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetWhoStarts")] 		public CHandle<CScriptedFlashFunction> M_fxSetWhoStarts { get; set;}
 
-		[RED("m_fxShowTutorial")] 		public CHandle<CScriptedFlashFunction> M_fxShowTutorial { get; set;}
+		[Ordinal(0)] [RED("("m_fxShowTutorial")] 		public CHandle<CScriptedFlashFunction> M_fxShowTutorial { get; set;}
 
-		[RED("playerWon")] 		public CBool PlayerWon { get; set;}
+		[Ordinal(0)] [RED("("playerWon")] 		public CBool PlayerWon { get; set;}
 
-		[RED("tutorialActive")] 		public CBool TutorialActive { get; set;}
+		[Ordinal(0)] [RED("("tutorialActive")] 		public CBool TutorialActive { get; set;}
 
 		public CR4GwintGameMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

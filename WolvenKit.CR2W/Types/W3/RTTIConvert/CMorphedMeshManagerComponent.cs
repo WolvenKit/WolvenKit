@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMorphedMeshManagerComponent : CComponent
 	{
-		[RED("Default morph ratio")] 		public CFloat Default_morph_ratio { get; set;}
+		[Ordinal(0)] [RED("Default morph ratio")] 		public CFloat Default_morph_ratio { get; set;}
 
-		[RED("morphCurve")] 		public CHandle<CCurve> MorphCurve { get; set;}
+		[Ordinal(0)] [RED("morphCurve")] 		public CHandle<CCurve> MorphCurve { get; set;}
 
-		[RED("morphRatio")] 		public CFloat MorphRatio { get; set;}
+		[Ordinal(0)] [RED("morphRatio")] 		public CFloat MorphRatio { get; set;}
 
-		[RED("testBlend")] 		public CBool TestBlend { get; set;}
+		[Ordinal(0)] [RED("testBlend")] 		public CBool TestBlend { get; set;}
 
 		public CMorphedMeshManagerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

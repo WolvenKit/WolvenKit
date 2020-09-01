@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Replacer : CR4Player
 	{
-		[RED("level")] 		public CInt32 Level { get; set;}
+		[Ordinal(0)] [RED("("level")] 		public CInt32 Level { get; set;}
 
 		public W3Replacer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

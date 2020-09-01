@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcReactionBruxaSpawn : CAINpcReaction
 	{
-		[RED("activationChance")] 		public CInt32 ActivationChance { get; set;}
+		[Ordinal(0)] [RED("activationChance")] 		public CInt32 ActivationChance { get; set;}
 
-		[RED("distanceToInterrupt")] 		public CInt32 DistanceToInterrupt { get; set;}
+		[Ordinal(0)] [RED("distanceToInterrupt")] 		public CInt32 DistanceToInterrupt { get; set;}
 
 		public CAINpcReactionBruxaSpawn(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

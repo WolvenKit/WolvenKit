@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskAxiiCharmMonitor : IBehTreeTask
 	{
-		[RED("wasCharmed")] 		public CBool WasCharmed { get; set;}
+		[Ordinal(0)] [RED("wasCharmed")] 		public CBool WasCharmed { get; set;}
 
-		[RED("removeCharmCooldown")] 		public CFloat RemoveCharmCooldown { get; set;}
+		[Ordinal(0)] [RED("removeCharmCooldown")] 		public CFloat RemoveCharmCooldown { get; set;}
 
 		public CBTTaskAxiiCharmMonitor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

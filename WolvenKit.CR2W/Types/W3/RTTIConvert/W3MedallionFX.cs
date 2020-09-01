@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MedallionFX : CEntity
 	{
-		[RED("scaleVector")] 		public Vector ScaleVector { get; set;}
+		[Ordinal(0)] [RED("("scaleVector")] 		public Vector ScaleVector { get; set;}
 
-		[RED("medallionScaleRate")] 		public CFloat MedallionScaleRate { get; set;}
+		[Ordinal(0)] [RED("("medallionScaleRate")] 		public CFloat MedallionScaleRate { get; set;}
 
-		[RED("effectDuration")] 		public CFloat EffectDuration { get; set;}
+		[Ordinal(0)] [RED("("effectDuration")] 		public CFloat EffectDuration { get; set;}
 
-		[RED("medallionComponent")] 		public CHandle<CComponent> MedallionComponent { get; set;}
+		[Ordinal(0)] [RED("("medallionComponent")] 		public CHandle<CComponent> MedallionComponent { get; set;}
 
 		public W3MedallionFX(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

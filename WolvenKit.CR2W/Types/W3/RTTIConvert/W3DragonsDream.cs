@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3DragonsDream : W3Petard
 	{
-		[RED("gasEntityTemplate")] 		public CHandle<CEntityTemplate> GasEntityTemplate { get; set;}
+		[Ordinal(0)] [RED("("gasEntityTemplate")] 		public CHandle<CEntityTemplate> GasEntityTemplate { get; set;}
 
-		[RED("gasEntity")] 		public CHandle<W3ToxicCloud> GasEntity { get; set;}
+		[Ordinal(0)] [RED("("gasEntity")] 		public CHandle<W3ToxicCloud> GasEntity { get; set;}
 
-		[RED("burningChance")] 		public CFloat BurningChance { get; set;}
+		[Ordinal(0)] [RED("("burningChance")] 		public CFloat BurningChance { get; set;}
 
 		public W3DragonsDream(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

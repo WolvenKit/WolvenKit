@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SHudDescription : CVariable
 	{
-		[RED("hudName")] 		public CName HudName { get; set;}
+		[Ordinal(0)] [RED("("hudName")] 		public CName HudName { get; set;}
 
-		[RED("hudResource")] 		public CSoft<CHudResource> HudResource { get; set;}
+		[Ordinal(0)] [RED("("hudResource")] 		public CSoft<CHudResource> HudResource { get; set;}
 
 		public SHudDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4CommonIngameMenu : CR4MenuBase
 	{
-		[RED("m_menuData", 2,0)] 		public CArray<SMenuTab> M_menuData { get; set;}
+		[Ordinal(0)] [RED("m_menuData", 2,0)] 		public CArray<SMenuTab> M_menuData { get; set;}
 
-		[RED("currentMenuName")] 		public CName CurrentMenuName { get; set;}
+		[Ordinal(0)] [RED("currentMenuName")] 		public CName CurrentMenuName { get; set;}
 
-		[RED("reopenRequested")] 		public CBool ReopenRequested { get; set;}
+		[Ordinal(0)] [RED("reopenRequested")] 		public CBool ReopenRequested { get; set;}
 
 		public CR4CommonIngameMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

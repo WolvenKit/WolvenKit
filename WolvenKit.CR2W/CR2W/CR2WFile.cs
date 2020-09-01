@@ -940,7 +940,7 @@ namespace WolvenKit.CR2W
                     }
 
                     // add all normal REDProperties
-                    returnedVariables.AddRange(cvar.GetExistingVariables(false, true)
+                    returnedVariables.AddRange(cvar.GetExistingVariables(false)
                         .Select(_ => new SNameArg(EStringTableMod.None, _)));
 
                     // for all buffers

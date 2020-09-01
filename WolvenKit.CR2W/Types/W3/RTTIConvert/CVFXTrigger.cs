@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CVFXTrigger : CGameplayEntity
 	{
-		[RED("fxOnEnter")] 		public CName FxOnEnter { get; set;}
+		[Ordinal(0)] [RED("fxOnEnter")] 		public CName FxOnEnter { get; set;}
 
 		public CVFXTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

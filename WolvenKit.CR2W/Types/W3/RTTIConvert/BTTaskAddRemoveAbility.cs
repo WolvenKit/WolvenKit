@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskAddRemoveAbility : IBehTreeTask
 	{
-		[RED("abilityName")] 		public CName AbilityName { get; set;}
+		[Ordinal(0)] [RED("abilityName")] 		public CName AbilityName { get; set;}
 
-		[RED("allowMultiple")] 		public CBool AllowMultiple { get; set;}
+		[Ordinal(0)] [RED("allowMultiple")] 		public CBool AllowMultiple { get; set;}
 
-		[RED("removeAbility")] 		public CBool RemoveAbility { get; set;}
+		[Ordinal(0)] [RED("removeAbility")] 		public CBool RemoveAbility { get; set;}
 
-		[RED("delayUntilInCameraFrame")] 		public CBool DelayUntilInCameraFrame { get; set;}
+		[Ordinal(0)] [RED("delayUntilInCameraFrame")] 		public CBool DelayUntilInCameraFrame { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(0)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("onAnimEventName")] 		public CName OnAnimEventName { get; set;}
+		[Ordinal(0)] [RED("onAnimEventName")] 		public CName OnAnimEventName { get; set;}
 
-		[RED("eventReceived")] 		public CBool EventReceived { get; set;}
+		[Ordinal(0)] [RED("eventReceived")] 		public CBool EventReceived { get; set;}
 
 		public BTTaskAddRemoveAbility(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

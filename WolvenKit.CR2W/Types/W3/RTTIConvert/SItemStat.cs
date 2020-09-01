@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SItemStat : CVariable
 	{
-		[RED("statType")] 		public CName StatType { get; set;}
+		[Ordinal(0)] [RED("("statType")] 		public CName StatType { get; set;}
 
-		[RED("statWeight")] 		public CFloat StatWeight { get; set;}
+		[Ordinal(0)] [RED("("statWeight")] 		public CFloat StatWeight { get; set;}
 
-		[RED("statIsPercentage")] 		public CBool StatIsPercentage { get; set;}
+		[Ordinal(0)] [RED("("statIsPercentage")] 		public CBool StatIsPercentage { get; set;}
 
 		public SItemStat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

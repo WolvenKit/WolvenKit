@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorConstraintRiderInSaddle : CBehaviorGraphPoseConstraintNode
 	{
-		[RED("bone")] 		public CName Bone { get; set;}
+		[Ordinal(0)] [RED("bone")] 		public CName Bone { get; set;}
 
-		[RED("blendTime")] 		public CFloat BlendTime { get; set;}
+		[Ordinal(0)] [RED("blendTime")] 		public CFloat BlendTime { get; set;}
 
-		[RED("blendRotation")] 		public CFloat BlendRotation { get; set;}
+		[Ordinal(0)] [RED("blendRotation")] 		public CFloat BlendRotation { get; set;}
 
 		public CBehaviorConstraintRiderInSaddle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

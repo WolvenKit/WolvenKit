@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStripeControlPoint : CVariable
 	{
-		[RED("position")] 		public Vector Position { get; set;}
+		[Ordinal(0)] [RED("("position")] 		public Vector Position { get; set;}
 
-		[RED("color")] 		public CColor Color { get; set;}
+		[Ordinal(0)] [RED("("color")] 		public CColor Color { get; set;}
 
-		[RED("scale")] 		public CFloat Scale { get; set;}
+		[Ordinal(0)] [RED("("scale")] 		public CFloat Scale { get; set;}
 
-		[RED("rotation")] 		public EulerAngles Rotation { get; set;}
+		[Ordinal(0)] [RED("("rotation")] 		public EulerAngles Rotation { get; set;}
 
-		[RED("blendOffset")] 		public CFloat BlendOffset { get; set;}
+		[Ordinal(0)] [RED("("blendOffset")] 		public CFloat BlendOffset { get; set;}
 
 		public SStripeControlPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

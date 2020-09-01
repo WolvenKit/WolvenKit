@@ -10,91 +10,91 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSpawnFXEntity : IBehTreeTask
 	{
-		[RED("attachToActor")] 		public CBool AttachToActor { get; set;}
+		[Ordinal(0)] [RED("attachToActor")] 		public CBool AttachToActor { get; set;}
 
-		[RED("useNodeWithTag")] 		public CBool UseNodeWithTag { get; set;}
+		[Ordinal(0)] [RED("useNodeWithTag")] 		public CBool UseNodeWithTag { get; set;}
 
-		[RED("referenceNodeTag")] 		public CName ReferenceNodeTag { get; set;}
+		[Ordinal(0)] [RED("referenceNodeTag")] 		public CName ReferenceNodeTag { get; set;}
 
-		[RED("useOnlyOneFXEntity")] 		public CBool UseOnlyOneFXEntity { get; set;}
+		[Ordinal(0)] [RED("useOnlyOneFXEntity")] 		public CBool UseOnlyOneFXEntity { get; set;}
 
-		[RED("useTargetInsteadOfOwner")] 		public CBool UseTargetInsteadOfOwner { get; set;}
+		[Ordinal(0)] [RED("useTargetInsteadOfOwner")] 		public CBool UseTargetInsteadOfOwner { get; set;}
 
-		[RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+		[Ordinal(0)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 
-		[RED("baseOffsetOnCasterRotation")] 		public CBool BaseOffsetOnCasterRotation { get; set;}
+		[Ordinal(0)] [RED("baseOffsetOnCasterRotation")] 		public CBool BaseOffsetOnCasterRotation { get; set;}
 
-		[RED("receiveRotationFromGameplayEvent")] 		public CBool ReceiveRotationFromGameplayEvent { get; set;}
+		[Ordinal(0)] [RED("receiveRotationFromGameplayEvent")] 		public CBool ReceiveRotationFromGameplayEvent { get; set;}
 
-		[RED("rotateEntityToTarget")] 		public CBool RotateEntityToTarget { get; set;}
+		[Ordinal(0)] [RED("rotateEntityToTarget")] 		public CBool RotateEntityToTarget { get; set;}
 
-		[RED("capRotationFromOwnerToTarget")] 		public CFloat CapRotationFromOwnerToTarget { get; set;}
+		[Ordinal(0)] [RED("capRotationFromOwnerToTarget")] 		public CFloat CapRotationFromOwnerToTarget { get; set;}
 
-		[RED("zeroPitchAndRoll")] 		public CBool ZeroPitchAndRoll { get; set;}
+		[Ordinal(0)] [RED("zeroPitchAndRoll")] 		public CBool ZeroPitchAndRoll { get; set;}
 
-		[RED("attachToSlotName")] 		public CName AttachToSlotName { get; set;}
+		[Ordinal(0)] [RED("attachToSlotName")] 		public CName AttachToSlotName { get; set;}
 
-		[RED("teleportToComponentName")] 		public CName TeleportToComponentName { get; set;}
+		[Ordinal(0)] [RED("teleportToComponentName")] 		public CName TeleportToComponentName { get; set;}
 
-		[RED("toComponentOnWeapon")] 		public CBool ToComponentOnWeapon { get; set;}
+		[Ordinal(0)] [RED("toComponentOnWeapon")] 		public CBool ToComponentOnWeapon { get; set;}
 
-		[RED("teleportToBoneName")] 		public CName TeleportToBoneName { get; set;}
+		[Ordinal(0)] [RED("teleportToBoneName")] 		public CName TeleportToBoneName { get; set;}
 
-		[RED("continuousTeleport")] 		public CBool ContinuousTeleport { get; set;}
+		[Ordinal(0)] [RED("continuousTeleport")] 		public CBool ContinuousTeleport { get; set;}
 
-		[RED("snapToGround")] 		public CBool SnapToGround { get; set;}
+		[Ordinal(0)] [RED("snapToGround")] 		public CBool SnapToGround { get; set;}
 
-		[RED("resourceName")] 		public CName ResourceName { get; set;}
+		[Ordinal(0)] [RED("resourceName")] 		public CName ResourceName { get; set;}
 
-		[RED("spawnAfter")] 		public CFloat SpawnAfter { get; set;}
+		[Ordinal(0)] [RED("spawnAfter")] 		public CFloat SpawnAfter { get; set;}
 
-		[RED("spawnOnAnimEvent")] 		public CName SpawnOnAnimEvent { get; set;}
+		[Ordinal(0)] [RED("spawnOnAnimEvent")] 		public CName SpawnOnAnimEvent { get; set;}
 
-		[RED("spawnOnGameplayEvent")] 		public CName SpawnOnGameplayEvent { get; set;}
+		[Ordinal(0)] [RED("spawnOnGameplayEvent")] 		public CName SpawnOnGameplayEvent { get; set;}
 
-		[RED("delayEntitySpawn")] 		public CFloat DelayEntitySpawn { get; set;}
+		[Ordinal(0)] [RED("delayEntitySpawn")] 		public CFloat DelayEntitySpawn { get; set;}
 
-		[RED("fxNameOnSpawn")] 		public CName FxNameOnSpawn { get; set;}
+		[Ordinal(0)] [RED("fxNameOnSpawn")] 		public CName FxNameOnSpawn { get; set;}
 
-		[RED("continuousPlayEffectInInterval")] 		public CFloat ContinuousPlayEffectInInterval { get; set;}
+		[Ordinal(0)] [RED("continuousPlayEffectInInterval")] 		public CFloat ContinuousPlayEffectInInterval { get; set;}
 
-		[RED("fxEntityTag")] 		public CName FxEntityTag { get; set;}
+		[Ordinal(0)] [RED("fxEntityTag")] 		public CName FxEntityTag { get; set;}
 
-		[RED("destroyEntityAfter")] 		public CFloat DestroyEntityAfter { get; set;}
+		[Ordinal(0)] [RED("destroyEntityAfter")] 		public CFloat DestroyEntityAfter { get; set;}
 
-		[RED("destroyEntityOnAnimEvent")] 		public CName DestroyEntityOnAnimEvent { get; set;}
+		[Ordinal(0)] [RED("destroyEntityOnAnimEvent")] 		public CName DestroyEntityOnAnimEvent { get; set;}
 
-		[RED("destroyEntityOnDeact")] 		public CBool DestroyEntityOnDeact { get; set;}
+		[Ordinal(0)] [RED("destroyEntityOnDeact")] 		public CBool DestroyEntityOnDeact { get; set;}
 
-		[RED("stopAllEffectsOnDeact")] 		public CBool StopAllEffectsOnDeact { get; set;}
+		[Ordinal(0)] [RED("stopAllEffectsOnDeact")] 		public CBool StopAllEffectsOnDeact { get; set;}
 
-		[RED("stopAllEffectsAfter")] 		public CFloat StopAllEffectsAfter { get; set;}
+		[Ordinal(0)] [RED("stopAllEffectsAfter")] 		public CFloat StopAllEffectsAfter { get; set;}
 
-		[RED("zToleranceFromActorRoot")] 		public CFloat ZToleranceFromActorRoot { get; set;}
+		[Ordinal(0)] [RED("zToleranceFromActorRoot")] 		public CFloat ZToleranceFromActorRoot { get; set;}
 
-		[RED("offsetVector")] 		public Vector OffsetVector { get; set;}
+		[Ordinal(0)] [RED("offsetVector")] 		public Vector OffsetVector { get; set;}
 
-		[RED("additionalRotation")] 		public EulerAngles AdditionalRotation { get; set;}
+		[Ordinal(0)] [RED("additionalRotation")] 		public EulerAngles AdditionalRotation { get; set;}
 
-		[RED("attachedTo")] 		public CHandle<CEntity> AttachedTo { get; set;}
+		[Ordinal(0)] [RED("attachedTo")] 		public CHandle<CEntity> AttachedTo { get; set;}
 
-		[RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
+		[Ordinal(0)] [RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
 
-		[RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(0)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
-		[RED("timeStamp")] 		public CFloat TimeStamp { get; set;}
+		[Ordinal(0)] [RED("timeStamp")] 		public CFloat TimeStamp { get; set;}
 
-		[RED("fxRotation")] 		public CFloat FxRotation { get; set;}
+		[Ordinal(0)] [RED("fxRotation")] 		public CFloat FxRotation { get; set;}
 
-		[RED("spawned")] 		public CBool Spawned { get; set;}
+		[Ordinal(0)] [RED("spawned")] 		public CBool Spawned { get; set;}
 
-		[RED("eventReceived")] 		public CBool EventReceived { get; set;}
+		[Ordinal(0)] [RED("eventReceived")] 		public CBool EventReceived { get; set;}
 
-		[RED("receivedRotationEvent")] 		public CBool ReceivedRotationEvent { get; set;}
+		[Ordinal(0)] [RED("receivedRotationEvent")] 		public CBool ReceivedRotationEvent { get; set;}
 
-		[RED("stopped")] 		public CBool Stopped { get; set;}
+		[Ordinal(0)] [RED("stopped")] 		public CBool Stopped { get; set;}
 
-		[RED("boneIdx")] 		public CInt32 BoneIdx { get; set;}
+		[Ordinal(0)] [RED("boneIdx")] 		public CInt32 BoneIdx { get; set;}
 
 		public CBTTaskSpawnFXEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMimicsGeneratorNode : CBehaviorGraphNode
 	{
-		[RED("trackName")] 		public CString TrackName { get; set;}
+		[Ordinal(0)] [RED("("trackName")] 		public CString TrackName { get; set;}
 
-		[RED("weight")] 		public CFloat Weight { get; set;}
+		[Ordinal(0)] [RED("("weight")] 		public CFloat Weight { get; set;}
 
-		[RED("cachedWeightVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedWeightVariableNode { get; set;}
+		[Ordinal(0)] [RED("("cachedWeightVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedWeightVariableNode { get; set;}
 
-		[RED("cachedPoseNumVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedPoseNumVariableNode { get; set;}
+		[Ordinal(0)] [RED("("cachedPoseNumVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedPoseNumVariableNode { get; set;}
 
 		public CBehaviorGraphMimicsGeneratorNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

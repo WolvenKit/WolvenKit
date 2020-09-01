@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SonarEnttity : CEntity
 	{
-		[RED("scaleVector")] 		public Vector ScaleVector { get; set;}
+		[Ordinal(0)] [RED("("scaleVector")] 		public Vector ScaleVector { get; set;}
 
-		[RED("sonarScaleRate")] 		public CFloat SonarScaleRate { get; set;}
+		[Ordinal(0)] [RED("("sonarScaleRate")] 		public CFloat SonarScaleRate { get; set;}
 
-		[RED("effectDuration")] 		public CFloat EffectDuration { get; set;}
+		[Ordinal(0)] [RED("("effectDuration")] 		public CFloat EffectDuration { get; set;}
 
-		[RED("speedModifier")] 		public CFloat SpeedModifier { get; set;}
+		[Ordinal(0)] [RED("("speedModifier")] 		public CFloat SpeedModifier { get; set;}
 
-		[RED("stopHighlightAfter")] 		public CFloat StopHighlightAfter { get; set;}
+		[Ordinal(0)] [RED("("stopHighlightAfter")] 		public CFloat StopHighlightAfter { get; set;}
 
-		[RED("sonarComponent")] 		public CHandle<CComponent> SonarComponent { get; set;}
+		[Ordinal(0)] [RED("("sonarComponent")] 		public CHandle<CComponent> SonarComponent { get; set;}
 
 		public W3SonarEnttity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

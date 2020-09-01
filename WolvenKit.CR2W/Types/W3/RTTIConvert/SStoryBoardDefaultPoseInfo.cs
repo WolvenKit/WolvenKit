@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStoryBoardDefaultPoseInfo : CVariable
 	{
-		[RED("uId")] 		public CInt32 UId { get; set;}
+		[Ordinal(0)] [RED("("uId")] 		public CInt32 UId { get; set;}
 
-		[RED("type")] 		public CInt32 Type { get; set;}
+		[Ordinal(0)] [RED("("type")] 		public CInt32 Type { get; set;}
 
-		[RED("animId")] 		public CName AnimId { get; set;}
+		[Ordinal(0)] [RED("("animId")] 		public CName AnimId { get; set;}
 
 		public SStoryBoardDefaultPoseInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

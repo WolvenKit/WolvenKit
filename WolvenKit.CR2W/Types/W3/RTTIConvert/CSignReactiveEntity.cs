@@ -10,33 +10,33 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSignReactiveEntity : W3MonsterClue
 	{
-		[RED("factOnSignCast")] 		public CString FactOnSignCast { get; set;}
+		[Ordinal(0)] [RED("factOnSignCast")] 		public CString FactOnSignCast { get; set;}
 
-		[RED("igni")] 		public CBool Igni { get; set;}
+		[Ordinal(0)] [RED("igni")] 		public CBool Igni { get; set;}
 
-		[RED("aard")] 		public CBool Aard { get; set;}
+		[Ordinal(0)] [RED("aard")] 		public CBool Aard { get; set;}
 
-		[RED("clueActionWhenDestroyed")] 		public CEnum<EClueOperation> ClueActionWhenDestroyed { get; set;}
+		[Ordinal(0)] [RED("clueActionWhenDestroyed")] 		public CEnum<EClueOperation> ClueActionWhenDestroyed { get; set;}
 
-		[RED("igniteOnInteraction")] 		public CBool IgniteOnInteraction { get; set;}
+		[Ordinal(0)] [RED("igniteOnInteraction")] 		public CBool IgniteOnInteraction { get; set;}
 
-		[RED("destroyingTimeout")] 		public CFloat DestroyingTimeout { get; set;}
+		[Ordinal(0)] [RED("destroyingTimeout")] 		public CFloat DestroyingTimeout { get; set;}
 
-		[RED("destroyedEffectsTimeout")] 		public CFloat DestroyedEffectsTimeout { get; set;}
+		[Ordinal(0)] [RED("destroyedEffectsTimeout")] 		public CFloat DestroyedEffectsTimeout { get; set;}
 
-		[RED("destroyingEffectName")] 		public CName DestroyingEffectName { get; set;}
+		[Ordinal(0)] [RED("destroyingEffectName")] 		public CName DestroyingEffectName { get; set;}
 
-		[RED("destroyedEffectName")] 		public CName DestroyedEffectName { get; set;}
+		[Ordinal(0)] [RED("destroyedEffectName")] 		public CName DestroyedEffectName { get; set;}
 
-		[RED("isDestroyed")] 		public CBool IsDestroyed { get; set;}
+		[Ordinal(0)] [RED("isDestroyed")] 		public CBool IsDestroyed { get; set;}
 
-		[RED("clueActionArray", 2,0)] 		public CArray<CEnum<EClueOperation>> ClueActionArray { get; set;}
+		[Ordinal(0)] [RED("clueActionArray", 2,0)] 		public CArray<CEnum<EClueOperation>> ClueActionArray { get; set;}
 
-		[RED("currentAppearance")] 		public CString CurrentAppearance { get; set;}
+		[Ordinal(0)] [RED("currentAppearance")] 		public CString CurrentAppearance { get; set;}
 
-		[RED("interactionComponents", 2,0)] 		public CArray<CHandle<CComponent>> InteractionComponents { get; set;}
+		[Ordinal(0)] [RED("interactionComponents", 2,0)] 		public CArray<CHandle<CComponent>> InteractionComponents { get; set;}
 
-		[RED("i")] 		public CInt32 I { get; set;}
+		[Ordinal(0)] [RED("i")] 		public CInt32 I { get; set;}
 
 		public CSignReactiveEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

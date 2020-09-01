@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondIsInBehaviorGraph : IBehTreeTask
 	{
-		[RED("behGraphName")] 		public CName BehGraphName { get; set;}
+		[Ordinal(0)] [RED("("behGraphName")] 		public CName BehGraphName { get; set;}
 
 		public CBTCondIsInBehaviorGraph(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

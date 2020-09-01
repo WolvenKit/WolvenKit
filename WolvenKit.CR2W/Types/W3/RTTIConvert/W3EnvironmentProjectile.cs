@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3EnvironmentProjectile : W3AdvancedProjectile
 	{
-		[RED("initFxName")] 		public CName InitFxName { get; set;}
+		[Ordinal(0)] [RED("("initFxName")] 		public CName InitFxName { get; set;}
 
-		[RED("stopFxOnDeactivate")] 		public CName StopFxOnDeactivate { get; set;}
+		[Ordinal(0)] [RED("("stopFxOnDeactivate")] 		public CName StopFxOnDeactivate { get; set;}
 
-		[RED("onCollisionFxName")] 		public CName OnCollisionFxName { get; set;}
+		[Ordinal(0)] [RED("("onCollisionFxName")] 		public CName OnCollisionFxName { get; set;}
 
-		[RED("ignoreVictimsWithTag")] 		public CName IgnoreVictimsWithTag { get; set;}
+		[Ordinal(0)] [RED("("ignoreVictimsWithTag")] 		public CName IgnoreVictimsWithTag { get; set;}
 
-		[RED("action")] 		public CHandle<W3DamageAction> Action { get; set;}
+		[Ordinal(0)] [RED("("action")] 		public CHandle<W3DamageAction> Action { get; set;}
 
-		[RED("comp")] 		public CHandle<CMeshComponent> Comp { get; set;}
+		[Ordinal(0)] [RED("("comp")] 		public CHandle<CMeshComponent> Comp { get; set;}
 
 		public W3EnvironmentProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

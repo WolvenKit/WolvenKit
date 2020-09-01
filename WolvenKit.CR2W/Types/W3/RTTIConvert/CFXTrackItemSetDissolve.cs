@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFXTrackItemSetDissolve : CFXTrackItem
 	{
-		[RED("DisableAllDissolves")] 		public CBool DisableAllDissolves { get; set;}
+		[Ordinal(0)] [RED("("DisableAllDissolves")] 		public CBool DisableAllDissolves { get; set;}
 
 		public CFXTrackItemSetDissolve(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

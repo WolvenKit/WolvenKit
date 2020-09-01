@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStaticMapPin : CVariable
 	{
-		[RED("tag")] 		public CName Tag { get; set;}
+		[Ordinal(0)] [RED("("tag")] 		public CName Tag { get; set;}
 
-		[RED("iconType")] 		public CName IconType { get; set;}
+		[Ordinal(0)] [RED("("iconType")] 		public CName IconType { get; set;}
 
-		[RED("comment")] 		public CString Comment { get; set;}
+		[Ordinal(0)] [RED("("comment")] 		public CString Comment { get; set;}
 
-		[RED("posX")] 		public CInt32 PosX { get; set;}
+		[Ordinal(0)] [RED("("posX")] 		public CInt32 PosX { get; set;}
 
-		[RED("posY")] 		public CInt32 PosY { get; set;}
+		[Ordinal(0)] [RED("("posY")] 		public CInt32 PosY { get; set;}
 
-		[RED("journalEntry")] 		public CSoft<CJournalResource> JournalEntry { get; set;}
+		[Ordinal(0)] [RED("("journalEntry")] 		public CSoft<CJournalResource> JournalEntry { get; set;}
 
 		public SStaticMapPin(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

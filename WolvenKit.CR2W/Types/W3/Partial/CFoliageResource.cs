@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CFoliageResource : CResource
 	{
-		[RED("bbox")] 		public Box Bbox { get; set;}
+		[Ordinal(0)] [RED("bbox")] 		public Box Bbox { get; set;}
 
-		[RED("gridbbox")] 		public Box Gridbbox { get; set;}
+		[Ordinal(0)] [RED("gridbbox")] 		public Box Gridbbox { get; set;}
 
-		[RED("version")] 		public CUInt32 Version { get; set;}
+		[Ordinal(0)] [RED("version")] 		public CUInt32 Version { get; set;}
 
 		public CFoliageResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

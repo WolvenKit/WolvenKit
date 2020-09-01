@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeInitializerBaseStartingBehavior : ISpawnTreeInitializerAI
 	{
-		[RED("runBehaviorOnSpawn")] 		public CBool RunBehaviorOnSpawn { get; set;}
+		[Ordinal(0)] [RED("runBehaviorOnSpawn")] 		public CBool RunBehaviorOnSpawn { get; set;}
 
-		[RED("runBehaviorOnActivation")] 		public CBool RunBehaviorOnActivation { get; set;}
+		[Ordinal(0)] [RED("runBehaviorOnActivation")] 		public CBool RunBehaviorOnActivation { get; set;}
 
-		[RED("runBehaviorOnLoading")] 		public CBool RunBehaviorOnLoading { get; set;}
+		[Ordinal(0)] [RED("runBehaviorOnLoading")] 		public CBool RunBehaviorOnLoading { get; set;}
 
-		[RED("actionPriority")] 		public CEnum<ETopLevelAIPriorities> ActionPriority { get; set;}
+		[Ordinal(0)] [RED("actionPriority")] 		public CEnum<ETopLevelAIPriorities> ActionPriority { get; set;}
 
 		public CSpawnTreeInitializerBaseStartingBehavior(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

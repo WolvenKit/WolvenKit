@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAIReactionRange : CVariable
 	{
-		[RED("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(0)] [RED("enabled")] 		public CBool Enabled { get; set;}
 
-		[RED("rangeMax")] 		public CFloat RangeMax { get; set;}
+		[Ordinal(0)] [RED("rangeMax")] 		public CFloat RangeMax { get; set;}
 
-		[RED("rangeAngle")] 		public CFloat RangeAngle { get; set;}
+		[Ordinal(0)] [RED("rangeAngle")] 		public CFloat RangeAngle { get; set;}
 
-		[RED("rangeBottom")] 		public CFloat RangeBottom { get; set;}
+		[Ordinal(0)] [RED("rangeBottom")] 		public CFloat RangeBottom { get; set;}
 
-		[RED("rangeTop")] 		public CFloat RangeTop { get; set;}
+		[Ordinal(0)] [RED("rangeTop")] 		public CFloat RangeTop { get; set;}
 
-		[RED("yaw")] 		public CFloat Yaw { get; set;}
+		[Ordinal(0)] [RED("yaw")] 		public CFloat Yaw { get; set;}
 
 		public SAIReactionRange(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

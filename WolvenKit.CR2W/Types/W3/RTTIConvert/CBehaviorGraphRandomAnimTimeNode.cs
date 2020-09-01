@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphRandomAnimTimeNode : CBehaviorGraphBaseNode
 	{
-		[RED("animSpeedMin")] 		public CFloat AnimSpeedMin { get; set;}
+		[Ordinal(0)] [RED("animSpeedMin")] 		public CFloat AnimSpeedMin { get; set;}
 
-		[RED("animSpeedMax")] 		public CFloat AnimSpeedMax { get; set;}
+		[Ordinal(0)] [RED("animSpeedMax")] 		public CFloat AnimSpeedMax { get; set;}
 
-		[RED("animStartTimeOffset")] 		public CFloat AnimStartTimeOffset { get; set;}
+		[Ordinal(0)] [RED("animStartTimeOffset")] 		public CFloat AnimStartTimeOffset { get; set;}
 
-		[RED("animStartTimePrecent")] 		public CFloat AnimStartTimePrecent { get; set;}
+		[Ordinal(0)] [RED("animStartTimePrecent")] 		public CFloat AnimStartTimePrecent { get; set;}
 
 		public CBehaviorGraphRandomAnimTimeNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

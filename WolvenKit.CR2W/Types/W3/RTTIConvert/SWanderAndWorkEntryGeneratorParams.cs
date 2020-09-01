@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SWanderAndWorkEntryGeneratorParams : CVariable
 	{
-		[RED("creatureEntry")] 		public SCreatureEntryEntryGeneratorNodeParam CreatureEntry { get; set;}
+		[Ordinal(0)] [RED("("creatureEntry")] 		public SCreatureEntryEntryGeneratorNodeParam CreatureEntry { get; set;}
 
-		[RED("wander")] 		public SWanderHistoryEntryGeneratorParams Wander { get; set;}
+		[Ordinal(0)] [RED("("wander")] 		public SWanderHistoryEntryGeneratorParams Wander { get; set;}
 
-		[RED("work")] 		public SWorkWanderSmartAIEntryGeneratorParam Work { get; set;}
+		[Ordinal(0)] [RED("("work")] 		public SWorkWanderSmartAIEntryGeneratorParam Work { get; set;}
 
 		public SWanderAndWorkEntryGeneratorParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4HudModuleSubtitles : CR4HudModuleBase
 	{
-		[RED("m_fxAddSubtitleSFF")] 		public CHandle<CScriptedFlashFunction> M_fxAddSubtitleSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxAddSubtitleSFF")] 		public CHandle<CScriptedFlashFunction> M_fxAddSubtitleSFF { get; set;}
 
-		[RED("m_fxRemoveSubtitleSFF")] 		public CHandle<CScriptedFlashFunction> M_fxRemoveSubtitleSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxRemoveSubtitleSFF")] 		public CHandle<CScriptedFlashFunction> M_fxRemoveSubtitleSFF { get; set;}
 
-		[RED("m_fxUpdateWidthSFF")] 		public CHandle<CScriptedFlashFunction> M_fxUpdateWidthSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxUpdateWidthSFF")] 		public CHandle<CScriptedFlashFunction> M_fxUpdateWidthSFF { get; set;}
 
 		public CR4HudModuleSubtitles(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

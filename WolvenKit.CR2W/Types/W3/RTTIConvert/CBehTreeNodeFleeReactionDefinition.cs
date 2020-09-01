@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeFleeReactionDefinition : CBehTreeNodeAtomicMoveToDefinition
 	{
-		[RED("fleeDistance")] 		public CBehTreeValFloat FleeDistance { get; set;}
+		[Ordinal(0)] [RED("fleeDistance")] 		public CBehTreeValFloat FleeDistance { get; set;}
 
-		[RED("surrenderDistance")] 		public CBehTreeValFloat SurrenderDistance { get; set;}
+		[Ordinal(0)] [RED("surrenderDistance")] 		public CBehTreeValFloat SurrenderDistance { get; set;}
 
-		[RED("queryRadiusRatio")] 		public CFloat QueryRadiusRatio { get; set;}
+		[Ordinal(0)] [RED("queryRadiusRatio")] 		public CFloat QueryRadiusRatio { get; set;}
 
-		[RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+		[Ordinal(0)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 
 		public CBehTreeNodeFleeReactionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

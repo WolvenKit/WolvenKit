@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorConstraintNodeFloorIKLegsData : CVariable
 	{
-		[RED("Min rel offset")] 		public CFloat Min_rel_offset { get; set;}
+		[Ordinal(0)] [RED("("Min rel offset")] 		public CFloat Min_rel_offset { get; set;}
 
-		[RED("Max rel offset")] 		public CFloat Max_rel_offset { get; set;}
+		[Ordinal(0)] [RED("("Max rel offset")] 		public CFloat Max_rel_offset { get; set;}
 
-		[RED("Min trace offset")] 		public CFloat Min_trace_offset { get; set;}
+		[Ordinal(0)] [RED("("Min trace offset")] 		public CFloat Min_trace_offset { get; set;}
 
-		[RED("Max trace offset")] 		public CFloat Max_trace_offset { get; set;}
+		[Ordinal(0)] [RED("("Max trace offset")] 		public CFloat Max_trace_offset { get; set;}
 
-		[RED("verticalOffsetBlendUpTime")] 		public CFloat VerticalOffsetBlendUpTime { get; set;}
+		[Ordinal(0)] [RED("("verticalOffsetBlendUpTime")] 		public CFloat VerticalOffsetBlendUpTime { get; set;}
 
-		[RED("verticalOffsetBlendDownTime")] 		public CFloat VerticalOffsetBlendDownTime { get; set;}
+		[Ordinal(0)] [RED("("verticalOffsetBlendDownTime")] 		public CFloat VerticalOffsetBlendDownTime { get; set;}
 
-		[RED("Max distance for trace update")] 		public CFloat Max_distance_for_trace_update { get; set;}
+		[Ordinal(0)] [RED("("Max distance for trace update")] 		public CFloat Max_distance_for_trace_update { get; set;}
 
-		[RED("maxAngleOffUprightNormal")] 		public CFloat MaxAngleOffUprightNormal { get; set;}
+		[Ordinal(0)] [RED("("maxAngleOffUprightNormal")] 		public CFloat MaxAngleOffUprightNormal { get; set;}
 
-		[RED("maxAngleOffUprightNormalSide")] 		public CFloat MaxAngleOffUprightNormalSide { get; set;}
+		[Ordinal(0)] [RED("("maxAngleOffUprightNormalSide")] 		public CFloat MaxAngleOffUprightNormalSide { get; set;}
 
-		[RED("maxAngleOffUprightNormalToRevert")] 		public CFloat MaxAngleOffUprightNormalToRevert { get; set;}
+		[Ordinal(0)] [RED("("maxAngleOffUprightNormalToRevert")] 		public CFloat MaxAngleOffUprightNormalToRevert { get; set;}
 
 		public SBehaviorConstraintNodeFloorIKLegsData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

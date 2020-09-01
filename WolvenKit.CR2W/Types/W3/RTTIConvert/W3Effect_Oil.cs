@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_Oil : CBaseGameplayEffect
 	{
-		[RED("currCount")] 		public CInt32 CurrCount { get; set;}
+		[Ordinal(0)] [RED("("currCount")] 		public CInt32 CurrCount { get; set;}
 
-		[RED("maxCount")] 		public CInt32 MaxCount { get; set;}
+		[Ordinal(0)] [RED("("maxCount")] 		public CInt32 MaxCount { get; set;}
 
-		[RED("sword")] 		public SItemUniqueId Sword { get; set;}
+		[Ordinal(0)] [RED("("sword")] 		public SItemUniqueId Sword { get; set;}
 
-		[RED("oilAbility")] 		public CName OilAbility { get; set;}
+		[Ordinal(0)] [RED("("oilAbility")] 		public CName OilAbility { get; set;}
 
-		[RED("oilItemName")] 		public CName OilItemName { get; set;}
+		[Ordinal(0)] [RED("("oilItemName")] 		public CName OilItemName { get; set;}
 
-		[RED("queueTimer")] 		public CInt32 QueueTimer { get; set;}
+		[Ordinal(0)] [RED("("queueTimer")] 		public CInt32 QueueTimer { get; set;}
 
 		public W3Effect_Oil(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

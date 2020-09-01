@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcDettlaffMinionParryAction : CAINpcDefenseAction
 	{
-		[RED("activationTimeLimitBonusHeavy")] 		public CFloat ActivationTimeLimitBonusHeavy { get; set;}
+		[Ordinal(0)] [RED("activationTimeLimitBonusHeavy")] 		public CFloat ActivationTimeLimitBonusHeavy { get; set;}
 
-		[RED("activationTimeLimitBonusLight")] 		public CFloat ActivationTimeLimitBonusLight { get; set;}
+		[Ordinal(0)] [RED("activationTimeLimitBonusLight")] 		public CFloat ActivationTimeLimitBonusLight { get; set;}
 
 		public CAINpcDettlaffMinionParryAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

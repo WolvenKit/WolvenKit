@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEncounterCreatureDefinition : CObject
 	{
-		[RED("definitionName")] 		public CName DefinitionName { get; set;}
+		[Ordinal(0)] [RED("("definitionName")] 		public CName DefinitionName { get; set;}
 
-		[RED("entityTemplate")] 		public CSoft<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(0)] [RED("("entityTemplate")] 		public CSoft<CEntityTemplate> EntityTemplate { get; set;}
 
-		[RED("totalSpawnLimit")] 		public CUInt16 TotalSpawnLimit { get; set;}
+		[Ordinal(0)] [RED("("totalSpawnLimit")] 		public CUInt16 TotalSpawnLimit { get; set;}
 
-		[RED("maxSpawnedAtOnce")] 		public CUInt16 MaxSpawnedAtOnce { get; set;}
+		[Ordinal(0)] [RED("("maxSpawnedAtOnce")] 		public CUInt16 MaxSpawnedAtOnce { get; set;}
 
-		[RED("override")] 		public CBool Override { get; set;}
+		[Ordinal(0)] [RED("("override")] 		public CBool Override { get; set;}
 
-		[RED("forcedAppearance")] 		public CName ForcedAppearance { get; set;}
+		[Ordinal(0)] [RED("("forcedAppearance")] 		public CName ForcedAppearance { get; set;}
 
-		[RED("tags")] 		public TagList Tags { get; set;}
+		[Ordinal(0)] [RED("("tags")] 		public TagList Tags { get; set;}
 
 		public CEncounterCreatureDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

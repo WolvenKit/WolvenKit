@@ -10,33 +10,33 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGlobalLightingTrajectory : CVariable
 	{
-		[RED("yawDegrees")] 		public CFloat YawDegrees { get; set;}
+		[Ordinal(0)] [RED("("yawDegrees")] 		public CFloat YawDegrees { get; set;}
 
-		[RED("yawDegreesSunOffset")] 		public CFloat YawDegreesSunOffset { get; set;}
+		[Ordinal(0)] [RED("("yawDegreesSunOffset")] 		public CFloat YawDegreesSunOffset { get; set;}
 
-		[RED("yawDegreesMoonOffset")] 		public CFloat YawDegreesMoonOffset { get; set;}
+		[Ordinal(0)] [RED("("yawDegreesMoonOffset")] 		public CFloat YawDegreesMoonOffset { get; set;}
 
-		[RED("sunCurveShiftFactor")] 		public CFloat SunCurveShiftFactor { get; set;}
+		[Ordinal(0)] [RED("("sunCurveShiftFactor")] 		public CFloat SunCurveShiftFactor { get; set;}
 
-		[RED("moonCurveShiftFactor")] 		public CFloat MoonCurveShiftFactor { get; set;}
+		[Ordinal(0)] [RED("("moonCurveShiftFactor")] 		public CFloat MoonCurveShiftFactor { get; set;}
 
-		[RED("sunSqueeze")] 		public CFloat SunSqueeze { get; set;}
+		[Ordinal(0)] [RED("("sunSqueeze")] 		public CFloat SunSqueeze { get; set;}
 
-		[RED("moonSqueeze")] 		public CFloat MoonSqueeze { get; set;}
+		[Ordinal(0)] [RED("("moonSqueeze")] 		public CFloat MoonSqueeze { get; set;}
 
-		[RED("sunHeight")] 		public SSimpleCurve SunHeight { get; set;}
+		[Ordinal(0)] [RED("("sunHeight")] 		public SSimpleCurve SunHeight { get; set;}
 
-		[RED("moonHeight")] 		public SSimpleCurve MoonHeight { get; set;}
+		[Ordinal(0)] [RED("("moonHeight")] 		public SSimpleCurve MoonHeight { get; set;}
 
-		[RED("lightHeight")] 		public SSimpleCurve LightHeight { get; set;}
+		[Ordinal(0)] [RED("("lightHeight")] 		public SSimpleCurve LightHeight { get; set;}
 
-		[RED("lightDirChoice")] 		public SSimpleCurve LightDirChoice { get; set;}
+		[Ordinal(0)] [RED("("lightDirChoice")] 		public SSimpleCurve LightDirChoice { get; set;}
 
-		[RED("skyDayAmount")] 		public SSimpleCurve SkyDayAmount { get; set;}
+		[Ordinal(0)] [RED("("skyDayAmount")] 		public SSimpleCurve SkyDayAmount { get; set;}
 
-		[RED("moonShaftsBeginHour")] 		public CFloat MoonShaftsBeginHour { get; set;}
+		[Ordinal(0)] [RED("("moonShaftsBeginHour")] 		public CFloat MoonShaftsBeginHour { get; set;}
 
-		[RED("moonShaftsEndHour")] 		public CFloat MoonShaftsEndHour { get; set;}
+		[Ordinal(0)] [RED("("moonShaftsEndHour")] 		public CFloat MoonShaftsEndHour { get; set;}
 
 		public CGlobalLightingTrajectory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

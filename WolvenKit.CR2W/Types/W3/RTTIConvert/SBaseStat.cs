@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBaseStat : CVariable
 	{
-		[RED("current")] 		public CFloat Current { get; set;}
+		[Ordinal(0)] [RED("current")] 		public CFloat Current { get; set;}
 
-		[RED("max")] 		public CFloat Max { get; set;}
+		[Ordinal(0)] [RED("max")] 		public CFloat Max { get; set;}
 
-		[RED("type")] 		public CEnum<EBaseCharacterStats> Type { get; set;}
+		[Ordinal(0)] [RED("type")] 		public CEnum<EBaseCharacterStats> Type { get; set;}
 
 		public SBaseStat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCameraAnimationData : CVariable
 	{
-		[RED("animation")] 		public CName Animation { get; set;}
+		[Ordinal(0)] [RED("("animation")] 		public CName Animation { get; set;}
 
-		[RED("priority")] 		public CEnum<ECameraAnimPriority> Priority { get; set;}
+		[Ordinal(0)] [RED("("priority")] 		public CEnum<ECameraAnimPriority> Priority { get; set;}
 
-		[RED("blend")] 		public CFloat Blend { get; set;}
+		[Ordinal(0)] [RED("("blend")] 		public CFloat Blend { get; set;}
 
-		[RED("weight")] 		public CFloat Weight { get; set;}
+		[Ordinal(0)] [RED("("weight")] 		public CFloat Weight { get; set;}
 
-		[RED("loop")] 		public CBool Loop { get; set;}
+		[Ordinal(0)] [RED("("loop")] 		public CBool Loop { get; set;}
 
 		public SCameraAnimationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

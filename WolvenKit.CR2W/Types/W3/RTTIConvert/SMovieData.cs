@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMovieData : CVariable
 	{
-		[RED("movieName")] 		public CString MovieName { get; set;}
+		[Ordinal(0)] [RED("("movieName")] 		public CString MovieName { get; set;}
 
-		[RED("isSkipable")] 		public CBool IsSkipable { get; set;}
+		[Ordinal(0)] [RED("("isSkipable")] 		public CBool IsSkipable { get; set;}
 
-		[RED("showLogo")] 		public CBool ShowLogo { get; set;}
+		[Ordinal(0)] [RED("("showLogo")] 		public CBool ShowLogo { get; set;}
 
 		public SMovieData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

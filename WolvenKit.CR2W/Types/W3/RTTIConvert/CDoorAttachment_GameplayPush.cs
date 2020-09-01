@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDoorAttachment_GameplayPush : IDoorAttachment
 	{
-		[RED("autoCloseForce")] 		public CFloat AutoCloseForce { get; set;}
+		[Ordinal(0)] [RED("("autoCloseForce")] 		public CFloat AutoCloseForce { get; set;}
 
-		[RED("openingSpeed")] 		public CFloat OpeningSpeed { get; set;}
+		[Ordinal(0)] [RED("("openingSpeed")] 		public CFloat OpeningSpeed { get; set;}
 
-		[RED("invertedPivot")] 		public CBool InvertedPivot { get; set;}
+		[Ordinal(0)] [RED("("invertedPivot")] 		public CBool InvertedPivot { get; set;}
 
 		public CDoorAttachment_GameplayPush(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

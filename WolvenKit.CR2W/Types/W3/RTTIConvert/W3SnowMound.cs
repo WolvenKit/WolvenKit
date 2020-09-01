@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SnowMound : CInteractiveEntity
 	{
-		[RED("TagRemovedAfterMelt")] 		public CName TagRemovedAfterMelt { get; set;}
+		[Ordinal(0)] [RED("("TagRemovedAfterMelt")] 		public CName TagRemovedAfterMelt { get; set;}
 
-		[RED("isMelted")] 		public CBool IsMelted { get; set;}
+		[Ordinal(0)] [RED("("isMelted")] 		public CBool IsMelted { get; set;}
 
 		public W3SnowMound(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_ReusableClueUsed : CQuestScriptedCondition
 	{
-		[RED("clueTag")] 		public CName ClueTag { get; set;}
+		[Ordinal(0)] [RED("("clueTag")] 		public CName ClueTag { get; set;}
 
-		[RED("resetClue")] 		public CBool ResetClue { get; set;}
+		[Ordinal(0)] [RED("("resetClue")] 		public CBool ResetClue { get; set;}
 
-		[RED("leaveFacts")] 		public CBool LeaveFacts { get; set;}
+		[Ordinal(0)] [RED("("leaveFacts")] 		public CBool LeaveFacts { get; set;}
 
-		[RED("keepFocusHighlight")] 		public CBool KeepFocusHighlight { get; set;}
+		[Ordinal(0)] [RED("("keepFocusHighlight")] 		public CBool KeepFocusHighlight { get; set;}
 
-		[RED("isFulfilled")] 		public CBool IsFulfilled { get; set;}
+		[Ordinal(0)] [RED("("isFulfilled")] 		public CBool IsFulfilled { get; set;}
 
-		[RED("listener")] 		public CHandle<W3QuestCond_ReusableClueUsed_Listener> Listener { get; set;}
+		[Ordinal(0)] [RED("("listener")] 		public CHandle<W3QuestCond_ReusableClueUsed_Listener> Listener { get; set;}
 
 		public W3QuestCond_ReusableClueUsed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

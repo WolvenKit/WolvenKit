@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SModUiCategorizedListItem : CVariable
 	{
-		[RED("id")] 		public CString Id { get; set;}
+		[Ordinal(0)] [RED("("id")] 		public CString Id { get; set;}
 
-		[RED("caption")] 		public CString Caption { get; set;}
+		[Ordinal(0)] [RED("("caption")] 		public CString Caption { get; set;}
 
-		[RED("cat1")] 		public CString Cat1 { get; set;}
+		[Ordinal(0)] [RED("("cat1")] 		public CString Cat1 { get; set;}
 
-		[RED("cat2")] 		public CString Cat2 { get; set;}
+		[Ordinal(0)] [RED("("cat2")] 		public CString Cat2 { get; set;}
 
-		[RED("cat3")] 		public CString Cat3 { get; set;}
+		[Ordinal(0)] [RED("("cat3")] 		public CString Cat3 { get; set;}
 
-		[RED("isWildcardMiss")] 		public CBool IsWildcardMiss { get; set;}
+		[Ordinal(0)] [RED("("isWildcardMiss")] 		public CBool IsWildcardMiss { get; set;}
 
 		public SModUiCategorizedListItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

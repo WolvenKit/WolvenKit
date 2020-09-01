@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCustomCameraDefaultPDC : ICustomCameraPivotDistanceController
 	{
-		[RED("dampFactor")] 		public CFloat DampFactor { get; set;}
+		[Ordinal(0)] [RED("("dampFactor")] 		public CFloat DampFactor { get; set;}
 
 		public CCustomCameraDefaultPDC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

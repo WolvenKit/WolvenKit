@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIAnimalRunWild : CAIDynamicWander
 	{
-		[RED("packRegroupEvent")] 		public CName PackRegroupEvent { get; set;}
+		[Ordinal(0)] [RED("packRegroupEvent")] 		public CName PackRegroupEvent { get; set;}
 
-		[RED("leaderRegroupEvent")] 		public CName LeaderRegroupEvent { get; set;}
+		[Ordinal(0)] [RED("leaderRegroupEvent")] 		public CName LeaderRegroupEvent { get; set;}
 
 		public CAIAnimalRunWild(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

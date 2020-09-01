@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SR4LootNameProperty : CVariable
 	{
-		[RED("lootName")] 		public CName LootName { get; set;}
+		[Ordinal(0)] [RED("("lootName")] 		public CName LootName { get; set;}
 
 		public SR4LootNameProperty(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

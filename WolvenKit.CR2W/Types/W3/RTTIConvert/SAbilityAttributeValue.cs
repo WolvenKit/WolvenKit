@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAbilityAttributeValue : CVariable
 	{
-		[RED("valueAdditive")] 		public CFloat ValueAdditive { get; set;}
+		[Ordinal(0)] [RED("("valueAdditive")] 		public CFloat ValueAdditive { get; set;}
 
-		[RED("valueMultiplicative")] 		public CFloat ValueMultiplicative { get; set;}
+		[Ordinal(0)] [RED("("valueMultiplicative")] 		public CFloat ValueMultiplicative { get; set;}
 
-		[RED("valueBase")] 		public CFloat ValueBase { get; set;}
+		[Ordinal(0)] [RED("("valueBase")] 		public CFloat ValueBase { get; set;}
 
 		public SAbilityAttributeValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

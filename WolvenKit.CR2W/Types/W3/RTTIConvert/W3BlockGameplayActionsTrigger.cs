@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3BlockGameplayActionsTrigger : CGameplayEntity
 	{
-		[RED("blockedActions", 2,0)] 		public CArray<CEnum<EInputActionBlock>> BlockedActions { get; set;}
+		[Ordinal(0)] [RED("("blockedActions", 2,0)] 		public CArray<CEnum<EInputActionBlock>> BlockedActions { get; set;}
 
-		[RED("sourceName")] 		public CName SourceName { get; set;}
+		[Ordinal(0)] [RED("("sourceName")] 		public CName SourceName { get; set;}
 
-		[RED("sheatheWeaponIfDrawn")] 		public CBool SheatheWeaponIfDrawn { get; set;}
+		[Ordinal(0)] [RED("("sheatheWeaponIfDrawn")] 		public CBool SheatheWeaponIfDrawn { get; set;}
 
 		public W3BlockGameplayActionsTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

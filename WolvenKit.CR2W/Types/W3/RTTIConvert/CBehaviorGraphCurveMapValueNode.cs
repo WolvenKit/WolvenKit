@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphCurveMapValueNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("curve")] 		public CPtr<CCurve> Curve { get; set;}
+		[Ordinal(0)] [RED("("curve")] 		public CPtr<CCurve> Curve { get; set;}
 
-		[RED("axisXScale")] 		public CFloat AxisXScale { get; set;}
+		[Ordinal(0)] [RED("("axisXScale")] 		public CFloat AxisXScale { get; set;}
 
-		[RED("valueScale")] 		public CFloat ValueScale { get; set;}
+		[Ordinal(0)] [RED("("valueScale")] 		public CFloat ValueScale { get; set;}
 
-		[RED("valueOffet")] 		public CFloat ValueOffet { get; set;}
+		[Ordinal(0)] [RED("("valueOffet")] 		public CFloat ValueOffet { get; set;}
 
-		[RED("mirrorY")] 		public CBool MirrorY { get; set;}
+		[Ordinal(0)] [RED("("mirrorY")] 		public CBool MirrorY { get; set;}
 
 		public CBehaviorGraphCurveMapValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

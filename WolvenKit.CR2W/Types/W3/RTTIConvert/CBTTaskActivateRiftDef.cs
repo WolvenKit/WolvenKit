@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskActivateRiftDef : CBTTaskAttackDef
 	{
-		[RED("resourceNameRift")] 		public CName ResourceNameRift { get; set;}
+		[Ordinal(0)] [RED("("resourceNameRift")] 		public CName ResourceNameRift { get; set;}
 
-		[RED("resourceNameGround")] 		public CName ResourceNameGround { get; set;}
+		[Ordinal(0)] [RED("("resourceNameGround")] 		public CName ResourceNameGround { get; set;}
 
 		public CBTTaskActivateRiftDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

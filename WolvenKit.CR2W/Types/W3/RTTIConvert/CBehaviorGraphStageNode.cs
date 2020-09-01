@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CBehaviorGraphStageNode : CBehaviorGraphContainerNode
 	{
-		[RED("activeByDefault")] 		public CBool ActiveByDefault { get; set;}
+		[Ordinal(0)] [RED("activeByDefault")] 		public CBool ActiveByDefault { get; set;}
 
-		[RED("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
+		[Ordinal(0)] [RED("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
 
 		public CBehaviorGraphStageNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

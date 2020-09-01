@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskEredinSetCanPerformAction : IBehTreeTask
 	{
-		[RED("combatDataStorage")] 		public CHandle<CBossAICombatStorage> CombatDataStorage { get; set;}
+		[Ordinal(0)] [RED("combatDataStorage")] 		public CHandle<CBossAICombatStorage> CombatDataStorage { get; set;}
 
-		[RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(0)] [RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
-		[RED("action")] 		public CEnum<EBossAction> Action { get; set;}
+		[Ordinal(0)] [RED("action")] 		public CEnum<EBossAction> Action { get; set;}
 
-		[RED("value")] 		public CBool Value { get; set;}
+		[Ordinal(0)] [RED("value")] 		public CBool Value { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
 		public BTTaskEredinSetCanPerformAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

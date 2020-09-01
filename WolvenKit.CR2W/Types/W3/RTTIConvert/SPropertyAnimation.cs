@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SPropertyAnimation : CVariable
 	{
-		[RED("propertyName")] 		public CName PropertyName { get; set;}
+		[Ordinal(0)] [RED("("propertyName")] 		public CName PropertyName { get; set;}
 
-		[RED("animationName")] 		public CName AnimationName { get; set;}
+		[Ordinal(0)] [RED("("animationName")] 		public CName AnimationName { get; set;}
 
-		[RED("curve")] 		public SMultiCurve Curve { get; set;}
+		[Ordinal(0)] [RED("("curve")] 		public SMultiCurve Curve { get; set;}
 
-		[RED("playOnStartup")] 		public CBool PlayOnStartup { get; set;}
+		[Ordinal(0)] [RED("("playOnStartup")] 		public CBool PlayOnStartup { get; set;}
 
-		[RED("effectToPlay")] 		public CName EffectToPlay { get; set;}
+		[Ordinal(0)] [RED("("effectToPlay")] 		public CName EffectToPlay { get; set;}
 
 		public SPropertyAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class AutoApplyOilsFunctions : CR4Player
 	{
-		[RED("enemyArray", 2,0)] 		public CArray<CHandle<CActor>> EnemyArray { get; set;}
+		[Ordinal(0)] [RED("enemyArray", 2,0)] 		public CArray<CHandle<CActor>> EnemyArray { get; set;}
 
-		[RED("equippedItems", 2,0)] 		public CArray<SItemUniqueId> EquippedItems { get; set;}
+		[Ordinal(0)] [RED("equippedItems", 2,0)] 		public CArray<SItemUniqueId> EquippedItems { get; set;}
 
-		[RED("nameIsTypeArray", 2,0)] 		public CArray<actorNameType> NameIsTypeArray { get; set;}
+		[Ordinal(0)] [RED("nameIsTypeArray", 2,0)] 		public CArray<actorNameType> NameIsTypeArray { get; set;}
 
-		[RED("blankItemId")] 		public SItemUniqueId BlankItemId { get; set;}
+		[Ordinal(0)] [RED("blankItemId")] 		public SItemUniqueId BlankItemId { get; set;}
 
-		[RED("oilAppliedForBoss")] 		public CString OilAppliedForBoss { get; set;}
+		[Ordinal(0)] [RED("oilAppliedForBoss")] 		public CString OilAppliedForBoss { get; set;}
 
-		[RED("notificationStrings", 2,0)] 		public CArray<CString> NotificationStrings { get; set;}
+		[Ordinal(0)] [RED("notificationStrings", 2,0)] 		public CArray<CString> NotificationStrings { get; set;}
 
-		[RED("errorStrings", 2,0)] 		public CArray<CString> ErrorStrings { get; set;}
+		[Ordinal(0)] [RED("errorStrings", 2,0)] 		public CArray<CString> ErrorStrings { get; set;}
 
-		[RED("warningStrings", 2,0)] 		public CArray<CString> WarningStrings { get; set;}
+		[Ordinal(0)] [RED("warningStrings", 2,0)] 		public CArray<CString> WarningStrings { get; set;}
 
-		[RED("steelOilApplied")] 		public CBool SteelOilApplied { get; set;}
+		[Ordinal(0)] [RED("steelOilApplied")] 		public CBool SteelOilApplied { get; set;}
 
-		[RED("silverOilApplied")] 		public CBool SilverOilApplied { get; set;}
+		[Ordinal(0)] [RED("silverOilApplied")] 		public CBool SilverOilApplied { get; set;}
 
-		[RED("displayNotifications")] 		public CBool DisplayNotifications { get; set;}
+		[Ordinal(0)] [RED("displayNotifications")] 		public CBool DisplayNotifications { get; set;}
 
 		public AutoApplyOilsFunctions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

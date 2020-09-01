@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphValueAccNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("resetOnActivation")] 		public CBool ResetOnActivation { get; set;}
+		[Ordinal(0)] [RED("resetOnActivation")] 		public CBool ResetOnActivation { get; set;}
 
-		[RED("initValue")] 		public CFloat InitValue { get; set;}
+		[Ordinal(0)] [RED("initValue")] 		public CFloat InitValue { get; set;}
 
-		[RED("wrapValue")] 		public CBool WrapValue { get; set;}
+		[Ordinal(0)] [RED("wrapValue")] 		public CBool WrapValue { get; set;}
 
-		[RED("wrapValueThrMax")] 		public CFloat WrapValueThrMax { get; set;}
+		[Ordinal(0)] [RED("wrapValueThrMax")] 		public CFloat WrapValueThrMax { get; set;}
 
-		[RED("wrapValueThrMin")] 		public CFloat WrapValueThrMin { get; set;}
+		[Ordinal(0)] [RED("wrapValueThrMin")] 		public CFloat WrapValueThrMin { get; set;}
 
 		public CBehaviorGraphValueAccNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

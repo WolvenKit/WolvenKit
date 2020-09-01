@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskHorsePlayAnimWithRider : IBehTreeTask
 	{
-		[RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(0)] [RED("("eventName")] 		public CName EventName { get; set;}
 
-		[RED("deactivationEventName")] 		public CName DeactivationEventName { get; set;}
+		[Ordinal(0)] [RED("("deactivationEventName")] 		public CName DeactivationEventName { get; set;}
 
-		[RED("workDone")] 		public CBool WorkDone { get; set;}
+		[Ordinal(0)] [RED("("workDone")] 		public CBool WorkDone { get; set;}
 
 		public CBTTaskHorsePlayAnimWithRider(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

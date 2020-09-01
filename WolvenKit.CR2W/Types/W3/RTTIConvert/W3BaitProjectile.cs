@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3BaitProjectile : W3BoltProjectile
 	{
-		[RED("foodSourceToGenerate")] 		public CHandle<CEntityTemplate> FoodSourceToGenerate { get; set;}
+		[Ordinal(0)] [RED("("foodSourceToGenerate")] 		public CHandle<CEntityTemplate> FoodSourceToGenerate { get; set;}
 
-		[RED("addScentToCollidedActors")] 		public CBool AddScentToCollidedActors { get; set;}
+		[Ordinal(0)] [RED("("addScentToCollidedActors")] 		public CBool AddScentToCollidedActors { get; set;}
 
-		[RED("attractionDuration")] 		public CFloat AttractionDuration { get; set;}
+		[Ordinal(0)] [RED("("attractionDuration")] 		public CFloat AttractionDuration { get; set;}
 
-		[RED("m_BaitEntity")] 		public CHandle<CEntity> M_BaitEntity { get; set;}
+		[Ordinal(0)] [RED("("m_BaitEntity")] 		public CHandle<CEntity> M_BaitEntity { get; set;}
 
 		public W3BaitProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMultiTransitionCondition : IBehaviorStateTransitionCondition
 	{
-		[RED("conditions", 2,0)] 		public CArray<CPtr<IBehaviorStateTransitionCondition>> Conditions { get; set;}
+		[Ordinal(0)] [RED("conditions", 2,0)] 		public CArray<CPtr<IBehaviorStateTransitionCondition>> Conditions { get; set;}
 
 		public CMultiTransitionCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

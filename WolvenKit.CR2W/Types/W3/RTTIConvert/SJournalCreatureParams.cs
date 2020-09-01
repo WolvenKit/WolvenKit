@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SJournalCreatureParams : CVariable
 	{
-		[RED("abilities", 2,0)] 		public CArray<CName> Abilities { get; set;}
+		[Ordinal(0)] [RED("("abilities", 2,0)] 		public CArray<CName> Abilities { get; set;}
 
-		[RED("autoEffects", 2,0)] 		public CArray<CName> AutoEffects { get; set;}
+		[Ordinal(0)] [RED("("autoEffects", 2,0)] 		public CArray<CName> AutoEffects { get; set;}
 
-		[RED("buffImmunity")] 		public CBuffImmunity BuffImmunity { get; set;}
+		[Ordinal(0)] [RED("("buffImmunity")] 		public CBuffImmunity BuffImmunity { get; set;}
 
-		[RED("monsterCategory")] 		public CInt32 MonsterCategory { get; set;}
+		[Ordinal(0)] [RED("("monsterCategory")] 		public CInt32 MonsterCategory { get; set;}
 
-		[RED("isTeleporting")] 		public CBool IsTeleporting { get; set;}
+		[Ordinal(0)] [RED("("isTeleporting")] 		public CBool IsTeleporting { get; set;}
 
-		[RED("droppedItems", 2,0)] 		public CArray<CName> DroppedItems { get; set;}
+		[Ordinal(0)] [RED("("droppedItems", 2,0)] 		public CArray<CName> DroppedItems { get; set;}
 
 		public SJournalCreatureParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

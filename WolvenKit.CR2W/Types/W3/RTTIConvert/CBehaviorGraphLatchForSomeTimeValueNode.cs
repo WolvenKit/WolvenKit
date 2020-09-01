@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphLatchForSomeTimeValueNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("minTime")] 		public CFloat MinTime { get; set;}
+		[Ordinal(0)] [RED("("minTime")] 		public CFloat MinTime { get; set;}
 
-		[RED("maxTime")] 		public CFloat MaxTime { get; set;}
+		[Ordinal(0)] [RED("("maxTime")] 		public CFloat MaxTime { get; set;}
 
 		public CBehaviorGraphLatchForSomeTimeValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

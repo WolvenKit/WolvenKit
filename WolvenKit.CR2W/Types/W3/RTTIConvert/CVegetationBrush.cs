@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CVegetationBrush : CResource
 	{
-		[RED("entries", 2,0)] 		public CArray<CPtr<CVegetationBrushEntry>> Entries { get; set;}
+		[Ordinal(0)] [RED("entries", 2,0)] 		public CArray<CPtr<CVegetationBrushEntry>> Entries { get; set;}
 
 		public CVegetationBrush(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

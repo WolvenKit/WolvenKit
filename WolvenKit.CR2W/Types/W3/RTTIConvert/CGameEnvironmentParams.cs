@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGameEnvironmentParams : CVariable
 	{
-		[RED("radialBlur")] 		public CEnvRadialBlurParameters RadialBlur { get; set;}
+		[Ordinal(0)] [RED("("radialBlur")] 		public CEnvRadialBlurParameters RadialBlur { get; set;}
 
-		[RED("fullscreenBlurIntensity")] 		public CFloat FullscreenBlurIntensity { get; set;}
+		[Ordinal(0)] [RED("("fullscreenBlurIntensity")] 		public CFloat FullscreenBlurIntensity { get; set;}
 
-		[RED("gameUnderwaterBrightness")] 		public CFloat GameUnderwaterBrightness { get; set;}
+		[Ordinal(0)] [RED("("gameUnderwaterBrightness")] 		public CFloat GameUnderwaterBrightness { get; set;}
 
-		[RED("dayCycleOverride")] 		public CEnvDayCycleOverrideParameters DayCycleOverride { get; set;}
+		[Ordinal(0)] [RED("("dayCycleOverride")] 		public CEnvDayCycleOverrideParameters DayCycleOverride { get; set;}
 
-		[RED("brightnessTint")] 		public CEnvBrightnessTintParameters BrightnessTint { get; set;}
+		[Ordinal(0)] [RED("("brightnessTint")] 		public CEnvBrightnessTintParameters BrightnessTint { get; set;}
 
-		[RED("displaySettings")] 		public CEnvDisplaySettingsParams DisplaySettings { get; set;}
+		[Ordinal(0)] [RED("("displaySettings")] 		public CEnvDisplaySettingsParams DisplaySettings { get; set;}
 
-		[RED("cutsceneDofMode")] 		public CBool CutsceneDofMode { get; set;}
+		[Ordinal(0)] [RED("("cutsceneDofMode")] 		public CBool CutsceneDofMode { get; set;}
 
-		[RED("cutsceneOrDialog")] 		public CBool CutsceneOrDialog { get; set;}
+		[Ordinal(0)] [RED("("cutsceneOrDialog")] 		public CBool CutsceneOrDialog { get; set;}
 
 		public CGameEnvironmentParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

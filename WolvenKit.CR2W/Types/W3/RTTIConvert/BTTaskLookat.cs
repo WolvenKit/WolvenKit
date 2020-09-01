@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskLookat : IBehTreeTask
 	{
-		[RED("lookatAtStart")] 		public CBool LookatAtStart { get; set;}
+		[Ordinal(0)] [RED("lookatAtStart")] 		public CBool LookatAtStart { get; set;}
 
-		[RED("useHeadBoneRotation")] 		public CBool UseHeadBoneRotation { get; set;}
+		[Ordinal(0)] [RED("useHeadBoneRotation")] 		public CBool UseHeadBoneRotation { get; set;}
 
-		[RED("keepLooking")] 		public CBool KeepLooking { get; set;}
+		[Ordinal(0)] [RED("keepLooking")] 		public CBool KeepLooking { get; set;}
 
-		[RED("initKeeplooking")] 		public CBool InitKeeplooking { get; set;}
+		[Ordinal(0)] [RED("initKeeplooking")] 		public CBool InitKeeplooking { get; set;}
 
-		[RED("verticalLookAt")] 		public CBool VerticalLookAt { get; set;}
+		[Ordinal(0)] [RED("verticalLookAt")] 		public CBool VerticalLookAt { get; set;}
 
-		[RED("setAdditionalBehVar")] 		public CBool SetAdditionalBehVar { get; set;}
+		[Ordinal(0)] [RED("setAdditionalBehVar")] 		public CBool SetAdditionalBehVar { get; set;}
 
-		[RED("keepLookingAngle")] 		public CFloat KeepLookingAngle { get; set;}
+		[Ordinal(0)] [RED("keepLookingAngle")] 		public CFloat KeepLookingAngle { get; set;}
 
-		[RED("additionalBehVarName")] 		public CName AdditionalBehVarName { get; set;}
+		[Ordinal(0)] [RED("additionalBehVarName")] 		public CName AdditionalBehVarName { get; set;}
 
-		[RED("headBoneName")] 		public CName HeadBoneName { get; set;}
+		[Ordinal(0)] [RED("headBoneName")] 		public CName HeadBoneName { get; set;}
 
-		[RED("isCombatTask")] 		public CBool IsCombatTask { get; set;}
+		[Ordinal(0)] [RED("isCombatTask")] 		public CBool IsCombatTask { get; set;}
 
-		[RED("lookAtTargetCheck")] 		public CBool LookAtTargetCheck { get; set;}
+		[Ordinal(0)] [RED("lookAtTargetCheck")] 		public CBool LookAtTargetCheck { get; set;}
 
 		public BTTaskLookat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

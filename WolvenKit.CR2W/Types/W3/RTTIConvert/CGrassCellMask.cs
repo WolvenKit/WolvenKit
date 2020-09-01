@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGrassCellMask : CVariable
 	{
-		[RED("srtFileName")] 		public CString SrtFileName { get; set;}
+		[Ordinal(0)] [RED("("srtFileName")] 		public CString SrtFileName { get; set;}
 
-		[RED("firstRow")] 		public CInt32 FirstRow { get; set;}
+		[Ordinal(0)] [RED("("firstRow")] 		public CInt32 FirstRow { get; set;}
 
-		[RED("lastRow")] 		public CInt32 LastRow { get; set;}
+		[Ordinal(0)] [RED("("lastRow")] 		public CInt32 LastRow { get; set;}
 
-		[RED("firstCol")] 		public CInt32 FirstCol { get; set;}
+		[Ordinal(0)] [RED("("firstCol")] 		public CInt32 FirstCol { get; set;}
 
-		[RED("lastCol")] 		public CInt32 LastCol { get; set;}
+		[Ordinal(0)] [RED("("lastCol")] 		public CInt32 LastCol { get; set;}
 
-		[RED("cellSize")] 		public CFloat CellSize { get; set;}
+		[Ordinal(0)] [RED("("cellSize")] 		public CFloat CellSize { get; set;}
 
-		[RED("bitmap")] 		public LongBitField Bitmap { get; set;}
+		[Ordinal(0)] [RED("("bitmap")] 		public LongBitField Bitmap { get; set;}
 
 		public CGrassCellMask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

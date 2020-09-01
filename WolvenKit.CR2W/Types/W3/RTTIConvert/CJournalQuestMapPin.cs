@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalQuestMapPin : CJournalContainerEntry
 	{
-		[RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(0)] [RED("("radius")] 		public CFloat Radius { get; set;}
 
-		[RED("mapPinID")] 		public CName MapPinID { get; set;}
+		[Ordinal(0)] [RED("("mapPinID")] 		public CName MapPinID { get; set;}
 
-		[RED("type")] 		public CEnum<EJournalMapPinType> Type { get; set;}
+		[Ordinal(0)] [RED("("type")] 		public CEnum<EJournalMapPinType> Type { get; set;}
 
-		[RED("enabledAtStartup")] 		public CBool EnabledAtStartup { get; set;}
+		[Ordinal(0)] [RED("("enabledAtStartup")] 		public CBool EnabledAtStartup { get; set;}
 
 		public CJournalQuestMapPin(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

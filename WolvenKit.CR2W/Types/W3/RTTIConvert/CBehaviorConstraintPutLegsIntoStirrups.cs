@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorConstraintPutLegsIntoStirrups : CBehaviorGraphPoseConstraintNode
 	{
-		[RED("leftLeg")] 		public SBehaviorConstraintPutLegIntoStirrupData LeftLeg { get; set;}
+		[Ordinal(0)] [RED("leftLeg")] 		public SBehaviorConstraintPutLegIntoStirrupData LeftLeg { get; set;}
 
-		[RED("rightLeg")] 		public SBehaviorConstraintPutLegIntoStirrupData RightLeg { get; set;}
+		[Ordinal(0)] [RED("rightLeg")] 		public SBehaviorConstraintPutLegIntoStirrupData RightLeg { get; set;}
 
 		public CBehaviorConstraintPutLegsIntoStirrups(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

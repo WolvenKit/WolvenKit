@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalPlaceGroup : CJournalBase
 	{
-		[RED("name")] 		public LocalizedString Name { get; set;}
+		[Ordinal(0)] [RED("("name")] 		public LocalizedString Name { get; set;}
 
-		[RED("image")] 		public CString Image { get; set;}
+		[Ordinal(0)] [RED("("image")] 		public CString Image { get; set;}
 
 		public CJournalPlaceGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

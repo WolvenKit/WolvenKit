@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateMutationsCanResearch : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("SELECT_ADVANCED")] 		public CName SELECT_ADVANCED { get; set;}
+		[Ordinal(0)] [RED("("SELECT_ADVANCED")] 		public CName SELECT_ADVANCED { get; set;}
 
-		[RED("PREREQUISITES")] 		public CName PREREQUISITES { get; set;}
+		[Ordinal(0)] [RED("("PREREQUISITES")] 		public CName PREREQUISITES { get; set;}
 
-		[RED("RESEARCHING")] 		public CName RESEARCHING { get; set;}
+		[Ordinal(0)] [RED("("RESEARCHING")] 		public CName RESEARCHING { get; set;}
 
-		[RED("SELECT")] 		public CName SELECT { get; set;}
+		[Ordinal(0)] [RED("("SELECT")] 		public CName SELECT { get; set;}
 
-		[RED("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
-		[RED("selectedMutation")] 		public CEnum<EPlayerMutationType> SelectedMutation { get; set;}
+		[Ordinal(0)] [RED("("selectedMutation")] 		public CEnum<EPlayerMutationType> SelectedMutation { get; set;}
 
 		public W3TutorialManagerUIHandlerStateMutationsCanResearch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

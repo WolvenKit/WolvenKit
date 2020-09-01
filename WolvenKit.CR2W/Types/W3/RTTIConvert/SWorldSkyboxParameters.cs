@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SWorldSkyboxParameters : CVariable
 	{
-		[RED("sunMesh")] 		public CHandle<CMesh> SunMesh { get; set;}
+		[Ordinal(0)] [RED("("sunMesh")] 		public CHandle<CMesh> SunMesh { get; set;}
 
-		[RED("sunMaterial")] 		public CHandle<CMaterialInstance> SunMaterial { get; set;}
+		[Ordinal(0)] [RED("("sunMaterial")] 		public CHandle<CMaterialInstance> SunMaterial { get; set;}
 
-		[RED("moonMesh")] 		public CHandle<CMesh> MoonMesh { get; set;}
+		[Ordinal(0)] [RED("("moonMesh")] 		public CHandle<CMesh> MoonMesh { get; set;}
 
-		[RED("moonMaterial")] 		public CHandle<CMaterialInstance> MoonMaterial { get; set;}
+		[Ordinal(0)] [RED("("moonMaterial")] 		public CHandle<CMaterialInstance> MoonMaterial { get; set;}
 
-		[RED("skyboxMesh")] 		public CHandle<CMesh> SkyboxMesh { get; set;}
+		[Ordinal(0)] [RED("("skyboxMesh")] 		public CHandle<CMesh> SkyboxMesh { get; set;}
 
-		[RED("skyboxMaterial")] 		public CHandle<CMaterialInstance> SkyboxMaterial { get; set;}
+		[Ordinal(0)] [RED("("skyboxMaterial")] 		public CHandle<CMaterialInstance> SkyboxMaterial { get; set;}
 
-		[RED("cloudsMesh")] 		public CHandle<CMesh> CloudsMesh { get; set;}
+		[Ordinal(0)] [RED("("cloudsMesh")] 		public CHandle<CMesh> CloudsMesh { get; set;}
 
-		[RED("cloudsMaterial")] 		public CHandle<CMaterialInstance> CloudsMaterial { get; set;}
+		[Ordinal(0)] [RED("("cloudsMaterial")] 		public CHandle<CMaterialInstance> CloudsMaterial { get; set;}
 
 		public SWorldSkyboxParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

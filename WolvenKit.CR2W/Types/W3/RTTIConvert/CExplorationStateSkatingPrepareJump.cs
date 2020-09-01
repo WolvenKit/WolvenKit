@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateSkatingPrepareJump : CExplorationInterceptorStateAbstract
 	{
-		[RED("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
+		[Ordinal(0)] [RED("("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
 
-		[RED("behAnimEnd")] 		public CName BehAnimEnd { get; set;}
+		[Ordinal(0)] [RED("("behAnimEnd")] 		public CName BehAnimEnd { get; set;}
 
-		[RED("timeMax")] 		public CFloat TimeMax { get; set;}
+		[Ordinal(0)] [RED("("timeMax")] 		public CFloat TimeMax { get; set;}
 
-		[RED("flowImpulse")] 		public CFloat FlowImpulse { get; set;}
+		[Ordinal(0)] [RED("("flowImpulse")] 		public CFloat FlowImpulse { get; set;}
 
 		public CExplorationStateSkatingPrepareJump(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

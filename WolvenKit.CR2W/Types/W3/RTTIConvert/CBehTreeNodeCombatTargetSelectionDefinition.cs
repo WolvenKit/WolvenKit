@@ -10,37 +10,37 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeCombatTargetSelectionDefinition : IBehTreeNodeCombatTargetSelectionBaseDefinition
 	{
-		[RED("targetOnlyPlayer")] 		public CBehTreeValBool TargetOnlyPlayer { get; set;}
+		[Ordinal(0)] [RED("targetOnlyPlayer")] 		public CBehTreeValBool TargetOnlyPlayer { get; set;}
 
-		[RED("hostileActorWeight")] 		public CBehTreeValFloat HostileActorWeight { get; set;}
+		[Ordinal(0)] [RED("hostileActorWeight")] 		public CBehTreeValFloat HostileActorWeight { get; set;}
 
-		[RED("currentTargetWeight")] 		public CBehTreeValFloat CurrentTargetWeight { get; set;}
+		[Ordinal(0)] [RED("currentTargetWeight")] 		public CBehTreeValFloat CurrentTargetWeight { get; set;}
 
-		[RED("rememberedHits")] 		public CBehTreeValInt RememberedHits { get; set;}
+		[Ordinal(0)] [RED("rememberedHits")] 		public CBehTreeValInt RememberedHits { get; set;}
 
-		[RED("hitterWeight")] 		public CBehTreeValFloat HitterWeight { get; set;}
+		[Ordinal(0)] [RED("hitterWeight")] 		public CBehTreeValFloat HitterWeight { get; set;}
 
-		[RED("maxWeightedDistance")] 		public CBehTreeValFloat MaxWeightedDistance { get; set;}
+		[Ordinal(0)] [RED("maxWeightedDistance")] 		public CBehTreeValFloat MaxWeightedDistance { get; set;}
 
-		[RED("distanceWeight")] 		public CBehTreeValFloat DistanceWeight { get; set;}
+		[Ordinal(0)] [RED("distanceWeight")] 		public CBehTreeValFloat DistanceWeight { get; set;}
 
-		[RED("playerWeightProbability")] 		public CBehTreeValInt PlayerWeightProbability { get; set;}
+		[Ordinal(0)] [RED("playerWeightProbability")] 		public CBehTreeValInt PlayerWeightProbability { get; set;}
 
-		[RED("playerWeight")] 		public CBehTreeValFloat PlayerWeight { get; set;}
+		[Ordinal(0)] [RED("playerWeight")] 		public CBehTreeValFloat PlayerWeight { get; set;}
 
-		[RED("monsterWeight")] 		public CBehTreeValFloat MonsterWeight { get; set;}
+		[Ordinal(0)] [RED("monsterWeight")] 		public CBehTreeValFloat MonsterWeight { get; set;}
 
-		[RED("skipVehicle")] 		public CBehTreeValECombatTargetSelectionSkipTarget SkipVehicle { get; set;}
+		[Ordinal(0)] [RED("skipVehicle")] 		public CBehTreeValECombatTargetSelectionSkipTarget SkipVehicle { get; set;}
 
-		[RED("skipVehicleProbability")] 		public CBehTreeValInt SkipVehicleProbability { get; set;}
+		[Ordinal(0)] [RED("skipVehicleProbability")] 		public CBehTreeValInt SkipVehicleProbability { get; set;}
 
-		[RED("skipUnreachable")] 		public CBehTreeValECombatTargetSelectionSkipTarget SkipUnreachable { get; set;}
+		[Ordinal(0)] [RED("skipUnreachable")] 		public CBehTreeValECombatTargetSelectionSkipTarget SkipUnreachable { get; set;}
 
-		[RED("skipUnreachableProbability")] 		public CBehTreeValInt SkipUnreachableProbability { get; set;}
+		[Ordinal(0)] [RED("skipUnreachableProbability")] 		public CBehTreeValInt SkipUnreachableProbability { get; set;}
 
-		[RED("skipNotThreatening")] 		public CBehTreeValECombatTargetSelectionSkipTarget SkipNotThreatening { get; set;}
+		[Ordinal(0)] [RED("skipNotThreatening")] 		public CBehTreeValECombatTargetSelectionSkipTarget SkipNotThreatening { get; set;}
 
-		[RED("skipNotThreateningProbability")] 		public CBehTreeValInt SkipNotThreateningProbability { get; set;}
+		[Ordinal(0)] [RED("skipNotThreateningProbability")] 		public CBehTreeValInt SkipNotThreateningProbability { get; set;}
 
 		public CBehTreeNodeCombatTargetSelectionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

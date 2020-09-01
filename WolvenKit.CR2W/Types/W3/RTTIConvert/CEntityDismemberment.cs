@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEntityDismemberment : CEntityTemplateParam
 	{
-		[RED("wounds", 2,0)] 		public CArray<CPtr<CDismembermentWound>> Wounds { get; set;}
+		[Ordinal(0)] [RED("("wounds", 2,0)] 		public CArray<CPtr<CDismembermentWound>> Wounds { get; set;}
 
-		[RED("disabledWounds", 2,0)] 		public CArray<SDismembermentWoundFilter> DisabledWounds { get; set;}
+		[Ordinal(0)] [RED("("disabledWounds", 2,0)] 		public CArray<SDismembermentWoundFilter> DisabledWounds { get; set;}
 
 		public CEntityDismemberment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMimicRandomBlendNode : CBehaviorGraphMimicRandomNode
 	{
-		[RED("blendDuration")] 		public CFloat BlendDuration { get; set;}
+		[Ordinal(0)] [RED("("blendDuration")] 		public CFloat BlendDuration { get; set;}
 
 		public CBehaviorGraphMimicRandomBlendNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

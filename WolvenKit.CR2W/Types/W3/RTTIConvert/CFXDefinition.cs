@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFXDefinition : CObject
 	{
-		[RED("trackGroups", 2,0)] 		public CArray<CPtr<CFXTrackGroup>> TrackGroups { get; set;}
+		[Ordinal(0)] [RED("trackGroups", 2,0)] 		public CArray<CPtr<CFXTrackGroup>> TrackGroups { get; set;}
 
-		[RED("length")] 		public CFloat Length { get; set;}
+		[Ordinal(0)] [RED("length")] 		public CFloat Length { get; set;}
 
-		[RED("loopStart")] 		public CFloat LoopStart { get; set;}
+		[Ordinal(0)] [RED("loopStart")] 		public CFloat LoopStart { get; set;}
 
-		[RED("loopEnd")] 		public CFloat LoopEnd { get; set;}
+		[Ordinal(0)] [RED("loopEnd")] 		public CFloat LoopEnd { get; set;}
 
-		[RED("name")] 		public CName Name { get; set;}
+		[Ordinal(0)] [RED("name")] 		public CName Name { get; set;}
 
-		[RED("animationName")] 		public CName AnimationName { get; set;}
+		[Ordinal(0)] [RED("animationName")] 		public CName AnimationName { get; set;}
 
-		[RED("showDistance")] 		public CFloat ShowDistance { get; set;}
+		[Ordinal(0)] [RED("showDistance")] 		public CFloat ShowDistance { get; set;}
 
-		[RED("stayInMemory")] 		public CBool StayInMemory { get; set;}
+		[Ordinal(0)] [RED("stayInMemory")] 		public CBool StayInMemory { get; set;}
 
-		[RED("isLooped")] 		public CBool IsLooped { get; set;}
+		[Ordinal(0)] [RED("isLooped")] 		public CBool IsLooped { get; set;}
 
-		[RED("randomStart")] 		public CBool RandomStart { get; set;}
+		[Ordinal(0)] [RED("randomStart")] 		public CBool RandomStart { get; set;}
 
 		public CFXDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBlockedAbility : CVariable
 	{
-		[RED("abilityName")] 		public CName AbilityName { get; set;}
+		[Ordinal(0)] [RED("("abilityName")] 		public CName AbilityName { get; set;}
 
-		[RED("timeWhenEnabledd")] 		public CFloat TimeWhenEnabledd { get; set;}
+		[Ordinal(0)] [RED("("timeWhenEnabledd")] 		public CFloat TimeWhenEnabledd { get; set;}
 
-		[RED("count")] 		public CInt32 Count { get; set;}
+		[Ordinal(0)] [RED("("count")] 		public CInt32 Count { get; set;}
 
 		public SBlockedAbility(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

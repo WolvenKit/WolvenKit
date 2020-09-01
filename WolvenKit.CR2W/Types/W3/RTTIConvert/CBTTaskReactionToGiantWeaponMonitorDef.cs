@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskReactionToGiantWeaponMonitorDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("effectResourceName")] 		public CName EffectResourceName { get; set;}
+		[Ordinal(0)] [RED("effectResourceName")] 		public CName EffectResourceName { get; set;}
 
-		[RED("playFxOnEffectEntity")] 		public CName PlayFxOnEffectEntity { get; set;}
+		[Ordinal(0)] [RED("playFxOnEffectEntity")] 		public CName PlayFxOnEffectEntity { get; set;}
 
-		[RED("spawnZOffset")] 		public CFloat SpawnZOffset { get; set;}
+		[Ordinal(0)] [RED("spawnZOffset")] 		public CFloat SpawnZOffset { get; set;}
 
 		public CBTTaskReactionToGiantWeaponMonitorDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

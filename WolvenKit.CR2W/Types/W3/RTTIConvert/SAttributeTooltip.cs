@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAttributeTooltip : CVariable
 	{
-		[RED("originName")] 		public CName OriginName { get; set;}
+		[Ordinal(0)] [RED("originName")] 		public CName OriginName { get; set;}
 
-		[RED("attributeName")] 		public CString AttributeName { get; set;}
+		[Ordinal(0)] [RED("attributeName")] 		public CString AttributeName { get; set;}
 
-		[RED("attributeColor")] 		public CString AttributeColor { get; set;}
+		[Ordinal(0)] [RED("attributeColor")] 		public CString AttributeColor { get; set;}
 
-		[RED("value")] 		public CFloat Value { get; set;}
+		[Ordinal(0)] [RED("value")] 		public CFloat Value { get; set;}
 
-		[RED("percentageValue")] 		public CBool PercentageValue { get; set;}
+		[Ordinal(0)] [RED("percentageValue")] 		public CBool PercentageValue { get; set;}
 
-		[RED("primaryStat")] 		public CBool PrimaryStat { get; set;}
+		[Ordinal(0)] [RED("primaryStat")] 		public CBool PrimaryStat { get; set;}
 
 		public SAttributeTooltip(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

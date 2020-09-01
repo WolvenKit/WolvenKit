@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFlyingSwarmScriptInput : CObject
 	{
-		[RED("groupList", 2,0)] 		public CArray<CFlyingSwarmGroup> GroupList { get; set;}
+		[Ordinal(0)] [RED("("groupList", 2,0)] 		public CArray<CFlyingSwarmGroup> GroupList { get; set;}
 
 		public CFlyingSwarmScriptInput(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SUsedFastTravelEvent : CVariable
 	{
-		[RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(0)] [RED("("eventName")] 		public CName EventName { get; set;}
 
-		[RED("tag")] 		public CName Tag { get; set;}
+		[Ordinal(0)] [RED("("tag")] 		public CName Tag { get; set;}
 
-		[RED("onStart")] 		public CBool OnStart { get; set;}
+		[Ordinal(0)] [RED("("onStart")] 		public CBool OnStart { get; set;}
 
 		public SUsedFastTravelEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

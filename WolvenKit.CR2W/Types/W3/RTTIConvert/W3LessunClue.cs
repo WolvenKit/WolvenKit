@@ -10,41 +10,41 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3LessunClue : CFlyingCrittersLairEntityScript
 	{
-		[RED("pathWaypoints", 2,0)] 		public CArray<CHandle<W3ClueWaypoint>> PathWaypoints { get; set;}
+		[Ordinal(0)] [RED("("pathWaypoints", 2,0)] 		public CArray<CHandle<W3ClueWaypoint>> PathWaypoints { get; set;}
 
-		[RED("factTriggeredAtEnd")] 		public CString FactTriggeredAtEnd { get; set;}
+		[Ordinal(0)] [RED("("factTriggeredAtEnd")] 		public CString FactTriggeredAtEnd { get; set;}
 
-		[RED("loopFlying")] 		public CBool LoopFlying { get; set;}
+		[Ordinal(0)] [RED("("loopFlying")] 		public CBool LoopFlying { get; set;}
 
-		[RED("swarmAttractorEntity")] 		public CHandle<CEntityTemplate> SwarmAttractorEntity { get; set;}
+		[Ordinal(0)] [RED("("swarmAttractorEntity")] 		public CHandle<CEntityTemplate> SwarmAttractorEntity { get; set;}
 
-		[RED("isCurrentSoundClue")] 		public CBool IsCurrentSoundClue { get; set;}
+		[Ordinal(0)] [RED("("isCurrentSoundClue")] 		public CBool IsCurrentSoundClue { get; set;}
 
-		[RED("swarmAttractor")] 		public CHandle<CEntity> SwarmAttractor { get; set;}
+		[Ordinal(0)] [RED("("swarmAttractor")] 		public CHandle<CEntity> SwarmAttractor { get; set;}
 
-		[RED("pathIndex")] 		public CInt32 PathIndex { get; set;}
+		[Ordinal(0)] [RED("("pathIndex")] 		public CInt32 PathIndex { get; set;}
 
-		[RED("clueSeen")] 		public CBool ClueSeen { get; set;}
+		[Ordinal(0)] [RED("("clueSeen")] 		public CBool ClueSeen { get; set;}
 
-		[RED("targetPosition")] 		public Vector TargetPosition { get; set;}
+		[Ordinal(0)] [RED("("targetPosition")] 		public Vector TargetPosition { get; set;}
 
-		[RED("destroyTriggered")] 		public CBool DestroyTriggered { get; set;}
+		[Ordinal(0)] [RED("("destroyTriggered")] 		public CBool DestroyTriggered { get; set;}
 
-		[RED("groupPosition")] 		public Vector GroupPosition { get; set;}
+		[Ordinal(0)] [RED("("groupPosition")] 		public Vector GroupPosition { get; set;}
 
-		[RED("accuracy")] 		public CFloat Accuracy { get; set;}
+		[Ordinal(0)] [RED("("accuracy")] 		public CFloat Accuracy { get; set;}
 
-		[RED("cameraDir")] 		public Vector CameraDir { get; set;}
+		[Ordinal(0)] [RED("("cameraDir")] 		public Vector CameraDir { get; set;}
 
-		[RED("camHeading")] 		public CFloat CamHeading { get; set;}
+		[Ordinal(0)] [RED("("camHeading")] 		public CFloat CamHeading { get; set;}
 
-		[RED("toClueVec")] 		public Vector ToClueVec { get; set;}
+		[Ordinal(0)] [RED("("toClueVec")] 		public Vector ToClueVec { get; set;}
 
-		[RED("toClueHeading")] 		public CFloat ToClueHeading { get; set;}
+		[Ordinal(0)] [RED("("toClueHeading")] 		public CFloat ToClueHeading { get; set;}
 
-		[RED("currentClueState")] 		public CName CurrentClueState { get; set;}
+		[Ordinal(0)] [RED("("currentClueState")] 		public CName CurrentClueState { get; set;}
 
-		[RED("groupEffectSpawnPointComponent")] 		public CHandle<CComponent> GroupEffectSpawnPointComponent { get; set;}
+		[Ordinal(0)] [RED("("groupEffectSpawnPointComponent")] 		public CHandle<CComponent> GroupEffectSpawnPointComponent { get; set;}
 
 		public W3LessunClue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

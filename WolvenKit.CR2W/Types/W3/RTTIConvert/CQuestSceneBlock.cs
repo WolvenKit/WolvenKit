@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestSceneBlock : CQuestGraphBlock
 	{
-		[RED("scene")] 		public CSoft<CStoryScene> Scene { get; set;}
+		[Ordinal(0)] [RED("scene")] 		public CSoft<CStoryScene> Scene { get; set;}
 
-		[RED("forcingMode")] 		public CEnum<EStorySceneForcingMode> ForcingMode { get; set;}
+		[Ordinal(0)] [RED("forcingMode")] 		public CEnum<EStorySceneForcingMode> ForcingMode { get; set;}
 
-		[RED("forceSpawnedActors")] 		public CBool ForceSpawnedActors { get; set;}
+		[Ordinal(0)] [RED("forceSpawnedActors")] 		public CBool ForceSpawnedActors { get; set;}
 
-		[RED("interrupt")] 		public CBool Interrupt { get; set;}
+		[Ordinal(0)] [RED("interrupt")] 		public CBool Interrupt { get; set;}
 
-		[RED("shouldFadeOnLoading")] 		public CBool ShouldFadeOnLoading { get; set;}
+		[Ordinal(0)] [RED("shouldFadeOnLoading")] 		public CBool ShouldFadeOnLoading { get; set;}
 
-		[RED("shouldFadeOnLoading_NamesCooked", 2,0)] 		public CArray<CName> ShouldFadeOnLoading_NamesCooked { get; set;}
+		[Ordinal(0)] [RED("shouldFadeOnLoading_NamesCooked", 2,0)] 		public CArray<CName> ShouldFadeOnLoading_NamesCooked { get; set;}
 
-		[RED("shouldFadeOnLoading_ValuesCooked", 2,0)] 		public CArray<CBool> ShouldFadeOnLoading_ValuesCooked { get; set;}
+		[Ordinal(0)] [RED("shouldFadeOnLoading_ValuesCooked", 2,0)] 		public CArray<CBool> ShouldFadeOnLoading_ValuesCooked { get; set;}
 
-		[RED("saveMode")] 		public CEnum<EQuestSceneSaveMode> SaveMode { get; set;}
+		[Ordinal(0)] [RED("saveMode")] 		public CEnum<EQuestSceneSaveMode> SaveMode { get; set;}
 
-		[RED("saveSkipOutputNode")] 		public CName SaveSkipOutputNode { get; set;}
+		[Ordinal(0)] [RED("saveSkipOutputNode")] 		public CName SaveSkipOutputNode { get; set;}
 
-		[RED("playGoChunk")] 		public CName PlayGoChunk { get; set;}
+		[Ordinal(0)] [RED("playGoChunk")] 		public CName PlayGoChunk { get; set;}
 
 		public CQuestSceneBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

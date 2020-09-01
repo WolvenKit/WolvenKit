@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDimmerComponent : CDrawableComponent
 	{
-		[RED("isAreaMarker")] 		public CBool IsAreaMarker { get; set;}
+		[Ordinal(0)] [RED("("isAreaMarker")] 		public CBool IsAreaMarker { get; set;}
 
-		[RED("dimmerType")] 		public CEnum<EDimmerType> DimmerType { get; set;}
+		[Ordinal(0)] [RED("("dimmerType")] 		public CEnum<EDimmerType> DimmerType { get; set;}
 
-		[RED("ambientLevel")] 		public CFloat AmbientLevel { get; set;}
+		[Ordinal(0)] [RED("("ambientLevel")] 		public CFloat AmbientLevel { get; set;}
 
-		[RED("marginFactor")] 		public CFloat MarginFactor { get; set;}
+		[Ordinal(0)] [RED("("marginFactor")] 		public CFloat MarginFactor { get; set;}
 
-		[RED("autoHideDistance")] 		public CFloat AutoHideDistance { get; set;}
+		[Ordinal(0)] [RED("("autoHideDistance")] 		public CFloat AutoHideDistance { get; set;}
 
 		public CDimmerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

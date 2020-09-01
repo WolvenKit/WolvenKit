@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskMagicBomb : CBTTaskAttack
 	{
-		[RED("resourceName")] 		public CName ResourceName { get; set;}
+		[Ordinal(0)] [RED("("resourceName")] 		public CName ResourceName { get; set;}
 
-		[RED("targetPos")] 		public Vector TargetPos { get; set;}
+		[Ordinal(0)] [RED("("targetPos")] 		public Vector TargetPos { get; set;}
 
-		[RED("targetRot")] 		public EulerAngles TargetRot { get; set;}
+		[Ordinal(0)] [RED("("targetRot")] 		public EulerAngles TargetRot { get; set;}
 
-		[RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
+		[Ordinal(0)] [RED("("entity")] 		public CHandle<CEntity> Entity { get; set;}
 
-		[RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(0)] [RED("("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
 		public CBTTaskMagicBomb(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

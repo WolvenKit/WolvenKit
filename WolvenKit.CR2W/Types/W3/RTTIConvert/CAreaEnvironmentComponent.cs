@@ -10,33 +10,33 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAreaEnvironmentComponent : CTriggerAreaComponent
 	{
-		[RED("priority")] 		public CInt32 Priority { get; set;}
+		[Ordinal(0)] [RED("priority")] 		public CInt32 Priority { get; set;}
 
-		[RED("blendingDistance")] 		public CFloat BlendingDistance { get; set;}
+		[Ordinal(0)] [RED("blendingDistance")] 		public CFloat BlendingDistance { get; set;}
 
-		[RED("blendingScale")] 		public CFloat BlendingScale { get; set;}
+		[Ordinal(0)] [RED("blendingScale")] 		public CFloat BlendingScale { get; set;}
 
-		[RED("blendInTime")] 		public CFloat BlendInTime { get; set;}
+		[Ordinal(0)] [RED("blendInTime")] 		public CFloat BlendInTime { get; set;}
 
-		[RED("blendOutTime")] 		public CFloat BlendOutTime { get; set;}
+		[Ordinal(0)] [RED("blendOutTime")] 		public CFloat BlendOutTime { get; set;}
 
-		[RED("terrainBlendingDistance")] 		public CFloat TerrainBlendingDistance { get; set;}
+		[Ordinal(0)] [RED("terrainBlendingDistance")] 		public CFloat TerrainBlendingDistance { get; set;}
 
-		[RED("blendAboveAndBelow")] 		public CBool BlendAboveAndBelow { get; set;}
+		[Ordinal(0)] [RED("blendAboveAndBelow")] 		public CBool BlendAboveAndBelow { get; set;}
 
-		[RED("rainDropsParticleSystem")] 		public CHandle<CParticleSystem> RainDropsParticleSystem { get; set;}
+		[Ordinal(0)] [RED("rainDropsParticleSystem")] 		public CHandle<CParticleSystem> RainDropsParticleSystem { get; set;}
 
-		[RED("rainSplashesParticleSystem")] 		public CHandle<CParticleSystem> RainSplashesParticleSystem { get; set;}
+		[Ordinal(0)] [RED("rainSplashesParticleSystem")] 		public CHandle<CParticleSystem> RainSplashesParticleSystem { get; set;}
 
-		[RED("additionalEnvEntity")] 		public CHandle<CEntityTemplate> AdditionalEnvEntity { get; set;}
+		[Ordinal(0)] [RED("additionalEnvEntity")] 		public CHandle<CEntityTemplate> AdditionalEnvEntity { get; set;}
 
-		[RED("environmentDefinition")] 		public CHandle<CEnvironmentDefinition> EnvironmentDefinition { get; set;}
+		[Ordinal(0)] [RED("environmentDefinition")] 		public CHandle<CEnvironmentDefinition> EnvironmentDefinition { get; set;}
 
-		[RED("blendingCurveEnabled")] 		public CBool BlendingCurveEnabled { get; set;}
+		[Ordinal(0)] [RED("blendingCurveEnabled")] 		public CBool BlendingCurveEnabled { get; set;}
 
-		[RED("blendingCurve")] 		public SSimpleCurve BlendingCurve { get; set;}
+		[Ordinal(0)] [RED("blendingCurve")] 		public SSimpleCurve BlendingCurve { get; set;}
 
-		[RED("points", 2,0)] 		public CArray<SAreaEnvironmentPoint> Points { get; set;}
+		[Ordinal(0)] [RED("points", 2,0)] 		public CArray<SAreaEnvironmentPoint> Points { get; set;}
 
 		public CAreaEnvironmentComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

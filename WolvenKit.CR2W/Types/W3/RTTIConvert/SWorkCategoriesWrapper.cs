@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SWorkCategoriesWrapper : CVariable
 	{
-		[RED("categories", 2,0)] 		public CArray<CName> Categories { get; set;}
+		[Ordinal(0)] [RED("("categories", 2,0)] 		public CArray<CName> Categories { get; set;}
 
 		public SWorkCategoriesWrapper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

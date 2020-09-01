@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SExplorationQueryToken : CVariable
 	{
-		[RED("valid")] 		public CBool Valid { get; set;}
+		[Ordinal(0)] [RED("("valid")] 		public CBool Valid { get; set;}
 
-		[RED("type")] 		public CEnum<EExplorationType> Type { get; set;}
+		[Ordinal(0)] [RED("("type")] 		public CEnum<EExplorationType> Type { get; set;}
 
-		[RED("pointOnEdge")] 		public Vector PointOnEdge { get; set;}
+		[Ordinal(0)] [RED("("pointOnEdge")] 		public Vector PointOnEdge { get; set;}
 
-		[RED("normal")] 		public Vector Normal { get; set;}
+		[Ordinal(0)] [RED("("normal")] 		public Vector Normal { get; set;}
 
-		[RED("usesHands")] 		public CBool UsesHands { get; set;}
+		[Ordinal(0)] [RED("("usesHands")] 		public CBool UsesHands { get; set;}
 
 		public SExplorationQueryToken(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

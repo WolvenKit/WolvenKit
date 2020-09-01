@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ReplacerCiri : W3Replacer
 	{
-		[RED("isInitialized")] 		public CBool IsInitialized { get; set;}
+		[Ordinal(0)] [RED("("isInitialized")] 		public CBool IsInitialized { get; set;}
 
-		[RED("ciriPhantoms", 2,0)] 		public CArray<CHandle<W3CiriPhantom>> CiriPhantoms { get; set;}
+		[Ordinal(0)] [RED("("ciriPhantoms", 2,0)] 		public CArray<CHandle<W3CiriPhantom>> CiriPhantoms { get; set;}
 
-		[RED("bloodExplode")] 		public CHandle<CEntityTemplate> BloodExplode { get; set;}
+		[Ordinal(0)] [RED("("bloodExplode")] 		public CHandle<CEntityTemplate> BloodExplode { get; set;}
 
-		[RED("rageEffectEnabled")] 		public CBool RageEffectEnabled { get; set;}
+		[Ordinal(0)] [RED("("rageEffectEnabled")] 		public CBool RageEffectEnabled { get; set;}
 
-		[RED("tempIsCollisionDisabled")] 		public CBool TempIsCollisionDisabled { get; set;}
+		[Ordinal(0)] [RED("("tempIsCollisionDisabled")] 		public CBool TempIsCollisionDisabled { get; set;}
 
-		[RED("collidedEnemies", 2,0)] 		public CArray<CHandle<CActor>> CollidedEnemies { get; set;}
+		[Ordinal(0)] [RED("("collidedEnemies", 2,0)] 		public CArray<CHandle<CActor>> CollidedEnemies { get; set;}
 
-		[RED("slidingToNewPosition")] 		public CBool SlidingToNewPosition { get; set;}
+		[Ordinal(0)] [RED("("slidingToNewPosition")] 		public CBool SlidingToNewPosition { get; set;}
 
-		[RED("cameraDesiredHeading")] 		public Vector CameraDesiredHeading { get; set;}
+		[Ordinal(0)] [RED("("cameraDesiredHeading")] 		public Vector CameraDesiredHeading { get; set;}
 
 		public W3ReplacerCiri(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

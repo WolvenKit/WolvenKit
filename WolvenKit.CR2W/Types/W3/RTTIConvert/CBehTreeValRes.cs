@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeValRes : CVariable
 	{
-		[RED("varName")] 		public CName VarName { get; set;}
+		[Ordinal(0)] [RED("varName")] 		public CName VarName { get; set;}
 
-		[RED("value")] 		public CHandle<CAITree> Value { get; set;}
+		[Ordinal(0)] [RED("value")] 		public CHandle<CAITree> Value { get; set;}
 
 		public CBehTreeValRes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

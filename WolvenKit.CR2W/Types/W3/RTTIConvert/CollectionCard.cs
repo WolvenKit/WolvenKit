@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CollectionCard : CVariable
 	{
-		[RED("cardID")] 		public CInt32 CardID { get; set;}
+		[Ordinal(0)] [RED("cardID")] 		public CInt32 CardID { get; set;}
 
-		[RED("numCopies")] 		public CInt32 NumCopies { get; set;}
+		[Ordinal(0)] [RED("numCopies")] 		public CInt32 NumCopies { get; set;}
 
 		public CollectionCard(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

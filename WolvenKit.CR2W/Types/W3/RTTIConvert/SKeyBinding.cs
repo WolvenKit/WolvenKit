@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SKeyBinding : CVariable
 	{
-		[RED("ActionID")] 		public CInt32 ActionID { get; set;}
+		[Ordinal(0)] [RED("("ActionID")] 		public CInt32 ActionID { get; set;}
 
-		[RED("LocalizationKey")] 		public CString LocalizationKey { get; set;}
+		[Ordinal(0)] [RED("("LocalizationKey")] 		public CString LocalizationKey { get; set;}
 
-		[RED("Gamepad_NavCode")] 		public CString Gamepad_NavCode { get; set;}
+		[Ordinal(0)] [RED("("Gamepad_NavCode")] 		public CString Gamepad_NavCode { get; set;}
 
-		[RED("Keyboard_KeyCode")] 		public CInt32 Keyboard_KeyCode { get; set;}
+		[Ordinal(0)] [RED("("Keyboard_KeyCode")] 		public CInt32 Keyboard_KeyCode { get; set;}
 
-		[RED("Enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(0)] [RED("("Enabled")] 		public CBool Enabled { get; set;}
 
-		[RED("IsLocalized")] 		public CBool IsLocalized { get; set;}
+		[Ordinal(0)] [RED("("IsLocalized")] 		public CBool IsLocalized { get; set;}
 
-		[RED("IsHold")] 		public CBool IsHold { get; set;}
+		[Ordinal(0)] [RED("("IsHold")] 		public CBool IsHold { get; set;}
 
 		public SKeyBinding(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

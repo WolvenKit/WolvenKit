@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEventStateTransitionCondition : IBehaviorStateTransitionCondition
 	{
-		[RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(0)] [RED("("eventName")] 		public CName EventName { get; set;}
 
 		public CEventStateTransitionCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

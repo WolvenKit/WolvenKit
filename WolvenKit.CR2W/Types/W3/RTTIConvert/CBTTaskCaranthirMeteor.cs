@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCaranthirMeteor : CBTTaskProjectileAttack
 	{
-		[RED("riftResourceName")] 		public CName RiftResourceName { get; set;}
+		[Ordinal(0)] [RED("riftResourceName")] 		public CName RiftResourceName { get; set;}
 
-		[RED("targetPos")] 		public Vector TargetPos { get; set;}
+		[Ordinal(0)] [RED("targetPos")] 		public Vector TargetPos { get; set;}
 
 		public CBTTaskCaranthirMeteor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

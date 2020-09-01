@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphAnimationSelAdditiveSlotNode : CBehaviorGraphAnimationAdditiveSlotNode
 	{
-		[RED("firstBone")] 		public CString FirstBone { get; set;}
+		[Ordinal(0)] [RED("firstBone")] 		public CString FirstBone { get; set;}
 
-		[RED("lastBone")] 		public CString LastBone { get; set;}
+		[Ordinal(0)] [RED("lastBone")] 		public CString LastBone { get; set;}
 
 		public CBehaviorGraphAnimationSelAdditiveSlotNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

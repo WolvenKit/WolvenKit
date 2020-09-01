@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_Health : CQCActorScriptedCondition
 	{
-		[RED("condition")] 		public CEnum<ECompareOp> Condition { get; set;}
+		[Ordinal(0)] [RED("("condition")] 		public CEnum<ECompareOp> Condition { get; set;}
 
-		[RED("percents")] 		public CInt32 Percents { get; set;}
+		[Ordinal(0)] [RED("("percents")] 		public CInt32 Percents { get; set;}
 
 		public W3QuestCond_Health(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3LocationArea : CGameplayEntity
 	{
-		[RED("locationNameKey")] 		public CName LocationNameKey { get; set;}
+		[Ordinal(0)] [RED("("locationNameKey")] 		public CName LocationNameKey { get; set;}
 
-		[RED("rewardName")] 		public CName RewardName { get; set;}
+		[Ordinal(0)] [RED("("rewardName")] 		public CName RewardName { get; set;}
 
-		[RED("discovered")] 		public CBool Discovered { get; set;}
+		[Ordinal(0)] [RED("("discovered")] 		public CBool Discovered { get; set;}
 
 		public W3LocationArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

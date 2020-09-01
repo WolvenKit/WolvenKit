@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAreaMapPinInfo : CVariable
 	{
-		[RED("areaType")] 		public CInt32 AreaType { get; set;}
+		[Ordinal(0)] [RED("areaType")] 		public CInt32 AreaType { get; set;}
 
-		[RED("position")] 		public Vector Position { get; set;}
+		[Ordinal(0)] [RED("position")] 		public Vector Position { get; set;}
 
-		[RED("worldPath")] 		public CString WorldPath { get; set;}
+		[Ordinal(0)] [RED("worldPath")] 		public CString WorldPath { get; set;}
 
-		[RED("requiredChunk")] 		public CName RequiredChunk { get; set;}
+		[Ordinal(0)] [RED("requiredChunk")] 		public CName RequiredChunk { get; set;}
 
-		[RED("localisationName")] 		public CName LocalisationName { get; set;}
+		[Ordinal(0)] [RED("localisationName")] 		public CName LocalisationName { get; set;}
 
-		[RED("localisationDescription")] 		public CName LocalisationDescription { get; set;}
+		[Ordinal(0)] [RED("localisationDescription")] 		public CName LocalisationDescription { get; set;}
 
 		public SAreaMapPinInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

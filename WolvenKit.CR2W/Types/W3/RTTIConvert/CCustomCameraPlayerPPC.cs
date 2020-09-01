@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCustomCameraPlayerPPC : ICustomCameraPivotPositionController
 	{
-		[RED("dampFactor")] 		public CFloat DampFactor { get; set;}
+		[Ordinal(0)] [RED("("dampFactor")] 		public CFloat DampFactor { get; set;}
 
-		[RED("smoothZ")] 		public CFloat SmoothZ { get; set;}
+		[Ordinal(0)] [RED("("smoothZ")] 		public CFloat SmoothZ { get; set;}
 
 		public CCustomCameraPlayerPPC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcCaranthirTacticTree : CAINpcCustomTacticTree
 	{
-		[RED("Phase1")] 		public CBool Phase1 { get; set;}
+		[Ordinal(0)] [RED("Phase1")] 		public CBool Phase1 { get; set;}
 
-		[RED("Phase2")] 		public CBool Phase2 { get; set;}
+		[Ordinal(0)] [RED("Phase2")] 		public CBool Phase2 { get; set;}
 
 		public CAINpcCaranthirTacticTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3NPCBackground : CGameplayEntity
 	{
-		[RED("work")] 		public CEnum<EBackgroundNPCWork_Single> Work { get; set;}
+		[Ordinal(0)] [RED("("work")] 		public CEnum<EBackgroundNPCWork_Single> Work { get; set;}
 
-		[RED("parentPairedBackgroundNPCEntity")] 		public CHandle<W3NPCBackgroundPair> ParentPairedBackgroundNPCEntity { get; set;}
+		[Ordinal(0)] [RED("("parentPairedBackgroundNPCEntity")] 		public CHandle<W3NPCBackgroundPair> ParentPairedBackgroundNPCEntity { get; set;}
 
-		[RED("isWorkingSingle")] 		public CBool IsWorkingSingle { get; set;}
+		[Ordinal(0)] [RED("("isWorkingSingle")] 		public CBool IsWorkingSingle { get; set;}
 
 		public W3NPCBackground(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

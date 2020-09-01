@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3PlayerWitcherStateCombatFists : CR4PlayerStateCombat
 	{
-		[RED("action")] 		public SInputAction Action { get; set;}
+		[Ordinal(0)] [RED("("action")] 		public SInputAction Action { get; set;}
 
 		public W3PlayerWitcherStateCombatFists(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

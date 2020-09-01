@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CActionPointActivationSwitcher : IComponentTargetingAction
 	{
-		[RED("activate")] 		public CBool Activate { get; set;}
+		[Ordinal(0)] [RED("activate")] 		public CBool Activate { get; set;}
 
 		public CActionPointActivationSwitcher(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4GlossaryTutorialsMenu : CR4ListBaseMenu
 	{
-		[RED("allEntries", 2,0)] 		public CArray<CHandle<CJournalTutorialGroup>> AllEntries { get; set;}
+		[Ordinal(0)] [RED("("allEntries", 2,0)] 		public CArray<CHandle<CJournalTutorialGroup>> AllEntries { get; set;}
 
-		[RED("m_fxSetTitle")] 		public CHandle<CScriptedFlashFunction> M_fxSetTitle { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetTitle")] 		public CHandle<CScriptedFlashFunction> M_fxSetTitle { get; set;}
 
-		[RED("m_fxSetText")] 		public CHandle<CScriptedFlashFunction> M_fxSetText { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetText")] 		public CHandle<CScriptedFlashFunction> M_fxSetText { get; set;}
 
-		[RED("m_fxSetImage")] 		public CHandle<CScriptedFlashFunction> M_fxSetImage { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetImage")] 		public CHandle<CScriptedFlashFunction> M_fxSetImage { get; set;}
 
-		[RED("resetSelection")] 		public CBool ResetSelection { get; set;}
+		[Ordinal(0)] [RED("("resetSelection")] 		public CBool ResetSelection { get; set;}
 
 		public CR4GlossaryTutorialsMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

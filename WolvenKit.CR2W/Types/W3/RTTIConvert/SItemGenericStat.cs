@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SItemGenericStat : CVariable
 	{
-		[RED("statName")] 		public CString StatName { get; set;}
+		[Ordinal(0)] [RED("("statName")] 		public CString StatName { get; set;}
 
-		[RED("value")] 		public CFloat Value { get; set;}
+		[Ordinal(0)] [RED("("value")] 		public CFloat Value { get; set;}
 
-		[RED("comparence")] 		public CString Comparence { get; set;}
+		[Ordinal(0)] [RED("("comparence")] 		public CString Comparence { get; set;}
 
 		public SItemGenericStat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

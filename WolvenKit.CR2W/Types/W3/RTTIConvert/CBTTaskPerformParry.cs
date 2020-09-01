@@ -10,33 +10,33 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPerformParry : CBTTaskPlayAnimationEventDecorator
 	{
-		[RED("activationTimeLimitBonusHeavy")] 		public CFloat ActivationTimeLimitBonusHeavy { get; set;}
+		[Ordinal(0)] [RED("activationTimeLimitBonusHeavy")] 		public CFloat ActivationTimeLimitBonusHeavy { get; set;}
 
-		[RED("activationTimeLimitBonusLight")] 		public CFloat ActivationTimeLimitBonusLight { get; set;}
+		[Ordinal(0)] [RED("activationTimeLimitBonusLight")] 		public CFloat ActivationTimeLimitBonusLight { get; set;}
 
-		[RED("checkParryChance")] 		public CBool CheckParryChance { get; set;}
+		[Ordinal(0)] [RED("checkParryChance")] 		public CBool CheckParryChance { get; set;}
 
-		[RED("interruptTaskToExecuteCounter")] 		public CBool InterruptTaskToExecuteCounter { get; set;}
+		[Ordinal(0)] [RED("interruptTaskToExecuteCounter")] 		public CBool InterruptTaskToExecuteCounter { get; set;}
 
-		[RED("allowParryOverlap")] 		public CBool AllowParryOverlap { get; set;}
+		[Ordinal(0)] [RED("allowParryOverlap")] 		public CBool AllowParryOverlap { get; set;}
 
-		[RED("activationTimeLimit")] 		public CFloat ActivationTimeLimit { get; set;}
+		[Ordinal(0)] [RED("activationTimeLimit")] 		public CFloat ActivationTimeLimit { get; set;}
 
-		[RED("action")] 		public CName Action { get; set;}
+		[Ordinal(0)] [RED("action")] 		public CName Action { get; set;}
 
-		[RED("runMain")] 		public CBool RunMain { get; set;}
+		[Ordinal(0)] [RED("runMain")] 		public CBool RunMain { get; set;}
 
-		[RED("parryChance")] 		public CFloat ParryChance { get; set;}
+		[Ordinal(0)] [RED("parryChance")] 		public CFloat ParryChance { get; set;}
 
-		[RED("counterChance")] 		public CFloat CounterChance { get; set;}
+		[Ordinal(0)] [RED("counterChance")] 		public CFloat CounterChance { get; set;}
 
-		[RED("counterMultiplier")] 		public CFloat CounterMultiplier { get; set;}
+		[Ordinal(0)] [RED("counterMultiplier")] 		public CFloat CounterMultiplier { get; set;}
 
-		[RED("hitsToCounter")] 		public CInt32 HitsToCounter { get; set;}
+		[Ordinal(0)] [RED("hitsToCounter")] 		public CInt32 HitsToCounter { get; set;}
 
-		[RED("swingType")] 		public CInt32 SwingType { get; set;}
+		[Ordinal(0)] [RED("swingType")] 		public CInt32 SwingType { get; set;}
 
-		[RED("swingDir")] 		public CInt32 SwingDir { get; set;}
+		[Ordinal(0)] [RED("swingDir")] 		public CInt32 SwingDir { get; set;}
 
 		public CBTTaskPerformParry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

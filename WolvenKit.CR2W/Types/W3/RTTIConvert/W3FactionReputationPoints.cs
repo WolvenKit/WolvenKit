@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FactionReputationPoints : CObject
 	{
-		[RED("currentReputationPoints")] 		public CInt32 CurrentReputationPoints { get; set;}
+		[Ordinal(0)] [RED("("currentReputationPoints")] 		public CInt32 CurrentReputationPoints { get; set;}
 
-		[RED("negativeReputationPoints")] 		public CInt32 NegativeReputationPoints { get; set;}
+		[Ordinal(0)] [RED("("negativeReputationPoints")] 		public CInt32 NegativeReputationPoints { get; set;}
 
 		public W3FactionReputationPoints(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

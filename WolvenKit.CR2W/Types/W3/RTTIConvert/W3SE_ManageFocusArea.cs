@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SE_ManageFocusArea : W3SwitchEvent
 	{
-		[RED("focusAreaTag")] 		public CName FocusAreaTag { get; set;}
+		[Ordinal(0)] [RED("("focusAreaTag")] 		public CName FocusAreaTag { get; set;}
 
-		[RED("enable")] 		public CBool Enable { get; set;}
+		[Ordinal(0)] [RED("("enable")] 		public CBool Enable { get; set;}
 
-		[RED("focuAreaEntity")] 		public CHandle<W3FocusAreaTrigger> FocuAreaEntity { get; set;}
+		[Ordinal(0)] [RED("("focuAreaEntity")] 		public CHandle<W3FocusAreaTrigger> FocuAreaEntity { get; set;}
 
 		public W3SE_ManageFocusArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondIsNpcAlive : IBehTreeTask
 	{
-		[RED("npcTag")] 		public CName NpcTag { get; set;}
+		[Ordinal(0)] [RED("("npcTag")] 		public CName NpcTag { get; set;}
 
 		public CBTCondIsNpcAlive(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

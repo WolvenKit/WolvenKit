@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimItemSyncWithCorrectionEvent : CExtAnimDurationEvent
 	{
-		[RED("equipSlot")] 		public CName EquipSlot { get; set;}
+		[Ordinal(0)] [RED("("equipSlot")] 		public CName EquipSlot { get; set;}
 
-		[RED("holdSlot")] 		public CName HoldSlot { get; set;}
+		[Ordinal(0)] [RED("("holdSlot")] 		public CName HoldSlot { get; set;}
 
-		[RED("action")] 		public CEnum<EItemLatentAction> Action { get; set;}
+		[Ordinal(0)] [RED("("action")] 		public CEnum<EItemLatentAction> Action { get; set;}
 
-		[RED("correctionBone")] 		public CName CorrectionBone { get; set;}
+		[Ordinal(0)] [RED("("correctionBone")] 		public CName CorrectionBone { get; set;}
 
 		public CExtAnimItemSyncWithCorrectionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

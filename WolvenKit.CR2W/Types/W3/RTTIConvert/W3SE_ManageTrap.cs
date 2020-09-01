@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SE_ManageTrap : W3SwitchEvent
 	{
-		[RED("trapHandle", 2,0)] 		public CArray<EntityHandle> TrapHandle { get; set;}
+		[Ordinal(0)] [RED("("trapHandle", 2,0)] 		public CArray<EntityHandle> TrapHandle { get; set;}
 
-		[RED("trapTag")] 		public CName TrapTag { get; set;}
+		[Ordinal(0)] [RED("("trapTag")] 		public CName TrapTag { get; set;}
 
-		[RED("operations", 2,0)] 		public CArray<CEnum<ETrapOperation>> Operations { get; set;}
+		[Ordinal(0)] [RED("("operations", 2,0)] 		public CArray<CEnum<ETrapOperation>> Operations { get; set;}
 
 		public W3SE_ManageTrap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

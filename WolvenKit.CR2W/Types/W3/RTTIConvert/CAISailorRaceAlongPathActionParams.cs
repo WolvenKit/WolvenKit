@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAISailorRaceAlongPathActionParams : ISailorActionParameters
 	{
-		[RED("boatTag")] 		public CName BoatTag { get; set;}
+		[Ordinal(0)] [RED("("boatTag")] 		public CName BoatTag { get; set;}
 
-		[RED("pathTag")] 		public CName PathTag { get; set;}
+		[Ordinal(0)] [RED("("pathTag")] 		public CName PathTag { get; set;}
 
-		[RED("upThePath")] 		public CBool UpThePath { get; set;}
+		[Ordinal(0)] [RED("("upThePath")] 		public CBool UpThePath { get; set;}
 
-		[RED("startFromBeginning")] 		public CBool StartFromBeginning { get; set;}
+		[Ordinal(0)] [RED("("startFromBeginning")] 		public CBool StartFromBeginning { get; set;}
 
 		public CAISailorRaceAlongPathActionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

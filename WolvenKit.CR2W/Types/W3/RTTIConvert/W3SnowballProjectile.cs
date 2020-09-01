@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SnowballProjectile : W3AdvancedProjectile
 	{
-		[RED("damageTypeName")] 		public CName DamageTypeName { get; set;}
+		[Ordinal(0)] [RED("("damageTypeName")] 		public CName DamageTypeName { get; set;}
 
-		[RED("initFxName")] 		public CName InitFxName { get; set;}
+		[Ordinal(0)] [RED("("initFxName")] 		public CName InitFxName { get; set;}
 
-		[RED("onCollisionFxName")] 		public CName OnCollisionFxName { get; set;}
+		[Ordinal(0)] [RED("("onCollisionFxName")] 		public CName OnCollisionFxName { get; set;}
 
-		[RED("specialFxOnVictimName")] 		public CName SpecialFxOnVictimName { get; set;}
+		[Ordinal(0)] [RED("("specialFxOnVictimName")] 		public CName SpecialFxOnVictimName { get; set;}
 
-		[RED("applyDebuffIfNoDmgWasDealt")] 		public CBool ApplyDebuffIfNoDmgWasDealt { get; set;}
+		[Ordinal(0)] [RED("("applyDebuffIfNoDmgWasDealt")] 		public CBool ApplyDebuffIfNoDmgWasDealt { get; set;}
 
 		public W3SnowballProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

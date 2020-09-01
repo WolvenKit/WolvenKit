@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class TextPopupData : W3PopupData
 	{
-		[RED("m_TextContent")] 		public CString M_TextContent { get; set;}
+		[Ordinal(0)] [RED("("m_TextContent")] 		public CString M_TextContent { get; set;}
 
-		[RED("m_TextTitle")] 		public CString M_TextTitle { get; set;}
+		[Ordinal(0)] [RED("("m_TextTitle")] 		public CString M_TextTitle { get; set;}
 
-		[RED("m_ImagePath")] 		public CString M_ImagePath { get; set;}
+		[Ordinal(0)] [RED("("m_ImagePath")] 		public CString M_ImagePath { get; set;}
 
-		[RED("m_DisplayGreyBackground")] 		public CBool M_DisplayGreyBackground { get; set;}
+		[Ordinal(0)] [RED("("m_DisplayGreyBackground")] 		public CBool M_DisplayGreyBackground { get; set;}
 
 		public TextPopupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

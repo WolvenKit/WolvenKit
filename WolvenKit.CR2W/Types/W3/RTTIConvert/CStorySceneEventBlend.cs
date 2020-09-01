@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventBlend : CStorySceneEventDuration
 	{
-		[RED("keys", 2,0)] 		public CArray<CGUID> Keys { get; set;}
+		[Ordinal(0)] [RED("("keys", 2,0)] 		public CArray<CGUID> Keys { get; set;}
 
 		public CStorySceneEventBlend(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

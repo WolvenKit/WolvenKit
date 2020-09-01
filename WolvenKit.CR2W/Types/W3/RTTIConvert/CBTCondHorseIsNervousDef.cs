@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondHorseIsNervousDef : IBehTreeHorseConditionalTaskDefinition
 	{
-		[RED("waitForAxiiCalmDownEnd")] 		public CBool WaitForAxiiCalmDownEnd { get; set;}
+		[Ordinal(0)] [RED("waitForAxiiCalmDownEnd")] 		public CBool WaitForAxiiCalmDownEnd { get; set;}
 
 		public CBTCondHorseIsNervousDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

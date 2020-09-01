@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4InteriorAreaEntity : CEntity
 	{
-		[RED("entranceTag")] 		public CName EntranceTag { get; set;}
+		[Ordinal(0)] [RED("("entranceTag")] 		public CName EntranceTag { get; set;}
 
-		[RED("texture")] 		public CString Texture { get; set;}
+		[Ordinal(0)] [RED("("texture")] 		public CString Texture { get; set;}
 
 		public CR4InteriorAreaEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateOpenInventory : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("OPEN_FAST_MENU")] 		public CName OPEN_FAST_MENU { get; set;}
+		[Ordinal(0)] [RED("("OPEN_FAST_MENU")] 		public CName OPEN_FAST_MENU { get; set;}
 
-		[RED("OPEN_INVENTORY")] 		public CName OPEN_INVENTORY { get; set;}
+		[Ordinal(0)] [RED("("OPEN_INVENTORY")] 		public CName OPEN_INVENTORY { get; set;}
 
 		public W3TutorialManagerUIHandlerStateOpenInventory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

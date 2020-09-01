@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class Crossbow : RangedWeapon
 	{
-		[RED("shotCount")] 		public CInt32 ShotCount { get; set;}
+		[Ordinal(0)] [RED("("shotCount")] 		public CInt32 ShotCount { get; set;}
 
-		[RED("shotCountLimit")] 		public CInt32 ShotCountLimit { get; set;}
+		[Ordinal(0)] [RED("("shotCountLimit")] 		public CInt32 ShotCountLimit { get; set;}
 
-		[RED("reloadAtStartComplete")] 		public CBool ReloadAtStartComplete { get; set;}
+		[Ordinal(0)] [RED("("reloadAtStartComplete")] 		public CBool ReloadAtStartComplete { get; set;}
 
 		public Crossbow(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

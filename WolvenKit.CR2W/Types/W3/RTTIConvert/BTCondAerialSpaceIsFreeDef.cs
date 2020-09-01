@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondAerialSpaceIsFreeDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("localOffset")] 		public Vector LocalOffset { get; set;}
+		[Ordinal(0)] [RED("localOffset")] 		public Vector LocalOffset { get; set;}
 
-		[RED("checkLineOfSight")] 		public CBool CheckLineOfSight { get; set;}
+		[Ordinal(0)] [RED("checkLineOfSight")] 		public CBool CheckLineOfSight { get; set;}
 
-		[RED("cylinderRadiusToCheck")] 		public CFloat CylinderRadiusToCheck { get; set;}
+		[Ordinal(0)] [RED("cylinderRadiusToCheck")] 		public CFloat CylinderRadiusToCheck { get; set;}
 
-		[RED("cylinderHeightToCheck")] 		public CFloat CylinderHeightToCheck { get; set;}
+		[Ordinal(0)] [RED("cylinderHeightToCheck")] 		public CFloat CylinderHeightToCheck { get; set;}
 
-		[RED("checkedNode")] 		public CEnum<ETargetName> CheckedNode { get; set;}
+		[Ordinal(0)] [RED("checkedNode")] 		public CEnum<ETargetName> CheckedNode { get; set;}
 
-		[RED("namedTarget")] 		public CName NamedTarget { get; set;}
+		[Ordinal(0)] [RED("namedTarget")] 		public CName NamedTarget { get; set;}
 
 		public BTCondAerialSpaceIsFreeDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4HudModuleBuffs : CR4HudModuleBase
 	{
-		[RED("_currentEffects", 2,0)] 		public CArray<CHandle<CBaseGameplayEffect>> _currentEffects { get; set;}
+		[Ordinal(0)] [RED("("_currentEffects", 2,0)] 		public CArray<CHandle<CBaseGameplayEffect>> _currentEffects { get; set;}
 
-		[RED("_previousEffects", 2,0)] 		public CArray<CHandle<CBaseGameplayEffect>> _previousEffects { get; set;}
+		[Ordinal(0)] [RED("("_previousEffects", 2,0)] 		public CArray<CHandle<CBaseGameplayEffect>> _previousEffects { get; set;}
 
-		[RED("_forceUpdate")] 		public CBool _forceUpdate { get; set;}
+		[Ordinal(0)] [RED("("_forceUpdate")] 		public CBool _forceUpdate { get; set;}
 
-		[RED("m_fxSetPercentSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetPercentSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetPercentSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetPercentSFF { get; set;}
 
-		[RED("m_fxShowBuffUpdateFx")] 		public CHandle<CScriptedFlashFunction> M_fxShowBuffUpdateFx { get; set;}
+		[Ordinal(0)] [RED("("m_fxShowBuffUpdateFx")] 		public CHandle<CScriptedFlashFunction> M_fxShowBuffUpdateFx { get; set;}
 
-		[RED("m_fxsetViewMode")] 		public CHandle<CScriptedFlashFunction> M_fxsetViewMode { get; set;}
+		[Ordinal(0)] [RED("("m_fxsetViewMode")] 		public CHandle<CScriptedFlashFunction> M_fxsetViewMode { get; set;}
 
-		[RED("m_flashValueStorage")] 		public CHandle<CScriptedFlashValueStorage> M_flashValueStorage { get; set;}
+		[Ordinal(0)] [RED("("m_flashValueStorage")] 		public CHandle<CScriptedFlashValueStorage> M_flashValueStorage { get; set;}
 
-		[RED("iCurrentEffectsSize")] 		public CInt32 ICurrentEffectsSize { get; set;}
+		[Ordinal(0)] [RED("("iCurrentEffectsSize")] 		public CInt32 ICurrentEffectsSize { get; set;}
 
-		[RED("bDisplayBuffs")] 		public CBool BDisplayBuffs { get; set;}
+		[Ordinal(0)] [RED("("bDisplayBuffs")] 		public CBool BDisplayBuffs { get; set;}
 
-		[RED("m_runword5Applied")] 		public CBool M_runword5Applied { get; set;}
+		[Ordinal(0)] [RED("("m_runword5Applied")] 		public CBool M_runword5Applied { get; set;}
 
 		public CR4HudModuleBuffs(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

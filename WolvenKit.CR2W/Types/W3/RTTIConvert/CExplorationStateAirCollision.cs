@@ -10,77 +10,77 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateAirCollision : CExplorationStateAbstract
 	{
-		[RED("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(0)] [RED("enabled")] 		public CBool Enabled { get; set;}
 
-		[RED("speedMinToCollide")] 		public CFloat SpeedMinToCollide { get; set;}
+		[Ordinal(0)] [RED("speedMinToCollide")] 		public CFloat SpeedMinToCollide { get; set;}
 
-		[RED("heightMinToCollide")] 		public CFloat HeightMinToCollide { get; set;}
+		[Ordinal(0)] [RED("heightMinToCollide")] 		public CFloat HeightMinToCollide { get; set;}
 
-		[RED("heightMaxToStop")] 		public CFloat HeightMaxToStop { get; set;}
+		[Ordinal(0)] [RED("heightMaxToStop")] 		public CFloat HeightMaxToStop { get; set;}
 
-		[RED("dotToHardHit")] 		public CFloat DotToHardHit { get; set;}
+		[Ordinal(0)] [RED("dotToHardHit")] 		public CFloat DotToHardHit { get; set;}
 
-		[RED("collisionAngle")] 		public CFloat CollisionAngle { get; set;}
+		[Ordinal(0)] [RED("collisionAngle")] 		public CFloat CollisionAngle { get; set;}
 
-		[RED("collisionSide")] 		public CEnum<EAirCollisionSide> CollisionSide { get; set;}
+		[Ordinal(0)] [RED("collisionSide")] 		public CEnum<EAirCollisionSide> CollisionSide { get; set;}
 
-		[RED("m_NormalMaxZToHitF")] 		public CFloat M_NormalMaxZToHitF { get; set;}
+		[Ordinal(0)] [RED("m_NormalMaxZToHitF")] 		public CFloat M_NormalMaxZToHitF { get; set;}
 
-		[RED("angleMinToCollide")] 		public CFloat AngleMinToCollide { get; set;}
+		[Ordinal(0)] [RED("angleMinToCollide")] 		public CFloat AngleMinToCollide { get; set;}
 
-		[RED("angleMinToCollideFront")] 		public CFloat AngleMinToCollideFront { get; set;}
+		[Ordinal(0)] [RED("angleMinToCollideFront")] 		public CFloat AngleMinToCollideFront { get; set;}
 
-		[RED("swipeDistance")] 		public CFloat SwipeDistance { get; set;}
+		[Ordinal(0)] [RED("swipeDistance")] 		public CFloat SwipeDistance { get; set;}
 
-		[RED("swipeRadius")] 		public CFloat SwipeRadius { get; set;}
+		[Ordinal(0)] [RED("swipeRadius")] 		public CFloat SwipeRadius { get; set;}
 
-		[RED("swipeHeightRequired")] 		public CFloat SwipeHeightRequired { get; set;}
+		[Ordinal(0)] [RED("swipeHeightRequired")] 		public CFloat SwipeHeightRequired { get; set;}
 
-		[RED("timeStopped")] 		public CFloat TimeStopped { get; set;}
+		[Ordinal(0)] [RED("timeStopped")] 		public CFloat TimeStopped { get; set;}
 
-		[RED("timeToRotate")] 		public CFloat TimeToRotate { get; set;}
+		[Ordinal(0)] [RED("timeToRotate")] 		public CFloat TimeToRotate { get; set;}
 
-		[RED("timeToCheckClimb")] 		public CFloat TimeToCheckClimb { get; set;}
+		[Ordinal(0)] [RED("timeToCheckClimb")] 		public CFloat TimeToCheckClimb { get; set;}
 
-		[RED("timeToCheckLand")] 		public CFloat TimeToCheckLand { get; set;}
+		[Ordinal(0)] [RED("timeToCheckLand")] 		public CFloat TimeToCheckLand { get; set;}
 
-		[RED("exitAngleLeft")] 		public CFloat ExitAngleLeft { get; set;}
+		[Ordinal(0)] [RED("exitAngleLeft")] 		public CFloat ExitAngleLeft { get; set;}
 
-		[RED("exitAngleRight")] 		public CFloat ExitAngleRight { get; set;}
+		[Ordinal(0)] [RED("exitAngleRight")] 		public CFloat ExitAngleRight { get; set;}
 
-		[RED("exitAngleExtra")] 		public CFloat ExitAngleExtra { get; set;}
+		[Ordinal(0)] [RED("exitAngleExtra")] 		public CFloat ExitAngleExtra { get; set;}
 
-		[RED("orientingSpeed")] 		public CFloat OrientingSpeed { get; set;}
+		[Ordinal(0)] [RED("orientingSpeed")] 		public CFloat OrientingSpeed { get; set;}
 
-		[RED("targetYaw")] 		public CFloat TargetYaw { get; set;}
+		[Ordinal(0)] [RED("targetYaw")] 		public CFloat TargetYaw { get; set;}
 
-		[RED("verticalSpeedConserveCoef")] 		public CFloat VerticalSpeedConserveCoef { get; set;}
+		[Ordinal(0)] [RED("verticalSpeedConserveCoef")] 		public CFloat VerticalSpeedConserveCoef { get; set;}
 
-		[RED("verticalMovementParams")] 		public SVerticalMovementParams VerticalMovementParams { get; set;}
+		[Ordinal(0)] [RED("verticalMovementParams")] 		public SVerticalMovementParams VerticalMovementParams { get; set;}
 
-		[RED("impulseForwardCenter")] 		public CFloat ImpulseForwardCenter { get; set;}
+		[Ordinal(0)] [RED("impulseForwardCenter")] 		public CFloat ImpulseForwardCenter { get; set;}
 
-		[RED("impulseDownCenter")] 		public CFloat ImpulseDownCenter { get; set;}
+		[Ordinal(0)] [RED("impulseDownCenter")] 		public CFloat ImpulseDownCenter { get; set;}
 
-		[RED("impulseForwardSide")] 		public CFloat ImpulseForwardSide { get; set;}
+		[Ordinal(0)] [RED("impulseForwardSide")] 		public CFloat ImpulseForwardSide { get; set;}
 
-		[RED("impulseDownSide")] 		public CFloat ImpulseDownSide { get; set;}
+		[Ordinal(0)] [RED("impulseDownSide")] 		public CFloat ImpulseDownSide { get; set;}
 
-		[RED("interactAlways")] 		public CBool InteractAlways { get; set;}
+		[Ordinal(0)] [RED("interactAlways")] 		public CBool InteractAlways { get; set;}
 
-		[RED("interactionTimeMin")] 		public CFloat InteractionTimeMin { get; set;}
+		[Ordinal(0)] [RED("interactionTimeMin")] 		public CFloat InteractionTimeMin { get; set;}
 
-		[RED("interactionMaxHeight")] 		public CFloat InteractionMaxHeight { get; set;}
+		[Ordinal(0)] [RED("interactionMaxHeight")] 		public CFloat InteractionMaxHeight { get; set;}
 
-		[RED("timeToHitToLand")] 		public CFloat TimeToHitToLand { get; set;}
+		[Ordinal(0)] [RED("timeToHitToLand")] 		public CFloat TimeToHitToLand { get; set;}
 
-		[RED("behEventHitToLand")] 		public CName BehEventHitToLand { get; set;}
+		[Ordinal(0)] [RED("behEventHitToLand")] 		public CName BehEventHitToLand { get; set;}
 
-		[RED("behVarSide")] 		public CName BehVarSide { get; set;}
+		[Ordinal(0)] [RED("behVarSide")] 		public CName BehVarSide { get; set;}
 
-		[RED("behVarHands")] 		public CName BehVarHands { get; set;}
+		[Ordinal(0)] [RED("behVarHands")] 		public CName BehVarHands { get; set;}
 
-		[RED("behAnimCanFall")] 		public CName BehAnimCanFall { get; set;}
+		[Ordinal(0)] [RED("behAnimCanFall")] 		public CName BehAnimCanFall { get; set;}
 
 		public CExplorationStateAirCollision(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

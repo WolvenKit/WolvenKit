@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimationBufferMultipart : IAnimationBuffer
 	{
-		[RED("numFrames")] 		public CUInt32 NumFrames { get; set;}
+		[Ordinal(0)] [RED("numFrames")] 		public CUInt32 NumFrames { get; set;}
 
-		[RED("numBones")] 		public CUInt32 NumBones { get; set;}
+		[Ordinal(0)] [RED("numBones")] 		public CUInt32 NumBones { get; set;}
 
-		[RED("numTracks")] 		public CUInt32 NumTracks { get; set;}
+		[Ordinal(0)] [RED("numTracks")] 		public CUInt32 NumTracks { get; set;}
 
-		[RED("firstFrames", 2,0)] 		public CArray<CUInt32> FirstFrames { get; set;}
+		[Ordinal(0)] [RED("firstFrames", 2,0)] 		public CArray<CUInt32> FirstFrames { get; set;}
 
-		[RED("parts", 2,0)] 		public CArray<CPtr<IAnimationBuffer>> Parts { get; set;}
+		[Ordinal(0)] [RED("parts", 2,0)] 		public CArray<CPtr<IAnimationBuffer>> Parts { get; set;}
 
 		public CAnimationBufferMultipart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

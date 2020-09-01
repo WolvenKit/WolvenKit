@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSoundInfoMapping : CVariable
 	{
-		[RED("soundTypeIdentification")] 		public CName SoundTypeIdentification { get; set;}
+		[Ordinal(0)] [RED("("soundTypeIdentification")] 		public CName SoundTypeIdentification { get; set;}
 
-		[RED("soundSizeIdentification")] 		public CName SoundSizeIdentification { get; set;}
+		[Ordinal(0)] [RED("("soundSizeIdentification")] 		public CName SoundSizeIdentification { get; set;}
 
-		[RED("boneIndexes", 2,0)] 		public CArray<CInt32> BoneIndexes { get; set;}
+		[Ordinal(0)] [RED("("boneIndexes", 2,0)] 		public CArray<CInt32> BoneIndexes { get; set;}
 
-		[RED("isDefault")] 		public CBool IsDefault { get; set;}
+		[Ordinal(0)] [RED("("isDefault")] 		public CBool IsDefault { get; set;}
 
 		public SSoundInfoMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

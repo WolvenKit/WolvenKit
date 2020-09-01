@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPlayerStateMovable : CPlayerStateBase
 	{
-		[RED("agent")] 		public CHandle<CMovingAgentComponent> Agent { get; set;}
+		[Ordinal(0)] [RED("agent")] 		public CHandle<CMovingAgentComponent> Agent { get; set;}
 
 		public CPlayerStateMovable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

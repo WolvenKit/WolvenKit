@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestVariedInputsBlock : CQuestGraphBlock
 	{
-		[RED("inputsCount")] 		public CUInt32 InputsCount { get; set;}
+		[Ordinal(0)] [RED("inputsCount")] 		public CUInt32 InputsCount { get; set;}
 
 		public CQuestVariedInputsBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

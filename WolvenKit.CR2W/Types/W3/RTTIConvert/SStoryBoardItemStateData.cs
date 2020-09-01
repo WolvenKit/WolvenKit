@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStoryBoardItemStateData : CVariable
 	{
-		[RED("id")] 		public CString Id { get; set;}
+		[Ordinal(0)] [RED("("id")] 		public CString Id { get; set;}
 
-		[RED("assetname")] 		public CString Assetname { get; set;}
+		[Ordinal(0)] [RED("("assetname")] 		public CString Assetname { get; set;}
 
-		[RED("userSetName")] 		public CBool UserSetName { get; set;}
+		[Ordinal(0)] [RED("("userSetName")] 		public CBool UserSetName { get; set;}
 
-		[RED("templatePath")] 		public CString TemplatePath { get; set;}
+		[Ordinal(0)] [RED("("templatePath")] 		public CString TemplatePath { get; set;}
 
 		public SStoryBoardItemStateData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

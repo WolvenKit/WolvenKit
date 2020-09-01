@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskSearchTargetDef : IBehTreeTaskDefinition
 	{
-		[RED("namedTarget")] 		public CName NamedTarget { get; set;}
+		[Ordinal(0)] [RED("namedTarget")] 		public CName NamedTarget { get; set;}
 
 		public BTTaskSearchTargetDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

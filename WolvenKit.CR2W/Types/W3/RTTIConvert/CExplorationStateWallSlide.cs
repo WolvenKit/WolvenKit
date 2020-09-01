@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateWallSlide : CExplorationStateSlide
 	{
-		[RED("wallSlideGenericCoef")] 		public CFloat WallSlideGenericCoef { get; set;}
+		[Ordinal(0)] [RED("("wallSlideGenericCoef")] 		public CFloat WallSlideGenericCoef { get; set;}
 
 		public CExplorationStateWallSlide(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

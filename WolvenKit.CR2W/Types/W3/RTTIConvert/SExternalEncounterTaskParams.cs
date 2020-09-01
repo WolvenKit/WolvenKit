@@ -10,35 +10,35 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SExternalEncounterTaskParams : CVariable
 	{
-		[RED("triggerWhenOutsideOwnerEncounterArea")] 		public CBool TriggerWhenOutsideOwnerEncounterArea { get; set;}
+		[Ordinal(0)] [RED("("triggerWhenOutsideOwnerEncounterArea")] 		public CBool TriggerWhenOutsideOwnerEncounterArea { get; set;}
 
-		[RED("shouldEncounterChangeState")] 		public CBool ShouldEncounterChangeState { get; set;}
+		[Ordinal(0)] [RED("("shouldEncounterChangeState")] 		public CBool ShouldEncounterChangeState { get; set;}
 
-		[RED("enableEncounter")] 		public CBool EnableEncounter { get; set;}
+		[Ordinal(0)] [RED("("enableEncounter")] 		public CBool EnableEncounter { get; set;}
 
-		[RED("encounterTag")] 		public CName EncounterTag { get; set;}
+		[Ordinal(0)] [RED("("encounterTag")] 		public CName EncounterTag { get; set;}
 
-		[RED("delay")] 		public GameTimeWrapper Delay { get; set;}
+		[Ordinal(0)] [RED("("delay")] 		public GameTimeWrapper Delay { get; set;}
 
-		[RED("factOnTaskPerformed")] 		public CString FactOnTaskPerformed { get; set;}
+		[Ordinal(0)] [RED("("factOnTaskPerformed")] 		public CString FactOnTaskPerformed { get; set;}
 
-		[RED("spawnTreeNodesToActivate", 2,0)] 		public CArray<CName> SpawnTreeNodesToActivate { get; set;}
+		[Ordinal(0)] [RED("("spawnTreeNodesToActivate", 2,0)] 		public CArray<CName> SpawnTreeNodesToActivate { get; set;}
 
-		[RED("spawnTreeNodesToDeactivate", 2,0)] 		public CArray<CName> SpawnTreeNodesToDeactivate { get; set;}
+		[Ordinal(0)] [RED("("spawnTreeNodesToDeactivate", 2,0)] 		public CArray<CName> SpawnTreeNodesToDeactivate { get; set;}
 
-		[RED("creaturesGroupToDisable", 2,0)] 		public CArray<CName> CreaturesGroupToDisable { get; set;}
+		[Ordinal(0)] [RED("("creaturesGroupToDisable", 2,0)] 		public CArray<CName> CreaturesGroupToDisable { get; set;}
 
-		[RED("creaturesGroupToEnable", 2,0)] 		public CArray<CName> CreaturesGroupToEnable { get; set;}
+		[Ordinal(0)] [RED("("creaturesGroupToEnable", 2,0)] 		public CArray<CName> CreaturesGroupToEnable { get; set;}
 
-		[RED("sourceName")] 		public CName SourceName { get; set;}
+		[Ordinal(0)] [RED("("sourceName")] 		public CName SourceName { get; set;}
 
-		[RED("forceDespawn")] 		public CBool ForceDespawn { get; set;}
+		[Ordinal(0)] [RED("("forceDespawn")] 		public CBool ForceDespawn { get; set;}
 
-		[RED("encounterPhasetoActivate")] 		public CName EncounterPhasetoActivate { get; set;}
+		[Ordinal(0)] [RED("("encounterPhasetoActivate")] 		public CName EncounterPhasetoActivate { get; set;}
 
-		[RED("ID")] 		public CInt32 ID { get; set;}
+		[Ordinal(0)] [RED("("ID")] 		public CInt32 ID { get; set;}
 
-		[RED("setTime")] 		public GameTime SetTime { get; set;}
+		[Ordinal(0)] [RED("("setTime")] 		public GameTime SetTime { get; set;}
 
 		public SExternalEncounterTaskParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

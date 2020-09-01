@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateRadial : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("SELECT_ITEMS")] 		public CName SELECT_ITEMS { get; set;}
+		[Ordinal(0)] [RED("("SELECT_ITEMS")] 		public CName SELECT_ITEMS { get; set;}
 
-		[RED("SELECT_BOLTS")] 		public CName SELECT_BOLTS { get; set;}
+		[Ordinal(0)] [RED("("SELECT_BOLTS")] 		public CName SELECT_BOLTS { get; set;}
 
-		[RED("BUFFS")] 		public CName BUFFS { get; set;}
+		[Ordinal(0)] [RED("("BUFFS")] 		public CName BUFFS { get; set;}
 
-		[RED("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
 		public W3TutorialManagerUIHandlerStateRadial(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

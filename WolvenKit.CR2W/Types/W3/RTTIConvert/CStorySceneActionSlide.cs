@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneActionSlide : CStorySceneActionTeleport
 	{
-		[RED("slideTime")] 		public CFloat SlideTime { get; set;}
+		[Ordinal(0)] [RED("("slideTime")] 		public CFloat SlideTime { get; set;}
 
 		public CStorySceneActionSlide(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

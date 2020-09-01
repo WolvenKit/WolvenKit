@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPopupResource : IGuiResource
 	{
-		[RED("popupClass")] 		public CName PopupClass { get; set;}
+		[Ordinal(0)] [RED("popupClass")] 		public CName PopupClass { get; set;}
 
-		[RED("popupFlashSwf")] 		public CSoft<CSwfResource> PopupFlashSwf { get; set;}
+		[Ordinal(0)] [RED("popupFlashSwf")] 		public CSoft<CSwfResource> PopupFlashSwf { get; set;}
 
-		[RED("layer")] 		public CUInt32 Layer { get; set;}
+		[Ordinal(0)] [RED("layer")] 		public CUInt32 Layer { get; set;}
 
-		[RED("popupDef")] 		public CPtr<CPopupDef> PopupDef { get; set;}
+		[Ordinal(0)] [RED("popupDef")] 		public CPtr<CPopupDef> PopupDef { get; set;}
 
 		public CPopupResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

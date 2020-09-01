@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestBehaviorCtrlBlock : CQuestScopeBlock
 	{
-		[RED("saveMode")] 		public CEnum<EQuestBehaviorSceneSaveMode> SaveMode { get; set;}
+		[Ordinal(0)] [RED("saveMode")] 		public CEnum<EQuestBehaviorSceneSaveMode> SaveMode { get; set;}
 
-		[RED("activationTimeout")] 		public CFloat ActivationTimeout { get; set;}
+		[Ordinal(0)] [RED("activationTimeout")] 		public CFloat ActivationTimeout { get; set;}
 
-		[RED("groups", 2,0)] 		public CArray<CPtr<SBehaviorGroup>> Groups { get; set;}
+		[Ordinal(0)] [RED("groups", 2,0)] 		public CArray<CPtr<SBehaviorGroup>> Groups { get; set;}
 
 		public CQuestBehaviorCtrlBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

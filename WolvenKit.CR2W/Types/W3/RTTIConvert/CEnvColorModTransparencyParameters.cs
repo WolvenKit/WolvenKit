@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvColorModTransparencyParameters : CVariable
 	{
-		[RED("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(0)] [RED("("activated")] 		public CBool Activated { get; set;}
 
-		[RED("commonFarDist")] 		public SSimpleCurve CommonFarDist { get; set;}
+		[Ordinal(0)] [RED("("commonFarDist")] 		public SSimpleCurve CommonFarDist { get; set;}
 
-		[RED("filterNearColor")] 		public SSimpleCurve FilterNearColor { get; set;}
+		[Ordinal(0)] [RED("("filterNearColor")] 		public SSimpleCurve FilterNearColor { get; set;}
 
-		[RED("filterFarColor")] 		public SSimpleCurve FilterFarColor { get; set;}
+		[Ordinal(0)] [RED("("filterFarColor")] 		public SSimpleCurve FilterFarColor { get; set;}
 
-		[RED("contrastNearStrength")] 		public SSimpleCurve ContrastNearStrength { get; set;}
+		[Ordinal(0)] [RED("("contrastNearStrength")] 		public SSimpleCurve ContrastNearStrength { get; set;}
 
-		[RED("contrastFarStrength")] 		public SSimpleCurve ContrastFarStrength { get; set;}
+		[Ordinal(0)] [RED("("contrastFarStrength")] 		public SSimpleCurve ContrastFarStrength { get; set;}
 
-		[RED("autoHideCustom0")] 		public CEnvDistanceRangeParameters AutoHideCustom0 { get; set;}
+		[Ordinal(0)] [RED("("autoHideCustom0")] 		public CEnvDistanceRangeParameters AutoHideCustom0 { get; set;}
 
-		[RED("autoHideCustom1")] 		public CEnvDistanceRangeParameters AutoHideCustom1 { get; set;}
+		[Ordinal(0)] [RED("("autoHideCustom1")] 		public CEnvDistanceRangeParameters AutoHideCustom1 { get; set;}
 
-		[RED("autoHideCustom2")] 		public CEnvDistanceRangeParameters AutoHideCustom2 { get; set;}
+		[Ordinal(0)] [RED("("autoHideCustom2")] 		public CEnvDistanceRangeParameters AutoHideCustom2 { get; set;}
 
-		[RED("autoHideCustom3")] 		public CEnvDistanceRangeParameters AutoHideCustom3 { get; set;}
+		[Ordinal(0)] [RED("("autoHideCustom3")] 		public CEnvDistanceRangeParameters AutoHideCustom3 { get; set;}
 
 		public CEnvColorModTransparencyParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskRidingManagerVehicleMount : IBehTreeTask
 	{
-		[RED("mountType")] 		public CName MountType { get; set;}
+		[Ordinal(0)] [RED("("mountType")] 		public CName MountType { get; set;}
 
-		[RED("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
+		[Ordinal(0)] [RED("("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
 
-		[RED("attachSlot")] 		public CName AttachSlot { get; set;}
+		[Ordinal(0)] [RED("("attachSlot")] 		public CName AttachSlot { get; set;}
 
 		public CBTTaskRidingManagerVehicleMount(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

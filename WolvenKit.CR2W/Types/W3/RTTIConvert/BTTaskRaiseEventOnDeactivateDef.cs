@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskRaiseEventOnDeactivateDef : IBehTreeTaskDefinition
 	{
-		[RED("eventName")] 		public CBehTreeValCName EventName { get; set;}
+		[Ordinal(0)] [RED("eventName")] 		public CBehTreeValCName EventName { get; set;}
 
 		public BTTaskRaiseEventOnDeactivateDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphConstraintNodeRoll : CBehaviorGraphBaseNode
 	{
-		[RED("weight")] 		public CFloat Weight { get; set;}
+		[Ordinal(0)] [RED("("weight")] 		public CFloat Weight { get; set;}
 
-		[RED("cachedControlValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlValueNode { get; set;}
+		[Ordinal(0)] [RED("("cachedControlValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlValueNode { get; set;}
 
 		public CBehaviorGraphConstraintNodeRoll(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

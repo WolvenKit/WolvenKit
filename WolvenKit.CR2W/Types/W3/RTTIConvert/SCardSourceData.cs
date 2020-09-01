@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCardSourceData : CVariable
 	{
-		[RED("cardName")] 		public CName CardName { get; set;}
+		[Ordinal(0)] [RED("("cardName")] 		public CName CardName { get; set;}
 
-		[RED("source")] 		public CString Source { get; set;}
+		[Ordinal(0)] [RED("("source")] 		public CString Source { get; set;}
 
-		[RED("originArea")] 		public CString OriginArea { get; set;}
+		[Ordinal(0)] [RED("("originArea")] 		public CString OriginArea { get; set;}
 
-		[RED("originQuest")] 		public CString OriginQuest { get; set;}
+		[Ordinal(0)] [RED("("originQuest")] 		public CString OriginQuest { get; set;}
 
-		[RED("details")] 		public CString Details { get; set;}
+		[Ordinal(0)] [RED("("details")] 		public CString Details { get; set;}
 
-		[RED("coords")] 		public CString Coords { get; set;}
+		[Ordinal(0)] [RED("("coords")] 		public CString Coords { get; set;}
 
 		public SCardSourceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

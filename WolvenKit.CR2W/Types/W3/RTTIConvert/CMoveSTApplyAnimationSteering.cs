@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTApplyAnimationSteering : CMoveSTApplySteering
 	{
-		[RED("rotationVar")] 		public CName RotationVar { get; set;}
+		[Ordinal(0)] [RED("rotationVar")] 		public CName RotationVar { get; set;}
 
 		public CMoveSTApplyAnimationSteering(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

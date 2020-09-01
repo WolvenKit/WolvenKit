@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MapInitData : W3MenuInitData
 	{
-		[RED("m_triggeredExitEntity")] 		public CBool M_triggeredExitEntity { get; set;}
+		[Ordinal(0)] [RED("("m_triggeredExitEntity")] 		public CBool M_triggeredExitEntity { get; set;}
 
-		[RED("m_usedFastTravelEntity")] 		public CHandle<CEntity> M_usedFastTravelEntity { get; set;}
+		[Ordinal(0)] [RED("("m_usedFastTravelEntity")] 		public CHandle<CEntity> M_usedFastTravelEntity { get; set;}
 
-		[RED("m_isSailing")] 		public CBool M_isSailing { get; set;}
+		[Ordinal(0)] [RED("("m_isSailing")] 		public CBool M_isSailing { get; set;}
 
 		public W3MapInitData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

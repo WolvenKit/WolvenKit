@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDoorMarkingTester : CGameplayEntity
 	{
-		[RED("door")] 		public CHandle<CDoorMarking> Door { get; set;}
+		[Ordinal(0)] [RED("("door")] 		public CHandle<CDoorMarking> Door { get; set;}
 
 		public CDoorMarkingTester(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

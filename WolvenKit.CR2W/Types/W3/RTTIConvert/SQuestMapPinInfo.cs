@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SQuestMapPinInfo : CVariable
 	{
-		[RED("tag")] 		public CName Tag { get; set;}
+		[Ordinal(0)] [RED("("tag")] 		public CName Tag { get; set;}
 
-		[RED("type")] 		public CName Type { get; set;}
+		[Ordinal(0)] [RED("("type")] 		public CName Type { get; set;}
 
-		[RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(0)] [RED("("radius")] 		public CFloat Radius { get; set;}
 
-		[RED("positions", 2,0)] 		public CArray<Vector> Positions { get; set;}
+		[Ordinal(0)] [RED("("positions", 2,0)] 		public CArray<Vector> Positions { get; set;}
 
 		public SQuestMapPinInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

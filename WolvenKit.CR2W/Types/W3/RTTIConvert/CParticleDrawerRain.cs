@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CParticleDrawerRain : IParticleDrawer
 	{
-		[RED("stretchPerVelocity")] 		public CFloat StretchPerVelocity { get; set;}
+		[Ordinal(0)] [RED("stretchPerVelocity")] 		public CFloat StretchPerVelocity { get; set;}
 
-		[RED("blendStartVelocity")] 		public CFloat BlendStartVelocity { get; set;}
+		[Ordinal(0)] [RED("blendStartVelocity")] 		public CFloat BlendStartVelocity { get; set;}
 
-		[RED("blendEndVelocity")] 		public CFloat BlendEndVelocity { get; set;}
+		[Ordinal(0)] [RED("blendEndVelocity")] 		public CFloat BlendEndVelocity { get; set;}
 
 		public CParticleDrawerRain(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

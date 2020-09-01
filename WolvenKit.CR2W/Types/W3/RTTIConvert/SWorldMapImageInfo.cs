@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SWorldMapImageInfo : CVariable
 	{
-		[RED("cropRect")] 		public Rect CropRect { get; set;}
+		[Ordinal(0)] [RED("("cropRect")] 		public Rect CropRect { get; set;}
 
-		[RED("baseFileName")] 		public CString BaseFileName { get; set;}
+		[Ordinal(0)] [RED("("baseFileName")] 		public CString BaseFileName { get; set;}
 
-		[RED("height")] 		public CInt32 Height { get; set;}
+		[Ordinal(0)] [RED("("height")] 		public CInt32 Height { get; set;}
 
-		[RED("width")] 		public CInt32 Width { get; set;}
+		[Ordinal(0)] [RED("("width")] 		public CInt32 Width { get; set;}
 
 		public SWorldMapImageInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CurveDamper : CObject
 	{
-		[RED("curve")] 		public CHandle<CCurve> Curve { get; set;}
+		[Ordinal(0)] [RED("curve")] 		public CHandle<CCurve> Curve { get; set;}
 
-		[RED("time")] 		public CFloat Time { get; set;}
+		[Ordinal(0)] [RED("time")] 		public CFloat Time { get; set;}
 
-		[RED("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(0)] [RED("duration")] 		public CFloat Duration { get; set;}
 
-		[RED("startValue")] 		public CFloat StartValue { get; set;}
+		[Ordinal(0)] [RED("startValue")] 		public CFloat StartValue { get; set;}
 
-		[RED("currValue")] 		public CFloat CurrValue { get; set;}
+		[Ordinal(0)] [RED("currValue")] 		public CFloat CurrValue { get; set;}
 
-		[RED("destValue")] 		public CFloat DestValue { get; set;}
+		[Ordinal(0)] [RED("destValue")] 		public CFloat DestValue { get; set;}
 
 		public CurveDamper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

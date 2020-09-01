@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSCGoalChannel : IMoveSteeringCondition
 	{
-		[RED("orientationRequired")] 		public CBool OrientationRequired { get; set;}
+		[Ordinal(0)] [RED("orientationRequired")] 		public CBool OrientationRequired { get; set;}
 
-		[RED("headingRequired")] 		public CBool HeadingRequired { get; set;}
+		[Ordinal(0)] [RED("headingRequired")] 		public CBool HeadingRequired { get; set;}
 
 		public CMoveSCGoalChannel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

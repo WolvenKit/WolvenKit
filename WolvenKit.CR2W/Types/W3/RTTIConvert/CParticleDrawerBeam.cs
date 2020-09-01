@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CParticleDrawerBeam : IParticleDrawer
 	{
-		[RED("texturesPerUnit")] 		public CFloat TexturesPerUnit { get; set;}
+		[Ordinal(0)] [RED("texturesPerUnit")] 		public CFloat TexturesPerUnit { get; set;}
 
-		[RED("spread")] 		public CPtr<IEvaluatorVector> Spread { get; set;}
+		[Ordinal(0)] [RED("spread")] 		public CPtr<IEvaluatorVector> Spread { get; set;}
 
-		[RED("numSegments")] 		public CUInt32 NumSegments { get; set;}
+		[Ordinal(0)] [RED("numSegments")] 		public CUInt32 NumSegments { get; set;}
 
 		public CParticleDrawerBeam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

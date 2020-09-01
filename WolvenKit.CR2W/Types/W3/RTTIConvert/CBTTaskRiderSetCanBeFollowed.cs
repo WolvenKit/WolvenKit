@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskRiderSetCanBeFollowed : IBehTreeTask
 	{
-		[RED("setCanBeFollowed")] 		public CBool SetCanBeFollowed { get; set;}
+		[Ordinal(0)] [RED("setCanBeFollowed")] 		public CBool SetCanBeFollowed { get; set;}
 
-		[RED("horse")] 		public CHandle<CNewNPC> Horse { get; set;}
+		[Ordinal(0)] [RED("horse")] 		public CHandle<CNewNPC> Horse { get; set;}
 
 		public CBTTaskRiderSetCanBeFollowed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,47 +10,47 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSpawnEntityOffset : CBTTaskPlayAnimationEventDecorator
 	{
-		[RED("positionOffset")] 		public Vector PositionOffset { get; set;}
+		[Ordinal(0)] [RED("positionOffset")] 		public Vector PositionOffset { get; set;}
 
-		[RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(0)] [RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
-		[RED("resourceName")] 		public CName ResourceName { get; set;}
+		[Ordinal(0)] [RED("resourceName")] 		public CName ResourceName { get; set;}
 
-		[RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(0)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
-		[RED("completeAfterSpawn")] 		public CBool CompleteAfterSpawn { get; set;}
+		[Ordinal(0)] [RED("completeAfterSpawn")] 		public CBool CompleteAfterSpawn { get; set;}
 
-		[RED("complete")] 		public CBool Complete { get; set;}
+		[Ordinal(0)] [RED("complete")] 		public CBool Complete { get; set;}
 
-		[RED("spawnEntityOnAnimEvent")] 		public CBool SpawnEntityOnAnimEvent { get; set;}
+		[Ordinal(0)] [RED("spawnEntityOnAnimEvent")] 		public CBool SpawnEntityOnAnimEvent { get; set;}
 
-		[RED("addEntityToSummonerComponent")] 		public CBool AddEntityToSummonerComponent { get; set;}
+		[Ordinal(0)] [RED("addEntityToSummonerComponent")] 		public CBool AddEntityToSummonerComponent { get; set;}
 
-		[RED("spawnAnimEventName")] 		public CName SpawnAnimEventName { get; set;}
+		[Ordinal(0)] [RED("spawnAnimEventName")] 		public CName SpawnAnimEventName { get; set;}
 
-		[RED("tagToAdd")] 		public CName TagToAdd { get; set;}
+		[Ordinal(0)] [RED("tagToAdd")] 		public CName TagToAdd { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(0)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("addTagToEntity")] 		public CBool AddTagToEntity { get; set;}
+		[Ordinal(0)] [RED("addTagToEntity")] 		public CBool AddTagToEntity { get; set;}
 
-		[RED("destroyTaggedEntitiesOnDeactivate")] 		public CBool DestroyTaggedEntitiesOnDeactivate { get; set;}
+		[Ordinal(0)] [RED("destroyTaggedEntitiesOnDeactivate")] 		public CBool DestroyTaggedEntitiesOnDeactivate { get; set;}
 
-		[RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
+		[Ordinal(0)] [RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
 
-		[RED("entities", 2,0)] 		public CArray<CHandle<CEntity>> Entities { get; set;}
+		[Ordinal(0)] [RED("entities", 2,0)] 		public CArray<CHandle<CEntity>> Entities { get; set;}
 
-		[RED("destroyEntityAfter")] 		public CFloat DestroyEntityAfter { get; set;}
+		[Ordinal(0)] [RED("destroyEntityAfter")] 		public CFloat DestroyEntityAfter { get; set;}
 
-		[RED("spawnEntityAtNode")] 		public CBool SpawnEntityAtNode { get; set;}
+		[Ordinal(0)] [RED("spawnEntityAtNode")] 		public CBool SpawnEntityAtNode { get; set;}
 
-		[RED("tagToFindNode")] 		public CName TagToFindNode { get; set;}
+		[Ordinal(0)] [RED("tagToFindNode")] 		public CName TagToFindNode { get; set;}
 
-		[RED("m_summonerComponent")] 		public CHandle<W3SummonerComponent> M_summonerComponent { get; set;}
+		[Ordinal(0)] [RED("m_summonerComponent")] 		public CHandle<W3SummonerComponent> M_summonerComponent { get; set;}
 
-		[RED("couldntLoadResource")] 		public CBool CouldntLoadResource { get; set;}
+		[Ordinal(0)] [RED("couldntLoadResource")] 		public CBool CouldntLoadResource { get; set;}
 
 		public CBTTaskSpawnEntityOffset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

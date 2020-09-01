@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMenuEvent : CVariable
 	{
-		[RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(0)] [RED("("eventName")] 		public CName EventName { get; set;}
 
-		[RED("openedMenu")] 		public CName OpenedMenu { get; set;}
+		[Ordinal(0)] [RED("("openedMenu")] 		public CName OpenedMenu { get; set;}
 
-		[RED("openedJournalEntry")] 		public CHandle<CJournalBase> OpenedJournalEntry { get; set;}
+		[Ordinal(0)] [RED("("openedJournalEntry")] 		public CHandle<CJournalBase> OpenedJournalEntry { get; set;}
 
 		public SMenuEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

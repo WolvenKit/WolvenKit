@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStorySceneGameplayActionCallbackInfo : CVariable
 	{
-		[RED("outChangeItems")] 		public CBool OutChangeItems { get; set;}
+		[Ordinal(0)] [RED("("outChangeItems")] 		public CBool OutChangeItems { get; set;}
 
-		[RED("outDontUseSceneTeleport")] 		public CBool OutDontUseSceneTeleport { get; set;}
+		[Ordinal(0)] [RED("("outDontUseSceneTeleport")] 		public CBool OutDontUseSceneTeleport { get; set;}
 
-		[RED("inActorPosition")] 		public Vector InActorPosition { get; set;}
+		[Ordinal(0)] [RED("("inActorPosition")] 		public Vector InActorPosition { get; set;}
 
-		[RED("inActorHeading")] 		public Vector InActorHeading { get; set;}
+		[Ordinal(0)] [RED("("inActorHeading")] 		public Vector InActorHeading { get; set;}
 
-		[RED("inGameplayAction")] 		public CInt32 InGameplayAction { get; set;}
+		[Ordinal(0)] [RED("("inGameplayAction")] 		public CInt32 InGameplayAction { get; set;}
 
-		[RED("inActor")] 		public CHandle<CActor> InActor { get; set;}
+		[Ordinal(0)] [RED("("inActor")] 		public CHandle<CActor> InActor { get; set;}
 
 		public SStorySceneGameplayActionCallbackInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

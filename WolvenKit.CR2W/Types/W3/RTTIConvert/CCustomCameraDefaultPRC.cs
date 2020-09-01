@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCustomCameraDefaultPRC : ICustomCameraPivotRotationController
 	{
-		[RED("dampYawFactor")] 		public CFloat DampYawFactor { get; set;}
+		[Ordinal(0)] [RED("("dampYawFactor")] 		public CFloat DampYawFactor { get; set;}
 
-		[RED("dampPitchFactor")] 		public CFloat DampPitchFactor { get; set;}
+		[Ordinal(0)] [RED("("dampPitchFactor")] 		public CFloat DampPitchFactor { get; set;}
 
-		[RED("yawMaxVelocity")] 		public CFloat YawMaxVelocity { get; set;}
+		[Ordinal(0)] [RED("("yawMaxVelocity")] 		public CFloat YawMaxVelocity { get; set;}
 
-		[RED("yawAcceleration")] 		public CFloat YawAcceleration { get; set;}
+		[Ordinal(0)] [RED("("yawAcceleration")] 		public CFloat YawAcceleration { get; set;}
 
-		[RED("pitchAcceleration")] 		public CFloat PitchAcceleration { get; set;}
+		[Ordinal(0)] [RED("("pitchAcceleration")] 		public CFloat PitchAcceleration { get; set;}
 
-		[RED("pitchMaxVelocity")] 		public CFloat PitchMaxVelocity { get; set;}
+		[Ordinal(0)] [RED("("pitchMaxVelocity")] 		public CFloat PitchMaxVelocity { get; set;}
 
 		public CCustomCameraDefaultPRC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

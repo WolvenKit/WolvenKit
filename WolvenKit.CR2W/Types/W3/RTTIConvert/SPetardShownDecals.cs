@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SPetardShownDecals : CVariable
 	{
-		[RED("componentName")] 		public CName ComponentName { get; set;}
+		[Ordinal(0)] [RED("("componentName")] 		public CName ComponentName { get; set;}
 
-		[RED("remainingShowTime")] 		public CFloat RemainingShowTime { get; set;}
+		[Ordinal(0)] [RED("("remainingShowTime")] 		public CFloat RemainingShowTime { get; set;}
 
 		public SPetardShownDecals(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

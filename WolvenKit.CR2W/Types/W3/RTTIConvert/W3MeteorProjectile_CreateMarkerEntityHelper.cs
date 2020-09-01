@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MeteorProjectile_CreateMarkerEntityHelper : CCreateEntityHelper
 	{
-		[RED("owner")] 		public CHandle<W3MeteorProjectile> Owner { get; set;}
+		[Ordinal(0)] [RED("("owner")] 		public CHandle<W3MeteorProjectile> Owner { get; set;}
 
 		public W3MeteorProjectile_CreateMarkerEntityHelper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

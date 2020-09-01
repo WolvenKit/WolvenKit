@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4ReactionManager : CBehTreeReactionManager
 	{
-		[RED("rainReactionsEnabled")] 		public CBool RainReactionsEnabled { get; set;}
+		[Ordinal(0)] [RED("rainReactionsEnabled")] 		public CBool RainReactionsEnabled { get; set;}
 
-		[RED("rainEventParams")] 		public CHandle<CBehTreeReactionEventData> RainEventParams { get; set;}
+		[Ordinal(0)] [RED("rainEventParams")] 		public CHandle<CBehTreeReactionEventData> RainEventParams { get; set;}
 
 		public CR4ReactionManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

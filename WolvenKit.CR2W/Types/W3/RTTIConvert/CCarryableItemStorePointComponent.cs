@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCarryableItemStorePointComponent : CWayPointComponent
 	{
-		[RED("storedItemType")] 		public CString StoredItemType { get; set;}
+		[Ordinal(0)] [RED("("storedItemType")] 		public CString StoredItemType { get; set;}
 
-		[RED("randomPrespawn")] 		public CBool RandomPrespawn { get; set;}
+		[Ordinal(0)] [RED("("randomPrespawn")] 		public CBool RandomPrespawn { get; set;}
 
 		public CCarryableItemStorePointComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

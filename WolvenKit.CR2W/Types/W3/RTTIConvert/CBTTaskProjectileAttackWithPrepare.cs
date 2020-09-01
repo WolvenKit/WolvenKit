@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskProjectileAttackWithPrepare : CBTTaskProjectileAttack
 	{
-		[RED("boneName")] 		public CName BoneName { get; set;}
+		[Ordinal(0)] [RED("boneName")] 		public CName BoneName { get; set;}
 
-		[RED("rawTarget")] 		public CBool RawTarget { get; set;}
+		[Ordinal(0)] [RED("rawTarget")] 		public CBool RawTarget { get; set;}
 
-		[RED("shootInFront")] 		public CBool ShootInFront { get; set;}
+		[Ordinal(0)] [RED("shootInFront")] 		public CBool ShootInFront { get; set;}
 
-		[RED("shootInFrontOffset")] 		public CFloat ShootInFrontOffset { get; set;}
+		[Ordinal(0)] [RED("shootInFrontOffset")] 		public CFloat ShootInFrontOffset { get; set;}
 
 		public CBTTaskProjectileAttackWithPrepare(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

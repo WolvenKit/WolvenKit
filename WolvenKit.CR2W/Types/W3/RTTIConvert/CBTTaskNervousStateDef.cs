@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskNervousStateDef : IBehTreeTaskDefinition
 	{
-		[RED("callFromQuestOnly")] 		public CBool CallFromQuestOnly { get; set;}
+		[Ordinal(0)] [RED("callFromQuestOnly")] 		public CBool CallFromQuestOnly { get; set;}
 
-		[RED("dangerRadius")] 		public CFloat DangerRadius { get; set;}
+		[Ordinal(0)] [RED("dangerRadius")] 		public CFloat DangerRadius { get; set;}
 
-		[RED("rearingChance")] 		public CFloat RearingChance { get; set;}
+		[Ordinal(0)] [RED("rearingChance")] 		public CFloat RearingChance { get; set;}
 
-		[RED("kickChance")] 		public CFloat KickChance { get; set;}
+		[Ordinal(0)] [RED("kickChance")] 		public CFloat KickChance { get; set;}
 
 		public CBTTaskNervousStateDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

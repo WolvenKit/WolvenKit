@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimHitEvent : CExtAnimEvent
 	{
-		[RED("hitLevel")] 		public CUInt32 HitLevel { get; set;}
+		[Ordinal(0)] [RED("("hitLevel")] 		public CUInt32 HitLevel { get; set;}
 
 		public CExtAnimHitEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

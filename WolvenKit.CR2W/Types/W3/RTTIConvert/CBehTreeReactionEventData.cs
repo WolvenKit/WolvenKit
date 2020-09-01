@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeReactionEventData : CObject
 	{
-		[RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(0)] [RED("eventName")] 		public CName EventName { get; set;}
 
-		[RED("lifetime")] 		public CFloat Lifetime { get; set;}
+		[Ordinal(0)] [RED("lifetime")] 		public CFloat Lifetime { get; set;}
 
-		[RED("broadcastInterval")] 		public CFloat BroadcastInterval { get; set;}
+		[Ordinal(0)] [RED("broadcastInterval")] 		public CFloat BroadcastInterval { get; set;}
 
-		[RED("distanceRange")] 		public CFloat DistanceRange { get; set;}
+		[Ordinal(0)] [RED("distanceRange")] 		public CFloat DistanceRange { get; set;}
 
-		[RED("recipientCount")] 		public CInt32 RecipientCount { get; set;}
+		[Ordinal(0)] [RED("recipientCount")] 		public CInt32 RecipientCount { get; set;}
 
 		public CBehTreeReactionEventData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimCutsceneDisableClothEvent : CExtAnimEvent
 	{
-		[RED("weight")] 		public CFloat Weight { get; set;}
+		[Ordinal(0)] [RED("("weight")] 		public CFloat Weight { get; set;}
 
-		[RED("blendTime")] 		public CFloat BlendTime { get; set;}
+		[Ordinal(0)] [RED("("blendTime")] 		public CFloat BlendTime { get; set;}
 
 		public CExtAnimCutsceneDisableClothEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

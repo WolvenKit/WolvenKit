@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ISpawnTreeInitializerToggleBehavior : ISpawnTreeInitializer
 	{
-		[RED("behaviorSwitchName")] 		public CName BehaviorSwitchName { get; set;}
+		[Ordinal(0)] [RED("behaviorSwitchName")] 		public CName BehaviorSwitchName { get; set;}
 
-		[RED("enableBehavior")] 		public CBool EnableBehavior { get; set;}
+		[Ordinal(0)] [RED("enableBehavior")] 		public CBool EnableBehavior { get; set;}
 
 		public ISpawnTreeInitializerToggleBehavior(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

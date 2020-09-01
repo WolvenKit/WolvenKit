@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestContextDialogBlock : CQuestGraphBlock
 	{
-		[RED("scene")] 		public CSoft<CStoryScene> Scene { get; set;}
+		[Ordinal(0)] [RED("scene")] 		public CSoft<CStoryScene> Scene { get; set;}
 
-		[RED("targetScene")] 		public CSoft<CStoryScene> TargetScene { get; set;}
+		[Ordinal(0)] [RED("targetScene")] 		public CSoft<CStoryScene> TargetScene { get; set;}
 
 		public CQuestContextDialogBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

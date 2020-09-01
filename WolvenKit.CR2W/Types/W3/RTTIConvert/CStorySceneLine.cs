@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneLine : CAbstractStorySceneLine
 	{
-		[RED("dialogLine")] 		public LocalizedString DialogLine { get; set;}
+		[Ordinal(0)] [RED("dialogLine")] 		public LocalizedString DialogLine { get; set;}
 
-		[RED("voiceFileName")] 		public CString VoiceFileName { get; set;}
+		[Ordinal(0)] [RED("voiceFileName")] 		public CString VoiceFileName { get; set;}
 
-		[RED("noBreak")] 		public CBool NoBreak { get; set;}
+		[Ordinal(0)] [RED("noBreak")] 		public CBool NoBreak { get; set;}
 
-		[RED("soundEventName")] 		public StringAnsi SoundEventName { get; set;}
+		[Ordinal(0)] [RED("soundEventName")] 		public StringAnsi SoundEventName { get; set;}
 
-		[RED("disableOcclusion")] 		public CBool DisableOcclusion { get; set;}
+		[Ordinal(0)] [RED("disableOcclusion")] 		public CBool DisableOcclusion { get; set;}
 
-		[RED("isBackgroundLine")] 		public CBool IsBackgroundLine { get; set;}
+		[Ordinal(0)] [RED("isBackgroundLine")] 		public CBool IsBackgroundLine { get; set;}
 
-		[RED("alternativeUI")] 		public CBool AlternativeUI { get; set;}
+		[Ordinal(0)] [RED("alternativeUI")] 		public CBool AlternativeUI { get; set;}
 
 		public CStorySceneLine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

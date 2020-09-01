@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SE_Fact : W3SwitchEvent
 	{
-		[RED("fact")] 		public CString Fact { get; set;}
+		[Ordinal(0)] [RED("("fact")] 		public CString Fact { get; set;}
 
-		[RED("operation")] 		public CEnum<EFactOperation> Operation { get; set;}
+		[Ordinal(0)] [RED("("operation")] 		public CEnum<EFactOperation> Operation { get; set;}
 
-		[RED("value")] 		public CInt32 Value { get; set;}
+		[Ordinal(0)] [RED("("value")] 		public CInt32 Value { get; set;}
 
-		[RED("validFor")] 		public CInt32 ValidFor { get; set;}
+		[Ordinal(0)] [RED("("validFor")] 		public CInt32 ValidFor { get; set;}
 
 		public W3SE_Fact(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

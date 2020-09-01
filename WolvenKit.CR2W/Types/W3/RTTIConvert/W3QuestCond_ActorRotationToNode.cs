@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_ActorRotationToNode : CQCActorScriptedCondition
 	{
-		[RED("condition")] 		public CEnum<ECompareOp> Condition { get; set;}
+		[Ordinal(0)] [RED("("condition")] 		public CEnum<ECompareOp> Condition { get; set;}
 
-		[RED("degrees")] 		public CFloat Degrees { get; set;}
+		[Ordinal(0)] [RED("("degrees")] 		public CFloat Degrees { get; set;}
 
-		[RED("targetTag")] 		public CName TargetTag { get; set;}
+		[Ordinal(0)] [RED("("targetTag")] 		public CName TargetTag { get; set;}
 
-		[RED("targetNode")] 		public CHandle<CNode> TargetNode { get; set;}
+		[Ordinal(0)] [RED("("targetNode")] 		public CHandle<CNode> TargetNode { get; set;}
 
-		[RED("listener")] 		public CHandle<W3QuestCond_ActorRotationToNode_Listener> Listener { get; set;}
+		[Ordinal(0)] [RED("("listener")] 		public CHandle<W3QuestCond_ActorRotationToNode_Listener> Listener { get; set;}
 
 		public W3QuestCond_ActorRotationToNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

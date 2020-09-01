@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskMagicMeleeAttack : CBTTaskMagicAttack
 	{
-		[RED("resourceName")] 		public CName ResourceName { get; set;}
+		[Ordinal(0)] [RED("("resourceName")] 		public CName ResourceName { get; set;}
 
-		[RED("fxOnAnimEvent", 2,0)] 		public CArray<SFxOnAnimEvent> FxOnAnimEvent { get; set;}
+		[Ordinal(0)] [RED("("fxOnAnimEvent", 2,0)] 		public CArray<SFxOnAnimEvent> FxOnAnimEvent { get; set;}
 
-		[RED("effectEntityTemplate")] 		public CHandle<CEntityTemplate> EffectEntityTemplate { get; set;}
+		[Ordinal(0)] [RED("("effectEntityTemplate")] 		public CHandle<CEntityTemplate> EffectEntityTemplate { get; set;}
 
-		[RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
+		[Ordinal(0)] [RED("("entity")] 		public CHandle<CEntity> Entity { get; set;}
 
-		[RED("dealDmgOnDeactivate")] 		public CBool DealDmgOnDeactivate { get; set;}
+		[Ordinal(0)] [RED("("dealDmgOnDeactivate")] 		public CBool DealDmgOnDeactivate { get; set;}
 
-		[RED("couldntLoadResource")] 		public CBool CouldntLoadResource { get; set;}
+		[Ordinal(0)] [RED("("couldntLoadResource")] 		public CBool CouldntLoadResource { get; set;}
 
-		[RED("effectHitName")] 		public CName EffectHitName { get; set;}
+		[Ordinal(0)] [RED("("effectHitName")] 		public CName EffectHitName { get; set;}
 
-		[RED("foundPos")] 		public CBool FoundPos { get; set;}
+		[Ordinal(0)] [RED("("foundPos")] 		public CBool FoundPos { get; set;}
 
-		[RED("pos")] 		public Vector Pos { get; set;}
+		[Ordinal(0)] [RED("("pos")] 		public Vector Pos { get; set;}
 
-		[RED("rot")] 		public EulerAngles Rot { get; set;}
+		[Ordinal(0)] [RED("("rot")] 		public EulerAngles Rot { get; set;}
 
 		public CBTTaskMagicMeleeAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

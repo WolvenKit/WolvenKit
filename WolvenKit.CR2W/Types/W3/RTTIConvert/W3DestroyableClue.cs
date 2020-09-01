@@ -10,35 +10,35 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3DestroyableClue : W3MonsterClue
 	{
-		[RED("destroyable")] 		public CBool Destroyable { get; set;}
+		[Ordinal(0)] [RED("("destroyable")] 		public CBool Destroyable { get; set;}
 
-		[RED("reactsToAard")] 		public CBool ReactsToAard { get; set;}
+		[Ordinal(0)] [RED("("reactsToAard")] 		public CBool ReactsToAard { get; set;}
 
-		[RED("reactsToIgni")] 		public CBool ReactsToIgni { get; set;}
+		[Ordinal(0)] [RED("("reactsToIgni")] 		public CBool ReactsToIgni { get; set;}
 
-		[RED("reactsToSwords")] 		public CBool ReactsToSwords { get; set;}
+		[Ordinal(0)] [RED("("reactsToSwords")] 		public CBool ReactsToSwords { get; set;}
 
-		[RED("reactsToBolts")] 		public CBool ReactsToBolts { get; set;}
+		[Ordinal(0)] [RED("("reactsToBolts")] 		public CBool ReactsToBolts { get; set;}
 
-		[RED("reactsToBombs")] 		public CBool ReactsToBombs { get; set;}
+		[Ordinal(0)] [RED("("reactsToBombs")] 		public CBool ReactsToBombs { get; set;}
 
-		[RED("defaultEffect")] 		public CName DefaultEffect { get; set;}
+		[Ordinal(0)] [RED("("defaultEffect")] 		public CName DefaultEffect { get; set;}
 
-		[RED("effectOnReaction")] 		public CName EffectOnReaction { get; set;}
+		[Ordinal(0)] [RED("("effectOnReaction")] 		public CName EffectOnReaction { get; set;}
 
-		[RED("effectOnBurning")] 		public CName EffectOnBurning { get; set;}
+		[Ordinal(0)] [RED("("effectOnBurning")] 		public CName EffectOnBurning { get; set;}
 
-		[RED("effectInstant")] 		public CBool EffectInstant { get; set;}
+		[Ordinal(0)] [RED("("effectInstant")] 		public CBool EffectInstant { get; set;}
 
-		[RED("reactionDelay")] 		public CFloat ReactionDelay { get; set;}
+		[Ordinal(0)] [RED("("reactionDelay")] 		public CFloat ReactionDelay { get; set;}
 
-		[RED("onDestroyedFact", 2,0)] 		public CArray<CString> OnDestroyedFact { get; set;}
+		[Ordinal(0)] [RED("("onDestroyedFact", 2,0)] 		public CArray<CString> OnDestroyedFact { get; set;}
 
-		[RED("performDestructionSystemCheck")] 		public CBool PerformDestructionSystemCheck { get; set;}
+		[Ordinal(0)] [RED("("performDestructionSystemCheck")] 		public CBool PerformDestructionSystemCheck { get; set;}
 
-		[RED("isBurning")] 		public CBool IsBurning { get; set;}
+		[Ordinal(0)] [RED("("isBurning")] 		public CBool IsBurning { get; set;}
 
-		[RED("destroyed")] 		public CBool Destroyed { get; set;}
+		[Ordinal(0)] [RED("("destroyed")] 		public CBool Destroyed { get; set;}
 
 		public W3DestroyableClue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

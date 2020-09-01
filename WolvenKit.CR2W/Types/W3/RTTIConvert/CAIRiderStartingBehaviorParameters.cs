@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIRiderStartingBehaviorParameters : CAIRedefinitionParameters
 	{
-		[RED("startingBehavior")] 		public CHandle<IRiderActionTree> StartingBehavior { get; set;}
+		[Ordinal(0)] [RED("("startingBehavior")] 		public CHandle<IRiderActionTree> StartingBehavior { get; set;}
 
-		[RED("startingBehaviorPriority")] 		public CInt32 StartingBehaviorPriority { get; set;}
+		[Ordinal(0)] [RED("("startingBehaviorPriority")] 		public CInt32 StartingBehaviorPriority { get; set;}
 
 		public CAIRiderStartingBehaviorParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

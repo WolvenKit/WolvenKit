@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4TestMenu : CR4MenuBase
 	{
-		[RED("entityTemplateIndex")] 		public CInt32 EntityTemplateIndex { get; set;}
+		[Ordinal(0)] [RED("("entityTemplateIndex")] 		public CInt32 EntityTemplateIndex { get; set;}
 
-		[RED("appearanceIndex")] 		public CInt32 AppearanceIndex { get; set;}
+		[Ordinal(0)] [RED("("appearanceIndex")] 		public CInt32 AppearanceIndex { get; set;}
 
-		[RED("environmentDefinitionIndex")] 		public CInt32 EnvironmentDefinitionIndex { get; set;}
+		[Ordinal(0)] [RED("("environmentDefinitionIndex")] 		public CInt32 EnvironmentDefinitionIndex { get; set;}
 
-		[RED("entityTemplates", 2,0)] 		public CArray<CString> EntityTemplates { get; set;}
+		[Ordinal(0)] [RED("("entityTemplates", 2,0)] 		public CArray<CString> EntityTemplates { get; set;}
 
-		[RED("appearances", 2,0)] 		public CArray<CName> Appearances { get; set;}
+		[Ordinal(0)] [RED("("appearances", 2,0)] 		public CArray<CName> Appearances { get; set;}
 
-		[RED("environmentDefinitions", 2,0)] 		public CArray<CString> EnvironmentDefinitions { get; set;}
+		[Ordinal(0)] [RED("("environmentDefinitions", 2,0)] 		public CArray<CString> EnvironmentDefinitions { get; set;}
 
-		[RED("sunRotation")] 		public EulerAngles SunRotation { get; set;}
+		[Ordinal(0)] [RED("("sunRotation")] 		public EulerAngles SunRotation { get; set;}
 
 		public CR4TestMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

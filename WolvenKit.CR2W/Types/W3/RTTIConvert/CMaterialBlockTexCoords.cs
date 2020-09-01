@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockTexCoords : CMaterialBlock
 	{
-		[RED("coordinatesIndex")] 		public CInt32 CoordinatesIndex { get; set;}
+		[Ordinal(0)] [RED("coordinatesIndex")] 		public CInt32 CoordinatesIndex { get; set;}
 
 		public CMaterialBlockTexCoords(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

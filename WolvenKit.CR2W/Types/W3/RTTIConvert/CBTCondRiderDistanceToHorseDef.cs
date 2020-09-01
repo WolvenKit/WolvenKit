@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondRiderDistanceToHorseDef : IBehTreeRiderConditionalTaskDefinition
 	{
-		[RED("minDistance")] 		public CFloat MinDistance { get; set;}
+		[Ordinal(0)] [RED("("minDistance")] 		public CFloat MinDistance { get; set;}
 
-		[RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(0)] [RED("("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
 		public CBTCondRiderDistanceToHorseDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

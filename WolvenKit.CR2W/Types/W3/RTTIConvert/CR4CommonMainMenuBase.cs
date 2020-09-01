@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4CommonMainMenuBase : CR4MenuBase
 	{
-		[RED("m_menuData", 2,0)] 		public CArray<SMenuTab> M_menuData { get; set;}
+		[Ordinal(0)] [RED("m_menuData", 2,0)] 		public CArray<SMenuTab> M_menuData { get; set;}
 
-		[RED("m_fxSetMovieData")] 		public CHandle<CScriptedFlashFunction> M_fxSetMovieData { get; set;}
+		[Ordinal(0)] [RED("m_fxSetMovieData")] 		public CHandle<CScriptedFlashFunction> M_fxSetMovieData { get; set;}
 
-		[RED("importSelected")] 		public CBool ImportSelected { get; set;}
+		[Ordinal(0)] [RED("importSelected")] 		public CBool ImportSelected { get; set;}
 
-		[RED("reopenRequested")] 		public CBool ReopenRequested { get; set;}
+		[Ordinal(0)] [RED("reopenRequested")] 		public CBool ReopenRequested { get; set;}
 
-		[RED("currentMenuName")] 		public CName CurrentMenuName { get; set;}
+		[Ordinal(0)] [RED("currentMenuName")] 		public CName CurrentMenuName { get; set;}
 
 		public CR4CommonMainMenuBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

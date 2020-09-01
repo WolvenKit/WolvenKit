@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskRecoverStatDef : IBehTreeTaskDefinition
 	{
-		[RED("percentReturn")] 		public CInt32 PercentReturn { get; set;}
+		[Ordinal(0)] [RED("percentReturn")] 		public CInt32 PercentReturn { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(0)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
 		public BTTaskRecoverStatDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMimicEventSlotNode : CBehaviorGraphMimicSlotNode
 	{
-		[RED("animations", 2,0)] 		public CArray<SSlotEventAnim> Animations { get; set;}
+		[Ordinal(0)] [RED("("animations", 2,0)] 		public CArray<SSlotEventAnim> Animations { get; set;}
 
 		public CBehaviorGraphMimicEventSlotNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

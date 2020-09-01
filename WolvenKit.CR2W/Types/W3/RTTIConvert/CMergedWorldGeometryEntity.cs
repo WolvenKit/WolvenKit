@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMergedWorldGeometryEntity : CEntity
 	{
-		[RED("sourceDataHash")] 		public CUInt64 SourceDataHash { get; set;}
+		[Ordinal(0)] [RED("sourceDataHash")] 		public CUInt64 SourceDataHash { get; set;}
 
-		[RED("worldBounds")] 		public Box WorldBounds { get; set;}
+		[Ordinal(0)] [RED("worldBounds")] 		public Box WorldBounds { get; set;}
 
-		[RED("gridCoordinates")] 		public CMergedWorldGeometryGridCoordinates GridCoordinates { get; set;}
+		[Ordinal(0)] [RED("gridCoordinates")] 		public CMergedWorldGeometryGridCoordinates GridCoordinates { get; set;}
 
-		[RED("statsDataSize")] 		public CUInt32 StatsDataSize { get; set;}
+		[Ordinal(0)] [RED("statsDataSize")] 		public CUInt32 StatsDataSize { get; set;}
 
-		[RED("statsNumTriangles")] 		public CUInt32 StatsNumTriangles { get; set;}
+		[Ordinal(0)] [RED("statsNumTriangles")] 		public CUInt32 StatsNumTriangles { get; set;}
 
-		[RED("statsNumVertices")] 		public CUInt32 StatsNumVertices { get; set;}
+		[Ordinal(0)] [RED("statsNumVertices")] 		public CUInt32 StatsNumVertices { get; set;}
 
 		public CMergedWorldGeometryEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

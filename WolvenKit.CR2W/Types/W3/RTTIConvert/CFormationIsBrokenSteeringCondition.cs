@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFormationIsBrokenSteeringCondition : IFormationSteeringCondition
 	{
-		[RED("howMuchBroken")] 		public CFloat HowMuchBroken { get; set;}
+		[Ordinal(0)] [RED("("howMuchBroken")] 		public CFloat HowMuchBroken { get; set;}
 
 		public CFormationIsBrokenSteeringCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

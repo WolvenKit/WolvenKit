@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphLipsyncControlValueCorrectionNode : CBehaviorGraphBaseMimicNode
 	{
-		[RED("lipsyncControlTrack")] 		public CInt32 LipsyncControlTrack { get; set;}
+		[Ordinal(0)] [RED("("lipsyncControlTrack")] 		public CInt32 LipsyncControlTrack { get; set;}
 
-		[RED("smoothTime")] 		public CFloat SmoothTime { get; set;}
+		[Ordinal(0)] [RED("("smoothTime")] 		public CFloat SmoothTime { get; set;}
 
-		[RED("startCorrEventName")] 		public CName StartCorrEventName { get; set;}
+		[Ordinal(0)] [RED("("startCorrEventName")] 		public CName StartCorrEventName { get; set;}
 
 		public CBehaviorGraphLipsyncControlValueCorrectionNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

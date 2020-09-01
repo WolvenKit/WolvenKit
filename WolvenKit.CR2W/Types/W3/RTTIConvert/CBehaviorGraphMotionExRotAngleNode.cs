@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMotionExRotAngleNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("cachedAnimInputNode")] 		public CPtr<CBehaviorGraphNode> CachedAnimInputNode { get; set;}
+		[Ordinal(0)] [RED("("cachedAnimInputNode")] 		public CPtr<CBehaviorGraphNode> CachedAnimInputNode { get; set;}
 
-		[RED("worldSpace")] 		public CBool WorldSpace { get; set;}
+		[Ordinal(0)] [RED("("worldSpace")] 		public CBool WorldSpace { get; set;}
 
 		public CBehaviorGraphMotionExRotAngleNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

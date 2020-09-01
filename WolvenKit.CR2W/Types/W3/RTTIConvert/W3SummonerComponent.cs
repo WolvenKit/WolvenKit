@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SummonerComponent : CScriptedComponent
 	{
-		[RED("forgetDeadEntities")] 		public CBool ForgetDeadEntities { get; set;}
+		[Ordinal(0)] [RED("("forgetDeadEntities")] 		public CBool ForgetDeadEntities { get; set;}
 
-		[RED("m_SummonedEntities", 2,0)] 		public CArray<CHandle<CEntity>> M_SummonedEntities { get; set;}
+		[Ordinal(0)] [RED("("m_SummonedEntities", 2,0)] 		public CArray<CHandle<CEntity>> M_SummonedEntities { get; set;}
 
 		public W3SummonerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

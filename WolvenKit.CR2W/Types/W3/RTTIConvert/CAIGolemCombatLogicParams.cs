@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIGolemCombatLogicParams : CAIMonsterCombatLogicParams
 	{
-		[RED("projectileTemplate")] 		public CHandle<CEntityTemplate> ProjectileTemplate { get; set;}
+		[Ordinal(0)] [RED("projectileTemplate")] 		public CHandle<CEntityTemplate> ProjectileTemplate { get; set;}
 
-		[RED("attackRange")] 		public CFloat AttackRange { get; set;}
+		[Ordinal(0)] [RED("attackRange")] 		public CFloat AttackRange { get; set;}
 
 		public CAIGolemCombatLogicParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

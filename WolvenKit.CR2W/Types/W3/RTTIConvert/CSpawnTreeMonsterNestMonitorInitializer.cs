@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeMonsterNestMonitorInitializer : ISpawnTreeSpawnMonitorInitializer
 	{
-		[RED("monsterNestTag")] 		public CName MonsterNestTag { get; set;}
+		[Ordinal(0)] [RED("("monsterNestTag")] 		public CName MonsterNestTag { get; set;}
 
-		[RED("disableRebuildingOnBossDeath")] 		public CBool DisableRebuildingOnBossDeath { get; set;}
+		[Ordinal(0)] [RED("("disableRebuildingOnBossDeath")] 		public CBool DisableRebuildingOnBossDeath { get; set;}
 
 		public CSpawnTreeMonsterNestMonitorInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

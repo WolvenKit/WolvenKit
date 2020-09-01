@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Bird : CGameplayEntity
 	{
-		[RED("flyingAppearanceName")] 		public CName FlyingAppearanceName { get; set;}
+		[Ordinal(0)] [RED("("flyingAppearanceName")] 		public CName FlyingAppearanceName { get; set;}
 
-		[RED("destroyDistance")] 		public CFloat DestroyDistance { get; set;}
+		[Ordinal(0)] [RED("("destroyDistance")] 		public CFloat DestroyDistance { get; set;}
 
-		[RED("flyCurves", 2,0)] 		public CArray<CName> FlyCurves { get; set;}
+		[Ordinal(0)] [RED("("flyCurves", 2,0)] 		public CArray<CName> FlyCurves { get; set;}
 
-		[RED("manager")] 		public CHandle<CBirdsManager> Manager { get; set;}
+		[Ordinal(0)] [RED("("manager")] 		public CHandle<CBirdsManager> Manager { get; set;}
 
 		public W3Bird(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

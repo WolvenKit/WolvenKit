@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class VirtualAnimationMotion : CVariable
 	{
-		[RED("startTime")] 		public CFloat StartTime { get; set;}
+		[Ordinal(0)] [RED("("startTime")] 		public CFloat StartTime { get; set;}
 
-		[RED("endTime")] 		public CFloat EndTime { get; set;}
+		[Ordinal(0)] [RED("("endTime")] 		public CFloat EndTime { get; set;}
 
-		[RED("blendIn")] 		public CFloat BlendIn { get; set;}
+		[Ordinal(0)] [RED("("blendIn")] 		public CFloat BlendIn { get; set;}
 
-		[RED("blendOut")] 		public CFloat BlendOut { get; set;}
+		[Ordinal(0)] [RED("("blendOut")] 		public CFloat BlendOut { get; set;}
 
 		public VirtualAnimationMotion(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ICustomCameraPositionController : ICustomCameraBaseController
 	{
-		[RED("enableAutoCollisionAvoidance")] 		public CBool EnableAutoCollisionAvoidance { get; set;}
+		[Ordinal(0)] [RED("enableAutoCollisionAvoidance")] 		public CBool EnableAutoCollisionAvoidance { get; set;}
 
-		[RED("enableScreenSpaceCorrections")] 		public CBool EnableScreenSpaceCorrections { get; set;}
+		[Ordinal(0)] [RED("enableScreenSpaceCorrections")] 		public CBool EnableScreenSpaceCorrections { get; set;}
 
 		public ICustomCameraPositionController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

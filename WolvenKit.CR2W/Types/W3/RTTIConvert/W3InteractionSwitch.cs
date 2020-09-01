@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3InteractionSwitch : W3PhysicalSwitch
 	{
-		[RED("isActivatedByPlayer")] 		public CBool IsActivatedByPlayer { get; set;}
+		[Ordinal(0)] [RED("("isActivatedByPlayer")] 		public CBool IsActivatedByPlayer { get; set;}
 
-		[RED("focusModeHighlight")] 		public CEnum<EFocusModeVisibility> FocusModeHighlight { get; set;}
+		[Ordinal(0)] [RED("("focusModeHighlight")] 		public CEnum<EFocusModeVisibility> FocusModeHighlight { get; set;}
 
-		[RED("interactionActiveInState")] 		public CEnum<ESwitchState> InteractionActiveInState { get; set;}
+		[Ordinal(0)] [RED("("interactionActiveInState")] 		public CEnum<ESwitchState> InteractionActiveInState { get; set;}
 
 		public W3InteractionSwitch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

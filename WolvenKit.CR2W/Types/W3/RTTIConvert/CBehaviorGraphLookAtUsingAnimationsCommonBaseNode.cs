@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphLookAtUsingAnimationsCommonBaseNode : CBehaviorGraphLookAtUsingAnimationsProcessingNode
 	{
-		[RED("Additive blend type")] 		public CEnum<EAdditiveType> Additive_blend_type { get; set;}
+		[Ordinal(0)] [RED("("Additive blend type")] 		public CEnum<EAdditiveType> Additive_blend_type { get; set;}
 
-		[RED("Horizontal blend is first")] 		public CBool Horizontal_blend_is_first { get; set;}
+		[Ordinal(0)] [RED("("Horizontal blend is first")] 		public CBool Horizontal_blend_is_first { get; set;}
 
-		[RED("Alternative additive mapping")] 		public CBool Alternative_additive_mapping { get; set;}
+		[Ordinal(0)] [RED("("Alternative additive mapping")] 		public CBool Alternative_additive_mapping { get; set;}
 
 		public CBehaviorGraphLookAtUsingAnimationsCommonBaseNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

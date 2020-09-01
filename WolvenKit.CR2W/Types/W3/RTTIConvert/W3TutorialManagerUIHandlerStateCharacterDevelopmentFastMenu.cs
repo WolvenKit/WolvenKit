@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateCharacterDevelopmentFastMenu : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("PANEL")] 		public CName PANEL { get; set;}
+		[Ordinal(0)] [RED("("PANEL")] 		public CName PANEL { get; set;}
 
-		[RED("CHAR_DEV_OPEN")] 		public CName CHAR_DEV_OPEN { get; set;}
+		[Ordinal(0)] [RED("("CHAR_DEV_OPEN")] 		public CName CHAR_DEV_OPEN { get; set;}
 
 		public W3TutorialManagerUIHandlerStateCharacterDevelopmentFastMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFormationPatternCompositeNode : IFormationPatternNode
 	{
-		[RED("childNodes", 2,0)] 		public CArray<CHandle<IFormationPatternNode>> ChildNodes { get; set;}
+		[Ordinal(0)] [RED("("childNodes", 2,0)] 		public CArray<CHandle<IFormationPatternNode>> ChildNodes { get; set;}
 
 		public CFormationPatternCompositeNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

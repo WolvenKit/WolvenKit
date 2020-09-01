@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimCutsceneBreakEvent : CExtAnimEvent
 	{
-		[RED("iAmHackDoNotUseMeInGame")] 		public CBool IAmHackDoNotUseMeInGame { get; set;}
+		[Ordinal(0)] [RED("("iAmHackDoNotUseMeInGame")] 		public CBool IAmHackDoNotUseMeInGame { get; set;}
 
 		public CExtAnimCutsceneBreakEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

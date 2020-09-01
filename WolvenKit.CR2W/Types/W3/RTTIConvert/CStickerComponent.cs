@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStickerComponent : CComponent
 	{
-		[RED("text")] 		public CString Text { get; set;}
+		[Ordinal(0)] [RED("("text")] 		public CString Text { get; set;}
 
-		[RED("textColor")] 		public CColor TextColor { get; set;}
+		[Ordinal(0)] [RED("("textColor")] 		public CColor TextColor { get; set;}
 
 		public CStickerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

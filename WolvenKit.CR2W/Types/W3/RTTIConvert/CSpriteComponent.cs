@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpriteComponent : CComponent
 	{
-		[RED("isVisible")] 		public CBool IsVisible { get; set;}
+		[Ordinal(0)] [RED("("isVisible")] 		public CBool IsVisible { get; set;}
 
-		[RED("icon")] 		public CHandle<CBitmapTexture> Icon { get; set;}
+		[Ordinal(0)] [RED("("icon")] 		public CHandle<CBitmapTexture> Icon { get; set;}
 
 		public CSpriteComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

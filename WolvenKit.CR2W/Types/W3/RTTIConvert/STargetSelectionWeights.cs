@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class STargetSelectionWeights : CVariable
 	{
-		[RED("angleWeight")] 		public CFloat AngleWeight { get; set;}
+		[Ordinal(0)] [RED("("angleWeight")] 		public CFloat AngleWeight { get; set;}
 
-		[RED("distanceWeight")] 		public CFloat DistanceWeight { get; set;}
+		[Ordinal(0)] [RED("("distanceWeight")] 		public CFloat DistanceWeight { get; set;}
 
-		[RED("distanceRingWeight")] 		public CFloat DistanceRingWeight { get; set;}
+		[Ordinal(0)] [RED("("distanceRingWeight")] 		public CFloat DistanceRingWeight { get; set;}
 
 		public STargetSelectionWeights(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

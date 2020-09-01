@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAISirenDynamicWander : CAISubTree
 	{
-		[RED("chanceToTakeOff")] 		public CFloat ChanceToTakeOff { get; set;}
+		[Ordinal(0)] [RED("chanceToTakeOff")] 		public CFloat ChanceToTakeOff { get; set;}
 
-		[RED("chanceToLand")] 		public CFloat ChanceToLand { get; set;}
+		[Ordinal(0)] [RED("chanceToLand")] 		public CFloat ChanceToLand { get; set;}
 
-		[RED("chanceToDive")] 		public CFloat ChanceToDive { get; set;}
+		[Ordinal(0)] [RED("chanceToDive")] 		public CFloat ChanceToDive { get; set;}
 
-		[RED("minFlyDistance")] 		public CFloat MinFlyDistance { get; set;}
+		[Ordinal(0)] [RED("minFlyDistance")] 		public CFloat MinFlyDistance { get; set;}
 
-		[RED("maxFlyDistance")] 		public CFloat MaxFlyDistance { get; set;}
+		[Ordinal(0)] [RED("maxFlyDistance")] 		public CFloat MaxFlyDistance { get; set;}
 
-		[RED("minHeight")] 		public CFloat MinHeight { get; set;}
+		[Ordinal(0)] [RED("minHeight")] 		public CFloat MinHeight { get; set;}
 
-		[RED("maxHeight")] 		public CFloat MaxHeight { get; set;}
+		[Ordinal(0)] [RED("maxHeight")] 		public CFloat MaxHeight { get; set;}
 
-		[RED("proximityToAllowTakeOff")] 		public CFloat ProximityToAllowTakeOff { get; set;}
+		[Ordinal(0)] [RED("proximityToAllowTakeOff")] 		public CFloat ProximityToAllowTakeOff { get; set;}
 
-		[RED("proximityToForceTakeOff")] 		public CFloat ProximityToForceTakeOff { get; set;}
+		[Ordinal(0)] [RED("proximityToForceTakeOff")] 		public CFloat ProximityToForceTakeOff { get; set;}
 
-		[RED("distanceFromPlayerToLand")] 		public CFloat DistanceFromPlayerToLand { get; set;}
+		[Ordinal(0)] [RED("distanceFromPlayerToLand")] 		public CFloat DistanceFromPlayerToLand { get; set;}
 
 		public CAISirenDynamicWander(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

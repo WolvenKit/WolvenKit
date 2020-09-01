@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationComponent : CComponent
 	{
-		[RED("explorationId")] 		public CEnum<EExplorationType> ExplorationId { get; set;}
+		[Ordinal(0)] [RED("("explorationId")] 		public CEnum<EExplorationType> ExplorationId { get; set;}
 
-		[RED("start")] 		public Vector Start { get; set;}
+		[Ordinal(0)] [RED("("start")] 		public Vector Start { get; set;}
 
-		[RED("end")] 		public Vector End { get; set;}
+		[Ordinal(0)] [RED("("end")] 		public Vector End { get; set;}
 
-		[RED("componentForEvents")] 		public CString ComponentForEvents { get; set;}
+		[Ordinal(0)] [RED("("componentForEvents")] 		public CString ComponentForEvents { get; set;}
 
-		[RED("internalExploration")] 		public CBool InternalExploration { get; set;}
+		[Ordinal(0)] [RED("("internalExploration")] 		public CBool InternalExploration { get; set;}
 
 		public CExplorationComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

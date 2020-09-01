@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskEredinGetIsInSpecialAttack : IBehTreeTask
 	{
-		[RED("combatDataStorage")] 		public CHandle<CBossAICombatStorage> CombatDataStorage { get; set;}
+		[Ordinal(0)] [RED("combatDataStorage")] 		public CHandle<CBossAICombatStorage> CombatDataStorage { get; set;}
 
 		public BTTaskEredinGetIsInSpecialAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

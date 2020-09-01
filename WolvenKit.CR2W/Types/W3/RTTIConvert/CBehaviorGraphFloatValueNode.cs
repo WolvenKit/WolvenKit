@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphFloatValueNode : CBehaviorGraphValueNode
 	{
-		[RED("value")] 		public CFloat Value { get; set;}
+		[Ordinal(0)] [RED("("value")] 		public CFloat Value { get; set;}
 
 		public CBehaviorGraphFloatValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

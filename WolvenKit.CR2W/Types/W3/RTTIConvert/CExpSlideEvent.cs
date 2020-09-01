@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExpSlideEvent : CExtAnimDurationEvent
 	{
-		[RED("translation")] 		public CBool Translation { get; set;}
+		[Ordinal(0)] [RED("("translation")] 		public CBool Translation { get; set;}
 
-		[RED("rotation")] 		public CBool Rotation { get; set;}
+		[Ordinal(0)] [RED("("rotation")] 		public CBool Rotation { get; set;}
 
-		[RED("toCollision")] 		public CBool ToCollision { get; set;}
+		[Ordinal(0)] [RED("("toCollision")] 		public CBool ToCollision { get; set;}
 
 		public CExpSlideEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

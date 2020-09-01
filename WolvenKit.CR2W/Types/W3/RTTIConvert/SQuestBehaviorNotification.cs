@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SQuestBehaviorNotification : CObject
 	{
-		[RED("npcTag")] 		public CName NpcTag { get; set;}
+		[Ordinal(0)] [RED("("npcTag")] 		public CName NpcTag { get; set;}
 
-		[RED("notification")] 		public CName Notification { get; set;}
+		[Ordinal(0)] [RED("("notification")] 		public CName Notification { get; set;}
 
-		[RED("all")] 		public CBool All { get; set;}
+		[Ordinal(0)] [RED("("all")] 		public CBool All { get; set;}
 
 		public SQuestBehaviorNotification(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

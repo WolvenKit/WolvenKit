@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTModifyAttackCountDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("attackName")] 		public CName AttackName { get; set;}
+		[Ordinal(0)] [RED("("attackName")] 		public CName AttackName { get; set;}
 
-		[RED("incrementAttackCount")] 		public CBool IncrementAttackCount { get; set;}
+		[Ordinal(0)] [RED("("incrementAttackCount")] 		public CBool IncrementAttackCount { get; set;}
 
-		[RED("resetAttackCount")] 		public CBool ResetAttackCount { get; set;}
+		[Ordinal(0)] [RED("("resetAttackCount")] 		public CBool ResetAttackCount { get; set;}
 
 		public CBTModifyAttackCountDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

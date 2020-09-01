@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3CurveFish : CGameplayEntity
 	{
-		[RED("destroyDistance")] 		public CFloat DestroyDistance { get; set;}
+		[Ordinal(0)] [RED("("destroyDistance")] 		public CFloat DestroyDistance { get; set;}
 
-		[RED("swimCurves", 2,0)] 		public CArray<CName> SwimCurves { get; set;}
+		[Ordinal(0)] [RED("("swimCurves", 2,0)] 		public CArray<CName> SwimCurves { get; set;}
 
-		[RED("speedUpChance")] 		public CFloat SpeedUpChance { get; set;}
+		[Ordinal(0)] [RED("("speedUpChance")] 		public CFloat SpeedUpChance { get; set;}
 
-		[RED("baseSpeedVariance")] 		public CFloat BaseSpeedVariance { get; set;}
+		[Ordinal(0)] [RED("("baseSpeedVariance")] 		public CFloat BaseSpeedVariance { get; set;}
 
-		[RED("maxSpeed")] 		public CFloat MaxSpeed { get; set;}
+		[Ordinal(0)] [RED("("maxSpeed")] 		public CFloat MaxSpeed { get; set;}
 
-		[RED("randomizedAppearances", 2,0)] 		public CArray<CString> RandomizedAppearances { get; set;}
+		[Ordinal(0)] [RED("("randomizedAppearances", 2,0)] 		public CArray<CString> RandomizedAppearances { get; set;}
 
-		[RED("manager")] 		public CHandle<W3CurveFishManager> Manager { get; set;}
+		[Ordinal(0)] [RED("("manager")] 		public CHandle<W3CurveFishManager> Manager { get; set;}
 
-		[RED("baseSpeed")] 		public CFloat BaseSpeed { get; set;}
+		[Ordinal(0)] [RED("("baseSpeed")] 		public CFloat BaseSpeed { get; set;}
 
-		[RED("selectedSwimCurve")] 		public CName SelectedSwimCurve { get; set;}
+		[Ordinal(0)] [RED("("selectedSwimCurve")] 		public CName SelectedSwimCurve { get; set;}
 
-		[RED("currentSpeed")] 		public CFloat CurrentSpeed { get; set;}
+		[Ordinal(0)] [RED("("currentSpeed")] 		public CFloat CurrentSpeed { get; set;}
 
-		[RED("accelerate")] 		public CBool Accelerate { get; set;}
+		[Ordinal(0)] [RED("("accelerate")] 		public CBool Accelerate { get; set;}
 
 		public W3CurveFish(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

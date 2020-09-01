@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4HudModuleOxygenBar : CR4HudModuleBase
 	{
-		[RED("m_fxSetOxygeneSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetOxygeneSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetOxygeneSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetOxygeneSFF { get; set;}
 
-		[RED("oxygenePerc")] 		public CFloat OxygenePerc { get; set;}
+		[Ordinal(0)] [RED("("oxygenePerc")] 		public CFloat OxygenePerc { get; set;}
 
-		[RED("forceShowElement")] 		public CBool ForceShowElement { get; set;}
+		[Ordinal(0)] [RED("("forceShowElement")] 		public CBool ForceShowElement { get; set;}
 
-		[RED("bOxygeneBar")] 		public CBool BOxygeneBar { get; set;}
+		[Ordinal(0)] [RED("("bOxygeneBar")] 		public CBool BOxygeneBar { get; set;}
 
-		[RED("bIsBarFull")] 		public CBool BIsBarFull { get; set;}
+		[Ordinal(0)] [RED("("bIsBarFull")] 		public CBool BIsBarFull { get; set;}
 
-		[RED("isInGasArea")] 		public CBool IsInGasArea { get; set;}
+		[Ordinal(0)] [RED("("isInGasArea")] 		public CBool IsInGasArea { get; set;}
 
 		public CR4HudModuleOxygenBar(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

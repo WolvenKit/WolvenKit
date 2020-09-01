@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestScriptBlock : CQuestGraphBlock
 	{
-		[RED("functionName")] 		public CName FunctionName { get; set;}
+		[Ordinal(0)] [RED("functionName")] 		public CName FunctionName { get; set;}
 
-		[RED("saveMode")] 		public CEnum<EQuestScriptSaveMode> SaveMode { get; set;}
+		[Ordinal(0)] [RED("saveMode")] 		public CEnum<EQuestScriptSaveMode> SaveMode { get; set;}
 
-		[RED("parameters", 2,0)] 		public CArray<QuestScriptParam> Parameters { get; set;}
+		[Ordinal(0)] [RED("parameters", 2,0)] 		public CArray<QuestScriptParam> Parameters { get; set;}
 
-		[RED("choiceOutput")] 		public CBool ChoiceOutput { get; set;}
+		[Ordinal(0)] [RED("choiceOutput")] 		public CBool ChoiceOutput { get; set;}
 
-		[RED("caption")] 		public CString Caption { get; set;}
+		[Ordinal(0)] [RED("caption")] 		public CString Caption { get; set;}
 
 		public CQuestScriptBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

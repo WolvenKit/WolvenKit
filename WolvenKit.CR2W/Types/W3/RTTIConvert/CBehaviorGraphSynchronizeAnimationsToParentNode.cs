@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphSynchronizeAnimationsToParentNode : CBehaviorGraphNode
 	{
-		[RED("Synchronize to input")] 		public CBool Synchronize_to_input { get; set;}
+		[Ordinal(0)] [RED("Synchronize to input")] 		public CBool Synchronize_to_input { get; set;}
 
-		[RED("Auto use anims with same name")] 		public CBool Auto_use_anims_with_same_name { get; set;}
+		[Ordinal(0)] [RED("Auto use anims with same name")] 		public CBool Auto_use_anims_with_same_name { get; set;}
 
-		[RED("Animation stay multiplier")] 		public CFloat Animation_stay_multiplier { get; set;}
+		[Ordinal(0)] [RED("Animation stay multiplier")] 		public CFloat Animation_stay_multiplier { get; set;}
 
-		[RED("Sync to normal/full body anims")] 		public CBool Sync_to_normal_full_body_anims { get; set;}
+		[Ordinal(0)] [RED("Sync to normal/full body anims")] 		public CBool Sync_to_normal_full_body_anims { get; set;}
 
-		[RED("Sync to overlay body anims")] 		public CBool Sync_to_overlay_body_anims { get; set;}
+		[Ordinal(0)] [RED("Sync to overlay body anims")] 		public CBool Sync_to_overlay_body_anims { get; set;}
 
-		[RED("Skip normal/full body anims when syncing overlay anims")] 		public CBool Skip_normal_full_body_anims_when_syncing_overlay_anims { get; set;}
+		[Ordinal(0)] [RED("Skip normal/full body anims when syncing overlay anims")] 		public CBool Skip_normal_full_body_anims_when_syncing_overlay_anims { get; set;}
 
-		[RED("Sync default to any looped anim found")] 		public CBool Sync_default_to_any_looped_anim_found { get; set;}
+		[Ordinal(0)] [RED("Sync default to any looped anim found")] 		public CBool Sync_default_to_any_looped_anim_found { get; set;}
 
-		[RED("Default")] 		public SSynchronizeAnimationToParentDefinition Default { get; set;}
+		[Ordinal(0)] [RED("Default")] 		public SSynchronizeAnimationToParentDefinition Default { get; set;}
 
-		[RED("Anims", 2,0)] 		public CArray<SSynchronizeAnimationToParentDefinition> Anims { get; set;}
+		[Ordinal(0)] [RED("Anims", 2,0)] 		public CArray<SSynchronizeAnimationToParentDefinition> Anims { get; set;}
 
-		[RED("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
+		[Ordinal(0)] [RED("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
 
 		public CBehaviorGraphSynchronizeAnimationsToParentNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

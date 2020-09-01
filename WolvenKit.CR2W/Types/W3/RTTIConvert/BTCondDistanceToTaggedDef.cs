@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondDistanceToTaggedDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("minDistance")] 		public CBehTreeValFloat MinDistance { get; set;}
+		[Ordinal(0)] [RED("minDistance")] 		public CBehTreeValFloat MinDistance { get; set;}
 
-		[RED("maxDistance")] 		public CBehTreeValFloat MaxDistance { get; set;}
+		[Ordinal(0)] [RED("maxDistance")] 		public CBehTreeValFloat MaxDistance { get; set;}
 
-		[RED("targetTag")] 		public CBehTreeValCName TargetTag { get; set;}
+		[Ordinal(0)] [RED("targetTag")] 		public CBehTreeValCName TargetTag { get; set;}
 
 		public BTCondDistanceToTaggedDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

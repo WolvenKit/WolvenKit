@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTOnRoad : IMoveSteeringTask
 	{
-		[RED("headingImportance")] 		public CFloat HeadingImportance { get; set;}
+		[Ordinal(0)] [RED("headingImportance")] 		public CFloat HeadingImportance { get; set;}
 
-		[RED("speedImportance")] 		public CFloat SpeedImportance { get; set;}
+		[Ordinal(0)] [RED("speedImportance")] 		public CFloat SpeedImportance { get; set;}
 
-		[RED("anticipatedPositionDistance")] 		public CFloat AnticipatedPositionDistance { get; set;}
+		[Ordinal(0)] [RED("anticipatedPositionDistance")] 		public CFloat AnticipatedPositionDistance { get; set;}
 
-		[RED("roadMaxDist")] 		public CFloat RoadMaxDist { get; set;}
+		[Ordinal(0)] [RED("roadMaxDist")] 		public CFloat RoadMaxDist { get; set;}
 
 		public CMoveSTOnRoad(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

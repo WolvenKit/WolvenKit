@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ISpawnTreeInitializerAI : ISpawnTreeInitializer
 	{
-		[RED("dynamicTreeParameterName")] 		public CName DynamicTreeParameterName { get; set;}
+		[Ordinal(0)] [RED("dynamicTreeParameterName")] 		public CName DynamicTreeParameterName { get; set;}
 
 		public ISpawnTreeInitializerAI(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

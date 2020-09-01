@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeActorTaskRunFromDangerDef : IBehTreeTaskDefinition
 	{
-		[RED("dangerRadius")] 		public CFloat DangerRadius { get; set;}
+		[Ordinal(0)] [RED("dangerRadius")] 		public CFloat DangerRadius { get; set;}
 
-		[RED("fleeDistance")] 		public CFloat FleeDistance { get; set;}
+		[Ordinal(0)] [RED("fleeDistance")] 		public CFloat FleeDistance { get; set;}
 
-		[RED("pursue")] 		public CBool Pursue { get; set;}
+		[Ordinal(0)] [RED("pursue")] 		public CBool Pursue { get; set;}
 
 		public CBehTreeActorTaskRunFromDangerDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeDecoratorHLDangerDefinition : IBehTreeDecoratorBaseHLDangerDefinition
 	{
-		[RED("neutralIsDanger")] 		public CBehTreeValBool NeutralIsDanger { get; set;}
+		[Ordinal(0)] [RED("neutralIsDanger")] 		public CBehTreeValBool NeutralIsDanger { get; set;}
 
 		public CBehTreeDecoratorHLDangerDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

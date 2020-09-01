@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCollisionShapeSphere : ICollisionShape
 	{
-		[RED("physicalMaterialName")] 		public CName PhysicalMaterialName { get; set;}
+		[Ordinal(0)] [RED("physicalMaterialName")] 		public CName PhysicalMaterialName { get; set;}
 
-		[RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(0)] [RED("radius")] 		public CFloat Radius { get; set;}
 
 		public CCollisionShapeSphere(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

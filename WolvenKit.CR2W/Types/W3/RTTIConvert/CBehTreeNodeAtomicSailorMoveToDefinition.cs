@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeAtomicSailorMoveToDefinition : CBehTreeNodeAtomicActionDefinition
 	{
-		[RED("boatTag")] 		public CBehTreeValCName BoatTag { get; set;}
+		[Ordinal(0)] [RED("boatTag")] 		public CBehTreeValCName BoatTag { get; set;}
 
-		[RED("entityTag")] 		public CBehTreeValCName EntityTag { get; set;}
+		[Ordinal(0)] [RED("entityTag")] 		public CBehTreeValCName EntityTag { get; set;}
 
 		public CBehTreeNodeAtomicSailorMoveToDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

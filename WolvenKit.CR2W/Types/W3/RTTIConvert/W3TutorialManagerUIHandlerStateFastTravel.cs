@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateFastTravel : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("FAST_TRAVEL")] 		public CName FAST_TRAVEL { get; set;}
+		[Ordinal(0)] [RED("("FAST_TRAVEL")] 		public CName FAST_TRAVEL { get; set;}
 
-		[RED("INTERACTION")] 		public CName INTERACTION { get; set;}
+		[Ordinal(0)] [RED("("INTERACTION")] 		public CName INTERACTION { get; set;}
 
-		[RED("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
 		public W3TutorialManagerUIHandlerStateFastTravel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

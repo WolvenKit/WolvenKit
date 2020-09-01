@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskXMLBasedDurationDef : IBehTreeTaskDefinition
 	{
-		[RED("xmlStatName")] 		public CName XmlStatName { get; set;}
+		[Ordinal(0)] [RED("("xmlStatName")] 		public CName XmlStatName { get; set;}
 
-		[RED("chance")] 		public CInt32 Chance { get; set;}
+		[Ordinal(0)] [RED("("chance")] 		public CInt32 Chance { get; set;}
 
-		[RED("endWithFailure")] 		public CBool EndWithFailure { get; set;}
+		[Ordinal(0)] [RED("("endWithFailure")] 		public CBool EndWithFailure { get; set;}
 
 		public CBTTaskXMLBasedDurationDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

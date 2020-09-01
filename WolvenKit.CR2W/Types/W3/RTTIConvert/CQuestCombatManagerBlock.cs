@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestCombatManagerBlock : IQuestCombatManagerBaseBlock
 	{
-		[RED("combatStyle")] 		public CHandle<CAINpcCombatStyle> CombatStyle { get; set;}
+		[Ordinal(0)] [RED("combatStyle")] 		public CHandle<CAINpcCombatStyle> CombatStyle { get; set;}
 
 		public CQuestCombatManagerBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

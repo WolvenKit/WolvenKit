@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMimicEyesCorrectionNode : CBehaviorGraphBaseMimicNode
 	{
-		[RED("trackEyeLeft_Left")] 		public CString TrackEyeLeft_Left { get; set;}
+		[Ordinal(0)] [RED("("trackEyeLeft_Left")] 		public CString TrackEyeLeft_Left { get; set;}
 
-		[RED("trackEyeLeft_Right")] 		public CString TrackEyeLeft_Right { get; set;}
+		[Ordinal(0)] [RED("("trackEyeLeft_Right")] 		public CString TrackEyeLeft_Right { get; set;}
 
-		[RED("trackEyeRight_Left")] 		public CString TrackEyeRight_Left { get; set;}
+		[Ordinal(0)] [RED("("trackEyeRight_Left")] 		public CString TrackEyeRight_Left { get; set;}
 
-		[RED("trackEyeRight_Right")] 		public CString TrackEyeRight_Right { get; set;}
+		[Ordinal(0)] [RED("("trackEyeRight_Right")] 		public CString TrackEyeRight_Right { get; set;}
 
 		public CBehaviorGraphMimicEyesCorrectionNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

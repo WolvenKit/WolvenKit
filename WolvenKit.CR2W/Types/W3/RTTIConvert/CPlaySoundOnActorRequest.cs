@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPlaySoundOnActorRequest : IEntityStateChangeRequest
 	{
-		[RED("boneName")] 		public CName BoneName { get; set;}
+		[Ordinal(0)] [RED("boneName")] 		public CName BoneName { get; set;}
 
-		[RED("soundName")] 		public StringAnsi SoundName { get; set;}
+		[Ordinal(0)] [RED("soundName")] 		public StringAnsi SoundName { get; set;}
 
-		[RED("fadeTime")] 		public CFloat FadeTime { get; set;}
+		[Ordinal(0)] [RED("fadeTime")] 		public CFloat FadeTime { get; set;}
 
 		public CPlaySoundOnActorRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

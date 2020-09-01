@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestCharacterCustomizerBlock : CQuestGraphBlock
 	{
-		[RED("actorTag")] 		public CName ActorTag { get; set;}
+		[Ordinal(0)] [RED("actorTag")] 		public CName ActorTag { get; set;}
 
-		[RED("operations", 2,0)] 		public CArray<CPtr<ICharacterCustomizationOperation>> Operations { get; set;}
+		[Ordinal(0)] [RED("operations", 2,0)] 		public CArray<CPtr<ICharacterCustomizationOperation>> Operations { get; set;}
 
 		public CQuestCharacterCustomizerBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

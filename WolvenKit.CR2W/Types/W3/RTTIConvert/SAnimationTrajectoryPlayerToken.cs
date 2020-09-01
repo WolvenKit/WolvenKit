@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAnimationTrajectoryPlayerToken : CVariable
 	{
-		[RED("isValid")] 		public CBool IsValid { get; set;}
+		[Ordinal(0)] [RED("isValid")] 		public CBool IsValid { get; set;}
 
-		[RED("pointWS")] 		public Vector PointWS { get; set;}
+		[Ordinal(0)] [RED("pointWS")] 		public Vector PointWS { get; set;}
 
-		[RED("syncPointMS")] 		public Vector SyncPointMS { get; set;}
+		[Ordinal(0)] [RED("syncPointMS")] 		public Vector SyncPointMS { get; set;}
 
-		[RED("timeFactor")] 		public CFloat TimeFactor { get; set;}
+		[Ordinal(0)] [RED("timeFactor")] 		public CFloat TimeFactor { get; set;}
 
-		[RED("syncPointDuration")] 		public CFloat SyncPointDuration { get; set;}
+		[Ordinal(0)] [RED("syncPointDuration")] 		public CFloat SyncPointDuration { get; set;}
 
-		[RED("blendIn")] 		public CFloat BlendIn { get; set;}
+		[Ordinal(0)] [RED("blendIn")] 		public CFloat BlendIn { get; set;}
 
-		[RED("blendOut")] 		public CFloat BlendOut { get; set;}
+		[Ordinal(0)] [RED("blendOut")] 		public CFloat BlendOut { get; set;}
 
-		[RED("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(0)] [RED("duration")] 		public CFloat Duration { get; set;}
 
-		[RED("syncTime")] 		public CFloat SyncTime { get; set;}
+		[Ordinal(0)] [RED("syncTime")] 		public CFloat SyncTime { get; set;}
 
 		public SAnimationTrajectoryPlayerToken(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

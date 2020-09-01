@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventCustomCameraInstance : CStorySceneEventCamera
 	{
-		[RED("customCameraName")] 		public CName CustomCameraName { get; set;}
+		[Ordinal(0)] [RED("("customCameraName")] 		public CName CustomCameraName { get; set;}
 
-		[RED("enableCameraNoise")] 		public CBool EnableCameraNoise { get; set;}
+		[Ordinal(0)] [RED("("enableCameraNoise")] 		public CBool EnableCameraNoise { get; set;}
 
 		public CStorySceneEventCustomCameraInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

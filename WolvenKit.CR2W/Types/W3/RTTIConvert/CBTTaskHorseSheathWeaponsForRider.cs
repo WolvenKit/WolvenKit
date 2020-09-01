@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskHorseSheathWeaponsForRider : IBehTreeTask
 	{
-		[RED("processLeftItem")] 		public CBool ProcessLeftItem { get; set;}
+		[Ordinal(0)] [RED("processLeftItem")] 		public CBool ProcessLeftItem { get; set;}
 
-		[RED("processRightItem")] 		public CBool ProcessRightItem { get; set;}
+		[Ordinal(0)] [RED("processRightItem")] 		public CBool ProcessRightItem { get; set;}
 
-		[RED("rider")] 		public CHandle<CActor> Rider { get; set;}
+		[Ordinal(0)] [RED("rider")] 		public CHandle<CActor> Rider { get; set;}
 
 		public CBTTaskHorseSheathWeaponsForRider(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

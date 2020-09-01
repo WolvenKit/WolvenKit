@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCondIsMountedOnBoat : IBehTreeTask
 	{
-		[RED("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
+		[Ordinal(0)] [RED("("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
 
 		public CBTTaskCondIsMountedOnBoat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

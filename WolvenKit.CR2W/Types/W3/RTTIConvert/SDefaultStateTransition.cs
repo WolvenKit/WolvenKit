@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SDefaultStateTransition : CVariable
 	{
-		[RED("m_StateNameN")] 		public CName M_StateNameN { get; set;}
+		[Ordinal(0)] [RED("("m_StateNameN")] 		public CName M_StateNameN { get; set;}
 
-		[RED("m_TimeToStartCheckingF")] 		public CFloat M_TimeToStartCheckingF { get; set;}
+		[Ordinal(0)] [RED("("m_TimeToStartCheckingF")] 		public CFloat M_TimeToStartCheckingF { get; set;}
 
 		public SDefaultStateTransition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

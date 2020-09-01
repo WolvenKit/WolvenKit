@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IBehTreeNodeCombatTicketDecoratorBaseDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("ticketName")] 		public CName TicketName { get; set;}
+		[Ordinal(0)] [RED("ticketName")] 		public CName TicketName { get; set;}
 
-		[RED("ticketsProvider")] 		public CEnum<EBehTreeTicketSourceProviderType> TicketsProvider { get; set;}
+		[Ordinal(0)] [RED("ticketsProvider")] 		public CEnum<EBehTreeTicketSourceProviderType> TicketsProvider { get; set;}
 
 		public IBehTreeNodeCombatTicketDecoratorBaseDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorNodeSyncData : CVariable
 	{
-		[RED("timeMultiplier")] 		public CFloat TimeMultiplier { get; set;}
+		[Ordinal(0)] [RED("timeMultiplier")] 		public CFloat TimeMultiplier { get; set;}
 
 		public CBehaviorNodeSyncData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

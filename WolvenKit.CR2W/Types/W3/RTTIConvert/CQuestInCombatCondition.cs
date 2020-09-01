@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestInCombatCondition : IQuestCondition
 	{
-		[RED("isInCombat")] 		public CBool IsInCombat { get; set;}
+		[Ordinal(0)] [RED("isInCombat")] 		public CBool IsInCombat { get; set;}
 
 		public CQuestInCombatCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

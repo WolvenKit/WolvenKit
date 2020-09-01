@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondTargetHasItemHeldDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("itemCategory")] 		public CName ItemCategory { get; set;}
+		[Ordinal(0)] [RED("("itemCategory")] 		public CName ItemCategory { get; set;}
 
-		[RED("alsoCheckIfHeldsAnything")] 		public CBool AlsoCheckIfHeldsAnything { get; set;}
+		[Ordinal(0)] [RED("("alsoCheckIfHeldsAnything")] 		public CBool AlsoCheckIfHeldsAnything { get; set;}
 
 		public CBTCondTargetHasItemHeldDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

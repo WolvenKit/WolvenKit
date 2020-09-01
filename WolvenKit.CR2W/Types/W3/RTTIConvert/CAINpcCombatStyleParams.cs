@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcCombatStyleParams : CAISubTreeParameters
 	{
-		[RED("LeftItemType")] 		public CName LeftItemType { get; set;}
+		[Ordinal(0)] [RED("LeftItemType")] 		public CName LeftItemType { get; set;}
 
-		[RED("RightItemType")] 		public CName RightItemType { get; set;}
+		[Ordinal(0)] [RED("RightItemType")] 		public CName RightItemType { get; set;}
 
-		[RED("chooseSilverIfPossible")] 		public CBool ChooseSilverIfPossible { get; set;}
+		[Ordinal(0)] [RED("chooseSilverIfPossible")] 		public CBool ChooseSilverIfPossible { get; set;}
 
-		[RED("behGraph")] 		public CEnum<EBehaviorGraph> BehGraph { get; set;}
+		[Ordinal(0)] [RED("behGraph")] 		public CEnum<EBehaviorGraph> BehGraph { get; set;}
 
-		[RED("minCombatStyleDistance")] 		public CFloat MinCombatStyleDistance { get; set;}
+		[Ordinal(0)] [RED("minCombatStyleDistance")] 		public CFloat MinCombatStyleDistance { get; set;}
 
-		[RED("defenseActions", 2,0)] 		public CArray<CHandle<CAINpcDefenseAction>> DefenseActions { get; set;}
+		[Ordinal(0)] [RED("defenseActions", 2,0)] 		public CArray<CHandle<CAINpcDefenseAction>> DefenseActions { get; set;}
 
-		[RED("combatTacticTree")] 		public CHandle<CAINpcTacticTree> CombatTacticTree { get; set;}
+		[Ordinal(0)] [RED("combatTacticTree")] 		public CHandle<CAINpcTacticTree> CombatTacticTree { get; set;}
 
-		[RED("attackBehavior")] 		public CHandle<CAIAttackBehaviorTree> AttackBehavior { get; set;}
+		[Ordinal(0)] [RED("attackBehavior")] 		public CHandle<CAIAttackBehaviorTree> AttackBehavior { get; set;}
 
-		[RED("potentialFollower")] 		public CBool PotentialFollower { get; set;}
+		[Ordinal(0)] [RED("potentialFollower")] 		public CBool PotentialFollower { get; set;}
 
-		[RED("tryToUseFormation")] 		public CBool TryToUseFormation { get; set;}
+		[Ordinal(0)] [RED("tryToUseFormation")] 		public CBool TryToUseFormation { get; set;}
 
-		[RED("formationTacticTree")] 		public CHandle<CAINpcFormationTacticTree> FormationTacticTree { get; set;}
+		[Ordinal(0)] [RED("formationTacticTree")] 		public CHandle<CAINpcFormationTacticTree> FormationTacticTree { get; set;}
 
 		public CAINpcCombatStyleParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

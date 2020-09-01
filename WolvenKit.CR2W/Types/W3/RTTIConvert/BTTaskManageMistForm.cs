@@ -10,35 +10,35 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskManageMistForm : CBTTaskPlayAnimationEventDecorator
 	{
-		[RED("manageMistFormOnAnimEvents")] 		public CBool ManageMistFormOnAnimEvents { get; set;}
+		[Ordinal(0)] [RED("manageMistFormOnAnimEvents")] 		public CBool ManageMistFormOnAnimEvents { get; set;}
 
-		[RED("enableOnActivate")] 		public CBool EnableOnActivate { get; set;}
+		[Ordinal(0)] [RED("enableOnActivate")] 		public CBool EnableOnActivate { get; set;}
 
-		[RED("enableOnMain")] 		public CBool EnableOnMain { get; set;}
+		[Ordinal(0)] [RED("enableOnMain")] 		public CBool EnableOnMain { get; set;}
 
-		[RED("disableOnDeactivate")] 		public CBool DisableOnDeactivate { get; set;}
+		[Ordinal(0)] [RED("disableOnDeactivate")] 		public CBool DisableOnDeactivate { get; set;}
 
-		[RED("affectVisibility")] 		public CBool AffectVisibility { get; set;}
+		[Ordinal(0)] [RED("affectVisibility")] 		public CBool AffectVisibility { get; set;}
 
-		[RED("affectGameplayVisibility")] 		public CBool AffectGameplayVisibility { get; set;}
+		[Ordinal(0)] [RED("affectGameplayVisibility")] 		public CBool AffectGameplayVisibility { get; set;}
 
-		[RED("affectCollision")] 		public CBool AffectCollision { get; set;}
+		[Ordinal(0)] [RED("affectCollision")] 		public CBool AffectCollision { get; set;}
 
-		[RED("affectHitAnims")] 		public CBool AffectHitAnims { get; set;}
+		[Ordinal(0)] [RED("affectHitAnims")] 		public CBool AffectHitAnims { get; set;}
 
-		[RED("affectImmortality")] 		public CBool AffectImmortality { get; set;}
+		[Ordinal(0)] [RED("affectImmortality")] 		public CBool AffectImmortality { get; set;}
 
-		[RED("delayExecutionInMain")] 		public CFloat DelayExecutionInMain { get; set;}
+		[Ordinal(0)] [RED("delayExecutionInMain")] 		public CFloat DelayExecutionInMain { get; set;}
 
-		[RED("appearanceOnActivate")] 		public CName AppearanceOnActivate { get; set;}
+		[Ordinal(0)] [RED("appearanceOnActivate")] 		public CName AppearanceOnActivate { get; set;}
 
-		[RED("appearanceOnMain")] 		public CName AppearanceOnMain { get; set;}
+		[Ordinal(0)] [RED("appearanceOnMain")] 		public CName AppearanceOnMain { get; set;}
 
-		[RED("restoreAppearanceOnDeactivate")] 		public CBool RestoreAppearanceOnDeactivate { get; set;}
+		[Ordinal(0)] [RED("restoreAppearanceOnDeactivate")] 		public CBool RestoreAppearanceOnDeactivate { get; set;}
 
-		[RED("appearanceOnDeactivate")] 		public CName AppearanceOnDeactivate { get; set;}
+		[Ordinal(0)] [RED("appearanceOnDeactivate")] 		public CName AppearanceOnDeactivate { get; set;}
 
-		[RED("previousAppearanceName")] 		public CName PreviousAppearanceName { get; set;}
+		[Ordinal(0)] [RED("previousAppearanceName")] 		public CName PreviousAppearanceName { get; set;}
 
 		public BTTaskManageMistForm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

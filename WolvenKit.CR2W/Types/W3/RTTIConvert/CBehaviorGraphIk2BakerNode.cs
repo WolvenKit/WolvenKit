@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphIk2BakerNode : CBehaviorGraphBaseNode
 	{
-		[RED("cachedValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedValueNode { get; set;}
+		[Ordinal(0)] [RED("("cachedValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedValueNode { get; set;}
 
-		[RED("cachedTargetPosNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetPosNode { get; set;}
+		[Ordinal(0)] [RED("("cachedTargetPosNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetPosNode { get; set;}
 
-		[RED("cachedTargetRotNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetRotNode { get; set;}
+		[Ordinal(0)] [RED("("cachedTargetRotNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetRotNode { get; set;}
 
-		[RED("endBoneName")] 		public CString EndBoneName { get; set;}
+		[Ordinal(0)] [RED("("endBoneName")] 		public CString EndBoneName { get; set;}
 
-		[RED("blendInDuration")] 		public CFloat BlendInDuration { get; set;}
+		[Ordinal(0)] [RED("("blendInDuration")] 		public CFloat BlendInDuration { get; set;}
 
-		[RED("blendOutDuration")] 		public CFloat BlendOutDuration { get; set;}
+		[Ordinal(0)] [RED("("blendOutDuration")] 		public CFloat BlendOutDuration { get; set;}
 
-		[RED("animEventName")] 		public CName AnimEventName { get; set;}
+		[Ordinal(0)] [RED("("animEventName")] 		public CName AnimEventName { get; set;}
 
-		[RED("defaultEventStartTime")] 		public CFloat DefaultEventStartTime { get; set;}
+		[Ordinal(0)] [RED("("defaultEventStartTime")] 		public CFloat DefaultEventStartTime { get; set;}
 
-		[RED("defaultEventEndTime")] 		public CFloat DefaultEventEndTime { get; set;}
+		[Ordinal(0)] [RED("("defaultEventEndTime")] 		public CFloat DefaultEventEndTime { get; set;}
 
-		[RED("hingeAxis")] 		public CEnum<EAxis> HingeAxis { get; set;}
+		[Ordinal(0)] [RED("("hingeAxis")] 		public CEnum<EAxis> HingeAxis { get; set;}
 
-		[RED("enforceEndPosition")] 		public CBool EnforceEndPosition { get; set;}
+		[Ordinal(0)] [RED("("enforceEndPosition")] 		public CBool EnforceEndPosition { get; set;}
 
-		[RED("bonePositionInWorldSpace")] 		public CBool BonePositionInWorldSpace { get; set;}
+		[Ordinal(0)] [RED("("bonePositionInWorldSpace")] 		public CBool BonePositionInWorldSpace { get; set;}
 
-		[RED("enforceEndRotation")] 		public CBool EnforceEndRotation { get; set;}
+		[Ordinal(0)] [RED("("enforceEndRotation")] 		public CBool EnforceEndRotation { get; set;}
 
 		public CBehaviorGraphIk2BakerNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

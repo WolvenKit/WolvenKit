@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardUi : CMod
 	{
-		[RED("confirmPopup")] 		public CHandle<CModUiActionConfirmation> ConfirmPopup { get; set;}
+		[Ordinal(0)] [RED("confirmPopup")] 		public CHandle<CModUiActionConfirmation> ConfirmPopup { get; set;}
 
-		[RED("viewCallback")] 		public CHandle<CModSbUiPopupCallback> ViewCallback { get; set;}
+		[Ordinal(0)] [RED("viewCallback")] 		public CHandle<CModSbUiPopupCallback> ViewCallback { get; set;}
 
-		[RED("storyboard")] 		public CHandle<CModStoryBoard> Storyboard { get; set;}
+		[Ordinal(0)] [RED("storyboard")] 		public CHandle<CModStoryBoard> Storyboard { get; set;}
 
-		[RED("currentMode")] 		public CHandle<CModStoryBoardWorkMode> CurrentMode { get; set;}
+		[Ordinal(0)] [RED("currentMode")] 		public CHandle<CModStoryBoardWorkMode> CurrentMode { get; set;}
 
-		[RED("modeCallback")] 		public CHandle<CModSbUiParentCallback> ModeCallback { get; set;}
+		[Ordinal(0)] [RED("modeCallback")] 		public CHandle<CModSbUiParentCallback> ModeCallback { get; set;}
 
-		[RED("hudModules", 2,0)] 		public CArray<CName> HudModules { get; set;}
+		[Ordinal(0)] [RED("hudModules", 2,0)] 		public CArray<CName> HudModules { get; set;}
 
-		[RED("hudModulesEnabled", 2,0)] 		public CArray<CBool> HudModulesEnabled { get; set;}
+		[Ordinal(0)] [RED("hudModulesEnabled", 2,0)] 		public CArray<CBool> HudModulesEnabled { get; set;}
 
-		[RED("hoursPerMinute")] 		public CFloat HoursPerMinute { get; set;}
+		[Ordinal(0)] [RED("hoursPerMinute")] 		public CFloat HoursPerMinute { get; set;}
 
 		public CModStoryBoardUi(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

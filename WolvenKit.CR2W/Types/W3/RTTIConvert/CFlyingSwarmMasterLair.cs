@@ -10,33 +10,33 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFlyingSwarmMasterLair : CFlyingCrittersLairEntityScript
 	{
-		[RED("m_spawnFromBirdMasterRequest")] 		public CInt32 M_spawnFromBirdMasterRequest { get; set;}
+		[Ordinal(0)] [RED("("m_spawnFromBirdMasterRequest")] 		public CInt32 M_spawnFromBirdMasterRequest { get; set;}
 
-		[RED("m_spawnFromShieldGroupRequest")] 		public CInt32 M_spawnFromShieldGroupRequest { get; set;}
+		[Ordinal(0)] [RED("("m_spawnFromShieldGroupRequest")] 		public CInt32 M_spawnFromShieldGroupRequest { get; set;}
 
-		[RED("m_despawnFromBirdMasterRequest")] 		public CInt32 M_despawnFromBirdMasterRequest { get; set;}
+		[Ordinal(0)] [RED("("m_despawnFromBirdMasterRequest")] 		public CInt32 M_despawnFromBirdMasterRequest { get; set;}
 
-		[RED("teleportGroupId")] 		public CFlyingGroupId TeleportGroupId { get; set;}
+		[Ordinal(0)] [RED("("teleportGroupId")] 		public CFlyingGroupId TeleportGroupId { get; set;}
 
-		[RED("shieldGroupId")] 		public CFlyingGroupId ShieldGroupId { get; set;}
+		[Ordinal(0)] [RED("("shieldGroupId")] 		public CFlyingGroupId ShieldGroupId { get; set;}
 
-		[RED("passedInput")] 		public CHandle<CFlyingSwarmScriptInput> PassedInput { get; set;}
+		[Ordinal(0)] [RED("("passedInput")] 		public CHandle<CFlyingSwarmScriptInput> PassedInput { get; set;}
 
-		[RED("m_init")] 		public CBool M_init { get; set;}
+		[Ordinal(0)] [RED("("m_init")] 		public CBool M_init { get; set;}
 
-		[RED("disperseShield")] 		public CBool DisperseShield { get; set;}
+		[Ordinal(0)] [RED("("disperseShield")] 		public CBool DisperseShield { get; set;}
 
-		[RED("teleportGroupPosition")] 		public Vector TeleportGroupPosition { get; set;}
+		[Ordinal(0)] [RED("("teleportGroupPosition")] 		public Vector TeleportGroupPosition { get; set;}
 
-		[RED("shieldBirdCount")] 		public CInt32 ShieldBirdCount { get; set;}
+		[Ordinal(0)] [RED("("shieldBirdCount")] 		public CInt32 ShieldBirdCount { get; set;}
 
-		[RED("teleportBirdCount")] 		public CInt32 TeleportBirdCount { get; set;}
+		[Ordinal(0)] [RED("("teleportBirdCount")] 		public CInt32 TeleportBirdCount { get; set;}
 
-		[RED("spawnCount")] 		public CInt32 SpawnCount { get; set;}
+		[Ordinal(0)] [RED("("spawnCount")] 		public CInt32 SpawnCount { get; set;}
 
-		[RED("checkBeginAttackArray", 2,0)] 		public CArray<CFlyingGroupId> CheckBeginAttackArray { get; set;}
+		[Ordinal(0)] [RED("("checkBeginAttackArray", 2,0)] 		public CArray<CFlyingGroupId> CheckBeginAttackArray { get; set;}
 
-		[RED("shieldBirdState")] 		public CName ShieldBirdState { get; set;}
+		[Ordinal(0)] [RED("("shieldBirdState")] 		public CName ShieldBirdState { get; set;}
 
 		public CFlyingSwarmMasterLair(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

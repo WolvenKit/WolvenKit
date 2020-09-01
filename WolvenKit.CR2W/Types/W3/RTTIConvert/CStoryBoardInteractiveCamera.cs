@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStoryBoardInteractiveCamera : CStoryBoardShotCamera
 	{
-		[RED("isInteractiveMode")] 		public CBool IsInteractiveMode { get; set;}
+		[Ordinal(0)] [RED("("isInteractiveMode")] 		public CBool IsInteractiveMode { get; set;}
 
-		[RED("stepMoveSize")] 		public CFloat StepMoveSize { get; set;}
+		[Ordinal(0)] [RED("("stepMoveSize")] 		public CFloat StepMoveSize { get; set;}
 
-		[RED("stepRotSize")] 		public CFloat StepRotSize { get; set;}
+		[Ordinal(0)] [RED("("stepRotSize")] 		public CFloat StepRotSize { get; set;}
 
-		[RED("defaultDofCenterRadius")] 		public CFloat DefaultDofCenterRadius { get; set;}
+		[Ordinal(0)] [RED("("defaultDofCenterRadius")] 		public CFloat DefaultDofCenterRadius { get; set;}
 
 		public CStoryBoardInteractiveCamera(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

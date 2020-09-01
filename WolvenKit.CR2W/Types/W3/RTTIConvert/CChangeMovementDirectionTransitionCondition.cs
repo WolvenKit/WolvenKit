@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CChangeMovementDirectionTransitionCondition : IBehaviorStateTransitionCondition
 	{
-		[RED("angleDiffThreshold")] 		public CFloat AngleDiffThreshold { get; set;}
+		[Ordinal(0)] [RED("angleDiffThreshold")] 		public CFloat AngleDiffThreshold { get; set;}
 
-		[RED("startCheckingAfterTime")] 		public CFloat StartCheckingAfterTime { get; set;}
+		[Ordinal(0)] [RED("startCheckingAfterTime")] 		public CFloat StartCheckingAfterTime { get; set;}
 
-		[RED("requestedMovementDirectionWSVariableName")] 		public CName RequestedMovementDirectionWSVariableName { get; set;}
+		[Ordinal(0)] [RED("requestedMovementDirectionWSVariableName")] 		public CName RequestedMovementDirectionWSVariableName { get; set;}
 
-		[RED("currentMovementDirectionMSInternalVariableName")] 		public CName CurrentMovementDirectionMSInternalVariableName { get; set;}
+		[Ordinal(0)] [RED("currentMovementDirectionMSInternalVariableName")] 		public CName CurrentMovementDirectionMSInternalVariableName { get; set;}
 
 		public CChangeMovementDirectionTransitionCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

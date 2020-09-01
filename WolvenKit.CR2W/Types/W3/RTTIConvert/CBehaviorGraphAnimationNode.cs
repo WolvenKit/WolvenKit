@@ -10,37 +10,37 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphAnimationNode : CBehaviorGraphValueNode
 	{
-		[RED("animationName")] 		public CName AnimationName { get; set;}
+		[Ordinal(0)] [RED("animationName")] 		public CName AnimationName { get; set;}
 
-		[RED("loopPlayback")] 		public CBool LoopPlayback { get; set;}
+		[Ordinal(0)] [RED("loopPlayback")] 		public CBool LoopPlayback { get; set;}
 
-		[RED("playbackSpeed")] 		public CFloat PlaybackSpeed { get; set;}
+		[Ordinal(0)] [RED("playbackSpeed")] 		public CFloat PlaybackSpeed { get; set;}
 
-		[RED("applyMotion")] 		public CBool ApplyMotion { get; set;}
+		[Ordinal(0)] [RED("applyMotion")] 		public CBool ApplyMotion { get; set;}
 
-		[RED("extractMotionTranslation")] 		public CBool ExtractMotionTranslation { get; set;}
+		[Ordinal(0)] [RED("extractMotionTranslation")] 		public CBool ExtractMotionTranslation { get; set;}
 
-		[RED("extractMotionRotation")] 		public CBool ExtractMotionRotation { get; set;}
+		[Ordinal(0)] [RED("extractMotionRotation")] 		public CBool ExtractMotionRotation { get; set;}
 
-		[RED("fireLoopEvent")] 		public CBool FireLoopEvent { get; set;}
+		[Ordinal(0)] [RED("fireLoopEvent")] 		public CBool FireLoopEvent { get; set;}
 
-		[RED("loopEventName")] 		public CName LoopEventName { get; set;}
+		[Ordinal(0)] [RED("loopEventName")] 		public CName LoopEventName { get; set;}
 
-		[RED("useFovTrack")] 		public CBool UseFovTrack { get; set;}
+		[Ordinal(0)] [RED("useFovTrack")] 		public CBool UseFovTrack { get; set;}
 
-		[RED("useDofTrack")] 		public CBool UseDofTrack { get; set;}
+		[Ordinal(0)] [RED("useDofTrack")] 		public CBool UseDofTrack { get; set;}
 
-		[RED("gatherEvents")] 		public CBool GatherEvents { get; set;}
+		[Ordinal(0)] [RED("gatherEvents")] 		public CBool GatherEvents { get; set;}
 
-		[RED("autoFireEffects")] 		public CBool AutoFireEffects { get; set;}
+		[Ordinal(0)] [RED("autoFireEffects")] 		public CBool AutoFireEffects { get; set;}
 
-		[RED("gatherSyncTokens")] 		public CBool GatherSyncTokens { get; set;}
+		[Ordinal(0)] [RED("gatherSyncTokens")] 		public CBool GatherSyncTokens { get; set;}
 
-		[RED("cachedForceTimeNode")] 		public CPtr<CBehaviorGraphValueNode> CachedForceTimeNode { get; set;}
+		[Ordinal(0)] [RED("cachedForceTimeNode")] 		public CPtr<CBehaviorGraphValueNode> CachedForceTimeNode { get; set;}
 
-		[RED("cachedSpeedTimeNode")] 		public CPtr<CBehaviorGraphValueNode> CachedSpeedTimeNode { get; set;}
+		[Ordinal(0)] [RED("cachedSpeedTimeNode")] 		public CPtr<CBehaviorGraphValueNode> CachedSpeedTimeNode { get; set;}
 
-		[RED("cachedForcePropNode")] 		public CPtr<CBehaviorGraphValueNode> CachedForcePropNode { get; set;}
+		[Ordinal(0)] [RED("cachedForcePropNode")] 		public CPtr<CBehaviorGraphValueNode> CachedForcePropNode { get; set;}
 
 		public CBehaviorGraphAnimationNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

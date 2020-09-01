@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSlotEventAnim : CVariable
 	{
-		[RED("event")] 		public CName Event { get; set;}
+		[Ordinal(0)] [RED("("event")] 		public CName Event { get; set;}
 
-		[RED("animation")] 		public CName Animation { get; set;}
+		[Ordinal(0)] [RED("("animation")] 		public CName Animation { get; set;}
 
 		public SSlotEventAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

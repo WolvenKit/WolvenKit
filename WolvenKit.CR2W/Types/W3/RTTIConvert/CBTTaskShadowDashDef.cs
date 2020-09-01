@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskShadowDashDef : IBehTreeTaskDefinition
 	{
-		[RED("slideSpeed")] 		public CFloat SlideSpeed { get; set;}
+		[Ordinal(0)] [RED("("slideSpeed")] 		public CFloat SlideSpeed { get; set;}
 
-		[RED("slideBehindTarget")] 		public CBool SlideBehindTarget { get; set;}
+		[Ordinal(0)] [RED("("slideBehindTarget")] 		public CBool SlideBehindTarget { get; set;}
 
-		[RED("distanceOffset")] 		public CFloat DistanceOffset { get; set;}
+		[Ordinal(0)] [RED("("distanceOffset")] 		public CFloat DistanceOffset { get; set;}
 
-		[RED("disableCollision")] 		public CBool DisableCollision { get; set;}
+		[Ordinal(0)] [RED("("disableCollision")] 		public CBool DisableCollision { get; set;}
 
-		[RED("dealDamageOnContact")] 		public CBool DealDamageOnContact { get; set;}
+		[Ordinal(0)] [RED("("dealDamageOnContact")] 		public CBool DealDamageOnContact { get; set;}
 
-		[RED("damageVal")] 		public CFloat DamageVal { get; set;}
+		[Ordinal(0)] [RED("("damageVal")] 		public CFloat DamageVal { get; set;}
 
-		[RED("maxDist")] 		public CFloat MaxDist { get; set;}
+		[Ordinal(0)] [RED("("maxDist")] 		public CFloat MaxDist { get; set;}
 
-		[RED("sideStepDist")] 		public CFloat SideStepDist { get; set;}
+		[Ordinal(0)] [RED("("sideStepDist")] 		public CFloat SideStepDist { get; set;}
 
-		[RED("sideStepHeadingOffset")] 		public CFloat SideStepHeadingOffset { get; set;}
+		[Ordinal(0)] [RED("("sideStepHeadingOffset")] 		public CFloat SideStepHeadingOffset { get; set;}
 
-		[RED("minDuration")] 		public CFloat MinDuration { get; set;}
+		[Ordinal(0)] [RED("("minDuration")] 		public CFloat MinDuration { get; set;}
 
-		[RED("maxDuration")] 		public CFloat MaxDuration { get; set;}
+		[Ordinal(0)] [RED("("maxDuration")] 		public CFloat MaxDuration { get; set;}
 
-		[RED("slideBlendInTime")] 		public CFloat SlideBlendInTime { get; set;}
+		[Ordinal(0)] [RED("("slideBlendInTime")] 		public CFloat SlideBlendInTime { get; set;}
 
-		[RED("disableGameplayVisibility")] 		public CBool DisableGameplayVisibility { get; set;}
+		[Ordinal(0)] [RED("("disableGameplayVisibility")] 		public CBool DisableGameplayVisibility { get; set;}
 
 		public CBTTaskShadowDashDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

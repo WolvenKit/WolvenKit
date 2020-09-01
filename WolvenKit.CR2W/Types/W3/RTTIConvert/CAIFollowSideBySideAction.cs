@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIFollowSideBySideAction : CAIFollowAction
 	{
-		[RED("useCustomSteering")] 		public CBool UseCustomSteering { get; set;}
+		[Ordinal(0)] [RED("useCustomSteering")] 		public CBool UseCustomSteering { get; set;}
 
-		[RED("customSteeringGraph")] 		public CHandle<CMoveSteeringBehavior> CustomSteeringGraph { get; set;}
+		[Ordinal(0)] [RED("customSteeringGraph")] 		public CHandle<CMoveSteeringBehavior> CustomSteeringGraph { get; set;}
 
 		public CAIFollowSideBySideAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

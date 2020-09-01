@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStorySceneCameraLightMod : CVariable
 	{
-		[RED("deactivateLight")] 		public CBool DeactivateLight { get; set;}
+		[Ordinal(0)] [RED("("deactivateLight")] 		public CBool DeactivateLight { get; set;}
 
-		[RED("useCustomLight")] 		public CBool UseCustomLight { get; set;}
+		[Ordinal(0)] [RED("("useCustomLight")] 		public CBool UseCustomLight { get; set;}
 
-		[RED("overrideColor")] 		public SSimpleCurve OverrideColor { get; set;}
+		[Ordinal(0)] [RED("("overrideColor")] 		public SSimpleCurve OverrideColor { get; set;}
 
-		[RED("lightOffset")] 		public Vector LightOffset { get; set;}
+		[Ordinal(0)] [RED("("lightOffset")] 		public Vector LightOffset { get; set;}
 
-		[RED("brightnessScale")] 		public CFloat BrightnessScale { get; set;}
+		[Ordinal(0)] [RED("("brightnessScale")] 		public CFloat BrightnessScale { get; set;}
 
-		[RED("radiusScale")] 		public CFloat RadiusScale { get; set;}
+		[Ordinal(0)] [RED("("radiusScale")] 		public CFloat RadiusScale { get; set;}
 
-		[RED("useCustomAttenuation")] 		public CBool UseCustomAttenuation { get; set;}
+		[Ordinal(0)] [RED("("useCustomAttenuation")] 		public CBool UseCustomAttenuation { get; set;}
 
-		[RED("attenuation")] 		public CFloat Attenuation { get; set;}
+		[Ordinal(0)] [RED("("attenuation")] 		public CFloat Attenuation { get; set;}
 
-		[RED("usageMask")] 		public CEnum<ECameraLightBitfield> UsageMask { get; set;}
+		[Ordinal(0)] [RED("("usageMask")] 		public CEnum<ECameraLightBitfield> UsageMask { get; set;}
 
 		public SStorySceneCameraLightMod(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

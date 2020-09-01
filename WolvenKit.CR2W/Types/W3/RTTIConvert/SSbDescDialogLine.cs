@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSbDescDialogLine : CVariable
 	{
-		[RED("prodActorId")] 		public CString ProdActorId { get; set;}
+		[Ordinal(0)] [RED("("prodActorId")] 		public CString ProdActorId { get; set;}
 
-		[RED("id")] 		public CInt32 Id { get; set;}
+		[Ordinal(0)] [RED("("id")] 		public CInt32 Id { get; set;}
 
-		[RED("str")] 		public CString Str { get; set;}
+		[Ordinal(0)] [RED("("str")] 		public CString Str { get; set;}
 
 		public SSbDescDialogLine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

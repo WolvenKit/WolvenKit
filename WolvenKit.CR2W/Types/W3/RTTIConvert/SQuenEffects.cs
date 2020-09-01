@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SQuenEffects : CVariable
 	{
-		[RED("lastingEffectUpgNone")] 		public CName LastingEffectUpgNone { get; set;}
+		[Ordinal(0)] [RED("("lastingEffectUpgNone")] 		public CName LastingEffectUpgNone { get; set;}
 
-		[RED("lastingEffectUpg1")] 		public CName LastingEffectUpg1 { get; set;}
+		[Ordinal(0)] [RED("("lastingEffectUpg1")] 		public CName LastingEffectUpg1 { get; set;}
 
-		[RED("lastingEffectUpg2")] 		public CName LastingEffectUpg2 { get; set;}
+		[Ordinal(0)] [RED("("lastingEffectUpg2")] 		public CName LastingEffectUpg2 { get; set;}
 
-		[RED("lastingEffectUpg3")] 		public CName LastingEffectUpg3 { get; set;}
+		[Ordinal(0)] [RED("("lastingEffectUpg3")] 		public CName LastingEffectUpg3 { get; set;}
 
-		[RED("castEffect")] 		public CName CastEffect { get; set;}
+		[Ordinal(0)] [RED("("castEffect")] 		public CName CastEffect { get; set;}
 
-		[RED("cameraShakeStranth")] 		public CFloat CameraShakeStranth { get; set;}
+		[Ordinal(0)] [RED("("cameraShakeStranth")] 		public CFloat CameraShakeStranth { get; set;}
 
 		public SQuenEffects(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

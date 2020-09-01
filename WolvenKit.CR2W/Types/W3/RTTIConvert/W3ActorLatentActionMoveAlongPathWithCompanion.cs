@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ActorLatentActionMoveAlongPathWithCompanion : W3ActorLatentActionMoveAlongPath
 	{
-		[RED("companionTag")] 		public CName CompanionTag { get; set;}
+		[Ordinal(0)] [RED("("companionTag")] 		public CName CompanionTag { get; set;}
 
-		[RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(0)] [RED("("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[RED("minDistance")] 		public CFloat MinDistance { get; set;}
+		[Ordinal(0)] [RED("("minDistance")] 		public CFloat MinDistance { get; set;}
 
-		[RED("progressWhenCompanionIsAhead")] 		public CBool ProgressWhenCompanionIsAhead { get; set;}
+		[Ordinal(0)] [RED("("progressWhenCompanionIsAhead")] 		public CBool ProgressWhenCompanionIsAhead { get; set;}
 
 		public W3ActorLatentActionMoveAlongPathWithCompanion(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

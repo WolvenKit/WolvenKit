@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTKeepDistanceToTarget : IMoveTargetPositionSteeringTask
 	{
-		[RED("importance")] 		public CFloat Importance { get; set;}
+		[Ordinal(0)] [RED("importance")] 		public CFloat Importance { get; set;}
 
-		[RED("acceleration")] 		public CFloat Acceleration { get; set;}
+		[Ordinal(0)] [RED("acceleration")] 		public CFloat Acceleration { get; set;}
 
-		[RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
+		[Ordinal(0)] [RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
 
-		[RED("minRange")] 		public CFloat MinRange { get; set;}
+		[Ordinal(0)] [RED("minRange")] 		public CFloat MinRange { get; set;}
 
-		[RED("maxRange")] 		public CFloat MaxRange { get; set;}
+		[Ordinal(0)] [RED("maxRange")] 		public CFloat MaxRange { get; set;}
 
-		[RED("tolerance")] 		public CFloat Tolerance { get; set;}
+		[Ordinal(0)] [RED("tolerance")] 		public CFloat Tolerance { get; set;}
 
-		[RED("brakeDistance")] 		public CFloat BrakeDistance { get; set;}
+		[Ordinal(0)] [RED("brakeDistance")] 		public CFloat BrakeDistance { get; set;}
 
-		[RED("randomizationFrequency")] 		public CFloat RandomizationFrequency { get; set;}
+		[Ordinal(0)] [RED("randomizationFrequency")] 		public CFloat RandomizationFrequency { get; set;}
 
 		public CMoveSTKeepDistanceToTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

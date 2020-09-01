@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSCCompareBehaviorVariable : IMoveSteeringCondition
 	{
-		[RED("variableName")] 		public CName VariableName { get; set;}
+		[Ordinal(0)] [RED("variableName")] 		public CName VariableName { get; set;}
 
-		[RED("referenceVal")] 		public CFloat ReferenceVal { get; set;}
+		[Ordinal(0)] [RED("referenceVal")] 		public CFloat ReferenceVal { get; set;}
 
-		[RED("comparison")] 		public CEnum<ECompareFunc> Comparison { get; set;}
+		[Ordinal(0)] [RED("comparison")] 		public CEnum<ECompareFunc> Comparison { get; set;}
 
 		public CMoveSCCompareBehaviorVariable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

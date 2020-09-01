@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimCutsceneResetClothAndDangleEvent : CExtAnimEvent
 	{
-		[RED("forceRelaxedState")] 		public CBool ForceRelaxedState { get; set;}
+		[Ordinal(0)] [RED("("forceRelaxedState")] 		public CBool ForceRelaxedState { get; set;}
 
 		public CExtAnimCutsceneResetClothAndDangleEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

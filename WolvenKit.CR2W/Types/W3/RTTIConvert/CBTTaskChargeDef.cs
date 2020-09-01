@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskChargeDef : CBTTaskAttackDef
 	{
-		[RED("raiseEventOnActivation")] 		public CName RaiseEventOnActivation { get; set;}
+		[Ordinal(0)] [RED("("raiseEventOnActivation")] 		public CName RaiseEventOnActivation { get; set;}
 
-		[RED("raiseEventOnObstacleCollision")] 		public CName RaiseEventOnObstacleCollision { get; set;}
+		[Ordinal(0)] [RED("("raiseEventOnObstacleCollision")] 		public CName RaiseEventOnObstacleCollision { get; set;}
 
-		[RED("handleCollisionWithObstacle")] 		public CBool HandleCollisionWithObstacle { get; set;}
+		[Ordinal(0)] [RED("("handleCollisionWithObstacle")] 		public CBool HandleCollisionWithObstacle { get; set;}
 
-		[RED("checkLineOfSight")] 		public CBool CheckLineOfSight { get; set;}
+		[Ordinal(0)] [RED("("checkLineOfSight")] 		public CBool CheckLineOfSight { get; set;}
 
-		[RED("dealDamage")] 		public CBool DealDamage { get; set;}
+		[Ordinal(0)] [RED("("dealDamage")] 		public CBool DealDamage { get; set;}
 
-		[RED("endTaskWhenOwnerGoesPastTarget")] 		public CBool EndTaskWhenOwnerGoesPastTarget { get; set;}
+		[Ordinal(0)] [RED("("endTaskWhenOwnerGoesPastTarget")] 		public CBool EndTaskWhenOwnerGoesPastTarget { get; set;}
 
-		[RED("chargeType")] 		public CEnum<EChargeAttackType> ChargeType { get; set;}
+		[Ordinal(0)] [RED("("chargeType")] 		public CEnum<EChargeAttackType> ChargeType { get; set;}
 
-		[RED("forceCriticalEffect")] 		public CBool ForceCriticalEffect { get; set;}
+		[Ordinal(0)] [RED("("forceCriticalEffect")] 		public CBool ForceCriticalEffect { get; set;}
 
-		[RED("forceCriticalEffectNpcOnly")] 		public CBool ForceCriticalEffectNpcOnly { get; set;}
+		[Ordinal(0)] [RED("("forceCriticalEffectNpcOnly")] 		public CBool ForceCriticalEffectNpcOnly { get; set;}
 
 		public CBTTaskChargeDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

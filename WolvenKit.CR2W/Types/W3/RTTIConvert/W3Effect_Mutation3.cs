@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_Mutation3 : CBaseGameplayEffect
 	{
-		[RED("stacks")] 		public CInt32 Stacks { get; set;}
+		[Ordinal(0)] [RED("("stacks")] 		public CInt32 Stacks { get; set;}
 
-		[RED("maxCap")] 		public CInt32 MaxCap { get; set;}
+		[Ordinal(0)] [RED("("maxCap")] 		public CInt32 MaxCap { get; set;}
 
-		[RED("apBonus")] 		public CFloat ApBonus { get; set;}
+		[Ordinal(0)] [RED("("apBonus")] 		public CFloat ApBonus { get; set;}
 
 		public W3Effect_Mutation3(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3BoltProjectile : W3ArrowProjectile
 	{
-		[RED("dismemberOnKill")] 		public CBool DismemberOnKill { get; set;}
+		[Ordinal(0)] [RED("("dismemberOnKill")] 		public CBool DismemberOnKill { get; set;}
 
-		[RED("dodgeable")] 		public CBool Dodgeable { get; set;}
+		[Ordinal(0)] [RED("("dodgeable")] 		public CBool Dodgeable { get; set;}
 
-		[RED("projectiles", 2,0)] 		public CArray<CHandle<W3BoltProjectile>> Projectiles { get; set;}
+		[Ordinal(0)] [RED("("projectiles", 2,0)] 		public CArray<CHandle<W3BoltProjectile>> Projectiles { get; set;}
 
-		[RED("targetPos")] 		public Vector TargetPos { get; set;}
+		[Ordinal(0)] [RED("("targetPos")] 		public Vector TargetPos { get; set;}
 
-		[RED("crossbowId")] 		public SItemUniqueId CrossbowId { get; set;}
+		[Ordinal(0)] [RED("("crossbowId")] 		public SItemUniqueId CrossbowId { get; set;}
 
-		[RED("collisionGroups", 2,0)] 		public CArray<CName> CollisionGroups { get; set;}
+		[Ordinal(0)] [RED("("collisionGroups", 2,0)] 		public CArray<CName> CollisionGroups { get; set;}
 
-		[RED("hitVictims", 2,0)] 		public CArray<CHandle<CActor>> HitVictims { get; set;}
+		[Ordinal(0)] [RED("("hitVictims", 2,0)] 		public CArray<CHandle<CActor>> HitVictims { get; set;}
 
-		[RED("wasShotUnderWater")] 		public CBool WasShotUnderWater { get; set;}
+		[Ordinal(0)] [RED("("wasShotUnderWater")] 		public CBool WasShotUnderWater { get; set;}
 
-		[RED("visibility")] 		public CBool Visibility { get; set;}
+		[Ordinal(0)] [RED("("visibility")] 		public CBool Visibility { get; set;}
 
 		public W3BoltProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

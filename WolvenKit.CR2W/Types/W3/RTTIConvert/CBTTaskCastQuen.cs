@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCastQuen : CBTTaskCastSign
 	{
-		[RED("completeAfterHit")] 		public CBool CompleteAfterHit { get; set;}
+		[Ordinal(0)] [RED("completeAfterHit")] 		public CBool CompleteAfterHit { get; set;}
 
-		[RED("alternateFireMode")] 		public CBool AlternateFireMode { get; set;}
+		[Ordinal(0)] [RED("alternateFireMode")] 		public CBool AlternateFireMode { get; set;}
 
-		[RED("processQuenOnCounterActivation")] 		public CBool ProcessQuenOnCounterActivation { get; set;}
+		[Ordinal(0)] [RED("processQuenOnCounterActivation")] 		public CBool ProcessQuenOnCounterActivation { get; set;}
 
-		[RED("hitEventReceived")] 		public CBool HitEventReceived { get; set;}
+		[Ordinal(0)] [RED("hitEventReceived")] 		public CBool HitEventReceived { get; set;}
 
-		[RED("hitEntity")] 		public CHandle<CEntity> HitEntity { get; set;}
+		[Ordinal(0)] [RED("hitEntity")] 		public CHandle<CEntity> HitEntity { get; set;}
 
-		[RED("hitEntityTemplate")] 		public CHandle<CEntityTemplate> HitEntityTemplate { get; set;}
+		[Ordinal(0)] [RED("hitEntityTemplate")] 		public CHandle<CEntityTemplate> HitEntityTemplate { get; set;}
 
-		[RED("ownerBoneIndex")] 		public CInt32 OwnerBoneIndex { get; set;}
+		[Ordinal(0)] [RED("ownerBoneIndex")] 		public CInt32 OwnerBoneIndex { get; set;}
 
-		[RED("shieldActive")] 		public CBool ShieldActive { get; set;}
+		[Ordinal(0)] [RED("shieldActive")] 		public CBool ShieldActive { get; set;}
 
-		[RED("humanCombatDataStorage")] 		public CHandle<CHumanAICombatStorage> HumanCombatDataStorage { get; set;}
+		[Ordinal(0)] [RED("humanCombatDataStorage")] 		public CHandle<CHumanAICombatStorage> HumanCombatDataStorage { get; set;}
 
-		[RED("playEffectTimeStamp")] 		public CFloat PlayEffectTimeStamp { get; set;}
+		[Ordinal(0)] [RED("playEffectTimeStamp")] 		public CFloat PlayEffectTimeStamp { get; set;}
 
 		public CBTTaskCastQuen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

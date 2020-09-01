@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3RepairObjectEnhancement : CBaseGameplayEffect
 	{
-		[RED("usesPerkBonus")] 		public CBool UsesPerkBonus { get; set;}
+		[Ordinal(0)] [RED("("usesPerkBonus")] 		public CBool UsesPerkBonus { get; set;}
 
-		[RED("durUpdates")] 		public CBool DurUpdates { get; set;}
+		[Ordinal(0)] [RED("("durUpdates")] 		public CBool DurUpdates { get; set;}
 
 		public W3RepairObjectEnhancement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

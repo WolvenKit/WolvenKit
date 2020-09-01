@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4PlayerStateMountBoat : CR4PlayerStateMountTheVehicle
 	{
-		[RED("boatComp")] 		public CHandle<CBoatComponent> BoatComp { get; set;}
+		[Ordinal(0)] [RED("boatComp")] 		public CHandle<CBoatComponent> BoatComp { get; set;}
 
 		public CR4PlayerStateMountBoat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

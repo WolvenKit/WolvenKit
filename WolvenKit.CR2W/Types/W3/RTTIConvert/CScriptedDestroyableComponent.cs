@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CScriptedDestroyableComponent : CRigidMeshComponent
 	{
-		[RED("destroyWay")] 		public CEnum<EDestroyWay> DestroyWay { get; set;}
+		[Ordinal(0)] [RED("("destroyWay")] 		public CEnum<EDestroyWay> DestroyWay { get; set;}
 
-		[RED("distanceValue")] 		public CFloat DistanceValue { get; set;}
+		[Ordinal(0)] [RED("("distanceValue")] 		public CFloat DistanceValue { get; set;}
 
-		[RED("destroyTimeDuration")] 		public CFloat DestroyTimeDuration { get; set;}
+		[Ordinal(0)] [RED("("destroyTimeDuration")] 		public CFloat DestroyTimeDuration { get; set;}
 
-		[RED("contactDestroyDelay")] 		public CFloat ContactDestroyDelay { get; set;}
+		[Ordinal(0)] [RED("("contactDestroyDelay")] 		public CFloat ContactDestroyDelay { get; set;}
 
-		[RED("destroyAtTime")] 		public CFloat DestroyAtTime { get; set;}
+		[Ordinal(0)] [RED("("destroyAtTime")] 		public CFloat DestroyAtTime { get; set;}
 
-		[RED("m_state")] 		public CEnum<EScriptedDetroyableComponentState> M_state { get; set;}
+		[Ordinal(0)] [RED("("m_state")] 		public CEnum<EScriptedDetroyableComponentState> M_state { get; set;}
 
-		[RED("entryTime")] 		public CFloat EntryTime { get; set;}
+		[Ordinal(0)] [RED("("entryTime")] 		public CFloat EntryTime { get; set;}
 
-		[RED("timerInterval")] 		public CFloat TimerInterval { get; set;}
+		[Ordinal(0)] [RED("("timerInterval")] 		public CFloat TimerInterval { get; set;}
 
 		public CScriptedDestroyableComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

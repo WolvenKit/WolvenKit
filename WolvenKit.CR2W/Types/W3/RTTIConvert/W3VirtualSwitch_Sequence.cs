@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3VirtualSwitch_Sequence : W3VirtualSwitch
 	{
-		[RED("nextSwitchIndex")] 		public CInt32 NextSwitchIndex { get; set;}
+		[Ordinal(0)] [RED("("nextSwitchIndex")] 		public CInt32 NextSwitchIndex { get; set;}
 
 		public W3VirtualSwitch_Sequence(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

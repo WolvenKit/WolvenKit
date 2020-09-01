@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CHorseIdleDecoratorTree : CAIMonsterIdleDecorator
 	{
-		[RED("actionPointSelector")] 		public CHandle<CHorseParkingActionPointSelector> ActionPointSelector { get; set;}
+		[Ordinal(0)] [RED("("actionPointSelector")] 		public CHandle<CHorseParkingActionPointSelector> ActionPointSelector { get; set;}
 
-		[RED("packName")] 		public CName PackName { get; set;}
+		[Ordinal(0)] [RED("("packName")] 		public CName PackName { get; set;}
 
 		public CHorseIdleDecoratorTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

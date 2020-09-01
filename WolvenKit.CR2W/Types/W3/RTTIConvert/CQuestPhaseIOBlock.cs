@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestPhaseIOBlock : CQuestGraphBlock
 	{
-		[RED("socketID")] 		public CName SocketID { get; set;}
+		[Ordinal(0)] [RED("socketID")] 		public CName SocketID { get; set;}
 
 		public CQuestPhaseIOBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

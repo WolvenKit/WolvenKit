@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIPlayVoiceSetAction : IAIActionTree
 	{
-		[RED("voiceSet")] 		public CString VoiceSet { get; set;}
+		[Ordinal(0)] [RED("voiceSet")] 		public CString VoiceSet { get; set;}
 
-		[RED("priority")] 		public CInt32 Priority { get; set;}
+		[Ordinal(0)] [RED("priority")] 		public CInt32 Priority { get; set;}
 
 		public CAIPlayVoiceSetAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

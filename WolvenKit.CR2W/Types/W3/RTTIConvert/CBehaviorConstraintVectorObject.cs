@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorConstraintVectorObject : IBehaviorConstraintObject
 	{
-		[RED("cachedTargetPositionNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetPositionNode { get; set;}
+		[Ordinal(0)] [RED("cachedTargetPositionNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetPositionNode { get; set;}
 
-		[RED("cachedTargetRotationNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetRotationNode { get; set;}
+		[Ordinal(0)] [RED("cachedTargetRotationNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetRotationNode { get; set;}
 
 		public CBehaviorConstraintVectorObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

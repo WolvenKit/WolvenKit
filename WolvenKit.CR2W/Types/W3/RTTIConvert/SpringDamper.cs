@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SpringDamper : CObject
 	{
-		[RED("destValue")] 		public CFloat DestValue { get; set;}
+		[Ordinal(0)] [RED("("destValue")] 		public CFloat DestValue { get; set;}
 
-		[RED("currValue")] 		public CFloat CurrValue { get; set;}
+		[Ordinal(0)] [RED("("currValue")] 		public CFloat CurrValue { get; set;}
 
-		[RED("velValue")] 		public CFloat VelValue { get; set;}
+		[Ordinal(0)] [RED("("velValue")] 		public CFloat VelValue { get; set;}
 
-		[RED("smoothTime")] 		public CFloat SmoothTime { get; set;}
+		[Ordinal(0)] [RED("("smoothTime")] 		public CFloat SmoothTime { get; set;}
 
 		public SpringDamper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

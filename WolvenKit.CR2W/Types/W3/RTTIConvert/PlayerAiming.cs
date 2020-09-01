@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class PlayerAiming : CObject
 	{
-		[RED("owner")] 		public CHandle<CR4Player> Owner { get; set;}
+		[Ordinal(0)] [RED("owner")] 		public CHandle<CR4Player> Owner { get; set;}
 
-		[RED("throwable")] 		public CHandle<CThrowable> Throwable { get; set;}
+		[Ordinal(0)] [RED("throwable")] 		public CHandle<CThrowable> Throwable { get; set;}
 
-		[RED("aimType")] 		public CEnum<EAimType> AimType { get; set;}
+		[Ordinal(0)] [RED("aimType")] 		public CEnum<EAimType> AimType { get; set;}
 
-		[RED("throwPos")] 		public Vector ThrowPos { get; set;}
+		[Ordinal(0)] [RED("throwPos")] 		public Vector ThrowPos { get; set;}
 
-		[RED("sweptFriendly")] 		public CHandle<CEntity> SweptFriendly { get; set;}
+		[Ordinal(0)] [RED("sweptFriendly")] 		public CHandle<CEntity> SweptFriendly { get; set;}
 
-		[RED("sweptActors", 2,0)] 		public CArray<CHandle<CActor>> SweptActors { get; set;}
+		[Ordinal(0)] [RED("sweptActors", 2,0)] 		public CArray<CHandle<CActor>> SweptActors { get; set;}
 
-		[RED("tracePosFrom")] 		public Vector TracePosFrom { get; set;}
+		[Ordinal(0)] [RED("tracePosFrom")] 		public Vector TracePosFrom { get; set;}
 
-		[RED("thrownBombImpactRadius")] 		public CFloat ThrownBombImpactRadius { get; set;}
+		[Ordinal(0)] [RED("thrownBombImpactRadius")] 		public CFloat ThrownBombImpactRadius { get; set;}
 
-		[RED("aimedTarget")] 		public CHandle<CActor> AimedTarget { get; set;}
+		[Ordinal(0)] [RED("aimedTarget")] 		public CHandle<CActor> AimedTarget { get; set;}
 
-		[RED("collisionGroupsNames", 2,0)] 		public CArray<CName> CollisionGroupsNames { get; set;}
+		[Ordinal(0)] [RED("collisionGroupsNames", 2,0)] 		public CArray<CName> CollisionGroupsNames { get; set;}
 
 		public PlayerAiming(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

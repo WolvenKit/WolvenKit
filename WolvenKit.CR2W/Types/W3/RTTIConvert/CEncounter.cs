@@ -10,41 +10,41 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEncounter : CGameplayEntity
 	{
-		[RED("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(0)] [RED("("enabled")] 		public CBool Enabled { get; set;}
 
-		[RED("ignoreAreaTrigger")] 		public CBool IgnoreAreaTrigger { get; set;}
+		[Ordinal(0)] [RED("("ignoreAreaTrigger")] 		public CBool IgnoreAreaTrigger { get; set;}
 
-		[RED("fullRespawnScheduled")] 		public CBool FullRespawnScheduled { get; set;}
+		[Ordinal(0)] [RED("("fullRespawnScheduled")] 		public CBool FullRespawnScheduled { get; set;}
 
-		[RED("spawnTree")] 		public CPtr<ISpawnTreeBranch> SpawnTree { get; set;}
+		[Ordinal(0)] [RED("("spawnTree")] 		public CPtr<ISpawnTreeBranch> SpawnTree { get; set;}
 
-		[RED("creatureDefinition", 2,0)] 		public CArray<CPtr<CEncounterCreatureDefinition>> CreatureDefinition { get; set;}
+		[Ordinal(0)] [RED("("creatureDefinition", 2,0)] 		public CArray<CPtr<CEncounterCreatureDefinition>> CreatureDefinition { get; set;}
 
-		[RED("encounterParameters")] 		public CHandle<CEncounterParameters> EncounterParameters { get; set;}
+		[Ordinal(0)] [RED("("encounterParameters")] 		public CHandle<CEncounterParameters> EncounterParameters { get; set;}
 
-		[RED("spawnArea")] 		public EntityHandle SpawnArea { get; set;}
+		[Ordinal(0)] [RED("("spawnArea")] 		public EntityHandle SpawnArea { get; set;}
 
-		[RED("fullRespawnDelay")] 		public GameTime FullRespawnDelay { get; set;}
+		[Ordinal(0)] [RED("("fullRespawnDelay")] 		public GameTime FullRespawnDelay { get; set;}
 
-		[RED("isFullRespawnTimeInGameTime")] 		public CBool IsFullRespawnTimeInGameTime { get; set;}
+		[Ordinal(0)] [RED("("isFullRespawnTimeInGameTime")] 		public CBool IsFullRespawnTimeInGameTime { get; set;}
 
-		[RED("fullRespawnTime")] 		public GameTime FullRespawnTime { get; set;}
+		[Ordinal(0)] [RED("("fullRespawnTime")] 		public GameTime FullRespawnTime { get; set;}
 
-		[RED("wasRaining")] 		public CBool WasRaining { get; set;}
+		[Ordinal(0)] [RED("("wasRaining")] 		public CBool WasRaining { get; set;}
 
-		[RED("conditionRetestTimeout")] 		public CFloat ConditionRetestTimeout { get; set;}
+		[Ordinal(0)] [RED("("conditionRetestTimeout")] 		public CFloat ConditionRetestTimeout { get; set;}
 
-		[RED("defaultImmediateDespawnConfiguration")] 		public SSpawnTreeDespawnConfiguration DefaultImmediateDespawnConfiguration { get; set;}
+		[Ordinal(0)] [RED("("defaultImmediateDespawnConfiguration")] 		public SSpawnTreeDespawnConfiguration DefaultImmediateDespawnConfiguration { get; set;}
 
-		[RED("spawnTreeType")] 		public CEnum<ESpawnTreeType> SpawnTreeType { get; set;}
+		[Ordinal(0)] [RED("("spawnTreeType")] 		public CEnum<ESpawnTreeType> SpawnTreeType { get; set;}
 
-		[RED("dataManager")] 		public CHandle<CEncounterDataManager> DataManager { get; set;}
+		[Ordinal(0)] [RED("("dataManager")] 		public CHandle<CEncounterDataManager> DataManager { get; set;}
 
-		[RED("ownerTasksToPerformOnLeaveEncounter", 2,0)] 		public CArray<SOwnerEncounterTaskParams> OwnerTasksToPerformOnLeaveEncounter { get; set;}
+		[Ordinal(0)] [RED("("ownerTasksToPerformOnLeaveEncounter", 2,0)] 		public CArray<SOwnerEncounterTaskParams> OwnerTasksToPerformOnLeaveEncounter { get; set;}
 
-		[RED("externalTasksToPerformOnLeaveEncounter", 2,0)] 		public CArray<SExternalEncounterTaskParams> ExternalTasksToPerformOnLeaveEncounter { get; set;}
+		[Ordinal(0)] [RED("("externalTasksToPerformOnLeaveEncounter", 2,0)] 		public CArray<SExternalEncounterTaskParams> ExternalTasksToPerformOnLeaveEncounter { get; set;}
 
-		[RED("isUpdating")] 		public CBool IsUpdating { get; set;}
+		[Ordinal(0)] [RED("("isUpdating")] 		public CBool IsUpdating { get; set;}
 
 		public CEncounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

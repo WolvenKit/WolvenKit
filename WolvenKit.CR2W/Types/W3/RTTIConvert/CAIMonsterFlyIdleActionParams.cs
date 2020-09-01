@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMonsterFlyIdleActionParams : CAIMonsterIdleActionParams
 	{
-		[RED("minDistanceFromGround")] 		public CFloat MinDistanceFromGround { get; set;}
+		[Ordinal(0)] [RED("minDistanceFromGround")] 		public CFloat MinDistanceFromGround { get; set;}
 
 		public CAIMonsterFlyIdleActionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

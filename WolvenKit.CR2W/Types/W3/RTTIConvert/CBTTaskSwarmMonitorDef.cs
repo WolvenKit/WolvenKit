@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSwarmMonitorDef : IBehTreeTaskDefinition
 	{
-		[RED("monitorShieldSwarm")] 		public CBool MonitorShieldSwarm { get; set;}
+		[Ordinal(0)] [RED("("monitorShieldSwarm")] 		public CBool MonitorShieldSwarm { get; set;}
 
-		[RED("respawnShieldBirds")] 		public CBool RespawnShieldBirds { get; set;}
+		[Ordinal(0)] [RED("("respawnShieldBirds")] 		public CBool RespawnShieldBirds { get; set;}
 
-		[RED("disableBoidPOIComponents")] 		public CBool DisableBoidPOIComponents { get; set;}
+		[Ordinal(0)] [RED("("disableBoidPOIComponents")] 		public CBool DisableBoidPOIComponents { get; set;}
 
-		[RED("respawnThreshold")] 		public CFloat RespawnThreshold { get; set;}
+		[Ordinal(0)] [RED("("respawnThreshold")] 		public CFloat RespawnThreshold { get; set;}
 
-		[RED("respawnCooldown")] 		public CFloat RespawnCooldown { get; set;}
+		[Ordinal(0)] [RED("("respawnCooldown")] 		public CFloat RespawnCooldown { get; set;}
 
 		public CBTTaskSwarmMonitorDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

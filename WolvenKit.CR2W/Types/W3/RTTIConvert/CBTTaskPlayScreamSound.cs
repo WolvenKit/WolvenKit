@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPlayScreamSound : IBehTreeTask
 	{
-		[RED("minFrequency")] 		public CFloat MinFrequency { get; set;}
+		[Ordinal(0)] [RED("("minFrequency")] 		public CFloat MinFrequency { get; set;}
 
-		[RED("maxFrequency")] 		public CFloat MaxFrequency { get; set;}
+		[Ordinal(0)] [RED("("maxFrequency")] 		public CFloat MaxFrequency { get; set;}
 
-		[RED("actor")] 		public CHandle<CActor> Actor { get; set;}
+		[Ordinal(0)] [RED("("actor")] 		public CHandle<CActor> Actor { get; set;}
 
 		public CBTTaskPlayScreamSound(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3PlayerWitcherStateMeditation : W3PlayerWitcherStateMeditationBase
 	{
-		[RED("meditationPointHeading")] 		public CFloat MeditationPointHeading { get; set;}
+		[Ordinal(0)] [RED("("meditationPointHeading")] 		public CFloat MeditationPointHeading { get; set;}
 
-		[RED("meditationHeadingSet")] 		public CBool MeditationHeadingSet { get; set;}
+		[Ordinal(0)] [RED("("meditationHeadingSet")] 		public CBool MeditationHeadingSet { get; set;}
 
-		[RED("stopRequested")] 		public CBool StopRequested { get; set;}
+		[Ordinal(0)] [RED("("stopRequested")] 		public CBool StopRequested { get; set;}
 
-		[RED("isSitting")] 		public CBool IsSitting { get; set;}
+		[Ordinal(0)] [RED("("isSitting")] 		public CBool IsSitting { get; set;}
 
-		[RED("closeUIOnStop")] 		public CBool CloseUIOnStop { get; set;}
+		[Ordinal(0)] [RED("("closeUIOnStop")] 		public CBool CloseUIOnStop { get; set;}
 
-		[RED("cameraIsLeavingState")] 		public CBool CameraIsLeavingState { get; set;}
+		[Ordinal(0)] [RED("("cameraIsLeavingState")] 		public CBool CameraIsLeavingState { get; set;}
 
-		[RED("isEntryFunctionLocked")] 		public CBool IsEntryFunctionLocked { get; set;}
+		[Ordinal(0)] [RED("("isEntryFunctionLocked")] 		public CBool IsEntryFunctionLocked { get; set;}
 
-		[RED("scheduledGoToWaiting")] 		public CBool ScheduledGoToWaiting { get; set;}
+		[Ordinal(0)] [RED("("scheduledGoToWaiting")] 		public CBool ScheduledGoToWaiting { get; set;}
 
-		[RED("changedContext")] 		public CBool ChangedContext { get; set;}
+		[Ordinal(0)] [RED("("changedContext")] 		public CBool ChangedContext { get; set;}
 
 		public W3PlayerWitcherStateMeditation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

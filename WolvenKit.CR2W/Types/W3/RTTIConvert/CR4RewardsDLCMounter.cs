@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4RewardsDLCMounter : IGameplayDLCMounter
 	{
-		[RED("rewordsXmlFilePath")] 		public CString RewordsXmlFilePath { get; set;}
+		[Ordinal(0)] [RED("rewordsXmlFilePath")] 		public CString RewordsXmlFilePath { get; set;}
 
 		public CR4RewardsDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

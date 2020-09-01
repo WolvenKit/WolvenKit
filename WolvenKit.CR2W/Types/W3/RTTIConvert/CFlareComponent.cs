@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFlareComponent : CDrawableComponent
 	{
-		[RED("material")] 		public CHandle<CMaterialInstance> Material { get; set;}
+		[Ordinal(0)] [RED("("material")] 		public CHandle<CMaterialInstance> Material { get; set;}
 
-		[RED("parameters")] 		public SFlareParameters Parameters { get; set;}
+		[Ordinal(0)] [RED("("parameters")] 		public SFlareParameters Parameters { get; set;}
 
 		public CFlareComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

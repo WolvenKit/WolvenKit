@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcBruxaDeathParams : CAINpcDeathParams
 	{
-		[RED("spawnEntityOnDeathName")] 		public CName SpawnEntityOnDeathName { get; set;}
+		[Ordinal(0)] [RED("spawnEntityOnDeathName")] 		public CName SpawnEntityOnDeathName { get; set;}
 
 		public CAINpcBruxaDeathParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

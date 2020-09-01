@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneDanglesShakeEventInterpolation : CStorySceneEventInterpolation
 	{
-		[RED("keys", 2,0)] 		public CArray<CStorySceneDanglesShakeEventInterpolationKey> Keys { get; set;}
+		[Ordinal(0)] [RED("("keys", 2,0)] 		public CArray<CStorySceneDanglesShakeEventInterpolationKey> Keys { get; set;}
 
 		public CStorySceneDanglesShakeEventInterpolation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,37 +10,37 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcDeathParams : CAIDeathParameters
 	{
-		[RED("createReactionEvent")] 		public CName CreateReactionEvent { get; set;}
+		[Ordinal(0)] [RED("createReactionEvent")] 		public CName CreateReactionEvent { get; set;}
 
-		[RED("fxName")] 		public CName FxName { get; set;}
+		[Ordinal(0)] [RED("fxName")] 		public CName FxName { get; set;}
 
-		[RED("playFXOnActivate")] 		public CName PlayFXOnActivate { get; set;}
+		[Ordinal(0)] [RED("playFXOnActivate")] 		public CName PlayFXOnActivate { get; set;}
 
-		[RED("playFXOnDeactivate")] 		public CName PlayFXOnDeactivate { get; set;}
+		[Ordinal(0)] [RED("playFXOnDeactivate")] 		public CName PlayFXOnDeactivate { get; set;}
 
-		[RED("stopFXOnActivate")] 		public CName StopFXOnActivate { get; set;}
+		[Ordinal(0)] [RED("stopFXOnActivate")] 		public CName StopFXOnActivate { get; set;}
 
-		[RED("stopFXOnDeactivate")] 		public CName StopFXOnDeactivate { get; set;}
+		[Ordinal(0)] [RED("stopFXOnDeactivate")] 		public CName StopFXOnDeactivate { get; set;}
 
-		[RED("playSFXOnActivate")] 		public CName PlaySFXOnActivate { get; set;}
+		[Ordinal(0)] [RED("playSFXOnActivate")] 		public CName PlaySFXOnActivate { get; set;}
 
-		[RED("setAppearanceTo")] 		public CName SetAppearanceTo { get; set;}
+		[Ordinal(0)] [RED("setAppearanceTo")] 		public CName SetAppearanceTo { get; set;}
 
-		[RED("changeAppearanceAfter")] 		public CFloat ChangeAppearanceAfter { get; set;}
+		[Ordinal(0)] [RED("changeAppearanceAfter")] 		public CFloat ChangeAppearanceAfter { get; set;}
 
-		[RED("disableAgony")] 		public CBool DisableAgony { get; set;}
+		[Ordinal(0)] [RED("disableAgony")] 		public CBool DisableAgony { get; set;}
 
-		[RED("disableCollision")] 		public CBool DisableCollision { get; set;}
+		[Ordinal(0)] [RED("disableCollision")] 		public CBool DisableCollision { get; set;}
 
-		[RED("disableCollisionDelay")] 		public CFloat DisableCollisionDelay { get; set;}
+		[Ordinal(0)] [RED("disableCollisionDelay")] 		public CFloat DisableCollisionDelay { get; set;}
 
-		[RED("disableCollisionOnAnim")] 		public CBool DisableCollisionOnAnim { get; set;}
+		[Ordinal(0)] [RED("disableCollisionOnAnim")] 		public CBool DisableCollisionOnAnim { get; set;}
 
-		[RED("disableCollisionOnAnimDelay")] 		public CFloat DisableCollisionOnAnimDelay { get; set;}
+		[Ordinal(0)] [RED("disableCollisionOnAnimDelay")] 		public CFloat DisableCollisionOnAnimDelay { get; set;}
 
-		[RED("destroyAfterAnimDelay")] 		public CFloat DestroyAfterAnimDelay { get; set;}
+		[Ordinal(0)] [RED("destroyAfterAnimDelay")] 		public CFloat DestroyAfterAnimDelay { get; set;}
 
-		[RED("disableRagdollAfter")] 		public CFloat DisableRagdollAfter { get; set;}
+		[Ordinal(0)] [RED("disableRagdollAfter")] 		public CFloat DisableRagdollAfter { get; set;}
 
 		public CAINpcDeathParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

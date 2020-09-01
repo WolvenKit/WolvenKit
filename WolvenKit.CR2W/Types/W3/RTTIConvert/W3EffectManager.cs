@@ -10,47 +10,47 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3EffectManager : CObject
 	{
-		[RED("owner")] 		public CHandle<CActor> Owner { get; set;}
+		[Ordinal(0)] [RED("("owner")] 		public CHandle<CActor> Owner { get; set;}
 
-		[RED("effects", 2,0)] 		public CArray<CHandle<CBaseGameplayEffect>> Effects { get; set;}
+		[Ordinal(0)] [RED("("effects", 2,0)] 		public CArray<CHandle<CBaseGameplayEffect>> Effects { get; set;}
 
-		[RED("statDeltas", 2,0)] 		public CArray<CFloat> StatDeltas { get; set;}
+		[Ordinal(0)] [RED("("statDeltas", 2,0)] 		public CArray<CFloat> StatDeltas { get; set;}
 
-		[RED("cachedDamages", 2,0)] 		public CArray<SEffectCachedDamage> CachedDamages { get; set;}
+		[Ordinal(0)] [RED("("cachedDamages", 2,0)] 		public CArray<SEffectCachedDamage> CachedDamages { get; set;}
 
-		[RED("isReady")] 		public CBool IsReady { get; set;}
+		[Ordinal(0)] [RED("("isReady")] 		public CBool IsReady { get; set;}
 
-		[RED("currentlyAnimatedCS")] 		public CHandle<CBaseGameplayEffect> CurrentlyAnimatedCS { get; set;}
+		[Ordinal(0)] [RED("("currentlyAnimatedCS")] 		public CHandle<CBaseGameplayEffect> CurrentlyAnimatedCS { get; set;}
 
-		[RED("currentlyPlayedFX", 2,0)] 		public CArray<SCurrentBuffFX> CurrentlyPlayedFX { get; set;}
+		[Ordinal(0)] [RED("("currentlyPlayedFX", 2,0)] 		public CArray<SCurrentBuffFX> CurrentlyPlayedFX { get; set;}
 
-		[RED("pausedEffects", 2,0)] 		public CArray<STemporarilyPausedEffect> PausedEffects { get; set;}
+		[Ordinal(0)] [RED("("pausedEffects", 2,0)] 		public CArray<STemporarilyPausedEffect> PausedEffects { get; set;}
 
-		[RED("pausedNotAppliedAutoBuffs", 2,0)] 		public CArray<SPausedAutoEffect> PausedNotAppliedAutoBuffs { get; set;}
+		[Ordinal(0)] [RED("("pausedNotAppliedAutoBuffs", 2,0)] 		public CArray<SPausedAutoEffect> PausedNotAppliedAutoBuffs { get; set;}
 
-		[RED("ownerIsWitcher")] 		public CBool OwnerIsWitcher { get; set;}
+		[Ordinal(0)] [RED("("ownerIsWitcher")] 		public CBool OwnerIsWitcher { get; set;}
 
-		[RED("isInitializingAutobuffs")] 		public CBool IsInitializingAutobuffs { get; set;}
+		[Ordinal(0)] [RED("("isInitializingAutobuffs")] 		public CBool IsInitializingAutobuffs { get; set;}
 
-		[RED("hasCriticalStateSaveLock")] 		public CBool HasCriticalStateSaveLock { get; set;}
+		[Ordinal(0)] [RED("("hasCriticalStateSaveLock")] 		public CBool HasCriticalStateSaveLock { get; set;}
 
-		[RED("criticalStateSaveLockId")] 		public CInt32 CriticalStateSaveLockId { get; set;}
+		[Ordinal(0)] [RED("("criticalStateSaveLockId")] 		public CInt32 CriticalStateSaveLockId { get; set;}
 
-		[RED("vitalityAutoRegenOn")] 		public CBool VitalityAutoRegenOn { get; set;}
+		[Ordinal(0)] [RED("("vitalityAutoRegenOn")] 		public CBool VitalityAutoRegenOn { get; set;}
 
-		[RED("essenceAutoRegenOn")] 		public CBool EssenceAutoRegenOn { get; set;}
+		[Ordinal(0)] [RED("("essenceAutoRegenOn")] 		public CBool EssenceAutoRegenOn { get; set;}
 
-		[RED("staminaAutoRegenOn")] 		public CBool StaminaAutoRegenOn { get; set;}
+		[Ordinal(0)] [RED("("staminaAutoRegenOn")] 		public CBool StaminaAutoRegenOn { get; set;}
 
-		[RED("moraleAutoRegenOn")] 		public CBool MoraleAutoRegenOn { get; set;}
+		[Ordinal(0)] [RED("("moraleAutoRegenOn")] 		public CBool MoraleAutoRegenOn { get; set;}
 
-		[RED("panicAutoRegenOn")] 		public CBool PanicAutoRegenOn { get; set;}
+		[Ordinal(0)] [RED("("panicAutoRegenOn")] 		public CBool PanicAutoRegenOn { get; set;}
 
-		[RED("airAutoRegenOn")] 		public CBool AirAutoRegenOn { get; set;}
+		[Ordinal(0)] [RED("("airAutoRegenOn")] 		public CBool AirAutoRegenOn { get; set;}
 
-		[RED("swimmingStaminaAutoRegenOn")] 		public CBool SwimmingStaminaAutoRegenOn { get; set;}
+		[Ordinal(0)] [RED("("swimmingStaminaAutoRegenOn")] 		public CBool SwimmingStaminaAutoRegenOn { get; set;}
 
-		[RED("adrenalineAutoRegenOn")] 		public CBool AdrenalineAutoRegenOn { get; set;}
+		[Ordinal(0)] [RED("("adrenalineAutoRegenOn")] 		public CBool AdrenalineAutoRegenOn { get; set;}
 
 		public W3EffectManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

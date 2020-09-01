@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CVariableValueStateTransitionCondition : IBehaviorStateTransitionCondition
 	{
-		[RED("compareValue")] 		public CFloat CompareValue { get; set;}
+		[Ordinal(0)] [RED("compareValue")] 		public CFloat CompareValue { get; set;}
 
-		[RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
+		[Ordinal(0)] [RED("compareFunc")] 		public CEnum<ECompareFunc> CompareFunc { get; set;}
 
-		[RED("socketName")] 		public CName SocketName { get; set;}
+		[Ordinal(0)] [RED("socketName")] 		public CName SocketName { get; set;}
 
-		[RED("useAbsoluteValue")] 		public CBool UseAbsoluteValue { get; set;}
+		[Ordinal(0)] [RED("useAbsoluteValue")] 		public CBool UseAbsoluteValue { get; set;}
 
-		[RED("cachedVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedVariableNode { get; set;}
+		[Ordinal(0)] [RED("cachedVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedVariableNode { get; set;}
 
 		public CVariableValueStateTransitionCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

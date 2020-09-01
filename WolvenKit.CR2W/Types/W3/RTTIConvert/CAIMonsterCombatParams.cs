@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMonsterCombatParams : CAIBaseMonsterCombatParams
 	{
-		[RED("createHitReactionEvent")] 		public CName CreateHitReactionEvent { get; set;}
+		[Ordinal(0)] [RED("createHitReactionEvent")] 		public CName CreateHitReactionEvent { get; set;}
 
-		[RED("IncreaseHitCounterOnlyOnMelee")] 		public CBool IncreaseHitCounterOnlyOnMelee { get; set;}
+		[Ordinal(0)] [RED("IncreaseHitCounterOnlyOnMelee")] 		public CBool IncreaseHitCounterOnlyOnMelee { get; set;}
 
-		[RED("criticalState")] 		public CHandle<CAINpcCriticalState> CriticalState { get; set;}
+		[Ordinal(0)] [RED("criticalState")] 		public CHandle<CAINpcCriticalState> CriticalState { get; set;}
 
-		[RED("reactionTree")] 		public CHandle<CAIMonsterCombatReactionsTree> ReactionTree { get; set;}
+		[Ordinal(0)] [RED("reactionTree")] 		public CHandle<CAIMonsterCombatReactionsTree> ReactionTree { get; set;}
 
 		public CAIMonsterCombatParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

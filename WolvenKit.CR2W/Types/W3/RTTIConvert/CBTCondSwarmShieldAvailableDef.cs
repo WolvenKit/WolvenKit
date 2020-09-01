@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondSwarmShieldAvailableDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("checkIsShieldInPlace")] 		public CBool CheckIsShieldInPlace { get; set;}
+		[Ordinal(0)] [RED("("checkIsShieldInPlace")] 		public CBool CheckIsShieldInPlace { get; set;}
 
 		public CBTCondSwarmShieldAvailableDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

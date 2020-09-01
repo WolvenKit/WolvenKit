@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SRadialDesaturation : CVariable
 	{
-		[RED("value")] 		public CBool Value { get; set;}
+		[Ordinal(0)] [RED("("value")] 		public CBool Value { get; set;}
 
-		[RED("fieldName")] 		public CName FieldName { get; set;}
+		[Ordinal(0)] [RED("("fieldName")] 		public CName FieldName { get; set;}
 
 		public SRadialDesaturation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

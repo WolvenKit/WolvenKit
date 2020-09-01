@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskSetIsTargetableByPlayer : IBehTreeTask
 	{
-		[RED("value")] 		public CBool Value { get; set;}
+		[Ordinal(0)] [RED("value")] 		public CBool Value { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
 		public BTTaskSetIsTargetableByPlayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskDelay : IBehTreeTask
 	{
-		[RED("delay")] 		public CFloat Delay { get; set;}
+		[Ordinal(0)] [RED("delay")] 		public CFloat Delay { get; set;}
 
-		[RED("nextActionTime")] 		public CFloat NextActionTime { get; set;}
+		[Ordinal(0)] [RED("nextActionTime")] 		public CFloat NextActionTime { get; set;}
 
 		public CBTTaskDelay(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

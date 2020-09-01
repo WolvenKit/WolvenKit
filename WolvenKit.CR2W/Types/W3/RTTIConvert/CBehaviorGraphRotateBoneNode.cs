@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphRotateBoneNode : CBehaviorGraphBaseNode
 	{
-		[RED("boneName")] 		public CString BoneName { get; set;}
+		[Ordinal(0)] [RED("boneName")] 		public CString BoneName { get; set;}
 
-		[RED("axis")] 		public CEnum<EBoneRotationAxis> Axis { get; set;}
+		[Ordinal(0)] [RED("axis")] 		public CEnum<EBoneRotationAxis> Axis { get; set;}
 
-		[RED("scale")] 		public CFloat Scale { get; set;}
+		[Ordinal(0)] [RED("scale")] 		public CFloat Scale { get; set;}
 
-		[RED("biasAngle")] 		public CFloat BiasAngle { get; set;}
+		[Ordinal(0)] [RED("biasAngle")] 		public CFloat BiasAngle { get; set;}
 
-		[RED("minAngle")] 		public CFloat MinAngle { get; set;}
+		[Ordinal(0)] [RED("minAngle")] 		public CFloat MinAngle { get; set;}
 
-		[RED("maxAngle")] 		public CFloat MaxAngle { get; set;}
+		[Ordinal(0)] [RED("maxAngle")] 		public CFloat MaxAngle { get; set;}
 
-		[RED("clampRotation")] 		public CBool ClampRotation { get; set;}
+		[Ordinal(0)] [RED("clampRotation")] 		public CBool ClampRotation { get; set;}
 
-		[RED("localSpace")] 		public CBool LocalSpace { get; set;}
+		[Ordinal(0)] [RED("localSpace")] 		public CBool LocalSpace { get; set;}
 
-		[RED("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
+		[Ordinal(0)] [RED("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
 
-		[RED("cachedAngleMinNode")] 		public CPtr<CBehaviorGraphValueNode> CachedAngleMinNode { get; set;}
+		[Ordinal(0)] [RED("cachedAngleMinNode")] 		public CPtr<CBehaviorGraphValueNode> CachedAngleMinNode { get; set;}
 
-		[RED("cachedAngleMaxNode")] 		public CPtr<CBehaviorGraphValueNode> CachedAngleMaxNode { get; set;}
+		[Ordinal(0)] [RED("cachedAngleMaxNode")] 		public CPtr<CBehaviorGraphValueNode> CachedAngleMaxNode { get; set;}
 
 		public CBehaviorGraphRotateBoneNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

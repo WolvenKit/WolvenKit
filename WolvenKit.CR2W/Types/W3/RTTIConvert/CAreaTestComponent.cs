@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAreaTestComponent : CComponent
 	{
-		[RED("traceDistance")] 		public CFloat TraceDistance { get; set;}
+		[Ordinal(0)] [RED("traceDistance")] 		public CFloat TraceDistance { get; set;}
 
-		[RED("extents")] 		public Vector Extents { get; set;}
+		[Ordinal(0)] [RED("extents")] 		public Vector Extents { get; set;}
 
-		[RED("searchRadius")] 		public CFloat SearchRadius { get; set;}
+		[Ordinal(0)] [RED("searchRadius")] 		public CFloat SearchRadius { get; set;}
 
 		public CAreaTestComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

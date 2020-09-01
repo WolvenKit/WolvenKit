@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskHorseSummon : IBehTreeTask
 	{
-		[RED("horseSummonner")] 		public CHandle<CEntity> HorseSummonner { get; set;}
+		[Ordinal(0)] [RED("horseSummonner")] 		public CHandle<CEntity> HorseSummonner { get; set;}
 
 		public CBTTaskHorseSummon(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

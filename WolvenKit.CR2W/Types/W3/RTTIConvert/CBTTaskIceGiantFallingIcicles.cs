@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskIceGiantFallingIcicles : CBTTaskAttack
 	{
-		[RED("icicles", 2,0)] 		public CArray<CHandle<CGameplayEntity>> Icicles { get; set;}
+		[Ordinal(0)] [RED("icicles", 2,0)] 		public CArray<CHandle<CGameplayEntity>> Icicles { get; set;}
 
-		[RED("rangeForIcyclesActivation")] 		public CFloat RangeForIcyclesActivation { get; set;}
+		[Ordinal(0)] [RED("rangeForIcyclesActivation")] 		public CFloat RangeForIcyclesActivation { get; set;}
 
-		[RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(0)] [RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
 		public CBTTaskIceGiantFallingIcicles(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

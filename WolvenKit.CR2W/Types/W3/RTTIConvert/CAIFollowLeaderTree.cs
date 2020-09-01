@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIFollowLeaderTree : IAIIdleFormationTree
 	{
-		[RED("leaderName")] 		public CName LeaderName { get; set;}
+		[Ordinal(0)] [RED("leaderName")] 		public CName LeaderName { get; set;}
 
-		[RED("disableGestures")] 		public CBool DisableGestures { get; set;}
+		[Ordinal(0)] [RED("disableGestures")] 		public CBool DisableGestures { get; set;}
 
-		[RED("removePlayedAnimationFromPool")] 		public CBool RemovePlayedAnimationFromPool { get; set;}
+		[Ordinal(0)] [RED("removePlayedAnimationFromPool")] 		public CBool RemovePlayedAnimationFromPool { get; set;}
 
-		[RED("gossipGesturesOnly")] 		public CBool GossipGesturesOnly { get; set;}
+		[Ordinal(0)] [RED("gossipGesturesOnly")] 		public CBool GossipGesturesOnly { get; set;}
 
-		[RED("cooldownBetweenGesture")] 		public CFloat CooldownBetweenGesture { get; set;}
+		[Ordinal(0)] [RED("cooldownBetweenGesture")] 		public CFloat CooldownBetweenGesture { get; set;}
 
-		[RED("chanceToPlayGesture")] 		public CFloat ChanceToPlayGesture { get; set;}
+		[Ordinal(0)] [RED("chanceToPlayGesture")] 		public CFloat ChanceToPlayGesture { get; set;}
 
-		[RED("dontActivateGestureWhenNotTalking")] 		public CBool DontActivateGestureWhenNotTalking { get; set;}
+		[Ordinal(0)] [RED("dontActivateGestureWhenNotTalking")] 		public CBool DontActivateGestureWhenNotTalking { get; set;}
 
-		[RED("onlyOneActorGesticulatingAtATime")] 		public CBool OnlyOneActorGesticulatingAtATime { get; set;}
+		[Ordinal(0)] [RED("onlyOneActorGesticulatingAtATime")] 		public CBool OnlyOneActorGesticulatingAtATime { get; set;}
 
-		[RED("stopGestureOnDeactivate")] 		public CBool StopGestureOnDeactivate { get; set;}
+		[Ordinal(0)] [RED("stopGestureOnDeactivate")] 		public CBool StopGestureOnDeactivate { get; set;}
 
-		[RED("dontOverrideRightHand")] 		public CBool DontOverrideRightHand { get; set;}
+		[Ordinal(0)] [RED("dontOverrideRightHand")] 		public CBool DontOverrideRightHand { get; set;}
 
-		[RED("dontOverrideLeftHand")] 		public CBool DontOverrideLeftHand { get; set;}
+		[Ordinal(0)] [RED("dontOverrideLeftHand")] 		public CBool DontOverrideLeftHand { get; set;}
 
 		public CAIFollowLeaderTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

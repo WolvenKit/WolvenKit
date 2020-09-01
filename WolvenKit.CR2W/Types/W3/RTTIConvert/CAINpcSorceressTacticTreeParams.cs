@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcSorceressTacticTreeParams : CAINpcTacticTreeParams
 	{
-		[RED("minStrafeDist")] 		public CFloat MinStrafeDist { get; set;}
+		[Ordinal(0)] [RED("minStrafeDist")] 		public CFloat MinStrafeDist { get; set;}
 
-		[RED("maxStrafeDist")] 		public CFloat MaxStrafeDist { get; set;}
+		[Ordinal(0)] [RED("maxStrafeDist")] 		public CFloat MaxStrafeDist { get; set;}
 
-		[RED("minFarStrafeDist")] 		public CFloat MinFarStrafeDist { get; set;}
+		[Ordinal(0)] [RED("minFarStrafeDist")] 		public CFloat MinFarStrafeDist { get; set;}
 
-		[RED("maxFarStrafeDist")] 		public CFloat MaxFarStrafeDist { get; set;}
+		[Ordinal(0)] [RED("maxFarStrafeDist")] 		public CFloat MaxFarStrafeDist { get; set;}
 
 		public CAINpcSorceressTacticTreeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

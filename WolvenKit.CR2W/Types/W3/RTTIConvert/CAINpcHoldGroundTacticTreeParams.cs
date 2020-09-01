@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcHoldGroundTacticTreeParams : CAINpcTacticTreeParams
 	{
-		[RED("holdPositionTag")] 		public CName HoldPositionTag { get; set;}
+		[Ordinal(0)] [RED("holdPositionTag")] 		public CName HoldPositionTag { get; set;}
 
-		[RED("engageDist")] 		public CFloat EngageDist { get; set;}
+		[Ordinal(0)] [RED("engageDist")] 		public CFloat EngageDist { get; set;}
 
-		[RED("maxDistanceToHoldGroundPosition")] 		public CFloat MaxDistanceToHoldGroundPosition { get; set;}
+		[Ordinal(0)] [RED("maxDistanceToHoldGroundPosition")] 		public CFloat MaxDistanceToHoldGroundPosition { get; set;}
 
 		public CAINpcHoldGroundTacticTreeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

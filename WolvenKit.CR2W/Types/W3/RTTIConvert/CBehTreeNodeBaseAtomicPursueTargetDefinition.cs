@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeBaseAtomicPursueTargetDefinition : CBehTreeNodeAtomicActionDefinition
 	{
-		[RED("minDistance")] 		public CBehTreeValFloat MinDistance { get; set;}
+		[Ordinal(0)] [RED("minDistance")] 		public CBehTreeValFloat MinDistance { get; set;}
 
-		[RED("moveSpeed")] 		public CBehTreeValFloat MoveSpeed { get; set;}
+		[Ordinal(0)] [RED("moveSpeed")] 		public CBehTreeValFloat MoveSpeed { get; set;}
 
-		[RED("tolerance")] 		public CBehTreeValFloat Tolerance { get; set;}
+		[Ordinal(0)] [RED("tolerance")] 		public CBehTreeValFloat Tolerance { get; set;}
 
-		[RED("moveType")] 		public CBehTreeValEMoveType MoveType { get; set;}
+		[Ordinal(0)] [RED("moveType")] 		public CBehTreeValEMoveType MoveType { get; set;}
 
-		[RED("moveOutsideNavdata")] 		public CBehTreeValBool MoveOutsideNavdata { get; set;}
+		[Ordinal(0)] [RED("moveOutsideNavdata")] 		public CBehTreeValBool MoveOutsideNavdata { get; set;}
 
 		public CBehTreeNodeBaseAtomicPursueTargetDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

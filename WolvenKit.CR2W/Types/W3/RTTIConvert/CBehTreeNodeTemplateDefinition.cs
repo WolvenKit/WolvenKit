@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeTemplateDefinition : IBehTreeMetanodeDefinition
 	{
-		[RED("res")] 		public CHandle<CBehTree> Res { get; set;}
+		[Ordinal(0)] [RED("res")] 		public CHandle<CBehTree> Res { get; set;}
 
-		[RED("aiParameters")] 		public CHandle<IAIParameters> AiParameters { get; set;}
+		[Ordinal(0)] [RED("aiParameters")] 		public CHandle<IAIParameters> AiParameters { get; set;}
 
 		public CBehTreeNodeTemplateDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIFlightIdleRedefinitionParameters : CAIRedefinitionParameters
 	{
-		[RED("freeFlight")] 		public CHandle<IAIFlightIdleTree> FreeFlight { get; set;}
+		[Ordinal(0)] [RED("freeFlight")] 		public CHandle<IAIFlightIdleTree> FreeFlight { get; set;}
 
 		public CAIFlightIdleRedefinitionParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

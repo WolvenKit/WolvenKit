@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4ScaleformContentDLCMounter : IGameplayDLCMounter
 	{
-		[RED("scaleformDirectoryPath")] 		public CString ScaleformDirectoryPath { get; set;}
+		[Ordinal(0)] [RED("scaleformDirectoryPath")] 		public CString ScaleformDirectoryPath { get; set;}
 
 		public CR4ScaleformContentDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

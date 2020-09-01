@@ -10,43 +10,43 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CRiftEntity : CInteractiveEntity
 	{
-		[RED("linkingMode")] 		public CBool LinkingMode { get; set;}
+		[Ordinal(0)] [RED("linkingMode")] 		public CBool LinkingMode { get; set;}
 
-		[RED("controlledEncounter")] 		public EntityHandle ControlledEncounter { get; set;}
+		[Ordinal(0)] [RED("controlledEncounter")] 		public EntityHandle ControlledEncounter { get; set;}
 
-		[RED("controlledEncounterTag")] 		public CName ControlledEncounterTag { get; set;}
+		[Ordinal(0)] [RED("controlledEncounterTag")] 		public CName ControlledEncounterTag { get; set;}
 
-		[RED("activationDelay")] 		public CFloat ActivationDelay { get; set;}
+		[Ordinal(0)] [RED("activationDelay")] 		public CFloat ActivationDelay { get; set;}
 
-		[RED("closeAfter")] 		public CFloat CloseAfter { get; set;}
+		[Ordinal(0)] [RED("closeAfter")] 		public CFloat CloseAfter { get; set;}
 
-		[RED("canBeDisabled")] 		public CBool CanBeDisabled { get; set;}
+		[Ordinal(0)] [RED("canBeDisabled")] 		public CBool CanBeDisabled { get; set;}
 
-		[RED("damageVal")] 		public SAbilityAttributeValue DamageVal { get; set;}
+		[Ordinal(0)] [RED("damageVal")] 		public SAbilityAttributeValue DamageVal { get; set;}
 
-		[RED("factSetAfterRiftWasDisabled")] 		public CString FactSetAfterRiftWasDisabled { get; set;}
+		[Ordinal(0)] [RED("factSetAfterRiftWasDisabled")] 		public CString FactSetAfterRiftWasDisabled { get; set;}
 
-		[RED("isIntact")] 		public CBool IsIntact { get; set;}
+		[Ordinal(0)] [RED("isIntact")] 		public CBool IsIntact { get; set;}
 
-		[RED("currState")] 		public CName CurrState { get; set;}
+		[Ordinal(0)] [RED("currState")] 		public CName CurrState { get; set;}
 
-		[RED("encounter")] 		public CHandle<CEncounter> Encounter { get; set;}
+		[Ordinal(0)] [RED("encounter")] 		public CHandle<CEncounter> Encounter { get; set;}
 
-		[RED("coldArea")] 		public CHandle<CTriggerAreaComponent> ColdArea { get; set;}
+		[Ordinal(0)] [RED("coldArea")] 		public CHandle<CTriggerAreaComponent> ColdArea { get; set;}
 
-		[RED("entitiesInRange", 2,0)] 		public CArray<CHandle<CActor>> EntitiesInRange { get; set;}
+		[Ordinal(0)] [RED("entitiesInRange", 2,0)] 		public CArray<CHandle<CActor>> EntitiesInRange { get; set;}
 
-		[RED("isEncounterEnabled")] 		public CBool IsEncounterEnabled { get; set;}
+		[Ordinal(0)] [RED("isEncounterEnabled")] 		public CBool IsEncounterEnabled { get; set;}
 
-		[RED("buffParams")] 		public SCustomEffectParams BuffParams { get; set;}
+		[Ordinal(0)] [RED("buffParams")] 		public SCustomEffectParams BuffParams { get; set;}
 
-		[RED("spawnCounter")] 		public CInt32 SpawnCounter { get; set;}
+		[Ordinal(0)] [RED("spawnCounter")] 		public CInt32 SpawnCounter { get; set;}
 
-		[RED("encounterSpawnLimit")] 		public CInt32 EncounterSpawnLimit { get; set;}
+		[Ordinal(0)] [RED("encounterSpawnLimit")] 		public CInt32 EncounterSpawnLimit { get; set;}
 
-		[RED("collisionEntityTemplate")] 		public CHandle<CEntityTemplate> CollisionEntityTemplate { get; set;}
+		[Ordinal(0)] [RED("collisionEntityTemplate")] 		public CHandle<CEntityTemplate> CollisionEntityTemplate { get; set;}
 
-		[RED("collisionEntity")] 		public CHandle<CEntity> CollisionEntity { get; set;}
+		[Ordinal(0)] [RED("collisionEntity")] 		public CHandle<CEntity> CollisionEntity { get; set;}
 
 		public CRiftEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

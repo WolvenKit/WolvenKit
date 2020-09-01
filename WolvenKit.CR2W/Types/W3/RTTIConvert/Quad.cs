@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class Quad : CVariable
 	{
-		[RED("p1")] 		public Vector P1 { get; set;}
+		[Ordinal(0)] [RED("p1")] 		public Vector P1 { get; set;}
 
-		[RED("p2")] 		public Vector P2 { get; set;}
+		[Ordinal(0)] [RED("p2")] 		public Vector P2 { get; set;}
 
-		[RED("p3")] 		public Vector P3 { get; set;}
+		[Ordinal(0)] [RED("p3")] 		public Vector P3 { get; set;}
 
-		[RED("p4")] 		public Vector P4 { get; set;}
+		[Ordinal(0)] [RED("p4")] 		public Vector P4 { get; set;}
 
 		public Quad(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

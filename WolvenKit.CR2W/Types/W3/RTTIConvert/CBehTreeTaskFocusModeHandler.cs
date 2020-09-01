@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeTaskFocusModeHandler : IBehTreeTask
 	{
-		[RED("activate")] 		public CBool Activate { get; set;}
+		[Ordinal(0)] [RED("activate")] 		public CBool Activate { get; set;}
 
 		public CBehTreeTaskFocusModeHandler(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardWorkMode : CObject
 	{
-		[RED("workMode")] 		public CName WorkMode { get; set;}
+		[Ordinal(0)] [RED("workMode")] 		public CName WorkMode { get; set;}
 
-		[RED("workContext")] 		public CName WorkContext { get; set;}
+		[Ordinal(0)] [RED("workContext")] 		public CName WorkContext { get; set;}
 
-		[RED("generalHelpKey")] 		public CString GeneralHelpKey { get; set;}
+		[Ordinal(0)] [RED("generalHelpKey")] 		public CString GeneralHelpKey { get; set;}
 
-		[RED("shot")] 		public CHandle<CModStoryBoardShot> Shot { get; set;}
+		[Ordinal(0)] [RED("shot")] 		public CHandle<CModStoryBoardShot> Shot { get; set;}
 
-		[RED("log")] 		public CHandle<CModLogger> Log { get; set;}
+		[Ordinal(0)] [RED("log")] 		public CHandle<CModLogger> Log { get; set;}
 
-		[RED("parentCallback")] 		public CHandle<CModSbUiParentCallback> ParentCallback { get; set;}
+		[Ordinal(0)] [RED("parentCallback")] 		public CHandle<CModSbUiParentCallback> ParentCallback { get; set;}
 
 		public CModStoryBoardWorkMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

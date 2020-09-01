@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStorage : CPeristentEntity
 	{
-		[RED("data", 2,0)] 		public CArray<CHandle<IModStorageData>> Data { get; set;}
+		[Ordinal(0)] [RED("("data", 2,0)] 		public CArray<CHandle<IModStorageData>> Data { get; set;}
 
 		public CModStorage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventPropVisibility : CStorySceneEvent
 	{
-		[RED("propID")] 		public CName PropID { get; set;}
+		[Ordinal(0)] [RED("propID")] 		public CName PropID { get; set;}
 
-		[RED("showHideFlag")] 		public CBool ShowHideFlag { get; set;}
+		[Ordinal(0)] [RED("showHideFlag")] 		public CBool ShowHideFlag { get; set;}
 
 		public CStorySceneEventPropVisibility(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphStateTransitionFinalStepNode : CBehaviorGraphStateTransitionBlendNode
 	{
-		[RED("locationAdjustmentVar")] 		public CName LocationAdjustmentVar { get; set;}
+		[Ordinal(0)] [RED("locationAdjustmentVar")] 		public CName LocationAdjustmentVar { get; set;}
 
-		[RED("adjustmentActiveVar")] 		public CName AdjustmentActiveVar { get; set;}
+		[Ordinal(0)] [RED("adjustmentActiveVar")] 		public CName AdjustmentActiveVar { get; set;}
 
 		public CBehaviorGraphStateTransitionFinalStepNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

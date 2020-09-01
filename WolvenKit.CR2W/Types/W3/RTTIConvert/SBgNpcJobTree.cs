@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBgNpcJobTree : CVariable
 	{
-		[RED("jobTree")] 		public CSoft<CJobTree> JobTree { get; set;}
+		[Ordinal(0)] [RED("("jobTree")] 		public CSoft<CJobTree> JobTree { get; set;}
 
-		[RED("category")] 		public CName Category { get; set;}
+		[Ordinal(0)] [RED("("category")] 		public CName Category { get; set;}
 
-		[RED("fireTime")] 		public GameTime FireTime { get; set;}
+		[Ordinal(0)] [RED("("fireTime")] 		public GameTime FireTime { get; set;}
 
 		public SBgNpcJobTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

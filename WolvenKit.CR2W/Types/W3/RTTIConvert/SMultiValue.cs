@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMultiValue : CVariable
 	{
-		[RED("floats", 2,0)] 		public CArray<CFloat> Floats { get; set;}
+		[Ordinal(0)] [RED("("floats", 2,0)] 		public CArray<CFloat> Floats { get; set;}
 
-		[RED("bools", 2,0)] 		public CArray<CBool> Bools { get; set;}
+		[Ordinal(0)] [RED("("bools", 2,0)] 		public CArray<CBool> Bools { get; set;}
 
-		[RED("enums", 2,0)] 		public CArray<SEnumVariant> Enums { get; set;}
+		[Ordinal(0)] [RED("("enums", 2,0)] 		public CArray<SEnumVariant> Enums { get; set;}
 
-		[RED("names", 2,0)] 		public CArray<CName> Names { get; set;}
+		[Ordinal(0)] [RED("("names", 2,0)] 		public CArray<CName> Names { get; set;}
 
 		public SMultiValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

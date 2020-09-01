@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeConditionDistanceToNamedTargetDefinition : CBehTreeNodeConditionDefinition
 	{
-		[RED("minDistance")] 		public CBehTreeValFloat MinDistance { get; set;}
+		[Ordinal(0)] [RED("("minDistance")] 		public CBehTreeValFloat MinDistance { get; set;}
 
-		[RED("maxDistance")] 		public CBehTreeValFloat MaxDistance { get; set;}
+		[Ordinal(0)] [RED("("maxDistance")] 		public CBehTreeValFloat MaxDistance { get; set;}
 
-		[RED("checkRotation")] 		public CBool CheckRotation { get; set;}
+		[Ordinal(0)] [RED("("checkRotation")] 		public CBool CheckRotation { get; set;}
 
-		[RED("targetName")] 		public CBehTreeValCName TargetName { get; set;}
+		[Ordinal(0)] [RED("("targetName")] 		public CBehTreeValCName TargetName { get; set;}
 
 		public CBehTreeNodeConditionDistanceToNamedTargetDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSavegameInfo : CVariable
 	{
-		[RED("filename")] 		public CString Filename { get; set;}
+		[Ordinal(0)] [RED("("filename")] 		public CString Filename { get; set;}
 
-		[RED("slotType")] 		public CEnum<ESaveGameType> SlotType { get; set;}
+		[Ordinal(0)] [RED("("slotType")] 		public CEnum<ESaveGameType> SlotType { get; set;}
 
-		[RED("slotIndex")] 		public CInt32 SlotIndex { get; set;}
+		[Ordinal(0)] [RED("("slotIndex")] 		public CInt32 SlotIndex { get; set;}
 
 		public SSavegameInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

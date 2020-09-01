@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardAssetWorkMode : CModSbListViewWorkMode
 	{
-		[RED("storyboard")] 		public CHandle<CModStoryBoard> Storyboard { get; set;}
+		[Ordinal(0)] [RED("("storyboard")] 		public CHandle<CModStoryBoard> Storyboard { get; set;}
 
-		[RED("shotViewer")] 		public CHandle<CModStoryBoardShotViewer> ShotViewer { get; set;}
+		[Ordinal(0)] [RED("("shotViewer")] 		public CHandle<CModStoryBoardShotViewer> ShotViewer { get; set;}
 
-		[RED("assetManager")] 		public CHandle<CModStoryBoardAssetManager> AssetManager { get; set;}
+		[Ordinal(0)] [RED("("assetManager")] 		public CHandle<CModStoryBoardAssetManager> AssetManager { get; set;}
 
-		[RED("idlePoseManager")] 		public CHandle<CModStoryBoardIdlePoseListsManager> IdlePoseManager { get; set;}
+		[Ordinal(0)] [RED("("idlePoseManager")] 		public CHandle<CModStoryBoardIdlePoseListsManager> IdlePoseManager { get; set;}
 
-		[RED("animDirector")] 		public CHandle<CModStoryBoardAnimationDirector> AnimDirector { get; set;}
+		[Ordinal(0)] [RED("("animDirector")] 		public CHandle<CModStoryBoardAnimationDirector> AnimDirector { get; set;}
 
 		public CModStoryBoardAssetWorkMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

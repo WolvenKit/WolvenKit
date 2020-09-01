@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4LocomotionDirectController : CObject
 	{
-		[RED("agent")] 		public CHandle<CMovingAgentComponent> Agent { get; set;}
+		[Ordinal(0)] [RED("("agent")] 		public CHandle<CMovingAgentComponent> Agent { get; set;}
 
-		[RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
+		[Ordinal(0)] [RED("("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
 
-		[RED("moveRotation")] 		public CFloat MoveRotation { get; set;}
+		[Ordinal(0)] [RED("("moveRotation")] 		public CFloat MoveRotation { get; set;}
 
 		public CR4LocomotionDirectController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

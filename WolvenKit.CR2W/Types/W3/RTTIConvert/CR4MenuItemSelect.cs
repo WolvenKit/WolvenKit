@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4MenuItemSelect : CR4OverlayMenu
 	{
-		[RED("_itemsInv")] 		public CHandle<W3GuiItemSelectComponent> _itemsInv { get; set;}
+		[Ordinal(0)] [RED("("_itemsInv")] 		public CHandle<W3GuiItemSelectComponent> _itemsInv { get; set;}
 
-		[RED("_invComponent")] 		public CHandle<CInventoryComponent> _invComponent { get; set;}
+		[Ordinal(0)] [RED("("_invComponent")] 		public CHandle<CInventoryComponent> _invComponent { get; set;}
 
-		[RED("_initData")] 		public CHandle<W3ItemSelectMenuInitData> _initData { get; set;}
+		[Ordinal(0)] [RED("("_initData")] 		public CHandle<W3ItemSelectMenuInitData> _initData { get; set;}
 
 		public CR4MenuItemSelect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

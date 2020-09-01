@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimMorphEvent : CExtAnimDurationEvent
 	{
-		[RED("morphComponentId")] 		public CName MorphComponentId { get; set;}
+		[Ordinal(0)] [RED("("morphComponentId")] 		public CName MorphComponentId { get; set;}
 
-		[RED("invertWeight")] 		public CBool InvertWeight { get; set;}
+		[Ordinal(0)] [RED("("invertWeight")] 		public CBool InvertWeight { get; set;}
 
-		[RED("useCurve")] 		public CBool UseCurve { get; set;}
+		[Ordinal(0)] [RED("("useCurve")] 		public CBool UseCurve { get; set;}
 
-		[RED("curve")] 		public SCurveData Curve { get; set;}
+		[Ordinal(0)] [RED("("curve")] 		public SCurveData Curve { get; set;}
 
 		public CExtAnimMorphEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

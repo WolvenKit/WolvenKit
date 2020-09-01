@@ -10,29 +10,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MonsterHuntNPC : CNewNPC
 	{
-		[RED("MONSTER_HUNT_TARGET_TAG")] 		public CName MONSTER_HUNT_TARGET_TAG { get; set;}
+		[Ordinal(0)] [RED("("MONSTER_HUNT_TARGET_TAG")] 		public CName MONSTER_HUNT_TARGET_TAG { get; set;}
 
-		[RED("bossBarOn")] 		public CBool BossBarOn { get; set;}
+		[Ordinal(0)] [RED("("bossBarOn")] 		public CBool BossBarOn { get; set;}
 
-		[RED("musicOn")] 		public CBool MusicOn { get; set;}
+		[Ordinal(0)] [RED("("musicOn")] 		public CBool MusicOn { get; set;}
 
-		[RED("displayBossBar")] 		public CBool DisplayBossBar { get; set;}
+		[Ordinal(0)] [RED("("displayBossBar")] 		public CBool DisplayBossBar { get; set;}
 
-		[RED("switchMusic")] 		public CBool SwitchMusic { get; set;}
+		[Ordinal(0)] [RED("("switchMusic")] 		public CBool SwitchMusic { get; set;}
 
-		[RED("questFocusSoundOnSpawn")] 		public CBool QuestFocusSoundOnSpawn { get; set;}
+		[Ordinal(0)] [RED("("questFocusSoundOnSpawn")] 		public CBool QuestFocusSoundOnSpawn { get; set;}
 
-		[RED("dontTagForAchievement")] 		public CBool DontTagForAchievement { get; set;}
+		[Ordinal(0)] [RED("("dontTagForAchievement")] 		public CBool DontTagForAchievement { get; set;}
 
-		[RED("disableDismemberment")] 		public CBool DisableDismemberment { get; set;}
+		[Ordinal(0)] [RED("("disableDismemberment")] 		public CBool DisableDismemberment { get; set;}
 
-		[RED("combatMusicStartEvent")] 		public CString CombatMusicStartEvent { get; set;}
+		[Ordinal(0)] [RED("("combatMusicStartEvent")] 		public CString CombatMusicStartEvent { get; set;}
 
-		[RED("combatMusicStopEvent")] 		public CString CombatMusicStopEvent { get; set;}
+		[Ordinal(0)] [RED("("combatMusicStopEvent")] 		public CString CombatMusicStopEvent { get; set;}
 
-		[RED("associatedInvestigationAreasTag")] 		public CName AssociatedInvestigationAreasTag { get; set;}
+		[Ordinal(0)] [RED("("associatedInvestigationAreasTag")] 		public CName AssociatedInvestigationAreasTag { get; set;}
 
-		[RED("investigationAreasProcessed")] 		public CBool InvestigationAreasProcessed { get; set;}
+		[Ordinal(0)] [RED("("investigationAreasProcessed")] 		public CBool InvestigationAreasProcessed { get; set;}
 
 		public W3MonsterHuntNPC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

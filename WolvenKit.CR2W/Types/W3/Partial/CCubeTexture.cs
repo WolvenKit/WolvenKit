@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CCubeTexture : CResource
 	{
-		[RED("targetFaceSize")] 		public CUInt32 TargetFaceSize { get; set;}
+		[Ordinal(0)] [RED("targetFaceSize")] 		public CUInt32 TargetFaceSize { get; set;}
 
-		[RED("strategy")] 		public CEnum<ECubeGenerationStrategy> Strategy { get; set;}
+		[Ordinal(0)] [RED("strategy")] 		public CEnum<ECubeGenerationStrategy> Strategy { get; set;}
 
-		[RED("compression")] 		public CEnum<ETextureCompression> Compression { get; set;}
+		[Ordinal(0)] [RED("compression")] 		public CEnum<ETextureCompression> Compression { get; set;}
 
-		[RED("front")] 		public CubeFace Front { get; set;}
+		[Ordinal(0)] [RED("front")] 		public CubeFace Front { get; set;}
 
-		[RED("back")] 		public CubeFace Back { get; set;}
+		[Ordinal(0)] [RED("back")] 		public CubeFace Back { get; set;}
 
-		[RED("top")] 		public CubeFace Top { get; set;}
+		[Ordinal(0)] [RED("top")] 		public CubeFace Top { get; set;}
 
-		[RED("bottom")] 		public CubeFace Bottom { get; set;}
+		[Ordinal(0)] [RED("bottom")] 		public CubeFace Bottom { get; set;}
 
-		[RED("left")] 		public CubeFace Left { get; set;}
+		[Ordinal(0)] [RED("left")] 		public CubeFace Left { get; set;}
 
-		[RED("right")] 		public CubeFace Right { get; set;}
+		[Ordinal(0)] [RED("right")] 		public CubeFace Right { get; set;}
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCubeTexture(cr2w, parent, name);
 

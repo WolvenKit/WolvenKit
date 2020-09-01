@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_IsInVehicle : CQCActorScriptedCondition
 	{
-		[RED("vehicleType")] 		public CEnum<EVehicleType> VehicleType { get; set;}
+		[Ordinal(0)] [RED("("vehicleType")] 		public CEnum<EVehicleType> VehicleType { get; set;}
 
-		[RED("vehicleTag")] 		public CName VehicleTag { get; set;}
+		[Ordinal(0)] [RED("("vehicleTag")] 		public CName VehicleTag { get; set;}
 
-		[RED("anyVehicle")] 		public CBool AnyVehicle { get; set;}
+		[Ordinal(0)] [RED("("anyVehicle")] 		public CBool AnyVehicle { get; set;}
 
 		public W3QuestCond_IsInVehicle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphScriptComponentStateNode : CBehaviorGraphScriptStateNode
 	{
-		[RED("componentName")] 		public CName ComponentName { get; set;}
+		[Ordinal(0)] [RED("componentName")] 		public CName ComponentName { get; set;}
 
 		public CBehaviorGraphScriptComponentStateNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

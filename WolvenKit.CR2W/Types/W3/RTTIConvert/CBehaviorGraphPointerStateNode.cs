@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphPointerStateNode : CBehaviorGraphStateNode
 	{
-		[RED("pointedStateName")] 		public CString PointedStateName { get; set;}
+		[Ordinal(0)] [RED("("pointedStateName")] 		public CString PointedStateName { get; set;}
 
-		[RED("pointedState")] 		public CPtr<CBehaviorGraphStateNode> PointedState { get; set;}
+		[Ordinal(0)] [RED("("pointedState")] 		public CPtr<CBehaviorGraphStateNode> PointedState { get; set;}
 
 		public CBehaviorGraphPointerStateNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

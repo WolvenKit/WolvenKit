@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPreCombatWarningDef : IBehTreeTaskDefinition
 	{
-		[RED("setFlagOnActivate")] 		public CBool SetFlagOnActivate { get; set;}
+		[Ordinal(0)] [RED("("setFlagOnActivate")] 		public CBool SetFlagOnActivate { get; set;}
 
-		[RED("setFlagOnDectivate")] 		public CBool SetFlagOnDectivate { get; set;}
+		[Ordinal(0)] [RED("("setFlagOnDectivate")] 		public CBool SetFlagOnDectivate { get; set;}
 
-		[RED("flag")] 		public CBool Flag { get; set;}
+		[Ordinal(0)] [RED("("flag")] 		public CBool Flag { get; set;}
 
 		public CBTTaskPreCombatWarningDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

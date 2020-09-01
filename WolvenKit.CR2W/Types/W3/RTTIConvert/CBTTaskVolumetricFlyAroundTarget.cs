@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskVolumetricFlyAroundTarget : CBTTaskVolumetricMove
 	{
-		[RED("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(0)] [RED("distance")] 		public CFloat Distance { get; set;}
 
-		[RED("height")] 		public CFloat Height { get; set;}
+		[Ordinal(0)] [RED("height")] 		public CFloat Height { get; set;}
 
-		[RED("flightMaxDuration")] 		public CFloat FlightMaxDuration { get; set;}
+		[Ordinal(0)] [RED("flightMaxDuration")] 		public CFloat FlightMaxDuration { get; set;}
 
-		[RED("npcToDestDistance")] 		public CFloat NpcToDestDistance { get; set;}
+		[Ordinal(0)] [RED("npcToDestDistance")] 		public CFloat NpcToDestDistance { get; set;}
 
-		[RED("flightStartTime")] 		public CFloat FlightStartTime { get; set;}
+		[Ordinal(0)] [RED("flightStartTime")] 		public CFloat FlightStartTime { get; set;}
 
-		[RED("flightDuration")] 		public CFloat FlightDuration { get; set;}
+		[Ordinal(0)] [RED("flightDuration")] 		public CFloat FlightDuration { get; set;}
 
 		public CBTTaskVolumetricFlyAroundTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

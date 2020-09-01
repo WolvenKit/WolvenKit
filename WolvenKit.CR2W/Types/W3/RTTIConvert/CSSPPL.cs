@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSSPPL : CObject
 	{
-		[RED("inGameConfigWrapper")] 		public CHandle<CInGameConfigWrapper> InGameConfigWrapper { get; set;}
+		[Ordinal(0)] [RED("("inGameConfigWrapper")] 		public CHandle<CInGameConfigWrapper> InGameConfigWrapper { get; set;}
 
-		[RED("isModOn")] 		public CBool IsModOn { get; set;}
+		[Ordinal(0)] [RED("("isModOn")] 		public CBool IsModOn { get; set;}
 
-		[RED("SPperLevel")] 		public CInt32 SPperLevel { get; set;}
+		[Ordinal(0)] [RED("("SPperLevel")] 		public CInt32 SPperLevel { get; set;}
 
 		public CSSPPL(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

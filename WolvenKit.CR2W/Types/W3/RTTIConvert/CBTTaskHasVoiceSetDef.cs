@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskHasVoiceSetDef : IBehTreeTaskDefinition
 	{
-		[RED("voiceSet")] 		public CBehTreeValString VoiceSet { get; set;}
+		[Ordinal(0)] [RED("("voiceSet")] 		public CBehTreeValString VoiceSet { get; set;}
 
 		public CBTTaskHasVoiceSetDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

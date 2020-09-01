@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneInputBlock : CStorySceneGraphBlock
 	{
-		[RED("input")] 		public CPtr<CStorySceneInput> Input { get; set;}
+		[Ordinal(0)] [RED("input")] 		public CPtr<CStorySceneInput> Input { get; set;}
 
 		public CStorySceneInputBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

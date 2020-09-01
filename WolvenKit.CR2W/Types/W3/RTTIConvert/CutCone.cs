@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CutCone : CVariable
 	{
-		[RED("positionAndRadius1")] 		public Vector PositionAndRadius1 { get; set;}
+		[Ordinal(0)] [RED("positionAndRadius1")] 		public Vector PositionAndRadius1 { get; set;}
 
-		[RED("normalAndRadius2")] 		public Vector NormalAndRadius2 { get; set;}
+		[Ordinal(0)] [RED("normalAndRadius2")] 		public Vector NormalAndRadius2 { get; set;}
 
-		[RED("height")] 		public CFloat Height { get; set;}
+		[Ordinal(0)] [RED("height")] 		public CFloat Height { get; set;}
 
 		public CutCone(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSetUnstoppableDef : IBehTreeTaskDefinition
 	{
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(0)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("onSuccess")] 		public CBool OnSuccess { get; set;}
+		[Ordinal(0)] [RED("("onSuccess")] 		public CBool OnSuccess { get; set;}
 
-		[RED("overrideForThisTask")] 		public CBool OverrideForThisTask { get; set;}
+		[Ordinal(0)] [RED("("overrideForThisTask")] 		public CBool OverrideForThisTask { get; set;}
 
-		[RED("makeUnpushable")] 		public CBool MakeUnpushable { get; set;}
+		[Ordinal(0)] [RED("("makeUnpushable")] 		public CBool MakeUnpushable { get; set;}
 
-		[RED("enable")] 		public CBool Enable { get; set;}
+		[Ordinal(0)] [RED("("enable")] 		public CBool Enable { get; set;}
 
 		public CBTTaskSetUnstoppableDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

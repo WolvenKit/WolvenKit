@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorConstraintUprightSpineBonesData : CVariable
 	{
-		[RED("boneName")] 		public CName BoneName { get; set;}
+		[Ordinal(0)] [RED("("boneName")] 		public CName BoneName { get; set;}
 
-		[RED("weight")] 		public CFloat Weight { get; set;}
+		[Ordinal(0)] [RED("("weight")] 		public CFloat Weight { get; set;}
 
-		[RED("boneCount")] 		public CInt32 BoneCount { get; set;}
+		[Ordinal(0)] [RED("("boneCount")] 		public CInt32 BoneCount { get; set;}
 
 		public SBehaviorConstraintUprightSpineBonesData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

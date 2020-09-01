@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondHitCounter : IBehTreeTask
 	{
-		[RED("value")] 		public CFloat Value { get; set;}
+		[Ordinal(0)] [RED("value")] 		public CFloat Value { get; set;}
 
-		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
+		[Ordinal(0)] [RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
-		[RED("total")] 		public CBool Total { get; set;}
+		[Ordinal(0)] [RED("total")] 		public CBool Total { get; set;}
 
 		public BTCondHitCounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

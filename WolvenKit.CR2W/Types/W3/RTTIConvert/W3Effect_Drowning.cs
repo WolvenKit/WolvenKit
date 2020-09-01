@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_Drowning : W3DamageOverTimeEffect
 	{
-		[RED("m_NoSaveLockInt")] 		public CInt32 M_NoSaveLockInt { get; set;}
+		[Ordinal(0)] [RED("("m_NoSaveLockInt")] 		public CInt32 M_NoSaveLockInt { get; set;}
 
-		[RED("isEffectOn")] 		public CBool IsEffectOn { get; set;}
+		[Ordinal(0)] [RED("("isEffectOn")] 		public CBool IsEffectOn { get; set;}
 
-		[RED("mac")] 		public CHandle<CMovingPhysicalAgentComponent> Mac { get; set;}
+		[Ordinal(0)] [RED("("mac")] 		public CHandle<CMovingPhysicalAgentComponent> Mac { get; set;}
 
-		[RED("submergeDepth")] 		public CFloat SubmergeDepth { get; set;}
+		[Ordinal(0)] [RED("("submergeDepth")] 		public CFloat SubmergeDepth { get; set;}
 
 		public W3Effect_Drowning(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

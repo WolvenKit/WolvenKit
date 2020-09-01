@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeDecoratorChangeBehaviorGraphDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("behGraphNameActivate")] 		public CBehTreeValCName BehGraphNameActivate { get; set;}
+		[Ordinal(0)] [RED("behGraphNameActivate")] 		public CBehTreeValCName BehGraphNameActivate { get; set;}
 
-		[RED("behGraphNameDeactivate")] 		public CBehTreeValCName BehGraphNameDeactivate { get; set;}
+		[Ordinal(0)] [RED("behGraphNameDeactivate")] 		public CBehTreeValCName BehGraphNameDeactivate { get; set;}
 
-		[RED("activateIfBehaviorUnavailable")] 		public CBool ActivateIfBehaviorUnavailable { get; set;}
+		[Ordinal(0)] [RED("activateIfBehaviorUnavailable")] 		public CBool ActivateIfBehaviorUnavailable { get; set;}
 
 		public CBehTreeDecoratorChangeBehaviorGraphDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

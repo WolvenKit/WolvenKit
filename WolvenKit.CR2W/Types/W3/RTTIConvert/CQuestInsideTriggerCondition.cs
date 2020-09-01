@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestInsideTriggerCondition : CQuestTriggerCondition
 	{
-		[RED("isInside")] 		public CBool IsInside { get; set;}
+		[Ordinal(0)] [RED("isInside")] 		public CBool IsInside { get; set;}
 
 		public CQuestInsideTriggerCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

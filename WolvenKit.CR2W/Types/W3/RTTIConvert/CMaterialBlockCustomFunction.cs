@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockCustomFunction : CMaterialBlock
 	{
-		[RED("customCode")] 		public CString CustomCode { get; set;}
+		[Ordinal(0)] [RED("customCode")] 		public CString CustomCode { get; set;}
 
 		public CMaterialBlockCustomFunction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

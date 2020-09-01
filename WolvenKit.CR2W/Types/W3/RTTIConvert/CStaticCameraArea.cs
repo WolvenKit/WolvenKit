@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStaticCameraArea : CEntity
 	{
-		[RED("cameraTag")] 		public CName CameraTag { get; set;}
+		[Ordinal(0)] [RED("("cameraTag")] 		public CName CameraTag { get; set;}
 
-		[RED("onlyForPlayer")] 		public CBool OnlyForPlayer { get; set;}
+		[Ordinal(0)] [RED("("onlyForPlayer")] 		public CBool OnlyForPlayer { get; set;}
 
-		[RED("activatorTag")] 		public CName ActivatorTag { get; set;}
+		[Ordinal(0)] [RED("("activatorTag")] 		public CName ActivatorTag { get; set;}
 
 		public CStaticCameraArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

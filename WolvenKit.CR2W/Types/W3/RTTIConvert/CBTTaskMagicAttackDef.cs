@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskMagicAttackDef : CBTTaskCollisionAttackDef
 	{
-		[RED("dodgeable")] 		public CBool Dodgeable { get; set;}
+		[Ordinal(0)] [RED("("dodgeable")] 		public CBool Dodgeable { get; set;}
 
-		[RED("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(0)] [RED("("effectName")] 		public CName EffectName { get; set;}
 
-		[RED("fxDummyEntityTag")] 		public CName FxDummyEntityTag { get; set;}
+		[Ordinal(0)] [RED("("fxDummyEntityTag")] 		public CName FxDummyEntityTag { get; set;}
 
-		[RED("dummyEntityEffectName")] 		public CName DummyEntityEffectName { get; set;}
+		[Ordinal(0)] [RED("("dummyEntityEffectName")] 		public CName DummyEntityEffectName { get; set;}
 
 		public CBTTaskMagicAttackDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

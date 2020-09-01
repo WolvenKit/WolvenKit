@@ -10,41 +10,41 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAnimationSequencePartDefinition : CVariable
 	{
-		[RED("animation")] 		public CName Animation { get; set;}
+		[Ordinal(0)] [RED("animation")] 		public CName Animation { get; set;}
 
-		[RED("syncType")] 		public CEnum<EAnimationManualSyncType> SyncType { get; set;}
+		[Ordinal(0)] [RED("syncType")] 		public CEnum<EAnimationManualSyncType> SyncType { get; set;}
 
-		[RED("syncEventName")] 		public CName SyncEventName { get; set;}
+		[Ordinal(0)] [RED("syncEventName")] 		public CName SyncEventName { get; set;}
 
-		[RED("shouldSlide")] 		public CBool ShouldSlide { get; set;}
+		[Ordinal(0)] [RED("shouldSlide")] 		public CBool ShouldSlide { get; set;}
 
-		[RED("shouldRotate")] 		public CBool ShouldRotate { get; set;}
+		[Ordinal(0)] [RED("shouldRotate")] 		public CBool ShouldRotate { get; set;}
 
-		[RED("useRefBone")] 		public CName UseRefBone { get; set;}
+		[Ordinal(0)] [RED("useRefBone")] 		public CName UseRefBone { get; set;}
 
-		[RED("rotationTypeUsingRefBone")] 		public CEnum<ESyncRotationUsingRefBoneType> RotationTypeUsingRefBone { get; set;}
+		[Ordinal(0)] [RED("rotationTypeUsingRefBone")] 		public CEnum<ESyncRotationUsingRefBoneType> RotationTypeUsingRefBone { get; set;}
 
-		[RED("finalPosition")] 		public Vector FinalPosition { get; set;}
+		[Ordinal(0)] [RED("finalPosition")] 		public Vector FinalPosition { get; set;}
 
-		[RED("finalHeading")] 		public CFloat FinalHeading { get; set;}
+		[Ordinal(0)] [RED("finalHeading")] 		public CFloat FinalHeading { get; set;}
 
-		[RED("blendTransitionTime")] 		public CFloat BlendTransitionTime { get; set;}
+		[Ordinal(0)] [RED("blendTransitionTime")] 		public CFloat BlendTransitionTime { get; set;}
 
-		[RED("blendInTime")] 		public CFloat BlendInTime { get; set;}
+		[Ordinal(0)] [RED("blendInTime")] 		public CFloat BlendInTime { get; set;}
 
-		[RED("blendOutTime")] 		public CFloat BlendOutTime { get; set;}
+		[Ordinal(0)] [RED("blendOutTime")] 		public CFloat BlendOutTime { get; set;}
 
-		[RED("allowBreakAtStart")] 		public CFloat AllowBreakAtStart { get; set;}
+		[Ordinal(0)] [RED("allowBreakAtStart")] 		public CFloat AllowBreakAtStart { get; set;}
 
-		[RED("allowBreakAtStartBeforeEventsEnd")] 		public CName AllowBreakAtStartBeforeEventsEnd { get; set;}
+		[Ordinal(0)] [RED("allowBreakAtStartBeforeEventsEnd")] 		public CName AllowBreakAtStartBeforeEventsEnd { get; set;}
 
-		[RED("allowBreakBeforeEnd")] 		public CFloat AllowBreakBeforeEnd { get; set;}
+		[Ordinal(0)] [RED("allowBreakBeforeEnd")] 		public CFloat AllowBreakBeforeEnd { get; set;}
 
-		[RED("allowBreakBeforeAtAfterEventsStart")] 		public CName AllowBreakBeforeAtAfterEventsStart { get; set;}
+		[Ordinal(0)] [RED("allowBreakBeforeAtAfterEventsStart")] 		public CName AllowBreakBeforeAtAfterEventsStart { get; set;}
 
-		[RED("sequenceIndex")] 		public CInt32 SequenceIndex { get; set;}
+		[Ordinal(0)] [RED("sequenceIndex")] 		public CInt32 SequenceIndex { get; set;}
 
-		[RED("disableProxyCollisions")] 		public CBool DisableProxyCollisions { get; set;}
+		[Ordinal(0)] [RED("disableProxyCollisions")] 		public CBool DisableProxyCollisions { get; set;}
 
 		public SAnimationSequencePartDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

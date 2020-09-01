@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskFlyAroundTargetDef : IBehTreeTaskDefinition
 	{
-		[RED("distance")] 		public CBehTreeValFloat Distance { get; set;}
+		[Ordinal(0)] [RED("("distance")] 		public CBehTreeValFloat Distance { get; set;}
 
-		[RED("frontalHeadingOffset")] 		public CBehTreeValInt FrontalHeadingOffset { get; set;}
+		[Ordinal(0)] [RED("("frontalHeadingOffset")] 		public CBehTreeValInt FrontalHeadingOffset { get; set;}
 
-		[RED("randomFactor")] 		public CBehTreeValInt RandomFactor { get; set;}
+		[Ordinal(0)] [RED("("randomFactor")] 		public CBehTreeValInt RandomFactor { get; set;}
 
-		[RED("height")] 		public CBehTreeValFloat Height { get; set;}
+		[Ordinal(0)] [RED("("height")] 		public CBehTreeValFloat Height { get; set;}
 
-		[RED("randomHeightAmplitude")] 		public CBehTreeValFloat RandomHeightAmplitude { get; set;}
+		[Ordinal(0)] [RED("("randomHeightAmplitude")] 		public CBehTreeValFloat RandomHeightAmplitude { get; set;}
 
 		public CBTTaskFlyAroundTargetDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestFightCondition : IQuestCondition
 	{
-		[RED("tag")] 		public CName Tag { get; set;}
+		[Ordinal(0)] [RED("tag")] 		public CName Tag { get; set;}
 
-		[RED("attackerTag")] 		public CName AttackerTag { get; set;}
+		[Ordinal(0)] [RED("attackerTag")] 		public CName AttackerTag { get; set;}
 
-		[RED("referenceValue")] 		public CInt32 ReferenceValue { get; set;}
+		[Ordinal(0)] [RED("referenceValue")] 		public CInt32 ReferenceValue { get; set;}
 
-		[RED("damageMode")] 		public CEnum<EQueryFightMode> DamageMode { get; set;}
+		[Ordinal(0)] [RED("damageMode")] 		public CEnum<EQueryFightMode> DamageMode { get; set;}
 
 		public CQuestFightCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

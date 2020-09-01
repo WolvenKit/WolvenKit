@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4StartScreenMenuBase : CR4MenuBase
 	{
-		[RED("_fadeDuration")] 		public CFloat _fadeDuration { get; set;}
+		[Ordinal(0)] [RED("_fadeDuration")] 		public CFloat _fadeDuration { get; set;}
 
-		[RED("m_fxSetFadeDuration")] 		public CHandle<CScriptedFlashFunction> M_fxSetFadeDuration { get; set;}
+		[Ordinal(0)] [RED("m_fxSetFadeDuration")] 		public CHandle<CScriptedFlashFunction> M_fxSetFadeDuration { get; set;}
 
-		[RED("m_fxSetIsStageDemo")] 		public CHandle<CScriptedFlashFunction> M_fxSetIsStageDemo { get; set;}
+		[Ordinal(0)] [RED("m_fxSetIsStageDemo")] 		public CHandle<CScriptedFlashFunction> M_fxSetIsStageDemo { get; set;}
 
-		[RED("m_fxStartFade")] 		public CHandle<CScriptedFlashFunction> M_fxStartFade { get; set;}
+		[Ordinal(0)] [RED("m_fxStartFade")] 		public CHandle<CScriptedFlashFunction> M_fxStartFade { get; set;}
 
-		[RED("m_fxSetGameLogoLanguage")] 		public CHandle<CScriptedFlashFunction> M_fxSetGameLogoLanguage { get; set;}
+		[Ordinal(0)] [RED("m_fxSetGameLogoLanguage")] 		public CHandle<CScriptedFlashFunction> M_fxSetGameLogoLanguage { get; set;}
 
-		[RED("m_fxSetText")] 		public CHandle<CScriptedFlashFunction> M_fxSetText { get; set;}
+		[Ordinal(0)] [RED("m_fxSetText")] 		public CHandle<CScriptedFlashFunction> M_fxSetText { get; set;}
 
 		public CR4StartScreenMenuBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

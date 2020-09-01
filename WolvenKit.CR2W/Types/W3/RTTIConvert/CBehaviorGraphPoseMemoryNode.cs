@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphPoseMemoryNode : CBehaviorGraphBaseNode
 	{
-		[RED("blendOutEvent")] 		public CName BlendOutEvent { get; set;}
+		[Ordinal(0)] [RED("("blendOutEvent")] 		public CName BlendOutEvent { get; set;}
 
-		[RED("blendOutDuration")] 		public CFloat BlendOutDuration { get; set;}
+		[Ordinal(0)] [RED("("blendOutDuration")] 		public CFloat BlendOutDuration { get; set;}
 
 		public CBehaviorGraphPoseMemoryNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

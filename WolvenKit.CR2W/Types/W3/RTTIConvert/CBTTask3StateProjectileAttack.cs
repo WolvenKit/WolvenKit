@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTask3StateProjectileAttack : CBTTask3StateAttack
 	{
-		[RED("attackRange")] 		public CFloat AttackRange { get; set;}
+		[Ordinal(0)] [RED("("attackRange")] 		public CFloat AttackRange { get; set;}
 
-		[RED("projEntity")] 		public CHandle<CEntityTemplate> ProjEntity { get; set;}
+		[Ordinal(0)] [RED("("projEntity")] 		public CHandle<CEntityTemplate> ProjEntity { get; set;}
 
-		[RED("projectileName")] 		public CName ProjectileName { get; set;}
+		[Ordinal(0)] [RED("("projectileName")] 		public CName ProjectileName { get; set;}
 
-		[RED("dodgeable")] 		public CBool Dodgeable { get; set;}
+		[Ordinal(0)] [RED("("dodgeable")] 		public CBool Dodgeable { get; set;}
 
-		[RED("useLookatTarget")] 		public CBool UseLookatTarget { get; set;}
+		[Ordinal(0)] [RED("("useLookatTarget")] 		public CBool UseLookatTarget { get; set;}
 
-		[RED("dontShootAboveAngleDistanceToTarget")] 		public CFloat DontShootAboveAngleDistanceToTarget { get; set;}
+		[Ordinal(0)] [RED("("dontShootAboveAngleDistanceToTarget")] 		public CFloat DontShootAboveAngleDistanceToTarget { get; set;}
 
-		[RED("projectiles", 2,0)] 		public CArray<CHandle<W3AdvancedProjectile>> Projectiles { get; set;}
+		[Ordinal(0)] [RED("("projectiles", 2,0)] 		public CArray<CHandle<W3AdvancedProjectile>> Projectiles { get; set;}
 
-		[RED("collisionGroups", 2,0)] 		public CArray<CName> CollisionGroups { get; set;}
+		[Ordinal(0)] [RED("("collisionGroups", 2,0)] 		public CArray<CName> CollisionGroups { get; set;}
 
 		public CBTTask3StateProjectileAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TraceGroundProjectile : W3AdvancedProjectile
 	{
-		[RED("samplingFreq")] 		public CFloat SamplingFreq { get; set;}
+		[Ordinal(0)] [RED("("samplingFreq")] 		public CFloat SamplingFreq { get; set;}
 
-		[RED("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(0)] [RED("("effectName")] 		public CName EffectName { get; set;}
 
-		[RED("onRangedReachedDestroyAfter")] 		public CFloat OnRangedReachedDestroyAfter { get; set;}
+		[Ordinal(0)] [RED("("onRangedReachedDestroyAfter")] 		public CFloat OnRangedReachedDestroyAfter { get; set;}
 
-		[RED("deactivateOnCollisionWithVictim")] 		public CBool DeactivateOnCollisionWithVictim { get; set;}
+		[Ordinal(0)] [RED("("deactivateOnCollisionWithVictim")] 		public CBool DeactivateOnCollisionWithVictim { get; set;}
 
-		[RED("comp")] 		public CHandle<CEffectDummyComponent> Comp { get; set;}
+		[Ordinal(0)] [RED("("comp")] 		public CHandle<CEffectDummyComponent> Comp { get; set;}
 
 		public W3TraceGroundProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

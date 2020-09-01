@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class Sphere : CVariable
 	{
-		[RED("CenterRadius2")] 		public Vector CenterRadius2 { get; set;}
+		[Ordinal(0)] [RED("("CenterRadius2")] 		public Vector CenterRadius2 { get; set;}
 
 		public Sphere(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

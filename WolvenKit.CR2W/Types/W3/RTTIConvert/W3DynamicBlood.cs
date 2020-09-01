@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3DynamicBlood : W3MonsterClue
 	{
-		[RED("lifetime")] 		public CFloat Lifetime { get; set;}
+		[Ordinal(0)] [RED("("lifetime")] 		public CFloat Lifetime { get; set;}
 
 		public W3DynamicBlood(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

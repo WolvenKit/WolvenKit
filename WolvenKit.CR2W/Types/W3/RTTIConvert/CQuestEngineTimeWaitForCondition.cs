@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestEngineTimeWaitForCondition : IQuestCondition
 	{
-		[RED("howLong")] 		public GameTime HowLong { get; set;}
+		[Ordinal(0)] [RED("howLong")] 		public GameTime HowLong { get; set;}
 
 		public CQuestEngineTimeWaitForCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

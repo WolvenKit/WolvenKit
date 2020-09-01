@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCameraAnimationDefinition : CVariable
 	{
-		[RED("animation")] 		public CName Animation { get; set;}
+		[Ordinal(0)] [RED("("animation")] 		public CName Animation { get; set;}
 
-		[RED("priority")] 		public CInt32 Priority { get; set;}
+		[Ordinal(0)] [RED("("priority")] 		public CInt32 Priority { get; set;}
 
-		[RED("blendIn")] 		public CFloat BlendIn { get; set;}
+		[Ordinal(0)] [RED("("blendIn")] 		public CFloat BlendIn { get; set;}
 
-		[RED("blendOut")] 		public CFloat BlendOut { get; set;}
+		[Ordinal(0)] [RED("("blendOut")] 		public CFloat BlendOut { get; set;}
 
-		[RED("weight")] 		public CFloat Weight { get; set;}
+		[Ordinal(0)] [RED("("weight")] 		public CFloat Weight { get; set;}
 
-		[RED("speed")] 		public CFloat Speed { get; set;}
+		[Ordinal(0)] [RED("("speed")] 		public CFloat Speed { get; set;}
 
-		[RED("loop")] 		public CBool Loop { get; set;}
+		[Ordinal(0)] [RED("("loop")] 		public CBool Loop { get; set;}
 
-		[RED("reset")] 		public CBool Reset { get; set;}
+		[Ordinal(0)] [RED("("reset")] 		public CBool Reset { get; set;}
 
-		[RED("additive")] 		public CBool Additive { get; set;}
+		[Ordinal(0)] [RED("("additive")] 		public CBool Additive { get; set;}
 
-		[RED("exclusive")] 		public CBool Exclusive { get; set;}
+		[Ordinal(0)] [RED("("exclusive")] 		public CBool Exclusive { get; set;}
 
 		public SCameraAnimationDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

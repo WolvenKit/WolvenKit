@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphStateTransitionGlobalBlendStreamingNode : CBehaviorGraphStateTransitionGlobalBlendNode
 	{
-		[RED("defaultStateName")] 		public CString DefaultStateName { get; set;}
+		[Ordinal(0)] [RED("defaultStateName")] 		public CString DefaultStateName { get; set;}
 
-		[RED("defaultState")] 		public CPtr<CBehaviorGraphStateNode> DefaultState { get; set;}
+		[Ordinal(0)] [RED("defaultState")] 		public CPtr<CBehaviorGraphStateNode> DefaultState { get; set;}
 
 		public CBehaviorGraphStateTransitionGlobalBlendStreamingNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

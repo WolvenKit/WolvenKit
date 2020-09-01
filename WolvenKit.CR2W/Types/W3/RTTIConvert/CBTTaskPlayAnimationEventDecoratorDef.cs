@@ -10,29 +10,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPlayAnimationEventDecoratorDef : IBehTreeTaskDefinition
 	{
-		[RED("finishTaskOnAllowBlend")] 		public CBool FinishTaskOnAllowBlend { get; set;}
+		[Ordinal(0)] [RED("finishTaskOnAllowBlend")] 		public CBool FinishTaskOnAllowBlend { get; set;}
 
-		[RED("rotateOnRotateEvent")] 		public CBool RotateOnRotateEvent { get; set;}
+		[Ordinal(0)] [RED("rotateOnRotateEvent")] 		public CBool RotateOnRotateEvent { get; set;}
 
-		[RED("disableHitOnActivation")] 		public CBool DisableHitOnActivation { get; set;}
+		[Ordinal(0)] [RED("disableHitOnActivation")] 		public CBool DisableHitOnActivation { get; set;}
 
-		[RED("disableLookatOnActivation")] 		public CBool DisableLookatOnActivation { get; set;}
+		[Ordinal(0)] [RED("disableLookatOnActivation")] 		public CBool DisableLookatOnActivation { get; set;}
 
-		[RED("interruptOverlayAnim")] 		public CBool InterruptOverlayAnim { get; set;}
+		[Ordinal(0)] [RED("interruptOverlayAnim")] 		public CBool InterruptOverlayAnim { get; set;}
 
-		[RED("checkStats")] 		public CBool CheckStats { get; set;}
+		[Ordinal(0)] [RED("checkStats")] 		public CBool CheckStats { get; set;}
 
-		[RED("xmlMoraleCheckName")] 		public CName XmlMoraleCheckName { get; set;}
+		[Ordinal(0)] [RED("xmlMoraleCheckName")] 		public CName XmlMoraleCheckName { get; set;}
 
-		[RED("xmlStaminaCostName")] 		public CName XmlStaminaCostName { get; set;}
+		[Ordinal(0)] [RED("xmlStaminaCostName")] 		public CName XmlStaminaCostName { get; set;}
 
-		[RED("drainStaminaOnUse")] 		public CBool DrainStaminaOnUse { get; set;}
+		[Ordinal(0)] [RED("drainStaminaOnUse")] 		public CBool DrainStaminaOnUse { get; set;}
 
-		[RED("completeTaskOnRotateEnd")] 		public CBool CompleteTaskOnRotateEnd { get; set;}
+		[Ordinal(0)] [RED("completeTaskOnRotateEnd")] 		public CBool CompleteTaskOnRotateEnd { get; set;}
 
-		[RED("useCombatTargetForRotation")] 		public CBool UseCombatTargetForRotation { get; set;}
+		[Ordinal(0)] [RED("useCombatTargetForRotation")] 		public CBool UseCombatTargetForRotation { get; set;}
 
-		[RED("setIsImportantAnim")] 		public CBool SetIsImportantAnim { get; set;}
+		[Ordinal(0)] [RED("setIsImportantAnim")] 		public CBool SetIsImportantAnim { get; set;}
 
 		public CBTTaskPlayAnimationEventDecoratorDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

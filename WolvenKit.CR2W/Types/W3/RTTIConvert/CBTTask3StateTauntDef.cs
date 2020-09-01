@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTask3StateTauntDef : CBTTaskPlayAnimationEventDecoratorDef
 	{
-		[RED("tauntType")] 		public CEnum<ETauntType> TauntType { get; set;}
+		[Ordinal(0)] [RED("("tauntType")] 		public CEnum<ETauntType> TauntType { get; set;}
 
-		[RED("raiseEventName")] 		public CName RaiseEventName { get; set;}
+		[Ordinal(0)] [RED("("raiseEventName")] 		public CName RaiseEventName { get; set;}
 
-		[RED("minDuration")] 		public CFloat MinDuration { get; set;}
+		[Ordinal(0)] [RED("("minDuration")] 		public CFloat MinDuration { get; set;}
 
-		[RED("maxDuration")] 		public CFloat MaxDuration { get; set;}
+		[Ordinal(0)] [RED("("maxDuration")] 		public CFloat MaxDuration { get; set;}
 
 		public CBTTask3StateTauntDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

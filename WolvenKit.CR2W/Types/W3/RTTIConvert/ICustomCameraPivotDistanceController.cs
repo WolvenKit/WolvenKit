@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ICustomCameraPivotDistanceController : ICustomCameraBaseController
 	{
-		[RED("minDist")] 		public CFloat MinDist { get; set;}
+		[Ordinal(0)] [RED("minDist")] 		public CFloat MinDist { get; set;}
 
-		[RED("maxDist")] 		public CFloat MaxDist { get; set;}
+		[Ordinal(0)] [RED("maxDist")] 		public CFloat MaxDist { get; set;}
 
 		public ICustomCameraPivotDistanceController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

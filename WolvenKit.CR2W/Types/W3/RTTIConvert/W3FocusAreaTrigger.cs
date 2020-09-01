@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FocusAreaTrigger : CGameplayEntity
 	{
-		[RED("rumbleIntensityModifier")] 		public CFloat RumbleIntensityModifier { get; set;}
+		[Ordinal(0)] [RED("("rumbleIntensityModifier")] 		public CFloat RumbleIntensityModifier { get; set;}
 
-		[RED("isDisabled")] 		public CBool IsDisabled { get; set;}
+		[Ordinal(0)] [RED("("isDisabled")] 		public CBool IsDisabled { get; set;}
 
-		[RED("intensity")] 		public CFloat Intensity { get; set;}
+		[Ordinal(0)] [RED("("intensity")] 		public CFloat Intensity { get; set;}
 
-		[RED("isActive")] 		public CBool IsActive { get; set;}
+		[Ordinal(0)] [RED("("isActive")] 		public CBool IsActive { get; set;}
 
-		[RED("linkedClues", 2,0)] 		public CArray<EntityHandle> LinkedClues { get; set;}
+		[Ordinal(0)] [RED("("linkedClues", 2,0)] 		public CArray<EntityHandle> LinkedClues { get; set;}
 
-		[RED("linkedCluesTags", 2,0)] 		public CArray<CName> LinkedCluesTags { get; set;}
+		[Ordinal(0)] [RED("("linkedCluesTags", 2,0)] 		public CArray<CName> LinkedCluesTags { get; set;}
 
 		public W3FocusAreaTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

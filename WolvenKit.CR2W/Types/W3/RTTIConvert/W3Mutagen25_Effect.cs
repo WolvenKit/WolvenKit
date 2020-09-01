@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Mutagen25_Effect : W3Mutagen_Effect
 	{
-		[RED("attackPowerBonus")] 		public SAbilityAttributeValue AttackPowerBonus { get; set;}
+		[Ordinal(0)] [RED("("attackPowerBonus")] 		public SAbilityAttributeValue AttackPowerBonus { get; set;}
 
 		public W3Mutagen25_Effect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

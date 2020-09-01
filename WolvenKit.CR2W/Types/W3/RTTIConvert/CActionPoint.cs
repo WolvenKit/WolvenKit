@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CActionPoint : CGameplayEntity
 	{
-		[RED("events", 2,0)] 		public CArray<SEntityActionsRouterEntry> Events { get; set;}
+		[Ordinal(0)] [RED("events", 2,0)] 		public CArray<SEntityActionsRouterEntry> Events { get; set;}
 
-		[RED("actionBreakable")] 		public CBool ActionBreakable { get; set;}
+		[Ordinal(0)] [RED("actionBreakable")] 		public CBool ActionBreakable { get; set;}
 
-		[RED("overrideActionBreakableInComponent")] 		public CBool OverrideActionBreakableInComponent { get; set;}
+		[Ordinal(0)] [RED("overrideActionBreakableInComponent")] 		public CBool OverrideActionBreakableInComponent { get; set;}
 
 		public CActionPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

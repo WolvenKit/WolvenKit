@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskFlyAroundTarget : CBTTaskVolumetricMove
 	{
-		[RED("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(0)] [RED("("distance")] 		public CFloat Distance { get; set;}
 
-		[RED("frontalHeadingOffset")] 		public CInt32 FrontalHeadingOffset { get; set;}
+		[Ordinal(0)] [RED("("frontalHeadingOffset")] 		public CInt32 FrontalHeadingOffset { get; set;}
 
-		[RED("randomFactor")] 		public CInt32 RandomFactor { get; set;}
+		[Ordinal(0)] [RED("("randomFactor")] 		public CInt32 RandomFactor { get; set;}
 
-		[RED("height")] 		public CFloat Height { get; set;}
+		[Ordinal(0)] [RED("("height")] 		public CFloat Height { get; set;}
 
-		[RED("randomHeightAmplitude")] 		public CFloat RandomHeightAmplitude { get; set;}
+		[Ordinal(0)] [RED("("randomHeightAmplitude")] 		public CFloat RandomHeightAmplitude { get; set;}
 
-		[RED("collisionGroupsNames", 2,0)] 		public CArray<CName> CollisionGroupsNames { get; set;}
+		[Ordinal(0)] [RED("("collisionGroupsNames", 2,0)] 		public CArray<CName> CollisionGroupsNames { get; set;}
 
 		public CBTTaskFlyAroundTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

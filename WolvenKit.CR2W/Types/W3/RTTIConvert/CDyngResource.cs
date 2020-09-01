@@ -10,43 +10,43 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDyngResource : CResource
 	{
-		[RED("name")] 		public CString Name { get; set;}
+		[Ordinal(0)] [RED("("name")] 		public CString Name { get; set;}
 
-		[RED("dyngSkeleton")] 		public CHandle<CSkeleton> DyngSkeleton { get; set;}
+		[Ordinal(0)] [RED("("dyngSkeleton")] 		public CHandle<CSkeleton> DyngSkeleton { get; set;}
 
-		[RED("nodeNames", 2,0)] 		public CArray<CString> NodeNames { get; set;}
+		[Ordinal(0)] [RED("("nodeNames", 2,0)] 		public CArray<CString> NodeNames { get; set;}
 
-		[RED("nodeParents", 2,0)] 		public CArray<CString> NodeParents { get; set;}
+		[Ordinal(0)] [RED("("nodeParents", 2,0)] 		public CArray<CString> NodeParents { get; set;}
 
-		[RED("nodeMasses", 2,0)] 		public CArray<CFloat> NodeMasses { get; set;}
+		[Ordinal(0)] [RED("("nodeMasses", 2,0)] 		public CArray<CFloat> NodeMasses { get; set;}
 
-		[RED("nodeStifnesses", 2,0)] 		public CArray<CFloat> NodeStifnesses { get; set;}
+		[Ordinal(0)] [RED("("nodeStifnesses", 2,0)] 		public CArray<CFloat> NodeStifnesses { get; set;}
 
-		[RED("nodeDistances", 2,0)] 		public CArray<CFloat> NodeDistances { get; set;}
+		[Ordinal(0)] [RED("("nodeDistances", 2,0)] 		public CArray<CFloat> NodeDistances { get; set;}
 
-		[RED("nodeTransforms", 2,0)] 		public CArray<CMatrix> NodeTransforms { get; set;}
+		[Ordinal(0)] [RED("("nodeTransforms", 2,0)] 		public CArray<CMatrix> NodeTransforms { get; set;}
 
-		[RED("linkTypes", 2,0)] 		public CArray<CInt32> LinkTypes { get; set;}
+		[Ordinal(0)] [RED("("linkTypes", 2,0)] 		public CArray<CInt32> LinkTypes { get; set;}
 
-		[RED("linkLengths", 2,0)] 		public CArray<CFloat> LinkLengths { get; set;}
+		[Ordinal(0)] [RED("("linkLengths", 2,0)] 		public CArray<CFloat> LinkLengths { get; set;}
 
-		[RED("linkAs", 2,0)] 		public CArray<CInt32> LinkAs { get; set;}
+		[Ordinal(0)] [RED("("linkAs", 2,0)] 		public CArray<CInt32> LinkAs { get; set;}
 
-		[RED("linkBs", 2,0)] 		public CArray<CInt32> LinkBs { get; set;}
+		[Ordinal(0)] [RED("("linkBs", 2,0)] 		public CArray<CInt32> LinkBs { get; set;}
 
-		[RED("triangleAs", 2,0)] 		public CArray<CInt32> TriangleAs { get; set;}
+		[Ordinal(0)] [RED("("triangleAs", 2,0)] 		public CArray<CInt32> TriangleAs { get; set;}
 
-		[RED("triangleBs", 2,0)] 		public CArray<CInt32> TriangleBs { get; set;}
+		[Ordinal(0)] [RED("("triangleBs", 2,0)] 		public CArray<CInt32> TriangleBs { get; set;}
 
-		[RED("triangleCs", 2,0)] 		public CArray<CInt32> TriangleCs { get; set;}
+		[Ordinal(0)] [RED("("triangleCs", 2,0)] 		public CArray<CInt32> TriangleCs { get; set;}
 
-		[RED("collisionParents", 2,0)] 		public CArray<CString> CollisionParents { get; set;}
+		[Ordinal(0)] [RED("("collisionParents", 2,0)] 		public CArray<CString> CollisionParents { get; set;}
 
-		[RED("collisionRadiuses", 2,0)] 		public CArray<CFloat> CollisionRadiuses { get; set;}
+		[Ordinal(0)] [RED("("collisionRadiuses", 2,0)] 		public CArray<CFloat> CollisionRadiuses { get; set;}
 
-		[RED("collisionHeights", 2,0)] 		public CArray<CFloat> CollisionHeights { get; set;}
+		[Ordinal(0)] [RED("("collisionHeights", 2,0)] 		public CArray<CFloat> CollisionHeights { get; set;}
 
-		[RED("collisionTransforms", 2,0)] 		public CArray<CMatrix> CollisionTransforms { get; set;}
+		[Ordinal(0)] [RED("("collisionTransforms", 2,0)] 		public CArray<CMatrix> CollisionTransforms { get; set;}
 
 		public CDyngResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

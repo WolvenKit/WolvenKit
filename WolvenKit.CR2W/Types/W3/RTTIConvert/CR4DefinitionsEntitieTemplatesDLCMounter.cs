@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4DefinitionsEntitieTemplatesDLCMounter : IGameplayDLCMounter
 	{
-		[RED("entitieTemplatesDirectoryPath")] 		public CString EntitieTemplatesDirectoryPath { get; set;}
+		[Ordinal(0)] [RED("("entitieTemplatesDirectoryPath")] 		public CString EntitieTemplatesDirectoryPath { get; set;}
 
 		public CR4DefinitionsEntitieTemplatesDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

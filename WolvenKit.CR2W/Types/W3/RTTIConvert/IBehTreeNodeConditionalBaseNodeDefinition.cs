@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IBehTreeNodeConditionalBaseNodeDefinition : IBehTreeMetanodeDefinition
 	{
-		[RED("childNodeToDisableCount")] 		public CUInt32 ChildNodeToDisableCount { get; set;}
+		[Ordinal(0)] [RED("childNodeToDisableCount")] 		public CUInt32 ChildNodeToDisableCount { get; set;}
 
-		[RED("child")] 		public CPtr<IBehTreeNodeDefinition> Child { get; set;}
+		[Ordinal(0)] [RED("child")] 		public CPtr<IBehTreeNodeDefinition> Child { get; set;}
 
-		[RED("invertCondition")] 		public CBool InvertCondition { get; set;}
+		[Ordinal(0)] [RED("invertCondition")] 		public CBool InvertCondition { get; set;}
 
 		public IBehTreeNodeConditionalBaseNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

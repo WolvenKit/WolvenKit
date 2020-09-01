@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCompleteOnHit : IBehTreeTask
 	{
-		[RED("onlyIfCanPlayHitAnim")] 		public CBool OnlyIfCanPlayHitAnim { get; set;}
+		[Ordinal(0)] [RED("onlyIfCanPlayHitAnim")] 		public CBool OnlyIfCanPlayHitAnim { get; set;}
 
 		public CBTCompleteOnHit(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

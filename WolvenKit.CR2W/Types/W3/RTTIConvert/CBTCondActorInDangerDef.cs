@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondActorInDangerDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("dangerRadius")] 		public CFloat DangerRadius { get; set;}
+		[Ordinal(0)] [RED("dangerRadius")] 		public CFloat DangerRadius { get; set;}
 
-		[RED("checkQuestRequests")] 		public CBool CheckQuestRequests { get; set;}
+		[Ordinal(0)] [RED("checkQuestRequests")] 		public CBool CheckQuestRequests { get; set;}
 
-		[RED("ignoreEntityWithTag")] 		public CName IgnoreEntityWithTag { get; set;}
+		[Ordinal(0)] [RED("ignoreEntityWithTag")] 		public CName IgnoreEntityWithTag { get; set;}
 
 		public CBTCondActorInDangerDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

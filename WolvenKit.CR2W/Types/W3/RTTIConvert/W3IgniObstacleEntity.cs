@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3IgniObstacleEntity : CInteractiveEntity
 	{
-		[RED("staticIgniObstacle")] 		public CHandle<CComponent> StaticIgniObstacle { get; set;}
+		[Ordinal(0)] [RED("("staticIgniObstacle")] 		public CHandle<CComponent> StaticIgniObstacle { get; set;}
 
-		[RED("iceWallStage1")] 		public CHandle<CDrawableComponent> IceWallStage1 { get; set;}
+		[Ordinal(0)] [RED("("iceWallStage1")] 		public CHandle<CDrawableComponent> IceWallStage1 { get; set;}
 
-		[RED("iceWallStage2")] 		public CHandle<CDrawableComponent> IceWallStage2 { get; set;}
+		[Ordinal(0)] [RED("("iceWallStage2")] 		public CHandle<CDrawableComponent> IceWallStage2 { get; set;}
 
-		[RED("iceWallStage2Melted")] 		public CHandle<CDrawableComponent> IceWallStage2Melted { get; set;}
+		[Ordinal(0)] [RED("("iceWallStage2Melted")] 		public CHandle<CDrawableComponent> IceWallStage2Melted { get; set;}
 
-		[RED("iceWallStage3")] 		public CHandle<CDrawableComponent> IceWallStage3 { get; set;}
+		[Ordinal(0)] [RED("("iceWallStage3")] 		public CHandle<CDrawableComponent> IceWallStage3 { get; set;}
 
-		[RED("iceWallStage3Melted")] 		public CHandle<CDrawableComponent> IceWallStage3Melted { get; set;}
+		[Ordinal(0)] [RED("("iceWallStage3Melted")] 		public CHandle<CDrawableComponent> IceWallStage3Melted { get; set;}
 
 		public W3IgniObstacleEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

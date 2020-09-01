@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCarryBox : IBehTreeTask
 	{
-		[RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(0)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
-		[RED("pickUpPoint")] 		public CName PickUpPoint { get; set;}
+		[Ordinal(0)] [RED("pickUpPoint")] 		public CName PickUpPoint { get; set;}
 
-		[RED("dropPoint")] 		public CName DropPoint { get; set;}
+		[Ordinal(0)] [RED("dropPoint")] 		public CName DropPoint { get; set;}
 
-		[RED("box")] 		public CHandle<CEntity> Box { get; set;}
+		[Ordinal(0)] [RED("box")] 		public CHandle<CEntity> Box { get; set;}
 
 		public CBTTaskCarryBox(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

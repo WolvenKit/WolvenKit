@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SVoicesetSlot : CVariable
 	{
-		[RED("scene")] 		public CSoft<CStoryScene> Scene { get; set;}
+		[Ordinal(0)] [RED("("scene")] 		public CSoft<CStoryScene> Scene { get; set;}
 
-		[RED("name")] 		public CString Name { get; set;}
+		[Ordinal(0)] [RED("("name")] 		public CString Name { get; set;}
 
-		[RED("voiceTag")] 		public CName VoiceTag { get; set;}
+		[Ordinal(0)] [RED("("voiceTag")] 		public CName VoiceTag { get; set;}
 
 		public SVoicesetSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

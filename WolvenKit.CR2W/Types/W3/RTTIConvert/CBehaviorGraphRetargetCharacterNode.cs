@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphRetargetCharacterNode : CBehaviorGraphBaseNode
 	{
-		[RED("cachedValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedValueNode { get; set;}
+		[Ordinal(0)] [RED("cachedValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedValueNode { get; set;}
 
-		[RED("method")] 		public CPtr<IBehaviorGraphRetargetCharacterNodeMethod> Method { get; set;}
+		[Ordinal(0)] [RED("method")] 		public CPtr<IBehaviorGraphRetargetCharacterNodeMethod> Method { get; set;}
 
 		public CBehaviorGraphRetargetCharacterNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

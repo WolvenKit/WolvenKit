@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvDayCycleOverrideParameters : CVariable
 	{
-		[RED("fakeDayCycleEnable")] 		public CBool FakeDayCycleEnable { get; set;}
+		[Ordinal(0)] [RED("("fakeDayCycleEnable")] 		public CBool FakeDayCycleEnable { get; set;}
 
-		[RED("fakeDayCycleHour")] 		public CFloat FakeDayCycleHour { get; set;}
+		[Ordinal(0)] [RED("("fakeDayCycleHour")] 		public CFloat FakeDayCycleHour { get; set;}
 
-		[RED("enableCustomSunRotation")] 		public CBool EnableCustomSunRotation { get; set;}
+		[Ordinal(0)] [RED("("enableCustomSunRotation")] 		public CBool EnableCustomSunRotation { get; set;}
 
-		[RED("customSunRotation")] 		public EulerAngles CustomSunRotation { get; set;}
+		[Ordinal(0)] [RED("("customSunRotation")] 		public EulerAngles CustomSunRotation { get; set;}
 
 		public CEnvDayCycleOverrideParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3DestructionTrigger : CGameplayEntity
 	{
-		[RED("destructionEntityTag")] 		public CName DestructionEntityTag { get; set;}
+		[Ordinal(0)] [RED("("destructionEntityTag")] 		public CName DestructionEntityTag { get; set;}
 
 		public W3DestructionTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

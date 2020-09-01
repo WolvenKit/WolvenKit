@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehTreeAreaSelection : CVariable
 	{
-		[RED("selectionMode")] 		public CBehTreeValAreaSelectionMode SelectionMode { get; set;}
+		[Ordinal(0)] [RED("("selectionMode")] 		public CBehTreeValAreaSelectionMode SelectionMode { get; set;}
 
-		[RED("optionalAreaTag")] 		public CBehTreeValCName OptionalAreaTag { get; set;}
+		[Ordinal(0)] [RED("("optionalAreaTag")] 		public CBehTreeValCName OptionalAreaTag { get; set;}
 
 		public SBehTreeAreaSelection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

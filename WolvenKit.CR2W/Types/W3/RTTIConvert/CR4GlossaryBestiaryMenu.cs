@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4GlossaryBestiaryMenu : CR4ListBaseMenu
 	{
-		[RED("allCreatures", 2,0)] 		public CArray<CHandle<CJournalCreature>> AllCreatures { get; set;}
+		[Ordinal(0)] [RED("("allCreatures", 2,0)] 		public CArray<CHandle<CJournalCreature>> AllCreatures { get; set;}
 
-		[RED("m_fxHideContent")] 		public CHandle<CScriptedFlashFunction> M_fxHideContent { get; set;}
+		[Ordinal(0)] [RED("("m_fxHideContent")] 		public CHandle<CScriptedFlashFunction> M_fxHideContent { get; set;}
 
-		[RED("m_fxSetTitle")] 		public CHandle<CScriptedFlashFunction> M_fxSetTitle { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetTitle")] 		public CHandle<CScriptedFlashFunction> M_fxSetTitle { get; set;}
 
-		[RED("m_fxSetText")] 		public CHandle<CScriptedFlashFunction> M_fxSetText { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetText")] 		public CHandle<CScriptedFlashFunction> M_fxSetText { get; set;}
 
-		[RED("m_fxSetImage")] 		public CHandle<CScriptedFlashFunction> M_fxSetImage { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetImage")] 		public CHandle<CScriptedFlashFunction> M_fxSetImage { get; set;}
 
 		public CR4GlossaryBestiaryMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

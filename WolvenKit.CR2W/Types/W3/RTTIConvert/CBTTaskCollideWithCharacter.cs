@@ -10,45 +10,45 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCollideWithCharacter : IBehTreeTask
 	{
-		[RED("isAvailable")] 		public CBool IsAvailable { get; set;}
+		[Ordinal(0)] [RED("("isAvailable")] 		public CBool IsAvailable { get; set;}
 
-		[RED("collideEndListenEventName")] 		public CName CollideEndListenEventName { get; set;}
+		[Ordinal(0)] [RED("("collideEndListenEventName")] 		public CName CollideEndListenEventName { get; set;}
 
-		[RED("collideBehGrapEventName")] 		public CName CollideBehGrapEventName { get; set;}
+		[Ordinal(0)] [RED("("collideBehGrapEventName")] 		public CName CollideBehGrapEventName { get; set;}
 
-		[RED("collidedConfirmedEvent")] 		public CName CollidedConfirmedEvent { get; set;}
+		[Ordinal(0)] [RED("("collidedConfirmedEvent")] 		public CName CollidedConfirmedEvent { get; set;}
 
-		[RED("collidedDirBehGraphVar")] 		public CName CollidedDirBehGraphVar { get; set;}
+		[Ordinal(0)] [RED("("collidedDirBehGraphVar")] 		public CName CollidedDirBehGraphVar { get; set;}
 
-		[RED("collidedPushBehGraphVar")] 		public CName CollidedPushBehGraphVar { get; set;}
+		[Ordinal(0)] [RED("("collidedPushBehGraphVar")] 		public CName CollidedPushBehGraphVar { get; set;}
 
-		[RED("cooldownToRestartTotal")] 		public CFloat CooldownToRestartTotal { get; set;}
+		[Ordinal(0)] [RED("("cooldownToRestartTotal")] 		public CFloat CooldownToRestartTotal { get; set;}
 
-		[RED("cooldownToStartTotal")] 		public CFloat CooldownToStartTotal { get; set;}
+		[Ordinal(0)] [RED("("cooldownToStartTotal")] 		public CFloat CooldownToStartTotal { get; set;}
 
-		[RED("cooldownToRetryTotal")] 		public CFloat CooldownToRetryTotal { get; set;}
+		[Ordinal(0)] [RED("("cooldownToRetryTotal")] 		public CFloat CooldownToRetryTotal { get; set;}
 
-		[RED("cooldownToPlayCur")] 		public CFloat CooldownToPlayCur { get; set;}
+		[Ordinal(0)] [RED("("cooldownToPlayCur")] 		public CFloat CooldownToPlayCur { get; set;}
 
-		[RED("cooldownToRestartCur")] 		public CFloat CooldownToRestartCur { get; set;}
+		[Ordinal(0)] [RED("("cooldownToRestartCur")] 		public CFloat CooldownToRestartCur { get; set;}
 
-		[RED("cooldownToRetryCur")] 		public CFloat CooldownToRetryCur { get; set;}
+		[Ordinal(0)] [RED("("cooldownToRetryCur")] 		public CFloat CooldownToRetryCur { get; set;}
 
-		[RED("collidedActor")] 		public CHandle<CActor> CollidedActor { get; set;}
+		[Ordinal(0)] [RED("("collidedActor")] 		public CHandle<CActor> CollidedActor { get; set;}
 
-		[RED("otherIsPlayer")] 		public CBool OtherIsPlayer { get; set;}
+		[Ordinal(0)] [RED("("otherIsPlayer")] 		public CBool OtherIsPlayer { get; set;}
 
-		[RED("otherIsHorse")] 		public CBool OtherIsHorse { get; set;}
+		[Ordinal(0)] [RED("("otherIsHorse")] 		public CBool OtherIsHorse { get; set;}
 
-		[RED("ignoreBumpOnOneGoingAway")] 		public CBool IgnoreBumpOnOneGoingAway { get; set;}
+		[Ordinal(0)] [RED("("ignoreBumpOnOneGoingAway")] 		public CBool IgnoreBumpOnOneGoingAway { get; set;}
 
-		[RED("ignoreBumpOnBothGoingAway")] 		public CBool IgnoreBumpOnBothGoingAway { get; set;}
+		[Ordinal(0)] [RED("("ignoreBumpOnBothGoingAway")] 		public CBool IgnoreBumpOnBothGoingAway { get; set;}
 
-		[RED("ignoreBumpOnBothStopped")] 		public CBool IgnoreBumpOnBothStopped { get; set;}
+		[Ordinal(0)] [RED("("ignoreBumpOnBothStopped")] 		public CBool IgnoreBumpOnBothStopped { get; set;}
 
-		[RED("ignoreMinCoefToGoAway")] 		public CFloat IgnoreMinCoefToGoAway { get; set;}
+		[Ordinal(0)] [RED("("ignoreMinCoefToGoAway")] 		public CFloat IgnoreMinCoefToGoAway { get; set;}
 
-		[RED("ignoreMinSpeedSqr")] 		public CFloat IgnoreMinSpeedSqr { get; set;}
+		[Ordinal(0)] [RED("("ignoreMinSpeedSqr")] 		public CFloat IgnoreMinSpeedSqr { get; set;}
 
 		public CBTTaskCollideWithCharacter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ProjectileShooterTest : CActor
 	{
-		[RED("projectileTemplate")] 		public CHandle<CEntityTemplate> ProjectileTemplate { get; set;}
+		[Ordinal(0)] [RED("("projectileTemplate")] 		public CHandle<CEntityTemplate> ProjectileTemplate { get; set;}
 
-		[RED("targetTag")] 		public CName TargetTag { get; set;}
+		[Ordinal(0)] [RED("("targetTag")] 		public CName TargetTag { get; set;}
 
-		[RED("frequency")] 		public CFloat Frequency { get; set;}
+		[Ordinal(0)] [RED("("frequency")] 		public CFloat Frequency { get; set;}
 
 		public W3ProjectileShooterTest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

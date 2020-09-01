@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class PersistentRef : CVariable
 	{
-		[RED("entityHandle")] 		public EntityHandle EntityHandle { get; set;}
+		[Ordinal(0)] [RED("entityHandle")] 		public EntityHandle EntityHandle { get; set;}
 
-		[RED("position")] 		public Vector Position { get; set;}
+		[Ordinal(0)] [RED("position")] 		public Vector Position { get; set;}
 
-		[RED("rotation")] 		public EulerAngles Rotation { get; set;}
+		[Ordinal(0)] [RED("rotation")] 		public EulerAngles Rotation { get; set;}
 
 		public PersistentRef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

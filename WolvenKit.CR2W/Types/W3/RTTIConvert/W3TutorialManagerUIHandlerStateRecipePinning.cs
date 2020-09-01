@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateRecipePinning : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("PIN")] 		public CName PIN { get; set;}
+		[Ordinal(0)] [RED("("PIN")] 		public CName PIN { get; set;}
 
-		[RED("SHOP")] 		public CName SHOP { get; set;}
+		[Ordinal(0)] [RED("("SHOP")] 		public CName SHOP { get; set;}
 
-		[RED("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
 		public W3TutorialManagerUIHandlerStateRecipePinning(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

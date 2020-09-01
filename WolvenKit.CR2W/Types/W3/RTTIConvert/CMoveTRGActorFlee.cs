@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveTRGActorFlee : CMoveTRGScript
 	{
-		[RED("dangerNode")] 		public CHandle<CNode> DangerNode { get; set;}
+		[Ordinal(0)] [RED("dangerNode")] 		public CHandle<CNode> DangerNode { get; set;}
 
-		[RED("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(0)] [RED("distance")] 		public CFloat Distance { get; set;}
 
-		[RED("pursue")] 		public CBool Pursue { get; set;}
+		[Ordinal(0)] [RED("pursue")] 		public CBool Pursue { get; set;}
 
 		public CMoveTRGActorFlee(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

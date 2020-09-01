@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskForceFinisherDef : IBehTreeTaskDefinition
 	{
-		[RED("belowHealthPercent")] 		public CFloat BelowHealthPercent { get; set;}
+		[Ordinal(0)] [RED("belowHealthPercent")] 		public CFloat BelowHealthPercent { get; set;}
 
-		[RED("whenAlone")] 		public CBool WhenAlone { get; set;}
+		[Ordinal(0)] [RED("whenAlone")] 		public CBool WhenAlone { get; set;}
 
-		[RED("leftStanceFinisherAnimName")] 		public CName LeftStanceFinisherAnimName { get; set;}
+		[Ordinal(0)] [RED("leftStanceFinisherAnimName")] 		public CName LeftStanceFinisherAnimName { get; set;}
 
-		[RED("rightStanceFinisherAnimName")] 		public CName RightStanceFinisherAnimName { get; set;}
+		[Ordinal(0)] [RED("rightStanceFinisherAnimName")] 		public CName RightStanceFinisherAnimName { get; set;}
 
-		[RED("shouldCheckForFinisherDLC")] 		public CBool ShouldCheckForFinisherDLC { get; set;}
+		[Ordinal(0)] [RED("shouldCheckForFinisherDLC")] 		public CBool ShouldCheckForFinisherDLC { get; set;}
 
-		[RED("hasFinisherDLC")] 		public CBool HasFinisherDLC { get; set;}
+		[Ordinal(0)] [RED("hasFinisherDLC")] 		public CBool HasFinisherDLC { get; set;}
 
 		public BTTaskForceFinisherDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

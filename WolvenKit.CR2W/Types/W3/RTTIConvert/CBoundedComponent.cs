@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBoundedComponent : CComponent
 	{
-		[RED("boundingBox")] 		public Box BoundingBox { get; set;}
+		[Ordinal(0)] [RED("boundingBox")] 		public Box BoundingBox { get; set;}
 
 		public CBoundedComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

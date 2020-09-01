@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_BookHasBeenRead : CQuestScriptedCondition
 	{
-		[RED("bookName")] 		public CName BookName { get; set;}
+		[Ordinal(0)] [RED("("bookName")] 		public CName BookName { get; set;}
 
-		[RED("bookFactName")] 		public CString BookFactName { get; set;}
+		[Ordinal(0)] [RED("("bookFactName")] 		public CString BookFactName { get; set;}
 
-		[RED("isFulfilled")] 		public CBool IsFulfilled { get; set;}
+		[Ordinal(0)] [RED("("isFulfilled")] 		public CBool IsFulfilled { get; set;}
 
-		[RED("listener")] 		public CHandle<W3QuestCond_BookHasBeenRead_Listener> Listener { get; set;}
+		[Ordinal(0)] [RED("("listener")] 		public CHandle<W3QuestCond_BookHasBeenRead_Listener> Listener { get; set;}
 
 		public W3QuestCond_BookHasBeenRead(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

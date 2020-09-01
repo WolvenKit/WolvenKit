@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeSendScaredEventDefinition : IBehTreeNodeDefinition
 	{
-		[RED("becomeScared")] 		public CBool BecomeScared { get; set;}
+		[Ordinal(0)] [RED("becomeScared")] 		public CBool BecomeScared { get; set;}
 
-		[RED("scaredTime")] 		public CBehTreeValFloat ScaredTime { get; set;}
+		[Ordinal(0)] [RED("scaredTime")] 		public CBehTreeValFloat ScaredTime { get; set;}
 
-		[RED("scaredTimeMax")] 		public CBehTreeValFloat ScaredTimeMax { get; set;}
+		[Ordinal(0)] [RED("scaredTimeMax")] 		public CBehTreeValFloat ScaredTimeMax { get; set;}
 
 		public CBehTreeNodeSendScaredEventDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateSkatingDashAttack : CExplorationStateSkatingDash
 	{
-		[RED("attacked")] 		public CBool Attacked { get; set;}
+		[Ordinal(0)] [RED("("attacked")] 		public CBool Attacked { get; set;}
 
-		[RED("afterAttackTime")] 		public CFloat AfterAttackTime { get; set;}
+		[Ordinal(0)] [RED("("afterAttackTime")] 		public CFloat AfterAttackTime { get; set;}
 
-		[RED("timeToEndCur")] 		public CFloat TimeToEndCur { get; set;}
+		[Ordinal(0)] [RED("("timeToEndCur")] 		public CFloat TimeToEndCur { get; set;}
 
-		[RED("behParamAttackName")] 		public CName BehParamAttackName { get; set;}
+		[Ordinal(0)] [RED("("behParamAttackName")] 		public CName BehParamAttackName { get; set;}
 
-		[RED("afterAttackImpulse")] 		public CFloat AfterAttackImpulse { get; set;}
+		[Ordinal(0)] [RED("("afterAttackImpulse")] 		public CFloat AfterAttackImpulse { get; set;}
 
 		public CExplorationStateSkatingDashAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

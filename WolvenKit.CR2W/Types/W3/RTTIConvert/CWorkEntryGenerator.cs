@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CWorkEntryGenerator : CSpawnTreeBaseEntryGenerator
 	{
-		[RED("entries", 2,0)] 		public CArray<SWorkEntryGeneratorParam> Entries { get; set;}
+		[Ordinal(0)] [RED("entries", 2,0)] 		public CArray<SWorkEntryGeneratorParam> Entries { get; set;}
 
-		[RED("commonSpawnParams")] 		public SCreatureEntrySpawnerParams CommonSpawnParams { get; set;}
+		[Ordinal(0)] [RED("commonSpawnParams")] 		public SCreatureEntrySpawnerParams CommonSpawnParams { get; set;}
 
-		[RED("workCategories", 2,0)] 		public CArray<SWorkCetegoriesForCreatureDefinitionEntryGeneratorParam> WorkCategories { get; set;}
+		[Ordinal(0)] [RED("workCategories", 2,0)] 		public CArray<SWorkCetegoriesForCreatureDefinitionEntryGeneratorParam> WorkCategories { get; set;}
 
 		public CWorkEntryGenerator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

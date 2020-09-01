@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskLeshyRootAttack : CBTTaskAttack
 	{
-		[RED("loopTime")] 		public CFloat LoopTime { get; set;}
+		[Ordinal(0)] [RED("loopTime")] 		public CFloat LoopTime { get; set;}
 
-		[RED("attackRange")] 		public CFloat AttackRange { get; set;}
+		[Ordinal(0)] [RED("attackRange")] 		public CFloat AttackRange { get; set;}
 
-		[RED("dodgeable")] 		public CFloat Dodgeable { get; set;}
+		[Ordinal(0)] [RED("dodgeable")] 		public CFloat Dodgeable { get; set;}
 
-		[RED("projEntity")] 		public CHandle<CEntityTemplate> ProjEntity { get; set;}
+		[Ordinal(0)] [RED("projEntity")] 		public CHandle<CEntityTemplate> ProjEntity { get; set;}
 
-		[RED("collisionGroups", 2,0)] 		public CArray<CName> CollisionGroups { get; set;}
+		[Ordinal(0)] [RED("collisionGroups", 2,0)] 		public CArray<CName> CollisionGroups { get; set;}
 
 		public CBTTaskLeshyRootAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

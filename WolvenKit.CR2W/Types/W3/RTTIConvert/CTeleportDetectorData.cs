@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CTeleportDetectorData : CObject
 	{
-		[RED("angleDif")] 		public CFloat AngleDif { get; set;}
+		[Ordinal(0)] [RED("angleDif")] 		public CFloat AngleDif { get; set;}
 
-		[RED("pelvisPositionThreshold")] 		public CFloat PelvisPositionThreshold { get; set;}
+		[Ordinal(0)] [RED("pelvisPositionThreshold")] 		public CFloat PelvisPositionThreshold { get; set;}
 
-		[RED("pelvisTeleportData")] 		public STeleportBone PelvisTeleportData { get; set;}
+		[Ordinal(0)] [RED("pelvisTeleportData")] 		public STeleportBone PelvisTeleportData { get; set;}
 
-		[RED("teleportedBones", 2,0)] 		public CArray<STeleportBone> TeleportedBones { get; set;}
+		[Ordinal(0)] [RED("teleportedBones", 2,0)] 		public CArray<STeleportBone> TeleportedBones { get; set;}
 
 		public CTeleportDetectorData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

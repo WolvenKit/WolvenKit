@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Reputation : CObject
 	{
-		[RED("factionReputations", 2,0)] 		public CArray<CHandle<W3FactionReputationPoints>> FactionReputations { get; set;}
+		[Ordinal(0)] [RED("("factionReputations", 2,0)] 		public CArray<CHandle<W3FactionReputationPoints>> FactionReputations { get; set;}
 
-		[RED("factionName")] 		public CEnum<EFactionName> FactionName { get; set;}
+		[Ordinal(0)] [RED("("factionName")] 		public CEnum<EFactionName> FactionName { get; set;}
 
 		public W3Reputation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

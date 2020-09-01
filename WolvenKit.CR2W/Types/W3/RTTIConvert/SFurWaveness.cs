@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFurWaveness : CVariable
 	{
-		[RED("waveScale")] 		public CFloat WaveScale { get; set;}
+		[Ordinal(0)] [RED("("waveScale")] 		public CFloat WaveScale { get; set;}
 
-		[RED("waveScaleTex")] 		public CHandle<CBitmapTexture> WaveScaleTex { get; set;}
+		[Ordinal(0)] [RED("("waveScaleTex")] 		public CHandle<CBitmapTexture> WaveScaleTex { get; set;}
 
-		[RED("waveScaleTexChannel")] 		public CEnum<EHairTextureChannel> WaveScaleTexChannel { get; set;}
+		[Ordinal(0)] [RED("("waveScaleTexChannel")] 		public CEnum<EHairTextureChannel> WaveScaleTexChannel { get; set;}
 
-		[RED("waveScaleNoise")] 		public CFloat WaveScaleNoise { get; set;}
+		[Ordinal(0)] [RED("("waveScaleNoise")] 		public CFloat WaveScaleNoise { get; set;}
 
-		[RED("waveFreq")] 		public CFloat WaveFreq { get; set;}
+		[Ordinal(0)] [RED("("waveFreq")] 		public CFloat WaveFreq { get; set;}
 
-		[RED("waveFreqTex")] 		public CHandle<CBitmapTexture> WaveFreqTex { get; set;}
+		[Ordinal(0)] [RED("("waveFreqTex")] 		public CHandle<CBitmapTexture> WaveFreqTex { get; set;}
 
-		[RED("waveFreqTexChannel")] 		public CEnum<EHairTextureChannel> WaveFreqTexChannel { get; set;}
+		[Ordinal(0)] [RED("("waveFreqTexChannel")] 		public CEnum<EHairTextureChannel> WaveFreqTexChannel { get; set;}
 
-		[RED("waveFreqNoise")] 		public CFloat WaveFreqNoise { get; set;}
+		[Ordinal(0)] [RED("("waveFreqNoise")] 		public CFloat WaveFreqNoise { get; set;}
 
-		[RED("waveRootStraighten")] 		public CFloat WaveRootStraighten { get; set;}
+		[Ordinal(0)] [RED("("waveRootStraighten")] 		public CFloat WaveRootStraighten { get; set;}
 
-		[RED("waveStrand")] 		public CFloat WaveStrand { get; set;}
+		[Ordinal(0)] [RED("("waveStrand")] 		public CFloat WaveStrand { get; set;}
 
-		[RED("waveClump")] 		public CFloat WaveClump { get; set;}
+		[Ordinal(0)] [RED("("waveClump")] 		public CFloat WaveClump { get; set;}
 
 		public SFurWaveness(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

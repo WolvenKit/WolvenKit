@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCircularPotentialField : IPotentialField
 	{
-		[RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(0)] [RED("radius")] 		public CFloat Radius { get; set;}
 
-		[RED("rangeTop")] 		public CFloat RangeTop { get; set;}
+		[Ordinal(0)] [RED("rangeTop")] 		public CFloat RangeTop { get; set;}
 
-		[RED("rangeBottom")] 		public CFloat RangeBottom { get; set;}
+		[Ordinal(0)] [RED("rangeBottom")] 		public CFloat RangeBottom { get; set;}
 
-		[RED("origin")] 		public Vector Origin { get; set;}
+		[Ordinal(0)] [RED("origin")] 		public Vector Origin { get; set;}
 
-		[RED("solid")] 		public CBool Solid { get; set;}
+		[Ordinal(0)] [RED("solid")] 		public CBool Solid { get; set;}
 
 		public CCircularPotentialField(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

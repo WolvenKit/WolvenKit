@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphSpringDampValueNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("factor")] 		public CFloat Factor { get; set;}
+		[Ordinal(0)] [RED("factor")] 		public CFloat Factor { get; set;}
 
-		[RED("scale")] 		public CFloat Scale { get; set;}
+		[Ordinal(0)] [RED("scale")] 		public CFloat Scale { get; set;}
 
-		[RED("forceInputValueOnActivate")] 		public CBool ForceInputValueOnActivate { get; set;}
+		[Ordinal(0)] [RED("forceInputValueOnActivate")] 		public CBool ForceInputValueOnActivate { get; set;}
 
 		public CBehaviorGraphSpringDampValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

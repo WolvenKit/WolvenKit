@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3VehicleCombatManagerStateThrowProjectile : W3VehicleCombatManagerStateRangedAttack
 	{
-		[RED("abortThrow")] 		public CBool AbortThrow { get; set;}
+		[Ordinal(0)] [RED("("abortThrow")] 		public CBool AbortThrow { get; set;}
 
-		[RED("thrownEntity")] 		public CHandle<CThrowable> ThrownEntity { get; set;}
+		[Ordinal(0)] [RED("("thrownEntity")] 		public CHandle<CThrowable> ThrownEntity { get; set;}
 
 		public W3VehicleCombatManagerStateThrowProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

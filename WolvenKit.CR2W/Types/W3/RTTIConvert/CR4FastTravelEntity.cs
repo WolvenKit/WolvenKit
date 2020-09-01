@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4FastTravelEntity : CR4MapPinEntity
 	{
-		[RED("spotName")] 		public CName SpotName { get; set;}
+		[Ordinal(0)] [RED("("spotName")] 		public CName SpotName { get; set;}
 
-		[RED("groupName")] 		public CName GroupName { get; set;}
+		[Ordinal(0)] [RED("("groupName")] 		public CName GroupName { get; set;}
 
-		[RED("teleportWayPointTag")] 		public CName TeleportWayPointTag { get; set;}
+		[Ordinal(0)] [RED("("teleportWayPointTag")] 		public CName TeleportWayPointTag { get; set;}
 
-		[RED("canBeReachedByBoat")] 		public CBool CanBeReachedByBoat { get; set;}
+		[Ordinal(0)] [RED("("canBeReachedByBoat")] 		public CBool CanBeReachedByBoat { get; set;}
 
-		[RED("isHubExit")] 		public CBool IsHubExit { get; set;}
+		[Ordinal(0)] [RED("("isHubExit")] 		public CBool IsHubExit { get; set;}
 
 		public CR4FastTravelEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

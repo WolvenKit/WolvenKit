@@ -10,37 +10,37 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFXTrackItemDynamicLight : CFXTrackItemCurveBase
 	{
-		[RED("color")] 		public CColor Color { get; set;}
+		[Ordinal(0)] [RED("color")] 		public CColor Color { get; set;}
 
-		[RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(0)] [RED("radius")] 		public CFloat Radius { get; set;}
 
-		[RED("brightness")] 		public CFloat Brightness { get; set;}
+		[Ordinal(0)] [RED("brightness")] 		public CFloat Brightness { get; set;}
 
-		[RED("attenuation")] 		public CFloat Attenuation { get; set;}
+		[Ordinal(0)] [RED("attenuation")] 		public CFloat Attenuation { get; set;}
 
-		[RED("specularScale")] 		public CFloat SpecularScale { get; set;}
+		[Ordinal(0)] [RED("specularScale")] 		public CFloat SpecularScale { get; set;}
 
-		[RED("lightChannels")] 		public ELightChannel LightChannels { get; set;}
+		[Ordinal(0)] [RED("lightChannels")] 		public ELightChannel LightChannels { get; set;}
 
-		[RED("isCastingShadows")] 		public CBool IsCastingShadows { get; set;}
+		[Ordinal(0)] [RED("isCastingShadows")] 		public CBool IsCastingShadows { get; set;}
 
-		[RED("isModulative")] 		public CBool IsModulative { get; set;}
+		[Ordinal(0)] [RED("isModulative")] 		public CBool IsModulative { get; set;}
 
-		[RED("lightFlickering")] 		public SLightFlickering LightFlickering { get; set;}
+		[Ordinal(0)] [RED("lightFlickering")] 		public SLightFlickering LightFlickering { get; set;}
 
-		[RED("autoHideDistance")] 		public CFloat AutoHideDistance { get; set;}
+		[Ordinal(0)] [RED("autoHideDistance")] 		public CFloat AutoHideDistance { get; set;}
 
-		[RED("autoHideRange")] 		public CFloat AutoHideRange { get; set;}
+		[Ordinal(0)] [RED("autoHideRange")] 		public CFloat AutoHideRange { get; set;}
 
-		[RED("colorGroup")] 		public CEnum<EEnvColorGroup> ColorGroup { get; set;}
+		[Ordinal(0)] [RED("colorGroup")] 		public CEnum<EEnvColorGroup> ColorGroup { get; set;}
 
-		[RED("isSpotlight")] 		public CBool IsSpotlight { get; set;}
+		[Ordinal(0)] [RED("isSpotlight")] 		public CBool IsSpotlight { get; set;}
 
-		[RED("spotInnerAngle")] 		public CFloat SpotInnerAngle { get; set;}
+		[Ordinal(0)] [RED("spotInnerAngle")] 		public CFloat SpotInnerAngle { get; set;}
 
-		[RED("spotOuterAngle")] 		public CFloat SpotOuterAngle { get; set;}
+		[Ordinal(0)] [RED("spotOuterAngle")] 		public CFloat SpotOuterAngle { get; set;}
 
-		[RED("spawner")] 		public CPtr<IFXSpawner> Spawner { get; set;}
+		[Ordinal(0)] [RED("spawner")] 		public CPtr<IFXSpawner> Spawner { get; set;}
 
 		public CFXTrackItemDynamicLight(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

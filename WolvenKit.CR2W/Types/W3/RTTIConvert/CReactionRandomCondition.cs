@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CReactionRandomCondition : CReactionScriptedCondition
 	{
-		[RED("percentageChance")] 		public CInt32 PercentageChance { get; set;}
+		[Ordinal(0)] [RED("percentageChance")] 		public CInt32 PercentageChance { get; set;}
 
 		public CReactionRandomCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ForestTrigger : CEntity
 	{
-		[RED("isPlayerInForest")] 		public CBool IsPlayerInForest { get; set;}
+		[Ordinal(0)] [RED("("isPlayerInForest")] 		public CBool IsPlayerInForest { get; set;}
 
 		public W3ForestTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

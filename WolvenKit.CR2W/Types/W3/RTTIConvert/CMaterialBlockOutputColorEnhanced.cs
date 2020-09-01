@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockOutputColorEnhanced : CMaterialRootBlock
 	{
-		[RED("maskThreshold")] 		public CFloat MaskThreshold { get; set;}
+		[Ordinal(0)] [RED("maskThreshold")] 		public CFloat MaskThreshold { get; set;}
 
-		[RED("alphaToCoverageScale")] 		public CFloat AlphaToCoverageScale { get; set;}
+		[Ordinal(0)] [RED("alphaToCoverageScale")] 		public CFloat AlphaToCoverageScale { get; set;}
 
 		public CMaterialBlockOutputColorEnhanced(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

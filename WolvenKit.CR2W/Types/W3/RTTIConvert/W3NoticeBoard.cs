@@ -10,45 +10,45 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3NoticeBoard : CR4MapPinEntity
 	{
-		[RED("visited")] 		public CBool Visited { get; set;}
+		[Ordinal(0)] [RED("("visited")] 		public CBool Visited { get; set;}
 
-		[RED("addedNotes", 2,0)] 		public CArray<ErrandDetailsList> AddedNotes { get; set;}
+		[Ordinal(0)] [RED("("addedNotes", 2,0)] 		public CArray<ErrandDetailsList> AddedNotes { get; set;}
 
-		[RED("fluffNotices", 2,0)] 		public CArray<CString> FluffNotices { get; set;}
+		[Ordinal(0)] [RED("("fluffNotices", 2,0)] 		public CArray<CString> FluffNotices { get; set;}
 
-		[RED("entitiesToBeShown", 2,0)] 		public CArray<CName> EntitiesToBeShown { get; set;}
+		[Ordinal(0)] [RED("("entitiesToBeShown", 2,0)] 		public CArray<CName> EntitiesToBeShown { get; set;}
 
-		[RED("questEntitiesToBeShown", 2,0)] 		public CArray<CName> QuestEntitiesToBeShown { get; set;}
+		[Ordinal(0)] [RED("("questEntitiesToBeShown", 2,0)] 		public CArray<CName> QuestEntitiesToBeShown { get; set;}
 
-		[RED("questNonActorEntitiesToBeShown", 2,0)] 		public CArray<CName> QuestNonActorEntitiesToBeShown { get; set;}
+		[Ordinal(0)] [RED("("questNonActorEntitiesToBeShown", 2,0)] 		public CArray<CName> QuestNonActorEntitiesToBeShown { get; set;}
 
-		[RED("InteractionSpawnDelayTime")] 		public CFloat InteractionSpawnDelayTime { get; set;}
+		[Ordinal(0)] [RED("("InteractionSpawnDelayTime")] 		public CFloat InteractionSpawnDelayTime { get; set;}
 
-		[RED("backgroundOverride")] 		public CString BackgroundOverride { get; set;}
+		[Ordinal(0)] [RED("("backgroundOverride")] 		public CString BackgroundOverride { get; set;}
 
-		[RED("factAddedOnDiscovery")] 		public CName FactAddedOnDiscovery { get; set;}
+		[Ordinal(0)] [RED("("factAddedOnDiscovery")] 		public CName FactAddedOnDiscovery { get; set;}
 
-		[RED("noticeboardDisabled")] 		public CBool NoticeboardDisabled { get; set;}
+		[Ordinal(0)] [RED("("noticeboardDisabled")] 		public CBool NoticeboardDisabled { get; set;}
 
-		[RED("activeErrands", 2,0)] 		public CArray<ErrandDetailsList> ActiveErrands { get; set;}
+		[Ordinal(0)] [RED("("activeErrands", 2,0)] 		public CArray<ErrandDetailsList> ActiveErrands { get; set;}
 
-		[RED("updatingInteraction")] 		public CBool UpdatingInteraction { get; set;}
+		[Ordinal(0)] [RED("("updatingInteraction")] 		public CBool UpdatingInteraction { get; set;}
 
-		[RED("errandPositionName")] 		public CString ErrandPositionName { get; set;}
+		[Ordinal(0)] [RED("("errandPositionName")] 		public CString ErrandPositionName { get; set;}
 
-		[RED("MAX_DISPLAYED_ERRANDS")] 		public CInt32 MAX_DISPLAYED_ERRANDS { get; set;}
+		[Ordinal(0)] [RED("("MAX_DISPLAYED_ERRANDS")] 		public CInt32 MAX_DISPLAYED_ERRANDS { get; set;}
 
-		[RED("lastTimeInteracted")] 		public GameTime LastTimeInteracted { get; set;}
+		[Ordinal(0)] [RED("("lastTimeInteracted")] 		public GameTime LastTimeInteracted { get; set;}
 
-		[RED("interactionComponent")] 		public CHandle<CInteractionComponent> InteractionComponent { get; set;}
+		[Ordinal(0)] [RED("("interactionComponent")] 		public CHandle<CInteractionComponent> InteractionComponent { get; set;}
 
-		[RED("hack_updateTriesLeft")] 		public CInt32 Hack_updateTriesLeft { get; set;}
+		[Ordinal(0)] [RED("("hack_updateTriesLeft")] 		public CInt32 Hack_updateTriesLeft { get; set;}
 
-		[RED("hack_isTryingUpdate")] 		public CBool Hack_isTryingUpdate { get; set;}
+		[Ordinal(0)] [RED("("hack_isTryingUpdate")] 		public CBool Hack_isTryingUpdate { get; set;}
 
-		[RED("hack_started")] 		public CBool Hack_started { get; set;}
+		[Ordinal(0)] [RED("("hack_started")] 		public CBool Hack_started { get; set;}
 
-		[RED("hack_fromAreaEnter")] 		public CBool Hack_fromAreaEnter { get; set;}
+		[Ordinal(0)] [RED("("hack_fromAreaEnter")] 		public CBool Hack_fromAreaEnter { get; set;}
 
 		public W3NoticeBoard(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

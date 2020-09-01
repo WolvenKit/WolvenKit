@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSCArrival : IMoveSteeringCondition
 	{
-		[RED("arrivalDistance")] 		public CFloat ArrivalDistance { get; set;}
+		[Ordinal(0)] [RED("arrivalDistance")] 		public CFloat ArrivalDistance { get; set;}
 
-		[RED("acceptableAngleToGoal")] 		public CFloat AcceptableAngleToGoal { get; set;}
+		[Ordinal(0)] [RED("acceptableAngleToGoal")] 		public CFloat AcceptableAngleToGoal { get; set;}
 
 		public CMoveSCArrival(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

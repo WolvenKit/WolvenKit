@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3LevelManager : CObject
 	{
-		[RED("owner")] 		public CHandle<W3PlayerWitcher> Owner { get; set;}
+		[Ordinal(0)] [RED("("owner")] 		public CHandle<W3PlayerWitcher> Owner { get; set;}
 
-		[RED("levelDefinitions", 2,0)] 		public CArray<SLevelDefinition> LevelDefinitions { get; set;}
+		[Ordinal(0)] [RED("("levelDefinitions", 2,0)] 		public CArray<SLevelDefinition> LevelDefinitions { get; set;}
 
-		[RED("level")] 		public CInt32 Level { get; set;}
+		[Ordinal(0)] [RED("("level")] 		public CInt32 Level { get; set;}
 
-		[RED("points", 2,0)] 		public CArray<SSpendablePoints> Points { get; set;}
+		[Ordinal(0)] [RED("("points", 2,0)] 		public CArray<SSpendablePoints> Points { get; set;}
 
-		[RED("lastCustomLevel")] 		public CInt32 LastCustomLevel { get; set;}
+		[Ordinal(0)] [RED("("lastCustomLevel")] 		public CInt32 LastCustomLevel { get; set;}
 
-		[RED("mSSPPL")] 		public CHandle<CSSPPL> MSSPPL { get; set;}
+		[Ordinal(0)] [RED("("mSSPPL")] 		public CHandle<CSSPPL> MSSPPL { get; set;}
 
 		public W3LevelManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStorySceneEventLookAtBlinkSettings : CVariable
 	{
-		[RED("canCloseEyes")] 		public CBool CanCloseEyes { get; set;}
+		[Ordinal(0)] [RED("("canCloseEyes")] 		public CBool CanCloseEyes { get; set;}
 
-		[RED("forceCloseEyes")] 		public CBool ForceCloseEyes { get; set;}
+		[Ordinal(0)] [RED("("forceCloseEyes")] 		public CBool ForceCloseEyes { get; set;}
 
-		[RED("animationName")] 		public CName AnimationName { get; set;}
+		[Ordinal(0)] [RED("("animationName")] 		public CName AnimationName { get; set;}
 
-		[RED("startOffset")] 		public CFloat StartOffset { get; set;}
+		[Ordinal(0)] [RED("("startOffset")] 		public CFloat StartOffset { get; set;}
 
-		[RED("durationPercent")] 		public CFloat DurationPercent { get; set;}
+		[Ordinal(0)] [RED("("durationPercent")] 		public CFloat DurationPercent { get; set;}
 
-		[RED("horizontalAngleDeg")] 		public CFloat HorizontalAngleDeg { get; set;}
+		[Ordinal(0)] [RED("("horizontalAngleDeg")] 		public CFloat HorizontalAngleDeg { get; set;}
 
 		public SStorySceneEventLookAtBlinkSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SE_SetAppearanceOnEntity : W3SwitchEvent
 	{
-		[RED("entityHandle")] 		public EntityHandle EntityHandle { get; set;}
+		[Ordinal(0)] [RED("("entityHandle")] 		public EntityHandle EntityHandle { get; set;}
 
-		[RED("appearanceName")] 		public CString AppearanceName { get; set;}
+		[Ordinal(0)] [RED("("appearanceName")] 		public CString AppearanceName { get; set;}
 
-		[RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
+		[Ordinal(0)] [RED("("entity")] 		public CHandle<CEntity> Entity { get; set;}
 
 		public W3SE_SetAppearanceOnEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

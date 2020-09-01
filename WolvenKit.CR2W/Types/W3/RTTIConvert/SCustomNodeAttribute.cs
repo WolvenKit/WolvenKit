@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCustomNodeAttribute : CVariable
 	{
-		[RED("attributeName")] 		public CName AttributeName { get; set;}
+		[Ordinal(0)] [RED("("attributeName")] 		public CName AttributeName { get; set;}
 
-		[RED("attributeValue")] 		public CString AttributeValue { get; set;}
+		[Ordinal(0)] [RED("("attributeValue")] 		public CString AttributeValue { get; set;}
 
-		[RED("attributeValueAsCName")] 		public CName AttributeValueAsCName { get; set;}
+		[Ordinal(0)] [RED("("attributeValueAsCName")] 		public CName AttributeValueAsCName { get; set;}
 
 		public SCustomNodeAttribute(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

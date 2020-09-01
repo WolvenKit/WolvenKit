@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SRangeF : CVariable
 	{
-		[RED("min")] 		public CFloat Min { get; set;}
+		[Ordinal(0)] [RED("("min")] 		public CFloat Min { get; set;}
 
-		[RED("max")] 		public CFloat Max { get; set;}
+		[Ordinal(0)] [RED("("max")] 		public CFloat Max { get; set;}
 
 		public SRangeF(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

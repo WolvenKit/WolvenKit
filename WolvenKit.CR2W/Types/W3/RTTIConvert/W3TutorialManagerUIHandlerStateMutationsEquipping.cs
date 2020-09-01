@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateMutationsEquipping : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("EQUIPPING")] 		public CName EQUIPPING { get; set;}
+		[Ordinal(0)] [RED("("EQUIPPING")] 		public CName EQUIPPING { get; set;}
 
-		[RED("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(0)] [RED("("activated")] 		public CBool Activated { get; set;}
 
 		public W3TutorialManagerUIHandlerStateMutationsEquipping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

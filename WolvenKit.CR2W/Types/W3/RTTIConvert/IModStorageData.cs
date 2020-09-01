@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IModStorageData : CObject
 	{
-		[RED("id")] 		public CName Id { get; set;}
+		[Ordinal(0)] [RED("("id")] 		public CName Id { get; set;}
 
 		public IModStorageData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimAttackEvent : CExtAnimEvent
 	{
-		[RED("soundAttackType")] 		public CName SoundAttackType { get; set;}
+		[Ordinal(0)] [RED("("soundAttackType")] 		public CName SoundAttackType { get; set;}
 
 		public CExtAnimAttackEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

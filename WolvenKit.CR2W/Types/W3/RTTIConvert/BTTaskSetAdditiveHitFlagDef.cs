@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskSetAdditiveHitFlagDef : IBehTreeTaskDefinition
 	{
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(0)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("onAnimEvent")] 		public CName OnAnimEvent { get; set;}
+		[Ordinal(0)] [RED("onAnimEvent")] 		public CName OnAnimEvent { get; set;}
 
-		[RED("flag")] 		public CBool Flag { get; set;}
+		[Ordinal(0)] [RED("flag")] 		public CBool Flag { get; set;}
 
-		[RED("additiveHits")] 		public CBool AdditiveHits { get; set;}
+		[Ordinal(0)] [RED("additiveHits")] 		public CBool AdditiveHits { get; set;}
 
-		[RED("additiveCriticalStates")] 		public CBool AdditiveCriticalStates { get; set;}
+		[Ordinal(0)] [RED("additiveCriticalStates")] 		public CBool AdditiveCriticalStates { get; set;}
 
-		[RED("overrideOnly")] 		public CBool OverrideOnly { get; set;}
+		[Ordinal(0)] [RED("overrideOnly")] 		public CBool OverrideOnly { get; set;}
 
-		[RED("playNormalHitOnCritical")] 		public CBool PlayNormalHitOnCritical { get; set;}
+		[Ordinal(0)] [RED("playNormalHitOnCritical")] 		public CBool PlayNormalHitOnCritical { get; set;}
 
 		public BTTaskSetAdditiveHitFlagDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

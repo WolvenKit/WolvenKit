@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeTaskCSEffectFlying : CBehTreeTaskCSEffect
 	{
-		[RED("wasFlying")] 		public CBool WasFlying { get; set;}
+		[Ordinal(0)] [RED("wasFlying")] 		public CBool WasFlying { get; set;}
 
-		[RED("waitingForEndOfDisableHit")] 		public CBool WaitingForEndOfDisableHit { get; set;}
+		[Ordinal(0)] [RED("waitingForEndOfDisableHit")] 		public CBool WaitingForEndOfDisableHit { get; set;}
 
 		public CBehTreeTaskCSEffectFlying(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

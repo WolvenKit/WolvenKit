@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SInputAction : CVariable
 	{
-		[RED("aName")] 		public CName AName { get; set;}
+		[Ordinal(0)] [RED("("aName")] 		public CName AName { get; set;}
 
-		[RED("value")] 		public CFloat Value { get; set;}
+		[Ordinal(0)] [RED("("value")] 		public CFloat Value { get; set;}
 
-		[RED("lastFrameValue")] 		public CFloat LastFrameValue { get; set;}
+		[Ordinal(0)] [RED("("lastFrameValue")] 		public CFloat LastFrameValue { get; set;}
 
 		public SInputAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

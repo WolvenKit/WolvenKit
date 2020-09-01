@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPlayerLevelCondition : ISpawnCondition
 	{
-		[RED("minLevel")] 		public CInt32 MinLevel { get; set;}
+		[Ordinal(0)] [RED("("minLevel")] 		public CInt32 MinLevel { get; set;}
 
-		[RED("maxLevel")] 		public CInt32 MaxLevel { get; set;}
+		[Ordinal(0)] [RED("("maxLevel")] 		public CInt32 MaxLevel { get; set;}
 
 		public CPlayerLevelCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

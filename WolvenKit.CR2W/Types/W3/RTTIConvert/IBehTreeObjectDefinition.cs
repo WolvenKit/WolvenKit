@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IBehTreeObjectDefinition : IScriptable
 	{
-		[RED("instanceClass")] 		public CName InstanceClass { get; set;}
+		[Ordinal(0)] [RED("instanceClass")] 		public CName InstanceClass { get; set;}
 
 		public IBehTreeObjectDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

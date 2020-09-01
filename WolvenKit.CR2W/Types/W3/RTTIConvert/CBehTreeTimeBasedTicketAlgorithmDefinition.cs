@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeTimeBasedTicketAlgorithmDefinition : IBehTreeTicketAlgorithmDefinition
 	{
-		[RED("importanceMultiplier")] 		public CBehTreeValFloat ImportanceMultiplier { get; set;}
+		[Ordinal(0)] [RED("importanceMultiplier")] 		public CBehTreeValFloat ImportanceMultiplier { get; set;}
 
 		public CBehTreeTimeBasedTicketAlgorithmDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

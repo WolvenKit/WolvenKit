@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SReactionSceneEvent : CVariable
 	{
-		[RED("reactionScene")] 		public CName ReactionScene { get; set;}
+		[Ordinal(0)] [RED("("reactionScene")] 		public CName ReactionScene { get; set;}
 
-		[RED("requiredSceneInputs", 2,0)] 		public CArray<CString> RequiredSceneInputs { get; set;}
+		[Ordinal(0)] [RED("("requiredSceneInputs", 2,0)] 		public CArray<CString> RequiredSceneInputs { get; set;}
 
-		[RED("inputsAsymetric")] 		public CBool InputsAsymetric { get; set;}
+		[Ordinal(0)] [RED("("inputsAsymetric")] 		public CBool InputsAsymetric { get; set;}
 
-		[RED("workOnlyBroadcast")] 		public CBool WorkOnlyBroadcast { get; set;}
+		[Ordinal(0)] [RED("("workOnlyBroadcast")] 		public CBool WorkOnlyBroadcast { get; set;}
 
 		public SReactionSceneEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

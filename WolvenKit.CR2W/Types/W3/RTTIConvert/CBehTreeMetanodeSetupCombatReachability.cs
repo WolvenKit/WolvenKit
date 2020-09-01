@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeMetanodeSetupCombatReachability : IBehTreeMetanodeOnSpawnDefinition
 	{
-		[RED("reachabilityTolerance")] 		public CBehTreeValFloat ReachabilityTolerance { get; set;}
+		[Ordinal(0)] [RED("reachabilityTolerance")] 		public CBehTreeValFloat ReachabilityTolerance { get; set;}
 
 		public CBehTreeMetanodeSetupCombatReachability(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

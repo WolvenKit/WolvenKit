@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockLocalReflection : CMaterialBlock
 	{
-		[RED("premultipliedAlpha")] 		public CBool PremultipliedAlpha { get; set;}
+		[Ordinal(0)] [RED("premultipliedAlpha")] 		public CBool PremultipliedAlpha { get; set;}
 
-		[RED("inputNormalStrength")] 		public CFloat InputNormalStrength { get; set;}
+		[Ordinal(0)] [RED("inputNormalStrength")] 		public CFloat InputNormalStrength { get; set;}
 
 		public CMaterialBlockLocalReflection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

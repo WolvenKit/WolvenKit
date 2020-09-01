@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CReactionAttitudeChange : IReactionAction
 	{
-		[RED("attitude")] 		public CEnum<EAIAttitude> Attitude { get; set;}
+		[Ordinal(0)] [RED("("attitude")] 		public CEnum<EAIAttitude> Attitude { get; set;}
 
-		[RED("towardSource")] 		public CBool TowardSource { get; set;}
+		[Ordinal(0)] [RED("("towardSource")] 		public CBool TowardSource { get; set;}
 
-		[RED("noticeActor")] 		public CBool NoticeActor { get; set;}
+		[Ordinal(0)] [RED("("noticeActor")] 		public CBool NoticeActor { get; set;}
 
 		public CReactionAttitudeChange(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

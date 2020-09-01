@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTMatchHeadingOrientation : IMoveSteeringTask
 	{
-		[RED("limitSpeedOnTurns")] 		public CBool LimitSpeedOnTurns { get; set;}
+		[Ordinal(0)] [RED("limitSpeedOnTurns")] 		public CBool LimitSpeedOnTurns { get; set;}
 
-		[RED("maxAngleNotLimitingSpeed")] 		public CFloat MaxAngleNotLimitingSpeed { get; set;}
+		[Ordinal(0)] [RED("maxAngleNotLimitingSpeed")] 		public CFloat MaxAngleNotLimitingSpeed { get; set;}
 
-		[RED("speedLimitOnRotation")] 		public CFloat SpeedLimitOnRotation { get; set;}
+		[Ordinal(0)] [RED("speedLimitOnRotation")] 		public CFloat SpeedLimitOnRotation { get; set;}
 
 		public CMoveSTMatchHeadingOrientation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

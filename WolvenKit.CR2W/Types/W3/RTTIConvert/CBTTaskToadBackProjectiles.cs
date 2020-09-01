@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskToadBackProjectiles : CBTTaskProjectileAttackWithPrepare
 	{
-		[RED("minDistFromTarget")] 		public CFloat MinDistFromTarget { get; set;}
+		[Ordinal(0)] [RED("("minDistFromTarget")] 		public CFloat MinDistFromTarget { get; set;}
 
-		[RED("maxDistFromTarget")] 		public CFloat MaxDistFromTarget { get; set;}
+		[Ordinal(0)] [RED("("maxDistFromTarget")] 		public CFloat MaxDistFromTarget { get; set;}
 
-		[RED("range")] 		public CFloat Range { get; set;}
+		[Ordinal(0)] [RED("("range")] 		public CFloat Range { get; set;}
 
-		[RED("animEvent", 2,0)] 		public CArray<CName> AnimEvent { get; set;}
+		[Ordinal(0)] [RED("("animEvent", 2,0)] 		public CArray<CName> AnimEvent { get; set;}
 
-		[RED("boneNames", 2,0)] 		public CArray<CName> BoneNames { get; set;}
+		[Ordinal(0)] [RED("("boneNames", 2,0)] 		public CArray<CName> BoneNames { get; set;}
 
-		[RED("projectilesShot")] 		public CBool ProjectilesShot { get; set;}
+		[Ordinal(0)] [RED("("projectilesShot")] 		public CBool ProjectilesShot { get; set;}
 
-		[RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(0)] [RED("("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
 		public CBTTaskToadBackProjectiles(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

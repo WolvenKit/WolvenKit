@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeDecoratorRiderPairingLogicDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("preferedHorseTag")] 		public CBehTreeValCName PreferedHorseTag { get; set;}
+		[Ordinal(0)] [RED("preferedHorseTag")] 		public CBehTreeValCName PreferedHorseTag { get; set;}
 
-		[RED("range")] 		public CFloat Range { get; set;}
+		[Ordinal(0)] [RED("range")] 		public CFloat Range { get; set;}
 
 		public CBehTreeDecoratorRiderPairingLogicDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

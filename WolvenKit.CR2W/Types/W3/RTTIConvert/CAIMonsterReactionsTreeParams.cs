@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMonsterReactionsTreeParams : CAIReactionsParameters
 	{
-		[RED("reactions", 2,0)] 		public CArray<CHandle<CAIMonsterActionSubtree>> Reactions { get; set;}
+		[Ordinal(0)] [RED("reactions", 2,0)] 		public CArray<CHandle<CAIMonsterActionSubtree>> Reactions { get; set;}
 
-		[RED("canFly")] 		public CBool CanFly { get; set;}
+		[Ordinal(0)] [RED("canFly")] 		public CBool CanFly { get; set;}
 
 		public CAIMonsterReactionsTreeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

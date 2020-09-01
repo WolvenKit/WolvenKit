@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorConstraintPullStirrupToLegData : CVariable
 	{
-		[RED("stirrupBoneName")] 		public CName StirrupBoneName { get; set;}
+		[Ordinal(0)] [RED("("stirrupBoneName")] 		public CName StirrupBoneName { get; set;}
 
-		[RED("stirrupContactPoint")] 		public Vector StirrupContactPoint { get; set;}
+		[Ordinal(0)] [RED("("stirrupContactPoint")] 		public Vector StirrupContactPoint { get; set;}
 
-		[RED("footBoneName")] 		public CName FootBoneName { get; set;}
+		[Ordinal(0)] [RED("("footBoneName")] 		public CName FootBoneName { get; set;}
 
-		[RED("footContactPoint")] 		public Vector FootContactPoint { get; set;}
+		[Ordinal(0)] [RED("("footContactPoint")] 		public Vector FootContactPoint { get; set;}
 
-		[RED("toeBoneName")] 		public CName ToeBoneName { get; set;}
+		[Ordinal(0)] [RED("("toeBoneName")] 		public CName ToeBoneName { get; set;}
 
-		[RED("toeAlignStirrupSideDir")] 		public Vector ToeAlignStirrupSideDir { get; set;}
+		[Ordinal(0)] [RED("("toeAlignStirrupSideDir")] 		public Vector ToeAlignStirrupSideDir { get; set;}
 
-		[RED("toeAlignStirrupRotationAxisDir")] 		public Vector ToeAlignStirrupRotationAxisDir { get; set;}
+		[Ordinal(0)] [RED("("toeAlignStirrupRotationAxisDir")] 		public Vector ToeAlignStirrupRotationAxisDir { get; set;}
 
 		public SBehaviorConstraintPullStirrupToLegData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

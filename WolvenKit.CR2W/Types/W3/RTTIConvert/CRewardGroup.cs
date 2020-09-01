@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CRewardGroup : CResource
 	{
-		[RED("rewards", 2,0)] 		public CArray<SReward> Rewards { get; set;}
+		[Ordinal(0)] [RED("rewards", 2,0)] 		public CArray<SReward> Rewards { get; set;}
 
-		[RED("subGroups", 2,0)] 		public CArray<CHandle<CRewardGroup>> SubGroups { get; set;}
+		[Ordinal(0)] [RED("subGroups", 2,0)] 		public CArray<CHandle<CRewardGroup>> SubGroups { get; set;}
 
-		[RED("isSubGroup")] 		public CBool IsSubGroup { get; set;}
+		[Ordinal(0)] [RED("isSubGroup")] 		public CBool IsSubGroup { get; set;}
 
 		public CRewardGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

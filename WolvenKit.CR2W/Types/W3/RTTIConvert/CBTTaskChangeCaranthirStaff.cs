@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskChangeCaranthirStaff : IBehTreeTask
 	{
-		[RED("wasActivated")] 		public CBool WasActivated { get; set;}
+		[Ordinal(0)] [RED("wasActivated")] 		public CBool WasActivated { get; set;}
 
-		[RED("startEffect")] 		public CBool StartEffect { get; set;}
+		[Ordinal(0)] [RED("startEffect")] 		public CBool StartEffect { get; set;}
 
 		public CBTTaskChangeCaranthirStaff(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

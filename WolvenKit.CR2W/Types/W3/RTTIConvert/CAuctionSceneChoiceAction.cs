@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAuctionSceneChoiceAction : CStorySceneChoiceLineActionScripted
 	{
-		[RED("money")] 		public CInt32 Money { get; set;}
+		[Ordinal(0)] [RED("money")] 		public CInt32 Money { get; set;}
 
 		public CAuctionSceneChoiceAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

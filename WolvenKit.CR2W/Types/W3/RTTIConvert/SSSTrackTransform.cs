@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSSTrackTransform : CVariable
 	{
-		[RED("track")] 		public CName Track { get; set;}
+		[Ordinal(0)] [RED("("track")] 		public CName Track { get; set;}
 
-		[RED("value")] 		public CFloat Value { get; set;}
+		[Ordinal(0)] [RED("("value")] 		public CFloat Value { get; set;}
 
 		public SSSTrackTransform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

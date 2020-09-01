@@ -10,35 +10,35 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CTicketAlgorithmMeleeDefinition : ITicketAlgorithmScriptDefinition
 	{
-		[RED("priority")] 		public CBehTreeValFloat Priority { get; set;}
+		[Ordinal(0)] [RED("priority")] 		public CBehTreeValFloat Priority { get; set;}
 
-		[RED("activationBonus")] 		public CBehTreeValFloat ActivationBonus { get; set;}
+		[Ordinal(0)] [RED("activationBonus")] 		public CBehTreeValFloat ActivationBonus { get; set;}
 
-		[RED("isInVicinityBonus")] 		public CBehTreeValFloat IsInVicinityBonus { get; set;}
+		[Ordinal(0)] [RED("isInVicinityBonus")] 		public CBehTreeValFloat IsInVicinityBonus { get; set;}
 
-		[RED("vicinityMax")] 		public CBehTreeValFloat VicinityMax { get; set;}
+		[Ordinal(0)] [RED("vicinityMax")] 		public CBehTreeValFloat VicinityMax { get; set;}
 
-		[RED("vicinityMin")] 		public CBehTreeValFloat VicinityMin { get; set;}
+		[Ordinal(0)] [RED("vicinityMin")] 		public CBehTreeValFloat VicinityMin { get; set;}
 
-		[RED("threatLevelBonus")] 		public CBehTreeValFloat ThreatLevelBonus { get; set;}
+		[Ordinal(0)] [RED("threatLevelBonus")] 		public CBehTreeValFloat ThreatLevelBonus { get; set;}
 
-		[RED("moraleBonus")] 		public CBehTreeValFloat MoraleBonus { get; set;}
+		[Ordinal(0)] [RED("moraleBonus")] 		public CBehTreeValFloat MoraleBonus { get; set;}
 
-		[RED("hpBonus")] 		public CBehTreeValFloat HpBonus { get; set;}
+		[Ordinal(0)] [RED("hpBonus")] 		public CBehTreeValFloat HpBonus { get; set;}
 
-		[RED("timeBonus")] 		public CBehTreeValFloat TimeBonus { get; set;}
+		[Ordinal(0)] [RED("timeBonus")] 		public CBehTreeValFloat TimeBonus { get; set;}
 
-		[RED("distanceBonus")] 		public CBehTreeValFloat DistanceBonus { get; set;}
+		[Ordinal(0)] [RED("distanceBonus")] 		public CBehTreeValFloat DistanceBonus { get; set;}
 
-		[RED("desiredDistance")] 		public CBehTreeValFloat DesiredDistance { get; set;}
+		[Ordinal(0)] [RED("desiredDistance")] 		public CBehTreeValFloat DesiredDistance { get; set;}
 
-		[RED("desiredTime")] 		public CBehTreeValFloat DesiredTime { get; set;}
+		[Ordinal(0)] [RED("desiredTime")] 		public CBehTreeValFloat DesiredTime { get; set;}
 
-		[RED("isAttackedBonus")] 		public CBehTreeValFloat IsAttackedBonus { get; set;}
+		[Ordinal(0)] [RED("isAttackedBonus")] 		public CBehTreeValFloat IsAttackedBonus { get; set;}
 
-		[RED("isAttackedStateDuration")] 		public CBehTreeValFloat IsAttackedStateDuration { get; set;}
+		[Ordinal(0)] [RED("isAttackedStateDuration")] 		public CBehTreeValFloat IsAttackedStateDuration { get; set;}
 
-		[RED("inTargetBackBonus")] 		public CBehTreeValFloat InTargetBackBonus { get; set;}
+		[Ordinal(0)] [RED("inTargetBackBonus")] 		public CBehTreeValFloat InTargetBackBonus { get; set;}
 
 		public CTicketAlgorithmMeleeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4PlayerStateUseGenericVehicle : CPlayerStateUseVehicle
 	{
-		[RED("vehicle")] 		public CHandle<CVehicleComponent> Vehicle { get; set;}
+		[Ordinal(0)] [RED("vehicle")] 		public CHandle<CVehicleComponent> Vehicle { get; set;}
 
-		[RED("camera")] 		public CHandle<CCustomCamera> Camera { get; set;}
+		[Ordinal(0)] [RED("camera")] 		public CHandle<CCustomCamera> Camera { get; set;}
 
-		[RED("signSlotNames", 2,0)] 		public CArray<CName> SignSlotNames { get; set;}
+		[Ordinal(0)] [RED("signSlotNames", 2,0)] 		public CArray<CName> SignSlotNames { get; set;}
 
-		[RED("fovVel")] 		public CFloat FovVel { get; set;}
+		[Ordinal(0)] [RED("fovVel")] 		public CFloat FovVel { get; set;}
 
 		public CR4PlayerStateUseGenericVehicle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

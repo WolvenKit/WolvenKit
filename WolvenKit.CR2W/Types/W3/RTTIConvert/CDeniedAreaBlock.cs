@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDeniedAreaBlock : CQuestGraphBlock
 	{
-		[RED("entityTag")] 		public CName EntityTag { get; set;}
+		[Ordinal(0)] [RED("("entityTag")] 		public CName EntityTag { get; set;}
 
-		[RED("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(0)] [RED("("enabled")] 		public CBool Enabled { get; set;}
 
 		public CDeniedAreaBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

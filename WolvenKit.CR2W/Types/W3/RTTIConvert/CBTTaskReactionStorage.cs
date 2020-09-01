@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskReactionStorage : IBehTreeTask
 	{
-		[RED("reactionDataStorage")] 		public CHandle<CAIStorageReactionData> ReactionDataStorage { get; set;}
+		[Ordinal(0)] [RED("reactionDataStorage")] 		public CHandle<CAIStorageReactionData> ReactionDataStorage { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(0)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("onCompletion")] 		public CBool OnCompletion { get; set;}
+		[Ordinal(0)] [RED("onCompletion")] 		public CBool OnCompletion { get; set;}
 
-		[RED("setIsAlarmed")] 		public CBool SetIsAlarmed { get; set;}
+		[Ordinal(0)] [RED("setIsAlarmed")] 		public CBool SetIsAlarmed { get; set;}
 
-		[RED("setTaunted")] 		public CBool SetTaunted { get; set;}
+		[Ordinal(0)] [RED("setTaunted")] 		public CBool SetTaunted { get; set;}
 
-		[RED("reset")] 		public CBool Reset { get; set;}
+		[Ordinal(0)] [RED("reset")] 		public CBool Reset { get; set;}
 
 		public CBTTaskReactionStorage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

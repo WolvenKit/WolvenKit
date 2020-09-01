@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFlashRenderTargetCamera : CVariable
 	{
-		[RED("position")] 		public Vector Position { get; set;}
+		[Ordinal(0)] [RED("("position")] 		public Vector Position { get; set;}
 
-		[RED("rotation")] 		public EulerAngles Rotation { get; set;}
+		[Ordinal(0)] [RED("("rotation")] 		public EulerAngles Rotation { get; set;}
 
-		[RED("fov")] 		public CFloat Fov { get; set;}
+		[Ordinal(0)] [RED("("fov")] 		public CFloat Fov { get; set;}
 
-		[RED("zoom")] 		public CFloat Zoom { get; set;}
+		[Ordinal(0)] [RED("("zoom")] 		public CFloat Zoom { get; set;}
 
 		public SFlashRenderTargetCamera(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

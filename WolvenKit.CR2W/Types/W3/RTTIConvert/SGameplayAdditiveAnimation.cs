@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SGameplayAdditiveAnimation : CVariable
 	{
-		[RED("animationName")] 		public CName AnimationName { get; set;}
+		[Ordinal(0)] [RED("("animationName")] 		public CName AnimationName { get; set;}
 
-		[RED("delay")] 		public CFloat Delay { get; set;}
+		[Ordinal(0)] [RED("("delay")] 		public CFloat Delay { get; set;}
 
-		[RED("cooldown")] 		public CFloat Cooldown { get; set;}
+		[Ordinal(0)] [RED("("cooldown")] 		public CFloat Cooldown { get; set;}
 
-		[RED("chance")] 		public CFloat Chance { get; set;}
+		[Ordinal(0)] [RED("("chance")] 		public CFloat Chance { get; set;}
 
-		[RED("onlyOnce")] 		public CBool OnlyOnce { get; set;}
+		[Ordinal(0)] [RED("("onlyOnce")] 		public CBool OnlyOnce { get; set;}
 
-		[RED("useWeightRange")] 		public CBool UseWeightRange { get; set;}
+		[Ordinal(0)] [RED("("useWeightRange")] 		public CBool UseWeightRange { get; set;}
 
-		[RED("weightRangeMin")] 		public CFloat WeightRangeMin { get; set;}
+		[Ordinal(0)] [RED("("weightRangeMin")] 		public CFloat WeightRangeMin { get; set;}
 
-		[RED("weightRangeMax")] 		public CFloat WeightRangeMax { get; set;}
+		[Ordinal(0)] [RED("("weightRangeMax")] 		public CFloat WeightRangeMax { get; set;}
 
-		[RED("useSpeedRange")] 		public CBool UseSpeedRange { get; set;}
+		[Ordinal(0)] [RED("("useSpeedRange")] 		public CBool UseSpeedRange { get; set;}
 
-		[RED("speedRangeMin")] 		public CFloat SpeedRangeMin { get; set;}
+		[Ordinal(0)] [RED("("speedRangeMin")] 		public CFloat SpeedRangeMin { get; set;}
 
-		[RED("speedRangeMax")] 		public CFloat SpeedRangeMax { get; set;}
+		[Ordinal(0)] [RED("("speedRangeMax")] 		public CFloat SpeedRangeMax { get; set;}
 
 		public SGameplayAdditiveAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

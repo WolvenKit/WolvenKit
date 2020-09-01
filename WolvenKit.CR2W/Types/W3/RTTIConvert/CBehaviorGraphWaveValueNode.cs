@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphWaveValueNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("type")] 		public CEnum<EBehaviorWaveValueType> Type { get; set;}
+		[Ordinal(0)] [RED("type")] 		public CEnum<EBehaviorWaveValueType> Type { get; set;}
 
-		[RED("freq")] 		public CFloat Freq { get; set;}
+		[Ordinal(0)] [RED("freq")] 		public CFloat Freq { get; set;}
 
-		[RED("amp")] 		public CFloat Amp { get; set;}
+		[Ordinal(0)] [RED("amp")] 		public CFloat Amp { get; set;}
 
 		public CBehaviorGraphWaveValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

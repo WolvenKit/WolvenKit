@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSoundAmbientDynamicSoundEvents : CVariable
 	{
-		[RED("eventName")] 		public StringAnsi EventName { get; set;}
+		[Ordinal(0)] [RED("("eventName")] 		public StringAnsi EventName { get; set;}
 
-		[RED("repeatTime")] 		public CFloat RepeatTime { get; set;}
+		[Ordinal(0)] [RED("("repeatTime")] 		public CFloat RepeatTime { get; set;}
 
-		[RED("repeatTimeVariance")] 		public CFloat RepeatTimeVariance { get; set;}
+		[Ordinal(0)] [RED("("repeatTimeVariance")] 		public CFloat RepeatTimeVariance { get; set;}
 
-		[RED("triggerOnActivation")] 		public CBool TriggerOnActivation { get; set;}
+		[Ordinal(0)] [RED("("triggerOnActivation")] 		public CBool TriggerOnActivation { get; set;}
 
 		public SSoundAmbientDynamicSoundEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

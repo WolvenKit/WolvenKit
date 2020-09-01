@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4HudModuleQuests : CR4HudModuleBase
 	{
-		[RED("m_systemQuest")] 		public CHandle<CJournalQuest> M_systemQuest { get; set;}
+		[Ordinal(0)] [RED("("m_systemQuest")] 		public CHandle<CJournalQuest> M_systemQuest { get; set;}
 
-		[RED("m_systemObjectives", 2,0)] 		public CArray<SJournalQuestObjectiveData> M_systemObjectives { get; set;}
+		[Ordinal(0)] [RED("("m_systemObjectives", 2,0)] 		public CArray<SJournalQuestObjectiveData> M_systemObjectives { get; set;}
 
-		[RED("m_userObjectives", 2,0)] 		public CArray<SJournalQuestObjectiveData> M_userObjectives { get; set;}
+		[Ordinal(0)] [RED("("m_userObjectives", 2,0)] 		public CArray<SJournalQuestObjectiveData> M_userObjectives { get; set;}
 
-		[RED("m_updateEvents", 2,0)] 		public CArray<SUpdateEvent> M_updateEvents { get; set;}
+		[Ordinal(0)] [RED("("m_updateEvents", 2,0)] 		public CArray<SUpdateEvent> M_updateEvents { get; set;}
 
-		[RED("manager")] 		public CHandle<CWitcherJournalManager> Manager { get; set;}
+		[Ordinal(0)] [RED("("manager")] 		public CHandle<CWitcherJournalManager> Manager { get; set;}
 
-		[RED("m_fxShowTrackedQuestSFF")] 		public CHandle<CScriptedFlashFunction> M_fxShowTrackedQuestSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxShowTrackedQuestSFF")] 		public CHandle<CScriptedFlashFunction> M_fxShowTrackedQuestSFF { get; set;}
 
-		[RED("m_fxUpdateObjectiveCounterSFF")] 		public CHandle<CScriptedFlashFunction> M_fxUpdateObjectiveCounterSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxUpdateObjectiveCounterSFF")] 		public CHandle<CScriptedFlashFunction> M_fxUpdateObjectiveCounterSFF { get; set;}
 
-		[RED("m_fxUpdateObjectiveHighlightSFF")] 		public CHandle<CScriptedFlashFunction> M_fxUpdateObjectiveHighlightSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxUpdateObjectiveHighlightSFF")] 		public CHandle<CScriptedFlashFunction> M_fxUpdateObjectiveHighlightSFF { get; set;}
 
-		[RED("m_fxUpdateObjectiveUnhighlightAllSFF")] 		public CHandle<CScriptedFlashFunction> M_fxUpdateObjectiveUnhighlightAllSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxUpdateObjectiveUnhighlightAllSFF")] 		public CHandle<CScriptedFlashFunction> M_fxUpdateObjectiveUnhighlightAllSFF { get; set;}
 
-		[RED("m_fxSetSystemQuestInfo")] 		public CHandle<CScriptedFlashFunction> M_fxSetSystemQuestInfo { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetSystemQuestInfo")] 		public CHandle<CScriptedFlashFunction> M_fxSetSystemQuestInfo { get; set;}
 
-		[RED("m_guiManager")] 		public CHandle<CR4GuiManager> M_guiManager { get; set;}
+		[Ordinal(0)] [RED("("m_guiManager")] 		public CHandle<CR4GuiManager> M_guiManager { get; set;}
 
-		[RED("m_hud")] 		public CHandle<CR4ScriptedHud> M_hud { get; set;}
+		[Ordinal(0)] [RED("("m_hud")] 		public CHandle<CR4ScriptedHud> M_hud { get; set;}
 
-		[RED("_highlightedObjective")] 		public CHandle<CJournalQuestObjective> _highlightedObjective { get; set;}
+		[Ordinal(0)] [RED("("_highlightedObjective")] 		public CHandle<CJournalQuestObjective> _highlightedObjective { get; set;}
 
 		public CR4HudModuleQuests(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3AxiiEntity : W3SignEntity
 	{
-		[RED("effects", 2,0)] 		public CArray<SAxiiEffects> Effects { get; set;}
+		[Ordinal(0)] [RED("("effects", 2,0)] 		public CArray<SAxiiEffects> Effects { get; set;}
 
-		[RED("projTemplate")] 		public CHandle<CEntityTemplate> ProjTemplate { get; set;}
+		[Ordinal(0)] [RED("("projTemplate")] 		public CHandle<CEntityTemplate> ProjTemplate { get; set;}
 
-		[RED("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(0)] [RED("("distance")] 		public CFloat Distance { get; set;}
 
-		[RED("projSpeed")] 		public CFloat ProjSpeed { get; set;}
+		[Ordinal(0)] [RED("("projSpeed")] 		public CFloat ProjSpeed { get; set;}
 
-		[RED("targets", 2,0)] 		public CArray<CHandle<CActor>> Targets { get; set;}
+		[Ordinal(0)] [RED("("targets", 2,0)] 		public CArray<CHandle<CActor>> Targets { get; set;}
 
-		[RED("orientationTarget")] 		public CHandle<CActor> OrientationTarget { get; set;}
+		[Ordinal(0)] [RED("("orientationTarget")] 		public CHandle<CActor> OrientationTarget { get; set;}
 
 		public W3AxiiEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

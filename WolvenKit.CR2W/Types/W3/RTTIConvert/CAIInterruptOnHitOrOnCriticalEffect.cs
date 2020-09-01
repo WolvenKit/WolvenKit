@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIInterruptOnHitOrOnCriticalEffect : IActionDecorator
 	{
-		[RED("completeOnHit")] 		public CBool CompleteOnHit { get; set;}
+		[Ordinal(0)] [RED("completeOnHit")] 		public CBool CompleteOnHit { get; set;}
 
-		[RED("completeOnCriticalEffect")] 		public CBool CompleteOnCriticalEffect { get; set;}
+		[Ordinal(0)] [RED("completeOnCriticalEffect")] 		public CBool CompleteOnCriticalEffect { get; set;}
 
 		public CAIInterruptOnHitOrOnCriticalEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

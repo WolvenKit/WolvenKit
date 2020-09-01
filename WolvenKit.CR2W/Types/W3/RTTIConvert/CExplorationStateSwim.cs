@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateSwim : CExplorationStateAbstract
 	{
-		[RED("solveCollisionsForward")] 		public CBool SolveCollisionsForward { get; set;}
+		[Ordinal(0)] [RED("("solveCollisionsForward")] 		public CBool SolveCollisionsForward { get; set;}
 
-		[RED("smoothPenetration")] 		public CBool SmoothPenetration { get; set;}
+		[Ordinal(0)] [RED("("smoothPenetration")] 		public CBool SmoothPenetration { get; set;}
 
-		[RED("collisionUpOffset")] 		public CFloat CollisionUpOffset { get; set;}
+		[Ordinal(0)] [RED("("collisionUpOffset")] 		public CFloat CollisionUpOffset { get; set;}
 
-		[RED("collisionDistance")] 		public CFloat CollisionDistance { get; set;}
+		[Ordinal(0)] [RED("("collisionDistance")] 		public CFloat CollisionDistance { get; set;}
 
-		[RED("collisionRadius")] 		public CFloat CollisionRadius { get; set;}
+		[Ordinal(0)] [RED("("collisionRadius")] 		public CFloat CollisionRadius { get; set;}
 
-		[RED("collisionPenetrationMax")] 		public CFloat CollisionPenetrationMax { get; set;}
+		[Ordinal(0)] [RED("("collisionPenetrationMax")] 		public CFloat CollisionPenetrationMax { get; set;}
 
-		[RED("collisionPenetration")] 		public Vector CollisionPenetration { get; set;}
+		[Ordinal(0)] [RED("("collisionPenetration")] 		public Vector CollisionPenetration { get; set;}
 
-		[RED("smoothSpeed")] 		public CFloat SmoothSpeed { get; set;}
+		[Ordinal(0)] [RED("("smoothSpeed")] 		public CFloat SmoothSpeed { get; set;}
 
-		[RED("zeroVec")] 		public Vector ZeroVec { get; set;}
+		[Ordinal(0)] [RED("("zeroVec")] 		public Vector ZeroVec { get; set;}
 
 		public CExplorationStateSwim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

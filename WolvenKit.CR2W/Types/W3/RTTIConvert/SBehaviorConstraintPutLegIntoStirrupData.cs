@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorConstraintPutLegIntoStirrupData : CVariable
 	{
-		[RED("footStoreName")] 		public CName FootStoreName { get; set;}
+		[Ordinal(0)] [RED("("footStoreName")] 		public CName FootStoreName { get; set;}
 
-		[RED("stirrupStoreName")] 		public CName StirrupStoreName { get; set;}
+		[Ordinal(0)] [RED("("stirrupStoreName")] 		public CName StirrupStoreName { get; set;}
 
-		[RED("stirrupFinalStoreName")] 		public CName StirrupFinalStoreName { get; set;}
+		[Ordinal(0)] [RED("("stirrupFinalStoreName")] 		public CName StirrupFinalStoreName { get; set;}
 
-		[RED("ik")] 		public STwoBonesIKSolverData Ik { get; set;}
+		[Ordinal(0)] [RED("("ik")] 		public STwoBonesIKSolverData Ik { get; set;}
 
-		[RED("additionalSideDirForIKMS")] 		public Vector AdditionalSideDirForIKMS { get; set;}
+		[Ordinal(0)] [RED("("additionalSideDirForIKMS")] 		public Vector AdditionalSideDirForIKMS { get; set;}
 
 		public SBehaviorConstraintPutLegIntoStirrupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

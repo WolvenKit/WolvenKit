@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SEntityTemplateOverride : CVariable
 	{
-		[RED("componentName")] 		public CName ComponentName { get; set;}
+		[Ordinal(0)] [RED("("componentName")] 		public CName ComponentName { get; set;}
 
-		[RED("className")] 		public CName ClassName { get; set;}
+		[Ordinal(0)] [RED("("className")] 		public CName ClassName { get; set;}
 
-		[RED("overriddenProperties", 2,0)] 		public CArray<CName> OverriddenProperties { get; set;}
+		[Ordinal(0)] [RED("("overriddenProperties", 2,0)] 		public CArray<CName> OverriddenProperties { get; set;}
 
 		public SEntityTemplateOverride(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

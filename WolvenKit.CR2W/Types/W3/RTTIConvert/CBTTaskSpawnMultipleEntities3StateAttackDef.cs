@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSpawnMultipleEntities3StateAttackDef : CBTTaskSpawnMultipleEntitiesAttackDef
 	{
-		[RED("delayActivationTime")] 		public CFloat DelayActivationTime { get; set;}
+		[Ordinal(0)] [RED("delayActivationTime")] 		public CFloat DelayActivationTime { get; set;}
 
-		[RED("loopTime")] 		public CFloat LoopTime { get; set;}
+		[Ordinal(0)] [RED("loopTime")] 		public CFloat LoopTime { get; set;}
 
-		[RED("spawnInterval")] 		public CFloat SpawnInterval { get; set;}
+		[Ordinal(0)] [RED("spawnInterval")] 		public CFloat SpawnInterval { get; set;}
 
-		[RED("decreaseLoopTimePerFailedCreateEntity")] 		public CFloat DecreaseLoopTimePerFailedCreateEntity { get; set;}
+		[Ordinal(0)] [RED("decreaseLoopTimePerFailedCreateEntity")] 		public CFloat DecreaseLoopTimePerFailedCreateEntity { get; set;}
 
-		[RED("spawnAdditionalEntityOnTargetPos")] 		public CBool SpawnAdditionalEntityOnTargetPos { get; set;}
+		[Ordinal(0)] [RED("spawnAdditionalEntityOnTargetPos")] 		public CBool SpawnAdditionalEntityOnTargetPos { get; set;}
 
 		public CBTTaskSpawnMultipleEntities3StateAttackDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

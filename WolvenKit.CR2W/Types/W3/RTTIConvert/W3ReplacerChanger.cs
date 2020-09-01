@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ReplacerChanger : W3GameplayTrigger
 	{
-		[RED("replacerTemplate")] 		public CString ReplacerTemplate { get; set;}
+		[Ordinal(0)] [RED("("replacerTemplate")] 		public CString ReplacerTemplate { get; set;}
 
-		[RED("recentlyChanged")] 		public CBool RecentlyChanged { get; set;}
+		[Ordinal(0)] [RED("("recentlyChanged")] 		public CBool RecentlyChanged { get; set;}
 
 		public W3ReplacerChanger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

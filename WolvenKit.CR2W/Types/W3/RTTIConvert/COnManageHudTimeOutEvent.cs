@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class COnManageHudTimeOutEvent : CHudEvent
 	{
-		[RED("action")] 		public CEnum<EHudTimeOutAction> Action { get; set;}
+		[Ordinal(0)] [RED("action")] 		public CEnum<EHudTimeOutAction> Action { get; set;}
 
-		[RED("timeOut")] 		public CFloat TimeOut { get; set;}
+		[Ordinal(0)] [RED("timeOut")] 		public CFloat TimeOut { get; set;}
 
 		public COnManageHudTimeOutEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

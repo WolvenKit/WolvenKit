@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IInstantEffectExecutor : IGameplayEffectExecutor
 	{
-		[RED("customIconPath")] 		public CString CustomIconPath { get; set;}
+		[Ordinal(0)] [RED("("customIconPath")] 		public CString CustomIconPath { get; set;}
 
-		[RED("customNameLocalisationKey")] 		public CString CustomNameLocalisationKey { get; set;}
+		[Ordinal(0)] [RED("("customNameLocalisationKey")] 		public CString CustomNameLocalisationKey { get; set;}
 
-		[RED("customDescriptionLocalisationKey")] 		public CString CustomDescriptionLocalisationKey { get; set;}
+		[Ordinal(0)] [RED("("customDescriptionLocalisationKey")] 		public CString CustomDescriptionLocalisationKey { get; set;}
 
-		[RED("executorName")] 		public CName ExecutorName { get; set;}
+		[Ordinal(0)] [RED("("executorName")] 		public CName ExecutorName { get; set;}
 
 		public IInstantEffectExecutor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

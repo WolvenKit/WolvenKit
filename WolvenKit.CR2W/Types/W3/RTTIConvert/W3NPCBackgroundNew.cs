@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3NPCBackgroundNew : CEntity
 	{
-		[RED("behaviorWorkNumber")] 		public CInt32 BehaviorWorkNumber { get; set;}
+		[Ordinal(0)] [RED("("behaviorWorkNumber")] 		public CInt32 BehaviorWorkNumber { get; set;}
 
-		[RED("randomized")] 		public CBool Randomized { get; set;}
+		[Ordinal(0)] [RED("("randomized")] 		public CBool Randomized { get; set;}
 
-		[RED("maxWorkNumber")] 		public CInt32 MaxWorkNumber { get; set;}
+		[Ordinal(0)] [RED("("maxWorkNumber")] 		public CInt32 MaxWorkNumber { get; set;}
 
-		[RED("excludeIdle")] 		public CBool ExcludeIdle { get; set;}
+		[Ordinal(0)] [RED("("excludeIdle")] 		public CBool ExcludeIdle { get; set;}
 
 		public W3NPCBackgroundNew(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

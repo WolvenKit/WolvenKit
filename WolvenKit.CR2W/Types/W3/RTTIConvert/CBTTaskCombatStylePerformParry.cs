@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCombatStylePerformParry : CBTTaskPerformParry
 	{
-		[RED("parentCombatStyle")] 		public CEnum<EBehaviorGraph> ParentCombatStyle { get; set;}
+		[Ordinal(0)] [RED("("parentCombatStyle")] 		public CEnum<EBehaviorGraph> ParentCombatStyle { get; set;}
 
 		public CBTTaskCombatStylePerformParry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalGlossary : CJournalContainer
 	{
-		[RED("title")] 		public LocalizedString Title { get; set;}
+		[Ordinal(0)] [RED("title")] 		public LocalizedString Title { get; set;}
 
-		[RED("image")] 		public CString Image { get; set;}
+		[Ordinal(0)] [RED("image")] 		public CString Image { get; set;}
 
-		[RED("active")] 		public CBool Active { get; set;}
+		[Ordinal(0)] [RED("active")] 		public CBool Active { get; set;}
 
 		public CJournalGlossary(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

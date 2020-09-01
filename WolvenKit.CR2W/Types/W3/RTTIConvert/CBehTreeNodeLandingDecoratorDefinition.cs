@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeLandingDecoratorDefinition : IBehTreeNodeFlightDecoratorDefinition
 	{
-		[RED("landingMaxHeight")] 		public CBehTreeValFloat LandingMaxHeight { get; set;}
+		[Ordinal(0)] [RED("landingMaxHeight")] 		public CBehTreeValFloat LandingMaxHeight { get; set;}
 
-		[RED("landingForwardOffset")] 		public CBehTreeValFloat LandingForwardOffset { get; set;}
+		[Ordinal(0)] [RED("landingForwardOffset")] 		public CBehTreeValFloat LandingForwardOffset { get; set;}
 
-		[RED("tolerationDistance")] 		public CBehTreeValFloat TolerationDistance { get; set;}
+		[Ordinal(0)] [RED("tolerationDistance")] 		public CBehTreeValFloat TolerationDistance { get; set;}
 
 		public CBehTreeNodeLandingDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

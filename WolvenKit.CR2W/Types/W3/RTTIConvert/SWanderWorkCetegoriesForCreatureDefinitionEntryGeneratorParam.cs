@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SWanderWorkCetegoriesForCreatureDefinitionEntryGeneratorParam : CVariable
 	{
-		[RED("creatureDefinition")] 		public SCreatureDefinitionWrapper CreatureDefinition { get; set;}
+		[Ordinal(0)] [RED("("creatureDefinition")] 		public SCreatureDefinitionWrapper CreatureDefinition { get; set;}
 
-		[RED("categories", 2,0)] 		public CArray<SEncounterActionPointSelectorPairScr> Categories { get; set;}
+		[Ordinal(0)] [RED("("categories", 2,0)] 		public CArray<SEncounterActionPointSelectorPairScr> Categories { get; set;}
 
 		public SWanderWorkCetegoriesForCreatureDefinitionEntryGeneratorParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ConstDamper : CObject
 	{
-		[RED("destValue")] 		public CFloat DestValue { get; set;}
+		[Ordinal(0)] [RED("destValue")] 		public CFloat DestValue { get; set;}
 
-		[RED("currValue")] 		public CFloat CurrValue { get; set;}
+		[Ordinal(0)] [RED("currValue")] 		public CFloat CurrValue { get; set;}
 
-		[RED("deltaValue")] 		public CFloat DeltaValue { get; set;}
+		[Ordinal(0)] [RED("deltaValue")] 		public CFloat DeltaValue { get; set;}
 
 		public ConstDamper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

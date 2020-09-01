@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalQuestMonsterKnownGraphBlock : CQuestGraphBlock
 	{
-		[RED("manualQuest")] 		public CHandle<CJournalPath> ManualQuest { get; set;}
+		[Ordinal(0)] [RED("manualQuest")] 		public CHandle<CJournalPath> ManualQuest { get; set;}
 
 		public CJournalQuestMonsterKnownGraphBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcTacticTreeParams : CAISubTreeParameters
 	{
-		[RED("specialActions", 2,0)] 		public CArray<CHandle<CAISpecialAction>> SpecialActions { get; set;}
+		[Ordinal(0)] [RED("specialActions", 2,0)] 		public CArray<CHandle<CAISpecialAction>> SpecialActions { get; set;}
 
-		[RED("dontUseRunWhileStrafing")] 		public CBool DontUseRunWhileStrafing { get; set;}
+		[Ordinal(0)] [RED("dontUseRunWhileStrafing")] 		public CBool DontUseRunWhileStrafing { get; set;}
 
-		[RED("allowChangingGuard")] 		public CBool AllowChangingGuard { get; set;}
+		[Ordinal(0)] [RED("allowChangingGuard")] 		public CBool AllowChangingGuard { get; set;}
 
 		public CAINpcTacticTreeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

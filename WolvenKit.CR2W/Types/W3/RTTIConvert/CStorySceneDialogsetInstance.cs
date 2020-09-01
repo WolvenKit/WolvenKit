@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneDialogsetInstance : CObject
 	{
-		[RED("name")] 		public CName Name { get; set;}
+		[Ordinal(0)] [RED("("name")] 		public CName Name { get; set;}
 
-		[RED("slots", 2,0)] 		public CArray<CPtr<CStorySceneDialogsetSlot>> Slots { get; set;}
+		[Ordinal(0)] [RED("("slots", 2,0)] 		public CArray<CPtr<CStorySceneDialogsetSlot>> Slots { get; set;}
 
-		[RED("placementTag")] 		public TagList PlacementTag { get; set;}
+		[Ordinal(0)] [RED("("placementTag")] 		public TagList PlacementTag { get; set;}
 
-		[RED("snapToTerrain")] 		public CBool SnapToTerrain { get; set;}
+		[Ordinal(0)] [RED("("snapToTerrain")] 		public CBool SnapToTerrain { get; set;}
 
-		[RED("findSafePlacement")] 		public CBool FindSafePlacement { get; set;}
+		[Ordinal(0)] [RED("("findSafePlacement")] 		public CBool FindSafePlacement { get; set;}
 
-		[RED("safePlacementRadius")] 		public CFloat SafePlacementRadius { get; set;}
+		[Ordinal(0)] [RED("("safePlacementRadius")] 		public CFloat SafePlacementRadius { get; set;}
 
-		[RED("areCamerasUsedForBoundsCalculation")] 		public CBool AreCamerasUsedForBoundsCalculation { get; set;}
+		[Ordinal(0)] [RED("("areCamerasUsedForBoundsCalculation")] 		public CBool AreCamerasUsedForBoundsCalculation { get; set;}
 
-		[RED("path")] 		public CString Path { get; set;}
+		[Ordinal(0)] [RED("("path")] 		public CString Path { get; set;}
 
 		public CStorySceneDialogsetInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

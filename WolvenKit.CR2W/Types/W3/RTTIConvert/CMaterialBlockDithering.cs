@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockDithering : CMaterialBlock
 	{
-		[RED("pixelWidth")] 		public CInt32 PixelWidth { get; set;}
+		[Ordinal(0)] [RED("pixelWidth")] 		public CInt32 PixelWidth { get; set;}
 
-		[RED("pixelHeight")] 		public CInt32 PixelHeight { get; set;}
+		[Ordinal(0)] [RED("pixelHeight")] 		public CInt32 PixelHeight { get; set;}
 
 		public CMaterialBlockDithering(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

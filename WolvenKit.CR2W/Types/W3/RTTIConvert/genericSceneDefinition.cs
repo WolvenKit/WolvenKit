@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class genericSceneDefinition : CVariable
 	{
-		[RED("voicesTag")] 		public CName VoicesTag { get; set;}
+		[Ordinal(0)] [RED("voicesTag")] 		public CName VoicesTag { get; set;}
 
-		[RED("storyScene")] 		public CHandle<CStoryScene> StoryScene { get; set;}
+		[Ordinal(0)] [RED("storyScene")] 		public CHandle<CStoryScene> StoryScene { get; set;}
 
-		[RED("input")] 		public CName Input { get; set;}
+		[Ordinal(0)] [RED("input")] 		public CName Input { get; set;}
 
 		public genericSceneDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

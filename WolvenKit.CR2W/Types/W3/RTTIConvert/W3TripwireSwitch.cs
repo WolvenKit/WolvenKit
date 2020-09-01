@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TripwireSwitch : W3PhysicalSwitch
 	{
-		[RED("autoSwitchOnLeave")] 		public CBool AutoSwitchOnLeave { get; set;}
+		[Ordinal(0)] [RED("("autoSwitchOnLeave")] 		public CBool AutoSwitchOnLeave { get; set;}
 
-		[RED("entities", 2,0)] 		public CArray<CHandle<CEntity>> Entities { get; set;}
+		[Ordinal(0)] [RED("("entities", 2,0)] 		public CArray<CHandle<CEntity>> Entities { get; set;}
 
-		[RED("delayedTurnOffEntity")] 		public CHandle<CEntity> DelayedTurnOffEntity { get; set;}
+		[Ordinal(0)] [RED("("delayedTurnOffEntity")] 		public CHandle<CEntity> DelayedTurnOffEntity { get; set;}
 
-		[RED("delayedTurnOnEntity")] 		public CHandle<CEntity> DelayedTurnOnEntity { get; set;}
+		[Ordinal(0)] [RED("("delayedTurnOnEntity")] 		public CHandle<CEntity> DelayedTurnOnEntity { get; set;}
 
-		[RED("connectedTrapClueTag")] 		public CName ConnectedTrapClueTag { get; set;}
+		[Ordinal(0)] [RED("("connectedTrapClueTag")] 		public CName ConnectedTrapClueTag { get; set;}
 
 		public W3TripwireSwitch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

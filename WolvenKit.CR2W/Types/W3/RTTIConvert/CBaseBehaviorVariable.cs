@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBaseBehaviorVariable : CObject
 	{
-		[RED("name")] 		public CName Name { get; set;}
+		[Ordinal(0)] [RED("("name")] 		public CName Name { get; set;}
 
-		[RED("varIndex")] 		public CUInt32 VarIndex { get; set;}
+		[Ordinal(0)] [RED("("varIndex")] 		public CUInt32 VarIndex { get; set;}
 
 		public CBaseBehaviorVariable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

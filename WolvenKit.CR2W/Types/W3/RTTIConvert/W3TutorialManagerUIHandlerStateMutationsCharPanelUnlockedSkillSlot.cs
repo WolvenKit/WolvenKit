@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateMutationsCharPanelUnlockedSkillSlot : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("ADDITIONAL_SLOT")] 		public CName ADDITIONAL_SLOT { get; set;}
+		[Ordinal(0)] [RED("("ADDITIONAL_SLOT")] 		public CName ADDITIONAL_SLOT { get; set;}
 
-		[RED("COLOR")] 		public CName COLOR { get; set;}
+		[Ordinal(0)] [RED("("COLOR")] 		public CName COLOR { get; set;}
 
-		[RED("YELLOW")] 		public CName YELLOW { get; set;}
+		[Ordinal(0)] [RED("("YELLOW")] 		public CName YELLOW { get; set;}
 
-		[RED("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
-		[RED("selectedMutation")] 		public CEnum<EPlayerMutationType> SelectedMutation { get; set;}
+		[Ordinal(0)] [RED("("selectedMutation")] 		public CEnum<EPlayerMutationType> SelectedMutation { get; set;}
 
 		public W3TutorialManagerUIHandlerStateMutationsCharPanelUnlockedSkillSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

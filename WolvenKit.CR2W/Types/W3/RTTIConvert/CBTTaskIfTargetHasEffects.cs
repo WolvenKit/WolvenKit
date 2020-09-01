@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskIfTargetHasEffects : IBehTreeTask
 	{
-		[RED("effects", 2,0)] 		public CArray<CEnum<EEffectType>> Effects { get; set;}
+		[Ordinal(0)] [RED("effects", 2,0)] 		public CArray<CEnum<EEffectType>> Effects { get; set;}
 
-		[RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+		[Ordinal(0)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 
 		public CBTTaskIfTargetHasEffects(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

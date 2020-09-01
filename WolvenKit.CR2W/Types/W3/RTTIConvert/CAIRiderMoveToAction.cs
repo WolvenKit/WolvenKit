@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIRiderMoveToAction : IRiderActionTree
 	{
-		[RED("params")] 		public CHandle<CAIRiderMoveToActionParams> Params { get; set;}
+		[Ordinal(0)] [RED("("params")] 		public CHandle<CAIRiderMoveToActionParams> Params { get; set;}
 
 		public CAIRiderMoveToAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEvaluatorVectorRandomUniform : IEvaluatorVector
 	{
-		[RED("min")] 		public Vector Min { get; set;}
+		[Ordinal(0)] [RED("("min")] 		public Vector Min { get; set;}
 
-		[RED("max")] 		public Vector Max { get; set;}
+		[Ordinal(0)] [RED("("max")] 		public Vector Max { get; set;}
 
 		public CEvaluatorVectorRandomUniform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

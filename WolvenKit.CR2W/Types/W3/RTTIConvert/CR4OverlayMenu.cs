@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4OverlayMenu : CR4MenuBase
 	{
-		[RED("m_BlurBackground")] 		public CBool M_BlurBackground { get; set;}
+		[Ordinal(0)] [RED("m_BlurBackground")] 		public CBool M_BlurBackground { get; set;}
 
-		[RED("m_PauseGame")] 		public CBool M_PauseGame { get; set;}
+		[Ordinal(0)] [RED("m_PauseGame")] 		public CBool M_PauseGame { get; set;}
 
 		public CR4OverlayMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

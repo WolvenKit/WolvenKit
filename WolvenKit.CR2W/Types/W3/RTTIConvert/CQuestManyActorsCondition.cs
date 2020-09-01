@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestManyActorsCondition : IQuestCondition
 	{
-		[RED("actorTags")] 		public TagList ActorTags { get; set;}
+		[Ordinal(0)] [RED("actorTags")] 		public TagList ActorTags { get; set;}
 
-		[RED("logicOperation")] 		public CEnum<EQuestActorConditionLogicOperation> LogicOperation { get; set;}
+		[Ordinal(0)] [RED("logicOperation")] 		public CEnum<EQuestActorConditionLogicOperation> LogicOperation { get; set;}
 
-		[RED("condition")] 		public CPtr<IActorConditionType> Condition { get; set;}
+		[Ordinal(0)] [RED("condition")] 		public CPtr<IActorConditionType> Condition { get; set;}
 
 		public CQuestManyActorsCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorMimicHeadConstraint : IBehaviorMimicConstraint
 	{
-		[RED("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
+		[Ordinal(0)] [RED("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
 
-		[RED("headTrack")] 		public CString HeadTrack { get; set;}
+		[Ordinal(0)] [RED("headTrack")] 		public CString HeadTrack { get; set;}
 
 		public CBehaviorMimicHeadConstraint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

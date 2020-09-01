@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeCustomSteeringDefinition : CBehTreeNodeAtomicActionDefinition
 	{
-		[RED("steeringGraph")] 		public CBehTreeValSteeringGraph SteeringGraph { get; set;}
+		[Ordinal(0)] [RED("steeringGraph")] 		public CBehTreeValSteeringGraph SteeringGraph { get; set;}
 
-		[RED("moveType")] 		public CBehTreeValEMoveType MoveType { get; set;}
+		[Ordinal(0)] [RED("moveType")] 		public CBehTreeValEMoveType MoveType { get; set;}
 
-		[RED("moveSpeed")] 		public CBehTreeValFloat MoveSpeed { get; set;}
+		[Ordinal(0)] [RED("moveSpeed")] 		public CBehTreeValFloat MoveSpeed { get; set;}
 
 		public CBehTreeNodeCustomSteeringDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

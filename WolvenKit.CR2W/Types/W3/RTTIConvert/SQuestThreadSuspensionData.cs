@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SQuestThreadSuspensionData : CVariable
 	{
-		[RED("scopeBlockGUID")] 		public CGUID ScopeBlockGUID { get; set;}
+		[Ordinal(0)] [RED("("scopeBlockGUID")] 		public CGUID ScopeBlockGUID { get; set;}
 
-		[RED("scopeData", 154,0)] 		public CByteArray ScopeData { get; set;}
+		[Ordinal(0)] [RED("("scopeData", 154,0)] 		public CByteArray ScopeData { get; set;}
 
 		public SQuestThreadSuspensionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

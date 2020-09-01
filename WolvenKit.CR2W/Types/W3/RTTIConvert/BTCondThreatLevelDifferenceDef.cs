@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondThreatLevelDifferenceDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
+		[Ordinal(0)] [RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
-		[RED("value")] 		public CInt32 Value { get; set;}
+		[Ordinal(0)] [RED("value")] 		public CInt32 Value { get; set;}
 
-		[RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+		[Ordinal(0)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 
-		[RED("useNamedTarget")] 		public CBehTreeValCName UseNamedTarget { get; set;}
+		[Ordinal(0)] [RED("useNamedTarget")] 		public CBehTreeValCName UseNamedTarget { get; set;}
 
-		[RED("saveTargetOnGameplayEvent")] 		public CBehTreeValCName SaveTargetOnGameplayEvent { get; set;}
+		[Ordinal(0)] [RED("saveTargetOnGameplayEvent")] 		public CBehTreeValCName SaveTargetOnGameplayEvent { get; set;}
 
 		public BTCondThreatLevelDifferenceDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

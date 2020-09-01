@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondHorsePerformingAction : IBehTreeTask
 	{
-		[RED("mounting")] 		public CBool Mounting { get; set;}
+		[Ordinal(0)] [RED("("mounting")] 		public CBool Mounting { get; set;}
 
-		[RED("dismounting")] 		public CBool Dismounting { get; set;}
+		[Ordinal(0)] [RED("("dismounting")] 		public CBool Dismounting { get; set;}
 
-		[RED("inAir")] 		public CBool InAir { get; set;}
+		[Ordinal(0)] [RED("("inAir")] 		public CBool InAir { get; set;}
 
 		public CBTCondHorsePerformingAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

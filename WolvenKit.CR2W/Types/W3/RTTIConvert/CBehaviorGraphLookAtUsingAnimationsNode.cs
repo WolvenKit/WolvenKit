@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphLookAtUsingAnimationsNode : CBehaviorGraphLookAtUsingAnimationsCommonBaseNode
 	{
-		[RED("cachedVerticalAdditiveInputNode")] 		public CPtr<CBehaviorGraphNode> CachedVerticalAdditiveInputNode { get; set;}
+		[Ordinal(0)] [RED("("cachedVerticalAdditiveInputNode")] 		public CPtr<CBehaviorGraphNode> CachedVerticalAdditiveInputNode { get; set;}
 
-		[RED("cachedHorizontalAdditiveInputNode")] 		public CPtr<CBehaviorGraphNode> CachedHorizontalAdditiveInputNode { get; set;}
+		[Ordinal(0)] [RED("("cachedHorizontalAdditiveInputNode")] 		public CPtr<CBehaviorGraphNode> CachedHorizontalAdditiveInputNode { get; set;}
 
 		public CBehaviorGraphLookAtUsingAnimationsNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIStorageAnimalData : IScriptable
 	{
-		[RED("scared")] 		public CBool Scared { get; set;}
+		[Ordinal(0)] [RED("scared")] 		public CBool Scared { get; set;}
 
 		public CAIStorageAnimalData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

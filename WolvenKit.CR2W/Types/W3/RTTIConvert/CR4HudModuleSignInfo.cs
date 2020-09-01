@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4HudModuleSignInfo : CR4HudModuleBase
 	{
-		[RED("_iconName")] 		public CString _iconName { get; set;}
+		[Ordinal(0)] [RED("("_iconName")] 		public CString _iconName { get; set;}
 
-		[RED("_CurrentSelectedSign")] 		public CEnum<ESignType> _CurrentSelectedSign { get; set;}
+		[Ordinal(0)] [RED("("_CurrentSelectedSign")] 		public CEnum<ESignType> _CurrentSelectedSign { get; set;}
 
-		[RED("m_fxShowBckArrowSFF")] 		public CHandle<CScriptedFlashFunction> M_fxShowBckArrowSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxShowBckArrowSFF")] 		public CHandle<CScriptedFlashFunction> M_fxShowBckArrowSFF { get; set;}
 
-		[RED("m_fxEnableSFF")] 		public CHandle<CScriptedFlashFunction> M_fxEnableSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxEnableSFF")] 		public CHandle<CScriptedFlashFunction> M_fxEnableSFF { get; set;}
 
 		public CR4HudModuleSignInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

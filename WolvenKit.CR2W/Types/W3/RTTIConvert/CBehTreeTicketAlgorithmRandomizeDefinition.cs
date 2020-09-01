@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeTicketAlgorithmRandomizeDefinition : IBehTreeTicketAlgorithmDecoratorDefinition
 	{
-		[RED("randMin")] 		public CBehTreeValFloat RandMin { get; set;}
+		[Ordinal(0)] [RED("randMin")] 		public CBehTreeValFloat RandMin { get; set;}
 
-		[RED("randMax")] 		public CBehTreeValFloat RandMax { get; set;}
+		[Ordinal(0)] [RED("randMax")] 		public CBehTreeValFloat RandMax { get; set;}
 
 		public CBehTreeTicketAlgorithmRandomizeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

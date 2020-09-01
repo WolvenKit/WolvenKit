@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskThrowBombDef : CBTTaskAttackDef
 	{
-		[RED("dontUseDiwmeritium")] 		public CBool DontUseDiwmeritium { get; set;}
+		[Ordinal(0)] [RED("("dontUseDiwmeritium")] 		public CBool DontUseDiwmeritium { get; set;}
 
-		[RED("activationChance")] 		public CFloat ActivationChance { get; set;}
+		[Ordinal(0)] [RED("("activationChance")] 		public CFloat ActivationChance { get; set;}
 
 		public CBTTaskThrowBombDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

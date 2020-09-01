@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Mutagen09_Effect : W3Mutagen_Effect
 	{
-		[RED("hasAbility")] 		public CBool HasAbility { get; set;}
+		[Ordinal(0)] [RED("("hasAbility")] 		public CBool HasAbility { get; set;}
 
 		public W3Mutagen09_Effect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

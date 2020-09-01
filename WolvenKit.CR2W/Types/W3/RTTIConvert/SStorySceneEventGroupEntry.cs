@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStorySceneEventGroupEntry : CVariable
 	{
-		[RED("time")] 		public CFloat Time { get; set;}
+		[Ordinal(0)] [RED("("time")] 		public CFloat Time { get; set;}
 
-		[RED("event")] 		public CPtr<CStorySceneEvent> Event { get; set;}
+		[Ordinal(0)] [RED("("event")] 		public CPtr<CStorySceneEvent> Event { get; set;}
 
 		public SStorySceneEventGroupEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_Frozen : W3ImmobilizeEffect
 	{
-		[RED("killOnHit")] 		public CBool KillOnHit { get; set;}
+		[Ordinal(0)] [RED("("killOnHit")] 		public CBool KillOnHit { get; set;}
 
-		[RED("bonusDamagePercents")] 		public CFloat BonusDamagePercents { get; set;}
+		[Ordinal(0)] [RED("("bonusDamagePercents")] 		public CFloat BonusDamagePercents { get; set;}
 
-		[RED("targetWasFlying")] 		public CBool TargetWasFlying { get; set;}
+		[Ordinal(0)] [RED("("targetWasFlying")] 		public CBool TargetWasFlying { get; set;}
 
-		[RED("pushPriority")] 		public CEnum<EInteractionPriority> PushPriority { get; set;}
+		[Ordinal(0)] [RED("("pushPriority")] 		public CEnum<EInteractionPriority> PushPriority { get; set;}
 
-		[RED("wasKnockedDown")] 		public CBool WasKnockedDown { get; set;}
+		[Ordinal(0)] [RED("("wasKnockedDown")] 		public CBool WasKnockedDown { get; set;}
 
 		public W3Effect_Frozen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

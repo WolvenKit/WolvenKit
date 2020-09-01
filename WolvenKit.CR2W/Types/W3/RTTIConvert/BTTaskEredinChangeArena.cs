@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskEredinChangeArena : IBehTreeTask
 	{
-		[RED("resourceName")] 		public CName ResourceName { get; set;}
+		[Ordinal(0)] [RED("resourceName")] 		public CName ResourceName { get; set;}
 
-		[RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(0)] [RED("eventName")] 		public CName EventName { get; set;}
 
-		[RED("spawnPortalInTaggedNode")] 		public CBool SpawnPortalInTaggedNode { get; set;}
+		[Ordinal(0)] [RED("spawnPortalInTaggedNode")] 		public CBool SpawnPortalInTaggedNode { get; set;}
 
-		[RED("nodeTag")] 		public CName NodeTag { get; set;}
+		[Ordinal(0)] [RED("nodeTag")] 		public CName NodeTag { get; set;}
 
-		[RED("destinationTag")] 		public CName DestinationTag { get; set;}
+		[Ordinal(0)] [RED("destinationTag")] 		public CName DestinationTag { get; set;}
 
-		[RED("factOnPlayerTeleport")] 		public CString FactOnPlayerTeleport { get; set;}
+		[Ordinal(0)] [RED("factOnPlayerTeleport")] 		public CString FactOnPlayerTeleport { get; set;}
 
-		[RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(0)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
-		[RED("shouldCreateRift")] 		public CBool ShouldCreateRift { get; set;}
+		[Ordinal(0)] [RED("shouldCreateRift")] 		public CBool ShouldCreateRift { get; set;}
 
 		public BTTaskEredinChangeArena(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

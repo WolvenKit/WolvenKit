@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskActionFail : CBTTaskPlayAnimationEventDecorator
 	{
-		[RED("failedActionType")] 		public CEnum<EActionFail> FailedActionType { get; set;}
+		[Ordinal(0)] [RED("("failedActionType")] 		public CEnum<EActionFail> FailedActionType { get; set;}
 
 		public CBTTaskActionFail(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

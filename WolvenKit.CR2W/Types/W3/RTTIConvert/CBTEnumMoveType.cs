@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTEnumMoveType : IBehTreeValueEnum
 	{
-		[RED("value")] 		public CEnum<EMoveType> Value { get; set;}
+		[Ordinal(0)] [RED("("value")] 		public CEnum<EMoveType> Value { get; set;}
 
 		public CBTEnumMoveType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

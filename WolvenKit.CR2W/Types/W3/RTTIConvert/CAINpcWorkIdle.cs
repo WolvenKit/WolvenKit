@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcWorkIdle : CAIIdleTree
 	{
-		[RED("actionPointSelector")] 		public CHandle<CActionPointSelector> ActionPointSelector { get; set;}
+		[Ordinal(0)] [RED("actionPointSelector")] 		public CHandle<CActionPointSelector> ActionPointSelector { get; set;}
 
-		[RED("actionPointMoveType")] 		public CEnum<EMoveType> ActionPointMoveType { get; set;}
+		[Ordinal(0)] [RED("actionPointMoveType")] 		public CEnum<EMoveType> ActionPointMoveType { get; set;}
 
-		[RED("params")] 		public CHandle<CAINpcWorkIdleParams> Params { get; set;}
+		[Ordinal(0)] [RED("params")] 		public CHandle<CAINpcWorkIdleParams> Params { get; set;}
 
 		public CAINpcWorkIdle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

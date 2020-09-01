@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStatePotions : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("CAN_EQUIP")] 		public CName CAN_EQUIP { get; set;}
+		[Ordinal(0)] [RED("("CAN_EQUIP")] 		public CName CAN_EQUIP { get; set;}
 
-		[RED("SELECT_TAB")] 		public CName SELECT_TAB { get; set;}
+		[Ordinal(0)] [RED("("SELECT_TAB")] 		public CName SELECT_TAB { get; set;}
 
-		[RED("EQUIP_POTION")] 		public CName EQUIP_POTION { get; set;}
+		[Ordinal(0)] [RED("("EQUIP_POTION")] 		public CName EQUIP_POTION { get; set;}
 
-		[RED("EQUIP_POTION_THUNDERBOLT")] 		public CName EQUIP_POTION_THUNDERBOLT { get; set;}
+		[Ordinal(0)] [RED("("EQUIP_POTION_THUNDERBOLT")] 		public CName EQUIP_POTION_THUNDERBOLT { get; set;}
 
-		[RED("ON_EQUIPPED")] 		public CName ON_EQUIPPED { get; set;}
+		[Ordinal(0)] [RED("("ON_EQUIPPED")] 		public CName ON_EQUIPPED { get; set;}
 
-		[RED("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
-		[RED("isForcedThunderbolt")] 		public CBool IsForcedThunderbolt { get; set;}
+		[Ordinal(0)] [RED("("isForcedThunderbolt")] 		public CBool IsForcedThunderbolt { get; set;}
 
-		[RED("skippingTabSelection")] 		public CBool SkippingTabSelection { get; set;}
+		[Ordinal(0)] [RED("("skippingTabSelection")] 		public CBool SkippingTabSelection { get; set;}
 
 		public W3TutorialManagerUIHandlerStatePotions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

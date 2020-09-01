@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMapToDiscreteNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("ranges", 2,0)] 		public CArray<SBehaviorGraphMapToDiscreteMapper> Ranges { get; set;}
+		[Ordinal(0)] [RED("("ranges", 2,0)] 		public CArray<SBehaviorGraphMapToDiscreteMapper> Ranges { get; set;}
 
 		public CBehaviorGraphMapToDiscreteNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

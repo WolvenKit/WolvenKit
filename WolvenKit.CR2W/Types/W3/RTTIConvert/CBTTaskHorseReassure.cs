@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskHorseReassure : IBehTreeTask
 	{
-		[RED("animalData")] 		public CHandle<CAIStorageAnimalData> AnimalData { get; set;}
+		[Ordinal(0)] [RED("("animalData")] 		public CHandle<CAIStorageAnimalData> AnimalData { get; set;}
 
 		public CBTTaskHorseReassure(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

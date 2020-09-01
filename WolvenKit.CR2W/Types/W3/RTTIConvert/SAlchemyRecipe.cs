@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAlchemyRecipe : CVariable
 	{
-		[RED("cookedItemName")] 		public CName CookedItemName { get; set;}
+		[Ordinal(0)] [RED("cookedItemName")] 		public CName CookedItemName { get; set;}
 
-		[RED("cookedItemType")] 		public CEnum<EAlchemyCookedItemType> CookedItemType { get; set;}
+		[Ordinal(0)] [RED("cookedItemType")] 		public CEnum<EAlchemyCookedItemType> CookedItemType { get; set;}
 
-		[RED("cookedItemIconPath")] 		public CString CookedItemIconPath { get; set;}
+		[Ordinal(0)] [RED("cookedItemIconPath")] 		public CString CookedItemIconPath { get; set;}
 
-		[RED("cookedItemQuantity")] 		public CInt32 CookedItemQuantity { get; set;}
+		[Ordinal(0)] [RED("cookedItemQuantity")] 		public CInt32 CookedItemQuantity { get; set;}
 
-		[RED("recipeName")] 		public CName RecipeName { get; set;}
+		[Ordinal(0)] [RED("recipeName")] 		public CName RecipeName { get; set;}
 
-		[RED("recipeIconPath")] 		public CString RecipeIconPath { get; set;}
+		[Ordinal(0)] [RED("recipeIconPath")] 		public CString RecipeIconPath { get; set;}
 
-		[RED("typeName")] 		public CName TypeName { get; set;}
+		[Ordinal(0)] [RED("typeName")] 		public CName TypeName { get; set;}
 
-		[RED("level")] 		public CInt32 Level { get; set;}
+		[Ordinal(0)] [RED("level")] 		public CInt32 Level { get; set;}
 
-		[RED("requiredIngredients", 2,0)] 		public CArray<SItemParts> RequiredIngredients { get; set;}
+		[Ordinal(0)] [RED("requiredIngredients", 2,0)] 		public CArray<SItemParts> RequiredIngredients { get; set;}
 
 		public SAlchemyRecipe(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

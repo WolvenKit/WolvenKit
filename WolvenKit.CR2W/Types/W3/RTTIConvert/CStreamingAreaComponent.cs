@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStreamingAreaComponent : CAreaComponent
 	{
-		[RED("testInEditor")] 		public CBool TestInEditor { get; set;}
+		[Ordinal(0)] [RED("testInEditor")] 		public CBool TestInEditor { get; set;}
 
 		public CStreamingAreaComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

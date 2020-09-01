@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFoodBoidPointOfInterest : CBoidPointOfInterestComponentScript
 	{
-		[RED("expirationTime")] 		public CInt32 ExpirationTime { get; set;}
+		[Ordinal(0)] [RED("("expirationTime")] 		public CInt32 ExpirationTime { get; set;}
 
-		[RED("useCounter")] 		public CFloat UseCounter { get; set;}
+		[Ordinal(0)] [RED("("useCounter")] 		public CFloat UseCounter { get; set;}
 
-		[RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
+		[Ordinal(0)] [RED("("entity")] 		public CHandle<CEntity> Entity { get; set;}
 
-		[RED("poiDisp")] 		public CHandle<W3POIDispenser> PoiDisp { get; set;}
+		[Ordinal(0)] [RED("("poiDisp")] 		public CHandle<W3POIDispenser> PoiDisp { get; set;}
 
-		[RED("poi")] 		public CHandle<W3PointOfInterestEntity> Poi { get; set;}
+		[Ordinal(0)] [RED("("poi")] 		public CHandle<W3PointOfInterestEntity> Poi { get; set;}
 
 		public CFoodBoidPointOfInterest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

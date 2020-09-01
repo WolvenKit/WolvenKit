@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFurDistanceLOD : CVariable
 	{
-		[RED("enableDistanceLOD")] 		public CBool EnableDistanceLOD { get; set;}
+		[Ordinal(0)] [RED("("enableDistanceLOD")] 		public CBool EnableDistanceLOD { get; set;}
 
-		[RED("distanceLODStart")] 		public CFloat DistanceLODStart { get; set;}
+		[Ordinal(0)] [RED("("distanceLODStart")] 		public CFloat DistanceLODStart { get; set;}
 
-		[RED("distanceLODEnd")] 		public CFloat DistanceLODEnd { get; set;}
+		[Ordinal(0)] [RED("("distanceLODEnd")] 		public CFloat DistanceLODEnd { get; set;}
 
-		[RED("distanceLODFadeStart")] 		public CFloat DistanceLODFadeStart { get; set;}
+		[Ordinal(0)] [RED("("distanceLODFadeStart")] 		public CFloat DistanceLODFadeStart { get; set;}
 
-		[RED("distanceLODWidth")] 		public CFloat DistanceLODWidth { get; set;}
+		[Ordinal(0)] [RED("("distanceLODWidth")] 		public CFloat DistanceLODWidth { get; set;}
 
-		[RED("distanceLODDensity")] 		public CFloat DistanceLODDensity { get; set;}
+		[Ordinal(0)] [RED("("distanceLODDensity")] 		public CFloat DistanceLODDensity { get; set;}
 
 		public SFurDistanceLOD(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTForwardCollisionResponse : CMoveSTCollisionResponse
 	{
-		[RED("probeDistanceInTime")] 		public CFloat ProbeDistanceInTime { get; set;}
+		[Ordinal(0)] [RED("probeDistanceInTime")] 		public CFloat ProbeDistanceInTime { get; set;}
 
-		[RED("crowdThroughVar")] 		public CName CrowdThroughVar { get; set;}
+		[Ordinal(0)] [RED("crowdThroughVar")] 		public CName CrowdThroughVar { get; set;}
 
 		public CMoveSTForwardCollisionResponse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

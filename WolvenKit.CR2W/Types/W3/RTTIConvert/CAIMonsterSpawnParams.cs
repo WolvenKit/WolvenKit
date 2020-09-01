@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMonsterSpawnParams : CAISubTreeParameters
 	{
-		[RED("fxName")] 		public CName FxName { get; set;}
+		[Ordinal(0)] [RED("fxName")] 		public CName FxName { get; set;}
 
-		[RED("animEventNameActivator")] 		public CName AnimEventNameActivator { get; set;}
+		[Ordinal(0)] [RED("animEventNameActivator")] 		public CName AnimEventNameActivator { get; set;}
 
-		[RED("playFXOnAnimEvent")] 		public CBool PlayFXOnAnimEvent { get; set;}
+		[Ordinal(0)] [RED("playFXOnAnimEvent")] 		public CBool PlayFXOnAnimEvent { get; set;}
 
-		[RED("monitorGroundContact")] 		public CBool MonitorGroundContact { get; set;}
+		[Ordinal(0)] [RED("monitorGroundContact")] 		public CBool MonitorGroundContact { get; set;}
 
-		[RED("dealDamageOnAnimEvent")] 		public CName DealDamageOnAnimEvent { get; set;}
+		[Ordinal(0)] [RED("dealDamageOnAnimEvent")] 		public CName DealDamageOnAnimEvent { get; set;}
 
-		[RED("becomeVisibleOnAnimEvent")] 		public CName BecomeVisibleOnAnimEvent { get; set;}
+		[Ordinal(0)] [RED("becomeVisibleOnAnimEvent")] 		public CName BecomeVisibleOnAnimEvent { get; set;}
 
 		public CAIMonsterSpawnParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

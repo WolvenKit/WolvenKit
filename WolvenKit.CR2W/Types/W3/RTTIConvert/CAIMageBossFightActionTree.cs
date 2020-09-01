@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMageBossFightActionTree : IAICustomActionTree
 	{
-		[RED("minDistFromTargetToPerformTeleport")] 		public CFloat MinDistFromTargetToPerformTeleport { get; set;}
+		[Ordinal(0)] [RED("minDistFromTargetToPerformTeleport")] 		public CFloat MinDistFromTargetToPerformTeleport { get; set;}
 
 		public CAIMageBossFightActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

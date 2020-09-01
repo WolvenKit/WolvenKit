@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFurGlint : CVariable
 	{
-		[RED("glintStrength")] 		public CFloat GlintStrength { get; set;}
+		[Ordinal(0)] [RED("("glintStrength")] 		public CFloat GlintStrength { get; set;}
 
-		[RED("glintCount")] 		public CFloat GlintCount { get; set;}
+		[Ordinal(0)] [RED("("glintCount")] 		public CFloat GlintCount { get; set;}
 
-		[RED("glintExponent")] 		public CFloat GlintExponent { get; set;}
+		[Ordinal(0)] [RED("("glintExponent")] 		public CFloat GlintExponent { get; set;}
 
 		public SFurGlint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

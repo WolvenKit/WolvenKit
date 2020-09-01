@@ -10,49 +10,49 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorMimicLookAtConstraint : IBehaviorMimicConstraint
 	{
-		[RED("cachedTargetNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetNode { get; set;}
+		[Ordinal(0)] [RED("cachedTargetNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetNode { get; set;}
 
-		[RED("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
+		[Ordinal(0)] [RED("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
 
-		[RED("cachedControlEyesDataNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedControlEyesDataNode { get; set;}
+		[Ordinal(0)] [RED("cachedControlEyesDataNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedControlEyesDataNode { get; set;}
 
-		[RED("eyeHorLLeftTrack")] 		public CString EyeHorLLeftTrack { get; set;}
+		[Ordinal(0)] [RED("eyeHorLLeftTrack")] 		public CString EyeHorLLeftTrack { get; set;}
 
-		[RED("eyeHorRLeftTrack")] 		public CString EyeHorRLeftTrack { get; set;}
+		[Ordinal(0)] [RED("eyeHorRLeftTrack")] 		public CString EyeHorRLeftTrack { get; set;}
 
-		[RED("eyeHorLRightTrack")] 		public CString EyeHorLRightTrack { get; set;}
+		[Ordinal(0)] [RED("eyeHorLRightTrack")] 		public CString EyeHorLRightTrack { get; set;}
 
-		[RED("eyeHorRRightTrack")] 		public CString EyeHorRRightTrack { get; set;}
+		[Ordinal(0)] [RED("eyeHorRRightTrack")] 		public CString EyeHorRRightTrack { get; set;}
 
-		[RED("eyeVerULeftTrack")] 		public CString EyeVerULeftTrack { get; set;}
+		[Ordinal(0)] [RED("eyeVerULeftTrack")] 		public CString EyeVerULeftTrack { get; set;}
 
-		[RED("eyeVerDLeftTrack")] 		public CString EyeVerDLeftTrack { get; set;}
+		[Ordinal(0)] [RED("eyeVerDLeftTrack")] 		public CString EyeVerDLeftTrack { get; set;}
 
-		[RED("eyeVerURightTrack")] 		public CString EyeVerURightTrack { get; set;}
+		[Ordinal(0)] [RED("eyeVerURightTrack")] 		public CString EyeVerURightTrack { get; set;}
 
-		[RED("eyeVerDRightTrack")] 		public CString EyeVerDRightTrack { get; set;}
+		[Ordinal(0)] [RED("eyeVerDRightTrack")] 		public CString EyeVerDRightTrack { get; set;}
 
-		[RED("eyeLeftPlacerBone")] 		public CString EyeLeftPlacerBone { get; set;}
+		[Ordinal(0)] [RED("eyeLeftPlacerBone")] 		public CString EyeLeftPlacerBone { get; set;}
 
-		[RED("eyeRightPlacerBone")] 		public CString EyeRightPlacerBone { get; set;}
+		[Ordinal(0)] [RED("eyeRightPlacerBone")] 		public CString EyeRightPlacerBone { get; set;}
 
-		[RED("eyeHorMax")] 		public CFloat EyeHorMax { get; set;}
+		[Ordinal(0)] [RED("eyeHorMax")] 		public CFloat EyeHorMax { get; set;}
 
-		[RED("eyeVerMin")] 		public CFloat EyeVerMin { get; set;}
+		[Ordinal(0)] [RED("eyeVerMin")] 		public CFloat EyeVerMin { get; set;}
 
-		[RED("eyeVerMax")] 		public CFloat EyeVerMax { get; set;}
+		[Ordinal(0)] [RED("eyeVerMax")] 		public CFloat EyeVerMax { get; set;}
 
-		[RED("eyeVerOffset")] 		public CFloat EyeVerOffset { get; set;}
+		[Ordinal(0)] [RED("eyeVerOffset")] 		public CFloat EyeVerOffset { get; set;}
 
-		[RED("eyesTrackClamp")] 		public CFloat EyesTrackClamp { get; set;}
+		[Ordinal(0)] [RED("eyesTrackClamp")] 		public CFloat EyesTrackClamp { get; set;}
 
-		[RED("dampTime")] 		public CFloat DampTime { get; set;}
+		[Ordinal(0)] [RED("dampTime")] 		public CFloat DampTime { get; set;}
 
-		[RED("blinkAnimName")] 		public CName BlinkAnimName { get; set;}
+		[Ordinal(0)] [RED("blinkAnimName")] 		public CName BlinkAnimName { get; set;}
 
-		[RED("blinkTimeOffset")] 		public CFloat BlinkTimeOffset { get; set;}
+		[Ordinal(0)] [RED("blinkTimeOffset")] 		public CFloat BlinkTimeOffset { get; set;}
 
-		[RED("blinkSpeed")] 		public CFloat BlinkSpeed { get; set;}
+		[Ordinal(0)] [RED("blinkSpeed")] 		public CFloat BlinkSpeed { get; set;}
 
 		public CBehaviorMimicLookAtConstraint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

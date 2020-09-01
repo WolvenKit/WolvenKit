@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPathLibSettings : CVariable
 	{
-		[RED("agentCategoriesCount")] 		public CUInt32 AgentCategoriesCount { get; set;}
+		[Ordinal(0)] [RED("("agentCategoriesCount")] 		public CUInt32 AgentCategoriesCount { get; set;}
 
-		[RED("agentCategoryRadius1")] 		public CFloat AgentCategoryRadius1 { get; set;}
+		[Ordinal(0)] [RED("("agentCategoryRadius1")] 		public CFloat AgentCategoryRadius1 { get; set;}
 
-		[RED("agentCategoryRadius2")] 		public CFloat AgentCategoryRadius2 { get; set;}
+		[Ordinal(0)] [RED("("agentCategoryRadius2")] 		public CFloat AgentCategoryRadius2 { get; set;}
 
-		[RED("agentCategoryRadius3")] 		public CFloat AgentCategoryRadius3 { get; set;}
+		[Ordinal(0)] [RED("("agentCategoryRadius3")] 		public CFloat AgentCategoryRadius3 { get; set;}
 
-		[RED("agentCategoryRadius4")] 		public CFloat AgentCategoryRadius4 { get; set;}
+		[Ordinal(0)] [RED("("agentCategoryRadius4")] 		public CFloat AgentCategoryRadius4 { get; set;}
 
-		[RED("roadsNavcostMultiplier")] 		public CFloat RoadsNavcostMultiplier { get; set;}
+		[Ordinal(0)] [RED("("roadsNavcostMultiplier")] 		public CFloat RoadsNavcostMultiplier { get; set;}
 
-		[RED("maxTerrainSlope")] 		public CFloat MaxTerrainSlope { get; set;}
+		[Ordinal(0)] [RED("("maxTerrainSlope")] 		public CFloat MaxTerrainSlope { get; set;}
 
-		[RED("seaLevel")] 		public CFloat SeaLevel { get; set;}
+		[Ordinal(0)] [RED("("seaLevel")] 		public CFloat SeaLevel { get; set;}
 
-		[RED("desiredStreamingRange")] 		public CFloat DesiredStreamingRange { get; set;}
+		[Ordinal(0)] [RED("("desiredStreamingRange")] 		public CFloat DesiredStreamingRange { get; set;}
 
-		[RED("terrainWalkableRegionMinSize")] 		public CFloat TerrainWalkableRegionMinSize { get; set;}
+		[Ordinal(0)] [RED("("terrainWalkableRegionMinSize")] 		public CFloat TerrainWalkableRegionMinSize { get; set;}
 
-		[RED("terrainUnwalkableRegionMinSize")] 		public CFloat TerrainUnwalkableRegionMinSize { get; set;}
+		[Ordinal(0)] [RED("("terrainUnwalkableRegionMinSize")] 		public CFloat TerrainUnwalkableRegionMinSize { get; set;}
 
-		[RED("terrainNavmeshSurroundedRegionMinSize")] 		public CFloat TerrainNavmeshSurroundedRegionMinSize { get; set;}
+		[Ordinal(0)] [RED("("terrainNavmeshSurroundedRegionMinSize")] 		public CFloat TerrainNavmeshSurroundedRegionMinSize { get; set;}
 
-		[RED("terrainHeightApproximationRange")] 		public CFloat TerrainHeightApproximationRange { get; set;}
+		[Ordinal(0)] [RED("("terrainHeightApproximationRange")] 		public CFloat TerrainHeightApproximationRange { get; set;}
 
 		public CPathLibSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

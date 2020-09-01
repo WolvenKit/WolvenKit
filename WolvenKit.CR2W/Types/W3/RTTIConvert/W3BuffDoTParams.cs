@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3BuffDoTParams : W3BuffCustomParams
 	{
-		[RED("isEnvironment")] 		public CBool IsEnvironment { get; set;}
+		[Ordinal(0)] [RED("("isEnvironment")] 		public CBool IsEnvironment { get; set;}
 
-		[RED("isPerk20Active")] 		public CBool IsPerk20Active { get; set;}
+		[Ordinal(0)] [RED("("isPerk20Active")] 		public CBool IsPerk20Active { get; set;}
 
 		public W3BuffDoTParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

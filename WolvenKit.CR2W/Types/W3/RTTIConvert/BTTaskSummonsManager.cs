@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskSummonsManager : IBehTreeTask
 	{
-		[RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(0)] [RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
-		[RED("summonedEntities", 2,0)] 		public CArray<CHandle<CGameplayEntity>> SummonedEntities { get; set;}
+		[Ordinal(0)] [RED("summonedEntities", 2,0)] 		public CArray<CHandle<CGameplayEntity>> SummonedEntities { get; set;}
 
-		[RED("summonedEntitiesSearchingRange")] 		public CFloat SummonedEntitiesSearchingRange { get; set;}
+		[Ordinal(0)] [RED("summonedEntitiesSearchingRange")] 		public CFloat SummonedEntitiesSearchingRange { get; set;}
 
-		[RED("summonedEntitiesTag")] 		public CName SummonedEntitiesTag { get; set;}
+		[Ordinal(0)] [RED("summonedEntitiesTag")] 		public CName SummonedEntitiesTag { get; set;}
 
-		[RED("killEntitiesOnDistance")] 		public CBool KillEntitiesOnDistance { get; set;}
+		[Ordinal(0)] [RED("killEntitiesOnDistance")] 		public CBool KillEntitiesOnDistance { get; set;}
 
-		[RED("killDistance")] 		public CFloat KillDistance { get; set;}
+		[Ordinal(0)] [RED("killDistance")] 		public CFloat KillDistance { get; set;}
 
 		public BTTaskSummonsManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

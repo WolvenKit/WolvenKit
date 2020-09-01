@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPlayVoiceSet : IBehTreeTask
 	{
-		[RED("voiceSet")] 		public CString VoiceSet { get; set;}
+		[Ordinal(0)] [RED("("voiceSet")] 		public CString VoiceSet { get; set;}
 
-		[RED("priority")] 		public CInt32 Priority { get; set;}
+		[Ordinal(0)] [RED("("priority")] 		public CInt32 Priority { get; set;}
 
-		[RED("waitUntilSpeechIsFinished")] 		public CBool WaitUntilSpeechIsFinished { get; set;}
+		[Ordinal(0)] [RED("("waitUntilSpeechIsFinished")] 		public CBool WaitUntilSpeechIsFinished { get; set;}
 
-		[RED("randomizeSpeechStart")] 		public CBool RandomizeSpeechStart { get; set;}
+		[Ordinal(0)] [RED("("randomizeSpeechStart")] 		public CBool RandomizeSpeechStart { get; set;}
 
-		[RED("dontActivateWhileSpeaking")] 		public CBool DontActivateWhileSpeaking { get; set;}
+		[Ordinal(0)] [RED("("dontActivateWhileSpeaking")] 		public CBool DontActivateWhileSpeaking { get; set;}
 
-		[RED("speachStartDelay")] 		public CFloat SpeachStartDelay { get; set;}
+		[Ordinal(0)] [RED("("speachStartDelay")] 		public CFloat SpeachStartDelay { get; set;}
 
-		[RED("playOnDeactivate")] 		public CBool PlayOnDeactivate { get; set;}
+		[Ordinal(0)] [RED("("playOnDeactivate")] 		public CBool PlayOnDeactivate { get; set;}
 
-		[RED("playAfterXtimes")] 		public CInt32 PlayAfterXtimes { get; set;}
+		[Ordinal(0)] [RED("("playAfterXtimes")] 		public CInt32 PlayAfterXtimes { get; set;}
 
-		[RED("breakCurrentSpeach")] 		public CBool BreakCurrentSpeach { get; set;}
+		[Ordinal(0)] [RED("("breakCurrentSpeach")] 		public CBool BreakCurrentSpeach { get; set;}
 
-		[RED("iterator")] 		public CInt32 Iterator { get; set;}
+		[Ordinal(0)] [RED("("iterator")] 		public CInt32 Iterator { get; set;}
 
 		public CBTTaskPlayVoiceSet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardLookAtMode : CModStoryBoardAssetSelectionBasedWorkMode
 	{
-		[RED("theLookAtDirector")] 		public CHandle<CModStoryBoardLookAtDirector> TheLookAtDirector { get; set;}
+		[Ordinal(0)] [RED("("theLookAtDirector")] 		public CHandle<CModStoryBoardLookAtDirector> TheLookAtDirector { get; set;}
 
-		[RED("theController")] 		public CHandle<CModStoryBoardInteractiveLookAt> TheController { get; set;}
+		[Ordinal(0)] [RED("("theController")] 		public CHandle<CModStoryBoardInteractiveLookAt> TheController { get; set;}
 
 		public CModStoryBoardLookAtMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

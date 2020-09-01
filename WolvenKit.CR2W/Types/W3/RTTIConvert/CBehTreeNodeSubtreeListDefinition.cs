@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeSubtreeListDefinition : IBehTreeMetanodeDefinition
 	{
-		[RED("listName")] 		public CName ListName { get; set;}
+		[Ordinal(0)] [RED("listName")] 		public CName ListName { get; set;}
 
 		public CBehTreeNodeSubtreeListDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

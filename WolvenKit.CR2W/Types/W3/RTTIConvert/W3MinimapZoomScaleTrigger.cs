@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MinimapZoomScaleTrigger : CGameplayEntity
 	{
-		[RED("zoomScale")] 		public CFloat ZoomScale { get; set;}
+		[Ordinal(0)] [RED("("zoomScale")] 		public CFloat ZoomScale { get; set;}
 
-		[RED("previousZoomScale")] 		public CFloat PreviousZoomScale { get; set;}
+		[Ordinal(0)] [RED("("previousZoomScale")] 		public CFloat PreviousZoomScale { get; set;}
 
 		public W3MinimapZoomScaleTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

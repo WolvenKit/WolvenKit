@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3HouseGenericDecoration : W3HouseDecorationBase
 	{
-		[RED("m_itemFilterTag")] 		public CName M_itemFilterTag { get; set;}
+		[Ordinal(0)] [RED("("m_itemFilterTag")] 		public CName M_itemFilterTag { get; set;}
 
-		[RED("m_decorationItems", 2,0)] 		public CArray<SHouseDecorationItemData> M_decorationItems { get; set;}
+		[Ordinal(0)] [RED("("m_decorationItems", 2,0)] 		public CArray<SHouseDecorationItemData> M_decorationItems { get; set;}
 
-		[RED("m_currentApperance")] 		public CName M_currentApperance { get; set;}
+		[Ordinal(0)] [RED("("m_currentApperance")] 		public CName M_currentApperance { get; set;}
 
 		public W3HouseGenericDecoration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

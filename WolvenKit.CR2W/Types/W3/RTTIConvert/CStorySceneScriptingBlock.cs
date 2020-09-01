@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneScriptingBlock : CStorySceneGraphBlock
 	{
-		[RED("sceneScript")] 		public CPtr<CStorySceneScript> SceneScript { get; set;}
+		[Ordinal(0)] [RED("sceneScript")] 		public CPtr<CStorySceneScript> SceneScript { get; set;}
 
 		public CStorySceneScriptingBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class RangedWeaponStateState_WeaponWait : CScriptableState
 	{
-		[RED("wasPressed")] 		public CBool WasPressed { get; set;}
+		[Ordinal(0)] [RED("wasPressed")] 		public CBool WasPressed { get; set;}
 
 		public RangedWeaponStateState_WeaponWait(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SHudItemInfo : CVariable
 	{
-		[RED("m_icon")] 		public CString M_icon { get; set;}
+		[Ordinal(0)] [RED("("m_icon")] 		public CString M_icon { get; set;}
 
-		[RED("m_category")] 		public CString M_category { get; set;}
+		[Ordinal(0)] [RED("("m_category")] 		public CString M_category { get; set;}
 
-		[RED("m_itemName")] 		public CString M_itemName { get; set;}
+		[Ordinal(0)] [RED("("m_itemName")] 		public CString M_itemName { get; set;}
 
-		[RED("m_ammoStr")] 		public CString M_ammoStr { get; set;}
+		[Ordinal(0)] [RED("("m_ammoStr")] 		public CString M_ammoStr { get; set;}
 
-		[RED("m_btn")] 		public CInt32 M_btn { get; set;}
+		[Ordinal(0)] [RED("("m_btn")] 		public CInt32 M_btn { get; set;}
 
-		[RED("m_pcBtn")] 		public CInt32 M_pcBtn { get; set;}
+		[Ordinal(0)] [RED("("m_pcBtn")] 		public CInt32 M_pcBtn { get; set;}
 
 		public SHudItemInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

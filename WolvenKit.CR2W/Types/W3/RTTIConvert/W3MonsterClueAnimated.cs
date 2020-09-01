@@ -10,29 +10,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MonsterClueAnimated : W3MonsterClue
 	{
-		[RED("animation")] 		public CEnum<EMonsterClueAnim> Animation { get; set;}
+		[Ordinal(0)] [RED("("animation")] 		public CEnum<EMonsterClueAnim> Animation { get; set;}
 
-		[RED("witnessWholeAnimation")] 		public CBool WitnessWholeAnimation { get; set;}
+		[Ordinal(0)] [RED("("witnessWholeAnimation")] 		public CBool WitnessWholeAnimation { get; set;}
 
-		[RED("animStartEvent")] 		public CName AnimStartEvent { get; set;}
+		[Ordinal(0)] [RED("("animStartEvent")] 		public CName AnimStartEvent { get; set;}
 
-		[RED("animEndEvent")] 		public CName AnimEndEvent { get; set;}
+		[Ordinal(0)] [RED("("animEndEvent")] 		public CName AnimEndEvent { get; set;}
 
-		[RED("useAccuracyTest")] 		public CBool UseAccuracyTest { get; set;}
+		[Ordinal(0)] [RED("("useAccuracyTest")] 		public CBool UseAccuracyTest { get; set;}
 
-		[RED("accuracyError")] 		public CFloat AccuracyError { get; set;}
+		[Ordinal(0)] [RED("("accuracyError")] 		public CFloat AccuracyError { get; set;}
 
-		[RED("stopAnimSoundEvent")] 		public CName StopAnimSoundEvent { get; set;}
+		[Ordinal(0)] [RED("("stopAnimSoundEvent")] 		public CName StopAnimSoundEvent { get; set;}
 
-		[RED("activatedByFact")] 		public CName ActivatedByFact { get; set;}
+		[Ordinal(0)] [RED("("activatedByFact")] 		public CName ActivatedByFact { get; set;}
 
-		[RED("spawnPosWasSaved")] 		public CBool SpawnPosWasSaved { get; set;}
+		[Ordinal(0)] [RED("("spawnPosWasSaved")] 		public CBool SpawnPosWasSaved { get; set;}
 
-		[RED("spawnPos")] 		public Vector SpawnPos { get; set;}
+		[Ordinal(0)] [RED("("spawnPos")] 		public Vector SpawnPos { get; set;}
 
-		[RED("spawnRot")] 		public EulerAngles SpawnRot { get; set;}
+		[Ordinal(0)] [RED("("spawnRot")] 		public EulerAngles SpawnRot { get; set;}
 
-		[RED("animStarted")] 		public CBool AnimStarted { get; set;}
+		[Ordinal(0)] [RED("("animStarted")] 		public CBool AnimStarted { get; set;}
 
 		public W3MonsterClueAnimated(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

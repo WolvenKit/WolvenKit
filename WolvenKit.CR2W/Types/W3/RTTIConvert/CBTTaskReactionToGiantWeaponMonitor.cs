@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskReactionToGiantWeaponMonitor : IBehTreeTask
 	{
-		[RED("effectResourceName")] 		public CName EffectResourceName { get; set;}
+		[Ordinal(0)] [RED("effectResourceName")] 		public CName EffectResourceName { get; set;}
 
-		[RED("playFxOnEffectEntity")] 		public CName PlayFxOnEffectEntity { get; set;}
+		[Ordinal(0)] [RED("playFxOnEffectEntity")] 		public CName PlayFxOnEffectEntity { get; set;}
 
-		[RED("spawnZOffset")] 		public CFloat SpawnZOffset { get; set;}
+		[Ordinal(0)] [RED("spawnZOffset")] 		public CFloat SpawnZOffset { get; set;}
 
-		[RED("effectEntity")] 		public CHandle<CEntityTemplate> EffectEntity { get; set;}
+		[Ordinal(0)] [RED("effectEntity")] 		public CHandle<CEntityTemplate> EffectEntity { get; set;}
 
-		[RED("victim")] 		public CHandle<CActor> Victim { get; set;}
+		[Ordinal(0)] [RED("victim")] 		public CHandle<CActor> Victim { get; set;}
 
-		[RED("victimsArray", 2,0)] 		public CArray<CHandle<CActor>> VictimsArray { get; set;}
+		[Ordinal(0)] [RED("victimsArray", 2,0)] 		public CArray<CHandle<CActor>> VictimsArray { get; set;}
 
-		[RED("actorEventReceived")] 		public CBool ActorEventReceived { get; set;}
+		[Ordinal(0)] [RED("actorEventReceived")] 		public CBool ActorEventReceived { get; set;}
 
-		[RED("entityPos")] 		public Vector EntityPos { get; set;}
+		[Ordinal(0)] [RED("entityPos")] 		public Vector EntityPos { get; set;}
 
-		[RED("entityRot")] 		public EulerAngles EntityRot { get; set;}
+		[Ordinal(0)] [RED("entityRot")] 		public EulerAngles EntityRot { get; set;}
 
 		public CBTTaskReactionToGiantWeaponMonitor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSlotInfo : CVariable
 	{
-		[RED("slotName")] 		public CName SlotName { get; set;}
+		[Ordinal(0)] [RED("("slotName")] 		public CName SlotName { get; set;}
 
-		[RED("parentSlotName")] 		public CName ParentSlotName { get; set;}
+		[Ordinal(0)] [RED("("parentSlotName")] 		public CName ParentSlotName { get; set;}
 
-		[RED("parentSlotIndex")] 		public CInt32 ParentSlotIndex { get; set;}
+		[Ordinal(0)] [RED("("parentSlotIndex")] 		public CInt32 ParentSlotIndex { get; set;}
 
-		[RED("relativePosition")] 		public Vector RelativePosition { get; set;}
+		[Ordinal(0)] [RED("("relativePosition")] 		public Vector RelativePosition { get; set;}
 
-		[RED("relativeRotation")] 		public EulerAngles RelativeRotation { get; set;}
+		[Ordinal(0)] [RED("("relativeRotation")] 		public EulerAngles RelativeRotation { get; set;}
 
 		public SSlotInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

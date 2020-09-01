@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SProcessedDamage : CVariable
 	{
-		[RED("vitalityDamage")] 		public CFloat VitalityDamage { get; set;}
+		[Ordinal(0)] [RED("("vitalityDamage")] 		public CFloat VitalityDamage { get; set;}
 
-		[RED("essenceDamage")] 		public CFloat EssenceDamage { get; set;}
+		[Ordinal(0)] [RED("("essenceDamage")] 		public CFloat EssenceDamage { get; set;}
 
-		[RED("moraleDamage")] 		public CFloat MoraleDamage { get; set;}
+		[Ordinal(0)] [RED("("moraleDamage")] 		public CFloat MoraleDamage { get; set;}
 
-		[RED("staminaDamage")] 		public CFloat StaminaDamage { get; set;}
+		[Ordinal(0)] [RED("("staminaDamage")] 		public CFloat StaminaDamage { get; set;}
 
 		public SProcessedDamage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

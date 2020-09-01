@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskManageGravityDef : IBehTreeTaskDefinition
 	{
-		[RED("manageGravity")] 		public CEnum<EManageGravity> ManageGravity { get; set;}
+		[Ordinal(0)] [RED("("manageGravity")] 		public CEnum<EManageGravity> ManageGravity { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(0)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("onEvent")] 		public CBool OnEvent { get; set;}
+		[Ordinal(0)] [RED("("onEvent")] 		public CBool OnEvent { get; set;}
 
-		[RED("setCustomMovement")] 		public CBool SetCustomMovement { get; set;}
+		[Ordinal(0)] [RED("("setCustomMovement")] 		public CBool SetCustomMovement { get; set;}
 
 		public CBTTaskManageGravityDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

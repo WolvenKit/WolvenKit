@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskManageFact : IBehTreeTask
 	{
-		[RED("fact")] 		public CString Fact { get; set;}
+		[Ordinal(0)] [RED("("fact")] 		public CString Fact { get; set;}
 
-		[RED("value")] 		public CInt32 Value { get; set;}
+		[Ordinal(0)] [RED("("value")] 		public CInt32 Value { get; set;}
 
-		[RED("validFor")] 		public CInt32 ValidFor { get; set;}
+		[Ordinal(0)] [RED("("validFor")] 		public CInt32 ValidFor { get; set;}
 
-		[RED("add")] 		public CBool Add { get; set;}
+		[Ordinal(0)] [RED("("add")] 		public CBool Add { get; set;}
 
-		[RED("doNotCompleteAfter")] 		public CBool DoNotCompleteAfter { get; set;}
+		[Ordinal(0)] [RED("("doNotCompleteAfter")] 		public CBool DoNotCompleteAfter { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onAnimEvent")] 		public CBool OnAnimEvent { get; set;}
+		[Ordinal(0)] [RED("("onAnimEvent")] 		public CBool OnAnimEvent { get; set;}
 
-		[RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(0)] [RED("("eventName")] 		public CName EventName { get; set;}
 
 		public CBTTaskManageFact(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

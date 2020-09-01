@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFormationKeepComradesSpeedSteeringTask : IFormationSteeringTask
 	{
-		[RED("speedImportance")] 		public CFloat SpeedImportance { get; set;}
+		[Ordinal(0)] [RED("("speedImportance")] 		public CFloat SpeedImportance { get; set;}
 
-		[RED("distanceToComrades")] 		public CFloat DistanceToComrades { get; set;}
+		[Ordinal(0)] [RED("("distanceToComrades")] 		public CFloat DistanceToComrades { get; set;}
 
 		public CFormationKeepComradesSpeedSteeringTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

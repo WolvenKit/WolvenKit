@@ -10,29 +10,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SUITutorial : CVariable
 	{
-		[RED("menuName")] 		public CName MenuName { get; set;}
+		[Ordinal(0)] [RED("("menuName")] 		public CName MenuName { get; set;}
 
-		[RED("tutorialStateName")] 		public CName TutorialStateName { get; set;}
+		[Ordinal(0)] [RED("("tutorialStateName")] 		public CName TutorialStateName { get; set;}
 
-		[RED("triggerCondition")] 		public CEnum<EUITutorialTriggerCondition> TriggerCondition { get; set;}
+		[Ordinal(0)] [RED("("triggerCondition")] 		public CEnum<EUITutorialTriggerCondition> TriggerCondition { get; set;}
 
-		[RED("requiredGameplayFactName")] 		public CString RequiredGameplayFactName { get; set;}
+		[Ordinal(0)] [RED("("requiredGameplayFactName")] 		public CString RequiredGameplayFactName { get; set;}
 
-		[RED("requiredGameplayFactValueInt")] 		public CInt32 RequiredGameplayFactValueInt { get; set;}
+		[Ordinal(0)] [RED("("requiredGameplayFactValueInt")] 		public CInt32 RequiredGameplayFactValueInt { get; set;}
 
-		[RED("requiredGameplayFactComparator")] 		public CEnum<ECompareOp> RequiredGameplayFactComparator { get; set;}
+		[Ordinal(0)] [RED("("requiredGameplayFactComparator")] 		public CEnum<ECompareOp> RequiredGameplayFactComparator { get; set;}
 
-		[RED("requiredGameplayFactName2")] 		public CString RequiredGameplayFactName2 { get; set;}
+		[Ordinal(0)] [RED("("requiredGameplayFactName2")] 		public CString RequiredGameplayFactName2 { get; set;}
 
-		[RED("requiredGameplayFactValueInt2")] 		public CInt32 RequiredGameplayFactValueInt2 { get; set;}
+		[Ordinal(0)] [RED("("requiredGameplayFactValueInt2")] 		public CInt32 RequiredGameplayFactValueInt2 { get; set;}
 
-		[RED("requiredGameplayFactComparator2")] 		public CEnum<ECompareOp> RequiredGameplayFactComparator2 { get; set;}
+		[Ordinal(0)] [RED("("requiredGameplayFactComparator2")] 		public CEnum<ECompareOp> RequiredGameplayFactComparator2 { get; set;}
 
-		[RED("priority")] 		public CInt32 Priority { get; set;}
+		[Ordinal(0)] [RED("("priority")] 		public CInt32 Priority { get; set;}
 
-		[RED("abortOnMenuClose")] 		public CBool AbortOnMenuClose { get; set;}
+		[Ordinal(0)] [RED("("abortOnMenuClose")] 		public CBool AbortOnMenuClose { get; set;}
 
-		[RED("sourceName")] 		public CString SourceName { get; set;}
+		[Ordinal(0)] [RED("("sourceName")] 		public CString SourceName { get; set;}
 
 		public SUITutorial(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

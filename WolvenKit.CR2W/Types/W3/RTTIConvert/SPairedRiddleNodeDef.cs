@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SPairedRiddleNodeDef : CVariable
 	{
-		[RED("pairedRiddleNodeTag")] 		public CName PairedRiddleNodeTag { get; set;}
+		[Ordinal(0)] [RED("("pairedRiddleNodeTag")] 		public CName PairedRiddleNodeTag { get; set;}
 
-		[RED("pairedRiddleNodeRequiredPos")] 		public CInt32 PairedRiddleNodeRequiredPos { get; set;}
+		[Ordinal(0)] [RED("("pairedRiddleNodeRequiredPos")] 		public CInt32 PairedRiddleNodeRequiredPos { get; set;}
 
-		[RED("externalRiddleFx")] 		public SExternalRiddleEffectEntityDef ExternalRiddleFx { get; set;}
+		[Ordinal(0)] [RED("("externalRiddleFx")] 		public SExternalRiddleEffectEntityDef ExternalRiddleFx { get; set;}
 
 		public SPairedRiddleNodeDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

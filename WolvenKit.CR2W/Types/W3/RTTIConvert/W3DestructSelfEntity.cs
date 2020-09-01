@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3DestructSelfEntity : CGameplayEntity
 	{
-		[RED("destructAfterDelay")] 		public CFloat DestructAfterDelay { get; set;}
+		[Ordinal(0)] [RED("("destructAfterDelay")] 		public CFloat DestructAfterDelay { get; set;}
 
-		[RED("stopEffectDuration")] 		public CFloat StopEffectDuration { get; set;}
+		[Ordinal(0)] [RED("("stopEffectDuration")] 		public CFloat StopEffectDuration { get; set;}
 
-		[RED("effectToStop")] 		public CName EffectToStop { get; set;}
+		[Ordinal(0)] [RED("("effectToStop")] 		public CName EffectToStop { get; set;}
 
 		public W3DestructSelfEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

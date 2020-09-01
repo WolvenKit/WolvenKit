@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeDelayActivationDecoratorDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("delay")] 		public CBehTreeValFloat Delay { get; set;}
+		[Ordinal(0)] [RED("delay")] 		public CBehTreeValFloat Delay { get; set;}
 
-		[RED("activationWindow")] 		public CFloat ActivationWindow { get; set;}
+		[Ordinal(0)] [RED("activationWindow")] 		public CFloat ActivationWindow { get; set;}
 
 		public CBehTreeNodeDelayActivationDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

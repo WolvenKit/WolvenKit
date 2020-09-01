@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCommunitySystem : IGameSystem
 	{
-		[RED("apMan")] 		public CHandle<CActionPointManager> ApMan { get; set;}
+		[Ordinal(0)] [RED("("apMan")] 		public CHandle<CActionPointManager> ApMan { get; set;}
 
-		[RED("communitySpawnInitializer")] 		public CHandle<ISpawnTreeInitializerAI> CommunitySpawnInitializer { get; set;}
+		[Ordinal(0)] [RED("("communitySpawnInitializer")] 		public CHandle<ISpawnTreeInitializerAI> CommunitySpawnInitializer { get; set;}
 
-		[RED("wmkMapMenu")] 		public CHandle<WmkMapMenu> WmkMapMenu { get; set;}
+		[Ordinal(0)] [RED("("wmkMapMenu")] 		public CHandle<WmkMapMenu> WmkMapMenu { get; set;}
 
 		public CCommunitySystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

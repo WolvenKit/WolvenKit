@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFXTrackItemParameterColor : CFXTrackItemCurveBase
 	{
-		[RED("parameterName")] 		public CName ParameterName { get; set;}
+		[Ordinal(0)] [RED("("parameterName")] 		public CName ParameterName { get; set;}
 
-		[RED("restoreAtEnd")] 		public CBool RestoreAtEnd { get; set;}
+		[Ordinal(0)] [RED("("restoreAtEnd")] 		public CBool RestoreAtEnd { get; set;}
 
 		public CFXTrackItemParameterColor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

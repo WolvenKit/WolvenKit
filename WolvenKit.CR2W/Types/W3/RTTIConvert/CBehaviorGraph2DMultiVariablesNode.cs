@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraph2DMultiVariablesNode : CBehaviorGraph2DVariableNode
 	{
-		[RED("variableName1")] 		public CName VariableName1 { get; set;}
+		[Ordinal(0)] [RED("variableName1")] 		public CName VariableName1 { get; set;}
 
-		[RED("variableName2")] 		public CName VariableName2 { get; set;}
+		[Ordinal(0)] [RED("variableName2")] 		public CName VariableName2 { get; set;}
 
 		public CBehaviorGraph2DMultiVariablesNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

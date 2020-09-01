@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphChooseRecoverFromRagdollAnimNode : CBehaviorGraphNode
 	{
-		[RED("mode")] 		public CEnum<EBehaviorGraphChooseRecoverFromRagdollAnimMode> Mode { get; set;}
+		[Ordinal(0)] [RED("("mode")] 		public CEnum<EBehaviorGraphChooseRecoverFromRagdollAnimMode> Mode { get; set;}
 
-		[RED("additionalOneFrameRotationYaw")] 		public CFloat AdditionalOneFrameRotationYaw { get; set;}
+		[Ordinal(0)] [RED("("additionalOneFrameRotationYaw")] 		public CFloat AdditionalOneFrameRotationYaw { get; set;}
 
-		[RED("pelvisBone")] 		public CName PelvisBone { get; set;}
+		[Ordinal(0)] [RED("("pelvisBone")] 		public CName PelvisBone { get; set;}
 
-		[RED("pelvisBoneFrontAxis")] 		public CEnum<EAxis> PelvisBoneFrontAxis { get; set;}
+		[Ordinal(0)] [RED("("pelvisBoneFrontAxis")] 		public CEnum<EAxis> PelvisBoneFrontAxis { get; set;}
 
-		[RED("pelvisBoneFrontAxisInverted")] 		public CBool PelvisBoneFrontAxisInverted { get; set;}
+		[Ordinal(0)] [RED("("pelvisBoneFrontAxisInverted")] 		public CBool PelvisBoneFrontAxisInverted { get; set;}
 
-		[RED("pelvisBoneWeight")] 		public CFloat PelvisBoneWeight { get; set;}
+		[Ordinal(0)] [RED("("pelvisBoneWeight")] 		public CFloat PelvisBoneWeight { get; set;}
 
-		[RED("shoulderBone")] 		public CName ShoulderBone { get; set;}
+		[Ordinal(0)] [RED("("shoulderBone")] 		public CName ShoulderBone { get; set;}
 
-		[RED("shoulderBoneFrontAxis")] 		public CEnum<EAxis> ShoulderBoneFrontAxis { get; set;}
+		[Ordinal(0)] [RED("("shoulderBoneFrontAxis")] 		public CEnum<EAxis> ShoulderBoneFrontAxis { get; set;}
 
-		[RED("shoulderBoneFrontAxisInverted")] 		public CBool ShoulderBoneFrontAxisInverted { get; set;}
+		[Ordinal(0)] [RED("("shoulderBoneFrontAxisInverted")] 		public CBool ShoulderBoneFrontAxisInverted { get; set;}
 
-		[RED("shoulderBoneWeight")] 		public CFloat ShoulderBoneWeight { get; set;}
+		[Ordinal(0)] [RED("("shoulderBoneWeight")] 		public CFloat ShoulderBoneWeight { get; set;}
 
-		[RED("cachedInputNodes", 2,0)] 		public CArray<CPtr<CBehaviorGraphNode>> CachedInputNodes { get; set;}
+		[Ordinal(0)] [RED("("cachedInputNodes", 2,0)] 		public CArray<CPtr<CBehaviorGraphNode>> CachedInputNodes { get; set;}
 
 		public CBehaviorGraphChooseRecoverFromRagdollAnimNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPursueTargetDef : IBehTreeTaskDefinition
 	{
-		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
+		[Ordinal(0)] [RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
-		[RED("minDistance")] 		public CBehTreeValFloat MinDistance { get; set;}
+		[Ordinal(0)] [RED("minDistance")] 		public CBehTreeValFloat MinDistance { get; set;}
 
-		[RED("keepDistance")] 		public CBehTreeValBool KeepDistance { get; set;}
+		[Ordinal(0)] [RED("keepDistance")] 		public CBehTreeValBool KeepDistance { get; set;}
 
 		public CBTTaskPursueTargetDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

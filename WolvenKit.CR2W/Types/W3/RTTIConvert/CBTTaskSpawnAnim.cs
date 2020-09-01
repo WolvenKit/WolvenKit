@@ -10,43 +10,43 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSpawnAnim : IBehTreeTask
 	{
-		[RED("spawnCondition")] 		public CEnum<ESpawnCondition> SpawnCondition { get; set;}
+		[Ordinal(0)] [RED("("spawnCondition")] 		public CEnum<ESpawnCondition> SpawnCondition { get; set;}
 
-		[RED("delayMain")] 		public CFloat DelayMain { get; set;}
+		[Ordinal(0)] [RED("("delayMain")] 		public CFloat DelayMain { get; set;}
 
-		[RED("time")] 		public CFloat Time { get; set;}
+		[Ordinal(0)] [RED("("time")] 		public CFloat Time { get; set;}
 
-		[RED("distToActors")] 		public CFloat DistToActors { get; set;}
+		[Ordinal(0)] [RED("("distToActors")] 		public CFloat DistToActors { get; set;}
 
-		[RED("manageGravity")] 		public CBool ManageGravity { get; set;}
+		[Ordinal(0)] [RED("("manageGravity")] 		public CBool ManageGravity { get; set;}
 
-		[RED("raiseEventName")] 		public CName RaiseEventName { get; set;}
+		[Ordinal(0)] [RED("("raiseEventName")] 		public CName RaiseEventName { get; set;}
 
-		[RED("fxName")] 		public CName FxName { get; set;}
+		[Ordinal(0)] [RED("("fxName")] 		public CName FxName { get; set;}
 
-		[RED("initialAppearance")] 		public CName InitialAppearance { get; set;}
+		[Ordinal(0)] [RED("("initialAppearance")] 		public CName InitialAppearance { get; set;}
 
-		[RED("setAppearanceTo")] 		public CName SetAppearanceTo { get; set;}
+		[Ordinal(0)] [RED("("setAppearanceTo")] 		public CName SetAppearanceTo { get; set;}
 
-		[RED("playFXOnAnimEvent")] 		public CBool PlayFXOnAnimEvent { get; set;}
+		[Ordinal(0)] [RED("("playFXOnAnimEvent")] 		public CBool PlayFXOnAnimEvent { get; set;}
 
-		[RED("animEventNameActivator")] 		public CName AnimEventNameActivator { get; set;}
+		[Ordinal(0)] [RED("("animEventNameActivator")] 		public CName AnimEventNameActivator { get; set;}
 
-		[RED("monitorGroundContact")] 		public CBool MonitorGroundContact { get; set;}
+		[Ordinal(0)] [RED("("monitorGroundContact")] 		public CBool MonitorGroundContact { get; set;}
 
-		[RED("dealDamageOnAnimEvent")] 		public CName DealDamageOnAnimEvent { get; set;}
+		[Ordinal(0)] [RED("("dealDamageOnAnimEvent")] 		public CName DealDamageOnAnimEvent { get; set;}
 
-		[RED("becomeVisibleOnAnimEvent")] 		public CName BecomeVisibleOnAnimEvent { get; set;}
+		[Ordinal(0)] [RED("("becomeVisibleOnAnimEvent")] 		public CName BecomeVisibleOnAnimEvent { get; set;}
 
-		[RED("tagToBeDamaged")] 		public CName TagToBeDamaged { get; set;}
+		[Ordinal(0)] [RED("("tagToBeDamaged")] 		public CName TagToBeDamaged { get; set;}
 
-		[RED("spawned")] 		public CBool Spawned { get; set;}
+		[Ordinal(0)] [RED("("spawned")] 		public CBool Spawned { get; set;}
 
-		[RED("canPlayHitAnim")] 		public CBool CanPlayHitAnim { get; set;}
+		[Ordinal(0)] [RED("("canPlayHitAnim")] 		public CBool CanPlayHitAnim { get; set;}
 
-		[RED("animEventOccured")] 		public CBool AnimEventOccured { get; set;}
+		[Ordinal(0)] [RED("("animEventOccured")] 		public CBool AnimEventOccured { get; set;}
 
-		[RED("isVisible")] 		public CBool IsVisible { get; set;}
+		[Ordinal(0)] [RED("("isVisible")] 		public CBool IsVisible { get; set;}
 
 		public CBTTaskSpawnAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

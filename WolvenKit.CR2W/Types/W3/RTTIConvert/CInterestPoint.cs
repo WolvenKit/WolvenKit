@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CInterestPoint : CObject
 	{
-		[RED("fieldName")] 		public CName FieldName { get; set;}
+		[Ordinal(0)] [RED("fieldName")] 		public CName FieldName { get; set;}
 
-		[RED("potentialField")] 		public CPtr<IPotentialField> PotentialField { get; set;}
+		[Ordinal(0)] [RED("potentialField")] 		public CPtr<IPotentialField> PotentialField { get; set;}
 
 		public CInterestPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

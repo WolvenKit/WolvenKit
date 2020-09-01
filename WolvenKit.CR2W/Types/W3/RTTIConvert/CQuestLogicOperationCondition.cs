@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestLogicOperationCondition : IQuestCondition
 	{
-		[RED("logicOperation")] 		public CEnum<ELogicOperation> LogicOperation { get; set;}
+		[Ordinal(0)] [RED("logicOperation")] 		public CEnum<ELogicOperation> LogicOperation { get; set;}
 
-		[RED("conditions", 2,0)] 		public CArray<CPtr<IQuestCondition>> Conditions { get; set;}
+		[Ordinal(0)] [RED("conditions", 2,0)] 		public CArray<CPtr<IQuestCondition>> Conditions { get; set;}
 
 		public CQuestLogicOperationCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

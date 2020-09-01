@@ -10,49 +10,49 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskFlashStep : IBehTreeTask
 	{
-		[RED("vanish")] 		public CBool Vanish { get; set;}
+		[Ordinal(0)] [RED("("vanish")] 		public CBool Vanish { get; set;}
 
-		[RED("disallowInPlayerFOV")] 		public CBool DisallowInPlayerFOV { get; set;}
+		[Ordinal(0)] [RED("("disallowInPlayerFOV")] 		public CBool DisallowInPlayerFOV { get; set;}
 
-		[RED("teleportOutsidePlayerFOV")] 		public CBool TeleportOutsidePlayerFOV { get; set;}
+		[Ordinal(0)] [RED("("teleportOutsidePlayerFOV")] 		public CBool TeleportOutsidePlayerFOV { get; set;}
 
-		[RED("alreadyTeleported")] 		public CBool AlreadyTeleported { get; set;}
+		[Ordinal(0)] [RED("("alreadyTeleported")] 		public CBool AlreadyTeleported { get; set;}
 
-		[RED("teleportType")] 		public CEnum<ETeleportType> TeleportType { get; set;}
+		[Ordinal(0)] [RED("("teleportType")] 		public CEnum<ETeleportType> TeleportType { get; set;}
 
-		[RED("disappearfxName")] 		public CName DisappearfxName { get; set;}
+		[Ordinal(0)] [RED("("disappearfxName")] 		public CName DisappearfxName { get; set;}
 
-		[RED("appearFXName")] 		public CName AppearFXName { get; set;}
+		[Ordinal(0)] [RED("("appearFXName")] 		public CName AppearFXName { get; set;}
 
-		[RED("emptyName")] 		public CName EmptyName { get; set;}
+		[Ordinal(0)] [RED("("emptyName")] 		public CName EmptyName { get; set;}
 
-		[RED("minDistance")] 		public CFloat MinDistance { get; set;}
+		[Ordinal(0)] [RED("("minDistance")] 		public CFloat MinDistance { get; set;}
 
-		[RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(0)] [RED("("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[RED("distFromLastTelePos")] 		public CFloat DistFromLastTelePos { get; set;}
+		[Ordinal(0)] [RED("("distFromLastTelePos")] 		public CFloat DistFromLastTelePos { get; set;}
 
-		[RED("cameraToPlayerDistance")] 		public CFloat CameraToPlayerDistance { get; set;}
+		[Ordinal(0)] [RED("("cameraToPlayerDistance")] 		public CFloat CameraToPlayerDistance { get; set;}
 
-		[RED("cooldown")] 		public CFloat Cooldown { get; set;}
+		[Ordinal(0)] [RED("("cooldown")] 		public CFloat Cooldown { get; set;}
 
-		[RED("isTeleporting")] 		public CBool IsTeleporting { get; set;}
+		[Ordinal(0)] [RED("("isTeleporting")] 		public CBool IsTeleporting { get; set;}
 
-		[RED("nextTeleTime")] 		public CFloat NextTeleTime { get; set;}
+		[Ordinal(0)] [RED("("nextTeleTime")] 		public CFloat NextTeleTime { get; set;}
 
-		[RED("angle")] 		public CFloat Angle { get; set;}
+		[Ordinal(0)] [RED("("angle")] 		public CFloat Angle { get; set;}
 
-		[RED("heading")] 		public Vector Heading { get; set;}
+		[Ordinal(0)] [RED("("heading")] 		public Vector Heading { get; set;}
 
-		[RED("lastTelePos")] 		public Vector LastTelePos { get; set;}
+		[Ordinal(0)] [RED("("lastTelePos")] 		public Vector LastTelePos { get; set;}
 
-		[RED("randVec")] 		public Vector RandVec { get; set;}
+		[Ordinal(0)] [RED("("randVec")] 		public Vector RandVec { get; set;}
 
-		[RED("whereTo")] 		public Vector WhereTo { get; set;}
+		[Ordinal(0)] [RED("("whereTo")] 		public Vector WhereTo { get; set;}
 
-		[RED("teleportEventName")] 		public CName TeleportEventName { get; set;}
+		[Ordinal(0)] [RED("("teleportEventName")] 		public CName TeleportEventName { get; set;}
 
-		[RED("behEventName")] 		public CName BehEventName { get; set;}
+		[Ordinal(0)] [RED("("behEventName")] 		public CName BehEventName { get; set;}
 
 		public CBTTaskFlashStep(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphIk3Node : CBehaviorGraphBaseNode
 	{
-		[RED("cachedValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedValueNode { get; set;}
+		[Ordinal(0)] [RED("("cachedValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedValueNode { get; set;}
 
-		[RED("cachedTargetPosNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetPosNode { get; set;}
+		[Ordinal(0)] [RED("("cachedTargetPosNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetPosNode { get; set;}
 
-		[RED("firstBone")] 		public CString FirstBone { get; set;}
+		[Ordinal(0)] [RED("("firstBone")] 		public CString FirstBone { get; set;}
 
-		[RED("secondBone")] 		public CString SecondBone { get; set;}
+		[Ordinal(0)] [RED("("secondBone")] 		public CString SecondBone { get; set;}
 
-		[RED("thirdBone")] 		public CString ThirdBone { get; set;}
+		[Ordinal(0)] [RED("("thirdBone")] 		public CString ThirdBone { get; set;}
 
-		[RED("endBone")] 		public CString EndBone { get; set;}
+		[Ordinal(0)] [RED("("endBone")] 		public CString EndBone { get; set;}
 
-		[RED("hingeAxis")] 		public CEnum<EAxis> HingeAxis { get; set;}
+		[Ordinal(0)] [RED("("hingeAxis")] 		public CEnum<EAxis> HingeAxis { get; set;}
 
 		public CBehaviorGraphIk3Node(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

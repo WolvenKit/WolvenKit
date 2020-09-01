@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphHeadingNode : CBehaviorGraphBaseNode
 	{
-		[RED("heading")] 		public CFloat Heading { get; set;}
+		[Ordinal(0)] [RED("("heading")] 		public CFloat Heading { get; set;}
 
 		public CBehaviorGraphHeadingNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

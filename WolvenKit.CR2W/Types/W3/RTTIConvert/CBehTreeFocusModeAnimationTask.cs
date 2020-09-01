@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeFocusModeAnimationTask : IBehTreeTask
 	{
-		[RED("isReady")] 		public CBool IsReady { get; set;}
+		[Ordinal(0)] [RED("isReady")] 		public CBool IsReady { get; set;}
 
-		[RED("hitAnimation")] 		public CName HitAnimation { get; set;}
+		[Ordinal(0)] [RED("hitAnimation")] 		public CName HitAnimation { get; set;}
 
 		public CBehTreeFocusModeAnimationTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

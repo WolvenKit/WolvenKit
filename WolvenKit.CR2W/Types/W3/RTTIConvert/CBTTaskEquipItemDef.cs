@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskEquipItemDef : IBehTreeTaskDefinition
 	{
-		[RED("itemCategory")] 		public CName ItemCategory { get; set;}
+		[Ordinal(0)] [RED("("itemCategory")] 		public CName ItemCategory { get; set;}
 
 		public CBTTaskEquipItemDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

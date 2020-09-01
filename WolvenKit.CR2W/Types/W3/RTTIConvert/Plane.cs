@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class Plane : CVariable
 	{
-		[RED("NormalDistance")] 		public Vector NormalDistance { get; set;}
+		[Ordinal(0)] [RED("NormalDistance")] 		public Vector NormalDistance { get; set;}
 
 		public Plane(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

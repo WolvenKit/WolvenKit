@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFormationSteerToSlotSteeringTask : IFormationFragmentarySteeringTask
 	{
-		[RED("speedImportance")] 		public CFloat SpeedImportance { get; set;}
+		[Ordinal(0)] [RED("("speedImportance")] 		public CFloat SpeedImportance { get; set;}
 
 		public CFormationSteerToSlotSteeringTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

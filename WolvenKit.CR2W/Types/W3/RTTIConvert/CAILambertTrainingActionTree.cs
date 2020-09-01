@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAILambertTrainingActionTree : IAICustomActionTree
 	{
-		[RED("holdPositionTag")] 		public CName HoldPositionTag { get; set;}
+		[Ordinal(0)] [RED("holdPositionTag")] 		public CName HoldPositionTag { get; set;}
 
-		[RED("maxDistanceToHoldGroundPosition")] 		public CFloat MaxDistanceToHoldGroundPosition { get; set;}
+		[Ordinal(0)] [RED("maxDistanceToHoldGroundPosition")] 		public CFloat MaxDistanceToHoldGroundPosition { get; set;}
 
 		public CAILambertTrainingActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

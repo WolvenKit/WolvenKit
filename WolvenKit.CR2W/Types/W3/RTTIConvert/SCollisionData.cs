@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCollisionData : CVariable
 	{
-		[RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
+		[Ordinal(0)] [RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
 
-		[RED("point")] 		public Vector Point { get; set;}
+		[Ordinal(0)] [RED("point")] 		public Vector Point { get; set;}
 
-		[RED("normal")] 		public Vector Normal { get; set;}
+		[Ordinal(0)] [RED("normal")] 		public Vector Normal { get; set;}
 
 		public SCollisionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

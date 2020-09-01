@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3CraftsmanComponent : W3MerchantComponent
 	{
-		[RED("craftsmanData", 2,0)] 		public CArray<SCraftsman> CraftsmanData { get; set;}
+		[Ordinal(0)] [RED("("craftsmanData", 2,0)] 		public CArray<SCraftsman> CraftsmanData { get; set;}
 
 		public W3CraftsmanComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

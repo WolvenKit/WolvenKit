@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSelectedQuickslotItem : CVariable
 	{
-		[RED("sourceName")] 		public CName SourceName { get; set;}
+		[Ordinal(0)] [RED("("sourceName")] 		public CName SourceName { get; set;}
 
-		[RED("itemID")] 		public SItemUniqueId ItemID { get; set;}
+		[Ordinal(0)] [RED("("itemID")] 		public SItemUniqueId ItemID { get; set;}
 
 		public SSelectedQuickslotItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SLensFlareGroupsParameters : CVariable
 	{
-		[RED("default")] 		public SLensFlareParameters Default { get; set;}
+		[Ordinal(0)] [RED("("default")] 		public SLensFlareParameters Default { get; set;}
 
-		[RED("sun")] 		public SLensFlareParameters Sun { get; set;}
+		[Ordinal(0)] [RED("("sun")] 		public SLensFlareParameters Sun { get; set;}
 
-		[RED("moon")] 		public SLensFlareParameters Moon { get; set;}
+		[Ordinal(0)] [RED("("moon")] 		public SLensFlareParameters Moon { get; set;}
 
-		[RED("custom0")] 		public SLensFlareParameters Custom0 { get; set;}
+		[Ordinal(0)] [RED("("custom0")] 		public SLensFlareParameters Custom0 { get; set;}
 
-		[RED("custom1")] 		public SLensFlareParameters Custom1 { get; set;}
+		[Ordinal(0)] [RED("("custom1")] 		public SLensFlareParameters Custom1 { get; set;}
 
-		[RED("custom2")] 		public SLensFlareParameters Custom2 { get; set;}
+		[Ordinal(0)] [RED("("custom2")] 		public SLensFlareParameters Custom2 { get; set;}
 
-		[RED("custom3")] 		public SLensFlareParameters Custom3 { get; set;}
+		[Ordinal(0)] [RED("("custom3")] 		public SLensFlareParameters Custom3 { get; set;}
 
-		[RED("custom4")] 		public SLensFlareParameters Custom4 { get; set;}
+		[Ordinal(0)] [RED("("custom4")] 		public SLensFlareParameters Custom4 { get; set;}
 
-		[RED("custom5")] 		public SLensFlareParameters Custom5 { get; set;}
+		[Ordinal(0)] [RED("("custom5")] 		public SLensFlareParameters Custom5 { get; set;}
 
 		public SLensFlareGroupsParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

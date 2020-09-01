@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockShiftColorRB : CMaterialBlock
 	{
-		[RED("colorThresholdLow")] 		public CFloat ColorThresholdLow { get; set;}
+		[Ordinal(0)] [RED("colorThresholdLow")] 		public CFloat ColorThresholdLow { get; set;}
 
-		[RED("colorThresholdHigh")] 		public CFloat ColorThresholdHigh { get; set;}
+		[Ordinal(0)] [RED("colorThresholdHigh")] 		public CFloat ColorThresholdHigh { get; set;}
 
-		[RED("satThresholdLow")] 		public CFloat SatThresholdLow { get; set;}
+		[Ordinal(0)] [RED("satThresholdLow")] 		public CFloat SatThresholdLow { get; set;}
 
-		[RED("satThresholdHigh")] 		public CFloat SatThresholdHigh { get; set;}
+		[Ordinal(0)] [RED("satThresholdHigh")] 		public CFloat SatThresholdHigh { get; set;}
 
 		public CMaterialBlockShiftColorRB(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

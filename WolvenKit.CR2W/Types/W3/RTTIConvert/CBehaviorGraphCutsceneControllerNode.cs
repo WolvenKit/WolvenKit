@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphCutsceneControllerNode : CBehaviorGraphAnimationNode
 	{
-		[RED("cachedBaseInputNode")] 		public CPtr<CBehaviorGraphNode> CachedBaseInputNode { get; set;}
+		[Ordinal(0)] [RED("("cachedBaseInputNode")] 		public CPtr<CBehaviorGraphNode> CachedBaseInputNode { get; set;}
 
-		[RED("mimicControl")] 		public CBool MimicControl { get; set;}
+		[Ordinal(0)] [RED("("mimicControl")] 		public CBool MimicControl { get; set;}
 
 		public CBehaviorGraphCutsceneControllerNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

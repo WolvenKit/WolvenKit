@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskWraithDrainDance : CBTTaskPlayAnimationEventDecorator
 	{
-		[RED("drainDistance")] 		public CFloat DrainDistance { get; set;}
+		[Ordinal(0)] [RED("("drainDistance")] 		public CFloat DrainDistance { get; set;}
 
-		[RED("drainTemplate")] 		public CHandle<CEntityTemplate> DrainTemplate { get; set;}
+		[Ordinal(0)] [RED("("drainTemplate")] 		public CHandle<CEntityTemplate> DrainTemplate { get; set;}
 
-		[RED("m_isDraining")] 		public CBool M_isDraining { get; set;}
+		[Ordinal(0)] [RED("("m_isDraining")] 		public CBool M_isDraining { get; set;}
 
-		[RED("m_DrainEffectEntity")] 		public CHandle<CEntity> M_DrainEffectEntity { get; set;}
+		[Ordinal(0)] [RED("("m_DrainEffectEntity")] 		public CHandle<CEntity> M_DrainEffectEntity { get; set;}
 
-		[RED("m_Disappeared")] 		public CBool M_Disappeared { get; set;}
+		[Ordinal(0)] [RED("("m_Disappeared")] 		public CBool M_Disappeared { get; set;}
 
 		public CBTTaskWraithDrainDance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

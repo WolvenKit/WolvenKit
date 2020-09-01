@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCookingSchematic : CVariable
 	{
-		[RED("cookedItemName")] 		public CName CookedItemName { get; set;}
+		[Ordinal(0)] [RED("("cookedItemName")] 		public CName CookedItemName { get; set;}
 
-		[RED("cookedItemQuantity")] 		public CInt32 CookedItemQuantity { get; set;}
+		[Ordinal(0)] [RED("("cookedItemQuantity")] 		public CInt32 CookedItemQuantity { get; set;}
 
-		[RED("ingredients", 2,0)] 		public CArray<SItemParts> Ingredients { get; set;}
+		[Ordinal(0)] [RED("("ingredients", 2,0)] 		public CArray<SItemParts> Ingredients { get; set;}
 
-		[RED("schemName")] 		public CName SchemName { get; set;}
+		[Ordinal(0)] [RED("("schemName")] 		public CName SchemName { get; set;}
 
 		public SCookingSchematic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

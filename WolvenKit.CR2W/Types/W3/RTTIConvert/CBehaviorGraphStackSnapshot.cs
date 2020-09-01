@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphStackSnapshot : CObject
 	{
-		[RED("instanceSnapshots", 2,0)] 		public CArray<CPtr<CBehaviorGraphInstanceSnapshot>> InstanceSnapshots { get; set;}
+		[Ordinal(0)] [RED("instanceSnapshots", 2,0)] 		public CArray<CPtr<CBehaviorGraphInstanceSnapshot>> InstanceSnapshots { get; set;}
 
 		public CBehaviorGraphStackSnapshot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

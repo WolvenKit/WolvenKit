@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGraphConnection : ISerializable
 	{
-		[RED("source")] 		public CPtr<CGraphSocket> Source { get; set;}
+		[Ordinal(0)] [RED("("source")] 		public CPtr<CGraphSocket> Source { get; set;}
 
-		[RED("destination")] 		public CPtr<CGraphSocket> Destination { get; set;}
+		[Ordinal(0)] [RED("("destination")] 		public CPtr<CGraphSocket> Destination { get; set;}
 
-		[RED("inactive")] 		public CBool Inactive { get; set;}
+		[Ordinal(0)] [RED("("inactive")] 		public CBool Inactive { get; set;}
 
 		public CGraphConnection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModExampleEntity : CEntity
 	{
-		[RED("counter")] 		public CInt32 Counter { get; set;}
+		[Ordinal(0)] [RED("("counter")] 		public CInt32 Counter { get; set;}
 
 		public CModExampleEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

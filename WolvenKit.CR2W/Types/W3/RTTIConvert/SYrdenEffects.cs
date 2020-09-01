@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SYrdenEffects : CVariable
 	{
-		[RED("castEffect")] 		public CName CastEffect { get; set;}
+		[Ordinal(0)] [RED("("castEffect")] 		public CName CastEffect { get; set;}
 
-		[RED("placeEffect")] 		public CName PlaceEffect { get; set;}
+		[Ordinal(0)] [RED("("placeEffect")] 		public CName PlaceEffect { get; set;}
 
-		[RED("shootEffect")] 		public CName ShootEffect { get; set;}
+		[Ordinal(0)] [RED("("shootEffect")] 		public CName ShootEffect { get; set;}
 
-		[RED("activateEffect")] 		public CName ActivateEffect { get; set;}
+		[Ordinal(0)] [RED("("activateEffect")] 		public CName ActivateEffect { get; set;}
 
 		public SYrdenEffects(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

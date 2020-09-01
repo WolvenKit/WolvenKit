@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFXTrackItemBrightnessTint : CFXTrackItemCurveBase
 	{
-		[RED("color")] 		public CColor Color { get; set;}
+		[Ordinal(0)] [RED("color")] 		public CColor Color { get; set;}
 
-		[RED("range")] 		public CFloat Range { get; set;}
+		[Ordinal(0)] [RED("range")] 		public CFloat Range { get; set;}
 
 		public CFXTrackItemBrightnessTint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

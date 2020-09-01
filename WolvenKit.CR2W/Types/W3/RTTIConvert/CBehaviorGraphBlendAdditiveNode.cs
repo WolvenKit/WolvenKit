@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphBlendAdditiveNode : CBehaviorGraphNode
 	{
-		[RED("type")] 		public CEnum<EAdditiveType> Type { get; set;}
+		[Ordinal(0)] [RED("("type")] 		public CEnum<EAdditiveType> Type { get; set;}
 
-		[RED("synchronize")] 		public CBool Synchronize { get; set;}
+		[Ordinal(0)] [RED("("synchronize")] 		public CBool Synchronize { get; set;}
 
-		[RED("syncMethod")] 		public CPtr<IBehaviorSyncMethod> SyncMethod { get; set;}
+		[Ordinal(0)] [RED("("syncMethod")] 		public CPtr<IBehaviorSyncMethod> SyncMethod { get; set;}
 
-		[RED("biasValue")] 		public CFloat BiasValue { get; set;}
+		[Ordinal(0)] [RED("("biasValue")] 		public CFloat BiasValue { get; set;}
 
-		[RED("scaleValue")] 		public CFloat ScaleValue { get; set;}
+		[Ordinal(0)] [RED("("scaleValue")] 		public CFloat ScaleValue { get; set;}
 
-		[RED("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
+		[Ordinal(0)] [RED("("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
 
-		[RED("cachedAddedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedAddedInputNode { get; set;}
+		[Ordinal(0)] [RED("("cachedAddedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedAddedInputNode { get; set;}
 
-		[RED("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
+		[Ordinal(0)] [RED("("cachedControlVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode { get; set;}
 
 		public CBehaviorGraphBlendAdditiveNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardAsset : CObject
 	{
-		[RED("id")] 		public CString Id { get; set;}
+		[Ordinal(0)] [RED("("id")] 		public CString Id { get; set;}
 
-		[RED("shotSettings")] 		public SStoryBoardShotAssetSettings ShotSettings { get; set;}
+		[Ordinal(0)] [RED("("shotSettings")] 		public SStoryBoardShotAssetSettings ShotSettings { get; set;}
 
-		[RED("templatePath")] 		public CString TemplatePath { get; set;}
+		[Ordinal(0)] [RED("("templatePath")] 		public CString TemplatePath { get; set;}
 
-		[RED("assetname")] 		public CString Assetname { get; set;}
+		[Ordinal(0)] [RED("("assetname")] 		public CString Assetname { get; set;}
 
-		[RED("userSetName")] 		public CBool UserSetName { get; set;}
+		[Ordinal(0)] [RED("("userSetName")] 		public CBool UserSetName { get; set;}
 
-		[RED("defaultPlacement")] 		public SStoryBoardPlacementSettings DefaultPlacement { get; set;}
+		[Ordinal(0)] [RED("("defaultPlacement")] 		public SStoryBoardPlacementSettings DefaultPlacement { get; set;}
 
-		[RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
+		[Ordinal(0)] [RED("("entity")] 		public CHandle<CEntity> Entity { get; set;}
 
-		[RED("needsRespawn")] 		public CBool NeedsRespawn { get; set;}
+		[Ordinal(0)] [RED("("needsRespawn")] 		public CBool NeedsRespawn { get; set;}
 
 		public CModStoryBoardAsset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

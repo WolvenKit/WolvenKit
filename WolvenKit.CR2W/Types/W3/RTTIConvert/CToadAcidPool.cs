@@ -10,39 +10,39 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CToadAcidPool : CInteractiveEntity
 	{
-		[RED("poisonDamage")] 		public SAbilityAttributeValue PoisonDamage { get; set;}
+		[Ordinal(0)] [RED("poisonDamage")] 		public SAbilityAttributeValue PoisonDamage { get; set;}
 
-		[RED("fxOnSpawn")] 		public CName FxOnSpawn { get; set;}
+		[Ordinal(0)] [RED("fxOnSpawn")] 		public CName FxOnSpawn { get; set;}
 
-		[RED("immunityFact")] 		public CString ImmunityFact { get; set;}
+		[Ordinal(0)] [RED("immunityFact")] 		public CString ImmunityFact { get; set;}
 
-		[RED("despawnTimer")] 		public CFloat DespawnTimer { get; set;}
+		[Ordinal(0)] [RED("despawnTimer")] 		public CFloat DespawnTimer { get; set;}
 
-		[RED("damageVal")] 		public CFloat DamageVal { get; set;}
+		[Ordinal(0)] [RED("damageVal")] 		public CFloat DamageVal { get; set;}
 
-		[RED("explosionRange")] 		public CFloat ExplosionRange { get; set;}
+		[Ordinal(0)] [RED("explosionRange")] 		public CFloat ExplosionRange { get; set;}
 
-		[RED("destroyTimer")] 		public CFloat DestroyTimer { get; set;}
+		[Ordinal(0)] [RED("destroyTimer")] 		public CFloat DestroyTimer { get; set;}
 
-		[RED("settled")] 		public CBool Settled { get; set;}
+		[Ordinal(0)] [RED("settled")] 		public CBool Settled { get; set;}
 
-		[RED("victim")] 		public CHandle<CActor> Victim { get; set;}
+		[Ordinal(0)] [RED("victim")] 		public CHandle<CActor> Victim { get; set;}
 
-		[RED("victims", 2,0)] 		public CArray<CHandle<CActor>> Victims { get; set;}
+		[Ordinal(0)] [RED("victims", 2,0)] 		public CArray<CHandle<CActor>> Victims { get; set;}
 
-		[RED("poisonArea")] 		public CHandle<CTriggerAreaComponent> PoisonArea { get; set;}
+		[Ordinal(0)] [RED("poisonArea")] 		public CHandle<CTriggerAreaComponent> PoisonArea { get; set;}
 
-		[RED("buffParams")] 		public SCustomEffectParams BuffParams { get; set;}
+		[Ordinal(0)] [RED("buffParams")] 		public SCustomEffectParams BuffParams { get; set;}
 
-		[RED("damage")] 		public CHandle<W3DamageAction> Damage { get; set;}
+		[Ordinal(0)] [RED("damage")] 		public CHandle<W3DamageAction> Damage { get; set;}
 
-		[RED("entitiesInRange", 2,0)] 		public CArray<CHandle<CGameplayEntity>> EntitiesInRange { get; set;}
+		[Ordinal(0)] [RED("entitiesInRange", 2,0)] 		public CArray<CHandle<CGameplayEntity>> EntitiesInRange { get; set;}
 
-		[RED("targetEntity")] 		public CHandle<CActor> TargetEntity { get; set;}
+		[Ordinal(0)] [RED("targetEntity")] 		public CHandle<CActor> TargetEntity { get; set;}
 
-		[RED("fxStartTime")] 		public CFloat FxStartTime { get; set;}
+		[Ordinal(0)] [RED("fxStartTime")] 		public CFloat FxStartTime { get; set;}
 
-		[RED("hasExploded")] 		public CBool HasExploded { get; set;}
+		[Ordinal(0)] [RED("hasExploded")] 		public CBool HasExploded { get; set;}
 
 		public CToadAcidPool(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,29 +10,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDismembermentWound : ISerializable
 	{
-		[RED("name")] 		public CName Name { get; set;}
+		[Ordinal(0)] [RED("("name")] 		public CName Name { get; set;}
 
-		[RED("disabledOnAppearances", 2,0)] 		public CArray<CName> DisabledOnAppearances { get; set;}
+		[Ordinal(0)] [RED("("disabledOnAppearances", 2,0)] 		public CArray<CName> DisabledOnAppearances { get; set;}
 
-		[RED("transform")] 		public EngineTransform Transform { get; set;}
+		[Ordinal(0)] [RED("("transform")] 		public EngineTransform Transform { get; set;}
 
-		[RED("excludeTag")] 		public CName ExcludeTag { get; set;}
+		[Ordinal(0)] [RED("("excludeTag")] 		public CName ExcludeTag { get; set;}
 
-		[RED("fillMesh")] 		public CHandle<CMesh> FillMesh { get; set;}
+		[Ordinal(0)] [RED("("fillMesh")] 		public CHandle<CMesh> FillMesh { get; set;}
 
-		[RED("singleSpawnArray", 2,0)] 		public CArray<SDismembermentWoundSingleSpawn> SingleSpawnArray { get; set;}
+		[Ordinal(0)] [RED("("singleSpawnArray", 2,0)] 		public CArray<SDismembermentWoundSingleSpawn> SingleSpawnArray { get; set;}
 
-		[RED("particles")] 		public CSoft<CParticleSystem> Particles { get; set;}
+		[Ordinal(0)] [RED("("particles")] 		public CSoft<CParticleSystem> Particles { get; set;}
 
-		[RED("attachedParticles")] 		public CSoft<CParticleSystem> AttachedParticles { get; set;}
+		[Ordinal(0)] [RED("("attachedParticles")] 		public CSoft<CParticleSystem> AttachedParticles { get; set;}
 
-		[RED("isExplosionWound")] 		public CBool IsExplosionWound { get; set;}
+		[Ordinal(0)] [RED("("isExplosionWound")] 		public CBool IsExplosionWound { get; set;}
 
-		[RED("isFrostWound")] 		public CBool IsFrostWound { get; set;}
+		[Ordinal(0)] [RED("("isFrostWound")] 		public CBool IsFrostWound { get; set;}
 
-		[RED("decal")] 		public SDismembermentWoundDecal Decal { get; set;}
+		[Ordinal(0)] [RED("("decal")] 		public SDismembermentWoundDecal Decal { get; set;}
 
-		[RED("mainEntityCurveName")] 		public CName MainEntityCurveName { get; set;}
+		[Ordinal(0)] [RED("("mainEntityCurveName")] 		public CName MainEntityCurveName { get; set;}
 
 		public CDismembermentWound(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

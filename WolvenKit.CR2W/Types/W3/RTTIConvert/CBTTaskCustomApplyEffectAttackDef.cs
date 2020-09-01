@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCustomApplyEffectAttackDef : CBTTaskAttackDef
 	{
-		[RED("applyEffectInterval")] 		public CFloat ApplyEffectInterval { get; set;}
+		[Ordinal(0)] [RED("("applyEffectInterval")] 		public CFloat ApplyEffectInterval { get; set;}
 
-		[RED("activateOnAnimEvent")] 		public CName ActivateOnAnimEvent { get; set;}
+		[Ordinal(0)] [RED("("activateOnAnimEvent")] 		public CName ActivateOnAnimEvent { get; set;}
 
 		public CBTTaskCustomApplyEffectAttackDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

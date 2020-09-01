@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIAttackBehaviorTreeParams : CAICombatActionParameters
 	{
-		[RED("chargeAction")] 		public CBool ChargeAction { get; set;}
+		[Ordinal(0)] [RED("chargeAction")] 		public CBool ChargeAction { get; set;}
 
-		[RED("approachAction")] 		public CBool ApproachAction { get; set;}
+		[Ordinal(0)] [RED("approachAction")] 		public CBool ApproachAction { get; set;}
 
-		[RED("throwBomb")] 		public CBool ThrowBomb { get; set;}
+		[Ordinal(0)] [RED("throwBomb")] 		public CBool ThrowBomb { get; set;}
 
-		[RED("teleportAction")] 		public CBool TeleportAction { get; set;}
+		[Ordinal(0)] [RED("teleportAction")] 		public CBool TeleportAction { get; set;}
 
-		[RED("attackAction")] 		public CHandle<CAIAttackActionTree> AttackAction { get; set;}
+		[Ordinal(0)] [RED("attackAction")] 		public CHandle<CAIAttackActionTree> AttackAction { get; set;}
 
-		[RED("attackActionRange")] 		public CName AttackActionRange { get; set;}
+		[Ordinal(0)] [RED("attackActionRange")] 		public CName AttackActionRange { get; set;}
 
-		[RED("farAttackAction")] 		public CHandle<CAIAttackActionTree> FarAttackAction { get; set;}
+		[Ordinal(0)] [RED("farAttackAction")] 		public CHandle<CAIAttackActionTree> FarAttackAction { get; set;}
 
-		[RED("farAttackActionRange")] 		public CName FarAttackActionRange { get; set;}
+		[Ordinal(0)] [RED("farAttackActionRange")] 		public CName FarAttackActionRange { get; set;}
 
 		public CAIAttackBehaviorTreeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

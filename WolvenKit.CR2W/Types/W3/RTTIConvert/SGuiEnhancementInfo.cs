@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SGuiEnhancementInfo : CVariable
 	{
-		[RED("enhancedItem")] 		public CName EnhancedItem { get; set;}
+		[Ordinal(0)] [RED("("enhancedItem")] 		public CName EnhancedItem { get; set;}
 
-		[RED("enhancement")] 		public CName Enhancement { get; set;}
+		[Ordinal(0)] [RED("("enhancement")] 		public CName Enhancement { get; set;}
 
-		[RED("oilItem")] 		public CName OilItem { get; set;}
+		[Ordinal(0)] [RED("("oilItem")] 		public CName OilItem { get; set;}
 
-		[RED("oil")] 		public CName Oil { get; set;}
+		[Ordinal(0)] [RED("("oil")] 		public CName Oil { get; set;}
 
-		[RED("dyeItem")] 		public CName DyeItem { get; set;}
+		[Ordinal(0)] [RED("("dyeItem")] 		public CName DyeItem { get; set;}
 
-		[RED("dye")] 		public CName Dye { get; set;}
+		[Ordinal(0)] [RED("("dye")] 		public CName Dye { get; set;}
 
-		[RED("dyeColor")] 		public CInt32 DyeColor { get; set;}
+		[Ordinal(0)] [RED("("dyeColor")] 		public CInt32 DyeColor { get; set;}
 
 		public SGuiEnhancementInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

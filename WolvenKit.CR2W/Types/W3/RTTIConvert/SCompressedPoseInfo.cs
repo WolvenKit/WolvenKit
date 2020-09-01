@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCompressedPoseInfo : CVariable
 	{
-		[RED("name")] 		public CName Name { get; set;}
+		[Ordinal(0)] [RED("("name")] 		public CName Name { get; set;}
 
-		[RED("animation")] 		public CName Animation { get; set;}
+		[Ordinal(0)] [RED("("animation")] 		public CName Animation { get; set;}
 
-		[RED("time")] 		public CFloat Time { get; set;}
+		[Ordinal(0)] [RED("("time")] 		public CFloat Time { get; set;}
 
 		public SCompressedPoseInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestActorCondition : IQuestCondition
 	{
-		[RED("actorTag")] 		public CName ActorTag { get; set;}
+		[Ordinal(0)] [RED("actorTag")] 		public CName ActorTag { get; set;}
 
-		[RED("checkType")] 		public CPtr<IActorConditionType> CheckType { get; set;}
+		[Ordinal(0)] [RED("checkType")] 		public CPtr<IActorConditionType> CheckType { get; set;}
 
 		public CQuestActorCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

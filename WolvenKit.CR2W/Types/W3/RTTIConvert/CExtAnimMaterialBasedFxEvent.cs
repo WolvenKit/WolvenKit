@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimMaterialBasedFxEvent : CExtAnimEvent
 	{
-		[RED("bone")] 		public CName Bone { get; set;}
+		[Ordinal(0)] [RED("("bone")] 		public CName Bone { get; set;}
 
-		[RED("vfxKickup")] 		public CBool VfxKickup { get; set;}
+		[Ordinal(0)] [RED("("vfxKickup")] 		public CBool VfxKickup { get; set;}
 
-		[RED("vfxFootstep")] 		public CBool VfxFootstep { get; set;}
+		[Ordinal(0)] [RED("("vfxFootstep")] 		public CBool VfxFootstep { get; set;}
 
 		public CExtAnimMaterialBasedFxEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

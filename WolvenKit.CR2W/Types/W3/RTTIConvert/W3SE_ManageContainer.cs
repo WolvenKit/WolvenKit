@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SE_ManageContainer : W3SwitchEvent
 	{
-		[RED("containersTag")] 		public CName ContainersTag { get; set;}
+		[Ordinal(0)] [RED("("containersTag")] 		public CName ContainersTag { get; set;}
 
-		[RED("containerEnabled")] 		public CBool ContainerEnabled { get; set;}
+		[Ordinal(0)] [RED("("containerEnabled")] 		public CBool ContainerEnabled { get; set;}
 
 		public W3SE_ManageContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

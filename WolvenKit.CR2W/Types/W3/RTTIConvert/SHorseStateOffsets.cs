@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SHorseStateOffsets : CVariable
 	{
-		[RED("speedValue")] 		public CFloat SpeedValue { get; set;}
+		[Ordinal(0)] [RED("("speedValue")] 		public CFloat SpeedValue { get; set;}
 
-		[RED("maxValue")] 		public CFloat MaxValue { get; set;}
+		[Ordinal(0)] [RED("("maxValue")] 		public CFloat MaxValue { get; set;}
 
-		[RED("legFY")] 		public CFloat LegFY { get; set;}
+		[Ordinal(0)] [RED("("legFY")] 		public CFloat LegFY { get; set;}
 
-		[RED("legFZ")] 		public CFloat LegFZ { get; set;}
+		[Ordinal(0)] [RED("("legFZ")] 		public CFloat LegFZ { get; set;}
 
-		[RED("legBY")] 		public CFloat LegBY { get; set;}
+		[Ordinal(0)] [RED("("legBY")] 		public CFloat LegBY { get; set;}
 
-		[RED("legBZ")] 		public CFloat LegBZ { get; set;}
+		[Ordinal(0)] [RED("("legBZ")] 		public CFloat LegBZ { get; set;}
 
-		[RED("pelvisY")] 		public CFloat PelvisY { get; set;}
+		[Ordinal(0)] [RED("("pelvisY")] 		public CFloat PelvisY { get; set;}
 
-		[RED("pelvisZ")] 		public CFloat PelvisZ { get; set;}
+		[Ordinal(0)] [RED("("pelvisZ")] 		public CFloat PelvisZ { get; set;}
 
-		[RED("headFirstAngle")] 		public CFloat HeadFirstAngle { get; set;}
+		[Ordinal(0)] [RED("("headFirstAngle")] 		public CFloat HeadFirstAngle { get; set;}
 
-		[RED("headSecondAngle")] 		public CFloat HeadSecondAngle { get; set;}
+		[Ordinal(0)] [RED("("headSecondAngle")] 		public CFloat HeadSecondAngle { get; set;}
 
-		[RED("headThirdAngle")] 		public CFloat HeadThirdAngle { get; set;}
+		[Ordinal(0)] [RED("("headThirdAngle")] 		public CFloat HeadThirdAngle { get; set;}
 
 		public SHorseStateOffsets(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

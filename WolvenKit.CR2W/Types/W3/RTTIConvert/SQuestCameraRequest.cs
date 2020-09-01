@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SQuestCameraRequest : CVariable
 	{
-		[RED("requestYaw")] 		public CBool RequestYaw { get; set;}
+		[Ordinal(0)] [RED("("requestYaw")] 		public CBool RequestYaw { get; set;}
 
-		[RED("yaw")] 		public CFloat Yaw { get; set;}
+		[Ordinal(0)] [RED("("yaw")] 		public CFloat Yaw { get; set;}
 
-		[RED("requestPitch")] 		public CBool RequestPitch { get; set;}
+		[Ordinal(0)] [RED("("requestPitch")] 		public CBool RequestPitch { get; set;}
 
-		[RED("pitch")] 		public CFloat Pitch { get; set;}
+		[Ordinal(0)] [RED("("pitch")] 		public CFloat Pitch { get; set;}
 
-		[RED("lookAtTag")] 		public CName LookAtTag { get; set;}
+		[Ordinal(0)] [RED("("lookAtTag")] 		public CName LookAtTag { get; set;}
 
-		[RED("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(0)] [RED("("duration")] 		public CFloat Duration { get; set;}
 
-		[RED("requestTimeStamp")] 		public CFloat RequestTimeStamp { get; set;}
+		[Ordinal(0)] [RED("("requestTimeStamp")] 		public CFloat RequestTimeStamp { get; set;}
 
 		public SQuestCameraRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

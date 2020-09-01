@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskRiderAdjustToHorse : IBehTreeTask
 	{
-		[RED("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
+		[Ordinal(0)] [RED("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
 
-		[RED("ticket")] 		public SMovementAdjustmentRequestTicket Ticket { get; set;}
+		[Ordinal(0)] [RED("ticket")] 		public SMovementAdjustmentRequestTicket Ticket { get; set;}
 
 		public CBTTaskRiderAdjustToHorse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

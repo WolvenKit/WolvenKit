@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4GlossaryMenu : CR4ListBaseMenu
 	{
-		[RED("allEntries", 2,0)] 		public CArray<CHandle<CJournalGlossaryGroup>> AllEntries { get; set;}
+		[Ordinal(0)] [RED("("allEntries", 2,0)] 		public CArray<CHandle<CJournalGlossaryGroup>> AllEntries { get; set;}
 
 		public CR4GlossaryMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

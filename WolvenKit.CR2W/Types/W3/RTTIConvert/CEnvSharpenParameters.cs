@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvSharpenParameters : CVariable
 	{
-		[RED("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(0)] [RED("("activated")] 		public CBool Activated { get; set;}
 
-		[RED("sharpenNear")] 		public SSimpleCurve SharpenNear { get; set;}
+		[Ordinal(0)] [RED("("sharpenNear")] 		public SSimpleCurve SharpenNear { get; set;}
 
-		[RED("sharpenFar")] 		public SSimpleCurve SharpenFar { get; set;}
+		[Ordinal(0)] [RED("("sharpenFar")] 		public SSimpleCurve SharpenFar { get; set;}
 
-		[RED("distanceNear")] 		public SSimpleCurve DistanceNear { get; set;}
+		[Ordinal(0)] [RED("("distanceNear")] 		public SSimpleCurve DistanceNear { get; set;}
 
-		[RED("distanceFar")] 		public SSimpleCurve DistanceFar { get; set;}
+		[Ordinal(0)] [RED("("distanceFar")] 		public SSimpleCurve DistanceFar { get; set;}
 
-		[RED("lumFilterOffset")] 		public SSimpleCurve LumFilterOffset { get; set;}
+		[Ordinal(0)] [RED("("lumFilterOffset")] 		public SSimpleCurve LumFilterOffset { get; set;}
 
-		[RED("lumFilterRange")] 		public SSimpleCurve LumFilterRange { get; set;}
+		[Ordinal(0)] [RED("("lumFilterRange")] 		public SSimpleCurve LumFilterRange { get; set;}
 
 		public CEnvSharpenParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

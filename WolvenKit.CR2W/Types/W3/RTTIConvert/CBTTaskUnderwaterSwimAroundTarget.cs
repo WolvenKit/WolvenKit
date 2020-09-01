@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskUnderwaterSwimAroundTarget : CBTTaskVolumetricMove
 	{
-		[RED("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(0)] [RED("distance")] 		public CFloat Distance { get; set;}
 
-		[RED("frontalHeadingOffset")] 		public CInt32 FrontalHeadingOffset { get; set;}
+		[Ordinal(0)] [RED("frontalHeadingOffset")] 		public CInt32 FrontalHeadingOffset { get; set;}
 
-		[RED("randomFactor")] 		public CInt32 RandomFactor { get; set;}
+		[Ordinal(0)] [RED("randomFactor")] 		public CInt32 RandomFactor { get; set;}
 
-		[RED("randomHeightAmplitude")] 		public CFloat RandomHeightAmplitude { get; set;}
+		[Ordinal(0)] [RED("randomHeightAmplitude")] 		public CFloat RandomHeightAmplitude { get; set;}
 
-		[RED("minimumWaterDepth")] 		public CFloat MinimumWaterDepth { get; set;}
+		[Ordinal(0)] [RED("minimumWaterDepth")] 		public CFloat MinimumWaterDepth { get; set;}
 
-		[RED("useActionTarget")] 		public CBool UseActionTarget { get; set;}
+		[Ordinal(0)] [RED("useActionTarget")] 		public CBool UseActionTarget { get; set;}
 
-		[RED("maxProximityToSurface")] 		public CFloat MaxProximityToSurface { get; set;}
+		[Ordinal(0)] [RED("maxProximityToSurface")] 		public CFloat MaxProximityToSurface { get; set;}
 
 		public CBTTaskUnderwaterSwimAroundTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskWasInCriticalState : IBehTreeTask
 	{
-		[RED("timeDifference")] 		public CFloat TimeDifference { get; set;}
+		[Ordinal(0)] [RED("("timeDifference")] 		public CFloat TimeDifference { get; set;}
 
-		[RED("maxTimeDifference")] 		public CFloat MaxTimeDifference { get; set;}
+		[Ordinal(0)] [RED("("maxTimeDifference")] 		public CFloat MaxTimeDifference { get; set;}
 
-		[RED("criticalState")] 		public CEnum<ECriticalStateType> CriticalState { get; set;}
+		[Ordinal(0)] [RED("("criticalState")] 		public CEnum<ECriticalStateType> CriticalState { get; set;}
 
-		[RED("timeOfLastCSDeactivation")] 		public CFloat TimeOfLastCSDeactivation { get; set;}
+		[Ordinal(0)] [RED("("timeOfLastCSDeactivation")] 		public CFloat TimeOfLastCSDeactivation { get; set;}
 
-		[RED("combatDataStorage")] 		public CHandle<CBaseAICombatStorage> CombatDataStorage { get; set;}
+		[Ordinal(0)] [RED("("combatDataStorage")] 		public CHandle<CBaseAICombatStorage> CombatDataStorage { get; set;}
 
 		public CBTTaskWasInCriticalState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

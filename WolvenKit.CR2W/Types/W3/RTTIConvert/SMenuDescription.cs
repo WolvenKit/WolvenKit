@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMenuDescription : CVariable
 	{
-		[RED("menuName")] 		public CName MenuName { get; set;}
+		[Ordinal(0)] [RED("("menuName")] 		public CName MenuName { get; set;}
 
-		[RED("menuResource")] 		public CSoft<CMenuResource> MenuResource { get; set;}
+		[Ordinal(0)] [RED("("menuResource")] 		public CSoft<CMenuResource> MenuResource { get; set;}
 
 		public SMenuDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

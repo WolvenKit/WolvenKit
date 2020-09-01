@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestWaitForTickBlock : CQuestTestBlock
 	{
-		[RED("tick")] 		public CUInt32 Tick { get; set;}
+		[Ordinal(0)] [RED("tick")] 		public CUInt32 Tick { get; set;}
 
 		public CQuestWaitForTickBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

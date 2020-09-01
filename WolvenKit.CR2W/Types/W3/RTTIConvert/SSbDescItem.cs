@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSbDescItem : CVariable
 	{
-		[RED("uId")] 		public CString UId { get; set;}
+		[Ordinal(0)] [RED("("uId")] 		public CString UId { get; set;}
 
-		[RED("repoItemId")] 		public CString RepoItemId { get; set;}
+		[Ordinal(0)] [RED("("repoItemId")] 		public CString RepoItemId { get; set;}
 
-		[RED("template")] 		public CString Template { get; set;}
+		[Ordinal(0)] [RED("("template")] 		public CString Template { get; set;}
 
 		public SSbDescItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4GlossaryBooksMenu : CR4MenuBase
 	{
-		[RED("SORT_WEIGHT_PAINTINGS")] 		public CInt32 SORT_WEIGHT_PAINTINGS { get; set;}
+		[Ordinal(0)] [RED("("SORT_WEIGHT_PAINTINGS")] 		public CInt32 SORT_WEIGHT_PAINTINGS { get; set;}
 
-		[RED("SORT_WEIGHT_BOOKS")] 		public CInt32 SORT_WEIGHT_BOOKS { get; set;}
+		[Ordinal(0)] [RED("("SORT_WEIGHT_BOOKS")] 		public CInt32 SORT_WEIGHT_BOOKS { get; set;}
 
-		[RED("SORT_WEIGHT_Q")] 		public CInt32 SORT_WEIGHT_Q { get; set;}
+		[Ordinal(0)] [RED("("SORT_WEIGHT_Q")] 		public CInt32 SORT_WEIGHT_Q { get; set;}
 
-		[RED("SORT_WEIGHT_SQ")] 		public CInt32 SORT_WEIGHT_SQ { get; set;}
+		[Ordinal(0)] [RED("("SORT_WEIGHT_SQ")] 		public CInt32 SORT_WEIGHT_SQ { get; set;}
 
-		[RED("SORT_WEIGHT_MQ")] 		public CInt32 SORT_WEIGHT_MQ { get; set;}
+		[Ordinal(0)] [RED("("SORT_WEIGHT_MQ")] 		public CInt32 SORT_WEIGHT_MQ { get; set;}
 
-		[RED("SORT_WEIGHT_MH")] 		public CInt32 SORT_WEIGHT_MH { get; set;}
+		[Ordinal(0)] [RED("("SORT_WEIGHT_MH")] 		public CInt32 SORT_WEIGHT_MH { get; set;}
 
-		[RED("SORT_WEIGHT_TH")] 		public CInt32 SORT_WEIGHT_TH { get; set;}
+		[Ordinal(0)] [RED("("SORT_WEIGHT_TH")] 		public CInt32 SORT_WEIGHT_TH { get; set;}
 
 		public CR4GlossaryBooksMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

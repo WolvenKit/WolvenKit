@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGhost : CNewNPC
 	{
-		[RED("isCastingShadows")] 		public CBool IsCastingShadows { get; set;}
+		[Ordinal(0)] [RED("("isCastingShadows")] 		public CBool IsCastingShadows { get; set;}
 
-		[RED("soundEffectType")] 		public CEnum<EFocusModeSoundEffectType> SoundEffectType { get; set;}
+		[Ordinal(0)] [RED("("soundEffectType")] 		public CEnum<EFocusModeSoundEffectType> SoundEffectType { get; set;}
 
 		public CGhost(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

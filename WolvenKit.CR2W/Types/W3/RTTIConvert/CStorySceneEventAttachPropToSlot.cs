@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventAttachPropToSlot : CStorySceneEvent
 	{
-		[RED("propId")] 		public CName PropId { get; set;}
+		[Ordinal(0)] [RED("("propId")] 		public CName PropId { get; set;}
 
-		[RED("activate")] 		public CBool Activate { get; set;}
+		[Ordinal(0)] [RED("("activate")] 		public CBool Activate { get; set;}
 
-		[RED("actorName")] 		public CName ActorName { get; set;}
+		[Ordinal(0)] [RED("("actorName")] 		public CName ActorName { get; set;}
 
-		[RED("slotName")] 		public CName SlotName { get; set;}
+		[Ordinal(0)] [RED("("slotName")] 		public CName SlotName { get; set;}
 
-		[RED("snapAtStart")] 		public CBool SnapAtStart { get; set;}
+		[Ordinal(0)] [RED("("snapAtStart")] 		public CBool SnapAtStart { get; set;}
 
-		[RED("showHide")] 		public CBool ShowHide { get; set;}
+		[Ordinal(0)] [RED("("showHide")] 		public CBool ShowHide { get; set;}
 
-		[RED("offset")] 		public EngineTransform Offset { get; set;}
+		[Ordinal(0)] [RED("("offset")] 		public EngineTransform Offset { get; set;}
 
 		public CStorySceneEventAttachPropToSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

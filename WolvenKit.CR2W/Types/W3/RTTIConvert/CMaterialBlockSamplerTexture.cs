@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockSamplerTexture : CMaterialBlockSampler
 	{
-		[RED("subUVWidth")] 		public CUInt32 SubUVWidth { get; set;}
+		[Ordinal(0)] [RED("subUVWidth")] 		public CUInt32 SubUVWidth { get; set;}
 
-		[RED("subUVHeight")] 		public CUInt32 SubUVHeight { get; set;}
+		[Ordinal(0)] [RED("subUVHeight")] 		public CUInt32 SubUVHeight { get; set;}
 
-		[RED("subUVInterpolate")] 		public CBool SubUVInterpolate { get; set;}
+		[Ordinal(0)] [RED("subUVInterpolate")] 		public CBool SubUVInterpolate { get; set;}
 
-		[RED("projected")] 		public CBool Projected { get; set;}
+		[Ordinal(0)] [RED("projected")] 		public CBool Projected { get; set;}
 
 		public CMaterialBlockSamplerTexture(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

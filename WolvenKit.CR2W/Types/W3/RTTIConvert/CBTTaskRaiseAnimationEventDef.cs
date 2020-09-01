@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskRaiseAnimationEventDef : IBehTreeTaskDefinition
 	{
-		[RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(0)] [RED("eventName")] 		public CName EventName { get; set;}
 
-		[RED("forceEvent")] 		public CBool ForceEvent { get; set;}
+		[Ordinal(0)] [RED("forceEvent")] 		public CBool ForceEvent { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(0)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("raiseEventAfter")] 		public CFloat RaiseEventAfter { get; set;}
+		[Ordinal(0)] [RED("raiseEventAfter")] 		public CFloat RaiseEventAfter { get; set;}
 
 		public CBTTaskRaiseAnimationEventDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPointLightComponent : CLightComponent
 	{
-		[RED("cacheStaticShadows")] 		public CBool CacheStaticShadows { get; set;}
+		[Ordinal(0)] [RED("cacheStaticShadows")] 		public CBool CacheStaticShadows { get; set;}
 
-		[RED("dynamicShadowsFaceMask")] 		public CEnum<ELightCubeSides> DynamicShadowsFaceMask { get; set;}
+		[Ordinal(0)] [RED("dynamicShadowsFaceMask")] 		public CEnum<ELightCubeSides> DynamicShadowsFaceMask { get; set;}
 
 		public CPointLightComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

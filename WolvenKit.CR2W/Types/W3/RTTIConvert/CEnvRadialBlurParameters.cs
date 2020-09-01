@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvRadialBlurParameters : CVariable
 	{
-		[RED("radialBlurSource")] 		public Vector RadialBlurSource { get; set;}
+		[Ordinal(0)] [RED("("radialBlurSource")] 		public Vector RadialBlurSource { get; set;}
 
-		[RED("radialBlurAmount")] 		public CFloat RadialBlurAmount { get; set;}
+		[Ordinal(0)] [RED("("radialBlurAmount")] 		public CFloat RadialBlurAmount { get; set;}
 
-		[RED("sineWaveAmount")] 		public CFloat SineWaveAmount { get; set;}
+		[Ordinal(0)] [RED("("sineWaveAmount")] 		public CFloat SineWaveAmount { get; set;}
 
-		[RED("sineWaveSpeed")] 		public CFloat SineWaveSpeed { get; set;}
+		[Ordinal(0)] [RED("("sineWaveSpeed")] 		public CFloat SineWaveSpeed { get; set;}
 
-		[RED("sineWaveFreq")] 		public CFloat SineWaveFreq { get; set;}
+		[Ordinal(0)] [RED("("sineWaveFreq")] 		public CFloat SineWaveFreq { get; set;}
 
-		[RED("centerMultiplier")] 		public CFloat CenterMultiplier { get; set;}
+		[Ordinal(0)] [RED("("centerMultiplier")] 		public CFloat CenterMultiplier { get; set;}
 
-		[RED("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(0)] [RED("("distance")] 		public CFloat Distance { get; set;}
 
 		public CEnvRadialBlurParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

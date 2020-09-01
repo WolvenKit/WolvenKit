@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIDamageReactionTreeParams : CAISubTreeParameters
 	{
-		[RED("completeTaskAfterDisablingHitReaction")] 		public CBool CompleteTaskAfterDisablingHitReaction { get; set;}
+		[Ordinal(0)] [RED("completeTaskAfterDisablingHitReaction")] 		public CBool CompleteTaskAfterDisablingHitReaction { get; set;}
 
-		[RED("enableTeleportOnHit")] 		public CBool EnableTeleportOnHit { get; set;}
+		[Ordinal(0)] [RED("enableTeleportOnHit")] 		public CBool EnableTeleportOnHit { get; set;}
 
 		public CAIDamageReactionTreeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeConditionIsEnemyAroundDefinition : CBehTreeNodeConditionDefinition
 	{
-		[RED("maxEnemyDistance")] 		public CFloat MaxEnemyDistance { get; set;}
+		[Ordinal(0)] [RED("("maxEnemyDistance")] 		public CFloat MaxEnemyDistance { get; set;}
 
-		[RED("updateDelay")] 		public CFloat UpdateDelay { get; set;}
+		[Ordinal(0)] [RED("("updateDelay")] 		public CFloat UpdateDelay { get; set;}
 
 		public CBehTreeNodeConditionIsEnemyAroundDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

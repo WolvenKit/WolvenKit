@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FrozenEffectCustomParams : W3BuffCustomParams
 	{
-		[RED("freezeFadeInTime")] 		public CFloat FreezeFadeInTime { get; set;}
+		[Ordinal(0)] [RED("("freezeFadeInTime")] 		public CFloat FreezeFadeInTime { get; set;}
 
 		public W3FrozenEffectCustomParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphSelfActivatingAdditiveStateMachineNode : CBehaviorGraphSelfActivatingStateMachineNode
 	{
-		[RED("type")] 		public CEnum<EAdditiveType> Type { get; set;}
+		[Ordinal(0)] [RED("type")] 		public CEnum<EAdditiveType> Type { get; set;}
 
-		[RED("mergeEvents")] 		public CBool MergeEvents { get; set;}
+		[Ordinal(0)] [RED("mergeEvents")] 		public CBool MergeEvents { get; set;}
 
 		public CBehaviorGraphSelfActivatingAdditiveStateMachineNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

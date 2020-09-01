@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3DifficultyChangeConfirmation : ConfirmationPopupData
 	{
-		[RED("menuRef")] 		public CHandle<CR4IngameMenu> MenuRef { get; set;}
+		[Ordinal(0)] [RED("("menuRef")] 		public CHandle<CR4IngameMenu> MenuRef { get; set;}
 
-		[RED("targetDifficulty")] 		public CInt32 TargetDifficulty { get; set;}
+		[Ordinal(0)] [RED("("targetDifficulty")] 		public CInt32 TargetDifficulty { get; set;}
 
 		public W3DifficultyChangeConfirmation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

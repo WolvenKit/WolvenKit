@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCharacter : CObject
 	{
-		[RED("name")] 		public CName Name { get; set;}
+		[Ordinal(0)] [RED("name")] 		public CName Name { get; set;}
 
-		[RED("guid")] 		public CGUID Guid { get; set;}
+		[Ordinal(0)] [RED("guid")] 		public CGUID Guid { get; set;}
 
-		[RED("parentCharacter")] 		public CPtr<CCharacter> ParentCharacter { get; set;}
+		[Ordinal(0)] [RED("parentCharacter")] 		public CPtr<CCharacter> ParentCharacter { get; set;}
 
-		[RED("i_voiceTag")] 		public CName I_voiceTag { get; set;}
+		[Ordinal(0)] [RED("i_voiceTag")] 		public CName I_voiceTag { get; set;}
 
-		[RED("tags")] 		public TagList Tags { get; set;}
+		[Ordinal(0)] [RED("tags")] 		public TagList Tags { get; set;}
 
-		[RED("entityTemplate")] 		public CSoft<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(0)] [RED("entityTemplate")] 		public CSoft<CEntityTemplate> EntityTemplate { get; set;}
 
 		public CCharacter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskGuardDef : IBehTreeTaskDefinition
 	{
-		[RED("guardArea_var")] 		public CName GuardArea_var { get; set;}
+		[Ordinal(0)] [RED("("guardArea_var")] 		public CName GuardArea_var { get; set;}
 
-		[RED("guardPursuitArea_var")] 		public CName GuardPursuitArea_var { get; set;}
+		[Ordinal(0)] [RED("("guardPursuitArea_var")] 		public CName GuardPursuitArea_var { get; set;}
 
-		[RED("guardPursuitRange")] 		public CBehTreeValFloat GuardPursuitRange { get; set;}
+		[Ordinal(0)] [RED("("guardPursuitRange")] 		public CBehTreeValFloat GuardPursuitRange { get; set;}
 
-		[RED("guardRetreatType")] 		public CHandle<CBTEnumMoveType> GuardRetreatType { get; set;}
+		[Ordinal(0)] [RED("("guardRetreatType")] 		public CHandle<CBTEnumMoveType> GuardRetreatType { get; set;}
 
-		[RED("guardRetreatSpeed")] 		public CBehTreeValFloat GuardRetreatSpeed { get; set;}
+		[Ordinal(0)] [RED("("guardRetreatSpeed")] 		public CBehTreeValFloat GuardRetreatSpeed { get; set;}
 
-		[RED("guardIntruderTestFrequency")] 		public CBehTreeValFloat GuardIntruderTestFrequency { get; set;}
+		[Ordinal(0)] [RED("("guardIntruderTestFrequency")] 		public CBehTreeValFloat GuardIntruderTestFrequency { get; set;}
 
 		public CBTTaskGuardDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

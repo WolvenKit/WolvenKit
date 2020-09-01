@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStoryBoardAssetsStateData : CVariable
 	{
-		[RED("lastuid")] 		public CInt32 Lastuid { get; set;}
+		[Ordinal(0)] [RED("("lastuid")] 		public CInt32 Lastuid { get; set;}
 
-		[RED("actorData", 2,0)] 		public CArray<SStoryBoardActorStateData> ActorData { get; set;}
+		[Ordinal(0)] [RED("("actorData", 2,0)] 		public CArray<SStoryBoardActorStateData> ActorData { get; set;}
 
-		[RED("itemData", 2,0)] 		public CArray<SStoryBoardItemStateData> ItemData { get; set;}
+		[Ordinal(0)] [RED("("itemData", 2,0)] 		public CArray<SStoryBoardItemStateData> ItemData { get; set;}
 
 		public SStoryBoardAssetsStateData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

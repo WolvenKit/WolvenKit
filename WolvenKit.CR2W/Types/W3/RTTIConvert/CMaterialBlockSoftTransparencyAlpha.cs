@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockSoftTransparencyAlpha : CMaterialBlock
 	{
-		[RED("invertAlpha")] 		public CBool InvertAlpha { get; set;}
+		[Ordinal(0)] [RED("invertAlpha")] 		public CBool InvertAlpha { get; set;}
 
 		public CMaterialBlockSoftTransparencyAlpha(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFXTrackItemParticles : CFXTrackItem
 	{
-		[RED("particleSystem")] 		public CSoft<CParticleSystem> ParticleSystem { get; set;}
+		[Ordinal(0)] [RED("("particleSystem")] 		public CSoft<CParticleSystem> ParticleSystem { get; set;}
 
-		[RED("spawner")] 		public CPtr<IFXSpawner> Spawner { get; set;}
+		[Ordinal(0)] [RED("("spawner")] 		public CPtr<IFXSpawner> Spawner { get; set;}
 
 		public CFXTrackItemParticles(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

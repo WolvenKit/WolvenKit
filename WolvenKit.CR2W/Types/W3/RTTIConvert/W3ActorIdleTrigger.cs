@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ActorIdleTrigger : CEntity
 	{
-		[RED("affectedActor")] 		public CHandle<CActor> AffectedActor { get; set;}
+		[Ordinal(0)] [RED("("affectedActor")] 		public CHandle<CActor> AffectedActor { get; set;}
 
-		[RED("affectedEntityTag")] 		public CName AffectedEntityTag { get; set;}
+		[Ordinal(0)] [RED("("affectedEntityTag")] 		public CName AffectedEntityTag { get; set;}
 
 		public W3ActorIdleTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

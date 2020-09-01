@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Mutagen20_Effect : W3Mutagen_Effect
 	{
-		[RED("burningPoints")] 		public SAbilityAttributeValue BurningPoints { get; set;}
+		[Ordinal(0)] [RED("("burningPoints")] 		public SAbilityAttributeValue BurningPoints { get; set;}
 
-		[RED("burningPercents")] 		public SAbilityAttributeValue BurningPercents { get; set;}
+		[Ordinal(0)] [RED("("burningPercents")] 		public SAbilityAttributeValue BurningPercents { get; set;}
 
-		[RED("poisonPoints")] 		public SAbilityAttributeValue PoisonPoints { get; set;}
+		[Ordinal(0)] [RED("("poisonPoints")] 		public SAbilityAttributeValue PoisonPoints { get; set;}
 
-		[RED("poisonPercents")] 		public SAbilityAttributeValue PoisonPercents { get; set;}
+		[Ordinal(0)] [RED("("poisonPercents")] 		public SAbilityAttributeValue PoisonPercents { get; set;}
 
-		[RED("bleedingPoints")] 		public SAbilityAttributeValue BleedingPoints { get; set;}
+		[Ordinal(0)] [RED("("bleedingPoints")] 		public SAbilityAttributeValue BleedingPoints { get; set;}
 
-		[RED("bleedingPercents")] 		public SAbilityAttributeValue BleedingPercents { get; set;}
+		[Ordinal(0)] [RED("("bleedingPercents")] 		public SAbilityAttributeValue BleedingPercents { get; set;}
 
-		[RED("burningResistanceCounter")] 		public CFloat BurningResistanceCounter { get; set;}
+		[Ordinal(0)] [RED("("burningResistanceCounter")] 		public CFloat BurningResistanceCounter { get; set;}
 
-		[RED("poisonResistanceCounter")] 		public CFloat PoisonResistanceCounter { get; set;}
+		[Ordinal(0)] [RED("("poisonResistanceCounter")] 		public CFloat PoisonResistanceCounter { get; set;}
 
-		[RED("bleedingResistanceCounter")] 		public CFloat BleedingResistanceCounter { get; set;}
+		[Ordinal(0)] [RED("("bleedingResistanceCounter")] 		public CFloat BleedingResistanceCounter { get; set;}
 
-		[RED("player")] 		public CHandle<CR4Player> Player { get; set;}
+		[Ordinal(0)] [RED("("player")] 		public CHandle<CR4Player> Player { get; set;}
 
 		public W3Mutagen20_Effect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

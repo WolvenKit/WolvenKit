@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ActorLatentActionPlayAnimation : IPresetActorLatentAction
 	{
-		[RED("eventStateName")] 		public CName EventStateName { get; set;}
+		[Ordinal(0)] [RED("("eventStateName")] 		public CName EventStateName { get; set;}
 
 		public W3ActorLatentActionPlayAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

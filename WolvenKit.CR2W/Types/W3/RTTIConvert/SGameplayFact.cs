@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SGameplayFact : CVariable
 	{
-		[RED("factName")] 		public CString FactName { get; set;}
+		[Ordinal(0)] [RED("("factName")] 		public CString FactName { get; set;}
 
-		[RED("value")] 		public CInt32 Value { get; set;}
+		[Ordinal(0)] [RED("("value")] 		public CInt32 Value { get; set;}
 
 		public SGameplayFact(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

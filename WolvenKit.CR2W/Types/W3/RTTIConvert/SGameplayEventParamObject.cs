@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SGameplayEventParamObject : CVariable
 	{
-		[RED("value")] 		public CHandle<IScriptable> Value { get; set;}
+		[Ordinal(0)] [RED("("value")] 		public CHandle<IScriptable> Value { get; set;}
 
 		public SGameplayEventParamObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

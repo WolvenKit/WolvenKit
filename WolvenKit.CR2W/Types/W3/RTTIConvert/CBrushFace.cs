@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBrushFace : CObject
 	{
-		[RED("material")] 		public CHandle<IMaterial> Material { get; set;}
+		[Ordinal(0)] [RED("material")] 		public CHandle<IMaterial> Material { get; set;}
 
-		[RED("mapping")] 		public CEnum<EBrushFaceMapping> Mapping { get; set;}
+		[Ordinal(0)] [RED("mapping")] 		public CEnum<EBrushFaceMapping> Mapping { get; set;}
 
-		[RED("scaleU")] 		public CFloat ScaleU { get; set;}
+		[Ordinal(0)] [RED("scaleU")] 		public CFloat ScaleU { get; set;}
 
-		[RED("scaleV")] 		public CFloat ScaleV { get; set;}
+		[Ordinal(0)] [RED("scaleV")] 		public CFloat ScaleV { get; set;}
 
-		[RED("offsetU")] 		public CFloat OffsetU { get; set;}
+		[Ordinal(0)] [RED("offsetU")] 		public CFloat OffsetU { get; set;}
 
-		[RED("offsetV")] 		public CFloat OffsetV { get; set;}
+		[Ordinal(0)] [RED("offsetV")] 		public CFloat OffsetV { get; set;}
 
-		[RED("rotation")] 		public CFloat Rotation { get; set;}
+		[Ordinal(0)] [RED("rotation")] 		public CFloat Rotation { get; set;}
 
-		[RED("renderFaceID")] 		public CInt32 RenderFaceID { get; set;}
+		[Ordinal(0)] [RED("renderFaceID")] 		public CInt32 RenderFaceID { get; set;}
 
 		public CBrushFace(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

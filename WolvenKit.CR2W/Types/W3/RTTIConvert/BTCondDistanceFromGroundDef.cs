@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondDistanceFromGroundDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("checkedActor")] 		public CEnum<EStatOwner> CheckedActor { get; set;}
+		[Ordinal(0)] [RED("checkedActor")] 		public CEnum<EStatOwner> CheckedActor { get; set;}
 
-		[RED("value")] 		public CBehTreeValFloat Value { get; set;}
+		[Ordinal(0)] [RED("value")] 		public CBehTreeValFloat Value { get; set;}
 
-		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
+		[Ordinal(0)] [RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
 		public BTCondDistanceFromGroundDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

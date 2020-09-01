@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorGraphMapToDiscreteMapper : CVariable
 	{
-		[RED("Min input value")] 		public CFloat Min_input_value { get; set;}
+		[Ordinal(0)] [RED("("Min input value")] 		public CFloat Min_input_value { get; set;}
 
-		[RED("Max input value")] 		public CFloat Max_input_value { get; set;}
+		[Ordinal(0)] [RED("("Max input value")] 		public CFloat Max_input_value { get; set;}
 
-		[RED("outValue")] 		public CFloat OutValue { get; set;}
+		[Ordinal(0)] [RED("("outValue")] 		public CFloat OutValue { get; set;}
 
 		public SBehaviorGraphMapToDiscreteMapper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

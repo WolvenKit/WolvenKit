@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateOils : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("CAN_EQUIP")] 		public CName CAN_EQUIP { get; set;}
+		[Ordinal(0)] [RED("("CAN_EQUIP")] 		public CName CAN_EQUIP { get; set;}
 
-		[RED("SELECT_TAB")] 		public CName SELECT_TAB { get; set;}
+		[Ordinal(0)] [RED("("SELECT_TAB")] 		public CName SELECT_TAB { get; set;}
 
-		[RED("EQUIP_OIL")] 		public CName EQUIP_OIL { get; set;}
+		[Ordinal(0)] [RED("("EQUIP_OIL")] 		public CName EQUIP_OIL { get; set;}
 
-		[RED("ON_EQUIPPED")] 		public CName ON_EQUIPPED { get; set;}
+		[Ordinal(0)] [RED("("ON_EQUIPPED")] 		public CName ON_EQUIPPED { get; set;}
 
-		[RED("OILS_JOURNAL_ENTRY")] 		public CName OILS_JOURNAL_ENTRY { get; set;}
+		[Ordinal(0)] [RED("("OILS_JOURNAL_ENTRY")] 		public CName OILS_JOURNAL_ENTRY { get; set;}
 
-		[RED("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
 		public W3TutorialManagerUIHandlerStateOils(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

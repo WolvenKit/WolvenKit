@@ -10,51 +10,51 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CClothComponent : CMeshTypeComponent
 	{
-		[RED("resource")] 		public CHandle<CApexResource> Resource { get; set;}
+		[Ordinal(0)] [RED("resource")] 		public CHandle<CApexResource> Resource { get; set;}
 
-		[RED("dispacher selection")] 		public CEnum<EDispatcherSelection> Dispacher_selection { get; set;}
+		[Ordinal(0)] [RED("dispacher selection")] 		public CEnum<EDispatcherSelection> Dispacher_selection { get; set;}
 
-		[RED("recomputeNormals")] 		public CBool RecomputeNormals { get; set;}
+		[Ordinal(0)] [RED("recomputeNormals")] 		public CBool RecomputeNormals { get; set;}
 
-		[RED("correctSimulationNormals")] 		public CBool CorrectSimulationNormals { get; set;}
+		[Ordinal(0)] [RED("correctSimulationNormals")] 		public CBool CorrectSimulationNormals { get; set;}
 
-		[RED("slowStart")] 		public CBool SlowStart { get; set;}
+		[Ordinal(0)] [RED("slowStart")] 		public CBool SlowStart { get; set;}
 
-		[RED("useStiffSolver")] 		public CBool UseStiffSolver { get; set;}
+		[Ordinal(0)] [RED("useStiffSolver")] 		public CBool UseStiffSolver { get; set;}
 
-		[RED("pressure")] 		public CFloat Pressure { get; set;}
+		[Ordinal(0)] [RED("pressure")] 		public CFloat Pressure { get; set;}
 
-		[RED("lodWeights.maxDistance")] 		public CFloat LodWeights_maxDistance { get; set;}
+		[Ordinal(0)] [RED("lodWeights.maxDistance")] 		public CFloat LodWeights_maxDistance { get; set;}
 
-		[RED("lodWeights.distanceWeight")] 		public CFloat LodWeights_distanceWeight { get; set;}
+		[Ordinal(0)] [RED("lodWeights.distanceWeight")] 		public CFloat LodWeights_distanceWeight { get; set;}
 
-		[RED("lodWeights.bias")] 		public CFloat LodWeights_bias { get; set;}
+		[Ordinal(0)] [RED("lodWeights.bias")] 		public CFloat LodWeights_bias { get; set;}
 
-		[RED("lodWeights.benefitsBias")] 		public CFloat LodWeights_benefitsBias { get; set;}
+		[Ordinal(0)] [RED("lodWeights.benefitsBias")] 		public CFloat LodWeights_benefitsBias { get; set;}
 
-		[RED("maxDistanceBlendTime")] 		public CFloat MaxDistanceBlendTime { get; set;}
+		[Ordinal(0)] [RED("maxDistanceBlendTime")] 		public CFloat MaxDistanceBlendTime { get; set;}
 
-		[RED("uvChannelForTangentUpdate")] 		public CUInt32 UvChannelForTangentUpdate { get; set;}
+		[Ordinal(0)] [RED("uvChannelForTangentUpdate")] 		public CUInt32 UvChannelForTangentUpdate { get; set;}
 
-		[RED("maxDistanceScale.Multipliable")] 		public CBool MaxDistanceScale_Multipliable { get; set;}
+		[Ordinal(0)] [RED("maxDistanceScale.Multipliable")] 		public CBool MaxDistanceScale_Multipliable { get; set;}
 
-		[RED("maxDistanceScale.Scale")] 		public CFloat MaxDistanceScale_Scale { get; set;}
+		[Ordinal(0)] [RED("maxDistanceScale.Scale")] 		public CFloat MaxDistanceScale_Scale { get; set;}
 
-		[RED("collisionResponseCoefficient")] 		public CFloat CollisionResponseCoefficient { get; set;}
+		[Ordinal(0)] [RED("collisionResponseCoefficient")] 		public CFloat CollisionResponseCoefficient { get; set;}
 
-		[RED("allowAdaptiveTargetFrequency")] 		public CBool AllowAdaptiveTargetFrequency { get; set;}
+		[Ordinal(0)] [RED("allowAdaptiveTargetFrequency")] 		public CBool AllowAdaptiveTargetFrequency { get; set;}
 
-		[RED("windScaler")] 		public CFloat WindScaler { get; set;}
+		[Ordinal(0)] [RED("windScaler")] 		public CFloat WindScaler { get; set;}
 
-		[RED("triggeringCollisionGroupNames", 2,0)] 		public CArray<CName> TriggeringCollisionGroupNames { get; set;}
+		[Ordinal(0)] [RED("triggeringCollisionGroupNames", 2,0)] 		public CArray<CName> TriggeringCollisionGroupNames { get; set;}
 
-		[RED("triggerType")] 		public CEnum<ETriggerShape> TriggerType { get; set;}
+		[Ordinal(0)] [RED("triggerType")] 		public CEnum<ETriggerShape> TriggerType { get; set;}
 
-		[RED("triggerDimensions")] 		public Vector TriggerDimensions { get; set;}
+		[Ordinal(0)] [RED("triggerDimensions")] 		public Vector TriggerDimensions { get; set;}
 
-		[RED("triggerLocalOffset.V[ 3 ]")] 		public Vector TriggerLocalOffset_V__3__ { get; set;}
+		[Ordinal(0)] [RED("triggerLocalOffset.V[ 3 ]")] 		public Vector TriggerLocalOffset_V__3__ { get; set;}
 
-		[RED("shadowDistanceOverride")] 		public CFloat ShadowDistanceOverride { get; set;}
+		[Ordinal(0)] [RED("shadowDistanceOverride")] 		public CFloat ShadowDistanceOverride { get; set;}
 
 		public CClothComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

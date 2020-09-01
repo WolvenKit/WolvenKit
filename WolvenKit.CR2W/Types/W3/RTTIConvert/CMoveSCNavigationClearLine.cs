@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSCNavigationClearLine : IMoveSteeringCondition
 	{
-		[RED("destinationForward")] 		public CFloat DestinationForward { get; set;}
+		[Ordinal(0)] [RED("destinationForward")] 		public CFloat DestinationForward { get; set;}
 
-		[RED("destinationLeft")] 		public CFloat DestinationLeft { get; set;}
+		[Ordinal(0)] [RED("destinationLeft")] 		public CFloat DestinationLeft { get; set;}
 
-		[RED("testRadius")] 		public CFloat TestRadius { get; set;}
+		[Ordinal(0)] [RED("testRadius")] 		public CFloat TestRadius { get; set;}
 
-		[RED("useCharacterOrientation")] 		public CBool UseCharacterOrientation { get; set;}
+		[Ordinal(0)] [RED("useCharacterOrientation")] 		public CBool UseCharacterOrientation { get; set;}
 
-		[RED("useSteeringOutput")] 		public CBool UseSteeringOutput { get; set;}
+		[Ordinal(0)] [RED("useSteeringOutput")] 		public CBool UseSteeringOutput { get; set;}
 
-		[RED("useGoalDirection")] 		public CBool UseGoalDirection { get; set;}
+		[Ordinal(0)] [RED("useGoalDirection")] 		public CBool UseGoalDirection { get; set;}
 
 		public CMoveSCNavigationClearLine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStorySceneLightDimmerProperties : CVariable
 	{
-		[RED("ambientLevel")] 		public SSimpleCurve AmbientLevel { get; set;}
+		[Ordinal(0)] [RED("("ambientLevel")] 		public SSimpleCurve AmbientLevel { get; set;}
 
-		[RED("marginFactor")] 		public SSimpleCurve MarginFactor { get; set;}
+		[Ordinal(0)] [RED("("marginFactor")] 		public SSimpleCurve MarginFactor { get; set;}
 
 		public SStorySceneLightDimmerProperties(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

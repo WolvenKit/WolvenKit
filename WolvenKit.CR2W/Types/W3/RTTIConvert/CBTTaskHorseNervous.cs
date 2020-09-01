@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskHorseNervous : IBehTreeTask
 	{
-		[RED("timeTillNextNervous")] 		public CFloat TimeTillNextNervous { get; set;}
+		[Ordinal(0)] [RED("("timeTillNextNervous")] 		public CFloat TimeTillNextNervous { get; set;}
 
 		public CBTTaskHorseNervous(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

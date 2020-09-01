@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcVesemirTutorialTacticTreeParams : CAINpcTacticTreeParams
 	{
-		[RED("backgroundTraining")] 		public CBool BackgroundTraining { get; set;}
+		[Ordinal(0)] [RED("backgroundTraining")] 		public CBool BackgroundTraining { get; set;}
 
-		[RED("onlyBlock")] 		public CBool OnlyBlock { get; set;}
+		[Ordinal(0)] [RED("onlyBlock")] 		public CBool OnlyBlock { get; set;}
 
-		[RED("onlyBlocksWithQuen")] 		public CBool OnlyBlocksWithQuen { get; set;}
+		[Ordinal(0)] [RED("onlyBlocksWithQuen")] 		public CBool OnlyBlocksWithQuen { get; set;}
 
-		[RED("useAttacks")] 		public CBool UseAttacks { get; set;}
+		[Ordinal(0)] [RED("useAttacks")] 		public CBool UseAttacks { get; set;}
 
-		[RED("useCombos")] 		public CBool UseCombos { get; set;}
+		[Ordinal(0)] [RED("useCombos")] 		public CBool UseCombos { get; set;}
 
-		[RED("forceIdle")] 		public CBool ForceIdle { get; set;}
+		[Ordinal(0)] [RED("forceIdle")] 		public CBool ForceIdle { get; set;}
 
-		[RED("attacksInterval")] 		public CFloat AttacksInterval { get; set;}
+		[Ordinal(0)] [RED("attacksInterval")] 		public CFloat AttacksInterval { get; set;}
 
-		[RED("maxDistFromTarget")] 		public CFloat MaxDistFromTarget { get; set;}
+		[Ordinal(0)] [RED("maxDistFromTarget")] 		public CFloat MaxDistFromTarget { get; set;}
 
 		public CAINpcVesemirTutorialTacticTreeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ShepherdGreetingTrigger : CGameplayEntity
 	{
-		[RED("greeted")] 		public CBool Greeted { get; set;}
+		[Ordinal(0)] [RED("("greeted")] 		public CBool Greeted { get; set;}
 
-		[RED("actors", 2,0)] 		public CArray<CHandle<CActor>> Actors { get; set;}
+		[Ordinal(0)] [RED("("actors", 2,0)] 		public CArray<CHandle<CActor>> Actors { get; set;}
 
 		public W3ShepherdGreetingTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

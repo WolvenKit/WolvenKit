@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockRenderFeedbackDataFetch : CMaterialBlock
 	{
-		[RED("feedbackDataType")] 		public CEnum<ERenderFeedbackDataType> FeedbackDataType { get; set;}
+		[Ordinal(0)] [RED("feedbackDataType")] 		public CEnum<ERenderFeedbackDataType> FeedbackDataType { get; set;}
 
 		public CMaterialBlockRenderFeedbackDataFetch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4HudModuleAreaInfo : CR4HudModuleBase
 	{
-		[RED("m_fxSetTextSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetTextSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetTextSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetTextSFF { get; set;}
 
-		[RED("dt")] 		public CFloat Dt { get; set;}
+		[Ordinal(0)] [RED("("dt")] 		public CFloat Dt { get; set;}
 
-		[RED("showTime")] 		public CFloat ShowTime { get; set;}
+		[Ordinal(0)] [RED("("showTime")] 		public CFloat ShowTime { get; set;}
 
-		[RED("bShow")] 		public CBool BShow { get; set;}
+		[Ordinal(0)] [RED("("bShow")] 		public CBool BShow { get; set;}
 
 		public CR4HudModuleAreaInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

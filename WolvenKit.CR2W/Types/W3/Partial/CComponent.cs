@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CComponent : CNode
 	{
-		[RED("name")] 		public CString Name { get; set;}
+		[Ordinal(0)] [RED("name")] 		public CString Name { get; set;}
 
-		[RED("isStreamed")] 		public CBool IsStreamed { get; set;}
+		[Ordinal(0)] [RED("isStreamed")] 		public CBool IsStreamed { get; set;}
 
-		[RED("graphPositionX")] 		public CInt16 GraphPositionX { get; set;}
+		[Ordinal(0)] [RED("graphPositionX")] 		public CInt16 GraphPositionX { get; set;}
 
-		[RED("graphPositionY")] 		public CInt16 GraphPositionY { get; set;}
+		[Ordinal(0)] [RED("graphPositionY")] 		public CInt16 GraphPositionY { get; set;}
 
 		public CComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

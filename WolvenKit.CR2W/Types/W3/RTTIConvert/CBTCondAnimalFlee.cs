@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondAnimalFlee : IBehTreeTask
 	{
-		[RED("chanceOfBeingScared")] 		public CFloat ChanceOfBeingScared { get; set;}
+		[Ordinal(0)] [RED("chanceOfBeingScared")] 		public CFloat ChanceOfBeingScared { get; set;}
 
-		[RED("chanceOfBeingScaredRerollTime")] 		public CFloat ChanceOfBeingScaredRerollTime { get; set;}
+		[Ordinal(0)] [RED("chanceOfBeingScaredRerollTime")] 		public CFloat ChanceOfBeingScaredRerollTime { get; set;}
 
-		[RED("scaredIfTargetRuns")] 		public CBool ScaredIfTargetRuns { get; set;}
+		[Ordinal(0)] [RED("scaredIfTargetRuns")] 		public CBool ScaredIfTargetRuns { get; set;}
 
-		[RED("maxTolerableTargetDistance")] 		public CFloat MaxTolerableTargetDistance { get; set;}
+		[Ordinal(0)] [RED("maxTolerableTargetDistance")] 		public CFloat MaxTolerableTargetDistance { get; set;}
 
-		[RED("rollSaysScared")] 		public CBool RollSaysScared { get; set;}
+		[Ordinal(0)] [RED("rollSaysScared")] 		public CBool RollSaysScared { get; set;}
 
-		[RED("rerollChanceTime")] 		public CFloat RerollChanceTime { get; set;}
+		[Ordinal(0)] [RED("rerollChanceTime")] 		public CFloat RerollChanceTime { get; set;}
 
 		public CBTCondAnimalFlee(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

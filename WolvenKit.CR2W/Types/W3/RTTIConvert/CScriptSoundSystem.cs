@@ -10,45 +10,45 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CScriptSoundSystem : CObject
 	{
-		[RED("currentGameState")] 		public CEnum<ESoundGameState> CurrentGameState { get; set;}
+		[Ordinal(0)] [RED("("currentGameState")] 		public CEnum<ESoundGameState> CurrentGameState { get; set;}
 
-		[RED("defaultGameState")] 		public CEnum<ESoundGameState> DefaultGameState { get; set;}
+		[Ordinal(0)] [RED("("defaultGameState")] 		public CEnum<ESoundGameState> DefaultGameState { get; set;}
 
-		[RED("defaultStates", 2,0)] 		public CArray<CEnum<ESoundGameState>> DefaultStates { get; set;}
+		[Ordinal(0)] [RED("("defaultStates", 2,0)] 		public CArray<CEnum<ESoundGameState>> DefaultStates { get; set;}
 
-		[RED("stateChangeTimestamp")] 		public CFloat StateChangeTimestamp { get; set;}
+		[Ordinal(0)] [RED("("stateChangeTimestamp")] 		public CFloat StateChangeTimestamp { get; set;}
 
-		[RED("stateCheckCooldown")] 		public CFloat StateCheckCooldown { get; set;}
+		[Ordinal(0)] [RED("("stateCheckCooldown")] 		public CFloat StateCheckCooldown { get; set;}
 
-		[RED("isGameStopped")] 		public CBool IsGameStopped { get; set;}
+		[Ordinal(0)] [RED("("isGameStopped")] 		public CBool IsGameStopped { get; set;}
 
-		[RED("currentThreatRating")] 		public CFloat CurrentThreatRating { get; set;}
+		[Ordinal(0)] [RED("("currentThreatRating")] 		public CFloat CurrentThreatRating { get; set;}
 
-		[RED("desiredThreatRating")] 		public CFloat DesiredThreatRating { get; set;}
+		[Ordinal(0)] [RED("("desiredThreatRating")] 		public CFloat DesiredThreatRating { get; set;}
 
-		[RED("lastThreatUpdateTime")] 		public CFloat LastThreatUpdateTime { get; set;}
+		[Ordinal(0)] [RED("("lastThreatUpdateTime")] 		public CFloat LastThreatUpdateTime { get; set;}
 
-		[RED("lastThreatDampTime")] 		public CFloat LastThreatDampTime { get; set;}
+		[Ordinal(0)] [RED("("lastThreatDampTime")] 		public CFloat LastThreatDampTime { get; set;}
 
-		[RED("threatUpdateCooldown")] 		public CFloat ThreatUpdateCooldown { get; set;}
+		[Ordinal(0)] [RED("("threatUpdateCooldown")] 		public CFloat ThreatUpdateCooldown { get; set;}
 
-		[RED("threatDampCooldown")] 		public CFloat ThreatDampCooldown { get; set;}
+		[Ordinal(0)] [RED("("threatDampCooldown")] 		public CFloat ThreatDampCooldown { get; set;}
 
-		[RED("threatDamper")] 		public CHandle<SpringDamper> ThreatDamper { get; set;}
+		[Ordinal(0)] [RED("("threatDamper")] 		public CHandle<SpringDamper> ThreatDamper { get; set;}
 
-		[RED("monsterHunt")] 		public CBool MonsterHunt { get; set;}
+		[Ordinal(0)] [RED("("monsterHunt")] 		public CBool MonsterHunt { get; set;}
 
-		[RED("monster")] 		public CBool Monster { get; set;}
+		[Ordinal(0)] [RED("("monster")] 		public CBool Monster { get; set;}
 
-		[RED("isBlackscreen")] 		public CBool IsBlackscreen { get; set;}
+		[Ordinal(0)] [RED("("isBlackscreen")] 		public CBool IsBlackscreen { get; set;}
 
-		[RED("soundSystemSettings")] 		public CHandle<C2dArray> SoundSystemSettings { get; set;}
+		[Ordinal(0)] [RED("("soundSystemSettings")] 		public CHandle<C2dArray> SoundSystemSettings { get; set;}
 
-		[RED("threatWeight")] 		public CInt32 ThreatWeight { get; set;}
+		[Ordinal(0)] [RED("("threatWeight")] 		public CInt32 ThreatWeight { get; set;}
 
-		[RED("levelWeight")] 		public CInt32 LevelWeight { get; set;}
+		[Ordinal(0)] [RED("("levelWeight")] 		public CInt32 LevelWeight { get; set;}
 
-		[RED("tweakWeight")] 		public CFloat TweakWeight { get; set;}
+		[Ordinal(0)] [RED("("tweakWeight")] 		public CFloat TweakWeight { get; set;}
 
 		public CScriptSoundSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

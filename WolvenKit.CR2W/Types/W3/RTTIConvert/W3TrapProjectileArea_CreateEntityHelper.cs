@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TrapProjectileArea_CreateEntityHelper : CCreateEntityHelper
 	{
-		[RED("owner")] 		public CHandle<W3TrapProjectileArea> Owner { get; set;}
+		[Ordinal(0)] [RED("("owner")] 		public CHandle<W3TrapProjectileArea> Owner { get; set;}
 
-		[RED("velocity")] 		public CFloat Velocity { get; set;}
+		[Ordinal(0)] [RED("("velocity")] 		public CFloat Velocity { get; set;}
 
-		[RED("targetPos")] 		public Vector TargetPos { get; set;}
+		[Ordinal(0)] [RED("("targetPos")] 		public Vector TargetPos { get; set;}
 
 		public W3TrapProjectileArea_CreateEntityHelper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

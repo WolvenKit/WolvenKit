@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskEventsBroadcaster : IBehTreeTask
 	{
-		[RED("broadcastedEvents", 2,0)] 		public CArray<SReactionEventData> BroadcastedEvents { get; set;}
+		[Ordinal(0)] [RED("("broadcastedEvents", 2,0)] 		public CArray<SReactionEventData> BroadcastedEvents { get; set;}
 
-		[RED("rescanInterval")] 		public CFloat RescanInterval { get; set;}
+		[Ordinal(0)] [RED("("rescanInterval")] 		public CFloat RescanInterval { get; set;}
 
-		[RED("minIntervalBetweenScenes")] 		public CFloat MinIntervalBetweenScenes { get; set;}
+		[Ordinal(0)] [RED("("minIntervalBetweenScenes")] 		public CFloat MinIntervalBetweenScenes { get; set;}
 
-		[RED("owner")] 		public CHandle<CNewNPC> Owner { get; set;}
+		[Ordinal(0)] [RED("("owner")] 		public CHandle<CNewNPC> Owner { get; set;}
 
-		[RED("i")] 		public CInt32 I { get; set;}
+		[Ordinal(0)] [RED("("i")] 		public CInt32 I { get; set;}
 
-		[RED("eventsCount")] 		public CInt32 EventsCount { get; set;}
+		[Ordinal(0)] [RED("("eventsCount")] 		public CInt32 EventsCount { get; set;}
 
-		[RED("currentTime")] 		public CFloat CurrentTime { get; set;}
+		[Ordinal(0)] [RED("("currentTime")] 		public CFloat CurrentTime { get; set;}
 
-		[RED("timeOfLastScene")] 		public CFloat TimeOfLastScene { get; set;}
+		[Ordinal(0)] [RED("("timeOfLastScene")] 		public CFloat TimeOfLastScene { get; set;}
 
 		public CBTTaskEventsBroadcaster(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

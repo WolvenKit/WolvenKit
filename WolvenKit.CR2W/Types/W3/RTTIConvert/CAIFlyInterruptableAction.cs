@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIFlyInterruptableAction : IFlightActionTree
 	{
-		[RED("interruptableAction")] 		public CHandle<CAISubTree> InterruptableAction { get; set;}
+		[Ordinal(0)] [RED("interruptableAction")] 		public CHandle<CAISubTree> InterruptableAction { get; set;}
 
 		public CAIFlyInterruptableAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

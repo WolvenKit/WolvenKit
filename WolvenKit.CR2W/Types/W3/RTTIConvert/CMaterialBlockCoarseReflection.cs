@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockCoarseReflection : CMaterialBlock
 	{
-		[RED("ForceGlobalReflection")] 		public CBool ForceGlobalReflection { get; set;}
+		[Ordinal(0)] [RED("ForceGlobalReflection")] 		public CBool ForceGlobalReflection { get; set;}
 
 		public CMaterialBlockCoarseReflection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

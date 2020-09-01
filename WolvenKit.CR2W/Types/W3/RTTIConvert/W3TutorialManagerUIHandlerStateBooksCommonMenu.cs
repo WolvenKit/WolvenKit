@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateBooksCommonMenu : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("OPEN_COMMON_MENU")] 		public CName OPEN_COMMON_MENU { get; set;}
+		[Ordinal(0)] [RED("("OPEN_COMMON_MENU")] 		public CName OPEN_COMMON_MENU { get; set;}
 
-		[RED("SELECT_GLOSSARY")] 		public CName SELECT_GLOSSARY { get; set;}
+		[Ordinal(0)] [RED("("SELECT_GLOSSARY")] 		public CName SELECT_GLOSSARY { get; set;}
 
 		public W3TutorialManagerUIHandlerStateBooksCommonMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

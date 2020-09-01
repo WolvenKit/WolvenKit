@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphPoseSlotNode : CBehaviorGraphBaseNode
 	{
-		[RED("slotName")] 		public CName SlotName { get; set;}
+		[Ordinal(0)] [RED("("slotName")] 		public CName SlotName { get; set;}
 
-		[RED("firstBone")] 		public CString FirstBone { get; set;}
+		[Ordinal(0)] [RED("("firstBone")] 		public CString FirstBone { get; set;}
 
-		[RED("worldSpace")] 		public CBool WorldSpace { get; set;}
+		[Ordinal(0)] [RED("("worldSpace")] 		public CBool WorldSpace { get; set;}
 
-		[RED("interpolation")] 		public CEnum<EInterpolationType> Interpolation { get; set;}
+		[Ordinal(0)] [RED("("interpolation")] 		public CEnum<EInterpolationType> Interpolation { get; set;}
 
-		[RED("blendFloatTracks")] 		public CBool BlendFloatTracks { get; set;}
+		[Ordinal(0)] [RED("("blendFloatTracks")] 		public CBool BlendFloatTracks { get; set;}
 
-		[RED("ignoreZeroFloatTracks")] 		public CBool IgnoreZeroFloatTracks { get; set;}
+		[Ordinal(0)] [RED("("ignoreZeroFloatTracks")] 		public CBool IgnoreZeroFloatTracks { get; set;}
 
 		public CBehaviorGraphPoseSlotNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

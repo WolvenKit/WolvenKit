@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalInitialEntriesResource : CResource
 	{
-		[RED("entries", 2,0)] 		public CArray<CHandle<CJournalPath>> Entries { get; set;}
+		[Ordinal(0)] [RED("("entries", 2,0)] 		public CArray<CHandle<CJournalPath>> Entries { get; set;}
 
-		[RED("regularQuestCount")] 		public CUInt32 RegularQuestCount { get; set;}
+		[Ordinal(0)] [RED("("regularQuestCount")] 		public CUInt32 RegularQuestCount { get; set;}
 
-		[RED("monsterHuntQuestCount")] 		public CUInt32 MonsterHuntQuestCount { get; set;}
+		[Ordinal(0)] [RED("("monsterHuntQuestCount")] 		public CUInt32 MonsterHuntQuestCount { get; set;}
 
-		[RED("treasureHuntQuestCount")] 		public CUInt32 TreasureHuntQuestCount { get; set;}
+		[Ordinal(0)] [RED("("treasureHuntQuestCount")] 		public CUInt32 TreasureHuntQuestCount { get; set;}
 
 		public CJournalInitialEntriesResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

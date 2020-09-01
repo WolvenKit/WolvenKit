@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQCIsOpenedJournalEntry : IUIConditionType
 	{
-		[RED("journalEntryToBeOpened")] 		public CHandle<CJournalPath> JournalEntryToBeOpened { get; set;}
+		[Ordinal(0)] [RED("journalEntryToBeOpened")] 		public CHandle<CJournalPath> JournalEntryToBeOpened { get; set;}
 
 		public CQCIsOpenedJournalEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

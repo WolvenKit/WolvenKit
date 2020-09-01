@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CParticleInitializerSpawnSphere : IParticleInitializer
 	{
-		[RED("innerRadius")] 		public CPtr<IEvaluatorFloat> InnerRadius { get; set;}
+		[Ordinal(0)] [RED("("innerRadius")] 		public CPtr<IEvaluatorFloat> InnerRadius { get; set;}
 
-		[RED("outerRadius")] 		public CPtr<IEvaluatorFloat> OuterRadius { get; set;}
+		[Ordinal(0)] [RED("("outerRadius")] 		public CPtr<IEvaluatorFloat> OuterRadius { get; set;}
 
-		[RED("surfaceOnly")] 		public CBool SurfaceOnly { get; set;}
+		[Ordinal(0)] [RED("("surfaceOnly")] 		public CBool SurfaceOnly { get; set;}
 
-		[RED("spawnPositiveX")] 		public CBool SpawnPositiveX { get; set;}
+		[Ordinal(0)] [RED("("spawnPositiveX")] 		public CBool SpawnPositiveX { get; set;}
 
-		[RED("spawnNegativeX")] 		public CBool SpawnNegativeX { get; set;}
+		[Ordinal(0)] [RED("("spawnNegativeX")] 		public CBool SpawnNegativeX { get; set;}
 
-		[RED("spawnPositiveY")] 		public CBool SpawnPositiveY { get; set;}
+		[Ordinal(0)] [RED("("spawnPositiveY")] 		public CBool SpawnPositiveY { get; set;}
 
-		[RED("spawnNegativeY")] 		public CBool SpawnNegativeY { get; set;}
+		[Ordinal(0)] [RED("("spawnNegativeY")] 		public CBool SpawnNegativeY { get; set;}
 
-		[RED("spawnPositiveZ")] 		public CBool SpawnPositiveZ { get; set;}
+		[Ordinal(0)] [RED("("spawnPositiveZ")] 		public CBool SpawnPositiveZ { get; set;}
 
-		[RED("spawnNegativeZ")] 		public CBool SpawnNegativeZ { get; set;}
+		[Ordinal(0)] [RED("("spawnNegativeZ")] 		public CBool SpawnNegativeZ { get; set;}
 
-		[RED("velocity")] 		public CBool Velocity { get; set;}
+		[Ordinal(0)] [RED("("velocity")] 		public CBool Velocity { get; set;}
 
-		[RED("forceScale")] 		public CPtr<IEvaluatorFloat> ForceScale { get; set;}
+		[Ordinal(0)] [RED("("forceScale")] 		public CPtr<IEvaluatorFloat> ForceScale { get; set;}
 
 		public CParticleInitializerSpawnSphere(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

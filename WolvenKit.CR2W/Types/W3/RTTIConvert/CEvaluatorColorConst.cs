@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEvaluatorColorConst : IEvaluatorColor
 	{
-		[RED("value")] 		public CColor Value { get; set;}
+		[Ordinal(0)] [RED("("value")] 		public CColor Value { get; set;}
 
 		public CEvaluatorColorConst(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

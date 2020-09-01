@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondHorseIsMountedDef : IBehTreeHorseConditionalTaskDefinition
 	{
-		[RED("waitForMountEnd")] 		public CBool WaitForMountEnd { get; set;}
+		[Ordinal(0)] [RED("waitForMountEnd")] 		public CBool WaitForMountEnd { get; set;}
 
-		[RED("waitForDismountEnd")] 		public CBool WaitForDismountEnd { get; set;}
+		[Ordinal(0)] [RED("waitForDismountEnd")] 		public CBool WaitForDismountEnd { get; set;}
 
 		public CBTCondHorseIsMountedDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

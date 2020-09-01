@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeAlreadyAtWorkDefinition : CBehTreeNodeCompleteImmediatelyDefinition
 	{
-		[RED("acceptDistance")] 		public CBehTreeValFloat AcceptDistance { get; set;}
+		[Ordinal(0)] [RED("acceptDistance")] 		public CBehTreeValFloat AcceptDistance { get; set;}
 
-		[RED("acceptRotationRequired")] 		public CBehTreeValFloat AcceptRotationRequired { get; set;}
+		[Ordinal(0)] [RED("acceptRotationRequired")] 		public CBehTreeValFloat AcceptRotationRequired { get; set;}
 
 		public CBehTreeNodeAlreadyAtWorkDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

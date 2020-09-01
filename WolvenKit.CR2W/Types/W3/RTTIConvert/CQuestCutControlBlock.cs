@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestCutControlBlock : CQuestGraphBlock
 	{
-		[RED("permanent")] 		public CBool Permanent { get; set;}
+		[Ordinal(0)] [RED("permanent")] 		public CBool Permanent { get; set;}
 
 		public CQuestCutControlBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskBreakQuen : IBehTreeTask
 	{
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
 		public CBTTaskBreakQuen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

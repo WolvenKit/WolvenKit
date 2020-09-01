@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCreaturePartyEntry : CBaseCreatureEntry
 	{
-		[RED("subDefinitions", 2,0)] 		public CArray<CPtr<CSpawnTreeEntrySubDefinition>> SubDefinitions { get; set;}
+		[Ordinal(0)] [RED("("subDefinitions", 2,0)] 		public CArray<CPtr<CSpawnTreeEntrySubDefinition>> SubDefinitions { get; set;}
 
-		[RED("partySpawnOrganizer")] 		public CHandle<CPartySpawnOrganizer> PartySpawnOrganizer { get; set;}
+		[Ordinal(0)] [RED("("partySpawnOrganizer")] 		public CHandle<CPartySpawnOrganizer> PartySpawnOrganizer { get; set;}
 
-		[RED("blockChats")] 		public CBool BlockChats { get; set;}
+		[Ordinal(0)] [RED("("blockChats")] 		public CBool BlockChats { get; set;}
 
-		[RED("synchronizeWork")] 		public CBool SynchronizeWork { get; set;}
+		[Ordinal(0)] [RED("("synchronizeWork")] 		public CBool SynchronizeWork { get; set;}
 
 		public CCreaturePartyEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

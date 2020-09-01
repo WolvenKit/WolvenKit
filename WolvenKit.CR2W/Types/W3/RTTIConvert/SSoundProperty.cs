@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSoundProperty : CVariable
 	{
-		[RED("SoundProperty")] 		public StringAnsi SoundProperty { get; set;}
+		[Ordinal(0)] [RED("("SoundProperty")] 		public StringAnsi SoundProperty { get; set;}
 
-		[RED("value")] 		public CFloat Value { get; set;}
+		[Ordinal(0)] [RED("("value")] 		public CFloat Value { get; set;}
 
 		public SSoundProperty(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

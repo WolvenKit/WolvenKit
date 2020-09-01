@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SGameplayLODConfig : CVariable
 	{
-		[RED("actorLODs", 2,0)] 		public CArray<SActorLODConfig> ActorLODs { get; set;}
+		[Ordinal(0)] [RED("("actorLODs", 2,0)] 		public CArray<SActorLODConfig> ActorLODs { get; set;}
 
-		[RED("actorInvisibilityTimeThreshold")] 		public CFloat ActorInvisibilityTimeThreshold { get; set;}
+		[Ordinal(0)] [RED("("actorInvisibilityTimeThreshold")] 		public CFloat ActorInvisibilityTimeThreshold { get; set;}
 
-		[RED("maxBudgetedComponentsTickTime")] 		public CFloat MaxBudgetedComponentsTickTime { get; set;}
+		[Ordinal(0)] [RED("("maxBudgetedComponentsTickTime")] 		public CFloat MaxBudgetedComponentsTickTime { get; set;}
 
-		[RED("minBudgetedComponentsTickPercentage")] 		public CUInt32 MinBudgetedComponentsTickPercentage { get; set;}
+		[Ordinal(0)] [RED("("minBudgetedComponentsTickPercentage")] 		public CUInt32 MinBudgetedComponentsTickPercentage { get; set;}
 
-		[RED("componentsTickLODUpdateTime")] 		public CFloat ComponentsTickLODUpdateTime { get; set;}
+		[Ordinal(0)] [RED("("componentsTickLODUpdateTime")] 		public CFloat ComponentsTickLODUpdateTime { get; set;}
 
-		[RED("componentsBudgetableTickDistance")] 		public CFloat ComponentsBudgetableTickDistance { get; set;}
+		[Ordinal(0)] [RED("("componentsBudgetableTickDistance")] 		public CFloat ComponentsBudgetableTickDistance { get; set;}
 
-		[RED("componentsDisableTickDistance")] 		public CFloat ComponentsDisableTickDistance { get; set;}
+		[Ordinal(0)] [RED("("componentsDisableTickDistance")] 		public CFloat ComponentsDisableTickDistance { get; set;}
 
-		[RED("entitiesBudgetableTickDistance")] 		public CFloat EntitiesBudgetableTickDistance { get; set;}
+		[Ordinal(0)] [RED("("entitiesBudgetableTickDistance")] 		public CFloat EntitiesBudgetableTickDistance { get; set;}
 
-		[RED("entitiesDisableTickDistance")] 		public CFloat EntitiesDisableTickDistance { get; set;}
+		[Ordinal(0)] [RED("("entitiesDisableTickDistance")] 		public CFloat EntitiesDisableTickDistance { get; set;}
 
-		[RED("entitiesTickTime")] 		public CFloat EntitiesTickTime { get; set;}
+		[Ordinal(0)] [RED("("entitiesTickTime")] 		public CFloat EntitiesTickTime { get; set;}
 
-		[RED("effectsBudgetableTickDistance")] 		public CFloat EffectsBudgetableTickDistance { get; set;}
+		[Ordinal(0)] [RED("("effectsBudgetableTickDistance")] 		public CFloat EffectsBudgetableTickDistance { get; set;}
 
-		[RED("effectsTickLODUpdateTime")] 		public CFloat EffectsTickLODUpdateTime { get; set;}
+		[Ordinal(0)] [RED("("effectsTickLODUpdateTime")] 		public CFloat EffectsTickLODUpdateTime { get; set;}
 
-		[RED("effectsTickTime")] 		public CFloat EffectsTickTime { get; set;}
+		[Ordinal(0)] [RED("("effectsTickTime")] 		public CFloat EffectsTickTime { get; set;}
 
 		public SGameplayLODConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

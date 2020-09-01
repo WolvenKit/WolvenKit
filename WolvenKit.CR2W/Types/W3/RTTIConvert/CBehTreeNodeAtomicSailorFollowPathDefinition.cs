@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeAtomicSailorFollowPathDefinition : CBehTreeNodeAtomicActionDefinition
 	{
-		[RED("boatTag")] 		public CBehTreeValCName BoatTag { get; set;}
+		[Ordinal(0)] [RED("boatTag")] 		public CBehTreeValCName BoatTag { get; set;}
 
-		[RED("pathTag")] 		public CBehTreeValCName PathTag { get; set;}
+		[Ordinal(0)] [RED("pathTag")] 		public CBehTreeValCName PathTag { get; set;}
 
-		[RED("upThePath")] 		public CBehTreeValBool UpThePath { get; set;}
+		[Ordinal(0)] [RED("upThePath")] 		public CBehTreeValBool UpThePath { get; set;}
 
-		[RED("startFromBeginning")] 		public CBehTreeValBool StartFromBeginning { get; set;}
+		[Ordinal(0)] [RED("startFromBeginning")] 		public CBehTreeValBool StartFromBeginning { get; set;}
 
 		public CBehTreeNodeAtomicSailorFollowPathDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

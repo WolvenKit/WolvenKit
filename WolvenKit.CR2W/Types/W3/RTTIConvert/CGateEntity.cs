@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGateEntity : W3LockableEntity
 	{
-		[RED("currState")] 		public CName CurrState { get; set;}
+		[Ordinal(0)] [RED("("currState")] 		public CName CurrState { get; set;}
 
-		[RED("speedModifier")] 		public CFloat SpeedModifier { get; set;}
+		[Ordinal(0)] [RED("("speedModifier")] 		public CFloat SpeedModifier { get; set;}
 
-		[RED("initiallyOpened")] 		public CBool InitiallyOpened { get; set;}
+		[Ordinal(0)] [RED("("initiallyOpened")] 		public CBool InitiallyOpened { get; set;}
 
-		[RED("startSound")] 		public CName StartSound { get; set;}
+		[Ordinal(0)] [RED("("startSound")] 		public CName StartSound { get; set;}
 
-		[RED("stopSound")] 		public CName StopSound { get; set;}
+		[Ordinal(0)] [RED("("stopSound")] 		public CName StopSound { get; set;}
 
-		[RED("runTime")] 		public CFloat RunTime { get; set;}
+		[Ordinal(0)] [RED("("runTime")] 		public CFloat RunTime { get; set;}
 
 		public CGateEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

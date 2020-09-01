@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalQuest : CJournalContainer
 	{
-		[RED("type")] 		public CEnum<eQuestType> Type { get; set;}
+		[Ordinal(0)] [RED("("type")] 		public CEnum<eQuestType> Type { get; set;}
 
-		[RED("contentType")] 		public CEnum<EJournalContentType> ContentType { get; set;}
+		[Ordinal(0)] [RED("("contentType")] 		public CEnum<EJournalContentType> ContentType { get; set;}
 
-		[RED("world")] 		public CUInt32 World { get; set;}
+		[Ordinal(0)] [RED("("world")] 		public CUInt32 World { get; set;}
 
-		[RED("huntingQuestPath")] 		public CHandle<CJournalPath> HuntingQuestPath { get; set;}
+		[Ordinal(0)] [RED("("huntingQuestPath")] 		public CHandle<CJournalPath> HuntingQuestPath { get; set;}
 
-		[RED("title")] 		public LocalizedString Title { get; set;}
+		[Ordinal(0)] [RED("("title")] 		public LocalizedString Title { get; set;}
 
-		[RED("questPhase")] 		public CSoft<CQuestPhase> QuestPhase { get; set;}
+		[Ordinal(0)] [RED("("questPhase")] 		public CSoft<CQuestPhase> QuestPhase { get; set;}
 
 		public CJournalQuest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

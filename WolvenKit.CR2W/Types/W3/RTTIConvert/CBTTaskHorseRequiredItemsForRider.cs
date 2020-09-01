@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskHorseRequiredItemsForRider : IBehTreeTask
 	{
-		[RED("processLeftItem")] 		public CBool ProcessLeftItem { get; set;}
+		[Ordinal(0)] [RED("processLeftItem")] 		public CBool ProcessLeftItem { get; set;}
 
-		[RED("processRightItem")] 		public CBool ProcessRightItem { get; set;}
+		[Ordinal(0)] [RED("processRightItem")] 		public CBool ProcessRightItem { get; set;}
 
-		[RED("LeftItemType")] 		public CName LeftItemType { get; set;}
+		[Ordinal(0)] [RED("LeftItemType")] 		public CName LeftItemType { get; set;}
 
-		[RED("RightItemType")] 		public CName RightItemType { get; set;}
+		[Ordinal(0)] [RED("RightItemType")] 		public CName RightItemType { get; set;}
 
 		public CBTTaskHorseRequiredItemsForRider(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

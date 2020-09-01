@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPlayPropertyAnimationAction : IEntityTargetingAction
 	{
-		[RED("animationName")] 		public CName AnimationName { get; set;}
+		[Ordinal(0)] [RED("animationName")] 		public CName AnimationName { get; set;}
 
-		[RED("loopCount")] 		public CUInt32 LoopCount { get; set;}
+		[Ordinal(0)] [RED("loopCount")] 		public CUInt32 LoopCount { get; set;}
 
-		[RED("lengthScale")] 		public CFloat LengthScale { get; set;}
+		[Ordinal(0)] [RED("lengthScale")] 		public CFloat LengthScale { get; set;}
 
-		[RED("mode")] 		public CEnum<EPropertyCurveMode> Mode { get; set;}
+		[Ordinal(0)] [RED("mode")] 		public CEnum<EPropertyCurveMode> Mode { get; set;}
 
 		public CPlayPropertyAnimationAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

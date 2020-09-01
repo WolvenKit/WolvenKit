@@ -10,33 +10,33 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class PlayerAimingStateAiming : CScriptableState
 	{
-		[RED("SLOWMO_SPEED")] 		public CFloat SLOWMO_SPEED { get; set;}
+		[Ordinal(0)] [RED("SLOWMO_SPEED")] 		public CFloat SLOWMO_SPEED { get; set;}
 
-		[RED("AIM_ENTITY_DISPLACEMENT")] 		public CFloat AIM_ENTITY_DISPLACEMENT { get; set;}
+		[Ordinal(0)] [RED("AIM_ENTITY_DISPLACEMENT")] 		public CFloat AIM_ENTITY_DISPLACEMENT { get; set;}
 
-		[RED("aimEntity")] 		public CHandle<CEntity> AimEntity { get; set;}
+		[Ordinal(0)] [RED("aimEntity")] 		public CHandle<CEntity> AimEntity { get; set;}
 
-		[RED("radiusEntity")] 		public CHandle<CEntity> RadiusEntity { get; set;}
+		[Ordinal(0)] [RED("radiusEntity")] 		public CHandle<CEntity> RadiusEntity { get; set;}
 
-		[RED("stopAiming")] 		public CBool StopAiming { get; set;}
+		[Ordinal(0)] [RED("stopAiming")] 		public CBool StopAiming { get; set;}
 
-		[RED("startTime")] 		public CFloat StartTime { get; set;}
+		[Ordinal(0)] [RED("startTime")] 		public CFloat StartTime { get; set;}
 
-		[RED("traceManager")] 		public CHandle<CScriptBatchQueryAccessor> TraceManager { get; set;}
+		[Ordinal(0)] [RED("traceManager")] 		public CHandle<CScriptBatchQueryAccessor> TraceManager { get; set;}
 
-		[RED("cachedCamDirection")] 		public Vector CachedCamDirection { get; set;}
+		[Ordinal(0)] [RED("cachedCamDirection")] 		public Vector CachedCamDirection { get; set;}
 
-		[RED("cachedCamPosition")] 		public Vector CachedCamPosition { get; set;}
+		[Ordinal(0)] [RED("cachedCamPosition")] 		public Vector CachedCamPosition { get; set;}
 
-		[RED("cachedOwnerPosition")] 		public Vector CachedOwnerPosition { get; set;}
+		[Ordinal(0)] [RED("cachedOwnerPosition")] 		public Vector CachedOwnerPosition { get; set;}
 
-		[RED("sweepId")] 		public SScriptSweepId SweepId { get; set;}
+		[Ordinal(0)] [RED("sweepId")] 		public SScriptSweepId SweepId { get; set;}
 
-		[RED("throwPosInitial")] 		public Vector ThrowPosInitial { get; set;}
+		[Ordinal(0)] [RED("throwPosInitial")] 		public Vector ThrowPosInitial { get; set;}
 
-		[RED("cachedTime")] 		public CFloat CachedTime { get; set;}
+		[Ordinal(0)] [RED("cachedTime")] 		public CFloat CachedTime { get; set;}
 
-		[RED("speedMultCasuserId")] 		public CInt32 SpeedMultCasuserId { get; set;}
+		[Ordinal(0)] [RED("speedMultCasuserId")] 		public CInt32 SpeedMultCasuserId { get; set;}
 
 		public PlayerAimingStateAiming(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

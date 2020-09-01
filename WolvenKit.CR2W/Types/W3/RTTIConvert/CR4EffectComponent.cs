@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4EffectComponent : CComponent
 	{
-		[RED("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(0)] [RED("("effectName")] 		public CName EffectName { get; set;}
 
-		[RED("effectTarget")] 		public EntityHandle EffectTarget { get; set;}
+		[Ordinal(0)] [RED("("effectTarget")] 		public EntityHandle EffectTarget { get; set;}
 
-		[RED("targetBone")] 		public CName TargetBone { get; set;}
+		[Ordinal(0)] [RED("("targetBone")] 		public CName TargetBone { get; set;}
 
 		public CR4EffectComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

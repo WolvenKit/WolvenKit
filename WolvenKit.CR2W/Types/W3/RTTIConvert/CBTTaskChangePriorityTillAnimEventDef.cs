@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskChangePriorityTillAnimEventDef : IBehTreeTaskDefinition
 	{
-		[RED("highPriority")] 		public CInt32 HighPriority { get; set;}
+		[Ordinal(0)] [RED("highPriority")] 		public CInt32 HighPriority { get; set;}
 
-		[RED("defaultPriority")] 		public CInt32 DefaultPriority { get; set;}
+		[Ordinal(0)] [RED("defaultPriority")] 		public CInt32 DefaultPriority { get; set;}
 
-		[RED("animEventName")] 		public CName AnimEventName { get; set;}
+		[Ordinal(0)] [RED("animEventName")] 		public CName AnimEventName { get; set;}
 
 		public CBTTaskChangePriorityTillAnimEventDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SEntityTemplateColoringEntry : CVariable
 	{
-		[RED("appearance")] 		public CName Appearance { get; set;}
+		[Ordinal(0)] [RED("("appearance")] 		public CName Appearance { get; set;}
 
-		[RED("componentName")] 		public CName ComponentName { get; set;}
+		[Ordinal(0)] [RED("("componentName")] 		public CName ComponentName { get; set;}
 
-		[RED("colorShift1")] 		public CColorShift ColorShift1 { get; set;}
+		[Ordinal(0)] [RED("("colorShift1")] 		public CColorShift ColorShift1 { get; set;}
 
-		[RED("colorShift2")] 		public CColorShift ColorShift2 { get; set;}
+		[Ordinal(0)] [RED("("colorShift2")] 		public CColorShift ColorShift2 { get; set;}
 
 		public SEntityTemplateColoringEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

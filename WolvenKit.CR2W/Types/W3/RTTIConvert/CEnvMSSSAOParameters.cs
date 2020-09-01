@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvMSSSAOParameters : CVariable
 	{
-		[RED("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(0)] [RED("activated")] 		public CBool Activated { get; set;}
 
-		[RED("noiseFilterTolerance")] 		public SSimpleCurve NoiseFilterTolerance { get; set;}
+		[Ordinal(0)] [RED("noiseFilterTolerance")] 		public SSimpleCurve NoiseFilterTolerance { get; set;}
 
-		[RED("blurTolerance")] 		public SSimpleCurve BlurTolerance { get; set;}
+		[Ordinal(0)] [RED("blurTolerance")] 		public SSimpleCurve BlurTolerance { get; set;}
 
-		[RED("upsampleTolerance")] 		public SSimpleCurve UpsampleTolerance { get; set;}
+		[Ordinal(0)] [RED("upsampleTolerance")] 		public SSimpleCurve UpsampleTolerance { get; set;}
 
-		[RED("rejectionFalloff")] 		public SSimpleCurve RejectionFalloff { get; set;}
+		[Ordinal(0)] [RED("rejectionFalloff")] 		public SSimpleCurve RejectionFalloff { get; set;}
 
-		[RED("combineResolutionsBeforeBlur")] 		public CBool CombineResolutionsBeforeBlur { get; set;}
+		[Ordinal(0)] [RED("combineResolutionsBeforeBlur")] 		public CBool CombineResolutionsBeforeBlur { get; set;}
 
-		[RED("combineResolutionsWithMul")] 		public CBool CombineResolutionsWithMul { get; set;}
+		[Ordinal(0)] [RED("combineResolutionsWithMul")] 		public CBool CombineResolutionsWithMul { get; set;}
 
-		[RED("hierarchyDepth")] 		public SSimpleCurve HierarchyDepth { get; set;}
+		[Ordinal(0)] [RED("hierarchyDepth")] 		public SSimpleCurve HierarchyDepth { get; set;}
 
-		[RED("normalAOMultiply")] 		public SSimpleCurve NormalAOMultiply { get; set;}
+		[Ordinal(0)] [RED("normalAOMultiply")] 		public SSimpleCurve NormalAOMultiply { get; set;}
 
-		[RED("normalToDepthBrightnessEqualiser")] 		public SSimpleCurve NormalToDepthBrightnessEqualiser { get; set;}
+		[Ordinal(0)] [RED("normalToDepthBrightnessEqualiser")] 		public SSimpleCurve NormalToDepthBrightnessEqualiser { get; set;}
 
-		[RED("normalBackProjectionTolerance")] 		public SSimpleCurve NormalBackProjectionTolerance { get; set;}
+		[Ordinal(0)] [RED("normalBackProjectionTolerance")] 		public SSimpleCurve NormalBackProjectionTolerance { get; set;}
 
 		public CEnvMSSSAOParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

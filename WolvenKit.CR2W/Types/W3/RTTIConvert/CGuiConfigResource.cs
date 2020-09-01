@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGuiConfigResource : CResource
 	{
-		[RED("huds", 2,0)] 		public CArray<SHudDescription> Huds { get; set;}
+		[Ordinal(0)] [RED("huds", 2,0)] 		public CArray<SHudDescription> Huds { get; set;}
 
-		[RED("menus", 2,0)] 		public CArray<SMenuDescription> Menus { get; set;}
+		[Ordinal(0)] [RED("menus", 2,0)] 		public CArray<SMenuDescription> Menus { get; set;}
 
-		[RED("popups", 2,0)] 		public CArray<SPopupDescription> Popups { get; set;}
+		[Ordinal(0)] [RED("popups", 2,0)] 		public CArray<SPopupDescription> Popups { get; set;}
 
-		[RED("scene")] 		public SGuiSceneDescription Scene { get; set;}
+		[Ordinal(0)] [RED("scene")] 		public SGuiSceneDescription Scene { get; set;}
 
 		public CGuiConfigResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

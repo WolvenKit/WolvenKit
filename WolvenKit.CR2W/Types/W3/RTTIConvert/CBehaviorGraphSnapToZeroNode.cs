@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphSnapToZeroNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("epsilon")] 		public CFloat Epsilon { get; set;}
+		[Ordinal(0)] [RED("epsilon")] 		public CFloat Epsilon { get; set;}
 
 		public CBehaviorGraphSnapToZeroNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIChangeBehaviorGraphDecorator : IActionDecorator
 	{
-		[RED("graphWhenActivate")] 		public CName GraphWhenActivate { get; set;}
+		[Ordinal(0)] [RED("graphWhenActivate")] 		public CName GraphWhenActivate { get; set;}
 
-		[RED("graphWhenDeactivate")] 		public CName GraphWhenDeactivate { get; set;}
+		[Ordinal(0)] [RED("graphWhenDeactivate")] 		public CName GraphWhenDeactivate { get; set;}
 
 		public CAIChangeBehaviorGraphDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

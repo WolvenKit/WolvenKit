@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeCompleteImmediatelyDefinition : CBehTreeNodeAtomicActionDefinition
 	{
-		[RED("reportSuccess")] 		public CBool ReportSuccess { get; set;}
+		[Ordinal(0)] [RED("reportSuccess")] 		public CBool ReportSuccess { get; set;}
 
 		public CBehTreeNodeCompleteImmediatelyDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

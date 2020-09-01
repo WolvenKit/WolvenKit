@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardCameraMode : CModStoryBoardWorkMode
 	{
-		[RED("theCam")] 		public CHandle<CStoryBoardInteractiveCamera> TheCam { get; set;}
+		[Ordinal(0)] [RED("("theCam")] 		public CHandle<CStoryBoardInteractiveCamera> TheCam { get; set;}
 
-		[RED("assetManager")] 		public CHandle<CModStoryBoardAssetManager> AssetManager { get; set;}
+		[Ordinal(0)] [RED("("assetManager")] 		public CHandle<CModStoryBoardAssetManager> AssetManager { get; set;}
 
 		public CModStoryBoardCameraMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

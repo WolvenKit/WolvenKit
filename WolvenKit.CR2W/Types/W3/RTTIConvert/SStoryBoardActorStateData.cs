@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStoryBoardActorStateData : CVariable
 	{
-		[RED("id")] 		public CString Id { get; set;}
+		[Ordinal(0)] [RED("("id")] 		public CString Id { get; set;}
 
-		[RED("assetname")] 		public CString Assetname { get; set;}
+		[Ordinal(0)] [RED("("assetname")] 		public CString Assetname { get; set;}
 
-		[RED("userSetName")] 		public CBool UserSetName { get; set;}
+		[Ordinal(0)] [RED("("userSetName")] 		public CBool UserSetName { get; set;}
 
-		[RED("templatePath")] 		public CString TemplatePath { get; set;}
+		[Ordinal(0)] [RED("("templatePath")] 		public CString TemplatePath { get; set;}
 
-		[RED("appearanceId")] 		public CInt32 AppearanceId { get; set;}
+		[Ordinal(0)] [RED("("appearanceId")] 		public CInt32 AppearanceId { get; set;}
 
-		[RED("defaultIdleAnim")] 		public CName DefaultIdleAnim { get; set;}
+		[Ordinal(0)] [RED("("defaultIdleAnim")] 		public CName DefaultIdleAnim { get; set;}
 
 		public SStoryBoardActorStateData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

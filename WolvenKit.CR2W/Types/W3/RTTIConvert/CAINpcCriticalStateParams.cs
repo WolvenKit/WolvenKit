@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcCriticalStateParams : CAICombatActionParameters
 	{
-		[RED("FinisherAnim")] 		public CName FinisherAnim { get; set;}
+		[Ordinal(0)] [RED("FinisherAnim")] 		public CName FinisherAnim { get; set;}
 
 		public CAINpcCriticalStateParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

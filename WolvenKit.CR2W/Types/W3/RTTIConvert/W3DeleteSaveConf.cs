@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3DeleteSaveConf : ConfirmationPopupData
 	{
-		[RED("menuRef")] 		public CHandle<CR4IngameMenu> MenuRef { get; set;}
+		[Ordinal(0)] [RED("("menuRef")] 		public CHandle<CR4IngameMenu> MenuRef { get; set;}
 
-		[RED("type")] 		public CEnum<ESaveGameType> Type { get; set;}
+		[Ordinal(0)] [RED("("type")] 		public CEnum<ESaveGameType> Type { get; set;}
 
-		[RED("slot")] 		public CInt32 Slot { get; set;}
+		[Ordinal(0)] [RED("("slot")] 		public CInt32 Slot { get; set;}
 
-		[RED("saveMode")] 		public CBool SaveMode { get; set;}
+		[Ordinal(0)] [RED("("saveMode")] 		public CBool SaveMode { get; set;}
 
 		public W3DeleteSaveConf(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEntityBodyPartState : CVariable
 	{
-		[RED("name")] 		public CName Name { get; set;}
+		[Ordinal(0)] [RED("("name")] 		public CName Name { get; set;}
 
-		[RED("componentsInUse", 2,0)] 		public CArray<CComponentReference> ComponentsInUse { get; set;}
+		[Ordinal(0)] [RED("("componentsInUse", 2,0)] 		public CArray<CComponentReference> ComponentsInUse { get; set;}
 
 		public CEntityBodyPartState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

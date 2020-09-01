@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCameraRotationControllerInteraction : ICustomCameraScriptedPivotRotationController
 	{
-		[RED("pitchMaxSpeed")] 		public CFloat PitchMaxSpeed { get; set;}
+		[Ordinal(0)] [RED("("pitchMaxSpeed")] 		public CFloat PitchMaxSpeed { get; set;}
 
-		[RED("blendTodesiredPitch")] 		public CBool BlendTodesiredPitch { get; set;}
+		[Ordinal(0)] [RED("("blendTodesiredPitch")] 		public CBool BlendTodesiredPitch { get; set;}
 
-		[RED("desiredPitch")] 		public CFloat DesiredPitch { get; set;}
+		[Ordinal(0)] [RED("("desiredPitch")] 		public CFloat DesiredPitch { get; set;}
 
-		[RED("desiredPitchSpeed")] 		public CFloat DesiredPitchSpeed { get; set;}
+		[Ordinal(0)] [RED("("desiredPitchSpeed")] 		public CFloat DesiredPitchSpeed { get; set;}
 
-		[RED("yawMaxSpeed")] 		public CFloat YawMaxSpeed { get; set;}
+		[Ordinal(0)] [RED("("yawMaxSpeed")] 		public CFloat YawMaxSpeed { get; set;}
 
 		public CCameraRotationControllerInteraction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

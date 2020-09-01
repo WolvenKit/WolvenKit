@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCheckAttitudeToTarget : IBehTreeTask
 	{
-		[RED("attitude")] 		public CEnum<EAIAttitude> Attitude { get; set;}
+		[Ordinal(0)] [RED("("attitude")] 		public CEnum<EAIAttitude> Attitude { get; set;}
 
 		public CBTTaskCheckAttitudeToTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

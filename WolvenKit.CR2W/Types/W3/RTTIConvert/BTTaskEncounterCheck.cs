@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskEncounterCheck : IBehTreeTask
 	{
-		[RED("encounter")] 		public CHandle<CEncounter> Encounter { get; set;}
+		[Ordinal(0)] [RED("encounter")] 		public CHandle<CEncounter> Encounter { get; set;}
 
-		[RED("taskExecuted")] 		public CBool TaskExecuted { get; set;}
+		[Ordinal(0)] [RED("taskExecuted")] 		public CBool TaskExecuted { get; set;}
 
 		public BTTaskEncounterCheck(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

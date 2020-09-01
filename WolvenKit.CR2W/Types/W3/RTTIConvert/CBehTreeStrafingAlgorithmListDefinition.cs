@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeStrafingAlgorithmListDefinition : CBehTreeStrafingAlgorithmDefinition
 	{
-		[RED("list", 2,0)] 		public CArray<CPtr<CBehTreeStrafingAlgorithmDefinition>> List { get; set;}
+		[Ordinal(0)] [RED("list", 2,0)] 		public CArray<CPtr<CBehTreeStrafingAlgorithmDefinition>> List { get; set;}
 
 		public CBehTreeStrafingAlgorithmListDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

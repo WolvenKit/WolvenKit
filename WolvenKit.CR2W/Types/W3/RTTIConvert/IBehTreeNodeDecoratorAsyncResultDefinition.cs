@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IBehTreeNodeDecoratorAsyncResultDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("queryName")] 		public CName QueryName { get; set;}
+		[Ordinal(0)] [RED("queryName")] 		public CName QueryName { get; set;}
 
 		public IBehTreeNodeDecoratorAsyncResultDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

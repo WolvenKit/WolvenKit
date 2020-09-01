@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStandPhysicalMaterialAreaComponent : CTriggerAreaComponent
 	{
-		[RED("physicalMaterialName")] 		public CName PhysicalMaterialName { get; set;}
+		[Ordinal(0)] [RED("("physicalMaterialName")] 		public CName PhysicalMaterialName { get; set;}
 
 		public CStandPhysicalMaterialAreaComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

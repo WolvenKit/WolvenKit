@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3DaoPillarObstacle : W3DurationObstacle
 	{
-		[RED("damageValue")] 		public CFloat DamageValue { get; set;}
+		[Ordinal(0)] [RED("("damageValue")] 		public CFloat DamageValue { get; set;}
 
 		public W3DaoPillarObstacle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

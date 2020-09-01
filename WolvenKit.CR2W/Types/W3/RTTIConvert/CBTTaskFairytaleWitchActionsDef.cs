@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskFairytaleWitchActionsDef : IBehTreeTaskDefinition
 	{
-		[RED("action")] 		public CEnum<EFairytaleWitchAction> Action { get; set;}
+		[Ordinal(0)] [RED("("action")] 		public CEnum<EFairytaleWitchAction> Action { get; set;}
 
 		public CBTTaskFairytaleWitchActionsDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

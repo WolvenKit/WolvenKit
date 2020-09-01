@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestUsedFastTravelCondition : IQuestCondition
 	{
-		[RED("pinTag")] 		public CName PinTag { get; set;}
+		[Ordinal(0)] [RED("pinTag")] 		public CName PinTag { get; set;}
 
-		[RED("conditionType")] 		public CEnum<EFastTravelConditionType> ConditionType { get; set;}
+		[Ordinal(0)] [RED("conditionType")] 		public CEnum<EFastTravelConditionType> ConditionType { get; set;}
 
 		public CQuestUsedFastTravelCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMoveToPointParams : IAIActionParameters
 	{
-		[RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(0)] [RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
+		[Ordinal(0)] [RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
 
-		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
+		[Ordinal(0)] [RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
-		[RED("destinationPosition")] 		public Vector DestinationPosition { get; set;}
+		[Ordinal(0)] [RED("destinationPosition")] 		public Vector DestinationPosition { get; set;}
 
-		[RED("destinationHeading")] 		public CFloat DestinationHeading { get; set;}
+		[Ordinal(0)] [RED("destinationHeading")] 		public CFloat DestinationHeading { get; set;}
 
-		[RED("maxIterationsNumber")] 		public CInt32 MaxIterationsNumber { get; set;}
+		[Ordinal(0)] [RED("maxIterationsNumber")] 		public CInt32 MaxIterationsNumber { get; set;}
 
-		[RED("useTimeout")] 		public CBool UseTimeout { get; set;}
+		[Ordinal(0)] [RED("useTimeout")] 		public CBool UseTimeout { get; set;}
 
-		[RED("timeoutValue")] 		public CFloat TimeoutValue { get; set;}
+		[Ordinal(0)] [RED("timeoutValue")] 		public CFloat TimeoutValue { get; set;}
 
 		public CAIMoveToPointParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

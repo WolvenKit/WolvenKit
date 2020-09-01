@@ -9,11 +9,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta()]
 	public class EmitterDurationSettings : CVariable
 	{
-		[RED("emitterDuration")] 		public CFloat EmitterDuration { get; set;}
+		[Ordinal(0)] [RED("emitterDuration")] 		public CFloat EmitterDuration { get; set;}
 
-		[RED("emitterDurationLow")] 		public CFloat EmitterDurationLow { get; set;}
+		[Ordinal(0)] [RED("emitterDurationLow")] 		public CFloat EmitterDurationLow { get; set;}
 
-		[RED("useEmitterDurationRange")] 		public CBool UseEmitterDurationRange { get; set;}
+		[Ordinal(0)] [RED("useEmitterDurationRange")] 		public CBool UseEmitterDurationRange { get; set;}
 
 		public EmitterDurationSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcUnconsciousTree : CAIDeathTree
 	{
-		[RED("params")] 		public CHandle<CAINpcUnconsciousParams> Params { get; set;}
+		[Ordinal(0)] [RED("params")] 		public CHandle<CAINpcUnconsciousParams> Params { get; set;}
 
 		public CAINpcUnconsciousTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

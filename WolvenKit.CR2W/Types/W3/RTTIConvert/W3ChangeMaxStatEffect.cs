@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ChangeMaxStatEffect : CBaseGameplayEffect
 	{
-		[RED("stat")] 		public CEnum<EBaseCharacterStats> Stat { get; set;}
+		[Ordinal(0)] [RED("("stat")] 		public CEnum<EBaseCharacterStats> Stat { get; set;}
 
 		public W3ChangeMaxStatEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

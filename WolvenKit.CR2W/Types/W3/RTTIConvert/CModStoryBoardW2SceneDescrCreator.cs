@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardW2SceneDescrCreator : CObject
 	{
-		[RED("poseMgr")] 		public CHandle<CModStoryBoardIdlePoseListsManager> PoseMgr { get; set;}
+		[Ordinal(0)] [RED("poseMgr")] 		public CHandle<CModStoryBoardIdlePoseListsManager> PoseMgr { get; set;}
 
-		[RED("animMgr")] 		public CHandle<CModStoryBoardAnimationListsManager> AnimMgr { get; set;}
+		[Ordinal(0)] [RED("animMgr")] 		public CHandle<CModStoryBoardAnimationListsManager> AnimMgr { get; set;}
 
-		[RED("mimicsMgr")] 		public CHandle<CModStoryBoardMimicsListsManager> MimicsMgr { get; set;}
+		[Ordinal(0)] [RED("mimicsMgr")] 		public CHandle<CModStoryBoardMimicsListsManager> MimicsMgr { get; set;}
 
-		[RED("voiceLinesMgr")] 		public CHandle<CModStoryBoardVoiceLinesListsManager> VoiceLinesMgr { get; set;}
+		[Ordinal(0)] [RED("voiceLinesMgr")] 		public CHandle<CModStoryBoardVoiceLinesListsManager> VoiceLinesMgr { get; set;}
 
-		[RED("thePlacement")] 		public CHandle<CModStoryBoardPlacementDirector> ThePlacement { get; set;}
+		[Ordinal(0)] [RED("thePlacement")] 		public CHandle<CModStoryBoardPlacementDirector> ThePlacement { get; set;}
 
-		[RED("theLookAtDirector")] 		public CHandle<CModStoryBoardLookAtDirector> TheLookAtDirector { get; set;}
+		[Ordinal(0)] [RED("theLookAtDirector")] 		public CHandle<CModStoryBoardLookAtDirector> TheLookAtDirector { get; set;}
 
-		[RED("repoActors", 2,0)] 		public CArray<SSbDescActor> RepoActors { get; set;}
+		[Ordinal(0)] [RED("repoActors", 2,0)] 		public CArray<SSbDescActor> RepoActors { get; set;}
 
-		[RED("repoItems", 2,0)] 		public CArray<SSbDescItem> RepoItems { get; set;}
+		[Ordinal(0)] [RED("repoItems", 2,0)] 		public CArray<SSbDescItem> RepoItems { get; set;}
 
-		[RED("repoCameras", 2,0)] 		public CArray<SSbDescCamera> RepoCameras { get; set;}
+		[Ordinal(0)] [RED("repoCameras", 2,0)] 		public CArray<SSbDescCamera> RepoCameras { get; set;}
 
-		[RED("playerTemplate")] 		public CString PlayerTemplate { get; set;}
+		[Ordinal(0)] [RED("playerTemplate")] 		public CString PlayerTemplate { get; set;}
 
 		public CModStoryBoardW2SceneDescrCreator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

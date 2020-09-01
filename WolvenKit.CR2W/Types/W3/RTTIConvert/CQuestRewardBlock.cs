@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestRewardBlock : CQuestGraphBlock
 	{
-		[RED("rewardName")] 		public CName RewardName { get; set;}
+		[Ordinal(0)] [RED("rewardName")] 		public CName RewardName { get; set;}
 
-		[RED("targetEntityTag")] 		public CName TargetEntityTag { get; set;}
+		[Ordinal(0)] [RED("targetEntityTag")] 		public CName TargetEntityTag { get; set;}
 
-		[RED("caption")] 		public CString Caption { get; set;}
+		[Ordinal(0)] [RED("caption")] 		public CString Caption { get; set;}
 
 		public CQuestRewardBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

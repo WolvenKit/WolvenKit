@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskOlgierdPhantomAttack : IBehTreeTask
 	{
-		[RED("phantomTemplate")] 		public CHandle<CEntityTemplate> PhantomTemplate { get; set;}
+		[Ordinal(0)] [RED("phantomTemplate")] 		public CHandle<CEntityTemplate> PhantomTemplate { get; set;}
 
-		[RED("phantom")] 		public CHandle<W3CiriPhantom> Phantom { get; set;}
+		[Ordinal(0)] [RED("phantom")] 		public CHandle<W3CiriPhantom> Phantom { get; set;}
 
 		public CBTTaskOlgierdPhantomAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

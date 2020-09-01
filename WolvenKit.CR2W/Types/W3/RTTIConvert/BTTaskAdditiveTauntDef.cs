@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskAdditiveTauntDef : IBehTreeTaskDefinition
 	{
-		[RED("distMin")] 		public CFloat DistMin { get; set;}
+		[Ordinal(0)] [RED("distMin")] 		public CFloat DistMin { get; set;}
 
-		[RED("distMax")] 		public CFloat DistMax { get; set;}
+		[Ordinal(0)] [RED("distMax")] 		public CFloat DistMax { get; set;}
 
 		public BTTaskAdditiveTauntDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

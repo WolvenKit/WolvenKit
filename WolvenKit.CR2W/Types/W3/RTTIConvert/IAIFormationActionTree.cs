@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IAIFormationActionTree : IAIBaseAction
 	{
-		[RED("formation")] 		public CHandle<CFormation> Formation { get; set;}
+		[Ordinal(0)] [RED("formation")] 		public CHandle<CFormation> Formation { get; set;}
 
 		public IAIFormationActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

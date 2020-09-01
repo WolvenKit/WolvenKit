@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ISpawnTreeSpawnAroundNodeInitializer : ISpawnTreeScriptedInitializer
 	{
-		[RED("spawnRadiousMin")] 		public CFloat SpawnRadiousMin { get; set;}
+		[Ordinal(0)] [RED("spawnRadiousMin")] 		public CFloat SpawnRadiousMin { get; set;}
 
-		[RED("spawnRadiousMAx")] 		public CFloat SpawnRadiousMAx { get; set;}
+		[Ordinal(0)] [RED("spawnRadiousMAx")] 		public CFloat SpawnRadiousMAx { get; set;}
 
-		[RED("spawnNodeTag")] 		public CName SpawnNodeTag { get; set;}
+		[Ordinal(0)] [RED("spawnNodeTag")] 		public CName SpawnNodeTag { get; set;}
 
-		[RED("spawnNode")] 		public CHandle<CNode> SpawnNode { get; set;}
+		[Ordinal(0)] [RED("spawnNode")] 		public CHandle<CNode> SpawnNode { get; set;}
 
 		public ISpawnTreeSpawnAroundNodeInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

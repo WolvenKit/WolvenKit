@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalQuestMappinStateBlock : CQuestGraphBlock
 	{
-		[RED("mappinEntry")] 		public CHandle<CJournalPath> MappinEntry { get; set;}
+		[Ordinal(0)] [RED("mappinEntry")] 		public CHandle<CJournalPath> MappinEntry { get; set;}
 
-		[RED("enableOnlyIfLatest")] 		public CBool EnableOnlyIfLatest { get; set;}
+		[Ordinal(0)] [RED("enableOnlyIfLatest")] 		public CBool EnableOnlyIfLatest { get; set;}
 
-		[RED("disableAllOtherMapPins")] 		public CBool DisableAllOtherMapPins { get; set;}
+		[Ordinal(0)] [RED("disableAllOtherMapPins")] 		public CBool DisableAllOtherMapPins { get; set;}
 
 		public CJournalQuestMappinStateBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

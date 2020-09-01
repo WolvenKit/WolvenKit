@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFXTrackItemPlayPropertyAnim : CFXTrackItem
 	{
-		[RED("propertyAnimationName")] 		public CName PropertyAnimationName { get; set;}
+		[Ordinal(0)] [RED("("propertyAnimationName")] 		public CName PropertyAnimationName { get; set;}
 
-		[RED("restoreAtEnd")] 		public CBool RestoreAtEnd { get; set;}
+		[Ordinal(0)] [RED("("restoreAtEnd")] 		public CBool RestoreAtEnd { get; set;}
 
-		[RED("loopCount")] 		public CUInt32 LoopCount { get; set;}
+		[Ordinal(0)] [RED("("loopCount")] 		public CUInt32 LoopCount { get; set;}
 
 		public CFXTrackItemPlayPropertyAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

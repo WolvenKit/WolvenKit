@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ISpawnAddAbilityInitializer : ISpawnTreeScriptedInitializer
 	{
-		[RED("remove")] 		public CBool Remove { get; set;}
+		[Ordinal(0)] [RED("("remove")] 		public CBool Remove { get; set;}
 
-		[RED("abulities", 2,0)] 		public CArray<CName> Abulities { get; set;}
+		[Ordinal(0)] [RED("("abulities", 2,0)] 		public CArray<CName> Abulities { get; set;}
 
-		[RED("abilityName")] 		public CName AbilityName { get; set;}
+		[Ordinal(0)] [RED("("abilityName")] 		public CName AbilityName { get; set;}
 
-		[RED("i")] 		public CInt32 I { get; set;}
+		[Ordinal(0)] [RED("("i")] 		public CInt32 I { get; set;}
 
 		public ISpawnAddAbilityInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

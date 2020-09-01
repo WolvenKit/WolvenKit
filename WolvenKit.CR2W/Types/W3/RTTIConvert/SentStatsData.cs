@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SentStatsData : CVariable
 	{
-		[RED("statName")] 		public CName StatName { get; set;}
+		[Ordinal(0)] [RED("("statName")] 		public CName StatName { get; set;}
 
-		[RED("statValue")] 		public CString StatValue { get; set;}
+		[Ordinal(0)] [RED("("statValue")] 		public CString StatValue { get; set;}
 
 		public SentStatsData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

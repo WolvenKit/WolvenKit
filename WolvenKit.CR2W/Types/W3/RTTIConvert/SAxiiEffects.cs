@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAxiiEffects : CVariable
 	{
-		[RED("castEffect")] 		public CName CastEffect { get; set;}
+		[Ordinal(0)] [RED("castEffect")] 		public CName CastEffect { get; set;}
 
-		[RED("throwEffect")] 		public CName ThrowEffect { get; set;}
+		[Ordinal(0)] [RED("throwEffect")] 		public CName ThrowEffect { get; set;}
 
 		public SAxiiEffects(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

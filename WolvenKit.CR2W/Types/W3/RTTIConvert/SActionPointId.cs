@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SActionPointId : CVariable
 	{
-		[RED("component")] 		public CGUID Component { get; set;}
+		[Ordinal(0)] [RED("("component")] 		public CGUID Component { get; set;}
 
-		[RED("entity")] 		public CGUID Entity { get; set;}
+		[Ordinal(0)] [RED("("entity")] 		public CGUID Entity { get; set;}
 
 		public SActionPointId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

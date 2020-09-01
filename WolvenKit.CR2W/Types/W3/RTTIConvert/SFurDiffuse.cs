@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFurDiffuse : CVariable
 	{
-		[RED("diffuseBlend")] 		public CFloat DiffuseBlend { get; set;}
+		[Ordinal(0)] [RED("("diffuseBlend")] 		public CFloat DiffuseBlend { get; set;}
 
-		[RED("diffuseScale")] 		public CFloat DiffuseScale { get; set;}
+		[Ordinal(0)] [RED("("diffuseScale")] 		public CFloat DiffuseScale { get; set;}
 
-		[RED("diffuseHairNormalWeight")] 		public CFloat DiffuseHairNormalWeight { get; set;}
+		[Ordinal(0)] [RED("("diffuseHairNormalWeight")] 		public CFloat DiffuseHairNormalWeight { get; set;}
 
-		[RED("diffuseBoneIndex")] 		public CUInt32 DiffuseBoneIndex { get; set;}
+		[Ordinal(0)] [RED("("diffuseBoneIndex")] 		public CUInt32 DiffuseBoneIndex { get; set;}
 
-		[RED("diffuseBoneLocalPos")] 		public Vector DiffuseBoneLocalPos { get; set;}
+		[Ordinal(0)] [RED("("diffuseBoneLocalPos")] 		public Vector DiffuseBoneLocalPos { get; set;}
 
-		[RED("diffuseNoiseScale")] 		public CFloat DiffuseNoiseScale { get; set;}
+		[Ordinal(0)] [RED("("diffuseNoiseScale")] 		public CFloat DiffuseNoiseScale { get; set;}
 
-		[RED("diffuseNoiseFreqU")] 		public CFloat DiffuseNoiseFreqU { get; set;}
+		[Ordinal(0)] [RED("("diffuseNoiseFreqU")] 		public CFloat DiffuseNoiseFreqU { get; set;}
 
-		[RED("diffuseNoiseFreqV")] 		public CFloat DiffuseNoiseFreqV { get; set;}
+		[Ordinal(0)] [RED("("diffuseNoiseFreqV")] 		public CFloat DiffuseNoiseFreqV { get; set;}
 
-		[RED("diffuseNoiseGain")] 		public CFloat DiffuseNoiseGain { get; set;}
+		[Ordinal(0)] [RED("("diffuseNoiseGain")] 		public CFloat DiffuseNoiseGain { get; set;}
 
 		public SFurDiffuse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

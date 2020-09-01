@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SResistanceValue : CVariable
 	{
-		[RED("points")] 		public SAbilityAttributeValue Points { get; set;}
+		[Ordinal(0)] [RED("("points")] 		public SAbilityAttributeValue Points { get; set;}
 
-		[RED("percents")] 		public SAbilityAttributeValue Percents { get; set;}
+		[Ordinal(0)] [RED("("percents")] 		public SAbilityAttributeValue Percents { get; set;}
 
-		[RED("type")] 		public CEnum<ECharacterDefenseStats> Type { get; set;}
+		[Ordinal(0)] [RED("("type")] 		public CEnum<ECharacterDefenseStats> Type { get; set;}
 
 		public SResistanceValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

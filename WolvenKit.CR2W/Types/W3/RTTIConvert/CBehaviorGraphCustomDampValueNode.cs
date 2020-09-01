@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphCustomDampValueNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("type")] 		public CEnum<EBehaviorCustomDampType> Type { get; set;}
+		[Ordinal(0)] [RED("("type")] 		public CEnum<EBehaviorCustomDampType> Type { get; set;}
 
-		[RED("directionalAcc_MaxAccDiffFromZero")] 		public CFloat DirectionalAcc_MaxAccDiffFromZero { get; set;}
+		[Ordinal(0)] [RED("("directionalAcc_MaxAccDiffFromZero")] 		public CFloat DirectionalAcc_MaxAccDiffFromZero { get; set;}
 
-		[RED("directionalAcc_MaxAccDiffToZero")] 		public CFloat DirectionalAcc_MaxAccDiffToZero { get; set;}
+		[Ordinal(0)] [RED("("directionalAcc_MaxAccDiffToZero")] 		public CFloat DirectionalAcc_MaxAccDiffToZero { get; set;}
 
-		[RED("filterLowPass_RC")] 		public CFloat FilterLowPass_RC { get; set;}
+		[Ordinal(0)] [RED("("filterLowPass_RC")] 		public CFloat FilterLowPass_RC { get; set;}
 
 		public CBehaviorGraphCustomDampValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

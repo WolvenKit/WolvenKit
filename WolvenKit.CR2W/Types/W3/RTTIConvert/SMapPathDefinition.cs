@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMapPathDefinition : CVariable
 	{
-		[RED("tag")] 		public CName Tag { get; set;}
+		[Ordinal(0)] [RED("("tag")] 		public CName Tag { get; set;}
 
-		[RED("lineWidth")] 		public CFloat LineWidth { get; set;}
+		[Ordinal(0)] [RED("("lineWidth")] 		public CFloat LineWidth { get; set;}
 
-		[RED("lineSegmentLength")] 		public CFloat LineSegmentLength { get; set;}
+		[Ordinal(0)] [RED("("lineSegmentLength")] 		public CFloat LineSegmentLength { get; set;}
 
-		[RED("color")] 		public CColor Color { get; set;}
+		[Ordinal(0)] [RED("("color")] 		public CColor Color { get; set;}
 
 		public SMapPathDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

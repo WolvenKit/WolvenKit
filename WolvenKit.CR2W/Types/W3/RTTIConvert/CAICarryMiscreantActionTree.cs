@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAICarryMiscreantActionTree : IAICustomActionTree
 	{
-		[RED("attachmentBone")] 		public CName AttachmentBone { get; set;}
+		[Ordinal(0)] [RED("attachmentBone")] 		public CName AttachmentBone { get; set;}
 
-		[RED("miscreantName")] 		public CName MiscreantName { get; set;}
+		[Ordinal(0)] [RED("miscreantName")] 		public CName MiscreantName { get; set;}
 
-		[RED("behaviorGraph")] 		public CName BehaviorGraph { get; set;}
+		[Ordinal(0)] [RED("behaviorGraph")] 		public CName BehaviorGraph { get; set;}
 
-		[RED("cryStartEventName")] 		public CName CryStartEventName { get; set;}
+		[Ordinal(0)] [RED("cryStartEventName")] 		public CName CryStartEventName { get; set;}
 
-		[RED("cryStopEventName")] 		public CName CryStopEventName { get; set;}
+		[Ordinal(0)] [RED("cryStopEventName")] 		public CName CryStopEventName { get; set;}
 
-		[RED("carrySubAction")] 		public CHandle<IAIActionTree> CarrySubAction { get; set;}
+		[Ordinal(0)] [RED("carrySubAction")] 		public CHandle<IAIActionTree> CarrySubAction { get; set;}
 
 		public CAICarryMiscreantActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

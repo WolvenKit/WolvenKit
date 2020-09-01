@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBokehDofParams : CVariable
 	{
-		[RED("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(0)] [RED("("enabled")] 		public CBool Enabled { get; set;}
 
-		[RED("hexToCircleScale")] 		public CFloat HexToCircleScale { get; set;}
+		[Ordinal(0)] [RED("("hexToCircleScale")] 		public CFloat HexToCircleScale { get; set;}
 
-		[RED("usePhysicalSetup")] 		public CBool UsePhysicalSetup { get; set;}
+		[Ordinal(0)] [RED("("usePhysicalSetup")] 		public CBool UsePhysicalSetup { get; set;}
 
-		[RED("planeInFocus")] 		public CFloat PlaneInFocus { get; set;}
+		[Ordinal(0)] [RED("("planeInFocus")] 		public CFloat PlaneInFocus { get; set;}
 
-		[RED("fStops")] 		public CEnum<EApertureValue> FStops { get; set;}
+		[Ordinal(0)] [RED("("fStops")] 		public CEnum<EApertureValue> FStops { get; set;}
 
-		[RED("bokehSizeMuliplier")] 		public CFloat BokehSizeMuliplier { get; set;}
+		[Ordinal(0)] [RED("("bokehSizeMuliplier")] 		public CFloat BokehSizeMuliplier { get; set;}
 
 		public SBokehDofParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

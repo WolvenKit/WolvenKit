@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFXTrackItemRadialBlur : CFXTrackItemCurveBase
 	{
-		[RED("trackComponentPosition")] 		public CBool TrackComponentPosition { get; set;}
+		[Ordinal(0)] [RED("("trackComponentPosition")] 		public CBool TrackComponentPosition { get; set;}
 
-		[RED("distanceFromCamera")] 		public CFloat DistanceFromCamera { get; set;}
+		[Ordinal(0)] [RED("("distanceFromCamera")] 		public CFloat DistanceFromCamera { get; set;}
 
-		[RED("centerMultiplier")] 		public CFloat CenterMultiplier { get; set;}
+		[Ordinal(0)] [RED("("centerMultiplier")] 		public CFloat CenterMultiplier { get; set;}
 
 		public CFXTrackItemRadialBlur(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

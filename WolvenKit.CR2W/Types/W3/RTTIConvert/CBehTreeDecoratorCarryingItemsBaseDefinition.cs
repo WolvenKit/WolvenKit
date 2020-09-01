@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeDecoratorCarryingItemsBaseDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("carryingAreaName_var")] 		public CName CarryingAreaName_var { get; set;}
+		[Ordinal(0)] [RED("carryingAreaName_var")] 		public CName CarryingAreaName_var { get; set;}
 
-		[RED("storeTag")] 		public CBehTreeValCName StoreTag { get; set;}
+		[Ordinal(0)] [RED("storeTag")] 		public CBehTreeValCName StoreTag { get; set;}
 
 		public CBehTreeDecoratorCarryingItemsBaseDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

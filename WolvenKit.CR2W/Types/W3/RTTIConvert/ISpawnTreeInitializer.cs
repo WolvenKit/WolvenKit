@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ISpawnTreeInitializer : CObject
 	{
-		[RED("graphPosX")] 		public CInt32 GraphPosX { get; set;}
+		[Ordinal(0)] [RED("graphPosX")] 		public CInt32 GraphPosX { get; set;}
 
-		[RED("graphPosY")] 		public CInt32 GraphPosY { get; set;}
+		[Ordinal(0)] [RED("graphPosY")] 		public CInt32 GraphPosY { get; set;}
 
-		[RED("comment")] 		public CString Comment { get; set;}
+		[Ordinal(0)] [RED("comment")] 		public CString Comment { get; set;}
 
-		[RED("id")] 		public CUInt64 Id { get; set;}
+		[Ordinal(0)] [RED("id")] 		public CUInt64 Id { get; set;}
 
-		[RED("overrideDeepInitializers")] 		public CBool OverrideDeepInitializers { get; set;}
+		[Ordinal(0)] [RED("overrideDeepInitializers")] 		public CBool OverrideDeepInitializers { get; set;}
 
 		public ISpawnTreeInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

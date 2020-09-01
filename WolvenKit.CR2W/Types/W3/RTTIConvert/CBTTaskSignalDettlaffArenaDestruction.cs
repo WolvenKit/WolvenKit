@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSignalDettlaffArenaDestruction : IBehTreeTask
 	{
-		[RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(0)] [RED("("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
-		[RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
+		[Ordinal(0)] [RED("("entity")] 		public CHandle<CEntity> Entity { get; set;}
 
-		[RED("destroyTime")] 		public CFloat DestroyTime { get; set;}
+		[Ordinal(0)] [RED("("destroyTime")] 		public CFloat DestroyTime { get; set;}
 
 		public CBTTaskSignalDettlaffArenaDestruction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

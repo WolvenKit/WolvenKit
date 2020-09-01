@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class COnTrackedQuestObjectiveHighlightedEvent : CHudEvent
 	{
-		[RED("journalObjective")] 		public CHandle<CJournalQuestObjective> JournalObjective { get; set;}
+		[Ordinal(0)] [RED("journalObjective")] 		public CHandle<CJournalQuestObjective> JournalObjective { get; set;}
 
-		[RED("journalObjectiveIndex")] 		public CInt32 JournalObjectiveIndex { get; set;}
+		[Ordinal(0)] [RED("journalObjectiveIndex")] 		public CInt32 JournalObjectiveIndex { get; set;}
 
 		public COnTrackedQuestObjectiveHighlightedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

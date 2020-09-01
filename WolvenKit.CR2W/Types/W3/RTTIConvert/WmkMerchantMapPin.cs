@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class WmkMerchantMapPin : CVariable
 	{
-		[RED("entityIdTag")] 		public IdTag EntityIdTag { get; set;}
+		[Ordinal(0)] [RED("("entityIdTag")] 		public IdTag EntityIdTag { get; set;}
 
-		[RED("uniqueTag")] 		public CName UniqueTag { get; set;}
+		[Ordinal(0)] [RED("("uniqueTag")] 		public CName UniqueTag { get; set;}
 
-		[RED("area")] 		public CEnum<EAreaName> Area { get; set;}
+		[Ordinal(0)] [RED("("area")] 		public CEnum<EAreaName> Area { get; set;}
 
-		[RED("pin")] 		public SCommonMapPinInstance Pin { get; set;}
+		[Ordinal(0)] [RED("("pin")] 		public SCommonMapPinInstance Pin { get; set;}
 
-		[RED("entityTags", 2,0)] 		public CArray<CName> EntityTags { get; set;}
+		[Ordinal(0)] [RED("("entityTags", 2,0)] 		public CArray<CName> EntityTags { get; set;}
 
 		public WmkMerchantMapPin(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

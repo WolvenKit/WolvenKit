@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CIdleBehaviorsDefaultParameters : IAISpawnTreeSubParameters
 	{
-		[RED("actionPointsArea")] 		public EntityHandle ActionPointsArea { get; set;}
+		[Ordinal(0)] [RED("actionPointsArea")] 		public EntityHandle ActionPointsArea { get; set;}
 
-		[RED("wanderArea")] 		public EntityHandle WanderArea { get; set;}
+		[Ordinal(0)] [RED("wanderArea")] 		public EntityHandle WanderArea { get; set;}
 
-		[RED("wanderPointsTag")] 		public CName WanderPointsTag { get; set;}
+		[Ordinal(0)] [RED("wanderPointsTag")] 		public CName WanderPointsTag { get; set;}
 
 		public CIdleBehaviorsDefaultParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

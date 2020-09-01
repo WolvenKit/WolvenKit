@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SyncAnimationManager : CObject
 	{
-		[RED("syncInstances", 2,0)] 		public CArray<CHandle<CAnimationManualSlotSyncInstance>> SyncInstances { get; set;}
+		[Ordinal(0)] [RED("("syncInstances", 2,0)] 		public CArray<CHandle<CAnimationManualSlotSyncInstance>> SyncInstances { get; set;}
 
-		[RED("masterEntity")] 		public CHandle<CGameplayEntity> MasterEntity { get; set;}
+		[Ordinal(0)] [RED("("masterEntity")] 		public CHandle<CGameplayEntity> MasterEntity { get; set;}
 
-		[RED("slaveEntity")] 		public CHandle<CGameplayEntity> SlaveEntity { get; set;}
+		[Ordinal(0)] [RED("("slaveEntity")] 		public CHandle<CGameplayEntity> SlaveEntity { get; set;}
 
-		[RED("syncActionName")] 		public CName SyncActionName { get; set;}
+		[Ordinal(0)] [RED("("syncActionName")] 		public CName SyncActionName { get; set;}
 
-		[RED("dlcFinishersLeftSide", 2,0)] 		public CArray<CHandle<CR4FinisherDLC>> DlcFinishersLeftSide { get; set;}
+		[Ordinal(0)] [RED("("dlcFinishersLeftSide", 2,0)] 		public CArray<CHandle<CR4FinisherDLC>> DlcFinishersLeftSide { get; set;}
 
-		[RED("dlcFinishersRightSide", 2,0)] 		public CArray<CHandle<CR4FinisherDLC>> DlcFinishersRightSide { get; set;}
+		[Ordinal(0)] [RED("("dlcFinishersRightSide", 2,0)] 		public CArray<CHandle<CR4FinisherDLC>> DlcFinishersRightSide { get; set;}
 
-		[RED("cameraAnimName")] 		public CName CameraAnimName { get; set;}
+		[Ordinal(0)] [RED("("cameraAnimName")] 		public CName CameraAnimName { get; set;}
 
 		public W3SyncAnimationManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

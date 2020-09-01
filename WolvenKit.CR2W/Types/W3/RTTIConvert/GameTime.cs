@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class GameTime : CVariable
 	{
-		[RED("m_seconds")] 		public CInt32 M_seconds { get; set;}
+		[Ordinal(0)] [RED("m_seconds")] 		public CInt32 M_seconds { get; set;}
 
 		public GameTime(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

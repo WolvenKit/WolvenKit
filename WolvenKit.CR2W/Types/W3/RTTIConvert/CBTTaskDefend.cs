@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskDefend : IBehTreeTask
 	{
-		[RED("useCustomHits")] 		public CBool UseCustomHits { get; set;}
+		[Ordinal(0)] [RED("useCustomHits")] 		public CBool UseCustomHits { get; set;}
 
-		[RED("listenToParryEvents")] 		public CBool ListenToParryEvents { get; set;}
+		[Ordinal(0)] [RED("listenToParryEvents")] 		public CBool ListenToParryEvents { get; set;}
 
-		[RED("completeTaskOnIsDefending")] 		public CBool CompleteTaskOnIsDefending { get; set;}
+		[Ordinal(0)] [RED("completeTaskOnIsDefending")] 		public CBool CompleteTaskOnIsDefending { get; set;}
 
-		[RED("minimumDuration")] 		public CFloat MinimumDuration { get; set;}
+		[Ordinal(0)] [RED("minimumDuration")] 		public CFloat MinimumDuration { get; set;}
 
-		[RED("playParrySound")] 		public CBool PlayParrySound { get; set;}
+		[Ordinal(0)] [RED("playParrySound")] 		public CBool PlayParrySound { get; set;}
 
-		[RED("m_activationTime")] 		public CFloat M_activationTime { get; set;}
+		[Ordinal(0)] [RED("m_activationTime")] 		public CFloat M_activationTime { get; set;}
 
 		public CBTTaskDefend(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

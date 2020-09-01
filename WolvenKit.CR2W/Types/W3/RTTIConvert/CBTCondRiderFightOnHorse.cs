@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondRiderFightOnHorse : IBehTreeTask
 	{
-		[RED("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
+		[Ordinal(0)] [RED("("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
 
 		public CBTCondRiderFightOnHorse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

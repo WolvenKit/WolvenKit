@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CCameraCompressedPose : CDefaultCompressedPose2
 	{
-		[RED("tracks", 2,0)] 		public CArray<CFloat> Tracks { get; set;}
+		[Ordinal(0)] [RED("tracks", 2,0)] 		public CArray<CFloat> Tracks { get; set;}
 
 		public CCameraCompressedPose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSSceneTimetableEntry : CVariable
 	{
-		[RED("time")] 		public GameTimeInterval Time { get; set;}
+		[Ordinal(0)] [RED("("time")] 		public GameTimeInterval Time { get; set;}
 
-		[RED("scenes", 2,0)] 		public CArray<CSSceneTimetableScenesEntry> Scenes { get; set;}
+		[Ordinal(0)] [RED("("scenes", 2,0)] 		public CArray<CSSceneTimetableScenesEntry> Scenes { get; set;}
 
 		public CSSceneTimetableEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

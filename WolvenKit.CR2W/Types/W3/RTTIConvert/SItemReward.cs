@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SItemReward : CVariable
 	{
-		[RED("item")] 		public CName Item { get; set;}
+		[Ordinal(0)] [RED("("item")] 		public CName Item { get; set;}
 
-		[RED("amount")] 		public CInt32 Amount { get; set;}
+		[Ordinal(0)] [RED("("amount")] 		public CInt32 Amount { get; set;}
 
 		public SItemReward(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

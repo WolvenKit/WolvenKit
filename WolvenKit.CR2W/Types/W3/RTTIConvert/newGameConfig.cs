@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class newGameConfig : CVariable
 	{
-		[RED("tutorialsOn")] 		public CBool TutorialsOn { get; set;}
+		[Ordinal(0)] [RED("tutorialsOn")] 		public CBool TutorialsOn { get; set;}
 
-		[RED("difficulty")] 		public CInt32 Difficulty { get; set;}
+		[Ordinal(0)] [RED("difficulty")] 		public CInt32 Difficulty { get; set;}
 
-		[RED("simulate_import")] 		public CBool Simulate_import { get; set;}
+		[Ordinal(0)] [RED("simulate_import")] 		public CBool Simulate_import { get; set;}
 
-		[RED("import_save_index")] 		public CInt32 Import_save_index { get; set;}
+		[Ordinal(0)] [RED("import_save_index")] 		public CInt32 Import_save_index { get; set;}
 
 		public newGameConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

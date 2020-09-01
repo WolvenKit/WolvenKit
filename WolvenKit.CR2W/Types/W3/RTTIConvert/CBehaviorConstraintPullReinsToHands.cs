@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorConstraintPullReinsToHands : CBehaviorGraphPoseConstraintNode
 	{
-		[RED("leftHand")] 		public SBehaviorConstraintPullReinToHandData LeftHand { get; set;}
+		[Ordinal(0)] [RED("leftHand")] 		public SBehaviorConstraintPullReinToHandData LeftHand { get; set;}
 
-		[RED("rightHand")] 		public SBehaviorConstraintPullReinToHandData RightHand { get; set;}
+		[Ordinal(0)] [RED("rightHand")] 		public SBehaviorConstraintPullReinToHandData RightHand { get; set;}
 
 		public CBehaviorConstraintPullReinsToHands(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

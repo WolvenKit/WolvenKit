@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CLineMotionExtraction : IMotionExtraction
 	{
-		[RED("frames", 2,0)] 		public CArray<Vector> Frames { get; set;}
+		[Ordinal(0)] [RED("frames", 2,0)] 		public CArray<Vector> Frames { get; set;}
 
-		[RED("times", 2,0)] 		public CArray<CFloat> Times { get; set;}
+		[Ordinal(0)] [RED("times", 2,0)] 		public CArray<CFloat> Times { get; set;}
 
 		public CLineMotionExtraction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

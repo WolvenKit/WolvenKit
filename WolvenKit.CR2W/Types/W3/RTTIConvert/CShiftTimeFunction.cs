@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CShiftTimeFunction : IQuestTimeFunction
 	{
-		[RED("timeShift")] 		public GameTime TimeShift { get; set;}
+		[Ordinal(0)] [RED("("timeShift")] 		public GameTime TimeShift { get; set;}
 
-		[RED("callEvents")] 		public CBool CallEvents { get; set;}
+		[Ordinal(0)] [RED("("callEvents")] 		public CBool CallEvents { get; set;}
 
 		public CShiftTimeFunction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

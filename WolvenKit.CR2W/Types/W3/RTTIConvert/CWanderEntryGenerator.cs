@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CWanderEntryGenerator : CSpawnTreeBaseEntryGenerator
 	{
-		[RED("entries", 2,0)] 		public CArray<SWanderEntryGeneratorParam> Entries { get; set;}
+		[Ordinal(0)] [RED("entries", 2,0)] 		public CArray<SWanderEntryGeneratorParam> Entries { get; set;}
 
 		public CWanderEntryGenerator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

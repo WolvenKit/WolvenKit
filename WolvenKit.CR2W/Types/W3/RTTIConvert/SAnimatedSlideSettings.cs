@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAnimatedSlideSettings : CVariable
 	{
-		[RED("animation")] 		public CName Animation { get; set;}
+		[Ordinal(0)] [RED("animation")] 		public CName Animation { get; set;}
 
-		[RED("slotName")] 		public CName SlotName { get; set;}
+		[Ordinal(0)] [RED("slotName")] 		public CName SlotName { get; set;}
 
-		[RED("blendIn")] 		public CFloat BlendIn { get; set;}
+		[Ordinal(0)] [RED("blendIn")] 		public CFloat BlendIn { get; set;}
 
-		[RED("blendOut")] 		public CFloat BlendOut { get; set;}
+		[Ordinal(0)] [RED("blendOut")] 		public CFloat BlendOut { get; set;}
 
-		[RED("useGameTimeScale")] 		public CBool UseGameTimeScale { get; set;}
+		[Ordinal(0)] [RED("useGameTimeScale")] 		public CBool UseGameTimeScale { get; set;}
 
-		[RED("useRotationDeltaPolicy")] 		public CBool UseRotationDeltaPolicy { get; set;}
+		[Ordinal(0)] [RED("useRotationDeltaPolicy")] 		public CBool UseRotationDeltaPolicy { get; set;}
 
 		public SAnimatedSlideSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

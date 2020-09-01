@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTChangeSpeed : IMoveSteeringTask
 	{
-		[RED("speedType")] 		public CEnum<EMoveType> SpeedType { get; set;}
+		[Ordinal(0)] [RED("speedType")] 		public CEnum<EMoveType> SpeedType { get; set;}
 
-		[RED("absSpeed")] 		public CFloat AbsSpeed { get; set;}
+		[Ordinal(0)] [RED("absSpeed")] 		public CFloat AbsSpeed { get; set;}
 
 		public CMoveSTChangeSpeed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,35 +10,35 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SEnvProbeGenParams : CVariable
 	{
-		[RED("useInInterior")] 		public CBool UseInInterior { get; set;}
+		[Ordinal(0)] [RED("("useInInterior")] 		public CBool UseInInterior { get; set;}
 
-		[RED("useInExterior")] 		public CBool UseInExterior { get; set;}
+		[Ordinal(0)] [RED("("useInExterior")] 		public CBool UseInExterior { get; set;}
 
-		[RED("isInteriorFallback")] 		public CBool IsInteriorFallback { get; set;}
+		[Ordinal(0)] [RED("("isInteriorFallback")] 		public CBool IsInteriorFallback { get; set;}
 
-		[RED("cullingDistance")] 		public CFloat CullingDistance { get; set;}
+		[Ordinal(0)] [RED("("cullingDistance")] 		public CFloat CullingDistance { get; set;}
 
-		[RED("ambientColor")] 		public CColor AmbientColor { get; set;}
+		[Ordinal(0)] [RED("("ambientColor")] 		public CColor AmbientColor { get; set;}
 
-		[RED("ambientIntensity")] 		public CFloat AmbientIntensity { get; set;}
+		[Ordinal(0)] [RED("("ambientIntensity")] 		public CFloat AmbientIntensity { get; set;}
 
-		[RED("dimmerFactor")] 		public CFloat DimmerFactor { get; set;}
+		[Ordinal(0)] [RED("("dimmerFactor")] 		public CFloat DimmerFactor { get; set;}
 
-		[RED("fadeInDuration")] 		public CFloat FadeInDuration { get; set;}
+		[Ordinal(0)] [RED("("fadeInDuration")] 		public CFloat FadeInDuration { get; set;}
 
-		[RED("fadeOutDuration")] 		public CFloat FadeOutDuration { get; set;}
+		[Ordinal(0)] [RED("("fadeOutDuration")] 		public CFloat FadeOutDuration { get; set;}
 
-		[RED("lightScaleGlobal")] 		public CFloat LightScaleGlobal { get; set;}
+		[Ordinal(0)] [RED("("lightScaleGlobal")] 		public CFloat LightScaleGlobal { get; set;}
 
-		[RED("lightScaleLocals")] 		public CFloat LightScaleLocals { get; set;}
+		[Ordinal(0)] [RED("("lightScaleLocals")] 		public CFloat LightScaleLocals { get; set;}
 
-		[RED("fogAmount")] 		public CFloat FogAmount { get; set;}
+		[Ordinal(0)] [RED("("fogAmount")] 		public CFloat FogAmount { get; set;}
 
-		[RED("daycycleAmbientIntensity")] 		public SSimpleCurve DaycycleAmbientIntensity { get; set;}
+		[Ordinal(0)] [RED("("daycycleAmbientIntensity")] 		public SSimpleCurve DaycycleAmbientIntensity { get; set;}
 
-		[RED("daycycleLightScaleLocals")] 		public SSimpleCurve DaycycleLightScaleLocals { get; set;}
+		[Ordinal(0)] [RED("("daycycleLightScaleLocals")] 		public SSimpleCurve DaycycleLightScaleLocals { get; set;}
 
-		[RED("daycycleEffectIntensity")] 		public SSimpleCurve DaycycleEffectIntensity { get; set;}
+		[Ordinal(0)] [RED("("daycycleEffectIntensity")] 		public SSimpleCurve DaycycleEffectIntensity { get; set;}
 
 		public SEnvProbeGenParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SEntityWeight : CVariable
 	{
-		[RED("template")] 		public CHandle<CEntityTemplate> Template { get; set;}
+		[Ordinal(0)] [RED("("template")] 		public CHandle<CEntityTemplate> Template { get; set;}
 
-		[RED("weight")] 		public CFloat Weight { get; set;}
+		[Ordinal(0)] [RED("("weight")] 		public CFloat Weight { get; set;}
 
 		public SEntityWeight(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

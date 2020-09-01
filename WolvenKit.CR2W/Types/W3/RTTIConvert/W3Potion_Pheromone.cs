@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Potion_Pheromone : CBaseGameplayEffect
 	{
-		[RED("abilityNameStr")] 		public CString AbilityNameStr { get; set;}
+		[Ordinal(0)] [RED("("abilityNameStr")] 		public CString AbilityNameStr { get; set;}
 
 		public W3Potion_Pheromone(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

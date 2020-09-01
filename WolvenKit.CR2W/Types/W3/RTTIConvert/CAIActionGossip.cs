@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIActionGossip : CAINpcActionSubtree
 	{
-		[RED("inInWorkBranch")] 		public CBool InInWorkBranch { get; set;}
+		[Ordinal(0)] [RED("inInWorkBranch")] 		public CBool InInWorkBranch { get; set;}
 
 		public CAIActionGossip(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

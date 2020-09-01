@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSlotFormationLogic : IFormationLogic
 	{
-		[RED("formationPattern")] 		public CPtr<IFormationPatternNode> FormationPattern { get; set;}
+		[Ordinal(0)] [RED("formationPattern")] 		public CPtr<IFormationPatternNode> FormationPattern { get; set;}
 
 		public CSlotFormationLogic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4DeathScreenMenu : CR4MenuBase
 	{
-		[RED("hasSaveData")] 		public CBool HasSaveData { get; set;}
+		[Ordinal(0)] [RED("hasSaveData")] 		public CBool HasSaveData { get; set;}
 
-		[RED("m_fxShowInputFeedback")] 		public CHandle<CScriptedFlashFunction> M_fxShowInputFeedback { get; set;}
+		[Ordinal(0)] [RED("m_fxShowInputFeedback")] 		public CHandle<CScriptedFlashFunction> M_fxShowInputFeedback { get; set;}
 
 		public CR4DeathScreenMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

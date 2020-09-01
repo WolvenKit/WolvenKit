@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPlayerTargetPriority : CGameplayEntityParam
 	{
-		[RED("priority")] 		public CFloat Priority { get; set;}
+		[Ordinal(0)] [RED("priority")] 		public CFloat Priority { get; set;}
 
 		public CPlayerTargetPriority(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

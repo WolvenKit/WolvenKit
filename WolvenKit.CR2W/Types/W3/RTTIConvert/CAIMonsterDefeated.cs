@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMonsterDefeated : CAIMonsterDeath
 	{
-		[RED("localDeathTree")] 		public CHandle<CAIMonsterDeath> LocalDeathTree { get; set;}
+		[Ordinal(0)] [RED("localDeathTree")] 		public CHandle<CAIMonsterDeath> LocalDeathTree { get; set;}
 
-		[RED("unconsciousTree")] 		public CHandle<CAINpcUnconsciousTree> UnconsciousTree { get; set;}
+		[Ordinal(0)] [RED("unconsciousTree")] 		public CHandle<CAINpcUnconsciousTree> UnconsciousTree { get; set;}
 
 		public CAIMonsterDefeated(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMimicLipsyncFilterNode : CBehaviorGraphBaseMimicNode
 	{
-		[RED("lipsyncControlTrack")] 		public CInt32 LipsyncControlTrack { get; set;}
+		[Ordinal(0)] [RED("("lipsyncControlTrack")] 		public CInt32 LipsyncControlTrack { get; set;}
 
-		[RED("lipsyncTrackBeginA")] 		public CInt32 LipsyncTrackBeginA { get; set;}
+		[Ordinal(0)] [RED("("lipsyncTrackBeginA")] 		public CInt32 LipsyncTrackBeginA { get; set;}
 
-		[RED("lipsyncTrackEndA")] 		public CInt32 LipsyncTrackEndA { get; set;}
+		[Ordinal(0)] [RED("("lipsyncTrackEndA")] 		public CInt32 LipsyncTrackEndA { get; set;}
 
-		[RED("lipsyncTrackBeginB")] 		public CInt32 LipsyncTrackBeginB { get; set;}
+		[Ordinal(0)] [RED("("lipsyncTrackBeginB")] 		public CInt32 LipsyncTrackBeginB { get; set;}
 
-		[RED("lipsyncTrackEndB")] 		public CInt32 LipsyncTrackEndB { get; set;}
+		[Ordinal(0)] [RED("("lipsyncTrackEndB")] 		public CInt32 LipsyncTrackEndB { get; set;}
 
-		[RED("lipsyncTrackBeginC")] 		public CInt32 LipsyncTrackBeginC { get; set;}
+		[Ordinal(0)] [RED("("lipsyncTrackBeginC")] 		public CInt32 LipsyncTrackBeginC { get; set;}
 
-		[RED("lipsyncTrackEndC")] 		public CInt32 LipsyncTrackEndC { get; set;}
+		[Ordinal(0)] [RED("("lipsyncTrackEndC")] 		public CInt32 LipsyncTrackEndC { get; set;}
 
-		[RED("cachedFilterInputNode")] 		public CPtr<CBehaviorGraphNode> CachedFilterInputNode { get; set;}
+		[Ordinal(0)] [RED("("cachedFilterInputNode")] 		public CPtr<CBehaviorGraphNode> CachedFilterInputNode { get; set;}
 
-		[RED("cachedWeightValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedWeightValueNode { get; set;}
+		[Ordinal(0)] [RED("("cachedWeightValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedWeightValueNode { get; set;}
 
 		public CBehaviorGraphMimicLipsyncFilterNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIMonsterTauntParams : CAITauntParameters
 	{
-		[RED("stopTauntingDistance")] 		public CFloat StopTauntingDistance { get; set;}
+		[Ordinal(0)] [RED("stopTauntingDistance")] 		public CFloat StopTauntingDistance { get; set;}
 
-		[RED("tauntDelay")] 		public CFloat TauntDelay { get; set;}
+		[Ordinal(0)] [RED("tauntDelay")] 		public CFloat TauntDelay { get; set;}
 
-		[RED("forceAttackDelay")] 		public CFloat ForceAttackDelay { get; set;}
+		[Ordinal(0)] [RED("forceAttackDelay")] 		public CFloat ForceAttackDelay { get; set;}
 
-		[RED("useSurround")] 		public CBool UseSurround { get; set;}
+		[Ordinal(0)] [RED("useSurround")] 		public CBool UseSurround { get; set;}
 
-		[RED("chanceToMove")] 		public CFloat ChanceToMove { get; set;}
+		[Ordinal(0)] [RED("chanceToMove")] 		public CFloat ChanceToMove { get; set;}
 
 		public CAIMonsterTauntParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

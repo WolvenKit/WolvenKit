@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeCombatTargetSelectionTaskDef : IBehTreeTaskDefinition
 	{
-		[RED("maxTargetDistance")] 		public CFloat MaxTargetDistance { get; set;}
+		[Ordinal(0)] [RED("maxTargetDistance")] 		public CFloat MaxTargetDistance { get; set;}
 
-		[RED("playerPriority")] 		public CInt32 PlayerPriority { get; set;}
+		[Ordinal(0)] [RED("playerPriority")] 		public CInt32 PlayerPriority { get; set;}
 
-		[RED("targetOnlyPlayer")] 		public CBool TargetOnlyPlayer { get; set;}
+		[Ordinal(0)] [RED("targetOnlyPlayer")] 		public CBool TargetOnlyPlayer { get; set;}
 
 		public CBehTreeCombatTargetSelectionTaskDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

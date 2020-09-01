@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Potestaquisitor : W3QuestUsableItem
 	{
-		[RED("detectableTag")] 		public CName DetectableTag { get; set;}
+		[Ordinal(0)] [RED("("detectableTag")] 		public CName DetectableTag { get; set;}
 
-		[RED("detectableRange")] 		public CFloat DetectableRange { get; set;}
+		[Ordinal(0)] [RED("("detectableRange")] 		public CFloat DetectableRange { get; set;}
 
-		[RED("closestRange")] 		public CFloat ClosestRange { get; set;}
+		[Ordinal(0)] [RED("("closestRange")] 		public CFloat ClosestRange { get; set;}
 
-		[RED("potestaquisitorFact")] 		public CString PotestaquisitorFact { get; set;}
+		[Ordinal(0)] [RED("("potestaquisitorFact")] 		public CString PotestaquisitorFact { get; set;}
 
-		[RED("soundEffectType")] 		public CEnum<EFocusModeSoundEffectType> SoundEffectType { get; set;}
+		[Ordinal(0)] [RED("("soundEffectType")] 		public CEnum<EFocusModeSoundEffectType> SoundEffectType { get; set;}
 
-		[RED("effect")] 		public CName Effect { get; set;}
+		[Ordinal(0)] [RED("("effect")] 		public CName Effect { get; set;}
 
-		[RED("registeredAnomalies", 2,0)] 		public CArray<CHandle<CGameplayEntity>> RegisteredAnomalies { get; set;}
+		[Ordinal(0)] [RED("("registeredAnomalies", 2,0)] 		public CArray<CHandle<CGameplayEntity>> RegisteredAnomalies { get; set;}
 
-		[RED("previousClosestAnomaly")] 		public CHandle<CGameplayEntity> PreviousClosestAnomaly { get; set;}
+		[Ordinal(0)] [RED("("previousClosestAnomaly")] 		public CHandle<CGameplayEntity> PreviousClosestAnomaly { get; set;}
 
 		public W3Potestaquisitor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

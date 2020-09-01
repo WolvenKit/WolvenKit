@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCurveEntity : CEntity
 	{
-		[RED("curveComponent")] 		public CPtr<CCurveComponent> CurveComponent { get; set;}
+		[Ordinal(0)] [RED("("curveComponent")] 		public CPtr<CCurveComponent> CurveComponent { get; set;}
 
-		[RED("controlPointEntities", 2,0)] 		public CArray<CPtr<CCurveControlPointEntity>> ControlPointEntities { get; set;}
+		[Ordinal(0)] [RED("("controlPointEntities", 2,0)] 		public CArray<CPtr<CCurveControlPointEntity>> ControlPointEntities { get; set;}
 
-		[RED("curveEntitySpawner")] 		public CPtr<CCurveEntitySpawner> CurveEntitySpawner { get; set;}
+		[Ordinal(0)] [RED("("curveEntitySpawner")] 		public CPtr<CCurveEntitySpawner> CurveEntitySpawner { get; set;}
 
 		public CCurveEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

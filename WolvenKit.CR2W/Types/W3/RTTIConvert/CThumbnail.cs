@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CThumbnail : CObject
 	{
-		[RED("name")] 		public CString Name { get; set;}
+		[Ordinal(0)] [RED("name")] 		public CString Name { get; set;}
 
-		[RED("info", 2,0)] 		public CArray<CString> Info { get; set;}
+		[Ordinal(0)] [RED("info", 2,0)] 		public CArray<CString> Info { get; set;}
 
-		[RED("cameraPosition")] 		public Vector CameraPosition { get; set;}
+		[Ordinal(0)] [RED("cameraPosition")] 		public Vector CameraPosition { get; set;}
 
-		[RED("cameraRotation")] 		public EulerAngles CameraRotation { get; set;}
+		[Ordinal(0)] [RED("cameraRotation")] 		public EulerAngles CameraRotation { get; set;}
 
-		[RED("cameraFov")] 		public CFloat CameraFov { get; set;}
+		[Ordinal(0)] [RED("cameraFov")] 		public CFloat CameraFov { get; set;}
 
-		[RED("sunRotation")] 		public EulerAngles SunRotation { get; set;}
+		[Ordinal(0)] [RED("sunRotation")] 		public EulerAngles SunRotation { get; set;}
 
-		[RED("flags")] 		public CInt32 Flags { get; set;}
+		[Ordinal(0)] [RED("flags")] 		public CInt32 Flags { get; set;}
 
 		public CThumbnail(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

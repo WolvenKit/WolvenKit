@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAreaLootParams : CVariable
 	{
-		[RED("remainingItemDrops", 2,0)] 		public CArray<SAreaItemDefinition> RemainingItemDrops { get; set;}
+		[Ordinal(0)] [RED("remainingItemDrops", 2,0)] 		public CArray<SAreaItemDefinition> RemainingItemDrops { get; set;}
 
-		[RED("areaType")] 		public CEnum<EAreaName> AreaType { get; set;}
+		[Ordinal(0)] [RED("areaType")] 		public CEnum<EAreaName> AreaType { get; set;}
 
 		public SAreaLootParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

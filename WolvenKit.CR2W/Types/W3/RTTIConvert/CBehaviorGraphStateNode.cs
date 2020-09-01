@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CBehaviorGraphStateNode : CBehaviorGraphContainerNode
 	{
-		[RED("groups")] 		public TagList Groups { get; set;}
+		[Ordinal(0)] [RED("groups")] 		public TagList Groups { get; set;}
 
-		[RED("behaviorGraphSyncInfo")] 		public SBehaviorGraphStateBehaviorGraphSyncInfo BehaviorGraphSyncInfo { get; set;}
+		[Ordinal(0)] [RED("behaviorGraphSyncInfo")] 		public SBehaviorGraphStateBehaviorGraphSyncInfo BehaviorGraphSyncInfo { get; set;}
 
-		[RED("cachedStateTransitions", 2,0)] 		public CArray<CPtr<CBehaviorGraphStateTransitionNode>> CachedStateTransitions { get; set;}
+		[Ordinal(0)] [RED("cachedStateTransitions", 2,0)] 		public CArray<CPtr<CBehaviorGraphStateTransitionNode>> CachedStateTransitions { get; set;}
 
 		public CBehaviorGraphStateNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

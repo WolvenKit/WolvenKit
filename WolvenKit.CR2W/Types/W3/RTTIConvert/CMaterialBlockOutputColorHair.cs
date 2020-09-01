@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockOutputColorHair : CMaterialRootBlock
 	{
-		[RED("isTwoSided")] 		public CBool IsTwoSided { get; set;}
+		[Ordinal(0)] [RED("isTwoSided")] 		public CBool IsTwoSided { get; set;}
 
-		[RED("rawOutput")] 		public CBool RawOutput { get; set;}
+		[Ordinal(0)] [RED("rawOutput")] 		public CBool RawOutput { get; set;}
 
-		[RED("maskThreshold")] 		public CFloat MaskThreshold { get; set;}
+		[Ordinal(0)] [RED("maskThreshold")] 		public CFloat MaskThreshold { get; set;}
 
-		[RED("implicitGlobalFogVertexBased")] 		public CBool ImplicitGlobalFogVertexBased { get; set;}
+		[Ordinal(0)] [RED("implicitGlobalFogVertexBased")] 		public CBool ImplicitGlobalFogVertexBased { get; set;}
 
-		[RED("shadowingSolidVertexBased")] 		public CBool ShadowingSolidVertexBased { get; set;}
+		[Ordinal(0)] [RED("shadowingSolidVertexBased")] 		public CBool ShadowingSolidVertexBased { get; set;}
 
-		[RED("shadowingTransparentVertexBased")] 		public CBool ShadowingTransparentVertexBased { get; set;}
+		[Ordinal(0)] [RED("shadowingTransparentVertexBased")] 		public CBool ShadowingTransparentVertexBased { get; set;}
 
-		[RED("shadowingCascadesVertexBased")] 		public CBool ShadowingCascadesVertexBased { get; set;}
+		[Ordinal(0)] [RED("shadowingCascadesVertexBased")] 		public CBool ShadowingCascadesVertexBased { get; set;}
 
-		[RED("envProbesSolidVertexBased")] 		public CBool EnvProbesSolidVertexBased { get; set;}
+		[Ordinal(0)] [RED("envProbesSolidVertexBased")] 		public CBool EnvProbesSolidVertexBased { get; set;}
 
-		[RED("envProbesTransparentVertexBased")] 		public CBool EnvProbesTransparentVertexBased { get; set;}
+		[Ordinal(0)] [RED("envProbesTransparentVertexBased")] 		public CBool EnvProbesTransparentVertexBased { get; set;}
 
 		public CMaterialBlockOutputColorHair(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

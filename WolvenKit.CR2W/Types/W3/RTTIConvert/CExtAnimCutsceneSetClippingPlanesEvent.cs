@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimCutsceneSetClippingPlanesEvent : CExtAnimEvent
 	{
-		[RED("nearPlaneDistance")] 		public CEnum<ENearPlaneDistance> NearPlaneDistance { get; set;}
+		[Ordinal(0)] [RED("("nearPlaneDistance")] 		public CEnum<ENearPlaneDistance> NearPlaneDistance { get; set;}
 
-		[RED("farPlaneDistance")] 		public CEnum<EFarPlaneDistance> FarPlaneDistance { get; set;}
+		[Ordinal(0)] [RED("("farPlaneDistance")] 		public CEnum<EFarPlaneDistance> FarPlaneDistance { get; set;}
 
-		[RED("customPlaneDistance")] 		public SCustomClippingPlanes CustomPlaneDistance { get; set;}
+		[Ordinal(0)] [RED("("customPlaneDistance")] 		public SCustomClippingPlanes CustomPlaneDistance { get; set;}
 
 		public CExtAnimCutsceneSetClippingPlanesEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

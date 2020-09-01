@@ -10,93 +10,93 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3DamageAction : CDamageData
 	{
-		[RED("dmgInfos", 2,0)] 		public CArray<SRawDamage> DmgInfos { get; set;}
+		[Ordinal(0)] [RED("("dmgInfos", 2,0)] 		public CArray<SRawDamage> DmgInfos { get; set;}
 
-		[RED("effectInfos", 2,0)] 		public CArray<SEffectInfo> EffectInfos { get; set;}
+		[Ordinal(0)] [RED("("effectInfos", 2,0)] 		public CArray<SEffectInfo> EffectInfos { get; set;}
 
-		[RED("cannotReturnDamage")] 		public CBool CannotReturnDamage { get; set;}
+		[Ordinal(0)] [RED("("cannotReturnDamage")] 		public CBool CannotReturnDamage { get; set;}
 
-		[RED("isPointResistIgnored")] 		public CBool IsPointResistIgnored { get; set;}
+		[Ordinal(0)] [RED("("isPointResistIgnored")] 		public CBool IsPointResistIgnored { get; set;}
 
-		[RED("canPlayHitParticle")] 		public CBool CanPlayHitParticle { get; set;}
+		[Ordinal(0)] [RED("("canPlayHitParticle")] 		public CBool CanPlayHitParticle { get; set;}
 
-		[RED("hitAnimationPlayType")] 		public CEnum<EActionHitAnim> HitAnimationPlayType { get; set;}
+		[Ordinal(0)] [RED("("hitAnimationPlayType")] 		public CEnum<EActionHitAnim> HitAnimationPlayType { get; set;}
 
-		[RED("hitReactionType")] 		public CEnum<EHitReactionType> HitReactionType { get; set;}
+		[Ordinal(0)] [RED("("hitReactionType")] 		public CEnum<EHitReactionType> HitReactionType { get; set;}
 
-		[RED("buffSourceName")] 		public CString BuffSourceName { get; set;}
+		[Ordinal(0)] [RED("("buffSourceName")] 		public CString BuffSourceName { get; set;}
 
-		[RED("canBeParried")] 		public CBool CanBeParried { get; set;}
+		[Ordinal(0)] [RED("("canBeParried")] 		public CBool CanBeParried { get; set;}
 
-		[RED("canBeDodged")] 		public CBool CanBeDodged { get; set;}
+		[Ordinal(0)] [RED("("canBeDodged")] 		public CBool CanBeDodged { get; set;}
 
-		[RED("hitFX")] 		public CName HitFX { get; set;}
+		[Ordinal(0)] [RED("("hitFX")] 		public CName HitFX { get; set;}
 
-		[RED("hitBackFX")] 		public CName HitBackFX { get; set;}
+		[Ordinal(0)] [RED("("hitBackFX")] 		public CName HitBackFX { get; set;}
 
-		[RED("hitParriedFX")] 		public CName HitParriedFX { get; set;}
+		[Ordinal(0)] [RED("("hitParriedFX")] 		public CName HitParriedFX { get; set;}
 
-		[RED("hitBackParriedFX")] 		public CName HitBackParriedFX { get; set;}
+		[Ordinal(0)] [RED("("hitBackParriedFX")] 		public CName HitBackParriedFX { get; set;}
 
-		[RED("powerStatType")] 		public CEnum<ECharacterPowerStats> PowerStatType { get; set;}
+		[Ordinal(0)] [RED("("powerStatType")] 		public CEnum<ECharacterPowerStats> PowerStatType { get; set;}
 
-		[RED("swingType")] 		public CEnum<EAttackSwingType> SwingType { get; set;}
+		[Ordinal(0)] [RED("("swingType")] 		public CEnum<EAttackSwingType> SwingType { get; set;}
 
-		[RED("swingDirection")] 		public CEnum<EAttackSwingDirection> SwingDirection { get; set;}
+		[Ordinal(0)] [RED("("swingDirection")] 		public CEnum<EAttackSwingDirection> SwingDirection { get; set;}
 
-		[RED("signSkill")] 		public CEnum<ESkill> SignSkill { get; set;}
+		[Ordinal(0)] [RED("("signSkill")] 		public CEnum<ESkill> SignSkill { get; set;}
 
-		[RED("isDodged")] 		public CBool IsDodged { get; set;}
+		[Ordinal(0)] [RED("("isDodged")] 		public CBool IsDodged { get; set;}
 
-		[RED("shouldProcessBuffsIfNoDamage")] 		public CBool ShouldProcessBuffsIfNoDamage { get; set;}
+		[Ordinal(0)] [RED("("shouldProcessBuffsIfNoDamage")] 		public CBool ShouldProcessBuffsIfNoDamage { get; set;}
 
-		[RED("ignoreImmortalityMode")] 		public CBool IgnoreImmortalityMode { get; set;}
+		[Ordinal(0)] [RED("("ignoreImmortalityMode")] 		public CBool IgnoreImmortalityMode { get; set;}
 
-		[RED("dealtFireDamage")] 		public CBool DealtFireDamage { get; set;}
+		[Ordinal(0)] [RED("("dealtFireDamage")] 		public CBool DealtFireDamage { get; set;}
 
-		[RED("isHeadShot")] 		public CBool IsHeadShot { get; set;}
+		[Ordinal(0)] [RED("("isHeadShot")] 		public CBool IsHeadShot { get; set;}
 
-		[RED("killedBySingleHit")] 		public CBool KilledBySingleHit { get; set;}
+		[Ordinal(0)] [RED("("killedBySingleHit")] 		public CBool KilledBySingleHit { get; set;}
 
-		[RED("ignoreArmor")] 		public CBool IgnoreArmor { get; set;}
+		[Ordinal(0)] [RED("("ignoreArmor")] 		public CBool IgnoreArmor { get; set;}
 
-		[RED("supressHitSounds")] 		public CBool SupressHitSounds { get; set;}
+		[Ordinal(0)] [RED("("supressHitSounds")] 		public CBool SupressHitSounds { get; set;}
 
-		[RED("dealtDamage")] 		public CBool DealtDamage { get; set;}
+		[Ordinal(0)] [RED("("dealtDamage")] 		public CBool DealtDamage { get; set;}
 
-		[RED("endsQuen")] 		public CBool EndsQuen { get; set;}
+		[Ordinal(0)] [RED("("endsQuen")] 		public CBool EndsQuen { get; set;}
 
-		[RED("armorReducedDamageToZero")] 		public CBool ArmorReducedDamageToZero { get; set;}
+		[Ordinal(0)] [RED("("armorReducedDamageToZero")] 		public CBool ArmorReducedDamageToZero { get; set;}
 
-		[RED("underwaterDisplayDamageHack")] 		public CBool UnderwaterDisplayDamageHack { get; set;}
+		[Ordinal(0)] [RED("("underwaterDisplayDamageHack")] 		public CBool UnderwaterDisplayDamageHack { get; set;}
 
-		[RED("parryStagger")] 		public CBool ParryStagger { get; set;}
+		[Ordinal(0)] [RED("("parryStagger")] 		public CBool ParryStagger { get; set;}
 
-		[RED("bouncedArrow")] 		public CBool BouncedArrow { get; set;}
+		[Ordinal(0)] [RED("("bouncedArrow")] 		public CBool BouncedArrow { get; set;}
 
-		[RED("forceExplosionDismemberment")] 		public CBool ForceExplosionDismemberment { get; set;}
+		[Ordinal(0)] [RED("("forceExplosionDismemberment")] 		public CBool ForceExplosionDismemberment { get; set;}
 
-		[RED("isCriticalHit")] 		public CBool IsCriticalHit { get; set;}
+		[Ordinal(0)] [RED("("isCriticalHit")] 		public CBool IsCriticalHit { get; set;}
 
-		[RED("instantKill")] 		public CBool InstantKill { get; set;}
+		[Ordinal(0)] [RED("("instantKill")] 		public CBool InstantKill { get; set;}
 
-		[RED("instantKillFloater")] 		public CBool InstantKillFloater { get; set;}
+		[Ordinal(0)] [RED("("instantKillFloater")] 		public CBool InstantKillFloater { get; set;}
 
-		[RED("instantKillCooldownIgnore")] 		public CBool InstantKillCooldownIgnore { get; set;}
+		[Ordinal(0)] [RED("("instantKillCooldownIgnore")] 		public CBool InstantKillCooldownIgnore { get; set;}
 
-		[RED("wasFrozen")] 		public CBool WasFrozen { get; set;}
+		[Ordinal(0)] [RED("("wasFrozen")] 		public CBool WasFrozen { get; set;}
 
-		[RED("mutation4Triggered")] 		public CBool Mutation4Triggered { get; set;}
+		[Ordinal(0)] [RED("("mutation4Triggered")] 		public CBool Mutation4Triggered { get; set;}
 
-		[RED("didReturnDamageToAttacker")] 		public CBool DidReturnDamageToAttacker { get; set;}
+		[Ordinal(0)] [RED("("didReturnDamageToAttacker")] 		public CBool DidReturnDamageToAttacker { get; set;}
 
-		[RED("DOTdt")] 		public CFloat DOTdt { get; set;}
+		[Ordinal(0)] [RED("("DOTdt")] 		public CFloat DOTdt { get; set;}
 
-		[RED("isActionRanged")] 		public CBool IsActionRanged { get; set;}
+		[Ordinal(0)] [RED("("isActionRanged")] 		public CBool IsActionRanged { get; set;}
 
-		[RED("isActionWitcherSign")] 		public CBool IsActionWitcherSign { get; set;}
+		[Ordinal(0)] [RED("("isActionWitcherSign")] 		public CBool IsActionWitcherSign { get; set;}
 
-		[RED("isActionEnvironment")] 		public CBool IsActionEnvironment { get; set;}
+		[Ordinal(0)] [RED("("isActionEnvironment")] 		public CBool IsActionEnvironment { get; set;}
 
 		public W3DamageAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

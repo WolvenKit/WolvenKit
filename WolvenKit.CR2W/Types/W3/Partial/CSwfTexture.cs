@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CSwfTexture : CBitmapTexture
 	{
-		[RED("linkageName")] 		public CString LinkageName { get; set;}
+		[Ordinal(0)] [RED("linkageName")] 		public CString LinkageName { get; set;}
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSwfTexture(cr2w, parent, name);
 

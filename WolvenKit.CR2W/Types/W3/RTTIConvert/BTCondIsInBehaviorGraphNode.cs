@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondIsInBehaviorGraphNode : IBehTreeTask
 	{
-		[RED("activationScriptEvent")] 		public CName ActivationScriptEvent { get; set;}
+		[Ordinal(0)] [RED("activationScriptEvent")] 		public CName ActivationScriptEvent { get; set;}
 
-		[RED("deactivateScriptEvent")] 		public CName DeactivateScriptEvent { get; set;}
+		[Ordinal(0)] [RED("deactivateScriptEvent")] 		public CName DeactivateScriptEvent { get; set;}
 
-		[RED("m_availability")] 		public CBool M_availability { get; set;}
+		[Ordinal(0)] [RED("m_availability")] 		public CBool M_availability { get; set;}
 
 		public BTCondIsInBehaviorGraphNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3EntitySpawner : W3UsableEntity
 	{
-		[RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(0)] [RED("("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
-		[RED("appearanceAfterSpawn")] 		public CName AppearanceAfterSpawn { get; set;}
+		[Ordinal(0)] [RED("("appearanceAfterSpawn")] 		public CName AppearanceAfterSpawn { get; set;}
 
-		[RED("autoSpawn")] 		public CBool AutoSpawn { get; set;}
+		[Ordinal(0)] [RED("("autoSpawn")] 		public CBool AutoSpawn { get; set;}
 
-		[RED("spawnDelay")] 		public CFloat SpawnDelay { get; set;}
+		[Ordinal(0)] [RED("("spawnDelay")] 		public CFloat SpawnDelay { get; set;}
 
-		[RED("numberOfUses")] 		public CInt32 NumberOfUses { get; set;}
+		[Ordinal(0)] [RED("("numberOfUses")] 		public CInt32 NumberOfUses { get; set;}
 
-		[RED("spawnNearPlayer")] 		public CBool SpawnNearPlayer { get; set;}
+		[Ordinal(0)] [RED("("spawnNearPlayer")] 		public CBool SpawnNearPlayer { get; set;}
 
-		[RED("avoidNodeWithTag")] 		public CName AvoidNodeWithTag { get; set;}
+		[Ordinal(0)] [RED("("avoidNodeWithTag")] 		public CName AvoidNodeWithTag { get; set;}
 
 		public W3EntitySpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

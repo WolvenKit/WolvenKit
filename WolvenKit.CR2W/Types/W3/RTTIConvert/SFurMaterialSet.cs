@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFurMaterialSet : CVariable
 	{
-		[RED("useWetness")] 		public CBool UseWetness { get; set;}
+		[Ordinal(0)] [RED("("useWetness")] 		public CBool UseWetness { get; set;}
 
-		[RED("physicalMaterials")] 		public SFurPhysicalMaterials PhysicalMaterials { get; set;}
+		[Ordinal(0)] [RED("("physicalMaterials")] 		public SFurPhysicalMaterials PhysicalMaterials { get; set;}
 
-		[RED("graphicalMaterials")] 		public SFurGraphicalMaterials GraphicalMaterials { get; set;}
+		[Ordinal(0)] [RED("("graphicalMaterials")] 		public SFurGraphicalMaterials GraphicalMaterials { get; set;}
 
 		public SFurMaterialSet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneSectionVariant : CVariable
 	{
-		[RED("id")] 		public CUInt32 Id { get; set;}
+		[Ordinal(0)] [RED("id")] 		public CUInt32 Id { get; set;}
 
-		[RED("localeId")] 		public CUInt32 LocaleId { get; set;}
+		[Ordinal(0)] [RED("localeId")] 		public CUInt32 LocaleId { get; set;}
 
-		[RED("events", 2,0)] 		public CArray<CGUID> Events { get; set;}
+		[Ordinal(0)] [RED("events", 2,0)] 		public CArray<CGUID> Events { get; set;}
 
-		[RED("elementInfo", 2,0)] 		public CArray<CStorySceneSectionVariantElementInfo> ElementInfo { get; set;}
+		[Ordinal(0)] [RED("elementInfo", 2,0)] 		public CArray<CStorySceneSectionVariantElementInfo> ElementInfo { get; set;}
 
 		public CStorySceneSectionVariant(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

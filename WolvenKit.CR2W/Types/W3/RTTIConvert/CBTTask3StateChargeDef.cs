@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTask3StateChargeDef : CBTTask3StateAttackDef
 	{
-		[RED("differentChargeEndings")] 		public CBool DifferentChargeEndings { get; set;}
+		[Ordinal(0)] [RED("("differentChargeEndings")] 		public CBool DifferentChargeEndings { get; set;}
 
 		public CBTTask3StateChargeDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

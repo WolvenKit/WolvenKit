@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBaseAICombatStorage : IScriptable
 	{
-		[RED("isAttacking")] 		public CBool IsAttacking { get; set;}
+		[Ordinal(0)] [RED("("isAttacking")] 		public CBool IsAttacking { get; set;}
 
-		[RED("isCharging")] 		public CBool IsCharging { get; set;}
+		[Ordinal(0)] [RED("("isCharging")] 		public CBool IsCharging { get; set;}
 
-		[RED("isTaunting")] 		public CBool IsTaunting { get; set;}
+		[Ordinal(0)] [RED("("isTaunting")] 		public CBool IsTaunting { get; set;}
 
-		[RED("isShooting")] 		public CBool IsShooting { get; set;}
+		[Ordinal(0)] [RED("("isShooting")] 		public CBool IsShooting { get; set;}
 
-		[RED("isAiming")] 		public CBool IsAiming { get; set;}
+		[Ordinal(0)] [RED("("isAiming")] 		public CBool IsAiming { get; set;}
 
-		[RED("isInImportantAnim")] 		public CBool IsInImportantAnim { get; set;}
+		[Ordinal(0)] [RED("("isInImportantAnim")] 		public CBool IsInImportantAnim { get; set;}
 
-		[RED("preCombatWarning")] 		public CBool PreCombatWarning { get; set;}
+		[Ordinal(0)] [RED("("preCombatWarning")] 		public CBool PreCombatWarning { get; set;}
 
-		[RED("atackTimeStamp")] 		public CFloat AtackTimeStamp { get; set;}
+		[Ordinal(0)] [RED("("atackTimeStamp")] 		public CFloat AtackTimeStamp { get; set;}
 
-		[RED("tauntTimeStamp")] 		public CFloat TauntTimeStamp { get; set;}
+		[Ordinal(0)] [RED("("tauntTimeStamp")] 		public CFloat TauntTimeStamp { get; set;}
 
-		[RED("CSArray", 2,0)] 		public CArray<CriticalStateStruct> CSArray { get; set;}
+		[Ordinal(0)] [RED("("CSArray", 2,0)] 		public CArray<CriticalStateStruct> CSArray { get; set;}
 
 		public CBaseAICombatStorage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

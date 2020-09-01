@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMod : CObject
 	{
-		[RED("modName")] 		public CName ModName { get; set;}
+		[Ordinal(0)] [RED("("modName")] 		public CName ModName { get; set;}
 
-		[RED("modVersion")] 		public CName ModVersion { get; set;}
+		[Ordinal(0)] [RED("("modVersion")] 		public CName ModVersion { get; set;}
 
-		[RED("modAuthor")] 		public CString ModAuthor { get; set;}
+		[Ordinal(0)] [RED("("modAuthor")] 		public CString ModAuthor { get; set;}
 
-		[RED("modUrl")] 		public CString ModUrl { get; set;}
+		[Ordinal(0)] [RED("("modUrl")] 		public CString ModUrl { get; set;}
 
-		[RED("log")] 		public CHandle<CModLogger> Log { get; set;}
+		[Ordinal(0)] [RED("("log")] 		public CHandle<CModLogger> Log { get; set;}
 
-		[RED("logLevel")] 		public CEnum<EModLogLevel> LogLevel { get; set;}
+		[Ordinal(0)] [RED("("logLevel")] 		public CEnum<EModLogLevel> LogLevel { get; set;}
 
 		public CMod(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

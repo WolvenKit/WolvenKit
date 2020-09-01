@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeLoopWithTimelimitDecoratorDefinition : CBehTreeNodeLoopDecoratorDefinition
 	{
-		[RED("timeLimit")] 		public CFloat TimeLimit { get; set;}
+		[Ordinal(0)] [RED("timeLimit")] 		public CFloat TimeLimit { get; set;}
 
 		public CBehTreeNodeLoopWithTimelimitDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

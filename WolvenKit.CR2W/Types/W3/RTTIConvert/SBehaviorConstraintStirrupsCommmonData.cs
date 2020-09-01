@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorConstraintStirrupsCommmonData : CVariable
 	{
-		[RED("speedForPerpendicular")] 		public CFloat SpeedForPerpendicular { get; set;}
+		[Ordinal(0)] [RED("("speedForPerpendicular")] 		public CFloat SpeedForPerpendicular { get; set;}
 
-		[RED("weight")] 		public CFloat Weight { get; set;}
+		[Ordinal(0)] [RED("("weight")] 		public CFloat Weight { get; set;}
 
 		public SBehaviorConstraintStirrupsCommmonData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

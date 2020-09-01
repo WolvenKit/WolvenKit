@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBoatDesctructionPart : CVariable
 	{
-		[RED("hpFalloffThreshold")] 		public CFloat HpFalloffThreshold { get; set;}
+		[Ordinal(0)] [RED("("hpFalloffThreshold")] 		public CFloat HpFalloffThreshold { get; set;}
 
-		[RED("componentName")] 		public CString ComponentName { get; set;}
+		[Ordinal(0)] [RED("("componentName")] 		public CString ComponentName { get; set;}
 
-		[RED("isPartDropped")] 		public CBool IsPartDropped { get; set;}
+		[Ordinal(0)] [RED("("isPartDropped")] 		public CBool IsPartDropped { get; set;}
 
 		public SBoatDesctructionPart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

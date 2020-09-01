@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3IllusionaryObstacleStateDestroying : CScriptableState
 	{
-		[RED("items", 2,0)] 		public CArray<SItemUniqueId> Items { get; set;}
+		[Ordinal(0)] [RED("("items", 2,0)] 		public CArray<SItemUniqueId> Items { get; set;}
 
-		[RED("medallion")] 		public SItemUniqueId Medallion { get; set;}
+		[Ordinal(0)] [RED("("medallion")] 		public SItemUniqueId Medallion { get; set;}
 
-		[RED("i")] 		public CInt32 I { get; set;}
+		[Ordinal(0)] [RED("("i")] 		public CInt32 I { get; set;}
 
 		public W3IllusionaryObstacleStateDestroying(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

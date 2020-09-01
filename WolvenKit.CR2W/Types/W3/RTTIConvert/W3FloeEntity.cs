@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FloeEntity : W3DestroyableTerrain
 	{
-		[RED("m_currentFxID")] 		public CInt32 M_currentFxID { get; set;}
+		[Ordinal(0)] [RED("("m_currentFxID")] 		public CInt32 M_currentFxID { get; set;}
 
-		[RED("entryTime")] 		public CFloat EntryTime { get; set;}
+		[Ordinal(0)] [RED("("entryTime")] 		public CFloat EntryTime { get; set;}
 
-		[RED("timerInterval")] 		public CFloat TimerInterval { get; set;}
+		[Ordinal(0)] [RED("("timerInterval")] 		public CFloat TimerInterval { get; set;}
 
-		[RED("rot")] 		public EulerAngles Rot { get; set;}
+		[Ordinal(0)] [RED("("rot")] 		public EulerAngles Rot { get; set;}
 
 		public W3FloeEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

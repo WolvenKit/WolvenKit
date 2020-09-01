@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeClosestNonFriendlyTargetSelectionDefinition : IBehTreeNodeCombatTargetSelectionBaseDefinition
 	{
-		[RED("testDelay")] 		public CFloat TestDelay { get; set;}
+		[Ordinal(0)] [RED("testDelay")] 		public CFloat TestDelay { get; set;}
 
 		public CBehTreeNodeClosestNonFriendlyTargetSelectionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

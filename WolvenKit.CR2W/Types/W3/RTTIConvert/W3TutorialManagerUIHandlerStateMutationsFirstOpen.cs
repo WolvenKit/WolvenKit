@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateMutationsFirstOpen : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("GET_STUFF")] 		public CName GET_STUFF { get; set;}
+		[Ordinal(0)] [RED("("GET_STUFF")] 		public CName GET_STUFF { get; set;}
 
 		public W3TutorialManagerUIHandlerStateMutationsFirstOpen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

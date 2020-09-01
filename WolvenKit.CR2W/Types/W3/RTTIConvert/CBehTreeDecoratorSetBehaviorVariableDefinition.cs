@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeDecoratorSetBehaviorVariableDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("VarName")] 		public CName VarName { get; set;}
+		[Ordinal(0)] [RED("VarName")] 		public CName VarName { get; set;}
 
-		[RED("setVarActivate")] 		public CBool SetVarActivate { get; set;}
+		[Ordinal(0)] [RED("setVarActivate")] 		public CBool SetVarActivate { get; set;}
 
-		[RED("valueActivate")] 		public CFloat ValueActivate { get; set;}
+		[Ordinal(0)] [RED("valueActivate")] 		public CFloat ValueActivate { get; set;}
 
-		[RED("setVarDeactivate")] 		public CBool SetVarDeactivate { get; set;}
+		[Ordinal(0)] [RED("setVarDeactivate")] 		public CBool SetVarDeactivate { get; set;}
 
-		[RED("valueDeactivate")] 		public CFloat ValueDeactivate { get; set;}
+		[Ordinal(0)] [RED("valueDeactivate")] 		public CFloat ValueDeactivate { get; set;}
 
 		public CBehTreeDecoratorSetBehaviorVariableDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

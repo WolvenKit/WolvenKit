@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGroupFXManager : CGameplayEntity
 	{
-		[RED("entityTag")] 		public CName EntityTag { get; set;}
+		[Ordinal(0)] [RED("("entityTag")] 		public CName EntityTag { get; set;}
 
-		[RED("randomDropMin")] 		public CFloat RandomDropMin { get; set;}
+		[Ordinal(0)] [RED("("randomDropMin")] 		public CFloat RandomDropMin { get; set;}
 
-		[RED("randomDropMax")] 		public CFloat RandomDropMax { get; set;}
+		[Ordinal(0)] [RED("("randomDropMax")] 		public CFloat RandomDropMax { get; set;}
 
-		[RED("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(0)] [RED("("effectName")] 		public CName EffectName { get; set;}
 
-		[RED("ntities", 2,0)] 		public CArray<CHandle<CEntity>> Ntities { get; set;}
+		[Ordinal(0)] [RED("("ntities", 2,0)] 		public CArray<CHandle<CEntity>> Ntities { get; set;}
 
-		[RED("randomDrop")] 		public CFloat RandomDrop { get; set;}
+		[Ordinal(0)] [RED("("randomDrop")] 		public CFloat RandomDrop { get; set;}
 
 		public CGroupFXManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

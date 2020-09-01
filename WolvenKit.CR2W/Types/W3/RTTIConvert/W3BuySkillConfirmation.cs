@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3BuySkillConfirmation : ConfirmationPopupData
 	{
-		[RED("characterMenuRef")] 		public CHandle<CR4CharacterMenu> CharacterMenuRef { get; set;}
+		[Ordinal(0)] [RED("("characterMenuRef")] 		public CHandle<CR4CharacterMenu> CharacterMenuRef { get; set;}
 
-		[RED("targetSkill")] 		public CEnum<ESkill> TargetSkill { get; set;}
+		[Ordinal(0)] [RED("("targetSkill")] 		public CEnum<ESkill> TargetSkill { get; set;}
 
 		public W3BuySkillConfirmation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

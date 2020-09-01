@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIFlyingMonsterCombatParams : CAIBaseMonsterCombatParams
 	{
-		[RED("IncreaseHitCounterOnlyOnMelee")] 		public CBool IncreaseHitCounterOnlyOnMelee { get; set;}
+		[Ordinal(0)] [RED("IncreaseHitCounterOnlyOnMelee")] 		public CBool IncreaseHitCounterOnlyOnMelee { get; set;}
 
-		[RED("criticalState")] 		public CHandle<CAINpcCriticalStateFlying> CriticalState { get; set;}
+		[Ordinal(0)] [RED("criticalState")] 		public CHandle<CAINpcCriticalStateFlying> CriticalState { get; set;}
 
-		[RED("reactionTree")] 		public CHandle<CAIMonsterCombatReactionsTree> ReactionTree { get; set;}
+		[Ordinal(0)] [RED("reactionTree")] 		public CHandle<CAIMonsterCombatReactionsTree> ReactionTree { get; set;}
 
 		public CAIFlyingMonsterCombatParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

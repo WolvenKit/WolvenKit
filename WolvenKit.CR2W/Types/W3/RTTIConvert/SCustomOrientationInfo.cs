@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCustomOrientationInfo : CVariable
 	{
-		[RED("orientationTarget")] 		public CEnum<EOrientationTarget> OrientationTarget { get; set;}
+		[Ordinal(0)] [RED("("orientationTarget")] 		public CEnum<EOrientationTarget> OrientationTarget { get; set;}
 
-		[RED("sourceName")] 		public CName SourceName { get; set;}
+		[Ordinal(0)] [RED("("sourceName")] 		public CName SourceName { get; set;}
 
-		[RED("customHeading")] 		public CFloat CustomHeading { get; set;}
+		[Ordinal(0)] [RED("("customHeading")] 		public CFloat CustomHeading { get; set;}
 
 		public SCustomOrientationInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

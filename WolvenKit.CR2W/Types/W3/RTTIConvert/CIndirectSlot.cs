@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CIndirectSlot : ISlot
 	{
-		[RED("slotIndex")] 		public CUInt32 SlotIndex { get; set;}
+		[Ordinal(0)] [RED("slotIndex")] 		public CUInt32 SlotIndex { get; set;}
 
 		public CIndirectSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

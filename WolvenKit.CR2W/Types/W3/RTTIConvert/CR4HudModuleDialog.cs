@@ -10,61 +10,61 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4HudModuleDialog : CR4HudModuleBase
 	{
-		[RED("m_fxSentenceSetSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSentenceSetSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxSentenceSetSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSentenceSetSFF { get; set;}
 
-		[RED("m_fxPreviousSentenceSetSFF")] 		public CHandle<CScriptedFlashFunction> M_fxPreviousSentenceSetSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxPreviousSentenceSetSFF")] 		public CHandle<CScriptedFlashFunction> M_fxPreviousSentenceSetSFF { get; set;}
 
-		[RED("m_fxPreviousSentenceHideSFF")] 		public CHandle<CScriptedFlashFunction> M_fxPreviousSentenceHideSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxPreviousSentenceHideSFF")] 		public CHandle<CScriptedFlashFunction> M_fxPreviousSentenceHideSFF { get; set;}
 
-		[RED("m_fxSentenceHideSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSentenceHideSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxSentenceHideSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSentenceHideSFF { get; set;}
 
-		[RED("m_fxChoiceTimeoutSetSFF")] 		public CHandle<CScriptedFlashFunction> M_fxChoiceTimeoutSetSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxChoiceTimeoutSetSFF")] 		public CHandle<CScriptedFlashFunction> M_fxChoiceTimeoutSetSFF { get; set;}
 
-		[RED("m_fxChoiceTimeoutHideSFF")] 		public CHandle<CScriptedFlashFunction> M_fxChoiceTimeoutHideSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxChoiceTimeoutHideSFF")] 		public CHandle<CScriptedFlashFunction> M_fxChoiceTimeoutHideSFF { get; set;}
 
-		[RED("m_fxSkipConfirmShowSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSkipConfirmShowSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxSkipConfirmShowSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSkipConfirmShowSFF { get; set;}
 
-		[RED("m_fxSkipConfirmHideSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSkipConfirmHideSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxSkipConfirmHideSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSkipConfirmHideSFF { get; set;}
 
-		[RED("m_fxSetBarValueSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetBarValueSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetBarValueSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetBarValueSFF { get; set;}
 
-		[RED("m_fxSetCanBeSkipped")] 		public CHandle<CScriptedFlashFunction> M_fxSetCanBeSkipped { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetCanBeSkipped")] 		public CHandle<CScriptedFlashFunction> M_fxSetCanBeSkipped { get; set;}
 
-		[RED("m_fxSetAlternativeDialogOptionView")] 		public CHandle<CScriptedFlashFunction> M_fxSetAlternativeDialogOptionView { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetAlternativeDialogOptionView")] 		public CHandle<CScriptedFlashFunction> M_fxSetAlternativeDialogOptionView { get; set;}
 
-		[RED("monsterBarganingPopupMenu")] 		public CHandle<CR4MenuPopup> MonsterBarganingPopupMenu { get; set;}
+		[Ordinal(0)] [RED("("monsterBarganingPopupMenu")] 		public CHandle<CR4MenuPopup> MonsterBarganingPopupMenu { get; set;}
 
-		[RED("m_guiManager")] 		public CHandle<CR4GuiManager> M_guiManager { get; set;}
+		[Ordinal(0)] [RED("("m_guiManager")] 		public CHandle<CR4GuiManager> M_guiManager { get; set;}
 
-		[RED("m_LastNegotiationResult")] 		public CEnum<ENegotiationResult> M_LastNegotiationResult { get; set;}
+		[Ordinal(0)] [RED("("m_LastNegotiationResult")] 		public CEnum<ENegotiationResult> M_LastNegotiationResult { get; set;}
 
-		[RED("currentRewardName")] 		public CName CurrentRewardName { get; set;}
+		[Ordinal(0)] [RED("("currentRewardName")] 		public CName CurrentRewardName { get; set;}
 
-		[RED("currentRewardMultiply")] 		public CFloat CurrentRewardMultiply { get; set;}
+		[Ordinal(0)] [RED("("currentRewardMultiply")] 		public CFloat CurrentRewardMultiply { get; set;}
 
-		[RED("isBet")] 		public CBool IsBet { get; set;}
+		[Ordinal(0)] [RED("("isBet")] 		public CBool IsBet { get; set;}
 
-		[RED("isReverseHaggling")] 		public CBool IsReverseHaggling { get; set;}
+		[Ordinal(0)] [RED("("isReverseHaggling")] 		public CBool IsReverseHaggling { get; set;}
 
-		[RED("isPopupOpened")] 		public CBool IsPopupOpened { get; set;}
+		[Ordinal(0)] [RED("("isPopupOpened")] 		public CBool IsPopupOpened { get; set;}
 
-		[RED("isGwentMode")] 		public CBool IsGwentMode { get; set;}
+		[Ordinal(0)] [RED("("isGwentMode")] 		public CBool IsGwentMode { get; set;}
 
-		[RED("anger")] 		public CFloat Anger { get; set;}
+		[Ordinal(0)] [RED("("anger")] 		public CFloat Anger { get; set;}
 
-		[RED("currentReward")] 		public CInt32 CurrentReward { get; set;}
+		[Ordinal(0)] [RED("("currentReward")] 		public CInt32 CurrentReward { get; set;}
 
-		[RED("minimalHagglingReward")] 		public CInt32 MinimalHagglingReward { get; set;}
+		[Ordinal(0)] [RED("("minimalHagglingReward")] 		public CInt32 MinimalHagglingReward { get; set;}
 
-		[RED("maxHaggleValue")] 		public CInt32 MaxHaggleValue { get; set;}
+		[Ordinal(0)] [RED("("maxHaggleValue")] 		public CInt32 MaxHaggleValue { get; set;}
 
-		[RED("NPCsPrettyClose")] 		public CFloat NPCsPrettyClose { get; set;}
+		[Ordinal(0)] [RED("("NPCsPrettyClose")] 		public CFloat NPCsPrettyClose { get; set;}
 
-		[RED("NPCsTooMuch")] 		public CFloat NPCsTooMuch { get; set;}
+		[Ordinal(0)] [RED("("NPCsTooMuch")] 		public CFloat NPCsTooMuch { get; set;}
 
-		[RED("LowestPriceControlFact")] 		public CString LowestPriceControlFact { get; set;}
+		[Ordinal(0)] [RED("("LowestPriceControlFact")] 		public CString LowestPriceControlFact { get; set;}
 
-		[RED("lastSetChoices", 2,0)] 		public CArray<SSceneChoice> LastSetChoices { get; set;}
+		[Ordinal(0)] [RED("("lastSetChoices", 2,0)] 		public CArray<SSceneChoice> LastSetChoices { get; set;}
 
 		public CR4HudModuleDialog(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

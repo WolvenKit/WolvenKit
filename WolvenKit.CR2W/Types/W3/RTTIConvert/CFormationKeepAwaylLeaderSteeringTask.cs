@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFormationKeepAwaylLeaderSteeringTask : IFormationFragmentarySteeringTask
 	{
-		[RED("minLeaderDistance")] 		public CFloat MinLeaderDistance { get; set;}
+		[Ordinal(0)] [RED("("minLeaderDistance")] 		public CFloat MinLeaderDistance { get; set;}
 
-		[RED("noticeLeaderDistance")] 		public CFloat NoticeLeaderDistance { get; set;}
+		[Ordinal(0)] [RED("("noticeLeaderDistance")] 		public CFloat NoticeLeaderDistance { get; set;}
 
 		public CFormationKeepAwaylLeaderSteeringTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

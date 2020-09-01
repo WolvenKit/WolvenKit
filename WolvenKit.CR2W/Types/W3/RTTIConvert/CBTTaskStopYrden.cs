@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskStopYrden : IBehTreeTask
 	{
-		[RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(0)] [RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
-		[RED("yrden")] 		public CHandle<W3YrdenEntity> Yrden { get; set;}
+		[Ordinal(0)] [RED("yrden")] 		public CHandle<W3YrdenEntity> Yrden { get; set;}
 
-		[RED("yrdenIsActionTarget")] 		public CBool YrdenIsActionTarget { get; set;}
+		[Ordinal(0)] [RED("yrdenIsActionTarget")] 		public CBool YrdenIsActionTarget { get; set;}
 
-		[RED("range")] 		public CFloat Range { get; set;}
+		[Ordinal(0)] [RED("range")] 		public CFloat Range { get; set;}
 
-		[RED("useYrdenRadiusAsRange")] 		public CBool UseYrdenRadiusAsRange { get; set;}
+		[Ordinal(0)] [RED("useYrdenRadiusAsRange")] 		public CBool UseYrdenRadiusAsRange { get; set;}
 
-		[RED("maxResults")] 		public CInt32 MaxResults { get; set;}
+		[Ordinal(0)] [RED("maxResults")] 		public CInt32 MaxResults { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(0)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("onAnimEvent")] 		public CBool OnAnimEvent { get; set;}
+		[Ordinal(0)] [RED("onAnimEvent")] 		public CBool OnAnimEvent { get; set;}
 
-		[RED("eventName")] 		public CName EventName { get; set;}
+		[Ordinal(0)] [RED("eventName")] 		public CName EventName { get; set;}
 
-		[RED("stopYrdenShock")] 		public CBool StopYrdenShock { get; set;}
+		[Ordinal(0)] [RED("stopYrdenShock")] 		public CBool StopYrdenShock { get; set;}
 
 		public CBTTaskStopYrden(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

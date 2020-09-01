@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondDoesChangingWeaponRequiresIdle : IBehTreeTask
 	{
-		[RED("combatDataStorage")] 		public CHandle<CHumanAICombatStorage> CombatDataStorage { get; set;}
+		[Ordinal(0)] [RED("combatDataStorage")] 		public CHandle<CHumanAICombatStorage> CombatDataStorage { get; set;}
 
 		public BTCondDoesChangingWeaponRequiresIdle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

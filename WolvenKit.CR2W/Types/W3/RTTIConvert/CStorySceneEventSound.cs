@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventSound : CStorySceneEvent
 	{
-		[RED("soundEventName")] 		public StringAnsi SoundEventName { get; set;}
+		[Ordinal(0)] [RED("soundEventName")] 		public StringAnsi SoundEventName { get; set;}
 
-		[RED("actor")] 		public CName Actor { get; set;}
+		[Ordinal(0)] [RED("actor")] 		public CName Actor { get; set;}
 
-		[RED("bone")] 		public CName Bone { get; set;}
+		[Ordinal(0)] [RED("bone")] 		public CName Bone { get; set;}
 
-		[RED("dbVolume")] 		public CFloat DbVolume { get; set;}
+		[Ordinal(0)] [RED("dbVolume")] 		public CFloat DbVolume { get; set;}
 
 		public CStorySceneEventSound(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

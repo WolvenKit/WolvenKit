@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondIsAttackCountGreaterThanLimitDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("attackName")] 		public CName AttackName { get; set;}
+		[Ordinal(0)] [RED("("attackName")] 		public CName AttackName { get; set;}
 
-		[RED("attackCountLimit")] 		public CInt32 AttackCountLimit { get; set;}
+		[Ordinal(0)] [RED("("attackCountLimit")] 		public CInt32 AttackCountLimit { get; set;}
 
 		public CBTCondIsAttackCountGreaterThanLimitDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

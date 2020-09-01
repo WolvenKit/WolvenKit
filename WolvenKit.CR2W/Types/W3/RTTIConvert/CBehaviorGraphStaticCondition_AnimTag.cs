@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphStaticCondition_AnimTag : IBehaviorGraphStaticCondition
 	{
-		[RED("animTag")] 		public CName AnimTag { get; set;}
+		[Ordinal(0)] [RED("animTag")] 		public CName AnimTag { get; set;}
 
 		public CBehaviorGraphStaticCondition_AnimTag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

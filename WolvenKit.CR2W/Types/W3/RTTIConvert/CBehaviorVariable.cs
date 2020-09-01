@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorVariable : CBaseBehaviorVariable
 	{
-		[RED("value")] 		public CFloat Value { get; set;}
+		[Ordinal(0)] [RED("value")] 		public CFloat Value { get; set;}
 
-		[RED("defaultValue")] 		public CFloat DefaultValue { get; set;}
+		[Ordinal(0)] [RED("defaultValue")] 		public CFloat DefaultValue { get; set;}
 
-		[RED("minValue")] 		public CFloat MinValue { get; set;}
+		[Ordinal(0)] [RED("minValue")] 		public CFloat MinValue { get; set;}
 
-		[RED("maxValue")] 		public CFloat MaxValue { get; set;}
+		[Ordinal(0)] [RED("maxValue")] 		public CFloat MaxValue { get; set;}
 
-		[RED("isModifiableByEffect")] 		public CBool IsModifiableByEffect { get; set;}
+		[Ordinal(0)] [RED("isModifiableByEffect")] 		public CBool IsModifiableByEffect { get; set;}
 
-		[RED("shouldBeSyncedBetweenGraphs")] 		public CBool ShouldBeSyncedBetweenGraphs { get; set;}
+		[Ordinal(0)] [RED("shouldBeSyncedBetweenGraphs")] 		public CBool ShouldBeSyncedBetweenGraphs { get; set;}
 
 		public CBehaviorVariable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskLeshyGrabAttack : IBehTreeTask
 	{
-		[RED("attackType")] 		public CEnum<EAttackType> AttackType { get; set;}
+		[Ordinal(0)] [RED("attackType")] 		public CEnum<EAttackType> AttackType { get; set;}
 
-		[RED("stopTaskAfterDealingDmg")] 		public CBool StopTaskAfterDealingDmg { get; set;}
+		[Ordinal(0)] [RED("stopTaskAfterDealingDmg")] 		public CBool StopTaskAfterDealingDmg { get; set;}
 
-		[RED("useDirectionalAttacks")] 		public CBool UseDirectionalAttacks { get; set;}
+		[Ordinal(0)] [RED("useDirectionalAttacks")] 		public CBool UseDirectionalAttacks { get; set;}
 
-		[RED("fxOnDamageInstigated")] 		public CName FxOnDamageInstigated { get; set;}
+		[Ordinal(0)] [RED("fxOnDamageInstigated")] 		public CName FxOnDamageInstigated { get; set;}
 
-		[RED("slave")] 		public CHandle<CActor> Slave { get; set;}
+		[Ordinal(0)] [RED("slave")] 		public CHandle<CActor> Slave { get; set;}
 
-		[RED("slaveComponent")] 		public CHandle<CEffectDummyComponent> SlaveComponent { get; set;}
+		[Ordinal(0)] [RED("slaveComponent")] 		public CHandle<CEffectDummyComponent> SlaveComponent { get; set;}
 
 		public CBTTaskLeshyGrabAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

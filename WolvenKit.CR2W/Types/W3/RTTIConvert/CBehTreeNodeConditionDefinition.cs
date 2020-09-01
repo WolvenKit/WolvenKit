@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeConditionDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("forwardAvailability")] 		public CBool ForwardAvailability { get; set;}
+		[Ordinal(0)] [RED("("forwardAvailability")] 		public CBool ForwardAvailability { get; set;}
 
-		[RED("forwardTestIfNotAvailable")] 		public CBool ForwardTestIfNotAvailable { get; set;}
+		[Ordinal(0)] [RED("("forwardTestIfNotAvailable")] 		public CBool ForwardTestIfNotAvailable { get; set;}
 
-		[RED("invertAvailability")] 		public CBool InvertAvailability { get; set;}
+		[Ordinal(0)] [RED("("invertAvailability")] 		public CBool InvertAvailability { get; set;}
 
-		[RED("skipIfActive")] 		public CBool SkipIfActive { get; set;}
+		[Ordinal(0)] [RED("("skipIfActive")] 		public CBool SkipIfActive { get; set;}
 
 		public CBehTreeNodeConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

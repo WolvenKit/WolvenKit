@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3BehTreeValNameArray : IScriptable
 	{
-		[RED("nameArray", 2,0)] 		public CArray<CName> NameArray { get; set;}
+		[Ordinal(0)] [RED("("nameArray", 2,0)] 		public CArray<CName> NameArray { get; set;}
 
 		public W3BehTreeValNameArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

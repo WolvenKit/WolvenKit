@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFXSimpleSpawner : IFXSpawner
 	{
-		[RED("slotNames", 2,0)] 		public CArray<CName> SlotNames { get; set;}
+		[Ordinal(0)] [RED("slotNames", 2,0)] 		public CArray<CName> SlotNames { get; set;}
 
-		[RED("boneNames", 2,0)] 		public CArray<CName> BoneNames { get; set;}
+		[Ordinal(0)] [RED("boneNames", 2,0)] 		public CArray<CName> BoneNames { get; set;}
 
-		[RED("relativePos")] 		public Vector RelativePos { get; set;}
+		[Ordinal(0)] [RED("relativePos")] 		public Vector RelativePos { get; set;}
 
-		[RED("relativeRot")] 		public EulerAngles RelativeRot { get; set;}
+		[Ordinal(0)] [RED("relativeRot")] 		public EulerAngles RelativeRot { get; set;}
 
 		public CFXSimpleSpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

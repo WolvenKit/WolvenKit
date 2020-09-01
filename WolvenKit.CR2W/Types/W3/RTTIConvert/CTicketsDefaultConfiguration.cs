@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CTicketsDefaultConfiguration : CObject
 	{
-		[RED("tickets", 2,0)] 		public CArray<CTicketSourceConfiguration> Tickets { get; set;}
+		[Ordinal(0)] [RED("tickets", 2,0)] 		public CArray<CTicketSourceConfiguration> Tickets { get; set;}
 
 		public CTicketsDefaultConfiguration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

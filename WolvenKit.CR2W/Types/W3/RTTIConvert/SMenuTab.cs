@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMenuTab : CVariable
 	{
-		[RED("MenuName")] 		public CName MenuName { get; set;}
+		[Ordinal(0)] [RED("("MenuName")] 		public CName MenuName { get; set;}
 
-		[RED("MenuLabel")] 		public CString MenuLabel { get; set;}
+		[Ordinal(0)] [RED("("MenuLabel")] 		public CString MenuLabel { get; set;}
 
-		[RED("Visible")] 		public CBool Visible { get; set;}
+		[Ordinal(0)] [RED("("Visible")] 		public CBool Visible { get; set;}
 
-		[RED("Enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(0)] [RED("("Enabled")] 		public CBool Enabled { get; set;}
 
-		[RED("Restricted")] 		public CBool Restricted { get; set;}
+		[Ordinal(0)] [RED("("Restricted")] 		public CBool Restricted { get; set;}
 
-		[RED("ParentMenu")] 		public CName ParentMenu { get; set;}
+		[Ordinal(0)] [RED("("ParentMenu")] 		public CName ParentMenu { get; set;}
 
-		[RED("MenuState")] 		public CName MenuState { get; set;}
+		[Ordinal(0)] [RED("("MenuState")] 		public CName MenuState { get; set;}
 
 		public SMenuTab(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeBaseConditionalTreeDefinition : IBehTreeMetanodeDefinition
 	{
-		[RED("child")] 		public CPtr<IBehTreeNodeDefinition> Child { get; set;}
+		[Ordinal(0)] [RED("child")] 		public CPtr<IBehTreeNodeDefinition> Child { get; set;}
 
-		[RED("invert")] 		public CBool Invert { get; set;}
+		[Ordinal(0)] [RED("invert")] 		public CBool Invert { get; set;}
 
 		public CBehTreeNodeBaseConditionalTreeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

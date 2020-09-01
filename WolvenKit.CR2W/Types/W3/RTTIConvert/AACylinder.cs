@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class AACylinder : CVariable
 	{
-		[RED("positionAndRadius")] 		public Vector PositionAndRadius { get; set;}
+		[Ordinal(0)] [RED("positionAndRadius")] 		public Vector PositionAndRadius { get; set;}
 
-		[RED("height")] 		public CFloat Height { get; set;}
+		[Ordinal(0)] [RED("height")] 		public CFloat Height { get; set;}
 
 		public AACylinder(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

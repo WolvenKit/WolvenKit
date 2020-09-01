@@ -10,43 +10,43 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskFlyAround : CBTTaskVolumetricMove
 	{
-		[RED("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(0)] [RED("("distance")] 		public CFloat Distance { get; set;}
 
-		[RED("altitude")] 		public CFloat Altitude { get; set;}
+		[Ordinal(0)] [RED("("altitude")] 		public CFloat Altitude { get; set;}
 
-		[RED("tolerance")] 		public CFloat Tolerance { get; set;}
+		[Ordinal(0)] [RED("("tolerance")] 		public CFloat Tolerance { get; set;}
 
-		[RED("frontalHeadingOffset")] 		public CInt32 FrontalHeadingOffset { get; set;}
+		[Ordinal(0)] [RED("("frontalHeadingOffset")] 		public CInt32 FrontalHeadingOffset { get; set;}
 
-		[RED("landingGroundOffset")] 		public CFloat LandingGroundOffset { get; set;}
+		[Ordinal(0)] [RED("("landingGroundOffset")] 		public CFloat LandingGroundOffset { get; set;}
 
-		[RED("randomHeight")] 		public CInt32 RandomHeight { get; set;}
+		[Ordinal(0)] [RED("("randomHeight")] 		public CInt32 RandomHeight { get; set;}
 
-		[RED("anchorPoint")] 		public CHandle<CEncounter> AnchorPoint { get; set;}
+		[Ordinal(0)] [RED("("anchorPoint")] 		public CHandle<CEncounter> AnchorPoint { get; set;}
 
-		[RED("anchorPointAC")] 		public CHandle<CAreaComponent> AnchorPointAC { get; set;}
+		[Ordinal(0)] [RED("("anchorPointAC")] 		public CHandle<CAreaComponent> AnchorPointAC { get; set;}
 
-		[RED("anchorPointPos")] 		public Vector AnchorPointPos { get; set;}
+		[Ordinal(0)] [RED("("anchorPointPos")] 		public Vector AnchorPointPos { get; set;}
 
-		[RED("anchorPointToNpcVector")] 		public Vector AnchorPointToNpcVector { get; set;}
+		[Ordinal(0)] [RED("("anchorPointToNpcVector")] 		public Vector AnchorPointToNpcVector { get; set;}
 
-		[RED("anchorPointToNpcHeight")] 		public CFloat AnchorPointToNpcHeight { get; set;}
+		[Ordinal(0)] [RED("("anchorPointToNpcHeight")] 		public CFloat AnchorPointToNpcHeight { get; set;}
 
-		[RED("anchorPointToNpcDistance2D")] 		public CFloat AnchorPointToNpcDistance2D { get; set;}
+		[Ordinal(0)] [RED("("anchorPointToNpcDistance2D")] 		public CFloat AnchorPointToNpcDistance2D { get; set;}
 
-		[RED("npcToDestVector")] 		public Vector NpcToDestVector { get; set;}
+		[Ordinal(0)] [RED("("npcToDestVector")] 		public Vector NpcToDestVector { get; set;}
 
-		[RED("npcToDestVector2")] 		public Vector NpcToDestVector2 { get; set;}
+		[Ordinal(0)] [RED("("npcToDestVector2")] 		public Vector NpcToDestVector2 { get; set;}
 
-		[RED("npcToDestDistance")] 		public CFloat NpcToDestDistance { get; set;}
+		[Ordinal(0)] [RED("("npcToDestDistance")] 		public CFloat NpcToDestDistance { get; set;}
 
-		[RED("npcToDestAngle")] 		public CFloat NpcToDestAngle { get; set;}
+		[Ordinal(0)] [RED("("npcToDestAngle")] 		public CFloat NpcToDestAngle { get; set;}
 
-		[RED("flightMaxDuration")] 		public CFloat FlightMaxDuration { get; set;}
+		[Ordinal(0)] [RED("("flightMaxDuration")] 		public CFloat FlightMaxDuration { get; set;}
 
-		[RED("flightStartTime")] 		public CFloat FlightStartTime { get; set;}
+		[Ordinal(0)] [RED("("flightStartTime")] 		public CFloat FlightStartTime { get; set;}
 
-		[RED("flightDuration")] 		public CFloat FlightDuration { get; set;}
+		[Ordinal(0)] [RED("("flightDuration")] 		public CFloat FlightDuration { get; set;}
 
 		public CBTTaskFlyAround(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

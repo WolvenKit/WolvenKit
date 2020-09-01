@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SControllerRadiusParams : CVariable
 	{
-		[RED("name")] 		public CName Name { get; set;}
+		[Ordinal(0)] [RED("("name")] 		public CName Name { get; set;}
 
-		[RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(0)] [RED("("radius")] 		public CFloat Radius { get; set;}
 
 		public SControllerRadiusParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

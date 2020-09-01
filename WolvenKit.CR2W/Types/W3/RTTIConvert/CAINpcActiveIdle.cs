@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcActiveIdle : CAIIdleTree
 	{
-		[RED("params")] 		public CHandle<CAINpcActiveIdleParams> Params { get; set;}
+		[Ordinal(0)] [RED("params")] 		public CHandle<CAINpcActiveIdleParams> Params { get; set;}
 
-		[RED("delayWorkOnFailure")] 		public CFloat DelayWorkOnFailure { get; set;}
+		[Ordinal(0)] [RED("delayWorkOnFailure")] 		public CFloat DelayWorkOnFailure { get; set;}
 
-		[RED("delayWorkOnSuccess")] 		public CFloat DelayWorkOnSuccess { get; set;}
+		[Ordinal(0)] [RED("delayWorkOnSuccess")] 		public CFloat DelayWorkOnSuccess { get; set;}
 
-		[RED("delayWorkOnInterruption")] 		public CFloat DelayWorkOnInterruption { get; set;}
+		[Ordinal(0)] [RED("delayWorkOnInterruption")] 		public CFloat DelayWorkOnInterruption { get; set;}
 
 		public CAINpcActiveIdle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3WhiteFrostWaveProjectile : CProjectileTrajectory
 	{
-		[RED("frostEntity")] 		public CHandle<W3WhiteFrost> FrostEntity { get; set;}
+		[Ordinal(0)] [RED("("frostEntity")] 		public CHandle<W3WhiteFrost> FrostEntity { get; set;}
 
 		public W3WhiteFrostWaveProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

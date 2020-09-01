@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModUiFilteredList : CObject
 	{
-		[RED("items", 2,0)] 		public CArray<SModUiCategorizedListItem> Items { get; set;}
+		[Ordinal(0)] [RED("items", 2,0)] 		public CArray<SModUiCategorizedListItem> Items { get; set;}
 
-		[RED("selectedCat1")] 		public CString SelectedCat1 { get; set;}
+		[Ordinal(0)] [RED("selectedCat1")] 		public CString SelectedCat1 { get; set;}
 
-		[RED("selectedCat2")] 		public CString SelectedCat2 { get; set;}
+		[Ordinal(0)] [RED("selectedCat2")] 		public CString SelectedCat2 { get; set;}
 
-		[RED("selectedCat3")] 		public CString SelectedCat3 { get; set;}
+		[Ordinal(0)] [RED("selectedCat3")] 		public CString SelectedCat3 { get; set;}
 
-		[RED("wildcardFilter")] 		public CString WildcardFilter { get; set;}
+		[Ordinal(0)] [RED("wildcardFilter")] 		public CString WildcardFilter { get; set;}
 
-		[RED("itemsMatching")] 		public CInt32 ItemsMatching { get; set;}
+		[Ordinal(0)] [RED("itemsMatching")] 		public CInt32 ItemsMatching { get; set;}
 
-		[RED("filteredList", 2,0)] 		public CArray<SModUiListItem> FilteredList { get; set;}
+		[Ordinal(0)] [RED("filteredList", 2,0)] 		public CArray<SModUiListItem> FilteredList { get; set;}
 
-		[RED("selectedId")] 		public CString SelectedId { get; set;}
+		[Ordinal(0)] [RED("selectedId")] 		public CString SelectedId { get; set;}
 
 		public CModUiFilteredList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

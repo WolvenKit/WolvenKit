@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardShot : CObject
 	{
-		[RED("shotname")] 		public CString Shotname { get; set;}
+		[Ordinal(0)] [RED("shotname")] 		public CString Shotname { get; set;}
 
-		[RED("camSettings")] 		public SStoryBoardCameraSettings CamSettings { get; set;}
+		[Ordinal(0)] [RED("camSettings")] 		public SStoryBoardCameraSettings CamSettings { get; set;}
 
-		[RED("assetSettings", 2,0)] 		public CArray<SStoryBoardShotAssetSettings> AssetSettings { get; set;}
+		[Ordinal(0)] [RED("assetSettings", 2,0)] 		public CArray<SStoryBoardShotAssetSettings> AssetSettings { get; set;}
 
 		public CModStoryBoardShot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

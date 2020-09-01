@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAnimMultiplyCauser : CVariable
 	{
-		[RED("id")] 		public CInt32 Id { get; set;}
+		[Ordinal(0)] [RED("id")] 		public CInt32 Id { get; set;}
 
-		[RED("mul")] 		public CFloat Mul { get; set;}
+		[Ordinal(0)] [RED("mul")] 		public CFloat Mul { get; set;}
 
 		public SAnimMultiplyCauser(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

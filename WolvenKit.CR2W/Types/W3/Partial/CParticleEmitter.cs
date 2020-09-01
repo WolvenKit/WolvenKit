@@ -10,49 +10,49 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CParticleEmitter : IParticleModule
 	{
-		[RED("modules", 2,0)] 		public CArray<CPtr<IParticleModule>> Modules { get; set;}
+		[Ordinal(0)] [RED("modules", 2,0)] 		public CArray<CPtr<IParticleModule>> Modules { get; set;}
 
-		[RED("positionX")] 		public CInt32 PositionX { get; set;}
+		[Ordinal(0)] [RED("positionX")] 		public CInt32 PositionX { get; set;}
 
-		[RED("positionY")] 		public CInt32 PositionY { get; set;}
+		[Ordinal(0)] [RED("positionY")] 		public CInt32 PositionY { get; set;}
 
-		[RED("material")] 		public CHandle<IMaterial> Material { get; set;}
+		[Ordinal(0)] [RED("material")] 		public CHandle<IMaterial> Material { get; set;}
 
-		[RED("maxParticles")] 		public CUInt32 MaxParticles { get; set;}
+		[Ordinal(0)] [RED("maxParticles")] 		public CUInt32 MaxParticles { get; set;}
 
-		[RED("emitterLoops")] 		public CInt32 EmitterLoops { get; set;}
+		[Ordinal(0)] [RED("emitterLoops")] 		public CInt32 EmitterLoops { get; set;}
 
-		[RED("particleDrawer")] 		public CPtr<IParticleDrawer> ParticleDrawer { get; set;}
+		[Ordinal(0)] [RED("particleDrawer")] 		public CPtr<IParticleDrawer> ParticleDrawer { get; set;}
 
-		[RED("decalSpawner")] 		public CPtr<CDecalSpawner> DecalSpawner { get; set;}
+		[Ordinal(0)] [RED("decalSpawner")] 		public CPtr<CDecalSpawner> DecalSpawner { get; set;}
 
-		[RED("collisionDecalSpawner")] 		public CPtr<CDecalSpawner> CollisionDecalSpawner { get; set;}
+		[Ordinal(0)] [RED("collisionDecalSpawner")] 		public CPtr<CDecalSpawner> CollisionDecalSpawner { get; set;}
 
-		[RED("motionDecalSpawner")] 		public CPtr<CDecalSpawner> MotionDecalSpawner { get; set;}
+		[Ordinal(0)] [RED("motionDecalSpawner")] 		public CPtr<CDecalSpawner> MotionDecalSpawner { get; set;}
 
-		[RED("useSubFrameEmission")] 		public CBool UseSubFrameEmission { get; set;}
+		[Ordinal(0)] [RED("useSubFrameEmission")] 		public CBool UseSubFrameEmission { get; set;}
 
-		[RED("keepSimulationLocal")] 		public CBool KeepSimulationLocal { get; set;}
+		[Ordinal(0)] [RED("keepSimulationLocal")] 		public CBool KeepSimulationLocal { get; set;}
 
-		[RED("envColorGroup")] 		public CEnum<EEnvColorGroup> EnvColorGroup { get; set;}
+		[Ordinal(0)] [RED("envColorGroup")] 		public CEnum<EEnvColorGroup> EnvColorGroup { get; set;}
 
-		[RED("windInfluence")] 		public CFloat WindInfluence { get; set;}
+		[Ordinal(0)] [RED("windInfluence")] 		public CFloat WindInfluence { get; set;}
 
-		[RED("useOnlyWindInfluence")] 		public CBool UseOnlyWindInfluence { get; set;}
+		[Ordinal(0)] [RED("useOnlyWindInfluence")] 		public CBool UseOnlyWindInfluence { get; set;}
 
-		[RED("modifierSetMask")] 		public CUInt32 ModifierSetMask { get; set;}
+		[Ordinal(0)] [RED("modifierSetMask")] 		public CUInt32 ModifierSetMask { get; set;}
 
-		[RED("numModifiers")] 		public CUInt32 NumModifiers { get; set;}
+		[Ordinal(0)] [RED("numModifiers")] 		public CUInt32 NumModifiers { get; set;}
 
-		[RED("initializerSetMask")] 		public CUInt32 InitializerSetMask { get; set;}
+		[Ordinal(0)] [RED("initializerSetMask")] 		public CUInt32 InitializerSetMask { get; set;}
 
-		[RED("numInitializers")] 		public CUInt32 NumInitializers { get; set;}
+		[Ordinal(0)] [RED("numInitializers")] 		public CUInt32 NumInitializers { get; set;}
 
-		[RED("seeds", 2,0)] 		public CArray<SSeedKeyValue> Seeds { get; set;}
+		[Ordinal(0)] [RED("seeds", 2,0)] 		public CArray<SSeedKeyValue> Seeds { get; set;}
 
-		[RED("internalPriority")] 		public CUInt8 InternalPriority { get; set;}
+		[Ordinal(0)] [RED("internalPriority")] 		public CUInt8 InternalPriority { get; set;}
 
-		[RED("lods", 2,0)] 		public CArray<SParticleEmitterLODLevel> Lods { get; set;}
+		[Ordinal(0)] [RED("lods", 2,0)] 		public CArray<SParticleEmitterLODLevel> Lods { get; set;}
 
 		public CParticleEmitter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

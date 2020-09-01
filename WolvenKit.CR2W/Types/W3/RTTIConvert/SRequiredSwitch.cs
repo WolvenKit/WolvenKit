@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SRequiredSwitch : CVariable
 	{
-		[RED("requiredSwitchTag")] 		public CName RequiredSwitchTag { get; set;}
+		[Ordinal(0)] [RED("("requiredSwitchTag")] 		public CName RequiredSwitchTag { get; set;}
 
-		[RED("switchState")] 		public CEnum<ERequiredSwitchState> SwitchState { get; set;}
+		[Ordinal(0)] [RED("("switchState")] 		public CEnum<ERequiredSwitchState> SwitchState { get; set;}
 
 		public SRequiredSwitch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

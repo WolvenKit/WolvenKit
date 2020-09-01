@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventHitSound : CStorySceneEvent
 	{
-		[RED("actor")] 		public CName Actor { get; set;}
+		[Ordinal(0)] [RED("("actor")] 		public CName Actor { get; set;}
 
-		[RED("actorAttacker")] 		public CName ActorAttacker { get; set;}
+		[Ordinal(0)] [RED("("actorAttacker")] 		public CName ActorAttacker { get; set;}
 
-		[RED("soundAttackType")] 		public CName SoundAttackType { get; set;}
+		[Ordinal(0)] [RED("("soundAttackType")] 		public CName SoundAttackType { get; set;}
 
-		[RED("actorAttackerWeaponSlot")] 		public CName ActorAttackerWeaponSlot { get; set;}
+		[Ordinal(0)] [RED("("actorAttackerWeaponSlot")] 		public CName ActorAttackerWeaponSlot { get; set;}
 
-		[RED("actorAttackerWeaponName")] 		public CName ActorAttackerWeaponName { get; set;}
+		[Ordinal(0)] [RED("("actorAttackerWeaponName")] 		public CName ActorAttackerWeaponName { get; set;}
 
 		public CStorySceneEventHitSound(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

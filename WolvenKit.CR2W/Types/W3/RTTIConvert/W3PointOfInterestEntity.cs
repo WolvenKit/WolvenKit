@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3PointOfInterestEntity : CGameplayEntity
 	{
-		[RED("toDestroy")] 		public CBool ToDestroy { get; set;}
+		[Ordinal(0)] [RED("("toDestroy")] 		public CBool ToDestroy { get; set;}
 
-		[RED("assignedDispenser")] 		public CHandle<W3POIDispenser> AssignedDispenser { get; set;}
+		[Ordinal(0)] [RED("("assignedDispenser")] 		public CHandle<W3POIDispenser> AssignedDispenser { get; set;}
 
 		public W3PointOfInterestEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SRaycastHitResult : CVariable
 	{
-		[RED("position")] 		public Vector Position { get; set;}
+		[Ordinal(0)] [RED("("position")] 		public Vector Position { get; set;}
 
-		[RED("normal")] 		public Vector Normal { get; set;}
+		[Ordinal(0)] [RED("("normal")] 		public Vector Normal { get; set;}
 
-		[RED("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(0)] [RED("("distance")] 		public CFloat Distance { get; set;}
 
-		[RED("component")] 		public CHandle<CComponent> Component { get; set;}
+		[Ordinal(0)] [RED("("component")] 		public CHandle<CComponent> Component { get; set;}
 
 		public SRaycastHitResult(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

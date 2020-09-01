@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ICustomCameraPivotPositionController : ICustomCameraBaseController
 	{
-		[RED("offsetZ")] 		public CFloat OffsetZ { get; set;}
+		[Ordinal(0)] [RED("offsetZ")] 		public CFloat OffsetZ { get; set;}
 
-		[RED("pivotZSmoothTime")] 		public CFloat PivotZSmoothTime { get; set;}
+		[Ordinal(0)] [RED("pivotZSmoothTime")] 		public CFloat PivotZSmoothTime { get; set;}
 
 		public ICustomCameraPivotPositionController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

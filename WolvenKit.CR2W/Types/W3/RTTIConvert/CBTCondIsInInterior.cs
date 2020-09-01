@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondIsInInterior : IBehTreeTask
 	{
-		[RED("testSubject")] 		public CEnum<ETestSubject> TestSubject { get; set;}
+		[Ordinal(0)] [RED("("testSubject")] 		public CEnum<ETestSubject> TestSubject { get; set;}
 
 		public CBTCondIsInInterior(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

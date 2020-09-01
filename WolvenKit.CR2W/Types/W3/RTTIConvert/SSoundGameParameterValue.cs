@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSoundGameParameterValue : CVariable
 	{
-		[RED("gameParameterName")] 		public StringAnsi GameParameterName { get; set;}
+		[Ordinal(0)] [RED("("gameParameterName")] 		public StringAnsi GameParameterName { get; set;}
 
-		[RED("gameParameterValue")] 		public CFloat GameParameterValue { get; set;}
+		[Ordinal(0)] [RED("("gameParameterValue")] 		public CFloat GameParameterValue { get; set;}
 
 		public SSoundGameParameterValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

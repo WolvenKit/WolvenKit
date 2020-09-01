@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SGuiSceneDescription : CVariable
 	{
-		[RED("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(0)] [RED("("enabled")] 		public CBool Enabled { get; set;}
 
-		[RED("worldClass")] 		public CName WorldClass { get; set;}
+		[Ordinal(0)] [RED("("worldClass")] 		public CName WorldClass { get; set;}
 
-		[RED("defaultEnvDef")] 		public CSoft<CEnvironmentDefinition> DefaultEnvDef { get; set;}
+		[Ordinal(0)] [RED("("defaultEnvDef")] 		public CSoft<CEnvironmentDefinition> DefaultEnvDef { get; set;}
 
-		[RED("defaultSunRotation")] 		public EulerAngles DefaultSunRotation { get; set;}
+		[Ordinal(0)] [RED("("defaultSunRotation")] 		public EulerAngles DefaultSunRotation { get; set;}
 
-		[RED("enablePhysics")] 		public CBool EnablePhysics { get; set;}
+		[Ordinal(0)] [RED("("enablePhysics")] 		public CBool EnablePhysics { get; set;}
 
 		public SGuiSceneDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

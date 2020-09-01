@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardInteractiveLookAt : CEntity
 	{
-		[RED("lookAtDirector")] 		public CHandle<CModStoryBoardLookAtDirector> LookAtDirector { get; set;}
+		[Ordinal(0)] [RED("("lookAtDirector")] 		public CHandle<CModStoryBoardLookAtDirector> LookAtDirector { get; set;}
 
-		[RED("actor")] 		public CHandle<CModStoryBoardActor> Actor { get; set;}
+		[Ordinal(0)] [RED("("actor")] 		public CHandle<CModStoryBoardActor> Actor { get; set;}
 
-		[RED("lookAt")] 		public SStoryBoardLookAtSettings LookAt { get; set;}
+		[Ordinal(0)] [RED("("lookAt")] 		public SStoryBoardLookAtSettings LookAt { get; set;}
 
-		[RED("isInteractiveMode")] 		public CBool IsInteractiveMode { get; set;}
+		[Ordinal(0)] [RED("("isInteractiveMode")] 		public CBool IsInteractiveMode { get; set;}
 
-		[RED("stepRotSize")] 		public CFloat StepRotSize { get; set;}
+		[Ordinal(0)] [RED("("stepRotSize")] 		public CFloat StepRotSize { get; set;}
 
 		public CModStoryBoardInteractiveLookAt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

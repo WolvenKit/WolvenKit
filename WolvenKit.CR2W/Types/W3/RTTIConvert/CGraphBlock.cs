@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGraphBlock : CObject
 	{
-		[RED("sockets", 2,0)] 		public CArray<CPtr<CGraphSocket>> Sockets { get; set;}
+		[Ordinal(0)] [RED("("sockets", 2,0)] 		public CArray<CPtr<CGraphSocket>> Sockets { get; set;}
 
-		[RED("position")] 		public Vector Position { get; set;}
+		[Ordinal(0)] [RED("("position")] 		public Vector Position { get; set;}
 
-		[RED("version")] 		public CUInt32 Version { get; set;}
+		[Ordinal(0)] [RED("("version")] 		public CUInt32 Version { get; set;}
 
 		public CGraphBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

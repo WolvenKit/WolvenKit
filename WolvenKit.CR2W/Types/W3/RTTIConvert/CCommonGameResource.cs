@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCommonGameResource : CGameResource
 	{
-		[RED("mainQuest")] 		public CSoft<CQuest> MainQuest { get; set;}
+		[Ordinal(0)] [RED("mainQuest")] 		public CSoft<CQuest> MainQuest { get; set;}
 
-		[RED("guiConfigOverride")] 		public CSoft<CGuiConfigResource> GuiConfigOverride { get; set;}
+		[Ordinal(0)] [RED("guiConfigOverride")] 		public CSoft<CGuiConfigResource> GuiConfigOverride { get; set;}
 
 		public CCommonGameResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

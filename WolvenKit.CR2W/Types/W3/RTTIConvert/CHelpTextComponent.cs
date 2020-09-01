@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CHelpTextComponent : CComponent
 	{
-		[RED("text")] 		public CString Text { get; set;}
+		[Ordinal(0)] [RED("("text")] 		public CString Text { get; set;}
 
-		[RED("textColor")] 		public CColor TextColor { get; set;}
+		[Ordinal(0)] [RED("("textColor")] 		public CColor TextColor { get; set;}
 
-		[RED("backgroundColor")] 		public CColor BackgroundColor { get; set;}
+		[Ordinal(0)] [RED("("backgroundColor")] 		public CColor BackgroundColor { get; set;}
 
-		[RED("drawBackground")] 		public CBool DrawBackground { get; set;}
+		[Ordinal(0)] [RED("("drawBackground")] 		public CBool DrawBackground { get; set;}
 
 		public CHelpTextComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

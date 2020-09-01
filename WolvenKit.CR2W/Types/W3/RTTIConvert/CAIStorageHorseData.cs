@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIStorageHorseData : IScriptable
 	{
-		[RED("horseEntity")] 		public CHandle<CActor> HorseEntity { get; set;}
+		[Ordinal(0)] [RED("horseEntity")] 		public CHandle<CActor> HorseEntity { get; set;}
 
-		[RED("horseComponent")] 		public CHandle<W3HorseComponent> HorseComponent { get; set;}
+		[Ordinal(0)] [RED("horseComponent")] 		public CHandle<W3HorseComponent> HorseComponent { get; set;}
 
 		public CAIStorageHorseData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

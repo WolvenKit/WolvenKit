@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCraftingFilters : CVariable
 	{
-		[RED("showCraftable")] 		public CBool ShowCraftable { get; set;}
+		[Ordinal(0)] [RED("("showCraftable")] 		public CBool ShowCraftable { get; set;}
 
-		[RED("showMissingIngre")] 		public CBool ShowMissingIngre { get; set;}
+		[Ordinal(0)] [RED("("showMissingIngre")] 		public CBool ShowMissingIngre { get; set;}
 
-		[RED("showAlreadyCrafted")] 		public CBool ShowAlreadyCrafted { get; set;}
+		[Ordinal(0)] [RED("("showAlreadyCrafted")] 		public CBool ShowAlreadyCrafted { get; set;}
 
 		public SCraftingFilters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

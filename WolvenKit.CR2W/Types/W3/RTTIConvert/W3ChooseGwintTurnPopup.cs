@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ChooseGwintTurnPopup : ConfirmationPopupData
 	{
-		[RED("gwintMenuRef")] 		public CHandle<CR4GwintGameMenu> GwintMenuRef { get; set;}
+		[Ordinal(0)] [RED("("gwintMenuRef")] 		public CHandle<CR4GwintGameMenu> GwintMenuRef { get; set;}
 
 		public W3ChooseGwintTurnPopup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

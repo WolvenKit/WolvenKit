@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCutsceneActorOverrideMapping : CVariable
 	{
-		[RED("actorName")] 		public CString ActorName { get; set;}
+		[Ordinal(0)] [RED("("actorName")] 		public CString ActorName { get; set;}
 
-		[RED("cutsceneActorDef")] 		public SCutsceneActorDef CutsceneActorDef { get; set;}
+		[Ordinal(0)] [RED("("cutsceneActorDef")] 		public SCutsceneActorDef CutsceneActorDef { get; set;}
 
 		public SCutsceneActorOverrideMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ICustomCameraPivotRotationController : ICustomCameraBaseController
 	{
-		[RED("minPitch")] 		public CFloat MinPitch { get; set;}
+		[Ordinal(0)] [RED("minPitch")] 		public CFloat MinPitch { get; set;}
 
-		[RED("maxPitch")] 		public CFloat MaxPitch { get; set;}
+		[Ordinal(0)] [RED("maxPitch")] 		public CFloat MaxPitch { get; set;}
 
-		[RED("sensitivityPreset")] 		public CEnum<EInputSensitivityPreset> SensitivityPreset { get; set;}
+		[Ordinal(0)] [RED("sensitivityPreset")] 		public CEnum<EInputSensitivityPreset> SensitivityPreset { get; set;}
 
 		public ICustomCameraPivotRotationController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

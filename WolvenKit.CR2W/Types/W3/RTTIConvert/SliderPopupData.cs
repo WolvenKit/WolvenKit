@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SliderPopupData : TextPopupData
 	{
-		[RED("minValue")] 		public CInt32 MinValue { get; set;}
+		[Ordinal(0)] [RED("("minValue")] 		public CInt32 MinValue { get; set;}
 
-		[RED("maxValue")] 		public CInt32 MaxValue { get; set;}
+		[Ordinal(0)] [RED("("maxValue")] 		public CInt32 MaxValue { get; set;}
 
-		[RED("currentValue")] 		public CInt32 CurrentValue { get; set;}
+		[Ordinal(0)] [RED("("currentValue")] 		public CInt32 CurrentValue { get; set;}
 
 		public SliderPopupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

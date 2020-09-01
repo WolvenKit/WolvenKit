@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SE_UseRiddleNode : W3SwitchEvent
 	{
-		[RED("riddleNodeTag")] 		public CName RiddleNodeTag { get; set;}
+		[Ordinal(0)] [RED("("riddleNodeTag")] 		public CName RiddleNodeTag { get; set;}
 
 		public W3SE_UseRiddleNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

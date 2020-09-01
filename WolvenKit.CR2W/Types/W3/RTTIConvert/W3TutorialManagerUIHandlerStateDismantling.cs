@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateDismantling : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("DESCRIPTION")] 		public CName DESCRIPTION { get; set;}
+		[Ordinal(0)] [RED("("DESCRIPTION")] 		public CName DESCRIPTION { get; set;}
 
-		[RED("ITEMS")] 		public CName ITEMS { get; set;}
+		[Ordinal(0)] [RED("("ITEMS")] 		public CName ITEMS { get; set;}
 
-		[RED("COMPONENTS")] 		public CName COMPONENTS { get; set;}
+		[Ordinal(0)] [RED("("COMPONENTS")] 		public CName COMPONENTS { get; set;}
 
-		[RED("COST")] 		public CName COST { get; set;}
+		[Ordinal(0)] [RED("("COST")] 		public CName COST { get; set;}
 
-		[RED("DISMANTLING")] 		public CName DISMANTLING { get; set;}
+		[Ordinal(0)] [RED("("DISMANTLING")] 		public CName DISMANTLING { get; set;}
 
-		[RED("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
 		public W3TutorialManagerUIHandlerStateDismantling(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

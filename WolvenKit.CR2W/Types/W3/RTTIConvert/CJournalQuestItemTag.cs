@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalQuestItemTag : CJournalContainerEntry
 	{
-		[RED("item")] 		public CName Item { get; set;}
+		[Ordinal(0)] [RED("("item")] 		public CName Item { get; set;}
 
 		public CJournalQuestItemTag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

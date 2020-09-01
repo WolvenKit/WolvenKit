@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphRetargetCharacterNodeMethod_SkeletonMapper : IBehaviorGraphRetargetCharacterNodeMethod
 	{
-		[RED("skeleton")] 		public CHandle<CSkeleton> Skeleton { get; set;}
+		[Ordinal(0)] [RED("skeleton")] 		public CHandle<CSkeleton> Skeleton { get; set;}
 
 		public CBehaviorGraphRetargetCharacterNodeMethod_SkeletonMapper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

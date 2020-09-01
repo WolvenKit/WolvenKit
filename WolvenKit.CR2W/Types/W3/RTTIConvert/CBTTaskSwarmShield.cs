@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSwarmShield : CBTTaskPlayAnimationEventDecorator
 	{
-		[RED("lair")] 		public CHandle<CFlyingSwarmMasterLair> Lair { get; set;}
+		[Ordinal(0)] [RED("("lair")] 		public CHandle<CFlyingSwarmMasterLair> Lair { get; set;}
 
-		[RED("stabilizationTimer")] 		public CFloat StabilizationTimer { get; set;}
+		[Ordinal(0)] [RED("("stabilizationTimer")] 		public CFloat StabilizationTimer { get; set;}
 
-		[RED("disperse")] 		public CBool Disperse { get; set;}
+		[Ordinal(0)] [RED("("disperse")] 		public CBool Disperse { get; set;}
 
 		public CBTTaskSwarmShield(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvWaterParameters : CVariable
 	{
-		[RED("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(0)] [RED("("activated")] 		public CBool Activated { get; set;}
 
-		[RED("waterFlowIntensity")] 		public SSimpleCurve WaterFlowIntensity { get; set;}
+		[Ordinal(0)] [RED("("waterFlowIntensity")] 		public SSimpleCurve WaterFlowIntensity { get; set;}
 
-		[RED("underwaterBrightness")] 		public SSimpleCurve UnderwaterBrightness { get; set;}
+		[Ordinal(0)] [RED("("underwaterBrightness")] 		public SSimpleCurve UnderwaterBrightness { get; set;}
 
-		[RED("underWaterFogIntensity")] 		public SSimpleCurve UnderWaterFogIntensity { get; set;}
+		[Ordinal(0)] [RED("("underWaterFogIntensity")] 		public SSimpleCurve UnderWaterFogIntensity { get; set;}
 
-		[RED("waterColor")] 		public SSimpleCurve WaterColor { get; set;}
+		[Ordinal(0)] [RED("("waterColor")] 		public SSimpleCurve WaterColor { get; set;}
 
-		[RED("underWaterColor")] 		public SSimpleCurve UnderWaterColor { get; set;}
+		[Ordinal(0)] [RED("("underWaterColor")] 		public SSimpleCurve UnderWaterColor { get; set;}
 
-		[RED("waterFresnel")] 		public SSimpleCurve WaterFresnel { get; set;}
+		[Ordinal(0)] [RED("("waterFresnel")] 		public SSimpleCurve WaterFresnel { get; set;}
 
-		[RED("waterCaustics")] 		public SSimpleCurve WaterCaustics { get; set;}
+		[Ordinal(0)] [RED("("waterCaustics")] 		public SSimpleCurve WaterCaustics { get; set;}
 
-		[RED("waterFoamIntensity")] 		public SSimpleCurve WaterFoamIntensity { get; set;}
+		[Ordinal(0)] [RED("("waterFoamIntensity")] 		public SSimpleCurve WaterFoamIntensity { get; set;}
 
-		[RED("waterAmbientScale")] 		public SSimpleCurve WaterAmbientScale { get; set;}
+		[Ordinal(0)] [RED("("waterAmbientScale")] 		public SSimpleCurve WaterAmbientScale { get; set;}
 
-		[RED("waterDiffuseScale")] 		public SSimpleCurve WaterDiffuseScale { get; set;}
+		[Ordinal(0)] [RED("("waterDiffuseScale")] 		public SSimpleCurve WaterDiffuseScale { get; set;}
 
 		public CEnvWaterParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

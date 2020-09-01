@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CParticleModificatorCollision : IParticleModificator
 	{
-		[RED("triggeringCollisionGroupNames", 2,0)] 		public CArray<CName> TriggeringCollisionGroupNames { get; set;}
+		[Ordinal(0)] [RED("("triggeringCollisionGroupNames", 2,0)] 		public CArray<CName> TriggeringCollisionGroupNames { get; set;}
 
-		[RED("dynamicFriction")] 		public CFloat DynamicFriction { get; set;}
+		[Ordinal(0)] [RED("("dynamicFriction")] 		public CFloat DynamicFriction { get; set;}
 
-		[RED("staticFriction")] 		public CFloat StaticFriction { get; set;}
+		[Ordinal(0)] [RED("("staticFriction")] 		public CFloat StaticFriction { get; set;}
 
-		[RED("restition")] 		public CFloat Restition { get; set;}
+		[Ordinal(0)] [RED("("restition")] 		public CFloat Restition { get; set;}
 
-		[RED("velocityDamp")] 		public CFloat VelocityDamp { get; set;}
+		[Ordinal(0)] [RED("("velocityDamp")] 		public CFloat VelocityDamp { get; set;}
 
-		[RED("disableGravity")] 		public CBool DisableGravity { get; set;}
+		[Ordinal(0)] [RED("("disableGravity")] 		public CBool DisableGravity { get; set;}
 
-		[RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(0)] [RED("("radius")] 		public CFloat Radius { get; set;}
 
-		[RED("killWhenCollide")] 		public CBool KillWhenCollide { get; set;}
+		[Ordinal(0)] [RED("("killWhenCollide")] 		public CBool KillWhenCollide { get; set;}
 
-		[RED("Use Gpu Simulation If Avaible")] 		public CBool Use_Gpu_Simulation_If_Avaible { get; set;}
+		[Ordinal(0)] [RED("("Use Gpu Simulation If Avaible")] 		public CBool Use_Gpu_Simulation_If_Avaible { get; set;}
 
 		public CParticleModificatorCollision(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4GlobalEventsScriptsDispatcher : CObject
 	{
-		[RED("listenersByCategory", 2,0)] 		public CArray<CArray<CHandle<IGlobalEventScriptedListener>>> ListenersByCategory { get; set;}
+		[Ordinal(0)] [RED("("listenersByCategory", 2,0)] 		public CArray<CArray<CHandle<IGlobalEventScriptedListener>>> ListenersByCategory { get; set;}
 
 		public CR4GlobalEventsScriptsDispatcher(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorNodeParentChild : CBehaviorGraphBaseNode
 	{
-		[RED("parentBoneName")] 		public CString ParentBoneName { get; set;}
+		[Ordinal(0)] [RED("parentBoneName")] 		public CString ParentBoneName { get; set;}
 
-		[RED("childBoneName")] 		public CString ChildBoneName { get; set;}
+		[Ordinal(0)] [RED("childBoneName")] 		public CString ChildBoneName { get; set;}
 
-		[RED("offset")] 		public Vector Offset { get; set;}
+		[Ordinal(0)] [RED("offset")] 		public Vector Offset { get; set;}
 
-		[RED("changeOnlyTranslation")] 		public CBool ChangeOnlyTranslation { get; set;}
+		[Ordinal(0)] [RED("changeOnlyTranslation")] 		public CBool ChangeOnlyTranslation { get; set;}
 
 		public CBehaviorNodeParentChild(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

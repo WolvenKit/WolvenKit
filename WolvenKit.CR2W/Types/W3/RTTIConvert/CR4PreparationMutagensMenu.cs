@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4PreparationMutagensMenu : CR4MenuBase
 	{
-		[RED("_gridInv")] 		public CHandle<W3GuiPreparationMutagensInventoryComponent> _gridInv { get; set;}
+		[Ordinal(0)] [RED("_gridInv")] 		public CHandle<W3GuiPreparationMutagensInventoryComponent> _gridInv { get; set;}
 
-		[RED("_currentInv")] 		public CHandle<W3GuiBaseInventoryComponent> _currentInv { get; set;}
+		[Ordinal(0)] [RED("_currentInv")] 		public CHandle<W3GuiBaseInventoryComponent> _currentInv { get; set;}
 
-		[RED("_inv")] 		public CHandle<CInventoryComponent> _inv { get; set;}
+		[Ordinal(0)] [RED("_inv")] 		public CHandle<CInventoryComponent> _inv { get; set;}
 
-		[RED("optionsItemActions", 2,0)] 		public CArray<CEnum<EInventoryActionType>> OptionsItemActions { get; set;}
+		[Ordinal(0)] [RED("optionsItemActions", 2,0)] 		public CArray<CEnum<EInventoryActionType>> OptionsItemActions { get; set;}
 
-		[RED("_currentQuickSlot")] 		public CEnum<EEquipmentSlots> _currentQuickSlot { get; set;}
+		[Ordinal(0)] [RED("_currentQuickSlot")] 		public CEnum<EEquipmentSlots> _currentQuickSlot { get; set;}
 
-		[RED("TOXICTY_BAR_DATA_BINDING_KEY")] 		public CString TOXICTY_BAR_DATA_BINDING_KEY { get; set;}
+		[Ordinal(0)] [RED("TOXICTY_BAR_DATA_BINDING_KEY")] 		public CString TOXICTY_BAR_DATA_BINDING_KEY { get; set;}
 
-		[RED("MUTAGENS_SIZE")] 		public CInt32 MUTAGENS_SIZE { get; set;}
+		[Ordinal(0)] [RED("MUTAGENS_SIZE")] 		public CInt32 MUTAGENS_SIZE { get; set;}
 
-		[RED("initialized")] 		public CBool Initialized { get; set;}
+		[Ordinal(0)] [RED("initialized")] 		public CBool Initialized { get; set;}
 
 		public CR4PreparationMutagensMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

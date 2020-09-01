@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimItemEvent : CExtAnimEvent
 	{
-		[RED("category")] 		public CName Category { get; set;}
+		[Ordinal(0)] [RED("("category")] 		public CName Category { get; set;}
 
-		[RED("itemName_optional")] 		public CName ItemName_optional { get; set;}
+		[Ordinal(0)] [RED("("itemName_optional")] 		public CName ItemName_optional { get; set;}
 
-		[RED("action")] 		public CEnum<EItemAction> Action { get; set;}
+		[Ordinal(0)] [RED("("action")] 		public CEnum<EItemAction> Action { get; set;}
 
-		[RED("ignoreItemsWithTag")] 		public CName IgnoreItemsWithTag { get; set;}
+		[Ordinal(0)] [RED("("ignoreItemsWithTag")] 		public CName IgnoreItemsWithTag { get; set;}
 
-		[RED("itemGetting")] 		public CEnum<EGettingItem> ItemGetting { get; set;}
+		[Ordinal(0)] [RED("("itemGetting")] 		public CEnum<EGettingItem> ItemGetting { get; set;}
 
 		public CExtAnimItemEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

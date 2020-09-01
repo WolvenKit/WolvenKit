@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_WasMeditating : CQuestScriptedCondition
 	{
-		[RED("hours")] 		public CInt32 Hours { get; set;}
+		[Ordinal(0)] [RED("("hours")] 		public CInt32 Hours { get; set;}
 
-		[RED("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
+		[Ordinal(0)] [RED("("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
 
-		[RED("dayPart")] 		public CEnum<EDayPart> DayPart { get; set;}
+		[Ordinal(0)] [RED("("dayPart")] 		public CEnum<EDayPart> DayPart { get; set;}
 
-		[RED("meditateToHour")] 		public CBool MeditateToHour { get; set;}
+		[Ordinal(0)] [RED("("meditateToHour")] 		public CBool MeditateToHour { get; set;}
 
-		[RED("immediateTest")] 		public CBool ImmediateTest { get; set;}
+		[Ordinal(0)] [RED("("immediateTest")] 		public CBool ImmediateTest { get; set;}
 
-		[RED("isFulfilled")] 		public CBool IsFulfilled { get; set;}
+		[Ordinal(0)] [RED("("isFulfilled")] 		public CBool IsFulfilled { get; set;}
 
-		[RED("listener")] 		public CHandle<W3QuestCond_WasMeditating_Listener> Listener { get; set;}
+		[Ordinal(0)] [RED("("listener")] 		public CHandle<W3QuestCond_WasMeditating_Listener> Listener { get; set;}
 
-		[RED("factsNames", 2,0)] 		public CArray<CString> FactsNames { get; set;}
+		[Ordinal(0)] [RED("("factsNames", 2,0)] 		public CArray<CString> FactsNames { get; set;}
 
 		public W3QuestCond_WasMeditating(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

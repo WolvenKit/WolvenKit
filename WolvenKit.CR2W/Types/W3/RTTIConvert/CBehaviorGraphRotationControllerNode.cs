@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphRotationControllerNode : CBehaviorGraphBaseNode
 	{
-		[RED("eventAllowRot")] 		public CName EventAllowRot { get; set;}
+		[Ordinal(0)] [RED("eventAllowRot")] 		public CName EventAllowRot { get; set;}
 
-		[RED("continueUpdate")] 		public CBool ContinueUpdate { get; set;}
+		[Ordinal(0)] [RED("continueUpdate")] 		public CBool ContinueUpdate { get; set;}
 
-		[RED("cachedAngleVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedAngleVariableNode { get; set;}
+		[Ordinal(0)] [RED("cachedAngleVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedAngleVariableNode { get; set;}
 
-		[RED("cachedWeightVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedWeightVariableNode { get; set;}
+		[Ordinal(0)] [RED("cachedWeightVariableNode")] 		public CPtr<CBehaviorGraphValueNode> CachedWeightVariableNode { get; set;}
 
 		public CBehaviorGraphRotationControllerNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SDismembermentWoundSingleSpawn : CVariable
 	{
-		[RED("spawnedEntity")] 		public CHandle<CEntityTemplate> SpawnedEntity { get; set;}
+		[Ordinal(0)] [RED("("spawnedEntity")] 		public CHandle<CEntityTemplate> SpawnedEntity { get; set;}
 
-		[RED("spawnEntityBoneName")] 		public CName SpawnEntityBoneName { get; set;}
+		[Ordinal(0)] [RED("("spawnEntityBoneName")] 		public CName SpawnEntityBoneName { get; set;}
 
-		[RED("spawnedEntityCurveName")] 		public CName SpawnedEntityCurveName { get; set;}
+		[Ordinal(0)] [RED("("spawnedEntityCurveName")] 		public CName SpawnedEntityCurveName { get; set;}
 
-		[RED("droppedEquipmentTag")] 		public CName DroppedEquipmentTag { get; set;}
+		[Ordinal(0)] [RED("("droppedEquipmentTag")] 		public CName DroppedEquipmentTag { get; set;}
 
-		[RED("soundEvents", 2,0)] 		public CArray<StringAnsi> SoundEvents { get; set;}
+		[Ordinal(0)] [RED("("soundEvents", 2,0)] 		public CArray<StringAnsi> SoundEvents { get; set;}
 
-		[RED("despawnAlongWithBase")] 		public CBool DespawnAlongWithBase { get; set;}
+		[Ordinal(0)] [RED("("despawnAlongWithBase")] 		public CBool DespawnAlongWithBase { get; set;}
 
-		[RED("syncPose")] 		public CBool SyncPose { get; set;}
+		[Ordinal(0)] [RED("("syncPose")] 		public CBool SyncPose { get; set;}
 
-		[RED("fixBaseBonesHierarchyType")] 		public CEnum<EFixBonesHierarchyType> FixBaseBonesHierarchyType { get; set;}
+		[Ordinal(0)] [RED("("fixBaseBonesHierarchyType")] 		public CEnum<EFixBonesHierarchyType> FixBaseBonesHierarchyType { get; set;}
 
-		[RED("fixSpawnedBonesHierarchyType")] 		public CEnum<EFixBonesHierarchyType> FixSpawnedBonesHierarchyType { get; set;}
+		[Ordinal(0)] [RED("("fixSpawnedBonesHierarchyType")] 		public CEnum<EFixBonesHierarchyType> FixSpawnedBonesHierarchyType { get; set;}
 
-		[RED("effectsNames", 2,0)] 		public CArray<CName> EffectsNames { get; set;}
+		[Ordinal(0)] [RED("("effectsNames", 2,0)] 		public CArray<CName> EffectsNames { get; set;}
 
-		[RED("additionalEffects", 2,0)] 		public CArray<SDismembermentEffect> AdditionalEffects { get; set;}
+		[Ordinal(0)] [RED("("additionalEffects", 2,0)] 		public CArray<SDismembermentEffect> AdditionalEffects { get; set;}
 
 		public SDismembermentWoundSingleSpawn(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

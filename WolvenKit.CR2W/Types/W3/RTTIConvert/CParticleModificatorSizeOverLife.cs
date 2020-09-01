@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CParticleModificatorSizeOverLife : IParticleModificator
 	{
-		[RED("size")] 		public CPtr<IEvaluatorVector> Size { get; set;}
+		[Ordinal(0)] [RED("("size")] 		public CPtr<IEvaluatorVector> Size { get; set;}
 
-		[RED("modulate")] 		public CBool Modulate { get; set;}
+		[Ordinal(0)] [RED("("modulate")] 		public CBool Modulate { get; set;}
 
 		public CParticleModificatorSizeOverLife(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

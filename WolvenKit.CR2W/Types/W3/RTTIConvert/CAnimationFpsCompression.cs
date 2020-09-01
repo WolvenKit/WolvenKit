@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimationFpsCompression : IAnimationCompression
 	{
-		[RED("fps")] 		public CEnum<EAnimationFps> Fps { get; set;}
+		[Ordinal(0)] [RED("fps")] 		public CEnum<EAnimationFps> Fps { get; set;}
 
 		public CAnimationFpsCompression(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

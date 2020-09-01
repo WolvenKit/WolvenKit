@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAISyannaCompanionBehavior : IAIBaseAction
 	{
-		[RED("params")] 		public CHandle<CAISyannaCompanionBehaviorParams> Params { get; set;}
+		[Ordinal(0)] [RED("params")] 		public CHandle<CAISyannaCompanionBehaviorParams> Params { get; set;}
 
-		[RED("useCustomSteering")] 		public CBool UseCustomSteering { get; set;}
+		[Ordinal(0)] [RED("useCustomSteering")] 		public CBool UseCustomSteering { get; set;}
 
-		[RED("customSteeringGraph")] 		public CHandle<CMoveSteeringBehavior> CustomSteeringGraph { get; set;}
+		[Ordinal(0)] [RED("customSteeringGraph")] 		public CHandle<CMoveSteeringBehavior> CustomSteeringGraph { get; set;}
 
 		public CAISyannaCompanionBehavior(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

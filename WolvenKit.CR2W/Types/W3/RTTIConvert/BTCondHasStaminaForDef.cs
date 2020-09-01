@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondHasStaminaForDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("staminaAction")] 		public CEnum<EStaminaActionType> StaminaAction { get; set;}
+		[Ordinal(0)] [RED("staminaAction")] 		public CEnum<EStaminaActionType> StaminaAction { get; set;}
 
 		public BTCondHasStaminaForDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

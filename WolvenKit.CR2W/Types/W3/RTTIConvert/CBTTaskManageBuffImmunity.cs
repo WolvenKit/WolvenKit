@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskManageBuffImmunity : IBehTreeTask
 	{
-		[RED("effects", 2,0)] 		public CArray<CEnum<EEffectType>> Effects { get; set;}
+		[Ordinal(0)] [RED("("effects", 2,0)] 		public CArray<CEnum<EEffectType>> Effects { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(0)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("bRemove")] 		public CBool BRemove { get; set;}
+		[Ordinal(0)] [RED("("bRemove")] 		public CBool BRemove { get; set;}
 
-		[RED("removeFromTemplate")] 		public CBool RemoveFromTemplate { get; set;}
+		[Ordinal(0)] [RED("("removeFromTemplate")] 		public CBool RemoveFromTemplate { get; set;}
 
 		public CBTTaskManageBuffImmunity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

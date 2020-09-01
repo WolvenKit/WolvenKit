@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneSystem : IGameSystem
 	{
-		[RED("activeScenes", 2,0)] 		public CArray<CHandle<CStoryScenePlayer>> ActiveScenes { get; set;}
+		[Ordinal(0)] [RED("activeScenes", 2,0)] 		public CArray<CHandle<CStoryScenePlayer>> ActiveScenes { get; set;}
 
-		[RED("actorMap")] 		public CPtr<CStorySceneActorMap> ActorMap { get; set;}
+		[Ordinal(0)] [RED("actorMap")] 		public CPtr<CStorySceneActorMap> ActorMap { get; set;}
 
 		public CStorySceneSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

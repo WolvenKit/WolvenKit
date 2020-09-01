@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskWraithManageDoppelgangers : IBehTreeTask
 	{
-		[RED("killDoppelgangersAtDeath")] 		public CBool KillDoppelgangersAtDeath { get; set;}
+		[Ordinal(0)] [RED("("killDoppelgangersAtDeath")] 		public CBool KillDoppelgangersAtDeath { get; set;}
 
-		[RED("killDoppelgangersAfterTime")] 		public CFloat KillDoppelgangersAfterTime { get; set;}
+		[Ordinal(0)] [RED("("killDoppelgangersAfterTime")] 		public CFloat KillDoppelgangersAfterTime { get; set;}
 
-		[RED("splitEffectEntityTemplate")] 		public CHandle<CEntityTemplate> SplitEffectEntityTemplate { get; set;}
+		[Ordinal(0)] [RED("("splitEffectEntityTemplate")] 		public CHandle<CEntityTemplate> SplitEffectEntityTemplate { get; set;}
 
-		[RED("healthPercentageToRegen")] 		public CFloat HealthPercentageToRegen { get; set;}
+		[Ordinal(0)] [RED("("healthPercentageToRegen")] 		public CFloat HealthPercentageToRegen { get; set;}
 
-		[RED("m_spawnTime")] 		public CFloat M_spawnTime { get; set;}
+		[Ordinal(0)] [RED("("m_spawnTime")] 		public CFloat M_spawnTime { get; set;}
 
-		[RED("m_SplitEntities", 2,0)] 		public CArray<CHandle<CEntity>> M_SplitEntities { get; set;}
+		[Ordinal(0)] [RED("("m_SplitEntities", 2,0)] 		public CArray<CHandle<CEntity>> M_SplitEntities { get; set;}
 
-		[RED("m_MergeReceived")] 		public CInt32 M_MergeReceived { get; set;}
+		[Ordinal(0)] [RED("("m_MergeReceived")] 		public CInt32 M_MergeReceived { get; set;}
 
-		[RED("m_HealthPercToReach")] 		public CFloat M_HealthPercToReach { get; set;}
+		[Ordinal(0)] [RED("("m_HealthPercToReach")] 		public CFloat M_HealthPercToReach { get; set;}
 
-		[RED("m_MergingStarted")] 		public CBool M_MergingStarted { get; set;}
+		[Ordinal(0)] [RED("("m_MergingStarted")] 		public CBool M_MergingStarted { get; set;}
 
 		public CBTTaskWraithManageDoppelgangers(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

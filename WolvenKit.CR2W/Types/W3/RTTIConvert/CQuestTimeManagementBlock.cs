@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestTimeManagementBlock : CQuestGraphBlock
 	{
-		[RED("function")] 		public CPtr<IQuestTimeFunction> Function { get; set;}
+		[Ordinal(0)] [RED("function")] 		public CPtr<IQuestTimeFunction> Function { get; set;}
 
 		public CQuestTimeManagementBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskSetEncounterAsActionTarget : IBehTreeTask
 	{
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(0)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("encounter")] 		public CHandle<CEncounter> Encounter { get; set;}
+		[Ordinal(0)] [RED("encounter")] 		public CHandle<CEncounter> Encounter { get; set;}
 
 		public BTTaskSetEncounterAsActionTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

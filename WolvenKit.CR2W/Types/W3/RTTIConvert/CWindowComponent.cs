@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CWindowComponent : CMeshComponent
 	{
-		[RED("startEmissiveHour")] 		public CFloat StartEmissiveHour { get; set;}
+		[Ordinal(0)] [RED("startEmissiveHour")] 		public CFloat StartEmissiveHour { get; set;}
 
-		[RED("startEmissiveFadeTime")] 		public CFloat StartEmissiveFadeTime { get; set;}
+		[Ordinal(0)] [RED("startEmissiveFadeTime")] 		public CFloat StartEmissiveFadeTime { get; set;}
 
-		[RED("endEmissiveHour")] 		public CFloat EndEmissiveHour { get; set;}
+		[Ordinal(0)] [RED("endEmissiveHour")] 		public CFloat EndEmissiveHour { get; set;}
 
-		[RED("endEmissiveFadeTime")] 		public CFloat EndEmissiveFadeTime { get; set;}
+		[Ordinal(0)] [RED("endEmissiveFadeTime")] 		public CFloat EndEmissiveFadeTime { get; set;}
 
-		[RED("randomRange")] 		public CFloat RandomRange { get; set;}
+		[Ordinal(0)] [RED("randomRange")] 		public CFloat RandomRange { get; set;}
 
 		public CWindowComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

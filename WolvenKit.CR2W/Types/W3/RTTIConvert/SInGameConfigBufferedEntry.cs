@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SInGameConfigBufferedEntry : CVariable
 	{
-		[RED("groupName")] 		public CName GroupName { get; set;}
+		[Ordinal(0)] [RED("("groupName")] 		public CName GroupName { get; set;}
 
-		[RED("varName")] 		public CName VarName { get; set;}
+		[Ordinal(0)] [RED("("varName")] 		public CName VarName { get; set;}
 
-		[RED("varValue")] 		public CString VarValue { get; set;}
+		[Ordinal(0)] [RED("("varValue")] 		public CString VarValue { get; set;}
 
-		[RED("startValue")] 		public CString StartValue { get; set;}
+		[Ordinal(0)] [RED("("startValue")] 		public CString StartValue { get; set;}
 
 		public SInGameConfigBufferedEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3VisualFx : CEntity
 	{
-		[RED("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(0)] [RED("("effectName")] 		public CName EffectName { get; set;}
 
-		[RED("destroyEffectTime")] 		public CFloat DestroyEffectTime { get; set;}
+		[Ordinal(0)] [RED("("destroyEffectTime")] 		public CFloat DestroyEffectTime { get; set;}
 
-		[RED("timedFxDestroyName")] 		public CName TimedFxDestroyName { get; set;}
+		[Ordinal(0)] [RED("("timedFxDestroyName")] 		public CName TimedFxDestroyName { get; set;}
 
-		[RED("parentActorHandle")] 		public EntityHandle ParentActorHandle { get; set;}
+		[Ordinal(0)] [RED("("parentActorHandle")] 		public EntityHandle ParentActorHandle { get; set;}
 
 		public W3VisualFx(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

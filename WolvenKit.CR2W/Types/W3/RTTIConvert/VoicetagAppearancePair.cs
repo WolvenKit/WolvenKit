@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class VoicetagAppearancePair : CVariable
 	{
-		[RED("voicetag")] 		public CName Voicetag { get; set;}
+		[Ordinal(0)] [RED("("voicetag")] 		public CName Voicetag { get; set;}
 
-		[RED("appearance")] 		public CName Appearance { get; set;}
+		[Ordinal(0)] [RED("("appearance")] 		public CName Appearance { get; set;}
 
 		public VoicetagAppearancePair(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

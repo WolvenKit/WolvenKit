@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCustomCameraBlendPPC : ICustomCameraPivotPositionController
 	{
-		[RED("from")] 		public CPtr<ICustomCameraPivotPositionController> From { get; set;}
+		[Ordinal(0)] [RED("("from")] 		public CPtr<ICustomCameraPivotPositionController> From { get; set;}
 
-		[RED("to")] 		public CPtr<ICustomCameraPivotPositionController> To { get; set;}
+		[Ordinal(0)] [RED("("to")] 		public CPtr<ICustomCameraPivotPositionController> To { get; set;}
 
 		public CCustomCameraBlendPPC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

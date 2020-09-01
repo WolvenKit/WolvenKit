@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ActorRemains : W3AnimatedContainer
 	{
-		[RED("dismemberOnLoot")] 		public CBool DismemberOnLoot { get; set;}
+		[Ordinal(0)] [RED("("dismemberOnLoot")] 		public CBool DismemberOnLoot { get; set;}
 
-		[RED("dismembermentOnlyWhenLootingTrophy")] 		public CBool DismembermentOnlyWhenLootingTrophy { get; set;}
+		[Ordinal(0)] [RED("("dismembermentOnlyWhenLootingTrophy")] 		public CBool DismembermentOnlyWhenLootingTrophy { get; set;}
 
-		[RED("dismembermentType")] 		public CEnum<EDismembermentWoundTypes> DismembermentType { get; set;}
+		[Ordinal(0)] [RED("("dismembermentType")] 		public CEnum<EDismembermentWoundTypes> DismembermentType { get; set;}
 
-		[RED("dismembermentName")] 		public CName DismembermentName { get; set;}
+		[Ordinal(0)] [RED("("dismembermentName")] 		public CName DismembermentName { get; set;}
 
-		[RED("manualTrophyTransfer")] 		public CBool ManualTrophyTransfer { get; set;}
+		[Ordinal(0)] [RED("("manualTrophyTransfer")] 		public CBool ManualTrophyTransfer { get; set;}
 
-		[RED("owner")] 		public CHandle<CActor> Owner { get; set;}
+		[Ordinal(0)] [RED("("owner")] 		public CHandle<CActor> Owner { get; set;}
 
-		[RED("hasTrophy")] 		public CBool HasTrophy { get; set;}
+		[Ordinal(0)] [RED("("hasTrophy")] 		public CBool HasTrophy { get; set;}
 
-		[RED("wasDismembered")] 		public CBool WasDismembered { get; set;}
+		[Ordinal(0)] [RED("("wasDismembered")] 		public CBool WasDismembered { get; set;}
 
-		[RED("trophyItemNames", 2,0)] 		public CArray<CName> TrophyItemNames { get; set;}
+		[Ordinal(0)] [RED("("trophyItemNames", 2,0)] 		public CArray<CName> TrophyItemNames { get; set;}
 
 		public W3ActorRemains(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

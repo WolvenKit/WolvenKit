@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CHorseTagAIParameters : ICustomValAIParameters
 	{
-		[RED("preferedHorseTag")] 		public CName PreferedHorseTag { get; set;}
+		[Ordinal(0)] [RED("("preferedHorseTag")] 		public CName PreferedHorseTag { get; set;}
 
 		public CHorseTagAIParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAISorceressLightningCastActionTree : IAICustomActionTree
 	{
-		[RED("targetTag")] 		public CName TargetTag { get; set;}
+		[Ordinal(0)] [RED("targetTag")] 		public CName TargetTag { get; set;}
 
 		public CAISorceressLightningCastActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

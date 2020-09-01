@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class UserMessageActionData : CVariable
 	{
-		[RED("actionId")] 		public CEnum<EUserMessageAction> ActionId { get; set;}
+		[Ordinal(0)] [RED("("actionId")] 		public CEnum<EUserMessageAction> ActionId { get; set;}
 
-		[RED("label")] 		public CString Label { get; set;}
+		[Ordinal(0)] [RED("("label")] 		public CString Label { get; set;}
 
 		public UserMessageActionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

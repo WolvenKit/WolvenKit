@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTSaveNamedTargetOnEvent : IBehTreeTask
 	{
-		[RED("namedTargetToSave")] 		public CName NamedTargetToSave { get; set;}
+		[Ordinal(0)] [RED("namedTargetToSave")] 		public CName NamedTargetToSave { get; set;}
 
-		[RED("saveUnder")] 		public CName SaveUnder { get; set;}
+		[Ordinal(0)] [RED("saveUnder")] 		public CName SaveUnder { get; set;}
 
-		[RED("gameplayEventToSaveOn")] 		public CName GameplayEventToSaveOn { get; set;}
+		[Ordinal(0)] [RED("gameplayEventToSaveOn")] 		public CName GameplayEventToSaveOn { get; set;}
 
 		public BTSaveNamedTargetOnEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

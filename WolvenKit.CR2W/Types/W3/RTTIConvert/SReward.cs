@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SReward : CVariable
 	{
-		[RED("name")] 		public CName Name { get; set;}
+		[Ordinal(0)] [RED("("name")] 		public CName Name { get; set;}
 
-		[RED("experience")] 		public CInt32 Experience { get; set;}
+		[Ordinal(0)] [RED("("experience")] 		public CInt32 Experience { get; set;}
 
-		[RED("level")] 		public CInt32 Level { get; set;}
+		[Ordinal(0)] [RED("("level")] 		public CInt32 Level { get; set;}
 
-		[RED("gold")] 		public CInt32 Gold { get; set;}
+		[Ordinal(0)] [RED("("gold")] 		public CInt32 Gold { get; set;}
 
-		[RED("items", 2,0)] 		public CArray<SItemReward> Items { get; set;}
+		[Ordinal(0)] [RED("("items", 2,0)] 		public CArray<SItemReward> Items { get; set;}
 
-		[RED("achievement")] 		public CInt32 Achievement { get; set;}
+		[Ordinal(0)] [RED("("achievement")] 		public CInt32 Achievement { get; set;}
 
-		[RED("script")] 		public CName Script { get; set;}
+		[Ordinal(0)] [RED("("script")] 		public CName Script { get; set;}
 
-		[RED("comment")] 		public CString Comment { get; set;}
+		[Ordinal(0)] [RED("("comment")] 		public CString Comment { get; set;}
 
 		public SReward(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

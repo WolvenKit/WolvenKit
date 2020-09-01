@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardAnimationModeStateSbUi_ActorAnimation : CModSbListViewWorkModeStateSbUi_FilteredListSelect
 	{
-		[RED("actor")] 		public CHandle<CModStoryBoardActor> Actor { get; set;}
+		[Ordinal(0)] [RED("("actor")] 		public CHandle<CModStoryBoardActor> Actor { get; set;}
 
-		[RED("newAnimation")] 		public SStoryBoardAnimationSettings NewAnimation { get; set;}
+		[Ordinal(0)] [RED("("newAnimation")] 		public SStoryBoardAnimationSettings NewAnimation { get; set;}
 
-		[RED("animStateCallback")] 		public CHandle<CModSbUiAnimModeAnimStateCallback> AnimStateCallback { get; set;}
+		[Ordinal(0)] [RED("("animStateCallback")] 		public CHandle<CModSbUiAnimModeAnimStateCallback> AnimStateCallback { get; set;}
 
 		public CModStoryBoardAnimationModeStateSbUi_ActorAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

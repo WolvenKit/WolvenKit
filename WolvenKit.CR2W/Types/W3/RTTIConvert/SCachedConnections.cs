@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCachedConnections : CVariable
 	{
-		[RED("socketId")] 		public CName SocketId { get; set;}
+		[Ordinal(0)] [RED("("socketId")] 		public CName SocketId { get; set;}
 
-		[RED("blocks", 2,0)] 		public CArray<SBlockDesc> Blocks { get; set;}
+		[Ordinal(0)] [RED("("blocks", 2,0)] 		public CArray<SBlockDesc> Blocks { get; set;}
 
 		public SCachedConnections(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

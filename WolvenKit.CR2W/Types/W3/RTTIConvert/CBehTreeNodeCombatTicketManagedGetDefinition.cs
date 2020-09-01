@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeCombatTicketManagedGetDefinition : CBehTreeNodeCombatTicketManagerDefinition
 	{
-		[RED("locksTicket")] 		public CBool LocksTicket { get; set;}
+		[Ordinal(0)] [RED("locksTicket")] 		public CBool LocksTicket { get; set;}
 
-		[RED("freesTicket")] 		public CBool FreesTicket { get; set;}
+		[Ordinal(0)] [RED("freesTicket")] 		public CBool FreesTicket { get; set;}
 
-		[RED("failsWhenTicketIsLost")] 		public CBool FailsWhenTicketIsLost { get; set;}
+		[Ordinal(0)] [RED("failsWhenTicketIsLost")] 		public CBool FailsWhenTicketIsLost { get; set;}
 
-		[RED("ticketRequestValidTime")] 		public CFloat TicketRequestValidTime { get; set;}
+		[Ordinal(0)] [RED("ticketRequestValidTime")] 		public CFloat TicketRequestValidTime { get; set;}
 
 		public CBehTreeNodeCombatTicketManagedGetDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

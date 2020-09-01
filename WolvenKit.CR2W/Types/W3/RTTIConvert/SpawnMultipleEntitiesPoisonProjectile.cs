@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SpawnMultipleEntitiesPoisonProjectile : PoisonProjectile
 	{
-		[RED("numberOfSpawns")] 		public CInt32 NumberOfSpawns { get; set;}
+		[Ordinal(0)] [RED("("numberOfSpawns")] 		public CInt32 NumberOfSpawns { get; set;}
 
-		[RED("minDistFromTarget")] 		public CInt32 MinDistFromTarget { get; set;}
+		[Ordinal(0)] [RED("("minDistFromTarget")] 		public CInt32 MinDistFromTarget { get; set;}
 
-		[RED("maxDistFromTarget")] 		public CInt32 MaxDistFromTarget { get; set;}
+		[Ordinal(0)] [RED("("maxDistFromTarget")] 		public CInt32 MaxDistFromTarget { get; set;}
 
 		public SpawnMultipleEntitiesPoisonProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalStoryBookPage : CJournalContainer
 	{
-		[RED("title")] 		public LocalizedString Title { get; set;}
+		[Ordinal(0)] [RED("title")] 		public LocalizedString Title { get; set;}
 
-		[RED("world")] 		public CUInt32 World { get; set;}
+		[Ordinal(0)] [RED("world")] 		public CUInt32 World { get; set;}
 
-		[RED("active")] 		public CBool Active { get; set;}
+		[Ordinal(0)] [RED("active")] 		public CBool Active { get; set;}
 
 		public CJournalStoryBookPage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

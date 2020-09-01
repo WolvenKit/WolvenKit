@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondLeshyStage : IBehTreeTask
 	{
-		[RED("activeInStage")] 		public CEnum<ENPCFightStage> ActiveInStage { get; set;}
+		[Ordinal(0)] [RED("("activeInStage")] 		public CEnum<ENPCFightStage> ActiveInStage { get; set;}
 
-		[RED("equalHigherThanStage")] 		public CBool EqualHigherThanStage { get; set;}
+		[Ordinal(0)] [RED("("equalHigherThanStage")] 		public CBool EqualHigherThanStage { get; set;}
 
 		public CBTCondLeshyStage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

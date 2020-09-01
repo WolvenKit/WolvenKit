@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTStrafeTargetRandomly : IMoveSTBaseStrafeTarget
 	{
-		[RED("randomizationFrequency")] 		public CFloat RandomizationFrequency { get; set;}
+		[Ordinal(0)] [RED("randomizationFrequency")] 		public CFloat RandomizationFrequency { get; set;}
 
-		[RED("outputRandomizationPower")] 		public CFloat OutputRandomizationPower { get; set;}
+		[Ordinal(0)] [RED("outputRandomizationPower")] 		public CFloat OutputRandomizationPower { get; set;}
 
-		[RED("changeDirectionOnBlockDelay")] 		public CFloat ChangeDirectionOnBlockDelay { get; set;}
+		[Ordinal(0)] [RED("changeDirectionOnBlockDelay")] 		public CFloat ChangeDirectionOnBlockDelay { get; set;}
 
 		public CMoveSTStrafeTargetRandomly(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

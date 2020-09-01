@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStoryBoardAnimationMetaInfo : CObject
 	{
-		[RED("animList", 2,0)] 		public CArray<SStoryBoardAnimationInfo> AnimList { get; set;}
+		[Ordinal(0)] [RED("("animList", 2,0)] 		public CArray<SStoryBoardAnimationInfo> AnimList { get; set;}
 
 		public CStoryBoardAnimationMetaInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

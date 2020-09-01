@@ -10,35 +10,35 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStatePushed : CExplorationStateAbstract
 	{
-		[RED("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(0)] [RED("enabled")] 		public CBool Enabled { get; set;}
 
-		[RED("pushDirection")] 		public Vector PushDirection { get; set;}
+		[Ordinal(0)] [RED("pushDirection")] 		public Vector PushDirection { get; set;}
 
-		[RED("pushDirectionOther")] 		public Vector PushDirectionOther { get; set;}
+		[Ordinal(0)] [RED("pushDirectionOther")] 		public Vector PushDirectionOther { get; set;}
 
-		[RED("pushSide")] 		public CEnum<EPushSide> PushSide { get; set;}
+		[Ordinal(0)] [RED("pushSide")] 		public CEnum<EPushSide> PushSide { get; set;}
 
-		[RED("pushAngle")] 		public CFloat PushAngle { get; set;}
+		[Ordinal(0)] [RED("pushAngle")] 		public CFloat PushAngle { get; set;}
 
-		[RED("extraTurnAngle")] 		public CFloat ExtraTurnAngle { get; set;}
+		[Ordinal(0)] [RED("extraTurnAngle")] 		public CFloat ExtraTurnAngle { get; set;}
 
-		[RED("behCanEnd")] 		public CName BehCanEnd { get; set;}
+		[Ordinal(0)] [RED("behCanEnd")] 		public CName BehCanEnd { get; set;}
 
-		[RED("behSide")] 		public CName BehSide { get; set;}
+		[Ordinal(0)] [RED("behSide")] 		public CName BehSide { get; set;}
 
-		[RED("safetyEndTimeMax")] 		public CFloat SafetyEndTimeMax { get; set;}
+		[Ordinal(0)] [RED("safetyEndTimeMax")] 		public CFloat SafetyEndTimeMax { get; set;}
 
-		[RED("safetyEndTimeCur")] 		public CFloat SafetyEndTimeCur { get; set;}
+		[Ordinal(0)] [RED("safetyEndTimeCur")] 		public CFloat SafetyEndTimeCur { get; set;}
 
-		[RED("recheckTimeMin")] 		public CFloat RecheckTimeMin { get; set;}
+		[Ordinal(0)] [RED("recheckTimeMin")] 		public CFloat RecheckTimeMin { get; set;}
 
-		[RED("recheckTimeCur")] 		public CFloat RecheckTimeCur { get; set;}
+		[Ordinal(0)] [RED("recheckTimeCur")] 		public CFloat RecheckTimeCur { get; set;}
 
-		[RED("ticket")] 		public SMovementAdjustmentRequestTicket Ticket { get; set;}
+		[Ordinal(0)] [RED("ticket")] 		public SMovementAdjustmentRequestTicket Ticket { get; set;}
 
-		[RED("rotatedToCollider")] 		public CBool RotatedToCollider { get; set;}
+		[Ordinal(0)] [RED("rotatedToCollider")] 		public CBool RotatedToCollider { get; set;}
 
-		[RED("movedLeft")] 		public CBool MovedLeft { get; set;}
+		[Ordinal(0)] [RED("movedLeft")] 		public CBool MovedLeft { get; set;}
 
 		public CExplorationStatePushed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3DracolizardFireball : W3FireballProjectile
 	{
-		[RED("range")] 		public CFloat Range { get; set;}
+		[Ordinal(0)] [RED("("range")] 		public CFloat Range { get; set;}
 
-		[RED("burningDur")] 		public CFloat BurningDur { get; set;}
+		[Ordinal(0)] [RED("("burningDur")] 		public CFloat BurningDur { get; set;}
 
-		[RED("destroyAfter")] 		public CFloat DestroyAfter { get; set;}
+		[Ordinal(0)] [RED("("destroyAfter")] 		public CFloat DestroyAfter { get; set;}
 
-		[RED("surfaceFX")] 		public SFXSurfacePostParams SurfaceFX { get; set;}
+		[Ordinal(0)] [RED("("surfaceFX")] 		public SFXSurfacePostParams SurfaceFX { get; set;}
 
 		public W3DracolizardFireball(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

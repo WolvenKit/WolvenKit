@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFistfightMinigame : CMinigame
 	{
-		[RED("fightAreaTag")] 		public CName FightAreaTag { get; set;}
+		[Ordinal(0)] [RED("("fightAreaTag")] 		public CName FightAreaTag { get; set;}
 
-		[RED("playerPosTag")] 		public CName PlayerPosTag { get; set;}
+		[Ordinal(0)] [RED("("playerPosTag")] 		public CName PlayerPosTag { get; set;}
 
-		[RED("toTheDeath")] 		public CBool ToTheDeath { get; set;}
+		[Ordinal(0)] [RED("("toTheDeath")] 		public CBool ToTheDeath { get; set;}
 
-		[RED("endsWithBlackscreen")] 		public CBool EndsWithBlackscreen { get; set;}
+		[Ordinal(0)] [RED("("endsWithBlackscreen")] 		public CBool EndsWithBlackscreen { get; set;}
 
-		[RED("enemies", 2,0)] 		public CArray<CFistfightOpponent> Enemies { get; set;}
+		[Ordinal(0)] [RED("("enemies", 2,0)] 		public CArray<CFistfightOpponent> Enemies { get; set;}
 
 		public CFistfightMinigame(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

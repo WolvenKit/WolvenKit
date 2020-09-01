@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTMapRotationChangeUsingCustomRotation : IMoveSteeringTask
 	{
-		[RED("defaultMaxDirectionChange")] 		public CFloat DefaultMaxDirectionChange { get; set;}
+		[Ordinal(0)] [RED("defaultMaxDirectionChange")] 		public CFloat DefaultMaxDirectionChange { get; set;}
 
-		[RED("defaultMaxRotationChange")] 		public CFloat DefaultMaxRotationChange { get; set;}
+		[Ordinal(0)] [RED("defaultMaxRotationChange")] 		public CFloat DefaultMaxRotationChange { get; set;}
 
 		public CMoveSTMapRotationChangeUsingCustomRotation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

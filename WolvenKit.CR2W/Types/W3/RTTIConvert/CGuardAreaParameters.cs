@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGuardAreaParameters : IAISpawnTreeSubParameters
 	{
-		[RED("guardArea")] 		public EntityHandle GuardArea { get; set;}
+		[Ordinal(0)] [RED("guardArea")] 		public EntityHandle GuardArea { get; set;}
 
-		[RED("guardPursuitArea")] 		public EntityHandle GuardPursuitArea { get; set;}
+		[Ordinal(0)] [RED("guardPursuitArea")] 		public EntityHandle GuardPursuitArea { get; set;}
 
-		[RED("guardPursuitRange")] 		public CFloat GuardPursuitRange { get; set;}
+		[Ordinal(0)] [RED("guardPursuitRange")] 		public CFloat GuardPursuitRange { get; set;}
 
 		public CGuardAreaParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeFlyOnCurveDefinition : CBehTreeNodeAttachToCurveDefinition
 	{
-		[RED("animValPitch")] 		public CBehTreeValCName AnimValPitch { get; set;}
+		[Ordinal(0)] [RED("animValPitch")] 		public CBehTreeValCName AnimValPitch { get; set;}
 
-		[RED("animValYaw")] 		public CBehTreeValCName AnimValYaw { get; set;}
+		[Ordinal(0)] [RED("animValYaw")] 		public CBehTreeValCName AnimValYaw { get; set;}
 
-		[RED("maxPitchInput")] 		public CBehTreeValFloat MaxPitchInput { get; set;}
+		[Ordinal(0)] [RED("maxPitchInput")] 		public CBehTreeValFloat MaxPitchInput { get; set;}
 
-		[RED("maxPitchOutput")] 		public CBehTreeValFloat MaxPitchOutput { get; set;}
+		[Ordinal(0)] [RED("maxPitchOutput")] 		public CBehTreeValFloat MaxPitchOutput { get; set;}
 
-		[RED("maxYawInput")] 		public CBehTreeValFloat MaxYawInput { get; set;}
+		[Ordinal(0)] [RED("maxYawInput")] 		public CBehTreeValFloat MaxYawInput { get; set;}
 
-		[RED("maxYawOutput")] 		public CBehTreeValFloat MaxYawOutput { get; set;}
+		[Ordinal(0)] [RED("maxYawOutput")] 		public CBehTreeValFloat MaxYawOutput { get; set;}
 
 		public CBehTreeNodeFlyOnCurveDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

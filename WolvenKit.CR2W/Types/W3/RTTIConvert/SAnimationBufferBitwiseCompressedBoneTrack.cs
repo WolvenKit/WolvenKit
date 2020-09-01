@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAnimationBufferBitwiseCompressedBoneTrack : CVariable
 	{
-		[RED("position")] 		public SAnimationBufferBitwiseCompressedData Position { get; set;}
+		[Ordinal(0)] [RED("position")] 		public SAnimationBufferBitwiseCompressedData Position { get; set;}
 
-		[RED("orientation")] 		public SAnimationBufferBitwiseCompressedData Orientation { get; set;}
+		[Ordinal(0)] [RED("orientation")] 		public SAnimationBufferBitwiseCompressedData Orientation { get; set;}
 
-		[RED("scale")] 		public SAnimationBufferBitwiseCompressedData Scale { get; set;}
+		[Ordinal(0)] [RED("scale")] 		public SAnimationBufferBitwiseCompressedData Scale { get; set;}
 
 		public SAnimationBufferBitwiseCompressedBoneTrack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

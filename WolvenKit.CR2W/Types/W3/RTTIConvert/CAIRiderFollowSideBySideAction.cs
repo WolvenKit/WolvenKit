@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIRiderFollowSideBySideAction : IRiderActionTree
 	{
-		[RED("params")] 		public CHandle<CAIRiderFollowSideBySideActionParams> Params { get; set;}
+		[Ordinal(0)] [RED("params")] 		public CHandle<CAIRiderFollowSideBySideActionParams> Params { get; set;}
 
 		public CAIRiderFollowSideBySideAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

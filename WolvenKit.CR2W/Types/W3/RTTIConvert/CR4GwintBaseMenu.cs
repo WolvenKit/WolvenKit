@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4GwintBaseMenu : CR4MenuBase
 	{
-		[RED("quitConfPopup")] 		public CHandle<W3GwintQuitConfPopup> QuitConfPopup { get; set;}
+		[Ordinal(0)] [RED("("quitConfPopup")] 		public CHandle<W3GwintQuitConfPopup> QuitConfPopup { get; set;}
 
-		[RED("gwintManager")] 		public CHandle<CR4GwintManager> GwintManager { get; set;}
+		[Ordinal(0)] [RED("("gwintManager")] 		public CHandle<CR4GwintManager> GwintManager { get; set;}
 
-		[RED("flashConstructor")] 		public CHandle<CScriptedFlashObject> FlashConstructor { get; set;}
+		[Ordinal(0)] [RED("("flashConstructor")] 		public CHandle<CScriptedFlashObject> FlashConstructor { get; set;}
 
 		public CR4GwintBaseMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

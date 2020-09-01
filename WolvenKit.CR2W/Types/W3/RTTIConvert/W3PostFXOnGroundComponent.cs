@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3PostFXOnGroundComponent : CSelfUpdatingComponent
 	{
-		[RED("fadeInTime")] 		public CFloat FadeInTime { get; set;}
+		[Ordinal(0)] [RED("("fadeInTime")] 		public CFloat FadeInTime { get; set;}
 
-		[RED("activeTime")] 		public CFloat ActiveTime { get; set;}
+		[Ordinal(0)] [RED("("activeTime")] 		public CFloat ActiveTime { get; set;}
 
-		[RED("fadeOutTime")] 		public CFloat FadeOutTime { get; set;}
+		[Ordinal(0)] [RED("("fadeOutTime")] 		public CFloat FadeOutTime { get; set;}
 
-		[RED("range")] 		public CFloat Range { get; set;}
+		[Ordinal(0)] [RED("("range")] 		public CFloat Range { get; set;}
 
-		[RED("type")] 		public CInt32 Type { get; set;}
+		[Ordinal(0)] [RED("("type")] 		public CInt32 Type { get; set;}
 
-		[RED("updateDelay")] 		public CFloat UpdateDelay { get; set;}
+		[Ordinal(0)] [RED("("updateDelay")] 		public CFloat UpdateDelay { get; set;}
 
-		[RED("stopAtDeath")] 		public CBool StopAtDeath { get; set;}
+		[Ordinal(0)] [RED("("stopAtDeath")] 		public CBool StopAtDeath { get; set;}
 
-		[RED("m_Actor")] 		public CHandle<CActor> M_Actor { get; set;}
+		[Ordinal(0)] [RED("("m_Actor")] 		public CHandle<CActor> M_Actor { get; set;}
 
-		[RED("m_DelaySinceLastUpdate")] 		public CFloat M_DelaySinceLastUpdate { get; set;}
+		[Ordinal(0)] [RED("("m_DelaySinceLastUpdate")] 		public CFloat M_DelaySinceLastUpdate { get; set;}
 
-		[RED("m_DefaultFadeInTime")] 		public CFloat M_DefaultFadeInTime { get; set;}
+		[Ordinal(0)] [RED("("m_DefaultFadeInTime")] 		public CFloat M_DefaultFadeInTime { get; set;}
 
-		[RED("m_DefaultActiveTime")] 		public CFloat M_DefaultActiveTime { get; set;}
+		[Ordinal(0)] [RED("("m_DefaultActiveTime")] 		public CFloat M_DefaultActiveTime { get; set;}
 
-		[RED("m_DefaultFadeOutTime")] 		public CFloat M_DefaultFadeOutTime { get; set;}
+		[Ordinal(0)] [RED("("m_DefaultFadeOutTime")] 		public CFloat M_DefaultFadeOutTime { get; set;}
 
-		[RED("m_DefaultRange")] 		public CFloat M_DefaultRange { get; set;}
+		[Ordinal(0)] [RED("("m_DefaultRange")] 		public CFloat M_DefaultRange { get; set;}
 
 		public W3PostFXOnGroundComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

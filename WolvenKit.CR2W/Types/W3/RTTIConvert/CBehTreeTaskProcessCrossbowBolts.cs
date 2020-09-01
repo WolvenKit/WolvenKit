@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeTaskProcessCrossbowBolts : IBehTreeTaskProcessProjectile
 	{
-		[RED("bolt")] 		public CHandle<W3AdvancedProjectile> Bolt { get; set;}
+		[Ordinal(0)] [RED("bolt")] 		public CHandle<W3AdvancedProjectile> Bolt { get; set;}
 
 		public CBehTreeTaskProcessCrossbowBolts(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

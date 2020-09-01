@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMapRangeNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("minInValue")] 		public CFloat MinInValue { get; set;}
+		[Ordinal(0)] [RED("("minInValue")] 		public CFloat MinInValue { get; set;}
 
-		[RED("maxInValue")] 		public CFloat MaxInValue { get; set;}
+		[Ordinal(0)] [RED("("maxInValue")] 		public CFloat MaxInValue { get; set;}
 
-		[RED("minOutValue")] 		public CFloat MinOutValue { get; set;}
+		[Ordinal(0)] [RED("("minOutValue")] 		public CFloat MinOutValue { get; set;}
 
-		[RED("maxOutValue")] 		public CFloat MaxOutValue { get; set;}
+		[Ordinal(0)] [RED("("maxOutValue")] 		public CFloat MaxOutValue { get; set;}
 
-		[RED("base")] 		public CFloat Base { get; set;}
+		[Ordinal(0)] [RED("("base")] 		public CFloat Base { get; set;}
 
-		[RED("bias")] 		public CFloat Bias { get; set;}
+		[Ordinal(0)] [RED("("bias")] 		public CFloat Bias { get; set;}
 
 		public CBehaviorGraphMapRangeNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

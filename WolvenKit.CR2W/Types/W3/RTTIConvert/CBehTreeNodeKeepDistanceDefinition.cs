@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeKeepDistanceDefinition : CBehTreeNodeCustomSteeringDefinition
 	{
-		[RED("distance")] 		public CBehTreeValFloat Distance { get; set;}
+		[Ordinal(0)] [RED("distance")] 		public CBehTreeValFloat Distance { get; set;}
 
-		[RED("notFacingTarget")] 		public CBehTreeValBool NotFacingTarget { get; set;}
+		[Ordinal(0)] [RED("notFacingTarget")] 		public CBehTreeValBool NotFacingTarget { get; set;}
 
 		public CBehTreeNodeKeepDistanceDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

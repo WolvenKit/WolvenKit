@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CNavmeshBorderAreaComponent : CAreaComponent
 	{
-		[RED("lockedToSpecyficNavmesh")] 		public EntityHandle LockedToSpecyficNavmesh { get; set;}
+		[Ordinal(0)] [RED("lockedToSpecyficNavmesh")] 		public EntityHandle LockedToSpecyficNavmesh { get; set;}
 
-		[RED("isDisabled")] 		public CBool IsDisabled { get; set;}
+		[Ordinal(0)] [RED("isDisabled")] 		public CBool IsDisabled { get; set;}
 
 		public CNavmeshBorderAreaComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTAvoidObstacles : IMoveSteeringTask
 	{
-		[RED("avoidObstaclesImportance")] 		public CFloat AvoidObstaclesImportance { get; set;}
+		[Ordinal(0)] [RED("avoidObstaclesImportance")] 		public CFloat AvoidObstaclesImportance { get; set;}
 
-		[RED("timeToChooseNextObstacle")] 		public CFloat TimeToChooseNextObstacle { get; set;}
+		[Ordinal(0)] [RED("timeToChooseNextObstacle")] 		public CFloat TimeToChooseNextObstacle { get; set;}
 
-		[RED("maxDistanceToObstacle")] 		public CFloat MaxDistanceToObstacle { get; set;}
+		[Ordinal(0)] [RED("maxDistanceToObstacle")] 		public CFloat MaxDistanceToObstacle { get; set;}
 
-		[RED("furthestImpactTime")] 		public CFloat FurthestImpactTime { get; set;}
+		[Ordinal(0)] [RED("furthestImpactTime")] 		public CFloat FurthestImpactTime { get; set;}
 
-		[RED("overrideValues")] 		public CBool OverrideValues { get; set;}
+		[Ordinal(0)] [RED("overrideValues")] 		public CBool OverrideValues { get; set;}
 
-		[RED("modifyRotation")] 		public CBool ModifyRotation { get; set;}
+		[Ordinal(0)] [RED("modifyRotation")] 		public CBool ModifyRotation { get; set;}
 
-		[RED("modifyHeading")] 		public CBool ModifyHeading { get; set;}
+		[Ordinal(0)] [RED("modifyHeading")] 		public CBool ModifyHeading { get; set;}
 
-		[RED("modifySpeed")] 		public CBool ModifySpeed { get; set;}
+		[Ordinal(0)] [RED("modifySpeed")] 		public CBool ModifySpeed { get; set;}
 
 		public CMoveSTAvoidObstacles(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class TCrPropertySet : CObject
 	{
-		[RED("shoulderWeight")] 		public CFloat ShoulderWeight { get; set;}
+		[Ordinal(0)] [RED("("shoulderWeight")] 		public CFloat ShoulderWeight { get; set;}
 
-		[RED("shoulderLimitUpDeg")] 		public CFloat ShoulderLimitUpDeg { get; set;}
+		[Ordinal(0)] [RED("("shoulderLimitUpDeg")] 		public CFloat ShoulderLimitUpDeg { get; set;}
 
-		[RED("shoulderLimitDownDeg")] 		public CFloat ShoulderLimitDownDeg { get; set;}
+		[Ordinal(0)] [RED("("shoulderLimitDownDeg")] 		public CFloat ShoulderLimitDownDeg { get; set;}
 
-		[RED("shoulderLimitLeftDeg")] 		public CFloat ShoulderLimitLeftDeg { get; set;}
+		[Ordinal(0)] [RED("("shoulderLimitLeftDeg")] 		public CFloat ShoulderLimitLeftDeg { get; set;}
 
-		[RED("shoulderLimitRightDeg")] 		public CFloat ShoulderLimitRightDeg { get; set;}
+		[Ordinal(0)] [RED("("shoulderLimitRightDeg")] 		public CFloat ShoulderLimitRightDeg { get; set;}
 
 		public TCrPropertySet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

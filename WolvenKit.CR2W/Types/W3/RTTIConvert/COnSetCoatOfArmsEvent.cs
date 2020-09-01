@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class COnSetCoatOfArmsEvent : CHudEvent
 	{
-		[RED("set")] 		public CBool Set { get; set;}
+		[Ordinal(0)] [RED("set")] 		public CBool Set { get; set;}
 
 		public COnSetCoatOfArmsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

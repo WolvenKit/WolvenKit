@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class EnchantingConfirmationPopupData : ConfirmationPopupData
 	{
-		[RED("removingEnchantment")] 		public CBool RemovingEnchantment { get; set;}
+		[Ordinal(0)] [RED("removingEnchantment")] 		public CBool RemovingEnchantment { get; set;}
 
-		[RED("menuRef")] 		public CHandle<CR4EnchantingMenu> MenuRef { get; set;}
+		[Ordinal(0)] [RED("menuRef")] 		public CHandle<CR4EnchantingMenu> MenuRef { get; set;}
 
-		[RED("m_Price")] 		public CFloat M_Price { get; set;}
+		[Ordinal(0)] [RED("m_Price")] 		public CFloat M_Price { get; set;}
 
 		public EnchantingConfirmationPopupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

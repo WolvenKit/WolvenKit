@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockGlobalFog : CMaterialBlock
 	{
-		[RED("isSky")] 		public CBool IsSky { get; set;}
+		[Ordinal(0)] [RED("isSky")] 		public CBool IsSky { get; set;}
 
-		[RED("isClouds")] 		public CBool IsClouds { get; set;}
+		[Ordinal(0)] [RED("isClouds")] 		public CBool IsClouds { get; set;}
 
-		[RED("isVertexBased")] 		public CBool IsVertexBased { get; set;}
+		[Ordinal(0)] [RED("isVertexBased")] 		public CBool IsVertexBased { get; set;}
 
 		public CMaterialBlockGlobalFog(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

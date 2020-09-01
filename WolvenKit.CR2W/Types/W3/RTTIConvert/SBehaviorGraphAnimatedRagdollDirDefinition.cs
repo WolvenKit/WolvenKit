@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBehaviorGraphAnimatedRagdollDirDefinition : CVariable
 	{
-		[RED("dirIndexValue")] 		public CFloat DirIndexValue { get; set;}
+		[Ordinal(0)] [RED("("dirIndexValue")] 		public CFloat DirIndexValue { get; set;}
 
-		[RED("relativeAngle")] 		public CFloat RelativeAngle { get; set;}
+		[Ordinal(0)] [RED("("relativeAngle")] 		public CFloat RelativeAngle { get; set;}
 
-		[RED("applyAngleToMovement")] 		public CFloat ApplyAngleToMovement { get; set;}
+		[Ordinal(0)] [RED("("applyAngleToMovement")] 		public CFloat ApplyAngleToMovement { get; set;}
 
-		[RED("replacements", 2,0)] 		public CArray<SBehaviorGraphAnimatedRagdollDirReplacement> Replacements { get; set;}
+		[Ordinal(0)] [RED("("replacements", 2,0)] 		public CArray<SBehaviorGraphAnimatedRagdollDirReplacement> Replacements { get; set;}
 
 		public SBehaviorGraphAnimatedRagdollDirDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

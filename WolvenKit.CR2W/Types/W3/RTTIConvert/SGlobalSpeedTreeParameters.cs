@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SGlobalSpeedTreeParameters : CVariable
 	{
-		[RED("alphaScalar3d")] 		public CFloat AlphaScalar3d { get; set;}
+		[Ordinal(0)] [RED("("alphaScalar3d")] 		public CFloat AlphaScalar3d { get; set;}
 
-		[RED("alphaScalarGrassNear")] 		public CFloat AlphaScalarGrassNear { get; set;}
+		[Ordinal(0)] [RED("("alphaScalarGrassNear")] 		public CFloat AlphaScalarGrassNear { get; set;}
 
-		[RED("alphaScalarGrass")] 		public CFloat AlphaScalarGrass { get; set;}
+		[Ordinal(0)] [RED("("alphaScalarGrass")] 		public CFloat AlphaScalarGrass { get; set;}
 
-		[RED("alphaScalarGrassDistNear")] 		public CFloat AlphaScalarGrassDistNear { get; set;}
+		[Ordinal(0)] [RED("("alphaScalarGrassDistNear")] 		public CFloat AlphaScalarGrassDistNear { get; set;}
 
-		[RED("alphaScalarGrassDistFar")] 		public CFloat AlphaScalarGrassDistFar { get; set;}
+		[Ordinal(0)] [RED("("alphaScalarGrassDistFar")] 		public CFloat AlphaScalarGrassDistFar { get; set;}
 
-		[RED("alphaScalarBillboards")] 		public CFloat AlphaScalarBillboards { get; set;}
+		[Ordinal(0)] [RED("("alphaScalarBillboards")] 		public CFloat AlphaScalarBillboards { get; set;}
 
-		[RED("billboardsGrainBias")] 		public CFloat BillboardsGrainBias { get; set;}
+		[Ordinal(0)] [RED("("billboardsGrainBias")] 		public CFloat BillboardsGrainBias { get; set;}
 
-		[RED("billboardsGrainAlbedoScale")] 		public CFloat BillboardsGrainAlbedoScale { get; set;}
+		[Ordinal(0)] [RED("("billboardsGrainAlbedoScale")] 		public CFloat BillboardsGrainAlbedoScale { get; set;}
 
-		[RED("billboardsGrainNormalScale")] 		public CFloat BillboardsGrainNormalScale { get; set;}
+		[Ordinal(0)] [RED("("billboardsGrainNormalScale")] 		public CFloat BillboardsGrainNormalScale { get; set;}
 
-		[RED("billboardsGrainClipScale")] 		public CFloat BillboardsGrainClipScale { get; set;}
+		[Ordinal(0)] [RED("("billboardsGrainClipScale")] 		public CFloat BillboardsGrainClipScale { get; set;}
 
-		[RED("billboardsGrainClipBias")] 		public CFloat BillboardsGrainClipBias { get; set;}
+		[Ordinal(0)] [RED("("billboardsGrainClipBias")] 		public CFloat BillboardsGrainClipBias { get; set;}
 
-		[RED("billboardsGrainClipDamping")] 		public CFloat BillboardsGrainClipDamping { get; set;}
+		[Ordinal(0)] [RED("("billboardsGrainClipDamping")] 		public CFloat BillboardsGrainClipDamping { get; set;}
 
-		[RED("grassNormalsVariation")] 		public CFloat GrassNormalsVariation { get; set;}
+		[Ordinal(0)] [RED("("grassNormalsVariation")] 		public CFloat GrassNormalsVariation { get; set;}
 
 		public SGlobalSpeedTreeParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

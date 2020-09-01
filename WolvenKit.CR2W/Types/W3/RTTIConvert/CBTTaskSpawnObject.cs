@@ -10,39 +10,39 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSpawnObject : IBehTreeTask
 	{
-		[RED("useThisTask")] 		public CBool UseThisTask { get; set;}
+		[Ordinal(0)] [RED("useThisTask")] 		public CBool UseThisTask { get; set;}
 
-		[RED("objectTemplate")] 		public CHandle<CEntityTemplate> ObjectTemplate { get; set;}
+		[Ordinal(0)] [RED("objectTemplate")] 		public CHandle<CEntityTemplate> ObjectTemplate { get; set;}
 
-		[RED("useAnimEvent")] 		public CBool UseAnimEvent { get; set;}
+		[Ordinal(0)] [RED("useAnimEvent")] 		public CBool UseAnimEvent { get; set;}
 
-		[RED("spawnAnimEventName")] 		public CName SpawnAnimEventName { get; set;}
+		[Ordinal(0)] [RED("spawnAnimEventName")] 		public CName SpawnAnimEventName { get; set;}
 
-		[RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+		[Ordinal(0)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 
-		[RED("spawnNodeTag")] 		public CName SpawnNodeTag { get; set;}
+		[Ordinal(0)] [RED("spawnNodeTag")] 		public CName SpawnNodeTag { get; set;}
 
-		[RED("spawnAtBonePosition")] 		public CBool SpawnAtBonePosition { get; set;}
+		[Ordinal(0)] [RED("spawnAtBonePosition")] 		public CBool SpawnAtBonePosition { get; set;}
 
-		[RED("boneName")] 		public CName BoneName { get; set;}
+		[Ordinal(0)] [RED("boneName")] 		public CName BoneName { get; set;}
 
-		[RED("spawnOnGround")] 		public CBool SpawnOnGround { get; set;}
+		[Ordinal(0)] [RED("spawnOnGround")] 		public CBool SpawnOnGround { get; set;}
 
-		[RED("groundZCheck")] 		public CFloat GroundZCheck { get; set;}
+		[Ordinal(0)] [RED("groundZCheck")] 		public CFloat GroundZCheck { get; set;}
 
-		[RED("spawnPositionOffset")] 		public Vector SpawnPositionOffset { get; set;}
+		[Ordinal(0)] [RED("spawnPositionOffset")] 		public Vector SpawnPositionOffset { get; set;}
 
-		[RED("offsetInLocalSpace")] 		public CBool OffsetInLocalSpace { get; set;}
+		[Ordinal(0)] [RED("offsetInLocalSpace")] 		public CBool OffsetInLocalSpace { get; set;}
 
-		[RED("randomizeOffset")] 		public CBool RandomizeOffset { get; set;}
+		[Ordinal(0)] [RED("randomizeOffset")] 		public CBool RandomizeOffset { get; set;}
 
-		[RED("spawnNodes", 2,0)] 		public CArray<CHandle<CNode>> SpawnNodes { get; set;}
+		[Ordinal(0)] [RED("spawnNodes", 2,0)] 		public CArray<CHandle<CNode>> SpawnNodes { get; set;}
 
-		[RED("i")] 		public CInt32 I { get; set;}
+		[Ordinal(0)] [RED("i")] 		public CInt32 I { get; set;}
 
-		[RED("size")] 		public CInt32 Size { get; set;}
+		[Ordinal(0)] [RED("size")] 		public CInt32 Size { get; set;}
 
-		[RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(0)] [RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
 		public CBTTaskSpawnObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSSpawnType : CVariable
 	{
-		[RED("spawnType")] 		public CName SpawnType { get; set;}
+		[Ordinal(0)] [RED("("spawnType")] 		public CName SpawnType { get; set;}
 
 		public CSSpawnType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3PlayerLevelCondition : ISpawnScriptCondition
 	{
-		[RED("level")] 		public CInt32 Level { get; set;}
+		[Ordinal(0)] [RED("("level")] 		public CInt32 Level { get; set;}
 
-		[RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
+		[Ordinal(0)] [RED("("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
-		[RED("queryVal")] 		public CInt32 QueryVal { get; set;}
+		[Ordinal(0)] [RED("("queryVal")] 		public CInt32 QueryVal { get; set;}
 
 		public W3PlayerLevelCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

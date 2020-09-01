@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FairytaleWitchFluid : CGameplayEntity
 	{
-		[RED("entitiesInRange", 2,0)] 		public CArray<CHandle<CGameplayEntity>> EntitiesInRange { get; set;}
+		[Ordinal(0)] [RED("("entitiesInRange", 2,0)] 		public CArray<CHandle<CGameplayEntity>> EntitiesInRange { get; set;}
 
-		[RED("damageRadius")] 		public CFloat DamageRadius { get; set;}
+		[Ordinal(0)] [RED("("damageRadius")] 		public CFloat DamageRadius { get; set;}
 
-		[RED("damageVal")] 		public CFloat DamageVal { get; set;}
+		[Ordinal(0)] [RED("("damageVal")] 		public CFloat DamageVal { get; set;}
 
 		public W3FairytaleWitchFluid(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_PlayerState : CQuestScriptedCondition
 	{
-		[RED("stateName")] 		public CName StateName { get; set;}
+		[Ordinal(0)] [RED("("stateName")] 		public CName StateName { get; set;}
 
-		[RED("playerState")] 		public CEnum<EQuestConditionPlayerState> PlayerState { get; set;}
+		[Ordinal(0)] [RED("("playerState")] 		public CEnum<EQuestConditionPlayerState> PlayerState { get; set;}
 
-		[RED("inverted")] 		public CBool Inverted { get; set;}
+		[Ordinal(0)] [RED("("inverted")] 		public CBool Inverted { get; set;}
 
 		public W3QuestCond_PlayerState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

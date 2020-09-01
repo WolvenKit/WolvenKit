@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphGetBoneTransformNode : CBehaviorGraphVectorValueNode
 	{
-		[RED("boneName")] 		public CString BoneName { get; set;}
+		[Ordinal(0)] [RED("("boneName")] 		public CString BoneName { get; set;}
 
-		[RED("type")] 		public CEnum<ETransformType> Type { get; set;}
+		[Ordinal(0)] [RED("("type")] 		public CEnum<ETransformType> Type { get; set;}
 
-		[RED("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
+		[Ordinal(0)] [RED("("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
 
 		public CBehaviorGraphGetBoneTransformNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

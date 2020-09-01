@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskAdjustVertically : IBehTreeTask
 	{
-		[RED("maxSlidingSpeed")] 		public CFloat MaxSlidingSpeed { get; set;}
+		[Ordinal(0)] [RED("("maxSlidingSpeed")] 		public CFloat MaxSlidingSpeed { get; set;}
 
 		public CBTTaskAdjustVertically(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

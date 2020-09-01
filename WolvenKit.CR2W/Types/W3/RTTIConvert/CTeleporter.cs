@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CTeleporter : CEntity
 	{
-		[RED("destinationNodesTags")] 		public TagList DestinationNodesTags { get; set;}
+		[Ordinal(0)] [RED("("destinationNodesTags")] 		public TagList DestinationNodesTags { get; set;}
 
-		[RED("teleportedActorsTags")] 		public TagList TeleportedActorsTags { get; set;}
+		[Ordinal(0)] [RED("("teleportedActorsTags")] 		public TagList TeleportedActorsTags { get; set;}
 
 		public CTeleporter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

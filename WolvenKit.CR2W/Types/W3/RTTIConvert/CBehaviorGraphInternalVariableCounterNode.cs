@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphInternalVariableCounterNode : CBehaviorGraphBaseNode
 	{
-		[RED("variableName")] 		public CName VariableName { get; set;}
+		[Ordinal(0)] [RED("("variableName")] 		public CName VariableName { get; set;}
 
-		[RED("countOnActivation")] 		public CBool CountOnActivation { get; set;}
+		[Ordinal(0)] [RED("("countOnActivation")] 		public CBool CountOnActivation { get; set;}
 
-		[RED("countOnDeactivation")] 		public CBool CountOnDeactivation { get; set;}
+		[Ordinal(0)] [RED("("countOnDeactivation")] 		public CBool CountOnDeactivation { get; set;}
 
-		[RED("stepValue")] 		public CFloat StepValue { get; set;}
+		[Ordinal(0)] [RED("("stepValue")] 		public CFloat StepValue { get; set;}
 
 		public CBehaviorGraphInternalVariableCounterNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcBase : CAIBaseTree
 	{
-		[RED("params")] 		public CHandle<CAINpcDefaults> Params { get; set;}
+		[Ordinal(0)] [RED("params")] 		public CHandle<CAINpcDefaults> Params { get; set;}
 
 		public CAINpcBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

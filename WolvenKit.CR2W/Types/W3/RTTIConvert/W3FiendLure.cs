@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FiendLure : W3QuestUsableItem
 	{
-		[RED("range")] 		public CFloat Range { get; set;}
+		[Ordinal(0)] [RED("("range")] 		public CFloat Range { get; set;}
 
-		[RED("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(0)] [RED("("duration")] 		public CFloat Duration { get; set;}
 
-		[RED("cloudEntity")] 		public CHandle<CEntityTemplate> CloudEntity { get; set;}
+		[Ordinal(0)] [RED("("cloudEntity")] 		public CHandle<CEntityTemplate> CloudEntity { get; set;}
 
 		public W3FiendLure(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

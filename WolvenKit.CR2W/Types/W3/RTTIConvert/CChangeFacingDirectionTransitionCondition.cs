@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CChangeFacingDirectionTransitionCondition : IBehaviorStateTransitionCondition
 	{
-		[RED("side")] 		public CEnum<EChangeFacingDirectionSide> Side { get; set;}
+		[Ordinal(0)] [RED("side")] 		public CEnum<EChangeFacingDirectionSide> Side { get; set;}
 
-		[RED("angleDiffMin")] 		public CFloat AngleDiffMin { get; set;}
+		[Ordinal(0)] [RED("angleDiffMin")] 		public CFloat AngleDiffMin { get; set;}
 
-		[RED("angleDiffMax")] 		public CFloat AngleDiffMax { get; set;}
+		[Ordinal(0)] [RED("angleDiffMax")] 		public CFloat AngleDiffMax { get; set;}
 
-		[RED("startCheckingAfterTime")] 		public CFloat StartCheckingAfterTime { get; set;}
+		[Ordinal(0)] [RED("startCheckingAfterTime")] 		public CFloat StartCheckingAfterTime { get; set;}
 
-		[RED("requestedFacingDirectionWSVariableName")] 		public CName RequestedFacingDirectionWSVariableName { get; set;}
+		[Ordinal(0)] [RED("requestedFacingDirectionWSVariableName")] 		public CName RequestedFacingDirectionWSVariableName { get; set;}
 
-		[RED("dontChange")] 		public CBool DontChange { get; set;}
+		[Ordinal(0)] [RED("dontChange")] 		public CBool DontChange { get; set;}
 
 		public CChangeFacingDirectionTransitionCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

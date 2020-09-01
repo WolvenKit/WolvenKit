@@ -10,59 +10,59 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDestructionComponent : CMeshTypeComponent
 	{
-		[RED("m_baseResource")] 		public CHandle<CPhysicsDestructionResource> M_baseResource { get; set;}
+		[Ordinal(0)] [RED("("m_baseResource")] 		public CHandle<CPhysicsDestructionResource> M_baseResource { get; set;}
 
-		[RED("m_fracturedResource")] 		public CHandle<CPhysicsDestructionResource> M_fracturedResource { get; set;}
+		[Ordinal(0)] [RED("("m_fracturedResource")] 		public CHandle<CPhysicsDestructionResource> M_fracturedResource { get; set;}
 
-		[RED("parameters.m_pose")] 		public CMatrix Parameters_m_pose { get; set;}
+		[Ordinal(0)] [RED("("parameters.m_pose")] 		public CMatrix Parameters_m_pose { get; set;}
 
-		[RED("m_physicalCollisionType")] 		public CPhysicalCollision M_physicalCollisionType { get; set;}
+		[Ordinal(0)] [RED("("m_physicalCollisionType")] 		public CPhysicalCollision M_physicalCollisionType { get; set;}
 
-		[RED("m_fracturedPhysicalCollisionType")] 		public CPhysicalCollision M_fracturedPhysicalCollisionType { get; set;}
+		[Ordinal(0)] [RED("("m_fracturedPhysicalCollisionType")] 		public CPhysicalCollision M_fracturedPhysicalCollisionType { get; set;}
 
-		[RED("dynamic")] 		public CBool Dynamic { get; set;}
+		[Ordinal(0)] [RED("("dynamic")] 		public CBool Dynamic { get; set;}
 
-		[RED("kinematic")] 		public CBool Kinematic { get; set;}
+		[Ordinal(0)] [RED("("kinematic")] 		public CBool Kinematic { get; set;}
 
-		[RED("debrisTimeout")] 		public CBool DebrisTimeout { get; set;}
+		[Ordinal(0)] [RED("("debrisTimeout")] 		public CBool DebrisTimeout { get; set;}
 
-		[RED("debrisTimeoutMin")] 		public CFloat DebrisTimeoutMin { get; set;}
+		[Ordinal(0)] [RED("("debrisTimeoutMin")] 		public CFloat DebrisTimeoutMin { get; set;}
 
-		[RED("debrisTimeoutMax")] 		public CFloat DebrisTimeoutMax { get; set;}
+		[Ordinal(0)] [RED("("debrisTimeoutMax")] 		public CFloat DebrisTimeoutMax { get; set;}
 
-		[RED("initialBaseVelocity")] 		public Vector InitialBaseVelocity { get; set;}
+		[Ordinal(0)] [RED("("initialBaseVelocity")] 		public Vector InitialBaseVelocity { get; set;}
 
-		[RED("hasInitialFractureVelocity")] 		public CBool HasInitialFractureVelocity { get; set;}
+		[Ordinal(0)] [RED("("hasInitialFractureVelocity")] 		public CBool HasInitialFractureVelocity { get; set;}
 
-		[RED("maxVelocity")] 		public CFloat MaxVelocity { get; set;}
+		[Ordinal(0)] [RED("("maxVelocity")] 		public CFloat MaxVelocity { get; set;}
 
-		[RED("maxAngularFractureVelocity")] 		public CFloat MaxAngularFractureVelocity { get; set;}
+		[Ordinal(0)] [RED("("maxAngularFractureVelocity")] 		public CFloat MaxAngularFractureVelocity { get; set;}
 
-		[RED("debrisMaxSeparationDistance")] 		public CFloat DebrisMaxSeparationDistance { get; set;}
+		[Ordinal(0)] [RED("("debrisMaxSeparationDistance")] 		public CFloat DebrisMaxSeparationDistance { get; set;}
 
-		[RED("simulationDistance")] 		public CFloat SimulationDistance { get; set;}
+		[Ordinal(0)] [RED("("simulationDistance")] 		public CFloat SimulationDistance { get; set;}
 
-		[RED("fadeOutTime")] 		public CFloat FadeOutTime { get; set;}
+		[Ordinal(0)] [RED("("fadeOutTime")] 		public CFloat FadeOutTime { get; set;}
 
-		[RED("forceToDamage")] 		public CFloat ForceToDamage { get; set;}
+		[Ordinal(0)] [RED("("forceToDamage")] 		public CFloat ForceToDamage { get; set;}
 
-		[RED("damageThreshold")] 		public CFloat DamageThreshold { get; set;}
+		[Ordinal(0)] [RED("("damageThreshold")] 		public CFloat DamageThreshold { get; set;}
 
-		[RED("damageEndurance")] 		public CFloat DamageEndurance { get; set;}
+		[Ordinal(0)] [RED("("damageEndurance")] 		public CFloat DamageEndurance { get; set;}
 
-		[RED("accumulateDamage")] 		public CBool AccumulateDamage { get; set;}
+		[Ordinal(0)] [RED("("accumulateDamage")] 		public CBool AccumulateDamage { get; set;}
 
-		[RED("useWorldSupport")] 		public CBool UseWorldSupport { get; set;}
+		[Ordinal(0)] [RED("("useWorldSupport")] 		public CBool UseWorldSupport { get; set;}
 
-		[RED("fractureSoundEvent")] 		public StringAnsi FractureSoundEvent { get; set;}
+		[Ordinal(0)] [RED("("fractureSoundEvent")] 		public StringAnsi FractureSoundEvent { get; set;}
 
-		[RED("fxName")] 		public CName FxName { get; set;}
+		[Ordinal(0)] [RED("("fxName")] 		public CName FxName { get; set;}
 
-		[RED("eventOnDestruction", 2,0)] 		public CArray<CPtr<IPerformableAction>> EventOnDestruction { get; set;}
+		[Ordinal(0)] [RED("("eventOnDestruction", 2,0)] 		public CArray<CPtr<IPerformableAction>> EventOnDestruction { get; set;}
 
-		[RED("pathLibCollisionType")] 		public CEnum<EPathLibCollision> PathLibCollisionType { get; set;}
+		[Ordinal(0)] [RED("("pathLibCollisionType")] 		public CEnum<EPathLibCollision> PathLibCollisionType { get; set;}
 
-		[RED("disableObstacleOnDestruction")] 		public CBool DisableObstacleOnDestruction { get; set;}
+		[Ordinal(0)] [RED("("disableObstacleOnDestruction")] 		public CBool DisableObstacleOnDestruction { get; set;}
 
 		public CDestructionComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_CheckBrazierPuzzleState : CQuestScriptedCondition
 	{
-		[RED("lightList", 2,0)] 		public CArray<CName> LightList { get; set;}
+		[Ordinal(0)] [RED("("lightList", 2,0)] 		public CArray<CName> LightList { get; set;}
 
-		[RED("lightsToTurnOn", 2,0)] 		public CArray<CInt32> LightsToTurnOn { get; set;}
+		[Ordinal(0)] [RED("("lightsToTurnOn", 2,0)] 		public CArray<CInt32> LightsToTurnOn { get; set;}
 
-		[RED("componentList", 2,0)] 		public CArray<CHandle<CComponent>> ComponentList { get; set;}
+		[Ordinal(0)] [RED("("componentList", 2,0)] 		public CArray<CHandle<CComponent>> ComponentList { get; set;}
 
-		[RED("expectedState", 2,0)] 		public CArray<CBool> ExpectedState { get; set;}
+		[Ordinal(0)] [RED("("expectedState", 2,0)] 		public CArray<CBool> ExpectedState { get; set;}
 
-		[RED("componentsFound")] 		public CBool ComponentsFound { get; set;}
+		[Ordinal(0)] [RED("("componentsFound")] 		public CBool ComponentsFound { get; set;}
 
-		[RED("statesDefined")] 		public CBool StatesDefined { get; set;}
+		[Ordinal(0)] [RED("("statesDefined")] 		public CBool StatesDefined { get; set;}
 
 		public W3QuestCond_CheckBrazierPuzzleState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalCreatureVitalSpotEntry : CJournalContainerEntry
 	{
-		[RED("title")] 		public LocalizedString Title { get; set;}
+		[Ordinal(0)] [RED("title")] 		public LocalizedString Title { get; set;}
 
-		[RED("description")] 		public LocalizedString Description { get; set;}
+		[Ordinal(0)] [RED("description")] 		public LocalizedString Description { get; set;}
 
-		[RED("active")] 		public CBool Active { get; set;}
+		[Ordinal(0)] [RED("active")] 		public CBool Active { get; set;}
 
 		public CJournalCreatureVitalSpotEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

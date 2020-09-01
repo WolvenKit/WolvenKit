@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SignEntityStateActive : CScriptableState
 	{
-		[RED("caster")] 		public CHandle<W3SignOwner> Caster { get; set;}
+		[Ordinal(0)] [RED("("caster")] 		public CHandle<W3SignOwner> Caster { get; set;}
 
 		public W3SignEntityStateActive(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

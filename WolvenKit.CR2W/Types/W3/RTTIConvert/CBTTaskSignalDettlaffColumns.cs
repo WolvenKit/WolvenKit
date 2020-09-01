@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSignalDettlaffColumns : IBehTreeTask
 	{
-		[RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(0)] [RED("("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
-		[RED("summonerComponent")] 		public CHandle<W3SummonerComponent> SummonerComponent { get; set;}
+		[Ordinal(0)] [RED("("summonerComponent")] 		public CHandle<W3SummonerComponent> SummonerComponent { get; set;}
 
-		[RED("summonsArray", 2,0)] 		public CArray<CHandle<CEntity>> SummonsArray { get; set;}
+		[Ordinal(0)] [RED("("summonsArray", 2,0)] 		public CArray<CHandle<CEntity>> SummonsArray { get; set;}
 
-		[RED("columnEntity")] 		public CHandle<CDettlaffColumn> ColumnEntity { get; set;}
+		[Ordinal(0)] [RED("("columnEntity")] 		public CHandle<CDettlaffColumn> ColumnEntity { get; set;}
 
-		[RED("cocoonEntity")] 		public CHandle<CEntity> CocoonEntity { get; set;}
+		[Ordinal(0)] [RED("("cocoonEntity")] 		public CHandle<CEntity> CocoonEntity { get; set;}
 
-		[RED("shouldComplete")] 		public CBool ShouldComplete { get; set;}
+		[Ordinal(0)] [RED("("shouldComplete")] 		public CBool ShouldComplete { get; set;}
 
-		[RED("startPumping")] 		public CBool StartPumping { get; set;}
+		[Ordinal(0)] [RED("("startPumping")] 		public CBool StartPumping { get; set;}
 
-		[RED("stopPumping")] 		public CBool StopPumping { get; set;}
+		[Ordinal(0)] [RED("("stopPumping")] 		public CBool StopPumping { get; set;}
 
 		public CBTTaskSignalDettlaffColumns(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

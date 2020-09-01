@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4HudModuleDamagedItems : CR4HudModuleBase
 	{
-		[RED("m_fxSetItemDamaged")] 		public CHandle<CScriptedFlashFunction> M_fxSetItemDamaged { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetItemDamaged")] 		public CHandle<CScriptedFlashFunction> M_fxSetItemDamaged { get; set;}
 
-		[RED("damagedItems", 2,0)] 		public CArray<CBool> DamagedItems { get; set;}
+		[Ordinal(0)] [RED("("damagedItems", 2,0)] 		public CArray<CBool> DamagedItems { get; set;}
 
-		[RED("inv")] 		public CHandle<CInventoryComponent> Inv { get; set;}
+		[Ordinal(0)] [RED("("inv")] 		public CHandle<CInventoryComponent> Inv { get; set;}
 
-		[RED("isDisplayed")] 		public CBool IsDisplayed { get; set;}
+		[Ordinal(0)] [RED("("isDisplayed")] 		public CBool IsDisplayed { get; set;}
 
 		public CR4HudModuleDamagedItems(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

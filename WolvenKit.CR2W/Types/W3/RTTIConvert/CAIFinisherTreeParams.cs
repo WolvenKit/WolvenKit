@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIFinisherTreeParams : CAICombatActionParameters
 	{
-		[RED("syncAnimName")] 		public CName SyncAnimName { get; set;}
+		[Ordinal(0)] [RED("syncAnimName")] 		public CName SyncAnimName { get; set;}
 
 		public CAIFinisherTreeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

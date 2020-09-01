@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventApplyAppearance : CStorySceneEvent
 	{
-		[RED("actor")] 		public CName Actor { get; set;}
+		[Ordinal(0)] [RED("("actor")] 		public CName Actor { get; set;}
 
-		[RED("appearance")] 		public CName Appearance { get; set;}
+		[Ordinal(0)] [RED("("appearance")] 		public CName Appearance { get; set;}
 
 		public CStorySceneEventApplyAppearance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

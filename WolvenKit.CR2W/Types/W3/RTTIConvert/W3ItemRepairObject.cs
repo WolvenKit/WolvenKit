@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ItemRepairObject : CR4MapPinEntity
 	{
-		[RED("repairSword")] 		public CBool RepairSword { get; set;}
+		[Ordinal(0)] [RED("("repairSword")] 		public CBool RepairSword { get; set;}
 
-		[RED("repairArmor")] 		public CBool RepairArmor { get; set;}
+		[Ordinal(0)] [RED("("repairArmor")] 		public CBool RepairArmor { get; set;}
 
-		[RED("chargesArmor")] 		public CInt32 ChargesArmor { get; set;}
+		[Ordinal(0)] [RED("("chargesArmor")] 		public CInt32 ChargesArmor { get; set;}
 
-		[RED("chargesWeapon")] 		public CInt32 ChargesWeapon { get; set;}
+		[Ordinal(0)] [RED("("chargesWeapon")] 		public CInt32 ChargesWeapon { get; set;}
 
-		[RED("interactionComp")] 		public CHandle<CInteractionComponent> InteractionComp { get; set;}
+		[Ordinal(0)] [RED("("interactionComp")] 		public CHandle<CInteractionComponent> InteractionComp { get; set;}
 
 		public W3ItemRepairObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

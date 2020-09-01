@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondIsAttackCountGreaterThanLimit : IBehTreeTask
 	{
-		[RED("combatDataStorage")] 		public CHandle<CExtendedAICombatStorage> CombatDataStorage { get; set;}
+		[Ordinal(0)] [RED("("combatDataStorage")] 		public CHandle<CExtendedAICombatStorage> CombatDataStorage { get; set;}
 
-		[RED("attackCountLimit")] 		public CInt32 AttackCountLimit { get; set;}
+		[Ordinal(0)] [RED("("attackCountLimit")] 		public CInt32 AttackCountLimit { get; set;}
 
-		[RED("attackName")] 		public CName AttackName { get; set;}
+		[Ordinal(0)] [RED("("attackName")] 		public CName AttackName { get; set;}
 
 		public CBTCondIsAttackCountGreaterThanLimit(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

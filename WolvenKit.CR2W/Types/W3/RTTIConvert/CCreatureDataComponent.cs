@@ -10,29 +10,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCreatureDataComponent : CScriptedComponent
 	{
-		[RED("itemsUsedAgainstCreature", 2,0)] 		public CArray<CName> ItemsUsedAgainstCreature { get; set;}
+		[Ordinal(0)] [RED("("itemsUsedAgainstCreature", 2,0)] 		public CArray<CName> ItemsUsedAgainstCreature { get; set;}
 
-		[RED("skillsUsedAgainstCreature", 2,0)] 		public CArray<CName> SkillsUsedAgainstCreature { get; set;}
+		[Ordinal(0)] [RED("("skillsUsedAgainstCreature", 2,0)] 		public CArray<CName> SkillsUsedAgainstCreature { get; set;}
 
-		[RED("cameraDistance")] 		public CFloat CameraDistance { get; set;}
+		[Ordinal(0)] [RED("("cameraDistance")] 		public CFloat CameraDistance { get; set;}
 
-		[RED("cameraLookAtZ")] 		public CFloat CameraLookAtZ { get; set;}
+		[Ordinal(0)] [RED("("cameraLookAtZ")] 		public CFloat CameraLookAtZ { get; set;}
 
-		[RED("cameraRotationYaw")] 		public CFloat CameraRotationYaw { get; set;}
+		[Ordinal(0)] [RED("("cameraRotationYaw")] 		public CFloat CameraRotationYaw { get; set;}
 
-		[RED("cameraRotationPitch")] 		public CFloat CameraRotationPitch { get; set;}
+		[Ordinal(0)] [RED("("cameraRotationPitch")] 		public CFloat CameraRotationPitch { get; set;}
 
-		[RED("environmentSunRotationYaw")] 		public CFloat EnvironmentSunRotationYaw { get; set;}
+		[Ordinal(0)] [RED("("environmentSunRotationYaw")] 		public CFloat EnvironmentSunRotationYaw { get; set;}
 
-		[RED("environmentSunRotationPitch")] 		public CFloat EnvironmentSunRotationPitch { get; set;}
+		[Ordinal(0)] [RED("("environmentSunRotationPitch")] 		public CFloat EnvironmentSunRotationPitch { get; set;}
 
-		[RED("appearance")] 		public CName Appearance { get; set;}
+		[Ordinal(0)] [RED("("appearance")] 		public CName Appearance { get; set;}
 
-		[RED("position")] 		public Vector Position { get; set;}
+		[Ordinal(0)] [RED("("position")] 		public Vector Position { get; set;}
 
-		[RED("scale")] 		public CFloat Scale { get; set;}
+		[Ordinal(0)] [RED("("scale")] 		public CFloat Scale { get; set;}
 
-		[RED("fov")] 		public CFloat Fov { get; set;}
+		[Ordinal(0)] [RED("("fov")] 		public CFloat Fov { get; set;}
 
 		public CCreatureDataComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

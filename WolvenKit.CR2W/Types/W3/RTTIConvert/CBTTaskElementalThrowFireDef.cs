@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskElementalThrowFireDef : CBTTaskAttackDef
 	{
-		[RED("projectileEntity")] 		public CHandle<CEntityTemplate> ProjectileEntity { get; set;}
+		[Ordinal(0)] [RED("projectileEntity")] 		public CHandle<CEntityTemplate> ProjectileEntity { get; set;}
 
-		[RED("dodgeable")] 		public CBool Dodgeable { get; set;}
+		[Ordinal(0)] [RED("dodgeable")] 		public CBool Dodgeable { get; set;}
 
 		public CBTTaskElementalThrowFireDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

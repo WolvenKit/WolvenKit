@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskTrollAttack : CBTTaskAttack
 	{
-		[RED("getStats")] 		public CBool GetStats { get; set;}
+		[Ordinal(0)] [RED("("getStats")] 		public CBool GetStats { get; set;}
 
 		public CBTTaskTrollAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

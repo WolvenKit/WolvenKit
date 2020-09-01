@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCraftAttribute : CVariable
 	{
-		[RED("attributeName")] 		public CName AttributeName { get; set;}
+		[Ordinal(0)] [RED("("attributeName")] 		public CName AttributeName { get; set;}
 
-		[RED("valAdditive")] 		public CFloat ValAdditive { get; set;}
+		[Ordinal(0)] [RED("("valAdditive")] 		public CFloat ValAdditive { get; set;}
 
-		[RED("valMultiplicative")] 		public CFloat ValMultiplicative { get; set;}
+		[Ordinal(0)] [RED("("valMultiplicative")] 		public CFloat ValMultiplicative { get; set;}
 
-		[RED("displayPercMul")] 		public CBool DisplayPercMul { get; set;}
+		[Ordinal(0)] [RED("("displayPercMul")] 		public CBool DisplayPercMul { get; set;}
 
-		[RED("displayPercAdd")] 		public CBool DisplayPercAdd { get; set;}
+		[Ordinal(0)] [RED("("displayPercAdd")] 		public CBool DisplayPercAdd { get; set;}
 
 		public SCraftAttribute(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMeshChunkPacked : CVariable
 	{
-		[RED("vertexType")] 		public CEnum<EMeshVertexType> VertexType { get; set;}
+		[Ordinal(0)] [RED("("vertexType")] 		public CEnum<EMeshVertexType> VertexType { get; set;}
 
-		[RED("materialID")] 		public CUInt32 MaterialID { get; set;}
+		[Ordinal(0)] [RED("("materialID")] 		public CUInt32 MaterialID { get; set;}
 
-		[RED("numBonesPerVertex")] 		public CUInt8 NumBonesPerVertex { get; set;}
+		[Ordinal(0)] [RED("("numBonesPerVertex")] 		public CUInt8 NumBonesPerVertex { get; set;}
 
-		[RED("numVertices")] 		public CUInt32 NumVertices { get; set;}
+		[Ordinal(0)] [RED("("numVertices")] 		public CUInt32 NumVertices { get; set;}
 
-		[RED("numIndices")] 		public CUInt32 NumIndices { get; set;}
+		[Ordinal(0)] [RED("("numIndices")] 		public CUInt32 NumIndices { get; set;}
 
-		[RED("firstVertex")] 		public CUInt32 FirstVertex { get; set;}
+		[Ordinal(0)] [RED("("firstVertex")] 		public CUInt32 FirstVertex { get; set;}
 
-		[RED("firstIndex")] 		public CUInt32 FirstIndex { get; set;}
+		[Ordinal(0)] [RED("("firstIndex")] 		public CUInt32 FirstIndex { get; set;}
 
-		[RED("renderMask")] 		public EMeshChunkRenderMask RenderMask { get; set;}
+		[Ordinal(0)] [RED("("renderMask")] 		public EMeshChunkRenderMask RenderMask { get; set;}
 
-		[RED("useForShadowmesh")] 		public CBool UseForShadowmesh { get; set;}
+		[Ordinal(0)] [RED("("useForShadowmesh")] 		public CBool UseForShadowmesh { get; set;}
 
 		public SMeshChunkPacked(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

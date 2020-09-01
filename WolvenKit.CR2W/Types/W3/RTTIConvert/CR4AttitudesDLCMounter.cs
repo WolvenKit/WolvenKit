@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4AttitudesDLCMounter : IGameplayDLCMounter
 	{
-		[RED("attitudeGroupsTableFilePath")] 		public CString AttitudeGroupsTableFilePath { get; set;}
+		[Ordinal(0)] [RED("attitudeGroupsTableFilePath")] 		public CString AttitudeGroupsTableFilePath { get; set;}
 
-		[RED("attitudesXMLFilePath")] 		public CString AttitudesXMLFilePath { get; set;}
+		[Ordinal(0)] [RED("attitudesXMLFilePath")] 		public CString AttitudesXMLFilePath { get; set;}
 
 		public CR4AttitudesDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

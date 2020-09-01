@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPeristentEntity : CEntity
 	{
-		[RED("idTag")] 		public IdTag IdTag { get; set;}
+		[Ordinal(0)] [RED("("idTag")] 		public IdTag IdTag { get; set;}
 
-		[RED("isSaveable")] 		public CBool IsSaveable { get; set;}
+		[Ordinal(0)] [RED("("isSaveable")] 		public CBool IsSaveable { get; set;}
 
 		public CPeristentEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

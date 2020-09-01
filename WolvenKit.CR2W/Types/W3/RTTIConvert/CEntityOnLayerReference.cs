@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEntityOnLayerReference : CVariable
 	{
-		[RED("layerGuid")] 		public CGUID LayerGuid { get; set;}
+		[Ordinal(0)] [RED("("layerGuid")] 		public CGUID LayerGuid { get; set;}
 
-		[RED("entityGuid")] 		public CGUID EntityGuid { get; set;}
+		[Ordinal(0)] [RED("("entityGuid")] 		public CGUID EntityGuid { get; set;}
 
 		public CEntityOnLayerReference(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

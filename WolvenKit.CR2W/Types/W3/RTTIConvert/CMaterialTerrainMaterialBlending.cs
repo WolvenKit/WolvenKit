@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialTerrainMaterialBlending : CMaterialBlock
 	{
-		[RED("uvScales", 7)] 		public CArrayFixedSize<CFloat> UvScales { get; set;}
+		[Ordinal(0)] [RED("uvScales", 7)] 		public CArrayFixedSize<CFloat> UvScales { get; set;}
 
 		public CMaterialTerrainMaterialBlending(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

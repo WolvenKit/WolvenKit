@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IMoveSNComposite : IMoveSteeringNode
 	{
-		[RED("children", 2,0)] 		public CArray<CPtr<IMoveSteeringNode>> Children { get; set;}
+		[Ordinal(0)] [RED("("children", 2,0)] 		public CArray<CPtr<IMoveSteeringNode>> Children { get; set;}
 
 		public IMoveSNComposite(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

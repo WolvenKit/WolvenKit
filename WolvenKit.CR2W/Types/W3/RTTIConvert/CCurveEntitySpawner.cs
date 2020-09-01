@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCurveEntitySpawner : CObject
 	{
-		[RED("density")] 		public CUInt32 Density { get; set;}
+		[Ordinal(0)] [RED("("density")] 		public CUInt32 Density { get; set;}
 
-		[RED("variation")] 		public CFloat Variation { get; set;}
+		[Ordinal(0)] [RED("("variation")] 		public CFloat Variation { get; set;}
 
-		[RED("templateWeights", 2,0)] 		public CArray<SEntityWeight> TemplateWeights { get; set;}
+		[Ordinal(0)] [RED("("templateWeights", 2,0)] 		public CArray<SEntityWeight> TemplateWeights { get; set;}
 
 		public CCurveEntitySpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

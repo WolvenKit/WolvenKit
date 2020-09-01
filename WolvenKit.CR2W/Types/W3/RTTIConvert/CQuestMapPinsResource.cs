@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestMapPinsResource : CResource
 	{
-		[RED("mappinsInfo", 2,0)] 		public CArray<SQuestMapPinInfo> MappinsInfo { get; set;}
+		[Ordinal(0)] [RED("mappinsInfo", 2,0)] 		public CArray<SQuestMapPinInfo> MappinsInfo { get; set;}
 
 		public CQuestMapPinsResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class AlignmentTest : CVariable
 	{
-		[RED("i")] 		public CInt32 I { get; set;}
+		[Ordinal(0)] [RED("i")] 		public CInt32 I { get; set;}
 
-		[RED("a")] 		public Vector A { get; set;}
+		[Ordinal(0)] [RED("a")] 		public Vector A { get; set;}
 
 		public AlignmentTest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

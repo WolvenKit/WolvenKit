@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEquipmentDefinitionEntry : CObject
 	{
-		[RED("category")] 		public CName Category { get; set;}
+		[Ordinal(0)] [RED("("category")] 		public CName Category { get; set;}
 
-		[RED("defaultItemName")] 		public CName DefaultItemName { get; set;}
+		[Ordinal(0)] [RED("("defaultItemName")] 		public CName DefaultItemName { get; set;}
 
-		[RED("initializer")] 		public CPtr<IEquipmentInitializer> Initializer { get; set;}
+		[Ordinal(0)] [RED("("initializer")] 		public CPtr<IEquipmentInitializer> Initializer { get; set;}
 
 		public CEquipmentDefinitionEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

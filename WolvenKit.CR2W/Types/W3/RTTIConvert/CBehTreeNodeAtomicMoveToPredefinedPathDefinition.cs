@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeAtomicMoveToPredefinedPathDefinition : CBehTreeNodeAtomicMoveToDefinition
 	{
-		[RED("pathName")] 		public CBehTreeValCName PathName { get; set;}
+		[Ordinal(0)] [RED("pathName")] 		public CBehTreeValCName PathName { get; set;}
 
-		[RED("upThePath")] 		public CBehTreeValBool UpThePath { get; set;}
+		[Ordinal(0)] [RED("upThePath")] 		public CBehTreeValBool UpThePath { get; set;}
 
-		[RED("startFromBeginning")] 		public CBehTreeValBool StartFromBeginning { get; set;}
+		[Ordinal(0)] [RED("startFromBeginning")] 		public CBehTreeValBool StartFromBeginning { get; set;}
 
 		public CBehTreeNodeAtomicMoveToPredefinedPathDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

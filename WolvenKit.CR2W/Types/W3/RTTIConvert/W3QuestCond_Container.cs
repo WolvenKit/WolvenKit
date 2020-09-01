@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_Container : CQuestScriptedCondition
 	{
-		[RED("containerTag")] 		public CName ContainerTag { get; set;}
+		[Ordinal(0)] [RED("("containerTag")] 		public CName ContainerTag { get; set;}
 
-		[RED("contents")] 		public CEnum<EContainerMode> Contents { get; set;}
+		[Ordinal(0)] [RED("("contents")] 		public CEnum<EContainerMode> Contents { get; set;}
 
-		[RED("inventory")] 		public CHandle<CInventoryComponent> Inventory { get; set;}
+		[Ordinal(0)] [RED("("inventory")] 		public CHandle<CInventoryComponent> Inventory { get; set;}
 
-		[RED("isFulfilled")] 		public CBool IsFulfilled { get; set;}
+		[Ordinal(0)] [RED("("isFulfilled")] 		public CBool IsFulfilled { get; set;}
 
-		[RED("globalListener")] 		public CHandle<W3QuestCond_Container_GlobalListener> GlobalListener { get; set;}
+		[Ordinal(0)] [RED("("globalListener")] 		public CHandle<W3QuestCond_Container_GlobalListener> GlobalListener { get; set;}
 
-		[RED("inventoryListener")] 		public CHandle<W3QuestCond_Container_InventoryListener> InventoryListener { get; set;}
+		[Ordinal(0)] [RED("("inventoryListener")] 		public CHandle<W3QuestCond_Container_InventoryListener> InventoryListener { get; set;}
 
 		public W3QuestCond_Container(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

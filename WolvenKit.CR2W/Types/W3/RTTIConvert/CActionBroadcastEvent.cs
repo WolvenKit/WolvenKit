@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CActionBroadcastEvent : IEntityTargetingAction
 	{
-		[RED("eventToBrodecast")] 		public CName EventToBrodecast { get; set;}
+		[Ordinal(0)] [RED("eventToBrodecast")] 		public CName EventToBrodecast { get; set;}
 
 		public CActionBroadcastEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CJournalTutorial : CJournalChildBase
 	{
-		[RED("name")] 		public LocalizedString Name { get; set;}
+		[Ordinal(0)] [RED("name")] 		public LocalizedString Name { get; set;}
 
-		[RED("image")] 		public CString Image { get; set;}
+		[Ordinal(0)] [RED("image")] 		public CString Image { get; set;}
 
-		[RED("video")] 		public CString Video { get; set;}
+		[Ordinal(0)] [RED("video")] 		public CString Video { get; set;}
 
-		[RED("description")] 		public LocalizedString Description { get; set;}
+		[Ordinal(0)] [RED("description")] 		public LocalizedString Description { get; set;}
 
-		[RED("dlcLock")] 		public CName DlcLock { get; set;}
+		[Ordinal(0)] [RED("dlcLock")] 		public CName DlcLock { get; set;}
 
-		[RED("active")] 		public CBool Active { get; set;}
+		[Ordinal(0)] [RED("active")] 		public CBool Active { get; set;}
 
 		public CJournalTutorial(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

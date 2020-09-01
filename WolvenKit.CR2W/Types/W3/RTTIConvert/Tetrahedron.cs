@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class Tetrahedron : CVariable
 	{
-		[RED("point1")] 		public Vector Point1 { get; set;}
+		[Ordinal(0)] [RED("("point1")] 		public Vector Point1 { get; set;}
 
-		[RED("point2")] 		public Vector Point2 { get; set;}
+		[Ordinal(0)] [RED("("point2")] 		public Vector Point2 { get; set;}
 
-		[RED("point3")] 		public Vector Point3 { get; set;}
+		[Ordinal(0)] [RED("("point3")] 		public Vector Point3 { get; set;}
 
-		[RED("point4")] 		public Vector Point4 { get; set;}
+		[Ordinal(0)] [RED("("point4")] 		public Vector Point4 { get; set;}
 
 		public Tetrahedron(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

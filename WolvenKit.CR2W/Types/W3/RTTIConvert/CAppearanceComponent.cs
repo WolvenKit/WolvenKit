@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAppearanceComponent : CComponent
 	{
-		[RED("forcedAppearance")] 		public CName ForcedAppearance { get; set;}
+		[Ordinal(0)] [RED("forcedAppearance")] 		public CName ForcedAppearance { get; set;}
 
-		[RED("attachmentReplacements")] 		public SAttachmentReplacements AttachmentReplacements { get; set;}
+		[Ordinal(0)] [RED("attachmentReplacements")] 		public SAttachmentReplacements AttachmentReplacements { get; set;}
 
-		[RED("appearanceAttachments", 2,0)] 		public CArray<SAppearanceAttachments> AppearanceAttachments { get; set;}
+		[Ordinal(0)] [RED("appearanceAttachments", 2,0)] 		public CArray<SAppearanceAttachments> AppearanceAttachments { get; set;}
 
 		public CAppearanceComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

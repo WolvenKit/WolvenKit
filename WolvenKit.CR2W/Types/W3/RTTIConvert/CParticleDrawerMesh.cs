@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CParticleDrawerMesh : IParticleDrawer
 	{
-		[RED("meshes", 2,0)] 		public CArray<CHandle<CMesh>> Meshes { get; set;}
+		[Ordinal(0)] [RED("meshes", 2,0)] 		public CArray<CHandle<CMesh>> Meshes { get; set;}
 
-		[RED("orientationMode")] 		public CEnum<EMeshParticleOrientationMode> OrientationMode { get; set;}
+		[Ordinal(0)] [RED("orientationMode")] 		public CEnum<EMeshParticleOrientationMode> OrientationMode { get; set;}
 
-		[RED("lightChannels")] 		public ELightChannel LightChannels { get; set;}
+		[Ordinal(0)] [RED("lightChannels")] 		public ELightChannel LightChannels { get; set;}
 
 		public CParticleDrawerMesh(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

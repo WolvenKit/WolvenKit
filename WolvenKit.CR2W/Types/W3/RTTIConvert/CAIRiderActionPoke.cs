@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIRiderActionPoke : IRiderActionTree
 	{
-		[RED("pokeEvent")] 		public CName PokeEvent { get; set;}
+		[Ordinal(0)] [RED("pokeEvent")] 		public CName PokeEvent { get; set;}
 
-		[RED("pokableScriptedAction")] 		public CHandle<IRiderActionTree> PokableScriptedAction { get; set;}
+		[Ordinal(0)] [RED("pokableScriptedAction")] 		public CHandle<IRiderActionTree> PokableScriptedAction { get; set;}
 
 		public CAIRiderActionPoke(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

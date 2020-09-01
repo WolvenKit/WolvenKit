@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4RyanAlchemyMenu : CR4Menu
 	{
-		[RED("KEY_RECIPE_LIST")] 		public CString KEY_RECIPE_LIST { get; set;}
+		[Ordinal(0)] [RED("KEY_RECIPE_LIST")] 		public CString KEY_RECIPE_LIST { get; set;}
 
-		[RED("m_flashValueStorage")] 		public CHandle<CScriptedFlashValueStorage> M_flashValueStorage { get; set;}
+		[Ordinal(0)] [RED("m_flashValueStorage")] 		public CHandle<CScriptedFlashValueStorage> M_flashValueStorage { get; set;}
 
-		[RED("m_alchemyManager")] 		public CHandle<W3AlchemyManager> M_alchemyManager { get; set;}
+		[Ordinal(0)] [RED("m_alchemyManager")] 		public CHandle<W3AlchemyManager> M_alchemyManager { get; set;}
 
-		[RED("m_inventory")] 		public CHandle<CInventoryComponent> M_inventory { get; set;}
+		[Ordinal(0)] [RED("m_inventory")] 		public CHandle<CInventoryComponent> M_inventory { get; set;}
 
-		[RED("m_recipeList", 2,0)] 		public CArray<SAlchemyRecipe> M_recipeList { get; set;}
+		[Ordinal(0)] [RED("m_recipeList", 2,0)] 		public CArray<SAlchemyRecipe> M_recipeList { get; set;}
 
 		public CR4RyanAlchemyMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

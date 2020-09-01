@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SJournalQuestObjectiveData : CVariable
 	{
-		[RED("status")] 		public CEnum<EJournalStatus> Status { get; set;}
+		[Ordinal(0)] [RED("("status")] 		public CEnum<EJournalStatus> Status { get; set;}
 
-		[RED("objectiveEntry")] 		public CHandle<CJournalQuestObjective> ObjectiveEntry { get; set;}
+		[Ordinal(0)] [RED("("objectiveEntry")] 		public CHandle<CJournalQuestObjective> ObjectiveEntry { get; set;}
 
 		public SJournalQuestObjectiveData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

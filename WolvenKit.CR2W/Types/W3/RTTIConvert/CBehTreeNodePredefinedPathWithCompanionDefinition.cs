@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodePredefinedPathWithCompanionDefinition : CBehTreeNodePredefinedPathDefinition
 	{
-		[RED("companionTag")] 		public CBehTreeValCName CompanionTag { get; set;}
+		[Ordinal(0)] [RED("companionTag")] 		public CBehTreeValCName CompanionTag { get; set;}
 
-		[RED("maxDistance")] 		public CBehTreeValFloat MaxDistance { get; set;}
+		[Ordinal(0)] [RED("maxDistance")] 		public CBehTreeValFloat MaxDistance { get; set;}
 
-		[RED("minDistance")] 		public CBehTreeValFloat MinDistance { get; set;}
+		[Ordinal(0)] [RED("minDistance")] 		public CBehTreeValFloat MinDistance { get; set;}
 
-		[RED("progressWhenCompanionIsAhead")] 		public CBehTreeValBool ProgressWhenCompanionIsAhead { get; set;}
+		[Ordinal(0)] [RED("progressWhenCompanionIsAhead")] 		public CBehTreeValBool ProgressWhenCompanionIsAhead { get; set;}
 
-		[RED("progressOnlyWhenCompanionIsAhead")] 		public CBehTreeValBool ProgressOnlyWhenCompanionIsAhead { get; set;}
+		[Ordinal(0)] [RED("progressOnlyWhenCompanionIsAhead")] 		public CBehTreeValBool ProgressOnlyWhenCompanionIsAhead { get; set;}
 
-		[RED("matchCompanionSpeed")] 		public CBehTreeValBool MatchCompanionSpeed { get; set;}
+		[Ordinal(0)] [RED("matchCompanionSpeed")] 		public CBehTreeValBool MatchCompanionSpeed { get; set;}
 
-		[RED("companionOffset")] 		public CBehTreeValFloat CompanionOffset { get; set;}
+		[Ordinal(0)] [RED("companionOffset")] 		public CBehTreeValFloat CompanionOffset { get; set;}
 
-		[RED("keepMovingWhenMaxDistanceReached")] 		public CBehTreeValBool KeepMovingWhenMaxDistanceReached { get; set;}
+		[Ordinal(0)] [RED("keepMovingWhenMaxDistanceReached")] 		public CBehTreeValBool KeepMovingWhenMaxDistanceReached { get; set;}
 
-		[RED("moveTypeAfterMaxDistanceReached")] 		public CBehTreeValEMoveType MoveTypeAfterMaxDistanceReached { get; set;}
+		[Ordinal(0)] [RED("moveTypeAfterMaxDistanceReached")] 		public CBehTreeValEMoveType MoveTypeAfterMaxDistanceReached { get; set;}
 
 		public CBehTreeNodePredefinedPathWithCompanionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

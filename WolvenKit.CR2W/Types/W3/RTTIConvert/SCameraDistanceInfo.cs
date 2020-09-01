@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCameraDistanceInfo : CVariable
 	{
-		[RED("minDistance")] 		public CFloat MinDistance { get; set;}
+		[Ordinal(0)] [RED("("minDistance")] 		public CFloat MinDistance { get; set;}
 
-		[RED("distanceRange")] 		public CFloat DistanceRange { get; set;}
+		[Ordinal(0)] [RED("("distanceRange")] 		public CFloat DistanceRange { get; set;}
 
-		[RED("enemiesMaxDistanceToCamera")] 		public CFloat EnemiesMaxDistanceToCamera { get; set;}
+		[Ordinal(0)] [RED("("enemiesMaxDistanceToCamera")] 		public CFloat EnemiesMaxDistanceToCamera { get; set;}
 
-		[RED("enemiesMaxDistanceToPlayer")] 		public CFloat EnemiesMaxDistanceToPlayer { get; set;}
+		[Ordinal(0)] [RED("("enemiesMaxDistanceToPlayer")] 		public CFloat EnemiesMaxDistanceToPlayer { get; set;}
 
-		[RED("standardDeviationRelevance")] 		public CFloat StandardDeviationRelevance { get; set;}
+		[Ordinal(0)] [RED("("standardDeviationRelevance")] 		public CFloat StandardDeviationRelevance { get; set;}
 
-		[RED("cameraZOffset")] 		public CFloat CameraZOffset { get; set;}
+		[Ordinal(0)] [RED("("cameraZOffset")] 		public CFloat CameraZOffset { get; set;}
 
-		[RED("cameraZOffsetRange")] 		public CFloat CameraZOffsetRange { get; set;}
+		[Ordinal(0)] [RED("("cameraZOffsetRange")] 		public CFloat CameraZOffsetRange { get; set;}
 
 		public SCameraDistanceInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

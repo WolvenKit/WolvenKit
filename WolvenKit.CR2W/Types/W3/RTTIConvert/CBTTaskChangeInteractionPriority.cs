@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskChangeInteractionPriority : IBehTreeTask
 	{
-		[RED("previousInteractionPriority")] 		public CEnum<EInteractionPriority> PreviousInteractionPriority { get; set;}
+		[Ordinal(0)] [RED("previousInteractionPriority")] 		public CEnum<EInteractionPriority> PreviousInteractionPriority { get; set;}
 
-		[RED("priorityChanged")] 		public CBool PriorityChanged { get; set;}
+		[Ordinal(0)] [RED("priorityChanged")] 		public CBool PriorityChanged { get; set;}
 
 		public CBTTaskChangeInteractionPriority(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

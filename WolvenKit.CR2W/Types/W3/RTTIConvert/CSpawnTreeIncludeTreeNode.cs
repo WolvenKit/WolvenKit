@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeIncludeTreeNode : ISpawnTreeBranch
 	{
-		[RED("spawnTree")] 		public CHandle<CSpawnTree> SpawnTree { get; set;}
+		[Ordinal(0)] [RED("spawnTree")] 		public CHandle<CSpawnTree> SpawnTree { get; set;}
 
 		public CSpawnTreeIncludeTreeNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

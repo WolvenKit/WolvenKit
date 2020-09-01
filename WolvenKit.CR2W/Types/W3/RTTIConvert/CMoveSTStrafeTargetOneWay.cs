@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTStrafeTargetOneWay : IMoveSTBaseStrafeTarget
 	{
-		[RED("left")] 		public CBool Left { get; set;}
+		[Ordinal(0)] [RED("left")] 		public CBool Left { get; set;}
 
 		public CMoveSTStrafeTargetOneWay(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

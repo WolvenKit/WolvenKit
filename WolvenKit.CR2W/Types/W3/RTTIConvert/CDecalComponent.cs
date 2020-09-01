@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDecalComponent : CDrawableComponent
 	{
-		[RED("diffuseTexture")] 		public CHandle<CBitmapTexture> DiffuseTexture { get; set;}
+		[Ordinal(0)] [RED("("diffuseTexture")] 		public CHandle<CBitmapTexture> DiffuseTexture { get; set;}
 
-		[RED("specularity")] 		public CFloat Specularity { get; set;}
+		[Ordinal(0)] [RED("("specularity")] 		public CFloat Specularity { get; set;}
 
-		[RED("specularColor")] 		public CColor SpecularColor { get; set;}
+		[Ordinal(0)] [RED("("specularColor")] 		public CColor SpecularColor { get; set;}
 
-		[RED("normalThreshold")] 		public CFloat NormalThreshold { get; set;}
+		[Ordinal(0)] [RED("("normalThreshold")] 		public CFloat NormalThreshold { get; set;}
 
-		[RED("autoHideDistance")] 		public CFloat AutoHideDistance { get; set;}
+		[Ordinal(0)] [RED("("autoHideDistance")] 		public CFloat AutoHideDistance { get; set;}
 
-		[RED("verticalFlip")] 		public CBool VerticalFlip { get; set;}
+		[Ordinal(0)] [RED("("verticalFlip")] 		public CBool VerticalFlip { get; set;}
 
-		[RED("horizontalFlip")] 		public CBool HorizontalFlip { get; set;}
+		[Ordinal(0)] [RED("("horizontalFlip")] 		public CBool HorizontalFlip { get; set;}
 
-		[RED("fadeTime")] 		public CFloat FadeTime { get; set;}
+		[Ordinal(0)] [RED("("fadeTime")] 		public CFloat FadeTime { get; set;}
 
 		public CDecalComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

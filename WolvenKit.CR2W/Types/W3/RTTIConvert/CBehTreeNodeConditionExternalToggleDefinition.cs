@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeConditionExternalToggleDefinition : CBehTreeNodeConditionDefinition
 	{
-		[RED("switchName")] 		public CName SwitchName { get; set;}
+		[Ordinal(0)] [RED("("switchName")] 		public CName SwitchName { get; set;}
 
-		[RED("initialValue")] 		public CBehTreeValBool InitialValue { get; set;}
+		[Ordinal(0)] [RED("("initialValue")] 		public CBehTreeValBool InitialValue { get; set;}
 
 		public CBehTreeNodeConditionExternalToggleDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

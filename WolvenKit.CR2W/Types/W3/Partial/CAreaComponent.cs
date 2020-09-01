@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CAreaComponent : CBoundedComponent
 	{
-		[RED("height")] 		public CFloat Height { get; set;}
+		[Ordinal(0)] [RED("("height")] 		public CFloat Height { get; set;}
 
-		[RED("color")] 		public CColor Color { get; set;}
+		[Ordinal(0)] [RED("("color")] 		public CColor Color { get; set;}
 
-		[RED("terrainSide")] 		public CEnum<EAreaTerrainSide> TerrainSide { get; set;}
+		[Ordinal(0)] [RED("("terrainSide")] 		public CEnum<EAreaTerrainSide> TerrainSide { get; set;}
 
-		[RED("clippingMode")] 		public CEnum<EAreaClippingMode> ClippingMode { get; set;}
+		[Ordinal(0)] [RED("("clippingMode")] 		public CEnum<EAreaClippingMode> ClippingMode { get; set;}
 
-		[RED("clippingAreaTags")] 		public TagList ClippingAreaTags { get; set;}
+		[Ordinal(0)] [RED("("clippingAreaTags")] 		public TagList ClippingAreaTags { get; set;}
 
-		[RED("saveShapeToLayer")] 		public CBool SaveShapeToLayer { get; set;}
+		[Ordinal(0)] [RED("("saveShapeToLayer")] 		public CBool SaveShapeToLayer { get; set;}
 
-		[RED("localPoints", 2,0)] 		public CArray<Vector> LocalPoints { get; set;}
+		[Ordinal(0)] [RED("("localPoints", 2,0)] 		public CArray<Vector> LocalPoints { get; set;}
 
-		[RED("worldPoints", 2,0)] 		public CArray<Vector> WorldPoints { get; set;}
+		[Ordinal(0)] [RED("("worldPoints", 2,0)] 		public CArray<Vector> WorldPoints { get; set;}
 
 		public CAreaComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

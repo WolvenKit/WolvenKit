@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3treasureHuntContainer : W3Container
 	{
-		[RED("OnLootedEvents", 2,0)] 		public CArray<CHandle<W3SwitchEvent>> OnLootedEvents { get; set;}
+		[Ordinal(0)] [RED("("OnLootedEvents", 2,0)] 		public CArray<CHandle<W3SwitchEvent>> OnLootedEvents { get; set;}
 
 		public W3treasureHuntContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

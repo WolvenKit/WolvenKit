@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CAnimPointCloudLookAtParam : ISkeletalAnimationSetEntryParam
 	{
-		[RED("boneName")] 		public CName BoneName { get; set;}
+		[Ordinal(0)] [RED("("boneName")] 		public CName BoneName { get; set;}
 
-		[RED("boneMSInv")] 		public CMatrix BoneMSInv { get; set;}
+		[Ordinal(0)] [RED("("boneMSInv")] 		public CMatrix BoneMSInv { get; set;}
 
-		[RED("boneTransMSInv")] 		public EngineQsTransform BoneTransMSInv { get; set;}
+		[Ordinal(0)] [RED("("boneTransMSInv")] 		public EngineQsTransform BoneTransMSInv { get; set;}
 
-		[RED("directionLS")] 		public Vector DirectionLS { get; set;}
+		[Ordinal(0)] [RED("("directionLS")] 		public Vector DirectionLS { get; set;}
 
-		[RED("pointsBS", 2,0)] 		public CArray<Vector> PointsBS { get; set;}
+		[Ordinal(0)] [RED("("pointsBS", 2,0)] 		public CArray<Vector> PointsBS { get; set;}
 
-		[RED("pointToTriMapping", 2,0)] 		public CArray<CArray<CInt32>> PointToTriMapping { get; set;}
+		[Ordinal(0)] [RED("("pointToTriMapping", 2,0)] 		public CArray<CArray<CInt32>> PointToTriMapping { get; set;}
 
-		[RED("refPose", 133,0)] 		public CArray<EngineQsTransform> RefPose { get; set;}
+		[Ordinal(0)] [RED("("refPose", 133,0)] 		public CArray<EngineQsTransform> RefPose { get; set;}
 
 		public CAnimPointCloudLookAtParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

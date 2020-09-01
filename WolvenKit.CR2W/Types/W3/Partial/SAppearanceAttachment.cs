@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class SAppearanceAttachment : CVariable
 	{
-		[RED("parentClass")] 		public CName ParentClass { get; set;}
+		[Ordinal(0)] [RED("parentClass")] 		public CName ParentClass { get; set;}
 
-		[RED("parentName")] 		public CName ParentName { get; set;}
+		[Ordinal(0)] [RED("parentName")] 		public CName ParentName { get; set;}
 
-		[RED("childClass")] 		public CName ChildClass { get; set;}
+		[Ordinal(0)] [RED("childClass")] 		public CName ChildClass { get; set;}
 
-		[RED("childName")] 		public CName ChildName { get; set;}
+		[Ordinal(0)] [RED("childName")] 		public CName ChildName { get; set;}
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SAppearanceAttachment(cr2w, parent, name);
 

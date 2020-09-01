@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimationEndCondition : IBehaviorStateTransitionCondition
 	{
-		[RED("useTransitionTimeOffset")] 		public CBool UseTransitionTimeOffset { get; set;}
+		[Ordinal(0)] [RED("useTransitionTimeOffset")] 		public CBool UseTransitionTimeOffset { get; set;}
 
-		[RED("backTimeOffset")] 		public CFloat BackTimeOffset { get; set;}
+		[Ordinal(0)] [RED("backTimeOffset")] 		public CFloat BackTimeOffset { get; set;}
 
 		public CAnimationEndCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

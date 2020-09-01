@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneDisablePhysicsClothEvent : CStorySceneEvent
 	{
-		[RED("actor")] 		public CName Actor { get; set;}
+		[Ordinal(0)] [RED("("actor")] 		public CName Actor { get; set;}
 
-		[RED("weight")] 		public CFloat Weight { get; set;}
+		[Ordinal(0)] [RED("("weight")] 		public CFloat Weight { get; set;}
 
-		[RED("blendTime")] 		public CFloat BlendTime { get; set;}
+		[Ordinal(0)] [RED("("blendTime")] 		public CFloat BlendTime { get; set;}
 
 		public CStorySceneDisablePhysicsClothEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

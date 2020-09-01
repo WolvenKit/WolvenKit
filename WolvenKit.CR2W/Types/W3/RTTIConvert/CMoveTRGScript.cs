@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveTRGScript : CObject
 	{
-		[RED("agent")] 		public CHandle<CMovingAgentComponent> Agent { get; set;}
+		[Ordinal(0)] [RED("agent")] 		public CHandle<CMovingAgentComponent> Agent { get; set;}
 
-		[RED("timeDelta")] 		public CFloat TimeDelta { get; set;}
+		[Ordinal(0)] [RED("timeDelta")] 		public CFloat TimeDelta { get; set;}
 
 		public CMoveTRGScript(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

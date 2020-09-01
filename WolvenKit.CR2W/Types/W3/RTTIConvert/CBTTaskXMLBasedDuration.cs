@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskXMLBasedDuration : CBTTaskBaseDuration
 	{
-		[RED("xmlStatName")] 		public CName XmlStatName { get; set;}
+		[Ordinal(0)] [RED("("xmlStatName")] 		public CName XmlStatName { get; set;}
 
 		public CBTTaskXMLBasedDuration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

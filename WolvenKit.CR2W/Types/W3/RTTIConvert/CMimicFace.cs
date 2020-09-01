@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMimicFace : CResource
 	{
-		[RED("mimicSkeleton")] 		public CHandle<CSkeleton> MimicSkeleton { get; set;}
+		[Ordinal(0)] [RED("("mimicSkeleton")] 		public CHandle<CSkeleton> MimicSkeleton { get; set;}
 
-		[RED("floatTrackSkeleton")] 		public CHandle<CSkeleton> FloatTrackSkeleton { get; set;}
+		[Ordinal(0)] [RED("("floatTrackSkeleton")] 		public CHandle<CSkeleton> FloatTrackSkeleton { get; set;}
 
-		[RED("mimicPoses", 2,0)] 		public CArray<CArray<EngineQsTransform>> MimicPoses { get; set;}
+		[Ordinal(0)] [RED("("mimicPoses", 2,0)] 		public CArray<CArray<EngineQsTransform>> MimicPoses { get; set;}
 
-		[RED("mapping", 2,0)] 		public CArray<CInt32> Mapping { get; set;}
+		[Ordinal(0)] [RED("("mapping", 2,0)] 		public CArray<CInt32> Mapping { get; set;}
 
-		[RED("mimicTrackPoses", 2,0)] 		public CArray<SMimicTrackPose> MimicTrackPoses { get; set;}
+		[Ordinal(0)] [RED("("mimicTrackPoses", 2,0)] 		public CArray<SMimicTrackPose> MimicTrackPoses { get; set;}
 
-		[RED("mimicFilterPoses", 2,0)] 		public CArray<SMimicTrackPose> MimicFilterPoses { get; set;}
+		[Ordinal(0)] [RED("("mimicFilterPoses", 2,0)] 		public CArray<SMimicTrackPose> MimicFilterPoses { get; set;}
 
-		[RED("normalBlendAreas", 2,0)] 		public CArray<Vector> NormalBlendAreas { get; set;}
+		[Ordinal(0)] [RED("("normalBlendAreas", 2,0)] 		public CArray<Vector> NormalBlendAreas { get; set;}
 
-		[RED("neckIndex")] 		public CInt32 NeckIndex { get; set;}
+		[Ordinal(0)] [RED("("neckIndex")] 		public CInt32 NeckIndex { get; set;}
 
-		[RED("headIndex")] 		public CInt32 HeadIndex { get; set;}
+		[Ordinal(0)] [RED("("headIndex")] 		public CInt32 HeadIndex { get; set;}
 
 		public CMimicFace(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

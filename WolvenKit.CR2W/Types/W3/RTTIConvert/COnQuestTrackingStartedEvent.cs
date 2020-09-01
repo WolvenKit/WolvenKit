@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class COnQuestTrackingStartedEvent : CHudEvent
 	{
-		[RED("journalQuest")] 		public CHandle<CJournalQuest> JournalQuest { get; set;}
+		[Ordinal(0)] [RED("journalQuest")] 		public CHandle<CJournalQuest> JournalQuest { get; set;}
 
 		public COnQuestTrackingStartedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

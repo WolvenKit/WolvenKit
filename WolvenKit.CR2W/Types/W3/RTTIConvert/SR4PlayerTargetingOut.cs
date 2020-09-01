@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SR4PlayerTargetingOut : CVariable
 	{
-		[RED("target")] 		public CHandle<CActor> Target { get; set;}
+		[Ordinal(0)] [RED("("target")] 		public CHandle<CActor> Target { get; set;}
 
-		[RED("result")] 		public CBool Result { get; set;}
+		[Ordinal(0)] [RED("("result")] 		public CBool Result { get; set;}
 
-		[RED("confirmNewTarget")] 		public CBool ConfirmNewTarget { get; set;}
+		[Ordinal(0)] [RED("("confirmNewTarget")] 		public CBool ConfirmNewTarget { get; set;}
 
-		[RED("forceDisableUpdatePosition")] 		public CBool ForceDisableUpdatePosition { get; set;}
+		[Ordinal(0)] [RED("("forceDisableUpdatePosition")] 		public CBool ForceDisableUpdatePosition { get; set;}
 
 		public SR4PlayerTargetingOut(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

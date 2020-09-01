@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeInitializerCollectDetachedSetup : ISpawnTreeInitializer
 	{
-		[RED("maximumCollectionDelay")] 		public CFloat MaximumCollectionDelay { get; set;}
+		[Ordinal(0)] [RED("maximumCollectionDelay")] 		public CFloat MaximumCollectionDelay { get; set;}
 
-		[RED("greedyCollection")] 		public CBool GreedyCollection { get; set;}
+		[Ordinal(0)] [RED("greedyCollection")] 		public CBool GreedyCollection { get; set;}
 
 		public CSpawnTreeInitializerCollectDetachedSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

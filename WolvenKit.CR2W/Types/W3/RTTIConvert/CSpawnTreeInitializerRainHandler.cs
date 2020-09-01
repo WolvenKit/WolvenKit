@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeInitializerRainHandler : ISpawnTreeInitializer
 	{
-		[RED("ratioWhenRaining")] 		public CFloat RatioWhenRaining { get; set;}
+		[Ordinal(0)] [RED("("ratioWhenRaining")] 		public CFloat RatioWhenRaining { get; set;}
 
 		public CSpawnTreeInitializerRainHandler(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

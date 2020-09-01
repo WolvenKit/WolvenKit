@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class VirtualAnimationPoseIK : CVariable
 	{
-		[RED("time")] 		public CFloat Time { get; set;}
+		[Ordinal(0)] [RED("("time")] 		public CFloat Time { get; set;}
 
-		[RED("ids", 2,0)] 		public CArray<CEnum<ETCrEffectorId>> Ids { get; set;}
+		[Ordinal(0)] [RED("("ids", 2,0)] 		public CArray<CEnum<ETCrEffectorId>> Ids { get; set;}
 
-		[RED("positionsMS", 2,0)] 		public CArray<Vector> PositionsMS { get; set;}
+		[Ordinal(0)] [RED("("positionsMS", 2,0)] 		public CArray<Vector> PositionsMS { get; set;}
 
-		[RED("rotationsMS", 2,0)] 		public CArray<EulerAngles> RotationsMS { get; set;}
+		[Ordinal(0)] [RED("("rotationsMS", 2,0)] 		public CArray<EulerAngles> RotationsMS { get; set;}
 
-		[RED("weights", 2,0)] 		public CArray<CFloat> Weights { get; set;}
+		[Ordinal(0)] [RED("("weights", 2,0)] 		public CArray<CFloat> Weights { get; set;}
 
 		public VirtualAnimationPoseIK(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

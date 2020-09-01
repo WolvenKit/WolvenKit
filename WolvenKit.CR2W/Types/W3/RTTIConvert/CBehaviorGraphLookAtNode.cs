@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphLookAtNode : CBehaviorGraphBaseNode
 	{
-		[RED("boneName")] 		public CString BoneName { get; set;}
+		[Ordinal(0)] [RED("("boneName")] 		public CString BoneName { get; set;}
 
-		[RED("axis")] 		public Vector Axis { get; set;}
+		[Ordinal(0)] [RED("("axis")] 		public Vector Axis { get; set;}
 
-		[RED("useLimits")] 		public CBool UseLimits { get; set;}
+		[Ordinal(0)] [RED("("useLimits")] 		public CBool UseLimits { get; set;}
 
-		[RED("limitAngle")] 		public CFloat LimitAngle { get; set;}
+		[Ordinal(0)] [RED("("limitAngle")] 		public CFloat LimitAngle { get; set;}
 
-		[RED("cachedValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedValueNode { get; set;}
+		[Ordinal(0)] [RED("("cachedValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedValueNode { get; set;}
 
-		[RED("cachedTargetNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetNode { get; set;}
+		[Ordinal(0)] [RED("("cachedTargetNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedTargetNode { get; set;}
 
 		public CBehaviorGraphLookAtNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

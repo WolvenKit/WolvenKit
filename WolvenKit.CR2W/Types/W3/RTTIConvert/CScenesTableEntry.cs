@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CScenesTableEntry : CVariable
 	{
-		[RED("sceneFile")] 		public CSoft<CStoryScene> SceneFile { get; set;}
+		[Ordinal(0)] [RED("("sceneFile")] 		public CSoft<CStoryScene> SceneFile { get; set;}
 
-		[RED("sceneInput")] 		public CString SceneInput { get; set;}
+		[Ordinal(0)] [RED("("sceneInput")] 		public CString SceneInput { get; set;}
 
-		[RED("requiredFact")] 		public CString RequiredFact { get; set;}
+		[Ordinal(0)] [RED("("requiredFact")] 		public CString RequiredFact { get; set;}
 
-		[RED("forbiddenFact")] 		public CString ForbiddenFact { get; set;}
+		[Ordinal(0)] [RED("("forbiddenFact")] 		public CString ForbiddenFact { get; set;}
 
 		public CScenesTableEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

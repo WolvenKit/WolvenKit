@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCreatureDefinitionWrapper : CVariable
 	{
-		[RED("creatureDefinition")] 		public CName CreatureDefinition { get; set;}
+		[Ordinal(0)] [RED("("creatureDefinition")] 		public CName CreatureDefinition { get; set;}
 
 		public SCreatureDefinitionWrapper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

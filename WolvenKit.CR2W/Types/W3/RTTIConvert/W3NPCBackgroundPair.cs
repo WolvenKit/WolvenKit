@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3NPCBackgroundPair : CGameplayEntity
 	{
-		[RED("work")] 		public CEnum<EBackgroundNPCWork_Paired> Work { get; set;}
+		[Ordinal(0)] [RED("("work")] 		public CEnum<EBackgroundNPCWork_Paired> Work { get; set;}
 
-		[RED("entitiesToSpawn", 2,0)] 		public CArray<SBackgroundPairSpawnedEntity> EntitiesToSpawn { get; set;}
+		[Ordinal(0)] [RED("("entitiesToSpawn", 2,0)] 		public CArray<SBackgroundPairSpawnedEntity> EntitiesToSpawn { get; set;}
 
-		[RED("spawnedEntities", 2,0)] 		public CArray<CHandle<CEntity>> SpawnedEntities { get; set;}
+		[Ordinal(0)] [RED("("spawnedEntities", 2,0)] 		public CArray<CHandle<CEntity>> SpawnedEntities { get; set;}
 
-		[RED("currentAttachments", 2,0)] 		public CArray<CHandle<CEntity>> CurrentAttachments { get; set;}
+		[Ordinal(0)] [RED("("currentAttachments", 2,0)] 		public CArray<CHandle<CEntity>> CurrentAttachments { get; set;}
 
-		[RED("slave")] 		public CHandle<W3NPCBackground> Slave { get; set;}
+		[Ordinal(0)] [RED("("slave")] 		public CHandle<W3NPCBackground> Slave { get; set;}
 
-		[RED("master")] 		public CHandle<W3NPCBackground> Master { get; set;}
+		[Ordinal(0)] [RED("("master")] 		public CHandle<W3NPCBackground> Master { get; set;}
 
-		[RED("mountEvents", 2,0)] 		public CArray<SMountEvent> MountEvents { get; set;}
+		[Ordinal(0)] [RED("("mountEvents", 2,0)] 		public CArray<SMountEvent> MountEvents { get; set;}
 
-		[RED("masterAC")] 		public CHandle<CAnimatedComponent> MasterAC { get; set;}
+		[Ordinal(0)] [RED("("masterAC")] 		public CHandle<CAnimatedComponent> MasterAC { get; set;}
 
-		[RED("slaveAC")] 		public CHandle<CAnimatedComponent> SlaveAC { get; set;}
+		[Ordinal(0)] [RED("("slaveAC")] 		public CHandle<CAnimatedComponent> SlaveAC { get; set;}
 
 		public W3NPCBackgroundPair(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

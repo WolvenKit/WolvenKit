@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SQuestPlayerSkill : CVariable
 	{
-		[RED("skill")] 		public CEnum<ESkill> Skill { get; set;}
+		[Ordinal(0)] [RED("("skill")] 		public CEnum<ESkill> Skill { get; set;}
 
-		[RED("skillLevel")] 		public CInt32 SkillLevel { get; set;}
+		[Ordinal(0)] [RED("("skillLevel")] 		public CInt32 SkillLevel { get; set;}
 
-		[RED("condition")] 		public CEnum<EQuestPlayerSkillCondition> Condition { get; set;}
+		[Ordinal(0)] [RED("("condition")] 		public CEnum<EQuestPlayerSkillCondition> Condition { get; set;}
 
 		public SQuestPlayerSkill(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

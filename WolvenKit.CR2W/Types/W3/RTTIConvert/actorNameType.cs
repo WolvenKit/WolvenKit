@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class actorNameType : CVariable
 	{
-		[RED("actorName", 2,0)] 		public CArray<CName> ActorName { get; set;}
+		[Ordinal(0)] [RED("actorName", 2,0)] 		public CArray<CName> ActorName { get; set;}
 
 		public actorNameType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

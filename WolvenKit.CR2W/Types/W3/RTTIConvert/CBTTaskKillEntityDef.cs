@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskKillEntityDef : IBehTreeTaskDefinition
 	{
-		[RED("entity")] 		public CHandle<CNewNPC> Entity { get; set;}
+		[Ordinal(0)] [RED("entity")] 		public CHandle<CNewNPC> Entity { get; set;}
 
-		[RED("tag")] 		public CName Tag { get; set;}
+		[Ordinal(0)] [RED("tag")] 		public CName Tag { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(0)] [RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
 		public CBTTaskKillEntityDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

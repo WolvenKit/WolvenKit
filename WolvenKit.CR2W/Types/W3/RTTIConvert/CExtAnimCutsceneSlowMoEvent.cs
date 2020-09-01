@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimCutsceneSlowMoEvent : CExtAnimCutsceneDurationEvent
 	{
-		[RED("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(0)] [RED("("enabled")] 		public CBool Enabled { get; set;}
 
-		[RED("factor")] 		public CFloat Factor { get; set;}
+		[Ordinal(0)] [RED("("factor")] 		public CFloat Factor { get; set;}
 
-		[RED("useWeightCurve")] 		public CBool UseWeightCurve { get; set;}
+		[Ordinal(0)] [RED("("useWeightCurve")] 		public CBool UseWeightCurve { get; set;}
 
-		[RED("weightCurve")] 		public SCurveData WeightCurve { get; set;}
+		[Ordinal(0)] [RED("("weightCurve")] 		public SCurveData WeightCurve { get; set;}
 
 		public CExtAnimCutsceneSlowMoEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

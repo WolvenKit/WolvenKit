@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondIsTargettedBy : IBehTreeTask
 	{
-		[RED("isTargettedByActors")] 		public CBool IsTargettedByActors { get; set;}
+		[Ordinal(0)] [RED("("isTargettedByActors")] 		public CBool IsTargettedByActors { get; set;}
 
-		[RED("isTargettedByPlayer")] 		public CBool IsTargettedByPlayer { get; set;}
+		[Ordinal(0)] [RED("("isTargettedByPlayer")] 		public CBool IsTargettedByPlayer { get; set;}
 
 		public CBTCondIsTargettedBy(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_PlayerLevel : CQuestScriptedCondition
 	{
-		[RED("level")] 		public CInt32 Level { get; set;}
+		[Ordinal(0)] [RED("("level")] 		public CInt32 Level { get; set;}
 
-		[RED("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
+		[Ordinal(0)] [RED("("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
 
-		[RED("useComparator")] 		public CBool UseComparator { get; set;}
+		[Ordinal(0)] [RED("("useComparator")] 		public CBool UseComparator { get; set;}
 
-		[RED("returnValue")] 		public CBool ReturnValue { get; set;}
+		[Ordinal(0)] [RED("("returnValue")] 		public CBool ReturnValue { get; set;}
 
 		public W3QuestCond_PlayerLevel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

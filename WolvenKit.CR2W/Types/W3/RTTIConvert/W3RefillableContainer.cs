@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3RefillableContainer : W3Container
 	{
-		[RED("isEmpty")] 		public CBool IsEmpty { get; set;}
+		[Ordinal(0)] [RED("("isEmpty")] 		public CBool IsEmpty { get; set;}
 
-		[RED("checkedForBonusHerbs")] 		public CBool CheckedForBonusHerbs { get; set;}
+		[Ordinal(0)] [RED("("checkedForBonusHerbs")] 		public CBool CheckedForBonusHerbs { get; set;}
 
 		public W3RefillableContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

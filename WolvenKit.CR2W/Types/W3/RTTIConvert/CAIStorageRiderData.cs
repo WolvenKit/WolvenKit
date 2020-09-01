@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIStorageRiderData : IScriptable
 	{
-		[RED("sharedParams")] 		public CHandle<CHorseRiderSharedParams> SharedParams { get; set;}
+		[Ordinal(0)] [RED("sharedParams")] 		public CHandle<CHorseRiderSharedParams> SharedParams { get; set;}
 
-		[RED("ridingManagerMountError")] 		public CBool RidingManagerMountError { get; set;}
+		[Ordinal(0)] [RED("ridingManagerMountError")] 		public CBool RidingManagerMountError { get; set;}
 
-		[RED("ridingManagerCurrentTask")] 		public CEnum<ERidingManagerTask> RidingManagerCurrentTask { get; set;}
+		[Ordinal(0)] [RED("ridingManagerCurrentTask")] 		public CEnum<ERidingManagerTask> RidingManagerCurrentTask { get; set;}
 
-		[RED("horseScriptedActionTree")] 		public CHandle<IAIActionTree> HorseScriptedActionTree { get; set;}
+		[Ordinal(0)] [RED("horseScriptedActionTree")] 		public CHandle<IAIActionTree> HorseScriptedActionTree { get; set;}
 
-		[RED("ridingManagerDismountType")] 		public CEnum<EDismountType> RidingManagerDismountType { get; set;}
+		[Ordinal(0)] [RED("ridingManagerDismountType")] 		public CEnum<EDismountType> RidingManagerDismountType { get; set;}
 
-		[RED("ridingManagerInstantMount")] 		public CBool RidingManagerInstantMount { get; set;}
+		[Ordinal(0)] [RED("ridingManagerInstantMount")] 		public CBool RidingManagerInstantMount { get; set;}
 
 		public CAIStorageRiderData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

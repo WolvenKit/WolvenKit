@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimCutsceneBokehDofBlendEvent : CExtAnimDurationEvent
 	{
-		[RED("bokehDofParamsStart")] 		public SBokehDofParams BokehDofParamsStart { get; set;}
+		[Ordinal(0)] [RED("("bokehDofParamsStart")] 		public SBokehDofParams BokehDofParamsStart { get; set;}
 
-		[RED("bokehDofParamsEnd")] 		public SBokehDofParams BokehDofParamsEnd { get; set;}
+		[Ordinal(0)] [RED("("bokehDofParamsEnd")] 		public SBokehDofParams BokehDofParamsEnd { get; set;}
 
 		public CExtAnimCutsceneBokehDofBlendEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FlyingWhale : CActor
 	{
-		[RED("forcedAppearance")] 		public CString ForcedAppearance { get; set;}
+		[Ordinal(0)] [RED("("forcedAppearance")] 		public CString ForcedAppearance { get; set;}
 
 		public W3FlyingWhale(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

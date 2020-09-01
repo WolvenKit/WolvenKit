@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskBlockPlayerActions : IBehTreeTask
 	{
-		[RED("block")] 		public CBool Block { get; set;}
+		[Ordinal(0)] [RED("block")] 		public CBool Block { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
 		public BTTaskBlockPlayerActions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

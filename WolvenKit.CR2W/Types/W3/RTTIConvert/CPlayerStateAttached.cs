@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPlayerStateAttached : CPlayerStateBase
 	{
-		[RED("attachedTo")] 		public CHandle<CEntity> AttachedTo { get; set;}
+		[Ordinal(0)] [RED("("attachedTo")] 		public CHandle<CEntity> AttachedTo { get; set;}
 
-		[RED("slot")] 		public CName Slot { get; set;}
+		[Ordinal(0)] [RED("("slot")] 		public CName Slot { get; set;}
 
 		public CPlayerStateAttached(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

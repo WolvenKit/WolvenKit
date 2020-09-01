@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardActor : CModStoryBoardAsset
 	{
-		[RED("defaultIdleAnim")] 		public CName DefaultIdleAnim { get; set;}
+		[Ordinal(0)] [RED("("defaultIdleAnim")] 		public CName DefaultIdleAnim { get; set;}
 
-		[RED("playerCloneTemplate")] 		public CString PlayerCloneTemplate { get; set;}
+		[Ordinal(0)] [RED("("playerCloneTemplate")] 		public CString PlayerCloneTemplate { get; set;}
 
-		[RED("appearanceNames", 2,0)] 		public CArray<CName> AppearanceNames { get; set;}
+		[Ordinal(0)] [RED("("appearanceNames", 2,0)] 		public CArray<CName> AppearanceNames { get; set;}
 
-		[RED("appearanceId")] 		public CInt32 AppearanceId { get; set;}
+		[Ordinal(0)] [RED("("appearanceId")] 		public CInt32 AppearanceId { get; set;}
 
-		[RED("mimicsTriggerScene")] 		public CHandle<CStoryScene> MimicsTriggerScene { get; set;}
+		[Ordinal(0)] [RED("("mimicsTriggerScene")] 		public CHandle<CStoryScene> MimicsTriggerScene { get; set;}
 
-		[RED("isStaticLookAt")] 		public CBool IsStaticLookAt { get; set;}
+		[Ordinal(0)] [RED("("isStaticLookAt")] 		public CBool IsStaticLookAt { get; set;}
 
-		[RED("isActiveLookAt")] 		public CBool IsActiveLookAt { get; set;}
+		[Ordinal(0)] [RED("("isActiveLookAt")] 		public CBool IsActiveLookAt { get; set;}
 
-		[RED("cachedActorType")] 		public CEnum<EStoryBoardActorType> CachedActorType { get; set;}
+		[Ordinal(0)] [RED("("cachedActorType")] 		public CEnum<EStoryBoardActorType> CachedActorType { get; set;}
 
 		public CModStoryBoardActor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

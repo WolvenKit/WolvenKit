@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestConditionBlock : CQuestGraphBlock
 	{
-		[RED("questCondition")] 		public CPtr<IQuestCondition> QuestCondition { get; set;}
+		[Ordinal(0)] [RED("questCondition")] 		public CPtr<IQuestCondition> QuestCondition { get; set;}
 
 		public CQuestConditionBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

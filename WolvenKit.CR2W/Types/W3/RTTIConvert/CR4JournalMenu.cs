@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4JournalMenu : CR4MenuBase
 	{
-		[RED("m_menuNames", 2,0)] 		public CArray<CName> M_menuNames { get; set;}
+		[Ordinal(0)] [RED("("m_menuNames", 2,0)] 		public CArray<CName> M_menuNames { get; set;}
 
 		public CR4JournalMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

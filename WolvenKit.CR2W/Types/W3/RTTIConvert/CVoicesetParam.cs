@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CVoicesetParam : CEntityTemplateParam
 	{
-		[RED("slots", 2,0)] 		public CArray<SVoicesetSlot> Slots { get; set;}
+		[Ordinal(0)] [RED("slots", 2,0)] 		public CArray<SVoicesetSlot> Slots { get; set;}
 
 		public CVoicesetParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

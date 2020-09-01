@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class DialogueSliderData : SliderPopupData
 	{
-		[RED("dialogueRef")] 		public CHandle<CR4HudModuleDialog> DialogueRef { get; set;}
+		[Ordinal(0)] [RED("dialogueRef")] 		public CHandle<CR4HudModuleDialog> DialogueRef { get; set;}
 
 		public DialogueSliderData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

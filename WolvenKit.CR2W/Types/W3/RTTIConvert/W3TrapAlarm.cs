@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TrapAlarm : W3Trap
 	{
-		[RED("alarmSoundString")] 		public CString AlarmSoundString { get; set;}
+		[Ordinal(0)] [RED("("alarmSoundString")] 		public CString AlarmSoundString { get; set;}
 
 		public W3TrapAlarm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

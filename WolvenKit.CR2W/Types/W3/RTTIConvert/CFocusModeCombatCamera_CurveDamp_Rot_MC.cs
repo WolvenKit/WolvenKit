@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFocusModeCombatCamera_CurveDamp_Rot_MC : CFocusModeCombatCamera_CurveDamp_MC
 	{
-		[RED("rollCurveName")] 		public CName RollCurveName { get; set;}
+		[Ordinal(0)] [RED("("rollCurveName")] 		public CName RollCurveName { get; set;}
 
-		[RED("posCurveName")] 		public CName PosCurveName { get; set;}
+		[Ordinal(0)] [RED("("posCurveName")] 		public CName PosCurveName { get; set;}
 
-		[RED("rollDamper")] 		public CHandle<AngleCurveDamper> RollDamper { get; set;}
+		[Ordinal(0)] [RED("("rollDamper")] 		public CHandle<AngleCurveDamper> RollDamper { get; set;}
 
-		[RED("posDamper")] 		public CHandle<CurveDamper3d> PosDamper { get; set;}
+		[Ordinal(0)] [RED("("posDamper")] 		public CHandle<CurveDamper3d> PosDamper { get; set;}
 
 		public CFocusModeCombatCamera_CurveDamp_Rot_MC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestEncounterActivator : CQuestGraphBlock
 	{
-		[RED("encounterTag")] 		public CName EncounterTag { get; set;}
+		[Ordinal(0)] [RED("encounterTag")] 		public CName EncounterTag { get; set;}
 
-		[RED("deactivateEncounter")] 		public CBool DeactivateEncounter { get; set;}
+		[Ordinal(0)] [RED("deactivateEncounter")] 		public CBool DeactivateEncounter { get; set;}
 
 		public CQuestEncounterActivator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

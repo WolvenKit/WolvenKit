@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardAudioDirector : CObject
 	{
-		[RED("actors", 2,0)] 		public CArray<CHandle<CModStoryBoardActor>> Actors { get; set;}
+		[Ordinal(0)] [RED("("actors", 2,0)] 		public CArray<CHandle<CModStoryBoardActor>> Actors { get; set;}
 
 		public CModStoryBoardAudioDirector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

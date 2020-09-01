@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockForwardLightCustom : CMaterialBlock
 	{
-		[RED("globalLightDiffuse")] 		public CBool GlobalLightDiffuse { get; set;}
+		[Ordinal(0)] [RED("globalLightDiffuse")] 		public CBool GlobalLightDiffuse { get; set;}
 
-		[RED("globalLightSpecular")] 		public CBool GlobalLightSpecular { get; set;}
+		[Ordinal(0)] [RED("globalLightSpecular")] 		public CBool GlobalLightSpecular { get; set;}
 
-		[RED("deferredDiffuse")] 		public CBool DeferredDiffuse { get; set;}
+		[Ordinal(0)] [RED("deferredDiffuse")] 		public CBool DeferredDiffuse { get; set;}
 
-		[RED("deferredSpecular")] 		public CBool DeferredSpecular { get; set;}
+		[Ordinal(0)] [RED("deferredSpecular")] 		public CBool DeferredSpecular { get; set;}
 
-		[RED("envProbes")] 		public CBool EnvProbes { get; set;}
+		[Ordinal(0)] [RED("envProbes")] 		public CBool EnvProbes { get; set;}
 
-		[RED("ambientOcclusion")] 		public CBool AmbientOcclusion { get; set;}
+		[Ordinal(0)] [RED("ambientOcclusion")] 		public CBool AmbientOcclusion { get; set;}
 
-		[RED("fog")] 		public CBool Fog { get; set;}
+		[Ordinal(0)] [RED("fog")] 		public CBool Fog { get; set;}
 
-		[RED("excludeFlags")] 		public CBool ExcludeFlags { get; set;}
+		[Ordinal(0)] [RED("excludeFlags")] 		public CBool ExcludeFlags { get; set;}
 
-		[RED("lightUsageMask")] 		public CEnum<ELightUsageMask> LightUsageMask { get; set;}
+		[Ordinal(0)] [RED("lightUsageMask")] 		public CEnum<ELightUsageMask> LightUsageMask { get; set;}
 
 		public CMaterialBlockForwardLightCustom(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

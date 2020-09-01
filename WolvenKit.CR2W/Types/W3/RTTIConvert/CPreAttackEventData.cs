@@ -10,39 +10,39 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPreAttackEventData : CVariable
 	{
-		[RED("attackName")] 		public CName AttackName { get; set;}
+		[Ordinal(0)] [RED("attackName")] 		public CName AttackName { get; set;}
 
-		[RED("weaponSlot")] 		public CName WeaponSlot { get; set;}
+		[Ordinal(0)] [RED("weaponSlot")] 		public CName WeaponSlot { get; set;}
 
-		[RED("hitReactionType")] 		public CInt32 HitReactionType { get; set;}
+		[Ordinal(0)] [RED("hitReactionType")] 		public CInt32 HitReactionType { get; set;}
 
-		[RED("rangeName")] 		public CName RangeName { get; set;}
+		[Ordinal(0)] [RED("rangeName")] 		public CName RangeName { get; set;}
 
-		[RED("Damage_Friendly")] 		public CBool Damage_Friendly { get; set;}
+		[Ordinal(0)] [RED("Damage_Friendly")] 		public CBool Damage_Friendly { get; set;}
 
-		[RED("Damage_Neutral")] 		public CBool Damage_Neutral { get; set;}
+		[Ordinal(0)] [RED("Damage_Neutral")] 		public CBool Damage_Neutral { get; set;}
 
-		[RED("Damage_Hostile")] 		public CBool Damage_Hostile { get; set;}
+		[Ordinal(0)] [RED("Damage_Hostile")] 		public CBool Damage_Hostile { get; set;}
 
-		[RED("Can_Parry_Attack")] 		public CBool Can_Parry_Attack { get; set;}
+		[Ordinal(0)] [RED("Can_Parry_Attack")] 		public CBool Can_Parry_Attack { get; set;}
 
-		[RED("hitFX")] 		public CName HitFX { get; set;}
+		[Ordinal(0)] [RED("hitFX")] 		public CName HitFX { get; set;}
 
-		[RED("hitBackFX")] 		public CName HitBackFX { get; set;}
+		[Ordinal(0)] [RED("hitBackFX")] 		public CName HitBackFX { get; set;}
 
-		[RED("hitParriedFX")] 		public CName HitParriedFX { get; set;}
+		[Ordinal(0)] [RED("hitParriedFX")] 		public CName HitParriedFX { get; set;}
 
-		[RED("hitBackParriedFX")] 		public CName HitBackParriedFX { get; set;}
+		[Ordinal(0)] [RED("hitBackParriedFX")] 		public CName HitBackParriedFX { get; set;}
 
-		[RED("swingType")] 		public CInt32 SwingType { get; set;}
+		[Ordinal(0)] [RED("swingType")] 		public CInt32 SwingType { get; set;}
 
-		[RED("swingDir")] 		public CInt32 SwingDir { get; set;}
+		[Ordinal(0)] [RED("swingDir")] 		public CInt32 SwingDir { get; set;}
 
-		[RED("soundAttackType")] 		public CName SoundAttackType { get; set;}
+		[Ordinal(0)] [RED("soundAttackType")] 		public CName SoundAttackType { get; set;}
 
-		[RED("canBeDodged")] 		public CBool CanBeDodged { get; set;}
+		[Ordinal(0)] [RED("canBeDodged")] 		public CBool CanBeDodged { get; set;}
 
-		[RED("cameraAnimOnMissedHit")] 		public CName CameraAnimOnMissedHit { get; set;}
+		[Ordinal(0)] [RED("cameraAnimOnMissedHit")] 		public CName CameraAnimOnMissedHit { get; set;}
 
 		public CPreAttackEventData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

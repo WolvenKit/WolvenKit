@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskSetFlyingBossCameraDef : IBehTreeTaskDefinition
 	{
-		[RED("val")] 		public CBool Val { get; set;}
+		[Ordinal(0)] [RED("val")] 		public CBool Val { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
 		public BTTaskSetFlyingBossCameraDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

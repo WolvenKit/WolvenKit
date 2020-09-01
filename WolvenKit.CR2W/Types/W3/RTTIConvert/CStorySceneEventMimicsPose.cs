@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventMimicsPose : CStorySceneEventDuration
 	{
-		[RED("actor")] 		public CName Actor { get; set;}
+		[Ordinal(0)] [RED("actor")] 		public CName Actor { get; set;}
 
-		[RED("poseName")] 		public CName PoseName { get; set;}
+		[Ordinal(0)] [RED("poseName")] 		public CName PoseName { get; set;}
 
-		[RED("weight")] 		public CFloat Weight { get; set;}
+		[Ordinal(0)] [RED("weight")] 		public CFloat Weight { get; set;}
 
-		[RED("useWeightCurve")] 		public CBool UseWeightCurve { get; set;}
+		[Ordinal(0)] [RED("useWeightCurve")] 		public CBool UseWeightCurve { get; set;}
 
-		[RED("weightCurve")] 		public SCurveData WeightCurve { get; set;}
+		[Ordinal(0)] [RED("weightCurve")] 		public SCurveData WeightCurve { get; set;}
 
 		public CStorySceneEventMimicsPose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

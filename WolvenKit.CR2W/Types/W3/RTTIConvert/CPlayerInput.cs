@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPlayerInput : CObject
 	{
-		[RED("actionLocks", 2,0)] 		public CArray<CArray<SInputActionLock>> ActionLocks { get; set;}
+		[Ordinal(0)] [RED("("actionLocks", 2,0)] 		public CArray<CArray<SInputActionLock>> ActionLocks { get; set;}
 
-		[RED("totalCameraPresetChange")] 		public CFloat TotalCameraPresetChange { get; set;}
+		[Ordinal(0)] [RED("("totalCameraPresetChange")] 		public CFloat TotalCameraPresetChange { get; set;}
 
-		[RED("potAction")] 		public SInputAction PotAction { get; set;}
+		[Ordinal(0)] [RED("("potAction")] 		public SInputAction PotAction { get; set;}
 
-		[RED("potPress")] 		public CBool PotPress { get; set;}
+		[Ordinal(0)] [RED("("potPress")] 		public CBool PotPress { get; set;}
 
-		[RED("debugBlockSourceName")] 		public CName DebugBlockSourceName { get; set;}
+		[Ordinal(0)] [RED("("debugBlockSourceName")] 		public CName DebugBlockSourceName { get; set;}
 
-		[RED("holdFastMenuInvoked")] 		public CBool HoldFastMenuInvoked { get; set;}
+		[Ordinal(0)] [RED("("holdFastMenuInvoked")] 		public CBool HoldFastMenuInvoked { get; set;}
 
-		[RED("potionUpperHeld")] 		public CBool PotionUpperHeld { get; set;}
+		[Ordinal(0)] [RED("("potionUpperHeld")] 		public CBool PotionUpperHeld { get; set;}
 
-		[RED("potionLowerHeld")] 		public CBool PotionLowerHeld { get; set;}
+		[Ordinal(0)] [RED("("potionLowerHeld")] 		public CBool PotionLowerHeld { get; set;}
 
-		[RED("potionModeHold")] 		public CBool PotionModeHold { get; set;}
+		[Ordinal(0)] [RED("("potionModeHold")] 		public CBool PotionModeHold { get; set;}
 
-		[RED("pressTimestamp")] 		public CFloat PressTimestamp { get; set;}
+		[Ordinal(0)] [RED("("pressTimestamp")] 		public CFloat PressTimestamp { get; set;}
 
-		[RED("DOUBLE_TAP_WINDOW")] 		public CFloat DOUBLE_TAP_WINDOW { get; set;}
+		[Ordinal(0)] [RED("("DOUBLE_TAP_WINDOW")] 		public CFloat DOUBLE_TAP_WINDOW { get; set;}
 
-		[RED("processedSwordHold")] 		public CBool ProcessedSwordHold { get; set;}
+		[Ordinal(0)] [RED("("processedSwordHold")] 		public CBool ProcessedSwordHold { get; set;}
 
-		[RED("lastMovementDoubleTapName")] 		public CName LastMovementDoubleTapName { get; set;}
+		[Ordinal(0)] [RED("("lastMovementDoubleTapName")] 		public CName LastMovementDoubleTapName { get; set;}
 
 		public CPlayerInput(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SLensFlareParameters : CVariable
 	{
-		[RED("nearDistance")] 		public CFloat NearDistance { get; set;}
+		[Ordinal(0)] [RED("("nearDistance")] 		public CFloat NearDistance { get; set;}
 
-		[RED("nearRange")] 		public CFloat NearRange { get; set;}
+		[Ordinal(0)] [RED("("nearRange")] 		public CFloat NearRange { get; set;}
 
-		[RED("farDistance")] 		public CFloat FarDistance { get; set;}
+		[Ordinal(0)] [RED("("farDistance")] 		public CFloat FarDistance { get; set;}
 
-		[RED("farRange")] 		public CFloat FarRange { get; set;}
+		[Ordinal(0)] [RED("("farRange")] 		public CFloat FarRange { get; set;}
 
-		[RED("elements", 2,0)] 		public CArray<SLensFlareElementParameters> Elements { get; set;}
+		[Ordinal(0)] [RED("("elements", 2,0)] 		public CArray<SLensFlareElementParameters> Elements { get; set;}
 
 		public SLensFlareParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

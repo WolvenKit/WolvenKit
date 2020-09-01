@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMapWorldSpaceDirectionToModelSpaceRangeNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("minOutValue")] 		public CFloat MinOutValue { get; set;}
+		[Ordinal(0)] [RED("("minOutValue")] 		public CFloat MinOutValue { get; set;}
 
-		[RED("maxOutValue")] 		public CFloat MaxOutValue { get; set;}
+		[Ordinal(0)] [RED("("maxOutValue")] 		public CFloat MaxOutValue { get; set;}
 
-		[RED("leftToRight")] 		public CBool LeftToRight { get; set;}
+		[Ordinal(0)] [RED("("leftToRight")] 		public CBool LeftToRight { get; set;}
 
 		public CBehaviorGraphMapWorldSpaceDirectionToModelSpaceRangeNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

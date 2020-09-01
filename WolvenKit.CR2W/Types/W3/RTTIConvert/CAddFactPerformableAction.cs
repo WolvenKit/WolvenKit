@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAddFactPerformableAction : IPerformableAction
 	{
-		[RED("factID")] 		public CString FactID { get; set;}
+		[Ordinal(0)] [RED("factID")] 		public CString FactID { get; set;}
 
-		[RED("value")] 		public CInt32 Value { get; set;}
+		[Ordinal(0)] [RED("value")] 		public CInt32 Value { get; set;}
 
-		[RED("validForSeconds")] 		public CInt32 ValidForSeconds { get; set;}
+		[Ordinal(0)] [RED("validForSeconds")] 		public CInt32 ValidForSeconds { get; set;}
 
 		public CAddFactPerformableAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

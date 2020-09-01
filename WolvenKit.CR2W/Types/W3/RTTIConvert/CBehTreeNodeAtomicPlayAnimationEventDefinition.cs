@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeAtomicPlayAnimationEventDefinition : CBehTreeNodeAtomicActionDefinition
 	{
-		[RED("shouldForceEvent")] 		public CBool ShouldForceEvent { get; set;}
+		[Ordinal(0)] [RED("shouldForceEvent")] 		public CBool ShouldForceEvent { get; set;}
 
-		[RED("eventStateName")] 		public CBehTreeValCName EventStateName { get; set;}
+		[Ordinal(0)] [RED("eventStateName")] 		public CBehTreeValCName EventStateName { get; set;}
 
-		[RED("eventResetTriggerName")] 		public CName EventResetTriggerName { get; set;}
+		[Ordinal(0)] [RED("eventResetTriggerName")] 		public CName EventResetTriggerName { get; set;}
 
 		public CBehTreeNodeAtomicPlayAnimationEventDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

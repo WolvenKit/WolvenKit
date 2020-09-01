@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SE_ManageGate : W3SwitchEvent
 	{
-		[RED("entityTag")] 		public CName EntityTag { get; set;}
+		[Ordinal(0)] [RED("("entityTag")] 		public CName EntityTag { get; set;}
 
-		[RED("open")] 		public CBool Open { get; set;}
+		[Ordinal(0)] [RED("("open")] 		public CBool Open { get; set;}
 
-		[RED("speedModifier")] 		public CFloat SpeedModifier { get; set;}
+		[Ordinal(0)] [RED("("speedModifier")] 		public CFloat SpeedModifier { get; set;}
 
 		public W3SE_ManageGate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

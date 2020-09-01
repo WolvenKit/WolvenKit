@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStatistic : CVariable
 	{
-		[RED("statType")] 		public CEnum<EStatistic> StatType { get; set;}
+		[Ordinal(0)] [RED("("statType")] 		public CEnum<EStatistic> StatType { get; set;}
 
-		[RED("registeredAchievements", 2,0)] 		public CArray<SAchievement> RegisteredAchievements { get; set;}
+		[Ordinal(0)] [RED("("registeredAchievements", 2,0)] 		public CArray<SAchievement> RegisteredAchievements { get; set;}
 
 		public SStatistic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

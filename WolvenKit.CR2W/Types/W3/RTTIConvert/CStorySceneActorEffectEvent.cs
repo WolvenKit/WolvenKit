@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneActorEffectEvent : CStorySceneEvent
 	{
-		[RED("actor")] 		public CName Actor { get; set;}
+		[Ordinal(0)] [RED("("actor")] 		public CName Actor { get; set;}
 
-		[RED("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(0)] [RED("("effectName")] 		public CName EffectName { get; set;}
 
-		[RED("startOrStop")] 		public CBool StartOrStop { get; set;}
+		[Ordinal(0)] [RED("("startOrStop")] 		public CBool StartOrStop { get; set;}
 
-		[RED("persistAcrossSections")] 		public CBool PersistAcrossSections { get; set;}
+		[Ordinal(0)] [RED("("persistAcrossSections")] 		public CBool PersistAcrossSections { get; set;}
 
 		public CStorySceneActorEffectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

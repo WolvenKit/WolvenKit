@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMenuHudParam : IMenuDisplayParam
 	{
-		[RED("keepHud")] 		public CBool KeepHud { get; set;}
+		[Ordinal(0)] [RED("keepHud")] 		public CBool KeepHud { get; set;}
 
 		public CMenuHudParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

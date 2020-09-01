@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IGuiResource : CResource
 	{
-		[RED("resourceBlocks", 2,0)] 		public CArray<CPtr<CGraphBlock>> ResourceBlocks { get; set;}
+		[Ordinal(0)] [RED("("resourceBlocks", 2,0)] 		public CArray<CPtr<CGraphBlock>> ResourceBlocks { get; set;}
 
 		public IGuiResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

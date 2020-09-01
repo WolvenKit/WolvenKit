@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeQuestNode : ISpawnTreeBranch
 	{
-		[RED("spawnPhases", 2,0)] 		public CArray<CPtr<CSpawnTreeQuestPhase>> SpawnPhases { get; set;}
+		[Ordinal(0)] [RED("("spawnPhases", 2,0)] 		public CArray<CPtr<CSpawnTreeQuestPhase>> SpawnPhases { get; set;}
 
 		public CSpawnTreeQuestNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

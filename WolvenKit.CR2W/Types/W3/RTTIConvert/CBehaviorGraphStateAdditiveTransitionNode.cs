@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphStateAdditiveTransitionNode : CBehaviorGraphStateTransitionBlendNode
 	{
-		[RED("cachedAdditiveNode")] 		public CPtr<CBehaviorGraphNode> CachedAdditiveNode { get; set;}
+		[Ordinal(0)] [RED("cachedAdditiveNode")] 		public CPtr<CBehaviorGraphNode> CachedAdditiveNode { get; set;}
 
 		public CBehaviorGraphStateAdditiveTransitionNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMimicTrackPose : CVariable
 	{
-		[RED("name")] 		public CName Name { get; set;}
+		[Ordinal(0)] [RED("("name")] 		public CName Name { get; set;}
 
-		[RED("tracks", 2,0)] 		public CArray<CFloat> Tracks { get; set;}
+		[Ordinal(0)] [RED("("tracks", 2,0)] 		public CArray<CFloat> Tracks { get; set;}
 
-		[RED("mapping", 2,0)] 		public CArray<CInt32> Mapping { get; set;}
+		[Ordinal(0)] [RED("("mapping", 2,0)] 		public CArray<CInt32> Mapping { get; set;}
 
 		public SMimicTrackPose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

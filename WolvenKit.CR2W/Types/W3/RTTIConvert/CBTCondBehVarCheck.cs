@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondBehVarCheck : IBehTreeTask
 	{
-		[RED("behVarName")] 		public CName BehVarName { get; set;}
+		[Ordinal(0)] [RED("behVarName")] 		public CName BehVarName { get; set;}
 
-		[RED("behVarValue")] 		public CInt32 BehVarValue { get; set;}
+		[Ordinal(0)] [RED("behVarValue")] 		public CInt32 BehVarValue { get; set;}
 
-		[RED("compareOperation")] 		public CEnum<ECompareOp> CompareOperation { get; set;}
+		[Ordinal(0)] [RED("compareOperation")] 		public CEnum<ECompareOp> CompareOperation { get; set;}
 
 		public CBTCondBehVarCheck(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

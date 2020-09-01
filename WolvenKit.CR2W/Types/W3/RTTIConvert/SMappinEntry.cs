@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMappinEntry : CVariable
 	{
-		[RED("newMappin")] 		public CName NewMappin { get; set;}
+		[Ordinal(0)] [RED("("newMappin")] 		public CName NewMappin { get; set;}
 
-		[RED("newMappinType")] 		public CName NewMappinType { get; set;}
+		[Ordinal(0)] [RED("("newMappinType")] 		public CName NewMappinType { get; set;}
 
 		public SMappinEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

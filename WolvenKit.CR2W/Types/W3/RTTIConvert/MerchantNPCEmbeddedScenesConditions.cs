@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class MerchantNPCEmbeddedScenesConditions : CVariable
 	{
-		[RED("applyToTag")] 		public CName ApplyToTag { get; set;}
+		[Ordinal(0)] [RED("applyToTag")] 		public CName ApplyToTag { get; set;}
 
-		[RED("requiredFact")] 		public CString RequiredFact { get; set;}
+		[Ordinal(0)] [RED("requiredFact")] 		public CString RequiredFact { get; set;}
 
-		[RED("forbiddenFact")] 		public CString ForbiddenFact { get; set;}
+		[Ordinal(0)] [RED("forbiddenFact")] 		public CString ForbiddenFact { get; set;}
 
 		public MerchantNPCEmbeddedScenesConditions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

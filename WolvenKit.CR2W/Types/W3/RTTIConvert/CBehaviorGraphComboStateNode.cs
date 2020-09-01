@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphComboStateNode : CBehaviorGraphStateNode
 	{
-		[RED("isConnected")] 		public CBool IsConnected { get; set;}
+		[Ordinal(0)] [RED("("isConnected")] 		public CBool IsConnected { get; set;}
 
-		[RED("comboWays", 2,0)] 		public CArray<SBehaviorComboWay> ComboWays { get; set;}
+		[Ordinal(0)] [RED("("comboWays", 2,0)] 		public CArray<SBehaviorComboWay> ComboWays { get; set;}
 
-		[RED("cooldown")] 		public CFloat Cooldown { get; set;}
+		[Ordinal(0)] [RED("("cooldown")] 		public CFloat Cooldown { get; set;}
 
-		[RED("blendForAnim")] 		public CFloat BlendForAnim { get; set;}
+		[Ordinal(0)] [RED("("blendForAnim")] 		public CFloat BlendForAnim { get; set;}
 
-		[RED("blendInternal")] 		public CFloat BlendInternal { get; set;}
+		[Ordinal(0)] [RED("("blendInternal")] 		public CFloat BlendInternal { get; set;}
 
-		[RED("maxLevel")] 		public CUInt32 MaxLevel { get; set;}
+		[Ordinal(0)] [RED("("maxLevel")] 		public CUInt32 MaxLevel { get; set;}
 
-		[RED("comboEvent")] 		public CName ComboEvent { get; set;}
+		[Ordinal(0)] [RED("("comboEvent")] 		public CName ComboEvent { get; set;}
 
-		[RED("finishedEvent")] 		public CName FinishedEvent { get; set;}
+		[Ordinal(0)] [RED("("finishedEvent")] 		public CName FinishedEvent { get; set;}
 
-		[RED("varComboWay")] 		public CName VarComboWay { get; set;}
+		[Ordinal(0)] [RED("("varComboWay")] 		public CName VarComboWay { get; set;}
 
-		[RED("varComboDist")] 		public CName VarComboDist { get; set;}
+		[Ordinal(0)] [RED("("varComboDist")] 		public CName VarComboDist { get; set;}
 
-		[RED("varComboDir")] 		public CName VarComboDir { get; set;}
+		[Ordinal(0)] [RED("("varComboDir")] 		public CName VarComboDir { get; set;}
 
-		[RED("slotA")] 		public CPtr<CBehaviorGraphAnimationNode> SlotA { get; set;}
+		[Ordinal(0)] [RED("("slotA")] 		public CPtr<CBehaviorGraphAnimationNode> SlotA { get; set;}
 
-		[RED("slotB")] 		public CPtr<CBehaviorGraphAnimationNode> SlotB { get; set;}
+		[Ordinal(0)] [RED("("slotB")] 		public CPtr<CBehaviorGraphAnimationNode> SlotB { get; set;}
 
 		public CBehaviorGraphComboStateNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

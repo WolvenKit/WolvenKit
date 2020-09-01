@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIActionSequenceParams : IAIActionParameters
 	{
-		[RED("actions", 2,0)] 		public CArray<CHandle<IAIActionTree>> Actions { get; set;}
+		[Ordinal(0)] [RED("actions", 2,0)] 		public CArray<CHandle<IAIActionTree>> Actions { get; set;}
 
 		public CAIActionSequenceParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

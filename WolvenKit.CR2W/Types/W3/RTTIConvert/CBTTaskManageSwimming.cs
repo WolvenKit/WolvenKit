@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskManageSwimming : IBehTreeTask
 	{
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("isSwimmingValue")] 		public CBool IsSwimmingValue { get; set;}
+		[Ordinal(0)] [RED("isSwimmingValue")] 		public CBool IsSwimmingValue { get; set;}
 
-		[RED("m_isInWater")] 		public CBool M_isInWater { get; set;}
+		[Ordinal(0)] [RED("m_isInWater")] 		public CBool M_isInWater { get; set;}
 
-		[RED("m_isWaitingForWater")] 		public CBool M_isWaitingForWater { get; set;}
+		[Ordinal(0)] [RED("m_isWaitingForWater")] 		public CBool M_isWaitingForWater { get; set;}
 
 		public CBTTaskManageSwimming(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

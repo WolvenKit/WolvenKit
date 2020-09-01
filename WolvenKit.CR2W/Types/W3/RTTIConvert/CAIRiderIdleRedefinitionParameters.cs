@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIRiderIdleRedefinitionParameters : CAIRedefinitionParameters
 	{
-		[RED("riderIdleTree")] 		public CHandle<CAIRiderIdle> RiderIdleTree { get; set;}
+		[Ordinal(0)] [RED("riderIdleTree")] 		public CHandle<CAIRiderIdle> RiderIdleTree { get; set;}
 
 		public CAIRiderIdleRedefinitionParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskAnimalFleeDef : IBehTreeTaskDefinition
 	{
-		[RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(0)] [RED("("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[RED("alertRadius")] 		public CFloat AlertRadius { get; set;}
+		[Ordinal(0)] [RED("("alertRadius")] 		public CFloat AlertRadius { get; set;}
 
-		[RED("ignoreEntitiesWithTag")] 		public CName IgnoreEntitiesWithTag { get; set;}
+		[Ordinal(0)] [RED("("ignoreEntitiesWithTag")] 		public CName IgnoreEntitiesWithTag { get; set;}
 
-		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
+		[Ordinal(0)] [RED("("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
 		public CBTTaskAnimalFleeDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

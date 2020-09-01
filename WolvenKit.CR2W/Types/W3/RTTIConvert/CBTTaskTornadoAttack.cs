@@ -10,47 +10,47 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskTornadoAttack : CBTTaskAttack
 	{
-		[RED("minCameraShakeStrength")] 		public CFloat MinCameraShakeStrength { get; set;}
+		[Ordinal(0)] [RED("("minCameraShakeStrength")] 		public CFloat MinCameraShakeStrength { get; set;}
 
-		[RED("maxCameraShakeStrength")] 		public CFloat MaxCameraShakeStrength { get; set;}
+		[Ordinal(0)] [RED("("maxCameraShakeStrength")] 		public CFloat MaxCameraShakeStrength { get; set;}
 
-		[RED("cameraShakeRange")] 		public CFloat CameraShakeRange { get; set;}
+		[Ordinal(0)] [RED("("cameraShakeRange")] 		public CFloat CameraShakeRange { get; set;}
 
-		[RED("cameraShakeInterval")] 		public CFloat CameraShakeInterval { get; set;}
+		[Ordinal(0)] [RED("("cameraShakeInterval")] 		public CFloat CameraShakeInterval { get; set;}
 
-		[RED("victimTestInterval")] 		public CFloat VictimTestInterval { get; set;}
+		[Ordinal(0)] [RED("("victimTestInterval")] 		public CFloat VictimTestInterval { get; set;}
 
-		[RED("debuffInterval")] 		public CFloat DebuffInterval { get; set;}
+		[Ordinal(0)] [RED("("debuffInterval")] 		public CFloat DebuffInterval { get; set;}
 
-		[RED("damageInterval")] 		public CFloat DamageInterval { get; set;}
+		[Ordinal(0)] [RED("("damageInterval")] 		public CFloat DamageInterval { get; set;}
 
-		[RED("damageMultiplier")] 		public CFloat DamageMultiplier { get; set;}
+		[Ordinal(0)] [RED("("damageMultiplier")] 		public CFloat DamageMultiplier { get; set;}
 
-		[RED("affectEnemiesInRangeMin")] 		public CFloat AffectEnemiesInRangeMin { get; set;}
+		[Ordinal(0)] [RED("("affectEnemiesInRangeMin")] 		public CFloat AffectEnemiesInRangeMin { get; set;}
 
-		[RED("affectEnemiesInRangeMax")] 		public CFloat AffectEnemiesInRangeMax { get; set;}
+		[Ordinal(0)] [RED("("affectEnemiesInRangeMax")] 		public CFloat AffectEnemiesInRangeMax { get; set;}
 
-		[RED("castingLoopTime")] 		public CFloat CastingLoopTime { get; set;}
+		[Ordinal(0)] [RED("("castingLoopTime")] 		public CFloat CastingLoopTime { get; set;}
 
-		[RED("setBehVarOnDeactivation")] 		public CName SetBehVarOnDeactivation { get; set;}
+		[Ordinal(0)] [RED("("setBehVarOnDeactivation")] 		public CName SetBehVarOnDeactivation { get; set;}
 
-		[RED("setBehVarValueOnDeactivation")] 		public CFloat SetBehVarValueOnDeactivation { get; set;}
+		[Ordinal(0)] [RED("("setBehVarValueOnDeactivation")] 		public CFloat SetBehVarValueOnDeactivation { get; set;}
 
-		[RED("debuffTypeInRangeMin")] 		public CEnum<EEffectType> DebuffTypeInRangeMin { get; set;}
+		[Ordinal(0)] [RED("("debuffTypeInRangeMin")] 		public CEnum<EEffectType> DebuffTypeInRangeMin { get; set;}
 
-		[RED("rotateToNodeByTagOnDebuffMin")] 		public CName RotateToNodeByTagOnDebuffMin { get; set;}
+		[Ordinal(0)] [RED("("rotateToNodeByTagOnDebuffMin")] 		public CName RotateToNodeByTagOnDebuffMin { get; set;}
 
-		[RED("debuffTypeInRangeMax")] 		public CEnum<EEffectType> DebuffTypeInRangeMax { get; set;}
+		[Ordinal(0)] [RED("("debuffTypeInRangeMax")] 		public CEnum<EEffectType> DebuffTypeInRangeMax { get; set;}
 
-		[RED("debuffDurationInRangeMin")] 		public CFloat DebuffDurationInRangeMin { get; set;}
+		[Ordinal(0)] [RED("("debuffDurationInRangeMin")] 		public CFloat DebuffDurationInRangeMin { get; set;}
 
-		[RED("debuffDurationInRangeMax")] 		public CFloat DebuffDurationInRangeMax { get; set;}
+		[Ordinal(0)] [RED("("debuffDurationInRangeMax")] 		public CFloat DebuffDurationInRangeMax { get; set;}
 
-		[RED("activateOnAnimEvent")] 		public CName ActivateOnAnimEvent { get; set;}
+		[Ordinal(0)] [RED("("activateOnAnimEvent")] 		public CName ActivateOnAnimEvent { get; set;}
 
-		[RED("additionalFxOnDamageVictim")] 		public CName AdditionalFxOnDamageVictim { get; set;}
+		[Ordinal(0)] [RED("("additionalFxOnDamageVictim")] 		public CName AdditionalFxOnDamageVictim { get; set;}
 
-		[RED("m_activated")] 		public CBool M_activated { get; set;}
+		[Ordinal(0)] [RED("("m_activated")] 		public CBool M_activated { get; set;}
 
 		public CBTTaskTornadoAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

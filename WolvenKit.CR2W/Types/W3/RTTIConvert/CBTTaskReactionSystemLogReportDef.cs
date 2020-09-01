@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskReactionSystemLogReportDef : IBehTreeTaskDefinition
 	{
-		[RED("reactionName")] 		public CString ReactionName { get; set;}
+		[Ordinal(0)] [RED("reactionName")] 		public CString ReactionName { get; set;}
 
-		[RED("message")] 		public CString Message { get; set;}
+		[Ordinal(0)] [RED("message")] 		public CString Message { get; set;}
 
 		public CBTTaskReactionSystemLogReportDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

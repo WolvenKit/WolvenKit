@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphTimerValueNode : CBehaviorGraphValueBaseNode
 	{
-		[RED("type")] 		public CEnum<EBehaviorValueTimerType> Type { get; set;}
+		[Ordinal(0)] [RED("type")] 		public CEnum<EBehaviorValueTimerType> Type { get; set;}
 
-		[RED("maxValue")] 		public CFloat MaxValue { get; set;}
+		[Ordinal(0)] [RED("maxValue")] 		public CFloat MaxValue { get; set;}
 
-		[RED("timeScale")] 		public CFloat TimeScale { get; set;}
+		[Ordinal(0)] [RED("timeScale")] 		public CFloat TimeScale { get; set;}
 
-		[RED("threshold")] 		public CFloat Threshold { get; set;}
+		[Ordinal(0)] [RED("threshold")] 		public CFloat Threshold { get; set;}
 
-		[RED("cachedFirstInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedFirstInputNode { get; set;}
+		[Ordinal(0)] [RED("cachedFirstInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedFirstInputNode { get; set;}
 
 		public CBehaviorGraphTimerValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

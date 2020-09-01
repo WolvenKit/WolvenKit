@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_Aerondight : CBaseGameplayEffect
 	{
-		[RED("m_maxCount")] 		public CInt32 M_maxCount { get; set;}
+		[Ordinal(0)] [RED("("m_maxCount")] 		public CInt32 M_maxCount { get; set;}
 
-		[RED("m_currCount")] 		public CInt32 M_currCount { get; set;}
+		[Ordinal(0)] [RED("("m_currCount")] 		public CInt32 M_currCount { get; set;}
 
-		[RED("m_wasDischarged")] 		public CBool M_wasDischarged { get; set;}
+		[Ordinal(0)] [RED("("m_wasDischarged")] 		public CBool M_wasDischarged { get; set;}
 
-		[RED("m_aerondightTime")] 		public CFloat M_aerondightTime { get; set;}
+		[Ordinal(0)] [RED("("m_aerondightTime")] 		public CFloat M_aerondightTime { get; set;}
 
-		[RED("m_attribute")] 		public SAbilityAttributeValue M_attribute { get; set;}
+		[Ordinal(0)] [RED("("m_attribute")] 		public SAbilityAttributeValue M_attribute { get; set;}
 
-		[RED("m_stacksPerLevel")] 		public SAbilityAttributeValue M_stacksPerLevel { get; set;}
+		[Ordinal(0)] [RED("("m_stacksPerLevel")] 		public SAbilityAttributeValue M_stacksPerLevel { get; set;}
 
-		[RED("m_currChargingEffect")] 		public CName M_currChargingEffect { get; set;}
+		[Ordinal(0)] [RED("("m_currChargingEffect")] 		public CName M_currChargingEffect { get; set;}
 
-		[RED("m_aerondightDelay")] 		public CFloat M_aerondightDelay { get; set;}
+		[Ordinal(0)] [RED("("m_aerondightDelay")] 		public CFloat M_aerondightDelay { get; set;}
 
-		[RED("timeOfPause")] 		public GameTime TimeOfPause { get; set;}
+		[Ordinal(0)] [RED("("timeOfPause")] 		public GameTime TimeOfPause { get; set;}
 
 		public W3Effect_Aerondight(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

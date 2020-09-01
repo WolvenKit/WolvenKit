@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBookMinigameBook : CGameplayEntity
 	{
-		[RED("bookId")] 		public CInt32 BookId { get; set;}
+		[Ordinal(0)] [RED("bookId")] 		public CInt32 BookId { get; set;}
 
 		public CBookMinigameBook(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

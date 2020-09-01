@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphComboCooldownModifier : IBehaviorGraphComboModifier
 	{
-		[RED("cooldown")] 		public CFloat Cooldown { get; set;}
+		[Ordinal(0)] [RED("("cooldown")] 		public CFloat Cooldown { get; set;}
 
 		public CBehaviorGraphComboCooldownModifier(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

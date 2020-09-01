@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDLCManager : CObject
 	{
-		[RED("definitions", 2,0)] 		public CArray<CHandle<CDLCDefinition>> Definitions { get; set;}
+		[Ordinal(0)] [RED("("definitions", 2,0)] 		public CArray<CHandle<CDLCDefinition>> Definitions { get; set;}
 
-		[RED("mountedContent", 2,0)] 		public CArray<CHandle<IGameplayDLCMounter>> MountedContent { get; set;}
+		[Ordinal(0)] [RED("("mountedContent", 2,0)] 		public CArray<CHandle<IGameplayDLCMounter>> MountedContent { get; set;}
 
 		public CDLCManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

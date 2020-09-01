@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMimicComponent : CAnimatedComponent
 	{
-		[RED("mimicFace")] 		public CHandle<CMimicFace> MimicFace { get; set;}
+		[Ordinal(0)] [RED("("mimicFace")] 		public CHandle<CMimicFace> MimicFace { get; set;}
 
-		[RED("categoryMimics")] 		public CHandle<CMimicFace> CategoryMimics { get; set;}
+		[Ordinal(0)] [RED("("categoryMimics")] 		public CHandle<CMimicFace> CategoryMimics { get; set;}
 
-		[RED("attachmentSlotName")] 		public CName AttachmentSlotName { get; set;}
+		[Ordinal(0)] [RED("("attachmentSlotName")] 		public CName AttachmentSlotName { get; set;}
 
 		public CMimicComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

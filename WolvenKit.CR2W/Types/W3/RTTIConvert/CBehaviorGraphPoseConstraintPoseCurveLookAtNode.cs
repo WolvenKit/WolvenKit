@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphPoseConstraintPoseCurveLookAtNode : CBehaviorGraphPoseConstraintPoseLookAtNode
 	{
-		[RED("useCurve")] 		public CBool UseCurve { get; set;}
+		[Ordinal(0)] [RED("("useCurve")] 		public CBool UseCurve { get; set;}
 
-		[RED("curve")] 		public CPtr<CCurve> Curve { get; set;}
+		[Ordinal(0)] [RED("("curve")] 		public CPtr<CCurve> Curve { get; set;}
 
-		[RED("doubleDamp")] 		public CBool DoubleDamp { get; set;}
+		[Ordinal(0)] [RED("("doubleDamp")] 		public CBool DoubleDamp { get; set;}
 
 		public CBehaviorGraphPoseConstraintPoseCurveLookAtNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

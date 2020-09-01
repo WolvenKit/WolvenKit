@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_IsItemEquipped : CQuestScriptedCondition
 	{
-		[RED("itemName")] 		public CName ItemName { get; set;}
+		[Ordinal(0)] [RED("("itemName")] 		public CName ItemName { get; set;}
 
-		[RED("categoryName")] 		public CName CategoryName { get; set;}
+		[Ordinal(0)] [RED("("categoryName")] 		public CName CategoryName { get; set;}
 
-		[RED("inverted")] 		public CBool Inverted { get; set;}
+		[Ordinal(0)] [RED("("inverted")] 		public CBool Inverted { get; set;}
 
-		[RED("isFulfilled")] 		public CBool IsFulfilled { get; set;}
+		[Ordinal(0)] [RED("("isFulfilled")] 		public CBool IsFulfilled { get; set;}
 
-		[RED("listener")] 		public CHandle<W3QuestCond_IsItemEquipped_Listener> Listener { get; set;}
+		[Ordinal(0)] [RED("("listener")] 		public CHandle<W3QuestCond_IsItemEquipped_Listener> Listener { get; set;}
 
 		public W3QuestCond_IsItemEquipped(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

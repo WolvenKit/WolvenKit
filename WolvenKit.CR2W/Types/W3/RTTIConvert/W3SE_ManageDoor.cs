@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SE_ManageDoor : W3SwitchEvent
 	{
-		[RED("doorTag")] 		public CName DoorTag { get; set;}
+		[Ordinal(0)] [RED("("doorTag")] 		public CName DoorTag { get; set;}
 
-		[RED("operations", 2,0)] 		public CArray<CEnum<EDoorOperation>> Operations { get; set;}
+		[Ordinal(0)] [RED("("operations", 2,0)] 		public CArray<CEnum<EDoorOperation>> Operations { get; set;}
 
-		[RED("force")] 		public CBool Force { get; set;}
+		[Ordinal(0)] [RED("("force")] 		public CBool Force { get; set;}
 
 		public W3SE_ManageDoor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

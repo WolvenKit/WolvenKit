@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMapPathInstance : CVariable
 	{
-		[RED("id")] 		public CInt32 Id { get; set;}
+		[Ordinal(0)] [RED("("id")] 		public CInt32 Id { get; set;}
 
-		[RED("position")] 		public Vector Position { get; set;}
+		[Ordinal(0)] [RED("("position")] 		public Vector Position { get; set;}
 
-		[RED("splinePoints", 2,0)] 		public CArray<Vector> SplinePoints { get; set;}
+		[Ordinal(0)] [RED("("splinePoints", 2,0)] 		public CArray<Vector> SplinePoints { get; set;}
 
-		[RED("color")] 		public CInt32 Color { get; set;}
+		[Ordinal(0)] [RED("("color")] 		public CInt32 Color { get; set;}
 
-		[RED("lineWidth")] 		public CFloat LineWidth { get; set;}
+		[Ordinal(0)] [RED("("lineWidth")] 		public CFloat LineWidth { get; set;}
 
-		[RED("isAddedToMinimap")] 		public CBool IsAddedToMinimap { get; set;}
+		[Ordinal(0)] [RED("("isAddedToMinimap")] 		public CBool IsAddedToMinimap { get; set;}
 
 		public SMapPathInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,73 +10,73 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SGameplayConfigGameCamera : CVariable
 	{
-		[RED("verManualMax")] 		public CFloat VerManualMax { get; set;}
+		[Ordinal(0)] [RED("("verManualMax")] 		public CFloat VerManualMax { get; set;}
 
-		[RED("verManualMin")] 		public CFloat VerManualMin { get; set;}
+		[Ordinal(0)] [RED("("verManualMin")] 		public CFloat VerManualMin { get; set;}
 
-		[RED("horDamping")] 		public CFloat HorDamping { get; set;}
+		[Ordinal(0)] [RED("("horDamping")] 		public CFloat HorDamping { get; set;}
 
-		[RED("verDamping")] 		public CFloat VerDamping { get; set;}
+		[Ordinal(0)] [RED("("verDamping")] 		public CFloat VerDamping { get; set;}
 
-		[RED("pivotDamp")] 		public CFloat PivotDamp { get; set;}
+		[Ordinal(0)] [RED("("pivotDamp")] 		public CFloat PivotDamp { get; set;}
 
-		[RED("focusTargetDamp")] 		public CFloat FocusTargetDamp { get; set;}
+		[Ordinal(0)] [RED("("focusTargetDamp")] 		public CFloat FocusTargetDamp { get; set;}
 
-		[RED("focusActDuration")] 		public CFloat FocusActDuration { get; set;}
+		[Ordinal(0)] [RED("("focusActDuration")] 		public CFloat FocusActDuration { get; set;}
 
-		[RED("zoomDamp")] 		public CFloat ZoomDamp { get; set;}
+		[Ordinal(0)] [RED("("zoomDamp")] 		public CFloat ZoomDamp { get; set;}
 
-		[RED("zoomActTime")] 		public CFloat ZoomActTime { get; set;}
+		[Ordinal(0)] [RED("("zoomActTime")] 		public CFloat ZoomActTime { get; set;}
 
-		[RED("verOffsetDamp")] 		public CFloat VerOffsetDamp { get; set;}
+		[Ordinal(0)] [RED("("verOffsetDamp")] 		public CFloat VerOffsetDamp { get; set;}
 
-		[RED("verOffsetActTime")] 		public CFloat VerOffsetActTime { get; set;}
+		[Ordinal(0)] [RED("("verOffsetActTime")] 		public CFloat VerOffsetActTime { get; set;}
 
-		[RED("backOffsetDamp")] 		public CFloat BackOffsetDamp { get; set;}
+		[Ordinal(0)] [RED("("backOffsetDamp")] 		public CFloat BackOffsetDamp { get; set;}
 
-		[RED("collisionDampOn")] 		public CFloat CollisionDampOn { get; set;}
+		[Ordinal(0)] [RED("("collisionDampOn")] 		public CFloat CollisionDampOn { get; set;}
 
-		[RED("collisionDampOff")] 		public CFloat CollisionDampOff { get; set;}
+		[Ordinal(0)] [RED("("collisionDampOff")] 		public CFloat CollisionDampOff { get; set;}
 
-		[RED("collisionBigRadius")] 		public CFloat CollisionBigRadius { get; set;}
+		[Ordinal(0)] [RED("("collisionBigRadius")] 		public CFloat CollisionBigRadius { get; set;}
 
-		[RED("collisionBoxScale")] 		public CFloat CollisionBoxScale { get; set;}
+		[Ordinal(0)] [RED("("collisionBoxScale")] 		public CFloat CollisionBoxScale { get; set;}
 
-		[RED("collisionAutoRotDamp")] 		public CFloat CollisionAutoRotDamp { get; set;}
+		[Ordinal(0)] [RED("("collisionAutoRotDamp")] 		public CFloat CollisionAutoRotDamp { get; set;}
 
-		[RED("collisionAutoRotMaxSpeed")] 		public CFloat CollisionAutoRotMaxSpeed { get; set;}
+		[Ordinal(0)] [RED("("collisionAutoRotMaxSpeed")] 		public CFloat CollisionAutoRotMaxSpeed { get; set;}
 
-		[RED("collisionVerCorrection")] 		public CFloat CollisionVerCorrection { get; set;}
+		[Ordinal(0)] [RED("("collisionVerCorrection")] 		public CFloat CollisionVerCorrection { get; set;}
 
-		[RED("collisionPivotHeightOffset")] 		public CFloat CollisionPivotHeightOffset { get; set;}
+		[Ordinal(0)] [RED("("collisionPivotHeightOffset")] 		public CFloat CollisionPivotHeightOffset { get; set;}
 
-		[RED("collisionPivotRadius")] 		public CFloat CollisionPivotRadius { get; set;}
+		[Ordinal(0)] [RED("("collisionPivotRadius")] 		public CFloat CollisionPivotRadius { get; set;}
 
-		[RED("collisionVerRadius")] 		public CFloat CollisionVerRadius { get; set;}
+		[Ordinal(0)] [RED("("collisionVerRadius")] 		public CFloat CollisionVerRadius { get; set;}
 
-		[RED("collisionVerOffsetP")] 		public CFloat CollisionVerOffsetP { get; set;}
+		[Ordinal(0)] [RED("("collisionVerOffsetP")] 		public CFloat CollisionVerOffsetP { get; set;}
 
-		[RED("collisionVerOffsetM")] 		public CFloat CollisionVerOffsetM { get; set;}
+		[Ordinal(0)] [RED("("collisionVerOffsetM")] 		public CFloat CollisionVerOffsetM { get; set;}
 
-		[RED("collisionVerFactor")] 		public CFloat CollisionVerFactor { get; set;}
+		[Ordinal(0)] [RED("("collisionVerFactor")] 		public CFloat CollisionVerFactor { get; set;}
 
-		[RED("collisionVerRadiusP")] 		public CFloat CollisionVerRadiusP { get; set;}
+		[Ordinal(0)] [RED("("collisionVerRadiusP")] 		public CFloat CollisionVerRadiusP { get; set;}
 
-		[RED("collisionVerRadiusM")] 		public CFloat CollisionVerRadiusM { get; set;}
+		[Ordinal(0)] [RED("("collisionVerRadiusM")] 		public CFloat CollisionVerRadiusM { get; set;}
 
-		[RED("collisionAutoRotTrace")] 		public CBool CollisionAutoRotTrace { get; set;}
+		[Ordinal(0)] [RED("("collisionAutoRotTrace")] 		public CBool CollisionAutoRotTrace { get; set;}
 
-		[RED("collisionAutoRotTraceFactor")] 		public CFloat CollisionAutoRotTraceFactor { get; set;}
+		[Ordinal(0)] [RED("("collisionAutoRotTraceFactor")] 		public CFloat CollisionAutoRotTraceFactor { get; set;}
 
-		[RED("indoorCollisionMaxZoom")] 		public CFloat IndoorCollisionMaxZoom { get; set;}
+		[Ordinal(0)] [RED("("indoorCollisionMaxZoom")] 		public CFloat IndoorCollisionMaxZoom { get; set;}
 
-		[RED("slopeVerFactor")] 		public CFloat SlopeVerFactor { get; set;}
+		[Ordinal(0)] [RED("("slopeVerFactor")] 		public CFloat SlopeVerFactor { get; set;}
 
-		[RED("slopeVerDamp")] 		public CFloat SlopeVerDamp { get; set;}
+		[Ordinal(0)] [RED("("slopeVerDamp")] 		public CFloat SlopeVerDamp { get; set;}
 
-		[RED("sensX")] 		public CFloat SensX { get; set;}
+		[Ordinal(0)] [RED("("sensX")] 		public CFloat SensX { get; set;}
 
-		[RED("sensY")] 		public CFloat SensY { get; set;}
+		[Ordinal(0)] [RED("("sensY")] 		public CFloat SensY { get; set;}
 
 		public SGameplayConfigGameCamera(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

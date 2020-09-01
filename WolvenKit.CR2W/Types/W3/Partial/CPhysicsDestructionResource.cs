@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CPhysicsDestructionResource : CMesh
 	{
-		[RED("boneIndicesMapping", 2,0)] 		public CArray<SBoneIndiceMapping> BoneIndicesMapping { get; set;}
+		[Ordinal(0)] [RED("boneIndicesMapping", 2,0)] 		public CArray<SBoneIndiceMapping> BoneIndicesMapping { get; set;}
 
-		[RED("finalIndices", 2,0)] 		public CArray<CUInt16> FinalIndices { get; set;}
+		[Ordinal(0)] [RED("finalIndices", 2,0)] 		public CArray<CUInt16> FinalIndices { get; set;}
 
-		[RED("chunkNumber")] 		public CUInt32 ChunkNumber { get; set;}
+		[Ordinal(0)] [RED("chunkNumber")] 		public CUInt32 ChunkNumber { get; set;}
 
 		public CPhysicsDestructionResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

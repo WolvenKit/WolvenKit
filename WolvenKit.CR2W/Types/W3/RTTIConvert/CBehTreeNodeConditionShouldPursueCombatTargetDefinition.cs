@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeConditionShouldPursueCombatTargetDefinition : CBehTreeNodeConditionDefinition
 	{
-		[RED("allowPursueInDistance")] 		public CBehTreeValFloat AllowPursueInDistance { get; set;}
+		[Ordinal(0)] [RED("allowPursueInDistance")] 		public CBehTreeValFloat AllowPursueInDistance { get; set;}
 
-		[RED("allowPursueInCombat")] 		public CBool AllowPursueInCombat { get; set;}
+		[Ordinal(0)] [RED("allowPursueInCombat")] 		public CBool AllowPursueInCombat { get; set;}
 
-		[RED("testReachability")] 		public CBool TestReachability { get; set;}
+		[Ordinal(0)] [RED("testReachability")] 		public CBool TestReachability { get; set;}
 
 		public CBehTreeNodeConditionShouldPursueCombatTargetDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

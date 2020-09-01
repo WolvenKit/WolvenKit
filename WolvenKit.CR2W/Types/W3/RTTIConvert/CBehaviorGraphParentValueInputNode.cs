@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphParentValueInputNode : CBehaviorGraphValueNode
 	{
-		[RED("parentSocket")] 		public CName ParentSocket { get; set;}
+		[Ordinal(0)] [RED("("parentSocket")] 		public CName ParentSocket { get; set;}
 
-		[RED("cachedParentValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedParentValueNode { get; set;}
+		[Ordinal(0)] [RED("("cachedParentValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedParentValueNode { get; set;}
 
 		public CBehaviorGraphParentValueInputNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

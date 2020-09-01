@@ -10,33 +10,33 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CActionPointComponent : CWayPointComponent
 	{
-		[RED("isEnabled")] 		public CBool IsEnabled { get; set;}
+		[Ordinal(0)] [RED("isEnabled")] 		public CBool IsEnabled { get; set;}
 
-		[RED("jobTreeRes")] 		public CHandle<CJobTree> JobTreeRes { get; set;}
+		[Ordinal(0)] [RED("jobTreeRes")] 		public CHandle<CJobTree> JobTreeRes { get; set;}
 
-		[RED("actionBreakable")] 		public CBool ActionBreakable { get; set;}
+		[Ordinal(0)] [RED("actionBreakable")] 		public CBool ActionBreakable { get; set;}
 
-		[RED("breakableByCutscene")] 		public CBool BreakableByCutscene { get; set;}
+		[Ordinal(0)] [RED("breakableByCutscene")] 		public CBool BreakableByCutscene { get; set;}
 
-		[RED("preferredNextAPs")] 		public TagList PreferredNextAPs { get; set;}
+		[Ordinal(0)] [RED("preferredNextAPs")] 		public TagList PreferredNextAPs { get; set;}
 
-		[RED("activateOnStart")] 		public CBool ActivateOnStart { get; set;}
+		[Ordinal(0)] [RED("activateOnStart")] 		public CBool ActivateOnStart { get; set;}
 
-		[RED("placementImportance")] 		public CEnum<EWorkPlacementImportance> PlacementImportance { get; set;}
+		[Ordinal(0)] [RED("placementImportance")] 		public CEnum<EWorkPlacementImportance> PlacementImportance { get; set;}
 
-		[RED("ignoreCollosions")] 		public CBool IgnoreCollosions { get; set;}
+		[Ordinal(0)] [RED("ignoreCollosions")] 		public CBool IgnoreCollosions { get; set;}
 
-		[RED("disableSoftReactions")] 		public CBool DisableSoftReactions { get; set;}
+		[Ordinal(0)] [RED("disableSoftReactions")] 		public CBool DisableSoftReactions { get; set;}
 
-		[RED("fireSourceDependent")] 		public CBool FireSourceDependent { get; set;}
+		[Ordinal(0)] [RED("fireSourceDependent")] 		public CBool FireSourceDependent { get; set;}
 
-		[RED("forceKeepIKactive")] 		public CBool ForceKeepIKactive { get; set;}
+		[Ordinal(0)] [RED("forceKeepIKactive")] 		public CBool ForceKeepIKactive { get; set;}
 
-		[RED("customWorkTree")] 		public CPtr<CAIPerformCustomWorkTree> CustomWorkTree { get; set;}
+		[Ordinal(0)] [RED("customWorkTree")] 		public CPtr<CAIPerformCustomWorkTree> CustomWorkTree { get; set;}
 
-		[RED("eventWorkStarted", 2,0)] 		public CArray<CPtr<IPerformableAction>> EventWorkStarted { get; set;}
+		[Ordinal(0)] [RED("eventWorkStarted", 2,0)] 		public CArray<CPtr<IPerformableAction>> EventWorkStarted { get; set;}
 
-		[RED("eventWorkEnded", 2,0)] 		public CArray<CPtr<IPerformableAction>> EventWorkEnded { get; set;}
+		[Ordinal(0)] [RED("eventWorkEnded", 2,0)] 		public CArray<CPtr<IPerformableAction>> EventWorkEnded { get; set;}
 
 		public CActionPointComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

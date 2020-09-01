@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3EnchantmentManager : CObject
 	{
-		[RED("schematics", 2,0)] 		public CArray<SEnchantmentSchematic> Schematics { get; set;}
+		[Ordinal(0)] [RED("("schematics", 2,0)] 		public CArray<SEnchantmentSchematic> Schematics { get; set;}
 
-		[RED("craftMasterComp")] 		public CHandle<W3CraftsmanComponent> CraftMasterComp { get; set;}
+		[Ordinal(0)] [RED("("craftMasterComp")] 		public CHandle<W3CraftsmanComponent> CraftMasterComp { get; set;}
 
-		[RED("schematicsNames", 2,0)] 		public CArray<CName> SchematicsNames { get; set;}
+		[Ordinal(0)] [RED("("schematicsNames", 2,0)] 		public CArray<CName> SchematicsNames { get; set;}
 
 		public W3EnchantmentManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

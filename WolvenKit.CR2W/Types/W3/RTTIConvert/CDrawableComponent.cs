@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDrawableComponent : CBoundedComponent
 	{
-		[RED("drawableFlags")] 		public EDrawableFlags DrawableFlags { get; set;}
+		[Ordinal(0)] [RED("("drawableFlags")] 		public EDrawableFlags DrawableFlags { get; set;}
 
-		[RED("lightChannels")] 		public ELightChannel LightChannels { get; set;}
+		[Ordinal(0)] [RED("("lightChannels")] 		public ELightChannel LightChannels { get; set;}
 
-		[RED("renderingPlane")] 		public CEnum<ERenderingPlane> RenderingPlane { get; set;}
+		[Ordinal(0)] [RED("("renderingPlane")] 		public CEnum<ERenderingPlane> RenderingPlane { get; set;}
 
 		public CDrawableComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

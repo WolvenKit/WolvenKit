@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvNVSSAOParameters : CVariable
 	{
-		[RED("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(0)] [RED("activated")] 		public CBool Activated { get; set;}
 
-		[RED("radius")] 		public SSimpleCurve Radius { get; set;}
+		[Ordinal(0)] [RED("radius")] 		public SSimpleCurve Radius { get; set;}
 
-		[RED("bias")] 		public SSimpleCurve Bias { get; set;}
+		[Ordinal(0)] [RED("bias")] 		public SSimpleCurve Bias { get; set;}
 
-		[RED("detailStrength")] 		public SSimpleCurve DetailStrength { get; set;}
+		[Ordinal(0)] [RED("detailStrength")] 		public SSimpleCurve DetailStrength { get; set;}
 
-		[RED("coarseStrength")] 		public SSimpleCurve CoarseStrength { get; set;}
+		[Ordinal(0)] [RED("coarseStrength")] 		public SSimpleCurve CoarseStrength { get; set;}
 
-		[RED("powerExponent")] 		public SSimpleCurve PowerExponent { get; set;}
+		[Ordinal(0)] [RED("powerExponent")] 		public SSimpleCurve PowerExponent { get; set;}
 
-		[RED("blurSharpness")] 		public SSimpleCurve BlurSharpness { get; set;}
+		[Ordinal(0)] [RED("blurSharpness")] 		public SSimpleCurve BlurSharpness { get; set;}
 
-		[RED("valueClamp")] 		public SSimpleCurve ValueClamp { get; set;}
+		[Ordinal(0)] [RED("valueClamp")] 		public SSimpleCurve ValueClamp { get; set;}
 
-		[RED("ssaoColor")] 		public SSimpleCurve SsaoColor { get; set;}
+		[Ordinal(0)] [RED("ssaoColor")] 		public SSimpleCurve SsaoColor { get; set;}
 
-		[RED("nonAmbientInfluence")] 		public SSimpleCurve NonAmbientInfluence { get; set;}
+		[Ordinal(0)] [RED("nonAmbientInfluence")] 		public SSimpleCurve NonAmbientInfluence { get; set;}
 
-		[RED("translucencyInfluence")] 		public SSimpleCurve TranslucencyInfluence { get; set;}
+		[Ordinal(0)] [RED("translucencyInfluence")] 		public SSimpleCurve TranslucencyInfluence { get; set;}
 
 		public CEnvNVSSAOParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

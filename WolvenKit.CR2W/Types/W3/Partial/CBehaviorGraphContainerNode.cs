@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CBehaviorGraphContainerNode : CBehaviorGraphNode
 	{
-		[RED("mimicInputs", 2,0)] 		public CArray<CName> MimicInputs { get; set;}
+		[Ordinal(0)] [RED("mimicInputs", 2,0)] 		public CArray<CName> MimicInputs { get; set;}
 
-		[RED("vectorValueInputs", 2,0)] 		public CArray<CName> VectorValueInputs { get; set;}
+		[Ordinal(0)] [RED("vectorValueInputs", 2,0)] 		public CArray<CName> VectorValueInputs { get; set;}
 
 		public CBehaviorGraphContainerNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

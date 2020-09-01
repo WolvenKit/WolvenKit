@@ -10,29 +10,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSkatingMovementParams : CVariable
 	{
-		[RED("accel")] 		public CFloat Accel { get; set;}
+		[Ordinal(0)] [RED("("accel")] 		public CFloat Accel { get; set;}
 
-		[RED("decel")] 		public CFloat Decel { get; set;}
+		[Ordinal(0)] [RED("("decel")] 		public CFloat Decel { get; set;}
 
-		[RED("decelMaxSpeed")] 		public CFloat DecelMaxSpeed { get; set;}
+		[Ordinal(0)] [RED("("decelMaxSpeed")] 		public CFloat DecelMaxSpeed { get; set;}
 
-		[RED("brake")] 		public CFloat Brake { get; set;}
+		[Ordinal(0)] [RED("("brake")] 		public CFloat Brake { get; set;}
 
-		[RED("brakeBaseSpeed")] 		public CFloat BrakeBaseSpeed { get; set;}
+		[Ordinal(0)] [RED("("brakeBaseSpeed")] 		public CFloat BrakeBaseSpeed { get; set;}
 
-		[RED("frictionSquare")] 		public CFloat FrictionSquare { get; set;}
+		[Ordinal(0)] [RED("("frictionSquare")] 		public CFloat FrictionSquare { get; set;}
 
-		[RED("frictionLinear")] 		public CFloat FrictionLinear { get; set;}
+		[Ordinal(0)] [RED("("frictionLinear")] 		public CFloat FrictionLinear { get; set;}
 
-		[RED("frictionConst")] 		public CFloat FrictionConst { get; set;}
+		[Ordinal(0)] [RED("("frictionConst")] 		public CFloat FrictionConst { get; set;}
 
-		[RED("turnCurve")] 		public CHandle<CCurve> TurnCurve { get; set;}
+		[Ordinal(0)] [RED("("turnCurve")] 		public CHandle<CCurve> TurnCurve { get; set;}
 
-		[RED("gravity")] 		public CFloat Gravity { get; set;}
+		[Ordinal(0)] [RED("("gravity")] 		public CFloat Gravity { get; set;}
 
-		[RED("turnToGravity")] 		public CFloat TurnToGravity { get; set;}
+		[Ordinal(0)] [RED("("turnToGravity")] 		public CFloat TurnToGravity { get; set;}
 
-		[RED("gravitySpeedMax")] 		public CFloat GravitySpeedMax { get; set;}
+		[Ordinal(0)] [RED("("gravitySpeedMax")] 		public CFloat GravitySpeedMax { get; set;}
 
 		public SSkatingMovementParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

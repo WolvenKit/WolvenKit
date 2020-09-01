@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SScenePersonalCameraDescription : CVariable
 	{
-		[RED("cameraName")] 		public CName CameraName { get; set;}
+		[Ordinal(0)] [RED("("cameraName")] 		public CName CameraName { get; set;}
 
-		[RED("cameraNumber")] 		public CUInt32 CameraNumber { get; set;}
+		[Ordinal(0)] [RED("("cameraNumber")] 		public CUInt32 CameraNumber { get; set;}
 
-		[RED("targetSlot")] 		public CUInt32 TargetSlot { get; set;}
+		[Ordinal(0)] [RED("("targetSlot")] 		public CUInt32 TargetSlot { get; set;}
 
-		[RED("sourceSlot")] 		public CUInt32 SourceSlot { get; set;}
+		[Ordinal(0)] [RED("("sourceSlot")] 		public CUInt32 SourceSlot { get; set;}
 
-		[RED("cameraShots", 2,0)] 		public CArray<SSceneCameraShotDescription> CameraShots { get; set;}
+		[Ordinal(0)] [RED("("cameraShots", 2,0)] 		public CArray<SSceneCameraShotDescription> CameraShots { get; set;}
 
 		public SScenePersonalCameraDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -9,13 +9,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta()]
 	public class EmitterDelaySettings : CVariable
 	{
-		[RED("emitterDelay")] 		public CFloat EmitterDelay { get; set;}
+		[Ordinal(0)] [RED("emitterDelay")] 		public CFloat EmitterDelay { get; set;}
 
-		[RED("emitterDelayLow")] 		public CFloat EmitterDelayLow { get; set;}
+		[Ordinal(0)] [RED("emitterDelayLow")] 		public CFloat EmitterDelayLow { get; set;}
 
-		[RED("useEmitterDelayRange")] 		public CBool UseEmitterDelayRange { get; set;}
+		[Ordinal(0)] [RED("useEmitterDelayRange")] 		public CBool UseEmitterDelayRange { get; set;}
 
-		[RED("useEmitterDelayOnce")] 		public CBool UseEmitterDelayOnce { get; set;}
+		[Ordinal(0)] [RED("useEmitterDelayOnce")] 		public CBool UseEmitterDelayOnce { get; set;}
 
 		public EmitterDelaySettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

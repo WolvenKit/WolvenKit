@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_WasNoticeboardVisited : CQuestScriptedCondition
 	{
-		[RED("entityName")] 		public CName EntityName { get; set;}
+		[Ordinal(0)] [RED("("entityName")] 		public CName EntityName { get; set;}
 
 		public W3QuestCond_WasNoticeboardVisited(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IFormationLogic : CObject
 	{
-		[RED("recomputionDelay")] 		public CFloat RecomputionDelay { get; set;}
+		[Ordinal(0)] [RED("recomputionDelay")] 		public CFloat RecomputionDelay { get; set;}
 
-		[RED("minCatchupDistance")] 		public CFloat MinCatchupDistance { get; set;}
+		[Ordinal(0)] [RED("minCatchupDistance")] 		public CFloat MinCatchupDistance { get; set;}
 
 		public IFormationLogic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

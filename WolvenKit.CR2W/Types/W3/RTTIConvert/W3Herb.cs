@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Herb : W3RefillableContainer
 	{
-		[RED("foliageComponent")] 		public CHandle<CSwitchableFoliageComponent> FoliageComponent { get; set;}
+		[Ordinal(0)] [RED("("foliageComponent")] 		public CHandle<CSwitchableFoliageComponent> FoliageComponent { get; set;}
 
-		[RED("isEmptyAppearance")] 		public CBool IsEmptyAppearance { get; set;}
+		[Ordinal(0)] [RED("("isEmptyAppearance")] 		public CBool IsEmptyAppearance { get; set;}
 
 		public W3Herb(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

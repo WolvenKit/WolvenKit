@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BookPopupFeedback : TextPopupData
 	{
-		[RED("bookItemId")] 		public SItemUniqueId BookItemId { get; set;}
+		[Ordinal(0)] [RED("bookItemId")] 		public SItemUniqueId BookItemId { get; set;}
 
-		[RED("inventoryRef")] 		public CHandle<CR4InventoryMenu> InventoryRef { get; set;}
+		[Ordinal(0)] [RED("inventoryRef")] 		public CHandle<CR4InventoryMenu> InventoryRef { get; set;}
 
-		[RED("singleBookMode")] 		public CBool SingleBookMode { get; set;}
+		[Ordinal(0)] [RED("singleBookMode")] 		public CBool SingleBookMode { get; set;}
 
-		[RED("curInventory")] 		public CHandle<CInventoryComponent> CurInventory { get; set;}
+		[Ordinal(0)] [RED("curInventory")] 		public CHandle<CInventoryComponent> CurInventory { get; set;}
 
 		public BookPopupFeedback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

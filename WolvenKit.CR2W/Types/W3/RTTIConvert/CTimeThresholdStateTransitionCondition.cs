@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CTimeThresholdStateTransitionCondition : IBehaviorStateTransitionCondition
 	{
-		[RED("minActivationTime")] 		public CFloat MinActivationTime { get; set;}
+		[Ordinal(0)] [RED("minActivationTime")] 		public CFloat MinActivationTime { get; set;}
 
-		[RED("maxActivationTime")] 		public CFloat MaxActivationTime { get; set;}
+		[Ordinal(0)] [RED("maxActivationTime")] 		public CFloat MaxActivationTime { get; set;}
 
-		[RED("resetTime")] 		public CBool ResetTime { get; set;}
+		[Ordinal(0)] [RED("resetTime")] 		public CBool ResetTime { get; set;}
 
 		public CTimeThresholdStateTransitionCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

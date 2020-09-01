@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMatchFromPoseNode : CBehaviorGraphBaseNode
 	{
-		[RED("minDuration")] 		public CFloat MinDuration { get; set;}
+		[Ordinal(0)] [RED("("minDuration")] 		public CFloat MinDuration { get; set;}
 
 		public CBehaviorGraphMatchFromPoseNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

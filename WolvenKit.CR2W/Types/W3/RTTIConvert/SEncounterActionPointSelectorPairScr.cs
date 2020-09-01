@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SEncounterActionPointSelectorPairScr : CVariable
 	{
-		[RED("category")] 		public SWorkCategoryWrapper Category { get; set;}
+		[Ordinal(0)] [RED("("category")] 		public SWorkCategoryWrapper Category { get; set;}
 
-		[RED("chance")] 		public CFloat Chance { get; set;}
+		[Ordinal(0)] [RED("("chance")] 		public CFloat Chance { get; set;}
 
 		public SEncounterActionPointSelectorPairScr(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

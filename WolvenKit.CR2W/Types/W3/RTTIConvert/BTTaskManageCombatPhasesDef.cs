@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskManageCombatPhasesDef : IBehTreeTaskDefinition
 	{
-		[RED("rangedCombatPhaseParameters")] 		public SCombatPhaseParameters RangedCombatPhaseParameters { get; set;}
+		[Ordinal(0)] [RED("rangedCombatPhaseParameters")] 		public SCombatPhaseParameters RangedCombatPhaseParameters { get; set;}
 
-		[RED("closeCombatPhaseParameters")] 		public SCombatPhaseParameters CloseCombatPhaseParameters { get; set;}
+		[Ordinal(0)] [RED("closeCombatPhaseParameters")] 		public SCombatPhaseParameters CloseCombatPhaseParameters { get; set;}
 
-		[RED("nonCombatPhaseParameters")] 		public SCombatPhaseParameters NonCombatPhaseParameters { get; set;}
+		[Ordinal(0)] [RED("nonCombatPhaseParameters")] 		public SCombatPhaseParameters NonCombatPhaseParameters { get; set;}
 
-		[RED("setBehVariableName")] 		public CName SetBehVariableName { get; set;}
+		[Ordinal(0)] [RED("setBehVariableName")] 		public CName SetBehVariableName { get; set;}
 
 		public BTTaskManageCombatPhasesDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

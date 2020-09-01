@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondHasTagDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("tag")] 		public CName Tag { get; set;}
+		[Ordinal(0)] [RED("tag")] 		public CName Tag { get; set;}
 
 		public CBTCondHasTagDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

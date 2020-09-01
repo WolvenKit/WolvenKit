@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAbilityAttribute : CVariable
 	{
-		[RED("name")] 		public CName Name { get; set;}
+		[Ordinal(0)] [RED("("name")] 		public CName Name { get; set;}
 
-		[RED("type")] 		public CEnum<EAbilityAttributeType> Type { get; set;}
+		[Ordinal(0)] [RED("("type")] 		public CEnum<EAbilityAttributeType> Type { get; set;}
 
-		[RED("alwaysRandom")] 		public CBool AlwaysRandom { get; set;}
+		[Ordinal(0)] [RED("("alwaysRandom")] 		public CBool AlwaysRandom { get; set;}
 
-		[RED("min")] 		public CFloat Min { get; set;}
+		[Ordinal(0)] [RED("("min")] 		public CFloat Min { get; set;}
 
-		[RED("max")] 		public CFloat Max { get; set;}
+		[Ordinal(0)] [RED("("max")] 		public CFloat Max { get; set;}
 
-		[RED("precision")] 		public CInt8 Precision { get; set;}
+		[Ordinal(0)] [RED("("precision")] 		public CInt8 Precision { get; set;}
 
-		[RED("displayPerc")] 		public CBool DisplayPerc { get; set;}
+		[Ordinal(0)] [RED("("displayPerc")] 		public CBool DisplayPerc { get; set;}
 
 		public SAbilityAttribute(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBuffImmunity : CVariable
 	{
-		[RED("immunityTo", 2,0)] 		public CArray<CInt32> ImmunityTo { get; set;}
+		[Ordinal(0)] [RED("("immunityTo", 2,0)] 		public CArray<CInt32> ImmunityTo { get; set;}
 
-		[RED("potion")] 		public CBool Potion { get; set;}
+		[Ordinal(0)] [RED("("potion")] 		public CBool Potion { get; set;}
 
-		[RED("positive")] 		public CBool Positive { get; set;}
+		[Ordinal(0)] [RED("("positive")] 		public CBool Positive { get; set;}
 
-		[RED("negative")] 		public CBool Negative { get; set;}
+		[Ordinal(0)] [RED("("negative")] 		public CBool Negative { get; set;}
 
-		[RED("neutral")] 		public CBool Neutral { get; set;}
+		[Ordinal(0)] [RED("("neutral")] 		public CBool Neutral { get; set;}
 
-		[RED("immobilize")] 		public CBool Immobilize { get; set;}
+		[Ordinal(0)] [RED("("immobilize")] 		public CBool Immobilize { get; set;}
 
-		[RED("confuse")] 		public CBool Confuse { get; set;}
+		[Ordinal(0)] [RED("("confuse")] 		public CBool Confuse { get; set;}
 
-		[RED("damage")] 		public CBool Damage { get; set;}
+		[Ordinal(0)] [RED("("damage")] 		public CBool Damage { get; set;}
 
 		public CBuffImmunity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

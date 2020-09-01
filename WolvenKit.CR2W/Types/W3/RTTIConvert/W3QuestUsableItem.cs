@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestUsableItem : W3UsableItem
 	{
-		[RED("factAddedOnUse")] 		public CString FactAddedOnUse { get; set;}
+		[Ordinal(0)] [RED("("factAddedOnUse")] 		public CString FactAddedOnUse { get; set;}
 
-		[RED("factValue")] 		public CInt32 FactValue { get; set;}
+		[Ordinal(0)] [RED("("factValue")] 		public CInt32 FactValue { get; set;}
 
-		[RED("factTimeValid")] 		public CInt32 FactTimeValid { get; set;}
+		[Ordinal(0)] [RED("("factTimeValid")] 		public CInt32 FactTimeValid { get; set;}
 
-		[RED("removeFactOnHide")] 		public CBool RemoveFactOnHide { get; set;}
+		[Ordinal(0)] [RED("("removeFactOnHide")] 		public CBool RemoveFactOnHide { get; set;}
 
 		public W3QuestUsableItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

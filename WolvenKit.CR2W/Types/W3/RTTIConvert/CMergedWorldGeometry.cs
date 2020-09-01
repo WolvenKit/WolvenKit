@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMergedWorldGeometry : CObject
 	{
-		[RED("gridSize")] 		public CInt32 GridSize { get; set;}
+		[Ordinal(0)] [RED("gridSize")] 		public CInt32 GridSize { get; set;}
 
-		[RED("mergers", 2,0)] 		public CArray<CPtr<IMergedWorldGeometryData>> Mergers { get; set;}
+		[Ordinal(0)] [RED("mergers", 2,0)] 		public CArray<CPtr<IMergedWorldGeometryData>> Mergers { get; set;}
 
 		public CMergedWorldGeometry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

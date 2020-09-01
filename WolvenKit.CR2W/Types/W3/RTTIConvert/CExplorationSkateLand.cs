@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationSkateLand : CExplorationStateAbstract
 	{
-		[RED("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
+		[Ordinal(0)] [RED("("skateGlobal")] 		public CHandle<CExplorationSkatingGlobal> SkateGlobal { get; set;}
 
-		[RED("behLandCancel")] 		public CName BehLandCancel { get; set;}
+		[Ordinal(0)] [RED("("behLandCancel")] 		public CName BehLandCancel { get; set;}
 
-		[RED("timePrevToChain")] 		public CFloat TimePrevToChain { get; set;}
+		[Ordinal(0)] [RED("("timePrevToChain")] 		public CFloat TimePrevToChain { get; set;}
 
-		[RED("timeToChainJump")] 		public CFloat TimeToChainJump { get; set;}
+		[Ordinal(0)] [RED("("timeToChainJump")] 		public CFloat TimeToChainJump { get; set;}
 
-		[RED("timeSafetyEnd")] 		public CFloat TimeSafetyEnd { get; set;}
+		[Ordinal(0)] [RED("("timeSafetyEnd")] 		public CFloat TimeSafetyEnd { get; set;}
 
-		[RED("actionChained")] 		public CBool ActionChained { get; set;}
+		[Ordinal(0)] [RED("("actionChained")] 		public CBool ActionChained { get; set;}
 
 		public CExplorationSkateLand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

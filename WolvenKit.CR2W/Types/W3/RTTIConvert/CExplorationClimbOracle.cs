@@ -10,29 +10,29 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationClimbOracle : CObject
 	{
-		[RED("m_ExplorationO")] 		public CHandle<CExplorationStateManager> M_ExplorationO { get; set;}
+		[Ordinal(0)] [RED("("m_ExplorationO")] 		public CHandle<CExplorationStateManager> M_ExplorationO { get; set;}
 
-		[RED("probeTop")] 		public CHandle<CClimbProbe> ProbeTop { get; set;}
+		[Ordinal(0)] [RED("("probeTop")] 		public CHandle<CClimbProbe> ProbeTop { get; set;}
 
-		[RED("probeBottom")] 		public CHandle<CClimbProbe> ProbeBottom { get; set;}
+		[Ordinal(0)] [RED("("probeBottom")] 		public CHandle<CClimbProbe> ProbeBottom { get; set;}
 
-		[RED("distForwardToCheck")] 		public CFloat DistForwardToCheck { get; set;}
+		[Ordinal(0)] [RED("("distForwardToCheck")] 		public CFloat DistForwardToCheck { get; set;}
 
-		[RED("characterRadius")] 		public CFloat CharacterRadius { get; set;}
+		[Ordinal(0)] [RED("("characterRadius")] 		public CFloat CharacterRadius { get; set;}
 
-		[RED("characterHeight")] 		public CFloat CharacterHeight { get; set;}
+		[Ordinal(0)] [RED("("characterHeight")] 		public CFloat CharacterHeight { get; set;}
 
-		[RED("radiusToCheck")] 		public CFloat RadiusToCheck { get; set;}
+		[Ordinal(0)] [RED("("radiusToCheck")] 		public CFloat RadiusToCheck { get; set;}
 
-		[RED("bottomCheckAllowed")] 		public CBool BottomCheckAllowed { get; set;}
+		[Ordinal(0)] [RED("("bottomCheckAllowed")] 		public CBool BottomCheckAllowed { get; set;}
 
-		[RED("topIsPriority")] 		public CBool TopIsPriority { get; set;}
+		[Ordinal(0)] [RED("("topIsPriority")] 		public CBool TopIsPriority { get; set;}
 
-		[RED("probeBeingUsed")] 		public CEnum<EClimbProbeUsed> ProbeBeingUsed { get; set;}
+		[Ordinal(0)] [RED("("probeBeingUsed")] 		public CEnum<EClimbProbeUsed> ProbeBeingUsed { get; set;}
 
-		[RED("debugLogFails")] 		public CBool DebugLogFails { get; set;}
+		[Ordinal(0)] [RED("("debugLogFails")] 		public CBool DebugLogFails { get; set;}
 
-		[RED("vectorUp")] 		public Vector VectorUp { get; set;}
+		[Ordinal(0)] [RED("("vectorUp")] 		public Vector VectorUp { get; set;}
 
 		public CExplorationClimbOracle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

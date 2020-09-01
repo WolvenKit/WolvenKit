@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CQuestUnlockNPCBlock : CQuestGraphBlock
 	{
-		[RED("npcsTag")] 		public TagList NpcsTag { get; set;}
+		[Ordinal(0)] [RED("npcsTag")] 		public TagList NpcsTag { get; set;}
 
 		public CQuestUnlockNPCBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskNPCNotInFrontOfPLayer : IBehTreeTask
 	{
-		[RED("coneAngle")] 		public CFloat ConeAngle { get; set;}
+		[Ordinal(0)] [RED("coneAngle")] 		public CFloat ConeAngle { get; set;}
 
-		[RED("angleOffset")] 		public CFloat AngleOffset { get; set;}
+		[Ordinal(0)] [RED("angleOffset")] 		public CFloat AngleOffset { get; set;}
 
-		[RED("coneRange")] 		public CFloat ConeRange { get; set;}
+		[Ordinal(0)] [RED("coneRange")] 		public CFloat ConeRange { get; set;}
 
-		[RED("playerHeading")] 		public CFloat PlayerHeading { get; set;}
+		[Ordinal(0)] [RED("playerHeading")] 		public CFloat PlayerHeading { get; set;}
 
-		[RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(0)] [RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
-		[RED("distance")] 		public CFloat Distance { get; set;}
+		[Ordinal(0)] [RED("distance")] 		public CFloat Distance { get; set;}
 
-		[RED("testedAngle")] 		public CFloat TestedAngle { get; set;}
+		[Ordinal(0)] [RED("testedAngle")] 		public CFloat TestedAngle { get; set;}
 
 		public CBTTaskNPCNotInFrontOfPLayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

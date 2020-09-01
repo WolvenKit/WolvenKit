@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_ActorIsDespawned : CQuestScriptedCondition
 	{
-		[RED("actorTag")] 		public CName ActorTag { get; set;}
+		[Ordinal(0)] [RED("("actorTag")] 		public CName ActorTag { get; set;}
 
-		[RED("actors", 2,0)] 		public CArray<CHandle<CActor>> Actors { get; set;}
+		[Ordinal(0)] [RED("("actors", 2,0)] 		public CArray<CHandle<CActor>> Actors { get; set;}
 
-		[RED("listener")] 		public CHandle<W3QuestCond_ActorIsDespawned_Listener> Listener { get; set;}
+		[Ordinal(0)] [RED("("listener")] 		public CHandle<W3QuestCond_ActorIsDespawned_Listener> Listener { get; set;}
 
 		public W3QuestCond_ActorIsDespawned(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

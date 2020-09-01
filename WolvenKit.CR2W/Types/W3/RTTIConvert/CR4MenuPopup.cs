@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4MenuPopup : CR4OverlayMenu
 	{
-		[RED("m_DataObject")] 		public CHandle<W3PopupData> M_DataObject { get; set;}
+		[Ordinal(0)] [RED("("m_DataObject")] 		public CHandle<W3PopupData> M_DataObject { get; set;}
 
-		[RED("m_initialized")] 		public CBool M_initialized { get; set;}
+		[Ordinal(0)] [RED("("m_initialized")] 		public CBool M_initialized { get; set;}
 
-		[RED("m_HideTutorial")] 		public CBool M_HideTutorial { get; set;}
+		[Ordinal(0)] [RED("("m_HideTutorial")] 		public CBool M_HideTutorial { get; set;}
 
-		[RED("m_fxSetBarValueSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetBarValueSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetBarValueSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetBarValueSFF { get; set;}
 
-		[RED("rttItemLoaded")] 		public CBool RttItemLoaded { get; set;}
+		[Ordinal(0)] [RED("("rttItemLoaded")] 		public CBool RttItemLoaded { get; set;}
 
-		[RED("itemRotation")] 		public EulerAngles ItemRotation { get; set;}
+		[Ordinal(0)] [RED("("itemRotation")] 		public EulerAngles ItemRotation { get; set;}
 
-		[RED("itemPosition")] 		public Vector ItemPosition { get; set;}
+		[Ordinal(0)] [RED("("itemPosition")] 		public Vector ItemPosition { get; set;}
 
-		[RED("itemScale")] 		public Vector ItemScale { get; set;}
+		[Ordinal(0)] [RED("("itemScale")] 		public Vector ItemScale { get; set;}
 
-		[RED("itemCat")] 		public CName ItemCat { get; set;}
+		[Ordinal(0)] [RED("("itemCat")] 		public CName ItemCat { get; set;}
 
 		public CR4MenuPopup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeCombatTicketHasDefinition : IBehTreeNodeCombatTicketDecoratorBaseDefinition
 	{
-		[RED("lockTicket")] 		public CBool LockTicket { get; set;}
+		[Ordinal(0)] [RED("lockTicket")] 		public CBool LockTicket { get; set;}
 
-		[RED("ifNotHave")] 		public CBool IfNotHave { get; set;}
+		[Ordinal(0)] [RED("ifNotHave")] 		public CBool IfNotHave { get; set;}
 
-		[RED("failsWhenTicketIsLost")] 		public CBool FailsWhenTicketIsLost { get; set;}
+		[Ordinal(0)] [RED("failsWhenTicketIsLost")] 		public CBool FailsWhenTicketIsLost { get; set;}
 
 		public CBehTreeNodeCombatTicketHasDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

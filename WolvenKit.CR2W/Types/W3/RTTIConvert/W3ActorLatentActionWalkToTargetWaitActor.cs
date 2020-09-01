@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ActorLatentActionWalkToTargetWaitActor : IPresetActorLatentAction
 	{
-		[RED("tag")] 		public CName Tag { get; set;}
+		[Ordinal(0)] [RED("("tag")] 		public CName Tag { get; set;}
 
-		[RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(0)] [RED("("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
+		[Ordinal(0)] [RED("("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
 
-		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
+		[Ordinal(0)] [RED("("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
-		[RED("waitForTag")] 		public CName WaitForTag { get; set;}
+		[Ordinal(0)] [RED("("waitForTag")] 		public CName WaitForTag { get; set;}
 
-		[RED("timeout")] 		public CFloat Timeout { get; set;}
+		[Ordinal(0)] [RED("("timeout")] 		public CFloat Timeout { get; set;}
 
-		[RED("testDistance")] 		public CFloat TestDistance { get; set;}
+		[Ordinal(0)] [RED("("testDistance")] 		public CFloat TestDistance { get; set;}
 
 		public W3ActorLatentActionWalkToTargetWaitActor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

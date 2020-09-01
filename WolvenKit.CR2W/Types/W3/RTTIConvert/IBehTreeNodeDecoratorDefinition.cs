@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IBehTreeNodeDecoratorDefinition : IBehTreeNodeDefinition
 	{
-		[RED("child")] 		public CPtr<IBehTreeNodeDefinition> Child { get; set;}
+		[Ordinal(0)] [RED("child")] 		public CPtr<IBehTreeNodeDefinition> Child { get; set;}
 
 		public IBehTreeNodeDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

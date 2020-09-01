@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSlidingMaterialNamesToPresets : CVariable
 	{
-		[RED("materialName")] 		public CName MaterialName { get; set;}
+		[Ordinal(0)] [RED("("materialName")] 		public CName MaterialName { get; set;}
 
-		[RED("presetName")] 		public CName PresetName { get; set;}
+		[Ordinal(0)] [RED("("presetName")] 		public CName PresetName { get; set;}
 
 		public SSlidingMaterialNamesToPresets(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

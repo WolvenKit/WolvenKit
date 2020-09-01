@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondCheckNPCTypeDef : IBehTreeReactionTaskDefinition
 	{
-		[RED("npcType")] 		public CEnum<ENPCGroupType> NpcType { get; set;}
+		[Ordinal(0)] [RED("npcType")] 		public CEnum<ENPCGroupType> NpcType { get; set;}
 
 		public CBTCondCheckNPCTypeDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

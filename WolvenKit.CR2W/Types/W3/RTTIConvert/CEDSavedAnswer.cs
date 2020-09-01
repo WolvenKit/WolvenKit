@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEDSavedAnswer : CVariable
 	{
-		[RED("questionName")] 		public CName QuestionName { get; set;}
+		[Ordinal(0)] [RED("("questionName")] 		public CName QuestionName { get; set;}
 
-		[RED("answer")] 		public CString Answer { get; set;}
+		[Ordinal(0)] [RED("("answer")] 		public CString Answer { get; set;}
 
 		public CEDSavedAnswer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

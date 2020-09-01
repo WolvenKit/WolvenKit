@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeDecoratorSnapToNavigationDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("performActivation")] 		public CBool PerformActivation { get; set;}
+		[Ordinal(0)] [RED("performActivation")] 		public CBool PerformActivation { get; set;}
 
-		[RED("snapOnActivation")] 		public CBool SnapOnActivation { get; set;}
+		[Ordinal(0)] [RED("snapOnActivation")] 		public CBool SnapOnActivation { get; set;}
 
-		[RED("performDeactivation")] 		public CBool PerformDeactivation { get; set;}
+		[Ordinal(0)] [RED("performDeactivation")] 		public CBool PerformDeactivation { get; set;}
 
-		[RED("snapOnDeactivation")] 		public CBool SnapOnDeactivation { get; set;}
+		[Ordinal(0)] [RED("snapOnDeactivation")] 		public CBool SnapOnDeactivation { get; set;}
 
 		public CBehTreeNodeDecoratorSnapToNavigationDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

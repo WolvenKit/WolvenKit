@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSwarmVictim : CVariable
 	{
-		[RED("actor")] 		public CHandle<CActor> Actor { get; set;}
+		[Ordinal(0)] [RED("("actor")] 		public CHandle<CActor> Actor { get; set;}
 
-		[RED("timeInSwarm")] 		public CFloat TimeInSwarm { get; set;}
+		[Ordinal(0)] [RED("("timeInSwarm")] 		public CFloat TimeInSwarm { get; set;}
 
-		[RED("inTrigger")] 		public CBool InTrigger { get; set;}
+		[Ordinal(0)] [RED("("inTrigger")] 		public CBool InTrigger { get; set;}
 
 		public SSwarmVictim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

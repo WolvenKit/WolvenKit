@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeConditionClearLineToTargetDefinition : CBehTreeNodeConditionDefinition
 	{
-		[RED("combatTarget")] 		public CBool CombatTarget { get; set;}
+		[Ordinal(0)] [RED("("combatTarget")] 		public CBool CombatTarget { get; set;}
 
-		[RED("navTest")] 		public CBool NavTest { get; set;}
+		[Ordinal(0)] [RED("("navTest")] 		public CBool NavTest { get; set;}
 
-		[RED("creatureTest")] 		public CBool CreatureTest { get; set;}
+		[Ordinal(0)] [RED("("creatureTest")] 		public CBool CreatureTest { get; set;}
 
-		[RED("useAgentRadius")] 		public CBool UseAgentRadius { get; set;}
+		[Ordinal(0)] [RED("("useAgentRadius")] 		public CBool UseAgentRadius { get; set;}
 
-		[RED("customRadius")] 		public CBehTreeValFloat CustomRadius { get; set;}
+		[Ordinal(0)] [RED("("customRadius")] 		public CBehTreeValFloat CustomRadius { get; set;}
 
 		public CBehTreeNodeConditionClearLineToTargetDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

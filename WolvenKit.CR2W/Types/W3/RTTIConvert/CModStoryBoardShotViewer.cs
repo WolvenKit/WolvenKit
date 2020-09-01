@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardShotViewer : CEntity
 	{
-		[RED("log")] 		public CHandle<CModLogger> Log { get; set;}
+		[Ordinal(0)] [RED("log")] 		public CHandle<CModLogger> Log { get; set;}
 
-		[RED("theShotCam")] 		public CHandle<CStoryBoardShotCamera> TheShotCam { get; set;}
+		[Ordinal(0)] [RED("theShotCam")] 		public CHandle<CStoryBoardShotCamera> TheShotCam { get; set;}
 
-		[RED("assetManager")] 		public CHandle<CModStoryBoardAssetManager> AssetManager { get; set;}
+		[Ordinal(0)] [RED("assetManager")] 		public CHandle<CModStoryBoardAssetManager> AssetManager { get; set;}
 
-		[RED("animListsManager")] 		public CHandle<CModStoryBoardAnimationListsManager> AnimListsManager { get; set;}
+		[Ordinal(0)] [RED("animListsManager")] 		public CHandle<CModStoryBoardAnimationListsManager> AnimListsManager { get; set;}
 
-		[RED("mimicsListsManager")] 		public CHandle<CModStoryBoardMimicsListsManager> MimicsListsManager { get; set;}
+		[Ordinal(0)] [RED("mimicsListsManager")] 		public CHandle<CModStoryBoardMimicsListsManager> MimicsListsManager { get; set;}
 
-		[RED("voiceLinesListsManager")] 		public CHandle<CModStoryBoardVoiceLinesListsManager> VoiceLinesListsManager { get; set;}
+		[Ordinal(0)] [RED("voiceLinesListsManager")] 		public CHandle<CModStoryBoardVoiceLinesListsManager> VoiceLinesListsManager { get; set;}
 
-		[RED("poseListManager")] 		public CHandle<CModStoryBoardIdlePoseListsManager> PoseListManager { get; set;}
+		[Ordinal(0)] [RED("poseListManager")] 		public CHandle<CModStoryBoardIdlePoseListsManager> PoseListManager { get; set;}
 
-		[RED("thePlacementDirector")] 		public CHandle<CModStoryBoardPlacementDirector> ThePlacementDirector { get; set;}
+		[Ordinal(0)] [RED("thePlacementDirector")] 		public CHandle<CModStoryBoardPlacementDirector> ThePlacementDirector { get; set;}
 
-		[RED("theAnimDirector")] 		public CHandle<CModStoryBoardAnimationDirector> TheAnimDirector { get; set;}
+		[Ordinal(0)] [RED("theAnimDirector")] 		public CHandle<CModStoryBoardAnimationDirector> TheAnimDirector { get; set;}
 
-		[RED("theLookAtDirector")] 		public CHandle<CModStoryBoardLookAtDirector> TheLookAtDirector { get; set;}
+		[Ordinal(0)] [RED("theLookAtDirector")] 		public CHandle<CModStoryBoardLookAtDirector> TheLookAtDirector { get; set;}
 
-		[RED("theAudioDirector")] 		public CHandle<CModStoryBoardAudioDirector> TheAudioDirector { get; set;}
+		[Ordinal(0)] [RED("theAudioDirector")] 		public CHandle<CModStoryBoardAudioDirector> TheAudioDirector { get; set;}
 
 		public CModStoryBoardShotViewer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

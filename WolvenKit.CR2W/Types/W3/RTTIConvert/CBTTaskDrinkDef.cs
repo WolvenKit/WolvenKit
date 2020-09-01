@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskDrinkDef : IBehTreeTaskDefinition
 	{
-		[RED("Delay")] 		public CFloat Delay { get; set;}
+		[Ordinal(0)] [RED("Delay")] 		public CFloat Delay { get; set;}
 
-		[RED("Event")] 		public CName Event { get; set;}
+		[Ordinal(0)] [RED("Event")] 		public CName Event { get; set;}
 
 		public CBTTaskDrinkDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

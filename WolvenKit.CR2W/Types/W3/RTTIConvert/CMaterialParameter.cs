@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialParameter : CMaterialBlock
 	{
-		[RED("parameterName")] 		public CName ParameterName { get; set;}
+		[Ordinal(0)] [RED("parameterName")] 		public CName ParameterName { get; set;}
 
-		[RED("parameterGroup")] 		public CName ParameterGroup { get; set;}
+		[Ordinal(0)] [RED("parameterGroup")] 		public CName ParameterGroup { get; set;}
 
 		public CMaterialParameter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

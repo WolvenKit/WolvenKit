@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMutagenBonusAlchemy19 : CVariable
 	{
-		[RED("abilityName")] 		public CName AbilityName { get; set;}
+		[Ordinal(0)] [RED("("abilityName")] 		public CName AbilityName { get; set;}
 
-		[RED("count")] 		public CInt32 Count { get; set;}
+		[Ordinal(0)] [RED("("count")] 		public CInt32 Count { get; set;}
 
 		public SMutagenBonusAlchemy19(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

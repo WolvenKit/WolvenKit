@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStoryBoardOriginStateData : CVariable
 	{
-		[RED("assetId")] 		public CString AssetId { get; set;}
+		[Ordinal(0)] [RED("("assetId")] 		public CString AssetId { get; set;}
 
-		[RED("pos")] 		public Vector Pos { get; set;}
+		[Ordinal(0)] [RED("("pos")] 		public Vector Pos { get; set;}
 
-		[RED("rot")] 		public EulerAngles Rot { get; set;}
+		[Ordinal(0)] [RED("("rot")] 		public EulerAngles Rot { get; set;}
 
 		public SStoryBoardOriginStateData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IBehTreeNodeDefinition : CObject
 	{
-		[RED("priority")] 		public CBehTreeValInt Priority { get; set;}
+		[Ordinal(0)] [RED("priority")] 		public CBehTreeValInt Priority { get; set;}
 
-		[RED("debugName")] 		public CName DebugName { get; set;}
+		[Ordinal(0)] [RED("debugName")] 		public CName DebugName { get; set;}
 
-		[RED("graphPosX")] 		public CInt32 GraphPosX { get; set;}
+		[Ordinal(0)] [RED("graphPosX")] 		public CInt32 GraphPosX { get; set;}
 
-		[RED("graphPosY")] 		public CInt32 GraphPosY { get; set;}
+		[Ordinal(0)] [RED("graphPosY")] 		public CInt32 GraphPosY { get; set;}
 
-		[RED("comment")] 		public CString Comment { get; set;}
+		[Ordinal(0)] [RED("comment")] 		public CString Comment { get; set;}
 
 		public IBehTreeNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

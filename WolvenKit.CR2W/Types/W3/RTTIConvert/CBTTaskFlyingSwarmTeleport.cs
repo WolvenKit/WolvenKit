@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskFlyingSwarmTeleport : CBTTaskTeleport
 	{
-		[RED("lair")] 		public CHandle<CFlyingSwarmMasterLair> Lair { get; set;}
+		[Ordinal(0)] [RED("("lair")] 		public CHandle<CFlyingSwarmMasterLair> Lair { get; set;}
 
-		[RED("useAnimations")] 		public CBool UseAnimations { get; set;}
+		[Ordinal(0)] [RED("("useAnimations")] 		public CBool UseAnimations { get; set;}
 
-		[RED("attackTeleport")] 		public CBool AttackTeleport { get; set;}
+		[Ordinal(0)] [RED("("attackTeleport")] 		public CBool AttackTeleport { get; set;}
 
-		[RED("res")] 		public CBool Res { get; set;}
+		[Ordinal(0)] [RED("("res")] 		public CBool Res { get; set;}
 
-		[RED("fail")] 		public CBool Fail { get; set;}
+		[Ordinal(0)] [RED("("fail")] 		public CBool Fail { get; set;}
 
-		[RED("despawnCalled")] 		public CBool DespawnCalled { get; set;}
+		[Ordinal(0)] [RED("("despawnCalled")] 		public CBool DespawnCalled { get; set;}
 
-		[RED("disableBoidPOIComponents")] 		public CBool DisableBoidPOIComponents { get; set;}
+		[Ordinal(0)] [RED("("disableBoidPOIComponents")] 		public CBool DisableBoidPOIComponents { get; set;}
 
-		[RED("delayVanish")] 		public CFloat DelayVanish { get; set;}
+		[Ordinal(0)] [RED("("delayVanish")] 		public CFloat DelayVanish { get; set;}
 
-		[RED("fxTime")] 		public CFloat FxTime { get; set;}
+		[Ordinal(0)] [RED("("fxTime")] 		public CFloat FxTime { get; set;}
 
-		[RED("spawnedBirdCount")] 		public CInt32 SpawnedBirdCount { get; set;}
+		[Ordinal(0)] [RED("("spawnedBirdCount")] 		public CInt32 SpawnedBirdCount { get; set;}
 
-		[RED("boidPOIComponents", 2,0)] 		public CArray<CHandle<CComponent>> BoidPOIComponents { get; set;}
+		[Ordinal(0)] [RED("("boidPOIComponents", 2,0)] 		public CArray<CHandle<CComponent>> BoidPOIComponents { get; set;}
 
-		[RED("appearFXLoopInterval")] 		public CFloat AppearFXLoopInterval { get; set;}
+		[Ordinal(0)] [RED("("appearFXLoopInterval")] 		public CFloat AppearFXLoopInterval { get; set;}
 
-		[RED("forcedDespawnTime")] 		public CFloat ForcedDespawnTime { get; set;}
+		[Ordinal(0)] [RED("("forcedDespawnTime")] 		public CFloat ForcedDespawnTime { get; set;}
 
 		public CBTTaskFlyingSwarmTeleport(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

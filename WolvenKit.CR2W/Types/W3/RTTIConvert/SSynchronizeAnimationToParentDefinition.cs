@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSynchronizeAnimationToParentDefinition : CVariable
 	{
-		[RED("Parent animation")] 		public CName Parent_animation { get; set;}
+		[Ordinal(0)] [RED("("Parent animation")] 		public CName Parent_animation { get; set;}
 
-		[RED("Play animation")] 		public CName Play_animation { get; set;}
+		[Ordinal(0)] [RED("("Play animation")] 		public CName Play_animation { get; set;}
 
 		public SSynchronizeAnimationToParentDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

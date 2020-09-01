@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCounterUtilityGraphBlock : CQuestGraphBlock
 	{
-		[RED("target")] 		public CInt32 Target { get; set;}
+		[Ordinal(0)] [RED("("target")] 		public CInt32 Target { get; set;}
 
 		public CCounterUtilityGraphBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

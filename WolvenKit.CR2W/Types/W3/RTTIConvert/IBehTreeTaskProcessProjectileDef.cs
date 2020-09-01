@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IBehTreeTaskProcessProjectileDef : IBehTreeTaskDefinition
 	{
-		[RED("destroyProjectileOnDeactivate")] 		public CBool DestroyProjectileOnDeactivate { get; set;}
+		[Ordinal(0)] [RED("destroyProjectileOnDeactivate")] 		public CBool DestroyProjectileOnDeactivate { get; set;}
 
-		[RED("projTemplate")] 		public CHandle<CEntityTemplate> ProjTemplate { get; set;}
+		[Ordinal(0)] [RED("projTemplate")] 		public CHandle<CEntityTemplate> ProjTemplate { get; set;}
 
 		public IBehTreeTaskProcessProjectileDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

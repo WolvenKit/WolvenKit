@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_AutoVitalityRegen : W3AutoRegenEffect
 	{
-		[RED("regenModeIsCombat")] 		public CBool RegenModeIsCombat { get; set;}
+		[Ordinal(0)] [RED("("regenModeIsCombat")] 		public CBool RegenModeIsCombat { get; set;}
 
-		[RED("cachedPlayer")] 		public CHandle<CR4Player> CachedPlayer { get; set;}
+		[Ordinal(0)] [RED("("cachedPlayer")] 		public CHandle<CR4Player> CachedPlayer { get; set;}
 
 		public W3Effect_AutoVitalityRegen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTRuberBand : IMoveSteeringTask
 	{
-		[RED("halfRange")] 		public CFloat HalfRange { get; set;}
+		[Ordinal(0)] [RED("halfRange")] 		public CFloat HalfRange { get; set;}
 
-		[RED("tensionCurve")] 		public SSimpleCurve TensionCurve { get; set;}
+		[Ordinal(0)] [RED("tensionCurve")] 		public SSimpleCurve TensionCurve { get; set;}
 
-		[RED("minAllowedSpeed")] 		public CFloat MinAllowedSpeed { get; set;}
+		[Ordinal(0)] [RED("minAllowedSpeed")] 		public CFloat MinAllowedSpeed { get; set;}
 
 		public CMoveSTRuberBand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

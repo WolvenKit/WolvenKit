@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class LongBitField : CVariable
 	{
-		[RED("mem", 2,0)] 		public CArray<CUInt32> Mem { get; set;}
+		[Ordinal(0)] [RED("mem", 2,0)] 		public CArray<CUInt32> Mem { get; set;}
 
 		public LongBitField(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

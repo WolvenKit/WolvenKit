@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CNotifyBossIndicatorShownEvent : CHudEvent
 	{
-		[RED("enable")] 		public CBool Enable { get; set;}
+		[Ordinal(0)] [RED("enable")] 		public CBool Enable { get; set;}
 
-		[RED("bossTag")] 		public CName BossTag { get; set;}
+		[Ordinal(0)] [RED("bossTag")] 		public CName BossTag { get; set;}
 
 		public CNotifyBossIndicatorShownEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

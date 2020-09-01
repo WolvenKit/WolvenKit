@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskLockViewToDettlaffDef : IBehTreeTaskDefinition
 	{
-		[RED("lock")] 		public CBool Lock { get; set;}
+		[Ordinal(0)] [RED("("lock")] 		public CBool Lock { get; set;}
 
-		[RED("actor")] 		public CHandle<CActor> Actor { get; set;}
+		[Ordinal(0)] [RED("("actor")] 		public CHandle<CActor> Actor { get; set;}
 
 		public CBTTaskLockViewToDettlaffDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

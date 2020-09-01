@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcReactionsTree : CAIReactionTree
 	{
-		[RED("reactions", 2,0)] 		public CArray<CHandle<CAINpcActionSubtree>> Reactions { get; set;}
+		[Ordinal(0)] [RED("reactions", 2,0)] 		public CArray<CHandle<CAINpcActionSubtree>> Reactions { get; set;}
 
 		public CAINpcReactionsTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

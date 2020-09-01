@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSkeletalAnimationAttackTrajectoryParam : ISkeletalAnimationSetEntryParam
 	{
-		[RED("tagId")] 		public CName TagId { get; set;}
+		[Ordinal(0)] [RED("tagId")] 		public CName TagId { get; set;}
 
-		[RED("type")] 		public CEnum<EAnimationAttackType> Type { get; set;}
+		[Ordinal(0)] [RED("type")] 		public CEnum<EAnimationAttackType> Type { get; set;}
 
-		[RED("slowMotionTimeFactor")] 		public CFloat SlowMotionTimeFactor { get; set;}
+		[Ordinal(0)] [RED("slowMotionTimeFactor")] 		public CFloat SlowMotionTimeFactor { get; set;}
 
-		[RED("hitDuration")] 		public CFloat HitDuration { get; set;}
+		[Ordinal(0)] [RED("hitDuration")] 		public CFloat HitDuration { get; set;}
 
-		[RED("postHitEnd")] 		public CFloat PostHitEnd { get; set;}
+		[Ordinal(0)] [RED("postHitEnd")] 		public CFloat PostHitEnd { get; set;}
 
-		[RED("slowMotionStart")] 		public CFloat SlowMotionStart { get; set;}
+		[Ordinal(0)] [RED("slowMotionStart")] 		public CFloat SlowMotionStart { get; set;}
 
-		[RED("slowMotionEnd")] 		public CFloat SlowMotionEnd { get; set;}
+		[Ordinal(0)] [RED("slowMotionEnd")] 		public CFloat SlowMotionEnd { get; set;}
 
-		[RED("dampOutEnd")] 		public CFloat DampOutEnd { get; set;}
+		[Ordinal(0)] [RED("dampOutEnd")] 		public CFloat DampOutEnd { get; set;}
 
 		public CSkeletalAnimationAttackTrajectoryParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

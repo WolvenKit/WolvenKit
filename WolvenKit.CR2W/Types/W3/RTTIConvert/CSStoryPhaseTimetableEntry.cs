@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSStoryPhaseTimetableEntry : CVariable
 	{
-		[RED("name")] 		public CName Name { get; set;}
+		[Ordinal(0)] [RED("("name")] 		public CName Name { get; set;}
 
-		[RED("actionCategies", 2,0)] 		public CArray<CSStoryPhaseTimetableACategoriesTimetableEntry> ActionCategies { get; set;}
+		[Ordinal(0)] [RED("("actionCategies", 2,0)] 		public CArray<CSStoryPhaseTimetableACategoriesTimetableEntry> ActionCategies { get; set;}
 
 		public CSStoryPhaseTimetableEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

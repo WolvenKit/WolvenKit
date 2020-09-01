@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeDecoratorWalkableSpotClosestQueryDefinition : IBehTreeNodeDecoratorWalkableSpotQueryDefinition
 	{
-		[RED("filter")] 		public SClosestSpotFilter Filter { get; set;}
+		[Ordinal(0)] [RED("filter")] 		public SClosestSpotFilter Filter { get; set;}
 
 		public CBehTreeNodeDecoratorWalkableSpotClosestQueryDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

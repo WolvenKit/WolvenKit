@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeSelectorDefinition : IBehTreeNodeCompositeDefinition
 	{
-		[RED("checkFrequency")] 		public CFloat CheckFrequency { get; set;}
+		[Ordinal(0)] [RED("checkFrequency")] 		public CFloat CheckFrequency { get; set;}
 
-		[RED("useScoring")] 		public CBool UseScoring { get; set;}
+		[Ordinal(0)] [RED("useScoring")] 		public CBool UseScoring { get; set;}
 
-		[RED("selectRandom")] 		public CBool SelectRandom { get; set;}
+		[Ordinal(0)] [RED("selectRandom")] 		public CBool SelectRandom { get; set;}
 
-		[RED("forwardChildrenCompletness")] 		public CBool ForwardChildrenCompletness { get; set;}
+		[Ordinal(0)] [RED("forwardChildrenCompletness")] 		public CBool ForwardChildrenCompletness { get; set;}
 
 		public CBehTreeNodeSelectorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3YrdenEntityStateYrdenShock : W3SignEntityStateActive
 	{
-		[RED("usedShockAreaName")] 		public CName UsedShockAreaName { get; set;}
+		[Ordinal(0)] [RED("("usedShockAreaName")] 		public CName UsedShockAreaName { get; set;}
 
-		[RED("traceFrom")] 		public Vector TraceFrom { get; set;}
+		[Ordinal(0)] [RED("("traceFrom")] 		public Vector TraceFrom { get; set;}
 
-		[RED("traceTo")] 		public Vector TraceTo { get; set;}
+		[Ordinal(0)] [RED("("traceTo")] 		public Vector TraceTo { get; set;}
 
 		public W3YrdenEntityStateYrdenShock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

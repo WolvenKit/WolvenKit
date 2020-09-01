@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCameraComponent : CSpriteComponent
 	{
-		[RED("fov")] 		public CFloat Fov { get; set;}
+		[Ordinal(0)] [RED("("fov")] 		public CFloat Fov { get; set;}
 
-		[RED("nearPlane")] 		public CEnum<ENearPlaneDistance> NearPlane { get; set;}
+		[Ordinal(0)] [RED("("nearPlane")] 		public CEnum<ENearPlaneDistance> NearPlane { get; set;}
 
-		[RED("farPlane")] 		public CEnum<EFarPlaneDistance> FarPlane { get; set;}
+		[Ordinal(0)] [RED("("farPlane")] 		public CEnum<EFarPlaneDistance> FarPlane { get; set;}
 
-		[RED("customClippingPlanes")] 		public SCustomClippingPlanes CustomClippingPlanes { get; set;}
+		[Ordinal(0)] [RED("("customClippingPlanes")] 		public SCustomClippingPlanes CustomClippingPlanes { get; set;}
 
-		[RED("aspect")] 		public CFloat Aspect { get; set;}
+		[Ordinal(0)] [RED("("aspect")] 		public CFloat Aspect { get; set;}
 
-		[RED("lockAspect")] 		public CBool LockAspect { get; set;}
+		[Ordinal(0)] [RED("("lockAspect")] 		public CBool LockAspect { get; set;}
 
-		[RED("defaultCamera")] 		public CBool DefaultCamera { get; set;}
+		[Ordinal(0)] [RED("("defaultCamera")] 		public CBool DefaultCamera { get; set;}
 
 		public CCameraComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SLeaderBoardData : CVariable
 	{
-		[RED("competitor")] 		public CString Competitor { get; set;}
+		[Ordinal(0)] [RED("("competitor")] 		public CString Competitor { get; set;}
 
-		[RED("points")] 		public CInt32 Points { get; set;}
+		[Ordinal(0)] [RED("("points")] 		public CInt32 Points { get; set;}
 
 		public SLeaderBoardData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

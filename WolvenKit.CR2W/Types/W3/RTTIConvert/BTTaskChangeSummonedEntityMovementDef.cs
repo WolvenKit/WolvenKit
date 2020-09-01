@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskChangeSummonedEntityMovementDef : IBehTreeTaskDefinition
 	{
-		[RED("speed")] 		public CFloat Speed { get; set;}
+		[Ordinal(0)] [RED("speed")] 		public CFloat Speed { get; set;}
 
-		[RED("stopDistance")] 		public CFloat StopDistance { get; set;}
+		[Ordinal(0)] [RED("stopDistance")] 		public CFloat StopDistance { get; set;}
 
-		[RED("fallBackSpeed")] 		public CFloat FallBackSpeed { get; set;}
+		[Ordinal(0)] [RED("fallBackSpeed")] 		public CFloat FallBackSpeed { get; set;}
 
-		[RED("normalSpeed")] 		public CFloat NormalSpeed { get; set;}
+		[Ordinal(0)] [RED("normalSpeed")] 		public CFloat NormalSpeed { get; set;}
 
-		[RED("verticalSpeed")] 		public CFloat VerticalSpeed { get; set;}
+		[Ordinal(0)] [RED("verticalSpeed")] 		public CFloat VerticalSpeed { get; set;}
 
-		[RED("speedOscilation")] 		public SRangeF SpeedOscilation { get; set;}
+		[Ordinal(0)] [RED("speedOscilation")] 		public SRangeF SpeedOscilation { get; set;}
 
-		[RED("normalSpeedOscilation")] 		public SRangeF NormalSpeedOscilation { get; set;}
+		[Ordinal(0)] [RED("normalSpeedOscilation")] 		public SRangeF NormalSpeedOscilation { get; set;}
 
-		[RED("verticalOscilation")] 		public SRangeF VerticalOscilation { get; set;}
+		[Ordinal(0)] [RED("verticalOscilation")] 		public SRangeF VerticalOscilation { get; set;}
 
-		[RED("speedOscilationSpeed")] 		public CFloat SpeedOscilationSpeed { get; set;}
+		[Ordinal(0)] [RED("speedOscilationSpeed")] 		public CFloat SpeedOscilationSpeed { get; set;}
 
-		[RED("normalSpeedOscilationSpeed")] 		public CFloat NormalSpeedOscilationSpeed { get; set;}
+		[Ordinal(0)] [RED("normalSpeedOscilationSpeed")] 		public CFloat NormalSpeedOscilationSpeed { get; set;}
 
-		[RED("verticalOscilationSpeed")] 		public CFloat VerticalOscilationSpeed { get; set;}
+		[Ordinal(0)] [RED("verticalOscilationSpeed")] 		public CFloat VerticalOscilationSpeed { get; set;}
 
 		public BTTaskChangeSummonedEntityMovementDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

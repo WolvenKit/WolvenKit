@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimatedComponentPhysicsRepresentation : CObject
 	{
-		[RED("ragdoll")] 		public CHandle<CRagdoll> Ragdoll { get; set;}
+		[Ordinal(0)] [RED("ragdoll")] 		public CHandle<CRagdoll> Ragdoll { get; set;}
 
-		[RED("ragdollCollisionType")] 		public CPhysicalCollision RagdollCollisionType { get; set;}
+		[Ordinal(0)] [RED("ragdollCollisionType")] 		public CPhysicalCollision RagdollCollisionType { get; set;}
 
-		[RED("ragdollAlwaysEnabled")] 		public CBool RagdollAlwaysEnabled { get; set;}
+		[Ordinal(0)] [RED("ragdollAlwaysEnabled")] 		public CBool RagdollAlwaysEnabled { get; set;}
 
-		[RED("allowRagdollInCutscene")] 		public CBool AllowRagdollInCutscene { get; set;}
+		[Ordinal(0)] [RED("allowRagdollInCutscene")] 		public CBool AllowRagdollInCutscene { get; set;}
 
 		public CAnimatedComponentPhysicsRepresentation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

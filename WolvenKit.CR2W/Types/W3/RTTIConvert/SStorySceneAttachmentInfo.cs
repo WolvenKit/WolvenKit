@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStorySceneAttachmentInfo : CVariable
 	{
-		[RED("attachTo")] 		public CName AttachTo { get; set;}
+		[Ordinal(0)] [RED("("attachTo")] 		public CName AttachTo { get; set;}
 
-		[RED("parentSlotName")] 		public CName ParentSlotName { get; set;}
+		[Ordinal(0)] [RED("("parentSlotName")] 		public CName ParentSlotName { get; set;}
 
-		[RED("freePositionAxisX")] 		public CBool FreePositionAxisX { get; set;}
+		[Ordinal(0)] [RED("("freePositionAxisX")] 		public CBool FreePositionAxisX { get; set;}
 
-		[RED("freePositionAxisY")] 		public CBool FreePositionAxisY { get; set;}
+		[Ordinal(0)] [RED("("freePositionAxisY")] 		public CBool FreePositionAxisY { get; set;}
 
-		[RED("freePositionAxisZ")] 		public CBool FreePositionAxisZ { get; set;}
+		[Ordinal(0)] [RED("("freePositionAxisZ")] 		public CBool FreePositionAxisZ { get; set;}
 
-		[RED("freeRotation")] 		public CBool FreeRotation { get; set;}
+		[Ordinal(0)] [RED("("freeRotation")] 		public CBool FreeRotation { get; set;}
 
 		public SStorySceneAttachmentInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

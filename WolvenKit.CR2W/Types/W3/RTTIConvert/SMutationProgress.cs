@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMutationProgress : CVariable
 	{
-		[RED("redUsed")] 		public CInt32 RedUsed { get; set;}
+		[Ordinal(0)] [RED("("redUsed")] 		public CInt32 RedUsed { get; set;}
 
-		[RED("redRequired")] 		public CInt32 RedRequired { get; set;}
+		[Ordinal(0)] [RED("("redRequired")] 		public CInt32 RedRequired { get; set;}
 
-		[RED("blueUsed")] 		public CInt32 BlueUsed { get; set;}
+		[Ordinal(0)] [RED("("blueUsed")] 		public CInt32 BlueUsed { get; set;}
 
-		[RED("blueRequired")] 		public CInt32 BlueRequired { get; set;}
+		[Ordinal(0)] [RED("("blueRequired")] 		public CInt32 BlueRequired { get; set;}
 
-		[RED("greenUsed")] 		public CInt32 GreenUsed { get; set;}
+		[Ordinal(0)] [RED("("greenUsed")] 		public CInt32 GreenUsed { get; set;}
 
-		[RED("greenRequired")] 		public CInt32 GreenRequired { get; set;}
+		[Ordinal(0)] [RED("("greenRequired")] 		public CInt32 GreenRequired { get; set;}
 
-		[RED("skillpointsUsed")] 		public CInt32 SkillpointsUsed { get; set;}
+		[Ordinal(0)] [RED("("skillpointsUsed")] 		public CInt32 SkillpointsUsed { get; set;}
 
-		[RED("skillpointsRequired")] 		public CInt32 SkillpointsRequired { get; set;}
+		[Ordinal(0)] [RED("("skillpointsRequired")] 		public CInt32 SkillpointsRequired { get; set;}
 
-		[RED("overallProgress")] 		public CInt32 OverallProgress { get; set;}
+		[Ordinal(0)] [RED("("overallProgress")] 		public CInt32 OverallProgress { get; set;}
 
 		public SMutationProgress(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

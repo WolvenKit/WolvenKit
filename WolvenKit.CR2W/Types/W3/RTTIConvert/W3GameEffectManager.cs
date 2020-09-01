@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3GameEffectManager : CObject
 	{
-		[RED("effects", 2,0)] 		public CArray<CHandle<CBaseGameplayEffect>> Effects { get; set;}
+		[Ordinal(0)] [RED("("effects", 2,0)] 		public CArray<CHandle<CBaseGameplayEffect>> Effects { get; set;}
 
-		[RED("effectNames", 2,0)] 		public CArray<CName> EffectNames { get; set;}
+		[Ordinal(0)] [RED("("effectNames", 2,0)] 		public CArray<CName> EffectNames { get; set;}
 
-		[RED("isReady")] 		public CBool IsReady { get; set;}
+		[Ordinal(0)] [RED("("isReady")] 		public CBool IsReady { get; set;}
 
-		[RED("effectIconTypes", 2,0)] 		public CArray<SEffectIconType> EffectIconTypes { get; set;}
+		[Ordinal(0)] [RED("("effectIconTypes", 2,0)] 		public CArray<SEffectIconType> EffectIconTypes { get; set;}
 
 		public W3GameEffectManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMeshComponent : CMeshTypeComponent
 	{
-		[RED("mesh")] 		public CHandle<CMesh> Mesh { get; set;}
+		[Ordinal(0)] [RED("mesh")] 		public CHandle<CMesh> Mesh { get; set;}
 
 		public CMeshComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

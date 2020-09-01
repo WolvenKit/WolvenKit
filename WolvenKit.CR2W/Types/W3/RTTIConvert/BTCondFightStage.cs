@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondFightStage : IBehTreeTask
 	{
-		[RED("currentFightStageIs")] 		public CEnum<ENPCFightStage> CurrentFightStageIs { get; set;}
+		[Ordinal(0)] [RED("currentFightStageIs")] 		public CEnum<ENPCFightStage> CurrentFightStageIs { get; set;}
 
 		public BTCondFightStage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

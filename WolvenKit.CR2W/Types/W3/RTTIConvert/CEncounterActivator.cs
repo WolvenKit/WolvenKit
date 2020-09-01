@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEncounterActivator : CGameplayEntity
 	{
-		[RED("encounterAreaTag")] 		public CName EncounterAreaTag { get; set;}
+		[Ordinal(0)] [RED("("encounterAreaTag")] 		public CName EncounterAreaTag { get; set;}
 
-		[RED("phaseToActivate")] 		public CName PhaseToActivate { get; set;}
+		[Ordinal(0)] [RED("("phaseToActivate")] 		public CName PhaseToActivate { get; set;}
 
-		[RED("disableEncounterOnExit")] 		public CBool DisableEncounterOnExit { get; set;}
+		[Ordinal(0)] [RED("("disableEncounterOnExit")] 		public CBool DisableEncounterOnExit { get; set;}
 
-		[RED("encounter")] 		public CHandle<CEncounter> Encounter { get; set;}
+		[Ordinal(0)] [RED("("encounter")] 		public CHandle<CEncounter> Encounter { get; set;}
 
-		[RED("isPlayerInArea")] 		public CBool IsPlayerInArea { get; set;}
+		[Ordinal(0)] [RED("("isPlayerInArea")] 		public CBool IsPlayerInArea { get; set;}
 
 		public CEncounterActivator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

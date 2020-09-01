@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDaytimeCondition : ISpawnCondition
 	{
-		[RED("begin")] 		public GameTime Begin { get; set;}
+		[Ordinal(0)] [RED("("begin")] 		public GameTime Begin { get; set;}
 
-		[RED("end")] 		public GameTime End { get; set;}
+		[Ordinal(0)] [RED("("end")] 		public GameTime End { get; set;}
 
 		public CDaytimeCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPathLibRoughtTerrainComponent : CAreaComponent
 	{
-		[RED("isRoughtTerrain")] 		public CBool IsRoughtTerrain { get; set;}
+		[Ordinal(0)] [RED("("isRoughtTerrain")] 		public CBool IsRoughtTerrain { get; set;}
 
 		public CPathLibRoughtTerrainComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

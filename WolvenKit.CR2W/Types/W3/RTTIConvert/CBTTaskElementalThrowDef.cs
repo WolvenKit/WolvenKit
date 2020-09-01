@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskElementalThrowDef : IBehTreeTaskDefinition
 	{
-		[RED("objectEntity")] 		public CHandle<CEntityTemplate> ObjectEntity { get; set;}
+		[Ordinal(0)] [RED("objectEntity")] 		public CHandle<CEntityTemplate> ObjectEntity { get; set;}
 
 		public CBTTaskElementalThrowDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

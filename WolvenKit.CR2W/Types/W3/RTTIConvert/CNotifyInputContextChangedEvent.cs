@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CNotifyInputContextChangedEvent : CHudEvent
 	{
-		[RED("inputContextName")] 		public CName InputContextName { get; set;}
+		[Ordinal(0)] [RED("inputContextName")] 		public CName InputContextName { get; set;}
 
 		public CNotifyInputContextChangedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSlideToTarget : IBehTreeTask
 	{
-		[RED("minDistance")] 		public CFloat MinDistance { get; set;}
+		[Ordinal(0)] [RED("("minDistance")] 		public CFloat MinDistance { get; set;}
 
-		[RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(0)] [RED("("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[RED("maxSpeed")] 		public CFloat MaxSpeed { get; set;}
+		[Ordinal(0)] [RED("("maxSpeed")] 		public CFloat MaxSpeed { get; set;}
 
-		[RED("onAnimEvent")] 		public CName OnAnimEvent { get; set;}
+		[Ordinal(0)] [RED("("onAnimEvent")] 		public CName OnAnimEvent { get; set;}
 
-		[RED("adjustVertically")] 		public CBool AdjustVertically { get; set;}
+		[Ordinal(0)] [RED("("adjustVertically")] 		public CBool AdjustVertically { get; set;}
 
-		[RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+		[Ordinal(0)] [RED("("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 
 		public CBTTaskSlideToTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

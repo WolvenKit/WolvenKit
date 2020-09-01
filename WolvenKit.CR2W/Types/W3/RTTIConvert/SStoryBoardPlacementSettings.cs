@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStoryBoardPlacementSettings : CVariable
 	{
-		[RED("pos")] 		public Vector Pos { get; set;}
+		[Ordinal(0)] [RED("("pos")] 		public Vector Pos { get; set;}
 
-		[RED("rot")] 		public EulerAngles Rot { get; set;}
+		[Ordinal(0)] [RED("("rot")] 		public EulerAngles Rot { get; set;}
 
-		[RED("isHidden")] 		public CBool IsHidden { get; set;}
+		[Ordinal(0)] [RED("("isHidden")] 		public CBool IsHidden { get; set;}
 
 		public SStoryBoardPlacementSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

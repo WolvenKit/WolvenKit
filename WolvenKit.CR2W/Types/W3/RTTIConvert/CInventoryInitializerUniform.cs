@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CInventoryInitializerUniform : IInventoryInitializer
 	{
-		[RED("itemName")] 		public CName ItemName { get; set;}
+		[Ordinal(0)] [RED("itemName")] 		public CName ItemName { get; set;}
 
 		public CInventoryInitializerUniform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

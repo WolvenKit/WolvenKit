@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3FlyingSwarmCreateGroupRequest : CObject
 	{
-		[RED("boidCount")] 		public CInt32 BoidCount { get; set;}
+		[Ordinal(0)] [RED("("boidCount")] 		public CInt32 BoidCount { get; set;}
 
-		[RED("spawnPOI")] 		public CName SpawnPOI { get; set;}
+		[Ordinal(0)] [RED("("spawnPOI")] 		public CName SpawnPOI { get; set;}
 
 		public W3FlyingSwarmCreateGroupRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

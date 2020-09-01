@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBirdsArea : CGameplayEntity
 	{
-		[RED("birdsManagerTag")] 		public CName BirdsManagerTag { get; set;}
+		[Ordinal(0)] [RED("birdsManagerTag")] 		public CName BirdsManagerTag { get; set;}
 
 		public CBirdsArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

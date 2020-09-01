@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSelectTargetFromListDef : IBehTreeTaskDefinition
 	{
-		[RED("targetList", 2,0)] 		public CArray<CName> TargetList { get; set;}
+		[Ordinal(0)] [RED("("targetList", 2,0)] 		public CArray<CName> TargetList { get; set;}
 
 		public CBTTaskSelectTargetFromListDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

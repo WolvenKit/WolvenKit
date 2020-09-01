@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class STutorialTemporarySkill : CVariable
 	{
-		[RED("wasLearned")] 		public CBool WasLearned { get; set;}
+		[Ordinal(0)] [RED("("wasLearned")] 		public CBool WasLearned { get; set;}
 
-		[RED("skillType")] 		public CEnum<ESkill> SkillType { get; set;}
+		[Ordinal(0)] [RED("("skillType")] 		public CEnum<ESkill> SkillType { get; set;}
 
 		public STutorialTemporarySkill(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

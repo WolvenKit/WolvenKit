@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCamera : CEntity
 	{
-		[RED("cameraState")] 		public CEnum<ECameraState> CameraState { get; set;}
+		[Ordinal(0)] [RED("("cameraState")] 		public CEnum<ECameraState> CameraState { get; set;}
 
 		public CCamera(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

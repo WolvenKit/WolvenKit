@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTask3StateProjectileAttackDef : CBTTask3StateAttackDef
 	{
-		[RED("attackRange")] 		public CFloat AttackRange { get; set;}
+		[Ordinal(0)] [RED("("attackRange")] 		public CFloat AttackRange { get; set;}
 
-		[RED("projectileName")] 		public CName ProjectileName { get; set;}
+		[Ordinal(0)] [RED("("projectileName")] 		public CName ProjectileName { get; set;}
 
-		[RED("dodgeable")] 		public CBool Dodgeable { get; set;}
+		[Ordinal(0)] [RED("("dodgeable")] 		public CBool Dodgeable { get; set;}
 
-		[RED("useLookatTarget")] 		public CBool UseLookatTarget { get; set;}
+		[Ordinal(0)] [RED("("useLookatTarget")] 		public CBool UseLookatTarget { get; set;}
 
-		[RED("dontShootAboveAngleDistanceToTarget")] 		public CFloat DontShootAboveAngleDistanceToTarget { get; set;}
+		[Ordinal(0)] [RED("("dontShootAboveAngleDistanceToTarget")] 		public CFloat DontShootAboveAngleDistanceToTarget { get; set;}
 
 		public CBTTask3StateProjectileAttackDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

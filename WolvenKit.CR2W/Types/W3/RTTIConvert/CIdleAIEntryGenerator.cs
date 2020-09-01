@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CIdleAIEntryGenerator : CSpawnTreeBaseEntryGenerator
 	{
-		[RED("commonSpawnParams")] 		public SCreatureEntrySpawnerParams CommonSpawnParams { get; set;}
+		[Ordinal(0)] [RED("commonSpawnParams")] 		public SCreatureEntrySpawnerParams CommonSpawnParams { get; set;}
 
-		[RED("entries", 2,0)] 		public CArray<SIdleAEntryGeneratorParam> Entries { get; set;}
+		[Ordinal(0)] [RED("entries", 2,0)] 		public CArray<SIdleAEntryGeneratorParam> Entries { get; set;}
 
 		public CIdleAIEntryGenerator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

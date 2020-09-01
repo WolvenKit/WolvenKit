@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SJobTreeSettings : CVariable
 	{
-		[RED("leftRemoveAtEnd")] 		public CBool LeftRemoveAtEnd { get; set;}
+		[Ordinal(0)] [RED("("leftRemoveAtEnd")] 		public CBool LeftRemoveAtEnd { get; set;}
 
-		[RED("leftDropOnBreak")] 		public CBool LeftDropOnBreak { get; set;}
+		[Ordinal(0)] [RED("("leftDropOnBreak")] 		public CBool LeftDropOnBreak { get; set;}
 
-		[RED("rightRemoveAtEnd")] 		public CBool RightRemoveAtEnd { get; set;}
+		[Ordinal(0)] [RED("("rightRemoveAtEnd")] 		public CBool RightRemoveAtEnd { get; set;}
 
-		[RED("rightDropOnBreak")] 		public CBool RightDropOnBreak { get; set;}
+		[Ordinal(0)] [RED("("rightDropOnBreak")] 		public CBool RightDropOnBreak { get; set;}
 
-		[RED("ignoreHardReactions")] 		public CBool IgnoreHardReactions { get; set;}
+		[Ordinal(0)] [RED("("ignoreHardReactions")] 		public CBool IgnoreHardReactions { get; set;}
 
-		[RED("needsPrecision")] 		public CBool NeedsPrecision { get; set;}
+		[Ordinal(0)] [RED("("needsPrecision")] 		public CBool NeedsPrecision { get; set;}
 
-		[RED("isConscious")] 		public CBool IsConscious { get; set;}
+		[Ordinal(0)] [RED("("isConscious")] 		public CBool IsConscious { get; set;}
 
-		[RED("altJobTreeRes")] 		public CHandle<CJobTree> AltJobTreeRes { get; set;}
+		[Ordinal(0)] [RED("("altJobTreeRes")] 		public CHandle<CJobTree> AltJobTreeRes { get; set;}
 
-		[RED("globalBreakingBlendOutTime")] 		public CFloat GlobalBreakingBlendOutTime { get; set;}
+		[Ordinal(0)] [RED("("globalBreakingBlendOutTime")] 		public CFloat GlobalBreakingBlendOutTime { get; set;}
 
-		[RED("forceKeepIKactive")] 		public CBool ForceKeepIKactive { get; set;}
+		[Ordinal(0)] [RED("("forceKeepIKactive")] 		public CBool ForceKeepIKactive { get; set;}
 
-		[RED("jobTreeType")] 		public CInt32 JobTreeType { get; set;}
+		[Ordinal(0)] [RED("("jobTreeType")] 		public CInt32 JobTreeType { get; set;}
 
 		public SJobTreeSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

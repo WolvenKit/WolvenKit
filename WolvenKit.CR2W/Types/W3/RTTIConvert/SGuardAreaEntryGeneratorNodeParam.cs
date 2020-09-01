@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SGuardAreaEntryGeneratorNodeParam : CVariable
 	{
-		[RED("guardAreaTag")] 		public CName GuardAreaTag { get; set;}
+		[Ordinal(0)] [RED("("guardAreaTag")] 		public CName GuardAreaTag { get; set;}
 
-		[RED("pursuitAreaTag")] 		public CName PursuitAreaTag { get; set;}
+		[Ordinal(0)] [RED("("pursuitAreaTag")] 		public CName PursuitAreaTag { get; set;}
 
-		[RED("pursuitRange")] 		public CFloat PursuitRange { get; set;}
+		[Ordinal(0)] [RED("("pursuitRange")] 		public CFloat PursuitRange { get; set;}
 
 		public SGuardAreaEntryGeneratorNodeParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

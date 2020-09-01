@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeDecoratorOverrideBehaviorVariableDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("varName")] 		public CName VarName { get; set;}
+		[Ordinal(0)] [RED("varName")] 		public CName VarName { get; set;}
 
-		[RED("value")] 		public CFloat Value { get; set;}
+		[Ordinal(0)] [RED("value")] 		public CFloat Value { get; set;}
 
 		public CBehTreeDecoratorOverrideBehaviorVariableDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

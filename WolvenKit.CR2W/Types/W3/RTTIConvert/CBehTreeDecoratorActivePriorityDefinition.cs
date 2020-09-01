@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeDecoratorActivePriorityDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("evaluateChildWhenActive")] 		public CBool EvaluateChildWhenActive { get; set;}
+		[Ordinal(0)] [RED("evaluateChildWhenActive")] 		public CBool EvaluateChildWhenActive { get; set;}
 
 		public CBehTreeDecoratorActivePriorityDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

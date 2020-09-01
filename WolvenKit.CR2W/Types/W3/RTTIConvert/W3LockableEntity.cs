@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3LockableEntity : CGameplayEntity
 	{
-		[RED("isEnabledOnSpawn")] 		public CBool IsEnabledOnSpawn { get; set;}
+		[Ordinal(0)] [RED("("isEnabledOnSpawn")] 		public CBool IsEnabledOnSpawn { get; set;}
 
-		[RED("lockedByKey")] 		public CBool LockedByKey { get; set;}
+		[Ordinal(0)] [RED("("lockedByKey")] 		public CBool LockedByKey { get; set;}
 
-		[RED("keyItemName")] 		public CName KeyItemName { get; set;}
+		[Ordinal(0)] [RED("("keyItemName")] 		public CName KeyItemName { get; set;}
 
-		[RED("removeKeyOnUse")] 		public CBool RemoveKeyOnUse { get; set;}
+		[Ordinal(0)] [RED("("removeKeyOnUse")] 		public CBool RemoveKeyOnUse { get; set;}
 
-		[RED("enabledByFact")] 		public CString EnabledByFact { get; set;}
+		[Ordinal(0)] [RED("("enabledByFact")] 		public CString EnabledByFact { get; set;}
 
-		[RED("factOnLockedAttempt")] 		public CString FactOnLockedAttempt { get; set;}
+		[Ordinal(0)] [RED("("factOnLockedAttempt")] 		public CString FactOnLockedAttempt { get; set;}
 
-		[RED("factOnUnlockedByKey")] 		public CString FactOnUnlockedByKey { get; set;}
+		[Ordinal(0)] [RED("("factOnUnlockedByKey")] 		public CString FactOnUnlockedByKey { get; set;}
 
-		[RED("mainInteractionComponent")] 		public CHandle<CDoorComponent> MainInteractionComponent { get; set;}
+		[Ordinal(0)] [RED("("mainInteractionComponent")] 		public CHandle<CDoorComponent> MainInteractionComponent { get; set;}
 
-		[RED("isEnabled")] 		public CBool IsEnabled { get; set;}
+		[Ordinal(0)] [RED("("isEnabled")] 		public CBool IsEnabled { get; set;}
 
-		[RED("isPlayerInActivationRange")] 		public CBool IsPlayerInActivationRange { get; set;}
+		[Ordinal(0)] [RED("("isPlayerInActivationRange")] 		public CBool IsPlayerInActivationRange { get; set;}
 
-		[RED("isInteractionBlocked")] 		public CBool IsInteractionBlocked { get; set;}
+		[Ordinal(0)] [RED("("isInteractionBlocked")] 		public CBool IsInteractionBlocked { get; set;}
 
 		public W3LockableEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

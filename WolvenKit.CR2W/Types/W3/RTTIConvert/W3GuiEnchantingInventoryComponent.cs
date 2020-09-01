@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3GuiEnchantingInventoryComponent : W3GuiBaseInventoryComponent
 	{
-		[RED("REQUIRED_SLOTS_COUNTS")] 		public CInt32 REQUIRED_SLOTS_COUNTS { get; set;}
+		[Ordinal(0)] [RED("("REQUIRED_SLOTS_COUNTS")] 		public CInt32 REQUIRED_SLOTS_COUNTS { get; set;}
 
 		public W3GuiEnchantingInventoryComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

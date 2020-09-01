@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4HudModuleTimeLapse : CR4HudModuleBase
 	{
-		[RED("m_fxSetShowTimeSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetShowTimeSFF { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetShowTimeSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetShowTimeSFF { get; set;}
 
-		[RED("m_fxSetTimeLapseMessage")] 		public CHandle<CScriptedFlashFunction> M_fxSetTimeLapseMessage { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetTimeLapseMessage")] 		public CHandle<CScriptedFlashFunction> M_fxSetTimeLapseMessage { get; set;}
 
-		[RED("m_fxSetTimeLapseAdditionalMessage")] 		public CHandle<CScriptedFlashFunction> M_fxSetTimeLapseAdditionalMessage { get; set;}
+		[Ordinal(0)] [RED("("m_fxSetTimeLapseAdditionalMessage")] 		public CHandle<CScriptedFlashFunction> M_fxSetTimeLapseAdditionalMessage { get; set;}
 
 		public CR4HudModuleTimeLapse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

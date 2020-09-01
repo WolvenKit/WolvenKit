@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockOutputColorEye : CMaterialRootBlock
 	{
-		[RED("rawOutput")] 		public CBool RawOutput { get; set;}
+		[Ordinal(0)] [RED("rawOutput")] 		public CBool RawOutput { get; set;}
 
-		[RED("maskThreshold")] 		public CFloat MaskThreshold { get; set;}
+		[Ordinal(0)] [RED("maskThreshold")] 		public CFloat MaskThreshold { get; set;}
 
 		public CMaterialBlockOutputColorEye(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

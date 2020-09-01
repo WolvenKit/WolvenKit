@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStoryBoardLookAtSettings : CVariable
 	{
-		[RED("enabled")] 		public CBool Enabled { get; set;}
+		[Ordinal(0)] [RED("("enabled")] 		public CBool Enabled { get; set;}
 
-		[RED("lookAtActor")] 		public CString LookAtActor { get; set;}
+		[Ordinal(0)] [RED("("lookAtActor")] 		public CString LookAtActor { get; set;}
 
-		[RED("rot")] 		public EulerAngles Rot { get; set;}
+		[Ordinal(0)] [RED("("rot")] 		public EulerAngles Rot { get; set;}
 
 		public SStoryBoardLookAtSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

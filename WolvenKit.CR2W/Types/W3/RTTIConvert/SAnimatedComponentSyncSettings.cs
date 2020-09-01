@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAnimatedComponentSyncSettings : CVariable
 	{
-		[RED("instanceName")] 		public CName InstanceName { get; set;}
+		[Ordinal(0)] [RED("instanceName")] 		public CName InstanceName { get; set;}
 
-		[RED("syncAllInstances")] 		public CBool SyncAllInstances { get; set;}
+		[Ordinal(0)] [RED("syncAllInstances")] 		public CBool SyncAllInstances { get; set;}
 
-		[RED("syncEngineValueSpeed")] 		public CBool SyncEngineValueSpeed { get; set;}
+		[Ordinal(0)] [RED("syncEngineValueSpeed")] 		public CBool SyncEngineValueSpeed { get; set;}
 
 		public SAnimatedComponentSyncSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

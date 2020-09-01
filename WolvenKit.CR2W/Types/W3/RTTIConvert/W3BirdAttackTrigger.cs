@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3BirdAttackTrigger : CEntity
 	{
-		[RED("lair")] 		public CHandle<CFlyingSwarmMasterLair> Lair { get; set;}
+		[Ordinal(0)] [RED("("lair")] 		public CHandle<CFlyingSwarmMasterLair> Lair { get; set;}
 
-		[RED("affectedEntityTag")] 		public CName AffectedEntityTag { get; set;}
+		[Ordinal(0)] [RED("("affectedEntityTag")] 		public CName AffectedEntityTag { get; set;}
 
-		[RED("attackRequestInterval")] 		public CFloat AttackRequestInterval { get; set;}
+		[Ordinal(0)] [RED("("attackRequestInterval")] 		public CFloat AttackRequestInterval { get; set;}
 
-		[RED("affectBirdsInRange")] 		public CFloat AffectBirdsInRange { get; set;}
+		[Ordinal(0)] [RED("("affectBirdsInRange")] 		public CFloat AffectBirdsInRange { get; set;}
 
 		public W3BirdAttackTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

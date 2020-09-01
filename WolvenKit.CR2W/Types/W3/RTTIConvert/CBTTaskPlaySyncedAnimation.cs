@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPlaySyncedAnimation : IBehTreeTask
 	{
-		[RED("isRunning")] 		public CBool IsRunning { get; set;}
+		[Ordinal(0)] [RED("("isRunning")] 		public CBool IsRunning { get; set;}
 
-		[RED("shouldStartAnimation")] 		public CBool ShouldStartAnimation { get; set;}
+		[Ordinal(0)] [RED("("shouldStartAnimation")] 		public CBool ShouldStartAnimation { get; set;}
 
-		[RED("syncInstance")] 		public CHandle<CAnimationManualSlotSyncInstance> SyncInstance { get; set;}
+		[Ordinal(0)] [RED("("syncInstance")] 		public CHandle<CAnimationManualSlotSyncInstance> SyncInstance { get; set;}
 
-		[RED("sequenceIndex")] 		public CInt32 SequenceIndex { get; set;}
+		[Ordinal(0)] [RED("("sequenceIndex")] 		public CInt32 SequenceIndex { get; set;}
 
-		[RED("forceEventOnEnd")] 		public CName ForceEventOnEnd { get; set;}
+		[Ordinal(0)] [RED("("forceEventOnEnd")] 		public CName ForceEventOnEnd { get; set;}
 
-		[RED("gameplayEventOnEnd")] 		public CName GameplayEventOnEnd { get; set;}
+		[Ordinal(0)] [RED("("gameplayEventOnEnd")] 		public CName GameplayEventOnEnd { get; set;}
 
-		[RED("finisherSyncAnim")] 		public CBool FinisherSyncAnim { get; set;}
+		[Ordinal(0)] [RED("("finisherSyncAnim")] 		public CBool FinisherSyncAnim { get; set;}
 
-		[RED("completeSuccess")] 		public CBool CompleteSuccess { get; set;}
+		[Ordinal(0)] [RED("("completeSuccess")] 		public CBool CompleteSuccess { get; set;}
 
 		public CBTTaskPlaySyncedAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

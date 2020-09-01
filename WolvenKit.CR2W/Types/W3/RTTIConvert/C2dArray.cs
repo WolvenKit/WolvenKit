@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class C2dArray : CResource
 	{
-		[RED("headers", 12,0)] 		public CArray<CString> Headers { get; set;}
+		[Ordinal(0)] [RED("headers", 12,0)] 		public CArray<CString> Headers { get; set;}
 
-		[RED("data", 12,0)] 		public CArray<CArray<CString>> Data { get; set;}
+		[Ordinal(0)] [RED("data", 12,0)] 		public CArray<CArray<CString>> Data { get; set;}
 
 		public C2dArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

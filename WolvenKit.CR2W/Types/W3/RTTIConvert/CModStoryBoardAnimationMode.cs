@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardAnimationMode : CModStoryBoardAssetSelectionBasedWorkMode
 	{
-		[RED("animListsManager")] 		public CHandle<CModStoryBoardAnimationListsManager> AnimListsManager { get; set;}
+		[Ordinal(0)] [RED("("animListsManager")] 		public CHandle<CModStoryBoardAnimationListsManager> AnimListsManager { get; set;}
 
-		[RED("poseListsManager")] 		public CHandle<CModStoryBoardIdlePoseListsManager> PoseListsManager { get; set;}
+		[Ordinal(0)] [RED("("poseListsManager")] 		public CHandle<CModStoryBoardIdlePoseListsManager> PoseListsManager { get; set;}
 
-		[RED("theAnimDirector")] 		public CHandle<CModStoryBoardAnimationDirector> TheAnimDirector { get; set;}
+		[Ordinal(0)] [RED("("theAnimDirector")] 		public CHandle<CModStoryBoardAnimationDirector> TheAnimDirector { get; set;}
 
 		public CModStoryBoardAnimationMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

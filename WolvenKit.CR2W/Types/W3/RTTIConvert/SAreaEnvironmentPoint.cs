@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAreaEnvironmentPoint : CVariable
 	{
-		[RED("position")] 		public Vector Position { get; set;}
+		[Ordinal(0)] [RED("position")] 		public Vector Position { get; set;}
 
-		[RED("direction")] 		public EulerAngles Direction { get; set;}
+		[Ordinal(0)] [RED("direction")] 		public EulerAngles Direction { get; set;}
 
-		[RED("type")] 		public CEnum<EAreaEnvironmentPointType> Type { get; set;}
+		[Ordinal(0)] [RED("type")] 		public CEnum<EAreaEnvironmentPointType> Type { get; set;}
 
-		[RED("blend")] 		public CEnum<EAreaEnvironmentPointBlend> Blend { get; set;}
+		[Ordinal(0)] [RED("blend")] 		public CEnum<EAreaEnvironmentPointBlend> Blend { get; set;}
 
-		[RED("innerRadius")] 		public CFloat InnerRadius { get; set;}
+		[Ordinal(0)] [RED("innerRadius")] 		public CFloat InnerRadius { get; set;}
 
-		[RED("outerRadius")] 		public CFloat OuterRadius { get; set;}
+		[Ordinal(0)] [RED("outerRadius")] 		public CFloat OuterRadius { get; set;}
 
-		[RED("scaleX")] 		public CFloat ScaleX { get; set;}
+		[Ordinal(0)] [RED("scaleX")] 		public CFloat ScaleX { get; set;}
 
-		[RED("scaleY")] 		public CFloat ScaleY { get; set;}
+		[Ordinal(0)] [RED("scaleY")] 		public CFloat ScaleY { get; set;}
 
-		[RED("scaleZ")] 		public CFloat ScaleZ { get; set;}
+		[Ordinal(0)] [RED("scaleZ")] 		public CFloat ScaleZ { get; set;}
 
-		[RED("useCurve")] 		public CBool UseCurve { get; set;}
+		[Ordinal(0)] [RED("useCurve")] 		public CBool UseCurve { get; set;}
 
-		[RED("curve")] 		public SSimpleCurve Curve { get; set;}
+		[Ordinal(0)] [RED("curve")] 		public SSimpleCurve Curve { get; set;}
 
-		[RED("blendScale")] 		public CFloat BlendScale { get; set;}
+		[Ordinal(0)] [RED("blendScale")] 		public CFloat BlendScale { get; set;}
 
-		[RED("environmentDefinition")] 		public CHandle<CEnvironmentDefinition> EnvironmentDefinition { get; set;}
+		[Ordinal(0)] [RED("environmentDefinition")] 		public CHandle<CEnvironmentDefinition> EnvironmentDefinition { get; set;}
 
 		public SAreaEnvironmentPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

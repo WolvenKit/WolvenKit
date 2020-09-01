@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ISpawnTreeSpawnStrategy : ISpawnTreeInitializer
 	{
-		[RED("enablePooling")] 		public CBool EnablePooling { get; set;}
+		[Ordinal(0)] [RED("enablePooling")] 		public CBool EnablePooling { get; set;}
 
-		[RED("overflowPoolRange")] 		public CFloat OverflowPoolRange { get; set;}
+		[Ordinal(0)] [RED("overflowPoolRange")] 		public CFloat OverflowPoolRange { get; set;}
 
 		public ISpawnTreeSpawnStrategy(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

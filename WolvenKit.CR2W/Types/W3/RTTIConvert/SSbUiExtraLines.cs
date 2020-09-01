@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSbUiExtraLines : CVariable
 	{
-		[RED("id")] 		public CInt32 Id { get; set;}
+		[Ordinal(0)] [RED("("id")] 		public CInt32 Id { get; set;}
 
-		[RED("subCategory1")] 		public CString SubCategory1 { get; set;}
+		[Ordinal(0)] [RED("("subCategory1")] 		public CString SubCategory1 { get; set;}
 
-		[RED("subCategory2")] 		public CString SubCategory2 { get; set;}
+		[Ordinal(0)] [RED("("subCategory2")] 		public CString SubCategory2 { get; set;}
 
-		[RED("caption")] 		public CString Caption { get; set;}
+		[Ordinal(0)] [RED("("caption")] 		public CString Caption { get; set;}
 
 		public SSbUiExtraLines(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

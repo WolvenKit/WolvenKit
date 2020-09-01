@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIDynamicWanderParams : CAINpcWanderParams
 	{
-		[RED("dynamicWanderArea")] 		public EntityHandle DynamicWanderArea { get; set;}
+		[Ordinal(0)] [RED("dynamicWanderArea")] 		public EntityHandle DynamicWanderArea { get; set;}
 
-		[RED("dynamicWanderIdleDuration")] 		public CFloat DynamicWanderIdleDuration { get; set;}
+		[Ordinal(0)] [RED("dynamicWanderIdleDuration")] 		public CFloat DynamicWanderIdleDuration { get; set;}
 
-		[RED("dynamicWanderIdleChance")] 		public CFloat DynamicWanderIdleChance { get; set;}
+		[Ordinal(0)] [RED("dynamicWanderIdleChance")] 		public CFloat DynamicWanderIdleChance { get; set;}
 
-		[RED("dynamicWanderMoveDuration")] 		public CFloat DynamicWanderMoveDuration { get; set;}
+		[Ordinal(0)] [RED("dynamicWanderMoveDuration")] 		public CFloat DynamicWanderMoveDuration { get; set;}
 
-		[RED("dynamicWanderMoveChance")] 		public CFloat DynamicWanderMoveChance { get; set;}
+		[Ordinal(0)] [RED("dynamicWanderMoveChance")] 		public CFloat DynamicWanderMoveChance { get; set;}
 
 		public CAIDynamicWanderParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

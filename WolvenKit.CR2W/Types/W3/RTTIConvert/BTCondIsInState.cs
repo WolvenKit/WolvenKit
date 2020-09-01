@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondIsInState : IBehTreeTask
 	{
-		[RED("stateName")] 		public CName StateName { get; set;}
+		[Ordinal(0)] [RED("stateName")] 		public CName StateName { get; set;}
 
-		[RED("ifNot")] 		public CBool IfNot { get; set;}
+		[Ordinal(0)] [RED("ifNot")] 		public CBool IfNot { get; set;}
 
 		public BTCondIsInState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

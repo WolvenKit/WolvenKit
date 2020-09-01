@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockOutputVolume : CMaterialRootBlock
 	{
-		[RED("isWaterBlended")] 		public CBool IsWaterBlended { get; set;}
+		[Ordinal(0)] [RED("isWaterBlended")] 		public CBool IsWaterBlended { get; set;}
 
 		public CMaterialBlockOutputVolume(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

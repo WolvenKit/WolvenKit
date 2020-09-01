@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskMagicFXAttack : CBTTaskMagicAttack
 	{
-		[RED("resourceName")] 		public CName ResourceName { get; set;}
+		[Ordinal(0)] [RED("("resourceName")] 		public CName ResourceName { get; set;}
 
-		[RED("effectEntityTemplate")] 		public CHandle<CEntityTemplate> EffectEntityTemplate { get; set;}
+		[Ordinal(0)] [RED("("effectEntityTemplate")] 		public CHandle<CEntityTemplate> EffectEntityTemplate { get; set;}
 
-		[RED("dealDmgOnDeactivate")] 		public CBool DealDmgOnDeactivate { get; set;}
+		[Ordinal(0)] [RED("("dealDmgOnDeactivate")] 		public CBool DealDmgOnDeactivate { get; set;}
 
-		[RED("couldntLoadResource")] 		public CBool CouldntLoadResource { get; set;}
+		[Ordinal(0)] [RED("("couldntLoadResource")] 		public CBool CouldntLoadResource { get; set;}
 
 		public CBTTaskMagicFXAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

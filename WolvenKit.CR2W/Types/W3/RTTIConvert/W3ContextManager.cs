@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ContextManager : CObject
 	{
-		[RED("m_currentContext")] 		public CHandle<W3UIContext> M_currentContext { get; set;}
+		[Ordinal(0)] [RED("("m_currentContext")] 		public CHandle<W3UIContext> M_currentContext { get; set;}
 
-		[RED("m_commonMenuRef")] 		public CHandle<CR4CommonMenu> M_commonMenuRef { get; set;}
+		[Ordinal(0)] [RED("("m_commonMenuRef")] 		public CHandle<CR4CommonMenu> M_commonMenuRef { get; set;}
 
 		public W3ContextManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockSamplerNormal : CMaterialBlockSampler
 	{
-		[RED("scale")] 		public Vector Scale { get; set;}
+		[Ordinal(0)] [RED("scale")] 		public Vector Scale { get; set;}
 
-		[RED("sampleTangentSpace")] 		public CBool SampleTangentSpace { get; set;}
+		[Ordinal(0)] [RED("sampleTangentSpace")] 		public CBool SampleTangentSpace { get; set;}
 
 		public CMaterialBlockSamplerNormal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

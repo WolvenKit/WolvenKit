@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMenuDef : CObject
 	{
-		[RED("timeParam")] 		public CPtr<IMenuTimeParam> TimeParam { get; set;}
+		[Ordinal(0)] [RED("timeParam")] 		public CPtr<IMenuTimeParam> TimeParam { get; set;}
 
-		[RED("backgroundVideoParam")] 		public CPtr<IMenuBackgroundVideoParam> BackgroundVideoParam { get; set;}
+		[Ordinal(0)] [RED("backgroundVideoParam")] 		public CPtr<IMenuBackgroundVideoParam> BackgroundVideoParam { get; set;}
 
-		[RED("renderParam")] 		public CPtr<IMenuDisplayParam> RenderParam { get; set;}
+		[Ordinal(0)] [RED("renderParam")] 		public CPtr<IMenuDisplayParam> RenderParam { get; set;}
 
 		public CMenuDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

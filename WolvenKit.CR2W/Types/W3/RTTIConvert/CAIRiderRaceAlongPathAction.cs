@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIRiderRaceAlongPathAction : IRiderActionTree
 	{
-		[RED("params")] 		public CHandle<CAIRiderRaceAlongPathActionParams> Params { get; set;}
+		[Ordinal(0)] [RED("("params")] 		public CHandle<CAIRiderRaceAlongPathActionParams> Params { get; set;}
 
 		public CAIRiderRaceAlongPathAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

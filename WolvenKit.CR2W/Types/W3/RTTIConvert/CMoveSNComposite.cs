@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSNComposite : IMoveSNComposite
 	{
-		[RED("groupName")] 		public CString GroupName { get; set;}
+		[Ordinal(0)] [RED("groupName")] 		public CString GroupName { get; set;}
 
 		public CMoveSNComposite(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

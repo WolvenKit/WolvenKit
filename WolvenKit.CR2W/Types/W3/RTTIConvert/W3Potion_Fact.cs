@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Potion_Fact : CBaseGameplayEffect
 	{
-		[RED("fact")] 		public CName Fact { get; set;}
+		[Ordinal(0)] [RED("("fact")] 		public CName Fact { get; set;}
 
 		public W3Potion_Fact(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

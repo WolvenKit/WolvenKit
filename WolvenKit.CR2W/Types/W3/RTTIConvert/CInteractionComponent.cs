@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CInteractionComponent : CInteractionAreaComponent
 	{
-		[RED("actionName")] 		public CString ActionName { get; set;}
+		[Ordinal(0)] [RED("actionName")] 		public CString ActionName { get; set;}
 
-		[RED("checkCameraVisibility")] 		public CBool CheckCameraVisibility { get; set;}
+		[Ordinal(0)] [RED("checkCameraVisibility")] 		public CBool CheckCameraVisibility { get; set;}
 
-		[RED("reportToScript")] 		public CBool ReportToScript { get; set;}
+		[Ordinal(0)] [RED("reportToScript")] 		public CBool ReportToScript { get; set;}
 
-		[RED("isEnabledInCombat")] 		public CBool IsEnabledInCombat { get; set;}
+		[Ordinal(0)] [RED("isEnabledInCombat")] 		public CBool IsEnabledInCombat { get; set;}
 
-		[RED("shouldIgnoreLocks")] 		public CBool ShouldIgnoreLocks { get; set;}
+		[Ordinal(0)] [RED("shouldIgnoreLocks")] 		public CBool ShouldIgnoreLocks { get; set;}
 
-		[RED("isEnabledOnHorse")] 		public CBool IsEnabledOnHorse { get; set;}
+		[Ordinal(0)] [RED("isEnabledOnHorse")] 		public CBool IsEnabledOnHorse { get; set;}
 
-		[RED("aimVector")] 		public Vector AimVector { get; set;}
+		[Ordinal(0)] [RED("aimVector")] 		public Vector AimVector { get; set;}
 
-		[RED("iconOffset")] 		public Vector IconOffset { get; set;}
+		[Ordinal(0)] [RED("iconOffset")] 		public Vector IconOffset { get; set;}
 
-		[RED("iconOffsetSlotName")] 		public CName IconOffsetSlotName { get; set;}
+		[Ordinal(0)] [RED("iconOffsetSlotName")] 		public CName IconOffsetSlotName { get; set;}
 
 		public CInteractionComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

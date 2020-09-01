@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSTMaintainTargetSpeed : IManageSpeedSteeringTask
 	{
-		[RED("allowedDiffPerSecond")] 		public CFloat AllowedDiffPerSecond { get; set;}
+		[Ordinal(0)] [RED("allowedDiffPerSecond")] 		public CFloat AllowedDiffPerSecond { get; set;}
 
-		[RED("stopSpeedThreshold")] 		public CFloat StopSpeedThreshold { get; set;}
+		[Ordinal(0)] [RED("stopSpeedThreshold")] 		public CFloat StopSpeedThreshold { get; set;}
 
-		[RED("distanceCoefficient")] 		public CFloat DistanceCoefficient { get; set;}
+		[Ordinal(0)] [RED("distanceCoefficient")] 		public CFloat DistanceCoefficient { get; set;}
 
 		public CMoveSTMaintainTargetSpeed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

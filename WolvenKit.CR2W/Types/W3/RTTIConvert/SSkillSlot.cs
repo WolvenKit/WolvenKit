@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SSkillSlot : CVariable
 	{
-		[RED("id")] 		public CInt32 Id { get; set;}
+		[Ordinal(0)] [RED("("id")] 		public CInt32 Id { get; set;}
 
-		[RED("unlockedOnLevel")] 		public CInt32 UnlockedOnLevel { get; set;}
+		[Ordinal(0)] [RED("("unlockedOnLevel")] 		public CInt32 UnlockedOnLevel { get; set;}
 
-		[RED("socketedSkill")] 		public CEnum<ESkill> SocketedSkill { get; set;}
+		[Ordinal(0)] [RED("("socketedSkill")] 		public CEnum<ESkill> SocketedSkill { get; set;}
 
-		[RED("unlocked")] 		public CBool Unlocked { get; set;}
+		[Ordinal(0)] [RED("("unlocked")] 		public CBool Unlocked { get; set;}
 
-		[RED("groupID")] 		public CInt32 GroupID { get; set;}
+		[Ordinal(0)] [RED("("groupID")] 		public CInt32 GroupID { get; set;}
 
 		public SSkillSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

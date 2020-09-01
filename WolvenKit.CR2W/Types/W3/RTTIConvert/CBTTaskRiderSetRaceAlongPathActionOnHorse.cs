@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskRiderSetRaceAlongPathActionOnHorse : IBehTreeTask
 	{
-		[RED("horseRaceAlongPathAction")] 		public CHandle<CAIRaceAlongPathAction> HorseRaceAlongPathAction { get; set;}
+		[Ordinal(0)] [RED("horseRaceAlongPathAction")] 		public CHandle<CAIRaceAlongPathAction> HorseRaceAlongPathAction { get; set;}
 
-		[RED("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
+		[Ordinal(0)] [RED("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
 
 		public CBTTaskRiderSetRaceAlongPathActionOnHorse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

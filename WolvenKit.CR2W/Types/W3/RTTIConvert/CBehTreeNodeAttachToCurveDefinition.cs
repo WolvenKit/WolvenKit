@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeAttachToCurveDefinition : CBehTreeNodeAtomicActionDefinition
 	{
-		[RED("animationName")] 		public CBehTreeValCName AnimationName { get; set;}
+		[Ordinal(0)] [RED("animationName")] 		public CBehTreeValCName AnimationName { get; set;}
 
-		[RED("componentName")] 		public CBehTreeValString ComponentName { get; set;}
+		[Ordinal(0)] [RED("componentName")] 		public CBehTreeValString ComponentName { get; set;}
 
-		[RED("blendInTime")] 		public CBehTreeValFloat BlendInTime { get; set;}
+		[Ordinal(0)] [RED("blendInTime")] 		public CBehTreeValFloat BlendInTime { get; set;}
 
 		public CBehTreeNodeAttachToCurveDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

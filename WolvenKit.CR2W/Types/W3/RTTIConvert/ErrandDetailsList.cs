@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class ErrandDetailsList : CVariable
 	{
-		[RED("errandStringKey")] 		public CString ErrandStringKey { get; set;}
+		[Ordinal(0)] [RED("errandStringKey")] 		public CString ErrandStringKey { get; set;}
 
-		[RED("newQuestFact")] 		public CString NewQuestFact { get; set;}
+		[Ordinal(0)] [RED("newQuestFact")] 		public CString NewQuestFact { get; set;}
 
-		[RED("requiredFact")] 		public CString RequiredFact { get; set;}
+		[Ordinal(0)] [RED("requiredFact")] 		public CString RequiredFact { get; set;}
 
-		[RED("forbiddenFact")] 		public CString ForbiddenFact { get; set;}
+		[Ordinal(0)] [RED("forbiddenFact")] 		public CString ForbiddenFact { get; set;}
 
-		[RED("addedItemName")] 		public CName AddedItemName { get; set;}
+		[Ordinal(0)] [RED("addedItemName")] 		public CName AddedItemName { get; set;}
 
-		[RED("displayAsFluff")] 		public CBool DisplayAsFluff { get; set;}
+		[Ordinal(0)] [RED("displayAsFluff")] 		public CBool DisplayAsFluff { get; set;}
 
-		[RED("posX")] 		public CInt32 PosX { get; set;}
+		[Ordinal(0)] [RED("posX")] 		public CInt32 PosX { get; set;}
 
-		[RED("posY")] 		public CInt32 PosY { get; set;}
+		[Ordinal(0)] [RED("posY")] 		public CInt32 PosY { get; set;}
 
-		[RED("errandPosition")] 		public CInt32 ErrandPosition { get; set;}
+		[Ordinal(0)] [RED("errandPosition")] 		public CInt32 ErrandPosition { get; set;}
 
 		public ErrandDetailsList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

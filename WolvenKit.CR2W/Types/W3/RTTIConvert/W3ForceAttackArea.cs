@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ForceAttackArea : CEntity
 	{
-		[RED("forceAttackEvenWithDisplayTarget")] 		public CBool ForceAttackEvenWithDisplayTarget { get; set;}
+		[Ordinal(0)] [RED("("forceAttackEvenWithDisplayTarget")] 		public CBool ForceAttackEvenWithDisplayTarget { get; set;}
 
 		public W3ForceAttackArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

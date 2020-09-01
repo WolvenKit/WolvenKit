@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeSetupCustomMoveTargetToPositionDefinition : IBehTreeNodeSetupCustomMoveDataDefinition
 	{
-		[RED("target")] 		public CBehTreeValVector Target { get; set;}
+		[Ordinal(0)] [RED("target")] 		public CBehTreeValVector Target { get; set;}
 
-		[RED("heading")] 		public CBehTreeValFloat Heading { get; set;}
+		[Ordinal(0)] [RED("heading")] 		public CBehTreeValFloat Heading { get; set;}
 
 		public CBehTreeNodeSetupCustomMoveTargetToPositionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

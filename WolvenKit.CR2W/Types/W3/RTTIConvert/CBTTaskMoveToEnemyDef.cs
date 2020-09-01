@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskMoveToEnemyDef : IBehTreeTaskDefinition
 	{
-		[RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(0)] [RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
+		[Ordinal(0)] [RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
-		[RED("absSpeed")] 		public CFloat AbsSpeed { get; set;}
+		[Ordinal(0)] [RED("absSpeed")] 		public CFloat AbsSpeed { get; set;}
 
 		public CBTTaskMoveToEnemyDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

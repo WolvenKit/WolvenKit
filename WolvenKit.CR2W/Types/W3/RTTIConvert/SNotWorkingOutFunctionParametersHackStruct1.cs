@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SNotWorkingOutFunctionParametersHackStruct1 : CVariable
 	{
-		[RED("outValue")] 		public CInt32 OutValue { get; set;}
+		[Ordinal(0)] [RED("("outValue")] 		public CInt32 OutValue { get; set;}
 
-		[RED("retValue")] 		public CBool RetValue { get; set;}
+		[Ordinal(0)] [RED("("retValue")] 		public CBool RetValue { get; set;}
 
 		public SNotWorkingOutFunctionParametersHackStruct1(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

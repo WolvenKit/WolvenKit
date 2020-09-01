@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskMaintainSpeed : IBehTreeTask
 	{
-		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
+		[Ordinal(0)] [RED("("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
-		[RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
+		[Ordinal(0)] [RED("("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
 
-		[RED("manageFlySpeed")] 		public CBool ManageFlySpeed { get; set;}
+		[Ordinal(0)] [RED("("manageFlySpeed")] 		public CBool ManageFlySpeed { get; set;}
 
-		[RED("onActivate")] 		public CBool OnActivate { get; set;}
+		[Ordinal(0)] [RED("("onActivate")] 		public CBool OnActivate { get; set;}
 
-		[RED("onDeactivate")] 		public CBool OnDeactivate { get; set;}
+		[Ordinal(0)] [RED("("onDeactivate")] 		public CBool OnDeactivate { get; set;}
 
-		[RED("speedDecay")] 		public CBool SpeedDecay { get; set;}
+		[Ordinal(0)] [RED("("speedDecay")] 		public CBool SpeedDecay { get; set;}
 
-		[RED("speedDecayOnDeactivate")] 		public CBool SpeedDecayOnDeactivate { get; set;}
+		[Ordinal(0)] [RED("("speedDecayOnDeactivate")] 		public CBool SpeedDecayOnDeactivate { get; set;}
 
-		[RED("overrideForThisTask")] 		public CBool OverrideForThisTask { get; set;}
+		[Ordinal(0)] [RED("("overrideForThisTask")] 		public CBool OverrideForThisTask { get; set;}
 
-		[RED("decayAfter")] 		public CFloat DecayAfter { get; set;}
+		[Ordinal(0)] [RED("("decayAfter")] 		public CFloat DecayAfter { get; set;}
 
-		[RED("previousSpeed")] 		public CFloat PreviousSpeed { get; set;}
+		[Ordinal(0)] [RED("("previousSpeed")] 		public CFloat PreviousSpeed { get; set;}
 
 		public CBTTaskMaintainSpeed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

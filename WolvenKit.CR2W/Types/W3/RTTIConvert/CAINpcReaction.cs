@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcReaction : CAISubTree
 	{
-		[RED("voiceSet")] 		public CString VoiceSet { get; set;}
+		[Ordinal(0)] [RED("voiceSet")] 		public CString VoiceSet { get; set;}
 
 		public CAINpcReaction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

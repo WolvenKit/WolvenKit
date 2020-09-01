@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskGetFoodNearbyDef : IBehTreeTaskDefinition
 	{
-		[RED("corpse")] 		public CBehTreeValBool Corpse { get; set;}
+		[Ordinal(0)] [RED("corpse")] 		public CBehTreeValBool Corpse { get; set;}
 
-		[RED("meat")] 		public CBehTreeValBool Meat { get; set;}
+		[Ordinal(0)] [RED("meat")] 		public CBehTreeValBool Meat { get; set;}
 
-		[RED("vegetable")] 		public CBehTreeValBool Vegetable { get; set;}
+		[Ordinal(0)] [RED("vegetable")] 		public CBehTreeValBool Vegetable { get; set;}
 
-		[RED("water")] 		public CBehTreeValBool Water { get; set;}
+		[Ordinal(0)] [RED("water")] 		public CBehTreeValBool Water { get; set;}
 
-		[RED("monster")] 		public CBehTreeValBool Monster { get; set;}
+		[Ordinal(0)] [RED("monster")] 		public CBehTreeValBool Monster { get; set;}
 
-		[RED("completeIfTargetChange")] 		public CBool CompleteIfTargetChange { get; set;}
+		[Ordinal(0)] [RED("completeIfTargetChange")] 		public CBool CompleteIfTargetChange { get; set;}
 
 		public BTTaskGetFoodNearbyDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

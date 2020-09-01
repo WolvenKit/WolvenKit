@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskScaredWhileSitting : CBTTaskShouldBeScaredOnOverlay
 	{
-		[RED("leftItem")] 		public CHandle<CDrawableComponent> LeftItem { get; set;}
+		[Ordinal(0)] [RED("("leftItem")] 		public CHandle<CDrawableComponent> LeftItem { get; set;}
 
-		[RED("rightItem")] 		public CHandle<CDrawableComponent> RightItem { get; set;}
+		[Ordinal(0)] [RED("("rightItem")] 		public CHandle<CDrawableComponent> RightItem { get; set;}
 
-		[RED("entity")] 		public CHandle<CEntity> Entity { get; set;}
+		[Ordinal(0)] [RED("("entity")] 		public CHandle<CEntity> Entity { get; set;}
 
 		public CBTTaskScaredWhileSitting(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

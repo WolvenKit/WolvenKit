@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondIsInTheWayDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("origin")] 		public CEnum<ETargetName> Origin { get; set;}
+		[Ordinal(0)] [RED("origin")] 		public CEnum<ETargetName> Origin { get; set;}
 
-		[RED("obstacle")] 		public CEnum<ETargetName> Obstacle { get; set;}
+		[Ordinal(0)] [RED("obstacle")] 		public CEnum<ETargetName> Obstacle { get; set;}
 
-		[RED("destination")] 		public CEnum<ETargetName> Destination { get; set;}
+		[Ordinal(0)] [RED("destination")] 		public CEnum<ETargetName> Destination { get; set;}
 
-		[RED("requiredDistanceFromLine")] 		public CFloat RequiredDistanceFromLine { get; set;}
+		[Ordinal(0)] [RED("requiredDistanceFromLine")] 		public CFloat RequiredDistanceFromLine { get; set;}
 
-		[RED("returnIfInvalid")] 		public CBool ReturnIfInvalid { get; set;}
+		[Ordinal(0)] [RED("returnIfInvalid")] 		public CBool ReturnIfInvalid { get; set;}
 
 		public BTCondIsInTheWayDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

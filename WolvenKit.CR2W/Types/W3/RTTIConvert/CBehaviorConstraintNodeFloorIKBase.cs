@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorConstraintNodeFloorIKBase : CBehaviorGraphPoseConstraintNode
 	{
-		[RED("requiredAnimEvent")] 		public CName RequiredAnimEvent { get; set;}
+		[Ordinal(0)] [RED("requiredAnimEvent")] 		public CName RequiredAnimEvent { get; set;}
 
-		[RED("blockAnimEvent")] 		public CName BlockAnimEvent { get; set;}
+		[Ordinal(0)] [RED("blockAnimEvent")] 		public CName BlockAnimEvent { get; set;}
 
-		[RED("canBeDisabledDueToFrameRate")] 		public CBool CanBeDisabledDueToFrameRate { get; set;}
+		[Ordinal(0)] [RED("canBeDisabledDueToFrameRate")] 		public CBool CanBeDisabledDueToFrameRate { get; set;}
 
-		[RED("useFixedVersion")] 		public CBool UseFixedVersion { get; set;}
+		[Ordinal(0)] [RED("useFixedVersion")] 		public CBool UseFixedVersion { get; set;}
 
-		[RED("slopeAngleDamp")] 		public CFloat SlopeAngleDamp { get; set;}
+		[Ordinal(0)] [RED("slopeAngleDamp")] 		public CFloat SlopeAngleDamp { get; set;}
 
-		[RED("generateEditorFragmentsForIKSolvers")] 		public CBool GenerateEditorFragmentsForIKSolvers { get; set;}
+		[Ordinal(0)] [RED("generateEditorFragmentsForIKSolvers")] 		public CBool GenerateEditorFragmentsForIKSolvers { get; set;}
 
-		[RED("generateEditorFragmentsForLegIndex")] 		public CInt32 GenerateEditorFragmentsForLegIndex { get; set;}
+		[Ordinal(0)] [RED("generateEditorFragmentsForLegIndex")] 		public CInt32 GenerateEditorFragmentsForLegIndex { get; set;}
 
-		[RED("common")] 		public SBehaviorConstraintNodeFloorIKCommonData Common { get; set;}
+		[Ordinal(0)] [RED("common")] 		public SBehaviorConstraintNodeFloorIKCommonData Common { get; set;}
 
 		public CBehaviorConstraintNodeFloorIKBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

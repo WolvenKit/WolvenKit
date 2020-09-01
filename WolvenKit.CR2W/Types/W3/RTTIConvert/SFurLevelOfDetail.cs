@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFurLevelOfDetail : CVariable
 	{
-		[RED("enableLOD")] 		public CBool EnableLOD { get; set;}
+		[Ordinal(0)] [RED("("enableLOD")] 		public CBool EnableLOD { get; set;}
 
-		[RED("culling")] 		public SFurCulling Culling { get; set;}
+		[Ordinal(0)] [RED("("culling")] 		public SFurCulling Culling { get; set;}
 
-		[RED("distanceLOD")] 		public SFurDistanceLOD DistanceLOD { get; set;}
+		[Ordinal(0)] [RED("("distanceLOD")] 		public SFurDistanceLOD DistanceLOD { get; set;}
 
-		[RED("detailLOD")] 		public SFurDetailLOD DetailLOD { get; set;}
+		[Ordinal(0)] [RED("("detailLOD")] 		public SFurDetailLOD DetailLOD { get; set;}
 
-		[RED("priority")] 		public CUInt32 Priority { get; set;}
+		[Ordinal(0)] [RED("("priority")] 		public CUInt32 Priority { get; set;}
 
 		public SFurLevelOfDetail(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

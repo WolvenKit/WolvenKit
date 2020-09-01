@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneCutsceneSection : CStorySceneSection
 	{
-		[RED("cutscene")] 		public CHandle<CCutsceneTemplate> Cutscene { get; set;}
+		[Ordinal(0)] [RED("("cutscene")] 		public CHandle<CCutsceneTemplate> Cutscene { get; set;}
 
-		[RED("point")] 		public TagList Point { get; set;}
+		[Ordinal(0)] [RED("("point")] 		public TagList Point { get; set;}
 
-		[RED("looped")] 		public CBool Looped { get; set;}
+		[Ordinal(0)] [RED("("looped")] 		public CBool Looped { get; set;}
 
-		[RED("actorOverrides", 2,0)] 		public CArray<SCutsceneActorOverrideMapping> ActorOverrides { get; set;}
+		[Ordinal(0)] [RED("("actorOverrides", 2,0)] 		public CArray<SCutsceneActorOverrideMapping> ActorOverrides { get; set;}
 
-		[RED("clearActorsHands")] 		public CBool ClearActorsHands { get; set;}
+		[Ordinal(0)] [RED("("clearActorsHands")] 		public CBool ClearActorsHands { get; set;}
 
 		public CStorySceneCutsceneSection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

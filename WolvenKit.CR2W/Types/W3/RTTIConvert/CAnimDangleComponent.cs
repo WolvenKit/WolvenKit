@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAnimDangleComponent : CComponent
 	{
-		[RED("constraint")] 		public CPtr<IAnimDangleConstraint> Constraint { get; set;}
+		[Ordinal(0)] [RED("constraint")] 		public CPtr<IAnimDangleConstraint> Constraint { get; set;}
 
-		[RED("attPrio")] 		public CInt32 AttPrio { get; set;}
+		[Ordinal(0)] [RED("attPrio")] 		public CInt32 AttPrio { get; set;}
 
-		[RED("debugRender")] 		public CBool DebugRender { get; set;}
+		[Ordinal(0)] [RED("debugRender")] 		public CBool DebugRender { get; set;}
 
 		public CAnimDangleComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

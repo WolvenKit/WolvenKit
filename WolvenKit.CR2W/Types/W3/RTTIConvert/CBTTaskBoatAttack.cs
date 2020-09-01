@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskBoatAttack : IBehTreeTask
 	{
-		[RED("m_TargetBoat")] 		public CHandle<CEntity> M_TargetBoat { get; set;}
+		[Ordinal(0)] [RED("m_TargetBoat")] 		public CHandle<CEntity> M_TargetBoat { get; set;}
 
-		[RED("m_LockedSlot")] 		public CName M_LockedSlot { get; set;}
+		[Ordinal(0)] [RED("m_LockedSlot")] 		public CName M_LockedSlot { get; set;}
 
 		public CBTTaskBoatAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IBehTreeTask : IScriptable
 	{
-		[RED("isActive")] 		public CBool IsActive { get; set;}
+		[Ordinal(0)] [RED("isActive")] 		public CBool IsActive { get; set;}
 
 		public IBehTreeTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

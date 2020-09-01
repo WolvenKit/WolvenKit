@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CTicketBaseAlgorithm : ITicketAlgorithmScript
 	{
-		[RED("resetImportanceOnSpecialCombatAction")] 		public CBool ResetImportanceOnSpecialCombatAction { get; set;}
+		[Ordinal(0)] [RED("resetImportanceOnSpecialCombatAction")] 		public CBool ResetImportanceOnSpecialCombatAction { get; set;}
 
-		[RED("threatLevelBonus")] 		public CFloat ThreatLevelBonus { get; set;}
+		[Ordinal(0)] [RED("threatLevelBonus")] 		public CFloat ThreatLevelBonus { get; set;}
 
-		[RED("activationBonus")] 		public CFloat ActivationBonus { get; set;}
+		[Ordinal(0)] [RED("activationBonus")] 		public CFloat ActivationBonus { get; set;}
 
 		public CTicketBaseAlgorithm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3VehicleCombatManager : CEntity
 	{
-		[RED("rider")] 		public CHandle<CR4Player> Rider { get; set;}
+		[Ordinal(0)] [RED("("rider")] 		public CHandle<CR4Player> Rider { get; set;}
 
-		[RED("vehicle")] 		public CHandle<CVehicleComponent> Vehicle { get; set;}
+		[Ordinal(0)] [RED("("vehicle")] 		public CHandle<CVehicleComponent> Vehicle { get; set;}
 
-		[RED("isInCombatAction")] 		public CBool IsInCombatAction { get; set;}
+		[Ordinal(0)] [RED("("isInCombatAction")] 		public CBool IsInCombatAction { get; set;}
 
-		[RED("wasBombReleased")] 		public CBool WasBombReleased { get; set;}
+		[Ordinal(0)] [RED("("wasBombReleased")] 		public CBool WasBombReleased { get; set;}
 
 		public W3VehicleCombatManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

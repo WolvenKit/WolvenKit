@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPlayEventLatentDef : IBehTreeTaskDefinition
 	{
-		[RED("nodeDeactivationName")] 		public CName NodeDeactivationName { get; set;}
+		[Ordinal(0)] [RED("("nodeDeactivationName")] 		public CName NodeDeactivationName { get; set;}
 
-		[RED("playEventName")] 		public CName PlayEventName { get; set;}
+		[Ordinal(0)] [RED("("playEventName")] 		public CName PlayEventName { get; set;}
 
-		[RED("eventIsForced")] 		public CBool EventIsForced { get; set;}
+		[Ordinal(0)] [RED("("eventIsForced")] 		public CBool EventIsForced { get; set;}
 
-		[RED("setVariable")] 		public CBool SetVariable { get; set;}
+		[Ordinal(0)] [RED("("setVariable")] 		public CBool SetVariable { get; set;}
 
-		[RED("variableName")] 		public CName VariableName { get; set;}
+		[Ordinal(0)] [RED("("variableName")] 		public CName VariableName { get; set;}
 
-		[RED("variableValue")] 		public CFloat VariableValue { get; set;}
+		[Ordinal(0)] [RED("("variableValue")] 		public CFloat VariableValue { get; set;}
 
 		public CBTTaskPlayEventLatentDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

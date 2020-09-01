@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTTaskEredinMeteoriteAttack : BTTaskSpawnEntitiesAttack
 	{
-		[RED("collisionGroups", 2,0)] 		public CArray<CName> CollisionGroups { get; set;}
+		[Ordinal(0)] [RED("collisionGroups", 2,0)] 		public CArray<CName> CollisionGroups { get; set;}
 
 		public BTTaskEredinMeteoriteAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

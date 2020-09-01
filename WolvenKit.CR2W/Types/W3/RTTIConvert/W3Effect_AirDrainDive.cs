@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_AirDrainDive : CBaseGameplayEffect
 	{
-		[RED("effectValueMultInIdle")] 		public SAbilityAttributeValue EffectValueMultInIdle { get; set;}
+		[Ordinal(0)] [RED("("effectValueMultInIdle")] 		public SAbilityAttributeValue EffectValueMultInIdle { get; set;}
 
-		[RED("effectValueMultWhileSprinting")] 		public SAbilityAttributeValue EffectValueMultWhileSprinting { get; set;}
+		[Ordinal(0)] [RED("("effectValueMultWhileSprinting")] 		public SAbilityAttributeValue EffectValueMultWhileSprinting { get; set;}
 
 		public W3Effect_AirDrainDive(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

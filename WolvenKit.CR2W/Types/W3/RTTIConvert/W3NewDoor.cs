@@ -10,31 +10,31 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3NewDoor : W3LockableEntity
 	{
-		[RED("openAngle")] 		public CFloat OpenAngle { get; set;}
+		[Ordinal(0)] [RED("("openAngle")] 		public CFloat OpenAngle { get; set;}
 
-		[RED("initiallyOpened")] 		public CBool InitiallyOpened { get; set;}
+		[Ordinal(0)] [RED("("initiallyOpened")] 		public CBool InitiallyOpened { get; set;}
 
-		[RED("factOnPlayerDoorOpen")] 		public CName FactOnPlayerDoorOpen { get; set;}
+		[Ordinal(0)] [RED("("factOnPlayerDoorOpen")] 		public CName FactOnPlayerDoorOpen { get; set;}
 
-		[RED("openedByHorse")] 		public CBool OpenedByHorse { get; set;}
+		[Ordinal(0)] [RED("("openedByHorse")] 		public CBool OpenedByHorse { get; set;}
 
-		[RED("doorsCmp")] 		public CHandle<CDoorComponent> DoorsCmp { get; set;}
+		[Ordinal(0)] [RED("("doorsCmp")] 		public CHandle<CDoorComponent> DoorsCmp { get; set;}
 
-		[RED("lockedCmp")] 		public CHandle<CInteractionComponent> LockedCmp { get; set;}
+		[Ordinal(0)] [RED("("lockedCmp")] 		public CHandle<CInteractionComponent> LockedCmp { get; set;}
 
-		[RED("unlockCmp")] 		public CHandle<CInteractionComponent> UnlockCmp { get; set;}
+		[Ordinal(0)] [RED("("unlockCmp")] 		public CHandle<CInteractionComponent> UnlockCmp { get; set;}
 
-		[RED("lockedDA")] 		public CHandle<CDeniedAreaComponent> LockedDA { get; set;}
+		[Ordinal(0)] [RED("("lockedDA")] 		public CHandle<CDeniedAreaComponent> LockedDA { get; set;}
 
-		[RED("rigidMeshCmp")] 		public CHandle<CRigidMeshComponent> RigidMeshCmp { get; set;}
+		[Ordinal(0)] [RED("("rigidMeshCmp")] 		public CHandle<CRigidMeshComponent> RigidMeshCmp { get; set;}
 
-		[RED("updateDuration")] 		public CFloat UpdateDuration { get; set;}
+		[Ordinal(0)] [RED("("updateDuration")] 		public CFloat UpdateDuration { get; set;}
 
-		[RED("updateTimeLeft")] 		public CFloat UpdateTimeLeft { get; set;}
+		[Ordinal(0)] [RED("("updateTimeLeft")] 		public CFloat UpdateTimeLeft { get; set;}
 
-		[RED("playerInsideTrapdoorTrigger")] 		public CBool PlayerInsideTrapdoorTrigger { get; set;}
+		[Ordinal(0)] [RED("("playerInsideTrapdoorTrigger")] 		public CBool PlayerInsideTrapdoorTrigger { get; set;}
 
-		[RED("enableDeniedAreaInCombat")] 		public CBool EnableDeniedAreaInCombat { get; set;}
+		[Ordinal(0)] [RED("("enableDeniedAreaInCombat")] 		public CBool EnableDeniedAreaInCombat { get; set;}
 
 		public W3NewDoor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

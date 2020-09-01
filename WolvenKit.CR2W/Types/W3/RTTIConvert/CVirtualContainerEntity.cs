@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CVirtualContainerEntity : CGameplayEntity
 	{
-		[RED("characterState", 2,0)] 		public CByteArray CharacterState { get; set;}
+		[Ordinal(0)] [RED("characterState", 2,0)] 		public CByteArray CharacterState { get; set;}
 
 		public CVirtualContainerEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

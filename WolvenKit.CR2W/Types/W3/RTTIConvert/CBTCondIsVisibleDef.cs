@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTCondIsVisibleDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("gameplayVisibility")] 		public CBool GameplayVisibility { get; set;}
+		[Ordinal(0)] [RED("("gameplayVisibility")] 		public CBool GameplayVisibility { get; set;}
 
-		[RED("meshVisibility")] 		public CBool MeshVisibility { get; set;}
+		[Ordinal(0)] [RED("("meshVisibility")] 		public CBool MeshVisibility { get; set;}
 
-		[RED("forceComplete")] 		public CBool ForceComplete { get; set;}
+		[Ordinal(0)] [RED("("forceComplete")] 		public CBool ForceComplete { get; set;}
 
-		[RED("target")] 		public CBool Target { get; set;}
+		[Ordinal(0)] [RED("("target")] 		public CBool Target { get; set;}
 
-		[RED("invert")] 		public CBool Invert { get; set;}
+		[Ordinal(0)] [RED("("invert")] 		public CBool Invert { get; set;}
 
 		public CBTCondIsVisibleDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

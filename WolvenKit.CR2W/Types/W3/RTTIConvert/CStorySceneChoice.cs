@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneChoice : CStorySceneElement
 	{
-		[RED("choiceLines", 2,0)] 		public CArray<CPtr<CStorySceneChoiceLine>> ChoiceLines { get; set;}
+		[Ordinal(0)] [RED("("choiceLines", 2,0)] 		public CArray<CPtr<CStorySceneChoiceLine>> ChoiceLines { get; set;}
 
-		[RED("timeLimit")] 		public CFloat TimeLimit { get; set;}
+		[Ordinal(0)] [RED("("timeLimit")] 		public CFloat TimeLimit { get; set;}
 
-		[RED("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(0)] [RED("("duration")] 		public CFloat Duration { get; set;}
 
-		[RED("isLooped")] 		public CBool IsLooped { get; set;}
+		[Ordinal(0)] [RED("("isLooped")] 		public CBool IsLooped { get; set;}
 
-		[RED("questChoice")] 		public CBool QuestChoice { get; set;}
+		[Ordinal(0)] [RED("("questChoice")] 		public CBool QuestChoice { get; set;}
 
-		[RED("showLastLine")] 		public CBool ShowLastLine { get; set;}
+		[Ordinal(0)] [RED("("showLastLine")] 		public CBool ShowLastLine { get; set;}
 
-		[RED("alternativeUI")] 		public CBool AlternativeUI { get; set;}
+		[Ordinal(0)] [RED("("alternativeUI")] 		public CBool AlternativeUI { get; set;}
 
 		public CStorySceneChoice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

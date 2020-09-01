@@ -10,41 +10,41 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ReactToBeingHitEntity : CGameplayEntity
 	{
-		[RED("reactsToSwords")] 		public CBool ReactsToSwords { get; set;}
+		[Ordinal(0)] [RED("("reactsToSwords")] 		public CBool ReactsToSwords { get; set;}
 
-		[RED("reactsToBolts")] 		public CBool ReactsToBolts { get; set;}
+		[Ordinal(0)] [RED("("reactsToBolts")] 		public CBool ReactsToBolts { get; set;}
 
-		[RED("deactivateOnHit")] 		public CBool DeactivateOnHit { get; set;}
+		[Ordinal(0)] [RED("("deactivateOnHit")] 		public CBool DeactivateOnHit { get; set;}
 
-		[RED("dealDamage")] 		public CBool DealDamage { get; set;}
+		[Ordinal(0)] [RED("("dealDamage")] 		public CBool DealDamage { get; set;}
 
-		[RED("debuffType")] 		public CEnum<EEffectType> DebuffType { get; set;}
+		[Ordinal(0)] [RED("("debuffType")] 		public CEnum<EEffectType> DebuffType { get; set;}
 
-		[RED("debuffDuration")] 		public CFloat DebuffDuration { get; set;}
+		[Ordinal(0)] [RED("("debuffDuration")] 		public CFloat DebuffDuration { get; set;}
 
-		[RED("damageTypeName")] 		public CName DamageTypeName { get; set;}
+		[Ordinal(0)] [RED("("damageTypeName")] 		public CName DamageTypeName { get; set;}
 
-		[RED("killOnHpBelowPerc")] 		public CFloat KillOnHpBelowPerc { get; set;}
+		[Ordinal(0)] [RED("("killOnHpBelowPerc")] 		public CFloat KillOnHpBelowPerc { get; set;}
 
-		[RED("setBehVarOnKill")] 		public CName SetBehVarOnKill { get; set;}
+		[Ordinal(0)] [RED("("setBehVarOnKill")] 		public CName SetBehVarOnKill { get; set;}
 
-		[RED("behVarValue")] 		public CFloat BehVarValue { get; set;}
+		[Ordinal(0)] [RED("("behVarValue")] 		public CFloat BehVarValue { get; set;}
 
-		[RED("gameplayEventOnAttacker")] 		public CName GameplayEventOnAttacker { get; set;}
+		[Ordinal(0)] [RED("("gameplayEventOnAttacker")] 		public CName GameplayEventOnAttacker { get; set;}
 
-		[RED("effectOnActivation")] 		public CName EffectOnActivation { get; set;}
+		[Ordinal(0)] [RED("("effectOnActivation")] 		public CName EffectOnActivation { get; set;}
 
-		[RED("durationEffect")] 		public CName DurationEffect { get; set;}
+		[Ordinal(0)] [RED("("durationEffect")] 		public CName DurationEffect { get; set;}
 
-		[RED("effectOnHit")] 		public CName EffectOnHit { get; set;}
+		[Ordinal(0)] [RED("("effectOnHit")] 		public CName EffectOnHit { get; set;}
 
-		[RED("effectOnHitVictim")] 		public CName EffectOnHitVictim { get; set;}
+		[Ordinal(0)] [RED("("effectOnHitVictim")] 		public CName EffectOnHitVictim { get; set;}
 
-		[RED("activeDuration")] 		public CFloat ActiveDuration { get; set;}
+		[Ordinal(0)] [RED("("activeDuration")] 		public CFloat ActiveDuration { get; set;}
 
-		[RED("active")] 		public CBool Active { get; set;}
+		[Ordinal(0)] [RED("("active")] 		public CBool Active { get; set;}
 
-		[RED("attributeName")] 		public CName AttributeName { get; set;}
+		[Ordinal(0)] [RED("("attributeName")] 		public CName AttributeName { get; set;}
 
 		public W3ReactToBeingHitEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

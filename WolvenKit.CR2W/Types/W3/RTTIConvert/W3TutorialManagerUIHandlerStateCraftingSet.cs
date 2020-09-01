@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateCraftingSet : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("SET")] 		public CName SET { get; set;}
+		[Ordinal(0)] [RED("("SET")] 		public CName SET { get; set;}
 
 		public W3TutorialManagerUIHandlerStateCraftingSet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

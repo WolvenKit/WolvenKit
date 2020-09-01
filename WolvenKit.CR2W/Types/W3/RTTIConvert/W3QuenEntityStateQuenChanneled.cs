@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuenEntityStateQuenChanneled : W3SignEntityStateChanneling
 	{
-		[RED("HEALING_FACTOR")] 		public CFloat HEALING_FACTOR { get; set;}
+		[Ordinal(0)] [RED("("HEALING_FACTOR")] 		public CFloat HEALING_FACTOR { get; set;}
 
-		[RED("HAXXOR_LeavingState")] 		public CBool HAXXOR_LeavingState { get; set;}
+		[Ordinal(0)] [RED("("HAXXOR_LeavingState")] 		public CBool HAXXOR_LeavingState { get; set;}
 
 		public W3QuenEntityStateQuenChanneled(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

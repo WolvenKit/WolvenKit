@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ReplacerWarningArea : CEntity
 	{
-		[RED("messageKey")] 		public CString MessageKey { get; set;}
+		[Ordinal(0)] [RED("("messageKey")] 		public CString MessageKey { get; set;}
 
-		[RED("messageInterval")] 		public CFloat MessageInterval { get; set;}
+		[Ordinal(0)] [RED("("messageInterval")] 		public CFloat MessageInterval { get; set;}
 
-		[RED("invertLogic")] 		public CBool InvertLogic { get; set;}
+		[Ordinal(0)] [RED("("invertLogic")] 		public CBool InvertLogic { get; set;}
 
-		[RED("isPlayerInArea")] 		public CBool IsPlayerInArea { get; set;}
+		[Ordinal(0)] [RED("("isPlayerInArea")] 		public CBool IsPlayerInArea { get; set;}
 
 		public W3ReplacerWarningArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

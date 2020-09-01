@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskRootPitch : IBehTreeTask
 	{
-		[RED("mac")] 		public CHandle<CMovingPhysicalAgentComponent> Mac { get; set;}
+		[Ordinal(0)] [RED("("mac")] 		public CHandle<CMovingPhysicalAgentComponent> Mac { get; set;}
 
 		public CBTTaskRootPitch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

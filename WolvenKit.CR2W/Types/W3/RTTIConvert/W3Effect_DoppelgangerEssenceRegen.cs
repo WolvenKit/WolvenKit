@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_DoppelgangerEssenceRegen : CBaseGameplayEffect
 	{
-		[RED("usesVitality")] 		public CBool UsesVitality { get; set;}
+		[Ordinal(0)] [RED("("usesVitality")] 		public CBool UsesVitality { get; set;}
 
 		public W3Effect_DoppelgangerEssenceRegen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

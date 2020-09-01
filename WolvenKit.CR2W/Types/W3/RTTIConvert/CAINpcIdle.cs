@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAINpcIdle : CAIIdleTree
 	{
-		[RED("params")] 		public CHandle<CAINpcIdleParams> Params { get; set;}
+		[Ordinal(0)] [RED("params")] 		public CHandle<CAINpcIdleParams> Params { get; set;}
 
 		public CAINpcIdle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

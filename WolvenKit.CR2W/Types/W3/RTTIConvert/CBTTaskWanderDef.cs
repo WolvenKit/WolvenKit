@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskWanderDef : IBehTreeTaskDefinition
 	{
-		[RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(0)] [RED("("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[RED("minDistance")] 		public CFloat MinDistance { get; set;}
+		[Ordinal(0)] [RED("("minDistance")] 		public CFloat MinDistance { get; set;}
 
-		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
+		[Ordinal(0)] [RED("("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
-		[RED("minSpeed")] 		public CFloat MinSpeed { get; set;}
+		[Ordinal(0)] [RED("("minSpeed")] 		public CFloat MinSpeed { get; set;}
 
-		[RED("maxSpeed")] 		public CFloat MaxSpeed { get; set;}
+		[Ordinal(0)] [RED("("maxSpeed")] 		public CFloat MaxSpeed { get; set;}
 
 		public CBTTaskWanderDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

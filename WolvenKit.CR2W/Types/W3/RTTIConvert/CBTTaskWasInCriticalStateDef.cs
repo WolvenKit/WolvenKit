@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskWasInCriticalStateDef : IBehTreeTaskDefinition
 	{
-		[RED("maxTimeDifference")] 		public CFloat MaxTimeDifference { get; set;}
+		[Ordinal(0)] [RED("("maxTimeDifference")] 		public CFloat MaxTimeDifference { get; set;}
 
-		[RED("criticalState")] 		public CEnum<ECriticalStateType> CriticalState { get; set;}
+		[Ordinal(0)] [RED("("criticalState")] 		public CEnum<ECriticalStateType> CriticalState { get; set;}
 
 		public CBTTaskWasInCriticalStateDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

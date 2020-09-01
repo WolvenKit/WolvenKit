@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CWizardQuestionNode : CWizardBaseNode
 	{
-		[RED("uniqueName")] 		public CName UniqueName { get; set;}
+		[Ordinal(0)] [RED("uniqueName")] 		public CName UniqueName { get; set;}
 
-		[RED("layoutTemplate")] 		public CString LayoutTemplate { get; set;}
+		[Ordinal(0)] [RED("layoutTemplate")] 		public CString LayoutTemplate { get; set;}
 
-		[RED("text")] 		public CString Text { get; set;}
+		[Ordinal(0)] [RED("text")] 		public CString Text { get; set;}
 
-		[RED("optional")] 		public CBool Optional { get; set;}
+		[Ordinal(0)] [RED("optional")] 		public CBool Optional { get; set;}
 
-		[RED("endNode")] 		public CBool EndNode { get; set;}
+		[Ordinal(0)] [RED("endNode")] 		public CBool EndNode { get; set;}
 
 		public CWizardQuestionNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

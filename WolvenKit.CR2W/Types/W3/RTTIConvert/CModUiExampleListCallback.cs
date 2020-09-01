@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModUiExampleListCallback : IModUiEditableListCallback
 	{
-		[RED("callback")] 		public CHandle<CModUiExampleMod> Callback { get; set;}
+		[Ordinal(0)] [RED("callback")] 		public CHandle<CModUiExampleMod> Callback { get; set;}
 
 		public CModUiExampleListCallback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

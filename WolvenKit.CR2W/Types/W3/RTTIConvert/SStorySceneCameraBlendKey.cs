@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStorySceneCameraBlendKey : CVariable
 	{
-		[RED("time")] 		public CFloat Time { get; set;}
+		[Ordinal(0)] [RED("("time")] 		public CFloat Time { get; set;}
 
-		[RED("cameraDefinition")] 		public StorySceneCameraDefinition CameraDefinition { get; set;}
+		[Ordinal(0)] [RED("("cameraDefinition")] 		public StorySceneCameraDefinition CameraDefinition { get; set;}
 
 		public SStorySceneCameraBlendKey(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

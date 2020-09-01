@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStaticMeshComponent : CMeshComponent
 	{
-		[RED("pathLibCollisionType")] 		public CEnum<EPathLibCollision> PathLibCollisionType { get; set;}
+		[Ordinal(0)] [RED("("pathLibCollisionType")] 		public CEnum<EPathLibCollision> PathLibCollisionType { get; set;}
 
-		[RED("fadeOnCameraCollision")] 		public CBool FadeOnCameraCollision { get; set;}
+		[Ordinal(0)] [RED("("fadeOnCameraCollision")] 		public CBool FadeOnCameraCollision { get; set;}
 
-		[RED("physicalCollisionType")] 		public CPhysicalCollision PhysicalCollisionType { get; set;}
+		[Ordinal(0)] [RED("("physicalCollisionType")] 		public CPhysicalCollision PhysicalCollisionType { get; set;}
 
 		public CStaticMeshComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

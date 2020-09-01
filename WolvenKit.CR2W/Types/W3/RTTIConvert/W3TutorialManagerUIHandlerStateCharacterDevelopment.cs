@@ -10,23 +10,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateCharacterDevelopment : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[RED("OPEN_CHAR_DEV")] 		public CName OPEN_CHAR_DEV { get; set;}
+		[Ordinal(0)] [RED("("OPEN_CHAR_DEV")] 		public CName OPEN_CHAR_DEV { get; set;}
 
-		[RED("LEVELING")] 		public CName LEVELING { get; set;}
+		[Ordinal(0)] [RED("("LEVELING")] 		public CName LEVELING { get; set;}
 
-		[RED("SKILLS")] 		public CName SKILLS { get; set;}
+		[Ordinal(0)] [RED("("SKILLS")] 		public CName SKILLS { get; set;}
 
-		[RED("BUY_SKILL")] 		public CName BUY_SKILL { get; set;}
+		[Ordinal(0)] [RED("("BUY_SKILL")] 		public CName BUY_SKILL { get; set;}
 
-		[RED("SKILL_EQUIPPING")] 		public CName SKILL_EQUIPPING { get; set;}
+		[Ordinal(0)] [RED("("SKILL_EQUIPPING")] 		public CName SKILL_EQUIPPING { get; set;}
 
-		[RED("EQUIP_SKILL")] 		public CName EQUIP_SKILL { get; set;}
+		[Ordinal(0)] [RED("("EQUIP_SKILL")] 		public CName EQUIP_SKILL { get; set;}
 
-		[RED("SKILL_UNEQUIPPING")] 		public CName SKILL_UNEQUIPPING { get; set;}
+		[Ordinal(0)] [RED("("SKILL_UNEQUIPPING")] 		public CName SKILL_UNEQUIPPING { get; set;}
 
-		[RED("GROUPS")] 		public CName GROUPS { get; set;}
+		[Ordinal(0)] [RED("("GROUPS")] 		public CName GROUPS { get; set;}
 
-		[RED("isClosing")] 		public CBool IsClosing { get; set;}
+		[Ordinal(0)] [RED("("isClosing")] 		public CBool IsClosing { get; set;}
 
 		public W3TutorialManagerUIHandlerStateCharacterDevelopment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

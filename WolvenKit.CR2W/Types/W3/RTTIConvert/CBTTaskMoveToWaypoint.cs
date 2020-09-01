@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskMoveToWaypoint : IBehTreeTask
 	{
-		[RED("waypoint")] 		public CName Waypoint { get; set;}
+		[Ordinal(0)] [RED("waypoint")] 		public CName Waypoint { get; set;}
 
-		[RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
+		[Ordinal(0)] [RED("moveType")] 		public CEnum<EMoveType> MoveType { get; set;}
 
-		[RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
+		[Ordinal(0)] [RED("moveSpeed")] 		public CFloat MoveSpeed { get; set;}
 
-		[RED("isMoving")] 		public CBool IsMoving { get; set;}
+		[Ordinal(0)] [RED("isMoving")] 		public CBool IsMoving { get; set;}
 
-		[RED("gotTarget")] 		public CBool GotTarget { get; set;}
+		[Ordinal(0)] [RED("gotTarget")] 		public CBool GotTarget { get; set;}
 
 		public CBTTaskMoveToWaypoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

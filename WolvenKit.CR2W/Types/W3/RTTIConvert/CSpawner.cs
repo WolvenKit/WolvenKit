@@ -10,33 +10,33 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawner : CEntity
 	{
-		[RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
+		[Ordinal(0)] [RED("entityTemplate")] 		public CHandle<CEntityTemplate> EntityTemplate { get; set;}
 
-		[RED("count")] 		public CInt32 Count { get; set;}
+		[Ordinal(0)] [RED("count")] 		public CInt32 Count { get; set;}
 
-		[RED("immortalityMode")] 		public CEnum<EActorImmortalityMode> ImmortalityMode { get; set;}
+		[Ordinal(0)] [RED("immortalityMode")] 		public CEnum<EActorImmortalityMode> ImmortalityMode { get; set;}
 
-		[RED("attitudeOverride")] 		public CBool AttitudeOverride { get; set;}
+		[Ordinal(0)] [RED("attitudeOverride")] 		public CBool AttitudeOverride { get; set;}
 
-		[RED("attitudeToPlayer")] 		public CEnum<EAIAttitude> AttitudeToPlayer { get; set;}
+		[Ordinal(0)] [RED("attitudeToPlayer")] 		public CEnum<EAIAttitude> AttitudeToPlayer { get; set;}
 
-		[RED("hostileSpawnerTag")] 		public CName HostileSpawnerTag { get; set;}
+		[Ordinal(0)] [RED("hostileSpawnerTag")] 		public CName HostileSpawnerTag { get; set;}
 
-		[RED("spawnTags", 2,0)] 		public CArray<CName> SpawnTags { get; set;}
+		[Ordinal(0)] [RED("spawnTags", 2,0)] 		public CArray<CName> SpawnTags { get; set;}
 
-		[RED("respawn")] 		public CBool Respawn { get; set;}
+		[Ordinal(0)] [RED("respawn")] 		public CBool Respawn { get; set;}
 
-		[RED("respawnDelay")] 		public CFloat RespawnDelay { get; set;}
+		[Ordinal(0)] [RED("respawnDelay")] 		public CFloat RespawnDelay { get; set;}
 
-		[RED("initialHealth")] 		public CInt32 InitialHealth { get; set;}
+		[Ordinal(0)] [RED("initialHealth")] 		public CInt32 InitialHealth { get; set;}
 
-		[RED("spawnAnimation")] 		public CEnum<EExplorationMode> SpawnAnimation { get; set;}
+		[Ordinal(0)] [RED("spawnAnimation")] 		public CEnum<EExplorationMode> SpawnAnimation { get; set;}
 
-		[RED("spawnedNPCs", 2,0)] 		public CArray<CHandle<CNewNPC>> SpawnedNPCs { get; set;}
+		[Ordinal(0)] [RED("spawnedNPCs", 2,0)] 		public CArray<CHandle<CNewNPC>> SpawnedNPCs { get; set;}
 
-		[RED("respawnTime", 2,0)] 		public CArray<EngineTime> RespawnTime { get; set;}
+		[Ordinal(0)] [RED("respawnTime", 2,0)] 		public CArray<EngineTime> RespawnTime { get; set;}
 
-		[RED("respawnNeeded", 2,0)] 		public CArray<CBool> RespawnNeeded { get; set;}
+		[Ordinal(0)] [RED("respawnNeeded", 2,0)] 		public CArray<CBool> RespawnNeeded { get; set;}
 
 		public CSpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

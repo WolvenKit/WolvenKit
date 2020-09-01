@@ -10,27 +10,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskUnderwaterPursueTarget : IBehTreeTask
 	{
-		[RED("useCustom")] 		public CBool UseCustom { get; set;}
+		[Ordinal(0)] [RED("useCustom")] 		public CBool UseCustom { get; set;}
 
-		[RED("distanceFromTarget")] 		public CFloat DistanceFromTarget { get; set;}
+		[Ordinal(0)] [RED("distanceFromTarget")] 		public CFloat DistanceFromTarget { get; set;}
 
-		[RED("heightFromTarget")] 		public CFloat HeightFromTarget { get; set;}
+		[Ordinal(0)] [RED("heightFromTarget")] 		public CFloat HeightFromTarget { get; set;}
 
-		[RED("distanceTolerance")] 		public CFloat DistanceTolerance { get; set;}
+		[Ordinal(0)] [RED("distanceTolerance")] 		public CFloat DistanceTolerance { get; set;}
 
-		[RED("npcPosition")] 		public Vector NpcPosition { get; set;}
+		[Ordinal(0)] [RED("npcPosition")] 		public Vector NpcPosition { get; set;}
 
-		[RED("targetPosition")] 		public Vector TargetPosition { get; set;}
+		[Ordinal(0)] [RED("targetPosition")] 		public Vector TargetPosition { get; set;}
 
-		[RED("npcToTargetDistance2D")] 		public CFloat NpcToTargetDistance2D { get; set;}
+		[Ordinal(0)] [RED("npcToTargetDistance2D")] 		public CFloat NpcToTargetDistance2D { get; set;}
 
-		[RED("movePos")] 		public Vector MovePos { get; set;}
+		[Ordinal(0)] [RED("movePos")] 		public Vector MovePos { get; set;}
 
-		[RED("cachedTime")] 		public CFloat CachedTime { get; set;}
+		[Ordinal(0)] [RED("cachedTime")] 		public CFloat CachedTime { get; set;}
 
-		[RED("randomHeight")] 		public CInt32 RandomHeight { get; set;}
+		[Ordinal(0)] [RED("randomHeight")] 		public CInt32 RandomHeight { get; set;}
 
-		[RED("flySpeed")] 		public CFloat FlySpeed { get; set;}
+		[Ordinal(0)] [RED("flySpeed")] 		public CFloat FlySpeed { get; set;}
 
 		public CBTTaskUnderwaterPursueTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

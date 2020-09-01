@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventAdditiveAnimation : CStorySceneEventAnimation
 	{
-		[RED("convertToAdditive")] 		public CBool ConvertToAdditive { get; set;}
+		[Ordinal(0)] [RED("("convertToAdditive")] 		public CBool ConvertToAdditive { get; set;}
 
-		[RED("additiveType")] 		public CEnum<EAdditiveType> AdditiveType { get; set;}
+		[Ordinal(0)] [RED("("additiveType")] 		public CEnum<EAdditiveType> AdditiveType { get; set;}
 
 		public CStorySceneEventAdditiveAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

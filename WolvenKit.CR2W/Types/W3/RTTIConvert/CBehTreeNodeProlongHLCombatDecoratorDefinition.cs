@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeProlongHLCombatDecoratorDefinition : IBehTreeNodeDecoratorDefinition
 	{
-		[RED("requestCombatActivationOnEvent")] 		public CBool RequestCombatActivationOnEvent { get; set;}
+		[Ordinal(0)] [RED("requestCombatActivationOnEvent")] 		public CBool RequestCombatActivationOnEvent { get; set;}
 
 		public CBehTreeNodeProlongHLCombatDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

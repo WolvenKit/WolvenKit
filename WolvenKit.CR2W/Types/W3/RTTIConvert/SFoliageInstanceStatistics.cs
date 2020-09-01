@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFoliageInstanceStatistics : CVariable
 	{
-		[RED("baseTree")] 		public CHandle<CSRTBaseTree> BaseTree { get; set;}
+		[Ordinal(0)] [RED("("baseTree")] 		public CHandle<CSRTBaseTree> BaseTree { get; set;}
 
-		[RED("instanceCount")] 		public CUInt32 InstanceCount { get; set;}
+		[Ordinal(0)] [RED("("instanceCount")] 		public CUInt32 InstanceCount { get; set;}
 
 		public SFoliageInstanceStatistics(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

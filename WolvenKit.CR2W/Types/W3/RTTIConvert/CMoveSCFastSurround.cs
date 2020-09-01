@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSCFastSurround : IMoveSteeringCondition
 	{
-		[RED("usageDelay")] 		public CFloat UsageDelay { get; set;}
+		[Ordinal(0)] [RED("usageDelay")] 		public CFloat UsageDelay { get; set;}
 
-		[RED("angleDistanceToActivate")] 		public CFloat AngleDistanceToActivate { get; set;}
+		[Ordinal(0)] [RED("angleDistanceToActivate")] 		public CFloat AngleDistanceToActivate { get; set;}
 
-		[RED("speedMinToActivate")] 		public CFloat SpeedMinToActivate { get; set;}
+		[Ordinal(0)] [RED("speedMinToActivate")] 		public CFloat SpeedMinToActivate { get; set;}
 
-		[RED("angleDistanceToBreak")] 		public CFloat AngleDistanceToBreak { get; set;}
+		[Ordinal(0)] [RED("angleDistanceToBreak")] 		public CFloat AngleDistanceToBreak { get; set;}
 
-		[RED("speedMinLimitToBreak")] 		public CFloat SpeedMinLimitToBreak { get; set;}
+		[Ordinal(0)] [RED("speedMinLimitToBreak")] 		public CFloat SpeedMinLimitToBreak { get; set;}
 
 		public CMoveSCFastSurround(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

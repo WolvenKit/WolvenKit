@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CAIGoToExplorationActionDecorator : IActionDecorator
 	{
-		[RED("sheathWeaponsOnStart")] 		public CBool SheathWeaponsOnStart { get; set;}
+		[Ordinal(0)] [RED("sheathWeaponsOnStart")] 		public CBool SheathWeaponsOnStart { get; set;}
 
 		public CAIGoToExplorationActionDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

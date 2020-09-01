@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondSynchronisedDelay : IBehTreeTask
 	{
-		[RED("syncEventName")] 		public CName SyncEventName { get; set;}
+		[Ordinal(0)] [RED("syncEventName")] 		public CName SyncEventName { get; set;}
 
-		[RED("delay")] 		public CFloat Delay { get; set;}
+		[Ordinal(0)] [RED("delay")] 		public CFloat Delay { get; set;}
 
-		[RED("skipInvoker")] 		public CBool SkipInvoker { get; set;}
+		[Ordinal(0)] [RED("skipInvoker")] 		public CBool SkipInvoker { get; set;}
 
-		[RED("triggerEventOnActivate")] 		public CBool TriggerEventOnActivate { get; set;}
+		[Ordinal(0)] [RED("triggerEventOnActivate")] 		public CBool TriggerEventOnActivate { get; set;}
 
-		[RED("triggerEventOnDeactivate")] 		public CBool TriggerEventOnDeactivate { get; set;}
+		[Ordinal(0)] [RED("triggerEventOnDeactivate")] 		public CBool TriggerEventOnDeactivate { get; set;}
 
-		[RED("triggerEventOnSuccess")] 		public CBool TriggerEventOnSuccess { get; set;}
+		[Ordinal(0)] [RED("triggerEventOnSuccess")] 		public CBool TriggerEventOnSuccess { get; set;}
 
-		[RED("triggerEventOnFailed")] 		public CBool TriggerEventOnFailed { get; set;}
+		[Ordinal(0)] [RED("triggerEventOnFailed")] 		public CBool TriggerEventOnFailed { get; set;}
 
-		[RED("isAvailableUntilFirstEvent")] 		public CBool IsAvailableUntilFirstEvent { get; set;}
+		[Ordinal(0)] [RED("isAvailableUntilFirstEvent")] 		public CBool IsAvailableUntilFirstEvent { get; set;}
 
-		[RED("personalSync")] 		public CBool PersonalSync { get; set;}
+		[Ordinal(0)] [RED("personalSync")] 		public CBool PersonalSync { get; set;}
 
-		[RED("m_eventReceivedTime")] 		public CFloat M_eventReceivedTime { get; set;}
+		[Ordinal(0)] [RED("m_eventReceivedTime")] 		public CFloat M_eventReceivedTime { get; set;}
 
 		public BTCondSynchronisedDelay(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

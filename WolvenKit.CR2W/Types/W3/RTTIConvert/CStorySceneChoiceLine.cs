@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneChoiceLine : CStorySceneLinkElement
 	{
-		[RED("choiceLine")] 		public LocalizedString ChoiceLine { get; set;}
+		[Ordinal(0)] [RED("("choiceLine")] 		public LocalizedString ChoiceLine { get; set;}
 
-		[RED("choiceComment")] 		public LocalizedString ChoiceComment { get; set;}
+		[Ordinal(0)] [RED("("choiceComment")] 		public LocalizedString ChoiceComment { get; set;}
 
-		[RED("questCondition")] 		public CPtr<IQuestCondition> QuestCondition { get; set;}
+		[Ordinal(0)] [RED("("questCondition")] 		public CPtr<IQuestCondition> QuestCondition { get; set;}
 
-		[RED("memo", 2,0)] 		public CArray<CPtr<ISceneChoiceMemo>> Memo { get; set;}
+		[Ordinal(0)] [RED("("memo", 2,0)] 		public CArray<CPtr<ISceneChoiceMemo>> Memo { get; set;}
 
-		[RED("singleUseChoice")] 		public CBool SingleUseChoice { get; set;}
+		[Ordinal(0)] [RED("("singleUseChoice")] 		public CBool SingleUseChoice { get; set;}
 
-		[RED("emphasisLine")] 		public CBool EmphasisLine { get; set;}
+		[Ordinal(0)] [RED("("emphasisLine")] 		public CBool EmphasisLine { get; set;}
 
-		[RED("action")] 		public CPtr<IStorySceneChoiceLineAction> Action { get; set;}
+		[Ordinal(0)] [RED("("action")] 		public CPtr<IStorySceneChoiceLineAction> Action { get; set;}
 
 		public CStorySceneChoiceLine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

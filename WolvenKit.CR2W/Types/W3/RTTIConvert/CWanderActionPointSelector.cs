@@ -10,19 +10,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CWanderActionPointSelector : CActionPointSelector
 	{
-		[RED("categories", 2,0)] 		public CArray<SEncounterActionPointSelectorPair> Categories { get; set;}
+		[Ordinal(0)] [RED("categories", 2,0)] 		public CArray<SEncounterActionPointSelectorPair> Categories { get; set;}
 
-		[RED("delay")] 		public CFloat Delay { get; set;}
+		[Ordinal(0)] [RED("delay")] 		public CFloat Delay { get; set;}
 
-		[RED("radius")] 		public CFloat Radius { get; set;}
+		[Ordinal(0)] [RED("radius")] 		public CFloat Radius { get; set;}
 
-		[RED("apTags")] 		public TagList ApTags { get; set;}
+		[Ordinal(0)] [RED("apTags")] 		public TagList ApTags { get; set;}
 
-		[RED("areaTags")] 		public TagList AreaTags { get; set;}
+		[Ordinal(0)] [RED("areaTags")] 		public TagList AreaTags { get; set;}
 
-		[RED("apAreaTag")] 		public CName ApAreaTag { get; set;}
+		[Ordinal(0)] [RED("apAreaTag")] 		public CName ApAreaTag { get; set;}
 
-		[RED("chooseClosestAP")] 		public CBool ChooseClosestAP { get; set;}
+		[Ordinal(0)] [RED("chooseClosestAP")] 		public CBool ChooseClosestAP { get; set;}
 
 		public CWanderActionPointSelector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

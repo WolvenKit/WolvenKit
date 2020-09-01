@@ -10,59 +10,59 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SGameplayConfigLookAts : CVariable
 	{
-		[RED("reactionDebugType")] 		public CInt32 ReactionDebugType { get; set;}
+		[Ordinal(0)] [RED("("reactionDebugType")] 		public CInt32 ReactionDebugType { get; set;}
 
-		[RED("lookAtDurationGlance")] 		public CFloat LookAtDurationGlance { get; set;}
+		[Ordinal(0)] [RED("("lookAtDurationGlance")] 		public CFloat LookAtDurationGlance { get; set;}
 
-		[RED("lookAtDurationLook")] 		public CFloat LookAtDurationLook { get; set;}
+		[Ordinal(0)] [RED("("lookAtDurationLook")] 		public CFloat LookAtDurationLook { get; set;}
 
-		[RED("lookAtDurationGaze")] 		public CFloat LookAtDurationGaze { get; set;}
+		[Ordinal(0)] [RED("("lookAtDurationGaze")] 		public CFloat LookAtDurationGaze { get; set;}
 
-		[RED("lookAtDurationStare")] 		public CFloat LookAtDurationStare { get; set;}
+		[Ordinal(0)] [RED("("lookAtDurationStare")] 		public CFloat LookAtDurationStare { get; set;}
 
-		[RED("lookAtDurationRandGlance")] 		public CFloat LookAtDurationRandGlance { get; set;}
+		[Ordinal(0)] [RED("("lookAtDurationRandGlance")] 		public CFloat LookAtDurationRandGlance { get; set;}
 
-		[RED("lookAtDurationRandLook")] 		public CFloat LookAtDurationRandLook { get; set;}
+		[Ordinal(0)] [RED("("lookAtDurationRandLook")] 		public CFloat LookAtDurationRandLook { get; set;}
 
-		[RED("lookAtDurationRandGaze")] 		public CFloat LookAtDurationRandGaze { get; set;}
+		[Ordinal(0)] [RED("("lookAtDurationRandGaze")] 		public CFloat LookAtDurationRandGaze { get; set;}
 
-		[RED("lookAtDurationRandStare")] 		public CFloat LookAtDurationRandStare { get; set;}
+		[Ordinal(0)] [RED("("lookAtDurationRandStare")] 		public CFloat LookAtDurationRandStare { get; set;}
 
-		[RED("lookAtRangeGlance")] 		public CFloat LookAtRangeGlance { get; set;}
+		[Ordinal(0)] [RED("("lookAtRangeGlance")] 		public CFloat LookAtRangeGlance { get; set;}
 
-		[RED("lookAtRangeLook")] 		public CFloat LookAtRangeLook { get; set;}
+		[Ordinal(0)] [RED("("lookAtRangeLook")] 		public CFloat LookAtRangeLook { get; set;}
 
-		[RED("lookAtRangeGaze")] 		public CFloat LookAtRangeGaze { get; set;}
+		[Ordinal(0)] [RED("("lookAtRangeGaze")] 		public CFloat LookAtRangeGaze { get; set;}
 
-		[RED("lookAtRangeStare")] 		public CFloat LookAtRangeStare { get; set;}
+		[Ordinal(0)] [RED("("lookAtRangeStare")] 		public CFloat LookAtRangeStare { get; set;}
 
-		[RED("lookAtSpeedGlance")] 		public CFloat LookAtSpeedGlance { get; set;}
+		[Ordinal(0)] [RED("("lookAtSpeedGlance")] 		public CFloat LookAtSpeedGlance { get; set;}
 
-		[RED("lookAtSpeedLook")] 		public CFloat LookAtSpeedLook { get; set;}
+		[Ordinal(0)] [RED("("lookAtSpeedLook")] 		public CFloat LookAtSpeedLook { get; set;}
 
-		[RED("lookAtSpeedGaze")] 		public CFloat LookAtSpeedGaze { get; set;}
+		[Ordinal(0)] [RED("("lookAtSpeedGaze")] 		public CFloat LookAtSpeedGaze { get; set;}
 
-		[RED("lookAtSpeedStare")] 		public CFloat LookAtSpeedStare { get; set;}
+		[Ordinal(0)] [RED("("lookAtSpeedStare")] 		public CFloat LookAtSpeedStare { get; set;}
 
-		[RED("lookAtSpeedRandGlance")] 		public CFloat LookAtSpeedRandGlance { get; set;}
+		[Ordinal(0)] [RED("("lookAtSpeedRandGlance")] 		public CFloat LookAtSpeedRandGlance { get; set;}
 
-		[RED("lookAtSpeedRandLook")] 		public CFloat LookAtSpeedRandLook { get; set;}
+		[Ordinal(0)] [RED("("lookAtSpeedRandLook")] 		public CFloat LookAtSpeedRandLook { get; set;}
 
-		[RED("lookAtSpeedRandGaze")] 		public CFloat LookAtSpeedRandGaze { get; set;}
+		[Ordinal(0)] [RED("("lookAtSpeedRandGaze")] 		public CFloat LookAtSpeedRandGaze { get; set;}
 
-		[RED("lookAtSpeedRandStare")] 		public CFloat LookAtSpeedRandStare { get; set;}
+		[Ordinal(0)] [RED("("lookAtSpeedRandStare")] 		public CFloat LookAtSpeedRandStare { get; set;}
 
-		[RED("lookAtAutoLimitGlance")] 		public CBool LookAtAutoLimitGlance { get; set;}
+		[Ordinal(0)] [RED("("lookAtAutoLimitGlance")] 		public CBool LookAtAutoLimitGlance { get; set;}
 
-		[RED("lookAtAutoLimitLook")] 		public CBool LookAtAutoLimitLook { get; set;}
+		[Ordinal(0)] [RED("("lookAtAutoLimitLook")] 		public CBool LookAtAutoLimitLook { get; set;}
 
-		[RED("lookAtAutoLimitGaze")] 		public CBool LookAtAutoLimitGaze { get; set;}
+		[Ordinal(0)] [RED("("lookAtAutoLimitGaze")] 		public CBool LookAtAutoLimitGaze { get; set;}
 
-		[RED("lookAtAutoLimitStare")] 		public CBool LookAtAutoLimitStare { get; set;}
+		[Ordinal(0)] [RED("("lookAtAutoLimitStare")] 		public CBool LookAtAutoLimitStare { get; set;}
 
-		[RED("lookAtDelay")] 		public CFloat LookAtDelay { get; set;}
+		[Ordinal(0)] [RED("("lookAtDelay")] 		public CFloat LookAtDelay { get; set;}
 
-		[RED("lookAtDelayDialog")] 		public CFloat LookAtDelayDialog { get; set;}
+		[Ordinal(0)] [RED("("lookAtDelayDialog")] 		public CFloat LookAtDelayDialog { get; set;}
 
 		public SGameplayConfigLookAts(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

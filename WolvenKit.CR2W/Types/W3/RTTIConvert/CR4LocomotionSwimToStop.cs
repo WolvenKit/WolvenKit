@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4LocomotionSwimToStop : CR4LocomotionDirectControllerScript
 	{
-		[RED("player")] 		public CHandle<CR4Player> Player { get; set;}
+		[Ordinal(0)] [RED("("player")] 		public CHandle<CR4Player> Player { get; set;}
 
-		[RED("targetPoint")] 		public Vector TargetPoint { get; set;}
+		[Ordinal(0)] [RED("("targetPoint")] 		public Vector TargetPoint { get; set;}
 
-		[RED("closeEnough")] 		public CBool CloseEnough { get; set;}
+		[Ordinal(0)] [RED("("closeEnough")] 		public CBool CloseEnough { get; set;}
 
 		public CR4LocomotionSwimToStop(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

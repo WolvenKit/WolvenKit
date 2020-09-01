@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockAmbientLight : CMaterialBlock
 	{
-		[RED("ForceGlobalAmbient")] 		public CBool ForceGlobalAmbient { get; set;}
+		[Ordinal(0)] [RED("ForceGlobalAmbient")] 		public CBool ForceGlobalAmbient { get; set;}
 
 		public CMaterialBlockAmbientLight(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

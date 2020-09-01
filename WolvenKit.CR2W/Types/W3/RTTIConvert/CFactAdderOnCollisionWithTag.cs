@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFactAdderOnCollisionWithTag : CGameplayEntity
 	{
-		[RED("factName")] 		public CString FactName { get; set;}
+		[Ordinal(0)] [RED("("factName")] 		public CString FactName { get; set;}
 
-		[RED("tagToCollideWith")] 		public CName TagToCollideWith { get; set;}
+		[Ordinal(0)] [RED("("tagToCollideWith")] 		public CName TagToCollideWith { get; set;}
 
 		public CFactAdderOnCollisionWithTag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

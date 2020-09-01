@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CFoundExplorationComponent : CSpriteComponent
 	{
-		[RED("ignore")] 		public CBool Ignore { get; set;}
+		[Ordinal(0)] [RED("("ignore")] 		public CBool Ignore { get; set;}
 
 		public CFoundExplorationComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IEvaluatorVector : IEvaluator
 	{
-		[RED("freeAxes")] 		public CEnum<EFreeVectorAxes> FreeAxes { get; set;}
+		[Ordinal(0)] [RED("freeAxes")] 		public CEnum<EFreeVectorAxes> FreeAxes { get; set;}
 
-		[RED("spill")] 		public CBool Spill { get; set;}
+		[Ordinal(0)] [RED("spill")] 		public CBool Spill { get; set;}
 
 		public IEvaluatorVector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

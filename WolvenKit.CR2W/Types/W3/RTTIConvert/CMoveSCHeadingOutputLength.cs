@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMoveSCHeadingOutputLength : IMoveSteeringCondition
 	{
-		[RED("minOutputLength")] 		public CFloat MinOutputLength { get; set;}
+		[Ordinal(0)] [RED("minOutputLength")] 		public CFloat MinOutputLength { get; set;}
 
-		[RED("considerSpeed")] 		public CBool ConsiderSpeed { get; set;}
+		[Ordinal(0)] [RED("considerSpeed")] 		public CBool ConsiderSpeed { get; set;}
 
 		public CMoveSCHeadingOutputLength(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

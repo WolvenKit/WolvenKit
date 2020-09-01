@@ -10,25 +10,25 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneEventChangeActorGameState : CStorySceneEvent
 	{
-		[RED("actor")] 		public CName Actor { get; set;}
+		[Ordinal(0)] [RED("("actor")] 		public CName Actor { get; set;}
 
-		[RED("snapToTerrain")] 		public CBool SnapToTerrain { get; set;}
+		[Ordinal(0)] [RED("("snapToTerrain")] 		public CBool SnapToTerrain { get; set;}
 
-		[RED("snapToTerrainDuration")] 		public CFloat SnapToTerrainDuration { get; set;}
+		[Ordinal(0)] [RED("("snapToTerrainDuration")] 		public CFloat SnapToTerrainDuration { get; set;}
 
-		[RED("blendPoseDuration")] 		public CFloat BlendPoseDuration { get; set;}
+		[Ordinal(0)] [RED("("blendPoseDuration")] 		public CFloat BlendPoseDuration { get; set;}
 
-		[RED("forceResetClothAndDangles")] 		public CBool ForceResetClothAndDangles { get; set;}
+		[Ordinal(0)] [RED("("forceResetClothAndDangles")] 		public CBool ForceResetClothAndDangles { get; set;}
 
-		[RED("switchToGameplayPose")] 		public CBool SwitchToGameplayPose { get; set;}
+		[Ordinal(0)] [RED("("switchToGameplayPose")] 		public CBool SwitchToGameplayPose { get; set;}
 
-		[RED("gameplayPoseTypeName")] 		public CName GameplayPoseTypeName { get; set;}
+		[Ordinal(0)] [RED("("gameplayPoseTypeName")] 		public CName GameplayPoseTypeName { get; set;}
 
-		[RED("raiseGlobalBehaviorEvent")] 		public CName RaiseGlobalBehaviorEvent { get; set;}
+		[Ordinal(0)] [RED("("raiseGlobalBehaviorEvent")] 		public CName RaiseGlobalBehaviorEvent { get; set;}
 
-		[RED("activateBehaviorGraph")] 		public CInt32 ActivateBehaviorGraph { get; set;}
+		[Ordinal(0)] [RED("("activateBehaviorGraph")] 		public CInt32 ActivateBehaviorGraph { get; set;}
 
-		[RED("startGameplayAction")] 		public CInt32 StartGameplayAction { get; set;}
+		[Ordinal(0)] [RED("("startGameplayAction")] 		public CInt32 StartGameplayAction { get; set;}
 
 		public CStorySceneEventChangeActorGameState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

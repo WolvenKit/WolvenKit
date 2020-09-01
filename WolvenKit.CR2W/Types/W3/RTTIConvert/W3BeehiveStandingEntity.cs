@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3BeehiveStandingEntity : W3AnimatedContainer
 	{
-		[RED("damageVal")] 		public SAbilityAttributeValue DamageVal { get; set;}
+		[Ordinal(0)] [RED("("damageVal")] 		public SAbilityAttributeValue DamageVal { get; set;}
 
-		[RED("actorsInRange", 2,0)] 		public CArray<CHandle<CActor>> ActorsInRange { get; set;}
+		[Ordinal(0)] [RED("("actorsInRange", 2,0)] 		public CArray<CHandle<CActor>> ActorsInRange { get; set;}
 
-		[RED("wasInteracted")] 		public CBool WasInteracted { get; set;}
+		[Ordinal(0)] [RED("("wasInteracted")] 		public CBool WasInteracted { get; set;}
 
 		public W3BeehiveStandingEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

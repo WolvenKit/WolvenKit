@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPlayerStateTraverseExploration : CPlayerStateBase
 	{
-		[RED("exploration")] 		public SExplorationQueryToken Exploration { get; set;}
+		[Ordinal(0)] [RED("exploration")] 		public SExplorationQueryToken Exploration { get; set;}
 
-		[RED("running")] 		public CBool Running { get; set;}
+		[Ordinal(0)] [RED("running")] 		public CBool Running { get; set;}
 
-		[RED("prevState")] 		public CName PrevState { get; set;}
+		[Ordinal(0)] [RED("prevState")] 		public CName PrevState { get; set;}
 
 		public CPlayerStateTraverseExploration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

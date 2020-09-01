@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphEnumComparatorNode : CBehaviorGraphValueNode
 	{
-		[RED("enumValue")] 		public CVariant EnumValue { get; set;}
+		[Ordinal(0)] [RED("("enumValue")] 		public CVariant EnumValue { get; set;}
 
-		[RED("operation")] 		public CEnum<ECompareFunc> Operation { get; set;}
+		[Ordinal(0)] [RED("("operation")] 		public CEnum<ECompareFunc> Operation { get; set;}
 
-		[RED("cachedFirstInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedFirstInputNode { get; set;}
+		[Ordinal(0)] [RED("("cachedFirstInputNode")] 		public CPtr<CBehaviorGraphValueNode> CachedFirstInputNode { get; set;}
 
 		public CBehaviorGraphEnumComparatorNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

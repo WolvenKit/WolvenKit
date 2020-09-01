@@ -10,11 +10,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDescriptionGraphBlock : CGraphHelperBlock
 	{
-		[RED("size")] 		public Vector Size { get; set;}
+		[Ordinal(0)] [RED("("size")] 		public Vector Size { get; set;}
 
-		[RED("caption")] 		public CString Caption { get; set;}
+		[Ordinal(0)] [RED("("caption")] 		public CString Caption { get; set;}
 
-		[RED("descriptionText")] 		public CString DescriptionText { get; set;}
+		[Ordinal(0)] [RED("("descriptionText")] 		public CString DescriptionText { get; set;}
 
 		public CDescriptionGraphBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

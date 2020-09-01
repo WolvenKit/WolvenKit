@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvDialogLightParameters : CVariable
 	{
-		[RED("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(0)] [RED("("activated")] 		public CBool Activated { get; set;}
 
-		[RED("lightColor")] 		public SSimpleCurve LightColor { get; set;}
+		[Ordinal(0)] [RED("("lightColor")] 		public SSimpleCurve LightColor { get; set;}
 
-		[RED("lightColor2")] 		public SSimpleCurve LightColor2 { get; set;}
+		[Ordinal(0)] [RED("("lightColor2")] 		public SSimpleCurve LightColor2 { get; set;}
 
-		[RED("lightColor3")] 		public SSimpleCurve LightColor3 { get; set;}
+		[Ordinal(0)] [RED("("lightColor3")] 		public SSimpleCurve LightColor3 { get; set;}
 
 		public CEnvDialogLightParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

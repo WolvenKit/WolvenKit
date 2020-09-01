@@ -10,21 +10,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCameraRotationControllerDrift : ICustomCameraScriptedPivotRotationController
 	{
-		[RED("fixedPitch")] 		public CFloat FixedPitch { get; set;}
+		[Ordinal(0)] [RED("("fixedPitch")] 		public CFloat FixedPitch { get; set;}
 
-		[RED("rollBase")] 		public CFloat RollBase { get; set;}
+		[Ordinal(0)] [RED("("rollBase")] 		public CFloat RollBase { get; set;}
 
-		[RED("rollExtraTurn")] 		public CFloat RollExtraTurn { get; set;}
+		[Ordinal(0)] [RED("("rollExtraTurn")] 		public CFloat RollExtraTurn { get; set;}
 
-		[RED("yawTotal")] 		public CFloat YawTotal { get; set;}
+		[Ordinal(0)] [RED("("yawTotal")] 		public CFloat YawTotal { get; set;}
 
-		[RED("timeCur")] 		public CFloat TimeCur { get; set;}
+		[Ordinal(0)] [RED("("timeCur")] 		public CFloat TimeCur { get; set;}
 
-		[RED("blendSpeedRoll")] 		public CFloat BlendSpeedRoll { get; set;}
+		[Ordinal(0)] [RED("("blendSpeedRoll")] 		public CFloat BlendSpeedRoll { get; set;}
 
-		[RED("blendSpeedYaw")] 		public CFloat BlendSpeedYaw { get; set;}
+		[Ordinal(0)] [RED("("blendSpeedYaw")] 		public CFloat BlendSpeedYaw { get; set;}
 
-		[RED("turnLast")] 		public CFloat TurnLast { get; set;}
+		[Ordinal(0)] [RED("("turnLast")] 		public CFloat TurnLast { get; set;}
 
 		public CCameraRotationControllerDrift(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

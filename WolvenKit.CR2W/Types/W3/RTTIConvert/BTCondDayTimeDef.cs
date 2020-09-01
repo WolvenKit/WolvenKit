@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class BTCondDayTimeDef : IBehTreeConditionalTaskDefinition
 	{
-		[RED("validTimeStart")] 		public CInt32 ValidTimeStart { get; set;}
+		[Ordinal(0)] [RED("validTimeStart")] 		public CInt32 ValidTimeStart { get; set;}
 
-		[RED("validTimeEnd")] 		public CInt32 ValidTimeEnd { get; set;}
+		[Ordinal(0)] [RED("validTimeEnd")] 		public CInt32 ValidTimeEnd { get; set;}
 
 		public BTCondDayTimeDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

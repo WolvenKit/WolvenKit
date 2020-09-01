@@ -10,15 +10,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskToadYrden : IBehTreeTask
 	{
-		[RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
+		[Ordinal(0)] [RED("("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
-		[RED("leftYrden")] 		public CBool LeftYrden { get; set;}
+		[Ordinal(0)] [RED("("leftYrden")] 		public CBool LeftYrden { get; set;}
 
-		[RED("leaveAfter")] 		public CFloat LeaveAfter { get; set;}
+		[Ordinal(0)] [RED("("leaveAfter")] 		public CFloat LeaveAfter { get; set;}
 
-		[RED("enterTimestamp")] 		public CFloat EnterTimestamp { get; set;}
+		[Ordinal(0)] [RED("("enterTimestamp")] 		public CFloat EnterTimestamp { get; set;}
 
-		[RED("l_effect")] 		public CBool L_effect { get; set;}
+		[Ordinal(0)] [RED("("l_effect")] 		public CBool L_effect { get; set;}
 
 		public CBTTaskToadYrden(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

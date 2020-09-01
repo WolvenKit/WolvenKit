@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCharacterEntityTemplate : CEntityTemplate
 	{
-		[RED("baseEntityOverride")] 		public CHandle<CEntityTemplate> BaseEntityOverride { get; set;}
+		[Ordinal(0)] [RED("baseEntityOverride")] 		public CHandle<CEntityTemplate> BaseEntityOverride { get; set;}
 
 		public CCharacterEntityTemplate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

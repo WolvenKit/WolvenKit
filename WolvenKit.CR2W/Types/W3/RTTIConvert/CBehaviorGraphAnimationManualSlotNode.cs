@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphAnimationManualSlotNode : CBehaviorGraphNode
 	{
-		[RED("defaultAnimation")] 		public CName DefaultAnimation { get; set;}
+		[Ordinal(0)] [RED("defaultAnimation")] 		public CName DefaultAnimation { get; set;}
 
 		public CBehaviorGraphAnimationManualSlotNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

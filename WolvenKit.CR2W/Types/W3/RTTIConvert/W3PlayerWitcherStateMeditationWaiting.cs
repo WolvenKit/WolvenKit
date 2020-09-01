@@ -10,17 +10,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3PlayerWitcherStateMeditationWaiting : W3PlayerWitcherStateMeditationBase
 	{
-		[RED("TARGET_HOURS_PER_MINUTE")] 		public CFloat TARGET_HOURS_PER_MINUTE { get; set;}
+		[Ordinal(0)] [RED("("TARGET_HOURS_PER_MINUTE")] 		public CFloat TARGET_HOURS_PER_MINUTE { get; set;}
 
-		[RED("BLEND_TIME_SECONDS_REAL")] 		public CFloat BLEND_TIME_SECONDS_REAL { get; set;}
+		[Ordinal(0)] [RED("("BLEND_TIME_SECONDS_REAL")] 		public CFloat BLEND_TIME_SECONDS_REAL { get; set;}
 
-		[RED("storedHoursPerMinute")] 		public CFloat StoredHoursPerMinute { get; set;}
+		[Ordinal(0)] [RED("("storedHoursPerMinute")] 		public CFloat StoredHoursPerMinute { get; set;}
 
-		[RED("waitStartTime")] 		public GameTime WaitStartTime { get; set;}
+		[Ordinal(0)] [RED("("waitStartTime")] 		public GameTime WaitStartTime { get; set;}
 
-		[RED("requestedTargetTime")] 		public GameTime RequestedTargetTime { get; set;}
+		[Ordinal(0)] [RED("("requestedTargetTime")] 		public GameTime RequestedTargetTime { get; set;}
 
-		[RED("abortRequested")] 		public CBool AbortRequested { get; set;}
+		[Ordinal(0)] [RED("("abortRequested")] 		public CBool AbortRequested { get; set;}
 
 		public W3PlayerWitcherStateMeditationWaiting(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

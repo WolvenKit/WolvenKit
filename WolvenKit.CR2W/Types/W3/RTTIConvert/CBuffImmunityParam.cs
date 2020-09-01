@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBuffImmunityParam : CGameplayEntityParam
 	{
-		[RED("immunityTo", 2,0)] 		public CArray<CInt32> ImmunityTo { get; set;}
+		[Ordinal(0)] [RED("("immunityTo", 2,0)] 		public CArray<CInt32> ImmunityTo { get; set;}
 
-		[RED("flags")] 		public CEnum<EImmunityFlags> Flags { get; set;}
+		[Ordinal(0)] [RED("("flags")] 		public CEnum<EImmunityFlags> Flags { get; set;}
 
 		public CBuffImmunityParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

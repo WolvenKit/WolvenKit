@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCreatureEntrySpawnerParams : CVariable
 	{
-		[RED("visibility")] 		public CEnum<ESpawnTreeSpawnVisibility> Visibility { get; set;}
+		[Ordinal(0)] [RED("("visibility")] 		public CEnum<ESpawnTreeSpawnVisibility> Visibility { get; set;}
 
-		[RED("spawnpointDelay")] 		public CFloat SpawnpointDelay { get; set;}
+		[Ordinal(0)] [RED("("spawnpointDelay")] 		public CFloat SpawnpointDelay { get; set;}
 
 		public SCreatureEntrySpawnerParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

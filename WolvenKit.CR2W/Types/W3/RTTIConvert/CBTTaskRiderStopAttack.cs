@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskRiderStopAttack : IBehTreeTask
 	{
-		[RED("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
+		[Ordinal(0)] [RED("("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
 
-		[RED("horse")] 		public CHandle<CNewNPC> Horse { get; set;}
+		[Ordinal(0)] [RED("("horse")] 		public CHandle<CNewNPC> Horse { get; set;}
 
 		public CBTTaskRiderStopAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

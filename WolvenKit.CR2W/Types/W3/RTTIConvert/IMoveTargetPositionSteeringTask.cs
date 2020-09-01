@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class IMoveTargetPositionSteeringTask : IMoveTargetSteeringTask
 	{
-		[RED("customPosition")] 		public CName CustomPosition { get; set;}
+		[Ordinal(0)] [RED("("customPosition")] 		public CName CustomPosition { get; set;}
 
 		public IMoveTargetPositionSteeringTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

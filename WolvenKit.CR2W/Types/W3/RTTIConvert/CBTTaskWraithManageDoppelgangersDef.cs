@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskWraithManageDoppelgangersDef : IBehTreeTaskDefinition
 	{
-		[RED("killDoppelgangersAtDeath")] 		public CBool KillDoppelgangersAtDeath { get; set;}
+		[Ordinal(0)] [RED("("killDoppelgangersAtDeath")] 		public CBool KillDoppelgangersAtDeath { get; set;}
 
-		[RED("killDoppelgangersAfterTime")] 		public CFloat KillDoppelgangersAfterTime { get; set;}
+		[Ordinal(0)] [RED("("killDoppelgangersAfterTime")] 		public CFloat KillDoppelgangersAfterTime { get; set;}
 
-		[RED("splitEffectEntityTemplate")] 		public CHandle<CEntityTemplate> SplitEffectEntityTemplate { get; set;}
+		[Ordinal(0)] [RED("("splitEffectEntityTemplate")] 		public CHandle<CEntityTemplate> SplitEffectEntityTemplate { get; set;}
 
-		[RED("healthPercentageToRegen")] 		public CFloat HealthPercentageToRegen { get; set;}
+		[Ordinal(0)] [RED("("healthPercentageToRegen")] 		public CFloat HealthPercentageToRegen { get; set;}
 
 		public CBTTaskWraithManageDoppelgangersDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

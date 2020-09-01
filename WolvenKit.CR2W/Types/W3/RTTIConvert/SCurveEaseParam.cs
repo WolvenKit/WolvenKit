@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SCurveEaseParam : CVariable
 	{
-		[RED("easeIn")] 		public CFloat EaseIn { get; set;}
+		[Ordinal(0)] [RED("("easeIn")] 		public CFloat EaseIn { get; set;}
 
-		[RED("easeOut")] 		public CFloat EaseOut { get; set;}
+		[Ordinal(0)] [RED("("easeOut")] 		public CFloat EaseOut { get; set;}
 
 		public SCurveEaseParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

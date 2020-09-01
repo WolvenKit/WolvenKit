@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimCutsceneHideEntityEvent : CExtAnimCutsceneEvent
 	{
-		[RED("entTohideTag")] 		public CName EntTohideTag { get; set;}
+		[Ordinal(0)] [RED("("entTohideTag")] 		public CName EntTohideTag { get; set;}
 
 		public CExtAnimCutsceneHideEntityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

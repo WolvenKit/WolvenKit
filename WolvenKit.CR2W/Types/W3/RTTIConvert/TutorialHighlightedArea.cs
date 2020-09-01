@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class TutorialHighlightedArea : CVariable
 	{
-		[RED("x")] 		public CFloat X { get; set;}
+		[Ordinal(0)] [RED("("x")] 		public CFloat X { get; set;}
 
-		[RED("y")] 		public CFloat Y { get; set;}
+		[Ordinal(0)] [RED("("y")] 		public CFloat Y { get; set;}
 
-		[RED("width")] 		public CFloat Width { get; set;}
+		[Ordinal(0)] [RED("("width")] 		public CFloat Width { get; set;}
 
-		[RED("height")] 		public CFloat Height { get; set;}
+		[Ordinal(0)] [RED("("height")] 		public CFloat Height { get; set;}
 
 		public TutorialHighlightedArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

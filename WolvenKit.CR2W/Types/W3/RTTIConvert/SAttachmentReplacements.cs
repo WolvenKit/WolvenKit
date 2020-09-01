@@ -10,7 +10,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SAttachmentReplacements : CVariable
 	{
-		[RED("replacements", 2,0)] 		public CArray<SAttachmentReplacement> Replacements { get; set;}
+		[Ordinal(0)] [RED("replacements", 2,0)] 		public CArray<SAttachmentReplacement> Replacements { get; set;}
 
 		public SAttachmentReplacements(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

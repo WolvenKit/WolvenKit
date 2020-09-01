@@ -10,13 +10,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SMountEvent : CVariable
 	{
-		[RED("animEventName")] 		public CName AnimEventName { get; set;}
+		[Ordinal(0)] [RED("("animEventName")] 		public CName AnimEventName { get; set;}
 
-		[RED("entityReferenceName")] 		public CName EntityReferenceName { get; set;}
+		[Ordinal(0)] [RED("("entityReferenceName")] 		public CName EntityReferenceName { get; set;}
 
-		[RED("newSlotName")] 		public CName NewSlotName { get; set;}
+		[Ordinal(0)] [RED("("newSlotName")] 		public CName NewSlotName { get; set;}
 
-		[RED("entityContainingSlot")] 		public CEnum<EBgNPCType> EntityContainingSlot { get; set;}
+		[Ordinal(0)] [RED("("entityContainingSlot")] 		public CEnum<EBgNPCType> EntityContainingSlot { get; set;}
 
 		public SMountEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

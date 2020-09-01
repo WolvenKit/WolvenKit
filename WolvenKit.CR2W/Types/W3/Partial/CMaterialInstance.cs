@@ -10,9 +10,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public partial class CMaterialInstance : IMaterial
 	{
-		[RED("baseMaterial")] 		public CHandle<IMaterial> BaseMaterial { get; set;}
+		[Ordinal(0)] [RED("baseMaterial")] 		public CHandle<IMaterial> BaseMaterial { get; set;}
 
-		[RED("enableMask")] 		public CBool EnableMask { get; set;}
+		[Ordinal(0)] [RED("enableMask")] 		public CBool EnableMask { get; set;}
 
 		public CMaterialInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
