@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CGraphConnection : ISerializable
 	{
-		[Ordinal(1)] [RED("("source")] 		public CPtr<CGraphSocket> Source { get; set;}
+		[Ordinal(1)] [RED("source")] 		public CPtr<CGraphSocket> Source { get; set;}
 
-		[Ordinal(2)] [RED("("destination")] 		public CPtr<CGraphSocket> Destination { get; set;}
+		[Ordinal(2)] [RED("destination")] 		public CPtr<CGraphSocket> Destination { get; set;}
 
-		[Ordinal(3)] [RED("("inactive")] 		public CBool Inactive { get; set;}
+		[Ordinal(3)] [RED("inactive")] 		public CBool Inactive { get; set;}
 
 		public CGraphConnection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

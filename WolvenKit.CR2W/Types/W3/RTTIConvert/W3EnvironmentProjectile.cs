@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3EnvironmentProjectile : W3AdvancedProjectile
 	{
-		[Ordinal(1)] [RED("("initFxName")] 		public CName InitFxName { get; set;}
+		[Ordinal(1)] [RED("initFxName")] 		public CName InitFxName { get; set;}
 
-		[Ordinal(2)] [RED("("stopFxOnDeactivate")] 		public CName StopFxOnDeactivate { get; set;}
+		[Ordinal(2)] [RED("stopFxOnDeactivate")] 		public CName StopFxOnDeactivate { get; set;}
 
-		[Ordinal(3)] [RED("("onCollisionFxName")] 		public CName OnCollisionFxName { get; set;}
+		[Ordinal(3)] [RED("onCollisionFxName")] 		public CName OnCollisionFxName { get; set;}
 
-		[Ordinal(4)] [RED("("ignoreVictimsWithTag")] 		public CName IgnoreVictimsWithTag { get; set;}
+		[Ordinal(4)] [RED("ignoreVictimsWithTag")] 		public CName IgnoreVictimsWithTag { get; set;}
 
-		[Ordinal(5)] [RED("("action")] 		public CHandle<W3DamageAction> Action { get; set;}
+		[Ordinal(5)] [RED("action")] 		public CHandle<W3DamageAction> Action { get; set;}
 
-		[Ordinal(6)] [RED("("comp")] 		public CHandle<CMeshComponent> Comp { get; set;}
+		[Ordinal(6)] [RED("comp")] 		public CHandle<CMeshComponent> Comp { get; set;}
 
 		public W3EnvironmentProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

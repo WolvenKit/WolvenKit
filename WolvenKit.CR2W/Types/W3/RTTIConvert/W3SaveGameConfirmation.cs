@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SaveGameConfirmation : ConfirmationPopupData
 	{
-		[Ordinal(1)] [RED("("menuRef")] 		public CHandle<CR4IngameMenu> MenuRef { get; set;}
+		[Ordinal(1)] [RED("menuRef")] 		public CHandle<CR4IngameMenu> MenuRef { get; set;}
 
-		[Ordinal(2)] [RED("("type")] 		public CEnum<ESaveGameType> Type { get; set;}
+		[Ordinal(2)] [RED("type")] 		public CEnum<ESaveGameType> Type { get; set;}
 
-		[Ordinal(3)] [RED("("slot")] 		public CInt32 Slot { get; set;}
+		[Ordinal(3)] [RED("slot")] 		public CInt32 Slot { get; set;}
 
 		public W3SaveGameConfirmation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class InterpCurvePointV : InterpCurvePoint
 	{
-		[Ordinal(1)] [RED("("outVal")] 		public Vector OutVal { get; set;}
+		[Ordinal(1)] [RED("outVal")] 		public Vector OutVal { get; set;}
 
-		[Ordinal(2)] [RED("("arriveTangent")] 		public Vector ArriveTangent { get; set;}
+		[Ordinal(2)] [RED("arriveTangent")] 		public Vector ArriveTangent { get; set;}
 
-		[Ordinal(3)] [RED("("leaveTangent")] 		public Vector LeaveTangent { get; set;}
+		[Ordinal(3)] [RED("leaveTangent")] 		public Vector LeaveTangent { get; set;}
 
 		public InterpCurvePointV(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

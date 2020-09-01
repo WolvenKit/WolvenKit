@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneCameraBlendEvent : CStorySceneEventBlend
 	{
-		[Ordinal(1)] [RED("("firstPointOfInterpolation")] 		public CFloat FirstPointOfInterpolation { get; set;}
+		[Ordinal(1)] [RED("firstPointOfInterpolation")] 		public CFloat FirstPointOfInterpolation { get; set;}
 
-		[Ordinal(2)] [RED("("lastPointOfInterpolation")] 		public CFloat LastPointOfInterpolation { get; set;}
+		[Ordinal(2)] [RED("lastPointOfInterpolation")] 		public CFloat LastPointOfInterpolation { get; set;}
 
-		[Ordinal(3)] [RED("("firstPartInterpolation")] 		public CEnum<ECameraInterpolation> FirstPartInterpolation { get; set;}
+		[Ordinal(3)] [RED("firstPartInterpolation")] 		public CEnum<ECameraInterpolation> FirstPartInterpolation { get; set;}
 
-		[Ordinal(4)] [RED("("lastPartInterpolation")] 		public CEnum<ECameraInterpolation> LastPartInterpolation { get; set;}
+		[Ordinal(4)] [RED("lastPartInterpolation")] 		public CEnum<ECameraInterpolation> LastPartInterpolation { get; set;}
 
 		public CStorySceneCameraBlendEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

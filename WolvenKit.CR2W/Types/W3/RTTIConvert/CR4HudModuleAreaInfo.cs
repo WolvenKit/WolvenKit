@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4HudModuleAreaInfo : CR4HudModuleBase
 	{
-		[Ordinal(1)] [RED("("m_fxSetTextSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetTextSFF { get; set;}
+		[Ordinal(1)] [RED("m_fxSetTextSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetTextSFF { get; set;}
 
-		[Ordinal(2)] [RED("("dt")] 		public CFloat Dt { get; set;}
+		[Ordinal(2)] [RED("dt")] 		public CFloat Dt { get; set;}
 
-		[Ordinal(3)] [RED("("showTime")] 		public CFloat ShowTime { get; set;}
+		[Ordinal(3)] [RED("showTime")] 		public CFloat ShowTime { get; set;}
 
-		[Ordinal(4)] [RED("("bShow")] 		public CBool BShow { get; set;}
+		[Ordinal(4)] [RED("bShow")] 		public CBool BShow { get; set;}
 
 		public CR4HudModuleAreaInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

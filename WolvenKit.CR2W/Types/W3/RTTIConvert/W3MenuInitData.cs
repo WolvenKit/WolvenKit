@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3MenuInitData : CObject
 	{
-		[Ordinal(1)] [RED("("ignoreSaveSystem")] 		public CBool IgnoreSaveSystem { get; set;}
+		[Ordinal(1)] [RED("ignoreSaveSystem")] 		public CBool IgnoreSaveSystem { get; set;}
 
-		[Ordinal(2)] [RED("("m_defaultState")] 		public CName M_defaultState { get; set;}
+		[Ordinal(2)] [RED("m_defaultState")] 		public CName M_defaultState { get; set;}
 
 		public W3MenuInitData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

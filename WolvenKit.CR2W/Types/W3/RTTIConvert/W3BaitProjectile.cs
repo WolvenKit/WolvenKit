@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3BaitProjectile : W3BoltProjectile
 	{
-		[Ordinal(1)] [RED("("foodSourceToGenerate")] 		public CHandle<CEntityTemplate> FoodSourceToGenerate { get; set;}
+		[Ordinal(1)] [RED("foodSourceToGenerate")] 		public CHandle<CEntityTemplate> FoodSourceToGenerate { get; set;}
 
-		[Ordinal(2)] [RED("("addScentToCollidedActors")] 		public CBool AddScentToCollidedActors { get; set;}
+		[Ordinal(2)] [RED("addScentToCollidedActors")] 		public CBool AddScentToCollidedActors { get; set;}
 
-		[Ordinal(3)] [RED("("attractionDuration")] 		public CFloat AttractionDuration { get; set;}
+		[Ordinal(3)] [RED("attractionDuration")] 		public CFloat AttractionDuration { get; set;}
 
-		[Ordinal(4)] [RED("("m_BaitEntity")] 		public CHandle<CEntity> M_BaitEntity { get; set;}
+		[Ordinal(4)] [RED("m_BaitEntity")] 		public CHandle<CEntity> M_BaitEntity { get; set;}
 
 		public W3BaitProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

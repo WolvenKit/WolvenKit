@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvPaintEffectParameters : CVariable
 	{
-		[Ordinal(1)] [RED("("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(1)] [RED("activated")] 		public CBool Activated { get; set;}
 
-		[Ordinal(2)] [RED("("amount")] 		public SSimpleCurve Amount { get; set;}
+		[Ordinal(2)] [RED("amount")] 		public SSimpleCurve Amount { get; set;}
 
 		public CEnvPaintEffectParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

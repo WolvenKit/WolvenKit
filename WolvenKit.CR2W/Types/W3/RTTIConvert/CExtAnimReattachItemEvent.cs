@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimReattachItemEvent : CExtAnimDurationEvent
 	{
-		[Ordinal(1)] [RED("("item")] 		public CName Item { get; set;}
+		[Ordinal(1)] [RED("item")] 		public CName Item { get; set;}
 
-		[Ordinal(2)] [RED("("targetSlot")] 		public CName TargetSlot { get; set;}
+		[Ordinal(2)] [RED("targetSlot")] 		public CName TargetSlot { get; set;}
 
 		public CExtAnimReattachItemEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

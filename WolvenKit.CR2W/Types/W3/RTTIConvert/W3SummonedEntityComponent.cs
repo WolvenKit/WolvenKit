@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SummonedEntityComponent : CScriptedComponent
 	{
-		[Ordinal(1)] [RED("("m_Summoner")] 		public CHandle<CActor> M_Summoner { get; set;}
+		[Ordinal(1)] [RED("m_Summoner")] 		public CHandle<CActor> M_Summoner { get; set;}
 
-		[Ordinal(2)] [RED("("m_SummonedTime")] 		public CFloat M_SummonedTime { get; set;}
+		[Ordinal(2)] [RED("m_SummonedTime")] 		public CFloat M_SummonedTime { get; set;}
 
-		[Ordinal(3)] [RED("("shouldUseSummonerGuardArea")] 		public CBool ShouldUseSummonerGuardArea { get; set;}
+		[Ordinal(3)] [RED("shouldUseSummonerGuardArea")] 		public CBool ShouldUseSummonerGuardArea { get; set;}
 
-		[Ordinal(4)] [RED("("killOnSummonersDeath")] 		public CBool KillOnSummonersDeath { get; set;}
+		[Ordinal(4)] [RED("killOnSummonersDeath")] 		public CBool KillOnSummonersDeath { get; set;}
 
 		public W3SummonedEntityComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

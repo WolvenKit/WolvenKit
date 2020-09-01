@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3ProjectileShooterTest : CActor
 	{
-		[Ordinal(1)] [RED("("projectileTemplate")] 		public CHandle<CEntityTemplate> ProjectileTemplate { get; set;}
+		[Ordinal(1)] [RED("projectileTemplate")] 		public CHandle<CEntityTemplate> ProjectileTemplate { get; set;}
 
-		[Ordinal(2)] [RED("("targetTag")] 		public CName TargetTag { get; set;}
+		[Ordinal(2)] [RED("targetTag")] 		public CName TargetTag { get; set;}
 
-		[Ordinal(3)] [RED("("frequency")] 		public CFloat Frequency { get; set;}
+		[Ordinal(3)] [RED("frequency")] 		public CFloat Frequency { get; set;}
 
 		public W3ProjectileShooterTest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

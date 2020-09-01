@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CHelpTextComponent : CComponent
 	{
-		[Ordinal(1)] [RED("("text")] 		public CString Text { get; set;}
+		[Ordinal(1)] [RED("text")] 		public CString Text { get; set;}
 
-		[Ordinal(2)] [RED("("textColor")] 		public CColor TextColor { get; set;}
+		[Ordinal(2)] [RED("textColor")] 		public CColor TextColor { get; set;}
 
-		[Ordinal(3)] [RED("("backgroundColor")] 		public CColor BackgroundColor { get; set;}
+		[Ordinal(3)] [RED("backgroundColor")] 		public CColor BackgroundColor { get; set;}
 
-		[Ordinal(4)] [RED("("drawBackground")] 		public CBool DrawBackground { get; set;}
+		[Ordinal(4)] [RED("drawBackground")] 		public CBool DrawBackground { get; set;}
 
 		public CHelpTextComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

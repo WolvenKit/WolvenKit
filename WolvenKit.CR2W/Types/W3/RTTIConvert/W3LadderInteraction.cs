@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3LadderInteraction : CGameplayEntity
 	{
-		[Ordinal(1)] [RED("("associatedDoorTag")] 		public CName AssociatedDoorTag { get; set;}
+		[Ordinal(1)] [RED("associatedDoorTag")] 		public CName AssociatedDoorTag { get; set;}
 
-		[Ordinal(2)] [RED("("associatedDoor")] 		public CHandle<W3NewDoor> AssociatedDoor { get; set;}
+		[Ordinal(2)] [RED("associatedDoor")] 		public CHandle<W3NewDoor> AssociatedDoor { get; set;}
 
 		public W3LadderInteraction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

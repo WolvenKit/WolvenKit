@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SFurMaterialSet : CVariable
 	{
-		[Ordinal(1)] [RED("("useWetness")] 		public CBool UseWetness { get; set;}
+		[Ordinal(1)] [RED("useWetness")] 		public CBool UseWetness { get; set;}
 
-		[Ordinal(2)] [RED("("physicalMaterials")] 		public SFurPhysicalMaterials PhysicalMaterials { get; set;}
+		[Ordinal(2)] [RED("physicalMaterials")] 		public SFurPhysicalMaterials PhysicalMaterials { get; set;}
 
-		[Ordinal(3)] [RED("("graphicalMaterials")] 		public SFurGraphicalMaterials GraphicalMaterials { get; set;}
+		[Ordinal(3)] [RED("graphicalMaterials")] 		public SFurGraphicalMaterials GraphicalMaterials { get; set;}
 
 		public SFurMaterialSet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

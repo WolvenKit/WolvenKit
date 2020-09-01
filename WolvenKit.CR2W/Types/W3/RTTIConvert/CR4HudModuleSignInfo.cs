@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4HudModuleSignInfo : CR4HudModuleBase
 	{
-		[Ordinal(1)] [RED("("_iconName")] 		public CString _iconName { get; set;}
+		[Ordinal(1)] [RED("_iconName")] 		public CString _iconName { get; set;}
 
-		[Ordinal(2)] [RED("("_CurrentSelectedSign")] 		public CEnum<ESignType> _CurrentSelectedSign { get; set;}
+		[Ordinal(2)] [RED("_CurrentSelectedSign")] 		public CEnum<ESignType> _CurrentSelectedSign { get; set;}
 
-		[Ordinal(3)] [RED("("m_fxShowBckArrowSFF")] 		public CHandle<CScriptedFlashFunction> M_fxShowBckArrowSFF { get; set;}
+		[Ordinal(3)] [RED("m_fxShowBckArrowSFF")] 		public CHandle<CScriptedFlashFunction> M_fxShowBckArrowSFF { get; set;}
 
-		[Ordinal(4)] [RED("("m_fxEnableSFF")] 		public CHandle<CScriptedFlashFunction> M_fxEnableSFF { get; set;}
+		[Ordinal(4)] [RED("m_fxEnableSFF")] 		public CHandle<CScriptedFlashFunction> M_fxEnableSFF { get; set;}
 
 		public CR4HudModuleSignInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

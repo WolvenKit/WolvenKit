@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneChoice : CStorySceneElement
 	{
-		[Ordinal(1)] [RED("("choiceLines", 2,0)] 		public CArray<CPtr<CStorySceneChoiceLine>> ChoiceLines { get; set;}
+		[Ordinal(1)] [RED("choiceLines", 2,0)] 		public CArray<CPtr<CStorySceneChoiceLine>> ChoiceLines { get; set;}
 
-		[Ordinal(2)] [RED("("timeLimit")] 		public CFloat TimeLimit { get; set;}
+		[Ordinal(2)] [RED("timeLimit")] 		public CFloat TimeLimit { get; set;}
 
-		[Ordinal(3)] [RED("("duration")] 		public CFloat Duration { get; set;}
+		[Ordinal(3)] [RED("duration")] 		public CFloat Duration { get; set;}
 
-		[Ordinal(4)] [RED("("isLooped")] 		public CBool IsLooped { get; set;}
+		[Ordinal(4)] [RED("isLooped")] 		public CBool IsLooped { get; set;}
 
-		[Ordinal(5)] [RED("("questChoice")] 		public CBool QuestChoice { get; set;}
+		[Ordinal(5)] [RED("questChoice")] 		public CBool QuestChoice { get; set;}
 
-		[Ordinal(6)] [RED("("showLastLine")] 		public CBool ShowLastLine { get; set;}
+		[Ordinal(6)] [RED("showLastLine")] 		public CBool ShowLastLine { get; set;}
 
-		[Ordinal(7)] [RED("("alternativeUI")] 		public CBool AlternativeUI { get; set;}
+		[Ordinal(7)] [RED("alternativeUI")] 		public CBool AlternativeUI { get; set;}
 
 		public CStorySceneChoice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

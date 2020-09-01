@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -16,15 +17,15 @@ namespace WolvenKit.CR2W.Types
 
 		[Ordinal(3)] [RED("awayFromCamera")] 		public CBool AwayFromCamera { get; set;}
 
-		[Ordinal(4)] [RED("("onlyReachable")] 		public CBool OnlyReachable { get; set;}
+		[Ordinal(4)] [RED("onlyReachable")] 		public CBool OnlyReachable { get; set;}
 
-		[Ordinal(5)] [RED("("noRoughTerrain")] 		public CBool NoRoughTerrain { get; set;}
+		[Ordinal(5)] [RED("noRoughTerrain")] 		public CBool NoRoughTerrain { get; set;}
 
-		[Ordinal(6)] [RED("("noInteriors")] 		public CBool NoInteriors { get; set;}
+		[Ordinal(6)] [RED("noInteriors")] 		public CBool NoInteriors { get; set;}
 
-		[Ordinal(7)] [RED("("limitToBaseArea")] 		public CBool LimitToBaseArea { get; set;}
+		[Ordinal(7)] [RED("limitToBaseArea")] 		public CBool LimitToBaseArea { get; set;}
 
-		[Ordinal(8)] [RED("("limitedPrecision")] 		public CBool LimitedPrecision { get; set;}
+		[Ordinal(8)] [RED("limitedPrecision")] 		public CBool LimitedPrecision { get; set;}
 
 		public SClosestSpotFilter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

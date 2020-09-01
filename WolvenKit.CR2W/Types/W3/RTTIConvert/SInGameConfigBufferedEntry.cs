@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SInGameConfigBufferedEntry : CVariable
 	{
-		[Ordinal(1)] [RED("("groupName")] 		public CName GroupName { get; set;}
+		[Ordinal(1)] [RED("groupName")] 		public CName GroupName { get; set;}
 
-		[Ordinal(2)] [RED("("varName")] 		public CName VarName { get; set;}
+		[Ordinal(2)] [RED("varName")] 		public CName VarName { get; set;}
 
-		[Ordinal(3)] [RED("("varValue")] 		public CString VarValue { get; set;}
+		[Ordinal(3)] [RED("varValue")] 		public CString VarValue { get; set;}
 
-		[Ordinal(4)] [RED("("startValue")] 		public CString StartValue { get; set;}
+		[Ordinal(4)] [RED("startValue")] 		public CString StartValue { get; set;}
 
 		public SInGameConfigBufferedEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

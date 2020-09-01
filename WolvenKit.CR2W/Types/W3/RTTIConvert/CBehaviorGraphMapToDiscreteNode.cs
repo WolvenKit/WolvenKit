@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMapToDiscreteNode : CBehaviorGraphValueBaseNode
 	{
-		[Ordinal(1)] [RED("("ranges", 2,0)] 		public CArray<SBehaviorGraphMapToDiscreteMapper> Ranges { get; set;}
+		[Ordinal(1)] [RED("ranges", 2,0)] 		public CArray<SBehaviorGraphMapToDiscreteMapper> Ranges { get; set;}
 
 		public CBehaviorGraphMapToDiscreteNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

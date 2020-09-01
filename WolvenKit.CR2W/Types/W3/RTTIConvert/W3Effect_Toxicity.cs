@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Effect_Toxicity : CBaseGameplayEffect
 	{
-		[Ordinal(1)] [RED("("dmgTypeName")] 		public CName DmgTypeName { get; set;}
+		[Ordinal(1)] [RED("dmgTypeName")] 		public CName DmgTypeName { get; set;}
 
-		[Ordinal(2)] [RED("("toxThresholdEffect")] 		public CInt32 ToxThresholdEffect { get; set;}
+		[Ordinal(2)] [RED("toxThresholdEffect")] 		public CInt32 ToxThresholdEffect { get; set;}
 
-		[Ordinal(3)] [RED("("delayToNextVFXUpdate")] 		public CFloat DelayToNextVFXUpdate { get; set;}
+		[Ordinal(3)] [RED("delayToNextVFXUpdate")] 		public CFloat DelayToNextVFXUpdate { get; set;}
 
 		public W3Effect_Toxicity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

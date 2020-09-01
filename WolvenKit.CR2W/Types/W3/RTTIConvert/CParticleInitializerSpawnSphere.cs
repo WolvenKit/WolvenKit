@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,27 +11,27 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CParticleInitializerSpawnSphere : IParticleInitializer
 	{
-		[Ordinal(1)] [RED("("innerRadius")] 		public CPtr<IEvaluatorFloat> InnerRadius { get; set;}
+		[Ordinal(1)] [RED("innerRadius")] 		public CPtr<IEvaluatorFloat> InnerRadius { get; set;}
 
-		[Ordinal(2)] [RED("("outerRadius")] 		public CPtr<IEvaluatorFloat> OuterRadius { get; set;}
+		[Ordinal(2)] [RED("outerRadius")] 		public CPtr<IEvaluatorFloat> OuterRadius { get; set;}
 
-		[Ordinal(3)] [RED("("surfaceOnly")] 		public CBool SurfaceOnly { get; set;}
+		[Ordinal(3)] [RED("surfaceOnly")] 		public CBool SurfaceOnly { get; set;}
 
-		[Ordinal(4)] [RED("("spawnPositiveX")] 		public CBool SpawnPositiveX { get; set;}
+		[Ordinal(4)] [RED("spawnPositiveX")] 		public CBool SpawnPositiveX { get; set;}
 
-		[Ordinal(5)] [RED("("spawnNegativeX")] 		public CBool SpawnNegativeX { get; set;}
+		[Ordinal(5)] [RED("spawnNegativeX")] 		public CBool SpawnNegativeX { get; set;}
 
-		[Ordinal(6)] [RED("("spawnPositiveY")] 		public CBool SpawnPositiveY { get; set;}
+		[Ordinal(6)] [RED("spawnPositiveY")] 		public CBool SpawnPositiveY { get; set;}
 
-		[Ordinal(7)] [RED("("spawnNegativeY")] 		public CBool SpawnNegativeY { get; set;}
+		[Ordinal(7)] [RED("spawnNegativeY")] 		public CBool SpawnNegativeY { get; set;}
 
-		[Ordinal(8)] [RED("("spawnPositiveZ")] 		public CBool SpawnPositiveZ { get; set;}
+		[Ordinal(8)] [RED("spawnPositiveZ")] 		public CBool SpawnPositiveZ { get; set;}
 
-		[Ordinal(9)] [RED("("spawnNegativeZ")] 		public CBool SpawnNegativeZ { get; set;}
+		[Ordinal(9)] [RED("spawnNegativeZ")] 		public CBool SpawnNegativeZ { get; set;}
 
-		[Ordinal(10)] [RED("("velocity")] 		public CBool Velocity { get; set;}
+		[Ordinal(10)] [RED("velocity")] 		public CBool Velocity { get; set;}
 
-		[Ordinal(11)] [RED("("forceScale")] 		public CPtr<IEvaluatorFloat> ForceScale { get; set;}
+		[Ordinal(11)] [RED("forceScale")] 		public CPtr<IEvaluatorFloat> ForceScale { get; set;}
 
 		public CParticleInitializerSpawnSphere(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

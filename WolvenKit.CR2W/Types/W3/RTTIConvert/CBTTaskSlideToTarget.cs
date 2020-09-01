@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSlideToTarget : IBehTreeTask
 	{
-		[Ordinal(1)] [RED("("minDistance")] 		public CFloat MinDistance { get; set;}
+		[Ordinal(1)] [RED("minDistance")] 		public CFloat MinDistance { get; set;}
 
-		[Ordinal(2)] [RED("("maxDistance")] 		public CFloat MaxDistance { get; set;}
+		[Ordinal(2)] [RED("maxDistance")] 		public CFloat MaxDistance { get; set;}
 
-		[Ordinal(3)] [RED("("maxSpeed")] 		public CFloat MaxSpeed { get; set;}
+		[Ordinal(3)] [RED("maxSpeed")] 		public CFloat MaxSpeed { get; set;}
 
-		[Ordinal(4)] [RED("("onAnimEvent")] 		public CName OnAnimEvent { get; set;}
+		[Ordinal(4)] [RED("onAnimEvent")] 		public CName OnAnimEvent { get; set;}
 
-		[Ordinal(5)] [RED("("adjustVertically")] 		public CBool AdjustVertically { get; set;}
+		[Ordinal(5)] [RED("adjustVertically")] 		public CBool AdjustVertically { get; set;}
 
-		[Ordinal(6)] [RED("("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
+		[Ordinal(6)] [RED("useCombatTarget")] 		public CBool UseCombatTarget { get; set;}
 
 		public CBTTaskSlideToTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

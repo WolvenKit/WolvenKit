@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SBgNpcJobTree : CVariable
 	{
-		[Ordinal(1)] [RED("("jobTree")] 		public CSoft<CJobTree> JobTree { get; set;}
+		[Ordinal(1)] [RED("jobTree")] 		public CSoft<CJobTree> JobTree { get; set;}
 
-		[Ordinal(2)] [RED("("category")] 		public CName Category { get; set;}
+		[Ordinal(2)] [RED("category")] 		public CName Category { get; set;}
 
-		[Ordinal(3)] [RED("("fireTime")] 		public GameTime FireTime { get; set;}
+		[Ordinal(3)] [RED("fireTime")] 		public GameTime FireTime { get; set;}
 
 		public SBgNpcJobTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

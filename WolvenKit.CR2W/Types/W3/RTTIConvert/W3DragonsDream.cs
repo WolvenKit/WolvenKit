@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3DragonsDream : W3Petard
 	{
-		[Ordinal(1)] [RED("("gasEntityTemplate")] 		public CHandle<CEntityTemplate> GasEntityTemplate { get; set;}
+		[Ordinal(1)] [RED("gasEntityTemplate")] 		public CHandle<CEntityTemplate> GasEntityTemplate { get; set;}
 
-		[Ordinal(2)] [RED("("gasEntity")] 		public CHandle<W3ToxicCloud> GasEntity { get; set;}
+		[Ordinal(2)] [RED("gasEntity")] 		public CHandle<W3ToxicCloud> GasEntity { get; set;}
 
-		[Ordinal(3)] [RED("("burningChance")] 		public CFloat BurningChance { get; set;}
+		[Ordinal(3)] [RED("burningChance")] 		public CFloat BurningChance { get; set;}
 
 		public W3DragonsDream(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

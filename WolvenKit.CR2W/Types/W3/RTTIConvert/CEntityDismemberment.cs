@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEntityDismemberment : CEntityTemplateParam
 	{
-		[Ordinal(1)] [RED("("wounds", 2,0)] 		public CArray<CPtr<CDismembermentWound>> Wounds { get; set;}
+		[Ordinal(1)] [RED("wounds", 2,0)] 		public CArray<CPtr<CDismembermentWound>> Wounds { get; set;}
 
-		[Ordinal(2)] [RED("("disabledWounds", 2,0)] 		public CArray<SDismembermentWoundFilter> DisabledWounds { get; set;}
+		[Ordinal(2)] [RED("disabledWounds", 2,0)] 		public CArray<SDismembermentWoundFilter> DisabledWounds { get; set;}
 
 		public CEntityDismemberment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

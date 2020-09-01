@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCreaturePartyEntry : CBaseCreatureEntry
 	{
-		[Ordinal(1)] [RED("("subDefinitions", 2,0)] 		public CArray<CPtr<CSpawnTreeEntrySubDefinition>> SubDefinitions { get; set;}
+		[Ordinal(1)] [RED("subDefinitions", 2,0)] 		public CArray<CPtr<CSpawnTreeEntrySubDefinition>> SubDefinitions { get; set;}
 
-		[Ordinal(2)] [RED("("partySpawnOrganizer")] 		public CHandle<CPartySpawnOrganizer> PartySpawnOrganizer { get; set;}
+		[Ordinal(2)] [RED("partySpawnOrganizer")] 		public CHandle<CPartySpawnOrganizer> PartySpawnOrganizer { get; set;}
 
-		[Ordinal(3)] [RED("("blockChats")] 		public CBool BlockChats { get; set;}
+		[Ordinal(3)] [RED("blockChats")] 		public CBool BlockChats { get; set;}
 
-		[Ordinal(4)] [RED("("synchronizeWork")] 		public CBool SynchronizeWork { get; set;}
+		[Ordinal(4)] [RED("synchronizeWork")] 		public CBool SynchronizeWork { get; set;}
 
 		public CCreaturePartyEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

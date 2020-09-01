@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMotionRotChangeValueNode : CBehaviorGraphValueNode
 	{
-		[Ordinal(1)] [RED("("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
+		[Ordinal(1)] [RED("cachedInputNode")] 		public CPtr<CBehaviorGraphNode> CachedInputNode { get; set;}
 
-		[Ordinal(2)] [RED("("analizeMotionEx")] 		public CBool AnalizeMotionEx { get; set;}
+		[Ordinal(2)] [RED("analizeMotionEx")] 		public CBool AnalizeMotionEx { get; set;}
 
-		[Ordinal(3)] [RED("("radOrDeg")] 		public CBool RadOrDeg { get; set;}
+		[Ordinal(3)] [RED("radOrDeg")] 		public CBool RadOrDeg { get; set;}
 
 		public CBehaviorGraphMotionRotChangeValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

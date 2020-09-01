@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TutorialManagerUIHandlerStateBooksCommonMenu : W3TutorialManagerUIHandlerStateTutHandlerBaseState
 	{
-		[Ordinal(1)] [RED("("OPEN_COMMON_MENU")] 		public CName OPEN_COMMON_MENU { get; set;}
+		[Ordinal(1)] [RED("OPEN_COMMON_MENU")] 		public CName OPEN_COMMON_MENU { get; set;}
 
-		[Ordinal(2)] [RED("("SELECT_GLOSSARY")] 		public CName SELECT_GLOSSARY { get; set;}
+		[Ordinal(2)] [RED("SELECT_GLOSSARY")] 		public CName SELECT_GLOSSARY { get; set;}
 
 		public W3TutorialManagerUIHandlerStateBooksCommonMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

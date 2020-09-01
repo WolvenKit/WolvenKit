@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExtAnimCutsceneDisableClothEvent : CExtAnimEvent
 	{
-		[Ordinal(1)] [RED("("weight")] 		public CFloat Weight { get; set;}
+		[Ordinal(1)] [RED("weight")] 		public CFloat Weight { get; set;}
 
-		[Ordinal(2)] [RED("("blendTime")] 		public CFloat BlendTime { get; set;}
+		[Ordinal(2)] [RED("blendTime")] 		public CFloat BlendTime { get; set;}
 
 		public CExtAnimCutsceneDisableClothEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

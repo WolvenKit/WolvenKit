@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CCameraPivotPositionControllerExplorationInteraction : CCameraPivotPositionControllerJump
 	{
-		[Ordinal(1)] [RED("("collisionOffsetF")] 		public CFloat CollisionOffsetF { get; set;}
+		[Ordinal(1)] [RED("collisionOffsetF")] 		public CFloat CollisionOffsetF { get; set;}
 
-		[Ordinal(2)] [RED("("explorationDirection")] 		public Vector ExplorationDirection { get; set;}
+		[Ordinal(2)] [RED("explorationDirection")] 		public Vector ExplorationDirection { get; set;}
 
-		[Ordinal(3)] [RED("("collisionOffset")] 		public Vector CollisionOffset { get; set;}
+		[Ordinal(3)] [RED("collisionOffset")] 		public Vector CollisionOffset { get; set;}
 
 		public CCameraPivotPositionControllerExplorationInteraction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

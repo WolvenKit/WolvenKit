@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3TraceGroundProjectile : W3AdvancedProjectile
 	{
-		[Ordinal(1)] [RED("("samplingFreq")] 		public CFloat SamplingFreq { get; set;}
+		[Ordinal(1)] [RED("samplingFreq")] 		public CFloat SamplingFreq { get; set;}
 
-		[Ordinal(2)] [RED("("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(2)] [RED("effectName")] 		public CName EffectName { get; set;}
 
-		[Ordinal(3)] [RED("("onRangedReachedDestroyAfter")] 		public CFloat OnRangedReachedDestroyAfter { get; set;}
+		[Ordinal(3)] [RED("onRangedReachedDestroyAfter")] 		public CFloat OnRangedReachedDestroyAfter { get; set;}
 
-		[Ordinal(4)] [RED("("deactivateOnCollisionWithVictim")] 		public CBool DeactivateOnCollisionWithVictim { get; set;}
+		[Ordinal(4)] [RED("deactivateOnCollisionWithVictim")] 		public CBool DeactivateOnCollisionWithVictim { get; set;}
 
-		[Ordinal(5)] [RED("("comp")] 		public CHandle<CEffectDummyComponent> Comp { get; set;}
+		[Ordinal(5)] [RED("comp")] 		public CHandle<CEffectDummyComponent> Comp { get; set;}
 
 		public W3TraceGroundProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SmellyCheese : W3AirDrainEntity
 	{
-		[Ordinal(1)] [RED("("deactivatedByAard")] 		public CBool DeactivatedByAard { get; set;}
+		[Ordinal(1)] [RED("deactivatedByAard")] 		public CBool DeactivatedByAard { get; set;}
 
-		[Ordinal(2)] [RED("("smellEffectName")] 		public CName SmellEffectName { get; set;}
+		[Ordinal(2)] [RED("smellEffectName")] 		public CName SmellEffectName { get; set;}
 
-		[Ordinal(3)] [RED("("aardedEffectName")] 		public CName AardedEffectName { get; set;}
+		[Ordinal(3)] [RED("aardedEffectName")] 		public CName AardedEffectName { get; set;}
 
-		[Ordinal(4)] [RED("("reactivateTimer")] 		public CFloat ReactivateTimer { get; set;}
+		[Ordinal(4)] [RED("reactivateTimer")] 		public CFloat ReactivateTimer { get; set;}
 
-		[Ordinal(5)] [RED("("deactivated")] 		public CBool Deactivated { get; set;}
+		[Ordinal(5)] [RED("deactivated")] 		public CBool Deactivated { get; set;}
 
 		public W3SmellyCheese(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

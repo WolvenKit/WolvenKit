@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3GuiEnchantingInventoryComponent : W3GuiBaseInventoryComponent
 	{
-		[Ordinal(1)] [RED("("REQUIRED_SLOTS_COUNTS")] 		public CInt32 REQUIRED_SLOTS_COUNTS { get; set;}
+		[Ordinal(1)] [RED("REQUIRED_SLOTS_COUNTS")] 		public CInt32 REQUIRED_SLOTS_COUNTS { get; set;}
 
 		public W3GuiEnchantingInventoryComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

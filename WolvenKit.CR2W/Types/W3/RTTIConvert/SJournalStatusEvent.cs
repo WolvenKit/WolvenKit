@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SJournalStatusEvent : SJournalEvent
 	{
-		[Ordinal(1)] [RED("("oldStatus")] 		public CEnum<EJournalStatus> OldStatus { get; set;}
+		[Ordinal(1)] [RED("oldStatus")] 		public CEnum<EJournalStatus> OldStatus { get; set;}
 
-		[Ordinal(2)] [RED("("newStatus")] 		public CEnum<EJournalStatus> NewStatus { get; set;}
+		[Ordinal(2)] [RED("newStatus")] 		public CEnum<EJournalStatus> NewStatus { get; set;}
 
-		[Ordinal(3)] [RED("("silent")] 		public CBool Silent { get; set;}
+		[Ordinal(3)] [RED("silent")] 		public CBool Silent { get; set;}
 
 		public SJournalStatusEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,23 +11,23 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3SummonedFlies : CGameplayEntity
 	{
-		[Ordinal(1)] [RED("("fleeDuration")] 		public CFloat FleeDuration { get; set;}
+		[Ordinal(1)] [RED("fleeDuration")] 		public CFloat FleeDuration { get; set;}
 
-		[Ordinal(2)] [RED("("lookForTarget")] 		public CBool LookForTarget { get; set;}
+		[Ordinal(2)] [RED("lookForTarget")] 		public CBool LookForTarget { get; set;}
 
-		[Ordinal(3)] [RED("("detectionDistance")] 		public CFloat DetectionDistance { get; set;}
+		[Ordinal(3)] [RED("detectionDistance")] 		public CFloat DetectionDistance { get; set;}
 
-		[Ordinal(4)] [RED("("pursueDistance")] 		public CFloat PursueDistance { get; set;}
+		[Ordinal(4)] [RED("pursueDistance")] 		public CFloat PursueDistance { get; set;}
 
-		[Ordinal(5)] [RED("("ignoreTag")] 		public CName IgnoreTag { get; set;}
+		[Ordinal(5)] [RED("ignoreTag")] 		public CName IgnoreTag { get; set;}
 
-		[Ordinal(6)] [RED("("m_Target")] 		public CHandle<CNode> M_Target { get; set;}
+		[Ordinal(6)] [RED("m_Target")] 		public CHandle<CNode> M_Target { get; set;}
 
-		[Ordinal(7)] [RED("("m_StartPos")] 		public Vector M_StartPos { get; set;}
+		[Ordinal(7)] [RED("m_StartPos")] 		public Vector M_StartPos { get; set;}
 
-		[Ordinal(8)] [RED("("m_SummonedCmp")] 		public CHandle<W3SummonedEntityComponent> M_SummonedCmp { get; set;}
+		[Ordinal(8)] [RED("m_SummonedCmp")] 		public CHandle<W3SummonedEntityComponent> M_SummonedCmp { get; set;}
 
-		[Ordinal(9)] [RED("("m_SlideCmp")] 		public CHandle<W3SlideToTargetComponent> M_SlideCmp { get; set;}
+		[Ordinal(9)] [RED("m_SlideCmp")] 		public CHandle<W3SlideToTargetComponent> M_SlideCmp { get; set;}
 
 		public W3SummonedFlies(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

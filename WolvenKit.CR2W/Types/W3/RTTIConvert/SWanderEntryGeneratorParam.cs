@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SWanderEntryGeneratorParam : CVariable
 	{
-		[Ordinal(1)] [RED("("qualityMin")] 		public CInt32 QualityMin { get; set;}
+		[Ordinal(1)] [RED("qualityMin")] 		public CInt32 QualityMin { get; set;}
 
-		[Ordinal(2)] [RED("("qualityMax")] 		public CInt32 QualityMax { get; set;}
+		[Ordinal(2)] [RED("qualityMax")] 		public CInt32 QualityMax { get; set;}
 
-		[Ordinal(3)] [RED("("creatureDefinition")] 		public SCreatureDefinitionWrapper CreatureDefinition { get; set;}
+		[Ordinal(3)] [RED("creatureDefinition")] 		public SCreatureDefinitionWrapper CreatureDefinition { get; set;}
 
-		[Ordinal(4)] [RED("("spawnWayPointTag")] 		public TagList SpawnWayPointTag { get; set;}
+		[Ordinal(4)] [RED("spawnWayPointTag")] 		public TagList SpawnWayPointTag { get; set;}
 
-		[Ordinal(5)] [RED("("wanderPointsGroupTag")] 		public CName WanderPointsGroupTag { get; set;}
+		[Ordinal(5)] [RED("wanderPointsGroupTag")] 		public CName WanderPointsGroupTag { get; set;}
 
 		public SWanderEntryGeneratorParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphMapWorldSpaceDirectionToModelSpaceRangeNode : CBehaviorGraphValueBaseNode
 	{
-		[Ordinal(1)] [RED("("minOutValue")] 		public CFloat MinOutValue { get; set;}
+		[Ordinal(1)] [RED("minOutValue")] 		public CFloat MinOutValue { get; set;}
 
-		[Ordinal(2)] [RED("("maxOutValue")] 		public CFloat MaxOutValue { get; set;}
+		[Ordinal(2)] [RED("maxOutValue")] 		public CFloat MaxOutValue { get; set;}
 
-		[Ordinal(3)] [RED("("leftToRight")] 		public CBool LeftToRight { get; set;}
+		[Ordinal(3)] [RED("leftToRight")] 		public CBool LeftToRight { get; set;}
 
 		public CBehaviorGraphMapWorldSpaceDirectionToModelSpaceRangeNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

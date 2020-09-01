@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CStorySceneElement : CObject
 	{
-		[Ordinal(1)] [RED("("elementID")] 		public CString ElementID { get; set;}
+		[Ordinal(1)] [RED("elementID")] 		public CString ElementID { get; set;}
 
-		[Ordinal(2)] [RED("("approvedDuration")] 		public CFloat ApprovedDuration { get; set;}
+		[Ordinal(2)] [RED("approvedDuration")] 		public CFloat ApprovedDuration { get; set;}
 
-		[Ordinal(3)] [RED("("isCopy")] 		public CBool IsCopy { get; set;}
+		[Ordinal(3)] [RED("isCopy")] 		public CBool IsCopy { get; set;}
 
 		public CStorySceneElement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

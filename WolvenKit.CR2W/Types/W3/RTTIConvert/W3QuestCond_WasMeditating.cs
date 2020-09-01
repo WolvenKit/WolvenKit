@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,21 +11,21 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3QuestCond_WasMeditating : CQuestScriptedCondition
 	{
-		[Ordinal(1)] [RED("("hours")] 		public CInt32 Hours { get; set;}
+		[Ordinal(1)] [RED("hours")] 		public CInt32 Hours { get; set;}
 
-		[Ordinal(2)] [RED("("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
+		[Ordinal(2)] [RED("comparator")] 		public CEnum<ECompareOp> Comparator { get; set;}
 
-		[Ordinal(3)] [RED("("dayPart")] 		public CEnum<EDayPart> DayPart { get; set;}
+		[Ordinal(3)] [RED("dayPart")] 		public CEnum<EDayPart> DayPart { get; set;}
 
-		[Ordinal(4)] [RED("("meditateToHour")] 		public CBool MeditateToHour { get; set;}
+		[Ordinal(4)] [RED("meditateToHour")] 		public CBool MeditateToHour { get; set;}
 
-		[Ordinal(5)] [RED("("immediateTest")] 		public CBool ImmediateTest { get; set;}
+		[Ordinal(5)] [RED("immediateTest")] 		public CBool ImmediateTest { get; set;}
 
-		[Ordinal(6)] [RED("("isFulfilled")] 		public CBool IsFulfilled { get; set;}
+		[Ordinal(6)] [RED("isFulfilled")] 		public CBool IsFulfilled { get; set;}
 
-		[Ordinal(7)] [RED("("listener")] 		public CHandle<W3QuestCond_WasMeditating_Listener> Listener { get; set;}
+		[Ordinal(7)] [RED("listener")] 		public CHandle<W3QuestCond_WasMeditating_Listener> Listener { get; set;}
 
-		[Ordinal(8)] [RED("("factsNames", 2,0)] 		public CArray<CString> FactsNames { get; set;}
+		[Ordinal(8)] [RED("factsNames", 2,0)] 		public CArray<CString> FactsNames { get; set;}
 
 		public W3QuestCond_WasMeditating(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

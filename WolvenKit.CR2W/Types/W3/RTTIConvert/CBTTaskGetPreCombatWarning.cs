@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskGetPreCombatWarning : IBehTreeTask
 	{
-		[Ordinal(1)] [RED("("combatDataStorage")] 		public CHandle<CBaseAICombatStorage> CombatDataStorage { get; set;}
+		[Ordinal(1)] [RED("combatDataStorage")] 		public CHandle<CBaseAICombatStorage> CombatDataStorage { get; set;}
 
-		[Ordinal(2)] [RED("("setFlagOnActivate")] 		public CBool SetFlagOnActivate { get; set;}
+		[Ordinal(2)] [RED("setFlagOnActivate")] 		public CBool SetFlagOnActivate { get; set;}
 
-		[Ordinal(3)] [RED("("setFlagOnDectivate")] 		public CBool SetFlagOnDectivate { get; set;}
+		[Ordinal(3)] [RED("setFlagOnDectivate")] 		public CBool SetFlagOnDectivate { get; set;}
 
-		[Ordinal(4)] [RED("("flag")] 		public CBool Flag { get; set;}
+		[Ordinal(4)] [RED("flag")] 		public CBool Flag { get; set;}
 
 		public CBTTaskGetPreCombatWarning(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

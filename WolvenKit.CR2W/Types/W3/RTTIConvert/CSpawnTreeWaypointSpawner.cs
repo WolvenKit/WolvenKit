@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeWaypointSpawner : CVariable
 	{
-		[Ordinal(1)] [RED("("visibility")] 		public CEnum<ESpawnTreeSpawnVisibility> Visibility { get; set;}
+		[Ordinal(1)] [RED("visibility")] 		public CEnum<ESpawnTreeSpawnVisibility> Visibility { get; set;}
 
-		[Ordinal(2)] [RED("("spawnpointDelay")] 		public CFloat SpawnpointDelay { get; set;}
+		[Ordinal(2)] [RED("spawnpointDelay")] 		public CFloat SpawnpointDelay { get; set;}
 
-		[Ordinal(3)] [RED("("tags")] 		public TagList Tags { get; set;}
+		[Ordinal(3)] [RED("tags")] 		public TagList Tags { get; set;}
 
-		[Ordinal(4)] [RED("("useLocationTest")] 		public CBool UseLocationTest { get; set;}
+		[Ordinal(4)] [RED("useLocationTest")] 		public CBool UseLocationTest { get; set;}
 
 		public CSpawnTreeWaypointSpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

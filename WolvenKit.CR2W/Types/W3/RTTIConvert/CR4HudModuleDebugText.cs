@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CR4HudModuleDebugText : CR4HudModuleBase
 	{
-		[Ordinal(1)] [RED("("bCurrentShowState")] 		public CBool BCurrentShowState { get; set;}
+		[Ordinal(1)] [RED("bCurrentShowState")] 		public CBool BCurrentShowState { get; set;}
 
-		[Ordinal(2)] [RED("("bShouldShowElement")] 		public CBool BShouldShowElement { get; set;}
+		[Ordinal(2)] [RED("bShouldShowElement")] 		public CBool BShouldShowElement { get; set;}
 
-		[Ordinal(3)] [RED("("bOpenDebugText")] 		public CBool BOpenDebugText { get; set;}
+		[Ordinal(3)] [RED("bOpenDebugText")] 		public CBool BOpenDebugText { get; set;}
 
 		public CR4HudModuleDebugText(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

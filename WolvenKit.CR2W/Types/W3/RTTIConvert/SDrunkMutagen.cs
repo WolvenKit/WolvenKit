@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SDrunkMutagen : CVariable
 	{
-		[Ordinal(1)] [RED("("slot")] 		public CInt32 Slot { get; set;}
+		[Ordinal(1)] [RED("slot")] 		public CInt32 Slot { get; set;}
 
-		[Ordinal(2)] [RED("("mutagenName")] 		public CName MutagenName { get; set;}
+		[Ordinal(2)] [RED("mutagenName")] 		public CName MutagenName { get; set;}
 
-		[Ordinal(3)] [RED("("toxicityOffset")] 		public CFloat ToxicityOffset { get; set;}
+		[Ordinal(3)] [RED("toxicityOffset")] 		public CFloat ToxicityOffset { get; set;}
 
-		[Ordinal(4)] [RED("("effectType")] 		public CEnum<EEffectType> EffectType { get; set;}
+		[Ordinal(4)] [RED("effectType")] 		public CEnum<EEffectType> EffectType { get; set;}
 
 		public SDrunkMutagen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

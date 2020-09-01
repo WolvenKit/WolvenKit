@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3GuiRepairInventoryComponent : W3GuiBaseInventoryComponent
 	{
-		[Ordinal(1)] [RED("("merchantInv")] 		public CHandle<CInventoryComponent> MerchantInv { get; set;}
+		[Ordinal(1)] [RED("merchantInv")] 		public CHandle<CInventoryComponent> MerchantInv { get; set;}
 
-		[Ordinal(2)] [RED("("masteryLevel")] 		public CInt32 MasteryLevel { get; set;}
+		[Ordinal(2)] [RED("masteryLevel")] 		public CInt32 MasteryLevel { get; set;}
 
-		[Ordinal(3)] [RED("("repairSwords")] 		public CBool RepairSwords { get; set;}
+		[Ordinal(3)] [RED("repairSwords")] 		public CBool RepairSwords { get; set;}
 
-		[Ordinal(4)] [RED("("repairArmors")] 		public CBool RepairArmors { get; set;}
+		[Ordinal(4)] [RED("repairArmors")] 		public CBool RepairArmors { get; set;}
 
 		public W3GuiRepairInventoryComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

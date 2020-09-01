@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SpawnMultipleEntitiesPoisonProjectile : PoisonProjectile
 	{
-		[Ordinal(1)] [RED("("numberOfSpawns")] 		public CInt32 NumberOfSpawns { get; set;}
+		[Ordinal(1)] [RED("numberOfSpawns")] 		public CInt32 NumberOfSpawns { get; set;}
 
-		[Ordinal(2)] [RED("("minDistFromTarget")] 		public CInt32 MinDistFromTarget { get; set;}
+		[Ordinal(2)] [RED("minDistFromTarget")] 		public CInt32 MinDistFromTarget { get; set;}
 
-		[Ordinal(3)] [RED("("maxDistFromTarget")] 		public CInt32 MaxDistFromTarget { get; set;}
+		[Ordinal(3)] [RED("maxDistFromTarget")] 		public CInt32 MaxDistFromTarget { get; set;}
 
 		public SpawnMultipleEntitiesPoisonProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

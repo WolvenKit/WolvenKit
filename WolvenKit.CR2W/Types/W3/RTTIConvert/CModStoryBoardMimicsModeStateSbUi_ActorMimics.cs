@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardMimicsModeStateSbUi_ActorMimics : CModSbListViewWorkModeStateSbUi_FilteredListSelect
 	{
-		[Ordinal(1)] [RED("("actor")] 		public CHandle<CModStoryBoardActor> Actor { get; set;}
+		[Ordinal(1)] [RED("actor")] 		public CHandle<CModStoryBoardActor> Actor { get; set;}
 
-		[Ordinal(2)] [RED("("newMimics")] 		public SStoryBoardAnimationSettings NewMimics { get; set;}
+		[Ordinal(2)] [RED("newMimics")] 		public SStoryBoardAnimationSettings NewMimics { get; set;}
 
 		public CModStoryBoardMimicsModeStateSbUi_ActorMimics(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

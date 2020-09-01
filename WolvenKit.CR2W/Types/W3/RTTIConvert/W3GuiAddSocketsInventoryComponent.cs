@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3GuiAddSocketsInventoryComponent : W3GuiPlayerInventoryComponent
 	{
-		[Ordinal(1)] [RED("("merchantInv")] 		public CHandle<CInventoryComponent> MerchantInv { get; set;}
+		[Ordinal(1)] [RED("merchantInv")] 		public CHandle<CInventoryComponent> MerchantInv { get; set;}
 
-		[Ordinal(2)] [RED("("maxUpgradedItems", 2,0)] 		public CArray<SItemUniqueId> MaxUpgradedItems { get; set;}
+		[Ordinal(2)] [RED("maxUpgradedItems", 2,0)] 		public CArray<SItemUniqueId> MaxUpgradedItems { get; set;}
 
 		public W3GuiAddSocketsInventoryComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

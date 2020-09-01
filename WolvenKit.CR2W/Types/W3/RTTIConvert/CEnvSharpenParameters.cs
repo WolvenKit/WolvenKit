@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CEnvSharpenParameters : CVariable
 	{
-		[Ordinal(1)] [RED("("activated")] 		public CBool Activated { get; set;}
+		[Ordinal(1)] [RED("activated")] 		public CBool Activated { get; set;}
 
-		[Ordinal(2)] [RED("("sharpenNear")] 		public SSimpleCurve SharpenNear { get; set;}
+		[Ordinal(2)] [RED("sharpenNear")] 		public SSimpleCurve SharpenNear { get; set;}
 
-		[Ordinal(3)] [RED("("sharpenFar")] 		public SSimpleCurve SharpenFar { get; set;}
+		[Ordinal(3)] [RED("sharpenFar")] 		public SSimpleCurve SharpenFar { get; set;}
 
-		[Ordinal(4)] [RED("("distanceNear")] 		public SSimpleCurve DistanceNear { get; set;}
+		[Ordinal(4)] [RED("distanceNear")] 		public SSimpleCurve DistanceNear { get; set;}
 
-		[Ordinal(5)] [RED("("distanceFar")] 		public SSimpleCurve DistanceFar { get; set;}
+		[Ordinal(5)] [RED("distanceFar")] 		public SSimpleCurve DistanceFar { get; set;}
 
-		[Ordinal(6)] [RED("("lumFilterOffset")] 		public SSimpleCurve LumFilterOffset { get; set;}
+		[Ordinal(6)] [RED("lumFilterOffset")] 		public SSimpleCurve LumFilterOffset { get; set;}
 
-		[Ordinal(7)] [RED("("lumFilterRange")] 		public SSimpleCurve LumFilterRange { get; set;}
+		[Ordinal(7)] [RED("lumFilterRange")] 		public SSimpleCurve LumFilterRange { get; set;}
 
 		public CEnvSharpenParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskShouldBeScaredOnOverlay : IBehTreeTask
 	{
-		[Ordinal(1)] [RED("("infantInHand")] 		public CBool InfantInHand { get; set;}
+		[Ordinal(1)] [RED("infantInHand")] 		public CBool InfantInHand { get; set;}
 
-		[Ordinal(2)] [RED("("catOnLap")] 		public CBool CatOnLap { get; set;}
+		[Ordinal(2)] [RED("catOnLap")] 		public CBool CatOnLap { get; set;}
 
-		[Ordinal(3)] [RED("("jobTreeType")] 		public CEnum<EJobTreeType> JobTreeType { get; set;}
+		[Ordinal(3)] [RED("jobTreeType")] 		public CEnum<EJobTreeType> JobTreeType { get; set;}
 
 		public CBTTaskShouldBeScaredOnOverlay(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CPayStorySceneChoiceAction : CStorySceneChoiceLineActionScripted
 	{
-		[Ordinal(1)] [RED("("money")] 		public CInt32 Money { get; set;}
+		[Ordinal(1)] [RED("money")] 		public CInt32 Money { get; set;}
 
-		[Ordinal(2)] [RED("("dontGrantExp")] 		public CBool DontGrantExp { get; set;}
+		[Ordinal(2)] [RED("dontGrantExp")] 		public CBool DontGrantExp { get; set;}
 
-		[Ordinal(3)] [RED("("actionIcon")] 		public CEnum<EDialogActionIcon> ActionIcon { get; set;}
+		[Ordinal(3)] [RED("actionIcon")] 		public CEnum<EDialogActionIcon> ActionIcon { get; set;}
 
 		public CPayStorySceneChoiceAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

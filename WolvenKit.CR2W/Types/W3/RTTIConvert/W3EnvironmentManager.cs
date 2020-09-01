@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,17 +11,17 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3EnvironmentManager : CObject
 	{
-		[Ordinal(1)] [RED("("m_envId")] 		public CInt32 M_envId { get; set;}
+		[Ordinal(1)] [RED("m_envId")] 		public CInt32 M_envId { get; set;}
 
-		[Ordinal(2)] [RED("("lunation")] 		public CInt32 Lunation { get; set;}
+		[Ordinal(2)] [RED("lunation")] 		public CInt32 Lunation { get; set;}
 
-		[Ordinal(3)] [RED("("dayStart")] 		public CInt32 DayStart { get; set;}
+		[Ordinal(3)] [RED("dayStart")] 		public CInt32 DayStart { get; set;}
 
-		[Ordinal(4)] [RED("("nightStart")] 		public CInt32 NightStart { get; set;}
+		[Ordinal(4)] [RED("nightStart")] 		public CInt32 NightStart { get; set;}
 
-		[Ordinal(5)] [RED("("redMoonPeriod")] 		public CInt32 RedMoonPeriod { get; set;}
+		[Ordinal(5)] [RED("redMoonPeriod")] 		public CInt32 RedMoonPeriod { get; set;}
 
-		[Ordinal(6)] [RED("("hourToSwitchEnv")] 		public CInt32 HourToSwitchEnv { get; set;}
+		[Ordinal(6)] [RED("hourToSwitchEnv")] 		public CInt32 HourToSwitchEnv { get; set;}
 
 		public W3EnvironmentManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

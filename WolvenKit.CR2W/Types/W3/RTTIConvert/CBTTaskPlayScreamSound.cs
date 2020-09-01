@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskPlayScreamSound : IBehTreeTask
 	{
-		[Ordinal(1)] [RED("("minFrequency")] 		public CFloat MinFrequency { get; set;}
+		[Ordinal(1)] [RED("minFrequency")] 		public CFloat MinFrequency { get; set;}
 
-		[Ordinal(2)] [RED("("maxFrequency")] 		public CFloat MaxFrequency { get; set;}
+		[Ordinal(2)] [RED("maxFrequency")] 		public CFloat MaxFrequency { get; set;}
 
-		[Ordinal(3)] [RED("("actor")] 		public CHandle<CActor> Actor { get; set;}
+		[Ordinal(3)] [RED("actor")] 		public CHandle<CActor> Actor { get; set;}
 
 		public CBTTaskPlayScreamSound(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

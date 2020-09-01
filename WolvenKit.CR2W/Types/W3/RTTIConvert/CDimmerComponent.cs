@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,15 +11,15 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CDimmerComponent : CDrawableComponent
 	{
-		[Ordinal(1)] [RED("("isAreaMarker")] 		public CBool IsAreaMarker { get; set;}
+		[Ordinal(1)] [RED("isAreaMarker")] 		public CBool IsAreaMarker { get; set;}
 
-		[Ordinal(2)] [RED("("dimmerType")] 		public CEnum<EDimmerType> DimmerType { get; set;}
+		[Ordinal(2)] [RED("dimmerType")] 		public CEnum<EDimmerType> DimmerType { get; set;}
 
-		[Ordinal(3)] [RED("("ambientLevel")] 		public CFloat AmbientLevel { get; set;}
+		[Ordinal(3)] [RED("ambientLevel")] 		public CFloat AmbientLevel { get; set;}
 
-		[Ordinal(4)] [RED("("marginFactor")] 		public CFloat MarginFactor { get; set;}
+		[Ordinal(4)] [RED("marginFactor")] 		public CFloat MarginFactor { get; set;}
 
-		[Ordinal(5)] [RED("("autoHideDistance")] 		public CFloat AutoHideDistance { get; set;}
+		[Ordinal(5)] [RED("autoHideDistance")] 		public CFloat AutoHideDistance { get; set;}
 
 		public CDimmerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

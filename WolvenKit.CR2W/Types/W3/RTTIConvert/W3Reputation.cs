@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class W3Reputation : CObject
 	{
-		[Ordinal(1)] [RED("("factionReputations", 2,0)] 		public CArray<CHandle<W3FactionReputationPoints>> FactionReputations { get; set;}
+		[Ordinal(1)] [RED("factionReputations", 2,0)] 		public CArray<CHandle<W3FactionReputationPoints>> FactionReputations { get; set;}
 
-		[Ordinal(2)] [RED("("factionName")] 		public CEnum<EFactionName> FactionName { get; set;}
+		[Ordinal(2)] [RED("factionName")] 		public CEnum<EFactionName> FactionName { get; set;}
 
 		public W3Reputation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

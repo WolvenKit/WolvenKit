@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,9 +11,9 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CExplorationStateTransitionAbstract : CExplorationStateAbstract
 	{
-		[Ordinal(1)] [RED("("m_TransitionOriginStateN")] 		public CName M_TransitionOriginStateN { get; set;}
+		[Ordinal(1)] [RED("m_TransitionOriginStateN")] 		public CName M_TransitionOriginStateN { get; set;}
 
-		[Ordinal(2)] [RED("("m_TransitionEndStateN")] 		public CName M_TransitionEndStateN { get; set;}
+		[Ordinal(2)] [RED("m_TransitionEndStateN")] 		public CName M_TransitionEndStateN { get; set;}
 
 		public CExplorationStateTransitionAbstract(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

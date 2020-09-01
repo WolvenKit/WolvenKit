@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,19 +11,19 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class SStoryBoardShotAssetSettings : CVariable
 	{
-		[Ordinal(1)] [RED("("assetId")] 		public CString AssetId { get; set;}
+		[Ordinal(1)] [RED("assetId")] 		public CString AssetId { get; set;}
 
-		[Ordinal(2)] [RED("("placement")] 		public SStoryBoardPlacementSettings Placement { get; set;}
+		[Ordinal(2)] [RED("placement")] 		public SStoryBoardPlacementSettings Placement { get; set;}
 
-		[Ordinal(3)] [RED("("pose")] 		public SStoryBoardPoseSettings Pose { get; set;}
+		[Ordinal(3)] [RED("pose")] 		public SStoryBoardPoseSettings Pose { get; set;}
 
-		[Ordinal(4)] [RED("("animation")] 		public SStoryBoardAnimationSettings Animation { get; set;}
+		[Ordinal(4)] [RED("animation")] 		public SStoryBoardAnimationSettings Animation { get; set;}
 
-		[Ordinal(5)] [RED("("mimics")] 		public SStoryBoardAnimationSettings Mimics { get; set;}
+		[Ordinal(5)] [RED("mimics")] 		public SStoryBoardAnimationSettings Mimics { get; set;}
 
-		[Ordinal(6)] [RED("("lookAt")] 		public SStoryBoardLookAtSettings LookAt { get; set;}
+		[Ordinal(6)] [RED("lookAt")] 		public SStoryBoardLookAtSettings LookAt { get; set;}
 
-		[Ordinal(7)] [RED("("audio")] 		public SStoryBoardAudioSettings Audio { get; set;}
+		[Ordinal(7)] [RED("audio")] 		public SStoryBoardAudioSettings Audio { get; set;}
 
 		public SStoryBoardShotAssetSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

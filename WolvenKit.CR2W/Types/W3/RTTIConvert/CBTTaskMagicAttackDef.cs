@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,13 +11,13 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CBTTaskMagicAttackDef : CBTTaskCollisionAttackDef
 	{
-		[Ordinal(1)] [RED("("dodgeable")] 		public CBool Dodgeable { get; set;}
+		[Ordinal(1)] [RED("dodgeable")] 		public CBool Dodgeable { get; set;}
 
-		[Ordinal(2)] [RED("("effectName")] 		public CName EffectName { get; set;}
+		[Ordinal(2)] [RED("effectName")] 		public CName EffectName { get; set;}
 
-		[Ordinal(3)] [RED("("fxDummyEntityTag")] 		public CName FxDummyEntityTag { get; set;}
+		[Ordinal(3)] [RED("fxDummyEntityTag")] 		public CName FxDummyEntityTag { get; set;}
 
-		[Ordinal(4)] [RED("("dummyEntityEffectName")] 		public CName DummyEntityEffectName { get; set;}
+		[Ordinal(4)] [RED("dummyEntityEffectName")] 		public CName DummyEntityEffectName { get; set;}
 
 		public CBTTaskMagicAttackDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 

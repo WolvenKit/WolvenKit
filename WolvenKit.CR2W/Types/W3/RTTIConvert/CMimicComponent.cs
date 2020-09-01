@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using WolvenKit.CR2W.Reflection;
+using FastMember;
 using static WolvenKit.CR2W.Types.Enums;
 
 
@@ -10,11 +11,11 @@ namespace WolvenKit.CR2W.Types
 	[REDMeta]
 	public class CMimicComponent : CAnimatedComponent
 	{
-		[Ordinal(1)] [RED("("mimicFace")] 		public CHandle<CMimicFace> MimicFace { get; set;}
+		[Ordinal(1)] [RED("mimicFace")] 		public CHandle<CMimicFace> MimicFace { get; set;}
 
-		[Ordinal(2)] [RED("("categoryMimics")] 		public CHandle<CMimicFace> CategoryMimics { get; set;}
+		[Ordinal(2)] [RED("categoryMimics")] 		public CHandle<CMimicFace> CategoryMimics { get; set;}
 
-		[Ordinal(3)] [RED("("attachmentSlotName")] 		public CName AttachmentSlotName { get; set;}
+		[Ordinal(3)] [RED("attachmentSlotName")] 		public CName AttachmentSlotName { get; set;}
 
 		public CMimicComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
