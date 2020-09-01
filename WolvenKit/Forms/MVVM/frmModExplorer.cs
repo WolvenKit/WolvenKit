@@ -36,7 +36,7 @@ namespace WolvenKit
         private readonly ModExplorerViewModel vm;
         private bool usecachedNodeList;
 
-        public frmModExplorer(ILoggerService logger)
+        public frmModExplorer()
         {
             // initialize Viewmodel
             vm = MockKernel.Get().GetModExplorerModel();

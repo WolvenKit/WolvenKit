@@ -185,6 +185,8 @@ namespace WolvenKit
                 return GetOutput();
             else if (persistString == typeof(frmWelcome).ToString())
                 return GetWelcome();
+            if (persistString == typeof(frmImportUtility).ToString())
+                return GetImportUtility();
             //else
             //{
             //    // DummyDoc overrides GetPersistString to add extra information into persistString.
@@ -1277,7 +1279,7 @@ namespace WolvenKit
         private IDockContent GetModExplorer()
         {
             if (ModExplorer == null || ModExplorer.IsDisposed)
-                ModExplorer = new frmModExplorer(Logger);
+                ModExplorer = new frmModExplorer();
             return ModExplorer;
         }
         private void ShowModExplorer()
@@ -1355,16 +1357,14 @@ namespace WolvenKit
 
             FormModKit.Activate();
         }
+        private IDockContent GetImportUtility()
+        {
+            if (ImportUtility == null || ImportUtility.IsDisposed)
+                ImportUtility = new frmImportUtility();
+            return ImportUtility;
+        }
         private void ShowImportUtility()
         {
-            if (ActiveMod == null)
-            {
-                MessageBox.Show(@"Please create a new mod project."
-                    , "Missing Mod Project"
-                    , MessageBoxButtons.OK
-                    , MessageBoxIcon.Information);
-                return;
-            }
             if (ImportUtility == null || ImportUtility.IsDisposed)
             {
                 ImportUtility = new frmImportUtility();
@@ -1429,6 +1429,8 @@ namespace WolvenKit
             ShowModExplorer();
             ShowConsole();
             ShowOutput();
+            ShowImportUtility();
+
             ClearOutput();
         }
 
@@ -1500,6 +1502,7 @@ namespace WolvenKit
                 }
             }
             ShowModExplorer();
+            ShowImportUtility();
             ShowConsole();
             ShowOutput();
 
@@ -2729,7 +2732,7 @@ namespace WolvenKit
         private void viewToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
             radishUtilitytoolStripMenuItem.Enabled = ActiveMod != null;
-            importUtilityToolStripMenuItem.Enabled = ActiveMod != null;
+            //importUtilityToolStripMenuItem.Enabled = ActiveMod != null;
         }
         #endregion
 

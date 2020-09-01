@@ -16,43 +16,6 @@ namespace WolvenKit.CR2W.Reflection
     /// </summary>
     public static class REDReflection
     {
-        //public static ulong ComputeFieldInfoHash(FieldInfo info)
-        //{
-        //    var fieldName     = GetREDNameString(info);
-        //    var declaringName = info.DeclaringType.Name;
-
-        //    var fnv = new FNV1A64HashAlgorithm();
-
-        //    fnv.AppendString(declaringName, true);
-        //    fnv.AppendString(fieldName, true);
-
-        //    return fnv.HashUInt64;
-        //}
-
-        //public static (string name, string type) GetREDNameTypePair(FieldInfo field)
-        //{
-        //    var attribute = field.GetCustomAttribute<REDAttribute>();
-        //    if(attribute is null)
-        //    {
-        //        return (null, null);
-        //    }
-        //    var flags = attribute.Flags.AsEnumerable().GetEnumerator();
-        //    if (String.IsNullOrWhiteSpace(attribute.Name))
-        //    {
-        //        return (field.Name, GetREDTypeString(field.FieldType, flags));
-        //    }
-        //    return (attribute.Name, GetREDTypeString(field.FieldType, flags));
-        //}
-
-        //public static string GetREDNameString(FieldInfo field)
-        //{
-        //    var attribute = field.GetCustomAttribute<REDAttribute>();
-        //    if (attribute is null || String.IsNullOrWhiteSpace(attribute.Name))
-        //    {
-        //        return field.Name;
-        //    }
-        //    return attribute.Name;
-        //}
         public static string GetREDNameString(PropertyInfo prop)
         {
             var attribute = prop.GetCustomAttribute<REDAttribute>();
@@ -63,16 +26,6 @@ namespace WolvenKit.CR2W.Reflection
             return attribute.Name;
         }
 
-        //public static string GetREDTypeString(FieldInfo field)
-        //{
-        //    var attribute = field.GetCustomAttribute<REDAttribute>();
-        //    if(attribute is null)
-        //    {
-        //        return null;
-        //    }
-        //    var flags = attribute.Flags.AsEnumerable().GetEnumerator();
-        //    return GetREDTypeString(field.FieldType, flags);
-        //}
         public static string GetREDTypeString(Type type, params int[] flags)
         {
             return GetREDTypeString(type, flags.AsEnumerable().GetEnumerator());
@@ -196,49 +149,6 @@ namespace WolvenKit.CR2W.Reflection
             }
         }
 
-        #region Property
-        #endregion
-        //public static IEnumerable<PropertyInfo> GetREDProperties(Type type)
-        //{
-        //    var allprops = type.GetProperties( BindingFlags.Instance | BindingFlags.Public);
-        //    return allprops.Where(prop => prop.IsDefined(typeof(REDAttribute))).ToList();
-        //}
-        //public static IEnumerable<PropertyInfo> GetREDProperties(Type type, BindingFlags flags)
-        //{
-        //    var allprops = type.GetProperties(flags);
-        //    return allprops.Where(prop => prop.IsDefined(typeof(REDAttribute))).ToList();
-        //}
-
-        //public static PropertyInfo GetREDProperty(Type classType, string name, string type)
-        //{
-        //    foreach (var p in GetREDProperties(classType))
-        //    {
-        //        var attribute = p.GetCustomAttribute<REDAttribute>();
-        //        var flags = attribute.Flags.AsEnumerable().GetEnumerator();
-        //        var n = attribute.Name;
-        //        if (String.IsNullOrWhiteSpace(n))
-        //        {
-        //            n = p.Name;
-        //        }
-        //        if (n == name && GetREDTypeString(p.PropertyType, flags) == type)
-        //            return p;
-        //    }
-        //    return null;
-        //}
-
-        //public static PropertyInfo GetREDProperty(Type classType, string type)
-        //{
-        //    foreach (var prop in GetREDProperties(classType))
-        //    {
-        //        var attribute = prop.GetCustomAttribute<REDAttribute>();
-        //        var flags = attribute.Flags.AsEnumerable().GetEnumerator();
-
-        //        if (GetREDTypeString(prop.PropertyType, flags) == type)
-        //            return prop;
-        //    }
-        //    return null;
-        //}
-
 
 
         private static IEnumerable<PropertyInfo> GetREDPropertiesinternal<T>(Type type, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public) where T : Attribute
@@ -271,12 +181,5 @@ namespace WolvenKit.CR2W.Reflection
         {
             return GetOrderedREDProperties<T>(type, bindingFlags).ToList();
         }
-
-        //public static PropertyInfo GetREDProperty<T>(Type classType, string name, string type) where T : Attribute
-        //{
-        //    return GetREDProperties<T>(classType)
-        //        .Where(prop => prop.Name == name && GetREDTypeString(prop.PropertyType) == type)
-        //        .FirstOrDefault();
-        //}
     }
 }

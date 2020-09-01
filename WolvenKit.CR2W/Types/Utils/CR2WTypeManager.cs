@@ -51,6 +51,11 @@ namespace WolvenKit.CR2W.Types
             }
         }
 
+        public static CVariable Create(Type type, string varname, CR2WFile cr2w, CVariable parentVariable, bool readUnknownAsBytes = true)
+        {
+            return Create(REDReflection.GetREDTypeString(type), varname, cr2w, parentVariable, readUnknownAsBytes);
+        }
+
         /// <summary>
         /// The instantiation step of the RedEngine-3 reflection.
         /// </summary>

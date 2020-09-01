@@ -50,7 +50,6 @@ namespace WolvenKit.Cache
                 Items.Add(item);
             }
         }
-
         public void Write(BinaryWriter bw)
         {
             bw.Write(Unk1);
@@ -76,15 +75,15 @@ namespace WolvenKit.Cache
                 bw.Write(item.Flag);
             }
         }
+    }
 
-        public class CollisionCacheItemHeaderItem
-        {
-            public string Name { get; set; }
-            public List<string> Strings { get; set; } = new List<string>();
-            public List<byte> Unk4 { get; set; } = new List<byte>();
-            public uint FileSize { get; set; }
-            public sbyte Flag { get; set; }
-        }
+    public class CollisionCacheItemHeaderItem
+    {
+        public string Name { get; set; }
+        public List<string> Strings { get; set; } = new List<string>();
+        public List<byte> Unk4 { get; set; } = new List<byte>();
+        public uint FileSize { get; set; }
+        public sbyte Flag { get; set; }
     }
 
     /// <summary>
@@ -149,6 +148,9 @@ namespace WolvenKit.Cache
             var filename = e.FileName;
             switch (Comtype)
             {
+                case 1:
+                    filename = Path.ChangeExtension(filename, "bin");
+                    break;
                 case 2:
                 case 5:
                     filename = Path.ChangeExtension(filename, "nxs"); 
